@@ -237,6 +237,26 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('oauth:batDau', { provider }) as Promise<{ ok: boolean; cong?: number }>,
     huy: () => ipcRenderer.invoke('oauth:huy') as Promise<{ ok: boolean }>,
   },
+  opencode: {
+    /** Máy này có node/npm/opencode chưa, và cấu hình đã tồn tại chưa. */
+    doMayNay: () =>
+      ipcRenderer.invoke('opencode:doMayNay') as Promise<{
+        heDieuHanh: string;
+        node: string | null;
+        npm: string | null;
+        opencode: string | null;
+        daCoCauHinh: boolean;
+        duongDanCauHinh: string;
+      }>,
+    /** ⚠️ Key đi qua ĐÂY, không qua hội thoại AI — xem main/ipc/opencode.ts. */
+    vietCauHinh: (p: {
+      key: string; baseUrl: string; models: string[];
+      contextToken: number; outputToken: number;
+    }) =>
+      ipcRenderer.invoke('opencode:vietCauHinh', p) as Promise<{
+        ok: true; duongDan: string; soModel: number;
+      }>,
+  },
   terminal: {
     chay: (cuocId: string, lenh: string) =>
       ipcRenderer.invoke('terminal:chay', { cuocId, lenh }) as Promise<TerminalKetQua>,

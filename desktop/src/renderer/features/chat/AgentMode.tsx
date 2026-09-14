@@ -34,6 +34,7 @@ import { viecDangLam, viecCuaTool } from './viecDangLam';
 import { BangLenh } from './BangLenh';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
+import { NutOpenCode } from './NutOpenCode';
 import { GoiYFile, docTokenFile, type TokenFile } from './GoiYFile';
 import { BangHook } from './BangHook';
 import { ghepThamSo } from '../../../shared/lenhDuAn';
@@ -917,7 +918,9 @@ export function AgentMode({
       {/* ── Bảng ghi (+ khung trình duyệt cạnh bên nếu agent đã mở) ── */}
       <div className="ct-agent-doi" data-co-web={webUrl !== null}>
       <div className="ct-agent-scroll" ref={cuonRef}>
-        {trangThai.muc.length === 0 && <ManHinhTrong coThuMuc={coThuMuc} />}
+        {trangThai.muc.length === 0 && (
+          <ManHinhTrong coThuMuc={coThuMuc} gui={gui} dangChay={trangThai.dangChay} />
+        )}
 
         {trangThai.muc.map((m, i) => {
           if (m.kieu === 'nguoi') {
@@ -2040,7 +2043,13 @@ function ThanhHanMuc({
   );
 }
 
-function ManHinhTrong({ coThuMuc }: { coThuMuc: boolean }) {
+function ManHinhTrong({
+  coThuMuc, gui, dangChay,
+}: {
+  coThuMuc: boolean;
+  gui: (chu: string) => void;
+  dangChay: boolean;
+}) {
   const { dich } = useDich();
   return (
     <div className="ct-agent-trong">
@@ -2058,6 +2067,12 @@ function ManHinhTrong({ coThuMuc }: { coThuMuc: boolean }) {
           {dich('Agent chỉ đọc được thư mục bạn tự chọn — không đọc chỗ nào khác trên máy.')}
         </p>
       )}
+
+      {/* Đặt ở MÀN HÌNH TRỐNG chứ không nhét vào thanh công cụ: đây là việc
+          làm MỘT LẦN rồi thôi, và chỗ này là nơi người dùng nhìn khi chưa biết
+          bắt đầu từ đâu. Nút tự ẩn/sáng theo việc có key hay chưa — xem
+          NutOpenCode.tsx. */}
+      <NutOpenCode gui={gui} dangChay={dangChay} />
     </div>
   );
 }

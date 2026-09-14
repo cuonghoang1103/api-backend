@@ -12604,3 +12604,62 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 .ct-tn-dang-traloi > button:hover { color: var(--ct-text); }
 .ct-tn-thanh-chon > span { margin-right: auto; color: var(--ct-text-dim); }
+
+/* ─── Nút "Cài OpenCode Terminal" trong AI Code ───────────────────────────
+   Hai trạng thái CỐ Ý khác hẳn nhau:
+   · chưa có key → mờ, viền đứt — nhìn là biết chưa dùng được, nhưng VẪN bấm
+     được để đọc giải thích. Nút disabled hoàn toàn thì người dùng không có
+     cách nào biết vì sao nó mờ.
+   · có key     → sáng, gradient như nút chính.                              */
+.nut-opencode {
+  margin-top: 22px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .18s ease;
+  border: 1px dashed var(--ct-border, rgba(148, 163, 184, .35));
+  background: transparent;
+  color: var(--ct-text-muted, #94a3b8);
+}
+.nut-opencode:hover { border-color: rgba(168, 85, 247, .5); color: #c4b5fd; }
+
+.nut-opencode--sang {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, .3);
+}
+.nut-opencode--sang:hover { filter: brightness(1.08); }
+.nut-opencode:disabled { opacity: .5; cursor: not-allowed; }
+
+.nut-opencode__loi { margin-top: 8px; font-size: 12px; color: #f87171; }
+
+.nut-opencode__phu {
+  position: fixed; inset: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; background: rgba(0, 0, 0, .7);
+}
+.nut-opencode__hop {
+  width: 100%; max-width: 420px; text-align: left;
+  padding: 22px; border-radius: 16px;
+  background: var(--ct-card, #16161f);
+  border: 1px solid var(--ct-border, rgba(148, 163, 184, .18));
+}
+.nut-opencode__hop h3 { margin: 0 0 10px; font-size: 16px; }
+.nut-opencode__hop p { margin: 0 0 12px; font-size: 13px; line-height: 1.6; color: var(--ct-text-muted, #94a3b8); }
+.nut-opencode__can { color: var(--ct-text, #e2e8f0) !important; font-weight: 600; }
+.nut-opencode__cach { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.nut-opencode__cach button {
+  flex: 1 1 160px; padding: 9px 12px; border-radius: 10px; cursor: pointer;
+  font-size: 12.5px; font-weight: 600; color: #fff; border: 1px solid transparent;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+}
+.nut-opencode__cach button:hover { filter: brightness(1.08); }
+.nut-opencode__nho { font-size: 12px !important; }
+.nut-opencode__dong {
+  width: 100%; padding: 9px; border-radius: 10px; cursor: pointer;
+  background: transparent; color: var(--ct-text-muted, #94a3b8);
+  border: 1px solid var(--ct-border, rgba(148, 163, 184, .25));
+}

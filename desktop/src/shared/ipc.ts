@@ -1445,6 +1445,23 @@ export const INVOKE_CHANNELS = {
   'oauth:batDau': z.object({ provider: z.enum(['google', 'github', 'apple']) }),
   'oauth:huy': null,
 
+  /**
+   * Ghi cấu hình OpenCode cho người dùng — xem `main/ipc/opencode.ts`.
+   *
+   * ⚠️ `key` đi qua ĐÂY, không đi qua hội thoại AI. Nhét key vào prompt là
+   * gửi key của khách lên cổng LLM dưới dạng văn bản, nằm lại trong log của
+   * bên thứ ba. Agent chỉ lo phần cài đặt, không bao giờ thấy key.
+   */
+  'opencode:vietCauHinh': z.object({
+    key: z.string().min(12).max(200),
+    baseUrl: z.string().url().max(300),
+    models: z.array(z.string().min(1).max(80)).min(1).max(20),
+    contextToken: z.number().int().positive().max(2_000_000),
+    outputToken: z.number().int().positive().max(200_000),
+  }),
+  /** Xem máy đã có gì: node, npm, opencode, và file cấu hình đã tồn tại chưa. */
+  'opencode:doMayNay': null,
+
   'terminal:chay': z.object({
     cuocId: z.string().min(1),
     /* Trần 4000 để một lệnh dài (chuỗi `find … -exec …`) vẫn chạy được, nhưng
@@ -1893,6 +1910,31 @@ export interface DesktopBridge {
     /** Bỏ lượt đang chờ (người dùng đóng màn đăng nhập). */
     huy(): Promise<{ ok: boolean }>;
   };
+  opencode: {
+    /** Máy này có node/npm/opencode chưa, và cấu hình đã tồn tại chưa. */
+    doMayNay(): Promise<{
+      heDieuHanh: string;
+      node: string | null;
+      npm: string | null;
+      opencode: string | null;
+      daCoCauHinh: boolean;
+      duongDanCauHinh: string;
+    }>;
+    /**
+     * Ghi `~/.config/opencode/opencode.json` kèm key.
+     *
+     * ⚠️ Key đi ĐƯỜNG NÀY chứ không qua hội thoại AI — nhét key vào prompt là
+     * gửi nó lên cổng LLM dưới dạng văn bản. Xem `main/ipc/opencode.ts`.
+     */
+    vietCauHinh(p: {
+      key: string;
+      baseUrl: string;
+      models: string[];
+      contextToken: number;
+      outputToken: number;
+    }): Promise<{ ok: true; duongDan: string; soModel: number }>;
+  };
+
   terminal: {
     /** Chạy một lệnh trong thư mục dự án của cuộc này. Trả về NGAY kèm mã. */
     chay(cuocId: string, lenh: string): Promise<TerminalKetQua>;

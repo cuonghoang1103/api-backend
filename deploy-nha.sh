@@ -521,6 +521,11 @@ docker pull "$FE:$SHA"
 docker tag "$BE:$SHA" "$PROJ-backend:latest"
 docker tag "$FE:$SHA" "$PROJ-frontend:latest"
 
+# In mã băm ảnh NGAY LÚC TRÁO, khi thẻ còn chắc chắn tồn tại. Chốt cuối so với
+# con số này chứ không đi tra lại thẻ — xem chú thích ở bước 8.
+echo "BAM_BE=$(docker image inspect -f '{{.Id}}' "$PROJ-backend:latest")"
+echo "BAM_FE=$(docker image inspect -f '{{.Id}}' "$PROJ-frontend:latest")"
+
 cd "$REPO_DIR"
 docker compose -p "$PROJ" up -d --no-build --remove-orphans backend frontend
 EOF
@@ -532,6 +537,8 @@ then
     fail "Tráo container thất bại — xem /tmp/trao.log"
     exit 1
 fi
+BAM_BE_LUC_TRAO=$(sed -n 's/^BAM_BE=//p' /tmp/trao.log | tail -1 | tr -d '\r')
+BAM_FE_LUC_TRAO=$(sed -n 's/^BAM_FE=//p' /tmp/trao.log | tail -1 | tr -d '\r')
 ok "Đã tráo sang ảnh ${SHA}"
 
 # ─── 5b. NẠP LẠI NGINX NGAY — không đợi bước 6c ────────────────────────
@@ -1031,9 +1038,21 @@ fi
 # Phép kiểm rẻ nhất bắt đúng lớp đó: so mã băm ảnh mà container ĐANG chạy
 # với mã băm ảnh ta vừa tráo. Khác nhau = có người tráo đè.
 info "Kiểm lại: container có đang chạy đúng ảnh vừa tráo không..."
+#
+# ⚠️ SO VỚI MÃ BĂM ĐÃ GHI LÚC TRÁO, KHÔNG đi tra lại thẻ `:${SHA}`.
+# Bản đầu tra `docker image inspect ghcr.io/...:${SHA}` ở bước này và nó BÁO
+# OAN ngay lượt thứ ba (14/09/2026): bước "Dọn ảnh deploy CŨ" — của chính lượt
+# này hoặc của một phiên deploy khác xen vào — đã xoá thẻ GHCR đi, chỉ còn
+# `<project>-backend:latest`. Tra không ra ⇒ chốt kêu "phiên khác tráo đè", in
+# một bài khôi phục dài, trong khi production đang chạy ĐÚNG thứ vừa ship (đo
+# lại: cả `hienTroLy` ở backend lẫn chunk frontend đều có mặt).
+#
+# Một chốt kêu oan là một chốt sắp bị người ta tắt đi. Mã băm ghi lúc tráo thì
+# không phụ thuộc vào thẻ còn hay mất, mà vẫn bắt được đúng ca cần bắt: phiên
+# khác tráo đè ⇒ container mang mã băm KHÁC.
 KQ_CHOT=$(sshvps "
     for d in backend frontend; do
-        MUON=\$(docker image inspect -f '{{.Id}}' ghcr.io/cuonghoang1103/api-backend-\$d:${SHA} 2>/dev/null)
+        case \$d in backend) MUON='${BAM_BE_LUC_TRAO}';; *) MUON='${BAM_FE_LUC_TRAO}';; esac
         THAT=\$(docker inspect -f '{{.Image}}' ${COMPOSE_PROJECT}_\$d 2>/dev/null)
         TEN=\$(docker inspect -f '{{.Config.Image}}' ${COMPOSE_PROJECT}_\$d 2>/dev/null)
         if [ -z \"\$MUON\" ] || [ -z \"\$THAT\" ]; then echo \"\$d KHONG_DOC_DUOC \$TEN\"

@@ -22,6 +22,8 @@
  * lấy sự mơ hồ.
  */
 import { Loader2 } from 'lucide-react';
+import { nhanBuoc } from './nhanBuoc';
+import { useDich } from '../../i18n';
 
 /** Giây bắt đầu đổi sang câu thứ hai. Dưới ngần này thì câu đầu chưa kịp đọc xong. */
 const CHANG_HAI_GIAY = 6;
@@ -49,18 +51,19 @@ export function DangNghi({
    */
   buoc?: { nay: number; tran: number };
 }) {
+  const { dich, dichP } = useDich();
   const chu = dangTraLoi
-    ? 'Odin đang trả lời…'
+    ? dich('Odin đang trả lời…')
     : giay >= CHANG_HAI_GIAY
-      ? 'Odin đang suy nghĩ…'
-      : (chuRieng ?? 'Chờ tớ suy nghĩ xíu nhé…');
+      ? dich('Odin đang suy nghĩ…')
+      : (chuRieng ?? dich('Chờ tớ suy nghĩ xíu nhé…'));
 
   return (
     <div className="ct-agent-nghi">
       <Loader2 size={13} aria-hidden className="ct-spin" />
       {buoc && (
         <span className="ct-agent-nghi-buoc" data-sap-het={buoc.tran - buoc.nay <= 1}>
-          bước {buoc.nay}/{buoc.tran}
+          {nhanBuoc(buoc.nay, buoc.tran, dichP)}
         </span>
       )}
       <span>
@@ -70,7 +73,7 @@ export function DangNghi({
         {giay >= 3 && <span className="ct-nghi-giay"> {giay}s</span>}
         {giay >= CHANG_LO_GIAY && (
           <span className="ct-nghi-phu">
-            {' '}Cổng AI đang chậm chứ app không treo — bấm Dừng nếu muốn thử lại.
+            {' '}{dich('Cổng AI đang chậm chứ app không treo — bấm Dừng nếu muốn thử lại.')}
           </span>
         )}
       </span>

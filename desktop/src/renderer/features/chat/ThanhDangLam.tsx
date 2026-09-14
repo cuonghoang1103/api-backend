@@ -26,6 +26,7 @@
  * đổi sự tử tế lấy sự mơ hồ.
  */
 import { useEffect, useState } from 'react';
+import { nhanBuoc } from './nhanBuoc';
 import { Loader2, Hand } from 'lucide-react';
 
 import type { ViecHienTai } from './viecDangLam';
@@ -62,7 +63,7 @@ export function ThanhDangLam({
 
       {buoc && (
         <span className="ct-danglam-buoc" data-sap-het={buoc.tran - buoc.nay <= 1}>
-          {dichP('bước {nay}/{tran}', { nay: buoc.nay, tran: buoc.tran })}
+          {nhanBuoc(buoc.nay, buoc.tran, dichP)}
         </span>
       )}
 

@@ -309,6 +309,9 @@ export const TU_DIEN: Record<string, string> = {
   'Thêm dòng': 'Add row',
   // ── Cửa sổ robot nổi + khung chat nhanh ──
   'Trợ lý': 'Assistant',
+  'bước {nay}': 'step {nay}',
+  'Odin đang trả lời…': 'Odin is answering…',
+  'Odin đang suy nghĩ…': 'Odin is thinking…',
   'mã': 'code',
   'Không nhận được trả lời.': 'No reply came back.',
   '(ảnh)': '(image)',

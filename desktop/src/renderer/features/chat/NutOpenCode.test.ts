@@ -15,6 +15,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { timKeyDangDung } from './NutOpenCode';
 
 const nguon = readFileSync(new URL('./NutOpenCode.tsx', import.meta.url), 'utf8');
 
@@ -42,5 +43,48 @@ describe('NutOpenCode gọi đúng đường API', () => {
     expect(khoiPrompt, 'prompt có chứa biến key ⇒ key của khách bị gửi lên cổng LLM')
       .not.toMatch(/\$\{key\}|\bkey\b\s*,/);
     expect(nguon).toMatch(/vietCauHinh\(\{\s*\n?\s*key,/);
+  });
+});
+
+/**
+ * ═══ CHẠY THẬT logic chọn key, không chỉ đọc chữ trong file ═══
+ *
+ * Bộ kiểm cũ chỉ soi nguồn nên nó xanh trong khi nút vẫn hỏng: đường dẫn API
+ * đã đúng, nhưng HÌNH DẠNG phản hồi thì sai (bóc `.data` hai lần). Người dùng
+ * phải báo lại lần thứ hai mới lộ ra. Phép kiểm đọc chữ không thay được phép
+ * kiểm chạy.
+ */
+describe('timKeyDangDung chạy với thân phản hồi THẬT', () => {
+  const donDaDuyet = {
+    id: 4, status: 'APPROVED', reason: 'x', key: 'sk-abcdefghijklmnop',
+    quotaUsd: 150, adminNote: null, source: 'REQUEST', expiresAt: null,
+    hetHan: false, createdAt: '', resolvedAt: '',
+  };
+
+  /** Y hệt `ApiClient.unwrap`: `return (envelope.data ?? envelope)`. */
+  const unwrap = (phongBi: unknown) => (phongBi as { data?: unknown }).data ?? phongBi;
+
+  it('tìm ra key sau khi request() đã bóc phong bì', () => {
+    const traVe = unwrap({ success: true, data: [donDaDuyet] });
+    expect(Array.isArray(traVe), 'unwrap phải trả về MẢNG — nếu không thì giả định này sai').toBe(true);
+    expect(timKeyDangDung(traVe)?.key, 'người ĐÃ được duyệt key mà nút vẫn mời đi mua')
+      .toBe(donDaDuyet.key);
+  });
+
+  it('vẫn tìm ra nếu một ngày phản hồi CÒN NGUYÊN phong bì', () => {
+    expect(timKeyDangDung({ success: true, data: [donDaDuyet] })?.key).toBe(donDaDuyet.key);
+  });
+
+  it('không nhận key của đơn HẾT HẠN, BỊ TỪ CHỐI hay THU HỒI', () => {
+    expect(timKeyDangDung([{ ...donDaDuyet, hetHan: true }])).toBeNull();
+    expect(timKeyDangDung([{ ...donDaDuyet, status: 'REJECTED' }])).toBeNull();
+    expect(timKeyDangDung([{ ...donDaDuyet, status: 'REVOKED' }])).toBeNull();
+    expect(timKeyDangDung([{ ...donDaDuyet, key: null }])).toBeNull();
+  });
+
+  it('danh sách rỗng hay dữ liệu lạ ⇒ null, không ném', () => {
+    expect(timKeyDangDung([])).toBeNull();
+    expect(timKeyDangDung(null)).toBeNull();
+    expect(timKeyDangDung({ loi: 'gì đó' })).toBeNull();
   });
 });

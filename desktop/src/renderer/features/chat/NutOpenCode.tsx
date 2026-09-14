@@ -21,7 +21,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSession } from '../../auth/session';
 
-interface DonKey {
+export interface DonKey {
   id: number;
   status: string;
   key: string | null;
@@ -49,6 +49,31 @@ interface DoMay {
 
 /** Trang web để người dùng đi mua / đi xin key. */
 const WEB = 'https://cuongthai.com';
+
+/**
+ * Bóc phong bì `{ success, data }` MỘT cách chịu được cả hai hình dạng.
+ *
+ * ⚠️⚠️ `ApiClient.request()` ĐÃ bóc `.data` rồi (`unwrap`:
+ * `return (envelope.data ?? envelope)`), nên nó trả về THẲNG mảng. Bóc thêm
+ * lần nữa cho ra `undefined`, và `?? []` biến nó thành "không có đơn nào" —
+ * nút hiện đúng màn hình mời đi mua key cho người ĐÃ ĐƯỢC DUYỆT, không một
+ * dấu hiệu nào. Đã dính hai lần liền (14-15/09/2026).
+ *
+ * Hàm này tách riêng để BỘ KIỂM CHẠY ĐƯỢC nó. Phép kiểm chỉ đọc chữ trong
+ * file thì không bắt được lỗi hình dạng — đó là lý do lần trước nó lọt.
+ */
+export function bocPhongBi<T>(v: unknown): T | null {
+  if (v == null) return null;
+  const o = v as { data?: unknown };
+  return (o.data !== undefined ? o.data : v) as T;
+}
+
+/** Đơn key đang hiệu lực, hay `null`. Tách ra để kiểm thử chạy thật. */
+export function timKeyDangDung(thanPhanHoi: unknown): DonKey | null {
+  const ds = bocPhongBi<DonKey[]>(thanPhanHoi);
+  if (!Array.isArray(ds)) return null;
+  return ds.find((d) => d.status === 'APPROVED' && !d.hetHan && d.key) ?? null;
+}
 
 export function NutOpenCode({ gui, dangChay }: { gui: (chu: string) => void; dangChay: boolean }) {
   const { api } = useSession();
@@ -78,21 +103,33 @@ export function NutOpenCode({ gui, dangChay }: { gui: (chu: string) => void; dan
         // và vì lời gọi này nuốt lỗi nên nút hiện "chưa có key" y hệt như khi
         // người dùng thật sự chưa có key. Đã dính thật 14/09/2026: người dùng
         // đã được duyệt key mà nút vẫn mời đi mua.
+        // ⚠️⚠️ `request()` ĐÃ BÓC `.data` rồi — xem `ApiClient.unwrap`:
+        //     return (envelope.data ?? envelope) as T
+        // nên nó trả về THẲNG mảng/đối tượng, không phải `{ data: ... }`. Bóc
+        // thêm lần nữa (`dons.data`) cho ra `undefined`, và `?? []` biến nó
+        // thành "không có đơn nào" — nút hiện đúng màn hình mời đi mua key cho
+        // người ĐÃ ĐƯỢC DUYỆT. Đã dính thật hai lần liền, 14-15/09/2026.
+        // Quy ước của app: `layDanhSachPlaylist` cũng nhận thẳng mảng.
         const [dons, info, m] = await Promise.all([
-          api?.request<{ data: DonKey[] }>('/api/v1/llm-keys/mine').catch((e: unknown) => {
+          api?.request<DonKey[]>('/api/v1/llm-keys/mine').catch((e: unknown) => {
             setLoiTai(e instanceof Error ? e.message : 'không hỏi được máy chủ');
             return null;
           }) ?? null,
-          api?.request<{ data: ThongTinKey }>('/api/v1/llm-keys/info').catch(() => null) ?? null,
+          api?.request<ThongTinKey>('/api/v1/llm-keys/info').catch(() => null) ?? null,
           window.cuongthai?.opencode.doMayNay().catch(() => null) ?? null,
         ]);
         if (huy) return;
         // Chỉ đơn ĐÃ DUYỆT và CÒN HẠN mới có key thật. Backend đã trả `key`
         // null cho đơn hết hạn, nhưng kiểm cả `hetHan` để không phụ thuộc
         // vào đúng một tầng.
-        const co = (dons?.data ?? []).find((d: DonKey) => d.status === 'APPROVED' && !d.hetHan && d.key);
+        // Phòng xa cho cả hai hình dạng: nếu một ngày `unwrap` đổi cách bóc,
+        // nút vẫn chạy thay vì âm thầm bảo người dùng đi mua key.
+        const co = timKeyDangDung(dons);
+        if (dons !== null && !Array.isArray(bocPhongBi<DonKey[]>(dons))) {
+          setLoiTai('máy chủ trả về hình dạng lạ cho danh sách key');
+        }
         setKey(co?.key ?? null);
-        setTin(info?.data ?? null);
+        setTin(bocPhongBi<ThongTinKey>(info));
         setMay(m ?? null);
       } finally {
         if (!huy) setDangTai(false);

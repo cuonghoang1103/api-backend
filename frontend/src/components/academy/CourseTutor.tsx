@@ -5,232 +5,84 @@
 // - Trả lời STREAM ("gõ từng chữ") qua SSE; hỏng thì tự lùi về POST thường.
 // - Mặc định TIẾNG VIỆT (giữ thuật ngữ tiếng Anh). Mỗi câu trả lời có nút
 //   "Bản tiếng Anh" để hỏi lại đúng câu đó bằng tiếng Anh khi cần.
+//
+// ⚠️ ĐÂY CHỈ CÒN LÀ CÁI VỎ. Toàn bộ phần ruột (gọi cổng, stream, cache, dịch
+// lại, lùi khi SSE hỏng) nằm ở `useGiaSuBai` — dùng chung với khung gia sư
+// trong con robot nổi. Sửa hành vi thì sửa ở HOOK, đừng vá riêng ở đây: vá
+// riêng là hai lối vào cùng một gia sư bắt đầu trả lời khác nhau.
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Sparkles, Loader2, Send, MessageCircle, Crown, User, Languages, RefreshCw } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { useCallback, useEffect, useRef } from 'react';
+import { Sparkles, Loader2, Send, MessageCircle, Crown, User, Languages, RefreshCw, ImagePlus, X } from 'lucide-react';
 import Link from 'next/link';
-import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { usePro } from '@/hooks/usePro';
 // Render câu trả lời như AI Chat chính: markdown + KaTeX + code + sơ đồ SVG.
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import FaqGiaSu from '@/components/academy/FaqGiaSu';
+import { GOI_Y_GIA_SU, useGiaSuBai, type TutorQuizItem } from '@/components/academy/useGiaSuBai';
+import { useGiaSuBaiStore } from '@/store/giaSuBaiStore';
 
-interface Turn {
-  role: 'user' | 'assistant';
-  content: string;
-  srcQuestion?: string;  // câu hỏi tạo ra câu trả lời này → để bấm "Bản tiếng Anh"
-  srcCacheKey?: string;  // cacheKey của chip (nếu có) → EN dùng lại để cache đúng khoá
-  english?: boolean;     // đây LÀ bản tiếng Anh (không hiện nút EN cho nó nữa)
-  streaming?: boolean;   // đang gõ dở → hoãn render KaTeX tới khi xong
-  enDone?: boolean;      // đã xin bản tiếng Anh cho câu này rồi
-  cached?: boolean;      // câu trả lời lấy từ cache (chip) → gắn nhãn "⚡ có sẵn"
-}
-
-// Gợi ý mở màn — đúng 5 việc học viên cần. Mỗi chip có `key` cố định để CACHE
-// dùng chung: ai bấm cùng chip trên cùng bài đều nhận cùng câu trả lời, tức thì.
-const QUICK: { key: string; q: string }[] = [
-  { key: 'start', q: 'Bài này học gì? Tôi nên bắt đầu từ đâu?' },
-  { key: 'exercises', q: 'Cho tôi 3 bài tập luyện + đáp án để tự kiểm tra.' },
-  { key: 'prereq', q: 'Kiến thức nền nào cần có trước khi học bài này?' },
-  { key: 'hard', q: 'Giảng lại phần khó nhất của bài một cách dễ hiểu.' },
-];
-
-function getToken(): string {
-  if (typeof document === 'undefined') return '';
-  const m = document.cookie.match(/(?:^|;)\s*backend_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : '';
-}
-
-const toMsg = (t: Turn) => ({ role: t.role, content: t.content });
-
-// Câu quiz truyền vào để gia sư biết "câu N" là gì (dùng ở Đề luyện cuối chương).
-export interface TutorQuizItem { n: number; prompt: string; options: string[]; correctIndexes: number[]; explanation?: string }
+export type { TutorQuizItem };
 
 export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, quizContext, autoAsk }: {
   lessonId: number; courseCode?: string; courseTitle?: string; lessonTitle?: string;
   /** Có ⇒ chế độ hỏi trong quiz: gia sư biết đề+đáp án các câu, học viên chỉ gõ "câu N". */
   quizContext?: TutorQuizItem[];
-  /** Câu hỏi bắn đi NGAY khi `key` đổi — dùng cho nút "Hỏi AI vì sao sai" ở
-   *  từng câu quiz. Bấm nút là muốn câu trả lời, không phải muốn một ô trống
-   *  để tự gõ lại đề. `key` là số tăng dần: bấm lại cùng một câu vẫn hỏi lại
-   *  được, còn re-render thường thì không bắn nhầm thêm lượt (tốn tiền). */
+  /** Câu hỏi bắn đi NGAY khi `key` đổi — dùng cho nút "Hỏi AI vì sao sai" ở từng câu quiz. */
   autoAsk?: { key: number; text: string } | null;
 }) {
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
   const { isPro } = usePro();
-  const inQuiz = !!quizContext?.length;
 
-  const [turns, setTurns] = useState<Turn[]>([]);
-  const [question, setQuestion] = useState('');
-  const [asking, setAsking] = useState(false);
+  const {
+    turns, question, setQuestion, asking, inQuiz,
+    hoi: ask, hoiTiengAnh: askEnglish, hoiLaiMoi: askFresh,
+    anhDan, themAnh, boAnh, danVao,
+  } = useGiaSuBai({ lessonId, ...(quizContext ? { quizContext } : {}), ...(autoAsk ? { autoAsk } : {}) });
+
   const endRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
+  const oFileRef = useRef<HTMLInputElement>(null);
 
   // Bấm "Câu N" → điền sẵn vào ô để học viên trình bày chỗ chưa hiểu.
   const pickCau = useCallback((n: number) => {
     setQuestion(`Câu ${n}: mình chưa hiểu `);
     setTimeout(() => taRef.current?.focus(), 0);
-  }, []);
+  }, [setQuestion]);
 
-  useEffect(() => { setTurns([]); setQuestion(''); }, [lessonId]);
-
-
-  const patch = (aIdx: number, upd: Partial<Turn>) =>
-    setTurns((t) => t.map((x, i) => (i === aIdx ? { ...x, ...upd } : x)));
-
-  // SSE: đọc luồng, dồn delta vào turn trợ lý ở vị trí aIdx. Ném lỗi để caller lùi.
-  const runStream = useCallback(async (aIdx: number, q: string, history: Turn[], english: boolean, cacheKey?: string, refresh?: boolean) => {
-    /*
-     * ⚠️ ĐƯỜNG DẪN TUYỆT ĐỐI, dựng từ `baseURL` của axios.
-     *
-     * Trước đây là `/api/v1/...` trần. Trên web nó trúng proxy Next cùng
-     * origin nên chạy. Nhưng component này còn được app desktop DÙNG LẠI, mà
-     * ở đó origin là `app://cuongthai` — một `fetch` tương đối sẽ bay vào
-     * `app://cuongthai/api/v1/...`, không tồn tại, và gia sư AI hỏng câm ở
-     * đúng chức năng chính của nó.
-     *
-     * `api.defaults.baseURL` là `/api/v1` trên web và `<gốc>/api/v1` trên
-     * desktop (xem `web-api-adapter.ts`), nên cắt đuôi rồi ghép lại là đúng
-     * cho cả hai — web KHÔNG đổi hành vi.
-     */
-    const goc = String(api.defaults.baseURL ?? '').replace(/\/api\/v1\/?$/, '');
-    const res = await fetch(`${goc}/api/v1/courses/lessons/${lessonId}/ai/ask-stream`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
-      body: JSON.stringify({ question: q, history: history.map(toMsg), english, cacheKey, refresh, ...(inQuiz ? { quizContext } : {}) }),
-    });
-    if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
-
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    let acc = '';
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const frames = buffer.split('\n\n');
-      buffer = frames.pop() || '';
-      for (const frame of frames) {
-        for (const line of frame.split('\n')) {
-          if (!line.startsWith('data:')) continue;
-          const raw = line.slice(5).trim();
-          if (!raw) continue;
-          let evt: { type?: string; text?: string; answer?: string; error?: string; cached?: boolean };
-          try { evt = JSON.parse(raw); } catch { continue; }
-          if (evt.type === 'delta' && evt.text) {
-            acc += evt.text;
-            patch(aIdx, { content: acc });
-          } else if (evt.type === 'done') {
-            // Bản chuẩn cuối — thay hẳn (né lặp nếu stream có retry). cached ⇒ nhãn.
-            patch(aIdx, { content: (evt.answer ?? acc), streaming: false, cached: !!evt.cached });
-            return;
-          } else if (evt.type === 'error') {
-            throw new Error(evt.error || 'AI lỗi');
-          }
-        }
-      }
-    }
-    if (!acc.trim()) throw new Error('empty stream');
-    patch(aIdx, { content: acc, streaming: false });
-  }, [lessonId, inQuiz, quizContext]);
-
-  // Hỏi một câu. showUser=false + english=true là lúc bấm nút "Bản tiếng Anh".
-  const ask = useCallback(async (text: string, opts?: {
-    english?: boolean; showUser?: boolean; cacheKey?: string;
-    /** Bỏ qua ĐỌC cache nhưng vẫn GHI ĐÈ (nút "Hỏi lại mới"). */
-    refresh?: boolean;
-    /** Gửi lịch sử RỖNG — xem ghi chú ở `askEnglish`. */
-    noHistory?: boolean;
-  }) => {
-    const q = (text || '').trim();
-    if (!q || asking) return;
-    const english = !!opts?.english;
-    const showUser = opts?.showUser !== false;
-    const cacheKey = opts?.cacheKey;
-    const refresh = !!opts?.refresh;
-
-    setAsking(true);
-    if (showUser) setQuestion('');
-
-    const history = opts?.noHistory ? [] : turns.filter((t) => !t.streaming);
-    const aIdx = history.length + (showUser ? 1 : 0); // vị trí turn trợ lý mới
-
-    setTurns((t) => {
-      const base = showUser ? [...t, { role: 'user' as const, content: q }] : [...t];
-      return [...base, {
-        role: 'assistant' as const, content: '', streaming: true,
-        // ⚠️ GIỮ `srcQuestion` cả cho lượt tiếng Anh. Để `undefined` thì nút
-        // "Hỏi lại mới" không hiện trên chính lượt tiếng Anh — tức đúng lượt
-        // đang giữ mục cache hỏng lại không sinh lại được. Việc có mời dịch
-        // hay không đã do `english` quyết, không cần mượn `srcQuestion`.
-        english, srcQuestion: q, srcCacheKey: cacheKey,
-      }];
-    });
-
-    try {
-      await runStream(aIdx, q, history, english, cacheKey, refresh);
-    } catch {
-      // SSE hỏng/không hỗ trợ → POST thường, không để chat chết.
-      try {
-        const r = await api.post<{ success: boolean; data: { answer: string; cached?: boolean } }>(
-          `/courses/lessons/${lessonId}/ai/ask`,
-          { question: q, history: history.map(toMsg), english, cacheKey, refresh, ...(inQuiz ? { quizContext } : {}) },
-          { timeout: 240_000 });
-        patch(aIdx, { content: r.data.data.answer, streaming: false, cached: !!r.data.data.cached });
-      } catch (e: unknown) {
-        const status = (e as { response?: { status?: number } })?.response?.status;
-        setTurns((t) => t.slice(0, showUser ? -2 : -1)); // gỡ bubble hỏng
-        if (showUser) setQuestion(q);
-        toast.error(status === 403 ? 'Hỏi AI là tính năng Pro.' : 'AI chưa trả lời được. Thử lại nhé.');
-      }
-    } finally { setAsking(false); }
-  }, [asking, turns, lessonId, runStream]);
-
-  // ⚠️⚠️ GỬI LỊCH SỬ RỖNG. Đo thật 05/09/2026: gửi kèm lịch sử thì model trả lời
-  // "Bạn vừa hỏi lại câu này — tôi đã trả lời ở trên rồi nhé! 😊" — nó đọc ra là
-  // hỏi TRÙNG (câu hỏi y hệt vừa nằm trong lịch sử) và đi trả lời chuyện đó thay
-  // vì trả lời câu hỏi. Mà đây vốn không phải một lượt hội thoại tiếp theo — nó
-  // là DỰNG LẠI một câu trả lời bằng thứ tiếng khác. Bỏ lịch sử còn rẻ hơn.
-  //
-  // Dùng lại cùng cacheKey ⇒ bản tiếng Anh cũng được cache dưới lang='en'.
-  /* Nút "Hỏi AI vì sao sai" ở từng câu quiz bắn qua đây.
-     Chỉ chạy khi `key` ĐỔI — nếu theo dõi cả `text` thì một lần re-render đổi
-     chuỗi (ví dụ đổi ngôn ngữ) sẽ tự hỏi lại, mà mỗi lượt là một lần tính tiền. */
-  const autoKey = autoAsk?.key ?? 0;
-  const daBan = useRef(0);
+  /*
+   * CÔNG BỐ "đang học bài nào" cho con robot nổi.
+   *
+   * Đặt ở ĐÂY chứ không ở trang học, vì chính component này là thứ duy nhất
+   * chắc chắn có mặt ở mọi lối vào bài học — trang `learn` của web, và màn
+   * môn học của app desktop (`monHoc.tsx` dùng lại đúng component này). Đặt
+   * ở trang thì mỗi lối vào mới phải nhớ cắm lại, và cái quên sẽ hỏng CÂM:
+   * robot vẫn mở, chỉ là nó không biết bài nào và hiện chat thường.
+   *
+   * Đề luyện (`inQuiz`) KHÔNG công bố: ngữ cảnh của nó là đề và đáp án, không
+   * phải bài học, nên robot mà nối vào đó sẽ trả lời lệch hẳn chủ đề.
+   */
+  const datBai = useGiaSuBaiStore((s) => s.datBai);
   useEffect(() => {
-    if (!autoKey || daBan.current === autoKey) return;
-    daBan.current = autoKey;
-    const t = autoAsk?.text?.trim();
-    if (t) void ask(t);
-  }, [autoKey, autoAsk?.text, ask]);
-
-  const askEnglish = useCallback((aIdx: number) => {
-    const t = turns[aIdx];
-    if (!t?.srcQuestion || asking) return;
-    patch(aIdx, { enDone: true });
-    void ask(t.srcQuestion, { english: true, showUser: false, cacheKey: t.srcCacheKey, noHistory: true });
-  }, [turns, asking, ask]);
-
-  // "Hỏi lại mới": sinh câu trả lời tươi VÀ ghi đè cache cho người sau.
-  //
-  // ⚠️ Bản cũ bỏ luôn `cacheKey` và ghi chú rằng "backend upsert nên cache cũng
-  // được làm mới" — SAI: máy chủ chỉ GHI khi có `cacheKey`, nên nó vừa không đọc
-  // vừa không ghi, và một mục cache hỏng nằm lại đó vĩnh viễn cho mọi người.
-  // Nay giữ `cacheKey` + `refresh:true`: bỏ qua bước ĐỌC, vẫn GHI ĐÈ.
-  const askFresh = useCallback((aIdx: number) => {
-    const t = turns[aIdx];
-    if (!t?.srcQuestion || asking) return;
-    void ask(t.srcQuestion, {
-      english: !!t.english, showUser: false,
-      cacheKey: t.srcCacheKey, refresh: true, noHistory: true,
+    if (inQuiz) return undefined;
+    datBai({
+      lessonId,
+      ...(courseCode ? { courseCode } : {}),
+      ...(courseTitle ? { courseTitle } : {}),
+      ...(lessonTitle ? { lessonTitle } : {}),
+      ...(typeof window !== 'undefined' ? { duongDan: window.location.pathname } : {}),
     });
-  }, [turns, asking, ask]);
+    return () => {
+      /* Chỉ xoá nếu kho VẪN đang giữ đúng bài này. Rời một bài để sang bài
+         khác thì hàm dọn của bài cũ có thể chạy SAU khi bài mới đã ghi vào —
+         xoá vô điều kiện là robot mất ngữ cảnh ngay lúc vừa có. */
+      const dang = useGiaSuBaiStore.getState().bai;
+      if (dang?.lessonId === lessonId) datBai(null);
+    };
+  }, [inQuiz, lessonId, courseCode, courseTitle, lessonTitle, datBai]);
 
   const label = [courseCode, courseTitle].filter(Boolean).join(' · ') || 'khoá học';
+
 
   return (
     <section className="mb-5">
@@ -268,7 +120,20 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
                   <div className="ct-answer rounded-lg px-3 py-2 text-sm"
                     style={{ background: t.role === 'user' ? 'var(--bg-surface)' : 'var(--bg-surface-active, var(--bg-surface))', color: 'var(--text-primary)' }}>
                     {t.role === 'user'
-                      ? <span className="whitespace-pre-wrap">{t.content}</span>
+                      ? (
+                        <>
+                          {!!t.anh?.length && (
+                            <div className="mb-1.5 flex flex-wrap gap-1.5">
+                              {t.anh.map((u, k) => (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img key={k} src={u} alt="" className="h-20 w-20 rounded-lg object-cover"
+                                  style={{ border: '1px solid var(--border-color)' }} />
+                              ))}
+                            </div>
+                          )}
+                          <span className="whitespace-pre-wrap">{t.content}</span>
+                        </>
+                      )
                       : (t.streaming && !t.content)
                         ? <span className="inline-flex items-center gap-2 opacity-70"><Loader2 size={13} className="animate-spin" /> Đang soạn…</span>
                         : <>
@@ -334,7 +199,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
               </div>
             ) : (
               <div className="mb-2 flex flex-wrap gap-1.5">
-                {QUICK.map((s) => (
+                {GOI_Y_GIA_SU.map((s) => (
                   <button key={s.key} type="button" onClick={() => void ask(s.q, { cacheKey: s.key })} disabled={asking}
                     className="rounded-full border px-2.5 py-1 text-left text-xs disabled:opacity-40"
                     style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>
@@ -346,18 +211,49 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
             {/* `flex-wrap` + `min-w` cho ô nhập: hàng này giờ có BA thứ (ô nhập,
                 nút Hỏi, nút Câu hỏi thường gặp). Không cho xuống dòng thì ở cửa
                 sổ hẹp ô nhập bị bóp còn một cột chữ dọc — đo thật ở 800px. */}
+            {anhDan.length > 0 && (
+              <div className="mb-2 flex flex-wrap gap-2">
+                {anhDan.map((u, i) => (
+                  <div key={i} className="relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={u} alt="" className="h-16 w-16 rounded-lg object-cover"
+                      style={{ border: '1px solid var(--border-color)' }} />
+                    <button type="button" onClick={() => boAnh(i)} aria-label="Bỏ ảnh"
+                      className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full text-xs"
+                      style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+                      <X size={11} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="flex flex-wrap items-end gap-2">
+              {/* Nút chọn ảnh — lối vào thứ hai cạnh Ctrl+V, cho máy không dán
+                  được ảnh từ clipboard. */}
+              <input ref={oFileRef} type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden
+                onChange={(e) => {
+                  const ds = [...(e.target.files ?? [])];
+                  e.target.value = '';   // chọn lại đúng file đó lần nữa phải được
+                  if (ds.length) void themAnh(ds);
+                }} />
+              <button type="button" onClick={() => oFileRef.current?.click()} disabled={asking}
+                title="Gửi kèm ảnh (hoặc dán thẳng bằng Ctrl+V)" aria-label="Gửi kèm ảnh"
+                className="inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg border disabled:opacity-40"
+                style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>
+                <ImagePlus size={15} />
+              </button>
               <textarea
                 ref={taRef}
+                onPaste={danVao}
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void ask(question); } }}
                 rows={2}
-                placeholder={inQuiz ? 'VD: câu 3 mình chưa hiểu vì sao đáp án là B…' : 'Hỏi bất cứ điều gì về bài này — hoặc dán code/bài làm của bạn nhờ chữa…'}
+                placeholder={inQuiz ? 'VD: câu 3 mình chưa hiểu vì sao đáp án là B…' : 'Hỏi bất cứ điều gì về bài này — dán ảnh chụp màn hình, code hay bài làm của bạn nhờ chữa…'}
                 className="min-w-[min(100%,220px)] flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none"
                 style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }}
               />
-              <button onClick={() => void ask(question)} disabled={asking || !question.trim()}
+              <button onClick={() => void ask(question)} disabled={asking || (!question.trim() && anhDan.length === 0)}
                 className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold disabled:opacity-40"
                 style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}>
                 {asking ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Hỏi

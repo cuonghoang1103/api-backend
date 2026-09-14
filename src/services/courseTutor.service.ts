@@ -14,6 +14,7 @@
  * của riêng từng người, từng lúc; frontend gửi kèm `history` để nối mạch.
  */
 import { prisma } from '../config/database.js';
+import type { ClaudeContentBlock } from './claudeChat.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopensInMs } from './interview/llm/index.js';
 import { isProEffective } from './pro.service.js';
@@ -25,7 +26,22 @@ import {
 const MAX_QUESTION = 1500;
 const MAX_HISTORY = 12;
 
-export interface TutorMessage { role: 'user' | 'assistant'; content: string }
+/**
+ * Tin nhắn gửi gia sư.
+ *
+ * `content` nhận cả MỘT CHUỖI lẫn MẢNG KHỐI — mảng khối là đường duy nhất gửi
+ * kèm ảnh (người học chụp màn hình một slide, một đoạn mã, một bài đã làm rồi
+ * dán vào hỏi). Kiểu này khớp thẳng `LLMMessage` của `llmComplete`, nên không
+ * có chỗ nào phải đổi hình dạng ở giữa — chỗ đổi hình dạng chính là chỗ ảnh
+ * hay bị vứt âm thầm.
+ */
+export interface TutorMessage {
+  role: 'user' | 'assistant';
+  content: string | ClaudeContentBlock[];
+}
+
+/** Ảnh người học dán vào — đã tách khỏi data URL ở tầng route. */
+export interface AnhHoi { media_type: string; data: string }
 
 // Quyền Pro/đăng nhập — LUÔN kiểm (kể cả khi trả lời từ cache: vẫn phải là Pro).
 async function assertPro(userId: number | null | undefined) {
@@ -133,6 +149,17 @@ Rules:
 - When you generate practice, number the exercises and say what each one drills.
 - If the question is not about this course/lesson or about studying it, say so briefly and
   steer back.
+
+IMAGES — the student can paste a screenshot with the question. When one is attached it is
+almost always ONE of these; read it carefully first, then answer:
+- A SLIDE / page of this lesson — the student is pointing at the exact spot they are stuck on.
+  Read the slide, then explain THAT content, tied to the lesson text you were given above.
+- CODE, an error message, or a terminal output — read it literally: quote the exact line,
+  symbol or message you are talking about so the student can find it.
+- The student's OWN work (handwriting, a diagram, an answer sheet) — review it, name what is
+  right, what is wrong, and why.
+Say what you actually see; if the image is unreadable, blurry, or cut off, say so and ask for
+a clearer shot — never guess at content you cannot read, and never describe a generic slide.
 
 FORMATTING — your answer is rendered as RICH markdown (bold, lists, tables, highlighted
 code, KaTeX math, SVG figures). Use it well; keep it clean and scannable, never a wall of text:
@@ -242,6 +269,22 @@ export interface TutorAskOpts {
   /** Các câu trong bài quiz cuối chương học viên đang làm. Có nó, học viên chỉ
    *  cần gõ "câu 3 tôi chưa hiểu" — gia sư biết đề+đáp án câu đó, khỏi chép lại. */
   quizContext?: { n: number; prompt: string; options: string[]; correctIndexes: number[]; explanation?: string }[];
+  /**
+   * Ảnh người học dán vào câu hỏi (chụp màn hình một slide, một đoạn mã, bài
+   * đã làm…). Tầng route đã tách khỏi data URL và kiểm loại + cỡ.
+   *
+   * ⚠️ CÓ ẢNH ⇒ KHÔNG ĐỤNG CACHE, cả đọc lẫn ghi. Cache của gia sư xếp theo
+   * `cacheKey` của chip gợi ý, mà chip thì giống nhau cho mọi người học trên
+   * cùng một bài — ghi vào đó một câu trả lời nói về ẢNH RIÊNG của một người
+   * là mọi người sau bấm chip đều nhận lời giảng về tấm ảnh họ chưa từng thấy.
+   * Xem `khongDungCache()`.
+   */
+  images?: AnhHoi[];
+}
+
+/** Có ảnh thì cache phải đứng ngoài — xem chú thích ở `images`. */
+export function khongDungCache(opts: TutorAskOpts): boolean {
+  return !!opts.images?.length;
 }
 
 // Dựng khối ngữ cảnh các câu quiz (đánh số) để "câu N" tra ra đúng câu.
@@ -261,6 +304,28 @@ function buildQuizBlock(quizContext?: TutorAskOpts['quizContext']): string {
 }
 
 const langOf = (english?: boolean): 'en' | 'vi' => (english ? 'en' : 'vi');
+
+/**
+ * Ghép câu hỏi + ảnh thành nội dung một lượt.
+ *
+ * ⚠️ ẢNH ĐẶT TRƯỚC CHỮ. Đó là thứ tự `ai.service.ts` đã dùng cho AI Chat, và
+ * nó không tuỳ tiện: model đọc khối theo thứ tự, nên để chữ trước thì câu
+ * "chỗ này là gì?" tới lúc chưa có gì để trỏ vào. Đặt ảnh trước thì câu hỏi
+ * đọc ra đúng nghĩa "chỗ này" = tấm vừa xem.
+ *
+ * Không có ảnh thì trả về CHUỖI TRẦN chứ không phải mảng một khối — giữ đúng
+ * hình dạng cũ cho mọi lượt hỏi thường, để đường đã chạy ổn không đổi gì.
+ */
+function hoiKemAnh(chu: string, anh?: AnhHoi[]): string | ClaudeContentBlock[] {
+  if (!anh?.length) return chu;
+  return [
+    ...anh.map((a) => ({
+      type: 'image' as const,
+      source: { type: 'base64' as const, media_type: a.media_type, data: a.data },
+    })),
+    { type: 'text' as const, text: chu },
+  ];
+}
 
 // Dựng system + messages một chỗ để bản STREAM và bản thường luôn giống hệt nhau.
 export async function buildTutorCall(
@@ -298,7 +363,7 @@ export async function buildTutorCall(
     },
     { role: 'assistant', content: MOI_TRO_LY[langOf(opts.english)] },
     ...(opts.history || []).slice(-MAX_HISTORY),
-    { role: 'user', content: nhacNgonNgu(opts.english) + question },
+    { role: 'user', content: hoiKemAnh(nhacNgonNgu(opts.english) + question, opts.images) },
   ];
   return { system: tutorSystem(opts.english), messages };
 }
@@ -310,7 +375,7 @@ export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Prom
 
   // Câu hỏi gợi ý (có cacheKey) → thử cache trước; HIT thì trả ngay, khỏi tốn AI.
   // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
-  const ck = opts.cacheKey ? await khoaCache(lessonId, opts.cacheKey) : undefined;
+  const ck = (opts.cacheKey && !khongDungCache(opts)) ? await khoaCache(lessonId, opts.cacheKey) : undefined;
   if (ck && !opts.refresh) {
     const hit = await getCachedAnswer(lessonId, ck, lang);
     if (hit) return { answer: hit, cached: true };
@@ -356,7 +421,7 @@ export async function streamCourseTutor(
   // Cache HIT: KHÔNG stream (không có delta) — route sẽ gửi thẳng khung 'done'
   // với answer + cached:true, frontend hiện ngay tức thì.
   // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
-  const ck = opts.cacheKey ? await khoaCache(lessonId, opts.cacheKey) : undefined;
+  const ck = (opts.cacheKey && !khongDungCache(opts)) ? await khoaCache(lessonId, opts.cacheKey) : undefined;
   if (ck && !opts.refresh) {
     const hit = await getCachedAnswer(lessonId, ck, lang);
     if (hit) return { answer: hit, cached: true };

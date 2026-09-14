@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, Copy, CheckCheck, User, Send, Search, SquarePen, History, ImageIcon } from 'lucide-react';
+import { X, Loader2, Copy, CheckCheck, User, Send, Search, SquarePen, History, ImageIcon, GraduationCap, Maximize2, Minimize2, MessageSquare } from 'lucide-react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
@@ -11,6 +11,8 @@ import { findStaticResponse } from '@/lib/ai-static-responses';
 import { useChatModelStore, DEFAULT_CHAT_MODEL_ID, getChatModel } from '@/lib/aiChatModels';
 import ModelPicker from './ModelPicker';
 import ChatMarkdown from './ChatMarkdown';
+import GiaSuTrongRobot from './GiaSuTrongRobot';
+import { useGiaSuBaiStore } from '@/store/giaSuBaiStore';
 import { toast } from 'sonner';
 import type { ChatMessage, ChatSession } from '@/types';
 
@@ -202,6 +204,19 @@ export default function ChatModal({ onClose }: ChatModalProps) {
   } = useChatStore();
 
   const [input, setInput] = useState('');
+
+  /* ── Gia sư bài học ──
+     `bai` do chính `CourseTutor` ghi vào khi nó được gắn (xem `giaSuBaiStore`),
+     nên robot tự biết trang nào là trang học mà không cần trang đó cắm gì. */
+  const baiDangHoc = useGiaSuBaiStore((st) => st.bai);
+  /* Đang ở trang học thì MẶC ĐỊNH mở thẳng chế độ gia sư — đó là lý do người
+     dùng bấm vào robot lúc đang học. Rời trang thì `baiDangHoc` thành null và
+     nhánh dưới tự rơi về trợ lý chung, không cần dọn cờ này. */
+  const [muonChung, datMuonChung] = useState(false);
+  const cheDoGiaSu = !!baiDangHoc && !muonChung;
+  /* Phóng to. Bài giảng có bảng, sơ đồ và công thức — 390px là chỗ người dùng
+     phải cuộn ngang để đọc, đúng chữ "thô" trong lời than. */
+  const [rong, datRong] = useState(false);
   const [showPrompts, setShowPrompts] = useState(true);
   /* ── Lịch sử phiên ──
      Trước bản này khung nổi không có đường nào mở lại cuộc cũ; muốn xem là
@@ -569,12 +584,14 @@ finished: true,
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 30 }}
         transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-        className="fixed bottom-24 right-6 z-[120] w-[390px] max-w-[calc(100vw-48px)] h-[580px] max-h-[calc(100dvh-140px)]
+        /* Bề rộng theo chế độ. `max-w`/`max-h` giữ nguyên nên ở cửa sổ hẹp
+           hoặc màn điện thoại nó vẫn co lại như cũ, không tràn ra ngoài. */
+        className={`fixed bottom-24 right-6 z-[120] ${rong ? 'w-[720px] h-[680px]' : 'w-[390px] h-[580px]'} max-w-[calc(100vw-48px)] max-h-[calc(100dvh-140px)]
           bg-[#0d1117]/95 backdrop-blur-xl
           rounded-2xl
           border border-[#22d3ee]/15
           shadow-[0_0_40px_rgba(34,211,238,0.08),0_8px_32px_rgba(0,0,0,0.8)]
-          flex flex-col overflow-hidden"
+          flex flex-col overflow-hidden`}
           style={{ contain: 'layout style' }}
       >
         {/* Header */}
@@ -590,23 +607,66 @@ finished: true,
             </div>
           </div>
 
-          <div className="flex-1">
-            {/* Terminal prompt */}
-            <h2 className="text-sm font-mono font-semibold text-[#f8fafc]">
-              <span className="text-[#22d3ee]">root</span>
-              <span className="text-[#64748b]">@</span>
-              <span className="text-[#22d3ee]">CuongMini-OS</span>
-              <span className="text-[#64748b]">:~#</span>
-            </h2>
-            <p className="text-[11px] text-[#64748b] font-mono">
-              {isStreaming ? (
-                <><span className="text-[#22d3ee]">[SYS]</span> Processing... {isAuthenticated ? 'AUTH' : 'GUEST'}</>
-              ) : (
-                <><span className="text-green-400">ONLINE</span> {isAuthenticated ? 'AUTH' : 'GUEST'}</>
-              )}
-            </p>
+          <div className="min-w-0 flex-1">
+            {/* Tiêu đề đổi theo chế độ: ở chế độ gia sư mà vẫn để "root@CuongMini-OS"
+                thì người học không có dấu hiệu nào cho biết robot đã nối vào bài. */}
+            {cheDoGiaSu ? (
+              <>
+                <h2 className="flex items-center gap-1.5 text-sm font-semibold text-[#f8fafc]">
+                  <GraduationCap className="h-4 w-4 shrink-0 text-[#22d3ee]" /> Gia sư bài học
+                </h2>
+                <p className="truncate text-[11px] text-[#64748b]">
+                  {isStreaming ? 'Đang soạn câu trả lời…' : 'Hỏi ngay tại đây, khỏi cuộn xuống cuối bài'}
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-sm font-mono font-semibold text-[#f8fafc]">
+                  <span className="text-[#22d3ee]">root</span>
+                  <span className="text-[#64748b]">@</span>
+                  <span className="text-[#22d3ee]">CuongMini-OS</span>
+                  <span className="text-[#64748b]">:~#</span>
+                </h2>
+                <p className="text-[11px] text-[#64748b] font-mono">
+                  {isStreaming ? (
+                    <><span className="text-[#22d3ee]">[SYS]</span> Processing... {isAuthenticated ? 'AUTH' : 'GUEST'}</>
+                  ) : (
+                    <><span className="text-green-400">ONLINE</span> {isAuthenticated ? 'AUTH' : 'GUEST'}</>
+                  )}
+                </p>
+              </>
+            )}
           </div>
 
+          {/* Chuyển chế độ — chỉ hiện khi đang ở một bài học. Không có bài thì
+              nút này là một lời hứa suông, bấm vào chẳng đổi gì. */}
+          {baiDangHoc && (
+            <button
+              onClick={() => datMuonChung((v) => !v)}
+              disabled={isStreaming}
+              title={cheDoGiaSu ? 'Chuyển sang trợ lý chung' : 'Quay lại gia sư của bài đang học'}
+              aria-label={cheDoGiaSu ? 'Chuyển sang trợ lý chung' : 'Quay lại gia sư của bài đang học'}
+              className="rounded-xl border border-transparent p-2 text-[#64748b] transition-colors hover:border-[#22d3ee]/20 hover:bg-[#22d3ee]/10 hover:text-[#22d3ee] disabled:opacity-40"
+            >
+              {cheDoGiaSu ? <MessageSquare className="h-4 w-4" /> : <GraduationCap className="h-4 w-4" />}
+            </button>
+          )}
+
+          {/* Phóng to. Ẩn ở màn hẹp: khung đã chạm `max-w` nên bấm vào không
+              rộng thêm được, chỉ là một cái nút chết. */}
+          <button
+            onClick={() => datRong((v) => !v)}
+            title={rong ? 'Thu nhỏ khung' : 'Phóng to khung'}
+            aria-label={rong ? 'Thu nhỏ khung' : 'Phóng to khung'}
+            className="hidden rounded-xl border border-transparent p-2 text-[#64748b] transition-colors hover:border-[#22d3ee]/20 hover:bg-[#22d3ee]/10 hover:text-[#22d3ee] lg:block"
+          >
+            {rong ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          </button>
+
+          {/* Lịch sử và "chat mới" thuộc về TRỢ LÝ CHUNG. Ở chế độ gia sư chúng
+              không có nghĩa: hội thoại gia sư xếp theo bài, không theo phiên chat,
+              nên bấm vào chỉ làm người dùng tưởng mình vừa mất bài đang hỏi. */}
+          {!cheDoGiaSu && (
           <button
             onClick={() => void moLichSu()}
             disabled={isStreaming}
@@ -616,8 +676,9 @@ finished: true,
           >
             <History className="w-4 h-4" />
           </button>
+          )}
 
-          {modalMessages.length > 0 && (
+          {!cheDoGiaSu && modalMessages.length > 0 && (
             <button
               onClick={() => {
                 if (isStreaming) return;
@@ -641,173 +702,180 @@ finished: true,
           </button>
         </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-3 space-y-3">
-          {/* Welcome */}
-          {modalMessages.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-6"
-            >
-              {/* Cyber robot avatar */}
-              <div className="w-16 h-16 rounded-2xl mx-auto mb-3 bg-[#0d1117] border border-[#22d3ee]/20 flex items-center justify-center shadow-[0_0_20px_rgba(34,211,238,0.15)]">
-                <div className="flex flex-col items-center gap-1">
-                  <div className="flex gap-3">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#22d3ee] led-eye" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#22d3ee] led-eye" style={{ animationDelay: '0.5s' }} />
+        {cheDoGiaSu && baiDangHoc ? (
+          /* Chế độ gia sư: cùng một ruột với mục cuối bài — xem GiaSuTrongRobot. */
+          <GiaSuTrongRobot bai={baiDangHoc} rong={rong} />
+        ) : (
+          <>
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-3 space-y-3">
+            {/* Welcome */}
+            {modalMessages.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center py-6"
+              >
+                {/* Cyber robot avatar */}
+                <div className="w-16 h-16 rounded-2xl mx-auto mb-3 bg-[#0d1117] border border-[#22d3ee]/20 flex items-center justify-center shadow-[0_0_20px_rgba(34,211,238,0.15)]">
+                  <div className="flex flex-col items-center gap-1">
+                    <div className="flex gap-3">
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#22d3ee] led-eye" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#22d3ee] led-eye" style={{ animationDelay: '0.5s' }} />
+                    </div>
+                    <div className="w-4 h-px bg-[#22d3ee]/40 rounded-full mt-1" />
                   </div>
-                  <div className="w-4 h-px bg-[#22d3ee]/40 rounded-full mt-1" />
                 </div>
+                <p className="text-xs text-[#64748b] font-mono mb-4">
+                  <span className="text-[#22d3ee]">//</span> Ask about CuongHoang's portfolio, skills &amp; projects.
+                </p>
+
+                {/* Prompt grid */}
+                {showPrompts && (
+                  <div className="grid grid-cols-2 gap-2">
+                    {INITIAL_PROMPTS.map((p, i) => (
+                      <motion.button
+                        key={p.id}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.08 }}
+                        whileHover={{ scale: 1.03, y: -1 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handlePromptSelect(p.prompt)}
+                        className="flex items-center gap-2 px-3 py-2 bg-[#0a0a0f] border border-[#22d3ee]/15 rounded-xl text-left hover:border-[#22d3ee]/40 hover:bg-[#22d3ee]/5 transition-all data-card-glow-cyan"
+                      >
+                        <span className="text-[10px] font-mono text-[#22d3ee]">{p.icon}.</span>
+                        <span className="text-xs text-[#94a3b8] font-mono">{p.label}</span>
+                      </motion.button>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {moSu && (
+              <div className="mb-3 rounded-xl border border-[#22d3ee]/15 bg-[#0a0a0f]/80 p-1">
+                {dangNapSu && su.length === 0 ? (
+                  <p className="px-3 py-2 text-xs font-mono text-[#64748b]">Đang tải…</p>
+                ) : su.length === 0 ? (
+                  <p className="px-3 py-2 text-xs font-mono text-[#64748b]">Chưa có cuộc nào.</p>
+                ) : (
+                  <div className="max-h-52 overflow-y-auto">
+                    {su.map((x) => (
+                      <button
+                        key={x.id}
+                        onClick={() => void chonPhien(x.id)}
+                        className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left transition-colors hover:bg-[#22d3ee]/10 ${
+                          x.id === currentSessionId ? 'bg-[#22d3ee]/15' : ''
+                        }`}
+                      >
+                        {/* `min-w-0` để tiêu đề dài CẮT chứ không đẩy con số ra
+                            khỏi khung — khung này chỉ rộng ~380px. */}
+                        <span className="min-w-0 flex-1 truncate font-mono text-xs text-[#cbd5e1]">{x.ten}</span>
+                        <span className="shrink-0 font-mono text-[10px] text-[#64748b]">{x.so}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-              <p className="text-xs text-[#64748b] font-mono mb-4">
-                <span className="text-[#22d3ee]">//</span> Ask about CuongHoang's portfolio, skills &amp; projects.
-              </p>
+            )}
 
-              {/* Prompt grid */}
-              {showPrompts && (
-                <div className="grid grid-cols-2 gap-2">
-                  {INITIAL_PROMPTS.map((p, i) => (
-                    <motion.button
-                      key={p.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.08 }}
-                      whileHover={{ scale: 1.03, y: -1 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => handlePromptSelect(p.prompt)}
-                      className="flex items-center gap-2 px-3 py-2 bg-[#0a0a0f] border border-[#22d3ee]/15 rounded-xl text-left hover:border-[#22d3ee]/40 hover:bg-[#22d3ee]/5 transition-all data-card-glow-cyan"
-                    >
-                      <span className="text-[10px] font-mono text-[#22d3ee]">{p.icon}.</span>
-                      <span className="text-xs text-[#94a3b8] font-mono">{p.label}</span>
-                    </motion.button>
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          )}
-
-          {moSu && (
-            <div className="mb-3 rounded-xl border border-[#22d3ee]/15 bg-[#0a0a0f]/80 p-1">
-              {dangNapSu && su.length === 0 ? (
-                <p className="px-3 py-2 text-xs font-mono text-[#64748b]">Đang tải…</p>
-              ) : su.length === 0 ? (
-                <p className="px-3 py-2 text-xs font-mono text-[#64748b]">Chưa có cuộc nào.</p>
-              ) : (
-                <div className="max-h-52 overflow-y-auto">
-                  {su.map((x) => (
-                    <button
-                      key={x.id}
-                      onClick={() => void chonPhien(x.id)}
-                      className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left transition-colors hover:bg-[#22d3ee]/10 ${
-                        x.id === currentSessionId ? 'bg-[#22d3ee]/15' : ''
-                      }`}
-                    >
-                      {/* `min-w-0` để tiêu đề dài CẮT chứ không đẩy con số ra
-                          khỏi khung — khung này chỉ rộng ~380px. */}
-                      <span className="min-w-0 flex-1 truncate font-mono text-xs text-[#cbd5e1]">{x.ten}</span>
-                      <span className="shrink-0 font-mono text-[10px] text-[#64748b]">{x.so}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          <AnimatePresence mode="popLayout">
-            {modalMessages.map((msg) => (
-              <ChatBubble
-                key={msg.id}
-                msg={msg}
-                isLastAssistant={msg.id === lastAssistantId}
-                isStreaming={isStreaming}
-              />
-            ))}
-          </AnimatePresence>
-
-          {isStreaming && modalMessages[modalMessages.length - 1]?.role !== 'assistant' && (
-            <MechTypingIndicator />
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Input */}
-        <div className="px-4 py-3 border-t border-[#22d3ee]/10 bg-[#0a0a0f]/80 flex-shrink-0">
-          <div className="mb-2 flex items-center">
-            <ModelPicker disabled={isStreaming} />
-          </div>
-
-          {anh.length > 0 && (
-            <div className="mb-2 flex flex-wrap gap-2">
-              {anh.map((u, i) => (
-                <span key={i} className="relative inline-flex">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={u} alt="" className="h-12 w-12 rounded-lg border border-[#22d3ee]/20 object-cover" />
-                  <button
-                    onClick={() => setAnh((c) => c.filter((_, k) => k !== i))}
-                    aria-label="Bỏ ảnh"
-                    className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#0a0a0f] text-[#94a3b8] hover:text-white"
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </span>
+            <AnimatePresence mode="popLayout">
+              {modalMessages.map((msg) => (
+                <ChatBubble
+                  key={msg.id}
+                  msg={msg}
+                  isLastAssistant={msg.id === lastAssistantId}
+                  isStreaming={isStreaming}
+                />
               ))}
-            </div>
-          )}
-          <div className="relative">
-            {/* Terminal prompt */}
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none select-none">
-              <span className="text-[#22d3ee] font-mono text-xs font-bold">&gt;</span>
-            </div>
+            </AnimatePresence>
 
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              onPaste={nhanDan}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
-              placeholder="enter command... (dán ảnh được)"
-              rows={1}
-              className={`
-                w-full pl-7 pr-12 py-2.5 bg-[#0a0a0f] rounded-xl text-xs text-[#f8fafc]
-                placeholder:text-[#64748b]/40 font-mono focus:outline-none resize-none
-                transition-all disabled:opacity-50
-                ${focused
-                  ? 'border border-[#22d3ee]/50 input-circuit-focus'
-                  : 'border border-[#22d3ee]/15'
-                }
-              `}
-              style={{ minHeight: '40px', maxHeight: '100px' }}
-            />
+            {isStreaming && modalMessages[modalMessages.length - 1]?.role !== 'assistant' && (
+              <MechTypingIndicator />
+            )}
 
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={isStreaming ? stopStreaming : () => handleSend(input)}
-              disabled={!isStreaming && !input.trim() && anh.length === 0}
-              aria-label={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
-              title={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
-              className={`
-                absolute right-1.5 bottom-1.5 w-8 h-8 rounded-lg flex items-center justify-center
-                transition-all overflow-hidden exec-btn-glitch
-                ${isStreaming
-                  ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white shadow-[0_0_10px_rgba(239,68,68,0.35)]'
-                  : input.trim()
-                    ? 'bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6] text-white shadow-[0_0_10px_rgba(34,211,238,0.3)]'
-                    : 'bg-[#1a1a24] text-[#64748b] cursor-not-allowed'
-                }
-              `}
-            >
-              {isStreaming ? (
-                <span className="block h-2.5 w-2.5 rounded-[2px] bg-white" />
-              ) : (
-                <Send className="w-3.5 h-3.5" />
-              )}
-            </motion.button>
+            <div ref={messagesEndRef} />
           </div>
-        </div>
+
+          {/* Input */}
+          <div className="px-4 py-3 border-t border-[#22d3ee]/10 bg-[#0a0a0f]/80 flex-shrink-0">
+            <div className="mb-2 flex items-center">
+              <ModelPicker disabled={isStreaming} />
+            </div>
+
+            {anh.length > 0 && (
+              <div className="mb-2 flex flex-wrap gap-2">
+                {anh.map((u, i) => (
+                  <span key={i} className="relative inline-flex">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={u} alt="" className="h-12 w-12 rounded-lg border border-[#22d3ee]/20 object-cover" />
+                    <button
+                      onClick={() => setAnh((c) => c.filter((_, k) => k !== i))}
+                      aria-label="Bỏ ảnh"
+                      className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#0a0a0f] text-[#94a3b8] hover:text-white"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+            <div className="relative">
+              {/* Terminal prompt */}
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none select-none">
+                <span className="text-[#22d3ee] font-mono text-xs font-bold">&gt;</span>
+              </div>
+
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onPaste={nhanDan}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                placeholder="enter command... (dán ảnh được)"
+                rows={1}
+                className={`
+                  w-full pl-7 pr-12 py-2.5 bg-[#0a0a0f] rounded-xl text-xs text-[#f8fafc]
+                  placeholder:text-[#64748b]/40 font-mono focus:outline-none resize-none
+                  transition-all disabled:opacity-50
+                  ${focused
+                    ? 'border border-[#22d3ee]/50 input-circuit-focus'
+                    : 'border border-[#22d3ee]/15'
+                  }
+                `}
+                style={{ minHeight: '40px', maxHeight: '100px' }}
+              />
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={isStreaming ? stopStreaming : () => handleSend(input)}
+                disabled={!isStreaming && !input.trim() && anh.length === 0}
+                aria-label={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
+                title={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
+                className={`
+                  absolute right-1.5 bottom-1.5 w-8 h-8 rounded-lg flex items-center justify-center
+                  transition-all overflow-hidden exec-btn-glitch
+                  ${isStreaming
+                    ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white shadow-[0_0_10px_rgba(239,68,68,0.35)]'
+                    : input.trim()
+                      ? 'bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6] text-white shadow-[0_0_10px_rgba(34,211,238,0.3)]'
+                      : 'bg-[#1a1a24] text-[#64748b] cursor-not-allowed'
+                  }
+                `}
+              >
+                {isStreaming ? (
+                  <span className="block h-2.5 w-2.5 rounded-[2px] bg-white" />
+                ) : (
+                  <Send className="w-3.5 h-3.5" />
+                )}
+              </motion.button>
+            </div>
+          </div>
+          </>
+        )}
       </motion.div>
     </>
   );

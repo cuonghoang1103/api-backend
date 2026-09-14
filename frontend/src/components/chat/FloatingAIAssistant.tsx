@@ -15,6 +15,7 @@ import { useReduceAnimations } from '@/hooks/useIsTouch';
 import { useTranslation } from '@/hooks/useTranslation';
 import { getLandingCopy } from '@/components/home/landing/landingCopy';
 import ChatModal from './ChatModal';
+import { useGiaSuBaiStore } from '@/store/giaSuBaiStore';
 
 type RobotState = 'idle' | 'thinking' | 'typing';
 
@@ -42,8 +43,15 @@ export default function FloatingAIAssistant() {
  // page it covered content/action buttons (user request 2026-07-09). Desktop
  // is unaffected. Uses matchMedia (a plain call, not a hook) so the value is
  // available synchronously during render.
+ // ⚠️ NGOẠI LỆ: trang BÀI HỌC vẫn hiện trên điện thoại (15/09/2026). Robot ở
+ // đó là lối tắt tới gia sư của chính bài đang học, và màn hình càng nhỏ thì
+ // quãng cuộn xuống mục gia sư cuối bài càng dài — tức chỗ nó CẦN nhất lại
+ // đang là chỗ duy nhất nó bị ẩn. `dangHocBai` do `CourseTutor` ghi vào kho
+ // khi bài được mở, nên ngoại lệ này chỉ mở đúng lúc đang học.
+ const dangHocBai = !!useGiaSuBaiStore((st) => st.bai);
  const hiddenOnMobile =
    pathname !== '/' &&
+   !dangHocBai &&
    typeof window !== 'undefined' &&
    window.matchMedia?.('(pointer: coarse)')?.matches;
  // Whether to hide the bubble on this route. We must NOT `return null` here:

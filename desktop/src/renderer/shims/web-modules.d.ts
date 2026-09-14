@@ -235,3 +235,50 @@ declare module '@/components/academy/ChapterQuiz' {
     lessonId?: number;
   }): JSX.Element;
 }
+
+/**
+ * Kho gia sư bài học.
+ *
+ * Desktop KHÔNG gọi thẳng kho này — `CourseTutor` (đã khai ở trên) tự ghi vào
+ * nó. Khai ở đây là để phép kiểm `giaSuBaiStore.test.ts` có kiểu: web không có
+ * bộ chạy kiểm nào, nên vitest của desktop là chỗ duy nhất trong kho chạy được
+ * một phép kiểm cho mã đó.
+ *
+ * ⚠️ Như cả file này: khai báo dưới đây KHÔNG được `tsc` đối chiếu với mã thật.
+ * Nhưng vitest thì nạp FILE THẬT, nên phép kiểm vẫn chạy trên mã thật — sai
+ * lệch giữa khai báo và thực tế sẽ lộ ra ngay ở đó.
+ */
+declare module '@/store/giaSuBaiStore' {
+  export interface LuotGiaSu {
+    role: 'user' | 'assistant';
+    content: string;
+    srcQuestion?: string;
+    srcCacheKey?: string;
+    english?: boolean;
+    streaming?: boolean;
+    enDone?: boolean;
+    cached?: boolean;
+    anh?: string[];
+  }
+  export interface BaiDangHoc {
+    lessonId: number;
+    courseCode?: string;
+    courseTitle?: string;
+    lessonTitle?: string;
+    duongDan?: string;
+  }
+  export function khoaGiaSu(lessonId: number, trongDe?: boolean): string;
+  interface GiaSuBaiState {
+    bai: BaiDangHoc | null;
+    datBai: (b: BaiDangHoc | null) => void;
+    cuoc: Record<string, LuotGiaSu[]>;
+    datCuoc: (khoa: string, f: (cu: LuotGiaSu[]) => LuotGiaSu[]) => void;
+    xoaCuoc: (khoa: string) => void;
+  }
+  export const useGiaSuBaiStore: {
+    (): GiaSuBaiState;
+    <T>(sel: (s: GiaSuBaiState) => T): T;
+    getState(): GiaSuBaiState;
+    setState(s: Partial<GiaSuBaiState>): void;
+  };
+}

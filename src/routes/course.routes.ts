@@ -2893,6 +2893,50 @@ router.post('/activate-code', async (req: any, res: any, next) => {
 });
 
 // ─── Gia sư AI cho từng bài học Academy (Pro only) ─────────────────
+/**
+ * ============================================================
+ * ẢNH DÁN VÀO CÂU HỎI GIA SƯ
+ * ============================================================
+ *
+ * Người dùng 15/09/2026: "tôi có thể chụp ảnh màn hình paste copy qua đó dán
+ * để hỏi những chỗ chi tiết thì càng tốt".
+ *
+ * Client gửi data URL. Ở đây tách ra {media_type, data} và kiểm ba thứ —
+ * KHÔNG tin client, vì ba thứ này đều là đường làm hỏng thật:
+ *
+ *  • LOẠI — chỉ png/jpeg/webp/gif. Một data URL `image/svg+xml` là XML, và
+ *    model nhận vào sẽ trả lời về một tấm ảnh nó không đọc được.
+ *  • CỠ — 5MB mỗi tấm tính trên chuỗi base64 (đã phình 4/3 so với byte gốc),
+ *    đúng thứ cổng đo. Không chặn thì một ảnh 4K dán vào là một lượt gọi
+ *    khổng lồ, chậm và đắt, rồi cổng từ chối bằng một lỗi không nói vì sao.
+ *  • SỐ LƯỢNG — tối đa 3. Hội thoại được GỬI LẠI TOÀN BỘ ở mỗi lượt, nên ảnh
+ *    thứ tư không chỉ tốn một lần mà tốn lại ở mọi câu hỏi tiếp theo.
+ *
+ * Tấm nào sai thì BỎ RIÊNG TẤM ĐÓ, không ném lỗi cả lượt: người học dán bốn
+ * tấm mà bị từ chối cả câu hỏi thì tệ hơn là được trả lời theo ba tấm hợp lệ.
+ */
+const ANH_HOP_LE = /^image\/(png|jpeg|jpg|webp|gif)$/;
+const TRAN_ANH_B64 = 5 * 1024 * 1024;
+const MAX_ANH_HOI = 3;
+
+export function docAnhDan(raw: unknown): { media_type: string; data: string }[] | undefined {
+  if (!Array.isArray(raw) || !raw.length) return undefined;
+  const ra: { media_type: string; data: string }[] = [];
+  for (const x of raw) {
+    if (typeof x !== 'string') continue;
+    const m = /^data:([^;,]+);base64,(.+)$/s.exec(x.trim());
+    if (!m) continue;
+    const loai = m[1].toLowerCase();
+    if (!ANH_HOP_LE.test(loai)) continue;
+    const than = m[2];
+    if (!than || than.length > TRAN_ANH_B64) continue;
+    // `image/jpg` không phải media type thật — cổng trả 400 cho nó.
+    ra.push({ media_type: loai === 'image/jpg' ? 'image/jpeg' : loai, data: than });
+    if (ra.length >= MAX_ANH_HOI) break;
+  }
+  return ra.length ? ra : undefined;
+}
+
 // POST /api/v1/courses/lessons/:id/ai/ask — hỏi bất cứ điều gì về bài đang học.
 router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
@@ -2906,6 +2950,7 @@ router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response
       // sửa được một mục cache hỏng (xem TutorAskOpts.refresh).
       refresh: req.body?.refresh === true,
       quizContext: Array.isArray(req.body?.quizContext) ? req.body.quizContext : undefined,
+      images: docAnhDan(req.body?.images),
     });
     res.json({ success: true, data: out });
     // Cả đường LÙI (không stream) cũng phải lưu. Chỉ gắn ở đường stream thì
@@ -2947,6 +2992,7 @@ router.post('/lessons/:id(\\d+)/ai/ask-stream', authenticate, async (req, res) =
         // sửa được một mục cache hỏng (xem TutorAskOpts.refresh).
         refresh: req.body?.refresh === true,
         quizContext: Array.isArray(req.body?.quizContext) ? req.body.quizContext : undefined,
+        images: docAnhDan(req.body?.images),
       },
       (delta) => send({ type: 'delta', text: delta }),
     );

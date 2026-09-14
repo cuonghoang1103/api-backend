@@ -99,6 +99,24 @@ export const topupLimiter = taoLimiter({
 });
 
 /** Mua gói Pro. */
+/**
+ * Gửi giao dịch Apple lên xác minh.
+ *
+ * Nới hơn `proOrderLimiter` có chủ đích: bấm "Khôi phục giao dịch" với bốn
+ * lượt mua cũ là bốn lời gọi liền nhau, và StoreKit còn tự phát lại giao
+ * dịch chưa `finish()` mỗi lần mở app. Đó là hành vi BÌNH THƯỜNG, chặn nó ở
+ * mức 5/phút thì người dùng thật không khôi phục nổi gói mình đã mua.
+ *
+ * Vẫn phải có trần: mỗi lời gọi là một lượt dựng và kiểm chuỗi chứng thư
+ * X.509, nên nã JWS rác vào đây là một cách đốt CPU rẻ tiền.
+ */
+export const appleIapLimiter = taoLimiter({
+  prefix: 'rl:appleiap:',
+  windowMs: 60_000,
+  max: parseInt(process.env.APPLE_IAP_LIMIT_PER_MIN || '20', 10),
+  message: 'Bạn đang gửi quá nhanh. Vui lòng chờ một lát rồi thử lại.',
+});
+
 export const proOrderLimiter = taoLimiter({
   prefix: 'rl:proorder:',
   windowMs: 60_000,

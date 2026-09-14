@@ -103,7 +103,7 @@ export const isProForDisplay = isProEffective;
  * time-limited membership adds days onto the later of now / current expiry; a
  * lifetime membership stays lifetime.
  */
-export async function grantProToUser(userId: number, durationDays: number | null, source: 'CODE' | 'ADMIN' | 'PURCHASE'): Promise<ProStatus> {
+export async function grantProToUser(userId: number, durationDays: number | null, source: 'CODE' | 'ADMIN' | 'PURCHASE' | 'APPLE_IAP'): Promise<ProStatus> {
   const u = await prisma.user.findUnique({ where: { id: userId }, select: { isPro: true, proExpiresAt: true, proSince: true } });
   if (!u) throw new NotFoundError('User không tồn tại');
 

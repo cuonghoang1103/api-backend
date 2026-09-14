@@ -7,7 +7,7 @@
 import { Router, type Request, type Response } from 'express';
 import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
-import { proOrderLimiter } from '../middleware/orderRateLimit.js';
+import { proOrderLimiter, appleIapLimiter } from '../middleware/orderRateLimit.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import * as pro from '../services/pro.service.js';
@@ -15,6 +15,7 @@ import * as billing from '../services/billing.service.js';
 import { taoChuyenKhoan } from '../services/bankTransfer.service.js';
 import { isPayosConfigured } from '../config/payos.js';
 import * as points from '../services/points.service.js';
+import { ghiNhanGiaoDich } from '../services/appleIAP/capPro.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -51,6 +52,33 @@ router.get('/status', authenticate, async (req: Request, res: Response<ApiRespon
 router.post('/redeem', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const data = await pro.redeemProCode(req.userId!, String(req.body?.code ?? ''));
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
+// ─────────────────────── Apple In-App Purchase ───────────────────────
+
+/**
+ * Ghi nhận một giao dịch mua Pro qua App Store.
+ * Body: { jws } — chuỗi JWS mà StoreKit 2 trả về (`Transaction.jsonRepresentation`).
+ *
+ * ⚠️ KHÔNG có endpoint "khôi phục" riêng, và không cần. Bấm "Khôi phục giao
+ * dịch" trong app chỉ khiến StoreKit đọc lại các giao dịch cũ rồi gửi đúng
+ * qua đây; khoá duy nhất trên `transaction_id` lo phần không cấp hai lần.
+ * Một đường vào, một luật.
+ *
+ * Máy chủ là nơi phán quyết: app KHÔNG được tự kết luận "đã mua xong" rồi tự
+ * mở khoá. Mọi cổng Pro vẫn hỏi `isProEffective` như trước.
+ */
+router.post('/apple/transactions', authenticate, appleIapLimiter, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const jws = String((req.body as { jws?: unknown })?.jws ?? '').trim();
+    if (!jws) throw new BadRequestError('Thiếu jws.');
+    // Trần độ dài: JWS thật gồm ba khúc base64url kèm chuỗi chứng thư, cỡ
+    // vài KB. Không chặn thì một thân yêu cầu 10MB cũng đi thẳng vào bộ giải
+    // mã base64 và bộ dựng X.509.
+    if (jws.length > 32_000) throw new BadRequestError('jws quá dài.');
+    const data = await ghiNhanGiaoDich(req.userId!, jws);
     res.json({ success: true, data });
   } catch (err) { next(err); }
 });

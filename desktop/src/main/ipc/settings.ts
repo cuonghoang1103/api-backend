@@ -43,6 +43,13 @@ export function registerSettingsHandlers(): void {
      * ⚠️ Cửa sổ robot nổi là một entry riêng và nó đọc thiết đặt đúng MỘT LẦN
      * lúc mở. Không báo thì đổi sang tiếng Anh xong, cả app đổi trừ con robot —
      * và nó là cửa sổ sống lâu nhất, hiếm khi được dựng lại. */
+    /* Bật/tắt trợ lý phải ăn NGAY, cả con nổi lẫn con trong app. Trước bản
+       này chỉ con trong app nghe `robotEnabled`, nên tắt công tắc xong con nổi
+       vẫn đứng đó — người dùng báo đúng chuyện đó 14/09/2026. */
+    if (key === 'robotEnabled') {
+      void import('../robotNoi').then((m) => m.dongBoRobotNoi());
+    }
+
     if (key === 'ngonNgu') {
       for (const w of BrowserWindow.getAllWindows()) {
         if (!w.isDestroyed()) w.webContents.send('app:doiNgonNgu', { ngonNgu: String(value) });

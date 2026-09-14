@@ -6,7 +6,7 @@
  * tôi nghĩ ra.
  */
 import { describe, expect, it } from 'vitest';
-import { kep, doiCoGiuGoc, vungChoDiem, hutMep } from './robotViTri';
+import { kep, doiCoGiuGoc, vungChoDiem, hutMep, nenHienRobot } from './robotViTri';
 
 /** Vùng làm việc thật của máy đo: MacBook 1728×1022, mép trên 33px là menu bar. */
 const VUNG = { x: 0, y: 33, width: 1728, height: 1022 };
@@ -104,5 +104,37 @@ describe('hút vào mép', () => {
     const r = hutMep({ x: 1200, y: 400, ...GON }, VUNG, 12);
     expect(r.x).toBe(1728 - 150 - 12);
     expect(r.x + r.width).toBeLessThanOrEqual(VUNG.x + VUNG.width);
+  });
+});
+
+describe('công tắc hiện robot', () => {
+  it('⛔ THIẾU khoá ⇒ HIỆN, không phải ẩn', () => {
+    /* Máy cài từ trước chưa có khoá này trong tệp cấu hình. Coi "thiếu" là tắt
+       thì bản cập nhật làm robot biến mất với TẤT CẢ người dùng cũ, và họ
+       không biết đi bật lại ở đâu. */
+    expect(nenHienRobot({})).toBe(true);
+    expect(nenHienRobot({ robotEnabled: undefined })).toBe(true);
+  });
+
+  it('chỉ đúng `false` mới ẩn', () => {
+    expect(nenHienRobot({ robotEnabled: false })).toBe(false);
+    expect(nenHienRobot({ robotEnabled: true })).toBe(true);
+  });
+
+  it('⛔ giá trị rác KHÔNG được coi là tắt', () => {
+    // Tệp cấu hình người dùng sửa được. `0` / `''` / `'false'` đều "falsy"
+    // trong JS — viết `!c.robotEnabled` thì chuỗi 'false' lại thành BẬT còn số
+    // 0 thành TẮT, tức hành vi phụ thuộc KIỂU chứ không phụ thuộc ý.
+    expect(nenHienRobot({ robotEnabled: 0 })).toBe(true);
+    expect(nenHienRobot({ robotEnabled: '' })).toBe(true);
+    expect(nenHienRobot({ robotEnabled: 'false' })).toBe(true);
+  });
+
+  it('khớp đúng quy ước OdinDock dùng bên renderer', () => {
+    // `OdinDock.tsx:33` viết `settings.robotEnabled !== false`. Hai nơi lệch
+    // nhau là hai con robot nói hai chuyện khác nhau.
+    for (const v of [undefined, true, false, 0, '', 'false', null]) {
+      expect(nenHienRobot({ robotEnabled: v })).toBe(v !== false);
+    }
   });
 });

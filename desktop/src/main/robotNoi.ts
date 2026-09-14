@@ -30,7 +30,7 @@
 import { BrowserWindow, screen, app } from 'electron';
 import path from 'node:path';
 import { IS_DEV, DEV_SERVER_URL, RENDERER_SOURCE, APP_ORIGIN } from './config';
-import { kep, doiCoGiuGoc, vungChoDiem, hutMep, type Vung } from './robotViTri';
+import { kep, doiCoGiuGoc, vungChoDiem, hutMep, nenHienRobot, type Vung } from './robotViTri';
 import { getSettings, setSetting } from './store';
 
 /** Kích thước lúc thu gọn — vừa đúng con robot cộng một chút bóng đổ. */
@@ -423,6 +423,25 @@ export function robotTheoTieuDiem(dangOTrongApp: boolean): void {
   // `showInactive`: hiện lại KHÔNG cướp tiêu điểm. `show()` sẽ kéo app
   // CuongThai lên trước mặt người đang gõ ở app khác.
   if (nenAn) w.hide(); else w.showInactive();
+}
+
+/**
+ * Mở hay đóng cửa sổ robot nổi theo thiết đặt `robotEnabled`.
+ *
+ * ⚠️ 14/09/2026 — người dùng tắt công tắc "Trợ lý Odin" trong Cài đặt mà con
+ * robot NỔI vẫn hiện. Lý do: `robotEnabled` chỉ được con robot TRONG APP đọc
+ * (`OdinDock`), còn cửa sổ nổi thì `index.ts` gọi `moRobot()` VÔ ĐIỀU KIỆN lúc
+ * khởi động và không ai bảo nó ẩn. Hai con robot, một công tắc, mà chỉ một con
+ * nghe.
+ *
+ * Gọi hàm này ở hai chỗ: lúc khởi động, và mỗi khi `robotEnabled` đổi.
+ */
+export function dongBoRobotNoi(): void {
+  if (nenHienRobot(getSettings())) {
+    if (!robotDangMo()) moRobot();
+  } else if (robotDangMo()) {
+    dongRobot();
+  }
 }
 
 export function dongRobot(): void {

@@ -103,8 +103,10 @@ async function bootstrap(): Promise<void> {
 
   // Robot nổi — bật sau cửa sổ chính. Nó là cửa sổ hệ điều hành RIÊNG, sống
   // chừng nào app chưa thoát hẳn, kể cả khi cửa sổ chính đã đóng.
-  const { moRobot, cuaSoChinh, dongRobot, robotTheoTieuDiem } = await import('./robotNoi');
-  moRobot();
+  const { cuaSoChinh, dongRobot, robotTheoTieuDiem, dongBoRobotNoi } = await import('./robotNoi');
+  /* Theo thiết đặt, KHÔNG mở vô điều kiện: người đã tắt trợ lý mà mở app lại
+     thấy nó quay về thì công tắc ấy coi như không có tác dụng. */
+  dongBoRobotNoi();
 
   /**
    * Một lúc chỉ MỘT con robot trên màn hình.

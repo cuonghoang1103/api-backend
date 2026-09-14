@@ -565,3 +565,116 @@ button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
   color: #e2b44f;
   background: rgba(226, 180, 79, 0.1);
 }
+
+/* ══ MARKDOWN TRONG KHUNG CHAT MINI ══════════════════════════════════════
+   Khung chat dùng lại `ChuAgent` của app chính, nhưng KHÔNG dùng lại CSS của
+   nó — vì hai lý do:
+
+   1. `robot.html` là entry RIÊNG và không nạp `styles.css`. Không có bộ luật
+      nào ở đây thì markdown dựng ra nhưng trần trụi.
+   2. Cửa sổ này rộng ~380px. Chép nguyên cỡ chữ của app chính vào đây là
+      bảng tràn, tiêu đề to quá khổ, khối mã cuộn ngang liên tục.
+
+   ⚠️ KHÔNG dùng `var(--ct-*)` ở đây. Cửa sổ robot không có bảng biến đó —
+   đúng cái bẫy đã làm hoạt ảnh robot chết câm một lần (`--ct-ease` rỗng thì cả
+   thuộc tính `animation` hỏng). Màu viết thẳng. */
+.rb-may .ct-md { font-size: 12.5px; line-height: 1.6; }
+.rb-may .ct-md p { margin: 0 0 8px; }
+.rb-may .ct-md > div > *:last-child { margin-bottom: 0; }
+.rb-may .ct-md strong { font-weight: 650; color: #fff; }
+.rb-may .ct-md em { font-style: italic; }
+.rb-may .ct-md h4 {
+  margin: 12px 0 6px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: #fff;
+}
+.rb-may .ct-md > div > h4:first-child { margin-top: 0; }
+.rb-may .ct-md ul,
+.rb-may .ct-md ol { margin: 0 0 8px; padding-left: 18px; }
+.rb-may .ct-md li { margin: 2px 0; }
+.rb-may .ct-md li::marker { color: #7a7a8c; }
+.rb-may .ct-md a { color: #9d9dfa; text-decoration: underline; cursor: pointer; }
+.rb-may .ct-md code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.09);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px;
+}
+.rb-may .ct-md blockquote {
+  margin: 0 0 8px;
+  padding: 2px 0 2px 10px;
+  border-left: 2px solid rgba(255, 255, 255, 0.18);
+  color: #b8b8c8;
+}
+
+/* Khối mã: cuộn NGANG trong chính nó, không đẩy bong bóng rộng ra. */
+.rb-may .ct-md-ma {
+  margin: 0 0 8px;
+  border-radius: 9px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.rb-may .ct-md-ma-dau {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  font-size: 10px;
+  color: #8a8a9c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.rb-may .ct-md-ma pre {
+  margin: 0;
+  padding: 8px 10px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.55;
+}
+.rb-may .ct-md-ma pre code { padding: 0; border: 0; background: none; font-size: inherit; }
+
+/* Nhãn ngôn ngữ + nút Chép trên đầu khối mã. Không có luật ở đây thì nút dùng
+   kiểu mặc định của trình duyệt — nền trắng, viền nổi, to bằng nửa khối mã.
+   Người dùng nhìn thấy đúng như thế trong ảnh chụp 14/09. */
+.rb-may .ct-md-ma-ngon { margin-right: auto; text-transform: lowercase; }
+.rb-may .ct-md-ma-chep {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: transparent;
+  color: #b8b8c8;
+  font-size: 10px;
+  cursor: pointer;
+}
+.rb-may .ct-md-ma-chep:hover { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
+
+/* Bảng: cuộn ngang, không bao giờ làm rộng bong bóng. */
+.rb-may .ct-md-bang { margin: 0 0 8px; overflow-x: auto; }
+.rb-may .ct-md-bang table { border-collapse: collapse; font-size: 11.5px; }
+.rb-may .ct-md-bang th,
+.rb-may .ct-md-bang td {
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+  white-space: nowrap;
+}
+.rb-may .ct-md-bang th { color: #fff; font-weight: 600; }
+
+/* Ảnh model trả về trong markdown. Cũng dùng cho app chính — cùng tên lớp. */
+.ct-md-anh,
+.rb-may .ct-md-anh {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 4px 0 8px;
+  border-radius: 9px;
+}
+
+/* Công thức khối: cuộn ngang thay vì tràn ra khỏi bong bóng. */
+.rb-may .ct-toan-khoi { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }

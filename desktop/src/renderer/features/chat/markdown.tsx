@@ -79,6 +79,12 @@ function trongDong(s: string): string {
     // thật thì bấm vào là renderer tự điều hướng, rời khỏi app; ở đây bấm sẽ
     // được bắt lại và mở bằng trình duyệt hệ thống. `javascript:` trong câu trả
     // lời là chuyện hoàn toàn có thể xảy ra khi agent chép nội dung một file.
+    /* ẢNH phải xét TRƯỚC liên kết: `![alt](url)` chỉ khác `[alt](url)` đúng
+       một dấu `!` đứng trước. Để luật liên kết chạy trước thì ảnh ra thành một
+       dấu chấm than lạc lõng kèm một cái link — đúng thứ người dùng thấy khi
+       model trả về ảnh. */
+    .replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<img src="$2" alt="$1" loading="lazy" class="ct-md-anh" />')
     .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a data-url="$2">$1</a>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[\s(])\*([^*\n]+)\*/g, '$1<em>$2</em>');
@@ -334,10 +340,10 @@ function KhoiMa({ ngonNgu, noiDung }: { ngonNgu: string; noiDung: string }) {
   return (
     <div className="ct-md-ma">
       <div className="ct-md-ma-dau">
-        <span className="ct-md-ma-ngon">{ngonNgu || 'mã'}</span>
+        <span className="ct-md-ma-ngon">{ngonNgu || dich('mã')}</span>
         <button type="button" className="ct-md-ma-chep" onClick={chep} title={dich('Chép')}>
           {daChep ? <Check size={12} aria-hidden /> : <Copy size={12} aria-hidden />}
-          {daChep ? 'Đã chép' : 'Chép'}
+          {daChep ? dich('Đã chép') : dich('Chép')}
         </button>
       </div>
       <pre><code dangerouslySetInnerHTML={{ __html: html }} /></pre>

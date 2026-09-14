@@ -61,13 +61,16 @@ export function registerRobotHandlers(): void {
         hutLaiVaoMep();
       },
       datBamMep: (v) => setSetting('robotBamMep', v),
+      /* MỘT công tắc, HAI con robot.
+       *
+       * ⚠️ Trước bản này, tắt con NỔI chỉ gọi `dongRobot()` mà không ghi thiết
+       * đặt — nên mở app lần sau nó quay về, và người dùng kết luận là nút tắt
+       * không ăn. Tắt ở đâu cũng phải nhớ, và phải tắt cả hai: nhãn trong Cài
+       * đặt chỉ có MỘT dòng "Trợ lý Odin", người dùng không phân biệt con nào. */
       tat: () => {
-        if (trongApp) {
-          setSetting('robotEnabled', false);
-          for (const w of BrowserWindow.getAllWindows()) w.webContents.send('robot:tat', {});
-        } else {
-          dongRobot();
-        }
+        setSetting('robotEnabled', false);
+        for (const w of BrowserWindow.getAllWindows()) w.webContents.send('robot:tat', {});
+        dongRobot();
       },
     // KHÔNG truyền `window` vào `popup()`: mặc định nó bám cửa sổ đang có tiêu
     // điểm, mà cửa sổ robot cố ý KHÔNG nhận tiêu điểm (bấm vào robot không

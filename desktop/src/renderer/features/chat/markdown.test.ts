@@ -143,3 +143,33 @@ describe('bảng markdown', () => {
     expect(h).toContain('<p>Sau bảng.</p>');
   });
 });
+
+describe('ảnh trong markdown', () => {
+  it('`![alt](url)` ra thẻ img, KHÔNG ra "!" kèm link', () => {
+    /* Hai cú pháp chỉ khác nhau một dấu `!`. Để luật liên kết chạy trước thì
+       ảnh ra thành một dấu chấm than lạc lõng cạnh một cái link — và người
+       dùng nhìn thấy đúng thứ đó khi model trả về ảnh. */
+    const h = html('![sơ đồ](https://x.invalid/a.png)');
+    expect(h).toContain('<img');
+    expect(h).toContain('src="https://x.invalid/a.png"');
+    expect(h).toContain('alt="sơ đồ"');
+    expect(h).not.toContain('>!<');
+    expect(h).not.toMatch(/!\s*<a/);
+  });
+
+  it('alt rỗng vẫn ra ảnh', () => {
+    expect(html('![](https://x.invalid/a.png)')).toContain('<img');
+  });
+
+  it('⛔ CHỈ http/https — không mở đường cho javascript: hay data:', () => {
+    // Cùng lý do với liên kết: nội dung này do model sinh ra.
+    expect(html('![a](javascript:alert(1))')).not.toContain('<img');
+    expect(html('![a](data:text/html,<script>)')).not.toContain('<img');
+  });
+
+  it('liên kết thường KHÔNG bị nhận nhầm thành ảnh', () => {
+    const h = html('[trang chủ](https://x.invalid)');
+    expect(h).toContain('<a data-url="https://x.invalid">');
+    expect(h).not.toContain('<img');
+  });
+});

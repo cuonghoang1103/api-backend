@@ -112,3 +112,16 @@ export function hutMep(o: Vung, vung: Vung, le = 0): Vung {
     x: benTrai ? vung.x + le : vung.x + vung.width - o.width - le,
   }, vung);
 }
+
+/**
+ * Thiết đặt này có nghĩa là HIỆN robot không.
+ *
+ * ⚠️ THIẾU KHOÁ = BẬT. Máy đã cài từ trước chưa có khoá này trong tệp cấu
+ * hình; coi "thiếu" là tắt thì bản cập nhật sẽ làm robot biến mất với TẤT CẢ
+ * người dùng cũ, và họ không biết đi bật lại ở đâu. Cùng quy ước với
+ * `OdinDock` (`settings.robotEnabled !== false`) — hai nơi lệch nhau là hai
+ * con robot nói hai chuyện khác nhau.
+ */
+export function nenHienRobot(c: { robotEnabled?: unknown }): boolean {
+  return c.robotEnabled !== false;
+}

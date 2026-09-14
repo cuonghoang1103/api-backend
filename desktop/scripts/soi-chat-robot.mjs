@@ -57,8 +57,27 @@ await p.addInitScript(({ anh }) => {
   });
   const thatRobot = {
     hoi: async (chu, them) => cho(50, {
-      chu: `Mình đọc rồi nhé. Bạn hỏi "${chu.slice(0, 24)}"…`
-        + (them?.anh?.length ? ` Có ${them.anh.length} ảnh kèm theo.` : ''),
+      /* Trả về MARKDOWN THẬT — đó là thứ model gửi về, và là chỗ khung này
+         từng hiện nguyên dấu sao cho người dùng xem. */
+      chu: [
+        'Có chứ! Đây là **cuongthai.com** — website của **Hoàng Nghĩa Cường**.',
+        '',
+        '- Website bán hàng, landing page',
+        '- Thanh toán `MoMo` / `ZaloPay` / `VNPay`',
+        '- Bảo hành *3–6 tháng* miễn phí',
+        '',
+        '| Gói | Giá |',
+        '| --- | --- |',
+        '| Cơ bản | 3 triệu |',
+        '| Pro | 8 triệu |',
+        '',
+        'Lãi kép: $A = P(1 + r)^n$',
+        '',
+        '```js',
+        'const a = 1;',
+        '```',
+        them?.anh?.length ? `Có ${them.anh.length} ảnh kèm theo.` : '',
+      ].join('\n'),
       phienId: 'p-1',
       roiBac: them?.model === 'cuongmini-max' ? { thanh: 'cuongmini-3.11', lyDo: 'pro_required' } : null,
     }),

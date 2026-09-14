@@ -16,7 +16,7 @@
  * rồi đóng khung chat trước khi kịp nhảy trang — người dùng thấy một cái nháy
  * vô nghĩa. 260ms là ngưỡng nhấp đúp quen thuộc của cả hai hệ điều hành.
  */
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { OdinRobot } from './features/odin/OdinRobot';
 /* ⚠️ Cửa sổ robot là một ENTRY RIÊNG (`robot.html`), không đi qua
@@ -564,6 +564,20 @@ function Robot() {
  * không giữ phiên đăng nhập và vướng CORS — xem `robot:hoi` bên `ipc/robot.ts`.
  */
 
+/**
+ * Bộ dựng markdown của app chính — DÙNG LẠI, không viết bản thứ hai.
+ *
+ * ⚠️ 14/09/2026 người dùng gửi ảnh: câu trả lời hiện nguyên `***` và gạch đầu
+ * dòng thô. Khung này in chữ THUẦN, mà model thì luôn trả markdown — nên mọi
+ * câu dài đều khó đọc. `ChuAgent` lo markdown, bảng, công thức toán (KaTeX) và
+ * sơ đồ mermaid, đúng như trang AI Chat đầy đủ.
+ *
+ * `lazy` chứ không import thẳng: nó kéo theo highlight.js + KaTeX (~600KB), mà
+ * cửa sổ robot LUÔN mở và phần lớn thời gian chỉ là con robot nhỏ ở góc. Nạp
+ * lúc mở khung chat lần đầu là đủ sớm.
+ */
+const ChuAgent = lazy(() => import('./features/chat/markdown').then((m) => ({ default: m.ChuAgent })));
+
 /** Ba bậc, khớp `CHAT_MODELS` bên máy chủ. */
 const BAC = [
   { id: 'cuongmini-max', ten: 'CuongMini Max' },
@@ -744,7 +758,12 @@ function KhungChat({ onDong }: { onDong: () => void }) {
         {luot.map((l, i) => (
           <div key={i} className={l.toi ? 'rb-toi' : 'rb-may'}>
             {l.anh?.map((u, k) => <img key={k} src={u} alt="" className="rb-anh" />)}
-            {l.chu}
+            {/* Câu của MÌNH giữ chữ thuần: người dùng gõ gì thì thấy đúng thế,
+                dựng markdown lên câu họ vừa gõ là sửa chữ của họ. Chỉ câu của
+                trợ lý mới đi qua bộ dựng. */}
+            {l.toi
+              ? l.chu
+              : <Suspense fallback={l.chu}><ChuAgent text={l.chu} /></Suspense>}
           </div>
         ))}
         {dangCho && <div className="rb-may rb-cho">{dich('Chờ tớ suy nghĩ xíu nhé…')}</div>}

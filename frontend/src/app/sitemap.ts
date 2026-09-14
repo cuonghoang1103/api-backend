@@ -322,17 +322,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }))
 
-  const codeExerciseUrls: MetadataRoute.Sitemap = codeLab.exercises
-    .filter((e) => e.slug && e.trackSlug)
-    .map((e) => ({
-      url: `${SITE_URL}/code-lab/${e.trackSlug}/${e.slug}`,
-      lastModified: e.updatedAt ? new Date(e.updatedAt) : now,
-      // Nội dung bài tập gần như không đổi sau khi xuất bản; nói 'monthly' để
-      // Googlebot không quay lại nện 12.500 URL mỗi ngày trên con VPS 6GB.
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    }))
-
+  // ── CỐ Ý KHÔNG nộp ~7.500 trang bài tập con vào sitemap (14/09/2026) ──
+  // Thực đo trên Search Console: nộp cả 7.500 URL bài tập chiếm 98,7% sitemap
+  // (7.522/7.618) nhưng Google TỪ CHỐI index gần hết — Soft 404, "Crawled –
+  // currently not indexed", "Found – not yet indexed" phình lên hàng nghìn,
+  // và đống thin-content đó ngốn sạch crawl budget nên các trang GIÁ TRỊ
+  // (trang chủ, courses, academy, projects) bị bỏ đói, không được index →
+  // tìm "cuongthai" trên Google không ra. Cùng lý do mà AI Templates chỉ nộp
+  // trang DANH SÁCH, không nộp 1.877 trang chi tiết. Trang bài tập vẫn được
+  // Googlebot bò tới qua link nội bộ từ trang track, chỉ là theo nhịp của nó,
+  // không còn nhấn chìm sitemap. Sitemap gọn lại còn ~130 URL chất lượng.
   const all = [
     ...staticPages,
     ...courseUrls,
@@ -343,7 +342,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...gameUrls,
     ...voiceUrls,
     ...codeTrackUrls,
-    ...codeExerciseUrls,
   ]
 
   // Trần cứng của giao thức sitemap: 50.000 URL cho MỘT file. Hiện ~12.700 nên

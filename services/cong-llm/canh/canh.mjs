@@ -212,17 +212,39 @@ function phienDaLuu() {
   return null;
 }
 
-/** Đăng xuất một phiên. Hỏng thì bỏ qua — đây là dọn dẹp, không phải việc chính. */
-async function dangXuat(p) {
+/**
+ * DỌN mọi phiên khác, giữ lại phiên đang cầm.
+ *
+ * ⚠️⚠️ ĐƯỜNG DẪN ĐÚNG LÀ `/api/user/sessions/revoke-others`.
+ * Bản vá đầu tiên của tôi gọi `/api/user/logout` — đường đó KHÔNG TỒN TẠI: nó
+ * rơi vào route `/api/user/:id` và New API cố parse chữ "logout" thành số.
+ * Và nó trả về **HTTP 200** kèm `{"success":false,"message":"strconv.Atoi:
+ * parsing \"logout\": invalid syntax"}`, nên `fetch` coi là thành công, không
+ * ai ném lỗi, và số phiên cứ tăng y như trước khi vá. Đo thật 14/09/2026:
+ * 56 → 63 phiên SAU khi đã "vá xong".
+ * Bài học: `r.ok` của Go/Gin API không có nghĩa là việc đã làm — phải đọc
+ * `success` trong thân.
+ *
+ * Gọi SAU khi đăng nhập (không phải trước): ta cần một phiên còn sống để có
+ * quyền gọi, và `revoke-others` giữ đúng phiên đang cầm.
+ */
+async function donPhienCu(p) {
   if (!p?.jwt) return;
   try {
-    await fetch(`${NEWAPI_URL}/api/user/logout`, {
-      method: 'GET',
-      headers: { authorization: `Bearer ${p.jwt}`, 'New-Api-User': String(p.userId ?? 1) },
-      signal: AbortSignal.timeout(8_000),
+    const r = await fetch(`${NEWAPI_URL}/api/user/sessions/revoke-others`, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${p.jwt}`, 'New-Api-User': String(p.userId ?? 1), 'content-type': 'application/json' },
+      signal: AbortSignal.timeout(10_000),
     });
-  } catch {
-    /* phiên có thể đã chết sẵn — không sao */
+    const d = await r.json().catch(() => ({}));
+    // Đọc `success`, KHÔNG tin mã HTTP — xem chú thích trên.
+    if (d?.success && d?.data?.revoked_count > 0) {
+      ghi(`đã dọn ${d.data.revoked_count} phiên New API cũ`);
+    } else if (!d?.success) {
+      ghi('dọn phiên cũ không ăn:', d?.message || `HTTP ${r.status}`);
+    }
+  } catch (e) {
+    ghi('không dọn được phiên cũ (sẽ thử lại lần đăng nhập sau):', e.message);
   }
 }
 
@@ -234,9 +256,6 @@ async function dangNhap() {
   if (cu) { phien = cu; return phien; }
 
   if (!NEWAPI_PASS) throw new Error('thiếu NEWAPI_PASS');
-
-  // Trả chỗ TRƯỚC khi xin chỗ mới. Thiếu bước này là mỗi giờ rò một phiên.
-  await dangXuat(luu.phien);
 
   const r = await fetch(`${NEWAPI_URL}/api/user/login`, {
     method: 'POST',
@@ -257,6 +276,11 @@ async function dangNhap() {
   };
   luu.phien = phien;
   luuTrangThai();
+
+  // Dọn NGAY SAU khi có phiên mới: `revoke-others` cần một phiên còn sống để
+  // gọi, và nó giữ lại đúng phiên vừa tạo. Không chờ tới lúc chạm trần mới
+  // dọn — chạm trần rồi thì không đăng nhập nổi để mà dọn.
+  await donPhienCu(phien);
   return phien;
 }
 

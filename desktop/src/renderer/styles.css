@@ -12663,3 +12663,42 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   background: transparent; color: var(--ct-text-muted, #94a3b8);
   border: 1px solid var(--ct-border, rgba(148, 163, 184, .25));
 }
+
+/* ══ LỜI MỜI TẠO AGENTS.md ═══════════════════════════════════════════════
+   Nằm NGAY TRÊN ô soạn — chỗ mắt người dùng đang ở. Nhét vào một bảng cài đặt
+   nào đó thì nó lại thành một tính năng không ai tìm ra, đúng vấn đề nó sinh
+   ra để chữa. */
+.ct-moi-ghichu {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 8px;
+  padding: 9px 12px;
+  border: 1px solid color-mix(in srgb, var(--ct-accent) 28%, transparent);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-accent) 8%, transparent);
+  color: var(--ct-text);
+}
+.ct-moi-ghichu > svg { flex: none; margin-top: 2px; color: var(--ct-accent); }
+.ct-moi-ghichu > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  /* `min-width: 0` để câu dài XUỐNG DÒNG chứ không đẩy hai nút ra khỏi khung. */
+  min-width: 0;
+  flex: 1;
+}
+.ct-moi-ghichu strong { font-size: 12.5px; font-weight: 600; }
+.ct-moi-ghichu span { font-size: 11.5px; line-height: 1.5; color: var(--ct-text-dim); }
+.ct-moi-ghichu > button { flex: none; align-self: center; }
+.ct-moi-ghichu-x {
+  flex: none;
+  align-self: flex-start;
+  padding: 3px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ct-text-faint);
+  cursor: pointer;
+}
+.ct-moi-ghichu-x:hover { color: var(--ct-text); background: var(--ct-hover); }

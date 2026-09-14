@@ -309,6 +309,11 @@ export const TU_DIEN: Record<string, string> = {
   'Thêm dòng': 'Add row',
   // ── Cửa sổ robot nổi + khung chat nhanh ──
   'Trợ lý': 'Assistant',
+  'Dự án này chưa có ghi chú cho AI Code.': 'This project has no notes for AI Code yet.',
+  'Agent đọc `AGENTS.md` trước mỗi lượt. Viết vào đó lệnh chạy, lệnh test và mấy cái bẫy đã gặp — mỗi dòng tiết kiệm hàng chục bước mò mẫm.':
+    'The agent reads `AGENTS.md` before every turn. Put your run and test commands there, plus the traps you have already hit — each line saves it dozens of steps of guessing.',
+  'Tạo AGENTS.md': 'Create AGENTS.md',
+  'Không hiện nữa': "Don't show again",
   'Đang dừng…': 'Stopping…',
   'bước {nay}': 'step {nay}',
   'Odin đang trả lời…': 'Odin is answering…',

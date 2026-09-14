@@ -26,6 +26,7 @@ import type {
 } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
+import { docGhiChuDuAn } from '../agent/ghiChu';
 import {
   bangGhiCua, chayLuot, cuocDangChay, datGocChoCuoc, datQuyenChoCuoc, dongCuoc, dsCuocDangMo,
   daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quayLui, quyenCuaCuoc, soCuaCuoc,
@@ -184,6 +185,42 @@ async function conDungDuoc(goc: string): Promise<boolean> {
   }
 }
 
+/**
+ * Bản mẫu `AGENTS.md`.
+ *
+ * Viết theo lối HỎI chứ không theo lối điền vào chỗ trống: người dùng mở ra là
+ * thấy ngay những câu mà agent sẽ phải tự mò nếu không ai trả lời. Một bản mẫu
+ * toàn đề mục trống thì họ đóng lại và không bao giờ quay lại.
+ */
+const MAU_GHI_CHU = `# Ghi chu cho AI Code
+
+Agent doc file nay TRUOC moi luot. Viet vao day nhung thu no khong the tu doan
+ra tu ma — moi dong o day tiet kiem cho ban hang chuc buoc mo mam.
+
+## Chay du an
+
+<!-- Lenh chay, lenh dung, lenh test. Vi du:
+- Chay: docker compose up -d
+- Test: ./mvnw test
+- Dung lai sau khi doi ma: docker compose build api — chi copy file vao thu muc
+  la KHONG du, compose dung 'build:' nen no dung lai tu nguon.
+-->
+
+## Bay da gap
+
+<!-- Nhung cho da lam mat thoi gian mot lan roi. Vi du:
+- Doi migration da chay thi phai xoa volume DB, khong Flyway bao checksum.
+- Cong 3000 dang co app khac — dung 3007.
+-->
+
+## Quy uoc
+
+<!-- Vi du:
+- Dung sua thu muc generated/.
+- Khong tu chay git commit — toi tu commit.
+-->
+`;
+
 export function registerAgentHandlers(): void {
   handle('agent:getInfo', async (): Promise<AgentInfo> => {
     const phien = readStoredSession();
@@ -228,6 +265,35 @@ export function registerAgentHandlers(): void {
       // nhìn thấy lịch sử phiên trước, chỉ là không gửi được câu mới.
       return trong;
     }
+  });
+
+  /**
+   * Dự án có ghi chú cho agent chưa.
+   *
+   * ⚠️ App đọc `AGENTS.md`/`CLAUDE.md` mỗi lượt từ lâu, nhưng KHÔNG chỗ nào
+   * trong giao diện nhắc tới chúng — đo 14/09/2026, `grep` trong `src/renderer`
+   * ra RỖNG. Người dùng hỏi thẳng "do tôi chưa cài skill hoặc prompt cho nó?"
+   * trong khi app đã hỗ trợ sẵn, và agent thì phải mò lại những thứ đáng ra
+   * được nói sẵn (147/160 bước cho một việc Docker/Flyway).
+   */
+  handle('agent:ghiChuTrangThai', async ({ cuocId }) => {
+    const goc = gocCua(cuocId);
+    if (!goc) return { co: false, ten: null };
+    const g = await docGhiChuDuAn(goc);
+    return { co: g !== null, ten: g?.ten ?? null };
+  });
+
+  /** Tạo `AGENTS.md` mẫu rồi mở ra để người dùng sửa. */
+  handle('agent:taoGhiChu', async ({ cuocId }) => {
+    const goc = gocCua(cuocId);
+    if (!goc) return { ok: false, daCo: false };
+    const duong = path.join(goc, 'AGENTS.md');
+    /* KHÔNG ghi đè. Người dùng có thể đã có file mà app đọc hụt vì lý do khác;
+       xoá công của họ để thay bằng bản mẫu là hỏng không lùi được. */
+    const daCo = await fs.access(duong).then(() => true).catch(() => false);
+    if (!daCo) await fs.writeFile(duong, MAU_GHI_CHU, 'utf8');
+    await shell.openPath(duong);
+    return { ok: true, daCo };
   });
 
   handle('agent:getWorkspace', async ({ cuocId }): Promise<AgentWorkspace> => {

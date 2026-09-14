@@ -1412,6 +1412,17 @@ export const INVOKE_CHANNELS = {
     duong: z.string().min(1).max(4096),
   }),
 
+  /**
+   * Dự án đang mở có GHI CHÚ cho agent chưa (`AGENTS.md` / `CLAUDE.md`).
+   *
+   * ⚠️ Có để hiện lời mời tạo. Trước bản này app đọc mấy file đó mỗi lượt
+   * nhưng KHÔNG chỗ nào trong giao diện nhắc tới chúng — đo thật 14/09/2026:
+   * `grep -rn "AGENTS.md" src/renderer` ra RỖNG. Người dùng hỏi thẳng "do tôi
+   * chưa cài skill hoặc prompt cho nó?" trong khi app đã hỗ trợ sẵn.
+   */
+  'agent:ghiChuTrangThai': agentCuocSchema,
+  /** Tạo `AGENTS.md` mẫu ở gốc dự án rồi mở ra cho người dùng sửa. */
+  'agent:taoGhiChu': agentCuocSchema,
   'agent:getInfo': null,
   'agent:getWorkspace': agentCuocSchema,
   'agent:chooseWorkspace': agentCuocSchema,
@@ -1954,6 +1965,8 @@ export interface DesktopBridge {
     dongCuoc(cuocId: string): Promise<void>;
     send(cuocId: string, text: string, anh?: string[]): Promise<void>;
     cancel(cuocId: string): Promise<void>;
+    ghiChuTrangThai(cuocId: string): Promise<{ co: boolean; ten: string | null }>;
+    taoGhiChu(cuocId: string): Promise<{ ok: boolean; daCo: boolean }>;
     /** Xoá hội thoại của MỘT cuộc, giữ tab. Hạn mức KHÔNG được reset theo. */
     reset(cuocId: string): Promise<void>;
     /**

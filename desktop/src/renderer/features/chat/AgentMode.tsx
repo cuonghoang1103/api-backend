@@ -16,6 +16,7 @@
  *     bật NGAY, nếu không màn hình đứng im và người dùng tưởng app treo.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { MoiGhiChu } from './MoiGhiChu';
 import {
   Keyboard,
   MousePointerClick,
@@ -1239,6 +1240,8 @@ export function AgentMode({
           {...(trangThai.buoc ? { buoc: trangThai.buoc } : {})}
         />
       )}
+
+      <MoiGhiChu cuocId={cuocId} coThuMuc={coThuMuc} />
 
       <div className="ct-agent-soan">
         <ODinhKemCode oFileRef={dk.oFileRef} nhanTuO={dk.nhanTuO} />

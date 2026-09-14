@@ -42,15 +42,31 @@ export interface TerminalUsage {
 const RONG: TerminalUsage = { coKey: false, daTieuUsd: 0, tranKeyUsd: null };
 
 /**
- * Điều kiện "gói còn hạn".
+ * Điều kiện chọn key ĐƯỢC TÍNH VÀO VÍ CHUNG với AI Code trên app desktop.
  *
- * Key xin tay ở /llm-key không có hạn (`expiresAt` null) — vẫn tính.
- * Key mua ở shop có hạn 30 ngày; hết hạn thì nó KHÔNG còn được tính vào ví
- * chung nữa, nếu không thì một gói đã hết hạn vẫn tiếp tục ăn mất hạn mức
- * AI Code của người dùng trên app desktop.
+ * ⚠️⚠️ CHỈ KEY XIN BẰNG TÀI KHOẢN PRO (`source: 'REQUEST'`) MỚI DÙNG CHUNG VÍ.
+ *
+ * Key MUA BẰNG TIỀN THẬT ở /shop thì KHÔNG. Người dùng chốt 14/09/2026:
+ * *"Mua key bằng tiền thật là key mới, không dùng chung với key hoặc các tính
+ * năng trên AI code, nó tính riêng. Còn xin key bằng tài khoản Pro thì tính
+ * chung usage với AI Code trong app desktop."*
+ *
+ * Lý do kinh tế rất rõ, và tôi đã làm SAI chiều này lúc đầu: người bỏ tiền mua
+ * gói 60$/5h mà lại bị trừ chung vào ví AI Code vốn đã có sẵn theo gói Pro thì
+ * họ trả tiền để KHÔNG ĐƯỢC GÌ THÊM. Còn key xin miễn phí theo quyền lợi Pro
+ * thì đúng là phải chung ví, nếu không thì một người Pro được hai suất.
+ *
+ * Key mua ở shop vẫn có hạn mức thật của nó — `canh` nạp lại mỗi cửa sổ theo
+ * `han-muc.json`/state, hoàn toàn độc lập với ví web.
+ *
+ * Kèm điều kiện CÒN HẠN: gói hết hạn thì thôi không tính nữa, nếu không thì
+ * một gói đã hết hạn vẫn tiếp tục ăn mất hạn mức AI Code của người dùng.
  */
-function conHan() {
-  return { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] };
+function keyGopVi() {
+  return {
+    source: 'REQUEST',
+    OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+  };
 }
 
 /**
@@ -71,7 +87,7 @@ export async function xemKeyTerminal(userId: number): Promise<TerminalUsage> {
   let tranKeyUsd: number | null = null;
   try {
     const don = await prisma.llmKeyRequest.findFirst({
-      where: { userId, status: 'APPROVED', ...conHan() },
+      where: { userId, status: 'APPROVED', ...keyGopVi() },
       orderBy: { resolvedAt: 'desc' },
       select: { keyValue: true, quotaUsd: true },
     });
@@ -130,7 +146,7 @@ export async function xemKeyTerminal(userId: number): Promise<TerminalUsage> {
 export async function tranRiengCuaNguoi(userId: number): Promise<number | null> {
   try {
     const don = await prisma.llmKeyRequest.findFirst({
-      where: { userId, status: 'APPROVED', quotaUsd: { not: null }, ...conHan() },
+      where: { userId, status: 'APPROVED', quotaUsd: { not: null }, ...keyGopVi() },
       orderBy: { resolvedAt: 'desc' },
       select: { quotaUsd: true },
     });

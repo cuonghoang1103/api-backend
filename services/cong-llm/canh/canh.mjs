@@ -462,6 +462,16 @@ async function gopViVoiWeb() {
       // Hết hạn rồi thì thôi không tính ví nữa — New API tự chặn key.
       if (hetHan > 0 && hetHan * 1000 <= Date.now()) continue;
 
+      // ⚠️⚠️ KEY MUA BẰNG TIỀN THẬT KHÔNG GỘP VÍ. Nó có hạn mức riêng, `canh`
+      // nạp lại mỗi cửa sổ như mọi key con khác; cộng thêm phần đã tiêu ở AI
+      // Code của app desktop là khoá oan key của người vừa trả tiền — và họ
+      // mất đúng thứ họ mua. Chỉ key XIN theo quyền lợi Pro mới chung ví.
+      // Web quyết định điều này (`gopVi`), canh không tự đoán theo tên key.
+      //
+      // Thiếu trường `gopVi` (backend cũ hơn) ⇒ coi như GỘP, giữ nguyên hành
+      // vi trước đó thay vì âm thầm mở toang hạn mức cho mọi key.
+      if (tin.gopVi === false) continue;
+
       const hanMuc = Number(tin.tranUsd ?? (t.name in bang.theoTen ? bang.theoTen[t.name] : bang.macDinh));
       if (!Number.isFinite(hanMuc) || hanMuc <= 0) continue;
 

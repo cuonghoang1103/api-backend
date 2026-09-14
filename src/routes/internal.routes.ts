@@ -56,11 +56,20 @@ router.use(chiNoiBo);
 
 /**
  * POST /api/v1/internal/ai-code-usage
- * Body: { keys: string[] }  →  { [key]: { userId, daTieuUsd, tranUsd, hetHanLuc } }
+ * Body: { keys: string[] }  →  { [key]: { userId, daTieuUsd, tranUsd, hetHanLuc, gopVi } }
  *
  * `hetHanLuc` (giây epoch, hoặc null) là hạn của GÓI đã bán. canh lấy nó đặt
  * `expired_time` cho key con ở New API — nếu không, gói "30 ngày" chạy mãi.
  * Ta trả hạn của CẢ key đã quá hạn để canh còn đóng chúng lại.
+ *
+ * ⚠️⚠️ `gopVi` phân biệt HAI LOẠI KEY, và canh phải tôn trọng nó:
+ *   · `true`  — key XIN theo quyền lợi Pro (`source: 'REQUEST'`): dùng chung
+ *     ví với AI Code trên app desktop, nên canh cộng hai đường rồi khoá khi
+ *     chạm trần. Không làm thế thì một người Pro được hai suất.
+ *   · `false` — key MUA BẰNG TIỀN THẬT ở /shop: hạn mức RIÊNG, canh KHÔNG
+ *     được cộng vào ví web. Trừ chung nghĩa là khách bỏ tiền mua 60$/5h mà
+ *     không được thêm gì so với ví Pro họ vốn đã có.
+ * Hạn gói (`hetHanLuc`) thì áp cho CẢ HAI — mua hay xin đều có thời hạn.
  *
  * Nhận NHIỀU key một lượt: canh chạy mỗi phút và có thể có hàng chục key —
  * hỏi từng cái là hàng chục vòng mỗi phút, không đáng.
@@ -74,7 +83,7 @@ router.post('/ai-code-usage', async (req: Request, res: Response<ApiResponse>, n
 
     const dons = await prisma.llmKeyRequest.findMany({
       where: { keyValue: { in: keys }, status: 'APPROVED' },
-      select: { keyValue: true, userId: true, quotaUsd: true, expiresAt: true },
+      select: { keyValue: true, userId: true, quotaUsd: true, expiresAt: true, source: true },
     });
     if (dons.length === 0) { res.json({ success: true, data: {} }); return; }
 
@@ -89,14 +98,22 @@ router.post('/ai-code-usage', async (req: Request, res: Response<ApiResponse>, n
     });
     const theoNguoi = new Map(tong.map((t) => [t.userId, Number(t._sum.costUsd ?? 0)]));
 
-    const ra: Record<string, { userId: number; daTieuUsd: number; tranUsd: number | null; hetHanLuc: number | null }> = {};
+    const ra: Record<string, {
+      userId: number; daTieuUsd: number; tranUsd: number | null;
+      hetHanLuc: number | null; gopVi: boolean;
+    }> = {};
     for (const d of dons) {
       if (!d.keyValue) continue;
+      const gopVi = d.source === 'REQUEST';
       ra[d.keyValue] = {
         userId: d.userId,
-        daTieuUsd: Math.round((theoNguoi.get(d.userId) ?? 0) * 10000) / 10000,
+        // Key mua ở shop KHÔNG gộp ví ⇒ số đã tiêu ở app desktop không liên
+        // quan tới nó. Trả 0 để dù canh có đọc nhầm cũng không khoá oan key
+        // của người đã trả tiền.
+        daTieuUsd: gopVi ? Math.round((theoNguoi.get(d.userId) ?? 0) * 10000) / 10000 : 0,
         tranUsd: d.quotaUsd,
         hetHanLuc: d.expiresAt ? Math.floor(d.expiresAt.getTime() / 1000) : null,
+        gopVi,
       };
     }
     res.json({ success: true, data: ra });

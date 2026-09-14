@@ -27,6 +27,7 @@ import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
 import { chayHook } from './hook';
+import { cauImLang, docCoHanIm } from './hanImLang';
 import { dsKyNang, docThanKyNang } from './kyNang';
 import { dsAgentPhu, docThanAgentPhu } from './agentPhu';
 import {
@@ -1504,7 +1505,24 @@ async function mgoiMotLuotThat(o: {
   let loi: { thongDiep: string; ma: string } | null = null;
 
   for (;;) {
-    const { done, value } = await doc.read();
+    /* ⚠️ KHÔNG `await doc.read()` trần.
+     *
+     * Cổng AI nhận kết nối rồi im lặng thì vòng này chờ VĨNH VIỄN — màn hình
+     * đứng ở "Odin đang đọc mã của bạn…", số giây tăng mãi, không gì tự thoát.
+     * Người dùng gửi ảnh 14/09/2026: kẹt ở bước 35/160, 159 giây, cả ba nền
+     * tảng. Giao diện có sẵn dòng "Cổng AI đang chậm chứ app không treo — bấm
+     * Dừng" sau 15 giây, nhưng đó chỉ là câu TRẤN AN: bên dưới không có đường
+     * thoát nào, và ai không bấm Dừng thì chờ mãi.
+     *
+     * Canh IM LẶNG chứ không canh tổng thời gian — xem `hanImLang.ts`. */
+    const mau = await docCoHanIm(doc);
+    if (!mau.ok) {
+      /* Huỷ hẳn luồng: không huỷ thì kết nối treo giữ một socket và, tệ hơn,
+         mẩu về muộn vẫn chạy tiếp vào một lượt đã kết thúc. */
+      void doc.cancel().catch(() => { /* luồng có thể đã chết */ });
+      return { ok: false, thongDiep: cauImLang(), ma: 'GATEWAY_IM_LANG' };
+    }
+    const { done, value } = mau.giaTri;
     if (done) break;
     dem += giaiMa.decode(value, { stream: true });
     const dong = dem.split('\n');

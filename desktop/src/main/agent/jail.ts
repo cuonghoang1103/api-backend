@@ -86,6 +86,27 @@ export function fileBiCam(ten: string): boolean {
 }
 
 /**
+ * File `.env*` — CẤM ĐỌC, nhưng cho TẠO MỚI.
+ *
+ * ⚠️ Vì sao tách riêng: danh sách cấm ở trên là chốt chống RÒ RỈ — agent đọc
+ * `.env` rồi gửi nội dung lên cổng LLM là bí mật đã rời khỏi máy. Nhưng chặn
+ * luôn việc TẠO thì không bảo vệ được gì cả: nội dung đi theo chiều NGƯỢC
+ * LẠI, từ model xuống đĩa, không có gì rời khỏi máy.
+ *
+ * Cái giá của việc chặn oan thì có thật, và người dùng đã gặp 15/09/2026:
+ * agent không tạo nổi `.env.test` (toàn giá trị giả để chạy test) và phải trả
+ * lời "tôi không làm được" cho một việc hết sức bình thường.
+ *
+ * ⚠️ CHỈ `.env*`, KHÔNG nới cho khoá riêng tư / credentials — một `.pem` do
+ * agent ghi ra vẫn là thứ ta không muốn nó tự ý làm.
+ * ⚠️ Và chỉ cho TẠO MỚI: `toolCreateFile` từ chối khi file đã tồn tại, nên
+ * `.env` thật của người dùng không bao giờ bị ghi đè.
+ */
+export function laFileEnv(ten: string): boolean {
+  return /(^|\.)env($|\.)/i.test(ten);
+}
+
+/**
  * Đường dẫn tương đối do model sinh ra → đường dẫn tuyệt đối đã chứng minh là
  * nằm trong ngục và không chạm vào thứ bị cấm.
  *
@@ -96,7 +117,14 @@ export function fileBiCam(ten: string): boolean {
 export async function moTrongNguc(
   goc: string,
   duongDanTuongDoi: string,
-  opts: { phaiCoThat?: boolean } = {},
+  opts: {
+    phaiCoThat?: boolean;
+    /**
+     * Cho phép TẠO MỚI file `.env*`. Xem `laFileEnv`. Chỉ `create_file` truyền
+     * cờ này — đường ĐỌC và đường SỬA không bao giờ được phép.
+     */
+    choTaoEnv?: boolean;
+  } = {},
 ): Promise<string> {
   const tho = String(duongDanTuongDoi ?? '').trim();
 
@@ -121,7 +149,7 @@ export async function moTrongNguc(
   }
   const cuoi = cacDoan[cacDoan.length - 1];
   if (cuoi && thuMucBiCam(cuoi)) throw new LoiNguc(`Không đọc thư mục "${cuoi}".`);
-  if (cuoi && fileBiCam(cuoi)) {
+  if (cuoi && fileBiCam(cuoi) && !(opts.choTaoEnv && laFileEnv(cuoi))) {
     throw new LoiNguc(
       `Không đọc file "${cuoi}" — đây là loại file có thể chứa khoá hoặc mật khẩu. ` +
         'Hãy trả lời mà không cần tới nó, và nói cho người dùng biết bạn đã bỏ qua nó.',

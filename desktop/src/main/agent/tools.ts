@@ -961,9 +961,15 @@ async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: B
     return { noiDung: `LỖI: nội dung vượt trần ${TRAN_BYTE_GHI / 1024}KB.`, tomTat: 'quá lớn' };
   }
 
-  // `phaiCoThat: false` vì file CHƯA tồn tại — nhưng ngục vẫn kiểm đường dẫn
-  // và danh sách chặn, nên `create_file('.env', …)` vẫn bị chặn.
-  const dich = await moTrongNguc(goc, tuongDoi);
+  // `phaiCoThat: false` vì file CHƯA tồn tại — ngục vẫn kiểm đường dẫn và
+  // danh sách chặn.
+  //
+  // ⚠️ `choTaoEnv` mở đúng MỘT khe: TẠO MỚI `.env*`. Chặn nó không bảo vệ được
+  // gì (nội dung đi từ model XUỐNG đĩa, không có gì rời khỏi máy), mà lại làm
+  // agent không tạo nổi `.env.test` toàn giá trị giả — người dùng gặp thật
+  // 15/09/2026. Đọc và sửa `.env` thì vẫn cấm tuyệt đối, và file đã tồn tại
+  // thì bị chặn ở ngay dưới nên `.env` thật không bao giờ bị ghi đè.
+  const dich = await moTrongNguc(goc, tuongDoi, { choTaoEnv: true });
   const daCo = await fs.stat(dich).then(() => true).catch(() => false);
   if (daCo) {
     return {

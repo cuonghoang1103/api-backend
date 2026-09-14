@@ -874,7 +874,8 @@ export async function chayLuot(
     phat({ loai: 'tool', ten: ghiChuDuAn.ten, tomTat: 'quy ước dự án', vong: 'may' });
   }
 
-  let daThuLai = false;
+  /** Đã thử lại mấy lần ở CHỖ KẸT HIỆN TẠI. Đi được một bước là về 0. */
+  let daThuLai = 0;
 
   try {
     for (let vong = 0; vong < MAX_VONG; vong++) {
@@ -908,9 +909,34 @@ export async function chayLuot(
       });
 
       if (!phanHoi.ok) {
-        if (MA_DANG_THU_LAI.has(phanHoi.ma) && !daThuLai) {
-          daThuLai = true;
-          phat({ loai: 'tool', ten: 'kết nối', tomTat: 'đứt giữa chừng — đang thử lại', vong: 'may' });
+        if (MA_DANG_THU_LAI.has(phanHoi.ma) && daThuLai < CHO_THU_LAI_MS.length) {
+          /**
+           * ⚠️ THỬ LẠI NHIỀU LẦN, CÓ CHỜ.
+           *
+           * Bản cũ thử lại đúng MỘT lần và thử NGAY LẬP TỨC. Đủ cho trường hợp
+           * nó sinh ra (container tráo ~10 giây) nhưng vô dụng với thứ hay gặp
+           * hơn nhiều: cổng AI quá tải. Đo thật 14/09/2026, rambo trả 429/529
+           * liên tục trong 45-60 PHÚT — một lần thử lại không chờ thì chắc
+           * chắn cũng trượt, và cả việc 20 bước chết ở đúng chỗ đang dở.
+           * Người dùng báo đúng vậy: *"đang làm dở chưa xong thì nó tự dừng"*.
+           *
+           * Chờ tăng dần: 2s → 5s → 12s → 30s. Tổng ~49 giây, đủ vượt qua một
+           * nhịp nghẽn mà không bắt người dùng ngồi chờ vô hạn.
+           */
+          const cho = CHO_THU_LAI_MS[daThuLai]!;
+          daThuLai++;
+          phat({
+            loai: 'tool',
+            ten: 'kết nối',
+            tomTat: `${phanHoi.ma === '429' || phanHoi.ma === '529' ? 'cổng AI đang quá tải' : 'đứt giữa chừng'} — chờ ${Math.round(cho / 1000)}s rồi thử lại (lần ${daThuLai}/${CHO_THU_LAI_MS.length})`,
+            vong: 'may',
+          });
+          // Huỷ giữa lúc chờ thì thôi, đừng ngủ hết rồi mới biết.
+          const ngu = await new Promise<'xong' | 'huy'>((ok) => {
+            const h = setTimeout(() => ok('xong'), cho);
+            dieuKhien.signal.addEventListener('abort', () => { clearTimeout(h); ok('huy'); }, { once: true });
+          });
+          if (ngu === 'huy') return;
           vong--; // lần thử lại không tính là một vòng
           continue;
         }
@@ -921,7 +947,7 @@ export async function chayLuot(
       // Đi được một bước ⇒ nạp lại quyền thử lại. "Một lần" là một lần cho MỖI
       // chỗ kẹt, không phải một lần cho cả việc — việc 20 bước mà đứt ở bước 3
       // rồi lại đứt ở bước 17 là hai sự cố khác nhau.
-      daThuLai = false;
+      daThuLai = 0;
 
       c.hoiThoai.push(...ketQua.append);
 
@@ -1358,8 +1384,24 @@ interface KetQuaLuot {
  * CHỈ thử lại MỘT lần, và chỉ với nhóm lỗi này. Lỗi "hết hạn mức", "chưa Pro",
  * "cổng trả 400" mà thử lại thì chỉ tốn thêm tiền cho cùng một câu trả lời.
  */
+/**
+ * Chờ bao lâu trước mỗi lần thử lại. Độ dài mảng = số lần thử lại tối đa.
+ * Tăng dần để một nhịp nghẽn ngắn được vượt nhanh, còn nghẽn dài thì không
+ * quay vòng đốt hạn mức.
+ */
+const CHO_THU_LAI_MS = [2_000, 5_000, 12_000, 30_000];
+
 const MA_DANG_THU_LAI = new Set([
   'CONNECTION_LOST', 'LLM_ERROR',
+  /*
+   * ⚠️ CỔNG AI QUÁ TẢI — thứ hay gặp hơn hẳn việc máy chủ thay ca.
+   * `429` (quá nhiều yêu cầu) và `529` (Anthropic báo quá tải) đều là "quay
+   * lại sau", không phải "từ chối". Đo thật 14/09/2026: rambo trả đúng hai mã
+   * này suốt 45-60 phút liền, và vì chúng KHÔNG nằm trong danh sách nên mọi
+   * lượt agent đang chạy đều chết ngay lập tức, mất sạch các bước đã đi.
+   * `500` cũng vào đây: lỗi tạm của cổng, không phải lỗi của câu hỏi.
+   */
+  '429', '500', '529',
   /*
    * MÁY CHỦ ĐANG KHỞI ĐỘNG LẠI. 19/08/2026 người dùng nhận "Máy chủ trả về
    * 502" giữa một lượt agent 20 bước — vì tôi deploy đúng lúc họ đang chạy.

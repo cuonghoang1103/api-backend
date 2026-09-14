@@ -210,7 +210,20 @@ import { spawn } from 'node:child_process';
 
 /** Trần mặc định và trần tuyệt đối cho một lệnh. */
 export const TRAN_GIAY_MAC_DINH = 120;
-export const TRAN_GIAY_TOI_DA = 600;
+/**
+ * Trần thời gian TỐI ĐA cho một lệnh chạy trước mặt.
+ *
+ * ⚠️ Nâng 600 → 1800 (15/09/2026). 10 phút đủ cho `npm test` của một dự án web,
+ * nhưng KHÔNG đủ cho thứ người dùng đang làm thật: build iOS/Android.
+ * `xcodebuild test` lần đầu (chưa có DerivedData), `./gradlew assembleDebug`
+ * trên máy lạnh, `flutter build ios` — đều thường xuyên vượt 10 phút, và khi
+ * vượt thì agent thấy "lệnh hỏng" chứ không thấy "chưa xong", rồi báo sai
+ * nguyên nhân cho người dùng.
+ *
+ * 30 phút vẫn là TRẦN, không phải mặc định: model phải tự khai `timeout_seconds`
+ * cao khi biết việc sẽ lâu, nên một lệnh treo vì lỗi vẫn chết sau 2 phút.
+ */
+export const TRAN_GIAY_TOI_DA = 1800;
 
 /**
  * Trần kết quả đưa vào hội thoại.

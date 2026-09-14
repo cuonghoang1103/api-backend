@@ -30,10 +30,41 @@ describe('thử lại khi đứt', () => {
 
   it('KHÔNG thử lại lỗi hỏi lại cũng thế', () => {
     const ds = maThuLai();
-    // 401 (hết phiên), 403 (chưa Pro), 429 (hết hạn mức): thử lại chỉ tốn thêm
-    // tiền cho cùng một câu trả lời.
-    for (const ma of ['401', '403', '429']) {
+    // 401 (hết phiên), 403 (chưa Pro): thử lại chỉ tốn thêm một lượt cho cùng
+    // một câu trả lời.
+    for (const ma of ['401', '403']) {
       expect(ds, `${ma} không nên thử lại`).not.toContain(ma);
+    }
+  });
+
+  /**
+   * ⚠️ `429` ĐÃ ĐƯỢC CHUYỂN SANG NHÓM THỬ LẠI (15/09/2026), và đây là lý do —
+   * phép kiểm cũ chặn nó, có cơ sở, nên không được lật mà không giải thích.
+   *
+   * Lý lẽ cũ: "429 = hết hạn mức, thử lại chỉ tốn thêm tiền cho cùng một câu
+   * trả lời". Đúng — NHƯNG hết hạn mức KHÔNG tới app dưới dạng `429`. Backend
+   * gắn mã riêng cho nó (`AGENT_BUDGET_EXCEEDED`, `BUDGET_EXCEEDED`,
+   * `CHAT_BUDGET_EXCEEDED`), và `loop.ts` đọc `than.code ?? String(res.status)`
+   * — tức mã của backend được ưu tiên.
+   *
+   * Nên một `429` TRẦN chỉ có thể tới từ CỔNG AI ĐANG QUÁ TẢI. Đo thật
+   * 14/09/2026: rambo trả 429/529 suốt 45-60 phút, và vì `429` nằm ngoài danh
+   * sách nên mọi lượt agent đang chạy chết ngay, mất sạch bước đã đi.
+   *
+   * Phép kiểm dưới giữ nguyên ý định CŨ (đừng đốt tiền cho hạn mức đã cạn)
+   * bằng cách khoá đúng những mã thật sự mang nghĩa đó.
+   */
+  it('mã HẾT HẠN MỨC vẫn KHÔNG được thử lại — đó mới là thứ tốn tiền', () => {
+    const ds = maThuLai();
+    for (const ma of ['AGENT_BUDGET_EXCEEDED', 'BUDGET_EXCEEDED', 'CHAT_BUDGET_EXCEEDED', 'PRO_REQUIRED']) {
+      expect(ds, `${ma} bị thử lại ⇒ đốt lượt cho một hạn mức đã cạn`).not.toContain(ma);
+    }
+  });
+
+  it('cổng AI quá tải (429/529) thì PHẢI thử lại', () => {
+    const ds = maThuLai();
+    for (const ma of ['429', '529']) {
+      expect(ds, `thiếu ${ma} ⇒ cổng nghẽn một nhịp là mất cả việc đang dở`).toContain(ma);
     }
   });
 });

@@ -382,12 +382,23 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       + 'đừng trả lời rằng bạn không có công cụ. ' +
       'KHÔNG dùng lệnh để đọc file — đã có read_file, và những file bị chặn thì chặn là có lý do. ' +
       'Lệnh chạy KHÔNG có bàn phím: thứ gì hỏi lại người dùng sẽ treo tới khi hết giờ. Thêm cờ không-hỏi (ví dụ `--yes`) nếu cần. ' +
-      'Đầu ra bị cắt ở khoảng 24.000 ký tự (giữ đầu và đuôi, bỏ khúc giữa).',
+      'Đầu ra bị cắt ở khoảng 24.000 ký tự (giữ đầu và đuôi, bỏ khúc giữa). '
+      + '📱 DI ĐỘNG: máy ảo/giả lập KHÔNG BAO GIỜ tự dừng — `xcrun simctl boot`, `emulator -avd`, '
+      + '`flutter run`, `npx expo start`, `adb logcat` phải chạy bằng chay_lenh_nen, dùng run_command là treo tới hết giờ. '
+      + 'Còn build và test (`xcodebuild test`, `./gradlew assembleDebug`, `flutter test`, `pod install`) thì dùng '
+      + 'run_command NHƯNG nhớ khai timeout_seconds 900-1800.',
     parameters: {
       type: 'object',
       properties: {
         command: { type: 'string', description: 'Lệnh đầy đủ, chạy từ gốc dự án.' },
-        timeout_seconds: { type: 'integer', description: 'Trần thời gian. Mặc định 120, tối đa 600.' },
+        timeout_seconds: {
+          type: 'integer',
+          description:
+            'Trần thời gian tính bằng giây. Mặc định 120, tối đa 1800. '
+            + 'HÃY KHAI CAO khi biết việc sẽ lâu — build di động là ví dụ điển hình: '
+            + '`xcodebuild`, `./gradlew`, `flutter build`, `pod install` lần đầu thường 5-20 phút. '
+            + 'Để mặc định 120 thì lệnh bị cắt giữa chừng và bạn sẽ tưởng nó HỎNG, rồi báo sai nguyên nhân.',
+        },
         quyen_cao: {
           type: 'boolean',
           description:

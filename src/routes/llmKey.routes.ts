@@ -171,7 +171,7 @@ router.post('/request', keyReplacementLimiter, async (req: Request, res: Respons
       mucDo: 'can_xu_ly',
       tieuDe: 'Có người xin cấp key OpenCode',
       noiDung: reason.slice(0, 300),
-      duongDan: '/admin/commerce?tab=llm-keys',
+      duongDan: '/admin/commerce?tab=llmkey',
       userId: req.userId ?? null,
       entityId: don.id,
       khoaChongTrung: `XIN_KEY:${don.id}`,

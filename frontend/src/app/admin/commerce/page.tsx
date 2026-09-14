@@ -33,7 +33,20 @@ const gonVN = (n: number) =>
 type Tab = 'doanhthu' | 'chuyenkhoan' | 'doikey' | 'llmkey' | 'caidat';
 
 export default function AdminCommercePage() {
-  const [tab, setTab] = useState<Tab>('doanhthu');
+  // Mở đúng tab theo `?tab=` trên URL.
+  //
+  // ⚠️ Không có khối này thì mọi link "Mở" trong hộp thư admin đều đổ về tab
+  // Doanh thu, và admin lại phải đi mò đúng cái tab cần — tức là hỏng đúng
+  // điều mà hộp thư sinh ra để sửa. Đọc trong `useState` initializer để tab
+  // đúng ngay từ lần vẽ ĐẦU TIÊN, không nháy qua tab mặc định rồi mới nhảy.
+  //
+  // Id sai thì rơi về mặc định, không vỡ trang.
+  const [tab, setTab] = useState<Tab>(() => {
+    if (typeof window === 'undefined') return 'doanhthu';
+    const t = new URLSearchParams(window.location.search).get('tab');
+    const hopLe: Tab[] = ['doanhthu', 'chuyenkhoan', 'doikey', 'llmkey', 'caidat'];
+    return hopLe.includes(t as Tab) ? (t as Tab) : 'doanhthu';
+  });
   const [soNgay, setSoNgay] = useState(30);
   const [data, setData] = useState<CommerceDashboard | null>(null);
   const [dangTai, setDangTai] = useState(true);

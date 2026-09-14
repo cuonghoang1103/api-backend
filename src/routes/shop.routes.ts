@@ -1568,7 +1568,7 @@ router.post(
         mucDo: 'can_xu_ly',
         tieuDe: 'Khách báo key hỏng, xin đổi',
         noiDung: 'Vào mục Đổi key để xem đơn hàng và lý do.',
-        duongDan: '/admin/commerce?tab=doi-key',
+        duongDan: '/admin/commerce?tab=doikey',
         userId: req.userId ?? null,
         entityId: yc.id,
         khoaChongTrung: `DOI_KEY:${yc.id}`,

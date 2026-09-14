@@ -208,7 +208,7 @@ export async function taoChuyenKhoan(input: TaoChuyenKhoanInput) {
       mucDo: 'can_xu_ly',
       tieuDe: `Chờ xác nhận chuyển khoản — ${row.refCode}`,
       noiDung: `${row.amountVnd.toLocaleString('vi-VN')}đ · ${input.orderKind} ${input.orderCode ?? ''}`.trim(),
-      duongDan: '/admin/commerce?tab=chuyen-khoan',
+      duongDan: '/admin/commerce?tab=chuyenkhoan',
       userId: input.userId ?? null,
       entityId: row.id,
       khoaChongTrung: `CHUYEN_KHOAN:${row.id}`,

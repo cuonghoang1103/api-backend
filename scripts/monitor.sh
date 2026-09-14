@@ -10,8 +10,32 @@ ALERT_EMAIL="${ALERT_EMAIL:-cuongthaihnhe176322@gmail.com}"
 FRONTEND_URL="https://cuongthai.com"
 BACKEND_URL="https://api.cuongthai.com/api/v1/system/health"
 LOG_FILE="/var/log/cuonghoangdev-monitor.log"
+# ─── Nạp bí mật từ env của production ────────────────────────────────────
+# ⚠️ THIẾU KHỐI NÀY LÀ CẢNH BÁO CHẾT CÂM. Đo thật 14/09/2026: script chạy mỗi
+# 5 phút từ 17/06/2026 (258.454 dòng log) và CHƯA GỬI NỔI MỘT TIN NÀO — số
+# lần nhắc tới Telegram trong toàn bộ log: 0.
+#
+# Lý do: cron gọi script trần (`*/5 * * * * /opt/.../monitor.sh`), cron không
+# truyền biến môi trường nào, và script cũng không tự đọc file .env. Nên hai
+# biến dưới luôn RỖNG, cái `if` gửi Telegram luôn rơi vào nhánh bỏ qua, im
+# lặng. Nhìn từ ngoài: log xanh, script chạy đều, và không ai biết chức năng
+# cảnh báo chưa bao giờ tồn tại.
+#
+# `set -a` để mọi biến trong file thành biến môi trường; `|| true` vì file có
+# thể vắng trên máy khác, và `set -e` ở trên sẽ giết script ngay tại đây.
+if [ -f /opt/cuonghoangdev/.env ]; then
+    set -a
+    # shellcheck disable=SC1091
+    . /opt/cuonghoangdev/.env || true
+    set +a
+fi
+
 TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN:-}"
-TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID:-}"
+# Nhận cả hai tên: `TELEGRAM_CHAT_ID` là tên script này vốn dùng,
+# `TELEGRAM_ADMIN_CHAT_ID` là tên backend dùng cho hộp thư admin. Đặt một
+# trong hai là đủ — bắt người vận hành nhớ hai tên cho cùng một con số là
+# cách chắc chắn để một ngày nào đó chỉ một nửa hệ thống báo được.
+TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID:-${TELEGRAM_ADMIN_CHAT_ID:-}}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'

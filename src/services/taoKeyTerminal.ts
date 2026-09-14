@@ -20,6 +20,7 @@
  * một cụm cong-llm đang bảo trì không chặn luôn việc duyệt đơn.
  */
 import { logger } from '../utils/logger.js';
+import { AppError } from '../middleware/errorHandler.js';
 
 const CANH_URL = (process.env.CANH_URL || 'http://cuonghoangdev_canh_llm:8080').replace(/\/+$/, '');
 
@@ -54,12 +55,18 @@ export async function taoKeyConQuaCanh(ten: string, quotaUsd: number): Promise<K
   } catch (err) {
     // Không với tới canh là chuyện hạ tầng, không phải lỗi của admin — nói
     // thẳng để họ biết chuyển sang dán tay thay vì bấm lại mười lần.
-    throw new Error(`Không gọi được cụm cấp key (${(err as Error).message}). Tạm thời dán key thủ công.`);
+    // AppError 502 chứ không phải Error trần: Error trần rơi vào nhánh 500
+    // của errorHandler và admin chỉ thấy "Internal Server Error" — không biết
+    // hỏng ở đâu, không biết nên làm gì. Đã dính thật 14/09/2026.
+    throw new AppError(`Không gọi được cụm cấp key: ${(err as Error).message}. Tạm thời dán key thủ công.`, 502);
   }
 
   const d = (await r.json().catch(() => null)) as { key?: string; ten?: string; quotaUsd?: number; loi?: string } | null;
   if (!r.ok || !d?.key) {
-    throw new Error(d?.loi || `Cụm cấp key trả lỗi HTTP ${r.status}`);
+    // Chuyển nguyên văn lý do của canh lên cho admin. Nó là câu tiếng Việt
+    // đọc được ("key tên ... đã tồn tại", "đăng nhập New API hỏng: ...
+    // (AUTH_SESSION_LIMIT)"), và đó là thứ duy nhất giúp admin biết phải làm gì.
+    throw new AppError(d?.loi || `Cụm cấp key trả lỗi HTTP ${r.status}`, 502);
   }
   // ⚠️ KHÔNG log `d.key`. Log đi qua nhiều chỗ và sống lâu hơn ta tưởng.
   logger.info('[llm-key] đã tạo key con tự động', { ten: d.ten, quotaUsd: d.quotaUsd });

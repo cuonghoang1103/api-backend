@@ -102,7 +102,7 @@ const s = {
 // `keyThat`: id token → key THẬT (48 ký tự). Ghi xuống đĩa vì New API chặn
 // dồn dập trên chính route lấy key — mất bộ nhớ tạm sau mỗi lần khởi động
 // lại là 33 lượt gọi dồn một lúc, và bị chặn đúng lúc cần nhất.
-let luu = { cuaSoDaDatLai: null, keyThat: {}, hanMucThem: {} };
+let luu = { cuaSoDaDatLai: null, keyThat: {}, hanMucThem: {}, phien: null };
 try {
   luu = { ...luu, ...JSON.parse(readFileSync(STATE_FILE, 'utf8')) };
 } catch {
@@ -182,11 +182,62 @@ function laCuaSoMoi() {
 }
 
 // ─── Đặt lại hạn mức key con qua API quản trị của New API ────────────────
+/**
+ * Phiên đăng nhập New API.
+ *
+ * ⛔⛔ MỖI LẦN ĐĂNG NHẬP LÀ MỘT PHIÊN SỐNG MÃI. New API giữ trần
+ * `USER_SESSION_ACTIVE_LIMIT` (mặc định 50) phiên còn hiệu lực cho một tài
+ * khoản; chạm trần thì MỌI lần đăng nhập sau trả `409 AUTH_SESSION_LIMIT`.
+ *
+ * Bản cũ giữ JWT trong BIẾN NHỚ TẠM và không bao giờ đăng xuất, nên:
+ *   · token hết hạn (~1 giờ) ⇒ đăng nhập lại ⇒ +1 phiên;
+ *   · mỗi lần dựng lại container ⇒ mất JWT ⇒ đăng nhập lại ⇒ +1 phiên.
+ * Đo thật 14/09/2026: 50 phiên active, cũ nhất từ 12/09 — tức ~1 phiên/giờ,
+ * và đúng hai ngày là kẹt. Kẹt rồi thì chết dây chuyền: không nạp lại hạn mức
+ * key con mỗi cửa sổ ⇒ key khách đã mua dùng hết một lần là chết hẳn.
+ * Và nó chết ÂM THẦM — canh chỉ ghi một dòng WARN mỗi phút.
+ *
+ * Vá hai đầu:
+ *  1. GIỮ phiên qua các lần khởi động (ghi vào `/state`), nên dựng lại
+ *     container không còn đẻ thêm phiên;
+ *  2. ĐĂNG XUẤT phiên cũ ngay trước khi tạo phiên mới, nên số phiên đứng yên
+ *     ở 1 thay vì tăng mãi.
+ */
 let phien = null; // { jwt, userId, hetLuc }
+
+/** Trả phiên đã lưu ở đĩa nếu còn hạn. */
+function phienDaLuu() {
+  const p = luu.phien;
+  if (p?.jwt && Number(p.hetLuc) > Date.now() + 60_000) return p;
+  return null;
+}
+
+/** Đăng xuất một phiên. Hỏng thì bỏ qua — đây là dọn dẹp, không phải việc chính. */
+async function dangXuat(p) {
+  if (!p?.jwt) return;
+  try {
+    await fetch(`${NEWAPI_URL}/api/user/logout`, {
+      method: 'GET',
+      headers: { authorization: `Bearer ${p.jwt}`, 'New-Api-User': String(p.userId ?? 1) },
+      signal: AbortSignal.timeout(8_000),
+    });
+  } catch {
+    /* phiên có thể đã chết sẵn — không sao */
+  }
+}
 
 async function dangNhap() {
   if (phien && phien.hetLuc > Date.now() + 60_000) return phien;
+
+  // Khởi động lại thì lấy lại phiên cũ thay vì đẻ phiên mới.
+  const cu = phienDaLuu();
+  if (cu) { phien = cu; return phien; }
+
   if (!NEWAPI_PASS) throw new Error('thiếu NEWAPI_PASS');
+
+  // Trả chỗ TRƯỚC khi xin chỗ mới. Thiếu bước này là mỗi giờ rò một phiên.
+  await dangXuat(luu.phien);
+
   const r = await fetch(`${NEWAPI_URL}/api/user/login`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -194,16 +245,22 @@ async function dangNhap() {
     signal: AbortSignal.timeout(15_000),
   });
   const d = await r.json().catch(() => ({}));
-  if (!d.success || !d.data?.access_token) throw new Error(`đăng nhập New API hỏng: ${d.message || r.status}`);
+  if (!d.success || !d.data?.access_token) {
+    // Nói rõ MÃ lỗi: "Conflict" một mình không cho biết đang hết ngạch phiên.
+    const ma = d.code ? ` (${d.code})` : '';
+    throw new Error(`đăng nhập New API hỏng: ${d.message || r.status}${ma}`);
+  }
   phien = {
     jwt: d.data.access_token,
     userId: d.data.user?.id ?? 1,
     hetLuc: (Number(d.data.access_expires_at) || 0) * 1000 || Date.now() + 10 * 60_000,
   };
+  luu.phien = phien;
+  luuTrangThai();
   return phien;
 }
 
-async function quanTri(duong, { method = 'GET', body } = {}) {
+async function quanTri(duong, { method = 'GET', body, thuLai = true } = {}) {
   const p = await dangNhap();
   const r = await fetch(`${NEWAPI_URL}${duong}`, {
     method,
@@ -211,6 +268,15 @@ async function quanTri(duong, { method = 'GET', body } = {}) {
     body: body ? JSON.stringify(body) : undefined,
     signal: AbortSignal.timeout(15_000),
   });
+  // Phiên lưu ở đĩa có thể đã bị thu hồi phía New API (admin bấm tay, hoặc
+  // dọn dẹp). Vứt nó đi và đăng nhập lại ĐÚNG MỘT lần, thay vì hỏng cho tới
+  // khi có người dựng lại container.
+  if ((r.status === 401 || r.status === 403) && thuLai) {
+    phien = null;
+    luu.phien = null;
+    luuTrangThai();
+    return quanTri(duong, { method, body, thuLai: false });
+  }
   const d = await r.json().catch(() => ({}));
   if (!d.success) throw new Error(`${method} ${duong}: ${d.message || r.status}`);
   return d.data;

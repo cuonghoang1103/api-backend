@@ -38,6 +38,18 @@ services:
       # không ai ngoài Internet gõ được vào đây.
       CRITICAL_RATE_LIMIT: "60"
       CRITICAL_RATE_LIMIT_DURATION: "20"
+      # ⚠️ Trần SỐ PHIÊN ĐĂNG NHẬP còn hiệu lực của một tài khoản. Mặc định 50.
+      # Chạm trần thì MỌI lần đăng nhập sau trả `409 AUTH_SESSION_LIMIT` — và
+      # đó là cái chết dây chuyền: `canh` không đăng nhập được ⇒ không nạp lại
+      # hạn mức key con mỗi cửa sổ ⇒ key khách đã mua dùng hết một lần là chết,
+      # ⇒ không gộp được ví AI Code, ⇒ admin không cấp key mới được.
+      # Đã dính thật 14/09/2026: 50 phiên active, cũ nhất từ 12/09.
+      #
+      # Nới lên 200 là ĐỆM, không phải bản vá — bản vá thật nằm ở canh.mjs
+      # (giữ lại phiên qua các lần khởi động + đăng xuất phiên cũ trước khi
+      # tạo phiên mới). Không có đệm này thì lúc triển khai bản vá cũng không
+      # đăng nhập nổi để mà chạy.
+      USER_SESSION_ACTIVE_LIMIT: "200"
     volumes:
       # SQLite + log. Bind ra host để dựng lại container không mất key con.
       - /opt/cong-llm/data:/data

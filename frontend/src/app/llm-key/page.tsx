@@ -85,6 +85,19 @@ function lenhDatKey(hdh: MaHDH, key: string): { lenh: string; ghiChu: string } {
   };
 }
 
+/**
+ * Lệnh cài Node.js theo từng hệ.
+ *
+ * OpenCode là gói npm nên KHÔNG có Node là không cài được — và thông báo lỗi
+ * lúc đó (`npm không phải là lệnh`) chẳng nhắc gì tới Node, nên người dùng
+ * tưởng hướng dẫn sai chứ không biết mình thiếu gì.
+ */
+function lenhCaiNode(hdh: MaHDH): string {
+  if (hdh === 'windows') return 'winget install OpenJS.NodeJS.LTS';
+  if (hdh === 'macos') return 'brew install node';
+  return 'sudo apt install -y nodejs npm';
+}
+
 /** Đường dẫn file cấu hình TOÀN CỤC của OpenCode. */
 function duongDanCauHinh(hdh: MaHDH): string {
   return hdh === 'windows'
@@ -387,8 +400,24 @@ export default function LlmKeyPage() {
               </h2>
               <p className="text-xs text-text-muted mb-4">
                 Chạy được trên cả <strong className="text-text-secondary">Windows, macOS và Linux</strong> — OpenCode là
-                gói npm, chỉ cần Node 18 trở lên. Hai bước khác nhau giữa các hệ nằm ngay dưới, chọn đúng hệ của bạn.
+                gói npm, chỉ cần Node 18 trở lên. Các bước khác nhau giữa ba hệ nằm ngay dưới, chọn đúng hệ của bạn.
               </p>
+
+              {/* Không giấu chuyện này xuống cuối: nhà phát triển OpenCode
+                  khuyên mạnh dùng WSL trên Windows, và người dùng cần biết
+                  TRƯỚC khi bỏ 10 phút đi theo đường native rồi mới gặp trục
+                  trặc. Nhưng cũng không ép — gói npm có sẵn nhị phân Windows
+                  (đã kiểm: os `win32`, opencode-windows-x64/arm64). */}
+              {heDieuHanh === 'windows' && (
+                <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-3 mb-4">
+                  <p className="text-xs text-text-muted leading-relaxed">
+                    <b className="text-amber-300">Windows:</b> làm theo hướng dẫn dưới là chạy được ngay. Nhưng nhà
+                    phát triển OpenCode <b className="text-text-secondary">khuyên dùng WSL</b> (Windows Subsystem for
+                    Linux) để có hiệu năng file và hỗ trợ terminal tốt hơn. Dùng WSL thì mở terminal WSL rồi làm theo
+                    tab <b className="text-text-secondary">Linux</b>, không phải tab Windows.
+                  </p>
+                </div>
+              )}
 
               {/* Chọn hệ điều hành — chỉ đổi bước 2 và bước 3 */}
               <div className="flex gap-1.5 mb-4 p-1 rounded-xl bg-darkbg border border-darkborder w-fit">
@@ -409,8 +438,32 @@ export default function LlmKeyPage() {
               </div>
 
               <ol className="space-y-4 text-sm">
+                {/* ⚠️ BƯỚC NÀY TRƯỚC ĐÂY KHÔNG CÓ, và đó là lỗi.
+                    Hướng dẫn cũ bắt đầu thẳng từ `npm i -g opencode-ai`, tức
+                    GIẢ ĐỊNH SẴN máy đã cài Node. Trên Windows sạch thì không,
+                    và người dùng nhận "npm không phải là lệnh" — một câu chẳng
+                    nhắc gì tới Node.js, nên họ tưởng hướng dẫn sai. Đã dính
+                    thật 14/09/2026. */}
                 <li>
-                  <p className="text-text-primary font-medium mb-1.5">1. Cài OpenCode</p>
+                  <p className="text-text-primary font-medium mb-1.5">1. Cài Node.js (bỏ qua nếu đã có)</p>
+                  <p className="text-xs text-text-muted mb-1.5">
+                    Kiểm trước bằng <code className="text-text-secondary">node -v</code>. Ra số phiên bản là đã có.
+                    Báo <em>&quot;không phải là lệnh&quot;</em> / <em>&quot;command not found&quot;</em> thì cài theo dưới
+                    — và đó cũng chính là lý do <code className="text-text-secondary">npm</code> báo không tìm thấy.
+                  </p>
+                  <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
+                    <code className="flex-1 min-w-0 text-xs font-mono text-text-secondary truncate">{lenhCaiNode(heDieuHanh)}</code>
+                    <button onClick={() => chepChu(lenhCaiNode(heDieuHanh), 'node')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
+                      {chep === 'node' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                  <p className="text-xs text-amber-300/80 mt-1.5">
+                    Cài xong phải <b>mở lại cửa sổ terminal</b> — đường dẫn mới chỉ có hiệu lực ở cửa sổ mở sau đó.
+                  </p>
+                </li>
+
+                <li>
+                  <p className="text-text-primary font-medium mb-1.5">2. Cài OpenCode</p>
                   <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
                     <code className="flex-1 text-xs font-mono text-text-secondary">npm i -g opencode-ai</code>
                     <button onClick={() => chepChu('npm i -g opencode-ai', 'cai')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
@@ -421,7 +474,7 @@ export default function LlmKeyPage() {
                 </li>
 
                 <li>
-                  <p className="text-text-primary font-medium mb-1.5">2. Đặt key vào biến môi trường</p>
+                  <p className="text-text-primary font-medium mb-1.5">3. Đặt key vào biến môi trường</p>
                   <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
                     <code className="flex-1 min-w-0 text-xs font-mono text-text-secondary truncate">
                       {lenhDatKey(heDieuHanh, key ? (hienKey ? key : 'sk-…') : 'key-cua-ban').lenh}
@@ -435,7 +488,7 @@ export default function LlmKeyPage() {
 
                 <li>
                   <p className="text-text-primary font-medium mb-1.5">
-                    3. Tạo <code className="text-text-secondary">{duongDanCauHinh(heDieuHanh)}</code>
+                    4. Tạo <code className="text-text-secondary">{duongDanCauHinh(heDieuHanh)}</code>
                   </p>
                   <p className="text-xs text-text-muted mb-1.5">
                     Không muốn đụng thư mục hệ thống thì đặt file tên{' '}
@@ -457,7 +510,7 @@ export default function LlmKeyPage() {
                 </li>
 
                 <li>
-                  <p className="text-text-primary font-medium mb-1.5">4. Chạy</p>
+                  <p className="text-text-primary font-medium mb-1.5">5. Chạy</p>
                   <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
                     <code className="flex-1 text-xs font-mono text-text-secondary">opencode</code>
                     <button onClick={() => chepChu('opencode', 'chay')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">

@@ -116,14 +116,31 @@ export function nenNguCanh(messages: AgentMessage[]): KetQuaNen {
   let kyTuDaCat = 0;
   const ra = messages.map((m, i) => {
     if (m.role !== 'tool' || giuNguyen.has(i)) return m;
+
+    /*
+     * ⚠️ GỠ CẢ ẢNH KÈM KẾT QUẢ, KHÔNG CHỈ CẮT CHỮ.
+     *
+     * Bản đầu chỉ rút ngắn `content` rồi `...m` chở nguyên `anh` đi tiếp. Kết
+     * quả: phần chữ co còn 180 ký tự trong khi tấm ảnh 1.500 token vẫn được
+     * gửi lại ở MỌI lượt sau — đúng thứ mà cả cơ chế nén này sinh ra để chặn,
+     * và là phần đắt nhất của hội thoại. Một việc 20 bước có 4 lần đọc ảnh là
+     * ~120k token trả cho những tấm hình agent đã xem xong từ lâu.
+     *
+     * Không lộ ra ở đâu cả: `kyTuDaCat` chỉ đếm ký tự chữ, nên sổ vẫn báo
+     * "đã tiết kiệm" trong khi tiền vẫn chảy. Xem
+     * [[feedback_hai_con_so_hai_kho_khong_ai_noi_lai]].
+     */
+    const coAnh = Array.isArray(m.anh) && m.anh.length > 0;
     const goc = m.content;
-    if (goc.length <= DAU_MAU) return m; // đã ngắn sẵn, lược cũng không lợi gì
+    if (goc.length <= DAU_MAU && !coAnh) return m; // đã ngắn sẵn, lược cũng không lợi gì
     soDaLuoc++;
-    kyTuDaCat += goc.length - DAU_MAU;
+    kyTuDaCat += Math.max(0, goc.length - DAU_MAU);
+    const { anh: _bo, ...conLai } = m;
     return {
-      ...m,
+      ...conLai,
       content:
         `${goc.slice(0, DAU_MAU)}\n` +
+        (coAnh ? '[… ảnh đã được gỡ để tiết kiệm ngữ cảnh. ] ' : '') +
         `[… kết quả cũ đã được lược bớt để tiết kiệm ngữ cảnh. ` +
         `Nếu bạn cần lại đầy đủ, hãy GỌI LẠI tool đó — đừng đoán phần bị lược.]`,
     };

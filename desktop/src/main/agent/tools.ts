@@ -28,7 +28,7 @@ import { promisify } from 'node:util';
 
 import { soSanhDong, type KetQuaDiff } from './diff';
 import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './jail';
-import { dinhDangTheoTen, suaAnh } from './anh';
+import { dinhDangTheoTen, napAnh, suaAnh } from './anh';
 import { kiemDuongDanNgoai } from './ghiNgoai';
 import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
 import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
@@ -502,8 +502,10 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
     if (st.size > TRAN_ANH) {
       return {
         noiDung: `LỖI: ảnh nặng ${(st.size / 1024 / 1024).toFixed(1)}MB, quá lớn (trần 1.4MB). `
-          + 'Thu nhỏ trước bằng run_command (ví dụ `sips -Z 1200 anh.png` trên macOS, '
-          + 'hoặc `magick anh.png -resize 1200x anh-nho.png`) rồi đọc lại.',
+          + 'Thu nhỏ bằng sua_anh: {"path": "<ảnh này>", "viec": "co", "rong": 1200, '
+          + '"dich": "<tên mới>.jpg"} rồi read_file file mới. '
+          + 'ĐỪNG đi vòng qua run_command với sips/magick — chế độ mặc định không có run_command, '
+          + 'và magick thì đa số máy không cài.',
         tomTat: 'ảnh quá lớn',
       };
     }
@@ -1030,8 +1032,10 @@ async function toolSuaAnh(goc: string, args: Record<string, unknown>): Promise<K
   const duongNguon = await moTrongNguc(goc, nguon, { phaiCoThat: true });
 
   if (viec === 'xem') {
-    const { nativeImage } = await import('electron');
-    const img = nativeImage.createFromPath(duongNguon);
+    // `napAnh` chứ không `createFromPath`: tên file `@2x` làm Electron báo
+    // kích thước BẰNG MỘT NỬA số điểm ảnh thật. Xem chú thích ở `anh.ts` —
+    // đưa con số sai cho model ở đây là mọi lệnh cắt sau đó đều trượt.
+    const img = napAnh(duongNguon);
     if (img.isEmpty()) return { noiDung: `LỖI: không đọc được ảnh ${nguon}.`, tomTat: 'ảnh hỏng' };
     const c = img.getSize();
     return {

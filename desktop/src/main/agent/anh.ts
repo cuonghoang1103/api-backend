@@ -25,7 +25,30 @@
  * ghép nền màu đỏ #ff0000 mà xếp byte theo RGBA thì ra màu XANH LAM, ảnh vẫn
  * dựng được, không lỗi nào, và chỉ lộ ra khi có người nhìn tấm ảnh.
  */
+import { readFileSync } from 'node:fs';
 import { nativeImage } from 'electron';
+
+/**
+ * Nạp ảnh từ đĩa — QUA BUFFER, không qua `createFromPath`.
+ *
+ * ⚠️ `createFromPath` đọc HẬU TỐ TRONG TÊN FILE: `anh@2x.png` bị gán
+ * `scaleFactor` 2. Đo thật 15/09/2026 trên một PNG 100×60:
+ *
+ *     thuong.png   getSize 100×60   toBitmap 24.000 B   ✔ khớp
+ *     anh@2x.png   getSize  50×30   toBitmap 24.000 B   ✘ LỆCH GẤP ĐÔI
+ *     anh@3x.png   getSize  33×20   toBitmap 24.000 B   ✘
+ *
+ * Hai hậu quả, cả hai đều CÂM: `ghepLenNen` đọc sai bước nhảy hàng nên ảnh xô
+ * chéo thành rác, và một tấm bìa "1200×630" ghi ra thành 2400×1260.
+ *
+ * `createFromBuffer` không có tên file để soi, `scaleFactor` mặc định 1 — đo
+ * lại thì cả hai file đều ra 100×60 và bitmap khớp. Tên file `@2x` là chuyện
+ * bình thường trong mọi dự án có tài nguyên màn hình Retina, nên đây không
+ * phải ca hiếm.
+ */
+export function napAnh(duong: string) {
+  return nativeImage.createFromBuffer(readFileSync(duong));
+}
 
 /** Cạnh lớn nhất chấp nhận được. Trên mức này thì đó là lỗi gõ số, không phải ý đồ. */
 export const CANH_TOI_DA = 12_000;
@@ -151,7 +174,7 @@ export function suaAnh(
   thamSo: { x?: number; y?: number; rong?: number; cao?: number; nen?: string; chatLuong?: number },
   dinhDang: 'png' | 'jpeg',
 ): KetQuaSuaAnh {
-  let img = nativeImage.createFromPath(duongNguon);
+  let img = napAnh(duongNguon);
   if (img.isEmpty()) throw new Error('không đọc được ảnh (định dạng lạ, hoặc file hỏng)');
   const goc = img.getSize();
   let keLai = '';
@@ -189,8 +212,14 @@ export function suaAnh(
       if (!mau) throw new Error('"nen" phải dạng #rrggbb');
       const { co, le } = tinhVua({ rong: goc.width, cao: goc.height }, dich);
       const nho = img.resize({ width: co.rong, height: co.cao, quality: 'best' });
+      const thanNho = nho.toBitmap();
+      // Lưới đỡ cuối: `ghepLenNen` tin vào `co.rong` để tính bước nhảy hàng.
+      // Lệch một byte là ảnh xô chéo thành rác mà không có lỗi nào — thà dừng.
+      if (thanNho.length !== co.rong * co.cao * 4) {
+        throw new Error(`bitmap ${thanNho.length}B không khớp ${co.rong}×${co.cao} — ảnh có scaleFactor lạ`);
+      }
       img = nativeImage.createFromBitmap(
-        ghepLenNen(nho.toBitmap(), co, dich, le, mau),
+        ghepLenNen(thanNho, co, dich, le, mau),
         { width: dich.rong, height: dich.cao },
       );
       keLai = `vừa khung ${dich.rong}×${dich.cao}, chừa viền ${thamSo.nen ?? '#ffffff'}`;

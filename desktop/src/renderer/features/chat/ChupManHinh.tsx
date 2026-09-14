@@ -40,6 +40,18 @@ function dataUrlSangFile(url: string, ten: string): File {
   return new File([mang], ten, { type: 'image/png' });
 }
 
+/**
+ * Đổi khung khoanh trên MÀN HÌNH sang khung trên ẢNH THẬT.
+ *
+ * Tách ra thành hàm thuần để kiểm được: đây đúng là chỗ đã sai một lần (đo
+ * theo khung bọc thay vì theo tấm ảnh), và một lỗi ở đây không làm gì đổ vỡ —
+ * nó chỉ cắt trúng chỗ khác, thứ chỉ người nhìn ảnh mới phát hiện ra.
+ */
+export function doiToaDo(k: Khung, anhThatRong: number, hienThiRong: number): Khung {
+  const ti = anhThatRong / (hienThiRong || 1);
+  return { x: k.x * ti, y: k.y * ti, w: k.w * ti, h: k.h * ti };
+}
+
 /** Cắt theo khung, trả về PNG mới. Khung tính theo toạ độ ẢNH THẬT. */
 async function catAnh(url: string, k: Khung): Promise<string> {
   const anh = new Image();
@@ -48,12 +60,54 @@ async function catAnh(url: string, k: Khung): Promise<string> {
     anh.onerror = () => tuChoi(new Error('Không đọc được ảnh vừa chụp.'));
     anh.src = url;
   });
+  /* Kẹp vào trong ảnh. Nhân tỉ lệ rồi làm tròn có thể đẩy mép phải/dưới vượt
+     ra ngoài đúng một điểm ảnh — `drawImage` không báo lỗi, nó chỉ để lại một
+     vệt TRONG SUỐT ở mép, và vệt đó thành ĐEN khi ảnh được mã hoá sang JPEG ở
+     bước sau. */
+  const x = Math.max(0, Math.min(Math.round(k.x), anh.naturalWidth - 1));
+  const y = Math.max(0, Math.min(Math.round(k.y), anh.naturalHeight - 1));
+  const w = Math.max(1, Math.min(Math.round(k.w), anh.naturalWidth - x));
+  const h = Math.max(1, Math.min(Math.round(k.h), anh.naturalHeight - y));
   const cv = document.createElement('canvas');
-  cv.width = Math.max(1, Math.round(k.w));
-  cv.height = Math.max(1, Math.round(k.h));
+  cv.width = w;
+  cv.height = h;
   const ctx = cv.getContext('2d');
   if (!ctx) throw new Error('Không dựng được canvas để cắt ảnh.');
-  ctx.drawImage(anh, Math.round(k.x), Math.round(k.y), cv.width, cv.height, 0, 0, cv.width, cv.height);
+  ctx.drawImage(anh, x, y, w, h, 0, 0, w, h);
+  return cv.toDataURL('image/png');
+}
+
+/**
+ * Cạnh dài tối đa của tấm gửi đi.
+ *
+ * ⚠️ Không phải để tiết kiệm token — chỗ đó `DinhKemCode` đã lo (co về 1568px).
+ * Đây là để KHÔNG BỊ TỪ CHỐI: đường /chat (`DinhKem.tsx`) có trần cứng 4MB và
+ * KHÔNG tự thu nhỏ, nó chỉ báo "nặng X, trần là 4MB" rồi bỏ tấm ảnh. Màn 5K
+ * chụp ra PNG 3–5MB là chạm đúng cái trần đó.
+ *
+ * 2560 chứ không 1568: cắt vùng được làm trên ảnh GỐC (chính xác hơn), còn đây
+ * là bước sau cùng — để dư một chút thì chữ nhỏ trên ảnh vẫn đọc được nếu về
+ * sau có ai nâng trần phía model.
+ */
+const CANH_GUI = 2560;
+
+/** Co ảnh nếu cạnh dài vượt `CANH_GUI`. Không vượt thì trả nguyên, không mã hoá lại. */
+async function coNeuTo(url: string): Promise<string> {
+  const anh = new Image();
+  await new Promise<void>((giai, tuChoi) => {
+    anh.onload = () => giai();
+    anh.onerror = () => tuChoi(new Error('Không đọc được ảnh vừa chụp.'));
+    anh.src = url;
+  });
+  const canh = Math.max(anh.naturalWidth, anh.naturalHeight);
+  if (canh <= CANH_GUI) return url;
+  const ti = CANH_GUI / canh;
+  const cv = document.createElement('canvas');
+  cv.width = Math.max(1, Math.round(anh.naturalWidth * ti));
+  cv.height = Math.max(1, Math.round(anh.naturalHeight * ti));
+  const ctx = cv.getContext('2d');
+  if (!ctx) return url;
+  ctx.drawImage(anh, 0, 0, cv.width, cv.height);
   return cv.toDataURL('image/png');
 }
 
@@ -116,14 +170,15 @@ export function ChupManHinh({ onXong, onDong }: { onXong: (f: File) => void; onD
     try {
       let url = anh.url;
       if (catTheoKhung && khung && oAnhRef.current) {
-        // Quy đổi hiển thị → ảnh thật. `naturalWidth` là số điểm ảnh THẬT,
-        // `clientWidth` là số điểm ảnh CSS sau khi khung co nó lại.
-        const ti = anh.rong / (oAnhRef.current.clientWidth || 1);
-        url = await catAnh(anh.url, {
-          x: khung.x * ti, y: khung.y * ti, w: khung.w * ti, h: khung.h * ti,
-        });
+        /* Quy đổi hiển thị → ảnh thật. `naturalWidth` là số điểm ảnh THẬT của
+           tấm đang hiển thị, `clientWidth` là số điểm ảnh CSS sau khi khung co
+           nó lại. Lấy `naturalWidth` làm gốc chứ không phải con số `rong` do
+           main gửi kèm: đó mới là thứ trình duyệt đang vẽ, nên nó không thể
+           lệch với `clientWidth` mà ta đang chia. */
+        const that = oAnhRef.current.naturalWidth || anh.rong;
+        url = await catAnh(anh.url, doiToaDo(khung, that, oAnhRef.current.clientWidth));
       }
-      onXong(dataUrlSangFile(url, `man-hinh-${Date.now()}.png`));
+      onXong(dataUrlSangFile(await coNeuTo(url), `man-hinh-${Date.now()}.png`));
       onDong();
     } catch (e) {
       datLoi((e as Error).message);

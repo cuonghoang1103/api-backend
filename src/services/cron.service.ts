@@ -24,6 +24,7 @@ import { logger } from '../utils/logger.js';
 import { completedExpiryCutoff, COMPLETED_TASK_RETENTION_DAYS } from '../utils/dashboard.js';
 import { deleteByKey } from '../storage/uploadService.js';
 import { sendDueReminders } from './myLanguage.reminder.service.js';
+import { submitSitemapToIndexNow } from './indexnow.service.js';
 
 let _started = false;
 
@@ -381,6 +382,25 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
+  // ─── IndexNow — báo Bing/Coc Coc/Yandex crawl URL (mỗi 6 giờ) ───
+  // Nộp toàn bộ URL trong sitemap.xml cho IndexNow. Rẻ, idempotent,
+  // và service tự nuốt mọi lỗi (không bao giờ throw) — nên đây chỉ
+  // cần gọi và ghi log. Tắt tay bằng INDEXNOW_ENABLED=false.
+  cron.schedule('0 */6 * * *', async () => {
+    try {
+      const r = await submitSitemapToIndexNow();
+      logger.info('cron IndexNow submit', { ok: r.ok, submitted: r.submitted, status: r.status });
+    } catch (err) {
+      logger.error('cron IndexNow submit failed', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
+  // Nộp một lần ~2 phút sau khởi động, để lần deploy đầu tự báo ngay
+  // mà không phải chờ tới mốc cron kế tiếp.
+  setTimeout(() => {
+    submitSitemapToIndexNow().catch(() => {});
+  }, 120000);
+
   // ─── Startup recovery ───
   void recoverPendingJobs();
 
@@ -399,6 +419,7 @@ export function startCronJobs(): void {
     ? 'Tech news ingest every 2h; bulletin 07:30 VN; scheduled-publish sweep every 5 min'
     : 'Tech news: TẮT (TECH_NEWS_AUTOPOST chưa bật) — chỉ còn scheduled-publish sweep, không gọi AI',
   'Maker Lab housekeeping hourly (telemetry prune, stale devices, expired commands)',
+  'IndexNow sitemap submit every 6h (+ once ~2 min after startup)',
   ],
   });
 }

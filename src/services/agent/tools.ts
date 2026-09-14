@@ -67,7 +67,19 @@ export type AgentCapability =
    * khai). Ở đây trang chạy TRÊN MÁY người dùng với phiên đăng nhập của họ —
    * nên `web_bam`/`web_go` phải xin duyệt từng lần, giống lệnh shell.
    */
-  | 'browser';
+  | 'browser'
+  /**
+   * Sửa ẢNH: cắt, co, dựng bìa.
+   *
+   * ⚠️ TÁCH KHỎI `fs_write` CÓ CHỦ Ý, dù nó cũng chỉ ghi một file vào dự án.
+   * Lý do là TƯƠNG THÍCH NGƯỢC: bản app đang nằm trên máy người dùng hôm nay
+   * khai `fs_write` nhưng KHÔNG cài `sua_anh`. Gắn tool vào `fs_write` là mọi
+   * bản cũ đều được model mời gọi một tool mà app trả "không cài tool tên
+   * sua_anh" — mất trắng một lượt gọi cổng, mỗi lần.
+   * Khả năng riêng thì chỉ bản app có cài mới khai, nên bản cũ không bao giờ
+   * nhìn thấy nó. Cùng lý do với `shell_nen`.
+   */
+  | 'anh_sua';
 
 export interface AgentToolDef {
   name: string;
@@ -273,6 +285,41 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
 
+  {
+    name: 'sua_anh',
+    ring: 'client',
+    capability: 'anh_sua',
+    description:
+      'Cắt ảnh, co ảnh, dựng ẢNH BÌA. Chạy bằng thư viện ảnh dựng sẵn của app — '
+      + 'KHÔNG cần ImageMagick/ffmpeg, và chạy được cả ở chế độ không có run_command. '
+      + 'Nhận .png .jpg .jpeg .webp .gif làm nguồn; ghi ra .png hoặc .jpg. '
+      + 'Năm việc: '
+      + '• xem — chỉ trả về kích thước, KHÔNG ghi file. LUÔN gọi cái này TRƯỚC khi cắt: '
+      + 'toạ độ bạn ước lượng bằng mắt trên tấm ảnh đã bị co nhỏ thì sai, phải biết số điểm ảnh thật. '
+      + '• cat — cắt vùng (x, y, rong, cao), tính bằng điểm ảnh THẬT của ảnh gốc. '
+      + '• co — đổi kích thước; cho MỘT chiều thì chiều kia tự theo tỉ lệ. '
+      + '• bia — dựng ảnh bìa đúng khung (rong × cao): phủ kín rồi cắt bớt rìa, không méo, không viền trống. '
+      + 'Cỡ hay dùng: 1200×630 (Open Graph/Facebook), 1280×720 (YouTube), 1500×500 (ảnh bìa X). '
+      + '• vua — thu cả ảnh vào khung và chừa viền màu "nen" (#rrggbb), giữ trọn nội dung. '
+      + '⚠️ KHÔNG ghi đè: "dich" trùng file có sẵn thì bị từ chối, hãy đặt tên khác. '
+      + '⚠️ KHÔNG vẽ được chữ lên ảnh. Bìa cần chữ thì dựng bằng HTML/CSS rồi chụp, đừng hứa với người dùng là làm được ở đây. '
+      + 'Xong thì gọi read_file để NHÌN tấm ảnh vừa tạo — đừng báo hoàn thành khi chưa thấy nó.',
+    parameters: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Ảnh nguồn, đường dẫn TƯƠNG ĐỐI so với gốc dự án.' },
+        viec: { type: 'string', enum: ['xem', 'cat', 'co', 'bia', 'vua'], description: 'Việc cần làm.' },
+        dich: { type: 'string', description: 'File ảnh sẽ tạo ra (.png/.jpg), tương đối gốc dự án. Bỏ trống khi viec="xem".' },
+        x: { type: 'integer', description: 'cat: mép trái vùng cắt, điểm ảnh.' },
+        y: { type: 'integer', description: 'cat: mép trên vùng cắt, điểm ảnh.' },
+        rong: { type: 'integer', description: 'Bề rộng — vùng cắt (cat) hoặc khung đích (co/bia/vua).' },
+        cao: { type: 'integer', description: 'Bề cao — vùng cắt (cat) hoặc khung đích (co/bia/vua).' },
+        nen: { type: 'string', description: 'vua: màu viền dạng #rrggbb. Mặc định #ffffff.' },
+        chat_luong: { type: 'integer', description: 'Chỉ với .jpg: 1-100. Mặc định 88.' },
+      },
+      required: ['path', 'viec'],
+    },
+  },
   {
     name: 'xoa_file',
     ring: 'client',
@@ -1033,7 +1080,7 @@ export function laToolMcp(name: string): boolean {
  */
 export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
-  'notes_write', 'browser', 'ky_nang',
+  'notes_write', 'browser', 'ky_nang', 'anh_sua',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

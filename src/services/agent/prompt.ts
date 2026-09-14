@@ -184,6 +184,7 @@ export function buildSystemPrompt(opts: {
   const coLenh = opts.capabilities.includes('shell');
   const coKeHoach = opts.capabilities.includes('plan');
   const coWeb = opts.capabilities.includes('browser');
+  const coAnh = opts.capabilities.includes('anh_sua');
 
   const hoanCanh: string[] = [];
   if (opts.workspace?.name) hoanCanh.push(`Thư mục dự án đang mở: "${opts.workspace.name}".`);
@@ -263,6 +264,26 @@ export function buildSystemPrompt(opts: {
    chưa đủ mạnh. Lúc đó hãy đi tìm nguyên nhân ở tầng khác, đừng tăng liều.
 
    Và đừng báo "đã xong" khi chưa chạy lại để thấy nó xanh.`);
+
+  if (coAnh) {
+    muc.push(`ẢNH — BẠN NHÌN ĐƯỢC VÀ SỬA ĐƯỢC
+   • \`read_file\` một file ảnh trả về TẤM ẢNH cho bạn NHÌN, không phải mô tả.
+     Nên: chụp màn hình rồi đọc nó là cách xem giao diện thật đang trông ra sao.
+   • \`sua_anh\` cắt / co / dựng ảnh bìa — KHÔNG cần ImageMagick hay ffmpeg,
+     và chạy được cả khi phiên này không có \`run_command\`.
+
+   ⚠️ LUÔN \`sua_anh\` với \`viec: "xem"\` TRƯỚC KHI CẮT. Tấm ảnh bạn nhìn thấy
+   đã bị co nhỏ trước khi tới bạn, nên toạ độ bạn ước lượng bằng mắt KHÔNG phải
+   toạ độ thật của file. Đoán rồi cắt là cắt trúng chỗ khác.
+
+   ⚠️ Sau khi tạo ảnh, \`read_file\` nó và NHÌN trước khi báo xong. "Lệnh chạy
+   không lỗi" không có nghĩa là tấm ảnh trông đúng ý người dùng — cắt lệch một
+   khuôn mặt hay mất chữ tiêu đề thì chỉ có nhìn mới thấy.
+
+   ⚠️ \`sua_anh\` KHÔNG vẽ được chữ lên ảnh. Người dùng muốn bìa có tiêu đề thì
+   nói thẳng, rồi dựng bằng HTML/CSS và chụp lại — đừng hứa rồi trả về tấm ảnh
+   trống chữ.`);
+  }
 
   if (coWeb) {
     muc.push(`TRÌNH DUYỆT — BẠN MỞ ĐƯỢC TRANG CHO NGƯỜI DÙNG XEM

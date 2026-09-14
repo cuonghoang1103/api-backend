@@ -257,6 +257,20 @@ const bridge: DesktopBridge = {
         ok: true; duongDan: string; soModel: number;
       }>,
   },
+  manHinh: {
+    /** Màn hình + cửa sổ đang mở, kèm ảnh nhỏ để chọn. Xem main/ipc/manHinh.ts. */
+    nguon: () =>
+      ipcRenderer.invoke('manHinh:nguon') as Promise<{
+        quyen: 'granted' | 'denied' | 'restricted' | 'not-determined' | 'khong-ap-dung';
+        nguon: { id: string; ten: string; loai: 'man' | 'cuaSo'; anhNho: string }[];
+      }>,
+    chup: (id: string) =>
+      ipcRenderer.invoke('manHinh:chup', { id }) as Promise<{
+        ok: boolean; anh?: string; rong?: number; cao?: number; loi?: string;
+      }>,
+    moCaiDatQuyen: () =>
+      ipcRenderer.invoke('manHinh:moCaiDatQuyen') as Promise<{ ok: boolean }>,
+  },
   terminal: {
     chay: (cuocId: string, lenh: string) =>
       ipcRenderer.invoke('terminal:chay', { cuocId, lenh }) as Promise<TerminalKetQua>,

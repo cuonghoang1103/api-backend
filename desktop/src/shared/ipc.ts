@@ -1473,6 +1473,23 @@ export const INVOKE_CHANNELS = {
   /** Xem máy đã có gì: node, npm, opencode, và file cấu hình đã tồn tại chưa. */
   'opencode:doMayNay': null,
 
+  /**
+   * Chụp màn hình NGAY TRONG APP — xem `main/ipc/manHinh.ts`.
+   *
+   * ⚠️ Vì sao phải có, trong khi agent đã chạy được `screencapture`: lệnh đó
+   * CHỈ có trên macOS. Windows không có lệnh chụp màn hình dựng sẵn nào gọi
+   * được từ dòng lệnh, Linux thì tuỳ máy có `grim`/`scrot`/`import` hay
+   * không. `desktopCapturer` của Electron chạy giống nhau trên cả ba.
+   *
+   * Và quan trọng hơn: người dùng muốn CHỤP RỒI DÁN VÀO CHAT, không phải nhờ
+   * AI chạy lệnh hộ — đó là hai việc khác nhau.
+   */
+  'manHinh:nguon': null,
+  /** Chụp một nguồn ở độ phân giải thật. `id` lấy từ `manHinh:nguon`. */
+  'manHinh:chup': z.object({ id: z.string().min(1).max(200) }),
+  /** Mở đúng trang cấp quyền Ghi màn hình của hệ điều hành (chỉ macOS). */
+  'manHinh:moCaiDatQuyen': null,
+
   'terminal:chay': z.object({
     cuocId: z.string().min(1),
     /* Trần 4000 để một lệnh dài (chuỗi `find … -exec …`) vẫn chạy được, nhưng
@@ -1944,6 +1961,25 @@ export interface DesktopBridge {
       contextToken: number;
       outputToken: number;
     }): Promise<{ ok: true; duongDan: string; soModel: number }>;
+  };
+
+  manHinh: {
+    /**
+     * Liệt kê màn hình + cửa sổ đang mở, kèm ảnh nhỏ để người dùng chọn.
+     *
+     * `quyen` chỉ có nghĩa trên macOS: chưa cấp quyền Ghi màn hình thì
+     * `desktopCapturer` vẫn trả về danh sách nhưng MỌI ảnh đều là nền trắng —
+     * không có lỗi nào, chỉ là ảnh rỗng. Phải đọc quyền riêng mới nói được
+     * cho người dùng biết vì sao họ nhìn thấy toàn ô trắng.
+     */
+    nguon(): Promise<{
+      quyen: 'granted' | 'denied' | 'restricted' | 'not-determined' | 'khong-ap-dung';
+      nguon: { id: string; ten: string; loai: 'man' | 'cuaSo'; anhNho: string }[];
+    }>;
+    /** Chụp lại nguồn đó ở độ phân giải thật. Trả về data URL PNG. */
+    chup(id: string): Promise<{ ok: boolean; anh?: string; rong?: number; cao?: number; loi?: string }>;
+    /** Mở trang cấp quyền Ghi màn hình (macOS). Nơi khác thì không làm gì. */
+    moCaiDatQuyen(): Promise<{ ok: boolean }>;
   };
 
   terminal: {

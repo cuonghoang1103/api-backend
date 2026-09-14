@@ -31,6 +31,8 @@ import { ChuAgent } from './markdown';
 import {
   DaiDinhKem, DinhKemDaGui, NutDinhKem, ODinhKem, useDinhKem, type TepDinhKem,
 } from './DinhKem';
+import { useDanKhapNoi } from './DinhKemCode';
+import { ChupManHinh, NutChupManHinh } from './ChupManHinh';
 import { NutGoiThoai } from './NutGoiThoai';
 import { NutTinNhan } from './NutTinNhan';
 /* Kiểu `PhienChat`/`ThuMuc` sống ở `ThanhBenChat` chứ không ở đây: thanh bên
@@ -183,6 +185,12 @@ export function ChatMode({ pro }: { pro: boolean }) {
   const huyRef = useRef<AbortController | null>(null);
   const cuonRef = useRef<HTMLDivElement>(null);
   const dk = useDinhKem();
+  /* Dán ở bất kỳ đâu trong khung chat — không chỉ khi con trỏ đã nằm trong ô
+     nhập. Xem `useDanKhapNoi` ở DinhKemCode.tsx cho lý do. Chỉ bật cho Pro,
+     đúng như nút đính kèm: không Pro thì máy chủ bỏ file, dán được chỉ làm
+     người dùng tưởng đã gửi. */
+  useDanKhapNoi(dk.them, pro);
+  const [dangChupMan, datDangChupMan] = useState(false);
 
   useEffect(() => {
     const el = cuonRef.current;
@@ -940,11 +948,19 @@ export function ChatMode({ pro }: { pro: boolean }) {
 
       <DaiDinhKem tep={dk.tep} bo={dk.bo} />
 
+      {dangChupMan && (
+        <ChupManHinh
+          onXong={(f) => void dk.them([f])}
+          onDong={() => datDangChupMan(false)}
+        />
+      )}
+
       <div className="ct-agent-soan">
         <ODinhKem oFileRef={dk.oFileRef} nhanTuO={dk.nhanTuO} />
         {/* Không Pro ⇒ khoá nút và NÓI RÕ vì sao. Cho bấm rồi để máy chủ lặng
             lẽ bỏ file là đúng cái bẫy vừa đo được. */}
         <NutDinhKem onBam={dk.moChonTep} khoa={dangChay || !pro} khongPro={!pro} />
+        {pro && <NutChupManHinh onBam={() => datDangChupMan(true)} khoa={dangChay} />}
         <textarea
           className="ct-agent-o"
           rows={2}

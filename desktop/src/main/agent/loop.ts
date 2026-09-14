@@ -850,6 +850,11 @@ export async function chayLuot(
     if (boiCanh.choChayLenh) capabilities.push('shell', 'shell_nen');
     if (boiCanh.choTrinhDuyet) capabilities.push('browser');
     if (boiCanh.choSua) capabilities.push('git_write');
+    /* Sửa ảnh đi theo `choSua` vì nó ghi một file vào dự án — nhưng là khả
+       năng RIÊNG, không gộp vào `fs_write`. Máy chủ dựa vào đúng chỗ này để
+       biết app có cài `sua_anh` hay chưa; bản app cũ không đẩy chuỗi này nên
+       model không bao giờ được mời một tool chúng không chạy được. */
+    if (boiCanh.choSua) capabilities.push('anh_sua');
   }
   // NGOÀI khối trên: ghi chú sống trên máy chủ, không cần thư mục dự án nào.
   if (boiCanh.choGhiNote) capabilities.push('notes_write');

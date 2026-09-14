@@ -28,6 +28,7 @@ import { promisify } from 'node:util';
 
 import { soSanhDong, type KetQuaDiff } from './diff';
 import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './jail';
+import { dinhDangTheoTen, suaAnh } from './anh';
 import { kiemDuongDanNgoai } from './ghiNgoai';
 import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
 import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
@@ -322,6 +323,14 @@ export async function chayToolAgent(
       case 'ghi_file_ngoai': {
         if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
         return await toolGhiFileNgoai(args, ghi);
+      }
+      /* Sửa ảnh: cắt / co / dựng bìa. GHI RA MỘT FILE MỚI, nên cùng quyền với
+         các tool sửa file — nhưng KHÔNG đi qua thẻ duyệt diff, vì "diff" của
+         một tấm ảnh nhị phân không nói được gì cho người bấm duyệt. Bù lại
+         nó không bao giờ ghi ĐÈ (xem `toolSuaAnh`), nên không có gì để mất. */
+      case 'sua_anh': {
+        if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
+        return await toolSuaAnh(goc, args);
       }
       case 'edit_file':
       case 'create_file': {
@@ -996,6 +1005,77 @@ async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: B
     noiDung: `Đã tạo ${tuongDoi} (${noiDung.split('\n').length} dòng). Người dùng đã duyệt.`,
     tomTat: `tạo mới, ${noiDung.split('\n').length} dòng`,
     diff,
+  };
+}
+
+// ─── sua_anh ───────────────────────────────────────────────────────
+
+/**
+ * Cắt / co / dựng ảnh bìa.
+ *
+ * ⚠️ KHÔNG BAO GIỜ GHI ĐÈ. Ảnh gốc là thứ không có `git checkout` nào lấy lại
+ * được nếu nó chưa từng được commit — và ảnh trong dự án thường đúng là thế
+ * (vừa tải về, vừa chụp). Trùng tên thì báo lỗi và bảo model đổi tên, chứ
+ * không hỏi "có ghi đè không": một cú bấm nhầm ở thẻ duyệt là mất bản gốc.
+ */
+async function toolSuaAnh(goc: string, args: Record<string, unknown>): Promise<KetQuaTool> {
+  const nguon = String(args.path ?? '');
+  const raTen = String(args.dich ?? '');
+  const viec = String(args.viec ?? '');
+  if (!nguon) return { noiDung: 'LỖI: thiếu "path".', tomTat: 'thiếu đường dẫn' };
+  if (!['cat', 'co', 'bia', 'vua', 'xem'].includes(viec)) {
+    return { noiDung: 'LỖI: "viec" phải là cat | co | bia | vua | xem.', tomTat: 'việc lạ' };
+  }
+
+  const duongNguon = await moTrongNguc(goc, nguon, { phaiCoThat: true });
+
+  if (viec === 'xem') {
+    const { nativeImage } = await import('electron');
+    const img = nativeImage.createFromPath(duongNguon);
+    if (img.isEmpty()) return { noiDung: `LỖI: không đọc được ảnh ${nguon}.`, tomTat: 'ảnh hỏng' };
+    const c = img.getSize();
+    return {
+      noiDung: `${nguon}: ${c.width}×${c.height} điểm ảnh.`,
+      tomTat: `${c.width}×${c.height}`,
+    };
+  }
+
+  if (!raTen) return { noiDung: 'LỖI: thiếu "dich" (tên file ảnh sẽ tạo ra).', tomTat: 'thiếu đích' };
+  const dinhDang = dinhDangTheoTen(raTen);
+  if (!dinhDang) {
+    return { noiDung: 'LỖI: "dich" phải kết thúc bằng .png, .jpg hoặc .jpeg.', tomTat: 'đuôi lạ' };
+  }
+
+  const duongDich = await moTrongNguc(goc, raTen);
+  if (await fs.stat(duongDich).then(() => true).catch(() => false)) {
+    return {
+      noiDung: `LỖI: "${raTen}" đã tồn tại. Đặt tên khác — tool này không ghi đè ảnh có sẵn.`,
+      tomTat: 'đã tồn tại',
+    };
+  }
+
+  const so = (k: string): number | undefined => (typeof args[k] === 'number' ? (args[k] as number) : undefined);
+  let kq;
+  try {
+    kq = suaAnh(duongNguon, viec as 'cat' | 'co' | 'bia' | 'vua', {
+      ...(so('x') !== undefined ? { x: so('x')! } : {}),
+      ...(so('y') !== undefined ? { y: so('y')! } : {}),
+      ...(so('rong') !== undefined ? { rong: so('rong')! } : {}),
+      ...(so('cao') !== undefined ? { cao: so('cao')! } : {}),
+      ...(typeof args.nen === 'string' ? { nen: args.nen } : {}),
+      ...(so('chat_luong') !== undefined ? { chatLuong: so('chat_luong')! } : {}),
+    }, dinhDang);
+  } catch (e) {
+    return { noiDung: `LỖI khi sửa ảnh: ${(e as Error).message}`, tomTat: 'sửa ảnh hỏng' };
+  }
+
+  await fs.mkdir(path.dirname(duongDich), { recursive: true });
+  await fs.writeFile(duongDich, kq.than);
+  return {
+    noiDung:
+      `Đã tạo ${raTen} — ${kq.keLai}. Ảnh ra ${kq.rong}×${kq.cao}, `
+      + `${Math.round(kq.than.length / 1024)}KB. Gọi read_file để NHÌN kết quả trước khi báo là xong.`,
+    tomTat: `${kq.rong}×${kq.cao}`,
   };
 }
 

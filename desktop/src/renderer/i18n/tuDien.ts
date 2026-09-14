@@ -826,6 +826,26 @@ export const TU_DIEN: Record<string, string> = {
   'Thả file hoặc thư mục vào đây — agent sẽ đọc được nó':
     'Drop a file or folder here — the agent will be able to read it',
   'Chưa có file nào để hoàn tác trong việc này.': 'No files to undo in this task.',
+
+  // ── Chụp màn hình (AI Code) ─────────────────────────────
+  'Chụp màn hình': 'Take a screenshot',
+  'Chụp màn hình rồi cắt vùng cần gửi': 'Take a screenshot, then crop the part you want to send',
+  'Chọn màn hình hoặc cửa sổ để chụp': 'Pick a screen or window to capture',
+  'Kéo để chọn vùng cần gửi': 'Drag to select the area you want to send',
+  'Chụp không thành công.': 'The capture did not work.',
+  'macOS chưa cho app quyền Ghi màn hình — ảnh chụp ra sẽ trắng trơn.':
+    'macOS has not granted this app Screen Recording permission — captures will come out blank.',
+  'Mở cài đặt quyền': 'Open permission settings',
+  'Cấp quyền xong phải mở lại app.': 'After granting it, restart the app.',
+  'Không thấy màn hình nào.': 'No screens found.',
+  'Đang chụp…': 'Capturing…',
+  'Ảnh vừa chụp': 'The screenshot just taken',
+  'điểm ảnh hiển thị': 'pixels on screen',
+  'điểm ảnh': 'pixels',
+  'Chụp lại': 'Retake',
+  'Bỏ khung': 'Clear selection',
+  'Cắt & gửi': 'Crop & send',
+  'Dùng cả ảnh': 'Use the whole image',
   'Tab này chưa mở dự án nào.': 'This tab has no project open.',
   'Không có quyền nào bị thu hồi.': 'No permissions were revoked.',
 

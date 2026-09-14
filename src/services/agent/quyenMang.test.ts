@@ -65,3 +65,29 @@ test('MỌI capability của tool đều có trong ALL_CAPABILITIES', () => {
   const thieu = [...dungBoi].filter((c) => !(ALL_CAPABILITIES as readonly string[]).includes(c));
   assert.deepEqual(thieu, [], `ALL_CAPABILITIES thiếu: ${thieu.join(', ')} ⇒ tool của chúng bị lọc mất`);
 });
+
+/*
+ * ⚠️ TƯƠNG THÍCH NGƯỢC VỚI BẢN APP ĐANG NẰM TRÊN MÁY NGƯỜI DÙNG.
+ *
+ * `sua_anh` ra đời 15/09/2026. Mọi bản app phát hành TRƯỚC đó vẫn khai
+ * `fs_write` — nếu tool này gắn vào `fs_write` thì những bản ấy được model mời
+ * gọi một tool mà app trả "không cài tool tên sua_anh", đốt một lượt gọi cổng
+ * mỗi lần. Khả năng RIÊNG (`anh_sua`) thì chỉ bản có cài mới khai.
+ *
+ * Phép kiểm này chặn đúng một thao tác trông rất vô hại: gộp `anh_sua` trở lại
+ * vào `fs_write` cho "gọn".
+ */
+test('bản app CŨ (chỉ khai fs_write) KHÔNG được mời gọi sua_anh', () => {
+  assert.ok(!tenTool(['fs_read', 'fs_write', 'shell']).includes('sua_anh'));
+});
+
+test('bản app MỚI (khai anh_sua) thì sua_anh có mặt', () => {
+  assert.ok(tenTool(['fs_read', 'fs_write', 'anh_sua']).includes('sua_anh'));
+});
+
+test('phần prompt về ảnh chỉ nói với app CÓ sua_anh', () => {
+  // Nói "bạn sửa được ảnh" với một bản app không có tool đó là dạy model hứa
+  // với người dùng thứ nó không làm được.
+  assert.ok(!buildSystemPrompt({ capabilities: ['fs_read', 'fs_write'] }).includes('sua_anh'));
+  assert.ok(buildSystemPrompt({ capabilities: ['fs_read', 'fs_write', 'anh_sua'] }).includes('sua_anh'));
+});

@@ -50,8 +50,9 @@ import { KhoiDiff, MaDong, ngonNguTuDuong } from './XinPhep';
 import { AnhPhongTo } from '../feed/AnhPhongTo';
 import { ChonCheDo } from './ChonCheDo';
 import {
-  DaiTepCode, NutChonTep, ODinhKemCode, useDinhKemCode,
+  DaiTepCode, NutChonTep, ODinhKemCode, useDanKhapNoi, useDinhKemCode,
 } from './DinhKemCode';
+import { ChupManHinh, NutChupManHinh } from './ChupManHinh';
 import { XinPhep, XinPhepGit, XinPhepLenh, XinPhepMcp, XinPhepNote } from './XinPhep';
 import { useDich } from '../../i18n';
 import { Chu } from '../../i18n/Chu';
@@ -198,6 +199,10 @@ export function AgentMode({
      Xem `DinhKemCode.tsx`. Thay hẳn `useState<string[]>` cũ — nó chỉ nhận ảnh
      DÁN vào, không có nút chọn file, không kéo-thả, không nhận PDF/log. */
   const dk = useDinhKemCode(cuocId);
+  /* Dán ở bất kỳ đâu trong app — không chỉ khi con trỏ nằm trong ô nhập.
+     Xem chú thích ở `useDanKhapNoi` cho lý do `onPaste` trên thẻ gốc không đủ. */
+  useDanKhapNoi(dk.them, true);
+  const [dangChupMan, datDangChupMan] = useState(false);
   const cuonRef = useRef<HTMLDivElement>(null);
 
   // Tiêu đề tab = câu hỏi ĐẦU TIÊN, giống cách đặt tên phiên ở main. Một tab
@@ -1130,6 +1135,13 @@ export function AgentMode({
         </button>
       )}
 
+      {dangChupMan && (
+        <ChupManHinh
+          onXong={(f) => void dk.them([f])}
+          onDong={() => datDangChupMan(false)}
+        />
+      )}
+
       {/* Bảng gợi ý lệnh — chỉ hiện khi ô nhập bắt đầu bằng `/` và chưa có
           khoảng trắng. `GoiYLenh` tự lo phím lên/xuống/Enter/Esc. */}
       <GoiYLenh
@@ -1248,6 +1260,9 @@ export function AgentMode({
         {/* Chưa chọn thư mục dự án ⇒ khoá: file trên đĩa phải nằm TRONG gốc dự
             án (ngục của agent), nên không có gốc thì không có chỗ để đặt. */}
         <NutChonTep onBam={dk.moChonTep} khoa={trangThai.dangChay || !coThuMuc} />
+        {/* Chụp màn hình KHÔNG cần thư mục dự án: ảnh đi đường "gửi thẳng",
+            không ghi xuống đĩa, nên không cần ngục để đặt vào. */}
+        <NutChupManHinh onBam={() => datDangChupMan(true)} khoa={trangThai.dangChay} />
         <textarea
           ref={oNhapRef}
           className="ct-agent-o"

@@ -16,7 +16,7 @@
  *
  * Người dùng không cần biết luật này; mỗi thẻ file tự nói nó đi đường nào.
  */
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FileText, ImageIcon, Loader2, Paperclip, X } from 'lucide-react';
 import { useDich } from '../../i18n';
 
@@ -315,8 +315,46 @@ export function useDinhKemCode(cuocId: string) {
   return {
     tep, bo, xoaHet, dangKeo, oFileRef, moChonTep, nhanTuO,
     keoVao, keoRa, keoTren, thaVao, danVao,
+    /* Đưa `them` ra ngoài để ảnh chụp màn hình đi CHUNG một đường với ảnh dán
+       và ảnh kéo thả. Nếu ChupManHinh tự dựng thẻ file riêng thì mọi luật ở
+       đây (chuẩn hoá 1568px, trần 8 ảnh gửi thẳng, khoá nút Gửi lúc `dangTai`)
+       phải chép lại lần hai — và lần chép đó sẽ lệch ngay lần sửa kế tiếp. */
+    them,
     anhGuiThang, duongDanTrenDia, dangTai,
   };
+}
+
+/**
+ * Dán ở BẤT KỲ ĐÂU trong khung chat, không chỉ khi con trỏ nằm trong ô nhập.
+ *
+ * ⚠️ Vì sao không gắn thêm `onPaste` vào thẻ gốc cho xong: sự kiện `paste` đi
+ * tới PHẦN TỬ ĐANG CÓ TIÊU ĐIỂM. Người dùng vừa bấm một nút, hay vừa cuộn
+ * trang, thì tiêu điểm nằm ở `<body>` — mà `<body>` KHÔNG nằm trong cây con
+ * của thẻ gốc, nên handler React ở đó không bao giờ bắn. Đó đúng là thứ người
+ * dùng báo 15/09/2026: "chưa chụp ảnh màn hình gửi vào đoạn chát được" — chụp
+ * xong bấm Cmd+V mà không có gì xảy ra, cũng không có lời báo nào.
+ *
+ * Nghe ở `window` thì bắt được mọi trường hợp. Đổi lại phải TỰ TRÁNH những ô
+ * chữ khác: nếu tiêu điểm đang nằm trong một `input`/`textarea`/vùng soạn
+ * thảo thì để chính chỗ đó xử lý, không cướp.
+ */
+export function useDanKhapNoi(them: (ds: File[]) => void, bat: boolean): void {
+  useEffect(() => {
+    if (!bat) return undefined;
+    const nghe = (e: ClipboardEvent) => {
+      const dich = e.target as HTMLElement | null;
+      if (dich && (dich.tagName === 'INPUT' || dich.tagName === 'TEXTAREA' || dich.isContentEditable)) return;
+      const ds = [...(e.clipboardData?.items ?? [])]
+        .filter((i) => i.kind === 'file')
+        .map((i) => i.getAsFile())
+        .filter((f): f is File => !!f);
+      if (!ds.length) return;
+      e.preventDefault();
+      them(ds);
+    };
+    window.addEventListener('paste', nghe);
+    return () => window.removeEventListener('paste', nghe);
+  }, [them, bat]);
 }
 
 export function NutChonTep({ onBam, khoa }: { onBam: () => void; khoa: boolean }) {

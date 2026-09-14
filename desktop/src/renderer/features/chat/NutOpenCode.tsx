@@ -59,15 +59,31 @@ export function NutOpenCode({ gui, dangChay }: { gui: (chu: string) => void; dan
   const [moGiaiThich, setMoGiaiThich] = useState(false);
   const [dangCai, setDangCai] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
+  /**
+   * Hỏi máy chủ HỎNG ≠ người dùng CHƯA CÓ KEY.
+   *
+   * Trước đây hai trạng thái đó hiện y hệt nhau ("chưa có key, đi mua đi") —
+   * nên khi đường dẫn API sai, người dùng đã được duyệt key vẫn bị mời đi mua
+   * và không ai biết vì sao. Tách ra để lần sau lỗi tự nói tên nó.
+   */
+  const [loiTai, setLoiTai] = useState<string | null>(null);
 
   useEffect(() => {
     let huy = false;
     void (async () => {
       try {
-        // `request` là API công khai duy nhất của ApiClient — không có `.get()`.
+        // ⚠️ PHẢI có tiền tố `/api/v1`. `baseUrl` của ApiClient là GỐC tên
+        // miền (`https://api.cuongthai.com`), không phải gốc API — mọi nơi
+        // khác trong app đều viết đủ đường dẫn. Thiếu nó thì máy chủ trả 404,
+        // và vì lời gọi này nuốt lỗi nên nút hiện "chưa có key" y hệt như khi
+        // người dùng thật sự chưa có key. Đã dính thật 14/09/2026: người dùng
+        // đã được duyệt key mà nút vẫn mời đi mua.
         const [dons, info, m] = await Promise.all([
-          api?.request<{ data: DonKey[] }>('/llm-keys/mine').catch(() => null) ?? null,
-          api?.request<{ data: ThongTinKey }>('/llm-keys/info').catch(() => null) ?? null,
+          api?.request<{ data: DonKey[] }>('/api/v1/llm-keys/mine').catch((e: unknown) => {
+            setLoiTai(e instanceof Error ? e.message : 'không hỏi được máy chủ');
+            return null;
+          }) ?? null,
+          api?.request<{ data: ThongTinKey }>('/api/v1/llm-keys/info').catch(() => null) ?? null,
           window.cuongthai?.opencode.doMayNay().catch(() => null) ?? null,
         ]);
         if (huy) return;
@@ -155,6 +171,12 @@ export function NutOpenCode({ gui, dangChay }: { gui: (chu: string) => void; dan
       </button>
 
       {loi && <p className="nut-opencode__loi">{loi}</p>}
+      {loiTai && !coKey && (
+        <p className="nut-opencode__loi">
+          Chưa kiểm được key của bạn ({loiTai}). Nút đang tạm khoá — thử mở lại app,
+          nếu vẫn vậy thì báo admin.
+        </p>
+      )}
 
       {moGiaiThich && (
         <div className="nut-opencode__phu" onClick={() => setMoGiaiThich(false)}>

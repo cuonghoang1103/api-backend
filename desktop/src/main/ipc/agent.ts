@@ -33,6 +33,7 @@ import {
   xoaHoiThoai, type SuKienAgent,
   dsQuyenLauCua, xoaQuyenLauCua,
 } from '../agent/loop';
+import { dungLenhNenCua } from '../agent/lenhNen';
 import { duongDanCauHinh, duyetDuAn, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
 import { cai, napChiMuc, tim } from '../agent/khoKyNang';
 import { WEB_ORIGIN } from '../config';
@@ -323,6 +324,19 @@ export function registerAgentHandlers(): void {
 
   handle('agent:cancel', ({ cuocId }) => {
     huyLuotCua(cuocId);
+    /**
+     * ⚠️ PHẢI dừng cả LỆNH NỀN, không chỉ huỷ luồng LLM.
+     *
+     * `huyLuotCua` abort lời gọi model và giải phóng thẻ xin phép — nhưng
+     * tiến trình mà agent đã bật (`npm install`, `npm run dev`, một bản dựng)
+     * VẪN CHẠY TIẾP. Người dùng bấm Dừng, chữ ngừng chảy, mà máy vẫn quay và
+     * bước đó vẫn "đang chạy" — đúng thứ người dùng báo 14/09/2026:
+     * *"ấn dừng không được và bị đơ ở bước chạy đó"*.
+     *
+     * `dongCuoc()` đã gọi cả hai từ lâu; chỗ này thì quên — mà đây mới là chỗ
+     * người dùng bấm hằng ngày.
+     */
+    dungLenhNenCua(cuocId);
   });
 
   handle('agent:reset', ({ cuocId }) => {

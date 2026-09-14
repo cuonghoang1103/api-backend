@@ -29,6 +29,8 @@ const MAX_NEN = 4;
 const TRAN_DEM = 200_000;
 /** Trả tối đa bấy nhiêu ký tự cho mỗi lần agent đọc. */
 const TRAN_DOC = 20_000;
+/** Hạn giờ một lệnh nền — xem chú thích ở chỗ đặt hẹn giờ. */
+const TRAN_GIO_MS = 20 * 60_000;
 
 interface LenhNen {
   id: string;
@@ -41,6 +43,8 @@ interface LenhNen {
   ma: number | null;
   dangChay: boolean;
   batDau: number;
+  /** Hẹn giờ cắt lệnh treo. Phải xoá khi lệnh kết thúc, kẻo nó cắt nhầm id tái dùng. */
+  dongHo?: ReturnType<typeof setTimeout>;
 }
 
 const bang = new Map<string, LenhNen>();
@@ -80,6 +84,22 @@ export function batLenhNen(opts: { lenh: string; cwd: string; cuocId: string }):
       shell: true,
       detached: process.platform !== 'win32',
       windowsHide: true,
+      /**
+       * ⚠️⚠️ ĐÓNG HẲN STDIN. Đây là thứ làm app "chạy mãi không dừng được".
+       *
+       * Không khai `stdio` thì Node mở stdin thành một ống RỖNG NHƯNG MỞ. Lệnh
+       * nào chờ nhập — `npm` hỏi "Ok to proceed? (y)", `winget` hỏi đồng ý giấy
+       * phép, `git` hỏi mật khẩu, `pause` của Windows — sẽ ngồi chờ VĨNH VIỄN
+       * một câu trả lời không bao giờ tới. Không lỗi, không hết giờ, không dấu
+       * hiệu gì: agent đứng im ở bước đó và người dùng thấy app treo.
+       *
+       * `CI=1` ở dưới chặn được phần lớn, nhưng không phải công cụ nào cũng
+       * tôn trọng nó — và Windows là nơi hỏi nhiều nhất.
+       *
+       * `'ignore'` cho stdin ⇒ chương trình đọc stdin nhận EOF ngay và thoát
+       * với lỗi rõ ràng, thay vì treo im.
+       */
+      stdio: ['ignore', 'pipe', 'pipe'],
       env: { ...process.env, CI: '1', NO_COLOR: '1', FORCE_COLOR: '0', TERM: 'dumb' },
     });
   } catch (err) {
@@ -92,6 +112,25 @@ export function batLenhNen(opts: { lenh: string; cwd: string; cuocId: string }):
   };
   bang.set(id, muc);
 
+  /**
+   * ⚠️ HẠN GIỜ. Không có nó thì một lệnh treo là treo MÃI MÃI — nó chiếm một
+   * trong `MAX_NEN` suất, và agent đứng chờ một thứ không bao giờ xong.
+   *
+   * 20 phút đủ rộng cho việc thật chậm nhất mà người ta hay chạy trong agent
+   * (`npm install` trên máy Windows có phần mềm diệt virus quét từng file có
+   * thể mất hơn mười phút), và vẫn đủ hẹp để không treo cả buổi.
+   *
+   * `unref()` để cái hẹn giờ này không giữ tiến trình sống lúc thoát app.
+   */
+  const dongHo = setTimeout(() => {
+    const m = bang.get(id);
+    if (!m?.dangChay) return;
+    m.dem = catDem(`${m.dem}\n\n[đã DỪNG: lệnh chạy quá ${Math.round(TRAN_GIO_MS / 60_000)} phút mà chưa xong]`);
+    dungLenhNen(id);
+  }, TRAN_GIO_MS);
+  (dongHo as unknown as { unref?: () => void }).unref?.();
+  muc.dongHo = dongHo;
+
   con.stdout?.on('data', (b: Buffer) => { muc.dem = catDem(muc.dem + b.toString('utf8')); });
   // stderr GỘP CHUNG vào một dòng thời gian, không để riêng: phần lớn công cụ
   // in tiến trình ra stderr và lỗi ra stdout hoặc ngược lại, nên tách ra chỉ
@@ -100,11 +139,18 @@ export function batLenhNen(opts: { lenh: string; cwd: string; cuocId: string }):
 
   // `spawn` KHÔNG ném khi lệnh không tồn tại — nó báo qua sự kiện `error`. Ghi
   // vào đệm để agent ĐỌC ĐƯỢC lý do, thay vì thấy một tiến trình chết câm.
+  // Lệnh xong thì XOÁ hẹn giờ. Để lại thì 20 phút sau nó gọi `dungLenhNen(id)`
+  // cho một id có thể đã được dùng lại — giết nhầm một lệnh đang chạy ngon.
+  // `exactOptionalPropertyTypes` coi "gán undefined" KHÁC "không có thuộc
+  // tính" — phải `delete`, không phải `= undefined`.
+  const xongHan = () => { if (muc.dongHo) { clearTimeout(muc.dongHo); delete muc.dongHo; } };
+
   con.on('error', (e) => {
     muc.dem = catDem(`${muc.dem}\n[không chạy được: ${e.message}]`);
     muc.dangChay = false;
+    xongHan();
   });
-  con.on('exit', (ma) => { muc.ma = ma; muc.dangChay = false; });
+  con.on('exit', (ma) => { muc.ma = ma; muc.dangChay = false; xongHan(); });
 
   return { ok: true, id };
 }

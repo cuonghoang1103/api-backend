@@ -233,6 +233,37 @@ export function buildSystemPrompt(opts: {
    đúng chỗ (read_file). Đừng đọc tràn lan cả chục file khi grep khoanh được.
    Khi kết quả tool bị cắt, hãy nói rõ là bạn mới xem một phần.`);
 
+  /*
+   * ⚠️ LUẬT CHỐNG ĐI VÒNG — thiếu nó là nguyên nhân của "sửa đi sửa mãi".
+   *
+   * Người dùng báo 14/09/2026: agent chạy tới bước 147/160 cho một việc, "làm
+   * sai sửa đi sửa mãi nửa tiếng mới xong". Rà prompt: có ngân sách bước, có
+   * luật bảo mật, có hướng dẫn từng tool — nhưng KHÔNG một dòng nào nói phải
+   * làm gì khi một cách đã không ăn.
+   *
+   * Không có luật này thì hành vi mặc định của model là thử biến thể: đổi một
+   * cờ, đổi một đường dẫn, chạy lại. Mỗi lần tốn một bước và một lượt tiền, và
+   * không lần nào chạm tới chẩn đoán sai nằm bên dưới.
+   *
+   * Đặt trong CÁCH LÀM VIỆC chứ không trong khối ngân sách: nó đúng ở MỌI mức,
+   * và ở mức thấp thì nó còn quan trọng hơn — 8 bước mà đi vòng là hết sạch.
+   */
+  muc.push(`KHI MỘT CÁCH KHÔNG ĂN — ĐỪNG THỬ LẠI BIẾN THỂ CỦA NÓ
+   Sửa xong mà lỗi VẪN THẾ (hoặc chỉ đổi câu chữ) thì lần thứ hai KHÔNG được
+   sửa tiếp theo cùng hướng. Dừng lại, làm đúng ba việc:
+   1. Đọc lại NGUYÊN VĂN thông báo lỗi — cả dòng đầu lẫn dòng cuối, đừng lướt.
+      Rất nhiều vòng lặp sinh ra vì đọc nhầm lỗi ngay từ đầu.
+   2. Nói ra giả định mình đang dựa vào, rồi ĐI KIỂM nó bằng một lệnh hoặc một
+      lần đọc file. "Mã không thể tạo ra trạng thái X" không chứng minh được
+      "X không tồn tại" — dữ liệu và môi trường có lịch sử riêng.
+   3. Vẫn không ra thì DỪNG và hỏi người dùng, kèm đủ ba thứ: đã thử gì, thấy
+      gì, đang mắc ở đâu. Hỏi sớm rẻ hơn nhiều so với hai mươi bước đoán mò.
+
+   SỬA BA LẦN CÙNG MỘT CHỖ MÀ CHƯA XANH LÀ DẤU HIỆU CHẨN SAI, không phải sửa
+   chưa đủ mạnh. Lúc đó hãy đi tìm nguyên nhân ở tầng khác, đừng tăng liều.
+
+   Và đừng báo "đã xong" khi chưa chạy lại để thấy nó xanh.`);
+
   if (coWeb) {
     muc.push(`TRÌNH DUYỆT — BẠN MỞ ĐƯỢC TRANG CHO NGƯỜI DÙNG XEM
    Người dùng đã bật quyền này. Khung trình duyệt hiện NGAY CẠNH bảng ghi khi

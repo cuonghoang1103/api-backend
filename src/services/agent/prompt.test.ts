@@ -157,3 +157,44 @@ test('hai nhánh trình duyệt LOẠI TRỪ nhau ở mọi tổ hợp quyền',
     assert.equal(bat !== tat, true, `capabilities=${JSON.stringify(caps)} ra ${bat}/${tat}`);
   }
 });
+
+/*
+ * LUẬT CHỐNG ĐI VÒNG.
+ *
+ * Người dùng báo 14/09/2026: agent chạy tới bước 147/160, "làm sai sửa đi sửa
+ * mãi nửa tiếng mới xong". Prompt lúc đó có ngân sách bước, có luật bảo mật,
+ * có hướng dẫn từng tool — nhưng KHÔNG dòng nào nói phải làm gì khi một cách
+ * đã không ăn. Hành vi mặc định của model là thử biến thể, và mỗi biến thể tốn
+ * một bước mà không chạm tới chẩn đoán sai nằm bên dưới.
+ */
+test('prompt LUÔN có luật chống đi vòng, ở mọi mức nỗ lực', () => {
+  for (const mucNoLuc of ['thap', 'vua', 'cao', 'ratCao', 'toiDa', 'ultracode', undefined]) {
+    const p = buildSystemPrompt({
+      capabilities: ['fs_read', 'fs_write', 'shell'],
+      workspace: { name: 'du-an', platform: 'darwin' },
+      ...(mucNoLuc ? { mucNoLuc } : {}),
+    } as never);
+    assert.match(p, /KHÔNG được\s+sửa tiếp theo cùng hướng/,
+      `mức ${mucNoLuc ?? 'mặc định'}: thiếu luật chống đi vòng`);
+    // Phải nói được VIỆC CẦN LÀM, không chỉ cấm.
+    assert.match(p, /Đọc lại NGUYÊN VĂN thông báo lỗi/, `mức ${mucNoLuc ?? 'mặc định'}: không chỉ ra việc cần làm`);
+    assert.match(p, /DỪNG và hỏi người dùng/, `mức ${mucNoLuc ?? 'mặc định'}: không có đường thoát bằng cách hỏi`);
+  }
+});
+
+test('luật chống đi vòng nằm ở CÁCH LÀM VIỆC, không nằm trong khối ngân sách', () => {
+  // Ở mức THẤP (8 bước) nó còn quan trọng hơn — đi vòng là hết sạch ngân sách.
+  // Nhét vào khối ngân sách thì mức nào không có khối đó sẽ mất luật.
+  const thap = buildSystemPrompt({
+    capabilities: ['fs_read'], workspace: { name: 'd', platform: 'linux' }, mucNoLuc: 'thap',
+  } as never);
+  assert.match(thap, /SỬA BA LẦN CÙNG MỘT CHỖ/);
+});
+
+test('prompt nhắc KHÔNG báo xong khi chưa chạy lại', () => {
+  // "Chắc là đúng" là câu đứng ngay trước một lượt sửa nữa.
+  const p = buildSystemPrompt({
+    capabilities: ['fs_read', 'fs_write', 'shell'], workspace: { name: 'd', platform: 'darwin' },
+  } as never);
+  assert.match(p, /đừng báo "đã xong" khi chưa chạy lại/i);
+});

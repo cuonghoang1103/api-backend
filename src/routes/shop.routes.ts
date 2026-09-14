@@ -10,6 +10,7 @@ import { shopOrderLimiter, keyReplacementLimiter } from '../middleware/orderRate
 import { truDiem, hoanDiem, laySoDu } from '../services/points.service.js';
 import { logger } from '../utils/logger.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
+import { khoaKeyQuaCanh } from '../services/taoKeyTerminal.js';
 
 const router = Router();
 
@@ -949,6 +950,50 @@ router.post('/admin/orders/:id/refund', authenticate, requireAdmin('ROLE_ADMIN')
       }
       return row;
     });
+
+    // ── HOÀN TIỀN THÌ KEY PHẢI CHẾT THẬT ────────────────────────────────
+    //
+    // Giao dịch phía trên đánh dấu `product_keys.status = DISABLED`, nhưng đó
+    // chỉ là chữ trong CSDL CỦA TA. Key vẫn sống ở New API, và khách đã cầm
+    // chuỗi key trong tay — họ tiếp tục dùng được sau khi đã lấy lại tiền.
+    // Chốt duy nhất chặn được là khoá token ở New API.
+    //
+    // Chạy NGOÀI giao dịch: gọi mạng bên trong `$transaction` là giữ kết nối
+    // suốt thời gian chờ, và nếu giao dịch cuộn lại thì key đã trót bị khoá.
+    if (isFullRefund) {
+      const donKey = await prisma.llmKeyRequest.findMany({
+        where: { source: 'SHOP', keyValue: { not: null }, reason: { contains: order.orderCode } },
+        select: { id: true, keyValue: true },
+      });
+      for (const dk of donKey) {
+        if (!dk.keyValue) continue;
+        const xong = await khoaKeyQuaCanh(dk.keyValue);
+        await prisma.llmKeyRequest.update({
+          where: { id: dk.id },
+          data: {
+            status: 'REVOKED',
+            adminNote: `Thu hồi do hoàn tiền đơn ${order.orderCode}`,
+            // Hết hạn NGAY, không chờ mốc 30 ngày: nếu bước khoá ở New API
+            // hỏng thì ít nhất ví chung và `/llm/han-muc` cũng thôi nhận nó.
+            expiresAt: new Date(),
+          },
+        });
+        if (!xong) {
+          logger.error('[shop] hoàn tiền nhưng CHƯA khoá được key ở New API — khoá TAY ngay', {
+            orderCode: order.orderCode, requestId: dk.id,
+          });
+          void baoAdmin({
+            loai: 'DOI_KEY',
+            mucDo: 'can_xu_ly',
+            tieuDe: `⚠️ Hoàn tiền ${order.orderCode} nhưng KEY CHƯA BỊ KHOÁ`,
+            noiDung: 'Khách đã lấy lại tiền mà key vẫn dùng được. Vào New API khoá tay ngay.',
+            duongDan: '/admin/commerce?tab=llmkey',
+            entityId: dk.id,
+            khoaChongTrung: `KHOA-KEY-HONG:${dk.id}`,
+          });
+        }
+      }
+    }
 
     res.json({ success: true, data: updated, message: 'Da hoan tien don hang' });
   } catch (error) { next(error); }

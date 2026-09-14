@@ -14,7 +14,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import {
-  RefreshCw, Terminal, KeyRound, Copy, Check, Loader2, ArrowLeft, Clock, XCircle,
+  ShieldAlert, RefreshCw, Terminal, KeyRound, Copy, Check, Loader2, ArrowLeft, Clock, XCircle,
   AlertCircle, Crown, Eye, EyeOff, Gauge, ExternalLink,
 } from 'lucide-react';
 import { useDaDangNhap } from '@/hooks/useDaDangNhap';
@@ -203,6 +203,32 @@ export default function LlmKeyPage() {
     return () => { huy = true; sk?.off('llm-key:doi-trang-thai'); };
   }, [isAuthenticated, nap]);
 
+  /**
+   * Xoay key khi bị lộ. Hỏi lại trước, vì key cũ CHẾT NGAY — mọi máy đang cắm
+   * key đó sẽ ngừng chạy cho tới khi người dùng dán key mới vào.
+   */
+  const [dangXoay, setDangXoay] = useState(false);
+  const xoayKey = useCallback(async () => {
+    if (dangXoay) return;
+    const chac = window.confirm(
+      'Xoay key mới?\n\n'
+      + '• Key hiện tại CHẾT NGAY LẬP TỨC — mọi máy đang cắm key đó sẽ ngừng chạy.\n'
+      + '• Bạn nhận key mới với đúng hạn mức và đúng hạn còn lại của gói.\n'
+      + '• Nhớ dán key mới vào opencode.json trên máy bạn.',
+    );
+    if (!chac) return;
+    setDangXoay(true);
+    try {
+      await goi<{ data: { key: string } }>('/llm-keys/doi-key-bi-lo', { method: 'POST' });
+      await nap();
+      toast.success('Đã xoay key. Key cũ đã bị khoá — nhớ dán key mới vào cấu hình.', { duration: 10000 });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Không xoay được key.', { duration: 8000 });
+    } finally {
+      setDangXoay(false);
+    }
+  }, [dangXoay, nap]);
+
   const donHienHanh =
     dons.find((d) => (d.status === 'PENDING' || d.status === 'APPROVED') && !d.hetHan) ?? dons[0] ?? null;
   const key = donHienHanh?.status === 'APPROVED' ? donHienHanh.key : null;
@@ -363,6 +389,20 @@ export default function LlmKeyPage() {
                 <p className="text-xs text-text-muted mt-3">
                   Giữ key như mật khẩu — đừng commit vào git, đừng dán lên nhóm chat.
                 </p>
+
+                {/* Lỡ lộ thì tính bằng PHÚT. Bắt người dùng nhắn admin rồi
+                    ngồi chờ nghĩa là trong khoảng đó ai nhặt được cũng xài
+                    được — và với key xin theo Pro thì nó ăn thẳng vào hạn mức
+                    AI Code của chính nạn nhân. Nên để họ tự xoay. */}
+                <button
+                  onClick={() => void xoayKey()}
+                  disabled={dangXoay}
+                  className="mt-3 inline-flex items-center gap-1.5 text-xs text-amber-300/90 hover:text-amber-200 underline underline-offset-2 disabled:opacity-50"
+                >
+                  {dangXoay
+                    ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Đang xoay key…</>
+                    : <><ShieldAlert className="w-3.5 h-3.5" /> Lỡ làm lộ key? Xoay key mới ngay</>}
+                </button>
 
                 {hanMuc && (
                   <div className="mt-4 flex items-center gap-2 text-sm text-text-muted bg-darkbg rounded-lg p-3">

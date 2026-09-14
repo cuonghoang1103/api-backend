@@ -16,11 +16,11 @@ import { Router, type Request, type Response } from 'express';
 import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { keyReplacementLimiter } from '../middleware/orderRateLimit.js';
-import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
+import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import { isProEffective } from '../services/pro.service.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
-import { coTheTuTaoKey, taoKeyConQuaCanh } from '../services/taoKeyTerminal.js';
+import { coTheTuTaoKey, khoaKeyQuaCanh, taoKeyConQuaCanh } from '../services/taoKeyTerminal.js';
 import { getIO } from '../socket/messaging.socket.js';
 
 /**
@@ -201,6 +201,83 @@ router.post('/request', keyReplacementLimiter, async (req: Request, res: Respons
       khoaChongTrung: `XIN_KEY:${don.id}`,
     });
     res.status(201).json({ success: true, data: choChuDon(don) });
+  } catch (err) { next(err); }
+});
+
+/**
+ * POST /doi-key-bi-lo — người dùng TỰ xoay key khi lỡ làm lộ.
+ *
+ * ⚠️ Vì sao phải để người dùng tự làm, không bắt nhắn admin:
+ * key lộ là việc tính bằng phút. Dán nhầm lên GitHub rồi ngồi chờ admin đọc
+ * tin nhắn thì trong lúc đó ai nhặt được cũng xài được — và với key XIN theo
+ * Pro thì nó ăn thẳng vào hạn mức AI Code của chính nạn nhân.
+ *
+ * Chạy cho CẢ HAI loại key, cùng một luồng:
+ *   · khoá key cũ ở New API (chết ngay lập tức);
+ *   · tạo key MỚI với ĐÚNG hạn mức và ĐÚNG hạn còn lại của gói.
+ *
+ * ⚠️ KHÔNG lấy thêm một key từ kho hàng với key mua ở shop. Khách đã mua
+ * quyền dùng 30 ngày ở mức X, không phải mua "một chuỗi ký tự" — xoay chuỗi
+ * không phải là bán thêm một suất, nên kho không bị trừ.
+ *
+ * ⚠️ Thứ tự: KHOÁ TRƯỚC, tạo sau. Ngược lại thì có một khoảnh khắc HAI key
+ * cùng sống, và nếu bước khoá hỏng thì key lộ vẫn chạy trong khi người dùng
+ * đã yên tâm vì thấy key mới.
+ */
+router.post('/doi-key-bi-lo', keyReplacementLimiter, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const don = await prisma.llmKeyRequest.findFirst({
+      where: {
+        userId: req.userId!,
+        status: 'APPROVED',
+        keyValue: { not: null },
+        OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+      },
+      orderBy: { resolvedAt: 'desc' },
+    });
+    if (!don?.keyValue) throw new NotFoundError('Bạn không có key nào đang hiệu lực.');
+    if (!coTheTuTaoKey()) {
+      throw new BadRequestError('Hệ thống cấp key đang bảo trì. Nhắn admin để được xoay key ngay.');
+    }
+
+    const daKhoa = await khoaKeyQuaCanh(don.keyValue);
+    if (!daKhoa) {
+      // Không khoá được thì DỪNG. Cấp key mới trong khi key lộ còn sống là
+      // tệ hơn hiện trạng: người dùng tưởng đã an toàn.
+      throw new AppError(
+        'Chưa khoá được key cũ nên chưa cấp key mới — làm ngược lại thì key lộ vẫn sống mà bạn tưởng đã an toàn. '
+        + 'Nhắn admin ngay, chúng tôi khoá tay trong vài phút.',
+        503,
+      );
+    }
+
+    const quota = don.quotaUsd ?? 60;
+    const vuaTao = await taoKeyConQuaCanh(`xoay-${don.id}-${Date.now().toString(36)}`, quota);
+    if (!vuaTao) throw new AppError('Đã khoá key cũ nhưng chưa tạo được key mới. Nhắn admin.', 503);
+
+    // GIỮ NGUYÊN `expiresAt`: xoay key không phải gia hạn.
+    await prisma.llmKeyRequest.update({
+      where: { id: don.id },
+      data: {
+        keyValue: vuaTao.key,
+        keyHien: cheKey(vuaTao.key),
+        adminNote: 'Người dùng tự xoay key do bị lộ',
+      },
+    });
+
+    logger.info('[llm-key] người dùng tự xoay key bị lộ', { requestId: don.id, userId: req.userId });
+    void baoAdmin({
+      loai: 'DOI_KEY',
+      mucDo: 'thuong',
+      tieuDe: 'Người dùng tự xoay key do bị lộ',
+      noiDung: `Đơn #${don.id} · hạn mức ${quota}$ · key cũ đã bị khoá ở New API.`,
+      duongDan: '/admin/commerce?tab=llmkey',
+      userId: req.userId ?? null,
+      entityId: don.id,
+    });
+    baoNguoiDung(don.userId, 'APPROVED');
+
+    res.json({ success: true, data: { key: vuaTao.key, keyHien: cheKey(vuaTao.key) } });
   } catch (err) { next(err); }
 });
 

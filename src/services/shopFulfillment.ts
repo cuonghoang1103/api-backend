@@ -139,8 +139,73 @@ export async function markShopOrderPaidAndFulfill(
               // gói "30 ngày" chạy vĩnh viễn vì không ai ghi hạn.
               // `viTien.ts`/`keyTerminal.ts`/`canh` đều đọc bảng này.
               const goi = goiTheoSlug(product.slug);
+
+              // ── GIA HẠN thay vì cấp key mới ──────────────────────────
+              //
+              // Người dùng đang còn key hợp lệ CỦA CHÍNH GÓI NÀY mà mua tiếp
+              // ⇒ cộng thêm ngày vào key cũ, KHÔNG đưa key mới.
+              //
+              // Vì sao: khách đã cắm key vào `opencode.json` trên máy họ. Đưa
+              // key mới nghĩa là mỗi tháng họ phải đi sửa lại file cấu hình —
+              // phiền tới mức người ta bỏ gói. Và key cũ thì vứt đi trong khi
+              // vẫn còn hạn.
+              //
+              // ⚠️ Key vừa lấy khỏi kho được TRẢ LẠI (`AVAILABLE`): gia hạn
+              // không tiêu một suất hàng. Thiếu bước này là mỗi lần gia hạn
+              // đốt mất một key trong kho mà không ai nhận được nó.
+              //
+              // ⚠️ Cộng dồn từ MỐC CÒN LẠI, không phải từ hôm nay: gia hạn
+              // sớm 5 ngày trước khi hết hạn thì 5 ngày đó không được phép
+              // biến mất.
+              let daGiaHan = false;
               if (goi && order.userId) {
-                const hetHan = new Date(Date.now() + goi.soNgay * 86_400_000);
+                const dangCo = await tx.llmKeyRequest.findFirst({
+                  where: {
+                    userId: order.userId,
+                    status: 'APPROVED',
+                    source: 'SHOP',
+                    productId: product.id,
+                    keyValue: { not: null },
+                    expiresAt: { gt: new Date() },
+                  },
+                  orderBy: { expiresAt: 'desc' },
+                });
+                if (dangCo?.expiresAt) {
+                  const moc = new Date(dangCo.expiresAt.getTime() + goi.soNgay * 86_400_000 * item.quantity);
+                  await tx.llmKeyRequest.update({
+                    where: { id: dangCo.id },
+                    data: { expiresAt: moc },
+                  });
+                  // Trả key vừa claim về kho.
+                  await tx.productKey.updateMany({
+                    where: { orderItemId: item.id, status: 'SOLD' },
+                    data: { status: 'AVAILABLE', orderItemId: null, buyerUserId: null, assignedAt: null },
+                  });
+                  await tx.product.updateMany({
+                    where: { id: product.id },
+                    data: { stockQuantity: { increment: claimed.length } },
+                  });
+                  // Dòng đơn nói rõ chuyện gì đã xảy ra — khách mở ra mà thấy
+                  // một chuỗi key mới thì họ sẽ đi thay cấu hình, đúng thứ ta
+                  // vừa cố tránh.
+                  await tx.shopOrderItem.update({
+                    where: { id: item.id },
+                    data: {
+                      digitalContent:
+                        `✅ ĐÃ GIA HẠN key hiện tại của bạn — không cần đổi gì trong cấu hình.
+
+`
+                        + `Hạn mới: ${moc.toLocaleString('vi-VN')}
+`
+                        + `Key của bạn giữ nguyên, cứ dùng tiếp như bình thường.`,
+                    },
+                  });
+                  daGiaHan = true;
+                }
+              }
+
+              if (goi && order.userId && !daGiaHan) {
+                const hetHan = new Date(Date.now() + goi.soNgay * 86_400_000 * item.quantity);
                 for (const key of claimed) {
                   // Một key chỉ được gắn cho MỘT người. Giao lại key đã gắn
                   // (lỗi vận hành, nạp trùng vào kho) thì bỏ qua chứ không

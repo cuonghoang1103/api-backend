@@ -344,6 +344,55 @@ function docHanMuc() {
  * và bảng hạn mức (số nạp lại mỗi cửa sổ). Chỉ ghi cái đầu thì key chạy đúng
  * đúng một cửa sổ rồi tụt về mặc định.
  */
+/**
+ * KHOÁ một key con theo GIÁ TRỊ key (không phải theo id).
+ *
+ * Dùng cho hai việc: người dùng báo key bị lộ, và admin hoàn tiền một đơn.
+ * Cả hai đều chỉ biết chuỗi key, không biết id trong New API.
+ *
+ * ⚠️ KHOÁ (`status = 2`) chứ không XOÁ. Xoá thì mất luôn số liệu đã tiêu, và
+ * mất cả dấu vết để đối chiếu khi có tranh chấp "tôi có dùng đâu mà hết hạn
+ * mức". Khoá thì key chết ngay lập tức mà lịch sử còn nguyên.
+ *
+ * ⚠️ So sánh bằng ĐUÔI key, vì `GET /api/token/` trả key ĐÃ CHE (18 ký tự,
+ * xem `layKeyThat`). Lấy key thật của từng token để so là hàng chục lượt gọi
+ * và dễ chạm trần ngạch; đuôi 8 ký tự đủ để không trùng trong vài chục key,
+ * và ta CÒN kiểm cả tiền tố nữa.
+ */
+async function khoaKeyCon(keyDayDu) {
+  const tho = String(keyDayDu || '').replace(/^sk-/, '');
+  if (tho.length < 32) throw new Error('key không hợp lệ');
+
+  const tatCa = [];
+  for (let trang = 1; trang <= 20; trang++) {
+    const d = await quanTri(`/api/token/?p=${trang}&page_size=100`);
+    const items = d?.items || [];
+    tatCa.push(...items);
+    if (items.length < 100) break;
+  }
+
+  const dau = tho.slice(0, 4);
+  const duoi = tho.slice(-4);
+  const hop = tatCa.filter((t) => {
+    const k = String(t.key || '');
+    return k.startsWith(dau) && k.endsWith(duoi);
+  });
+  if (hop.length === 0) throw new Error('không tìm thấy key này trong New API');
+  if (hop.length > 1) throw new Error(`có ${hop.length} key trùng dấu nhận dạng — không dám khoá, kiểm tay`);
+
+  const t = hop[0];
+  if (t.status !== 2) {
+    await quanTri('/api/token/?status_only=true', { method: 'PUT', body: { id: t.id, status: 2 } });
+  }
+  // Quên hạn mức đã nhớ: key chết rồi thì `datLaiHanMuc` không cần nạp nữa.
+  if (luu.hanMucThem?.[t.name] !== undefined) {
+    const { [t.name]: _bo, ...conLai } = luu.hanMucThem;
+    luu.hanMucThem = conLai;
+    luuTrangThai();
+  }
+  return { id: t.id, ten: t.name };
+}
+
 async function taoKeyCon(ten, quotaUsd) {
   const usd = Number(quotaUsd);
   if (!ten || !/^[A-Za-z0-9_-]{3,60}$/.test(ten)) throw new Error('tên key không hợp lệ');
@@ -784,6 +833,27 @@ http
         })
         .catch((e) => {
           ghi('tạo key con hỏng:', e.message);
+          if (!res.headersSent) traJson(res, 400, { loi: e.message });
+        });
+    }
+    // Khoá một key con (người dùng báo lộ, hoặc admin hoàn tiền).
+    if (req.method === 'POST' && req.url === '/khoa-key') {
+      const nhan = String(req.headers['x-khoa-noi-bo'] || '');
+      if (!KHOA_NOI_BO || nhan !== KHOA_NOI_BO) {
+        return traJson(res, 404, { loi: 'không có đường này' });
+      }
+      return docBody(req)
+        .then((buf) => {
+          let b;
+          try { b = JSON.parse(buf.toString('utf8') || '{}'); } catch { throw new Error('body không phải JSON'); }
+          return khoaKeyCon(b?.key);
+        })
+        .then((kq) => {
+          ghi(`đã KHOÁ key con "${kq.ten}" theo yêu cầu của web`);
+          traJson(res, 200, kq);
+        })
+        .catch((e) => {
+          ghi('khoá key con hỏng:', e.message);
           if (!res.headersSent) traJson(res, 400, { loi: e.message });
         });
     }

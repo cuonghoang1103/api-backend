@@ -35,6 +35,47 @@ export function coTheTuTaoKey(): boolean {
 }
 
 /**
+ * KHOÁ một key ở New API theo giá trị key.
+ *
+ * Dùng khi người dùng báo key bị lộ, và khi admin hoàn tiền một đơn. Khoá chứ
+ * không xoá — xoá thì mất số liệu đã tiêu và mất dấu vết đối chiếu khi có
+ * tranh chấp.
+ *
+ * Thiếu cấu hình ⇒ `false`, KHÔNG ném: nơi gọi vẫn phải làm xong phần của
+ * mình (đánh dấu thu hồi trong CSDL) rồi báo admin đi khoá tay. Ném ở đây là
+ * bỏ dở giữa chừng — key vừa còn sống vừa không ai biết.
+ */
+export async function khoaKeyQuaCanh(key: string): Promise<boolean> {
+  const khoa = process.env.CANH_KHOA_NOI_BO?.trim();
+  if (!khoa) {
+    logger.warn('[llm-key] chưa cắm CANH_KHOA_NOI_BO — KHÔNG khoá được key ở New API, phải khoá tay');
+    return false;
+  }
+  try {
+    const r = await fetch(`${CANH_URL}/khoa-key`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-khoa-noi-bo': khoa },
+      body: JSON.stringify({ key }),
+      signal: AbortSignal.timeout(30_000),
+    });
+    const d = (await r.json().catch(() => null)) as { ten?: string; loi?: string } | null;
+    if (!r.ok) {
+      logger.error('[llm-key] KHOÁ KEY HỎNG — key vẫn đang sống, phải khoá tay', {
+        http: r.status, loi: d?.loi ?? null,
+      });
+      return false;
+    }
+    logger.info('[llm-key] đã khoá key ở New API', { ten: d?.ten });
+    return true;
+  } catch (err) {
+    logger.error('[llm-key] KHÔNG gọi được cụm để khoá key — key vẫn đang sống, phải khoá tay', {
+      error: (err as Error).message,
+    });
+    return false;
+  }
+}
+
+/**
  * @param ten      tên key con trong New API — phải là duy nhất
  * @param quotaUsd hạn mức USD quy đổi cho mỗi cửa sổ 5 giờ
  * @throws lỗi có CHỮ đọc được khi canh từ chối (tên trùng, hạn mức sai…),

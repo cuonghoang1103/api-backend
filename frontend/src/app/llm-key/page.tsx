@@ -14,7 +14,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import {
-  Terminal, KeyRound, Copy, Check, Loader2, ArrowLeft, Clock, XCircle,
+  RefreshCw, Terminal, KeyRound, Copy, Check, Loader2, ArrowLeft, Clock, XCircle,
   AlertCircle, Crown, Eye, EyeOff, Gauge, ExternalLink,
 } from 'lucide-react';
 import { useDaDangNhap } from '@/hooks/useDaDangNhap';
@@ -151,6 +151,57 @@ export default function LlmKeyPage() {
   }, [isAuthenticated]);
 
   useEffect(() => { nap(); }, [nap]);
+
+  /**
+   * ═══ BA LỚP ĐỂ NGƯỜI DÙNG KHÔNG PHẢI TỰ TẢI LẠI TRANG ═══
+   *
+   * Trước 14/09/2026 trang này nạp đúng MỘT LẦN lúc mở. Admin duyệt xong thì
+   * người dùng vẫn ngồi nhìn dòng "đang chờ admin duyệt" cho tới khi họ tình
+   * cờ bấm F5 — và phần lớn không nghĩ ra việc đó. Người dùng nói nguyên văn:
+   * *"nhiều user cứ ở trang đấy mãi trong khi admin duyệt rồi mà vẫn không
+   * biết"*.
+   *
+   * Ba lớp, cố ý chồng nhau vì mỗi lớp hỏng theo một kiểu khác nhau:
+   *  1. SOCKET — nhanh nhất, gần như tức thì. Nhưng rớt mạng, tab ngủ, hoặc
+   *     proxy cắt kết nối thì nó im mà không báo.
+   *  2. NHỊP HỎI LẠI 12 giây — lưới đỡ cho lớp 1. CHỈ chạy khi đang có đơn
+   *     PENDING; đơn đã xong rồi mà vẫn hỏi mỗi 12 giây là tự tạo tải cho máy
+   *     chủ suốt thời gian người dùng để tab đó mở.
+   *  3. NÚT TẢI LẠI — cho người sốt ruột, và cho trường hợp cả hai lớp trên
+   *     cùng hỏng. Luôn có, không phụ thuộc gì.
+   */
+  const dangCho = dons.some((d) => d.status === 'PENDING');
+
+  // Lớp 2: nhịp hỏi lại, chỉ khi đang chờ.
+  useEffect(() => {
+    if (!dangCho || !isAuthenticated) return;
+    const h = setInterval(() => { void nap(); }, 12_000);
+    return () => clearInterval(h);
+  }, [dangCho, isAuthenticated, nap]);
+
+  // Lớp 1: socket. Nạp động để trang không kéo theo socket.io khi không cần.
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    let huy = false;
+    let sk: { off: (s: string) => void } | null = null;
+    void import('@/lib/socket')
+      .then((m) => {
+        const s = (m as { getSocket?: () => unknown }).getSocket?.() as
+          | { on: (su: string, cb: (d: unknown) => void) => void; off: (su: string) => void }
+          | null | undefined;
+        if (!s || huy) return;
+        s.on('llm-key:doi-trang-thai', (d) => {
+          const tt = (d as { trangThai?: string } | null)?.trangThai;
+          void nap();
+          if (tt === 'APPROVED') toast.success('Admin đã duyệt — key của bạn đã sẵn sàng ngay bên dưới.', { duration: 8000 });
+          else if (tt === 'REJECTED') toast.error('Đơn xin key của bạn đã bị từ chối. Xem lý do bên dưới.', { duration: 8000 });
+          else if (tt === 'REVOKED') toast('Key của bạn vừa bị thu hồi.', { duration: 8000 });
+        });
+        sk = s;
+      })
+      .catch(() => { /* không có socket thì đã có lớp 2 và lớp 3 */ });
+    return () => { huy = true; sk?.off('llm-key:doi-trang-thai'); };
+  }, [isAuthenticated, nap]);
 
   const donHienHanh =
     dons.find((d) => (d.status === 'PENDING' || d.status === 'APPROVED') && !d.hetHan) ?? dons[0] ?? null;
@@ -328,11 +379,27 @@ export default function LlmKeyPage() {
             ) : donHienHanh?.status === 'PENDING' ? (
               <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 flex items-start gap-3">
                 <Clock className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <p className="font-semibold text-amber-300">Đơn đang chờ admin duyệt</p>
                   <p className="text-sm text-text-muted mt-1">
-                    Gửi lúc {new Date(donHienHanh.createdAt).toLocaleString('vi-VN')}. Key sẽ hiện ở đây ngay khi được duyệt.
+                    Gửi lúc {new Date(donHienHanh.createdAt).toLocaleString('vi-VN')}.
                   </p>
+                  {/* Nói RÕ rằng trang tự theo dõi. Không nói thì người dùng
+                      vẫn ngồi bấm F5 — mà chính việc họ không biết phải F5 là
+                      vấn đề ban đầu. */}
+                  <p className="text-sm text-text-secondary mt-2 flex items-center gap-2">
+                    <span className="relative flex h-2 w-2 shrink-0">
+                      <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    </span>
+                    Trang đang tự theo dõi — key sẽ hiện ngay tại đây khi admin duyệt, bạn không cần tải lại.
+                  </p>
+                  <button
+                    onClick={() => { void nap(); toast.success('Đã kiểm tra lại.'); }}
+                    className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/30 text-xs text-amber-200 hover:bg-amber-500/10 transition-colors"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" /> Kiểm tra ngay
+                  </button>
                 </div>
               </div>
             ) : (

@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  Package, BookOpen, Download, ShoppingBag,
+  RefreshCw, Package, BookOpen, Download, ShoppingBag,
   ArrowLeft, Clock, CheckCircle, XCircle, FileText,
   Package as PackageIcon, ChevronRight, Loader2, RotateCcw,
   Copy, LifeBuoy,
@@ -159,6 +159,51 @@ function MyOrdersContent() {
       .catch(() => setCourseOrders([]));
   }, [isAuthenticated]);
 
+  /**
+   * ═══ ĐỂ KHÁCH KHÔNG PHẢI TỰ TẢI LẠI TRANG ═══
+   *
+   * Trang này nạp đúng một lần lúc mở. Khách trả tiền xong quay lại tab cũ thì
+   * vẫn thấy "chờ thanh toán" cho tới khi họ tự bấm F5 — và với đơn CHUYỂN
+   * KHOẢN (admin duyệt tay) thì khoảng chờ đó tính bằng phút, có khi hàng giờ.
+   * Người dùng nói đúng: *"phải realtime chứ reload như này khách không biết"*.
+   *
+   * `lanNap` tăng lên là hiệu ứng nạp chạy lại. Ba lớp gọi nó: socket (nhanh
+   * nhất), nhịp hỏi lại 15 giây khi CÒN đơn chưa trả tiền (lưới đỡ cho socket),
+   * và nút Tải lại (cho người sốt ruột, và khi hai lớp trên cùng hỏng).
+   */
+  const [lanNap, setLanNap] = useState(0);
+  const coDonChoTra = localOrders.some((o) => String(o.status).toUpperCase() === 'PENDING');
+
+  useEffect(() => {
+    if (!coDonChoTra || !isAuthenticated) return;
+    const h = setInterval(() => setLanNap((n) => n + 1), 15_000);
+    return () => clearInterval(h);
+  }, [coDonChoTra, isAuthenticated]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    let huy = false;
+    let sk: { off: (s: string) => void } | null = null;
+    void import('@/lib/socket')
+      .then((m) => {
+        const s = (m as { getSocket?: () => unknown }).getSocket?.() as
+          | { on: (su: string, cb: (d: unknown) => void) => void; off: (su: string) => void }
+          | null | undefined;
+        if (!s || huy) return;
+        s.on('shop:don-doi-trang-thai', (d) => {
+          setLanNap((n) => n + 1);
+          const ma = (d as { orderCode?: string } | null)?.orderCode;
+          toast.success(
+            ma ? `Đơn ${ma} đã thanh toán xong — hàng đã sẵn sàng bên dưới.` : 'Đơn của bạn đã thanh toán xong.',
+            { duration: 8000 },
+          );
+        });
+        sk = s;
+      })
+      .catch(() => { /* không có socket thì đã có nhịp hỏi lại và nút Tải lại */ });
+    return () => { huy = true; sk?.off('shop:don-doi-trang-thai'); };
+  }, [isAuthenticated]);
+
   useEffect(() => {
     const storedOrders = getAllOrders();
     setLocalOrders(storedOrders);
@@ -254,7 +299,7 @@ function MyOrdersContent() {
     if (mounted) {
       void loadOrders();
     }
-  }, [mounted, isAuthenticated, getAllOrders, saveBackendOrder]);
+  }, [mounted, isAuthenticated, getAllOrders, saveBackendOrder, lanNap]);
 
   // Deep-link: /my-orders?code=ORD-... auto-expands the matching order (used by
   // the "order code" links so a customer lands right on the relevant order).
@@ -282,11 +327,31 @@ function MyOrdersContent() {
             <h1 className="text-2xl md:text-3xl font-heading font-bold text-text-primary">
               {t('orders.title')}
             </h1>
-            <p className="text-text-muted text-sm mt-1">
-              {localOrders.length} {localOrders.length === 1 ? t('orders.order') : t('orders.orders')}
+            <p className="text-text-muted text-sm mt-1 flex items-center gap-2 flex-wrap">
+              <span>{localOrders.length} {localOrders.length === 1 ? t('orders.order') : t('orders.orders')}</span>
+              {/* Nói RÕ trang đang tự theo dõi. Không nói thì khách vẫn ngồi
+                  bấm F5 — mà chính việc họ không biết phải F5 là vấn đề. */}
+              {coDonChoTra && (
+                <span className="inline-flex items-center gap-1.5 text-emerald-400">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  </span>
+                  đang tự theo dõi
+                </span>
+              )}
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => { setLanNap((n) => n + 1); toast.success('Đã kiểm tra lại.'); }}
+              disabled={loading}
+              title="Kiểm tra lại đơn hàng"
+              className="p-2 rounded-lg border border-darkborder text-text-muted hover:text-neon-violet hover:border-neon-violet/40 transition-colors disabled:opacity-50"
+              aria-label="Tải lại đơn hàng"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </button>
             <Link
               href="/shop"
               className="flex items-center gap-2 text-sm text-text-muted hover:text-neon-violet transition-colors"

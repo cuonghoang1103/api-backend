@@ -9,6 +9,7 @@ import { getPayosStatus, isPayosConfigured } from '../config/payos.js';
 import { emailService } from './email.service.js';
 import { goiTheoSlug } from './shop/goiKeyTerminal.js';
 import { baoAdmin } from './thongBaoAdmin.service.js';
+import { getIO } from '../socket/messaging.socket.js';
 
 // PayOS `orderCode` must be a single positive integer that is unique across
 // the WHOLE merchant. Course orders use `CourseOrder.id` directly (small
@@ -197,6 +198,21 @@ export async function markShopOrderPaidAndFulfill(
     logger.info('shop order fulfilled', {
       orderCode: order.orderCode, shopOrderId: order.id, method: meta.method, txnNo: meta.txnNo, orderType: order.orderType,
     });
+    // ── Báo NGƯỜI MUA: đơn đã thanh toán, hàng đã giao ──
+    //
+    // Trang "Đơn của tôi" nạp một lần lúc mở. Khách trả tiền xong quay lại tab
+    // cũ thì vẫn thấy "chờ thanh toán" cho tới khi họ tự tải lại — và với đơn
+    // chuyển khoản (admin duyệt tay) thì khoảng chờ đó tính bằng phút hoặc
+    // giờ. Chỉ báo "có thay đổi", KHÔNG gửi kèm key qua socket.
+    if (order.userId) {
+      try {
+        getIO()?.to(`user:${order.userId}`).emit('shop:don-doi-trang-thai', {
+          orderCode: order.orderCode,
+          trangThai: 'PAID',
+        });
+      } catch { /* socket chưa sẵn sàng — trang vẫn có nhịp hỏi lại */ }
+    }
+
     // ── Báo admin ──
     // Gọi NGOÀI `$transaction` (giao dịch đã đóng ở trên): nằm trong đó thì
     // nó giữ kết nối suốt thời gian chờ mạng Telegram, và nếu giao dịch bị

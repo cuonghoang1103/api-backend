@@ -21,6 +21,30 @@ import { logger } from '../utils/logger.js';
 import { isProEffective } from '../services/pro.service.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 import { coTheTuTaoKey, taoKeyConQuaCanh } from '../services/taoKeyTerminal.js';
+import { getIO } from '../socket/messaging.socket.js';
+
+/**
+ * Báo cho ĐÚNG người dùng đó biết đơn key của họ vừa đổi trạng thái.
+ *
+ * ⚠️ Vì sao cần: trang /llm-key nạp danh sách đúng MỘT LẦN lúc mở, rồi thôi.
+ * Admin duyệt xong thì người dùng vẫn ngồi nhìn dòng "đang chờ admin duyệt"
+ * cho tới khi họ tình cờ tải lại trang — và phần lớn người dùng không nghĩ ra
+ * việc đó. Người dùng nói đúng nguyên văn 14/09/2026: *"có nhiều user không
+ * biết cứ ở trang đấy mãi hiện thông báo đợi admin duyệt trong khi admin
+ * duyệt rồi mà vẫn không biết"*.
+ *
+ * ⚠️ KHÔNG gửi kèm `key` qua socket. Socket đi tới mọi tab đang mở của người
+ * đó và nằm lại trong bộ nhớ trình duyệt; key thì chỉ nên đi qua đúng một
+ * đường đã có kiểm soát (`GET /llm-keys/mine`). Ở đây chỉ báo "có thay đổi,
+ * đi hỏi lại đi".
+ */
+function baoNguoiDung(userId: number, trangThai: string): void {
+  try {
+    getIO()?.to(`user:${userId}`).emit('llm-key:doi-trang-thai', { trangThai });
+  } catch {
+    /* socket chưa sẵn sàng — trang vẫn có nhịp hỏi lại và nút Tải lại */
+  }
+}
 import type { ApiResponse } from '../types/index.js';
 
 /** Sáu model cổng rambo đang phục vụ — app/trang hướng dẫn đọc từ đây. */
@@ -286,6 +310,7 @@ adminRouter.post('/:id/approve', async (req: Request, res: Response<ApiResponse>
     void prisma.adminNotification
       .updateMany({ where: { khoaChongTrung: `XIN_KEY:${id}` }, data: { daXuLy: true, daDoc: true, docLuc: new Date() } })
       .catch(() => {});
+    baoNguoiDung(don.userId, 'APPROVED');
     res.json({ success: true, data: { id, status: 'APPROVED', keyHien: cheKey(key), tuTao: !keyDan } });
   } catch (err) { next(err); }
 });
@@ -303,6 +328,13 @@ adminRouter.post('/:id/reject', async (req: Request, res: Response<ApiResponse>,
       },
     });
     if (hit.count === 0) throw new ConflictError('Đơn không ở trạng thái từ chối được');
+    // Bị từ chối cũng phải báo: ngồi chờ một câu trả lời đã có rồi là tệ
+    // ngang với không nhận được key.
+    const donTC = await prisma.llmKeyRequest.findUnique({ where: { id }, select: { userId: true } });
+    if (donTC) baoNguoiDung(donTC.userId, 'REJECTED');
+    void prisma.adminNotification
+      .updateMany({ where: { khoaChongTrung: `XIN_KEY:${id}` }, data: { daXuLy: true, daDoc: true, docLuc: new Date() } })
+      .catch(() => {});
     res.json({ success: true, data: { id, status: 'REJECTED' } });
   } catch (err) { next(err); }
 });
@@ -327,6 +359,8 @@ adminRouter.post('/:id/revoke', async (req: Request, res: Response<ApiResponse>,
       },
     });
     if (hit.count === 0) throw new ConflictError('Đơn không ở trạng thái thu hồi được');
+    const donTH = await prisma.llmKeyRequest.findUnique({ where: { id }, select: { userId: true } });
+    if (donTH) baoNguoiDung(donTH.userId, 'REVOKED');
     res.json({
       success: true,
       data: {

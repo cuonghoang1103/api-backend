@@ -82,6 +82,8 @@ export interface UserPreferences {
   ui: {
     locale: 'vi' | 'en';
     reduceMotion: boolean;
+    /** Hiện bong bóng trợ lý AI nổi ở góc. Mặc định BẬT. */
+    hienTroLy: boolean;
   };
   /** Academy onboarding: which FPTU major (and, for SE, which combo) the
    *  student picked, so /academy can show their own curriculum first.
@@ -123,6 +125,9 @@ export function defaultPreferences(): UserPreferences {
     ui: {
       locale: 'vi',
       reduceMotion: false,
+      /* ⚠️ Mặc định BẬT. Người dùng cũ chưa có khoá này trong bản ghi; coi
+         "thiếu" là tắt thì bản cập nhật làm trợ lý biến mất với tất cả họ. */
+      hienTroLy: true,
     },
     academy: {
       isStudent: null,
@@ -217,6 +222,7 @@ export function sanitize(input: unknown, base: UserPreferences): UserPreferences
     const u = src.ui as Record<string, unknown>;
     if (u.locale === 'vi' || u.locale === 'en') out.ui.locale = u.locale;
     if ('reduceMotion' in u) out.ui.reduceMotion = asBool(u.reduceMotion, out.ui.reduceMotion);
+    if ('hienTroLy' in u) out.ui.hienTroLy = asBool(u.hienTroLy, out.ui.hienTroLy);
   }
 
   if (src.academy && typeof src.academy === 'object') {

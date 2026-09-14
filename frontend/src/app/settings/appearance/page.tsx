@@ -10,7 +10,7 @@
  * write through the same providers, so they stay in step with this page.
  */
 
-import { Monitor, Moon, Sun, Languages, Sparkles, Check } from 'lucide-react';
+import { Monitor, Moon, Sun, Languages, Sparkles, Check, Bot } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import { useLocaleContext } from '@/context/LocaleContext';
 import { usePreferencesStore } from '@/store/preferencesStore';
@@ -73,6 +73,9 @@ export default function AppearanceSettingsPage() {
 
   const reduceMotion = usePreferencesStore((s) => s.reduceMotion);
   const setReduceMotion = usePreferencesStore((s) => s.setReduceMotion);
+  // `!== false` — người dùng cũ chưa có khoá này, mặc định là BẬT.
+  const hienTroLy = usePreferencesStore((s) => s.hienTroLy) !== false;
+  const setHienTroLy = usePreferencesStore((s) => s.setHienTroLy);
   const syncStatus = usePreferencesStore((s) => s.syncStatus);
 
   return (
@@ -125,6 +128,20 @@ export default function AppearanceSettingsPage() {
             subtitle="Interface in English"
           />
         </div>
+      </SettingsCard>
+
+      <SettingsCard title="Trợ lý AI" icon={<Bot className="h-4 w-4" />}>
+        <SettingsRow
+          label="Hiện trợ lý ở góc màn hình"
+          description="Bong bóng CuongMini nổi ở góc dưới bên phải. Tắt đi thì nó biến mất khỏi mọi trang — bạn vẫn mở được trang AI Chat đầy đủ ở /chat. Cài đặt này đi theo tài khoản nên máy nào bạn đăng nhập cũng giống nhau."
+          control={
+            <Toggle
+              checked={hienTroLy}
+              onChange={setHienTroLy}
+              label="Hiện trợ lý ở góc màn hình"
+            />
+          }
+        />
       </SettingsCard>
 
       <SettingsCard title="Chuyển động" icon={<Sparkles className="h-4 w-4" />}>

@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { usePreferencesStore } from '@/store/preferencesStore';
+import toast from 'react-hot-toast';
+import { X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
@@ -51,8 +54,14 @@ export default function FloatingAIAssistant() {
  // now, call every hook unconditionally, then bail out just before the JSX.
  // `/nhung-video`: khung nhung TRAN cho lop phu cua app desktop, chi co dung
  // mot iframe lap kin man hinh. Bong bong tro ly ve de len giua video.
+ // Công tắc của người dùng (Cài đặt → Giao diện), đồng bộ theo tài khoản.
+ // `!== false` chứ không `!!`: người dùng cũ chưa có khoá này, coi "thiếu" là
+ // tắt thì bản cập nhật làm trợ lý biến mất với tất cả họ.
+ const nguoiDungBat = usePreferencesStore((st) => st.hienTroLy) !== false;
+ const setHienTroLy = usePreferencesStore((st) => st.setHienTroLy);
  const hidden = Boolean(
-   pathname?.startsWith('/creator') || pathname?.startsWith('/admin')
+   !nguoiDungBat
+   || pathname?.startsWith('/creator') || pathname?.startsWith('/admin')
    || pathname?.startsWith('/nhung-video') || hiddenOnMobile,
  );
 
@@ -294,7 +303,26 @@ export default function FloatingAIAssistant() {
         </AnimatePresence>
 
         {/* Robot container */}
-        <div className="relative flex flex-col items-end">
+        <div className="group/rb relative flex flex-col items-end">
+          {/* Nút ẩn NGAY TẠI ĐÂY.
+              Người dùng báo "nhiều lúc nó rất rối muốn tắt không được" — và
+              đúng là không có đường nào tắt. Bắt họ đi tìm trong Cài đặt →
+              Giao diện là bắt rời trang đang đọc, đúng lúc thứ làm phiền đang
+              che mất nội dung. Hiện khi rê chuột, để nó không thành một dấu X
+              lúc nào cũng lơ lửng cạnh con robot. */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setHienTroLy(false);
+              toast.success('Đã ẩn trợ lý. Bật lại ở Cài đặt → Giao diện.', { duration: 5000 });
+            }}
+            aria-label="Ẩn trợ lý"
+            title="Ẩn trợ lý"
+            className="absolute -top-1 -right-1 z-10 hidden h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-darkcard text-text-secondary shadow-lg transition-colors hover:text-white group-hover/rb:flex focus:flex"
+          >
+            <X aria-hidden className="h-3.5 w-3.5" />
+          </button>
           {/* Thinking bubble */}
           <AnimatePresence>
             {robotState === 'thinking' && (

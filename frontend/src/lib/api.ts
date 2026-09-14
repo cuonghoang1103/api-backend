@@ -2624,6 +2624,8 @@ export interface ServerPreferences {
   ui: {
     locale: 'vi' | 'en';
     reduceMotion: boolean;
+    /** Hiện bong bóng trợ lý AI nổi. Máy chủ CŨ không trả trường này ⇒ tuỳ chọn. */
+    hienTroLy?: boolean;
   };
   /** Academy onboarding (robot): FPTU student? which major? which combo?
    *  Mirrors `academy` in the backend's userPreferences.service.ts. */

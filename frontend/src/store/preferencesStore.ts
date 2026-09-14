@@ -130,6 +130,19 @@ interface PreferencesState {
   /** Honour prefers-reduced-motion manually (some users want it on
    *  this site only, without changing an OS setting). */
   reduceMotion: boolean;
+  /**
+   * Hiện bong bóng trợ lý AI nổi ở góc màn hình.
+   *
+   * ⚠️ Mặc định BẬT, và phải so `!== false` ở chỗ dùng. Người dùng cũ chưa có
+   * khoá này; coi "thiếu" là tắt thì bản cập nhật làm trợ lý biến mất với tất
+   * cả họ và không ai biết đi bật lại ở đâu.
+   *
+   * ⚠️ Trường này PHẢI có mặt trong bộ lọc của máy chủ
+   * (`userPreferences.service.ts`). Bộ lọc đó dựng kết quả từ giá trị mặc định
+   * rồi chỉ chép sang những khoá nó BIẾT — thêm ở client mà quên thêm ở đó thì
+   * công tắc chạy đúng một lúc rồi bị lần đồng bộ sau xoá mất, hỏng câm.
+   */
+  hienTroLy: boolean;
 
   /** Server sync bookkeeping. Not persisted — recomputed each load. */
   syncStatus: SyncStatus;
@@ -147,6 +160,7 @@ interface PreferencesState {
   setNotifyType: (type: NotifyType, v: boolean) => void;
   setBrowserPush: (v: boolean) => void;
   setReduceMotion: (v: boolean) => void;
+  setHienTroLy: (v: boolean) => void;
   reset: () => void;
 
   /** Pull the account copy and reconcile (newest wins). Called once
@@ -221,6 +235,7 @@ export const usePreferencesStore = create<PreferencesState>()(
         notifyTypes: defaultNotifyTypes(),
         browserPush: false,
         reduceMotion: false,
+        hienTroLy: true,
         syncStatus: 'idle' as SyncStatus,
         serverUpdatedAt: null,
         localUpdatedAt: null,
@@ -260,6 +275,10 @@ export const usePreferencesStore = create<PreferencesState>()(
         },
         setBrowserPush: (v) => {
           set({ browserPush: v });
+          touch();
+        },
+        setHienTroLy: (v) => {
+          set({ hienTroLy: v });
           touch();
         },
         setReduceMotion: (v) => {
@@ -330,6 +349,9 @@ export const usePreferencesStore = create<PreferencesState>()(
               notifyTypes: { ...defaultNotifyTypes(), ...remote.notify.types },
               browserPush: remote.notify.browserPush,
               reduceMotion: remote.ui.reduceMotion,
+              /* Máy chủ cũ (chưa deploy bản có khoá này) trả về `undefined` ⇒
+                 giữ BẬT, đừng để `undefined` ghi đè thành tắt. */
+              hienTroLy: remote.ui.hienTroLy !== false,
               serverUpdatedAt: remoteAt,
               localUpdatedAt: remoteAt,
               syncStatus: 'idle',
@@ -374,7 +396,7 @@ export const usePreferencesStore = create<PreferencesState>()(
                   customFileName: s.customFileName,
                 },
                 notify: { types: s.notifyTypes, browserPush: s.browserPush },
-                ui: { reduceMotion: s.reduceMotion },
+                ui: { reduceMotion: s.reduceMotion, hienTroLy: s.hienTroLy },
               };
               const res = await preferencesApi.update({ preferences: patch });
               const updatedAt = res.data?.data?.preferences?.updatedAt ?? null;

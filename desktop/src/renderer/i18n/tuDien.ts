@@ -1271,6 +1271,7 @@ export const TU_DIEN: Record<string, string> = {
   'Máy này chưa đủ cho bản đó.': 'This computer is not powerful enough for that one.',
   'Tải': 'Download',
   'Xoá khỏi máy': 'Remove from this computer',
+  'Xem hướng dẫn đầy đủ': 'Read the full guide',
   'Khi có mạng, app vẫn tự dùng bản trên mạng vì nó trả lời tốt hơn. AI trên máy là lưới đỡ lúc mất kết nối.':
     'When you are online the app still uses the online AI, because it answers '
     + 'better. The on-device AI is a safety net for when the connection drops.',

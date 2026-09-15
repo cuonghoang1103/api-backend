@@ -245,6 +245,19 @@ export function AiNgoaiTuyen() {
 
       <p className="ct-field-help" style={{ marginTop: 14 }}>
         {dich('Khi có mạng, app vẫn tự dùng bản trên mạng vì nó trả lời tốt hơn. AI trên máy là lưới đỡ lúc mất kết nối.')}
+        {' '}
+        {/* Mở bằng trình duyệt HỆ THỐNG, không mở trong app: trang hướng dẫn là
+            nội dung web thường, và nhét nó vào cửa sổ app chỉ tạo thêm một chỗ
+            người dùng bị kẹt không biết bấm gì để quay lại. */}
+        <a
+          href="https://cuongthai.com/huong-dan/ai-ngoai-tuyen"
+          onClick={(e) => {
+            e.preventDefault();
+            void window.cuongthai?.app.openExternal('https://cuongthai.com/huong-dan/ai-ngoai-tuyen');
+          }}
+        >
+          {dich('Xem hướng dẫn đầy đủ')}
+        </a>
       </p>
     </section>
   );

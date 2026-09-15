@@ -48,9 +48,6 @@
       ],
       "@/lib/queryClient": [
         "../frontend/src/lib/queryClient.ts"
-      ],
-      "@/components/messaging/*": [
-        "../frontend/src/components/messaging/*"
       ]
     }
   },

@@ -47,6 +47,29 @@ export function aliasDesktop(goc: string): Record<string, string> {
      *
      * ⚠️ Thêm shim mới thì thêm Ở ĐÂY, không thêm vào từng file cấu hình.
      */
+    /**
+     * ⚠️⚠️ MỘT BẢN REACT DUY NHẤT — ghim bằng alias, không trông vào `dedupe`.
+     *
+     * `../frontend` là một gói RIÊNG và có `node_modules/react` của nó. Khi
+     * một component web được nạp từ đó, bộ giải mặc định tìm `react` ở
+     * `node_modules` GẦN NHẤT — tức bản của frontend — trong khi app chạy bản
+     * của desktop. Hai bản không chia sẻ dispatcher, và mọi hook ném
+     * `Cannot read properties of null (reading 'useContext')` ngay lượt render
+     * đầu: màn hình trắng, không có gì trong log nói lý do.
+     *
+     * `resolve.dedupe` KHÔNG đủ — đã thử 16/09/2026, nó không với tới cây
+     * `node_modules` của một gói nằm ngoài root. Alias thì tuyệt đối.
+     *
+     * Thêm `zustand` vì cùng lý do: cửa hàng tin nhắn là một singleton, hai
+     * bản zustand nghĩa là hai cửa hàng — trang ghi vào cái này, component
+     * đọc cái kia, và giao diện đứng im không lỗi.
+     */
+    react: o('node_modules/react'),
+    'react-dom': o('node_modules/react-dom'),
+    'react/jsx-runtime': o('node_modules/react/jsx-runtime.js'),
+    'react/jsx-dev-runtime': o('node_modules/react/jsx-dev-runtime.js'),
+    zustand: o('node_modules/zustand'),
+
     'next/dynamic': o('src/renderer/shims/next-dynamic.tsx'),
     'next/link': o('src/renderer/shims/next-link.tsx'),
     'next/image': o('src/renderer/shims/next-image.tsx'),

@@ -18,6 +18,13 @@ export default defineConfig({
   plugins: [react(), noiDungBai(__dirname)],
   resolve: {
     alias: aliasDesktop(__dirname),
+    /**
+     * ⚠️ `../frontend` có `node_modules/react` riêng. Không gộp thì một cây
+     * component của web có thể nạp bản React của nó trong khi app chạy bản
+     * của mình — hai dispatcher, và mọi hook ném ngay lượt render đầu.
+     * Xem chú thích dài ở khối `test` bên dưới.
+     */
+    dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'zustand'],
   },
   server: {
     port: 5273,
@@ -143,5 +150,43 @@ export default defineConfig({
        gói ba nền, tức là chỗ KHÓ thử nhất và cũng là chỗ hỏng đắt nhất — một
        móc sai làm bản cài thiếu nhị phân mà vẫn dựng xanh. */
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'scripts/**/*.test.mjs'],
+    /**
+     * ⚠️⚠️ MỘT BẢN REACT DUY NHẤT, KHÔNG HAI.
+     *
+     * App dùng lại cây component của web, mà cây đó nằm ở `../frontend` —
+     * nơi có `node_modules/react` RIÊNG. Không có dòng này thì vitest nạp
+     * React của frontend cho component web và React của desktop cho bộ dựng,
+     * hai bản không chia sẻ dispatcher, và MỌI hook ném
+     * `Cannot read properties of null (reading 'useRef')`.
+     *
+     * Đã dẫm phải 16/09/2026 khi viết phép kiểm gắn cây messenger. Mất một
+     * lúc mới phân biệt được: đây là lỗi của BỘ KIỂM, không phải của sản phẩm
+     * — bản dựng thật chỉ có một bản React (kiểm bằng cách đếm dấu vân tay
+     * `ReactCurrentDispatcher` trong `dist/renderer/assets`, và Notes vốn
+     * cũng là cây web dùng hook đã chạy trên production từ lâu).
+     *
+     * Bản dựng không cần dòng này vì Vite tự gộp; vitest thì không.
+     */
+    /**
+     * ⚠️⚠️ ÉP VITEST NẠP THƯ VIỆN CỦA `../frontend` QUA VITE, KHÔNG QUA NODE.
+     *
+     * Mặc định vitest "externalize" mọi thứ trong `node_modules`: Node nạp
+     * thẳng bằng đường dẫn tệp, và alias của Vite KHÔNG áp vào đó. Hệ quả đo
+     * được 16/09/2026: `framer-motion` nằm ở `frontend/node_modules` được nạp
+     * thẳng, nó `import 'react'` và bộ giải của Node tìm thấy React CỦA
+     * FRONTEND — bản thứ hai. Mọi hook bên trong `AnimatePresence` ném
+     * `Cannot read properties of null (reading 'useContext')`.
+     *
+     * Đây là lỗi của BỘ KIỂM, không phải của sản phẩm: bản dựng thật đi qua
+     * Vite nên alias áp đủ, và trong `dist/renderer/assets` chỉ có MỘT bản
+     * React (đếm bằng dấu vân tay `ReactCurrentDispatcher`).
+     *
+     * Xem [[feedback_verify_the_checker_before_the_content]] — lần thứ hai
+     * trong ngày một "lỗi" hoá ra nằm ở bộ đo.
+     */
+    server: { deps: { inline: [/frontend[\\/]node_modules/] } },
   },
+  /* Cùng lý do trên — áp cho cả bản dựng lẫn vitest cho chắc, và để người sau
+     đọc `resolve` là thấy ngay ràng buộc này. */
+  optimizeDeps: { include: ['react', 'react-dom'] },
 });

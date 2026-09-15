@@ -53,6 +53,54 @@ declare module '@/lib/socket' {
   ): void;
 }
 
+/**
+ * Những mảnh của cây messenger mà PHÉP KIỂM gắn thẳng.
+ *
+ * ⚠️ Khai báo môi trường chứ KHÔNG ánh xạ đường dẫn tới `../frontend`. Ánh xạ
+ * sẽ kéo cả cây web thật vào chương trình TypeScript của desktop, và ở đó nó
+ * đụng ngay với những khai báo rút gọn có chủ đích ở tệp này (`@/lib/api` khai
+ * đúng phần desktop cần, không khai cả 4.994 dòng). Đã thử 16/09/2026: hơn
+ * chục lỗi "không có thành viên xuất" cho những thứ desktop không bao giờ gọi.
+ */
+declare module '@/components/messaging/MessageInput' {
+  import type { ComponentType } from 'react';
+  const C: ComponentType<{ disabled?: boolean }>;
+  export default C;
+}
+declare module '@/components/messaging/ThreadList' {
+  import type { ComponentType } from 'react';
+  const C: ComponentType<Record<string, never>>;
+  export default C;
+}
+declare module '@/components/messaging/MessageList' {
+  import type { ComponentType } from 'react';
+  const C: ComponentType<Record<string, never>>;
+  export default C;
+}
+declare module '@/components/messaging/ChatInfoPanel' {
+  import type { ComponentType } from 'react';
+  const C: ComponentType<{ thread: unknown; onClose?: () => void }>;
+  export default C;
+}
+declare module '@/components/messaging/CuocGoiOverlay' {
+  import type { ComponentType } from 'react';
+  const C: ComponentType<{
+    threadId?: number; peerId?: number; peerName?: string;
+    peerAvatar?: string | null; goiDi: number; goiVideo?: number;
+  }>;
+  export default C;
+}
+declare module '@/components/messaging/useGhiAm' {
+  export const GIAY_TOI_DA: number;
+  export function kieuGhiDuoc(hoTro?: (t: string) => boolean): string;
+  export function duoiTheoKieu(mime: string): string;
+  export function dongHo(giay: number): string;
+}
+declare module '@/store/messagingStore' {
+  /** Chỉ `setState` — phép kiểm đặt sẵn hội thoại đang mở rồi dựng component. */
+  export const useMessagingStore: { setState(s: unknown): void };
+}
+
 declare module '@/app/messages/page' {
   import type { ComponentType } from 'react';
   /** Trang tin nhắn của web, dùng lại nguyên si — xem features/messages. */

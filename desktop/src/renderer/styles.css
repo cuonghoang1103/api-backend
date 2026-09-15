@@ -13005,3 +13005,34 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   line-height: 1.5;
   text-align: left;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Khung nhúng cho một TRANG WEB dùng lại nguyên si (Tin nhắn).
+
+   ⚠️ Vấn đề phải giải: trang messenger của web tự tính chiều cao bằng `100dvh`
+   — đúng trong tab trình duyệt, nơi nó chiếm cả màn hình. Trong app nó nằm
+   DƯỚI thanh tiêu đề và BÊN PHẢI thanh điều hướng, nên `100dvh` dài hơn chỗ
+   thật sự có, và phần cuối (khung nhập chữ, nút gửi) bị đẩy xuống dưới mép cửa
+   sổ — người dùng thấy một messenger không gõ được.
+
+   Cách chữa: cho vùng chứa một chiều cao THẬT rồi ép mọi `100dvh`/`100vh` bên
+   trong xuống `100%` của vùng chứa đó. `:where()` để độ đặc hiệu bằng 0, nên
+   nó không giẫm lên bất kỳ luật nào của chính trang web.
+   ───────────────────────────────────────────────────────────── */
+.ct-web-nhung {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ct-web-nhung > * {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Mọi thứ bên trong đo theo khung app, không đo theo màn hình. */
+.ct-web-nhung :where([class*="dvh"], [class*="-screen"]) {
+  max-height: 100%;
+}

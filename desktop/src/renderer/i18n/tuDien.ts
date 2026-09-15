@@ -586,6 +586,7 @@ export const TU_DIEN: Record<string, string> = {
   '— giọng mặc định của máy chủ —': '— the server’s default voice —',
   'Nhỏ hơn': 'Smaller',
   'To hơn': 'Bigger',
+  'Đang mở Tin nhắn…': 'Opening Messages…',
   'Đang mở Ghi chú…': 'Opening Notes…',
   'Đang nạp…': 'Loading…',
   '— chọn bài —': '— pick a track —',

@@ -132,7 +132,7 @@ export function registerCallSignaling(io: Server, socket: Socket, user: { id: nu
     && socket.rooms.has(`thread:${threadId}`);
 
   // ── Bắt đầu gọi ─────────────────────────────────────────────────
-  socket.on('call:offer', (p: { threadId: number; toUserId: number; sdp: unknown }) => {
+  socket.on('call:offer', (p: { threadId: number; toUserId: number; sdp: unknown; coVideo?: boolean }) => {
     if (!p || !trongHoiThoai(p.threadId)) return;
     if (typeof p.toUserId !== 'number' || p.toUserId === user.id) return;
     if (!p.sdp) return;
@@ -215,6 +215,12 @@ export function registerCallSignaling(io: Server, socket: Socket, user: { id: nu
         tenNguoiGoi: nguoi?.displayName?.trim() || nguoi?.fullName?.trim()
           || nguoi?.username?.trim() || 'Người dùng',
         anhNguoiGoi: nguoi?.avatarUrl ?? null,
+        /* Người gọi muốn gọi VIDEO hay chỉ thoại.
+           ⚠️ Phải đi qua máy chủ chứ không đoán từ SDP: bên nhận cần biết
+           TRƯỚC KHI bắt máy, để xin camera ngay lượt `getUserMedia` đầu tiên.
+           Xin thêm camera sau khi đã nối là phải thương lượng lại SDP —
+           một vòng nữa có thể hỏng, cho một thứ biết được từ đầu. */
+        coVideo: p.coVideo === true,
       });
     })();
     logger.info('cuộc gọi bắt đầu', { callId: c.id, tu: user.id, den: p.toUserId });

@@ -276,6 +276,29 @@ export default function MessageBubble({
                   </a>
                 );
               }
+              /*
+               * Tin nhắn thoại: phát ngay trong bong bóng.
+               *
+               * ⚠️ Nhận ra bằng MIME chứ không bằng đuôi tệp. `MediaRecorder`
+               * trên Safari trả `audio/mp4` còn Chrome trả `audio/webm;codecs=opus`
+               * — hai đuôi khác nhau cho cùng một việc, và đuôi còn có thể bị
+               * mất khi đi qua bộ lưu trữ. MIME do máy chủ trả về thì luôn có.
+               *
+               * `preload="metadata"`: tải đủ để biết độ dài mà không kéo cả
+               * tệp về. Một hội thoại nhiều tin thoại mà `preload="auto"` là
+               * hàng chục MB tải ngay lúc mở.
+               */
+              if (a.mimeType.startsWith('audio/')) {
+                return (
+                  <audio
+                    key={a.id}
+                    src={resolvedUrl}
+                    controls
+                    preload="metadata"
+                    className="h-10 w-[240px] max-w-full"
+                  />
+                );
+              }
               // Determine icon by MIME type
               const ext = a.fileName.split('.').pop()?.toLowerCase() ?? '';
               return (

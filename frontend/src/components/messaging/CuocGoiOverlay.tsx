@@ -9,7 +9,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Mic, MicOff, Phone, PhoneOff, Volume2 } from 'lucide-react';
+import { Mic, MicOff, Phone, PhoneOff, Video, VideoOff, Volume2 } from 'lucide-react';
 import { CuocGoi, type TrangThaiGoi } from '@/lib/webrtc/cuocGoi';
 import { getSocket } from '@/lib/socket';
 
@@ -21,9 +21,11 @@ interface Props {
   peerAvatar?: string | null;
   /** Bật lên khi người dùng bấm nút gọi ở thanh tiêu đề. */
   goiDi: number;
+  /** Bộ đếm riêng cho nút gọi VIDEO. Tách khỏi `goiDi` vì hai nút khác nhau. */
+  goiVideo?: number;
 }
 
-export default function CuocGoiOverlay({ threadId, peerId, peerName, peerAvatar, goiDi }: Props) {
+export default function CuocGoiOverlay({ threadId, peerId, peerName, peerAvatar, goiDi, goiVideo = 0 }: Props) {
   const [trangThai, setTrangThai] = useState<TrangThaiGoi>('roi');
   const [loi, setLoi] = useState<string | null>(null);
   const [tatMic, setTatMic] = useState(false);
@@ -32,21 +34,44 @@ export default function CuocGoiOverlay({ threadId, peerId, peerName, peerAvatar,
    *  được, vì người dùng có thể đang mở hội thoại khác. */
   const [tenHienThi, setTenHienThi] = useState<string>('');
 
+  /** Cuộc này có hình không. Đặt lúc bấm gọi, hoặc lúc nhận `call:incoming`. */
+  const [laVideo, setLaVideo] = useState(false);
+  const [tatCam, setTatCam] = useState(false);
+
   const goiRef = useRef<CuocGoi | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const videoXaRef = useRef<HTMLVideoElement | null>(null);
+  const videoToiRef = useRef<HTMLVideoElement | null>(null);
+  /** Giữ luồng lại: thẻ <video> chỉ tồn tại KHI đang gọi video, mà luồng có
+   *  thể tới trước lúc React kịp gắn thẻ đó vào DOM. */
+  const luongXaRef = useRef<MediaStream | null>(null);
+  const luongToiRef = useRef<MediaStream | null>(null);
 
   // ── Dựng đối tượng cuộc gọi MỘT lần ─────────────────────────
   if (!goiRef.current) {
     goiRef.current = new CuocGoi({
       doiTrangThai: setTrangThai,
       coTiengNoi: (luong) => {
+        luongXaRef.current = luong;
         if (audioRef.current) {
           audioRef.current.srcObject = luong;
           // Trình duyệt chặn tự phát nếu chưa có tương tác — nhưng người dùng
           // vừa bấm "gọi" hoặc "nhận", nên tương tác đã có.
           void audioRef.current.play().catch(() => {});
         }
+        if (videoXaRef.current) {
+          videoXaRef.current.srcObject = luong;
+          void videoXaRef.current.play().catch(() => {});
+        }
       },
+      luongCuaToi: (luong) => {
+        luongToiRef.current = luong;
+        if (videoToiRef.current) {
+          videoToiRef.current.srcObject = luong;
+          void videoToiRef.current.play().catch(() => {});
+        }
+      },
+      doiCamera: (bat) => setTatCam(!bat),
       ketThuc: () => {},
       loi: setLoi,
     });
@@ -65,18 +90,33 @@ export default function CuocGoiOverlay({ threadId, peerId, peerName, peerAvatar,
     if (goiDi <= 0 || !threadId || !peerId) return;
     setLoi(null);
     setTenHienThi(peerName ?? 'Người dùng');
-    void goi.goi(threadId, peerId);
+    setLaVideo(false);
+    void goi.goi(threadId, peerId, false);
     // `goiDi` là một bộ đếm tăng dần, không phải cờ bật/tắt: bấm gọi lần thứ
     // hai sau khi cúp máy vẫn phải kích hoạt lại.
   }, [goiDi]);   // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Nút gọi VIDEO ───────────────────────────────────────────
+  useEffect(() => {
+    if (goiVideo <= 0 || !threadId || !peerId) return;
+    setLoi(null);
+    setTatCam(false);
+    setTenHienThi(peerName ?? 'Người dùng');
+    setLaVideo(true);
+    void goi.goi(threadId, peerId, true);
+  }, [goiVideo]);   // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Nối dây socket ──────────────────────────────────────────
   useEffect(() => {
     const s = getSocket();
     if (!s) return;
 
-    const coNguoiGoi = (p: { callId: string; threadId: number; fromUserId: number; sdp: RTCSessionDescriptionInit; tenNguoiGoi?: string }) => {
-      goi.chuanBiNhan(p.callId, p.threadId, p.fromUserId, p.sdp);
+    const coNguoiGoi = (p: { callId: string; threadId: number; fromUserId: number; sdp: RTCSessionDescriptionInit; tenNguoiGoi?: string; coVideo?: boolean }) => {
+      /* `coVideo` do MÁY CHỦ chuyển từ bên gọi. Biết trước khi bắt máy là điều
+         kiện để xin camera ngay lượt `getUserMedia` đầu tiên — xem `cuocGoi.ts`. */
+      goi.chuanBiNhan(p.callId, p.threadId, p.fromUserId, p.sdp, p.coVideo === true);
+      setLaVideo(p.coVideo === true);
+      setTatCam(false);
       setTenHienThi(p.tenNguoiGoi ?? peerName ?? 'Người dùng');
       setLoi(null);
     };
@@ -138,6 +178,24 @@ export default function CuocGoiOverlay({ threadId, peerId, peerName, peerAvatar,
     setTatMic((t) => { goi.tatMicro(!t); return !t; });
   }, [goi]);
 
+  const doiCam = useCallback(() => { goi.doiCamera(); }, [goi]);
+
+  /* Gắn luồng vào thẻ <video> khi thẻ vừa xuất hiện.
+     ⚠️ Cần vì thẻ chỉ được dựng KHI `laVideo` bật, mà luồng có thể tới TRƯỚC
+     lúc đó — gán trong callback thôi là không đủ, và người dùng nhìn một ô
+     đen trong khi tiếng vẫn chạy. */
+  useEffect(() => {
+    if (!laVideo) return;
+    if (videoXaRef.current && luongXaRef.current) {
+      videoXaRef.current.srcObject = luongXaRef.current;
+      void videoXaRef.current.play().catch(() => {});
+    }
+    if (videoToiRef.current && luongToiRef.current) {
+      videoToiRef.current.srcObject = luongToiRef.current;
+      void videoToiRef.current.play().catch(() => {});
+    }
+  }, [laVideo, trangThai]);
+
   if (trangThai === 'roi' && !loi) return null;
 
   const dinhDangGiay = (g: number) =>
@@ -147,25 +205,65 @@ export default function CuocGoiOverlay({ threadId, peerId, peerName, peerAvatar,
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-neutral-950/95 backdrop-blur-sm">
       <audio ref={audioRef} autoPlay playsInline className="hidden" />
 
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      {peerAvatar
-        ? <img src={peerAvatar} alt="" className="h-28 w-28 rounded-full object-cover ring-4 ring-white/10" />
-        : <div className="flex h-28 w-28 items-center justify-center rounded-full bg-white/10 text-4xl">
-            {(tenHienThi || '?').charAt(0).toUpperCase()}
-          </div>}
+      {laVideo && trangThai === 'dang-noi' ? (
+        <>
+          {/* Hình người kia — phủ kín nền. `object-cover` chứ không `contain`:
+              khung hình webcam và khung cửa sổ hiếm khi cùng tỉ lệ, và hai dải
+              đen hai bên trông như app hỏng. */}
+          <video
+            ref={videoXaRef}
+            autoPlay
+            playsInline
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          {/* Hình của mình — ô nhỏ góc dưới phải.
+              `muted` là BẮT BUỘC: không có nó người dùng nghe lại tiếng chính
+              mình vọng về, trễ vài phần giây, và không nói nổi một câu.
+              `scale-x-[-1]` cho giống gương — người ta quen thấy mình lật. */}
+          <video
+            ref={videoToiRef}
+            autoPlay
+            playsInline
+            muted
+            className={`absolute bottom-28 right-5 h-40 w-28 scale-x-[-1] rounded-xl object-cover
+              shadow-lg ring-1 ring-white/20 sm:h-48 sm:w-32 ${tatCam ? 'hidden' : ''}`}
+          />
+          {tatCam && (
+            <div className="absolute bottom-28 right-5 flex h-40 w-28 items-center justify-center
+              rounded-xl bg-neutral-800 ring-1 ring-white/20 sm:h-48 sm:w-32">
+              <VideoOff className="h-6 w-6 text-white/50" />
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          {peerAvatar
+            ? <img src={peerAvatar} alt="" className="h-28 w-28 rounded-full object-cover ring-4 ring-white/10" />
+            : <div className="flex h-28 w-28 items-center justify-center rounded-full bg-white/10 text-4xl">
+                {(tenHienThi || '?').charAt(0).toUpperCase()}
+              </div>}
+        </>
+      )}
 
-      <p className="mt-5 text-xl font-semibold text-white">{tenHienThi || 'Người dùng'}</p>
+      {/* ⚠️ `relative z-10` là BẮT BUỘC khi có video. Thẻ <video> ở trên định vị
+          TUYỆT ĐỐI, mà phần tử được định vị luôn vẽ đè lên phần tử tĩnh bất kể
+          thứ tự trong DOM — thiếu dòng này thì tên, đồng hồ và cả cụm nút cúp
+          máy biến mất dưới khung hình, và người dùng không có cách nào tắt. */}
+      <p className={`relative z-10 mt-5 text-xl font-semibold text-white ${laVideo && trangThai === 'dang-noi' ? 'absolute left-0 right-0 top-6 text-center drop-shadow' : ''}`}>
+        {tenHienThi || 'Người dùng'}
+      </p>
 
-      <p className="mt-1 text-sm text-white/60">
+      <p className={`relative z-10 mt-1 text-sm text-white/60 ${laVideo && trangThai === 'dang-noi' ? 'absolute left-0 right-0 top-14 text-center drop-shadow' : ''}`}>
         {loi
           ? loi
           : trangThai === 'dang-goi' ? 'Đang gọi…'
-          : trangThai === 'do-chuong' ? 'Cuộc gọi thoại đến'
+          : trangThai === 'do-chuong' ? (laVideo ? 'Cuộc gọi video đến' : 'Cuộc gọi thoại đến')
           : trangThai === 'dang-noi' ? dinhDangGiay(giay)
           : ''}
       </p>
 
-      <div className="mt-10 flex items-center gap-5">
+      <div className={`relative z-10 flex items-center gap-5 ${laVideo && trangThai === 'dang-noi' ? 'absolute bottom-8 left-0 right-0 justify-center' : 'mt-10'}`}>
         {trangThai === 'do-chuong' ? (
           <>
             <button
@@ -213,9 +311,22 @@ export default function CuocGoiOverlay({ threadId, peerId, peerName, peerAvatar,
             >
               <PhoneOff className="h-7 w-7" />
             </button>
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white/50">
-              <Volume2 className="h-6 w-6" />
-            </div>
+            {laVideo ? (
+              <button
+                type="button"
+                onClick={doiCam}
+                aria-label={tatCam ? 'Bật camera' : 'Tắt camera'}
+                className={`flex h-14 w-14 items-center justify-center rounded-full transition-colors ${
+                  tatCam ? 'bg-white text-neutral-900' : 'bg-white/10 text-white'
+                }`}
+              >
+                {tatCam ? <VideoOff className="h-6 w-6" /> : <Video className="h-6 w-6" />}
+              </button>
+            ) : (
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white/50">
+                <Volume2 className="h-6 w-6" />
+              </div>
+            )}
           </>
         )}
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Paperclip, X, Loader2, FileText, Reply, Smile, Film, Sticker } from 'lucide-react';
+import { Send, Paperclip, X, Loader2, FileText, Reply, Smile, Film, Sticker, Mic, Trash2 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { messagingApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import EmojiPickerPopover from './EmojiPickerPopover';
 import GifPicker from './GifPicker';
 import StickerPicker from './StickerPicker';
+import { dongHo, GIAY_TOI_DA, useGhiAm } from './useGhiAm';
 
 type ActivePicker = 'emoji' | 'gif' | 'sticker' | null;
 
@@ -24,7 +25,10 @@ interface PendingAttachment {
 
 const MAX_SIZE = 10 * 1024 * 1024;
 const MAX_FILES = 5;
-const ALLOWED_PREFIXES = ['image/', 'application/pdf', 'text/', 'application/zip', 'application/x-zip-compressed'];
+/* `audio/` có ở đây vì tin nhắn thoại đi qua ĐÚNG đường tải tệp này. Máy chủ
+   nhận sẵn: `/messages/upload` đẩy mọi thứ không phải ảnh sang `uploadDocument`,
+   và hàm đó không lọc theo MIME. */
+const ALLOWED_PREFIXES = ['image/', 'audio/', 'video/', 'application/pdf', 'text/', 'application/zip', 'application/x-zip-compressed'];
 const ALLOWED_EXACT = new Set([
   'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -157,6 +161,31 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
       typingTimerRef.current = setTimeout(() => store.setTyping(threadId, false), 3000);
     } else {
       store.setTyping(threadId, false);
+    }
+  };
+
+  const ghi = useGhiAm();
+
+  /**
+   * Dừng ghi rồi GỬI NGAY, không đưa vào hàng đính kèm.
+   *
+   * Khác với tệp thường có chủ đích: một tin thoại là một tin nhắn trọn vẹn,
+   * không phải thứ người ta muốn kèm thêm chữ. Bắt họ bấm ghi → chờ tải →
+   * bấm gửi là ba nhịp cho một việc đáng lẽ một nhịp.
+   */
+  const guiThoai = async () => {
+    const tep = await ghi.ketThuc();
+    if (!tep) return;
+    setSending(true);
+    try {
+      const res = await messagingApi.uploadAttachment(tep);
+      const fileId = res.data.data?.fileId;
+      if (!fileId) throw new Error('Máy chủ không trả về mã tệp.');
+      await store.sendMessage(threadId, '', [fileId], replyTo?.id ?? null);
+    } catch (e: any) {
+      toast.error(e?.userFriendlyMessage ?? e?.message ?? 'Gửi tin thoại thất bại');
+    } finally {
+      setSending(false);
     }
   };
 
@@ -351,6 +380,37 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
           this is the iOS Messages pattern: a single shape that
           contains the field, with a small action area glued to the
           trailing edge. */}
+      {/* Dải "đang ghi". Thay chỗ ô gõ chữ thay vì đè lên nó: đang ghi âm thì
+          gõ chữ không có nghĩa gì, và để cả hai cùng hiện chỉ làm người dùng
+          phân vân xem cái nào sẽ được gửi. */}
+      {ghi.trangThai !== 'roi' && (
+        <div className="mb-2 flex items-center gap-3 rounded-2xl border border-red-500/20 bg-red-500/[0.07] px-3 py-2.5">
+          <span className="relative flex h-2.5 w-2.5 shrink-0">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-70" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+          </span>
+          <span className="text-[13px] font-medium text-text-primary">
+            {ghi.trangThai === 'dang-xu-ly' ? 'Đang xử lý…' : 'Đang ghi'}
+          </span>
+          <span className="font-mono text-[13px] tabular-nums text-text-secondary">
+            {dongHo(ghi.giay)} <span className="opacity-50">/ {dongHo(GIAY_TOI_DA)}</span>
+          </span>
+          <div className="flex-1" />
+          <button
+            type="button"
+            onClick={ghi.huy}
+            className="rounded-xl p-2 text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-red-400"
+            aria-label="Huỷ ghi âm"
+            title="Huỷ ghi âm"
+          >
+            <Trash2 className="h-[18px] w-[18px]" strokeWidth={1.75} />
+          </button>
+        </div>
+      )}
+      {ghi.loi && (
+        <p className="mb-2 text-[12.5px] text-red-400">{ghi.loi}</p>
+      )}
+
       <div
         className="flex items-end gap-1 rounded-2xl border border-white/[0.06] bg-white/[0.03] pl-1 pr-1 py-1 transition-colors focus-within:border-cyan-500/30 focus-within:bg-white/[0.05]"
       >
@@ -393,6 +453,15 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
           title="GIF"
         >
           <Film className="h-[18px] w-[18px]" strokeWidth={1.75} />
+        </button>
+        <button
+          onClick={() => (ghi.trangThai === 'dang-ghi' ? void guiThoai() : void ghi.batDau())}
+          disabled={disabled || sending || ghi.trangThai === 'dang-xu-ly'}
+          className={`shrink-0 rounded-xl p-2 transition-colors hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40 ${ghi.trangThai === 'dang-ghi' ? 'text-red-400' : 'text-text-secondary hover:text-text-primary'}`}
+          aria-label={ghi.trangThai === 'dang-ghi' ? 'Gửi tin thoại' : 'Ghi tin thoại'}
+          title={ghi.trangThai === 'dang-ghi' ? 'Gửi tin thoại' : 'Ghi tin thoại'}
+        >
+          <Mic className="h-[18px] w-[18px]" strokeWidth={1.75} />
         </button>
         <input
           ref={fileInputRef}

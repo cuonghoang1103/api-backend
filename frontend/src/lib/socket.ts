@@ -20,6 +20,41 @@ import { useAuthStore } from '@/store/authStore';
 let socket: Socket | null = null;
 let connecting: Promise<Socket> | null = null;
 
+/**
+ * ─── Cửa cho app desktop cắm socket CỦA NÓ vào ───────────────
+ *
+ * Web nối tới `window.location.origin`. App desktop chạy ở `app://cuongthai`,
+ * nơi origin đó không phải máy chủ — nên nếu không có cửa này thì toàn bộ cây
+ * messenger dùng lại được ở desktop sẽ nối vào hư không.
+ *
+ * ⚠️ Vì sao GẮN SOCKET CÓ SẴN chứ không chỉ truyền vào một URL: app desktop đã
+ * có một socket của riêng nó (`realtime/socket.ts`) cho cuộc gọi và cho phiên
+ * đăng nhập. Mở thêm một socket thứ hai cho cùng một người thì máy chủ vẫn
+ * chịu được (nó đếm theo NGƯỜI, xem `messaging.socket.ts`), nhưng mọi sự kiện
+ * sẽ tới hai nơi và app phải tự chống xử lý trùng — thêm một lớp có thể sai mà
+ * không đổi lấy gì.
+ *
+ * Trên web thì biến này luôn `null` và mọi thứ chạy y như trước.
+ */
+let nhaCungCapNgoai: (() => Socket | Promise<Socket> | null) | null = null;
+
+/**
+ * Cắm socket từ bên ngoài. Gọi TRƯỚC khi dựng cây messenger.
+ *
+ * Truyền `null` để trả lại hành vi mặc định của web.
+ */
+export function datNguonSocket(f: (() => Socket | Promise<Socket> | null) | null): void {
+  nhaCungCapNgoai = f;
+  /* Bỏ socket cũ do chính mô-đun này tạo — giữ lại thì `getSocket()` vẫn trả
+     về nó và cửa vừa mở thành vô nghĩa. */
+  if (f && socket) {
+    socket.removeAllListeners();
+    socket.disconnect();
+    socket = null;
+    connecting = null;
+  }
+}
+
 function getToken(): string | null {
   // The JWT lives in the httpOnly `backend_token` cookie and is NOT
   // directly readable from JS. We rely on the auth store having
@@ -37,6 +72,12 @@ function getToken(): string | null {
 }
 
 export async function connectSocket(): Promise<Socket> {
+  if (nhaCungCapNgoai) {
+    const s = await nhaCungCapNgoai();
+    if (!s) throw new Error('Chưa có kết nối realtime.');
+    socket = s;
+    return s;
+  }
   if (socket?.connected) return socket;
   if (connecting) return connecting;
 
@@ -89,6 +130,10 @@ export async function connectSocket(): Promise<Socket> {
 }
 
 export function disconnectSocket() {
+  /* Socket do bên ngoài cấp thì bên ngoài đóng — đóng hộ ở đây sẽ cắt luôn
+     cuộc gọi và phiên đăng nhập của app desktop, hai thứ không liên quan gì
+     tới việc rời trang tin nhắn. */
+  if (nhaCungCapNgoai) { socket = null; connecting = null; return; }
   if (socket) {
     socket.removeAllListeners();
     socket.disconnect();
@@ -98,6 +143,14 @@ export function disconnectSocket() {
 }
 
 export function getSocket(): Socket | null {
+  /* Hỏi lại nguồn ngoài mỗi lần, không dùng bản đã nhớ: app desktop nối lại
+     socket khi token được làm mới (`noiLaiVoiTokenMoi`), và khi đó bản nhớ ở
+     đây trỏ vào một socket đã chết — cửa hàng tin nhắn sẽ gắn listener lên
+     xác chết đó và im lặng vĩnh viễn. */
+  if (nhaCungCapNgoai) {
+    const s = nhaCungCapNgoai();
+    return s && !(s instanceof Promise) ? s : socket;
+  }
   return socket;
 }
 

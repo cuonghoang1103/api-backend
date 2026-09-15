@@ -77,6 +77,8 @@ function MessagesPageInner() {
   const [infoOpen, setInfoOpen] = useState(false);
   /** Bộ đếm số lần bấm nút gọi — xem ghi chú ở chỗ truyền `onGoi`. */
   const [lanBamGoi, setLanBamGoi] = useState(0);
+  /** Bộ đếm RIÊNG cho nút gọi video — hai nút khác nhau, hai bộ đếm. */
+  const [lanBamVideo, setLanBamVideo] = useState(0);
   // iOS on-screen keyboard: shrink the fixed-height shell so the composer
   // rides above the keyboard (the keyboard also covers the bottom nav, so
   // the shell reclaims that band while typing).
@@ -388,6 +390,7 @@ function MessagesPageInner() {
                   // hai sau khi cúp máy vẫn phải kích hoạt lại, mà cờ `true`
                   // thì lần hai không đổi giá trị nên `useEffect` không chạy.
                   onGoi={() => setLanBamGoi((n) => n + 1)}
+                  onGoiVideo={() => setLanBamVideo((n) => n + 1)}
                 />
                 <div className="min-h-0 flex-1">
                   <MessageList />
@@ -442,6 +445,7 @@ function MessagesPageInner() {
         peerName={currentThread?.peer?.displayName ?? currentThread?.peer?.username}
         peerAvatar={currentThread?.peer?.avatarUrl ?? null}
         goiDi={lanBamGoi}
+        goiVideo={lanBamVideo}
       />
     </div>
   );
@@ -520,12 +524,14 @@ function ThreadHeader({
   onBack,
   onToggleInfo,
   onGoi,
+  onGoiVideo,
 }: {
   thread: ReturnType<typeof useMessagingStore.getState>['currentThread'];
   getPresence: (uid: number) => { online: boolean; lastSeen: number };
   onBack?: () => void;
   onToggleInfo?: () => void;
   onGoi?: () => void;
+  onGoiVideo?: () => void;
 }) {
   const peer = thread?.peer;
   const presence = peer ? getPresence(peer.id) : null;
@@ -607,25 +613,42 @@ function ThreadHeader({
           {statusText}
         </p>
       </div>
-      {/* Messenger-style action cluster: call/video are visual placeholders
-          (no call infra yet — dimmed with a "coming soon" title), info
-          toggles the desktop details panel. */}
+      {/*
+        ⚠️ Nút gọi TỪNG BỊ KHOÁ CỨNG với nhãn "sắp có" trong khi cả đường dây
+        phía sau đã chạy được: `CuocGoiOverlay` gắn sẵn ở cuối trang, WebRTC ở
+        `lib/webrtc/cuocGoi.ts`, máy chủ có `/messages/ice-servers`, và chính
+        trang này đã truyền `onGoi` xuống đây từ dòng 389. Thiếu đúng một chỗ:
+        cái nút không gọi `onGoi`. Hệ quả đo được 16/09/2026 — người dùng NHẬN
+        được cuộc gọi nhưng không GỌI ĐI được, ở cả web lẫn app desktop.
+      */}
       <div className="flex shrink-0 items-center gap-1">
         <button
           type="button"
-          disabled
-          title="Gọi thoại — sắp có"
-          aria-label="Gọi thoại (sắp có)"
-          className="flex h-9 w-9 cursor-default items-center justify-center rounded-full text-cyan-400/40"
+          onClick={onGoi}
+          disabled={!onGoi || !peer}
+          title="Gọi thoại"
+          aria-label="Gọi thoại"
+          className={cn(
+            'flex h-9 w-9 items-center justify-center rounded-full transition-colors',
+            onGoi && peer
+              ? 'cursor-pointer text-cyan-400 hover:bg-cyan-400/10'
+              : 'cursor-default text-cyan-400/40',
+          )}
         >
           <Phone className="h-[18px] w-[18px]" />
         </button>
         <button
           type="button"
-          disabled
-          title="Gọi video — sắp có"
-          aria-label="Gọi video (sắp có)"
-          className="flex h-9 w-9 cursor-default items-center justify-center rounded-full text-cyan-400/40"
+          onClick={onGoiVideo}
+          disabled={!onGoiVideo || !peer}
+          title="Gọi video"
+          aria-label="Gọi video"
+          className={cn(
+            'flex h-9 w-9 items-center justify-center rounded-full transition-colors',
+            onGoiVideo && peer
+              ? 'cursor-pointer text-cyan-400 hover:bg-cyan-400/10'
+              : 'cursor-default text-cyan-400/40',
+          )}
         >
           <Video className="h-[18px] w-[18px]" />
         </button>

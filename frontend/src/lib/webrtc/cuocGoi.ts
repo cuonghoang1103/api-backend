@@ -25,6 +25,15 @@ export interface SuKienGoi {
   coTiengNoi: (luong: MediaStream) => void;
   ketThuc: (lyDo: string, giay: number) => void;
   loi: (chu: string) => void;
+  /**
+   * Luồng hình của CHÍNH MÌNH, để vẽ ô xem trước. Chỉ gọi khi gọi video.
+   *
+   * Tách khỏi `coTiengNoi` có chủ đích: luồng của mình phải phát CÂM
+   * (`muted`), không thì người dùng nghe lại tiếng mình vọng về.
+   */
+  luongCuaToi?: (luong: MediaStream | null) => void;
+  /** Camera của mình đang bật hay tắt — để nút đổi hình cho đúng. */
+  doiCamera?: (bat: boolean) => void;
 }
 
 interface IceServer { urls: string | string[]; username?: string; credential?: string }
@@ -110,14 +119,41 @@ export class CuocGoi {
     return pc;
   }
 
-  /** Xin micro. Tách riêng vì đây là chỗ hay bị từ chối, và lời báo lỗi phải
-   *  nói rõ cách bật lại chứ không chỉ "không truy cập được". */
-  private async xinMicro(): Promise<MediaStream> {
+  /** Cuộc này có hình hay chỉ có tiếng. Đặt lúc bắt đầu, không đổi giữa chừng. */
+  private coVideo = false;
+
+  /**
+   * Xin micro (và camera nếu là gọi video).
+   *
+   * Tách riêng vì đây là chỗ hay bị từ chối, và lời báo lỗi phải nói rõ cách
+   * bật lại chứ không chỉ "không truy cập được".
+   *
+   * ⚠️ Xin camera HỎNG thì KHÔNG làm hỏng cả cuộc gọi — lùi về gọi thoại và
+   * nói cho người dùng biết. Máy để bàn không có webcam là chuyện thường, và
+   * bắt cả cuộc gọi chết vì thiếu camera là đổi sai chiều.
+   */
+  private async xinThietBi(coVideo: boolean): Promise<MediaStream> {
+    const tiengNoi = {
+      echoCancellation: true, noiseSuppression: true, autoGainControl: true,
+    } as const;
+    if (coVideo) {
+      try {
+        return await navigator.mediaDevices.getUserMedia({
+          audio: tiengNoi,
+          video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
+        });
+      } catch (e) {
+        const ten = (e as Error)?.name;
+        if (ten === 'NotAllowedError') {
+          throw new Error('Bạn chưa cho phép dùng camera và micro. Hãy cấp quyền rồi gọi lại.');
+        }
+        /* Không có camera ⇒ vẫn gọi được bằng tiếng. */
+        this.coVideo = false;
+        this.su.loi('Không mở được camera — đã chuyển sang gọi thoại.');
+      }
+    }
     try {
-      return await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
-        video: false,
-      });
+      return await navigator.mediaDevices.getUserMedia({ audio: tiengNoi, video: false });
     } catch (e) {
       const ten = (e as Error)?.name;
       throw new Error(
@@ -130,19 +166,39 @@ export class CuocGoi {
     }
   }
 
+  /** Bật/tắt camera giữa cuộc. Trả về trạng thái mới. */
+  doiCamera(): boolean {
+    const hinh = this.luongCuaToi?.getVideoTracks() ?? [];
+    if (!hinh.length) return false;
+    const bat = !hinh[0]!.enabled;
+    for (const t of hinh) t.enabled = bat;
+    this.su.doiCamera?.(bat);
+    return bat;
+  }
+
+  /** Cuộc này có hình không — để màn hình gọi biết vẽ kiểu nào. */
+  laGoiVideo(): boolean {
+    return this.coVideo;
+  }
+
   // ── Gọi đi ───────────────────────────────────────────────────
-  async goi(threadId: number, toUserId: number): Promise<void> {
+  async goi(threadId: number, toUserId: number, coVideo = false): Promise<void> {
     this.threadId = threadId;
     this.benKia = toUserId;
     this.daDon = false;
+    this.coVideo = coVideo;
     try {
-      this.luongCuaToi = await this.xinMicro();
+      this.luongCuaToi = await this.xinThietBi(coVideo);
       const pc = await this.dungPeer();
       this.luongCuaToi.getTracks().forEach((t) => pc.addTrack(t, this.luongCuaToi!));
+      if (this.coVideo) this.su.luongCuaToi?.(this.luongCuaToi);
 
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
-      getSocket()?.emit('call:offer', { threadId, toUserId, sdp: offer });
+      /* `coVideo` gửi kèm để bên kia xin camera NGAY lượt `getUserMedia` đầu
+         tiên. Đoán từ SDP thì phải chờ tới lúc họ bắt máy, và lúc đó thêm
+         camera là một vòng thương lượng lại nữa. */
+      getSocket()?.emit('call:offer', { threadId, toUserId, sdp: offer, coVideo: this.coVideo });
       this.su.doiTrangThai('dang-goi');
     } catch (e) {
       this.su.loi((e as Error).message);
@@ -151,12 +207,19 @@ export class CuocGoi {
   }
 
   // ── Có người gọi tới ─────────────────────────────────────────
-  chuanBiNhan(callId: string, threadId: number, fromUserId: number, sdp: RTCSessionDescriptionInit): void {
+  chuanBiNhan(
+    callId: string,
+    threadId: number,
+    fromUserId: number,
+    sdp: RTCSessionDescriptionInit,
+    coVideo = false,
+  ): void {
     this.callId = callId;
     this.threadId = threadId;
     this.benKia = fromUserId;
     this.sdpCho = sdp;
     this.daDon = false;
+    this.coVideo = coVideo;
     this.su.doiTrangThai('do-chuong');
   }
   private sdpCho: RTCSessionDescriptionInit | null = null;
@@ -164,9 +227,10 @@ export class CuocGoi {
   async nhan(): Promise<void> {
     if (!this.sdpCho || !this.callId) return;
     try {
-      this.luongCuaToi = await this.xinMicro();
+      this.luongCuaToi = await this.xinThietBi(this.coVideo);
       const pc = await this.dungPeer();
       this.luongCuaToi.getTracks().forEach((t) => pc.addTrack(t, this.luongCuaToi!));
+      if (this.coVideo) this.su.luongCuaToi?.(this.luongCuaToi);
 
       await pc.setRemoteDescription(new RTCSessionDescription(this.sdpCho));
       this.daCoMoTaXa = true;

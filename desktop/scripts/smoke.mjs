@@ -267,7 +267,7 @@ if (!smokeUser || !smokePass) {
   console.log('\n\x1b[33m⚠ BỎ QUA 3 phép kiểm shell — cần tài khoản thật\x1b[0m');
   console.log('  Chạy đầy đủ bằng:');
   console.log('  CT_SMOKE_USER=<tên> CT_SMOKE_PASS=<mật khẩu> npm run smoke');
-  skipped += 3;
+  skipped += 4;
 } else {
   await window.fill('input[autocomplete="username"]', smokeUser);
   await window.fill('input[autocomplete="current-password"]', smokePass);
@@ -283,6 +283,32 @@ if (!smokeUser || !smokePass) {
     () => document.querySelector('.ct-titlebar-title')?.textContent,
   );
   check('bấm sidebar thì đổi trang', afterNav === 'Tin nhắn', String(afterNav));
+
+  /*
+   * ⚠️ TIN NHẮN DÙNG LẠI NGUYÊN CÂY MESSENGER CỦA WEB (16/09/2026).
+   *
+   * Nó đi qua ba lớp nối — axios của web, `authStore` của web, và socket của
+   * app cắm vào `lib/socket.ts` — nên "biên dịch xong" và "dựng xong" KHÔNG
+   * nói gì về việc nó chạy được. Một shim thiếu, một import chỉ có ở Next, hay
+   * một lỗi lúc dựng component đều cho ra cùng một thứ: khung trống, không lỗi
+   * trên màn hình.
+   *
+   * Phép kiểm này đòi thấy DẤU VẾT THẬT của cây web (khung soạn tin, hoặc màn
+   * hình rỗng "chọn một cuộc trò chuyện"), chứ không chỉ đòi tiêu đề trang.
+   */
+  await window.waitForTimeout(2500);
+  const mess = await window.evaluate(() => {
+    const host = document.querySelector('.ct-web-nhung');
+    const chu = (host?.textContent ?? '').toLowerCase();
+    return {
+      coHost: !!host,
+      coDauVet: !!document.querySelector('textarea, [aria-label*="Đính kèm"], [aria-label*="Ghi tin thoại"]')
+        || /tin nhắn|trò chuyện|cuộc trò chuyện/.test(chu),
+      daiChu: chu.length,
+    };
+  });
+  check('trang Tin nhắn dựng được cây messenger của web', mess.coHost && mess.coDauVet,
+    JSON.stringify(mess));
 
   await window.keyboard.press('Control+k');
   await window.waitForTimeout(200);

@@ -39,6 +39,27 @@ declare module '@/store/authStore' {
   export const useAuthStore: AuthStoreApi;
 }
 
+declare module '@/lib/socket' {
+  /**
+   * Cửa để app desktop cắm socket CỦA NÓ vào cây messenger dùng lại từ web.
+   *
+   * Chỉ khai `datNguonSocket` vì đó là thứ duy nhất desktop gọi. Kiểu socket
+   * để lỏng (`unknown`) có chủ đích: buộc nó vào `Socket` của socket.io-client
+   * sẽ kéo cả cây kiểu ấy qua ranh giới này, và ranh giới càng rộng càng dễ
+   * lệch — xem chú thích ở `@/lib/api` ngay dưới.
+   */
+  export function datNguonSocket(
+    f: (() => unknown | Promise<unknown> | null) | null,
+  ): void;
+}
+
+declare module '@/app/messages/page' {
+  import type { ComponentType } from 'react';
+  /** Trang tin nhắn của web, dùng lại nguyên si — xem features/messages. */
+  const Page: ComponentType;
+  export default Page;
+}
+
 declare module '@/lib/api' {
   /**
    * Instance axios của web. Desktop chỉ đụng vào `defaults` và `interceptors`

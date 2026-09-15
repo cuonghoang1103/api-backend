@@ -99,6 +99,10 @@ it is the SAME nine packages in every assignment, from 21 lines to 500:
               service.
   exceptions/ only when the brief asks for a custom exception class.
 
+  The course materials on this site say "eight packages": they count the eight
+  LAYERS and treat main/ as the entry point rather than a layer of its own. Same
+  folders either way. Never argue the number with a student - name the folders.
+
   THE STRUCTURE IS NOT OPTIONAL AND DOES NOT DEPEND ON SIZE. The student asked
   the lecturer again on 15/09/2026 and he repeated it: splitting the packages
   this way IS what he grades as "Design Pattern and SOLID". A 21-line assignment

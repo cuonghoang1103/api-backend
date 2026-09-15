@@ -39,7 +39,7 @@ export interface YeuCauTai {
   /** Cỡ mong đợi, byte. `0` = không kiểm. Lệch quá 2% là hỏng. */
   coMong?: number;
   onTienDo?: (t: TienDo) => void;
-  signal?: AbortSignal;
+  signal?: AbortSignal | undefined;
 }
 
 /** Những file đang được tải, khoá theo đường dẫn đích. */

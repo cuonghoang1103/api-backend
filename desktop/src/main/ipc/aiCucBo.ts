@@ -1,0 +1,179 @@
+/**
+ * ============================================================
+ * IPC CHO AI NGOẠI TUYẾN
+ * ============================================================
+ *
+ * Lớp mỏng giữa renderer và `main/aiCucBo/`. Ba quy tắc, và cả ba đều có lý do
+ * đã cắn ở chỗ khác trong app này:
+ *
+ * 1. **KHÔNG handler nào ném.** Màn hình Cài đặt phải vẽ ra được kể cả khi
+ *    mọi thứ hỏng — ném từ IPC làm renderer nhận một Error trần và thường là
+ *    một màn trắng.
+ * 2. **Việc lâu KHÔNG chờ trong Promise.** Tải 2,5 GB là nhiều phút. `cai()`
+ *    trả về ngay, tiến độ chảy qua sự kiện `aiCucBo:tienDo`.
+ * 3. **Tắt máy chủ khi app thoát.** `llama-server` là tiến trình CON nhưng nó
+ *    không tự chết theo cha trên Windows. Bỏ bước này là để lại một tiến trình
+ *    ăn 3,5 GB RAM sau khi người dùng đã đóng app — và họ sẽ không bao giờ
+ *    đoán ra nó là của mình.
+ */
+import { app, BrowserWindow } from 'electron';
+import { join } from 'node:path';
+import type { AiCucBoMa, AiCucBoTienDo, AiCucBoTinhTrang } from '../../shared/ipc';
+import { MODEL } from '../aiCucBo/kho';
+import {
+  batModel, cai, datGoc, goSach, tatModel, tinhTrang, xoa,
+} from '../aiCucBo/quanLy';
+import { trangThai } from '../aiCucBo/chay';
+import { handle } from './index';
+
+/** Lượt cài đang chạy. Chỉ cho phép MỘT — hai lượt cùng tải là tranh nhau đĩa. */
+let dangCai: AbortController | null = null;
+
+function baoTienDo(t: AiCucBoTienDo): void {
+  for (const w of BrowserWindow.getAllWindows()) {
+    if (!w.isDestroyed()) w.webContents.send('aiCucBo:tienDo', t);
+  }
+}
+
+function loiChu(e: unknown): string {
+  const m = (e as Error)?.message;
+  return typeof m === 'string' && m.trim() ? m : 'Lỗi không rõ.';
+}
+
+/** Sổ model rút gọn cho giao diện — renderer không phải chép cứng tên và cỡ. */
+const khoChoGiaoDien = (): AiCucBoTinhTrang['kho'] => MODEL.map((m) => ({
+  ma: m.ma,
+  ten: m.ten,
+  moTa: m.moTa,
+  gb: Math.round((m.gb + (m.mmproj?.gb ?? 0)) * 100) / 100,
+  ramGb: m.ramGb,
+}));
+
+export function dangKyAiCucBo(): void {
+  /* Thư mục nằm trong `userData`, tức đi theo hồ sơ người dùng và KHÔNG bị
+     xoá khi app tự cập nhật — 2,5 GB tải lại sau mỗi bản cập nhật là không
+     chấp nhận được. */
+  datGoc(join(app.getPath('userData'), 'ai-ngoai-tuyen'));
+
+  handle('aiCucBo:tinhTrang', async (): Promise<AiCucBoTinhTrang> => {
+    try {
+      const t = await tinhTrang();
+      return { ...t, kho: khoChoGiaoDien() };
+    } catch {
+      /* Máy quá lạ để quét được thì vẫn phải trả về một hình dạng hợp lệ:
+         giao diện sẽ hiện "máy này chưa dùng được" thay vì màn trắng. */
+      return {
+        may: {
+          nenTang: process.platform,
+          kienTruc: process.arch,
+          ramGb: 0,
+          diaGb: 0,
+          coGpu: false,
+          chacChan: false,
+          tenGpu: '',
+        },
+        khuyen: { nen: null, choPhep: [], vi: 'Chưa đọc được cấu hình máy này.' },
+        coBoChay: false,
+        daCo: [],
+        dangChay: null,
+        goc: null,
+        kho: khoChoGiaoDien(),
+      };
+    }
+  });
+
+  handle('aiCucBo:cai', ({ ma }) => {
+    if (dangCai) return { ok: false, loi: 'Đang có một lượt tải chạy rồi.' };
+    const bo = new AbortController();
+    dangCai = bo;
+
+    /* CỐ Ý không `await`. Người dùng bấm "Tải" xong là màn hình phải phản hồi
+       ngay; phần còn lại chảy qua sự kiện. */
+    void cai({ ma: ma as AiCucBoMa, bao: baoTienDo, signal: bo.signal })
+      .then(() => baoTienDo({ viec: 'Xong.', phanTram: 100, bps: 0, xong: { ok: true } }))
+      .catch((e) => baoTienDo({
+        viec: 'Dừng lại.', phanTram: 0, bps: 0, xong: { ok: false, loi: loiChu(e) },
+      }))
+      .finally(() => { if (dangCai === bo) dangCai = null; });
+
+    return { ok: true };
+  });
+
+  handle('aiCucBo:huyCai', () => {
+    dangCai?.abort();
+    dangCai = null;
+    return { ok: true };
+  });
+
+  handle('aiCucBo:bat', async ({ ma }) => {
+    try {
+      return { ok: true, goc: await batModel(ma as AiCucBoMa) };
+    } catch (e) {
+      return { ok: false, loi: loiChu(e) };
+    }
+  });
+
+  handle('aiCucBo:tat', async () => {
+    await tatModel().catch(() => {});
+    return { ok: true };
+  });
+
+  handle('aiCucBo:xoa', async ({ ma }) => {
+    try {
+      await xoa(ma as AiCucBoMa);
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, loi: loiChu(e) };
+    }
+  });
+
+  handle('aiCucBo:goSach', async () => {
+    try {
+      dangCai?.abort();
+      dangCai = null;
+      await goSach();
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, loi: loiChu(e) };
+    }
+  });
+
+  handle('aiCucBo:hoi', async ({ chu, lichSu }) => {
+    const dang = trangThai();
+    if (!dang) return { chu: '', loi: 'AI trên máy chưa bật.' };
+    try {
+      const tin = [
+        ...(lichSu ?? []).map((t) => ({
+          role: t.vaiTro === 'nguoi' ? 'user' : 'assistant',
+          content: t.chu,
+        })),
+        { role: 'user', content: chu },
+      ];
+      /* Tuyến OpenAI — cùng giao thức app đã nói với cổng từ trước, nên không
+         cần lớp chuyển đổi nào. Đo thật 15/09/2026 trên llama-server b10964. */
+      const r = await fetch(`${dang.goc}/v1/chat/completions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: tin, max_tokens: 900, temperature: 0.7 }),
+        /* 3 phút: máy chỉ có CPU gõ 8 chữ/giây, nên một câu trả lời dài thật
+           sự mất hơn một phút. Trần ngắn hơn sẽ cắt ngang đúng những máy yếu
+           mà tính năng này sinh ra để phục vụ. */
+        signal: AbortSignal.timeout(180_000),
+      });
+      if (!r.ok) return { chu: '', loi: `AI trên máy trả ${r.status}.` };
+      const j = await r.json() as { choices?: { message?: { content?: string } }[] };
+      return { chu: j?.choices?.[0]?.message?.content ?? '' };
+    } catch (e) {
+      return { chu: '', loi: loiChu(e) };
+    }
+  });
+
+  /* ⚠️ Tắt máy chủ khi app đóng. `before-quit` chứ không phải
+     `window-all-closed`: trên macOS đóng hết cửa sổ KHÔNG phải là thoát app,
+     và tắt AI ở đó sẽ làm con robot mất trí nhớ mỗi lần người dùng đóng cửa
+     sổ chính. */
+  app.on('before-quit', () => {
+    dangCai?.abort();
+    void tatModel();
+  });
+}

@@ -80,6 +80,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'robot:viec',
   'oauth:xong',
   'nhac:phim',
+  'aiCucBo:tienDo',
 ];
 
 const bridge: DesktopBridge = {
@@ -293,6 +294,17 @@ const bridge: DesktopBridge = {
     moCaiDatQuyen: () =>
       ipcRenderer.invoke('manHinh:moCaiDatQuyen') as Promise<{ ok: boolean }>,
   },
+  aiCucBo: {
+    tinhTrang: () => ipcRenderer.invoke('aiCucBo:tinhTrang'),
+    cai: (ma) => ipcRenderer.invoke('aiCucBo:cai', { ma }),
+    huyCai: () => ipcRenderer.invoke('aiCucBo:huyCai'),
+    bat: (ma) => ipcRenderer.invoke('aiCucBo:bat', { ma }),
+    tat: () => ipcRenderer.invoke('aiCucBo:tat'),
+    xoa: (ma) => ipcRenderer.invoke('aiCucBo:xoa', { ma }),
+    goSach: () => ipcRenderer.invoke('aiCucBo:goSach'),
+    hoi: (p) => ipcRenderer.invoke('aiCucBo:hoi', p),
+  },
+
   terminal: {
     chay: (cuocId: string, lenh: string) =>
       ipcRenderer.invoke('terminal:chay', { cuocId, lenh }) as Promise<TerminalKetQua>,

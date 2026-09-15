@@ -1090,6 +1090,56 @@ export type AgentMucKhoiPhuc =
  * Dùng lại nguyên `lenhNen.ts` mà agent đang dùng: hạ tầng đó đã có trần số
  * tiến trình, dọn theo cuộc, và giết CẢ NHÓM tiến trình khi dừng.
  */
+/**
+ * ── AI NGOẠI TUYẾN: hình dạng dữ liệu giữa hai tiến trình ──
+ *
+ * Những kiểu này là BẢN SAO có chủ đích của kiểu trong `main/aiCucBo/`. Không
+ * import ngược từ `main/` sang đây, vì `shared/` bị cả preload nạp vào — kéo
+ * theo `node:child_process` là phá đúng ranh giới mà preload sinh ra để giữ.
+ */
+export type AiCucBoMa = 'nho' | 'vua' | 'anh';
+
+export interface AiCucBoTinhTrang {
+  may: {
+    nenTang: string;
+    kienTruc: string;
+    ramGb: number;
+    diaGb: number;
+    coGpu: boolean;
+    /** `false` = mới nhìn tên card, CHƯA chạy thử. Đừng hứa gì với người dùng. */
+    chacChan: boolean;
+    tenGpu: string;
+  };
+  khuyen: {
+    nen: AiCucBoMa | null;
+    choPhep: AiCucBoMa[];
+    /** Lý do, viết sẵn bằng tiếng Việt cho người dùng đọc. */
+    vi: string;
+  };
+  coBoChay: boolean;
+  daCo: AiCucBoMa[];
+  dangChay: AiCucBoMa | null;
+  goc: string | null;
+  /** Sổ model để giao diện vẽ, khỏi chép cứng tên và dung lượng ở renderer. */
+  kho: {
+    ma: AiCucBoMa;
+    ten: string;
+    moTa: string;
+    gb: number;
+    ramGb: number;
+  }[];
+}
+
+/** Một nhịp tiến độ của việc tải/cài. Đi qua sự kiện `aiCucBo:tienDo`. */
+export interface AiCucBoTienDo {
+  viec: string;
+  /** 0-100 cho TOÀN BỘ việc cài, không phải cho từng file. */
+  phanTram: number;
+  bps: number;
+  /** Có mặt khi việc cài kết thúc — thành công hay không. */
+  xong?: { ok: boolean; loi?: string };
+}
+
 export interface TerminalKetQua {
   ok: boolean;
   loi?: string;
@@ -1552,6 +1602,31 @@ export const INVOKE_CHANNELS = {
   /** Mở đúng trang cấp quyền Ghi màn hình của hệ điều hành (chỉ macOS). */
   'manHinh:moCaiDatQuyen': null,
 
+  /**
+   * ── AI NGOẠI TUYẾN ───────────────────────────────────────
+   *
+   * AI chạy THẲNG trên máy người dùng qua llama.cpp, dùng được khi mất mạng.
+   * Toàn bộ việc nặng nằm ở tiến trình chính (`main/aiCucBo/`): renderer chỉ
+   * xin trạng thái, bấm tải, bấm bật/tắt. Tiến độ tải đi qua sự kiện
+   * `aiCucBo:tienDo` chứ không qua giá trị trả về — tải 2,5 GB là việc nhiều
+   * phút, không ai chờ một Promise lâu như thế mà không thấy gì.
+   */
+  'aiCucBo:tinhTrang': null,
+  'aiCucBo:cai': z.object({ ma: z.enum(['nho', 'vua', 'anh']) }),
+  'aiCucBo:huyCai': null,
+  'aiCucBo:bat': z.object({ ma: z.enum(['nho', 'vua', 'anh']) }),
+  'aiCucBo:tat': null,
+  'aiCucBo:xoa': z.object({ ma: z.enum(['nho', 'vua', 'anh']) }),
+  'aiCucBo:goSach': null,
+  /** Hỏi AI trên máy. Trả nguyên câu — cùng kiểu với `robot:hoi`. */
+  'aiCucBo:hoi': z.object({
+    chu: z.string().min(1).max(20_000),
+    lichSu: z.array(z.object({
+      vaiTro: z.enum(['nguoi', 'may']),
+      chu: z.string().max(20_000),
+    })).max(20).optional(),
+  }),
+
   'terminal:chay': z.object({
     cuocId: z.string().min(1),
     /* Trần 4000 để một lệnh dài (chuỗi `find … -exec …`) vẫn chạy được, nhưng
@@ -1756,6 +1831,8 @@ export const EVENT_CHANNELS = [
   'oauth:xong',
   /** Phím media của bàn phím (Play/Pause · Next · Prev), kể cả khi app không ở trước. */
   'nhac:phim',
+  /** Tiến độ tải/cài AI ngoại tuyến. Nhiều phút, nên phải chảy dần. */
+  'aiCucBo:tienDo',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];
@@ -2090,6 +2167,26 @@ export interface DesktopBridge {
     chup(id: string): Promise<{ ok: boolean; anh?: string; rong?: number; cao?: number; loi?: string }>;
     /** Mở trang cấp quyền Ghi màn hình (macOS). Nơi khác thì không làm gì. */
     moCaiDatQuyen(): Promise<{ ok: boolean }>;
+  };
+
+  aiCucBo: {
+    /** Toàn cảnh: máy này thế nào, đã tải gì, đang chạy gì. Không bao giờ ném. */
+    tinhTrang(): Promise<AiCucBoTinhTrang>;
+    /** Tải + cài + bật một bản. Tiến độ qua sự kiện `aiCucBo:tienDo`. */
+    cai(ma: AiCucBoMa): Promise<{ ok: boolean; loi?: string }>;
+    /** Dừng lượt tải đang chạy. Phần đã tải được GIỮ LẠI để bấm tiếp. */
+    huyCai(): Promise<{ ok: boolean }>;
+    /** Bật một bản đã tải sẵn. */
+    bat(ma: AiCucBoMa): Promise<{ ok: boolean; goc?: string; loi?: string }>;
+    /** Tắt, trả RAM về cho máy. */
+    tat(): Promise<{ ok: boolean }>;
+    /** Xoá một bản khỏi đĩa. */
+    xoa(ma: AiCucBoMa): Promise<{ ok: boolean; loi?: string }>;
+    /** Gỡ sạch cả model lẫn bộ chạy. */
+    goSach(): Promise<{ ok: boolean; loi?: string }>;
+    /** Hỏi AI trên máy. `null` ở `chu` nghĩa là chưa bật. */
+    hoi(p: { chu: string; lichSu?: { vaiTro: 'nguoi' | 'may'; chu: string }[] }):
+      Promise<{ chu: string; loi?: string }>;
   };
 
   terminal: {

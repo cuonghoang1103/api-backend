@@ -95,6 +95,7 @@ export async function registerIpcHandlers(): Promise<void> {
     { registerXuongRemixHandlers },
     { registerOpenCodeHandlers },
     { registerManHinhHandlers },
+    { dangKyAiCucBo },
   ] = await Promise.all([
     import('./app'),
     import('./settings'),
@@ -112,6 +113,7 @@ export async function registerIpcHandlers(): Promise<void> {
     import('./xuongRemix'),
     import('./opencode'),
     import('./manHinh'),
+    import('./aiCucBo'),
   ]);
 
   registerAppHandlers();
@@ -130,6 +132,7 @@ export async function registerIpcHandlers(): Promise<void> {
   registerXuongRemixHandlers();
   registerOpenCodeHandlers();
   registerManHinhHandlers();
+  dangKyAiCucBo();
 
   assertEveryChannelRegistered();
 }

@@ -34,6 +34,7 @@ import { isProEffective } from '../pro.service.js';
 import { buildProjectDigest } from '../interview/projectZip.service.js';
 import { logger } from '../../utils/logger.js';
 import { heThong, NGAN_HANG_VAN_DAP } from './quyTacThay.js';
+import { locCuaBai, khungChoPrompt } from './khungDuAn.js';
 
 const LOC_GOAL_MAC_DINH = 750;
 const LOC_GOAL_MIN = 50;
@@ -68,19 +69,11 @@ async function assertAi(userId: number) {
 // ─── LOC ────────────────────────────────────────────────────────
 
 /**
- * Số dòng code của một bài, đọc từ chính dữ liệu bài chứ không đoán.
- *
- * LAB211 nhét LOC vào tiêu đề đúng dạng `... (37 LOC)` — đo thật: 54/54 bài
- * đều có, và 54/54 problemHtml cũng nhắc lại. Tiêu đề trước vì nó ngắn và
- * người học nhìn thấy đúng con số đó trên màn hình chọn bài; problemHtml là
- * đường lùi cho bài mà ai đó đã sửa tiêu đề.
+ * `locCuaBai` nay sống ở `khungDuAn.ts` vì Code Lab cũng cần nó (prompt giảng
+ * bài phải biết bài to hay nhỏ). Re-export để `locCuaBai.test.ts` và mọi lời
+ * gọi cũ trong file này không phải đổi — một phép đọc, một chỗ định nghĩa.
  */
-export function locCuaBai(ex: { title?: string | null; problemHtml?: string | null }): number {
-  const tuTieuDe = /\((\d{1,4})\s*LOC\)/i.exec(ex.title || '');
-  if (tuTieuDe) return Number(tuTieuDe[1]);
-  const tuDe = /(\d{1,4})\s*LOC/i.exec(ex.problemHtml || '');
-  return tuDe ? Number(tuDe[1]) : 0;
-}
+export { locCuaBai };
 
 // ─── đọc/ghi phòng ──────────────────────────────────────────────
 
@@ -360,7 +353,12 @@ async function nganhCanh(itemId: number) {
       .map((f) => `--- ${String(f.name)} ---\n${String(f.code)}`);
     if (tep.length) mauThamChieu = tep.join('\n\n').slice(0, MAX_MAU_THAM_CHIEU);
   }
-  return { it, ex, brief: phan.join('\n'), mauThamChieu };
+  // Khung dự án: TÊN gói + TÊN lớp của lời giải đã verify, không có thân code.
+  // Khác hẳn `mauThamChieu` ở trên — cái này KHÔNG phải đáp án, nó là thứ thầy
+  // bắt buộc phải có, nên giảng đề và trợ giảng đều được biết. Chính sách chấm
+  // của trường cấm "chỉ cho họ cách mình đã làm", không cấm chỉ đúng tầng.
+  const khung = khungChoPrompt(ex);
+  return { it, ex, brief: phan.join('\n'), mauThamChieu, khung };
 }
 
 /** Lấy khối JSON đầu tiên trong câu trả lời, kể cả khi nó bị bọc trong ```json. */
@@ -439,13 +437,16 @@ export async function gioiThieuBai(userId: number, roomId: number, itemId: numbe
   if (cu?.introJson && !lamMoi) return cu.introJson;
 
   await assertAi(userId);
-  const { brief } = await nganhCanh(itemId);
+  const { brief, khung } = await nganhCanh(itemId);
 
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
     purpose: 'lab_room',
-    system: heThong(NHIEM_VU_GIOI_THIEU),
+    // `khung` = cây gói/lớp THẬT của bài này. Không có nó, AI phải đoán bố cục
+    // và mỗi lượt sinh ra một bố cục khác — người học đọc hai bài thì thấy hai
+    // kiến trúc, không biết tin cái nào.
+    system: heThong(NHIEM_VU_GIOI_THIEU, khung),
     messages: [{ role: 'user', content: brief }],
     // Bài giảng nay có thêm sơ đồ, bảng diễn tiến, bộ test và khuôn mẫu —
     // 4k token cắt ngang JSON là hỏng cả lượt, không phải hỏng một mục.
@@ -508,7 +509,7 @@ export async function chat(userId: number, roomId: number, itemId: number, cauHo
   if (hoi.length > MAX_CAU_HOI) throw new BadRequestError('Câu hỏi dài quá, rút gọn giúp mình.');
   await assertAi(userId);
 
-  const { brief } = await nganhCanh(itemId);
+  const { brief, khung } = await nganhCanh(itemId);
   const truoc = await prisma.codeLabRoomMessage.findMany({
     where: { itemId },
     orderBy: { createdAt: 'desc' },
@@ -524,7 +525,10 @@ export async function chat(userId: number, roomId: number, itemId: number, cauHo
     step: 'generation',
     feature: 'codelab',
     purpose: 'lab_room',
-    system: heThong(NHIEM_VU_CHAT, `THE ASSIGNMENT THIS CONVERSATION IS ABOUT:\n${brief}`),
+    // Trợ giảng phải trả lời "cái này viết ở đâu" bằng ĐÚNG gói của bài này,
+    // nên `khung` đi kèm đề. Thiếu nó thì câu trả lời hay gặp nhất — "để trong
+    // class Manager" — là câu làm người học bị trả bài.
+    system: heThong(NHIEM_VU_CHAT, khung, `THE ASSIGNMENT THIS CONVERSATION IS ABOUT:\n${brief}`),
     messages: [...lichSu, { role: 'user', content: hoi }],
     maxTokens: 6_000,
     maxRetries: 1,
@@ -638,13 +642,13 @@ export async function chamBaiNop(userId: number, roomId: number, itemId: number,
       + `${biCat ? ', and the text below was cut at the character limit' : ''}. `
       + `Per the rules, "dat" must be false and you must say this first.\n`
     : '';
-  const { brief, mauThamChieu } = await nganhCanh(itemId);
+  const { brief, mauThamChieu, khung } = await nganhCanh(itemId);
 
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
     purpose: 'lab_room',
-    system: heThong(NGAN_HANG_VAN_DAP, NHIEM_VU_CHAM),
+    system: heThong(NGAN_HANG_VAN_DAP, NHIEM_VU_CHAM, khung),
     messages: [{
       role: 'user',
       content: `${brief}`
@@ -738,14 +742,16 @@ export async function huongDanReview(userId: number, roomId: number, itemId: num
   if (cu?.guideJson && !lamMoi) return cu.guideJson;
 
   await assertAi(userId);
-  const { brief } = await nganhCanh(itemId);
+  const { brief, khung } = await nganhCanh(itemId);
   const cham = cu?.reviewJson ? `\n\nWHAT THE MARKING FOUND (use it — the weak spots are what the lecturer will probe):\n${JSON.stringify(cu.reviewJson).slice(0, 12_000)}` : '';
 
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
     purpose: 'lab_room',
-    system: heThong(NGAN_HANG_VAN_DAP, NHIEM_VU_HUONG_DAN),
+    // Buổi review thầy bắt "chỉ vào code" — muốn dạy được cách chỉ, AI phải
+    // biết trong bài này có đúng những lớp nào.
+    system: heThong(NGAN_HANG_VAN_DAP, NHIEM_VU_HUONG_DAN, khung),
     messages: [{ role: 'user', content: `${brief}${cham}` }],
     maxTokens: 6_000,
     maxRetries: 1,

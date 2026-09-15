@@ -347,7 +347,25 @@ HOW YOU SPEAK
   with something they could SAY to the examiner in one sentence.
 `.trim();
 
-/** Nối các khối lại. Luôn có `QUY_TAC_LOI` và `GIONG_NOI`. */
+/**
+ * Nối các khối lại. Luôn có `QUY_TAC_LOI` và `GIONG_NOI`.
+ *
+ * Khối rỗng bị loại: `khungChoPrompt()` trả '' cho bài KHÔNG thuộc LAB211, và
+ * nối thẳng thì prompt lĩnh hai dòng trắng giữa hai mục — vô hại với người đọc,
+ * nhưng đây là thứ model đọc, và khoảng trống bất thường là nhiễu vô ích.
+ */
 export function heThong(...them: string[]): string {
-  return [QUY_TAC_LOI, ...them, GIONG_NOI].join('\n\n');
+  return [QUY_TAC_LOI, ...them.filter((s) => s && s.trim()), GIONG_NOI].join('\n\n');
+}
+
+/**
+ * Luật (+ ngữ cảnh bài) NHƯNG KHÔNG kèm `GIONG_NOI`.
+ *
+ * Dành cho nơi tự quy định ngôn ngữ và định dạng đầu ra — ví dụ prompt giảng bài
+ * của Code Lab trả JSON SONG NGỮ, còn `GIONG_NOI` lại bắt "reply in Vietnamese".
+ * Ghép cả hai vào là ra một prompt tự mâu thuẫn, và thứ rụng trước thường là
+ * nửa tiếng Anh của bài giảng.
+ */
+export function luatKemKhung(...them: string[]): string {
+  return [QUY_TAC_LOI, ...them.filter((s) => s && s.trim())].join('\n\n');
 }

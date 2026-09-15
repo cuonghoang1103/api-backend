@@ -25,6 +25,8 @@ import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/er
 import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
 import { buildProjectDigest } from './interview/projectZip.service.js';
 import { isProEffective } from './pro.service.js';
+import { luatKemKhung, NGAN_HANG_VAN_DAP } from './labRoom/quyTacThay.js';
+import { khungChoPrompt, laBaiLab211 } from './labRoom/khungDuAn.js';
 
 export type VivaMode = 'explain' | 'change';
 
@@ -44,6 +46,11 @@ async function loadExercise(id: number) {
       id: true, title: true, language: true, difficulty: true,
       problemHtml: true, inputSpec: true, outputSpec: true, constraints: true,
       concepts: true,
+      // `slug` để nhận ra bài LAB211; hai cột code để dựng KHUNG gói/lớp thật.
+      // Trước 16/09/2026 vấn đáp và review của Code Lab chấm mù: không đề nào
+      // vẽ cây thư mục, nên prompt review được dặn "đừng bịa yêu cầu" và vì thế
+      // bỏ qua luôn thứ thầy trượt người học đầu tiên — sai cấu trúc.
+      slug: true, solutionCodeJson: true, starterCodeJson: true,
       module: { select: { name: true } },
     },
   });
@@ -60,6 +67,31 @@ function plain(html: string | null | undefined, cap = 7000): string {
     .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     .replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n')
     .trim().slice(0, cap);
+}
+
+/**
+ * System prompt của một tính năng coach, có luật thầy + khung bài khi là LAB211.
+ *
+ * `luatKemKhung` chứ không `heThong`: cả bốn prompt ở file này trả JSON có
+ * trường tiếng Anh lẫn tiếng Việt, còn `GIONG_NOI` lại bắt trả lời tiếng Việt.
+ */
+function heThongCoach(ex: Awaited<ReturnType<typeof loadExercise>>, ...nhiemVu: string[]): string {
+  if (!laBaiLab211(ex)) return nhiemVu.filter(Boolean).join('\n\n');
+  return luatKemKhung(khungChoPrompt(ex), ...nhiemVu);
+}
+
+/** Lời giải mẫu đã verify, dùng làm THƯỚC ĐO khi chấm — không bao giờ để lộ. */
+function mauThamChieu(ex: Awaited<ReturnType<typeof loadExercise>>, cap = 20_000): string {
+  const sol = ex.solutionCodeJson;
+  if (!laBaiLab211(ex) || !Array.isArray(sol) || !sol.length) return '';
+  const tep = (sol as Array<Record<string, unknown>>)
+    .filter((f) => typeof f?.name === 'string' && typeof f?.code === 'string')
+    .map((f) => `--- ${String(f.name)} ---\n${String(f.code)}`);
+  if (!tep.length) return '';
+  return '\n\n=================\nREFERENCE SOLUTION (verified — a yardstick for YOU only.\n'
+    + 'Never quote it back to the student and never tell them to copy it; say what THEIR\n'
+    + 'code is missing and where it goes.)\n=================\n'
+    + tep.join('\n\n').slice(0, cap);
 }
 
 function briefOf(ex: Awaited<ReturnType<typeof loadExercise>>): string {
@@ -131,7 +163,9 @@ export async function askViva(
     step: 'generation',
     feature: 'codelab',
     purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
-    system: ASK_SYSTEM,
+    // Ngân hàng câu vấn đáp của thầy đi kèm: đây ĐÚNG là tính năng vấn đáp,
+    // mà trước nay nó tự nghĩ câu hỏi trong khi ngân hàng nằm sẵn không ai dùng.
+    system: heThongCoach(ex, NGAN_HANG_VAN_DAP, ASK_SYSTEM),
     messages: [{ role: 'user', content: `MODE = ${opts.mode}\n\n${briefOf(ex)}${avoid}` }],
     maxTokens: 700,
     maxRetries: 1,
@@ -192,7 +226,7 @@ export async function gradeViva(
     step: 'generation',
     feature: 'codelab',
     purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
-    system: GRADE_SYSTEM,
+    system: heThongCoach(ex, NGAN_HANG_VAN_DAP, GRADE_SYSTEM),
     messages: [{
       role: 'user',
       content: `MODE = ${opts.mode}\n\n${briefOf(ex)}\n\nQUESTION ASKED:\n${opts.question}\n\nSTUDENT ANSWER:\n${answer}`,
@@ -228,6 +262,18 @@ Return ONLY JSON:
 
 - One item per DISTINCT requirement in the brief: each menu option, each validation
   rule, each output format, each named method, each stated constraint. Expect 6-20.
+- If the RULES section above is present, the first FOUR items are always these, in
+  this order, because they are the gates this course refuses to review without:
+    1. "Package structure" — do the packages match the layout given above? Name the
+       classes that sit in the wrong package, or the package that is missing.
+    2. "Comments" — is there a one-line // above every method and every branch?
+    3. "Naming and convention" — PascalCase class, camelCase method/variable,
+       UPPER_SNAKE constant, 4-space indent, no tabs, no leftover NetBeans
+       "To change this license header" block.
+    4. "Scanner and printing" — exactly one Scanner, created in main() as a LOCAL
+       variable, never static, never closed; nothing outside view/ and main/ prints.
+  Mark them missing when the pasted code is only a fragment and say so in "evidence" —
+  a fragment cannot prove the structure is right.
 - "evidence": for met/partial, quote the method or line that satisfies it. Quote what
   is really in the code — never invent a line the student did not write.
 - "fix": for partial/missing, one concrete sentence on what to add. Empty for met.
@@ -263,8 +309,13 @@ export async function checkAgainstBrief(
     step: 'generation',
     feature: 'codelab',
     purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
-    system: CHECK_SYSTEM,
-    messages: [{ role: 'user', content: `${briefOf(ex)}\n\nSTUDENT CODE:\n\`\`\`java\n${code}\n\`\`\`` }],
+    system: heThongCoach(ex, CHECK_SYSTEM),
+    messages: [{
+      role: 'user',
+      // Lời giải mẫu đi kèm để chấm có THƯỚC: trước đây review đoán "đề đòi gì"
+      // từ mỗi văn đề, nên thiếu một lớp hay sai gói thì không ai thấy.
+      content: `${briefOf(ex)}${mauThamChieu(ex)}\n\nSTUDENT CODE:\n\`\`\`java\n${code}\n\`\`\``,
+    }],
     maxTokens: 4000,
     maxRetries: 1,
     timeoutMs: 150_000,
@@ -343,11 +394,16 @@ Return ONLY JSON:
   a quote with no path is useless to someone trying to find it. Quote what is
   really there — never invent a line the student did not write.
 - "fix": for partial/missing, one concrete sentence naming the file to change.
-- "structure": compare the required project tree in the brief against the tree you
-  were given. One entry per required class/package. "ok" = present where the brief
-  says; "misplaced" = present but in another package, and "actual" says where it
-  really is; "missing" = not in the project at all. If the brief states no tree,
-  return an empty array rather than inventing requirements.
+- "structure": compare the REQUIRED tree against the tree you were given. One entry
+  per required class/package. "ok" = present where required; "misplaced" = present
+  but in another package, and "actual" says where it really is; "missing" = not in
+  the project at all.
+  The required tree comes from, in this order: (1) the "THE PACKAGE LAYOUT OF THE
+  ACCEPTED SOLUTION" section above, when present — that is this course's own
+  structure and it is graded first; (2) failing that, a tree drawn in the brief.
+  Only when there is neither may you return an empty array. A missing package here
+  is not a style note: this course refuses to review work with the wrong structure,
+  so say it in "summary" too.
 - "risks": what will crash or embarrass the student in a live demo — unhandled bad
   input, a data file missing on first run, a duplicate id accepted, an infinite
   loop on a wrong menu choice. Read ACROSS files: a check in Main that the service
@@ -378,8 +434,8 @@ export async function checkProjectAgainstBrief(
     step: 'generation',
     feature: 'codelab',
     purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
-    system: PROJECT_CHECK_SYSTEM,
-    messages: [{ role: 'user', content: `${briefOf(ex)}\n\nSTUDENT PROJECT:\n${body}` }],
+    system: heThongCoach(ex, PROJECT_CHECK_SYSTEM),
+    messages: [{ role: 'user', content: `${briefOf(ex)}${mauThamChieu(ex)}\n\nSTUDENT PROJECT:\n${body}` }],
     // Four sections instead of one, over a whole project — 4000 truncated the
     // JSON and the whole review was lost to a parse error.
     maxTokens: 8000,

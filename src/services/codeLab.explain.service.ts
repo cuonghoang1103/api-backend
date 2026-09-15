@@ -24,6 +24,11 @@ import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/er
 import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopensInMs } from './interview/llm/index.js';
 import { isProEffective } from './pro.service.js';
 import { normalizeBlocks, type DocBlock } from './snippets.aiDoc.service.js';
+// LAB211 được chấm bằng một bộ luật riêng của thầy. Prompt ở file này phục vụ
+// MỌI track của Code Lab, nên luật chỉ được nhét vào khi bài đúng là LAB211 —
+// áp luật chín gói Java lên một bài Python thì là bịa.
+import { luatKemKhung } from './labRoom/quyTacThay.js';
+import { khungChoPrompt, laBaiLab211, type BaiCoKhung } from './labRoom/khungDuAn.js';
 
 const MAX_QUESTION = 1200;
 const MAX_HISTORY = 12;
@@ -112,6 +117,7 @@ Return ONLY a JSON array of blocks, no prose around it. Each block is one of:
   {"type":"heading","text":"…","textVi":"…"}
   {"type":"prose","html":"<p>…</p>","htmlVi":"<p>…</p>"}
   {"type":"code","language":"java","title":"…","titleVi":"…","code":"…"}
+  {"type":"mermaid","code":"flowchart LR\n  A[main] --> B[controller]"}
 
 Rules:
 - Every heading and prose block MUST carry both the English field and its Vietnamese
@@ -124,26 +130,19 @@ Rules:
      NetBeans project as a directory tree: the project folder, src/, every
      package, every class inside it, and the data files at the project root.
      Put a short "<- what it does" comment beside each entry. This block is
-     MANDATORY and must come early. Model it on this shape, adapted to THIS
-     assignment (do not copy the names):
-       ProjectName/
-       ├── build.xml            <- Ant build script, NetBeans needs it
-       ├── src/                 <- your code, and only here
-       │   ├── entity/
-       │   │   └── Thing.java   <- the data: private fields, getters, toString
-       │   ├── bo/
-       │   │   └── ThingManager.java <- the collection + the rules; never prints
-       │   ├── utils/
-       │   │   └── Validator.java    <- every keyboard read, in one place
-       │   └── ui/
-       │       └── Main.java    <- the menu and the screen, nothing else
-       ├── data.txt             <- data files sit at the PROJECT ROOT, not in src/
-       └── build/               <- compiled .class files (safe to delete)
+     MANDATORY and must come early.
+     If the user message contains a section headed "THE PACKAGE LAYOUT OF THE
+     ACCEPTED SOLUTION", that tree is the answer: reproduce it, adding the
+     project folder, build.xml, the data files and build/ around it. It was read
+     from the solution this course actually accepts — do NOT invent a different
+     layout, do NOT rename or merge its packages, and do NOT drop one because
+     the program looks small.
   3. A prose block right after it justifying that layout for THIS brief: what
-     each layer is responsible for, and WHY a layer is present or absent. The
-     rule is "add a layer only where this program needs one" — a 40-line
-     assignment gets no controller, a program with no stored data gets no bo.
-     Say which class each method named in the brief's Guidelines belongs in.
+     each package is responsible for, and why the conditional ones (repository,
+     service, exceptions) are present or absent HERE. Say which class each
+     method named in the brief's Guidelines belongs in. Never argue that a
+     package is unnecessary because the assignment is short — the layout does
+     not depend on size.
   4. The data you must model — the fields, their types, and why those types.
   5. The steps to build it, in the order you would actually write them.
   6. The specific Java APIs needed and why each one (name the exact methods).
@@ -158,10 +157,33 @@ Rules:
 - DO NOT give the finished solution. Give the structure, the decisions and the
   traps. Short illustrative snippets of one technique are fine; a complete
   working program is not.
-- prose html may use only <p> <ul> <ol> <li> <code> <strong> <em>.
+- prose html may use only <p> <ul> <ol> <li> <code> <strong> <em> <pre> <table>.
+- INSIDE prose html, write Java generics with entities: &lt;code&gt;ArrayList&amp;lt;Doctor&amp;gt;&lt;/code&gt;.
+  A raw "<" glued to a letter is read as an HTML tag and the reader loses the type:
+  "List<Asset>" arrives on screen as "List". (Inside a "code" block, write it
+  normally — that path is not HTML.)
+- Exactly ONE "mermaid" block, placed after the structure tree: a flowchart of one
+  feature travelling through the layers, e.g.
+  flowchart LR\n  M[main: reads the line] --> C[controller]\n  C --> S[service: the rule]\n  S --> R[repository]\n  C --> V[view: prints]
+  Keep node labels short and in English; it is a diagram, not a paragraph.
 - Be concrete about THIS assignment. Quote the brief's own wording, its own
   message strings and its own numbers. Generic advice that would fit any
   exercise is worthless here.`;
+
+/**
+ * System prompt của phần GIẢNG BÀI, có luật thầy khi bài thuộc LAB211.
+ *
+ * Dùng `luatKemKhung` chứ không `heThong`: `heThong` kèm `GIONG_NOI` ("reply in
+ * VIETNAMESE"), mà prompt này lại bắt trả JSON SONG NGỮ. Hai mệnh lệnh chọi
+ * nhau thì thứ rụng là nửa tiếng Anh của bài giảng.
+ *
+ * Luật đặt TRƯỚC, nhiệm vụ đặt SAU: nhiệm vụ là thứ model phải làm ngay, và
+ * đoạn cuối prompt là đoạn nó bám chắc nhất.
+ */
+function heThongGiang(ex: BaiCoKhung): string {
+  if (!laBaiLab211(ex)) return EXPLAIN_SYSTEM;
+  return luatKemKhung(khungChoPrompt(ex), EXPLAIN_SYSTEM);
+}
 
 /** The cached explanation, if one exists. Free to read — generating cost the
  *  tokens, and hiding the result from non-Pro readers would waste them. */
@@ -194,7 +216,7 @@ export async function explainExercise(
     // kênh Claude (đo 27/08: opus 12k→429, 16k→502), sinh lớn/hàng loạt là nghẽn.
     // Giữ codelab_bulk (nhanh, kênh GPT/máy nhà) như trước — 54 bản cache hiện tại
     // sinh kiểu này vẫn tốt. CHAT hỏi-tiếp + coach (nhỏ ≤8k) mới chạy Opus 4.8.
-    system: EXPLAIN_SYSTEM,
+    system: heThongGiang(ex),
     messages: [{ role: 'user', content: briefFor(ex) }],
     // 16-26 blocks, every one of them bilingual, plus a structure tree:
     // 3500 truncated the JSON mid-array and parseBlocks then returned
@@ -325,7 +347,12 @@ same answer in Vietnamese under a line that reads "Tiếng Việt:".
 Keep it short and concrete — a few sentences, plus a small code snippet only when it
 genuinely clarifies. Refer back to the explanation the student is looking at. Never hand
 over a complete solution to the assignment; guide instead. If the question is not about
-this assignment or about programming, say so briefly and steer back.`;
+this assignment or about programming, say so briefly and steer back.
+
+When the student asks WHERE something goes ("where do I put this method?"), answer with
+the package and the class from the layout above, never with a vague "in a helper class".
+Label every fence: \`\`\`java for code, \`\`\`text for a tree or a console transcript — an
+unlabelled fence is rendered inline and a tree collapses into one run-on line.`;
 
 export interface FollowUpMessage { role: 'user' | 'assistant'; content: string }
 
@@ -366,7 +393,7 @@ export async function askFollowUp(
     step: 'generation',
     feature: 'codelab',
     purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
-    system: CHAT_SYSTEM,
+    system: laBaiLab211(ex) ? luatKemKhung(khungChoPrompt(ex), CHAT_SYSTEM) : CHAT_SYSTEM,
     messages,
     maxTokens: 4000,
     maxRetries: 2,

@@ -15,6 +15,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
+import { QUY_TAC_LOI } from './labRoom/quyTacThay.js';
 import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
 import { looseJson } from './myLanguage.ai.service.js';
 import { normalizeBlocks, type DocBlock } from './snippets.aiDoc.service.js';
@@ -73,8 +74,13 @@ export async function generateLesson(
   const mod = await loadModule(moduleId);
   const lang = mod.track.language;
   const ctx = mod.description ? `\nModule context: ${mod.description}` : '';
+  // Bài GIẢNG của track lab211 đứng trên luật của thầy. Module 847 từng dạy
+  // `entity/bo/ui` và "controller được đọc bàn phím" đúng vì prompt này không
+  // biết luật — viết lại bằng tay xong thì phải chặn đường quay lại.
+  const luatLab211 = /^lab211$/i.test(mod.track.slug || '') ? QUY_TAC_LOI + '\n\n' : '';
 
   const system =
+    luatLab211 +
     `You are a senior university programming instructor writing a COMPREHENSIVE, textbook-chapter ` +
     `TUTORIAL in ENGLISH — in the style of NTU's "programming notes" (ehchua). This is a LESSON to teach ` +
     `the module "${mod.name}" of the track "${mod.track.name}" (language/tech: ${lang}, group: ` +

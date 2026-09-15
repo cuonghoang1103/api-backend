@@ -52,12 +52,36 @@ function str(v: unknown): string {
 // runs sanitizeHtml (same as Snippet.noteContent), so this is defence-in-depth,
 // not the only guard.
 function scrubHtml(html: string): string {
-  return html
+  return vaTheLa(html)
     .replace(/<\s*script[\s\S]*?<\s*\/\s*script\s*>/gi, '')
     .replace(/<\s*style[\s\S]*?<\s*\/\s*style\s*>/gi, '')
     .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
     .replace(/(href|src)\s*=\s*("|')?\s*javascript:[^"'>\s]*/gi, '$1="#"')
     .slice(0, 12_000);
+}
+
+/** Những thẻ bài giảng thật sự dùng — và trang đã có CSS cho từng cái. */
+const THE_GIU = new Set([
+  'p', 'br', 'hr', 'ul', 'ol', 'li', 'code', 'pre', 'strong', 'em', 'b', 'i',
+  'sup', 'sub', 'a', 'span', 'div', 'h3', 'h4', 'h5',
+  'table', 'thead', 'tbody', 'tr', 'th', 'td',
+]);
+
+/**
+ * Escape những "thẻ" không phải thẻ — gần như luôn là GENERIC CỦA JAVA.
+ *
+ * Model viết `List<Asset>` trong câu văn. Trình duyệt thấy `<` dính liền chữ cái
+ * nên đọc `<Asset>` là một phần tử lạ, rồi `sanitizeHtml` phía trang vứt nó đi:
+ * người học đọc được đúng chữ `List`, mất sạch kiểu phần tử. Đo trên dữ liệu
+ * thật 16/09/2026: 2 chỗ trong bộ 54 bài — ít, nhưng đây là môn mà `ArrayList
+ * <Doctor>` xuất hiện ở gần như mọi bài, nên xác suất chỉ tăng theo mỗi lượt sinh.
+ *
+ * (Dấu `<` có KHOẢNG TRẮNG theo sau — `i < n` — thì trình duyệt đã coi là chữ
+ * thường rồi, không cần đụng tới, và đụng vào là làm hỏng câu đang đúng.)
+ */
+export function vaTheLa(html: string): string {
+  return html.replace(/<(\/?)([A-Za-z][A-Za-z0-9]*)\b([^<>]*)>/g, (ca, _dong, ten: string) =>
+    THE_GIU.has(ten.toLowerCase()) ? ca : ca.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
 }
 
 /** Validate + normalize ONE block. Returns null to drop malformed blocks. */

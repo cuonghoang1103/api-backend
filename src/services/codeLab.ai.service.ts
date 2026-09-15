@@ -16,6 +16,7 @@
  */
 import { prisma } from '../config/database.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
+import { QUY_TAC_LOI } from './labRoom/quyTacThay.js';
 import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopensInMs } from './interview/llm/index.js';
 import { looseJson } from './myLanguage.ai.service.js';
 import * as codeLab from './codeLab.service.js';
@@ -251,7 +252,16 @@ export async function generateExercises(
       `task — pick a genuinely different facet of the module):\n- ${avoidTitles.join('\n- ')}`
     : '';
 
+  // Bài MỚI của track lab211 phải sinh ra đúng kiến trúc thầy chấm, nếu không
+  // ta lại tự tay thêm một bài dạy sai vào giữa 54 bài đã chuẩn.
+  const luatLab211 = /^lab211$/i.test(mod.track.slug || '')
+    ? QUY_TAC_LOI + '\n\nEvery exercise you write here — brief, starter code and official '
+      + 'solution — must obey the rules above: the Guide.xlsx packages, one Scanner in main(), '
+      + 'printing only in view/ and main/, a one-line // comment above every method.\n\n'
+    : '';
+
   const system =
+    luatLab211 +
     `You are a senior software instructor writing complete, professional coding EXERCISES in ENGLISH, ` +
     `in the style of a university programming course (like the NTU "programming notes" exercises). ` +
     `The exercises are for the module "${mod.name}" of the track "${mod.track.name}" ` +

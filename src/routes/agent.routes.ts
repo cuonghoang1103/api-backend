@@ -164,10 +164,19 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   // ─── 1. Kiểm đầu vào TRƯỚC khi mở SSE ────────────────────────
   // Mở SSE rồi mới thấy đầu vào sai thì lỗi phải đi trong một khung sự kiện,
   // và app nhận HTTP 200 cho một yêu cầu hỏng. Sai sớm thì sai bằng mã HTTP.
+  /*
+   * ⚠️ KIỂU NÀY CHÍNH LÀ CHỖ LỖI ẨN NÁU. Nó liệt kê từng trường, nên một
+   * trường app GỬI LÊN mà quên khai ở đây sẽ bị vứt trong im lặng — `tsc`
+   * không kêu, không có lỗi lúc chạy, và tính năng đó chỉ đơn giản là không
+   * bao giờ hoạt động. `agentPhu`/`promptPhu` nằm im như vậy tới 15/09/2026.
+   *
+   * Thêm trường mới ở app thì PHẢI thêm cả ở đây VÀ ở chỗ dựng đầu vào bên
+   * dưới. Hai chỗ, không phải một.
+   */
   const body = req.body as {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
     ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
-    model?: unknown;
+    model?: unknown; agentPhu?: unknown; promptPhu?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -200,6 +209,37 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
       .slice(0, 40)
       .map((x) => ({ ten: String(x.ten).slice(0, 64), moTa: String(x.moTa).slice(0, 300) }))
     : undefined;
+
+  /*
+   * ⚠️ AGENT PHỤ CỦA DỰ ÁN — TRƯỚC 15/09/2026 HAI TRƯỜNG NÀY BỊ VỨT IM LẶNG.
+   *
+   * App đọc `.claude/agents/*.md` của dự án rồi gửi lên (`loop.ts:904` gửi
+   * `agentPhu`, `loop.ts:1293` gửi `promptPhu`), và `turn.ts` có đọc chúng để
+   * dựng prompt (`turn.ts:624-625`). Nhưng route này dựng đầu vào bằng cách
+   * LIỆT KÊ TỪNG TRƯỜNG, và hai cái đó không có trong danh sách — nên chúng
+   * rơi mất ngay tại đây.
+   *
+   * Hậu quả, và không có lỗi nào để thấy:
+   *   • Model KHÔNG BAO GIỜ biết dự án có những agent phụ nào ⇒ nó không gọi.
+   *   • Nếu nó có gọi theo `loai`, app đọc đúng thân file rồi gửi lên để bị
+   *     vứt ⇒ việc phụ chạy bằng prompt MẶC ĐỊNH. Người dùng viết một agent
+   *     phụ chuyên biệt, thấy nó "chạy", nhưng nó chưa từng được dùng.
+   *
+   * Trần chặt như `kyNang` vì cùng lý do: chúng vào thẳng prompt hệ thống.
+   */
+  const ap = body.agentPhu;
+  const agentPhu = Array.isArray(ap)
+    ? ap
+      .filter((x): x is { ten: string; moTa: string } => Boolean(x) && typeof x === 'object'
+        && typeof (x as any).ten === 'string' && typeof (x as any).moTa === 'string')
+      .slice(0, 40)
+      .map((x) => ({ ten: String(x.ten).slice(0, 64), moTa: String(x.moTa).slice(0, 300) }))
+    : undefined;
+
+  /* `promptPhu` là THÂN của một file agent phụ — dài hơn hẳn mô tả, nhưng chỉ
+     đi kèm đúng lượt chạy việc phụ đó chứ không lặp ở mọi lượt. */
+  const pp = body.promptPhu;
+  const promptPhu = typeof pp === 'string' && pp.trim() ? pp.slice(0, 20_000) : undefined;
 
   // ─── 2. Mở SSE ───────────────────────────────────────────────
   res.setHeader('Content-Type', 'text/event-stream');
@@ -235,6 +275,8 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         workspace,
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
         ...(kyNang?.length ? { kyNang } : {}),
+        ...(agentPhu?.length ? { agentPhu } : {}),
+        ...(promptPhu ? { promptPhu } : {}),
         mucNoLuc: body.mucNoLuc,
         model: body.model,
         laPhu: body.laPhu,

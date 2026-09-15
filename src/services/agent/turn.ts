@@ -616,6 +616,12 @@ export async function runAgentTurn(
   const system = buildSystemPrompt({
     capabilities,
     mucNoLuc,
+    /* Con số ĐI THEO prompt, không chép tay vào đó. Chính file này đã cảnh báo
+       "app cũ hiện 60 bước trong khi máy chủ đã đổi thành 100 là một lời nói
+       dối mà không ai phát hiện được" — prompt cũng là một cái app cũ như thế
+       nếu nó tự gõ lại số. */
+    tranBuoc: MAX_AGENT_STEPS,
+    tranViecPhu: TRAN_VIEC_PHU[mucNoLuc],
     laPhu,
     soToolMcp: toolMcp.length,
     ...(input.workspace ? { workspace: input.workspace } : {}),

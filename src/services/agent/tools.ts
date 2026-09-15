@@ -543,7 +543,8 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Agent phụ CHỈ ĐỌC (không sửa file, không chạy lệnh, không giao việc tiếp) và tối đa 10 bước. ' +
       'DÙNG KHI: cần dò nhiều hướng độc lập nhau trên repo lớn — ví dụ "tìm mọi nơi xử lý thanh toán" song song với "tìm mọi nơi ghi log". ' +
       'ĐỪNG DÙNG KHI: việc chỉ cần vài lần grep/read (tự làm rẻ hơn nhiều), hoặc khi các bước phụ thuộc nhau — agent phụ không thấy hội thoại của bạn và không nói chuyện được với nhau. ' +
-      'Tối đa 3 việc phụ cho MỘT câu hỏi của người dùng. Mỗi việc phụ tốn hạn mức như một lượt riêng, nên hãy viết nhiệm vụ THẬT CỤ THỂ: nói rõ cần tìm gì và muốn nhận lại gì.',
+      'Số việc phụ cho MỘT câu hỏi bị GIỚI HẠN theo mức nỗ lực người dùng chọn — con số đúng của lượt này nằm ở mục "TRẦN AGENT PHỤ" trong prompt, không phải ở đây. '
+      + 'Mỗi việc phụ tốn hạn mức như một lượt riêng, nên hãy viết nhiệm vụ THẬT CỤ THỂ: nói rõ cần tìm gì và muốn nhận lại gì.',
     parameters: {
       type: 'object',
       properties: {

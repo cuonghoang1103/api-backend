@@ -625,20 +625,22 @@ export function AgentMode({
     }
   };
 
-  // ─── Chưa đủ điều kiện ─────────────────────────────────────
-  if (!info.pro) return <MoiNangCap />;
-  if (!info.configured) {
-    return (
-      <div className="ct-empty">
-        <h1>{dich('Máy chủ chưa bật AI')}</h1>
-        <p>{dich('Chế độ Lập trình cần khoá AI ở máy chủ. Hãy thử lại sau.')}</p>
-        <div className="ct-actions">
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={napLai}>{dich('Thử lại')}</button>
-        </div>
-      </div>
-    );
-  }
-
+  /*
+   * ⚠️ KHÔNG `return` SỚM Ở ĐÂY — MỌI HOOK PHẢI CHẠY VÔ ĐIỀU KIỆN.
+   *
+   * Bản trước thoát ngay tại chỗ này khi `!info.pro` hoặc `!info.configured`,
+   * mà `useEffect`/`useCallback` lại nằm BÊN DƯỚI. Bấm "Thử lại" và máy chủ
+   * trả về đã bật AI ⇒ lần vẽ sau chạy NHIỀU HOOK HƠN lần trước ⇒ React ném
+   * *"Rendered more hooks than during the previous render"* và tháo sạch cây:
+   * MÀN HÌNH TRẮNG, ngay từ cú bấm vào đúng cái nút duy nhất trên màn đó.
+   *
+   * Cùng cơ chế khi `info.pro` chớp `false` rồi hồi (máy chủ trả 403 thoáng
+   * qua) — và đường đó không cần ai bấm gì cả.
+   *
+   * Bài học này đã có sẵn trong kho, ở `FloatingAIAssistant.tsx`: *"tính cờ
+   * bây giờ, gọi mọi hook vô điều kiện, rồi mới thoát ngay trước JSX"*. Đây
+   * là lần thứ hai nó cắn.
+   */
   const coThuMuc = Boolean(thuMuc?.path);
 
   useEffect(() => {
@@ -656,6 +658,21 @@ export function AgentMode({
     datNhap(chu);
     datTokenFile(coThuMuc ? docTokenFile(chu, caret) : null);
   }, [coThuMuc]);
+
+  // ─── Chưa đủ điều kiện ─────────────────────────────────────
+  // Thoát Ở ĐÂY, sau khi MỌI hook đã chạy — xem chú thích dài ở trên.
+  if (!info.pro) return <MoiNangCap />;
+  if (!info.configured) {
+    return (
+      <div className="ct-empty">
+        <h1>{dich('Máy chủ chưa bật AI')}</h1>
+        <p>{dich('Chế độ Lập trình cần khoá AI ở máy chủ. Hãy thử lại sau.')}</p>
+        <div className="ct-actions">
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={napLai}>{dich('Thử lại')}</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     /* ⛔ KHÔNG gắn `coThuMuc ? … : undefined` như bản cũ nữa.

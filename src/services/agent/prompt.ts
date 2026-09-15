@@ -172,6 +172,10 @@ export function buildSystemPrompt(opts: {
   promptPhu?: string;
   /** 'nhanh' | 'canBang' | 'ky' — người dùng chọn đào sâu tới đâu. */
   mucNoLuc?: string;
+  /** Trần bước THẬT của lượt này, do `turn.ts` tính. Đừng gõ lại số vào prompt. */
+  tranBuoc?: number;
+  /** Trần agent phụ THẬT của lượt này, do `turn.ts` tính. */
+  tranViecPhu?: number;
   /** Đây là agent PHỤ — prompt khác hẳn, xem `promptViecPhu`. */
   laPhu?: boolean;
   /** Số tool MCP người dùng đã cắm. 0 ⇒ không nhắc gì tới MCP trong prompt. */
@@ -368,8 +372,13 @@ export function buildSystemPrompt(opts: {
    • ĐỌC LẠI file bằng read_file ngay trước khi sửa. \`old_text\` phải khớp
      chính xác với nội dung ĐANG có trên đĩa, không phải với trí nhớ của bạn
      hay với thứ bạn vừa đề nghị ở lượt trước.
-   • Mỗi lời gọi sửa MỘT chỗ. Người dùng duyệt từng thay đổi, nên một lời gọi
-     ôm năm chỗ sửa buộc họ phải nuốt cả năm hoặc bỏ cả năm.
+   • MỘT chỗ sửa ⇒ \`edit_file\`. NHIỀU chỗ trong CÙNG một file ⇒
+     \`sua_nhieu_cho\` — một lời gọi, một thẻ duyệt, làm trọn gói hoặc
+     không làm gì. Đổi tên một biến ở 20 chỗ mà gọi \`edit_file\` 20 lần là
+     20 lượt qua cổng, mỗi lượt chở lại TOÀN BỘ hội thoại — đắt gấp hàng chục lần
+     mà kết quả y hệt.
+   • Chỉ tách thành nhiều lời gọi khi các chỗ sửa THẬT SỰ độc lập, tức người
+     dùng có lý do để đồng ý cái này mà từ chối cái kia.
    • GỌI TOOL CHÍNH LÀ CÁCH BẠN XIN PHÉP. App tự hiện bảng diff và nút duyệt
      ngay khi bạn gọi \`edit_file\`. TUYỆT ĐỐI ĐỪNG viết "bạn cho phép sửa chứ?"
      rồi ngồi đợi — trên màn hình KHÔNG có nút nào để trả lời câu đó, nên lượt
@@ -481,12 +490,41 @@ export function buildSystemPrompt(opts: {
      lý do, và lách qua shell là phản bội lòng tin vừa được cấp.
    • Lệnh chạy KHÔNG có bàn phím: thứ gì hỏi lại sẽ treo tới lúc hết giờ.
    • Lệnh hỏng thì ĐỌC đầu ra rồi sửa nguyên nhân. Đừng chạy lại y hệt để xem
-     nó có tự khỏi không.`);
+     nó có tự khỏi không.
+
+   ⚠️ LỆNH KHÔNG BAO GIỜ TỰ KẾT THÚC thì PHẢI chạy NỀN, đừng dùng
+   \`run_command\`. Máy chủ dev, \`tsc --watch\`, \`adb logcat\`, máy ảo, bản dựng
+   di động dài — \`run_command\` sẽ treo tới lúc hết giờ rồi trả "LỆNH BỊ
+   DỪNG", và bạn sẽ tưởng lệnh hỏng mà đi sửa mã đang đúng.
+     • \`chay_lenh_nen\`   — bật nó lên, trả về NGAY kèm một mã.
+     • \`doc_dau_ra_nen\` — đọc phần đầu ra MỚI. Gọi lại nhiều lần được.
+     • \`dung_lenh_nen\`  — tắt khi xong. Tắt đi, đừng để nó chạy mãi.
+   Nhịp đúng: bật nền → làm việc khác → đọc đầu ra → thấy "ready"/lỗi thì xử lý.`);
   } else {
     muc.push(`BẠN CHƯA CHẠY ĐƯỢC LỆNH
    Không có terminal ở phiên này. Vì KHÔNG chạy được test, đừng nói "đã sửa
    xong và hoạt động tốt" — nói rõ bạn đã đổi gì và người dùng nên chạy lệnh
    nào để kiểm.`);
+  }
+
+  /*
+   * `git_commit` và `tao_pr` đã cắm xong từ lâu — có tool, có chốt chặn nhánh
+   * chung, có lọc file bí mật, có thẻ duyệt — mà prompt nhắc tới chúng ĐÚNG 0
+   * LẦN (đo 15/09/2026). Hệ quả: model commit bằng `run_command git commit`,
+   * tức là đi vòng qua đúng cái chốt chặn được dựng lên để bảo vệ người dùng.
+   */
+  if (opts.capabilities.includes('git_write')) {
+    muc.push(`GHI VÀO GIT
+   • Commit thì gọi \`git_commit\`, ĐỪNG \`run_command git commit\`. Tool có
+     chốt chặn mà lệnh trần không có: nó chặn nhánh chung (main/master/develop/
+     production) và loại file bí mật kể cả khi .gitignore sót. Đi vòng qua shell
+     là tự tay gỡ hai cái chốt đó.
+   • ĐỪNG commit khi người dùng chưa bảo. Sửa xong là xong; commit là một quyết
+     định của họ, không phải bước dọn dẹp của bạn.
+   • Lời nhắn nói RÕ đã làm gì và VÌ SAO. Danh sách tên file thì họ đã thấy
+     trong diff rồi.
+   • \`tao_pr\` là hành động RA NGOÀI — người khác nhận thông báo. Chỉ gọi khi
+     người dùng nói thẳng là muốn mở PR, và chỉ sau khi đã commit xong.`);
   }
 
   if (opts.agentPhu?.length) {
@@ -584,17 +622,19 @@ ${g.noiDung}
   // Mức nỗ lực nói cho model biết NGÂN SÁCH của nó, thay vì để nó tự đoán. Không
   // nói thì "nhanh" và "kỹ" cho ra cùng một hành vi, chỉ khác lúc bị cắt ngang.
   if (opts.mucNoLuc === 'thap') {
+    const buoc = opts.tranBuoc ?? 8;
     muc.push(`NGÂN SÁCH: THẤP
-   Người dùng chọn mức THẤP — bạn chỉ có khoảng 8 bước. Đi thẳng vào câu hỏi,
-   đọc đúng chỗ cần đọc, trả lời sớm. Chưa đủ dữ kiện thì nói rõ là chưa đủ và
-   mời họ hỏi lại ở mức cao hơn, đừng cố nhồi mọi thứ vào 8 bước.`);
+   Người dùng chọn mức THẤP — bạn chỉ có khoảng ${buoc} bước. Đi thẳng vào câu
+   hỏi, đọc đúng chỗ cần đọc, trả lời sớm. Chưa đủ dữ kiện thì nói rõ là chưa
+   đủ và mời họ hỏi lại ở mức cao hơn, đừng cố nhồi mọi thứ vào ${buoc} bước.`);
   } else if (opts.mucNoLuc === 'cao') {
     muc.push(`NGÂN SÁCH: CAO
-   Người dùng chọn mức CAO — bạn có tới 60 bước. Được phép đọc rộng, đối chiếu
-   nhiều chỗ, chạy bộ kiểm rồi sửa tiếp cho tới khi xanh. Nhưng RỘNG không phải
-   là LAN MAN: mỗi bước vẫn phải trả lời được "bước này để làm gì".`);
+   Người dùng chọn mức CAO — bạn có tới ${opts.tranBuoc ?? 60} bước. Được phép
+   đọc rộng, đối chiếu nhiều chỗ, chạy bộ kiểm rồi sửa tiếp cho tới khi xanh.
+   Nhưng RỘNG không phải là LAN MAN: mỗi bước vẫn phải trả lời được "bước này
+   để làm gì".`);
   } else if (opts.mucNoLuc === 'ratCao' || opts.mucNoLuc === 'toiDa') {
-    const buoc = opts.mucNoLuc === 'toiDa' ? 160 : 100;
+    const buoc = opts.tranBuoc ?? (opts.mucNoLuc === 'toiDa' ? 160 : 100);
     muc.push(`NGÂN SÁCH: ${opts.mucNoLuc === 'toiDa' ? 'TỐI ĐA' : 'RẤT CAO'}
    Người dùng chọn mức rộng — bạn có tới ${buoc} bước, và họ đang trả tiền cho
    độ chắc chắn chứ không phải cho tốc độ. Việc đáng làm thêm ở mức này:
@@ -605,12 +645,12 @@ ${g.noiDung}
    Nhiều bước KHÔNG có nghĩa là phải dùng hết. Xong sớm thì trả lời sớm.`);
   } else if (opts.mucNoLuc === 'ultracode') {
     muc.push(`NGÂN SÁCH: ULTRACODE
-   Mức cao nhất — tới 260 bước và tối đa 10 agent phụ. Người dùng bật mức này
+   Mức cao nhất — tới ${opts.tranBuoc ?? 260} bước và tối đa ${opts.tranViecPhu ?? 10} agent phụ. Người dùng bật mức này
    khi họ muốn việc được làm CHO XONG HẲN, chấp nhận tốn hạn mức.
 
    Ở mức này hãy làm việc theo lối khác hẳn, không phải "giống mức Cao nhưng
    lâu hơn":
-   • CHIA VIỆC RA TRƯỚC. Công bố kế hoạch bằng \`ke_hoach\` ngay từ đầu, rồi
+   • CHIA VIỆC RA TRƯỚC. Công bố kế hoạch bằng \`cap_nhat_ke_hoach\` ngay từ đầu, rồi
      bám theo nó — 260 bước không có kế hoạch thì thành 260 bước đi lạc.
    • DÙNG AGENT PHỤ CHO VIỆC DÒ SONG SONG. Khi có nhiều hướng tìm hiểu ĐỘC LẬP
      nhau ("mọi nơi đụng tới thanh toán" / "mọi nơi ghi log"), giao mỗi hướng
@@ -623,8 +663,24 @@ ${g.noiDung}
      nói rõ là chưa có gì kiểm được, đừng để "trông có vẻ đúng" thay cho "đã
      chạy đúng".
 
-   ⚠️ Hạn mức 5 giờ mới là trần thật, không phải 260 bước. Tiêu hết là việc
+   ⚠️ Hạn mức 5 giờ mới là trần thật, không phải ${opts.tranBuoc ?? 260} bước. Tiêu hết là việc
    đứt giữa chừng, nên đừng lãng phí bước vào việc đọc lại thứ đã đọc.`);
+  }
+
+  /*
+   * Trần agent phụ ĐỔI THEO MỨC (1 / 3 / 3 / 5 / 6 / 10) nhưng mô tả tool là
+   * MỘT chuỗi tĩnh dùng chung cho mọi mức — nó không thể nói đúng con số. Nên
+   * con số thật phải nói ở ĐÂY, chỗ duy nhất biết mức của lượt này. Thiếu dòng
+   * này thì ở mức Thấp model tin nó có 3 việc phụ (mô tả tool nói thế), giao
+   * việc thứ hai, và ăn một lỗi mà nó không hiểu tại sao.
+   */
+  if (opts.capabilities.includes('subagent') && opts.tranViecPhu) {
+    muc.push(`TRẦN AGENT PHỤ
+   Lượt này bạn được giao tối đa ${opts.tranViecPhu} việc phụ (\`giao_viec_phu\`) — con số
+   này đổi theo mức nỗ lực người dùng chọn, và nó ĐÈ lên con số ghi trong mô tả
+   của tool. ${opts.tranViecPhu === 1
+     ? 'Một cái thôi, nên để dành cho hướng dò tốn công nhất; việc còn lại tự làm.'
+     : 'Hết trần là lời gọi tiếp theo bị từ chối, nên đừng tiêu vào việc mà vài lần grep là xong.'}`);
   }
 
   muc.push(`TRẢ LỜI

@@ -803,10 +803,30 @@ async function toolSuaNhieuCho(goc: string, args: Record<string, unknown>, ghi: 
     const { cu, moi } = sua[i] as { cu: string; moi: string };
     const soLan = demSoLan(hienTai, cu);
     if (soLan === 0) {
+      /*
+       * Chẩn đoán khoảng trắng như `edit_file` — và ở ĐÂY nó còn đáng hơn:
+       * một phép trượt là huỷ CẢ LÔ, nên "chép lại cho chính xác" mà không nói
+       * chính xác chỗ nào lệch thì model gửi lại nguyên lô và trượt lại y hệt.
+       * Lưu ý so trên `hienTai` (đã áp ${i} phép trước), không phải `goc0`.
+       */
+      const gan = timGanDung(hienTai, cu);
+      if (gan) {
+        return {
+          noiDung:
+            `LỖI: phép thứ ${i + 1} không khớp CHÍNH XÁC (đã áp ${i} phép trước đó), nhưng có đúng một `
+            + `đoạn khớp nếu bỏ qua khoảng trắng — ${gan.lyDo}. CẢ LÔ BỊ HUỶ, file giữ nguyên.\n\n`
+            + 'Đoạn THẬT trên đĩa (chép NGUYÊN VĂN vào "cu" của phép đó rồi gọi lại CẢ LÔ):\n'
+            + '```\n' + gan.doanThat + '\n```\n\n'
+            + '(Hiện khoảng trắng vô hình — → là tab, · là dấu cách thừa cuối dòng:)\n'
+            + '```\n' + hienKhoangTrang(gan.doanThat) + '\n```',
+          tomTat: `phép ${i + 1} lệch khoảng trắng — huỷ cả lô`,
+        };
+      }
       return {
         noiDung:
           `LỖI: phép thứ ${i + 1} không tìm thấy "cu" trong ${tuongDoi} (đã áp ${i} phép trước đó). `
-          + 'CẢ LÔ BỊ HUỶ, file giữ nguyên. Gọi read_file đọc lại rồi chép chính xác, kể cả thụt lề.',
+          + 'CẢ LÔ BỊ HUỶ, file giữ nguyên. Gọi read_file đọc lại rồi chép chính xác, kể cả thụt lề. '
+          + 'ĐỪNG dùng xxd/od để dò từng byte — read_file đã trả đúng nội dung trên đĩa.',
         tomTat: `phép ${i + 1} không khớp — huỷ cả lô`,
       };
     }

@@ -16,6 +16,18 @@ type Goal = 'pass' | 'good';
 
 interface Props {
   sections: CourseSection[];
+  /**
+   * Ép ngôn ngữ, bỏ qua hook.
+   *
+   * Thêm 15/09/2026 cho app desktop. App dùng lại chính component này, nhưng
+   * nó KHÔNG bọc `LocaleProvider` (đó là ngữ cảnh của Next), nên
+   * `useTranslation()` rơi vào lối lùi và trả `locale: 'en'` — tức lộ trình sẽ
+   * hiện tiêu đề TIẾNG ANH giữa một app tiếng Việt, trong khi phần còn lại của
+   * màn hình hiện tiếng Việt. Không lỗi nào, chỉ trông như hỏng.
+   *
+   * Tuỳ chọn và mặc định là giá trị của hook, nên WEB không đổi gì.
+   */
+  locale?: 'vi' | 'en';
   isCompleted: (lessonId: number) => boolean;
   currentLessonId?: number;
   overallProgress: number;
@@ -24,13 +36,14 @@ interface Props {
   onJump: (lesson: LessonDto) => void;
 }
 
-export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallProgress, courseId, courseCode, onJump }: Props) {
+export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallProgress, courseId, courseCode, onJump, locale: localeEp }: Props) {
   /* Tiêu đề chương/bài lưu dạng song ngữ `EN|||VI`. Quên tách là người dùng
      đọc thấy nguyên dấu `|||` giữa hai bản dịch — đã lọt ra production và
      người dùng báo ngày 08/09/2026. Lấy locale từ hook toàn cục (đúng cái
      nút EN/VN trên đầu trang bật) thay vì bắt nơi gọi truyền xuống, để
      component nào dùng lại cũng không thể quên. */
-  const { locale } = useTranslation();
+  const { locale: localeHook } = useTranslation();
+  const locale = localeEp ?? localeHook;
   // Số câu Exam Room ĐÃ gán theo từng chương (điền dần bằng script phân loại).
   // Fetch 1 lần/khoá; chương nào có câu thì hiện link "luyện chương này".
   const [counts, setCounts] = useState<Record<number, number>>({});

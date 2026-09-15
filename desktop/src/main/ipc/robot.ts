@@ -4,7 +4,7 @@
  * Mỏng có chủ ý — mọi quyết định về cửa sổ nằm ở `main/robotNoi.ts`.
  */
 import {
-  datNacCo, doiCo, doiKichThuoc, keoBatDau, keoToi, keoXong, moTrangChinh,
+  baoRobot, datNacCo, doiCo, doiKichThuoc, keoBatDau, keoToi, keoXong, moTrangChinh,
   dongRobot, hutLaiVaoMep, nacCoHienTai,
 } from '../robotNoi';
 import { Menu, BrowserWindow } from 'electron';
@@ -14,6 +14,17 @@ import { bangMenuRobot } from '../robotMenu';
 import { baoNhac } from '../robotTin';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from './auth';
+
+/**
+ * Bài học cửa sổ chính đang mở. Giữ ở main vì hai cửa sổ không dùng chung bộ
+ * nhớ, và cửa sổ robot có thể dựng SAU khi người dùng đã mở bài.
+ */
+let baiDangHoc: unknown = null;
+
+/** Cửa sổ robot vừa dựng xong ⇒ gửi lại ngữ cảnh hiện có. */
+export function guiLaiBaiDangHoc(): void {
+  if (baiDangHoc) baoRobot('robot:baiHoc', baiDangHoc);
+}
 import { getSettings, setSetting } from '../store';
 import { tachCau } from '../../renderer/features/odin/tachCau';
 import { handle } from './index';
@@ -99,6 +110,61 @@ export function registerRobotHandlers(): void {
    * Gọi từ MAIN chứ không từ cửa sổ robot: renderer của robot chạy ở origin
    * `app://` và mọi lời gọi từ đó phải qua CORS, trong khi main thì không.
    */
+  /*
+   * ============================================================
+   * GIA SƯ BÀI HỌC CHO CON ROBOT NỔI
+   * ============================================================
+   *
+   * Người dùng 15/09/2026 chốt: con robot của app cũng phải biết bài đang học,
+   * như trên web.
+   *
+   * ⚠️ VÌ SAO PHẢI ĐI VÒNG QUA MAIN. Trên web, trang bài học và con robot nằm
+   * CÙNG một tài liệu, nên một kho zustand là đủ. Trong app chúng là HAI CỬA
+   * SỔ ELECTRON riêng: khác tiến trình render, không dùng chung bộ nhớ, và cửa
+   * sổ robot còn chạy ở origin `app://` — không giữ phiên đăng nhập, vướng
+   * CORS. Nên main vừa là chỗ TRUNG CHUYỂN ngữ cảnh, vừa là chỗ gọi máy chủ.
+   *
+   * ⚠️ VÀ PHẢI NHỚ LẠI, không chỉ chuyển tiếp. Cửa sổ robot bật/tắt được, và
+   * nó có thể được dựng SAU khi người dùng đã mở bài. Chỉ phát đi một lần thì
+   * con robot mở sau sẽ không biết gì, và người dùng thấy nó "lúc được lúc
+   * không" — dạng lỗi khó tả lại nhất.
+   */
+  handle('academy:baiDangHoc', async (bai) => {
+    baiDangHoc = bai;
+    baoRobot('robot:baiHoc', bai);
+    return { ok: true };
+  });
+
+  handle('robot:hoiGiaSu', async ({ lessonId, chu, cacheKey, lichSu }) => {
+    const phien = readStoredSession();
+    if (!phien) return { chu: '', loi: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.' };
+    try {
+      /* Dùng đường KHÔNG stream (`/ai/ask`) chứ không phải `/ai/ask-stream`:
+         chảy chữ qua IPC cần thêm một kênh sự kiện và một bộ ghép mẩu ở đầu
+         kia, đổi lấy vài giây chờ ngắn hơn. Khung chat của robot vốn đã không
+         stream (`robot:hoi` cũng trả nguyên câu), nên giữ cùng một kiểu. */
+      const r = await fetch(`${API_ORIGIN}/api/v1/courses/lessons/${lessonId}/ai/ask`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${phien.sessionToken}`,
+        },
+        body: JSON.stringify({ question: chu, history: lichSu ?? [], cacheKey }),
+        signal: AbortSignal.timeout(240_000),
+      });
+      const j = await r.json().catch(() => null) as { data?: { answer?: string }; message?: string } | null;
+      if (!r.ok) {
+        /* Nói ra lý do THẬT của máy chủ. Nuốt thành một câu cố định thì lỗi
+           403 "cần Pro" và lỗi mạng trông giống hệt nhau, và người dùng không
+           biết phải làm gì tiếp. */
+        return { chu: '', loi: j?.message || `Máy chủ trả ${r.status}.` };
+      }
+      return { chu: j?.data?.answer ?? '' };
+    } catch (e) {
+      return { chu: '', loi: (e as Error)?.message || 'Không hỏi được.' };
+    }
+  });
+
   handle('robot:hoi', async ({ chu, model, phienId, anh }) => {
     const phien = readStoredSession();
     if (!phien) {

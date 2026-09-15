@@ -83,9 +83,9 @@ check('Buffer không lộ ra renderer', !isolation.hasBuffer);
    không còn gác gì nữa — người ta lướt qua nó. Thêm nhóm mới vào preload
    thì thêm cả vào đây, đó chính là điều phép kiểm này muốn ép. */
 const expected = [
-  'agent', 'app', 'auth', 'browser', 'duongCuaFile', 'manHinh', 'mau', 'music',
-  'notes', 'oauth', 'on', 'opencode', 'robot', 'settings', 'storage',
-  'terminal', 'update', 'xuongRemix',
+  'academy', 'agent', 'app', 'auth', 'browser', 'duongCuaFile', 'manHinh',
+  'mau', 'music', 'notes', 'oauth', 'on', 'opencode', 'robot', 'robotGiaSu',
+  'settings', 'storage', 'terminal', 'update', 'xuongRemix',
 ];
 console.log('\nCầu nối preload:');
 check('window.cuongthai tồn tại', isolation.bridgeKeys !== null);

@@ -197,3 +197,47 @@ export function useTienDo(goi: Goi | null, monId: number | null) {
 
   return { xong, danhDau, dangGhi };
 }
+
+/* ============================================================
+ * CHỨNG CHỈ
+ * ============================================================
+ *
+ * Máy chủ CẤP chứng chỉ ngay khi người học chạm 100% (xem `POST /:id/progress`
+ * — nó tạo `Certificate` ngay trong cùng lời gọi). Web hiện tấm băng chúc mừng
+ * kèm nút xem chứng chỉ và đổi mã giảm 10%; app thì trước bản này không có gì,
+ * nên người học xong cả khoá trên app cũng không biết mình đã có chứng chỉ.
+ */
+
+export interface ChungChi {
+  id: number;
+  certificateNumber: string;
+}
+
+export function useChungChi(goi: Goi | null, monId: number | null, daXongHet: boolean) {
+  const [cc, datCc] = useState<ChungChi | null>(null);
+
+  useEffect(() => {
+    datCc(null);
+    /* Chỉ hỏi khi ĐÃ xong hết: endpoint trả 404 khi chưa có, và gọi nó ở mọi
+       lần mở môn là mỗi màn hình đẻ một lỗi 404 trong log của máy chủ. */
+    if (!goi || !monId || !daXongHet) return undefined;
+    let con = true;
+    void goi<ChungChi>(`/api/v1/certificates/course/${monId}`)
+      .then((r) => { if (con && r?.certificateNumber) datCc(r); })
+      .catch(() => { /* 404 = chưa được cấp; không phải lỗi để báo */ });
+    return () => { con = false; };
+  }, [goi, monId, daXongHet]);
+
+  /** Đổi mã giảm 10%. Máy chủ làm việc này idempotent nên bấm lại vẫn ra mã cũ. */
+  const doiMa = async (): Promise<string | null> => {
+    if (!goi || !cc) return null;
+    try {
+      const r = await goi<{ code?: string }>(`/api/v1/certificates/${cc.id}/redeem`, { method: 'POST' });
+      return r?.code ?? null;
+    } catch {
+      return null;
+    }
+  };
+
+  return { chungChi: cc, doiMa };
+}

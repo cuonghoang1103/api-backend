@@ -678,3 +678,81 @@ button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
 
 /* Công thức khối: cuộn ngang thay vì tràn ra khỏi bong bóng. */
 .rb-may .ct-toan-khoi { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+
+/* ── Gia sư bài học trong khung robot ────────────────────── */
+/* Thanh ngữ cảnh: bài nào đang được hỏi. Không có nó thì một câu trả lời đúng
+   cũng trông như trả lời nhầm, vì người đọc không biết "bài này" là bài gì. */
+.rb-bai {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.14);
+  background: rgba(34, 211, 238, 0.06);
+}
+.rb-bai-ten {
+  flex: 1;
+  min-width: 0;
+  /* Tên bài dài không được kéo giãn cửa sổ robot — nó là cửa sổ nhỏ, cố định. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+.rb-bai-ma {
+  flex: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.rb-goiy { display: flex; flex-direction: column; gap: 8px; }
+.rb-goiy-ds { display: flex; flex-direction: column; gap: 6px; }
+.rb-goiy-ds > button,
+.rb-slide-ds > button {
+  padding: 7px 10px;
+  border: 1px solid rgba(34, 211, 238, 0.16);
+  border-radius: 10px;
+  background: #0d1117;
+  color: #cbd5e1;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+.rb-goiy-ds > button:hover:not(:disabled),
+.rb-slide-ds > button:hover:not(:disabled) {
+  border-color: rgba(34, 211, 238, 0.45);
+  background: rgba(34, 211, 238, 0.07);
+}
+.rb-goiy-ds > button:disabled,
+.rb-slide-ds > button:disabled { opacity: 0.4; cursor: default; }
+
+.rb-slide > summary {
+  padding: 6px 2px;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  list-style: none;
+}
+.rb-slide > summary::-webkit-details-marker { display: none; }
+.rb-slide > summary::before { content: '📑 '; }
+.rb-slide[open] > summary { color: #22d3ee; }
+/* Một bài ghép ba bộ slide có thể tới 60 mục — cuộn trong khung, đừng đẩy ô
+   nhập xuống khỏi cửa sổ. */
+.rb-slide-ds {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.rb-slide-ds > button > em {
+  font-style: normal;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  color: #22d3ee;
+}

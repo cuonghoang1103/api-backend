@@ -12960,3 +12960,34 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
    cần chừa khoảng cách chứ không vẽ lại nền — vẽ đè là hai lớp nền chồng nhau. */
 .ct-hv-quiz,
 .ct-hv-pdf { margin: 18px 0; }
+
+/* ── Học viện: chứng chỉ ────────────────────────────────── */
+.ct-hv-chungchi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 18px;
+  padding: 16px 18px;
+  border: 1px solid color-mix(in srgb, var(--ct-ok) 35%, transparent);
+  border-radius: var(--ct-radius);
+  background: color-mix(in srgb, var(--ct-ok) 8%, transparent);
+  color: var(--ct-text);
+}
+.ct-hv-chungchi > svg { color: var(--ct-ok); flex: none; }
+.ct-hv-chungchi-chu {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  /* `flex: 1 1 260px` chứ không `flex: 1`: ở cửa sổ hẹp khối chữ phải xuống
+     dòng nguyên khối thay vì bị bóp còn một cột chữ dọc. */
+  flex: 1 1 260px;
+  min-width: 0;
+}
+.ct-hv-chungchi-chu > span { font-size: 13px; color: var(--ct-text-muted); }
+.ct-hv-chungchi-nut { display: flex; flex-wrap: wrap; gap: 8px; }
+.ct-hv-chungchi-nut code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 700;
+  color: var(--ct-ok);
+}

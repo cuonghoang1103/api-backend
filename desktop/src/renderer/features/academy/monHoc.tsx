@@ -13,7 +13,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import DOMPurify from 'dompurify';
 import {
   ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronRight, CloudOff, ExternalLink,
-  CheckCircle2, FileText, Layers3, Lock, PlayCircle,
+  Award, CheckCircle2, FileText, Layers3, Lock, PlayCircle,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
@@ -39,7 +39,9 @@ import { ChapterQuiz } from '@/components/academy/ChapterQuiz';
  */
 import LessonQuizPlayer, { type QuizData } from '@/app/courses/[slug]/learn/LessonQuizPlayer';
 import LessonPdfViewer from '@/app/courses/[slug]/learn/LessonPdfViewer';
-import { duongTaiLieu, laBaiQuiz, locPdf, useChiTietBai, useTienDo, type TuyChonGoi } from './chiTietBai';
+import { CourseRoadmapPanel } from '@/components/academy/CourseRoadmap';
+import { docSlide } from '@/components/academy/docSlide';
+import { duongTaiLieu, laBaiQuiz, locPdf, useChiTietBai, useChungChi, useTienDo, type TuyChonGoi } from './chiTietBai';
 import { useDich } from '../../i18n';
 
 export interface Mon {
@@ -143,7 +145,7 @@ export function ChiTietMon({
      đang ở đâu trong cây. */
   nhanQuayLai?: string;
 }) {
-  const { dich } = useDich();
+  const { dich, nn } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -160,6 +162,7 @@ export function ChiTietMon({
     [api],
   );
   const tienDo = useTienDo(goiApi, mon?.id ?? null);
+  const [maGiam, datMaGiam] = useState<string | null>(null);
 
   useEffect(() => {
     if (userId === null || !api) return;
@@ -196,6 +199,7 @@ export function ChiTietMon({
   const tongBai = muc.reduce((n, x) => n + (x.lessons ?? []).length, 0);
   const soXong = muc.reduce(
     (n, x) => n + (x.lessons ?? []).filter((b) => tienDo.xong.has(b.id)).length, 0);
+  const { chungChi, doiMa } = useChungChi(goiApi, mon?.id ?? null, tongBai > 0 && soXong >= tongBai);
 
   if (baiMo && mon) {
     /* Danh sách PHẲNG theo đúng thứ tự hiển thị: nối bài của từng mục lại.
@@ -285,6 +289,62 @@ export function ChiTietMon({
           <h2>{dich('Cần có trước')}</h2>
           <ul>{canCo.map((x, i) => <li key={i}>{x}</li>)}</ul>
         </section>
+      )}
+
+      {/* ── CHỨNG CHỈ ──
+          Máy chủ cấp ngay khi chạm 100% (cùng lời gọi lưu tiến độ). Trước bản
+          này app không hiện gì, nên người học xong cả khoá trên app cũng
+          không biết mình đã có chứng chỉ. */}
+      {chungChi && (
+        <section className="ct-hv-chungchi">
+          <Award size={22} aria-hidden />
+          <div className="ct-hv-chungchi-chu">
+            <strong>{dich('Chúc mừng! Bạn đã hoàn thành khoá học')}</strong>
+            <span>{dich('Chứng chỉ đã được cấp — xem, in, và đổi mã giảm 10% cho khoá tiếp theo.')}</span>
+          </div>
+          <div className="ct-hv-chungchi-nut">
+            {/* Trang chứng chỉ là trang WEB (có bố cục để in) — mở ra trình
+                duyệt thay vì dựng lại một bản in trong app. */}
+            <button type="button" className="ct-btn"
+              onClick={() => moNgoai(`${WEB}/certificates/${chungChi.certificateNumber}`)}>
+              {dich('Xem chứng chỉ')}
+            </button>
+            {maGiam ? (
+              <button type="button" className="ct-btn ct-btn-ghost"
+                onClick={() => void navigator.clipboard?.writeText(maGiam)}
+                title={dich('Bấm để chép mã')}>
+                {dich('Mã giảm 10%')}: <code>{maGiam}</code>
+              </button>
+            ) : (
+              <button type="button" className="ct-btn ct-btn-ghost"
+                onClick={() => void doiMa().then((m) => { if (m) datMaGiam(m); })}>
+                {dich('Lấy mã giảm 10%')}
+              </button>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* ── LỘ TRÌNH HỌC ──
+          Web có, app thì chưa. Nó cho thấy cả đường đi của môn: chương nào
+          xong, chương nào đang dở, và chương nào có đề luyện.
+
+          `locale` truyền thẳng: app KHÔNG bọc `LocaleProvider`, nên hook bên
+          trong component rơi về 'en' và tiêu đề chương sẽ hiện tiếng Anh giữa
+          màn hình tiếng Việt — không lỗi nào, chỉ trông như hỏng. */}
+      {tongBai > 0 && (
+        <CourseRoadmapPanel
+          sections={muc}
+          isCompleted={(id: number) => tienDo.xong.has(id)}
+          overallProgress={Math.round((soXong / tongBai) * 100)}
+          courseId={mon.id}
+          {...(mon.courseCode ? { courseCode: mon.courseCode } : {})}
+          onJump={(b: { id: number }) => {
+            const bai = muc.flatMap((x) => x.lessons ?? []).find((y) => y.id === b.id);
+            if (bai) setBaiMo(bai);
+          }}
+          locale={nn === 'vi' ? 'vi' : 'en'}
+        />
       )}
 
       <section className="ct-hv-muc-ds">
@@ -383,6 +443,30 @@ function DocBai({
     [api],
   );
   const ct = useChiTietBai(goi, mon.id ?? null, bai.id);
+
+  /*
+   * BÁO SANG CỬA SỔ ROBOT NỔI đang học bài nào.
+   *
+   * ⚠️ Không dùng chung `giaSuBaiStore` được như trên web: robot của app là
+   * một CỬA SỔ ELECTRON RIÊNG, khác tiến trình render, không thấy kho zustand
+   * của cửa sổ này. Phải đi vòng qua main — xem `academy:baiDangHoc`.
+   *
+   * Slide đọc từ chính nội dung bài, giống hệt web, để con robot cũng có mục
+   * "hỏi theo slide".
+   */
+  useEffect(() => {
+    const ds = docSlide(ct?.content ?? bai.content ?? '');
+    void window.cuongthai?.academy.baiDangHoc({
+      lessonId: bai.id,
+      ...(mon.courseCode ? { courseCode: mon.courseCode } : {}),
+      courseTitle: chuVi(mon.title),
+      lessonTitle: chuVi(bai.title),
+      ...(ds.length ? { slides: ds } : {}),
+    });
+    /* Rời trang bài học ⇒ robot về trợ lý thường. Thiếu bước dọn này thì nó
+       vẫn nhận mình là gia sư của một bài người dùng đã đóng từ lâu. */
+    return () => { void window.cuongthai?.academy.baiDangHoc(null); };
+  }, [bai.id, bai.title, bai.content, ct?.content, mon.courseCode, mon.title]);
 
   /*
    * ĐỀ LUYỆN CUỐI CHƯƠNG.

@@ -332,3 +332,25 @@ declare module '@/app/courses/[slug]/learn/LessonPdfViewer' {
   const LessonPdfViewer: ComponentType<{ url: string; title?: string }>;
   export default LessonPdfViewer;
 }
+
+/**
+ * Lộ trình khoá học — dùng lại của web.
+ *
+ * `locale` là tham số thêm cho app: app KHÔNG bọc `LocaleProvider` (ngữ cảnh
+ * của Next) nên hook bên trong rơi về `'en'`, và lộ trình sẽ hiện tiêu đề
+ * tiếng Anh giữa màn hình tiếng Việt. Truyền thẳng ngôn ngữ của app vào.
+ */
+declare module '@/components/academy/CourseRoadmap' {
+  import type { ComponentType } from 'react';
+  export const CourseRoadmapPanel: ComponentType<{
+    sections: unknown[];
+    isCompleted: (lessonId: number) => boolean;
+    currentLessonId?: number;
+    overallProgress: number;
+    courseId: number;
+    courseCode?: string;
+    onJump: (lesson: { id: number }) => void;
+    locale?: 'vi' | 'en';
+    defaultOpen?: boolean;
+  }>;
+}

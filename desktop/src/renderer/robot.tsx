@@ -596,6 +596,23 @@ const TOI_DA_ANH = 4;
 
 interface Luot { toi: boolean; chu: string; anh?: string[] }
 
+/** Bài cửa sổ chính đang mở — main chuyển sang qua `robot:baiHoc`. */
+interface BaiHoc {
+  lessonId: number;
+  courseCode?: string;
+  courseTitle?: string;
+  lessonTitle?: string;
+  slides?: { so: number; tong: number; bo: string; ten: string }[];
+}
+
+/** Gợi ý mở màn của gia sư — CÙNG `key` với web để dùng chung cache câu trả lời. */
+const GOI_Y_BAI: { key: string; q: string }[] = [
+  { key: 'start', q: 'Bài này học gì? Tôi nên bắt đầu từ đâu?' },
+  { key: 'exercises', q: 'Cho tôi 3 bài tập luyện + đáp án để tự kiểm tra.' },
+  { key: 'prereq', q: 'Kiến thức nền nào cần có trước khi học bài này?' },
+  { key: 'hard', q: 'Giảng lại phần khó nhất của bài một cách dễ hiểu.' },
+];
+
 function KhungChat({ onDong }: { onDong: () => void }) {
   const [nhap, datNhap] = useState('');
   const [luot, datLuot] = useState<Luot[]>([]);
@@ -609,6 +626,29 @@ function KhungChat({ onDong }: { onDong: () => void }) {
   const [su, datSu] = useState<Array<{ id: string; ten: string; luc: string; so: number }>>([]);
   const [bao, datBao] = useState<string | null>(null);
   const cuonRef = useRef<HTMLDivElement>(null);
+
+  /*
+   * ── GIA SƯ CỦA BÀI ĐANG HỌC ──
+   *
+   * Cửa sổ chính báo sang qua main (`robot:baiHoc`). Có bài ⇒ mặc định mở
+   * thẳng chế độ gia sư: đó là lý do người ta bấm vào robot lúc đang học.
+   * Rời trang bài học ⇒ main gửi `null` và khung tự về trợ lý thường, nên
+   * không cần dọn cờ nào.
+   */
+  const [bai, datBai] = useState<BaiHoc | null>(null);
+  const [muonChung, datMuonChung] = useState(false);
+  const cheDoGiaSu = !!bai && !muonChung;
+
+  useEffect(() => {
+    const bo = window.cuongthai?.on('robot:baiHoc', (b) => {
+      const moi = (b ?? null) as BaiHoc | null;
+      datBai(moi);
+      /* Đổi sang bài KHÁC ⇒ vứt hội thoại cũ: hỏi tiếp trên ngữ cảnh bài cũ
+         thì gia sư trả lời về một bài người dùng đã rời. */
+      datLuot((c) => (moi && moi.lessonId !== bai?.lessonId ? [] : c));
+    });
+    return () => { bo?.(); };
+  }, [bai?.lessonId]);
 
   useEffect(() => {
     const el = cuonRef.current;
@@ -675,6 +715,33 @@ function KhungChat({ onDong }: { onDong: () => void }) {
     datMoSu(false);
   };
 
+  /**
+   * Hỏi gia sư một câu CÓ SẴN (chip gợi ý hoặc một slide).
+   *
+   * `cacheKey` là chỗ tiết kiệm lớn: mọi người học bấm cùng chip trên cùng bài
+   * đều nhận CÙNG một câu trả lời lấy từ cache, tức thì và không tốn thêm lượt
+   * gọi model. Cùng khoá với web nên hai bên dùng chung một kho cache.
+   */
+  const hoiNhanh = async (cau: string, cacheKey?: string): Promise<void> => {
+    if (!bai || dangCho) return;
+    datLuot((c) => [...c, { toi: true, chu: cau }]);
+    datDangCho(true);
+    try {
+      const g = await window.cuongthai?.robotGiaSu.hoi({
+        lessonId: bai.lessonId, chu: cau, ...(cacheKey ? { cacheKey } : {}),
+      });
+      datLuot((c) => [...c, { toi: false, chu: g?.chu || (g?.loi ?? dich('Không nhận được trả lời.')) }]);
+    } finally {
+      datDangCho(false);
+    }
+  };
+
+  const hoiSlide = (sl: { so: number; tong: number; bo: string; ten: string }): Promise<void> => hoiNhanh(
+    `Giảng kỹ slide ${sl.so}${sl.tong ? `/${sl.tong}` : ''} của bộ ${sl.bo}`
+      + `${sl.ten ? ` (“${sl.ten}”)` : ''} trong bài này: ý chính là gì, vì sao nó quan trọng, và một ví dụ dễ hiểu.`,
+    `slide:${sl.bo}:${sl.so}`.slice(0, 40),
+  );
+
   const gui = async (): Promise<void> => {
     const t = nhap.trim();
     if ((!t && anh.length === 0) || dangCho) return;
@@ -685,6 +752,20 @@ function KhungChat({ onDong }: { onDong: () => void }) {
     datLuot((c) => [...c, { toi: true, chu: t || dich('(ảnh)'), anh: keo }]);
     datDangCho(true);
     try {
+      if (cheDoGiaSu && bai) {
+        /* Gia sư đi ĐƯỜNG KHÁC: endpoint của bài, có sẵn trọn nội dung bài
+           trong ngữ cảnh. Gửi kèm lịch sử để hỏi tiếp có mạch. */
+        const g = await window.cuongthai?.robotGiaSu.hoi({
+          lessonId: bai.lessonId,
+          chu: t,
+          lichSu: luot.slice(-8).map((x) => ({
+            role: x.toi ? ('user' as const) : ('assistant' as const),
+            content: x.chu,
+          })),
+        });
+        datLuot((c) => [...c, { toi: false, chu: g?.chu || (g?.loi ?? dich('Không nhận được trả lời.')) }]);
+        return;
+      }
       const r = await window.cuongthai?.robot.hoi(t || dich('Xem ảnh này giúp mình.'), {
         model: bac,
         phienId,
@@ -711,19 +792,35 @@ function KhungChat({ onDong }: { onDong: () => void }) {
   return (
     <div className="rb-chat">
       <div className="rb-chat-dau">
-        <strong>{dich('Trợ lý')}</strong>
-        {/* Bậc model ngay trên thanh: đổi bậc là việc làm GIỮA cuộc trò chuyện
-            (câu này khó, nâng lên Max), không phải việc cài đặt một lần. */}
-        <select
-          className="rb-bac"
-          value={bac}
-          onChange={(e) => doiBac(e.target.value)}
-          title={dich('Bậc model')}
-        >
-          {BAC.map((b) => <option key={b.id} value={b.id}>{b.ten}</option>)}
-        </select>
+        <strong>{cheDoGiaSu ? dich('Gia sư bài học') : dich('Trợ lý')}</strong>
+        {/* Bậc model CHỈ có nghĩa với trợ lý chung. Gia sư bài học chạy model
+            riêng do máy chủ phân theo việc (`course_tutor`), nên để cái chọn
+            bậc ở đó là một cái nút không đổi được gì. */}
+        {!cheDoGiaSu && (
+          <select
+            className="rb-bac"
+            value={bac}
+            onChange={(e) => doiBac(e.target.value)}
+            title={dich('Bậc model')}
+          >
+            {BAC.map((b) => <option key={b.id} value={b.id}>{b.ten}</option>)}
+          </select>
+        )}
         <div className="rb-chat-nut">
-          <button type="button" onClick={() => void moLichSu()} title={dich('Lịch sử trò chuyện')}>{dich('Lịch sử')}</button>
+          {/* Chuyển chế độ — chỉ hiện khi ĐANG mở một bài. Không có bài thì nút
+              này là lời hứa suông, bấm vào chẳng đổi gì. */}
+          {bai && (
+            <button
+              type="button"
+              onClick={() => { datMuonChung((v) => !v); datLuot([]); }}
+              title={cheDoGiaSu ? dich('Chuyển sang trợ lý chung') : dich('Quay lại gia sư của bài đang học')}
+            >
+              {cheDoGiaSu ? dich('Trợ lý') : dich('Gia sư')}
+            </button>
+          )}
+          {!cheDoGiaSu && (
+            <button type="button" onClick={() => void moLichSu()} title={dich('Lịch sử trò chuyện')}>{dich('Lịch sử')}</button>
+          )}
           <button type="button" onClick={cuocMoi} title={dich('Bắt đầu cuộc mới')}>{dich('Mới')}</button>
           <button
             type="button"
@@ -749,8 +846,52 @@ function KhungChat({ onDong }: { onDong: () => void }) {
         </div>
       )}
 
+      {/* Thanh ngữ cảnh — người học phải thấy NGAY robot đang nói về bài nào.
+          Thiếu nó thì hỏi "chỗ này khó quá" mà không biết "chỗ này" là bài gì,
+          và một câu trả lời đúng cũng trông như trả lời nhầm. */}
+      {cheDoGiaSu && bai && (
+        <div className="rb-bai">
+          <span className="rb-bai-ten" title={bai.lessonTitle ?? ''}>{bai.lessonTitle ?? dich('Bài đang học')}</span>
+          {bai.courseCode && <span className="rb-bai-ma">{bai.courseCode}</span>}
+        </div>
+      )}
+
       <div className="rb-chat-than" ref={cuonRef}>
-        {luot.length === 0 && !moSu && (
+        {luot.length === 0 && !moSu && cheDoGiaSu && (
+          <div className="rb-goiy">
+            <p className="rb-chat-trong">
+              {dich('Hỏi bất cứ điều gì về bài này — chỗ chưa hiểu, kiến thức nền, hay xin bài tập luyện.')}
+            </p>
+            {/* Hỏi theo SLIDE: bấm một cái thay vì tả lại slide bằng chữ. Phần
+                giảng của mỗi slide đã nằm sẵn trong nội dung bài mà gia sư
+                được đưa trọn, nên chỉ cần nêu số là đủ. */}
+            {!!bai?.slides?.length && (
+              <details className="rb-slide">
+                <summary>{dichP('Hỏi theo slide ({n})', { n: bai.slides.length })}</summary>
+                <div className="rb-slide-ds">
+                  {bai.slides.map((sl) => (
+                    <button
+                      key={`${sl.bo}#${sl.so}`}
+                      type="button"
+                      disabled={dangCho}
+                      onClick={() => void hoiSlide(sl)}
+                    >
+                      <em>{sl.bo} {sl.so}{sl.tong ? `/${sl.tong}` : ''}</em> {sl.ten || '—'}
+                    </button>
+                  ))}
+                </div>
+              </details>
+            )}
+            <div className="rb-goiy-ds">
+              {GOI_Y_BAI.map((g) => (
+                <button key={g.key} type="button" disabled={dangCho} onClick={() => void hoiNhanh(g.q, g.key)}>
+                  {g.q}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {luot.length === 0 && !moSu && !cheDoGiaSu && (
           <p className="rb-chat-trong">
             {dich('Hỏi nhanh một câu, dán ảnh vào cũng được. Bấm Lịch sử để mở lại cuộc cũ.')}
           </p>

@@ -1484,6 +1484,41 @@ export const INVOKE_CHANNELS = {
    * Và quan trọng hơn: người dùng muốn CHỤP RỒI DÁN VÀO CHAT, không phải nhờ
    * AI chạy lệnh hộ — đó là hai việc khác nhau.
    */
+  /**
+   * Cửa sổ CHÍNH báo đang mở bài học nào. Main nhớ lại và chuyển tiếp sang cửa
+   * sổ robot; nhớ để cửa sổ robot mở SAU vẫn nhận được (nó là cửa sổ sống lâu
+   * nhất nhưng có thể bị tắt/bật lại).
+   */
+  'academy:baiDangHoc': z.object({
+    lessonId: z.number().int().positive(),
+    courseCode: z.string().max(40).optional(),
+    courseTitle: z.string().max(300).optional(),
+    lessonTitle: z.string().max(300).optional(),
+    slides: z.array(z.object({
+      so: z.number().int(),
+      tong: z.number().int(),
+      bo: z.string().max(60),
+      ten: z.string().max(200),
+    })).max(200).optional(),
+  }).nullable(),
+
+  /**
+   * Cửa sổ ROBOT hỏi gia sư của bài đang học.
+   *
+   * ⚠️ PHẢI đi qua main như `robot:hoi`. Cửa sổ robot chạy ở origin `app://`,
+   * không giữ phiên đăng nhập và vướng CORS — gọi thẳng máy chủ từ đó là 401
+   * hoặc bị chặn, và hỏng theo kiểu khó đoán nhất.
+   */
+  'robot:hoiGiaSu': z.object({
+    lessonId: z.number().int().positive(),
+    chu: z.string().min(1).max(4000),
+    cacheKey: z.string().max(40).optional(),
+    lichSu: z.array(z.object({
+      role: z.enum(['user', 'assistant']),
+      content: z.string().max(20000),
+    })).max(20).optional(),
+  }),
+
   'manHinh:nguon': null,
   /** Chụp một nguồn ở độ phân giải thật. `id` lấy từ `manHinh:nguon`. */
   'manHinh:chup': z.object({ id: z.string().min(1).max(200) }),
@@ -1672,6 +1707,14 @@ export const EVENT_CHANNELS = [
    * đổi trừ con robot — mà nó lại là cửa sổ sống lâu nhất, hiếm khi dựng lại.
    */
   'app:doiNgonNgu',
+  /**
+   * BÀI HỌC đang mở ở cửa sổ chính — để con robot nổi thành gia sư của bài đó.
+   *
+   * Trên web hai thứ này ở CÙNG một trang nên chỉ cần một kho zustand. Trong
+   * app chúng là HAI CỬA SỔ ELECTRON riêng, không dùng chung bộ nhớ, nên phải
+   * đi vòng qua main. `null` = vừa rời trang bài học ⇒ robot về trợ lý thường.
+   */
+  'robot:baiHoc',
   /** Người dùng vừa tắt robot từ menu chuột phải. */
   'robot:tat',
   /**
@@ -1961,6 +2004,30 @@ export interface DesktopBridge {
       contextToken: number;
       outputToken: number;
     }): Promise<{ ok: true; duongDan: string; soModel: number }>;
+  };
+
+  academy: {
+    /**
+     * Báo main biết cửa sổ chính đang mở bài học nào, để con robot nổi thành
+     * gia sư của đúng bài đó. `null` = vừa rời trang bài học.
+     */
+    baiDangHoc(b: {
+      lessonId: number;
+      courseCode?: string;
+      courseTitle?: string;
+      lessonTitle?: string;
+      slides?: { so: number; tong: number; bo: string; ten: string }[];
+    } | null): Promise<{ ok: boolean }>;
+  };
+
+  robotGiaSu: {
+    /** Hỏi gia sư của bài đang học, từ cửa sổ robot. Đi vòng qua main — xem lược đồ. */
+    hoi(p: {
+      lessonId: number;
+      chu: string;
+      cacheKey?: string;
+      lichSu?: { role: 'user' | 'assistant'; content: string }[];
+    }): Promise<{ chu: string; loi?: string }>;
   };
 
   manHinh: {

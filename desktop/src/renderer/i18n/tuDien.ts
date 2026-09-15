@@ -827,6 +827,25 @@ export const TU_DIEN: Record<string, string> = {
     'Drop a file or folder here — the agent will be able to read it',
   'Chưa có file nào để hoàn tác trong việc này.': 'No files to undo in this task.',
 
+  // ── Học viện: chứng chỉ ─────────────────────────────────
+  'Chúc mừng! Bạn đã hoàn thành khoá học': 'Congratulations — you finished the course',
+  'Chứng chỉ đã được cấp — xem, in, và đổi mã giảm 10% cho khoá tiếp theo.':
+    'Your certificate is ready — view it, print it, and claim a 10% discount code for your next course.',
+  'Xem chứng chỉ': 'View certificate',
+  'Lấy mã giảm 10%': 'Get 10% discount code',
+  'Mã giảm 10%': '10% discount code',
+  'Bấm để chép mã': 'Click to copy the code',
+
+  // ── Robot: gia sư bài học ───────────────────────────────
+  'Gia sư bài học': 'Lesson tutor',
+  'Gia sư': 'Tutor',
+  'Bài đang học': 'Current lesson',
+  'Chuyển sang trợ lý chung': 'Switch to the general assistant',
+  'Quay lại gia sư của bài đang học': 'Back to the tutor for this lesson',
+  'Hỏi bất cứ điều gì về bài này — chỗ chưa hiểu, kiến thức nền, hay xin bài tập luyện.':
+    'Ask anything about this lesson — what you are stuck on, background knowledge, or practice exercises.',
+  'Hỏi theo slide ({n})': 'Ask about a slide ({n})',
+
   // ── Học viện: tiến độ · luồng video ─────────────────────
   'bài': 'lessons',
   'Chọn bản video': 'Choose a video version',

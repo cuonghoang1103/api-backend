@@ -75,6 +75,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'robot:tin',
   'robot:coDoi',
   'app:doiNgonNgu',
+  'robot:baiHoc',
   'robot:tat',
   'robot:viec',
   'oauth:xong',
@@ -256,6 +257,20 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('opencode:vietCauHinh', p) as Promise<{
         ok: true; duongDan: string; soModel: number;
       }>,
+  },
+  academy: {
+    /** Cửa sổ chính báo đang mở bài nào — main chuyển tiếp sang cửa sổ robot. */
+    baiDangHoc: (b: {
+      lessonId: number; courseCode?: string; courseTitle?: string; lessonTitle?: string;
+      slides?: { so: number; tong: number; bo: string; ten: string }[];
+    } | null) => ipcRenderer.invoke('academy:baiDangHoc', b) as Promise<{ ok: boolean }>,
+  },
+  robotGiaSu: {
+    /** Hỏi gia sư của bài đang học, từ cửa sổ robot. Đi vòng qua main. */
+    hoi: (p: {
+      lessonId: number; chu: string; cacheKey?: string;
+      lichSu?: { role: 'user' | 'assistant'; content: string }[];
+    }) => ipcRenderer.invoke('robot:hoiGiaSu', p) as Promise<{ chu: string; loi?: string }>,
   },
   manHinh: {
     /** Màn hình + cửa sổ đang mở, kèm ảnh nhỏ để chọn. Xem main/ipc/manHinh.ts. */

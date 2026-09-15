@@ -186,3 +186,39 @@ describe('kiểm tệp đã tải trọn', () => {
     await rm(g, { recursive: true, force: true });
   });
 });
+
+/**
+ * ⚠️⚠️ LẦN CHẠY ĐẦU CỦA TỆP VỪA GIẢI NÉN RẤT LÂU TRÊN macOS.
+ *
+ * Đo thật 15/09/2026 trên gói `llama-b10976-bin-macos-arm64.tar.gz`:
+ *
+ *     lần chạy đầu : 22,09 giây
+ *     lần thứ hai  :  0,078 giây   (nhanh hơn 283 lần)
+ *
+ * Nguyên nhân không phải quarantine — tệp tải bằng `fetch` không mang
+ * `com.apple.quarantine`; nó là tệp ký kiểu `adhoc, linker-signed` nên macOS
+ * quét mã độc ở lần chạy đầu.
+ *
+ * Với trần cũ 20 giây, phép đo thiết bị LUÔN quá hạn ở lần cài đầu, trả về
+ * "không có GPU", và chỗ gọi xoá luôn bộ chạy — macOS chỉ có MỘT gói, không có
+ * gói lùi, nên cài hỏng hẳn. 100% máy Mac, và gần như không tái hiện được vì
+ * lần chạy thứ hai đã nhanh.
+ */
+describe('quá hạn KHÁC với không có GPU', () => {
+  it('trần đo thiết bị phải chịu được lần chạy đầu 22 giây của macOS', async () => {
+    const ma = await import('node:fs/promises')
+      .then((fs) => fs.readFile(join(import.meta.dirname, 'quetMay.ts'), 'utf8'));
+    const so = /HAN_DO_THIET_BI_MS\s*=\s*([\d_]+)/.exec(ma)?.[1]?.replace(/_/g, '');
+    expect(so, 'không tìm thấy hằng trần đo thiết bị').toBeTruthy();
+    expect(Number(so), 'trần phải > 22s đã đo được, kèm biên cho máy chậm hơn')
+      .toBeGreaterThanOrEqual(60_000);
+  });
+
+  it('chỉ lùi gói khi phép đo CHẠY TỚI NƠI mà không thấy GPU', async () => {
+    const ma = await import('node:fs/promises')
+      .then((fs) => fs.readFile(join(import.meta.dirname, 'quanLy.ts'), 'utf8'));
+    /* Điều kiện lùi PHẢI có `chayDuoc` — thiếu nó là quá hạn bị hiểu thành
+       "không có GPU" và một gói hoàn toàn tốt bị xoá. */
+    expect(ma).toMatch(/that\.chayDuoc\s*&&\s*!that\.coGpu/);
+  });
+});

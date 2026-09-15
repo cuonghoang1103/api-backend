@@ -131,6 +131,25 @@ export async function quetMay(thuMucModel: string): Promise<KetQuaQuet> {
   }
 }
 
+export interface ThietBiThat {
+  coGpu: boolean;
+  ten: string;
+  /** Lệnh có chạy tới nơi không. `false` = chưa biết gì cả, KHÁC với "không có GPU". */
+  chayDuoc: boolean;
+  /** Quá hạn (thường là macOS quét tệp mới ở lần chạy đầu) chứ không phải chết. */
+  quaHan?: boolean;
+}
+
+/**
+ * Trần cho phép đo thiết bị.
+ *
+ * 120 giây, không phải 20. Đo thật: lần chạy đầu của tệp vừa giải nén trên
+ * macOS mất 22 giây vì hệ quét mã độc; máy chậm hơn hoặc gói lớn hơn (bản
+ * Vulkan 32 MB) sẽ lâu hơn nữa. Trần rộng ở đây không tốn gì — nó chỉ chạm
+ * tới khi có chuyện thật sự hỏng.
+ */
+const HAN_DO_THIET_BI_MS = 120_000;
+
 /**
  * Hỏi CHÍNH llama.cpp xem nó thấy thiết bị nào — phép đo thật, sau khi đã cài.
  *
@@ -150,27 +169,44 @@ export async function quetMay(thuMucModel: string): Promise<KetQuaQuet> {
  * CPU. Danh sách loại trừ ngắn và biết rõ; danh sách cho phép thì không bao
  * giờ đủ, vì mỗi bản llama.cpp lại thêm một backend mới.
  */
-export async function hoiThietBiThat(duongLlamaServer: string): Promise<{ coGpu: boolean; ten: string }> {
+export async function hoiThietBiThat(duongLlamaServer: string): Promise<ThietBiThat> {
   try {
     const { stdout, stderr } = await chay(`"${duongLlamaServer}" --list-devices`, {
-      timeout: 20_000,
+      timeout: HAN_DO_THIET_BI_MS,
       windowsHide: true,
     });
     const ra = `${stdout}\n${stderr}`;
     const sau = ra.split(/Available devices:/i)[1];
-    if (!sau) return { coGpu: false, ten: '' };
+    if (!sau) return { coGpu: false, ten: '', chayDuoc: true };
     const dong = sau.split(/\r?\n/).map((s) => s.trim())
       /* Một dòng thiết bị có dạng `TÊN[số]: mô tả (… MiB free)`. */
       .filter((s) => /^[A-Za-z][A-Za-z0-9_]*\d*:\s+\S/.test(s))
       /* BLAS/Accelerate chạy trên CPU — có mặt trên mọi máy, kể cả máy không
          có card nào. Nhận nhầm nó là "có GPU" thì phép đo vô nghĩa. */
       .filter((s) => !/^(BLAS|CPU|RPC)\d*:/i.test(s));
-    if (!dong.length) return { coGpu: false, ten: '' };
-    return { coGpu: true, ten: dong.map((d) => d.replace(/\s*\(.*$/, '')).join(' · ') };
-  } catch {
-    /* Lệnh chết = bộ chạy không lên được trên máy này. Với bản Vulkan thiếu
-       loader thì đây CHÍNH LÀ triệu chứng, nên trả về "không có GPU" là đúng
-       nghĩa: chỗ gọi sẽ lùi sang gói CPU. */
-    return { coGpu: false, ten: '' };
+    if (!dong.length) return { coGpu: false, ten: '', chayDuoc: true };
+    return {
+      coGpu: true,
+      ten: dong.map((d) => d.replace(/\s*\(.*$/, '')).join(' · '),
+      chayDuoc: true,
+    };
+  } catch (e) {
+    /*
+     * ⚠️⚠️ PHÂN BIỆT "CHẠY RỒI, KHÔNG THẤY GPU" VỚI "KHÔNG CHẠY NỔI".
+     *
+     * Gộp hai thứ này lại là lỗi đã đo được ngày 15/09/2026 và nó hỏng 100% máy
+     * macOS ở lần cài đầu: trần cũ 20 giây, mà lần chạy ĐẦU của một tệp vừa
+     * giải nén mất 22,09 GIÂY (lần thứ hai: 0,078 giây — nhanh hơn 283 lần).
+     * Quá hạn ⇒ báo "không có GPU" ⇒ chỗ gọi tưởng gói hỏng ⇒ XOÁ bộ chạy ⇒
+     * macOS không có gói lùi nên cài hỏng hẳn. Và gần như không tái hiện được,
+     * vì lần chạy thứ hai trở đi thì nhanh.
+     *
+     * Nguyên nhân không phải quarantine (tệp tải bằng `fetch` không mang
+     * `com.apple.quarantine`) mà là tệp ký kiểu `adhoc, linker-signed`: macOS
+     * quét mã độc ở lần chạy đầu. Không gỡ được, chỉ chịu được.
+     */
+    const quaHan = (e as { killed?: boolean; signal?: string })?.killed === true
+      || (e as { code?: string })?.code === 'ETIMEDOUT';
+    return { coGpu: false, ten: '', chayDuoc: false, quaHan };
   }
 }

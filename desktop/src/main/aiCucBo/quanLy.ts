@@ -94,7 +94,11 @@ export async function tinhTrang(): Promise<TinhTrang> {
   let mayThat = may;
   if (boChay) {
     const that = await hoiThietBiThat(boChay);
-    mayThat = { ...may, coGpu: that.coGpu, chacChan: true, tenGpu: that.ten || may.tenGpu };
+    /* Phép đo không chạy tới nơi thì GIỮ NGUYÊN phỏng đoán cũ và vẫn để
+       `chacChan: false` — thà nói "chưa chắc" còn hơn nói một điều sai. */
+    if (that.chayDuoc) {
+      mayThat = { ...may, coGpu: that.coGpu, chacChan: true, tenGpu: that.ten || may.tenGpu };
+    }
   }
 
   const daCo: MaModel[] = [];
@@ -149,12 +153,30 @@ async function caiBoChay(bao: (b: BuocTai) => void, signal?: AbortSignal): Promi
       if (!tep) { loiCuoi = 'Giải nén xong nhưng không thấy tệp chạy.'; continue; }
 
       /* CHẠY THẬT rồi mới tin. Gói Vulkan trên máy thiếu loader sẽ chết ở đúng
-         đây, và đó chính là tín hiệu để lùi sang gói CPU. */
+         đây, và đó chính là tín hiệu để lùi sang gói CPU.
+
+         ⚠️ Lần chạy ĐẦU của tệp vừa giải nén rất lâu trên macOS (đo thật 22,09
+         giây — hệ quét mã độc tệp ký kiểu adhoc). Nói cho người dùng biết,
+         không thì họ nhìn một thanh tiến độ đứng im nửa phút. */
+      bao({ viec: 'Đang kiểm tra bộ chạy (lần đầu có thể lâu)…', phanTram: 9, bps: 0 });
       const that = await hoiThietBiThat(tep);
-      if (g.tangToc !== 'cpu' && !that.coGpu) {
+
+      /* ⚠️⚠️ CHỈ lùi khi phép đo CHẠY TỚI NƠI mà không thấy GPU. Quá hạn nghĩa
+         là CHƯA BIẾT GÌ CẢ — coi nó là "không có GPU" sẽ xoá mất một gói hoàn
+         toàn tốt, và trên macOS (chỉ có MỘT gói, không có gói lùi) thì cài
+         hỏng hẳn. Đây là lỗi thật, đo được 15/09/2026. */
+      if (g.tangToc !== 'cpu' && that.chayDuoc && !that.coGpu) {
         loiCuoi = `Gói ${g.tangToc} không dùng được GPU trên máy này.`;
         /* Dọn sạch trước khi thử gói sau — trộn hai bộ thư viện vào cùng một
            thư mục là cách chắc chắn để cả hai cùng hỏng. */
+        await rm(thuMucBoChay(), { recursive: true, force: true });
+        continue;
+      }
+
+      /* Chạy không nổi VÀ KHÔNG PHẢI quá hạn ⇒ gói hỏng thật (thiếu thư viện,
+         sai kiến trúc). Lùi sang gói sau nếu còn. */
+      if (!that.chayDuoc && !that.quaHan && goiList.length > 1 && g !== goiList[goiList.length - 1]) {
+        loiCuoi = `Gói ${g.tangToc} không chạy được trên máy này.`;
         await rm(thuMucBoChay(), { recursive: true, force: true });
         continue;
       }

@@ -83,7 +83,7 @@ check('Buffer không lộ ra renderer', !isolation.hasBuffer);
    không còn gác gì nữa — người ta lướt qua nó. Thêm nhóm mới vào preload
    thì thêm cả vào đây, đó chính là điều phép kiểm này muốn ép. */
 const expected = [
-  'academy', 'agent', 'app', 'auth', 'browser', 'duongCuaFile', 'manHinh',
+  'academy', 'agent', 'aiCucBo', 'app', 'auth', 'browser', 'duongCuaFile', 'manHinh',
   'mau', 'music', 'notes', 'oauth', 'on', 'opencode', 'robot', 'robotGiaSu',
   'settings', 'storage', 'terminal', 'update', 'xuongRemix',
 ];

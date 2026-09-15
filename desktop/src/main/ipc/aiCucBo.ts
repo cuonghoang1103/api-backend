@@ -23,7 +23,7 @@ import { MODEL } from '../aiCucBo/kho';
 import {
   batModel, cai, datGoc, goSach, tatModel, tinhTrang, xoa,
 } from '../aiCucBo/quanLy';
-import { trangThai } from '../aiCucBo/chay';
+import { dangSan, hoiMay } from '../aiCucBo/hoi';
 import { handle } from './index';
 
 /** Lượt cài đang chạy. Chỉ cho phép MỘT — hai lượt cùng tải là tranh nhau đĩa. */
@@ -139,33 +139,9 @@ export function dangKyAiCucBo(): void {
   });
 
   handle('aiCucBo:hoi', async ({ chu, lichSu }) => {
-    const dang = trangThai();
-    if (!dang) return { chu: '', loi: 'AI trên máy chưa bật.' };
-    try {
-      const tin = [
-        ...(lichSu ?? []).map((t) => ({
-          role: t.vaiTro === 'nguoi' ? 'user' : 'assistant',
-          content: t.chu,
-        })),
-        { role: 'user', content: chu },
-      ];
-      /* Tuyến OpenAI — cùng giao thức app đã nói với cổng từ trước, nên không
-         cần lớp chuyển đổi nào. Đo thật 15/09/2026 trên llama-server b10964. */
-      const r = await fetch(`${dang.goc}/v1/chat/completions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: tin, max_tokens: 900, temperature: 0.7 }),
-        /* 3 phút: máy chỉ có CPU gõ 8 chữ/giây, nên một câu trả lời dài thật
-           sự mất hơn một phút. Trần ngắn hơn sẽ cắt ngang đúng những máy yếu
-           mà tính năng này sinh ra để phục vụ. */
-        signal: AbortSignal.timeout(180_000),
-      });
-      if (!r.ok) return { chu: '', loi: `AI trên máy trả ${r.status}.` };
-      const j = await r.json() as { choices?: { message?: { content?: string } }[] };
-      return { chu: j?.choices?.[0]?.message?.content ?? '' };
-    } catch (e) {
-      return { chu: '', loi: loiChu(e) };
-    }
+    if (!dangSan()) return { chu: '', loi: 'AI trên máy chưa bật.' };
+    const ra = await hoiMay({ chu, lichSu });
+    return ra === null ? { chu: '', loi: 'AI trên máy không trả lời được.' } : { chu: ra };
   });
 
   /* ⚠️ Tắt máy chủ khi app đóng. `before-quit` chứ không phải

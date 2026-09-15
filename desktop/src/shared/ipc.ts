@@ -2415,6 +2415,9 @@ export interface DesktopBridge {
       chu: string;
       phienId: string | null;
       roiBac: { thanh: string; lyDo: string } | null;
+      /** Câu này do AI TRÊN MÁY trả lời vì máy chủ không với tới được. */
+      tuMay?: boolean;
+      loi?: string;
     }>;
     phienDs(): Promise<{ ds: Array<{ id: string; ten: string; luc: string; so: number }> }>;
     phienDoc(phienId: string): Promise<{ luot: Array<{ toi: boolean; chu: string }> }>;

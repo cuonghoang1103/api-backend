@@ -1245,4 +1245,33 @@ export const TU_DIEN: Record<string, string> = {
     'Samples, loops and one-shots — mostly CC0 or CC BY',
   'Nhạc trọn bài, phần lớn công cộng hoặc CC':
     'Full tracks, mostly public domain or CC',
+
+  /* ── Cài đặt → AI ngoại tuyến ──────────────────────────── */
+  'AI ngoại tuyến': 'Offline AI',
+  'Đang xem cấu hình máy…': 'Checking your computer…',
+  'Tải AI về chạy thẳng trên máy bạn. Mất mạng vẫn hỏi được, và câu hỏi không rời khỏi máy. Đổi lại, nó trả lời kém hơn bản trên mạng.':
+    'Download an AI that runs on your own computer. It works with no internet, '
+    + 'and your questions never leave the machine. In exchange, its answers are '
+    + 'weaker than the online one.',
+  'Bộ nhớ (RAM)': 'Memory (RAM)',
+  'Đĩa còn trống': 'Free disk space',
+  'Tăng tốc bằng GPU': 'GPU acceleration',
+  'Có': 'Yes',
+  'Chưa thấy': 'Not found',
+  '(chưa chạy thử nên chưa chắc)': '(not tested yet, so not certain)',
+  'Đang chuẩn bị…': 'Getting ready…',
+  'Dừng tải': 'Stop downloading',
+  'Dừng giữa chừng cũng không mất phần đã tải — bấm tải lại là chạy tiếp.':
+    'Stopping does not lose what you already downloaded — press download again to continue.',
+  'Không cài được.': 'Could not install.',
+  'Hợp máy bạn': 'Fits your computer',
+  'Đang chạy': 'Running',
+  'cần': 'needs',
+  'bộ nhớ khi chạy': 'of memory while running',
+  'Máy này chưa đủ cho bản đó.': 'This computer is not powerful enough for that one.',
+  'Tải': 'Download',
+  'Xoá khỏi máy': 'Remove from this computer',
+  'Khi có mạng, app vẫn tự dùng bản trên mạng vì nó trả lời tốt hơn. AI trên máy là lưới đỡ lúc mất kết nối.':
+    'When you are online the app still uses the online AI, because it answers '
+    + 'better. The on-device AI is a safety net for when the connection drops.',
 };

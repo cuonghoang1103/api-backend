@@ -27,6 +27,7 @@ export function guiLaiBaiDangHoc(): void {
 }
 import { getSettings, setSetting } from '../store';
 import { tachCau } from '../../renderer/features/odin/tachCau';
+import { dangSan, ganNhan, hoiMay } from '../aiCucBo/hoi';
 import { handle } from './index';
 
 export function registerRobotHandlers(): void {
@@ -158,23 +159,75 @@ export function registerRobotHandlers(): void {
       if (!r.ok) {
         /* Nói ra lý do THẬT của máy chủ. Nuốt thành một câu cố định thì lỗi
            403 "cần Pro" và lỗi mạng trông giống hệt nhau, và người dùng không
-           biết phải làm gì tiếp. */
+           biết phải làm gì tiếp.
+
+           ⚠️ KHÔNG rơi xuống AI trên máy ở đây. 4xx là máy chủ TRẢ LỜI RÕ
+           ("cần Pro", "chưa ghi danh") — thay nó bằng một câu của model cục bộ
+           là giấu mất điều người dùng cần biết để xử lý. Chỉ lỗi MẠNG mới
+           đáng lùi, và lỗi mạng rơi vào `catch` phía dưới. */
         return { chu: '', loi: j?.message || `Máy chủ trả ${r.status}.` };
       }
       return { chu: j?.data?.answer ?? '' };
     } catch (e) {
-      return { chu: '', loi: (e as Error)?.message || 'Không hỏi được.' };
+      /* Mạng đứt. Đây mới là chỗ AI trên máy đáng vào việc.
+
+         ⚠️ Nó KHÔNG có nội dung bài học: bài nằm ở máy chủ, và chính máy chủ
+         mới là nơi ghép bài vào câu hỏi (`/ai/ask`). Cái app giữ được chỉ là
+         TÊN bài và tên các slide. Nên câu trả lời sẽ mỏng, và nhãn phải nói
+         thẳng điều đó thay vì để người học tưởng đây là gia sư đầy đủ. */
+      if (dangSan()) {
+        const b = baiDangHoc as {
+          courseCode?: string; courseTitle?: string; lessonTitle?: string;
+        } | null;
+        const boiCanh = b
+          ? `Người dùng đang học bài "${b.lessonTitle ?? ''}" của môn `
+            + `${b.courseCode ?? ''} ${b.courseTitle ?? ''}. `
+            + 'Bạn KHÔNG có nội dung bài, chỉ có tên bài. '
+            + 'Trả lời theo kiến thức chung, và nói rõ chỗ nào bạn không chắc vì thiếu bài.'
+          : undefined;
+        const ra = await hoiMay({ chu, lichSu: lichSu as never, boiCanh });
+        if (ra) return { chu: ganNhan(ra), tuMay: true };
+      }
+      return { chu: '', loi: (e as Error)?.message || 'Không hỏi được gia sư.' };
     }
   });
 
   handle('robot:hoi', async ({ chu, model, phienId, anh }) => {
     const phien = readStoredSession();
+    /* Chưa đăng nhập mà ĐÃ tải AI về máy thì vẫn hỏi được — model nằm trên
+       máy họ, không cần tài khoản nào để chạy. Bắt đăng nhập ở đây là dựng
+       một hàng rào không phục vụ gì. */
     if (!phien) {
+      if (dangSan()) {
+        const ra = await hoiMay({ chu });
+        if (ra) return { chu: ganNhan(ra), phienId: null, roiBac: null, tuMay: true };
+      }
       return { chu: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.', phienId: null, roiBac: null };
     }
-    return hoiTroLy(phien.sessionToken, chu, false, {
-      model, phienId: phienId ?? undefined, anh,
-    });
+
+    try {
+      const r = await hoiTroLy(phien.sessionToken, chu, false, {
+        model, phienId: phienId ?? undefined, anh,
+      });
+      if (r.chu) return r;
+      /* Máy chủ trả lời RỖNG cũng là hỏng, chỉ là hỏng lặng lẽ hơn. Rơi xuống
+         lưới đỡ ở đây, không chỉ ở nhánh `catch`. */
+      throw new Error('rỗng');
+    } catch (e) {
+      /* ⚠️ Lưới đỡ CHỈ chạy khi máy chủ không với tới được. Có mạng thì luôn
+         đi máy chủ: đo thật 15/09/2026 cho thấy model 4B đọc sai dấu tiếng
+         Việt ("biên" → "biến"), đúng loại sai mà người học không nhận ra. */
+      if (dangSan()) {
+        const ra = await hoiMay({ chu });
+        if (ra) return { chu: ganNhan(ra), phienId: null, roiBac: null, tuMay: true };
+      }
+      return {
+        chu: '',
+        loi: (e as Error)?.message || 'Không hỏi được.',
+        phienId: null,
+        roiBac: null,
+      };
+    }
   });
 
   /**

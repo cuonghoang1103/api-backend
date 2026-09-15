@@ -10,8 +10,8 @@ import AcademyOnboarding from '@/components/academy/AcademyOnboarding';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { useSemesters, useCoursesBySemesters } from '@/hooks/useAcademyQueries';
 import { useAcademyProfile } from '@/hooks/useAcademyProfile';
-import { isPlaceholderCode } from '@/data/fptuCurriculum';
-import { getFaculty, getCatMajor, getCatCombo, leafSemesterPlan } from '@/data/academyCatalog';
+import { getFaculty, getCatMajor, getCatCombo } from '@/data/academyCatalog';
+import { daChonNganhHep, locMonMotKy, maCuaKhung, type MonHien } from '@/components/academy/locTheoNganh';
 import { useTranslation } from '@/context/LocaleContext';
 import { cn, pickLang } from '@/lib/utils';
 
@@ -110,49 +110,18 @@ export default function AcademyPage() {
   // Đã chọn tới NGÀNH HẸP → LỌC: trang chỉ hiện đúng môn của ngành đó (yêu cầu
   // của người dùng — không đổ hết môn ra cho ngợp). IT chưa chọn combo vẫn lọc
   // theo khung ngành nền; khối khác mỗi chuyên ngành là một khung riêng nên cần combo.
-  const leafActive = isStudent && !!major && (!!combo || profile.faculty === 'it');
-  const leafCodes = useMemo(() => {
-    if (!leafActive) return null;
-    const plan = leafSemesterPlan(profile.faculty, profile.major, profile.combo);
-    const s = new Set<string>();
-    for (const { codes } of plan) {
-      for (const c of codes) if (!isPlaceholderCode(c)) s.add(c.trim().toUpperCase());
-    }
-    return s;
-  }, [leafActive, profile.faculty, profile.major, profile.combo]);
-
-  /** Tên môn chuẩn hoá (phần tiếng Anh trước "|||") để dò mã CŨ ↔ mã MỚI cùng môn. */
-  const normTitle = (t?: string | null) => (t || '').split('|||')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-
-  /**
-   * Môn hiện cho một kỳ. Khi đã chọn ngành hẹp → lọc theo leafCodes (khung MỚI),
-   * NHƯNG cũng giữ lại mã CŨ (khoá cũ) cùng TÊN môn với một mã trong khung mới —
-   * gắn cờ isOld — để SV khoá cũ vẫn tìm được môn đã có bài (VD CSI104 cạnh CSI106),
-   * SV khoá mới thấy mã mới. Cả hai cùng một kỳ, tự chọn cái mình học.
-   */
-  // Project OJT (INT601–INT610) — dự án gợi ý cho kỳ Thực tập, KHÔNG nằm trong
-  // khung giáo trình nên bị leafCodes lọc mất; luôn hiện lại (khối IT), gắn cờ project.
-  const isProjectCode = (c: Course) => /^INT6\d\d$/i.test((c.courseCode || '').trim());
-  const semCourses = (semId: number): { course: Course; isOld: boolean; isProject: boolean }[] => {
-    const list = coursesBySemester[semId] || [];
-    if (!leafCodes) return list.map((c) => ({ course: c, isOld: false, isProject: isProjectCode(c) }));
-    const codeOf = (c: Course) => (c.courseCode || '').trim().toUpperCase();
-    const inLeaf = list.filter((c) => leafCodes.has(codeOf(c)));
-    const leafTitles = new Set(inLeaf.map((c) => normTitle(c.title)).filter(Boolean));
-    const oldEquiv = list.filter((c) => !leafCodes.has(codeOf(c)) && normTitle(c.title) && leafTitles.has(normTitle(c.title)));
-    // Project chỉ hiện cho SE (CNTT) + combo Node.JS hoặc C#/.NET (đúng loại project
-    // web/app/API này) — không đổ vào ngành/combo khác.
-    const showProjects = profile.faculty === 'it' && profile.major === 'se'
-      && (profile.combo === 'react-nodejs' || profile.combo === 'dotnet');
-    const projects = showProjects
-      ? list.filter((c) => isProjectCode(c) && !leafCodes.has(codeOf(c)))
-      : [];
-    return [
-      ...inLeaf.map((c) => ({ course: c, isOld: false, isProject: isProjectCode(c) })),
-      ...oldEquiv.map((c) => ({ course: c, isOld: true, isProject: false })),
-      ...projects.map((c) => ({ course: c, isOld: false, isProject: true })),
-    ];
-  };
+  /* ⚠️ PHẦN LỌC ĐÃ CHUYỂN SANG `components/academy/locTheoNganh.ts` — app
+     desktop dùng chung đúng mã đó. Nó KHÔNG phải mã tầm thường mà là kiến thức
+     về chương trình đào tạo (mã cũ ↔ mã mới, project theo combo), và nó đổi
+     theo từng khoá; hai bản sao sẽ lệch nhau ở lần cập nhật kế tiếp, mà lệch
+     kiểu đó hỏng CÂM — trang vẫn chạy, chỉ thiếu môn. */
+  const leafActive = daChonNganhHep(profile, !!major, !!combo);
+  const leafCodes = useMemo(
+    () => maCuaKhung(profile, leafActive),
+    [leafActive, profile],
+  );
+  const semCourses = (semId: number): MonHien[] =>
+    locMonMotKy(coursesBySemester[semId] || [], leafCodes, profile);
   const shownTotal = useMemo(
     () => (leafCodes ? semesters.reduce((a, s) => a + semCourses(s.id).length, 0) : totalCourses),
     // eslint-disable-next-line react-hooks/exhaustive-deps

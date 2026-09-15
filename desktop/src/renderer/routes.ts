@@ -30,7 +30,9 @@ import {
   Braces,
   Briefcase,
   ClipboardList,
+  Compass,
   Cpu,
+  Network,
   FileText,
   FlaskConical,
   Gamepad2,
@@ -100,6 +102,14 @@ export const ROUTES: readonly RouteDef[] = [
   // ── Học tập ──────────────────────────────────────────────
   { path: '/academy', label: 'Học viện', icon: GraduationCap, group: 'hoc',
     keywords: ['academy', 'khoá học', 'môn', 'fpt', 'hoc vien'] },
+  /* Hai trang tư vấn của Học viện — dùng lại nguyên của web (xem
+     `dinhTuyenWeb.ts`). Phải khai ở ĐÂY nữa: `findRoute` khớp CHÍNH XÁC, nên
+     thiếu là bấm vào rơi thẳng vào màn "Không tìm thấy" — đúng thứ phép kiểm
+     `App.test.ts` vừa bắt được. */
+  { path: '/academy/tu-van-nganh', label: 'Tư vấn ngành', icon: Compass, group: 'hoc',
+    keywords: ['tu van', 'nganh', 'chon nganh', 'major', 'huong nghiep'] },
+  { path: '/academy/so-do-mon-hoc', label: 'Sơ đồ môn học', icon: Network, group: 'hoc',
+    keywords: ['so do', 'mon hoc', 'curriculum', 'khung chuong trinh'] },
   { path: '/courses', label: 'Khoá học', icon: Library, group: 'hoc',
     keywords: ['courses', 'khoa hoc'] },
   { path: '/code-lab', label: 'Code Lab', icon: Braces, group: 'hoc',

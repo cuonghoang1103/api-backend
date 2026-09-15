@@ -36,6 +36,7 @@ import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
 import { TechTrendsWebPage } from './features/tech-trends/TechTrendsWebPage';
 import { HocVienPage } from './features/academy/HocVienPage';
+import { TuVanNganhPage } from './features/academy/TuVanNganhPage';
 import { KhoaHocPage } from './features/academy/KhoaHocPage';
 import { CodeLabPage } from './features/codelab/CodeLabPage';
 import { PhongThiPage } from './features/exam/PhongThiPage';
@@ -107,6 +108,11 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/saved', DaLuuPage],
   ['/profile', TrangCaNhanPage],
   ['/tech-trends', TechTrendsWebPage],
+  /* ⚠️ `/academy` KHỚP CHÍNH XÁC ở `NATIVE_PAGES` nên nó vẫn ra `HocVienPage`
+     (bản có đọc ngoại tuyến). Mục này chỉ bắt các trang CON — `tu-van-nganh`,
+     `so-do-mon-hoc` — vốn app chưa từng có. Thứ tự trong `nativePageFor` bảo
+     đảm điều đó: khớp chính xác trước, cây web sau. */
+  ['/academy', TuVanNganhPage],
 ];
 
 export function nativePageFor(path: string): ComponentType | undefined {

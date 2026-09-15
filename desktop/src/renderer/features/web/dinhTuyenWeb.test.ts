@@ -135,8 +135,10 @@ describe('khopTuyenWeb', () => {
     }
     /* Con số CỐ Ý viết cứng: nó là dây bẫy, buộc người thêm tuyến phải mở tệp
        này ra và nhìn lại danh sách. 65 → 73 ngày 07/09/2026 khi cây
-       `/tech-trends` (8 tuyến) được dùng lại từ web. */
-    expect(thay.size).toBe(73);
+       `/tech-trends` (8 tuyến) được dùng lại từ web. 73 → 75 ngày 15/09/2026:
+       hai trang tư vấn của Học viện (`/academy/tu-van-nganh`,
+       `/academy/so-do-mon-hoc`) — app trước đó không có chúng. */
+    expect(thay.size).toBe(75);
   });
 });
 

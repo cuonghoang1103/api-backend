@@ -98,6 +98,19 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/cv/xem', nap: () => import('@/app/cv/xem/page') },
   { mau: '/cv/builder/:id', nap: () => import('@/app/cv/builder/[id]/page') },
 
+  /* ── Học viện: hai trang tư vấn ──
+     App có màn Học viện RIÊNG (`features/academy/HocVienPage`) vì nó cần đọc
+     được khi ngoại tuyến — trang web không có phần đó. Nhưng hai trang dưới
+     đây thì app chưa từng có, và người dùng nêu đích danh 15/09/2026: *"chưa
+     có chọn ngành, tư vấn ngành hẹp, sơ đồ"*.
+
+     Dùng lại nguyên của web thay vì viết lại: cả hai đều là cây tư vấn dựa
+     trên bảng ngành/khoa/combo (`data/academyCatalog.ts`), tức là KIẾN THỨC
+     chứ không phải mã — chép sang đây là chép một bảng dữ liệu sẽ đổi theo
+     chương trình đào tạo, rồi hai bản lệch nhau lúc nào không hay. */
+  { mau: '/academy/tu-van-nganh', nap: () => import('@/app/academy/tu-van-nganh/page') },
+  { mau: '/academy/so-do-mon-hoc', nap: () => import('@/app/academy/so-do-mon-hoc/page') },
+
   /* ── Tech Trends ──
      TĨNH TRƯỚC ĐỘNG. Sáu trang chuyên đề (`/news`, `/ielts`, `/hoc-sql`…) đều
      dài đúng 2 đoạn giống `/tech-trends/:slug` của bài viết, nên xếp sau mẫu
@@ -250,6 +263,10 @@ export const GOC_WEB: readonly string[] = [
   '/maker-lab', '/creator', '/projects', '/exp-hub',
   '/finance', '/forum', '/saved', '/profile',
   '/tech-trends',
+  /* ⚠️ `/academy` CHÍNH NÓ vẫn là màn native (`HocVienPage`, có đọc ngoại
+     tuyến) — `nativePageFor` khớp chính xác TRƯỚC khi hỏi tới cây web, nên
+     mục này chỉ mở đường cho các trang CON: `tu-van-nganh`, `so-do-mon-hoc`. */
+  '/academy',
 ];
 
 /** Đường dẫn này có thuộc một cây web không (kể cả các trang con động). */

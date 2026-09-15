@@ -827,6 +827,11 @@ export const TU_DIEN: Record<string, string> = {
     'Drop a file or folder here — the agent will be able to read it',
   'Chưa có file nào để hoàn tác trong việc này.': 'No files to undo in this task.',
 
+  // ── Học viện: chọn ngành ────────────────────────────────
+  'Chọn ngành': 'Choose your major',
+  'Tư vấn ngành': 'Major advisor',
+  'Sơ đồ môn học': 'Curriculum map',
+
   // ── Học viện: chứng chỉ ─────────────────────────────────
   'Chúc mừng! Bạn đã hoàn thành khoá học': 'Congratulations — you finished the course',
   'Chứng chỉ đã được cấp — xem, in, và đổi mã giảm 10% cho khoá tiếp theo.':

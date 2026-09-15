@@ -24,8 +24,8 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  ChevronDown, ChevronRight, CloudOff, ExternalLink, GraduationCap, Layers3,
-  RefreshCw, Search, X,
+  ChevronDown, ChevronRight, CloudOff, Compass, ExternalLink, GraduationCap,
+  Layers3, Network, RefreshCw, Search, X,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
@@ -33,6 +33,22 @@ import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { chuVi, fold, moNgoai, WEB } from '../chu';
 import { ChiTietMon, TheMon, type Mon } from './monHoc';
 import { useDich } from '../../i18n';
+/*
+ * CHỌN NGÀNH + LỌC THEO NGÀNH HẸP — DÙNG LẠI của web, không viết lại.
+ *
+ * Người dùng 15/09/2026: *"chưa có chọn ngành, tư vấn ngành hẹp, sơ đồ, lọc
+ * ngành đúng với ngành hẹp"*.
+ *
+ * `AcademyOnboarding` là con robot hỏi khoa → ngành → combo; `useAcademyProfile`
+ * nhớ câu trả lời (localStorage + đồng bộ lên máy chủ) nên chọn trên web thì
+ * app cũng biết, và ngược lại. Phần LỌC nằm ở `locTheoNganh.ts` — nó là kiến
+ * thức về chương trình đào tạo (mã cũ ↔ mã mới, project theo combo), chép sang
+ * đây là hai bản sẽ lệch ở lần cập nhật khung kế tiếp.
+ */
+import AcademyOnboarding from '@/components/academy/AcademyOnboarding';
+import { useAcademyProfile } from '@/hooks/useAcademyProfile';
+import { getCatCombo, getCatMajor } from '@/data/academyCatalog';
+import { daChonNganhHep, locMonMotKy, maCuaKhung } from '@/components/academy/locTheoNganh';
 import { Chu } from '../../i18n/Chu';
 
 interface Ky {
@@ -45,7 +61,7 @@ interface Ky {
 
 export function HocVienPage() {
   const { dich } = useDich();
-  const { online } = useAppState();
+  const { online, navigate } = useAppState();
   const { api, userId } = useSession();
 
   const [ky, setKy] = useState<Ky[]>([]);
@@ -56,6 +72,18 @@ export function HocVienPage() {
   const [cu, setCu] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
   const [moSlug, setMoSlug] = useState<string | null>(null);
+
+  /* Hồ sơ ngành. `needsOnboarding` = chưa từng trả lời ⇒ mở robot hỏi. Người
+     đã nói "không phải sinh viên FPTU" cũng là một câu trả lời, không hỏi lại. */
+  const { profile, needsOnboarding } = useAcademyProfile();
+  const [daBoQua, datDaBoQua] = useState(false);
+  const [moChonLai, datMoChonLai] = useState(false);
+  const moOnboarding = moChonLai || (needsOnboarding && !daBoQua);
+
+  const major = getCatMajor(profile.faculty, profile.major);
+  const combo = getCatCombo(profile.faculty, profile.major, profile.combo);
+  const coLoc = daChonNganhHep(profile, !!major, !!combo);
+  const khungMa = useMemo(() => maCuaKhung(profile, coLoc), [profile, coLoc]);
 
   const nap = useCallback(async () => {
     if (userId === null || !api) return;
@@ -154,6 +182,19 @@ export function HocVienPage() {
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>
             <RefreshCw size={14} aria-hidden /> Tải lại
           </button>
+          {/* Chọn/đổi ngành. Đã chọn rồi thì nút ghi thẳng tên ngành — người
+              dùng cần thấy mình đang lọc theo cái gì, chứ một danh sách ngắn đi
+              mà không nói vì sao thì trông như mất môn. */}
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datMoChonLai(true)}>
+            <GraduationCap size={14} aria-hidden />
+            {major ? `${major.name}${combo ? ` · ${combo.name}` : ''}` : dich('Chọn ngành')}
+          </button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => navigate('/academy/tu-van-nganh')}>
+            <Compass size={14} aria-hidden /> {dich('Tư vấn ngành')}
+          </button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => navigate('/academy/so-do-mon-hoc')}>
+            <Network size={14} aria-hidden /> {dich('Sơ đồ môn học')}
+          </button>
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(`${WEB}/academy`)}>
             <ExternalLink size={14} aria-hidden /> Mở trên web
           </button>
@@ -200,7 +241,9 @@ export function HocVienPage() {
       ) : (
         <div className="ct-hv-ky-ds">
           {ky.map((s) => {
-            const ds = monTheoKy[s.id] ?? [];
+            /* Lọc theo ngành hẹp — CÙNG mã với web, xem `locTheoNganh.ts`.
+               Chưa chọn ngành thì `khungMa` là null và danh sách giữ nguyên. */
+            const ds = locMonMotKy(monTheoKy[s.id] ?? [], khungMa, profile).map((x) => x.course);
             const mo = bung.includes(s.id);
             return (
               <section key={s.id} className="ct-hv-ky" data-mo={mo}>
@@ -229,6 +272,15 @@ export function HocVienPage() {
           })}
         </div>
       )}
+      {/* Robot hỏi khoa → ngành → combo. Trả lời xong là danh sách môn tự lọc
+          theo khung ngành đó. Câu trả lời lưu chung với web (localStorage +
+          hồ sơ trên máy chủ) nên chọn ở đâu cũng có tác dụng ở cả hai. */}
+      <AcademyOnboarding
+        open={moOnboarding}
+        onClose={() => { datMoChonLai(false); datDaBoQua(true); }}
+        {...(moChonLai ? { startAtMajor: true } : {})}
+      />
+
     </div>
   );
 }

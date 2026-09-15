@@ -354,3 +354,58 @@ declare module '@/components/academy/CourseRoadmap' {
     defaultOpen?: boolean;
   }>;
 }
+
+/**
+ * Chọn ngành + lọc theo ngành hẹp — dùng lại của web.
+ *
+ * `useAcademyProfile` nhớ câu trả lời ở localStorage VÀ đồng bộ lên máy chủ,
+ * nên chọn ngành trên web thì app cũng biết, và ngược lại.
+ */
+declare module '@/components/academy/AcademyOnboarding' {
+  import type { ComponentType } from 'react';
+  const AcademyOnboarding: ComponentType<{
+    open: boolean;
+    onClose: () => void;
+    startAtMajor?: boolean;
+  }>;
+  export default AcademyOnboarding;
+}
+
+declare module '@/hooks/useAcademyProfile' {
+  export interface AcademyProfile {
+    isStudent?: boolean | null;
+    faculty?: string | null;
+    major?: string | null;
+    combo?: string | null;
+    chosenAt?: string | null;
+  }
+  export function useAcademyProfile(): {
+    profile: AcademyProfile;
+    needsOnboarding: boolean;
+    save: (p: Partial<AcademyProfile>) => void;
+    reset: () => void;
+  };
+}
+
+declare module '@/data/academyCatalog' {
+  export function getFaculty(id?: string | null): { id: string; name: string } | undefined;
+  export function getCatMajor(faculty?: string | null, major?: string | null): { id: string; name: string } | undefined;
+  export function getCatCombo(faculty?: string | null, major?: string | null, combo?: string | null): { id: string; name: string } | undefined;
+  export function leafSemesterPlan(faculty?: string | null, major?: string | null, combo?: string | null): Array<{ codes: string[] }>;
+}
+
+declare module '@/components/academy/locTheoNganh' {
+  export interface HoSoNganh {
+    isStudent?: boolean | null;
+    faculty?: string | null;
+    major?: string | null;
+    combo?: string | null;
+  }
+  export interface MonHien { course: { id: number }; isOld: boolean; isProject: boolean }
+  export function daChonNganhHep(ho: HoSoNganh, coMajor: boolean, coCombo: boolean): boolean;
+  export function maCuaKhung(ho: HoSoNganh, coLoc: boolean): Set<string> | null;
+  export function locMonMotKy<T extends { id: number; courseCode?: string | null; title?: string | null }>(
+    ds: T[], khung: Set<string> | null, ho: HoSoNganh,
+  ): Array<{ course: T; isOld: boolean; isProject: boolean }>;
+  export function tenChuan(t?: string | null): string;
+}

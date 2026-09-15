@@ -23,9 +23,12 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { BookOpen, Crown, ImagePlus, Languages, Loader2, RefreshCw, Send, Sparkles, User, X } from 'lucide-react';
+import { BookMarked, BookOpen, Crown, ImagePlus, Languages, Loader2, MessageCirclePlus, RefreshCw, Send, Sparkles, Trash2, User, X } from 'lucide-react';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import { GOI_Y_GIA_SU, useGiaSuBai } from '@/components/academy/useGiaSuBai';
+import { useFaqGiaSu } from '@/components/academy/useFaqGiaSu';
+import ChonSlide from '@/components/academy/ChonSlide';
+import { cauHoiSlide, khoaCacheSlide, type Slide } from '@/components/academy/docSlide';
 import type { BaiDangHoc } from '@/store/giaSuBaiStore';
 import { useAuthStore } from '@/store/authStore';
 import { usePro } from '@/hooks/usePro';
@@ -33,12 +36,15 @@ import { usePro } from '@/hooks/usePro';
 export default function GiaSuTrongRobot({ bai, rong }: { bai: BaiDangHoc; rong: boolean }) {
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
   const { isPro } = usePro();
-  const { turns, question, setQuestion, asking, hoi, hoiTiengAnh, hoiLaiMoi, anhDan, themAnh, boAnh, danVao } =
-    useGiaSuBai({ lessonId: bai.lessonId });
+  const {
+    turns, question, setQuestion, asking, hoi, hoiTiengAnh, hoiLaiMoi, nhoLaiCauCu,
+    anhDan, themAnh, boAnh, danVao,
+  } = useGiaSuBai({ lessonId: bai.lessonId });
+  const faq = useFaqGiaSu(`/courses/lessons/${bai.lessonId}/ai/asks`, bai.lessonId);
   const oFileRef = useRef<HTMLInputElement>(null);
+  const oNhap = useRef<HTMLTextAreaElement>(null);
 
   const cuoiRef = useRef<HTMLDivElement>(null);
-  const oNhapRef = useRef<HTMLTextAreaElement>(null);
 
   /* Cuộn xuống theo câu trả lời đang gõ. `turns` đổi ở MỖI mẩu delta nên
      hiệu ứng này chạy liên tục — dùng `auto` chứ không `smooth`: cuộn mượt bị
@@ -89,7 +95,86 @@ export default function GiaSuTrongRobot({ bai, rong }: { bai: BaiDangHoc; rong: 
             </p>
           )}
         </div>
+        {/* Câu hỏi thường gặp — người dùng 15/09/2026: khung robot thiếu đúng
+            mục này so với mục gia sư cuối bài. Nó là chỗ đọc lại câu AI đã trả
+            lời sẵn, khỏi hỏi lại (mỗi lần hỏi lại là một lượt gọi model). */}
+        <button
+          type="button"
+          onClick={faq.batMo}
+          title="Câu hỏi thường gặp của bài này"
+          aria-label="Câu hỏi thường gặp"
+          className={`flex h-7 shrink-0 items-center gap-1 rounded-lg px-2 text-[11px] font-medium transition-colors ${
+            faq.mo ? 'bg-[#22d3ee]/20 text-[#22d3ee]' : 'text-[#64748b] hover:bg-[#22d3ee]/10 hover:text-[#22d3ee]'}`}
+        >
+          <BookMarked className="h-3.5 w-3.5" />
+          {faq.ds?.length ? faq.ds.length : 'Hỏi đáp'}
+        </button>
       </div>
+
+      {faq.mo && (
+        <div className="max-h-64 overflow-y-auto border-b border-[#22d3ee]/10 bg-[#0a0a0f]">
+          {faq.dangTai && !faq.ds ? (
+            <p className="px-3 py-4 text-center text-[11px] text-[#64748b]">Đang tải…</p>
+          ) : !faq.ds?.length ? (
+            <p className="px-3 py-4 text-center text-[11px] text-[#64748b]">
+              Chưa ai hỏi gì ở bài này. Câu bạn hỏi sẽ được lưu lại đây cho người sau.
+            </p>
+          ) : (
+            <>
+              {faq.ds.map((f) => {
+                const dangMo = faq.moMuc === f.id;
+                return (
+                  <div key={f.id} className="border-b border-[#22d3ee]/10 last:border-b-0">
+                    <div className="flex items-start gap-1.5 px-3 py-2">
+                      <button type="button" onClick={() => faq.datMoMuc(dangMo ? null : f.id)} className="min-w-0 flex-1 text-left">
+                        <span className="block text-[12px] font-medium text-[#e2e8f0]">{f.question}</span>
+                        <span className="mt-0.5 block text-[10px] text-[#64748b]">
+                          {f.nguoiHoi} · {new Date(f.createdAt).toLocaleDateString('vi-VN')}
+                          {f.lang === 'en' && ' · EN'}
+                          {!dangMo && ' · bấm để xem'}
+                        </span>
+                      </button>
+                      {/* Chỉ người hỏi mới thấy nút xoá — máy chủ kiểm lại lần
+                          nữa, ở đây chỉ là không mời mọc. */}
+                      {f.cuaToi && (
+                        <button type="button" onClick={() => void faq.xoa(f.id)} aria-label="Xoá câu hỏi này"
+                          className="shrink-0 rounded p-1 text-[#64748b] hover:text-[#f87171]">
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      )}
+                    </div>
+                    {dangMo && (
+                      <div className="px-3 pb-2.5">
+                        <div className="ct-robot-tra text-[13px] leading-relaxed text-[#e6edf3]"
+                          style={{ overflowWrap: 'anywhere' }}>
+                          <ChatMarkdown content={f.answer} />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            nhoLaiCauCu(f);
+                            faq.datMoMuc(null);
+                            setTimeout(() => oNhap.current?.focus(), 0);
+                          }}
+                          className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-[#22d3ee]/20 px-2.5 py-1.5 text-[11px] font-medium text-[#22d3ee] hover:bg-[#22d3ee]/10"
+                        >
+                          <MessageCirclePlus className="h-3 w-3" /> Hỏi tiếp từ câu này
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+              {faq.conNua && (
+                <button type="button" onClick={() => void faq.napThem()} disabled={faq.dangTai}
+                  className="w-full px-3 py-2 text-center text-[11px] font-medium text-[#64748b] hover:text-[#22d3ee] disabled:opacity-50">
+                  {faq.dangTai ? 'Đang tải…' : 'Xem thêm câu cũ hơn'}
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      )}
 
       <div className="flex-1 space-y-3 overflow-y-auto overflow-x-hidden px-4 py-3">
         {turns.length === 0 && (
@@ -98,6 +183,14 @@ export default function GiaSuTrongRobot({ bai, rong }: { bai: BaiDangHoc; rong: 
               Hỏi bất cứ điều gì về bài này — chỗ chưa hiểu, kiến thức nền còn thiếu,
               xin bài tập luyện, hoặc dán bài của bạn nhờ chữa.
             </p>
+            {!!bai.slides?.length && (
+              <ChonSlide
+                toi
+                slides={bai.slides}
+                khoa={asking}
+                onChon={(sl: Slide) => void hoi(cauHoiSlide(sl), { cacheKey: khoaCacheSlide(sl) })}
+              />
+            )}
             <div className="grid gap-1.5">
               {GOI_Y_GIA_SU.map((g) => (
                 <button
@@ -233,7 +326,7 @@ export default function GiaSuTrongRobot({ bai, rong }: { bai: BaiDangHoc; rong: 
             <ImagePlus className="h-4 w-4" />
           </button>
           <textarea
-            ref={oNhapRef}
+            ref={oNhap}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             onKeyDown={(e) => {

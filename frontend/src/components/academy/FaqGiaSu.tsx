@@ -15,67 +15,28 @@
  * đúng là nhóm hưởng lợi nhiều nhất — đọc được thay vì hỏi lại, mà mỗi lần
  * hỏi lại là một lượt gọi model tốn tiền.
  */
-import { useCallback, useEffect, useState } from 'react';
-import { BookMarked, ChevronDown, Trash2 } from 'lucide-react';
-import { toast } from 'react-hot-toast';
-import { api } from '@/lib/api';
+import { BookMarked, ChevronDown, Loader2, MessageCirclePlus, Trash2 } from 'lucide-react';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
+import { useFaqGiaSu, type MucFaq } from '@/components/academy/useFaqGiaSu';
 
-export interface MucFaq {
-  id: number;
-  question: string;
-  /** NGUYÊN VĂN — máy chủ không cắt, và ở đây cũng không. */
-  answer: string;
-  lang?: string;
-  createdAt: string;
-  nguoiHoi: string;
-  avatar: string | null;
-  cuaToi: boolean;
-}
+export type { MucFaq };
 
-export default function FaqGiaSu({ duong, khoaDoiBai }: {
+
+export default function FaqGiaSu({ duong, khoaDoiBai, onHoiTiep }: {
   /** Đường API, KHÔNG có đuôi. VD: `/code-lab/exercises/12/ai/asks` */
   duong: string;
   /** Đổi giá trị này ⇒ đóng mục và vứt danh sách cũ (chuyển sang bài khác). */
   khoaDoiBai: number | string;
+  /** Có ⇒ hiện nút "Hỏi tiếp": nối câu cũ vào cuộc đang mở rồi hỏi thêm. */
+  onHoiTiep?: (m: MucFaq) => void;
 }) {
-  const [mo, datMo] = useState(false);
-  const [ds, datDs] = useState<MucFaq[] | null>(null);
-  const [dangTai, datDangTai] = useState(false);
-  const [moMuc, datMoMuc] = useState<number | null>(null);
-
-  /* Nạp LƯỜI: chỉ hỏi máy chủ khi người dùng mở mục ra. Một bài đông người hỏi
-     có thể trả về vài trăm KB — không đáng kéo về cho mọi lần mở bài. */
-  const nap = useCallback(async () => {
-    datDangTai(true);
-    try {
-      const r = await api.get(duong);
-      datDs(r.data?.data?.items ?? []);
-    } catch {
-      datDs([]);
-    } finally {
-      datDangTai(false);
-    }
-  }, [duong]);
-
-  // Đổi bài thì đóng và VỨT danh sách cũ — giữ lại là hiện câu hỏi của bài khác.
-  useEffect(() => { datMo(false); datDs(null); datMoMuc(null); }, [khoaDoiBai]);
-
-  const xoa = async (id: number) => {
-    if (!window.confirm('Xoá câu hỏi này khỏi mục Câu hỏi thường gặp?')) return;
-    try {
-      await api.delete(`${duong}/${id}`);
-      datDs((cu) => (cu ?? []).filter((x) => x.id !== id));
-    } catch {
-      toast.error('Xoá không được.');
-    }
-  };
+  const { mo, batMo, ds, dangTai, moMuc, datMoMuc, xoa, conNua, napThem } = useFaqGiaSu(duong, khoaDoiBai);
 
   return (
     <div className="mt-3">
       <button
         type="button"
-        onClick={() => { const m = !mo; datMo(m); if (m && ds === null) void nap(); }}
+        onClick={batMo}
         className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-semibold"
         style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
         title="Câu hỏi mọi người đã hỏi ở bài này, kèm câu trả lời của AI"
@@ -132,12 +93,41 @@ export default function FaqGiaSu({ duong, khoaDoiBai }: {
                     {dangMo && (
                       <div className="px-3 pb-3">
                         <ChatMarkdown content={f.answer} />
+                        {onHoiTiep && (
+                          /* "Hỏi tiếp": nối câu hỏi + câu trả lời cũ vào cuộc
+                             đang mở, rồi người học gõ tiếp. Không có nút này
+                             thì muốn đào sâu một câu cũ họ phải chép tay lại
+                             cả đoạn — và gia sư mất hẳn ngữ cảnh đã có. */
+                          <button
+                            type="button"
+                            onClick={() => onHoiTiep(f)}
+                            className="mt-2 inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium"
+                            style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+                          >
+                            <MessageCirclePlus size={13} /> Hỏi tiếp từ câu này
+                          </button>
+                        )}
                       </div>
                     )}
                   </li>
                 );
               })}
             </ul>
+          )}
+          {/* Không câu nào bị giấu: danh sách chỉ trả 40 mỗi trang, nhưng CSDL
+              giữ hết — xem chú thích ở route. */}
+          {conNua && (
+            <button
+              type="button"
+              onClick={() => void napThem()}
+              disabled={dangTai}
+              className="w-full border-t px-3 py-2 text-center text-xs font-medium disabled:opacity-50"
+              style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+            >
+              {dangTai
+                ? <span className="inline-flex items-center gap-1.5"><Loader2 size={12} className="animate-spin" /> Đang tải…</span>
+                : 'Xem thêm câu cũ hơn'}
+            </button>
           )}
         </div>
       )}

@@ -286,6 +286,31 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk }: {
     });
   }, [asking, hoi]);
 
+  /**
+   * Nối một câu hỏi CŨ (từ mục "Câu hỏi thường gặp") vào cuộc đang mở.
+   *
+   * Người dùng 15/09/2026: *"có thể vào phiên trả lời cũ ấy để hỏi tiếp"*.
+   *
+   * Cách làm: đẩy đúng cặp hỏi–đáp cũ vào hội thoại như thể nó vừa diễn ra.
+   * Từ đó mọi câu hỏi sau tự mang theo nó trong lịch sử, nên gia sư hiểu
+   * "chỗ này" là chỗ nào mà người học không phải chép lại gì.
+   *
+   * ⚠️ `srcQuestion` để RỖNG cho lượt trả lời chép về: nó không phải câu gia
+   * sư vừa sinh ra trong phiên này, nên hai nút "Bản tiếng Anh" / "Hỏi lại
+   * mới" không được hiện — bấm vào sẽ sinh lại rồi GHI ĐÈ mục cache dùng
+   * chung bằng một câu không ai yêu cầu.
+   */
+  const nhoLaiCauCu = useCallback((m: { question: string; answer: string }) => {
+    const q = (m.question || '').trim();
+    const a = (m.answer || '').trim();
+    if (!q || !a) return;
+    datCuoc(khoa, (t) => {
+      // Đã nối rồi thì thôi — bấm hai lần không được nhân đôi cả đoạn.
+      if (t.some((x) => x.role === 'user' && x.content === q)) return t;
+      return [...t, { role: 'user', content: q }, { role: 'assistant', content: a }];
+    });
+  }, [datCuoc, khoa]);
+
   /* Nút "Hỏi AI vì sao sai" ở từng câu quiz bắn qua đây. Chỉ chạy khi `key`
      ĐỔI — nếu theo dõi cả `text` thì một lần re-render đổi chuỗi (ví dụ đổi
      ngôn ngữ) sẽ tự hỏi lại, mà mỗi lượt là một lần tính tiền. */
@@ -300,7 +325,7 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk }: {
 
   return {
     turns, question, setQuestion, asking, inQuiz,
-    hoi, hoiTiengAnh, hoiLaiMoi,
+    hoi, hoiTiengAnh, hoiLaiMoi, nhoLaiCauCu,
     anhDan, themAnh, boAnh, danVao, MAX_ANH,
     xoaHoiThoai: useCallback(() => xoaCuoc(khoa), [xoaCuoc, khoa]),
   };

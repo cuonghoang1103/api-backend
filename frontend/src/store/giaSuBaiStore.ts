@@ -59,6 +59,14 @@ export interface LuotGiaSu {
 
 export interface BaiDangHoc {
   lessonId: number;
+  /**
+   * Slide của bài, đọc từ chính nội dung bài (xem `docSlide.ts`).
+   *
+   * Có nó thì robot hiện được mục "hỏi theo slide" — người học bấm một cái
+   * thay vì chụp màn hình từng tấm rồi dán vào. Bài không có slide thì mảng
+   * rỗng và mục đó ẩn hẳn.
+   */
+  slides?: import('@/components/academy/docSlide').Slide[];
   courseCode?: string;
   courseTitle?: string;
   lessonTitle?: string;

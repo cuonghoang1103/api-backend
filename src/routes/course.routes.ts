@@ -3063,22 +3063,37 @@ async function luuLuotHoi(
 router.get('/lessons/:id(\\d+)/ai/asks', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
     const lessonId = Number(req.params.id);
-    /* Trần 40: đủ để một bài đông người hỏi vẫn có cái mà đọc, mà không biến
-       một lời gọi thành vài trăm KB. Câu trả lời trả về NGUYÊN VĂN — cắt ở đây
-       thì mục này mất hẳn ý nghĩa. */
+    /* Trần 40 MỖI TRANG: đủ để một bài đông người hỏi vẫn có cái mà đọc, mà
+       không biến một lời gọi thành vài trăm KB. Câu trả lời trả về NGUYÊN VĂN
+       — cắt ở đây thì mục này mất hẳn ý nghĩa.
+
+       ⚠️ `truoc` là PHÂN TRANG, thêm 15/09/2026. Người dùng chốt rằng câu hỏi
+       ở đây "không bao giờ biến mất trừ khi chính user đó hoặc admin muốn
+       xoá". Trong CSDL đúng là không có gì xoá chúng — không cron, không TTL,
+       chỉ mỗi route DELETE có kiểm quyền. Nhưng trước bản này danh sách dừng ở
+       40 câu mới nhất và không có đường nào xem tiếp, nên câu thứ 41 trở đi
+       biến mất khỏi TẦM MẮT — mà với người dùng thì hai chuyện đó là một.
+
+       Phân trang theo ID chứ không `skip`: `skip` trượt khi có câu mới chen
+       vào giữa hai lần gọi, và người đọc sẽ thấy lặp hoặc hụt mất một câu. */
+    const truoc = Number(req.query.truoc);
     const rows = await prisma.lessonTutorAsk.findMany({
-      where: { lessonId },
-      orderBy: { createdAt: 'desc' },
-      take: 40,
+      where: { lessonId, ...(Number.isFinite(truoc) && truoc > 0 ? { id: { lt: truoc } } : {}) },
+      orderBy: { id: 'desc' },
+      take: 41,
       select: {
         id: true, question: true, answer: true, lang: true, createdAt: true, userId: true,
         user: { select: { username: true, displayName: true, avatarUrl: true } },
       },
     });
+    /* Lấy 41 để BIẾT có còn nữa không, rồi trả về 40. Đếm riêng bằng
+       `count()` là thêm một lượt truy vấn cho đúng một bit thông tin. */
+    const conNua = rows.length > 40;
     res.json({
       success: true,
       data: {
-        items: rows.map((r) => ({
+        conNua,
+        items: rows.slice(0, 40).map((r) => ({
           id: r.id,
           question: r.question,
           answer: r.answer,

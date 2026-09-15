@@ -282,3 +282,17 @@ declare module '@/store/giaSuBaiStore' {
     setState(s: Partial<GiaSuBaiState>): void;
   };
 }
+
+/**
+ * Đọc danh sách slide từ nội dung bài.
+ *
+ * Desktop không gọi thẳng — `CourseTutor` (đã khai ở trên) tự dùng. Khai ở đây
+ * để phép kiểm `docSlide.test.ts` có kiểu; vitest vẫn nạp FILE THẬT nên phép
+ * kiểm chạy trên mã thật, sai lệch giữa khai báo và thực tế lộ ra ngay ở đó.
+ */
+declare module '@/components/academy/docSlide' {
+  export interface Slide { so: number; tong: number; bo: string; ten: string }
+  export function docSlide(html: string | null | undefined): Slide[];
+  export function cauHoiSlide(s: Slide): string;
+  export function khoaCacheSlide(s: Slide): string;
+}

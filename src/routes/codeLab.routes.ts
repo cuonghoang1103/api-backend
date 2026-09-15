@@ -222,10 +222,18 @@ async function luuLuotHoiCodeLab(
 // lời sẵn thay vì tốn thêm một lượt gọi model. KHÔNG chặn theo Pro.
 router.get('/exercises/:id(\\d+)/ai/asks', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
+    /* `truoc` = phân trang theo ID, giống mục Câu hỏi thường gặp của Academy
+       (xem chú thích dài ở `course.routes.ts`). Không có nó thì câu thứ 41 trở
+       đi biến mất khỏi TẦM MẮT dù CSDL vẫn giữ nguyên — và với người dùng thì
+       hai chuyện đó là một. Lấy 41 để biết còn nữa không, trả về 40. */
+    const truoc = Number(req.query.truoc);
     const rows = await prisma.codeExerciseTutorAsk.findMany({
-      where: { exerciseId: Number(req.params.id) },
-      orderBy: { createdAt: 'desc' },
-      take: 40, // đủ đọc mà không biến một lời gọi thành vài trăm KB
+      where: {
+        exerciseId: Number(req.params.id),
+        ...(Number.isFinite(truoc) && truoc > 0 ? { id: { lt: truoc } } : {}),
+      },
+      orderBy: { id: 'desc' },
+      take: 41,
       select: {
         id: true, question: true, answer: true, createdAt: true, userId: true,
         user: { select: { username: true, displayName: true, avatarUrl: true } },
@@ -234,7 +242,8 @@ router.get('/exercises/:id(\\d+)/ai/asks', authenticate, async (req, res: Respon
     res.json({
       success: true,
       data: {
-        items: rows.map((r) => ({
+        conNua: rows.length > 40,
+        items: rows.slice(0, 40).map((r) => ({
           id: r.id,
           question: r.question,
           answer: r.answer,           // NGUYÊN VĂN

@@ -11,7 +11,7 @@
 // trong con robot nổi. Sửa hành vi thì sửa ở HOOK, đừng vá riêng ở đây: vá
 // riêng là hai lối vào cùng một gia sư bắt đầu trả lời khác nhau.
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Sparkles, Loader2, Send, MessageCircle, Crown, User, Languages, RefreshCw, ImagePlus, X } from 'lucide-react';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/authStore';
@@ -19,13 +19,17 @@ import { usePro } from '@/hooks/usePro';
 // Render câu trả lời như AI Chat chính: markdown + KaTeX + code + sơ đồ SVG.
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import FaqGiaSu from '@/components/academy/FaqGiaSu';
+import ChonSlide from '@/components/academy/ChonSlide';
 import { GOI_Y_GIA_SU, useGiaSuBai, type TutorQuizItem } from '@/components/academy/useGiaSuBai';
 import { useGiaSuBaiStore } from '@/store/giaSuBaiStore';
+import { cauHoiSlide, docSlide, khoaCacheSlide, type Slide } from '@/components/academy/docSlide';
 
 export type { TutorQuizItem };
 
-export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, quizContext, autoAsk }: {
+export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, noiDungHtml, quizContext, autoAsk }: {
   lessonId: number; courseCode?: string; courseTitle?: string; lessonTitle?: string;
+  /** HTML của bài — để đọc ra danh sách slide. Không truyền thì mục hỏi-theo-slide ẩn. */
+  noiDungHtml?: string;
   /** Có ⇒ chế độ hỏi trong quiz: gia sư biết đề+đáp án các câu, học viên chỉ gõ "câu N". */
   quizContext?: TutorQuizItem[];
   /** Câu hỏi bắn đi NGAY khi `key` đổi — dùng cho nút "Hỏi AI vì sao sai" ở từng câu quiz. */
@@ -36,7 +40,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
 
   const {
     turns, question, setQuestion, asking, inQuiz,
-    hoi: ask, hoiTiengAnh: askEnglish, hoiLaiMoi: askFresh,
+    hoi: ask, hoiTiengAnh: askEnglish, hoiLaiMoi: askFresh, nhoLaiCauCu,
     anhDan, themAnh, boAnh, danVao,
   } = useGiaSuBai({ lessonId, ...(quizContext ? { quizContext } : {}), ...(autoAsk ? { autoAsk } : {}) });
 
@@ -63,10 +67,14 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
    * phải bài học, nên robot mà nối vào đó sẽ trả lời lệch hẳn chủ đề.
    */
   const datBai = useGiaSuBaiStore((s) => s.datBai);
+  /* Đọc MỘT LẦN cho mỗi lần nội dung đổi. Nội dung bài dài chục nghìn ký tự;
+     chạy lại ở mỗi lần vẽ là quét lại cả chuỗi đó mỗi khi người dùng gõ. */
+  const slides = useMemo(() => docSlide(noiDungHtml), [noiDungHtml]);
   useEffect(() => {
     if (inQuiz) return undefined;
     datBai({
       lessonId,
+      ...(slides.length ? { slides } : {}),
       ...(courseCode ? { courseCode } : {}),
       ...(courseTitle ? { courseTitle } : {}),
       ...(lessonTitle ? { lessonTitle } : {}),
@@ -79,7 +87,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
       const dang = useGiaSuBaiStore.getState().bai;
       if (dang?.lessonId === lessonId) datBai(null);
     };
-  }, [inQuiz, lessonId, courseCode, courseTitle, lessonTitle, datBai]);
+  }, [inQuiz, lessonId, courseCode, courseTitle, lessonTitle, slides, datBai]);
 
   const label = [courseCode, courseTitle].filter(Boolean).join(' · ') || 'khoá học';
 
@@ -198,6 +206,10 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
                 </div>
               </div>
             ) : (
+              <>
+              {slides.length > 0 && (
+                <ChonSlide slides={slides} khoa={asking} onChon={(sl: Slide) => void ask(cauHoiSlide(sl), { cacheKey: khoaCacheSlide(sl) })} />
+              )}
               <div className="mb-2 flex flex-wrap gap-1.5">
                 {GOI_Y_GIA_SU.map((s) => (
                   <button key={s.key} type="button" onClick={() => void ask(s.q, { cacheKey: s.key })} disabled={asking}
@@ -207,6 +219,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
                   </button>
                 ))}
               </div>
+              </>
             ))}
             {/* `flex-wrap` + `min-w` cho ô nhập: hàng này giờ có BA thứ (ô nhập,
                 nút Hỏi, nút Câu hỏi thường gặp). Không cho xuống dòng thì ở cửa
@@ -267,7 +280,11 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
         {/* Mục "Câu hỏi thường gặp" — dùng chung với gia sư Code Lab, xem
             `FaqGiaSu.tsx`. NGOÀI cổng Pro có chủ đích. */}
         {isAuthed && (
-          <FaqGiaSu duong={`/courses/lessons/${lessonId}/ai/asks`} khoaDoiBai={lessonId} />
+          <FaqGiaSu
+            duong={`/courses/lessons/${lessonId}/ai/asks`}
+            khoaDoiBai={lessonId}
+            onHoiTiep={(m) => { nhoLaiCauCu(m); setTimeout(() => taRef.current?.focus(), 0); }}
+          />
         )}
       </div>
     </section>

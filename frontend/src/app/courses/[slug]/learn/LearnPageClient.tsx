@@ -1095,6 +1095,9 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   courseCode={course.courseCode ?? undefined}
                   courseTitle={pickLang(course.title, locale)}
                   lessonTitle={pickLang(currentLesson.title, locale)}
+                  /* Nội dung bài → danh sách slide → mục "hỏi theo slide" ở cả
+                     mục cuối bài lẫn con robot. Xem `docSlide.ts`. */
+                  noiDungHtml={currentLesson.content ?? ''}
                 />
               )}
 

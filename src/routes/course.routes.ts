@@ -46,6 +46,25 @@ const router = Router();
 // even when the user is not enrolled. Use that for the public
 // course detail page where the marketing site needs to show
 // sample lessons.
+/**
+ * `Enrollment.source = 'AUTO'` — dòng ghi danh do MÁY tạo khi người học tích
+ * "đã học xong" một bài trong khoá họ vốn đã được đọc (khoá FREE, thành viên
+ * Pro, admin, giảng viên). Xem `POST /:id/progress`.
+ *
+ * ⚠️ NHỮNG DÒNG NÀY KHÔNG ĐƯỢC ĐẾM VÀO SỐ "HỌC VIÊN" hiện công khai trên
+ * trang khoá học. Con số đó lấy từ `_count.enrollments`, nên nếu không lọc thì
+ * mỗi cú tích của một người đọc ngang sẽ thổi nó lên — người dùng chốt
+ * 15/09/2026 là phải tách bạch "chủ động ghi danh" với "tự ghi danh khi học".
+ *
+ * Dùng lại cột `source` sẵn có thay vì thêm cột mới: nó vốn được đặt ra để ghi
+ * "người này vào khoá bằng đường nào", đúng câu hỏi ở đây — và thêm cột là
+ * thêm một migration cho một thông tin đã có chỗ chứa.
+ */
+const GHI_DANH_TU_DONG = 'AUTO';
+
+/** Điều kiện đếm học viên THẬT — bỏ những dòng máy tự tạo. */
+const CHI_GHI_DANH_THAT = { source: { not: GHI_DANH_TU_DONG } } as const;
+
 type AccessMode = 'enrolled' | 'preview' | 'admin-or-enrolled';
 
 async function assertCanAccessCourseContent(
@@ -531,7 +550,7 @@ async function serializeCourse(
         orderBy: { sortOrder: 'asc' },
       },
       reviews: { where: { isApproved: true }, take: 10, orderBy: { createdAt: 'desc' } },
-      _count: { select: { enrollments: true, reviews: true } },
+      _count: { select: { enrollments: { where: CHI_GHI_DANH_THAT }, reviews: true } },
     },
   });
 
@@ -1022,7 +1041,7 @@ router.get('/semester/:semesterId', optionalAuth, async (req, res: Response<ApiR
           price: true,
           isFree: true,
           level: true,
-          _count: { select: { enrollments: true } },
+          _count: { select: { enrollments: { where: CHI_GHI_DANH_THAT } } },
         },
       });
       res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=600');
@@ -1792,7 +1811,7 @@ router.get('/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next)
           orderBy: { sortOrder: 'asc' },
         },
         reviews: { where: { isApproved: true }, take: 10, orderBy: { createdAt: 'desc' } },
-        _count: { select: { enrollments: true, reviews: true } },
+        _count: { select: { enrollments: { where: CHI_GHI_DANH_THAT }, reviews: true } },
       },
     });
     if (!course) throw new AppError('Course not found', 404);
@@ -2014,10 +2033,49 @@ router.post('/:id/progress', authenticate, async (req, res: Response<ApiResponse
     const courseId = parseInt(req.params.id);
     const { lessonId, isCompleted, watchTimeSeconds, lastPositionSeconds } = req.body;
 
-    const enrollment = await prisma.enrollment.findUnique({
+    /*
+     * ============================================================
+     * ĐỌC ĐƯỢC THÌ PHẢI LƯU ĐƯỢC TIẾN ĐỘ
+     * ============================================================
+     *
+     * Người dùng 15/09/2026: *"nút tích xong tiến độ học trên web đang bị lỗi,
+     * tôi tích mỗi bài khi học xong để đánh dấu tiến độ không được"*.
+     *
+     * Đo thật trên production: tài khoản đó có 7 dòng ghi danh trên tổng 592
+     * khoá, và khoá đang học (SWT301, `accessType: FREE`) KHÔNG có dòng nào.
+     * Bài vẫn đọc bình thường vì `assertCanAccessCourseContent` — chốt DUY
+     * NHẤT quyết định "được đọc hay không" — trả `isEnrolled: true` cho khoá
+     * FREE, cho admin/giảng viên, và cho thành viên Pro, KỂ CẢ khi không có
+     * dòng ghi danh nào. Nhưng chỗ này lại đòi đúng dòng ghi danh ấy.
+     *
+     * Tức là hai chốt nói hai chuyện khác nhau: một bên cho đọc, một bên
+     * không cho lưu. Người học bấm tích, nhận 400, và màn hình chỉ nói
+     * "Unable to save progress" — không nói vì sao, và họ thì đang đọc bài
+     * ngon lành nên không có lý do gì để nghĩ tới chữ "ghi danh".
+     *
+     * Vá: hỏi chính cái chốt đọc. Nó cho qua ⇒ tạo dòng ghi danh rồi lưu.
+     * Nó từ chối ⇒ ném nguyên lỗi 402/403 của nó, không nuốt.
+     *
+     * ⚠️ ĐÁNH DẤU `source: 'AUTO'`, VÀ CHỖ ĐẾM PHẢI LỌC NÓ RA. Con số "học
+     * viên" hiện công khai trên trang khoá học lấy từ `_count.enrollments`,
+     * nên nếu không tách thì mỗi cú tích của một người đọc ngang sẽ thổi nó
+     * lên. Xem `GHI_DANH_TU_DONG` / `CHI_GHI_DANH_THAT` ở đầu file.
+     */
+    let enrollment = await prisma.enrollment.findUnique({
       where: { userId_courseId: { userId: req.userId!, courseId } },
     });
-    if (!enrollment) throw new AppError('Not enrolled in this course', 400);
+    if (!enrollment) {
+      await assertCanAccessCourseContent(req.userId, courseId);   // ném 402/403 nếu thật sự không được vào
+      enrollment = await prisma.enrollment.upsert({
+        /* `upsert` chứ không `create`: hai bài học xong gần như cùng lúc (bấm
+           tích rồi bấm ngay bài sau) là hai lời gọi song song, và `create` thứ
+           hai sẽ vỡ vì ràng buộc duy nhất — đúng lúc người dùng vừa thấy nó
+           chạy được lần đầu. */
+        where: { userId_courseId: { userId: req.userId!, courseId } },
+        create: { userId: req.userId!, courseId, source: GHI_DANH_TU_DONG },
+        update: {},
+      });
+    }
 
     const progress = await prisma.lessonProgress.upsert({
       where: { enrollmentId_lessonId: { enrollmentId: enrollment.id, lessonId } },

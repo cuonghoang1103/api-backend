@@ -270,6 +270,7 @@ const bridge: DesktopBridge = {
     hoi: (p: {
       lessonId: number; chu: string; cacheKey?: string;
       lichSu?: { role: 'user' | 'assistant'; content: string }[];
+      anh?: string[];
     }) => ipcRenderer.invoke('robot:hoiGiaSu', p) as Promise<{ chu: string; loi?: string }>,
   },
   manHinh: {

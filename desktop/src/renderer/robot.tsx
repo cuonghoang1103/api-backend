@@ -757,11 +757,19 @@ function KhungChat({ onDong }: { onDong: () => void }) {
            trong ngữ cảnh. Gửi kèm lịch sử để hỏi tiếp có mạch. */
         const g = await window.cuongthai?.robotGiaSu.hoi({
           lessonId: bai.lessonId,
-          chu: t,
+          /* Chỉ dán ảnh mà không gõ gì là chuyện RẤT hay xảy ra — tấm ảnh đã
+             nói hết ý. Gửi chuỗi rỗng thì máy chủ trả "Hãy nhập câu hỏi", và
+             người dùng thấy một lỗi vô lý ngay sau khi vừa dán xong ảnh. */
+          chu: t || 'Giải thích giúp mình chỗ trong ảnh này (liên hệ với nội dung bài đang học).',
           lichSu: luot.slice(-8).map((x) => ({
             role: x.toi ? ('user' as const) : ('assistant' as const),
             content: x.chu,
           })),
+          /* ⚠️ PHẢI gửi ảnh. Bỏ sót dòng này là khung vẫn hiện tấm ảnh trong
+             bong bóng người dùng, nhưng nó không rời khỏi máy — và model trả
+             lời về một tấm ảnh nó chưa từng thấy. Người dùng không có cách nào
+             biết, vì họ ĐANG NHÌN THẤY ảnh mình vừa dán. */
+          ...(keo.length ? { anh: keo } : {}),
         });
         datLuot((c) => [...c, { toi: false, chu: g?.chu || (g?.loi ?? dich('Không nhận được trả lời.')) }]);
         return;

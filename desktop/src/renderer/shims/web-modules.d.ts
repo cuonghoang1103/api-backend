@@ -222,6 +222,8 @@ declare module '@/components/academy/CourseTutor' {
     courseCode?: string;
     courseTitle?: string;
     lessonTitle?: string;
+    /** HTML của bài — để gia sư đọc ra danh sách slide và hiện mục "Hỏi theo slide". */
+    noiDungHtml?: string;
     quizContext?: unknown[];
   }): JSX.Element;
 }

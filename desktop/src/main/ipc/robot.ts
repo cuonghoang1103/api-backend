@@ -135,7 +135,7 @@ export function registerRobotHandlers(): void {
     return { ok: true };
   });
 
-  handle('robot:hoiGiaSu', async ({ lessonId, chu, cacheKey, lichSu }) => {
+  handle('robot:hoiGiaSu', async ({ lessonId, chu, cacheKey, lichSu, anh }) => {
     const phien = readStoredSession();
     if (!phien) return { chu: '', loi: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.' };
     try {
@@ -149,7 +149,9 @@ export function registerRobotHandlers(): void {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${phien.sessionToken}`,
         },
-        body: JSON.stringify({ question: chu, history: lichSu ?? [], cacheKey }),
+        /* `images` là data URL; máy chủ tự tách và lọc lại (xem `docAnhDan`
+           ở `course.routes.ts`) — không tin client, kể cả client của mình. */
+        body: JSON.stringify({ question: chu, history: lichSu ?? [], cacheKey, ...(anh?.length ? { images: anh } : {}) }),
         signal: AbortSignal.timeout(240_000),
       });
       const j = await r.json().catch(() => null) as { data?: { answer?: string }; message?: string } | null;

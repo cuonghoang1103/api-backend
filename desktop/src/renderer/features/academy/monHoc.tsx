@@ -694,8 +694,12 @@ function DocBai({
       <CourseTutor
         lessonId={bai.id}
         {...(mon.courseCode ? { courseCode: mon.courseCode } : {})}
-        courseTitle={mon.title}
-        lessonTitle={bai.title}
+        courseTitle={chuVi(mon.title)}
+        lessonTitle={chuVi(bai.title)}
+        /* ⚠️ Nội dung bài → mục "Hỏi theo slide". Thiếu tham số này thì mục
+           đó chỉ có trên web còn app im lặng không có — không lỗi nào, chỉ là
+           một tính năng vắng mặt mà không ai biết vì sao. */
+        noiDungHtml={ct?.content ?? bai.content ?? ''}
       />
 
       {chuong && (soCau[chuong.id] ?? 0) > 0 && (

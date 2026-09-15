@@ -1517,6 +1517,17 @@ export const INVOKE_CHANNELS = {
       role: z.enum(['user', 'assistant']),
       content: z.string().max(20000),
     })).max(20).optional(),
+    /**
+     * Ảnh dán vào câu hỏi — data URL.
+     *
+     * ⚠️ Thiếu trường này là lỗi HỎNG CÂM: khung chat vẫn hiện tấm ảnh trong
+     * bong bóng của người dùng, nhưng nó không bao giờ rời khỏi máy, và model
+     * trả lời về một tấm ảnh nó chưa từng thấy. Người dùng không có cách nào
+     * biết — họ NHÌN THẤY ảnh mình vừa dán ngay trên màn hình.
+     *
+     * Trần 3 ảnh / 8MB khớp `docAnhDan` ở tầng route (máy chủ lọc lại lần nữa).
+     */
+    anh: z.array(z.string().max(8 * 1024 * 1024)).max(3).optional(),
   }),
 
   'manHinh:nguon': null,
@@ -2027,6 +2038,8 @@ export interface DesktopBridge {
       chu: string;
       cacheKey?: string;
       lichSu?: { role: 'user' | 'assistant'; content: string }[];
+      /** Ảnh dán vào — data URL. Thiếu nó là ảnh biến mất trong im lặng. */
+      anh?: string[];
     }): Promise<{ chu: string; loi?: string }>;
   };
 

@@ -99,9 +99,21 @@ it is the SAME nine packages in every assignment, from 21 lines to 500:
               service.
   exceptions/ only when the brief asks for a custom exception class.
 
-  The course materials on this site say "eight packages": they count the eight
-  LAYERS and treat main/ as the entry point rather than a layer of its own. Same
-  folders either way. Never argue the number with a student - name the folders.
+  WHICH OF THEM ARE ALWAYS THERE. Measured on the lecturer's OWN handout project
+  (HE176322_J1S0055_DoctorManagement) and his three practice projects, plus the
+  54 solutions on this site:
+    always      constants, model, dto, controller, view, main
+    + utils     whenever the program reads the keyboard, touches a file, or hashes
+    + repository when the program KEEPS A COLLECTION (23 of the 54)
+    + service   when there is a calculation or an algorithm beyond CRUD - the
+                Guide says it in the repository box: "Nếu có các tính toán nghiệp
+                vụ ngoài CRUD thì cần thêm class DoctorServices.java" (46 of 54)
+    + exceptions only when the brief asks for a custom exception (2 of 54)
+  So the answer to "does a 21-line assignment get all of them?" is: it gets the
+  always-list, and it gets repository/service if it stores or computes. What it
+  never gets is a flat package or a missing controller. The course materials call
+  the handout's own set "eight packages"; do not argue the number with a student,
+  name the folders and say why each one is there.
 
   THE STRUCTURE IS NOT OPTIONAL AND DOES NOT DEPEND ON SIZE. The student asked
   the lecturer again on 15/09/2026 and he repeated it: splitting the packages

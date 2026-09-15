@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
-import { ArrowLeft, CheckCircle2, Circle, Loader2, Clock, ExternalLink, Target, FlaskConical, CheckSquare, Square } from 'lucide-react';
+import { ArrowLeft, BookOpenText, CheckCircle2, Circle, Loader2, Clock, ExternalLink, Target, FlaskConical, CheckSquare, Square } from 'lucide-react';
 import { codeLabApi, locFromTitle } from '@/lib/code-lab-api';
 import type { CodeTrack, MyProgressItem } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
@@ -92,6 +92,19 @@ export default function TrackRoadmapPage() {
     }, 80);
     return () => window.clearTimeout(t);
   }, [track]);
+
+  // Hai nhóm module: bài giảng thuần (không có bài tập nhưng CÓ nội dung) và
+  // phần còn lại. Module rỗng hoàn toàn — không bài tập, không bài giảng — vẫn
+  // nằm ở nhóm dưới như cũ, vì gom nó vào "Giáo trình" là hứa một bài giảng
+  // không tồn tại.
+  const baiGiang = useMemo(
+    () => (track?.modules || []).filter((m) => (m.exercises || []).length === 0 && m.hasLesson),
+    [track],
+  );
+  const moduleBaiTap = useMemo(
+    () => (track?.modules || []).filter((m) => !((m.exercises || []).length === 0 && m.hasLesson)),
+    [track],
+  );
 
   const { total, solved } = useMemo(() => {
     const all = (track?.modules || []).flatMap((m) => m.exercises || []);
@@ -208,8 +221,51 @@ export default function TrackRoadmapPage() {
       )}
       <SkillCoverage trackSlug={slug} />
 
+      {/* GIÁO TRÌNH — mọi module chỉ-có-bài-giảng gom vào MỘT mục, đặt trên các
+          bài tập. Trước đây chúng nằm rải: 4 bài giảng ở trên, 54 bài lab ở
+          giữa, 3 bài tra cứu ở dưới — mỗi bài một thẻ to kèm dòng "No exercises
+          in this module yet.", nên trang đọc như một danh sách hỏng. Thứ tự bên
+          trong giữ nguyên thứ tự của track: phần hướng dẫn vẫn đứng đầu. */}
+      {baiGiang.length >= 2 && (
+        <section
+          className="mb-5 overflow-hidden rounded-2xl border"
+          style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
+        >
+          <header className="flex flex-wrap items-center gap-2 border-b px-4 py-3.5" style={{ borderColor: 'var(--border-color)' }}>
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl"
+              style={{ background: `color-mix(in srgb, ${accent} 15%, transparent)`, color: accent, border: `1px solid color-mix(in srgb, ${accent} 30%, transparent)` }}>
+              <BookOpenText size={17} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-semibold" style={{ color: 'var(--text-primary)' }}>Giáo trình — đọc trước khi làm bài</h2>
+              <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+                {baiGiang.length} bài giảng, theo thứ tự nên đọc. Mỗi bài mở ngay tại đây và có AI giải thích từng mục.
+              </p>
+            </div>
+            <span className="hidden shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums sm:inline-block"
+              style={{ background: 'var(--bg-surface)', color: 'var(--text-muted)' }}>
+              {baiGiang.length} bài
+            </span>
+          </header>
+          <div>
+            {baiGiang.map((m, i) => (
+              <ModuleLesson
+                key={m.id}
+                id={`module-${m.id}`}
+                moduleId={m.id}
+                hasLesson={m.hasLesson}
+                autoOpen={focusModuleId === m.id}
+                ten={m.name}
+                moTa={m.description}
+                soThuTu={i + 1}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
       <div className="space-y-5">
-        {(track.modules || []).map((m, mi) => {
+        {moduleBaiTap.map((m, mi) => {
           const modAll = (m.exercises || []).length;
           const modSolved = (m.exercises || []).filter((e) => progress[e.id]?.status === 'SOLVED').length;
           const modDone = modAll > 0 && modSolved === modAll;

@@ -36,7 +36,7 @@ import * as explainService from '../services/codeLab.explain.service.js';
 import * as coachService from '../services/codeLab.coach.service.js';
 import * as workspace from '../services/codeLab.workspace.service.js';
 import { generateRoadmap, generateExercises, commitExercises } from '../services/codeLab.ai.service.js';
-import { generateLesson, commitLesson, getModuleLesson, clearLesson } from '../services/codeLab.lesson.service.js';
+import { generateLesson, commitLesson, getModuleLesson, clearLesson, hoiBaiGiang } from '../services/codeLab.lesson.service.js';
 import * as phongLab from '../services/labRoom/phongLab.service.js';
 
 const router = Router();
@@ -591,6 +591,19 @@ router.post('/admin/ai/exercises/commit', authenticate, requireRole('ADMIN', 'ED
 // Public: full lesson for one module (fetched on demand, not in the tree).
 router.get('/modules/:id(\\d+)/lesson', async (req, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await getModuleLesson(parseInt(req.params.id)) }); } catch (e) { next(e); }
+});
+// Hỏi AI về CHÍNH bài giảng đang đọc. Cần đăng nhập (mỗi lượt tính vào hạn mức
+// AI của người hỏi), không cần Pro: đây là chỗ người học mắc ngay khi đọc, dựng
+// cổng Pro ở đây là chặn đúng lúc họ cần nhất.
+router.post('/modules/:id(\\d+)/lesson/ask', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await hoiBaiGiang(parseInt(req.params.id), {
+      userId: req.user!.userId,
+      question: String(req.body?.question || ''),
+      muc: req.body?.muc ? String(req.body.muc) : undefined,
+      history: Array.isArray(req.body?.history) ? req.body.history : undefined,
+    }) });
+  } catch (e) { next(e); }
 });
 router.post('/admin/ai/lesson/generate', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await generateLesson(req.user!.userId, req.body) }); } catch (e) { next(e); }

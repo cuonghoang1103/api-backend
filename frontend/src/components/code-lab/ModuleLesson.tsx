@@ -12,8 +12,15 @@ import type { DocBlock, DocLang } from '@/types/exp-hub';
 import { hasVietnamese, docParts } from '@/types/exp-hub';
 import { codeLabApi } from '@/lib/code-lab-api';
 import { DocBlocksView } from '@/components/exp-hub/DocBlocksView';
+import { LessonAsk } from '@/components/code-lab/LessonAsk';
 
-export function ModuleLesson({ moduleId, hasLesson, autoOpen }: { moduleId: number; hasLesson?: boolean; autoOpen?: boolean }) {
+export function ModuleLesson({ moduleId, hasLesson, autoOpen, ten, moTa, soThuTu, id }: {
+  moduleId: number; hasLesson?: boolean; autoOpen?: boolean;
+  /** Khi có `ten`, hàng bấm hiện TÊN BÀI GIẢNG thay cho chữ "Lesson" chung chung.
+   *  Dùng cho mục "Giáo trình" gom các bài giảng lại — ở đó mỗi hàng là một bài
+   *  khác nhau, nên tám hàng cùng ghi "Lesson" thì không ai biết hàng nào là gì. */
+  ten?: string; moTa?: string | null; soThuTu?: number; id?: string;
+}) {
   const [open, setOpen] = useState(false);
   const [blocks, setBlocks] = useState<DocBlock[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -66,15 +73,35 @@ export function ModuleLesson({ moduleId, hasLesson, autoOpen }: { moduleId: numb
   };
 
   return (
-    <div className="border-b" style={{ borderColor: 'var(--border-color)' }}>
+    <div id={id} className="scroll-mt-24 border-b last:border-b-0" style={{ borderColor: 'var(--border-color)' }}>
       <button
         onClick={toggle}
-        className="flex w-full items-center gap-2 px-4 py-2.5 text-left transition-colors hover:bg-[var(--bg-surface-hover)]"
+        aria-expanded={open}
+        className="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-[var(--bg-surface-hover)]"
       >
-        <BookOpenText size={16} className="text-[var(--accent-color,#8b5cf6)]" style={{ color: 'var(--accent-color)' }} />
-        <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Lesson</span>
-        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>— read before the exercises</span>
-        <ChevronDown size={16} className={`ml-auto transition-transform ${open ? '' : '-rotate-90'}`} style={{ color: 'var(--text-muted)' }} />
+        {soThuTu !== undefined ? (
+          <span
+            className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg text-xs font-bold tabular-nums"
+            style={{
+              background: 'color-mix(in srgb, var(--accent-color, #8b5cf6) 15%, transparent)',
+              color: 'var(--accent-color, #8b5cf6)',
+              border: '1px solid color-mix(in srgb, var(--accent-color, #8b5cf6) 30%, transparent)',
+            }}
+          >
+            {soThuTu}
+          </span>
+        ) : (
+          <BookOpenText size={16} className="mt-0.5 shrink-0" style={{ color: 'var(--accent-color)' }} />
+        )}
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+            {ten || 'Lesson'}
+          </span>
+          <span className="mt-0.5 block text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+            {moTa || (ten ? '' : '— read before the exercises')}
+          </span>
+        </span>
+        <ChevronDown size={16} className={`mt-1 shrink-0 transition-transform ${open ? '' : '-rotate-90'}`} style={{ color: 'var(--text-muted)' }} />
       </button>
       {open && (
         <div className="px-4 pb-4">
@@ -138,6 +165,8 @@ export function ModuleLesson({ moduleId, hasLesson, autoOpen }: { moduleId: numb
                 </nav>
               )}
               <DocBlocksView blocks={blocks} lang={lang} />
+              {/* Hỏi ngay tại chỗ đang đọc — xem docblock của LessonAsk. */}
+              <LessonAsk moduleId={moduleId} parts={parts} lang={lang} />
             </div>
           ) : (
             <p className="py-3 text-sm" style={{ color: 'var(--text-muted)' }}>No lesson content yet.</p>

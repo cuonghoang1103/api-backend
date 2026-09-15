@@ -58,6 +58,11 @@ export const codeLabApi = {
   getExercise: (slug: string) => api.get<Ok<CodeExercise>>(`${BASE}/exercises/${slug}`),
   // NTU-style module lesson (fetched on demand; empty blocks when none).
   getLesson: (moduleId: number) => api.get<Ok<CodeLesson>>(`${BASE}/modules/${moduleId}/lesson`),
+
+  // Hỏi AI về CHÍNH bài giảng đang mở. `muc` là tiêu đề phần đang đọc, để câu
+  // trả lời bám đúng chỗ đó khi bài dài (module 847 có 272 khối).
+  askLesson: (moduleId: number, body: { question: string; muc?: string; history?: Array<{ role: 'user' | 'assistant'; content: string }> }) =>
+    api.post<Ok<{ answer: string }>>(`${BASE}/modules/${moduleId}/lesson/ask`, body, { timeout: 180_000 }),
   getStats: () => api.get<Ok<CodeStats>>(`${BASE}/stats`),
 
   // AI explanation of one exercise. Reading a cached one is free; generating it

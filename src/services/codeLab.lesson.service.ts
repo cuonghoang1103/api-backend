@@ -206,6 +206,117 @@ export async function getModuleLesson(moduleId: number) {
   };
 }
 
+// ─── Hỏi AI về chính bài giảng đang đọc ─────────────────────────
+
+const MAX_CAU_HOI = 1200;
+const MAX_LICH_SU = 10;
+/** Trần chữ của bài giảng nhét vào ngữ cảnh. Module 847 có 272 khối — nhét
+ *  hết là vài trăm nghìn ký tự, vượt cửa sổ và tốn tiền vô ích. */
+const MAX_BAI_GIANG = 26_000;
+
+/** Bóc bài giảng thành chữ thuần để làm ngữ cảnh, giữ nguyên thứ tự mục.
+ *  Export để kiểm được: phép cắt này hỏng thì AI trả lời lạc đề, không ai thấy. */
+export function chuCuaBaiGiang(blocks: unknown, moc?: string): string {
+  const ds = Array.isArray(blocks) ? (blocks as Array<Record<string, unknown>>) : [];
+  const dong: string[] = [];
+  for (const b of ds) {
+    const loai = String(b?.type || '');
+    if (loai === 'heading' || loai === 'part') dong.push(`\n## ${String(b.text || '')}`);
+    else if (loai === 'prose') dong.push(plainText(String(b.html || '')));
+    else if (loai === 'code') dong.push('```' + String(b.language || '') + '\n' + String(b.code || '').slice(0, 2_000) + '\n```');
+    else if (loai === 'mermaid') dong.push('```mermaid\n' + String(b.code || '').slice(0, 800) + '\n```');
+  }
+  const tatCa = dong.join('\n');
+  if (tatCa.length <= MAX_BAI_GIANG) return tatCa;
+  // Người học hỏi về MỘT mục. Cắt quanh mục đó thay vì cắt từ đầu bài — cắt từ
+  // đầu là luôn mất phần cuối, mà phần cuối mới là chỗ khó nên mới bị hỏi.
+  const i = moc ? tatCa.toLowerCase().indexOf(moc.toLowerCase().slice(0, 60)) : -1;
+  if (i < 0) return tatCa.slice(0, MAX_BAI_GIANG);
+  const dau = Math.max(0, i - Math.floor(MAX_BAI_GIANG / 3));
+  return tatCa.slice(dau, dau + MAX_BAI_GIANG);
+}
+
+function plainText(html: string): string {
+  return html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|li|h[1-6]|tr|pre)>/gi, '\n')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/[ \t]+/g, ' ')
+    // Thẻ đóng biến thành dấu cách, nên `<strong>JavaBean</strong>.` ra
+    // "JavaBean ." — dán lại cho câu đọc như câu, vì đây là chữ model đọc.
+    .replace(/ +([.,;:!?)\]])/g, '$1')
+    .replace(/([([]) +/g, '$1')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+const NHIEM_VU_HOI = `YOUR TASK NOW: a student is reading ONE lesson of this course and does not
+understand part of it. You answer about THAT lesson.
+
+* Answer in VIETNAMESE. Keep every identifier, keyword, message string, file path and
+  package name in English exactly as the lesson writes it.
+* Ground every answer in the LESSON TEXT you were given. Quote its own wording when you
+  explain — the student is looking at that page, so an answer that uses different words
+  for the same thing makes them think there are two rules.
+* If the lesson does not cover what they asked, say so in one sentence, then answer from
+  the course rules — and say which part of the lesson they should read instead.
+* Be concrete and short: 3-8 sentences, or a small list. This is a question asked while
+  reading, not a second lecture.
+* Use Markdown, and LABEL EVERY FENCE: \`\`\`java for code, \`\`\`text for a file tree or a
+  console transcript. An unlabelled fence renders inline and every newline collapses.
+* End with one sentence the student could SAY to the lecturer if asked about this.`;
+
+/**
+ * Trợ giảng của MỘT bài giảng: hỏi gì đáp nấy, nhưng chỉ trong phạm vi bài đó.
+ *
+ * Vì sao không dùng chung gia sư khoá học: gia sư khoá học đứng trên nội dung
+ * Academy, còn bài giảng Code Lab là văn bản khác, và với track lab211 nó phải
+ * đứng trên luật của thầy — trả lời "để trong class Manager" là dạy đúng thứ
+ * làm người học bị trả bài.
+ */
+export async function hoiBaiGiang(
+  moduleId: number,
+  opts: { userId: number; question: string; muc?: string; history?: Array<{ role: 'user' | 'assistant'; content: string }> },
+): Promise<{ answer: string }> {
+  const cauHoi = (opts.question || '').trim();
+  if (!cauHoi) throw new BadRequestError('Bạn chưa nhập câu hỏi.');
+  if (cauHoi.length > MAX_CAU_HOI) throw new BadRequestError('Câu hỏi dài quá, rút gọn giúp mình.');
+  if (!isAiAvailable('codelab')) throw new BadRequestError('AI đang không sẵn sàng. Thử lại sau chút nhé.');
+  if (!(await checkTokenQuota(opts.userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI của hôm nay.');
+
+  const mod = await loadModule(moduleId);
+  const than = chuCuaBaiGiang(mod.lessonBlocks, opts.muc);
+  if (!than.trim()) throw new BadRequestError('Mục này chưa có bài giảng để hỏi.');
+
+  const laLab211 = /^lab211$/i.test(mod.track.slug || '');
+  const system = (laLab211 ? QUY_TAC_LOI + '\n\n' : '') + NHIEM_VU_HOI;
+  const nguCanh = `THE LESSON THE STUDENT IS READING\nTrack: ${mod.track.name} · Module: ${mod.name}\n`
+    + (opts.muc ? `They are asking about the section: "${opts.muc}"\n` : '')
+    + `\n${than}`;
+
+  const res = await llmComplete({
+    step: 'generation',
+    feature: 'codelab',
+    purpose: 'codelab_coach', // người học đang chờ câu trả lời → model mạnh
+    system,
+    messages: [
+      { role: 'user', content: nguCanh },
+      { role: 'assistant', content: 'Mình đã đọc xong bài giảng này.' },
+      ...(opts.history || []).slice(-MAX_LICH_SU),
+      { role: 'user', content: cauHoi },
+    ],
+    maxTokens: 2_500,
+    maxRetries: 1,
+    timeoutMs: 120_000,
+    userId: opts.userId,
+  });
+
+  const traLoi = (res.text || '').trim();
+  if (!traLoi) throw new BadRequestError('AI chưa trả lời được. Thử hỏi lại giúp mình.');
+  return { answer: traLoi };
+}
+
 /** Clear a module's lesson (admin). */
 export async function clearLesson(moduleId: number): Promise<void> {
   const mod = await prisma.codeModule.findUnique({ where: { id: moduleId }, select: { id: true } });

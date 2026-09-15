@@ -73,111 +73,60 @@ Four things decide the mark:
   letter for letter, including a capitalised name like Damage() that breaks the
   usual convention, and including the declared RETURN TYPE.
 
---- 2. THE LAYERS, AND WHEN TO ADD ONE --------------------------
-  entity     Plain data object. Private fields, full constructor, getters/
-             setters, toString(). Knows its data. No rules, no printing.
-             implements Serializable ONLY when the program writes objects with
-             ObjectOutputStream. Measured across all 54 briefs: NOT ONE does —
-             every file assignment here writes text, CSV, or a .dat file
-             written as text. So in this course the interface changes nothing
-             at run time; 22 reference solutions keep it because markers expect
-             to see it. Either answer is defensible, silence is not: be ready
-             for "you never serialize anything, why is this Serializable?" and
-             for "this one has no Serializable, why not?".
-  bo         Holds the collection and the rules. Throws Exception carrying the
-             brief's own message. **NEVER prints.** This is the one layering
-             rule stated with no exception.
-  controller Reads input via the Validator, calls bo, reports the outcome.
-  ui / Main  The menu and the loop, and the screen. Nothing else — unless the
-             Guidelines put a named method here ("in startup code"), in which
-             case here is exactly right.
-  utils      Validator and small helpers. private static final Scanner, a
-             private constructor, every method static.
+--- 2. THE LAYERS: THE NINE PACKAGES OF Guide.xlsx ---------------
+The architecture sheet of the lecturer's own Guide.xlsx is what he grades, and
+it is the SAME nine packages in every assignment, from 21 lines to 500:
 
-  READING AND WRITING THE DATA FILE BELONGS IN bo. Never in utils, never in
-  the controller, never in the entity. Whether it gets a class of its own is
-  a judgement call, and both answers pass. Measured across the 54 reference
-  solutions: 15 touch a file at all; 11 of those keep a separate class for it
-  and 4 merge it into the business class. All 11 separate classes live in bo
-  (VehicleFile, DataStore, FileProcessor, CSVFormatter, CopyManager,
-  ZipManager, WordSearcher, DocumentFileManager, FileManager, FileProcessing
-  - ten names for eleven projects, DataStore serving both P0014 and P0015).
-    - MERGE it when one bo owns one file for one entity - FruitManager with
-      fruits.txt, DictionaryManager with dictionary.txt. A FileHelper there is
-      an indirection with nothing behind it, and the student has to defend it.
-    - SPLIT it out when several bo classes share one file (DataStore in
-      P0014/P0015 serves AssetStore, EmployeeStore, RequestStore and
-      BorrowStore), or when the file format IS the assignment: zip, CSV,
-      copying, searching a file for a word.
-  The only file writing that appears in utils across all 54 is SampleData,
-  which creates the demo input so the first run has something to read. The
-  program's own load and save are not utilities.
+  constants/  Message.java    every sentence the program prints - no literal
+                              user-facing text anywhere else in the project.
+              Constants.java  numbers, formats, regexes, and the enums.
+  model/      the JavaBean(s): private fields, a public no-argument constructor,
+              getters/setters. Never prints, never reads the keyboard, no static.
+  dto/        RequestDTO  main -> controller.  ResponseDTO  controller -> view.
+              This is also how a method keeps to at most two parameters.
+  repository/ owns the collection (ArrayList / HashMap / Hashtable) and its CRUD,
+              plus loading and saving the data file.
+  service/    the business rules and the algorithms. Called only by a controller.
+  controller/ takes a request DTO, asks a service, hands the result to the view.
+              NEVER static, NEVER a Scanner, NEVER a System.out, and it must not
+              import model - it speaks DTO.
+  view/       the ONLY place besides main that is allowed to print.
+  utils/      public final class + private constructor + every method static:
+              Validation, FileUtils, MD5Utils, captcha.
+  main/       Main.java - the menu and the keyboard. The Scanner is created HERE
+              and only here, as a LOCAL variable. static METHODS are fine, static
+              FIELDS are forbidden. Must not import model, view, repository or
+              service.
+  exceptions/ only when the brief asks for a custom exception class.
 
-  PACKAGES ARE FOLDERS, AND THERE IS NO FLAT OPTION. Measured across all 54
-  reference solutions: NOT ONE puts its classes in the default package or in a
-  single flat package named after the program. Every one of them uses
-  src/entity, src/bo, src/controller, src/ui, src/utils - the folders it needs,
-  never a flat bag. Suggesting "default package or doctormanagement/" is wrong
-  even when the brief's own Suggestion sketch looks flat: the brief names
-  CLASSES, the layout is the course convention. Never offer the flat shape as
-  an option.
+  THE STRUCTURE IS NOT OPTIONAL AND DOES NOT DEPEND ON SIZE. The student asked
+  the lecturer again on 15/09/2026 and he repeated it: splitting the packages
+  this way IS what he grades as "Design Pattern and SOLID". A 21-line assignment
+  keeps every package it uses. NEVER tell a student that a controller in a
+  40-line program is over-engineering - here the MISSING controller is what
+  loses the mark. What does depend on size is adding a GoF pattern CLASS; that
+  is section 9, and it is a different question.
 
-  NEVER DECIDE A LAYER BY LINE COUNT. "Only 73 LOC, so a controller would be an
-  empty wrapper" is exactly the reasoning this sheet forbids, and it has been
-  produced for real on J1.S.P0055. The conclusion there happens to be right -
-  P0055 has no controller - but the reason is wrong, and a student who repeats
-  it out loud gets asked the follow-up and has nothing. Decide by what the
-  program DOES. If the responsibility test says a layer is needed, 40 LOC does
-  not cancel it; if it says no, 300 LOC does not create it. Say the operations,
-  never the size.
+  NEVER a flat package, and never the default package. Both halves of this have
+  been got wrong for real on J1.S.P0055: an assistant sketched "src/ └── (default
+  package or doctormanagement/)", and then justified having no controller with
+  "only 73 LOC". Under Guide.xlsx that assignment has a controller like every
+  other one, and the student who repeats "it is too small for a controller" to
+  the lecturer loses the mark.
 
-  ADD A LAYER ONLY WHERE THIS PROGRAM NEEDS ONE. Decide by RESPONSIBILITY, not
-  by counting files:
-    - a bo appears when there is a business rule or an algorithm worth keeping
-      away from the screen. This happens in THREE-file programs too: the
-      sorting and searching briefs put the algorithm in a bo with no entity
-      anywhere in sight.
-    - a controller appears when the program performs SEVERAL DISTINCT
-      OPERATIONS ON ONE STORED COLLECTION — add / update / delete / search /
-      save. Not when it is merely large.
+  WHERE THE ALGORITHM GOES. An algorithm the brief tells the student to write by
+  hand (bubble sort, binary search, Fibonacci) belongs in a service class, as a
+  private method - J1.S.P0001 is service/SortService with a private bubbleSort()
+  called from sortRandomArray(). Never in Main, never in the model. Saying "this
+  is only 40 lines, put it in main" is the reasoning this sheet forbids: decide
+  by RESPONSIBILITY, never by line count.
 
-  Those two sentences are measured, not asserted. Across the 54 reference
-  solutions, counting the kinds of collection operation each program performs:
-      with a controller     ~4.8 kinds on average (11 projects)
-      without a controller  ~0.9 kinds on average
-  WARNING - THOSE TWO NUMBERS GOVERN controller ONLY. They say NOTHING about
-  bo. Reading "0.9 operations" as "so it needs no bo either" is a real mistake
-  this sheet has watched happen, on J1.S.P0001 (bubble sort): the answer said
-  "no controller" correctly and then added "no bo", while the reference
-  solution for that exact brief is THREE files WITH a bo -
-      bo/ArraySorter.java    generate() and bubbleSort()
-      utils/Validator.java   reads the size, re-asks on bad input
-      ui/Main.java           24 lines, owns the screen
-  and ArraySorter's own comment states the reason: "No printing: the ui layer
-  owns the screen, which is what lets this class be reused and tested."
-  An algorithm the brief tells the student to WRITE BY HAND is precisely what a
-  bo exists to hold. Run the responsibility test on bo and on controller
-  SEPARATELY. Never let the answer for one decide the other, and never answer
-  "no bo" for a brief whose core IS an algorithm.
+  READING AND WRITING THE DATA FILE BELONGS IN repository/, using utils/FileUtils
+  for the raw lines. Never in model, never in controller, never in main. Data
+  files themselves live at the PROJECT ROOT, next to build.xml.
 
-  File count does NOT separate the two groups and must not be used as the rule.
-  The clearest proof is the Shapes brief: TEN files and correctly no controller,
-  because nine of them are shape classes, not features, and the program performs
-  zero collection operations. The average main() is 58 lines with a controller
-  and 67 without — so "it keeps main short" is not the reason either.
-
-  As a rough cross-check only, counted across 17 passing submissions: 2-3 files
-  usually had no bo, 5-6 usually had one, 7+ usually had a controller. Four
-  files went BOTH ways (CalculatorBill without a bo, MatrixOOP with one), which
-  is exactly why the count is a cross-check and not the rule.
-
-  An empty controller in a 40-line assignment LOSES a mark. Expect "why is
-  there no controller here?" and answer with the operations the program
-  performs, never with a file count and never with a preference.
-
-  The test of whether the layers are real: you can delete the whole menu and
-  the model still compiles. If removing System.out breaks the entity, they are
-  tangled.
+  The test of whether the layers are real: delete the whole menu and the model
+  still compiles. If removing System.out breaks the model, they are tangled.
 
 --- 3. INPUT THAT NEVER CRASHES ---------------------------------
 * Around 44 of the 54 briefs read the keyboard. A crash on bad input is zero
@@ -190,8 +139,13 @@ Four things decide the mark:
   Double.parseDouble always takes a dot.
 * A validated read LOOPS INSIDE THE READER and returns only when the value is
   good. Never loop around the caller.
-* NEVER call close() on a Scanner wrapping System.in — it closes stdin for the
-  whole program and the next read throws NoSuchElementException.
+* ONE Scanner for the whole program, created in main() as a local variable and
+  passed to the input helpers. Never a Scanner field, never one in utils, and
+  NEVER call close() on it — that closes stdin and the next read throws
+  NoSuchElementException.
+* Read the line OUTSIDE the try that validates it. With sc.nextLine() inside the
+  try, catch (Exception) also swallows the NoSuchElementException thrown when
+  input runs out, and the ask-again loop spins for ever.
 * Exit the menu with a boolean flag, never System.exit(0): System.exit kills the
   JVM immediately and any "save to file before quitting" step never runs.
 
@@ -255,17 +209,28 @@ Four things decide the mark:
   Exception: when the brief itself prints "protected String countryCode;", the
   brief wins — and you say out loud that you noticed it differs from the habit.
 
---- 9. SOLID  (PRO192 N2.1 — background, NOT a LAB211 grading criterion) ---
-  S  one class, one job
-  O  extend by adding a subclass/implementation, not by editing what works
+--- 9. SOLID AND DESIGN PATTERNS — GRADED IN THIS COURSE ---------
+  The lecturer's handout lists "SOLID, Design Pattern" in the knowledge to hold
+  and says implementing and UNDERSTANDING SOLID earns LOC. In his own words in
+  class, a design pattern the student can explain is the thing he rates highest.
+  S  one class, one job        - this is what the nine packages already deliver
+  O  extend by adding a class, not by editing what works
   L  a subclass works anywhere its parent is expected
   I  small focused interfaces beat one big one
-  D  depend on abstractions where things might change
-  HONESTY REQUIRED: LAB211 does not grade SOLID, and it does not teach design
-  patterns at all — those belong to PRO192 and SWD392. Do NOT push a student to
-  add interfaces, dependency injection or a design pattern into a 40-line lab
-  assignment: in this course that is over-engineering and it LOSES marks. Use
-  SOLID only to explain WHY the layer rules above look the way they do.
+  D  depend on an abstraction where the implementation might change
+  WHERE THE LINE IS. The package split above is required everywhere. Adding a
+  GoF pattern CLASS is a separate decision, made by the assignment:
+    - Strategy: several ways to sort / search / price something (a Comparator IS
+      a Strategy), Factory: create the right subclass from a type code,
+      Template Method: a fixed skeleton whose steps subclasses fill in,
+      Builder: an object with many fields, Facade: what the controller already is.
+    - In an assignment of about 60 lines or less do NOT add an interface plus a
+      single implementation just to own a pattern name. The lecturer's own SOLID
+      slide 26 warns against an abstraction introduced "only because SOLID says
+      so" (YAGNI). Keep MVC, keep the controller as Facade, put the algorithm in
+      a private method of the service - and be ready to say WHERE Strategy would
+      plug in and what it would cost. That answer scores; a pattern the student
+      cannot defend does not.
 
 --- 10. NAMING, COMMENTS, CHECKSTYLE ----------------------------
 * class PascalCase noun (Doctor, DoctorManager) · method camelCase verb
@@ -276,6 +241,10 @@ Four things decide the mark:
 * DELETE the NetBeans "To change this license header…" comment — it is the
   signature of generated code. Replace it with a short Javadoc that says WHY the
   class exists, not what it is.
+* COMMENT DENSITY THE LECTURER CHECKS: a short Javadoc on each class (with
+  @author), then a ONE-LINE // comment above every method, every field and every
+  block - if / else / for / while / switch / case / default / try / catch. "No
+  comments, no review" is one of his five refusal gates.
 * A comment explains the DECISION, not the code. "// increment i" is noise.
   "A LinkedHashMap rather than a HashMap: lookup is instant either way, but this
   keeps the file's line order stable between runs" is the standard.

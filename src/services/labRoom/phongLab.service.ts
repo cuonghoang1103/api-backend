@@ -384,8 +384,8 @@ Return ONLY JSON, no prose around it:
  "tongQuan": "3-6 sentences: what this brief is REALLY asking for, in plain Vietnamese. Name the skill it tests.",
  "yeuCauBatBuoc": ["every requirement the Guidelines state, one per entry, quoting the exact method signature or message string where the sheet gives one"],
  "kienTruc": {
-   "tang": [{"goi": "entity", "file": "Contact.java", "viec": "what it holds and what it must NOT do"}],
-   "viSao": "2-4 sentences justifying THIS layer set for THIS assignment: the responsibility test first, the file count as the cross-check. If the Guidelines say the methods go 'in startup code', say so and put them in Main."
+   "tang": [{"goi": "model", "file": "Contact.java", "viec": "what it holds and what it must NOT do"}],
+   "viSao": "2-4 sentences: what each package of Guide.xlsx holds IN THIS assignment, and which class carries the brief's named methods. The package set is fixed; what varies is what goes in each one."
  },
  "soDo": "a mermaid diagram of THIS program's flow, as plain text starting with 'flowchart LR' or 'flowchart TD'. One node per class or per stage, arrows for who calls whom and where the data goes. Keep node labels short and ASCII. null if a diagram would add nothing.",
  "dienTien": {
@@ -411,11 +411,11 @@ Rules for this task:
   "bayCanTranh" — noticing it earns marks.
 * Do NOT write the solution. This is the briefing, not the answer. Name the
   classes and their responsibilities; do not hand over method bodies.
-* LAYERS: run the responsibility test on bo and on controller SEPARATELY. The
-  4.8-vs-0.9 measurement governs controller ONLY. A brief whose core is an
-  algorithm the student must write by hand gets a bo even at three files — see
-  the J1.S.P0001 worked case in the rules above. Saying "no bo" there is wrong
-  and it costs the student marks.
+* LAYERS: list the packages of Guide.xlsx this assignment uses, and say what
+  goes in each. The set does NOT shrink because the assignment is small — see
+  the rules above. An algorithm the student must write by hand goes in a
+  service class as a private method (J1.S.P0001 -> service/SortService), never
+  in Main. Never suggest dropping the controller to "avoid an empty wrapper".
 * "dienTien" is for briefs whose heart is an ALGORITHM (a sort, a search, a
   conversion, a matrix walk). Trace it on a SMALL concrete example, one row per
   pass, showing the array or the state after that pass. This is the single most
@@ -590,8 +590,9 @@ HOW TO MARK
 * Check comments: is every non-obvious method explained by a comment that says
   WHY, not what? A method with no comment and a non-obvious job is a finding.
 * Check the NetBeans header is gone, the naming, the access modifiers, the
-  Validator contract, the locale on every %f, strict dates, @Override, and that
-  no bo prints.
+  Validation contract, the locale on every %f, strict dates, @Override, that
+  nothing outside view/ and main/ prints, and that the Scanner exists only in
+  main() as a local variable.
 * "dat" is true ONLY when ALL of these hold: it compiles; every Guidelines
   requirement is implemented with the stated signature; bad input cannot crash
   it; the console matches the expected screen; and there is no code a student

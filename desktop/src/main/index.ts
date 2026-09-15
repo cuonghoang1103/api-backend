@@ -88,6 +88,26 @@ async function bootstrap(): Promise<void> {
 
   await app.whenReady();
 
+  /*
+   * NẠP PATH THẬT TRƯỚC MỌI THỨ KHÁC.
+   *
+   * App mở từ Dock không đọc `.zshrc`, nên `run_command` của agent không thấy
+   * node/npm/docker/psql và nó kết luận "máy bạn chưa cài" — sai, và đẩy việc
+   * ngược về người dùng. Xem `duongLenh.ts` cho số đo thật.
+   *
+   * `await` có chủ ý dù nó làm chậm lúc mở: đặt sau `createMainWindow()` thì
+   * có một khe vài trăm mili giây mà agent đã chạy được lệnh với PATH cụt —
+   * và lỗi lọt qua khe đó sẽ là loại "thỉnh thoảng mới sai", khó lần nhất.
+   * Trần chờ là 3 giây và có lưới đỡ, nên khe này không thể treo app.
+   */
+  try {
+    const { napPathThat } = await import('./duongLenh');
+    const them = await napPathThat();
+    if (them.length) console.log(`[path] đã thêm ${them.length} đường từ shell đăng nhập`);
+  } catch (e) {
+    console.warn('[path] không nạp được PATH của shell:', (e as Error)?.message);
+  }
+
   applySessionPolicies();
   registerAppProtocol(path.join(__dirname, '../renderer'));
   await registerIpcHandlers();

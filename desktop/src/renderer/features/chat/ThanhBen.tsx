@@ -19,7 +19,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Archive, ArchiveRestore, ChevronLeft, FolderGit2, GitBranch, Loader2, MessageSquarePlus,
-  Pencil, Pin, PinOff, Search, Trash2,
+  Pencil, Pin, PinOff, Search, SquarePlus, Trash2,
 } from 'lucide-react';
 
 import { useAppState } from '../../app-state';
@@ -34,10 +34,21 @@ const RONG_MAX = 460;
 const RONG_MAC_DINH = 260;
 
 export function ThanhBen({
-  cuocId, onMoPhien, onTaoTab,
+  cuocId, onMoPhien, onMoPhienTabMoi, onTaoTab,
 }: {
   cuocId: string | null;
   onMoPhien: (id: string) => void;
+  /**
+   * Mở việc cũ vào TAB MỚI, giữ nguyên tab đang làm.
+   *
+   * Người dùng 15/09/2026: *"tôi mở tiếp task B để làm mục khác trong project A
+   * không được, nó hiện lại đoạn chat task A"*. Đúng — bấm một việc ở thanh bên
+   * CỐ Ý mở vào tab ĐANG XEM (thiết kế cho "đọc lại việc cũ"), nên nó đè lên
+   * việc đang làm. Hợp lý khi muốn đọc lại, sai hẳn khi muốn làm song song.
+   *
+   * Nay có cả hai đường, và đường "tab mới" nằm ngay trong menu ba chấm.
+   */
+  onMoPhienTabMoi: (id: string) => void;
   onTaoTab: () => void;
 }) {
   const { dich } = useDich();
@@ -168,6 +179,13 @@ export function ThanhBen({
   };
 
   const mucMenu = (p: AgentPhien): MucMenu[] => [
+    {
+      /* Đặt ĐẦU danh sách: làm song song hai việc trong cùng một dự án là nhu
+         cầu thường xuyên hơn hẳn ghim hay đổi tên. */
+      nhan: 'Mở vào tab mới',
+      icon: <SquarePlus size={13} aria-hidden />,
+      onChon: () => onMoPhienTabMoi(p.id),
+    },
     {
       nhan: p.ghim === true ? 'Bỏ ghim' : 'Ghim lên đầu',
       icon: p.ghim === true ? <PinOff size={13} aria-hidden /> : <Pin size={13} aria-hidden />,

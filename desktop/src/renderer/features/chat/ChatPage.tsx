@@ -274,6 +274,7 @@ export function ChatPage() {
             <ThanhBen
               cuocId={tabMo || null}
               onMoPhien={moPhienVaoTab}
+              onMoPhienTabMoi={moPhienVaoTabMoi}
               onTaoTab={themTab}
             />
           )}

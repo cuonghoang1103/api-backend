@@ -75,7 +75,13 @@ export function timKeyDangDung(thanPhanHoi: unknown): DonKey | null {
   return ds.find((d) => d.status === 'APPROVED' && !d.hetHan && d.key) ?? null;
 }
 
-export function NutOpenCode({ gui, dangChay }: { gui: (chu: string) => void; dangChay: boolean }) {
+/**
+ * ⚠️ `gui` đã BỎ (15/09/2026). Việc cài giờ chạy thẳng ở tiến trình chính, nên
+ * nút không còn phải nhờ agent — và nhờ vậy nó chạy được cả khi người dùng
+ * CHƯA chọn thư mục dự án nào, đúng nhóm người dùng nút này phục vụ.
+ * `dangChay` giữ lại: đang có việc chạy thì đừng xen một lần cài vào giữa.
+ */
+export function NutOpenCode({ dangChay }: { dangChay: boolean }) {
   const { api } = useSession();
   const [key, setKey] = useState<string | null>(null);
   const [tin, setTin] = useState<ThongTinKey | null>(null);
@@ -84,6 +90,9 @@ export function NutOpenCode({ gui, dangChay }: { gui: (chu: string) => void; dan
   const [moGiaiThich, setMoGiaiThich] = useState(false);
   const [dangCai, setDangCai] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
+  /* Báo XONG ngay trong nút, không đẩy sang khung chat: việc này giờ chạy hẳn
+     ở tiến trình chính nên chẳng có lượt chat nào để mà đọc kết quả. */
+  const [xong, setXong] = useState<string | null>(null);
   /**
    * Hỏi máy chủ HỎNG ≠ người dùng CHƯA CÓ KEY.
    *
@@ -142,6 +151,7 @@ export function NutOpenCode({ gui, dangChay }: { gui: (chu: string) => void; dan
     if (!key || !tin || dangCai) return;
     setDangCai(true);
     setLoi(null);
+    setXong(null);
     try {
       // 1. App tự ghi cấu hình — key dừng lại ở máy này.
       const kq = await window.cuongthai?.opencode.vietCauHinh({
@@ -153,43 +163,43 @@ export function NutOpenCode({ gui, dangChay }: { gui: (chu: string) => void; dan
       });
       if (!kq?.ok) throw new Error('Không ghi được file cấu hình.');
 
-      // 2. Agent lo phần còn lại. Liệt kê ĐÚNG việc còn thiếu.
-      const thieu: string[] = [];
-      if (!may?.node) thieu.push('Node.js (chưa có — đây là lý do `npm` báo không tìm thấy lệnh)');
-      else if (!may.npm) thieu.push('npm (có node nhưng thiếu npm)');
-      if (!may?.opencode) thieu.push('gói `opencode-ai` (cài toàn cục bằng `npm i -g opencode-ai`)');
+      /*
+       * 2. CÀI THẲNG Ở TIẾN TRÌNH CHÍNH — không nhờ agent nữa.
+       *
+       * Bản trước gửi một câu dài cho agent để nó tự chạy `npm i -g`. Nhưng
+       * agent chỉ có quyền chạy lệnh khi cuộc đó ĐÃ CÓ thư mục dự án, mà
+       * người dùng chỉ muốn lấy key để dùng OpenCode ở terminal thì chẳng có
+       * dự án nào trong app — bấm nút không cài được gì. Người dùng báo đúng
+       * chuyện đó 15/09/2026.
+       *
+       * Chạy ở main còn đúng hơn về bản chất: cài một công cụ TOÀN CỤC không
+       * liên quan dự án nào, không tốn một lượt gọi model, và chạy y hệt nhau
+       * mọi lần thay vì phụ thuộc model đoán đúng lệnh.
+       */
+      const cai = await window.cuongthai?.opencode.cai();
 
-      const win = (may?.heDieuHanh ?? '') === 'win32';
-      const chu = [
-        'Hãy cài OpenCode trên máy này giúp tôi, làm từng bước và báo tôi biết khi xong.',
-        '',
-        `Hệ điều hành: ${may?.heDieuHanh ?? 'không rõ'}.`,
-        `Đã có: node=${may?.node ?? 'KHÔNG'}, npm=${may?.npm ?? 'KHÔNG'}, opencode=${may?.opencode ?? 'KHÔNG'}.`,
-        '',
-        thieu.length
-          ? `Việc cần làm — CHỈ những thứ còn thiếu:\n${thieu.map((t, i) => `${i + 1}. ${t}`).join('\n')}`
-          : 'Mọi thứ đã có sẵn — chỉ cần xác minh lại và hướng dẫn tôi dùng.',
-        '',
-        `File cấu hình ĐÃ ĐƯỢC TẠO SẴN tại: ${kq.duongDan}`,
-        '⚠️ File đó đã chứa API key của tôi rồi. ĐỪNG mở, ĐỪNG đọc, ĐỪNG in nội dung nó ra —',
-        'chỉ cần kiểm tra file có tồn tại là đủ.',
-        '',
-        win
-          ? 'Lưu ý Windows: nếu chưa có Node.js thì cài bằng winget (`winget install OpenJS.NodeJS.LTS`) '
-            + 'hoặc tải từ nodejs.org, rồi MỞ LẠI terminal trước khi chạy npm — biến PATH chỉ có hiệu lực ở cửa sổ mới.'
-          : 'Nếu chưa có Node.js thì cài bằng trình quản lý gói sẵn có trên máy (brew/apt/dnf).',
-        '',
-        'Cuối cùng: chạy `opencode --version` để xác minh, rồi hướng dẫn tôi ngắn gọn '
-          + 'cách mở terminal, vào thư mục dự án và gõ `opencode` để bắt đầu dùng.',
-      ].join('\n');
+      if (cai?.canNode) {
+        /* Cài Node cần quyền quản trị — ta KHÔNG tự làm. Nhưng cũng không bỏ
+           mặc: đưa đúng một câu lệnh cho hệ điều hành này, và nhờ agent giải
+           thích tiếp nếu người dùng cần. */
+        setLoi(`Máy chưa có Node.js nên chưa cài được. Chạy lệnh này trong terminal rồi bấm lại:\n${cai.huongDan}`);
+        return;
+      }
+      if (!cai?.ok) {
+        setLoi(cai?.loi ?? 'Không cài được.');
+        return;
+      }
 
-      gui(chu);
+      setXong(`Xong! OpenCode ${cai.phienBan ?? ''} đã sẵn sàng. Cấu hình ở ${kq.duongDan}. `
+        + 'Mở terminal, vào thư mục dự án của bạn và gõ `opencode` để bắt đầu.');
+      /* Nạp lại trạng thái máy để nút đổi sang "đã cài" mà không phải mở lại app. */
+      setMay(await window.cuongthai?.opencode.doMayNay() ?? null);
     } catch (e) {
       setLoi(e instanceof Error ? e.message : 'Không cài được.');
     } finally {
       setDangCai(false);
     }
-  }, [key, tin, may, gui, dangCai]);
+  }, [key, tin, dangCai]);
 
   if (dangTai) return null;
 
@@ -204,10 +214,15 @@ export function NutOpenCode({ gui, dangChay }: { gui: (chu: string) => void; dan
         title={coKey ? 'Cài OpenCode và cắm key của bạn vào' : 'Chưa có key — bấm để xem cách lấy'}
         className={`nut-opencode${coKey ? ' nut-opencode--sang' : ''}`}
       >
-        {dangCai ? 'Đang chuẩn bị…' : 'Cài OpenCode Terminal'}
+        {dangCai
+          ? 'Đang cài… (có thể mất 1–2 phút)'
+          : may?.opencode ? 'Cài lại OpenCode Terminal' : 'Cài OpenCode Terminal'}
       </button>
 
-      {loi && <p className="nut-opencode__loi">{loi}</p>}
+      {/* `white-space: pre-line` để câu lệnh hướng dẫn xuống dòng đúng chỗ —
+          gộp một dòng thì người dùng chép nhầm cả câu dẫn vào terminal. */}
+      {loi && <p className="nut-opencode__loi" style={{ whiteSpace: 'pre-line' }}>{loi}</p>}
+      {xong && <p className="nut-opencode__xong">{xong}</p>}
       {loiTai && !coKey && (
         <p className="nut-opencode__loi">
           Chưa kiểm được key của bạn ({loiTai}). Nút đang tạm khoá — thử mở lại app,

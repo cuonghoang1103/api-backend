@@ -12991,3 +12991,17 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   font-weight: 700;
   color: var(--ct-ok);
 }
+
+/* Kết quả cài OpenCode — báo ngay trong nút, không đẩy sang khung chat. */
+.nut-opencode__xong {
+  max-width: 460px;
+  margin: 8px auto 0;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--ct-ok) 40%, transparent);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-ok) 9%, transparent);
+  color: var(--ct-text);
+  font-size: 12.5px;
+  line-height: 1.5;
+  text-align: left;
+}

@@ -1474,6 +1474,22 @@ export const INVOKE_CHANNELS = {
   'opencode:doMayNay': null,
 
   /**
+   * CÀI `opencode-ai` — chạy THẲNG ở tiến trình chính, không nhờ agent.
+   *
+   * ⚠️ Vì sao đổi (15/09/2026): bản trước nhờ agent chạy `npm i -g opencode-ai`.
+   * Nhưng agent chỉ có quyền chạy lệnh khi cuộc đó ĐÃ CÓ thư mục dự án — xem
+   * `loop.ts`, mọi khả năng đều nằm trong `if (boiCanh.goc)`. Người dùng mới
+   * chưa từng chọn thư mục nào thì bấm nút cài KHÔNG cài được gì, và đó đúng
+   * là nhóm người dùng nút này sinh ra để phục vụ: họ chỉ muốn lấy key rồi
+   * dùng OpenCode ở terminal, chẳng có "dự án" nào trong app cả.
+   *
+   * Chạy ở main còn đúng hơn về bản chất: cài một công cụ TOÀN CỤC không liên
+   * quan gì tới dự án nào, không cần ngục, không tốn một lượt gọi model, và
+   * chạy y hệt nhau mọi lần thay vì phụ thuộc model đoán đúng lệnh.
+   */
+  'opencode:cai': null,
+
+  /**
    * Chụp màn hình NGAY TRONG APP — xem `main/ipc/manHinh.ts`.
    *
    * ⚠️ Vì sao phải có, trong khi agent đã chạy được `screencapture`: lệnh đó
@@ -2015,6 +2031,20 @@ export interface DesktopBridge {
       contextToken: number;
       outputToken: number;
     }): Promise<{ ok: true; duongDan: string; soModel: number }>;
+    /**
+     * Cài `opencode-ai` toàn cục. KHÔNG cần thư mục dự án, không qua agent.
+     *
+     * `canNode` = máy chưa có Node.js nên không tự cài được; `huongDan` là câu
+     * chỉ đường đúng hệ điều hành để người dùng làm một bước đó bằng tay.
+     */
+    cai(): Promise<{
+      ok: boolean;
+      canNode?: boolean;
+      huongDan?: string;
+      phienBan?: string;
+      loi?: string;
+      log?: string;
+    }>;
   };
 
   academy: {

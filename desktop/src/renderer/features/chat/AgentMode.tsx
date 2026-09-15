@@ -925,7 +925,7 @@ export function AgentMode({
       <div className="ct-agent-doi" data-co-web={webUrl !== null}>
       <div className="ct-agent-scroll" ref={cuonRef}>
         {trangThai.muc.length === 0 && (
-          <ManHinhTrong coThuMuc={coThuMuc} gui={gui} dangChay={trangThai.dangChay} />
+          <ManHinhTrong coThuMuc={coThuMuc} dangChay={trangThai.dangChay} />
         )}
 
         {trangThai.muc.map((m, i) => {
@@ -2069,10 +2069,9 @@ function ThanhHanMuc({
 }
 
 function ManHinhTrong({
-  coThuMuc, gui, dangChay,
+  coThuMuc, dangChay,
 }: {
   coThuMuc: boolean;
-  gui: (chu: string) => void;
   dangChay: boolean;
 }) {
   const { dich } = useDich();
@@ -2097,7 +2096,7 @@ function ManHinhTrong({
           làm MỘT LẦN rồi thôi, và chỗ này là nơi người dùng nhìn khi chưa biết
           bắt đầu từ đâu. Nút tự ẩn/sáng theo việc có key hay chưa — xem
           NutOpenCode.tsx. */}
-      <NutOpenCode gui={gui} dangChay={dangChay} />
+      <NutOpenCode dangChay={dangChay} />
     </div>
   );
 }

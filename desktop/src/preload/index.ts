@@ -257,6 +257,12 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('opencode:vietCauHinh', p) as Promise<{
         ok: true; duongDan: string; soModel: number;
       }>,
+    /** Cài `opencode-ai` toàn cục — chạy ở main, không cần thư mục dự án. */
+    cai: () =>
+      ipcRenderer.invoke('opencode:cai') as Promise<{
+        ok: boolean; canNode?: boolean; huongDan?: string;
+        phienBan?: string; loi?: string; log?: string;
+      }>,
   },
   academy: {
     /** Cửa sổ chính báo đang mở bài nào — main chuyển tiếp sang cửa sổ robot. */

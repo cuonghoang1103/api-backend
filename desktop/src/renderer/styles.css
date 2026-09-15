@@ -12889,3 +12889,74 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   gap: 8px;
 }
 .ct-chup-chan .ct-chup-nho { flex: 1; }
+
+/* ── Học viện: tiến độ · luồng video · đánh dấu xong ───── */
+.ct-hv-tiendo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+}
+.ct-hv-tiendo-thanh {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--ct-hover);
+}
+.ct-hv-tiendo-thanh > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ct-accent), #8b5cf6);
+  /* Đổi bề rộng phải thấy được là đang đổi — bấm "đã học xong" mà thanh nhảy
+     tức thì thì không ai chắc mình vừa bấm trúng. */
+  transition: width var(--ct-motion) var(--ct-ease);
+}
+.ct-hv-tiendo-chu {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--ct-text-muted);
+  /* Số nhảy từ 9 lên 10 không được làm thanh co lại — chữ số đều bề ngang. */
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-hv-bai-xong { color: var(--ct-ok); }
+
+.ct-hv-luong {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+.ct-hv-luong-nut {
+  padding: 5px 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: 999px;
+  background: var(--ct-surface);
+  color: var(--ct-text-muted);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: border-color var(--ct-motion-fast) var(--ct-ease),
+              color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-hv-luong-nut:hover { border-color: var(--ct-accent); color: var(--ct-text); }
+.ct-hv-luong-nut[data-chon='true'] {
+  border-color: var(--ct-accent);
+  background: var(--ct-active);
+  color: var(--ct-accent-text);
+  font-weight: 600;
+}
+
+.ct-hv-xong {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 8px;
+}
+.ct-hv-xong .ct-btn[data-xong='true'] { color: var(--ct-ok); }
+
+/* Khung quiz và PDF nhúng từ web: chúng tự mang bảng màu tối của web, nên chỉ
+   cần chừa khoảng cách chứ không vẽ lại nền — vẽ đè là hai lớp nền chồng nhau. */
+.ct-hv-quiz,
+.ct-hv-pdf { margin: 18px 0; }

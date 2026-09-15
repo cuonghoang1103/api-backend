@@ -827,6 +827,12 @@ export const TU_DIEN: Record<string, string> = {
     'Drop a file or folder here — the agent will be able to read it',
   'Chưa có file nào để hoàn tác trong việc này.': 'No files to undo in this task.',
 
+  // ── Học viện: tiến độ · luồng video ─────────────────────
+  'bài': 'lessons',
+  'Chọn bản video': 'Choose a video version',
+  'Đánh dấu đã học xong': 'Mark as completed',
+  'Đã học xong — bỏ đánh dấu': 'Completed — undo',
+
   // ── Chụp màn hình (AI Code) ─────────────────────────────
   'Chụp màn hình': 'Take a screenshot',
   'Chụp màn hình rồi cắt vùng cần gửi': 'Take a screenshot, then crop the part you want to send',

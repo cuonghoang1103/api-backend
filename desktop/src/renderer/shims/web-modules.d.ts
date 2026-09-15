@@ -296,3 +296,39 @@ declare module '@/components/academy/docSlide' {
   export function cauHoiSlide(s: Slide): string;
   export function khoaCacheSlide(s: Slide): string;
 }
+
+/**
+ * Trình chơi đề của bài dạng QUIZ, và trình đọc PDF nhúng — cả hai của web.
+ *
+ * App dùng lại thẳng (xem `monHoc.tsx`): không cái nào import `next/*`, và
+ * Tailwind của app quét cả cây nguồn web nên lớp riêng của web vẫn có CSS.
+ */
+declare module '@/app/courses/[slug]/learn/LessonQuizPlayer' {
+  import type { ComponentType } from 'react';
+  export interface QuizQuestion {
+    id: string;
+    type?: 'MC' | 'ESSAY';
+    question: string;
+    code?: string;
+    codeLang?: string;
+    options: string[];
+    correctIndex?: number;
+    correctIndexes?: number[];
+    sampleAnswer?: string;
+    explanation?: string;
+    points: number;
+  }
+  export interface QuizData { timeLimitSeconds: number; questions: QuizQuestion[] }
+  const LessonQuizPlayer: ComponentType<{
+    quiz: QuizData;
+    onSubmitted?: () => void;
+    locale?: 'en' | 'vi';
+  }>;
+  export default LessonQuizPlayer;
+}
+
+declare module '@/app/courses/[slug]/learn/LessonPdfViewer' {
+  import type { ComponentType } from 'react';
+  const LessonPdfViewer: ComponentType<{ url: string; title?: string }>;
+  export default LessonPdfViewer;
+}

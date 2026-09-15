@@ -13,7 +13,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import DOMPurify from 'dompurify';
 import {
   ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronRight, CloudOff, ExternalLink,
-  FileText, Layers3, Lock, PlayCircle,
+  CheckCircle2, FileText, Layers3, Lock, PlayCircle,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
@@ -31,6 +31,15 @@ import { KhungVideo } from './KhungVideo';
  */
 import { CourseTutor } from '@/components/academy/CourseTutor';
 import { ChapterQuiz } from '@/components/academy/ChapterQuiz';
+/*
+ * ⚠️ HAI COMPONENT NÀY CŨNG DÙNG LẠI THẲNG CỦA WEB, không viết lại.
+ * Đã kiểm: cả hai KHÔNG import gì từ `next/*`, và Tailwind của app quét cả cây
+ * nguồn web + lấy chung bảng màu (xem `tailwind.config.ts`), nên lớp riêng của
+ * web như `bg-darkcard` vẫn sinh ra CSS ở đây.
+ */
+import LessonQuizPlayer, { type QuizData } from '@/app/courses/[slug]/learn/LessonQuizPlayer';
+import LessonPdfViewer from '@/app/courses/[slug]/learn/LessonPdfViewer';
+import { duongTaiLieu, laBaiQuiz, locPdf, useChiTietBai, useTienDo, type TuyChonGoi } from './chiTietBai';
 import { useDich } from '../../i18n';
 
 export interface Mon {
@@ -71,6 +80,13 @@ export interface Muc {
   lessonCount?: number | null;
   lessons?: Bai[] | null;
 }
+
+/** Nhãn ba luồng video. Mã luồng do máy chủ đặt (`VI` / `EN` / `YT`). */
+const NHAN_LUONG: Record<string, string> = {
+  VI: 'Giảng tiếng Việt',
+  EN: 'Giảng tiếng Anh',
+  YT: 'YouTube',
+};
 
 export interface Bai {
   id: number;
@@ -136,6 +152,15 @@ export function ChiTietMon({
   const [mucMo, setMucMo] = useState<number[]>([]);
   const [baiMo, setBaiMo] = useState<Bai | null>(null);
 
+  /* Tiến độ học — DÙNG CHUNG dữ liệu với web (cùng bảng `lessonProgress`).
+     Trước bản này app không ghi gì: học xong trên app rồi mở web vẫn thấy 0%,
+     như thể buổi học vừa rồi không tồn tại. */
+  const goiApi = useMemo(
+    () => (api ? <T,>(d: string, o?: TuyChonGoi) => api.request<T>(d, o) : null),
+    [api],
+  );
+  const tienDo = useTienDo(goiApi, mon?.id ?? null);
+
   useEffect(() => {
     if (userId === null || !api) return;
     let huy = false;
@@ -168,6 +193,9 @@ export function ChiTietMon({
   }, [api, userId, online, slug]);
 
   const muc = mon?.sections ?? [];
+  const tongBai = muc.reduce((n, x) => n + (x.lessons ?? []).length, 0);
+  const soXong = muc.reduce(
+    (n, x) => n + (x.lessons ?? []).filter((b) => tienDo.xong.has(b.id)).length, 0);
 
   if (baiMo && mon) {
     /* Danh sách PHẲNG theo đúng thứ tự hiển thị: nối bài của từng mục lại.
@@ -187,6 +215,8 @@ export function ChiTietMon({
         truoc={i > 0 ? phang[i - 1] ?? null : null}
         sau={i >= 0 && i + 1 < phang.length ? phang[i + 1] ?? null : null}
         onDoiBai={setBaiMo}
+        daXong={tienDo.xong.has(baiMo.id)}
+        onDanhDau={(r: boolean) => void tienDo.danhDau(baiMo.id, r)}
       />
     );
   }
@@ -213,7 +243,6 @@ export function ChiTietMon({
     );
   }
 
-  const tongBai = muc.reduce((n, s) => n + (s.lessons ?? []).length, 0);
   const hoc = raDanhSach(mon.whatYouLearn);
   const canCo = raDanhSach(mon.requirements);
 
@@ -260,6 +289,18 @@ export function ChiTietMon({
 
       <section className="ct-hv-muc-ds">
         <h2>{dich('Nội dung môn học')}</h2>
+        {/* Thanh tiến độ — web có, app thì chưa bao giờ. Chỉ hiện khi môn có
+            bài: chia cho 0 ra NaN và thanh sẽ nhảy lung tung. */}
+        {tongBai > 0 && (
+          <div className="ct-hv-tiendo">
+            <div className="ct-hv-tiendo-thanh">
+              <span style={{ width: `${Math.round((soXong / tongBai) * 100)}%` }} />
+            </div>
+            <span className="ct-hv-tiendo-chu">
+              {soXong}/{tongBai} {dich('bài')} · {Math.round((soXong / tongBai) * 100)}%
+            </span>
+          </div>
+        )}
         {muc.length === 0 ? (
           <p className="ct-muted">{dich('Môn này chưa có bài học nào được đăng.')}</p>
         ) : muc.map((s) => {
@@ -293,8 +334,9 @@ export function ChiTietMon({
                           title={khoa ? 'Bài này cần ghi danh — mở trên web' : chuVi(b.title)}
                         >
                           {khoa ? <Lock size={13} aria-hidden />
-                            : b.videoUrl ? <PlayCircle size={13} aria-hidden />
-                              : <FileText size={13} aria-hidden />}
+                            : tienDo.xong.has(b.id) ? <CheckCircle2 size={13} aria-hidden className="ct-hv-bai-xong" />
+                              : b.videoUrl ? <PlayCircle size={13} aria-hidden />
+                                : <FileText size={13} aria-hidden />}
                           <span className="ct-hv-bai-ten">{chuVi(b.title)}</span>
                           {b.isFreePreview && <span className="ct-hv-free">{dich('xem thử')}</span>}
                         </button>
@@ -317,13 +359,30 @@ export function ChiTietMon({
 function baiKhoa(b: Bai): boolean { return !b.content && !b.videoUrl; }
 
 function DocBai({
-  bai, mon, onQuayLai, truoc, sau, onDoiBai,
+  bai, mon, onQuayLai, truoc, sau, onDoiBai, daXong, onDanhDau,
 }: {
   bai: Bai; mon: Mon; onQuayLai: () => void;
   truoc: Bai | null; sau: Bai | null; onDoiBai: (b: Bai) => void;
+  /** Bài này đã được đánh dấu học xong chưa. */
+  daXong: boolean;
+  onDanhDau: (roi: boolean) => void;
 }) {
   const { dich } = useDich();
   const { api } = useSession();
+
+  /*
+   * CHI TIẾT BÀI — thứ làm app hết "sơ sài".
+   *
+   * Dữ liệu đi kèm `/courses/:slug` chỉ có `content`. Phần GIẢNG SÂU
+   * (`teachingNotes`), đề của bài QUIZ, ba luồng video và tài liệu PDF đều
+   * nằm ở `/courses/:id/lessons/:baiId` — mà app chưa từng gọi. Xem
+   * `chiTietBai.ts`.
+   */
+  const goi = useMemo(
+    () => (api ? <T,>(d: string, o?: TuyChonGoi) => api.request<T>(d, o) : null),
+    [api],
+  );
+  const ct = useChiTietBai(goi, mon.id ?? null, bai.id);
 
   /*
    * ĐỀ LUYỆN CUỐI CHƯƠNG.
@@ -356,6 +415,31 @@ function DocBai({
      chỉ định đọc chữ. Đổi lại còn nút X để đóng, và lúc đó nút "Xem video trong
      app" hiện lại. */
   const [xemVideo, datXemVideo] = useState(true);
+
+  /*
+   * ── BA LUỒNG VIDEO: giảng tiếng Việt / tiếng Anh / YouTube ──
+   *
+   * Web cho đổi qua lại; app trước bản này chỉ chơi được `bai.videoUrl`, tức
+   * đúng MỘT luồng — và với những môn có bản giảng tiếng Việt riêng thì người
+   * học app không có đường nào tới nó.
+   *
+   * Không có `videoTracks` (bài cũ, hoặc chưa nạp xong chi tiết) thì dựng một
+   * luồng duy nhất từ `videoUrl` — y như web làm, để không có bài nào mất video.
+   */
+  const luong = useMemo(() => {
+    const ds = (ct?.videoTracks ?? []).filter((t) => t && t.url);
+    if (ds.length) return ds;
+    const url = ct?.videoUrl || bai.videoUrl || '';
+    return url ? [{ key: 'VI', url, platform: ct?.videoPlatform ?? null }] : [];
+  }, [ct?.videoTracks, ct?.videoUrl, ct?.videoPlatform, bai.videoUrl]);
+
+  const [luongChon, datLuongChon] = useState<string | null>(null);
+  /* Đổi bài ⇒ quay về luồng mặc định của bài MỚI. Giữ lựa chọn cũ thì người
+     đang xem bản tiếng Anh sang bài không có bản tiếng Anh sẽ thấy khung trống. */
+  useEffect(() => { datLuongChon(null); }, [bai.id]);
+  const luongDang = luong.find((t) => t.key === (luongChon ?? ct?.defaultVideoTrack))
+    ?? luong[0]
+    ?? null;
   const goc = useRef<HTMLDivElement>(null);
   /* Đổi bài thì mở lại khung (nếu bài trước họ đã đóng). */
   useEffect(() => { datXemVideo(true); }, [bai.id]);
@@ -365,11 +449,34 @@ function DocBai({
      thể mang theo `<script>` hoặc `onerror=` từ chỗ dán vào. DOMPurify chạy ở
      renderer, ngay trước khi vẽ. */
   const html = useMemo(() => {
-    const sach = DOMPurify.sanitize(bai.content ?? '', { USE_PROFILES: { html: true } });
+    const sach = DOMPurify.sanitize(ct?.content ?? bai.content ?? '', { USE_PROFILES: { html: true } });
     /* Bản song ngữ: nội dung bọc trong `.ml-en` / `.ml-vi`. Web ẩn một bên
        bằng `[data-ml]`; ở đây đặt cùng thuộc tính lên phần bọc. */
     return sach;
-  }, [bai.content]);
+  }, [ct?.content, bai.content]);
+
+  /* Phần giảng sâu — lọc cùng cách với nội dung chính. Nó cũng là HTML do quản
+     trị viên soạn, nên cũng phải đi qua DOMPurify. */
+  const ghiChuGiang = useMemo(
+    () => (ct?.teachingNotes
+      ? DOMPurify.sanitize(ct.teachingNotes, { USE_PROFILES: { html: true } })
+      : ''),
+    [ct?.teachingNotes],
+  );
+
+  /* Đề của bài QUIZ. Máy chủ trả `quizData` dạng object; bản cũ có thể là
+     CHUỖI JSON — nhận cả hai, vì một `JSON.parse` thiếu ở đây là trang trắng. */
+  const deQuiz = useMemo<QuizData | null>(() => {
+    const raw = ct?.quizData;
+    if (!raw) return null;
+    try {
+      const o = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      return (o && Array.isArray((o as QuizData).questions) && (o as QuizData).questions.length)
+        ? (o as QuizData) : null;
+    } catch { return null; }
+  }, [ct?.quizData]);
+
+  const dsPdf = useMemo(() => locPdf(ct?.documents ?? bai.documents), [ct?.documents, bai.documents]);
 
   /* Đổi bài phải về ĐẦU trang. Component được gắn lại (`key` ở chỗ gọi), nên
      effect này chạy đúng một lần mỗi bài. Tìm lớp cuộn bằng cách đi ngược tổ
@@ -393,13 +500,13 @@ function DocBai({
       {bai.description && <p className="ct-hv-hero-mo">{chuVi(bai.description)}</p>}
 
       <div className="ct-hv-bai-nut">
-        {bai.videoUrl && !xemVideo && (
+        {luongDang && !xemVideo && (
           <button type="button" className="ct-btn" onClick={() => datXemVideo(true)}>
             <PlayCircle size={15} aria-hidden /> Xem video trong app
           </button>
         )}
-        {bai.videoUrl && (
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(bai.videoUrl!)}>
+        {luongDang && (
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(luongDang.url)}>
             <ExternalLink size={14} aria-hidden /> Mở trên YouTube
           </button>
         )}
@@ -421,7 +528,25 @@ function DocBai({
 
       {/* Khung video nằm NGOÀI vùng cuộn của bài — xem chú thích đầu KhungVideo:
           trang web do main vẽ đè, cuộn theo chữ là nó trùm lên chữ. */}
-      {xemVideo && bai.videoUrl && (
+      {/* Thanh chọn luồng — chỉ hiện khi có TỪ HAI luồng trở lên. Một nút đơn
+          độc không cho chọn gì là nhiễu thuần tuý. */}
+      {xemVideo && luong.length > 1 && (
+        <div className="ct-hv-luong" role="group" aria-label={dich('Chọn bản video')}>
+          {luong.map((t) => (
+            <button
+              key={t.key}
+              type="button"
+              className="ct-hv-luong-nut"
+              data-chon={t.key === luongDang?.key}
+              onClick={() => datLuongChon(t.key)}
+            >
+              {NHAN_LUONG[t.key] ?? t.label ?? t.key}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {xemVideo && luongDang && (
         /* `key` ở đây là PHÒNG XA, không phải bản vá cho một lỗi đang có.
            Đo thật: gỡ nó ra thì đổi bài VẪN nạp đúng video mới, vì luồng hiện
            tại bắt quay ra danh sách trước, và cú đó tháo cả trình đọc.
@@ -429,7 +554,10 @@ function DocBai({
            gắn. Ngày nào có ai thêm nút "bài kế tiếp" ngay trong trình đọc —
            đổi bài mà KHÔNG tháo — thì thiếu `key` là khung kẹt video cũ, im
            lặng, không lỗi nào để thấy. Một chữ, mua trước cái đó. */
-        <KhungVideo key={bai.id} url={bai.videoUrl} onDong={() => datXemVideo(false)} />
+        /* `key` gồm cả luồng: đổi bản tiếng Việt ↔ tiếng Anh phải nạp lại
+           khung, mà `KhungVideo` chốt `daMoRef` để chỉ gọi `mo()` một lần mỗi
+           lần gắn — thiếu luồng trong `key` là bấm đổi mà video không đổi. */
+        <KhungVideo key={`${bai.id}:${luongDang.key}`} url={luongDang.url} onDong={() => datXemVideo(false)} />
       )}
 
       {html
@@ -442,6 +570,39 @@ function DocBai({
             </button>
           </p>
         )}
+
+      {/* ── PHẦN GIẢNG SÂU ──
+          `teachingNotes` thường DÀI HƠN `content` và là chỗ chứa lời giảng
+          thật của bài — web hiện nó, app thì chưa bao giờ. Đây là phần lớn
+          nhất của lời than "trên app desktop đăng sơ sài". */}
+      {ghiChuGiang && (
+        <div
+          className="ct-hv-noidung rich-content"
+          data-ml="vi"
+          dangerouslySetInnerHTML={{ __html: ghiChuGiang }}
+        />
+      )}
+
+      {/* ── BÀI DẠNG QUIZ ──
+          Trước bản này bài QUIZ không có `content` nên app hiện đúng một dòng
+          "Bài này chưa có nội dung chữ" — người học tưởng bài hỏng. */}
+      {laBaiQuiz(ct?.lessonType ?? bai.lessonType) && deQuiz && (
+        <div className="ct-hv-quiz">
+          <LessonQuizPlayer key={bai.id} quiz={deQuiz} locale="vi" />
+        </div>
+      )}
+
+      {/* ── PDF KÈM BÀI ──
+          Bài tập / lời giải dạng PDF: web nhúng đọc ngay tại chỗ, app trước
+          đây chỉ có nút mở ra trình duyệt ngoài. */}
+      {dsPdf.map((d) => (
+        <div key={d.id} className="ct-hv-pdf">
+          <LessonPdfViewer
+            url={duongTaiLieu(api?.baseUrlForForms() ?? WEB, d.id)}
+            {...(d.title ? { title: chuVi(d.title) } : {})}
+          />
+        </div>
+      ))}
 
       {/* Gia sư AI cho ĐÚNG bài đang mở. Đặt SAU nội dung: người ta đọc xong
           rồi mới có câu hỏi, và một khung chat chen giữa bài thì nó cắt mạch
@@ -461,6 +622,23 @@ function DocBai({
           lessonId={bai.id}
         />
       )}
+
+      {/* ── ĐÁNH DẤU HỌC XONG ──
+          Đặt TRƯỚC phần chuyển bài: đọc xong thì việc tiếp theo tự nhiên là
+          đánh dấu rồi sang bài sau, theo đúng thứ tự đó trên màn hình.
+          Tiến độ ghi vào cùng bảng với web, nên học trên app xong mở web vẫn
+          thấy đúng % — trước bản này app không ghi gì cả. */}
+      <div className="ct-hv-xong">
+        <button
+          type="button"
+          className={daXong ? 'ct-btn ct-btn-ghost' : 'ct-btn'}
+          onClick={() => onDanhDau(!daXong)}
+          data-xong={daXong}
+        >
+          <CheckCircle2 size={15} aria-hidden />
+          {daXong ? dich('Đã học xong — bỏ đánh dấu') : dich('Đánh dấu đã học xong')}
+        </button>
+      </div>
 
       {/* Chuyển bài — đi xuyên mục, y như web.
           Bài kế bị khoá thì KHÔNG giấu nút: giấu đi là người dùng tưởng đã hết

@@ -172,3 +172,35 @@ describe('lời khuyên cho máy người dùng', () => {
     }
   });
 });
+
+/**
+ * ⚠️⚠️ "KHÔNG ĐO ĐƯỢC ĐĨA" KHÁC HẲN "HẾT ĐĨA".
+ *
+ * Người dùng gửi ảnh 16/09/2026: máy còn 370 GB, màn hình ghi *"Đĩa chỉ còn
+ * 0.0 GB. Cần ít nhất 4.3 GB"*, và CẢ BA nút tải đều xám. Không ai từng tải
+ * được model, và lỗi trông y như một quyết định có chủ ý.
+ *
+ * Gốc rễ: lần đầu chạy thì `…/ai-ngoai-tuyen/model` chưa tồn tại, `statfs` ném
+ * ENOENT, hàm đo trả 0 — và 0 GB đọc thành "đĩa gần đầy". Hỏng 100% người dùng
+ * ở đúng lần mở đầu tiên.
+ */
+describe('⭐ đĩa không đo được thì ĐỪNG khoá hết', () => {
+  it('diaGb = -1 (chưa đo được) ⇒ VẪN mời tải', () => {
+    const k = loiKhuyen({ ramGb: 32, diaGb: -1, coGpu: true });
+    expect(k.nen, 'không đo được đĩa mà khoá sạch nút là lỗi đã hỏng 100% người dùng')
+      .not.toBeNull();
+    expect(k.choPhep.length).toBeGreaterThan(0);
+  });
+
+  it('đĩa THẬT SỰ gần đầy ⇒ vẫn chặn, và nói con số thật', () => {
+    const k = loiKhuyen({ ramGb: 32, diaGb: 0.5, coGpu: true });
+    expect(k.nen).toBeNull();
+    expect(k.vi).toMatch(/0[.,]5 GB/);
+  });
+
+  it('đủ cho bản gọn nhưng không đủ bản lớn ⇒ mời bản gọn, đừng chặn hết', () => {
+    const k = loiKhuyen({ ramGb: 32, diaGb: 2.5, coGpu: true });
+    expect(k.nen).toBe('nho');
+    expect(k.choPhep).toEqual(['nho']);
+  });
+});

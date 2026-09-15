@@ -14,9 +14,10 @@
  *    ở đúng chỗ nó xảy ra.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Cpu, Download, HardDrive, Loader2, Play, Square, Trash2, X } from 'lucide-react';
+import { Cpu, Download, HardDrive, Loader2, Play, RefreshCw, Sparkles, Square, Trash2, X } from 'lucide-react';
 import type { AiCucBoMa, AiCucBoTienDo, AiCucBoTinhTrang } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
+import { useAppState } from '../../app-state';
 
 /** "2,5 GB" — dấu phẩy kiểu Việt, không phải dấu chấm. */
 function gb(x: number): string {
@@ -32,6 +33,11 @@ function tocDo(bps: number): string {
 
 export function AiNgoaiTuyen() {
   const { dich } = useDich();
+  const { settings, setSetting } = useAppState();
+  /* Mặc định BẬT cả hai — người đã tải model về là người muốn dùng nó. */
+  const choChay = settings.aiCucBoBat !== false;
+  const tuDong = settings.aiCucBoTuDong !== false;
+  const [dangQuet, datDangQuet] = useState(false);
   const [tt, setTt] = useState<AiCucBoTinhTrang | null>(null);
   const [tienDo, setTienDo] = useState<AiCucBoTienDo | null>(null);
   const [loi, setLoi] = useState('');
@@ -80,10 +86,20 @@ export function AiNgoaiTuyen() {
     void nap();
   };
 
+  /** Quét lại máy — nút "Kiểm tra máy". */
+  const quetLai = async () => {
+    datDangQuet(true);
+    setLoi('');
+    await nap();
+    /* Giữ vòng quay ít nhất nửa giây: quét xong trong 40ms thì nút chỉ nháy
+       một cái và người dùng không biết nó đã chạy hay chưa bấm trúng. */
+    setTimeout(() => datDangQuet(false), 500);
+  };
+
   const bat = async (ma: AiCucBoMa) => {
     setLoi('');
     setDangLam(ma);
-    const r = await window.cuongthai?.aiCucBo.bat(ma);
+    const r = await window.cuongthai?.aiCucBo.bat(ma, true);
     if (r && !r.ok) setLoi(r.loi ?? '');
     setDangLam(null);
     void nap();
@@ -105,6 +121,15 @@ export function AiNgoaiTuyen() {
     void nap();
   };
 
+  /** Gạt công tắc chính. Tắt thì DỪNG máy chủ ngay để trả RAM. */
+  const gatChinh = async (bat_: boolean) => {
+    setSetting('aiCucBoBat', bat_);
+    if (!bat_) {
+      await window.cuongthai?.aiCucBo.tat();
+      void nap();
+    }
+  };
+
   if (!tt) {
     return (
       <section className="ct-section">
@@ -116,6 +141,8 @@ export function AiNgoaiTuyen() {
 
   const { may, khuyen } = tt;
   const dangTai = tienDo !== null;
+  /** Bản hợp máy nhất — thứ người dùng thật sự cần biết. */
+  const nenDung = khuyen.nen ? tt.kho.find((m) => m.ma === khuyen.nen) : undefined;
 
   return (
     <section className="ct-section">
@@ -124,15 +151,54 @@ export function AiNgoaiTuyen() {
         {dich('Tải AI về chạy thẳng trên máy bạn. Mất mạng vẫn hỏi được, và câu hỏi không rời khỏi máy. Đổi lại, nó trả lời kém hơn bản trên mạng.')}
       </p>
 
+      {/* ── Hai công tắc ────────────────────────────────── */}
+      <div className="ct-field" style={{ marginTop: 14 }}>
+        <div>
+          <div className="ct-field-label">{dich('Cho phép chạy AI trên máy')}</div>
+          <div className="ct-field-help">
+            {dich('Tắt thì dừng ngay và trả lại bộ nhớ. File đã tải vẫn giữ nguyên, bật lại là dùng được.')}
+          </div>
+        </div>
+        <label className="ct-switch">
+          <input type="checkbox" checked={choChay}
+            onChange={(e) => void gatChinh(e.target.checked)} />
+          <span />
+        </label>
+      </div>
+
+      <div className="ct-field" style={{ opacity: choChay ? 1 : 0.5 }}>
+        <div>
+          <div className="ct-field-label">{dich('Mất mạng thì tự dùng AI trên máy')}</div>
+          <div className="ct-field-help">
+            {dich('Tắt thì lúc mất mạng app báo lỗi như cũ thay vì tự trả lời bằng bản yếu hơn.')}
+          </div>
+        </div>
+        <label className="ct-switch">
+          <input type="checkbox" checked={tuDong} disabled={!choChay}
+            onChange={(e) => setSetting('aiCucBoTuDong', e.target.checked)} />
+          <span />
+        </label>
+      </div>
+
       {/* ── Máy này ─────────────────────────────────────── */}
-      <div className="ct-rows" style={{ marginTop: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 18, marginBottom: 4 }}>
+        <span className="ct-field-label" style={{ flex: 1 }}>{dich('Máy của bạn')}</span>
+        <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void quetLai()}
+          disabled={dangQuet}>
+          {dangQuet ? <Loader2 size={14} className="ct-spin" /> : <RefreshCw size={14} />}
+          {' '}{dich('Kiểm tra máy')}
+        </button>
+      </div>
+      <div className="ct-rows">
         <div className="ct-row">
           <dt><HardDrive size={14} style={{ verticalAlign: -2, marginRight: 6 }} />{dich('Bộ nhớ (RAM)')}</dt>
           <dd>{may.ramGb > 0 ? gb(may.ramGb) : '—'}</dd>
         </div>
         <div className="ct-row">
           <dt>{dich('Đĩa còn trống')}</dt>
-          <dd>{may.diaGb > 0 ? gb(may.diaGb) : '—'}</dd>
+          {/* `-1` = chưa đo được (hệ không cho hỏi), KHÁC hẳn "còn 0 GB". Gộp
+              hai thứ đó chính là lỗi đã khoá sạch nút tải của mọi người dùng. */}
+          <dd>{may.diaGb > 0 ? gb(may.diaGb) : dich('chưa đọc được')}</dd>
         </div>
         <div className="ct-row">
           <dt><Cpu size={14} style={{ verticalAlign: -2, marginRight: 6 }} />{dich('Tăng tốc bằng GPU')}</dt>
@@ -149,7 +215,36 @@ export function AiNgoaiTuyen() {
         </div>
       </div>
 
-      <p className="ct-field-help" style={{ marginTop: 10 }}>{khuyen.vi}</p>
+      {/* Khuyến nghị đặt NỔI BẬT, không trộn vào chữ phụ: đây là câu trả lời
+          cho câu hỏi duy nhất người dùng có lúc này — "máy tôi nên tải bản
+          nào". Chôn nó trong một dòng xám là bắt họ tự đoán. */}
+      <div style={{
+        marginTop: 12,
+        padding: '12px 14px',
+        borderRadius: 10,
+        border: '1px solid var(--ct-line, #e5e7eb)',
+        display: 'flex',
+        gap: 10,
+        alignItems: 'flex-start',
+      }}
+      >
+        <Sparkles size={16} style={{ flexShrink: 0, marginTop: 2, opacity: 0.8 }} />
+        <div style={{ flex: 1 }}>
+          {nenDung && (
+            <div className="ct-field-label" style={{ marginBottom: 2 }}>
+              {dich('Nên dùng:')} {nenDung.ten} · {gb(nenDung.gb)}
+            </div>
+          )}
+          <div className="ct-field-help" style={{ margin: 0 }}>{khuyen.vi}</div>
+          {nenDung && !tt.daCo.includes(nenDung.ma) && !dangTai && (
+            <button type="button" className="ct-btn" style={{ marginTop: 10 }}
+              disabled={!choChay || dangLam !== null}
+              onClick={() => void tai(nenDung.ma)}>
+              <Download size={14} /> {dich('Tải bản này')}
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* ── Thanh tiến độ ───────────────────────────────── */}
       {dangTai && (
@@ -189,7 +284,7 @@ export function AiNgoaiTuyen() {
           const coRoi = tt.daCo.includes(m.ma);
           const chay = tt.dangChay === m.ma;
           const duoc = khuyen.choPhep.includes(m.ma);
-          const ban = dangTai || dangLam !== null;
+          const ban = dangTai || dangLam !== null || !choChay;
           return (
             <div key={m.ma} className="ct-field" style={{ alignItems: 'flex-start', opacity: duoc || coRoi ? 1 : 0.55 }}>
               <div style={{ flex: 1 }}>

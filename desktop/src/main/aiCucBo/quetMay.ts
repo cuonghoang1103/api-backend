@@ -25,6 +25,7 @@
  */
 import { exec } from 'node:child_process';
 import { statfs } from 'node:fs/promises';
+import { dirname } from 'node:path';
 import { arch, platform, totalmem } from 'node:os';
 import { promisify } from 'node:util';
 
@@ -55,14 +56,35 @@ function lamTron(x: number): number {
  * liên quan gì tới chỗ thật sự sẽ ghi file 2,5 GB.
  */
 export async function diaConTrong(thuMuc: string): Promise<number> {
-  try {
-    const s = await statfs(thuMuc);
-    return lamTron((Number(s.bavail) * Number(s.bsize)) / 1e9);
-  } catch {
-    /* Thư mục chưa tồn tại (lần đầu) hoặc hệ thống không cho hỏi. Trả 0 để
-       chỗ gọi xử lý như "không biết" thay vì để `undefined` rò ra ngoài. */
-    return 0;
+  /*
+   * ⚠️⚠️ LEO NGƯỢC LÊN THƯ MỤC CHA CHO TỚI KHI GẶP CÁI CÓ THẬT.
+   *
+   * Bản đầu hỏi thẳng `statfs(thuMuc)` và trả 0 khi ném. Nghe thì vô hại, thực
+   * tế là hỏng 100%: lần đầu chạy thì `…/ai-ngoai-tuyen/model` CHƯA TỒN TẠI,
+   * `statfs` ném ENOENT, hàm trả 0 — và `loiKhuyen()` đọc 0 GB thành "đĩa gần
+   * đầy" rồi KHOÁ MỌI NÚT TẢI. Người dùng gửi ảnh 16/09/2026: máy còn 370 GB,
+   * màn hình ghi "Đĩa chỉ còn 0.0 GB. Cần ít nhất 4.3 GB", cả ba nút xám.
+   *
+   * Không ai từng tải được model, và lỗi trông y như một quyết định có chủ ý.
+   *
+   * Phân vùng là thuộc tính của CÂY THƯ MỤC, nên thư mục cha bất kỳ cũng cho
+   * đúng con số — chỉ cần nó có thật.
+   */
+  let d = thuMuc;
+  for (let i = 0; i < 12; i += 1) {
+    try {
+      const s = await statfs(d);
+      return lamTron((Number(s.bavail) * Number(s.bsize)) / 1e9);
+    } catch {
+      const cha = dirname(d);
+      if (cha === d) break;   // đã tới gốc
+      d = cha;
+    }
   }
+  /* Tới gốc mà vẫn không hỏi được: hệ thống thật sự không cho. Trả -1 chứ
+     KHÔNG trả 0 — "không biết" và "hết đĩa" là hai chuyện khác nhau, và gộp
+     chúng chính là lỗi vừa vá. */
+  return -1;
 }
 
 /** Lệnh liệt kê card màn hình cho từng hệ. `null` = hệ này không cần hỏi. */

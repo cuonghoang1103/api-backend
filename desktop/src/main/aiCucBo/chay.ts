@@ -55,6 +55,43 @@ export interface DangChay {
 
 let tienTrinh: ChildProcess | null = null;
 let dangChay: DangChay | null = null;
+
+/**
+ * ── TỰ TẮT KHI ĐỂ KHÔNG ────────────────────────────────────────
+ *
+ * Người dùng: *"để tránh lãng phí ram, cpu chẳng hạn"*. Đúng lo: model 4B giữ
+ * **3,6 GB RAM** thường trực (đo thật), và trên máy 16 GB đó là gần một phần
+ * tư bộ nhớ nằm không.
+ *
+ * Nên máy chủ tự tắt sau một khoảng không ai hỏi. Bật lại tốn vài giây nạp
+ * model — rẻ hơn nhiều so với giữ 3,6 GB suốt buổi cho một tính năng có thể cả
+ * ngày không dùng tới.
+ *
+ * 15 phút: đủ dài để một phiên hỏi đáp có quãng nghỉ không bị cắt ngang, đủ
+ * ngắn để người quên mất mình từng bật không mất RAM cả ngày.
+ */
+const HAN_DE_KHONG_MS = 15 * 60_000;
+let henTuTat: ReturnType<typeof setTimeout> | null = null;
+/** Người dùng tự bấm Bật thì KHÔNG tự tắt — đó là một quyết định có chủ đích. */
+let nguoiDungTuBat = false;
+
+function hoanTuTat(): void {
+  if (henTuTat) clearTimeout(henTuTat);
+  henTuTat = null;
+  if (nguoiDungTuBat || !dangChay) return;
+  henTuTat = setTimeout(() => { void tat(); }, HAN_DE_KHONG_MS);
+}
+
+/** Báo "vừa có người hỏi" — dời hạn tự tắt ra sau. */
+export function vuaDung(): void {
+  hoanTuTat();
+}
+
+/** Đánh dấu lượt bật này là do NGƯỜI DÙNG bấm, nên đừng tự tắt. */
+export function danhDauNguoiDungBat(co: boolean): void {
+  nguoiDungTuBat = co;
+  hoanTuTat();
+}
 /** Vài dòng cuối của đầu ra — để nói cho người dùng biết nó chết vì sao. */
 let nhatKy: string[] = [];
 
@@ -238,6 +275,7 @@ export async function bat(yc: YeuCauBat): Promise<DangChay> {
     }
     if (await khoeChua(goc)) {
       dangChay = { cong, goc, maModel: yc.maModel };
+      hoanTuTat();
       yc.onTin?.('Đã sẵn sàng.');
       return dangChay;
     }
@@ -254,6 +292,7 @@ export async function bat(yc: YeuCauBat): Promise<DangChay> {
 
 /** Tắt máy chủ. Gọi được cả khi chưa chạy. */
 export async function tat(): Promise<void> {
+  if (henTuTat) { clearTimeout(henTuTat); henTuTat = null; }
   const con = tienTrinh;
   tienTrinh = null;
   dangChay = null;

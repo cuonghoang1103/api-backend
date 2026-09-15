@@ -27,7 +27,7 @@ export function guiLaiBaiDangHoc(): void {
 }
 import { getSettings, setSetting } from '../store';
 import { tachCau } from '../../renderer/features/odin/tachCau';
-import { dangSan, ganNhan, hoiMay } from '../aiCucBo/hoi';
+import { ganNhan, hoiMay, sanChoLuoiDo } from '../aiCucBo/hoi';
 import { handle } from './index';
 
 export function registerRobotHandlers(): void {
@@ -175,7 +175,7 @@ export function registerRobotHandlers(): void {
          mới là nơi ghép bài vào câu hỏi (`/ai/ask`). Cái app giữ được chỉ là
          TÊN bài và tên các slide. Nên câu trả lời sẽ mỏng, và nhãn phải nói
          thẳng điều đó thay vì để người học tưởng đây là gia sư đầy đủ. */
-      if (dangSan()) {
+      if (sanChoLuoiDo()) {
         const b = baiDangHoc as {
           courseCode?: string; courseTitle?: string; lessonTitle?: string;
         } | null;
@@ -199,7 +199,7 @@ export function registerRobotHandlers(): void {
        máy họ, không cần tài khoản nào để chạy. Bắt đăng nhập ở đây là dựng
        một hàng rào không phục vụ gì. */
     if (!phien) {
-      if (dangSan()) {
+      if (sanChoLuoiDo()) {
         const ra = await hoiMay({ chu, anh });
         if (ra?.chu) return { chu: ganNhan(ra.chu), phienId: null, roiBac: null, tuMay: true };
         if (ra?.loi) return { chu: '', loi: ra.loi, phienId: null, roiBac: null };
@@ -219,7 +219,7 @@ export function registerRobotHandlers(): void {
       /* ⚠️ Lưới đỡ CHỈ chạy khi máy chủ không với tới được. Có mạng thì luôn
          đi máy chủ: đo thật 15/09/2026 cho thấy model 4B đọc sai dấu tiếng
          Việt ("biên" → "biến"), đúng loại sai mà người học không nhận ra. */
-      if (dangSan()) {
+      if (sanChoLuoiDo()) {
         /* Ảnh đi CÙNG câu hỏi xuống đường lùi. Bỏ nó lại là đúng cái lỗi đã
            bắt được ở `robot:hoiGiaSu` hôm 15/09: người dùng thấy ảnh mình vừa
            dán nằm trong khung chat, còn model thì chưa từng thấy nó. */

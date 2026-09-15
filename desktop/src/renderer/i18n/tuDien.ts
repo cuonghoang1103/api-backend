@@ -1273,6 +1273,17 @@ export const TU_DIEN: Record<string, string> = {
   'Tải': 'Download',
   'Xoá khỏi máy': 'Remove from this computer',
   'Xem hướng dẫn đầy đủ': 'Read the full guide',
+  'Cho phép chạy AI trên máy': 'Allow the AI to run on this computer',
+  'Tắt thì dừng ngay và trả lại bộ nhớ. File đã tải vẫn giữ nguyên, bật lại là dùng được.':
+    'Turning it off stops it right away and gives the memory back. Downloaded files stay, so turning it back on just works.',
+  'Mất mạng thì tự dùng AI trên máy': 'Use the on-device AI automatically when offline',
+  'Tắt thì lúc mất mạng app báo lỗi như cũ thay vì tự trả lời bằng bản yếu hơn.':
+    'With this off, losing the connection shows the usual error instead of quietly answering with the weaker AI.',
+  'Máy của bạn': 'Your computer',
+  'Kiểm tra máy': 'Check this computer',
+  'Nên dùng:': 'Best for you:',
+  'Tải bản này': 'Download this one',
+  'chưa đọc được': 'could not read',
   'Khi có mạng, app vẫn tự dùng bản trên mạng vì nó trả lời tốt hơn. AI trên máy là lưới đỡ lúc mất kết nối.':
     'When you are online the app still uses the online AI, because it answers '
     + 'better. The on-device AI is a safety net for when the connection drops.',

@@ -51,6 +51,22 @@ export const settingKeySchema = z.enum([
    * Mặc định BẬT. Tắt được ngay trên khối Lịch học — xem `LichHoc.tsx`.
    */
   'nhacLichRobot',
+  /**
+   * ── AI NGOẠI TUYẾN: hai công tắc, cố ý TÁCH RIÊNG ──
+   *
+   * `aiCucBoBat` — có được phép chạy AI trên máy hay không. Tắt thì máy chủ
+   * cục bộ bị dừng ngay và KHÔNG tự bật lại: model 4B giữ 3,6 GB RAM thường
+   * trực, và người dùng phải có đường lấy lại chỗ đó mà không cần xoá file
+   * 2,5 GB rồi tải lại sau.
+   *
+   * `aiCucBoTuDong` — mất mạng thì có TỰ dùng bản trên máy không. Tách khỏi
+   * công tắc trên vì đó là hai câu hỏi khác nhau: "cho phép chạy" và "tự chạy
+   * khi mất mạng". Có người muốn giữ model sẵn để bấm dùng khi cần, nhưng
+   * không muốn nó âm thầm trả lời thay bản trên mạng — câu trả lời từ máy yếu
+   * hơn hẳn, và im lặng thay thế là điều tệ nhất có thể làm với họ.
+   */
+  'aiCucBoBat',
+  'aiCucBoTuDong',
   'reducedMotion',
   'zoomLevel',
   'lastRoute',
@@ -1614,7 +1630,12 @@ export const INVOKE_CHANNELS = {
   'aiCucBo:tinhTrang': null,
   'aiCucBo:cai': z.object({ ma: z.enum(['nho', 'vua', 'anh']) }),
   'aiCucBo:huyCai': null,
-  'aiCucBo:bat': z.object({ ma: z.enum(['nho', 'vua', 'anh']) }),
+  'aiCucBo:bat': z.object({
+    ma: z.enum(['nho', 'vua', 'anh']),
+    /* `true` = NGƯỜI DÙNG tự bấm Bật ⇒ đừng tự tắt khi để không. Lượt bật do
+       lưới đỡ tự làm thì để `false` và nó sẽ tự trả RAM sau 15 phút. */
+    nguoiDungBam: z.boolean().optional(),
+  }),
   'aiCucBo:tat': null,
   'aiCucBo:xoa': z.object({ ma: z.enum(['nho', 'vua', 'anh']) }),
   'aiCucBo:goSach': null,
@@ -2182,7 +2203,7 @@ export interface DesktopBridge {
     /** Dừng lượt tải đang chạy. Phần đã tải được GIỮ LẠI để bấm tiếp. */
     huyCai(): Promise<{ ok: boolean }>;
     /** Bật một bản đã tải sẵn. */
-    bat(ma: AiCucBoMa): Promise<{ ok: boolean; goc?: string; loi?: string }>;
+    bat(ma: AiCucBoMa, nguoiDungBam?: boolean): Promise<{ ok: boolean; goc?: string; loi?: string }>;
     /** Tắt, trả RAM về cho máy. */
     tat(): Promise<{ ok: boolean }>;
     /** Xoá một bản khỏi đĩa. */

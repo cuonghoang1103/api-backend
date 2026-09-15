@@ -12,7 +12,7 @@
  * tới được mới rơi xuống đây, và câu trả lời phải được GẮN NHÃN để người dùng
  * biết mình đang đọc cái gì.
  */
-import { trangThai } from './chay';
+import { trangThai, vuaDung } from './chay';
 
 export interface LuotNoi {
   vaiTro: 'nguoi' | 'may';
@@ -64,9 +64,49 @@ export interface YeuCauHoi {
  */
 export type KetQuaHoi = { chu: string; loi?: undefined } | { chu?: undefined; loi: string };
 
-/** AI trên máy có đang bật không. */
+/**
+ * ── HAI CÔNG TẮC CỦA NGƯỜI DÙNG ──────────────────────────────
+ *
+ * Đọc từ cài đặt Ở MỖI LẦN HỎI, không nhớ lại: người dùng gạt công tắc giữa
+ * chừng là phải có hiệu lực ngay, không đợi khởi động lại app.
+ *
+ * Nạp `../store` kiểu động để `hoi.ts` chạy được trong vitest mà không kéo
+ * theo `electron-store` và cả tầng Electron.
+ */
+function caiDat(): Record<string, unknown> {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, global-require
+    return (require('../store') as { getSettings(): Record<string, unknown> }).getSettings();
+  } catch {
+    return {};
+  }
+}
+
+/** Người dùng có CHO PHÉP chạy AI trên máy không. Mặc định: có. */
+export function duocPhepChay(): boolean {
+  return caiDat().aiCucBoBat !== false;
+}
+
+/**
+ * Mất mạng thì có TỰ dùng bản trên máy không. Mặc định: có.
+ *
+ * ⚠️ Tách khỏi `duocPhepChay` có chủ đích. Có người muốn giữ model sẵn để bấm
+ * dùng khi cần, nhưng KHÔNG muốn nó âm thầm trả lời thay bản trên mạng — câu
+ * từ máy yếu hơn hẳn (đo thật: đọc sai dấu tiếng Việt), và thay thế trong im
+ * lặng là điều tệ nhất có thể làm với họ.
+ */
+export function tuDungKhiMatMang(): boolean {
+  return caiDat().aiCucBoTuDong !== false;
+}
+
+/** AI trên máy đang chạy VÀ được phép dùng. */
 export function dangSan(): boolean {
-  return trangThai() !== null;
+  return trangThai() !== null && duocPhepChay();
+}
+
+/** Dùng cho LƯỚI ĐỠ tự động: phải qua CẢ HAI công tắc. */
+export function sanChoLuoiDo(): boolean {
+  return dangSan() && tuDungKhiMatMang();
 }
 
 /**
@@ -129,6 +169,9 @@ export async function hoiMay(yc: YeuCauHoi): Promise<KetQuaHoi | null> {
     })),
     { role: 'user', content: noiDungHoi },
   ];
+
+  /* Dời hạn tự tắt: đang có người dùng thật thì đừng cắt giữa chừng. */
+  vuaDung();
 
   try {
     const r = await fetch(`${dang.goc}/v1/chat/completions`, {

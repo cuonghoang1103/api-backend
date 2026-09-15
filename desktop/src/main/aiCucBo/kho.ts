@@ -215,12 +215,23 @@ export function loiKhuyen(may: CauHinhMay): LoiKhuyen {
   const nho = timModel('nho')!;
   const anh = timModel('anh')!;
 
-  if (may.diaGb < tongGb(anh) + 1) {
+  /*
+   * ⚠️ `-1` nghĩa là KHÔNG ĐO ĐƯỢC đĩa, không phải "hết đĩa". Chặn ở đây thì
+   * một máy có đĩa dư vẫn bị khoá sạch nút — đúng lỗi đã hỏng 100% người dùng
+   * ngày 16/09/2026. Không đo được thì cứ mời; lúc tải thật mà thiếu chỗ, hệ
+   * điều hành sẽ báo và bộ tải nói lại bằng tiếng Việt.
+   */
+  const bietDia = may.diaGb >= 0;
+  if (bietDia && may.diaGb < tongGb(anh) + 1) {
+    /* Còn đủ cho bản gọn thì vẫn mời bản gọn — chặn hết là quá tay. */
+    const duBanGon = may.diaGb >= tongGb(nho) + 1;
     return {
-      nen: null,
-      choPhep: [],
-      vi: `Đĩa chỉ còn ${may.diaGb.toFixed(1)} GB. Cần ít nhất ${(tongGb(anh) + 1).toFixed(1)} GB `
-        + 'để tải và chạy. Dọn bớt đĩa rồi quay lại nhé.',
+      nen: duBanGon ? 'nho' : null,
+      choPhep: duBanGon ? ['nho'] : [],
+      vi: `Đĩa còn ${may.diaGb.toFixed(1)} GB. `
+        + (duBanGon
+          ? `Đủ cho bản gọn (${tongGb(nho)} GB), chưa đủ cho bản lớn hơn.`
+          : `Cần ít nhất ${(tongGb(nho) + 1).toFixed(1)} GB để tải và chạy. Dọn bớt đĩa rồi quay lại nhé.`),
     };
   }
 

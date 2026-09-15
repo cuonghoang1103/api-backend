@@ -23,7 +23,8 @@ import { MODEL } from '../aiCucBo/kho';
 import {
   batModel, cai, datGoc, goSach, tatModel, tinhTrang, xoa,
 } from '../aiCucBo/quanLy';
-import { dangSan, hoiMay } from '../aiCucBo/hoi';
+import { dangSan, duocPhepChay, hoiMay } from '../aiCucBo/hoi';
+import { danhDauNguoiDungBat } from '../aiCucBo/chay';
 import { handle } from './index';
 
 /** Lượt cài đang chạy. Chỉ cho phép MỘT — hai lượt cùng tải là tranh nhau đĩa. */
@@ -105,15 +106,23 @@ export function dangKyAiCucBo(): void {
     return { ok: true };
   });
 
-  handle('aiCucBo:bat', async ({ ma }) => {
+  handle('aiCucBo:bat', async ({ ma, nguoiDungBam }) => {
+    if (!duocPhepChay()) {
+      return { ok: false, loi: 'AI ngoại tuyến đang tắt. Bật công tắc ở đầu mục này trước.' };
+    }
     try {
+      /* Người dùng tự bấm ⇒ không tự tắt. Đó là một quyết định có chủ đích,
+         và tắt nó sau lưng họ là lấy đi thứ họ vừa chọn. */
+      danhDauNguoiDungBat(nguoiDungBam === true);
       return { ok: true, goc: await batModel(ma as AiCucBoMa) };
     } catch (e) {
+      danhDauNguoiDungBat(false);
       return { ok: false, loi: loiChu(e) };
     }
   });
 
   handle('aiCucBo:tat', async () => {
+    danhDauNguoiDungBat(false);
     await tatModel().catch(() => {});
     return { ok: true };
   });

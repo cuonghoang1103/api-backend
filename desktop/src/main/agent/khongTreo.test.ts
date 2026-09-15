@@ -78,3 +78,51 @@ describe('② thiếu quyền thì chỉ chỗ bật', () => {
     expect(prompt).toMatch(/if \(dangTat\.length\)/);
   });
 });
+
+/**
+ * ③ HAI CÔNG TẮC CỦA AI NGOẠI TUYẾN.
+ *
+ * Người dùng: *"có nút bật tắt tự động này… và có nút bật tắt AI local riêng
+ * khi muốn và không muốn dùng. để tránh lãng phí ram, cpu"*.
+ *
+ * Tách hai công tắc là có chủ đích: "cho phép chạy" và "tự chạy khi mất mạng"
+ * là hai câu hỏi khác nhau. Có người muốn giữ model sẵn để bấm dùng khi cần
+ * nhưng KHÔNG muốn nó âm thầm trả lời thay bản trên mạng.
+ */
+describe('③ công tắc AI ngoại tuyến', () => {
+  const hoi = readFileSync(join(goc, 'src/main/aiCucBo/hoi.ts'), 'utf8');
+  const chay = readFileSync(join(goc, 'src/main/aiCucBo/chay.ts'), 'utf8');
+  const robot = readFileSync(join(goc, 'src/main/ipc/robot.ts'), 'utf8');
+
+  it('có HAI công tắc riêng, không gộp làm một', () => {
+    expect(hoi).toMatch(/export function duocPhepChay\(\)/);
+    expect(hoi).toMatch(/export function tuDungKhiMatMang\(\)/);
+  });
+
+  it('lưới đỡ tự động phải qua CẢ HAI công tắc', () => {
+    expect(hoi).toMatch(/sanChoLuoiDo[\s\S]{0,160}tuDungKhiMatMang\(\)/);
+    /* Con robot dùng `sanChoLuoiDo`, không dùng `dangSan` — dùng nhầm là bỏ
+       qua công tắc "tự dùng khi mất mạng" mà người dùng vừa tắt. */
+    expect(robot).toContain('sanChoLuoiDo()');
+    expect(robot, 'robot còn gọi dangSan() ⇒ lọt công tắc tự động')
+      .not.toMatch(/if \(dangSan\(\)\)/);
+  });
+
+  it('đọc cài đặt Ở MỖI LẦN HỎI, không nhớ lại lúc khởi động', () => {
+    /* Nhớ lại thì gạt công tắc phải khởi động lại app mới có hiệu lực — và
+       người dùng sẽ tưởng công tắc hỏng. */
+    expect(hoi).toMatch(/function caiDat\(\)/);
+    expect(hoi).toMatch(/duocPhepChay[\s\S]{0,120}caiDat\(\)/);
+  });
+
+  it('TỰ TẮT khi để không, để trả lại RAM', () => {
+    expect(chay).toMatch(/HAN_DE_KHONG_MS/);
+    expect(chay).toMatch(/export function vuaDung\(\)/);
+    /* Người dùng tự bấm Bật thì KHÔNG tự tắt — đó là quyết định có chủ đích. */
+    expect(chay).toMatch(/nguoiDungTuBat/);
+  });
+
+  it('mỗi lần hỏi đều dời hạn tự tắt — không cắt ngang người đang dùng', () => {
+    expect(hoi).toMatch(/vuaDung\(\)/);
+  });
+});

@@ -146,6 +146,35 @@ function docMucNoLuc(raw: unknown): MucNoLuc {
 const MAX_SERVER_HOPS = 4;
 /** Trần độ dài hội thoại. Vượt là app hỏng hoặc bị sửa — không phải người dùng gõ dài. */
 const MAX_MESSAGES = 200;
+
+/**
+ * Trần tuyệt đối cho số phần tử `messages` nhận vào.
+ *
+ * Không phải để chặn payload ác ý (việc đó thuộc giới hạn kích thước thân yêu
+ * cầu) mà để một mảng khổng lồ không làm vòng lọc bên dưới chạy vô ích — mọi
+ * thứ ngoài `MAX_MESSAGES` lượt gần nhất đằng nào cũng bị `catLuotCu` bỏ.
+ */
+const TRAN_TUYET_DOI = MAX_MESSAGES * 5;
+
+/**
+ * Cắt thô mảng thô xuống trần, GIỮ phần MỚI NHẤT, và bắt đầu ở một tin nhắn
+ * `user`.
+ *
+ * ⛔ Bắt đầu ở đâu cũng được là SAI. Giao thức đòi mỗi `tool_calls` có đúng
+ * một tin nhắn `tool` mang đúng `tool_call_id`; cắt trúng giữa một lượt là để
+ * lại một tin nhắn `tool` MỒ CÔI ở đầu mảng, và cổng từ chối cả lượt bằng một
+ * lỗi không nói rõ thiếu ở đâu. Nên sau khi cắt còn phải bỏ tiếp cho tới tin
+ * nhắn `user` đầu tiên.
+ */
+function catThoChoAnToan(raw: unknown[], tran: number): unknown[] {
+  const duoi = raw.slice(-tran);
+  const dau = duoi.findIndex(
+    (m) => !!m && typeof m === 'object' && (m as { role?: unknown }).role === 'user',
+  );
+  // Không còn tin nhắn `user` nào trong phần giữ lại ⇒ trả nguyên phần đó và
+  // để `catLuotCu` + cổng xử lý; cắt sạch thành mảng rỗng còn tệ hơn.
+  return dau > 0 ? duoi.slice(dau) : duoi;
+}
 const MAX_TOTAL_CHARS = 600_000;
 /** Trần cho MỘT kết quả tool do app gửi lên. App đã tự cắt; đây là lớp phòng khi app cũ chưa cắt. */
 const MAX_TOOL_RESULT_CHARS = 60_000;
@@ -330,21 +359,35 @@ export class AgentInputError extends Error {
  * bất kỳ ai cũng đặt lại được luật bảo mật ở mục 5 của prompt. Luật đó chỉ có
  * nghĩa khi máy chủ là nơi duy nhất viết ra nó.
  */
-function sanitizeIncoming(raw: unknown): AgentMessage[] {
+export function sanitizeIncoming(raw: unknown): AgentMessage[] {
   if (!Array.isArray(raw)) throw new AgentInputError('messages phải là mảng', 'BAD_MESSAGES');
   if (raw.length === 0) throw new AgentInputError('messages rỗng', 'BAD_MESSAGES');
-  // ⚠️ KHÔNG ném khi quá dài nữa — xem `catCu.ts`. Ném ở đây nghĩa là người
-  // dùng đang làm dở một việc 40 bước bỗng bị chặn hẳn và mất mạch, thứ họ đã
-  // trả tiền để dựng lên. Giờ hội thoại quá dài thì tự bỏ lượt CŨ NHẤT.
-  // Vẫn giữ một trần tuyệt đối rất cao để chặn payload ác ý.
-  if (raw.length > MAX_MESSAGES * 5) {
-    throw new AgentInputError(`messages quá lớn (${raw.length}).`, 'BAD_MESSAGES');
-  }
+  /*
+   * ⚠️ KHÔNG NÉM KHI QUÁ DÀI — kể cả ở trần tuyệt đối.
+   *
+   * Bản trước vẫn ném khi vượt `MAX_MESSAGES * 5`, với lý do "chặn payload ác
+   * ý". Người dùng gặp thật 15/09/2026: agent đang làm dở một việc còn ~26
+   * bước thì dừng hẳn với `messages quá lớn (1001)` — đúng cái mà `catCu.ts`
+   * được viết ra để tránh, chỉ khác là nó không bao giờ chạy tới vì cú ném này
+   * đứng chặn ở trước.
+   *
+   * Mà trần đó cũng không chặn được payload ác ý: kẻ xấu gửi 999 tin nhắn mỗi
+   * cái 1MB thì vẫn lọt. Thứ chặn payload là giới hạn kích thước THÂN yêu cầu
+   * ở tầng Express, không phải số phần tử mảng.
+   *
+   * Nay: cắt bớt rồi đi tiếp. `catLuotCu` ở dưới sẽ cắt tiếp cho đúng trần
+   * thật và chèn lời nhắc để model BIẾT nó vừa mất ngữ cảnh gì.
+   */
+  /* Biến MỚI chứ không gán đè `raw`: gán đè làm TypeScript mất kết quả thu
+     hẹp kiểu của `Array.isArray` ở trên, và vòng lặp dưới quay về `unknown`. */
+  const vao: unknown[] = raw.length > TRAN_TUYET_DOI
+    ? catThoChoAnToan(raw, TRAN_TUYET_DOI)
+    : raw;
 
   const out: AgentMessage[] = [];
   let tongChu = 0;
 
-  for (const m of raw) {
+  for (const m of vao) {
     if (!m || typeof m !== 'object') continue;
     const role = (m as { role?: unknown }).role;
 

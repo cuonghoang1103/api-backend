@@ -29,6 +29,7 @@ import { promisify } from 'node:util';
 import { soSanhDong, type KetQuaDiff } from './diff';
 import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './jail';
 import { dinhDangTheoTen, napAnh, suaAnh } from './anh';
+import { hienKhoangTrang, timGanDung } from './ganDung';
 import { kiemDuongDanNgoai } from './ghiNgoai';
 import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
 import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
@@ -643,10 +644,32 @@ async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: Boi
   // duyệt một diff trông hợp lý, và cái sai nằm ở đoạn không ai nhìn.
   const soLan = demSoLan(noiDung, cu);
   if (soLan === 0) {
+    /*
+     * TỰ CHẨN ĐOÁN thay vì bảo model "chép cho chính xác".
+     *
+     * Người dùng gửi ảnh 15/09/2026: bốn lần `edit_file` liên tiếp đều "không
+     * khớp", rồi agent phải chạy `xxd` đọc từng byte mới tìm ra chỗ lệch —
+     * năm sáu lượt gọi cổng cho một lần sửa một dòng. Lời khuyên cũ vô dụng vì
+     * model TƯỞNG nó đã chép chính xác; thứ nó thiếu là THÔNG TIN, không phải
+     * lời khuyên. Xem `ganDung.ts`.
+     */
+    const gan = timGanDung(noiDung, cu);
+    if (gan) {
+      return {
+        noiDung:
+          `LỖI: old_text không khớp CHÍNH XÁC, nhưng tìm thấy đúng một đoạn khớp nếu bỏ qua khoảng trắng — `
+          + `${gan.lyDo}.\n\nĐoạn THẬT trên đĩa (chép NGUYÊN VĂN đoạn này vào old_text rồi gọi lại):\n`
+          + '```\n' + gan.doanThat + '\n```\n\n'
+          + `(Hiện khoảng trắng vô hình — → là tab, · là dấu cách thừa cuối dòng:)\n`
+          + '```\n' + hienKhoangTrang(gan.doanThat) + '\n```',
+        tomTat: `lệch khoảng trắng — ${gan.lyDo}`,
+      };
+    }
     return {
       noiDung:
         `LỖI: không tìm thấy old_text trong ${tuongDoi}. Nội dung trên đĩa khác với thứ bạn đang nhớ. ` +
-        'Hãy gọi read_file để đọc lại đoạn đó rồi chép CHÍNH XÁC (kể cả thụt lề).',
+        'Hãy gọi read_file để đọc lại đoạn đó rồi chép CHÍNH XÁC (kể cả thụt lề). ' +
+        'ĐỪNG dùng xxd/od để dò từng byte — read_file đã trả đúng nội dung trên đĩa.',
       tomTat: 'không khớp',
     };
   }

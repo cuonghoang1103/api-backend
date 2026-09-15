@@ -124,12 +124,26 @@ export interface SearchEntry {
   p: string;
   c: string;
   t: TypeSlug;
+  /**
+   * Gốc raw của kho chứa mục này — CHỈ có ở mục đến từ kho KHÁC kho tổng hợp.
+   *
+   * Thêm 15/09/2026 khi bổ sung `wondelai/skills` (196), `obra/superpowers`
+   * (14) và `anthropics/skills` (20). App desktop tải nội dung thật từ GitHub
+   * lúc người dùng bấm cài (xem `khoKyNang.ts`); không có trường này thì nó
+   * lấy ở kho tổng hợp và trả 404 cho mọi mục mới.
+   *
+   * Vắng mặt với 865 mục cũ, nên payload gần như không đổi.
+   */
+  g?: string;
 }
 
 export function getSearchIndex(): SearchEntry[] {
   const out: SearchEntry[] = [];
   for (const t of TYPES) {
-    for (const r of DATA[t.slug]) out.push({ n: r.name, p: r.path, c: r.category, t: t.slug });
+    for (const r of DATA[t.slug]) {
+      const src = (r as { src?: string }).src;
+      out.push({ n: r.name, p: r.path, c: r.category, t: t.slug, ...(src ? { g: src } : {}) });
+    }
   }
   return out;
 }

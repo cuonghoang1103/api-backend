@@ -46,14 +46,28 @@ const TTL_CHI_MUC_MS = 30 * 60_000;
 
 export type LoaiKho = 'skill' | 'agent' | 'command';
 
-/** Một mục trong chỉ mục. Tên trường viết tắt vì web lặp nó 1.877 lần. */
-interface MucTho { n: string; p: string; c: string; t: string }
+/**
+ * Một mục trong chỉ mục. Tên trường viết tắt vì web lặp nó 1.877 lần.
+ *
+ * `g` (gốc) là TUỲ CHỌN và chỉ có ở những mục đến từ kho KHÁC kho tổng hợp.
+ * Thiếu nó ⇒ lấy ở `GOC_RAW` như trước, nên 865 mục cũ không đổi gì.
+ */
+interface MucTho { n: string; p: string; c: string; t: string; g?: string }
 
 export interface MucKho {
   ten: string;
   duong: string;
   danhMuc: string;
   loai: LoaiKho;
+  /**
+   * Gốc raw của kho chứa mục này, ví dụ
+   * `https://raw.githubusercontent.com/wondelai/skills/main`.
+   *
+   * ⚠️ Có `goc` thì `duong` là đường ĐẦY ĐỦ trong kho đó, KHÔNG ghép thêm
+   * `cli-tool/components/...` — mỗi kho có cách xếp thư mục riêng, ghép tiền
+   * tố của kho tổng hợp vào là 404 ở mọi mục.
+   */
+  goc?: string;
 }
 
 const LOAI: Record<LoaiKho, { thuMuc: string; kieu: 'folder' | 'file'; dich: (t: string) => string }> = {
@@ -82,7 +96,10 @@ export async function napChiMuc(webOrigin: string): Promise<MucKho[]> {
     const tho = (await r.json()) as MucTho[];
     const ds = tho
       .filter((x) => x.t === 'skill' || x.t === 'agent' || x.t === 'command')
-      .map((x) => ({ ten: x.n, duong: x.p, danhMuc: x.c, loai: x.t as LoaiKho }));
+      .map((x) => ({
+        ten: x.n, duong: x.p, danhMuc: x.c, loai: x.t as LoaiKho,
+        ...(x.g ? { goc: x.g } : {}),
+      }));
     dem = { luc: Date.now(), ds };
     return ds;
   } finally {
@@ -131,17 +148,36 @@ export function tim(ds: MucKho[], tuKhoa: string, tran = 15): MucKho[] {
     .map((x) => x.m);
 }
 
+/**
+ * Dựng URL tải nội dung. Tách riêng để KIỂM ĐƯỢC — xem `khoNhieuKho.test.ts`.
+ *
+ * Ghép sai ở đây là 404 ở MỌI mục của kho đó, và người dùng chỉ thấy "không
+ * tải được" mà không biết vì sao.
+ */
+export function duongTai(m: MucKho): string {
+  const meta = LOAI[m.loai];
+  /*
+   * Mục đến từ kho RIÊNG thì `duong` đã là đường đầy đủ trong kho đó — KHÔNG
+   * ghép tiền tố `cli-tool/components/...` của kho tổng hợp vào. Mỗi kho xếp
+   * thư mục theo cách của nó.
+   */
+  const goc = m.goc ?? GOC_RAW;
+  const duong = m.goc
+    ? (meta.kieu === 'folder' ? `${m.duong}/SKILL.md` : m.duong)
+    : meta.kieu === 'folder'
+      ? `${THU_MUC_COMPONENT}/${meta.thuMuc}/${m.duong}/SKILL.md`
+      : `${THU_MUC_COMPONENT}/${meta.thuMuc}/${m.duong}`;
+  return `${goc}/${duong}`;
+}
+
 /** Tải nội dung thật của một component từ GitHub. */
 async function taiNoiDung(m: MucKho): Promise<string> {
-  const meta = LOAI[m.loai];
-  const duong = meta.kieu === 'folder'
-    ? `${THU_MUC_COMPONENT}/${meta.thuMuc}/${m.duong}/SKILL.md`
-    : `${THU_MUC_COMPONENT}/${meta.thuMuc}/${m.duong}`;
+  const url = duongTai(m);
   const dieuKhien = new AbortController();
   const dongHo = setTimeout(() => dieuKhien.abort(), HET_GIO_MS);
   try {
-    const r = await fetch(`${GOC_RAW}/${duong}`, { signal: dieuKhien.signal });
-    if (!r.ok) throw new Error(`GitHub trả HTTP ${r.status} cho ${duong}`);
+    const r = await fetch(url, { signal: dieuKhien.signal });
+    if (!r.ok) throw new Error(`GitHub trả HTTP ${r.status} cho ${url}`);
     const chu = await r.text();
     if (chu.length > MAX_BYTE) throw new Error(`Nội dung ${(chu.length / 1024).toFixed(0)}KB, quá lớn.`);
     if (!chu.trim()) throw new Error('Tệp rỗng.');

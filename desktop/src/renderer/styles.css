@@ -3725,15 +3725,50 @@ select {
 
 /* ── Bảng ghi ── */
 
+/**
+ * ── CỘT ĐỌC ─────────────────────────────────────────────────────
+ *
+ * ⚠️ Trước 16/09/2026 bảng ghi KHÔNG có cột đọc: chữ trải hết bề ngang cửa sổ.
+ * Trên màn 2000px một dòng dài hơn 200 ký tự — mắt đọc hết dòng rồi phải quét
+ * ngược cả một khoảng rộng để tìm đầu dòng sau, và cứ vài dòng lại đọc nhầm
+ * dòng. Đó là lý do câu trả lời dài trông "rối" dù nội dung không đổi.
+ *
+ * Người dùng so thẳng với Claude cho máy tính và hỏi đã giống chưa. Chưa —
+ * khác biệt lớn nhất chính là chỗ này, không phải màu hay phông.
+ *
+ * 46rem ≈ 736px ở cỡ chữ gốc, tức khoảng 75-85 ký tự mỗi dòng — đúng khoảng
+ * mà mọi tài liệu về đọc đều hội tụ, và cũng là khoảng Claude đang dùng.
+ */
 .ct-agent-scroll {
+  --ct-cot-doc: 46rem;
+
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 16px 2px;
+  /* Đệm hai bên 16px: ở cửa sổ hẹp cột đọc chạm mép, và chữ dính mép đọc rất
+     mệt. Xem [[feedback_moi_trang_phai_chiu_duoc_cua_so_hep]]. */
+  padding: 18px 16px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
+/**
+ * Mọi thứ trong bảng ghi nằm trong CÙNG một cột — tin nhắn, thẻ tool, khối mã,
+ * thanh trạng thái.
+ *
+ * ⚠️ Căn giữa từng loại riêng lẻ sẽ làm chúng lệch nhau vài pixel và cả cột
+ * trông "rung". Một luật cho mọi con là cách duy nhất giữ mép trái thẳng hàng.
+ */
+.ct-agent-scroll > * {
+  width: 100%;
+  max-width: var(--ct-cot-doc);
+  margin-inline: auto;
+}
+
+/* Khung web mở bên cạnh ⇒ bảng ghi hẹp lại còn một nửa. Giữ cột 46rem ở đó là
+   ép chữ vào một dải mỏng giữa hai khoảng trắng. Bỏ trần, dùng cả bề ngang. */
+.ct-agent-doi[data-co-web='true'] .ct-agent-scroll { --ct-cot-doc: 100%; }
 
 /* ⚠️⚠️ CON CỦA BẢNG GHI KHÔNG ĐƯỢC CO.
  *
@@ -4012,14 +4047,40 @@ select {
 
 /* ── Ô soạn ── */
 
+/**
+ * Khung soạn nằm TRONG CÙNG cột đọc với bảng ghi.
+ *
+ * ⚠️ Lệch một chút thôi là thấy ngay: mắt đã quen mép trái của câu trả lời,
+ * nên một ô nhập rộng hơn hẳn làm cả trang trông "rơi ra ngoài". Claude cho
+ * máy tính giữ hai thứ này thẳng một cột, và đó là phần lớn lý do nó nhìn gọn.
+ *
+ * Đường viền trên thì trải HẾT bề ngang (`::before`), không co theo cột — một
+ * gạch ngang cụt giữa màn hình trông như lỗi render.
+ */
 .ct-agent-soan {
+  position: relative;
   display: flex;
   align-items: flex-end;
   gap: 8px;
+  width: 100%;
+  max-width: 46rem;
+  margin-inline: auto;
   padding-top: 10px;
-  border-top: 1px solid var(--ct-border);
   flex-shrink: 0;
 }
+
+.ct-agent-soan::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  border-top: 1px solid var(--ct-border);
+}
+
+/* Khung web mở bên cạnh ⇒ bỏ trần, theo đúng cách bảng ghi làm. */
+.ct-agent-doi[data-co-web='true'] .ct-agent-soan { max-width: none; }
 
 .ct-agent-o {
   flex: 1;
@@ -4597,20 +4658,30 @@ html[data-ct-theme='light'] .ct-diff .hljs-property { color: #0a4fa8; }
    danh sách đều lộ nguyên ký tự. Đó là lý do lớn nhất khiến màn hình trông
    thô sơ — lớn hơn cả màu và font. */
 
+/**
+ * ⚠️ 14.5px chứ không phải 13.5px.
+ *
+ * 13.5px là cỡ của giao diện (nút, nhãn, thanh trạng thái) — đúng cho thứ
+ * người ta LIẾC, sai cho thứ người ta ĐỌC. Câu trả lời của model là văn bản
+ * dài, và một nửa số đó là tiếng Việt có dấu, nơi dấu chồng lên chữ ở cỡ nhỏ
+ * khiến mắt phải cố. Claude cho máy tính dùng ~15px cho đúng vùng này.
+ */
 .ct-md {
-  font-size: 13.5px;
-  line-height: 1.68;
+  font-size: 14.5px;
+  line-height: 1.72;
   color: var(--ct-text);
+  /* Bẻ dòng ở chỗ hợp lý thay vì cắt giữa một đường dẫn dài. */
+  overflow-wrap: anywhere;
 }
 
 /* Khoảng cách giữa các đoạn là thứ tạo ra NHỊP ĐỌC. Đoạn dính nhau thì mắt
    không biết nghỉ ở đâu, và một câu trả lời dài thành một khối chữ đặc. */
-.ct-md p { margin: 0 0 10px; }
+.ct-md p { margin: 0 0 13px; }
 .ct-md > div > *:last-child { margin-bottom: 0; }
 
 .ct-md h4 {
-  margin: 16px 0 8px;
-  font-size: 13.5px;
+  margin: 22px 0 9px;
+  font-size: 15px;
   font-weight: 650;
   letter-spacing: -0.01em;
   color: var(--ct-text);
@@ -4658,14 +4729,35 @@ html[data-ct-theme='light'] .ct-diff .hljs-property { color: #0a4fa8; }
 .ct-md-bang tr:last-child td { border-bottom: 0; }
 .ct-md-bang tbody tr:hover { background: var(--ct-hover); }
 
+/**
+ * ⚠️⚠️ PHẢI ĐẶT LẠI `list-style`.
+ *
+ * Tailwind preflight gỡ dấu đầu dòng của MỌI `ul`/`ol` trong app. Không đặt
+ * lại thì mọi danh sách trong câu trả lời của AI hiện ra thành mấy dòng thụt
+ * lề trần — không chấm, không số — và người đọc không phân biệt được đâu là
+ * danh sách, đâu là đoạn văn xuống dòng. Model trả lời bằng danh sách gần như
+ * mọi lượt, nên đây là lỗi gặp hằng ngày.
+ *
+ * Cây web đã vá đúng chỗ tương đương từ trước (`.rich-content ul` trong
+ * `globals.css`); `.ct-md` thì bị bỏ quên. Phát hiện 16/09/2026 bằng cách đo
+ * `getComputedStyle(ul).listStyleType` trên chính bản dựng — nhìn ảnh chụp thì
+ * chỉ thấy "hơi lạ", không chỉ ra được nguyên nhân.
+ */
 .ct-md ul,
 .ct-md ol {
-  margin: 0 0 10px;
-  padding-left: 20px;
+  margin: 0 0 13px;
+  padding-left: 22px;
 }
 
-.ct-md li { margin: 3px 0; }
+.ct-md ul { list-style: disc; }
+.ct-md ol { list-style: decimal; }
+.ct-md ul ul { list-style: circle; }
+
+.ct-md li { margin: 5px 0; }
 .ct-md li::marker { color: var(--ct-text-faint); }
+/* Danh sách lồng nhau không cần khoảng dưới — nó đã nằm trong khoảng của mục cha. */
+.ct-md li > ul,
+.ct-md li > ol { margin-bottom: 4px; }
 
 .ct-md blockquote {
   margin: 0 0 10px;

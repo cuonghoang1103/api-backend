@@ -25,6 +25,27 @@
 /** Im lặng quá ngần này thì coi như cổng đã chết. */
 export const TRAN_IM_LANG_MS = 120_000;
 
+/**
+ * ⚠️ HẠN TỔNG CHO MỘT LƯỢT — lưới đỡ thứ hai, cho cái mà canh im lặng KHÔNG
+ * bắt được.
+ *
+ * Người dùng gửi ảnh 16/09/2026: kẹt ở bước 150/160, **454 giây** cùng một câu
+ * trạng thái, và phải bấm Dừng bằng tay. Canh im lặng 120s không hề nổ — nghĩa
+ * là cổng vẫn nhỏ giọt byte đều đặn, chỉ là lượt không bao giờ kết thúc. Một
+ * dòng chảy "sống" mà vô tận thì với người dùng không khác gì treo.
+ *
+ * Chú thích ở đầu tệp này nói "đừng canh tổng thời gian, nó giết oan việc
+ * khó". Vẫn đúng — nên con số ở đây KHÔNG phải trần cho cả việc, mà cho MỘT
+ * lời gọi `/agent/turn`. Trong một lời gọi, máy chủ chỉ chạy tối đa vài vòng
+ * model rồi phải trả về; mọi thứ nặng (chạy lệnh, dựng, test) đều do APP làm,
+ * ngoài lời gọi này. Đo thật: một lượt bình thường 2–15 giây, lượt nặng nhất
+ * quan sát được chưa tới 90 giây.
+ *
+ * 6 phút là gấp bốn lần lượt nặng nhất từng thấy — đủ rộng để không giết oan,
+ * đủ chặt để người dùng không phải ngồi nhìn 454 giây rồi tự bấm Dừng.
+ */
+export const TRAN_MOT_LUOT_MS = 360_000;
+
 export type KetQuaDoc<T> =
   | { ok: true; giaTri: T }
   | { ok: false; imLang: true };

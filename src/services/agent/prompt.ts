@@ -508,6 +508,42 @@ export function buildSystemPrompt(opts: {
   }
 
   /*
+   * ⚠️⚠️ THIẾU QUYỀN THÌ CHỈ CHỖ BẬT, ĐỪNG NÓI "TÔI KHÔNG LÀM ĐƯỢC".
+   *
+   * Người dùng gửi ảnh 16/09/2026: họ hỏi về một trang web, agent trả lời
+   * *"Trang đó dùng JavaScript render nên tôi không đọc được nội dung"* — và
+   * họ kết luận *"tưởng con AI Code của tôi bị dỏm không làm được"*. Sự thật
+   * là app LÀM ĐƯỢC: chỉ cần bật công tắc Trình duyệt ở thanh trên khung chat,
+   * cách đúng một cú bấm.
+   *
+   * Câu "tôi không đọc được" đúng về kỹ thuật và sai về mọi mặt còn lại: nó
+   * mô tả giới hạn của LƯỢT NÀY như thể là giới hạn của SẢN PHẨM, và người
+   * dùng không có cách nào biết khác đi.
+   *
+   * Nên prompt phải kể tên công tắc. Model không tự đoán ra nhãn nút trên một
+   * giao diện nó chưa từng thấy.
+   */
+  const tatCa: Array<{ co: boolean; nut: string; lam: string }> = [
+    { co: coWeb, nut: 'Trình duyệt', lam: 'mở trang web, đọc nội dung SAU KHI JavaScript chạy, xem lỗi console' },
+    { co: coLenh, nut: 'Chạy lệnh', lam: 'chạy `npm test`, `git status`, dựng dự án' },
+    { co: coSua, nut: 'Sửa file', lam: 'sửa và tạo file trong dự án' },
+  ];
+  const dangTat = tatCa.filter((x) => !x.co);
+  if (dangTat.length) {
+    muc.push(`CÔNG TẮC ĐANG TẮT — CHỈ CHỖ BẬT, ĐỪNG NÓI "KHÔNG LÀM ĐƯỢC"
+   Lượt này ${dangTat.map((x) => x.nut).join(' · ')} chưa được bật, nên bạn chưa có
+   những tool tương ứng. Đó là một CÔNG TẮC CHƯA BẬT, không phải một thứ app
+   không làm được — và người dùng không biết điều đó nếu bạn không nói.
+
+${dangTat.map((x) => `   • Cần ${x.lam}? ⇒ "Bạn bật công tắc **${x.nut}** ở thanh ngay trên khung chat rồi nhắn lại, mình làm ngay."`).join('\n')}
+
+   ⛔ ĐỪNG viết những câu kiểu "tôi không đọc được trang đó", "tôi không chạy
+   được lệnh", "tôi không sửa file được" mà KHÔNG kèm chỗ bật. Người dùng đọc
+   xong sẽ tưởng app không làm nổi việc đó — và họ thôi không nhờ nữa.
+   Nói NGẮN: một câu nêu việc cần, một câu chỉ công tắc. Đừng giảng giải.`);
+  }
+
+  /*
    * `git_commit` và `tao_pr` đã cắm xong từ lâu — có tool, có chốt chặn nhánh
    * chung, có lọc file bí mật, có thẻ duyệt — mà prompt nhắc tới chúng ĐÚNG 0
    * LẦN (đo 15/09/2026). Hệ quả: model commit bằng `run_command git commit`,
@@ -682,6 +718,31 @@ ${g.noiDung}
      ? 'Một cái thôi, nên để dành cho hướng dò tốn công nhất; việc còn lại tự làm.'
      : 'Hết trần là lời gọi tiếp theo bị từ chối, nên đừng tiêu vào việc mà vài lần grep là xong.'}`);
   }
+
+  /*
+   * ⚠️ XONG THÌ DỪNG HẲN.
+   *
+   * Người dùng gửi ảnh 16/09/2026: agent đã viết xong phần "Tóm lại những gì
+   * đã làm" — tức là nó tự coi việc đã xong — mà vẫn chạy tiếp tới bước
+   * 150/160, và họ phải bấm Dừng bằng tay. Lời than: *"làm xong rồi các bước
+   * vẫn chạy… phải để tôi ấn stop thủ công rất phiền"*.
+   *
+   * Vòng lặp chỉ kết thúc khi model trả về CHỮ MÀ KHÔNG KÈM lời gọi tool nào.
+   * Kèm thêm một tool "cho chắc" sau bản tóm tắt là ký thêm một vòng nữa, và
+   * người dùng ngồi nhìn.
+   */
+  muc.push(`XONG THÌ DỪNG
+   Viết bản tóm tắt kết quả là hành động CUỐI CÙNG của bạn. Lượt chỉ thật sự
+   kết thúc khi bạn trả lời bằng CHỮ mà KHÔNG gọi thêm tool nào.
+
+   ⛔ ĐỪNG gọi thêm tool sau khi đã tóm tắt — kể cả "kiểm lại cho chắc", "xem
+   lại file lần nữa", hay chạy lại một lệnh vừa chạy. Cần kiểm thì kiểm TRƯỚC
+   khi tóm tắt.
+   ⛔ ĐỪNG đọc lại thứ đã đọc, và đừng chạy lại lệnh đã cho cùng kết quả. Hai
+   lần liên tiếp ra cùng một thứ nghĩa là bạn đang đi vòng — dừng lại, nói thật
+   những gì còn chưa chắc, rồi để người dùng quyết.
+   ✅ Còn việc chưa làm được thì NÓI RA rồi dừng, đừng cố mãi. Một câu "chỗ này
+   mình chưa làm được vì X" có ích hơn ba mươi bước im lặng.`);
 
   muc.push(`TRẢ LỜI
    Tiếng Việt, gọn, đi thẳng vào việc. Ưu tiên câu trả lời trước, giải thích

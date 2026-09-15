@@ -27,7 +27,7 @@ import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
 import { chayHook } from './hook';
-import { cauImLang, docCoHanIm } from './hanImLang';
+import { cauImLang, docCoHanIm, TRAN_MOT_LUOT_MS } from './hanImLang';
 import { dsKyNang, docThanKyNang } from './kyNang';
 import { dsAgentPhu, docThanAgentPhu } from './agentPhu';
 import {
@@ -1399,6 +1399,15 @@ const CHO_THU_LAI_MS = [2_000, 5_000, 12_000, 30_000];
 const MA_DANG_THU_LAI = new Set([
   'CONNECTION_LOST', 'LLM_ERROR',
   /*
+   * LƯỢT CHẠY QUÁ LÂU — cổng còn sống nhưng lượt không dứt (xem
+   * `TRAN_MOT_LUOT_MS`). Thử lại là đúng: các bước đã đi vẫn còn trong hội
+   * thoại, nên lượt sau đi tiếp từ đó chứ không làm lại từ đầu. Không cho thử
+   * lại thì một lần cổng ngẩn ngơ giết cả việc 150 bước.
+   */
+  'LUOT_QUA_LAU',
+  /* Im lặng hẳn — cùng cách xử lý, khác nguyên nhân. */
+  'GATEWAY_IM_LANG',
+  /*
    * ⚠️ CỔNG AI QUÁ TẢI — thứ hay gặp hơn hẳn việc máy chủ thay ca.
    * `429` (quá nhiều yêu cầu) và `529` (Anthropic báo quá tải) đều là "quay
    * lại sau", không phải "từ chối". Đo thật 14/09/2026: rambo trả đúng hai mã
@@ -1515,10 +1524,23 @@ async function mgoiMotLuotThat(o: {
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
+  /*
+   * ⚠️ HẠN TỔNG CHO LỜI GỌI NÀY, chồng lên tín hiệu huỷ của người dùng.
+   *
+   * Canh im lặng (dưới) bắt trường hợp cổng CÂM. Nó KHÔNG bắt được trường hợp
+   * cổng nhỏ giọt byte mãi mà lượt không kết thúc — đúng cái người dùng gặp
+   * 16/09/2026: 454 giây ở bước 150/160 với CÙNG một câu trạng thái, và phải
+   * bấm Dừng bằng tay.
+   *
+   * `AbortSignal.any` để HAI tín hiệu cùng có hiệu lực: người dùng bấm Dừng
+   * vẫn cắt ngay, và hết hạn cũng cắt. Gắn mỗi hạn giờ vào `signal` sẽ NUỐT
+   * MẤT nút Dừng — đổi một lỗi khó chịu lấy một lỗi tệ hơn.
+   */
+  const henLuot = AbortSignal.timeout(TRAN_MOT_LUOT_MS);
   const res = await fetch(`${API_ORIGIN}/api/v1/agent/turn`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${o.token}` },
-    signal: o.signal,
+    signal: AbortSignal.any([o.signal, henLuot]),
     body: JSON.stringify({
       messages: o.messages,
       capabilities: o.capabilities,
@@ -1562,6 +1584,17 @@ async function mgoiMotLuotThat(o: {
      * thoát nào, và ai không bấm Dừng thì chờ mãi.
      *
      * Canh IM LẶNG chứ không canh tổng thời gian — xem `hanImLang.ts`. */
+    if (henLuot.aborted && !o.signal.aborted) {
+      /* Hết hạn tổng. Mã RIÊNG, không dùng lại `GATEWAY_IM_LANG`: im lặng là
+         cổng chết, còn cái này là cổng SỐNG mà lượt không dứt. Lẫn hai thứ đó
+         là đọc log rồi đuổi nhầm hướng. */
+      void doc.cancel().catch(() => { /* luồng có thể đã chết */ });
+      return {
+        ok: false,
+        thongDiep: `Lượt này chạy quá ${Math.round(TRAN_MOT_LUOT_MS / 60_000)} phút mà chưa xong — đã dừng và sẽ thử lại.`,
+        ma: 'LUOT_QUA_LAU',
+      };
+    }
     const mau = await docCoHanIm(doc);
     if (!mau.ok) {
       /* Huỷ hẳn luồng: không huỷ thì kết nối treo giữ một socket và, tệ hơn,

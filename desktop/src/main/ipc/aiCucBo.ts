@@ -138,10 +138,11 @@ export function dangKyAiCucBo(): void {
     }
   });
 
-  handle('aiCucBo:hoi', async ({ chu, lichSu }) => {
+  handle('aiCucBo:hoi', async ({ chu, lichSu, anh }) => {
     if (!dangSan()) return { chu: '', loi: 'AI trên máy chưa bật.' };
-    const ra = await hoiMay({ chu, lichSu });
-    return ra === null ? { chu: '', loi: 'AI trên máy không trả lời được.' } : { chu: ra };
+    const ra = await hoiMay({ chu, lichSu, anh });
+    if (ra?.chu) return { chu: ra.chu };
+    return { chu: '', loi: ra?.loi ?? 'AI trên máy không trả lời được.' };
   });
 
   /* ⚠️ Tắt máy chủ khi app đóng. `before-quit` chứ không phải

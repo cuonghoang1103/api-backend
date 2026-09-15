@@ -1625,6 +1625,11 @@ export const INVOKE_CHANNELS = {
       vaiTro: z.enum(['nguoi', 'may']),
       chu: z.string().max(20_000),
     })).max(20).optional(),
+    /* Ảnh dán vào, dạng data URL. Trần 3 ảnh × 8MB khớp với trần của máy chủ
+       (`docAnhDan` ở `course.routes.ts`) — hai luật khác nhau tuỳ lúc có mạng
+       hay không là thứ người dùng không đoán nổi. 8MB vì base64 phình ~33% so
+       với tệp gốc 5MB mà máy chủ nhận. */
+    anh: z.array(z.string().startsWith('data:image/').max(8_000_000)).max(3).optional(),
   }),
 
   'terminal:chay': z.object({
@@ -2185,8 +2190,12 @@ export interface DesktopBridge {
     /** Gỡ sạch cả model lẫn bộ chạy. */
     goSach(): Promise<{ ok: boolean; loi?: string }>;
     /** Hỏi AI trên máy. `null` ở `chu` nghĩa là chưa bật. */
-    hoi(p: { chu: string; lichSu?: { vaiTro: 'nguoi' | 'may'; chu: string }[] }):
-      Promise<{ chu: string; loi?: string }>;
+    hoi(p: {
+      chu: string;
+      lichSu?: { vaiTro: 'nguoi' | 'may'; chu: string }[];
+      /** Data URL. Chỉ "Bản xem ảnh" dùng được; bản khác trả lỗi nói rõ điều đó. */
+      anh?: string[];
+    }): Promise<{ chu: string; loi?: string }>;
   };
 
   terminal: {

@@ -185,8 +185,9 @@ export function registerRobotHandlers(): void {
             + 'Bạn KHÔNG có nội dung bài, chỉ có tên bài. '
             + 'Trả lời theo kiến thức chung, và nói rõ chỗ nào bạn không chắc vì thiếu bài.'
           : undefined;
-        const ra = await hoiMay({ chu, lichSu: lichSu as never, boiCanh });
-        if (ra) return { chu: ganNhan(ra), tuMay: true };
+        const ra = await hoiMay({ chu, lichSu: lichSu as never, boiCanh, anh });
+        if (ra?.chu) return { chu: ganNhan(ra.chu), tuMay: true };
+        if (ra?.loi) return { chu: '', loi: ra.loi };
       }
       return { chu: '', loi: (e as Error)?.message || 'Không hỏi được gia sư.' };
     }
@@ -199,8 +200,9 @@ export function registerRobotHandlers(): void {
        một hàng rào không phục vụ gì. */
     if (!phien) {
       if (dangSan()) {
-        const ra = await hoiMay({ chu });
-        if (ra) return { chu: ganNhan(ra), phienId: null, roiBac: null, tuMay: true };
+        const ra = await hoiMay({ chu, anh });
+        if (ra?.chu) return { chu: ganNhan(ra.chu), phienId: null, roiBac: null, tuMay: true };
+        if (ra?.loi) return { chu: '', loi: ra.loi, phienId: null, roiBac: null };
       }
       return { chu: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.', phienId: null, roiBac: null };
     }
@@ -218,8 +220,12 @@ export function registerRobotHandlers(): void {
          đi máy chủ: đo thật 15/09/2026 cho thấy model 4B đọc sai dấu tiếng
          Việt ("biên" → "biến"), đúng loại sai mà người học không nhận ra. */
       if (dangSan()) {
-        const ra = await hoiMay({ chu });
-        if (ra) return { chu: ganNhan(ra), phienId: null, roiBac: null, tuMay: true };
+        /* Ảnh đi CÙNG câu hỏi xuống đường lùi. Bỏ nó lại là đúng cái lỗi đã
+           bắt được ở `robot:hoiGiaSu` hôm 15/09: người dùng thấy ảnh mình vừa
+           dán nằm trong khung chat, còn model thì chưa từng thấy nó. */
+        const ra = await hoiMay({ chu, anh });
+        if (ra?.chu) return { chu: ganNhan(ra.chu), phienId: null, roiBac: null, tuMay: true };
+        if (ra?.loi) return { chu: '', loi: ra.loi, phienId: null, roiBac: null };
       }
       return {
         chu: '',

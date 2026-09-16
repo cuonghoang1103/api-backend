@@ -41,6 +41,23 @@ test('① ngưỡng nhường đã nới, và hai ngưỡng vẫn có khoảng t
   assert.ok(nhuong - moLai >= 0.05, `khoảng trễ ${(nhuong - moLai).toFixed(2)} quá hẹp — cổng sẽ rung`);
 });
 
+test('⭐ mặc định ở compose KHỚP mặc định trong mã', () => {
+  /*
+   * Compose LUÔN truyền `NGUONG_NHUONG` xuống, nên `env.X ?? 0.85` trong mã
+   * không bao giờ được dùng tới. Đổi một chỗ mà quên chỗ kia thì triển khai
+   * xong, mã mới đã lên, mà cổng vẫn chạy ngưỡng CŨ — và log vẫn báo số cũ,
+   * nên nhìn log cũng không thấy gì sai. Đã dẫm phải 16/09/2026.
+   */
+  const compose = readFileSync(join(goc, '..', 'docker-compose.yml'), 'utf8');
+  const cNhuong = /NGUONG_NHUONG: \$\{CONG_LLM_NGUONG_NHUONG:-([\d.]+)\}/.exec(compose)[1];
+  const cMoLai = /NGUONG_MO_LAI: \$\{CONG_LLM_NGUONG_MO_LAI:-([\d.]+)\}/.exec(compose)[1];
+  const mNhuong = /NGUONG_NHUONG = Number\(env\.NGUONG_NHUONG \?\? ([\d.]+)\)/.exec(ma)[1];
+  const mMoLai = /NGUONG_MO_LAI = Number\(env\.NGUONG_MO_LAI \?\? ([\d.]+)\)/.exec(ma)[1];
+
+  assert.equal(cNhuong, mNhuong, `compose ${cNhuong} ≠ mã ${mNhuong} — compose thắng, mã vô nghĩa`);
+  assert.equal(cMoLai, mMoLai, `compose ${cMoLai} ≠ mã ${mMoLai}`);
+});
+
 test('② câu cho người dùng dựng LÚC TRẢ LỜI, không dùng lý do đã cất sẵn', () => {
   /* `s.lyDo` chỉ được làm mới mỗi chu kỳ, nên nó có thể lệch tới một phút. */
   assert.match(ma, /return loiAnthropic\(res, 429, 'rate_limit_error', cauChoNguoiDung\(\)\)/);

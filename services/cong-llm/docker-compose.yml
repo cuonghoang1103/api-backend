@@ -88,8 +88,13 @@ services:
       KEY_CON: ${CONG_LLM_KEY_CON:-opencode-1,opencode-2,web-phu-1}
       # Key chính đã dùng ≥70% cửa sổ 5h ⇒ đóng key con; <60% (tức cửa sổ
       # mới) mới mở lại. 30% cuối mỗi cửa sổ là của riêng web.
-      NGUONG_NHUONG: ${CONG_LLM_NGUONG_NHUONG:-0.7}
-      NGUONG_MO_LAI: ${CONG_LLM_NGUONG_MO_LAI:-0.6}
+      # ⚠️ PHẢI KHỚP mặc định trong `canh/canh.mjs`. Compose LUÔN truyền biến
+      # này xuống, nên `env.NGUONG_NHUONG ?? 0.85` trong mã KHÔNG bao giờ được
+      # dùng tới — đổi mặc định ở mã mà quên chỗ này thì không có gì đổi cả,
+      # và log vẫn báo ngưỡng cũ. Đã dẫm phải 16/09/2026: triển khai xong, mã
+      # mới đã lên, mà cổng vẫn đóng ở 70%. Có phép kiểm so hai chỗ.
+      NGUONG_NHUONG: ${CONG_LLM_NGUONG_NHUONG:-0.85}
+      NGUONG_MO_LAI: ${CONG_LLM_NGUONG_MO_LAI:-0.75}
       # ─── Gộp ví với AI Code của web (14/09/2026) ─────────────────────
       # Người mua gói key terminal dùng CHUNG hạn mức với AI Code trên app
       # desktop. canh hỏi backend web số đã tiêu ở app rồi cộng với phần đã

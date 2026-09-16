@@ -127,8 +127,23 @@ export function MucDung() {
         </button>
       </div>
 
+      {/*
+        ⚠️ CÂU NÀY TỪNG NÓI KHÔNG ĐỦ ĐÚNG, và người trả tiền là người chịu.
+        Bản cũ: *"người khác dùng nhiều không ảnh hưởng tới bạn"*. Đúng cho ví
+        của app — nhưng BÊN DƯỚI chỉ có MỘT khoá thật ở cổng AI, dùng chung
+        cho mọi tài khoản (đã so vân tay trên máy chủ 16/09/2026: khoá mà bộ
+        canh đo và khoá AI Code dùng là cùng một chuỗi). Khi khoá chung đó vào
+        cao điểm, key terminal bị tạm dừng — bất kể ví riêng của người đó còn
+        đầy.
+
+        Người dùng gặp đúng chuyện đó với một tài khoản MỚI, vừa cấp Pro, chưa
+        dùng lần nào. Họ tin câu trên, và tin là hợp lý: chính app viết nó.
+      */}
       <p className="ct-field-help">
-        {dichP('Mỗi tài khoản có ví RIÊNG cho từng mảng, tính trượt trong {n} giờ vừa qua — người khác dùng nhiều không ảnh hưởng tới bạn, và AI Code hết không làm AI Chat dừng theo.', { n: vi?.code.soGio ?? 5 })}
+        {dichP('Mỗi tài khoản có ví RIÊNG cho từng mảng, tính trượt trong {n} giờ vừa qua — người khác dùng nhiều không làm hụt ví của bạn, và AI Code hết không làm AI Chat dừng theo.', { n: vi?.code.soGio ?? 5 })}
+      </p>
+      <p className="ct-field-help">
+        {dich('Riêng key dùng ở terminal đi qua một cổng chung: lúc cả nhà cùng dùng nhiều, nó có thể tạm dừng vài phút rồi tự chạy lại — ví của bạn không bị trừ trong lúc đó.')}
       </p>
     </section>
   );

@@ -908,8 +908,8 @@ export const TU_DIEN: Record<string, string> = {
     'Your own allowance, measured over the last {n} hours.',
   'Tài khoản quản trị — không bị chặn. Số liệu vẫn được ghi.':
     'Admin account — never blocked. Usage is still recorded.',
-  'Mỗi tài khoản có ví RIÊNG cho từng mảng, tính trượt trong {n} giờ vừa qua — người khác dùng nhiều không ảnh hưởng tới bạn, và AI Code hết không làm AI Chat dừng theo.':
-    'Every account has its OWN allowance per area, measured over a rolling {n}-hour window — heavy use by other people does not affect you, and running out on AI Code does not stop AI Chat.',
+  'Mỗi tài khoản có ví RIÊNG cho từng mảng, tính trượt trong {n} giờ vừa qua — người khác dùng nhiều không làm hụt ví của bạn, và AI Code hết không làm AI Chat dừng theo.':
+    'Every account has its OWN allowance per area, measured over a rolling {n}-hour window — heavy use by other people does not eat into your allowance, and running out on AI Code does not stop AI Chat.',
   // ── Bậc model trong AI Chat ─────────────────────────────
   'Thường': 'Standard',
   'Nhanh, đủ cho hỏi đáp hằng ngày': 'Fast, enough for everyday questions',
@@ -1273,6 +1273,8 @@ export const TU_DIEN: Record<string, string> = {
   'Tải': 'Download',
   'Xoá khỏi máy': 'Remove from this computer',
   'Xem hướng dẫn đầy đủ': 'Read the full guide',
+  'Riêng key dùng ở terminal đi qua một cổng chung: lúc cả nhà cùng dùng nhiều, nó có thể tạm dừng vài phút rồi tự chạy lại — ví của bạn không bị trừ trong lúc đó.':
+    'The key you use in the terminal goes through a shared gateway: when everyone is busy it may pause for a few minutes and then resume on its own — your allowance is not charged while it waits.',
   'Cho phép chạy AI trên máy': 'Allow the AI to run on this computer',
   'Tắt thì dừng ngay và trả lại bộ nhớ. File đã tải vẫn giữ nguyên, bật lại là dùng được.':
     'Turning it off stops it right away and gives the memory back. Downloaded files stay, so turning it back on just works.',

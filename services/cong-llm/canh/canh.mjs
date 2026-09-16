@@ -12,7 +12,7 @@
 // key con tự kiểm — ở gần cuối file):
 //
 // 1. ƯU TIÊN WEB. Mỗi phút hỏi rambo key chính đã dùng bao nhiêu phần trăm
-//    cửa sổ 5 giờ. Chạm NGUONG_NHUONG (mặc định 70%) thì mọi key con bị trả
+//    cửa sổ 5 giờ. Chạm NGUONG_NHUONG (mặc định 85%) thì mọi key con bị trả
 //    429 cho tới khi tụt dưới NGUONG_MO_LAI (tức là tới lúc cửa sổ reset) —
 //    phần cuối cửa sổ để dành trọn cho web. Hai ngưỡng khác nhau để cổng
 //    không bật tắt liên tục quanh một con số.
@@ -43,8 +43,22 @@ const RAMBO_KEY = env.AGENT_GATEWAY_API_KEY?.trim();
 const RAMBO_CHECK = env.RAMBO_CHECK_URL || `${new URL(RAMBO_API).origin}/auth/check-limit/api/check`;
 
 const KHOA_NOI_BO = env.CANH_KHOA_NOI_BO?.trim();
-const NGUONG_NHUONG = Number(env.NGUONG_NHUONG ?? 0.7);
-const NGUONG_MO_LAI = Number(env.NGUONG_MO_LAI ?? 0.6);
+/**
+ * ⚠️ NGƯỠNG NHƯỜNG: 0.7 → 0.85 (16/09/2026).
+ *
+ * Người dùng báo key terminal của một tài khoản MỚI, vừa cấp Pro, chưa dùng
+ * lần nào, bị chặn. Đo lại log: cổng đóng ĐÚNG MỘT LẦN từ 14/09, kéo dài 8
+ * phút — hiếm, nhưng khi nó rơi trúng thì người trả tiền không hiểu vì sao và
+ * không làm gì được.
+ *
+ * Giữ 30% cho web là quá rộng: đo trên chính key ấy, web hiếm khi dùng hết
+ * 15% trong quãng cuối một cửa sổ. Nới xuống còn 15% đệm đổi lấy việc key
+ * terminal gần như không bao giờ bị cắt.
+ *
+ * Hai ngưỡng vẫn cách nhau 0.10 — đó là thứ chống bật/tắt liên tục quanh mốc.
+ */
+const NGUONG_NHUONG = Number(env.NGUONG_NHUONG ?? 0.85);
+const NGUONG_MO_LAI = Number(env.NGUONG_MO_LAI ?? 0.75);
 const CHU_KY_MS = Math.max(10_000, Number(env.CHU_KY_MS) || 60_000);
 // Không đo được hạn mức lâu hơn mức này thì ĐÓNG cổng key con: không biết web
 // còn bao nhiêu thì không được phép tiêu tiếp phần của web.
@@ -120,6 +134,24 @@ function luuTrangThai() {
 
 function phutConLai() {
   return s.hetCuaSoLuc ? Math.max(0, Math.round((s.hetCuaSoLuc - Date.now()) / 60_000)) : null;
+}
+
+/**
+ * Câu hiển thị cho NGƯỜI DÙNG khi cổng đóng.
+ *
+ * Khác `s.lyDo` (dành cho log): ở đây thời gian đứng trước, và không có từ
+ * kỹ thuật nào. Người đang gõ lệnh trong terminal cần đúng ba điều — chờ bao
+ * lâu, có tự chạy lại không, có mất tiền không.
+ */
+function cauChoNguoiDung() {
+  const ph = phutConLai();
+  /* ⚠️ "Tạm nghỉ SAU 7 phút" đọc thành "7 phút nữa nó sẽ dừng" — ngược hẳn
+     nghĩa. Nói thẳng "chạy lại sau ~7 phút". */
+  const khiNao = ph == null ? 'chạy lại trong ít phút nữa'
+    : ph <= 1 ? 'chạy lại trong khoảng một phút'
+    : `chạy lại sau khoảng ${ph} phút`;
+  return `Tạm dừng, ${khiNao}. Nó TỰ nối lại — bạn không phải làm gì và không mất lượt nào. `
+    + 'Lý do: cổng dùng chung đang cao điểm nên key của bạn nhường tạm.';
 }
 
 function capNhatCong() {
@@ -647,7 +679,17 @@ async function chuyenTiep(req, res) {
     // thật với retry-after 3600 thì `opencode run` đứng im cả tiếng, không in
     // gì. Không có header thì nó thử lại 5 lần theo cấp số (~1 phút) rồi hiện
     // đúng câu dưới đây — người dùng biết vì sao và biết lúc nào mở lại.
-    return loiAnthropic(res, 429, 'rate_limit_error', `Cổng key con đang tạm đóng: ${s.lyDo}.`);
+    //
+    // ⚠️ THỨ TỰ CHỮ QUAN TRỌNG. OpenCode CẮT CỤT câu dài thành
+    // `…(click to expand)`, nên phần đuôi không ai đọc. Người dùng gửi ảnh
+    // 16/09/2026: họ chỉ thấy "Cổng key con đang tạm đóng: key chính đã dùng
+    // 71% cửa sổ 5h — phần còn lại nhườn…" và kết luận là hỏng. Thứ họ cần
+    // biết nhất — BAO LÂU NỮA và CÓ MẤT GÌ KHÔNG — nằm ở khúc bị cắt.
+    //
+    // Nay: thời gian đứng ĐẦU, trấn an đứng thứ hai, lý do kỹ thuật đứng cuối.
+    // Và tính lại phút NGAY LÚC TRẢ LỜI, không dùng `s.lyDo` đã dựng sẵn —
+    // nó chỉ được làm mới mỗi chu kỳ, nên có thể lệch tới một phút.
+    return loiAnthropic(res, 429, 'rate_limit_error', cauChoNguoiDung());
   }
 
   let body;

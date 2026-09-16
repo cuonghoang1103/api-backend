@@ -41,7 +41,7 @@ const NGON_NGU: { value: NgonNgu; label: string }[] = [
 
 export function Settings() {
   const { theme, setSetting, settings } = useAppState();
-  const { dich } = useDich();
+  const { dich, dichP } = useDich();
   const ngonNgu: NgonNgu = settings.ngonNgu === 'en' ? 'en' : 'vi';
   const [httpCache, setHttpCache] = useState<number | null>(null);
   const [estimate, setEstimate] = useState<StorageEstimate | null>(null);
@@ -71,6 +71,17 @@ export function Settings() {
   };
 
   const robotEnabled = settings.robotEnabled !== false;
+
+  /**
+   * Phím tắt THẬT SỰ đang giữ được, hỏi main chứ không viết cứng ở đây.
+   *
+   * `globalShortcut.register()` trả `false` khi một app khác đã chiếm phím, và
+   * nó KHÔNG ném lỗi — nên phím đầu danh sách chưa chắc là phím đang chạy. In
+   * một chuỗi viết cứng ra đây là dạy người dùng bấm một tổ hợp không làm gì
+   * cả, rồi họ kết luận tính năng hỏng. Xem `main/phimRobot.ts`.
+   */
+  const [phimTat, datPhimTat] = useState<string | null>(null);
+  useEffect(() => { void window.cuongthai?.robot.phimTat().then(datPhimTat); }, []);
 
   return (
     <div className="ct-page">
@@ -134,6 +145,22 @@ export function Settings() {
               <div className="ct-field-help">
                 {dich('Hiển thị bảng trợ lý ở cạnh phải. Tắt đi thì app vẫn dùng bình thường.')}
               </div>
+              {/*
+                Công tắc này có BA lối khác ngoài chính nó, và người dùng không
+                đoán ra lối nào — nên phải kể ở đây. Quan trọng nhất là dòng
+                phím tắt: bốn cú bấm chỉ ẨN được, còn muốn robot quay lại mà
+                không có phím tắt thì chỉ còn đường lần vào đúng trang này.
+              */}
+              <ul className="ct-field-help ct-robot-meo">
+                <li>{dich('Bấm 4 lần vào robot: ẩn nhanh, không cần vào đây.')}</li>
+                <li>
+                  {phimTat
+                    ? dichP('Phím tắt ẩn/hiện (chạy cả khi đang ở app khác): {phim}', { phim: phimTat })
+                    : dich('Phím tắt ẩn/hiện: không giữ được — một app khác đang chiếm cả ba tổ hợp dự phòng.')}
+                </li>
+                <li>{dich('Bấm 3 lần vào robot: bật/tắt chế độ kéo và đổi cỡ.')}</li>
+                <li>{dich('Chuột phải vào robot: menu đầy đủ (cỡ, ghim mép, tắt).')}</li>
+              </ul>
             </div>
             <label className="ct-switch">
               <input

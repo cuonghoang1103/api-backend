@@ -19,6 +19,7 @@
 import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { OdinRobot } from './features/odin/OdinRobot';
+import { taoBoDem } from './features/odin/demCuBam';
 /* ⚠️ Cửa sổ robot là một ENTRY RIÊNG (`robot.html`), không đi qua
    `AppStateProvider` — nơi cửa sổ chính gọi `datNgonNgu`. Không tự gọi ở đây
    thì đổi ngôn ngữ trong Cài đặt xong, mọi cửa sổ đổi trừ con robot. */
@@ -32,6 +33,31 @@ import './robot.css';
 const CHU_CHO = 'Chờ tớ suy nghĩ xíu nhé…';
 
 const TRE_NHAP_DUP_MS = 260;
+
+/**
+ * Bong bóng thông báo sống bao lâu.
+ *
+ * Người dùng 16/09/2026: "nó cứ hiện mãi trông rất phiền, chỉ hiện 3s thôi".
+ * Trước bản này là 8 giây và KHÔNG có cách nào tắt sớm.
+ *
+ * ⚠️ Đồng hồ DỪNG khi con trỏ đang ở trên bong bóng (`ghim`). 3 giây là đủ để
+ * liếc, nhưng không đủ để đọc một câu trả lời dài — và một bong bóng biến mất
+ * giữa lúc người ta đang đọc nó thì tệ hơn hẳn một bong bóng ở lâu.
+ */
+const GIAY_HIEN_TIN_MS = 3000;
+
+/**
+ * Cửa sổ thời gian gộp các cú bấm liên tiếp khi TỰ ĐẾM. Xem chú thích dài ở
+ * `demBam` bên dưới — vì sao `e.detail` một mình không đủ.
+ *
+ * 600ms rộng hơn ngưỡng nhấp đúp mặc định của cả macOS (~450ms) lẫn Windows
+ * (500ms). Rộng như thế an toàn vì mỗi cử chỉ CHỐT LẠI sau `TRE_NHAP_DUP_MS`:
+ * hẹn giờ nổ xong là bộ đếm về 0, nên nó không thể gộp nhầm hai cử chỉ rời.
+ */
+const CUA_SO_DEM_MS = 600;
+
+/** Bấm xê dịch quá ngần này thì coi là một chuỗi MỚI (đơn vị: điểm ảnh màn hình). */
+const LECH_CHO_PHEP_PX = 12;
 
 interface ThongBao {
   loai: 'tin-nhan' | 'thong-bao' | 'nhac' | 'agent';
@@ -53,6 +79,8 @@ function Robot() {
    */
   const [viec, datViec] = useState<string | null>(null);
   const [hover, datHover] = useState(false);
+  /* Con trỏ đang ở trên bong bóng ⇒ GIỮ nó lại, đừng đếm 3 giây. */
+  const [ghim, datGhim] = useState(false);
   const henRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tt, datTt] = useState<TrangThaiNoi>('im');
   const thuRef = useRef<BoThu | null>(null);
@@ -114,14 +142,26 @@ function Robot() {
   useEffect(() => {
     const cau = window.cuongthai;
     if (!cau) return;
-    return cau.on('robot:tin', (p) => {
-      const t = p as ThongBao;
-      datTin(t);
-      // Tin tự mờ đi sau 8 giây. Để nguyên thì cái bong bóng che màn hình người
-      // dùng mãi mãi, và họ phải đi tìm cách tắt nó.
-      setTimeout(() => datTin((cu) => (cu === t ? null : cu)), 8000);
-    });
+    return cau.on('robot:tin', (p) => { datTin(p as ThongBao); });
   }, []);
+
+  /**
+   * Bong bóng tự biến mất sau `GIAY_HIEN_TIN_MS`.
+   *
+   * ⚠️ Phải là MỘT HIỆU ỨNG theo `tin`, không phải một `setTimeout` cắm trong
+   * chỗ nhận tin. Bản cũ làm thế và nó hỏng hai kiểu: hẹn giờ không huỷ được
+   * (nên nút × mới sẽ vô nghĩa — bấm tắt xong 5 giây sau nó vẫn "tắt" thêm một
+   * lần nữa, xoá mất tin MỚI vừa tới), và không có chỗ nào để dừng đồng hồ khi
+   * người dùng đang rê chuột lên đọc.
+   *
+   * `ghim` bật ⇒ không đặt hẹn giờ; chuột rời ra ⇒ hiệu ứng chạy lại và đếm
+   * lại từ đầu. Đó đúng là điều người đọc mong đợi.
+   */
+  useEffect(() => {
+    if (!tin || ghim) return;
+    const h = setTimeout(() => datTin(null), GIAY_HIEN_TIN_MS);
+    return () => clearTimeout(h);
+  }, [tin, ghim]);
 
   useEffect(() => window.cuongthai?.on('robot:viec', (p) => {
     const c = (p as { chu?: string | null }).chu;
@@ -132,20 +172,6 @@ function Robot() {
     datRong(v);
     void window.cuongthai?.robot.doiKichThuoc(v);
   }, []);
-
-  const bam = useCallback((e: { detail: number }) => {
-    if (e.detail >= 3) {
-      huyHen();                 // huỷ cả mở-khung-chat lẫn mở-cửa-sổ-chính
-      datKeoDuoc((v) => !v);
-      return;
-    }
-    if (henRef.current) return; // đang chờ xem có phải nhấp đúp không
-    henRef.current = setTimeout(() => {
-      henRef.current = null;
-      doiRong(!rong);
-      datTin(null);
-    }, TRE_NHAP_DUP_MS);
-  }, [rong, doiRong]);
 
   /**
    * Giữ để nói.
@@ -315,36 +341,82 @@ function Robot() {
     };
   }, [dangKeo]);
 
-  /**
-   * Ba cú bấm lật khoá.
-   *
-   * Dùng `e.detail` của trình duyệt chứ không tự đếm bằng `setTimeout`: nó
-   * đếm theo ĐÚNG khoảng nhấp-đúp của hệ điều hành, nên khớp với cảm giác tay
-   * người dùng thay vì một con số 600ms tôi bịa ra.
-   *
-   * ⚠️ CÚ THỨ HAI CŨNG BẮN `onDoubleClick`, và ở cửa sổ nổi thì `bamDup` MỞ
-   * CỬA SỔ CHÍNH — nó cướp tiêu điểm, và cú thứ ba rơi vào cửa sổ vừa hiện
-   * lên chứ không vào robot. Đây chính là lý do ba-cú-bấm chạy trong app mà
-   * không chạy ở con robot nổi ngoài. Nên `bamDup` phải HOÃN, và cú thứ ba
-   * huỷ cái hoãn đó.
-   */
-  const henDup = useRef<ReturnType<typeof setTimeout> | null>(null);
   const huyHen = useCallback(() => {
     if (henRef.current) { clearTimeout(henRef.current); henRef.current = null; }
-    if (henDup.current) { clearTimeout(henDup.current); henDup.current = null; }
   }, []);
 
+  /** Mở trang AI Chat. Dùng cho cả cử chỉ hai-cú-bấm lẫn cú bấm vào bong bóng. */
   const bamDup = useCallback(() => {
-    if (henRef.current) { clearTimeout(henRef.current); henRef.current = null; }
-    // HOÃN, không làm ngay: cú thứ ba (nếu có) sẽ huỷ cái hẹn này. Mở cửa sổ
-    // chính ngay tại cú thứ hai là cướp tiêu điểm và giết luôn cử chỉ ba bấm.
-    if (henDup.current) clearTimeout(henDup.current);
-    henDup.current = setTimeout(() => {
-      henDup.current = null;
+    huyHen();
+    datTin(null);
+    void window.cuongthai?.robot.moChinh('/chat');
+  }, [huyHen]);
+
+  /**
+   * ============================================================
+   * ĐẾM CÚ BẤM — BỐN CỬ CHỈ TRÊN CÙNG MỘT CON ROBOT
+   * ============================================================
+   *
+   *   1 lần → mở/đóng khung chat mini
+   *   2 lần → nhảy sang trang AI Chat ở cửa sổ chính
+   *   3 lần → bật/tắt chế độ KÉO + đổi cỡ
+   *   4 lần → ẨN hẳn con robot
+   *
+   * ⚠️⚠️ `e.detail` MỘT MÌNH KHÔNG ĐỦ — và chỗ nó hụt đúng là chỗ người dùng
+   * báo lỗi (16/09/2026, Windows): *"ấn 3 cái để mở chỉnh sửa thì được, ấn 3
+   * cái nữa để tắt thì không tắt được"*.
+   *
+   * Vì sao: một khi đã mở khoá, `onPointerDown` gọi `setPointerCapture` và cửa
+   * sổ bắt đầu chạy theo chuột bằng `setBounds` ở main. Con trỏ đứng yên trên
+   * MÀN HÌNH, nhưng CỬA SỔ trượt dưới nó — nên toạ độ trong-cửa-sổ của cú bấm
+   * kế khác cú trước. Chromium đếm nhấp liên tiếp theo cả KHOẢNG CÁCH lẫn thời
+   * gian, nên lệch quá ngưỡng là `e.detail` tụt về 1 và không bao giờ lên nổi
+   * 3 nữa. Ở chiều BẬT thì chưa kéo được nên không dịch gì — đúng như báo cáo:
+   * bật thì chạy, tắt thì không.
+   *
+   * Nên đếm thêm một lần nữa bằng tay theo TOẠ ĐỘ MÀN HÌNH (`screenX/Y`) —
+   * thứ duy nhất không đổi khi cửa sổ trượt — rồi lấy số LỚN HƠN. Cả hai cách
+   * đều cần: `e.detail` đúng theo ngưỡng nhấp đúp THẬT của hệ điều hành (máy
+   * người dùng có thể chỉnh chậm hơn `CUA_SO_DEM_MS`), còn đếm tay sống sót
+   * qua chuyện cửa sổ dịch.
+   */
+  const demRef = useRef(taoBoDem(CUA_SO_DEM_MS, LECH_CHO_PHEP_PX));
+
+  /**
+   * ⚠️ MỌI cử chỉ đều HOÃN `TRE_NHAP_DUP_MS`, kể cả cú thứ ba — trừ cú thứ tư
+   * (không còn cử chỉ nào dài hơn để đợi).
+   *
+   * Hoãn cả cú thứ ba nghe thừa, nhưng không hoãn thì bốn cú bấm sẽ nổ cử chỉ
+   * ba TRƯỚC: người dùng định ẩn robot, và thứ họ nhận được là robot ẩn đi
+   * TRONG KHI đã âm thầm bật chế độ kéo — bật lại thì nó hiện ra ở trạng thái
+   * lạ mà họ không hề chọn. Đợi thêm một nhịp rẻ hơn nhiều so với chuyện đó.
+   */
+  const bam = useCallback((e: { detail: number; screenX: number; screenY: number }) => {
+    const n = demRef.current.dem(e);
+    huyHen();
+
+    if (n >= 4) {
+      demRef.current.khepLai();
       datTin(null);
-      void window.cuongthai?.robot.moChinh('/chat');
-    }, 260);
-  }, []);
+      /* Chiều BẬT LẠI không thể đi qua đây — ẩn rồi thì không còn gì để bấm.
+         Lối về là phím tắt toàn cục (xem `main/phimRobot.ts`), và trang Cài
+         đặt in phím đó ngay cạnh công tắc. */
+      /* `.catch` chứ không `void`: main ĐÓNG chính cửa sổ này để thực hiện lời
+         gọi, nên kênh IPC đứt trước khi lời hứa kịp giải — `void` sẽ để lại
+         một rejection không ai bắt trong những mili giây cuối cùng của renderer. */
+      window.cuongthai?.robot.batTat(false).catch(() => {});
+      return;
+    }
+
+    henRef.current = setTimeout(() => {
+      henRef.current = null;
+      demRef.current.khepLai();   // cú bấm sau mở đầu chuỗi MỚI
+      if (n === 3) { datKeoDuoc((v) => !v); return; }
+      if (n === 2) { bamDup(); return; }
+      doiRong(!rong);
+      datTin(null);
+    }, TRE_NHAP_DUP_MS);
+  }, [rong, doiRong, huyHen, bamDup]);
 
   /**
    * Tâm trạng hiện tại — tính MỘT chỗ, dùng cho cả vỏ (`data-mood`, để CSS bật
@@ -393,6 +465,12 @@ function Robot() {
           ref={doRef}
           className="rb-bong rb-do"
           data-loai={tin ? tin.loai : 'cho'}
+          /* ⚠️ Ô đo phải giống bong bóng THẬT ở MỌI thứ ảnh hưởng bố cục —
+             `data-co-x` chừa chỗ cho nút ×. Thiếu nó thì ô đo hẹp hơn bong
+             bóng thật đúng bằng bề rộng cái nút, cửa sổ tính theo số đo hụt,
+             và dòng cuối bị xén. Đây là LẦN THỨ HAI cùng một lỗi ở cùng chỗ
+             này (lần trước là `data-loai`, 20/08/2026). */
+          data-co-x={tin ? 'true' : undefined}
           tabIndex={-1}
           aria-hidden
         >
@@ -436,16 +514,46 @@ function Robot() {
          * và bấm-hai-lần. Không chặn thì một cú bấm vào chữ vừa mở khung
          * mini vừa nhảy trang.
          */
-        <button
-          type="button"
-          className="rb-bong"
-          data-loai={tin.loai}
-          title={dich('Bấm để đọc đầy đủ trong AI Chat')}
-          onClick={(e) => { e.stopPropagation(); bamDup(); }}
-          onDoubleClick={(e) => e.stopPropagation()}
+        <div
+          className="rb-bong-boc"
+          /* Rê chuột lên ⇒ DỪNG đồng hồ 3 giây. Không có cái này thì một câu
+             trả lời dài biến mất giữa lúc người ta đang đọc nó. */
+          onMouseEnter={() => datGhim(true)}
+          onMouseLeave={() => datGhim(false)}
         >
-          {tin.chu}
-        </button>
+          <button
+            type="button"
+            className="rb-bong"
+            data-loai={tin.loai}
+            data-co-x="true"
+            title={dich('Bấm để đọc đầy đủ trong AI Chat')}
+            onClick={(e) => { e.stopPropagation(); bamDup(); }}
+            onDoubleClick={(e) => e.stopPropagation()}
+          >
+            {tin.chu}
+          </button>
+          {/*
+            Nút ẨN.
+
+            ⚠️ `<button>` LỒNG trong `<button>` là HTML không hợp lệ, và
+            trình duyệt tự gỡ rối bằng cách ĐÓNG nút ngoài trước nút trong —
+            bong bóng vỡ làm đôi. Nên nó là ANH EM của bong bóng, đặt tuyệt
+            đối vào khoảng `padding-right` mà `data-co-x` vừa chừa ra.
+
+            `stopPropagation`: thân robot đang đếm cú bấm ở ngay dưới; không
+            chặn thì bấm × cũng tính là một cú bấm vào robot.
+          */}
+          <button
+            type="button"
+            className="rb-bong-x"
+            aria-label={dich('Ẩn thông báo')}
+            title={dich('Ẩn thông báo')}
+            onClick={(e) => { e.stopPropagation(); datTin(null); }}
+            onDoubleClick={(e) => e.stopPropagation()}
+          >
+            ×
+          </button>
+        </div>
       )}
       <div
         className="rb-than"
@@ -462,14 +570,21 @@ function Robot() {
           datDangKeo(true);
           void window.cuongthai?.robot.keoBatDau();
         }}
+        /* ⚠️ KHÔNG còn `onDoubleClick`. Cú thứ hai bắn CẢ `click` lẫn
+           `dblclick`, nên hai chỗ cùng xử lý một cử chỉ là hai bộ hẹn giờ
+           giẫm nhau — đúng thứ đã làm ba-cú-bấm không sang nổi cú thứ ba.
+           Nay mọi cử chỉ đếm ở MỘT chỗ. */
         onClick={bam}
-        onDoubleClick={bamDup}
         /* Menu chuột phải — cửa duy nhất người dùng ĐOÁN RA được. Cử chỉ
            ba-cú-bấm vẫn còn cho người quen tay, nhưng không ai tự nghĩ ra nó. */
         onContextMenu={(e) => { e.preventDefault(); void window.cuongthai?.robot.menu(false); }}
         onMouseEnter={() => datHover(true)}
         onMouseLeave={() => datHover(false)}
-        title={'Bấm một lần: mở khung chat nhanh\nBấm hai lần: mở trang AI Chat\nKéo để dời'}
+        title={dich('Bấm 1 lần: mở khung chat nhanh')
+          + '\n' + dich('Bấm 2 lần: mở trang AI Chat')
+          + '\n' + dich('Bấm 3 lần: bật/tắt chế độ kéo và đổi cỡ')
+          + '\n' + dich('Bấm 4 lần: ẩn robot')
+          + '\n' + dich('Chuột phải: menu đầy đủ')}
       >
         {/* Có tin thì robot 'vui' — cùng bộ tâm trạng với con robot trong app,
             nên nó vẫn là MỘT nhân vật chứ không phải hai con giống nhau. */}

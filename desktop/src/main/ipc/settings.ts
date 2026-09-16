@@ -47,7 +47,15 @@ export function registerSettingsHandlers(): void {
        này chỉ con trong app nghe `robotEnabled`, nên tắt công tắc xong con nổi
        vẫn đứng đó — người dùng báo đúng chuyện đó 14/09/2026. */
     if (key === 'robotEnabled') {
-      void import('../robotNoi').then((m) => m.dongBoRobotNoi());
+      void import('../robotNoi').then((m) => {
+        m.dongBoRobotNoi();
+        /* Báo cho MỌI cửa sổ, kể cả cửa sổ vừa gửi lệnh này.
+         *
+         * ⚠️ Bên nhận chỉ được sửa trạng thái trong bộ nhớ. Gọi ngược
+         * `settings.set` ở đó là một vòng lặp vô tận: main phát tin → renderer
+         * ghi lại → main phát tin… Xem chú thích `robot:congTac` ở shared/ipc. */
+        m.baoMoiCuaSo(value !== false);
+      });
     }
 
     if (key === 'ngonNgu') {

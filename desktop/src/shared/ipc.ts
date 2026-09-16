@@ -1676,6 +1676,18 @@ export const INVOKE_CHANNELS = {
      "Ghim/Bỏ ghim" và "Tắt robot nổi", con trong app thì không. */
   'robot:menu': z.object({ trongApp: z.boolean() }),
   'robot:hutMep': z.object({}).optional(),
+  /**
+   * BẬT/TẮT con robot (cả nổi lẫn trong app). `bat` bỏ trống = lật trạng thái.
+   *
+   * Ba cửa cùng gọi vào đây: bốn cú bấm lên con robot nổi, phím tắt toàn cục,
+   * và mục "Tắt robot" của menu chuột phải. Một hàm duy nhất ở main quyết định
+   * — nếu mỗi cửa tự ghi thiết đặt rồi tự đóng cửa sổ thì sớm muộn có cửa quên
+   * một nửa, và người dùng gặp lại đúng lỗi 14/09/2026 (tắt xong mở app lại
+   * thấy robot quay về).
+   */
+  'robot:batTat': z.object({ bat: z.boolean().optional() }).optional(),
+  /** Phím tắt toàn cục ĐANG giữ được, đã định dạng để hiện trong Cài đặt. */
+  'robot:phimTat': z.object({}).optional(),
   'agent:datMucNoLuc': agentMucNoLucSchema,
   'agent:datModel': agentModelSchema,
   'agent:hoanTac': agentCuocSchema,
@@ -1843,8 +1855,20 @@ export const EVENT_CHANNELS = [
    * đi vòng qua main. `null` = vừa rời trang bài học ⇒ robot về trợ lý thường.
    */
   'robot:baiHoc',
-  /** Người dùng vừa tắt robot từ menu chuột phải. */
-  'robot:tat',
+  /**
+   * Công tắc robot vừa lật — ở BẤT KỲ cửa nào (menu chuột phải, bốn cú bấm lên
+   * con robot nổi, phím tắt toàn cục, hay chính công tắc trong Cài đặt).
+   *
+   * Payload `{ bat: boolean }`. Trước bản này kênh tên `robot:tat` và không
+   * mang giá trị — nó chỉ diễn tả được MỘT chiều, nên khi có thêm đường bật
+   * lại (phím tắt) thì cửa sổ chính không có cách nào biết để tick lại ô trong
+   * Cài đặt. Một kênh mang giá trị diễn tả được cả hai chiều.
+   *
+   * ⚠️ Cửa sổ nhận tin này chỉ được sửa TRẠNG THÁI TRONG BỘ NHỚ, tuyệt đối
+   * không ghi ngược `settings.set('robotEnabled', …)` — main đã ghi rồi, và
+   * ghi lại sẽ khiến main phát tin lần nữa: một vòng lặp vô tận.
+   */
+  'robot:congTac',
   /**
    * AI Code đang làm gì — báo LIÊN TỤC, không phải một thông báo chớp tắt.
    *
@@ -2440,6 +2464,10 @@ export interface DesktopBridge {
     menu(trongApp: boolean): Promise<void>;
     /** Hút lại vào mép ngay (sau khi đổi cỡ từ menu). */
     hutMep(): Promise<void>;
+    /** Lật công tắc robot (cả nổi lẫn trong app). Bỏ trống = đảo. Trả trạng thái MỚI. */
+    batTat(bat?: boolean): Promise<boolean>;
+    /** Phím tắt toàn cục đang giữ được, đã định dạng cho người đọc, hoặc `null`. */
+    phimTat(): Promise<string | null>;
     /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */
     hoi(chu: string, them?: { model?: string; phienId?: string | null; anh?: string[] }): Promise<{
       chu: string;

@@ -92,6 +92,26 @@ export function AppStateProvider({
     });
   }, [bridge]);
 
+  /**
+   * Công tắc robot vừa lật ở ĐÂU ĐÓ KHÁC — menu chuột phải, bốn cú bấm lên con
+   * robot nổi, hay phím tắt toàn cục.
+   *
+   * ⚠️⚠️ CHỈ sửa trạng thái trong bộ nhớ (`setSettings`), TUYỆT ĐỐI KHÔNG gọi
+   * `setSetting` ở đây. `setSetting` ghi xuống main, main thấy khoá
+   * `robotEnabled` đổi nên phát `robot:congTac` lần nữa, và ta lại ghi xuống…
+   * một vòng lặp vô tận giữa hai tiến trình. Main đã ghi đĩa trước khi phát
+   * tin rồi — ở đây chỉ còn việc cho giao diện biết.
+   *
+   * Đặt ở AppState chứ không ở `OdinDock`: công tắc trong trang Cài đặt cũng
+   * đọc `settings.robotEnabled`, nên nghe ở một chỗ là cả hai cùng đúng. Bản
+   * trước nghe trong `OdinDock` nên tắt robot bằng menu xong, vào Cài đặt vẫn
+   * thấy ô đang tick.
+   */
+  useEffect(() => window.cuongthai?.on('robot:congTac', (p) => {
+    const bat = (p as { bat?: unknown }).bat;
+    if (typeof bat === 'boolean') setSettings((cu) => ({ ...cu, robotEnabled: bat }));
+  }), []);
+
   useEffect(() => {
     if (!bridge) return;
     return bridge.on('app:networkChanged', (payload) => {

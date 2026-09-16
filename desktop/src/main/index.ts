@@ -20,6 +20,7 @@ import {
 import { registerIpcHandlers } from './ipc';
 import { createMainWindow } from './window';
 import { dangKyPhimMedia, goPhimMedia } from './phimMedia';
+import { dangKyPhimRobot, goPhimRobot } from './phimRobot';
 
 registerSchemesAsPrivileged();
 
@@ -123,7 +124,7 @@ async function bootstrap(): Promise<void> {
 
   // Robot nổi — bật sau cửa sổ chính. Nó là cửa sổ hệ điều hành RIÊNG, sống
   // chừng nào app chưa thoát hẳn, kể cả khi cửa sổ chính đã đóng.
-  const { cuaSoChinh, dongRobot, robotTheoTieuDiem, dongBoRobotNoi } = await import('./robotNoi');
+  const { cuaSoChinh, dongRobot, robotTheoTieuDiem, dongBoRobotNoi, dangOTrongApp } = await import('./robotNoi');
   /* Theo thiết đặt, KHÔNG mở vô điều kiện: người đã tắt trợ lý mà mở app lại
      thấy nó quay về thì công tắc ấy coi như không có tác dụng. */
   dongBoRobotNoi();
@@ -150,11 +151,9 @@ async function bootstrap(): Promise<void> {
    *
    * Tính lại từ trạng thái thật của mọi cửa sổ thì cả hai chỗ ấy tự đúng.
    */
-  const dangOTrongApp = (): boolean => BrowserWindow.getAllWindows().some(
-    (w) => !w.isDestroyed()
-      && !w.webContents.getURL().endsWith('/robot.html')
-      && w.isFocused(),
-  );
+  /* Cùng một phép hỏi với `dongBoRobotNoi()` — xem `robotNoi.ts`. Để hai bản
+     sao ở hai tệp là mời một bản trôi đi, và triệu chứng của nó là "thỉnh
+     thoảng lại thấy hai con robot". */
   const capNhatRobot = (): void => robotTheoTieuDiem(dangOTrongApp());
 
   /* Cấp APP, không cấp cửa sổ: hai sự kiện này bắn cho MỌI cửa sổ, kể cả cửa
@@ -194,6 +193,13 @@ async function bootstrap(): Promise<void> {
      Xem `phimMedia.ts`: nó CƯỚP phím khỏi mọi app khác trên máy. */
   dangKyPhimMedia();
   app.on('will-quit', goPhimMedia);
+
+  /* Phím tắt ẩn/hiện robot. Phải TOÀN CỤC: con robot nổi nằm trên mọi app
+     khác, nên lúc người dùng muốn tống nó đi thì app này gần như chắc chắn
+     không phải thứ đang có tiêu điểm. Xem `phimRobot.ts` — trong đó có cả lý
+     do "Cmd+C+T" không đăng ký được và những phím đã cố ý loại. */
+  dangKyPhimRobot(() => { void import('./robotNoi').then((m) => m.batTatRobot()); });
+  app.on('will-quit', goPhimRobot);
 
   /**
    * Đóng cửa sổ CHÍNH trên Windows/Linux ⇒ thoát app.

@@ -106,6 +106,23 @@ export const TU_DIEN: Record<string, string> = {
   'Trợ lý Odin': 'Odin assistant',
   'Hiển thị bảng trợ lý ở cạnh phải. Tắt đi thì app vẫn dùng bình thường.':
     'Show the assistant panel on the right. Turning it off changes nothing else.',
+  // ── Cử chỉ và phím tắt của con robot (hiện ngay dưới công tắc trên) ──
+  'Bấm 4 lần vào robot: ẩn nhanh, không cần vào đây.':
+    'Click the robot 4 times to hide it — no need to come here.',
+  'Phím tắt ẩn/hiện (chạy cả khi đang ở app khác): {phim}':
+    'Show/hide shortcut (works from any app): {phim}',
+  'Phím tắt ẩn/hiện: không giữ được — một app khác đang chiếm cả ba tổ hợp dự phòng.':
+    'Show/hide shortcut: unavailable — another app holds all three fallback combinations.',
+  'Bấm 3 lần vào robot: bật/tắt chế độ kéo và đổi cỡ.':
+    'Click the robot 3 times to toggle drag and resize mode.',
+  'Chuột phải vào robot: menu đầy đủ (cỡ, ghim mép, tắt).':
+    'Right-click the robot for the full menu (size, snap to edge, turn off).',
+  'Bấm 1 lần: mở khung chat nhanh': 'Click once: open the quick chat box',
+  'Bấm 2 lần: mở trang AI Chat': 'Click twice: open the AI Chat page',
+  'Bấm 3 lần: bật/tắt chế độ kéo và đổi cỡ': 'Click 3 times: toggle drag and resize mode',
+  'Bấm 4 lần: ẩn robot': 'Click 4 times: hide the robot',
+  'Chuột phải: menu đầy đủ': 'Right-click: full menu',
+  'Ẩn thông báo': 'Dismiss',
   'Dung lượng': 'Storage',
   'Cache HTTP (ảnh, tệp tĩnh)': 'HTTP cache (images, static files)',
   'Dữ liệu ứng dụng đã dùng': 'App data used',

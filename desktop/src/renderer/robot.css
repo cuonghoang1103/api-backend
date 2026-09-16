@@ -231,6 +231,49 @@ button.rb-bong {
 
 button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
 
+/* ── Bong bóng thông báo + nút ẨN ──
+   Vỏ bọc chỉ để neo nút ×. Nó KHÔNG được thêm một pixel nào vào hộp của bong
+   bóng: ô đo vô hình (`.rb-do`) đo bong bóng chứ không đo vỏ này, và mọi chênh
+   lệch giữa hai bên đều biến thành một dòng chữ bị xén (đã trả giá 20/08/2026).
+   Nên: không viền, không đệm, `display: contents` thì lại mất `position:
+   relative` — dùng `flex` với hộp khít đúng bằng con. */
+.rb-bong-boc {
+  position: relative;
+  align-self: flex-end;
+  display: flex;
+  max-width: 100%;
+  min-height: 0;
+}
+/* Chừa chỗ cho nút × bằng ĐỆM PHẢI của chính bong bóng, không phải bằng một ô
+   flex riêng: chữ trong bong bóng phải xuống dòng TRÁNH cái nút, chứ không
+   chui xuống dưới nó. Ô đo mang cùng thuộc tính này nên hai bên khớp nhau. */
+.rb-bong[data-co-x='true'] { padding-right: 26px; }
+
+.rb-bong-x {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  width: 17px;
+  height: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.72);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  /* Nằm trong vùng kéo cửa sổ ⇒ phải trừ ra, không thì bấm vào nó là kéo cửa sổ. */
+  -webkit-app-region: no-drag;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.rb-bong-x:hover { background: rgba(239, 68, 68, 0.9); color: #fff; }
+.rb-bong-x:focus-visible { outline: 2px solid #a78bfa; outline-offset: 1px; }
+
 /* ── Khung chat mini ── */
 .rb-chat {
   flex: 1;

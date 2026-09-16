@@ -13156,3 +13156,17 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-web-nhung :where([class*="dvh"], [class*="-screen"]) {
   max-height: 100%;
 }
+
+/* ── Mẹo dùng robot, ngay dưới công tắc "Trợ lý Odin" trong Cài đặt ──
+   `list-style` khai TƯỜNG MINH: preflight của Tailwind gỡ chấm đầu dòng khỏi
+   mọi `ul`/`ol`, nên một danh sách không tự khai sẽ vẽ ra bốn dòng chữ trần
+   không ai nhận ra là danh sách. */
+.ct-robot-meo {
+  list-style: disc;
+  margin: 6px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ct-robot-meo li { list-style: inherit; }

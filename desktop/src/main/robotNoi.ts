@@ -187,6 +187,26 @@ export function moRobot(): BrowserWindow {
     maximizable: false,
     fullscreenable: false,
     skipTaskbar: true,
+    /**
+     * ⚠️⚠️ DỰNG TRONG TRẠNG THÁI ẨN, rồi mới `showInactive()`.
+     *
+     * Không có dòng này thì `BrowserWindow` tự hiện VÀ TỰ LẤY TIÊU ĐIỂM ngay
+     * khi dựng — và đó là gốc của lỗi "vào app thấy HAI con robot".
+     *
+     * Cơ chế ẩn con robot nổi dựa vào `dangOTrongApp()`, tức "có cửa sổ nào
+     * KHÁC robot đang giữ tiêu điểm không". Lúc khởi động, cửa sổ robot cướp
+     * tiêu điểm nên câu trả lời là KHÔNG, robot nổi ở lại — trong khi người
+     * dùng đang nhìn thẳng vào app và đã thấy con robot trong app.
+     *
+     * Đo thật 16/09/2026, ba mốc:
+     *   ① vừa khởi động   robot.html HIỆN và CÓ tiêu điểm · index.html không
+     *   ② app mất tiêu điểm  robot vẫn hiện (đúng)
+     *   ③ app có tiêu điểm   robot ẩn ✓ (cơ chế vốn chạy đúng)
+     * Tức máy móc không sai; chỉ mốc ① không bao giờ xảy ra như thiết kế.
+     *
+     * `showInactive()` là thứ cả tệp này đã dùng ở chỗ khác vì đúng lý do ấy.
+     */
+    show: false,
     // macOS: panel mới nổi được trên app toàn màn hình.
     ...(process.platform === 'darwin' ? { type: 'panel' as const } : {}),
     webPreferences: {
@@ -219,6 +239,18 @@ export function moRobot(): BrowserWindow {
     ? `${DEV_SERVER_URL}/robot.html`
     : `${APP_ORIGIN}/robot.html`;
   void cuaSo.loadURL(duong);
+
+  /* Hiện KHÔNG lấy tiêu điểm, và chỉ sau khi vẽ xong — hiện sớm là một ô
+     trong suốt nhấp nháy ở góc màn hình. Xem chú thích `show: false` trên. */
+  cuaSo.once('ready-to-show', () => {
+    /* ⚠️ `!dangAn` là bắt buộc, không phải phòng xa. Cửa sổ có thể vừa được
+       dựng ĐÚNG LÚC app đang ở trước mặt (người dùng bật lại robot từ Cài
+       đặt) — khi ấy `dongBoRobotNoi()` đã gọi `robotTheoTieuDiem()` và quyết
+       định là PHẢI ẨN, nhưng quyết định đó xảy ra TRƯỚC khi trang vẽ xong.
+       Thiếu chốt này thì `showInactive()` lật ngược nó, và người dùng lại
+       thấy hai con robot — đúng lỗi vừa sửa, tới bằng một cửa khác. */
+    if (cuaSo && !cuaSo.isDestroyed() && !dangAn) cuaSo.showInactive();
+  });
 
   cuaSo.on('closed', () => { cuaSo = null; dangRong = false; dangAn = false; });
 
@@ -438,16 +470,83 @@ export function robotTheoTieuDiem(dangOTrongApp: boolean): void {
  */
 export function dongBoRobotNoi(): void {
   if (nenHienRobot(getSettings())) {
-    if (!robotDangMo()) moRobot();
+    if (!robotDangMo()) {
+      moRobot();
+      /* ⚠️ Áp luật MỘT-CON-ROBOT NGAY, đừng đợi sự kiện tiêu điểm kế tiếp.
+         Bật lại robot từ Cài đặt là lúc cửa sổ chính ĐANG có tiêu điểm, nên
+         sẽ chẳng có `browser-window-focus` nào bắn ra nữa — con nổi hiện lên
+         cạnh con trong app và ngồi đó cho tới khi người dùng bấm sang app
+         khác rồi bấm về. Đo thật 16/09/2026: đúng như vậy. */
+      robotTheoTieuDiem(dangOTrongApp());
+    }
   } else if (robotDangMo()) {
     dongRobot();
   }
+}
+
+/**
+ * Có cửa sổ nào của app (KHÔNG tính con robot) đang giữ tiêu điểm không?
+ *
+ * Tính lại từ trạng thái thật của mọi cửa sổ mỗi lần hỏi, không giữ cờ: cửa sổ
+ * chính có thể bị đóng rồi dựng lại (macOS), và một cờ nhớ sẵn sẽ mô tả cửa sổ
+ * đã chết.
+ */
+export function dangOTrongApp(): boolean {
+  return BrowserWindow.getAllWindows().some(
+    (w) => !w.isDestroyed()
+      && !w.webContents.getURL().endsWith('/robot.html')
+      && w.isFocused(),
+  );
 }
 
 export function dongRobot(): void {
   if (cuaSo && !cuaSo.isDestroyed()) cuaSo.destroy();
   cuaSo = null;
   dangRong = false;
+}
+
+/**
+ * ============================================================
+ * MỘT CÔNG TẮC, BỐN CÁI NÚT
+ * ============================================================
+ *
+ * Bật/tắt robot có BỐN lối vào, và tất cả phải đi qua đây:
+ *
+ *  1. công tắc "Trợ lý Odin" trong Cài đặt   → `settings:set`
+ *  2. mục "Tắt robot" ở menu chuột phải      → `robot:menu`
+ *  3. **bốn cú bấm** lên con robot nổi       → `robot:batTat`
+ *  4. **phím tắt toàn cục**                  → `phimRobot.ts`
+ *
+ * Mỗi lối phải làm ĐỦ BA việc, và thiếu bất cứ việc nào cũng ra một lỗi người
+ * dùng đã gặp thật:
+ *
+ *  • **ghi thiết đặt** — thiếu thì tắt xong mở app lần sau robot quay về, và
+ *    người dùng kết luận nút tắt không ăn (báo cáo 14/09/2026);
+ *  • **đóng/mở cửa sổ nổi** — thiếu thì tắt ở Cài đặt mà con nổi vẫn đứng đó;
+ *  • **báo cho các cửa sổ khác** — thiếu thì tắt bằng phím tắt xong, vào Cài
+ *    đặt vẫn thấy ô đang tick, và con robot TRONG app vẫn ngồi đó.
+ *
+ * Trả về trạng thái MỚI để nơi gọi khỏi phải đọc lại thiết đặt.
+ */
+export function batTatRobot(bat?: boolean): boolean {
+  const moi = bat ?? !nenHienRobot(getSettings());
+  setSetting('robotEnabled', moi);
+  baoMoiCuaSo(moi);
+  dongBoRobotNoi();
+  return moi;
+}
+
+/**
+ * Báo công tắc vừa lật cho MỌI cửa sổ.
+ *
+ * Tách riêng vì `settings:set` cũng phải gọi (người dùng gạt công tắc trong
+ * Cài đặt ⇒ con robot trong app ở cửa sổ đó tự biết, nhưng cửa sổ robot nổi
+ * thì không, và ngược lại).
+ */
+export function baoMoiCuaSo(bat: boolean): void {
+  for (const w of BrowserWindow.getAllWindows()) {
+    if (!w.isDestroyed()) w.webContents.send('robot:congTac', { bat });
+  }
 }
 
 /**

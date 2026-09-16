@@ -274,7 +274,8 @@ export function OdinDock() {
     const n = (p as { nac?: number }).nac;
     if (typeof n === 'number') setSetting('odinCo', n);
   }), [setSetting]);
-  useEffect(() => window.cuongthai?.on('robot:tat', () => setSetting('robotEnabled', false)), [setSetting]);
+  /* Công tắc robot nghe ở AppState (`robot:congTac`) — một chỗ cho cả con
+     robot trong app lẫn ô tick trong trang Cài đặt. Xem chú thích ở đó. */
   /** Cú kéo vừa rồi có đi đủ xa để tính là KÉO, không phải BẤM. */
   const daDi = useRef(false);
 

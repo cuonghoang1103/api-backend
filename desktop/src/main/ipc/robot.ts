@@ -5,8 +5,9 @@
  */
 import {
   baoRobot, datNacCo, doiCo, doiKichThuoc, keoBatDau, keoToi, keoXong, moTrangChinh,
-  dongRobot, hutLaiVaoMep, nacCoHienTai,
+  hutLaiVaoMep, nacCoHienTai, batTatRobot,
 } from '../robotNoi';
+import { phimDeDoc, phimRobotHienTai } from '../phimRobot';
 import { Menu, BrowserWindow } from 'electron';
 
 import { bangMenuRobot } from '../robotMenu';
@@ -79,11 +80,7 @@ export function registerRobotHandlers(): void {
        * đặt — nên mở app lần sau nó quay về, và người dùng kết luận là nút tắt
        * không ăn. Tắt ở đâu cũng phải nhớ, và phải tắt cả hai: nhãn trong Cài
        * đặt chỉ có MỘT dòng "Trợ lý Odin", người dùng không phân biệt con nào. */
-      tat: () => {
-        setSetting('robotEnabled', false);
-        for (const w of BrowserWindow.getAllWindows()) w.webContents.send('robot:tat', {});
-        dongRobot();
-      },
+      tat: () => { batTatRobot(false); },
     // KHÔNG truyền `window` vào `popup()`: mặc định nó bám cửa sổ đang có tiêu
     // điểm, mà cửa sổ robot cố ý KHÔNG nhận tiêu điểm (bấm vào robot không
     // được kéo cả app lên trước). Bỏ trống thì Electron bật menu tại con trỏ.
@@ -91,6 +88,21 @@ export function registerRobotHandlers(): void {
   });
 
   handle('robot:hutMep', () => { hutLaiVaoMep(); });
+
+  /**
+   * BỐN CÚ BẤM lên con robot nổi ⇒ ẩn nó đi.
+   *
+   * ⚠️ Chiều BẬT LẠI không đi qua đây được — robot đã ẩn thì không còn gì để
+   * bấm. Đó chính là lý do phải có phím tắt toàn cục (`phimRobot.ts`), và lý
+   * do trang Cài đặt phải NÓI RA phím đó ngay cạnh công tắc: một cử chỉ chỉ
+   * ẩn được mà không hiện lại được là một cái bẫy, không phải một tính năng.
+   */
+  handle('robot:batTat', (p) => batTatRobot(p?.bat));
+
+  handle('robot:phimTat', () => {
+    const ma = phimRobotHienTai();
+    return ma ? phimDeDoc(ma, process.platform === 'darwin') : null;
+  });
 
   handle('robot:moChinh', ({ duongDan }) => {
     // Chỉ nhận đường dẫn TRONG app, không nhận URL. Một chuỗi `https://…` lọt

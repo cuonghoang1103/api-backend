@@ -76,7 +76,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'robot:coDoi',
   'app:doiNgonNgu',
   'robot:baiHoc',
-  'robot:tat',
+  'robot:congTac',
   'robot:viec',
   'oauth:xong',
   'nhac:phim',
@@ -447,6 +447,10 @@ const bridge: DesktopBridge = {
     keoXong: () => ipcRenderer.invoke('robot:keoXong') as Promise<void>,
     menu: (trongApp: boolean) => ipcRenderer.invoke('robot:menu', { trongApp }) as Promise<void>,
     hutMep: () => ipcRenderer.invoke('robot:hutMep') as Promise<void>,
+    /** Lật công tắc robot. Bỏ trống `bat` = đảo trạng thái. Trả về trạng thái MỚI. */
+    batTat: (bat?: boolean) => ipcRenderer.invoke('robot:batTat', { bat }) as Promise<boolean>,
+    /** Phím tắt toàn cục đang giữ được (đã định dạng cho người đọc), hoặc `null`. */
+    phimTat: () => ipcRenderer.invoke('robot:phimTat') as Promise<string | null>,
     moChinh: (duongDan: string) =>
       ipcRenderer.invoke('robot:moChinh', { duongDan }) as Promise<void>,
     hoi: (chu: string, them?: { model?: string; phienId?: string | null; anh?: string[] }) =>

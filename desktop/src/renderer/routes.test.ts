@@ -16,7 +16,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { GROUP_LABELS, GROUP_ORDER, ROUTES } from './routes';
+import { GROUP_LABELS, GROUP_ORDER, ROUTES, findRoute } from './routes';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const APP_DIR = path.resolve(here, '../../../frontend/src/app');
@@ -96,5 +96,72 @@ describe('bảng điều hướng khớp với website', () => {
     for (const route of ROUTES) {
       expect(route.path.startsWith('/admin')).toBe(false);
     }
+  });
+});
+
+/**
+ * ============================================================
+ * ⭐ TRANG CON KHÔNG ĐƯỢC ĐỨNG NGANG HÀNG Ở THANH BÊN
+ * ============================================================
+ *
+ * Người dùng 17/09/2026, kèm ảnh thanh bên đang hiện ba mục ngang hàng
+ * (Academy · Major advisor · Curriculum map): *"các phần này đều nằm trong 1
+ * trang academy như trên web mà… Khi ấn vào academy thì sẽ có các bước chọn
+ * ngành, ngành hẹp,… trình tự như trên web ấy cho những người mới dùng"*.
+ *
+ * Trên web, `NavigationDock.tsx` nhóm `learn` chỉ có `/academy`; hai trang kia
+ * KHÔNG có mục điều hướng nào, chỉ tới được từ bên trong Học viện.
+ *
+ * Một mục thanh bên là một lời hứa: "đây là tính năng riêng, vào lúc nào cũng
+ * được". Với trang chỉ có nghĩa sau khi đã đi qua một bước trước, lời hứa đó
+ * sai — và nó xoá mất cảm giác có TRÌNH TỰ mà người mới cần.
+ */
+describe('trang con', () => {
+  const thanhBen = ROUTES.filter((r) => !r.trangCon);
+
+  it('⭐ route nào nằm DƯỚI một route khác thì phải đánh dấu `trangCon`', () => {
+    // Luật chung, không phải vá riêng cho Academy: hễ bảng có cả `/x` lẫn
+    // `/x/y` thì `/x/y` là một bước bên trong `/x`, không phải anh em của nó.
+    const goc = new Set(ROUTES.map((r) => r.path));
+    const sai = ROUTES.filter((r) => !r.trangCon
+      && [...goc].some((g) => g !== r.path && r.path.startsWith(`${g}/`)));
+    expect(sai.map((r) => r.path)).toEqual([]);
+  });
+
+  it('nhóm Học tập ở thanh bên có Học viện và Khoá học, KHÔNG có hai trang con', () => {
+    const hoc = thanhBen.filter((r) => r.group === 'hoc').map((r) => r.path);
+    expect(hoc).toContain('/academy');
+    // Khoá học là trang RIÊNG, không nằm trong Academy FPTU — đúng như web.
+    expect(hoc).toContain('/courses');
+    expect(hoc).not.toContain('/academy/tu-van-nganh');
+    expect(hoc).not.toContain('/academy/so-do-mon-hoc');
+  });
+
+  it('⭐ nhưng route vẫn PHẢI giải được — nút trong trang Học viện bấm vào đó', () => {
+    // Xoá hẳn khỏi bảng là cách sửa sai: `findRoute` khớp chính xác, nên bấm
+    // "Sơ đồ môn học" sẽ rơi vào màn "Không tìm thấy".
+    for (const p of ['/academy/tu-van-nganh', '/academy/so-do-mon-hoc']) {
+      expect(findRoute(p), `${p} phải giải được`).toBeDefined();
+    }
+  });
+
+  it('command palette vẫn tìm ra chúng (nó dùng cả ROUTES, không lọc)', () => {
+    // Gõ "sơ đồ môn học" mà không thấy gì thì người dùng kết luận app thiếu
+    // tính năng — khác hẳn với chuyện không bày nó ra thanh bên.
+    const tatCa = ROUTES.map((r) => r.path);
+    expect(tatCa).toContain('/academy/tu-van-nganh');
+    expect(tatCa).toContain('/academy/so-do-mon-hoc');
+  });
+
+  it('⭐ khớp với WEB: nhóm learn của NavigationDock chỉ có /academy dưới cây academy', () => {
+    // Đọc thẳng file của web — hai danh sách này phải không được trôi khỏi nhau.
+    const dock = fs.readFileSync(
+      path.resolve(here, '../../../frontend/src/components/layout/NavigationDock.tsx'), 'utf8');
+    const duongWeb = [...dock.matchAll(/\{\s*href:\s*'([^']+)'/g)].map((m) => m[1]!);
+    const academyWeb = duongWeb.filter((d) => d.startsWith('/academy'));
+    expect(academyWeb).toEqual(['/academy']);
+
+    const academyApp = thanhBen.filter((r) => r.path.startsWith('/academy')).map((r) => r.path);
+    expect(academyApp).toEqual(['/academy']);
   });
 });

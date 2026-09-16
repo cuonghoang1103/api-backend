@@ -47,7 +47,7 @@ import { useDich } from '../../i18n';
  */
 import AcademyOnboarding from '@/components/academy/AcademyOnboarding';
 import { useAcademyProfile } from '@/hooks/useAcademyProfile';
-import { getCatCombo, getCatMajor } from '@/data/academyCatalog';
+import { getCatCombo, getCatMajor, getFaculty } from '@/data/academyCatalog';
 import { daChonNganhHep, locMonMotKy, maCuaKhung } from '@/components/academy/locTheoNganh';
 import { Chu } from '../../i18n/Chu';
 
@@ -60,7 +60,7 @@ interface Ky {
 }
 
 export function HocVienPage() {
-  const { dich } = useDich();
+  const { dich, dichP } = useDich();
   const { online, navigate } = useAppState();
   const { api, userId } = useSession();
 
@@ -80,6 +80,7 @@ export function HocVienPage() {
   const [moChonLai, datMoChonLai] = useState(false);
   const moOnboarding = moChonLai || (needsOnboarding && !daBoQua);
 
+  const khoa = getFaculty(profile.faculty);
   const major = getCatMajor(profile.faculty, profile.major);
   const combo = getCatCombo(profile.faculty, profile.major, profile.combo);
   const coLoc = daChonNganhHep(profile, !!major, !!combo);
@@ -165,6 +166,12 @@ export function HocVienPage() {
   }
 
   const tongMon = tatCaMon.length;
+  /* Số môn CÒN LẠI sau khi lọc theo ngành hẹp. Web hiện con số này trong một
+     con chip ("Đang lọc N môn của ngành") vì nếu không, danh sách ngắn đi mà
+     không nói vì sao thì trông như mất môn. */
+  const monNganh = coLoc
+    ? ky.reduce((t, s) => t + locMonMotKy(monTheoKy[s.id] ?? [], khungMa, profile).length, 0)
+    : tongMon;
 
   return (
     <div className="ct-page ct-hv">
@@ -182,24 +189,76 @@ export function HocVienPage() {
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>
             <RefreshCw size={14} aria-hidden /> Tải lại
           </button>
-          {/* Chọn/đổi ngành. Đã chọn rồi thì nút ghi thẳng tên ngành — người
-              dùng cần thấy mình đang lọc theo cái gì, chứ một danh sách ngắn đi
-              mà không nói vì sao thì trông như mất môn. */}
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datMoChonLai(true)}>
-            <GraduationCap size={14} aria-hidden />
-            {major ? `${major.name}${combo ? ` · ${combo.name}` : ''}` : dich('Chọn ngành')}
-          </button>
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => navigate('/academy/tu-van-nganh')}>
-            <Compass size={14} aria-hidden /> {dich('Tư vấn ngành')}
-          </button>
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => navigate('/academy/so-do-mon-hoc')}>
-            <Network size={14} aria-hidden /> {dich('Sơ đồ môn học')}
-          </button>
+          {/* CHƯA chọn ngành thì đây là lối vào duy nhất. Đã chọn rồi thì mọi
+              thứ chuyển xuống khối "Ngành của bạn" bên dưới — giống hệt web,
+              và vì một thanh nút bốn cái ở đầu trang không nói được cái nào
+              quan trọng. */}
+          {!major && (
+            <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datMoChonLai(true)}>
+              <GraduationCap size={14} aria-hidden /> {dich('Chọn ngành')}
+            </button>
+          )}
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(`${WEB}/academy`)}>
             <ExternalLink size={14} aria-hidden /> Mở trên web
           </button>
         </div>
       </header>
+
+      {/*
+        ============================================================
+        NGÀNH CỦA BẠN — khối sau khi đã chọn xong
+        ============================================================
+
+        Bám theo web (`frontend/src/app/academy/page.tsx`): đây là chỗ DUY NHẤT
+        để đổi ngành và mở sơ đồ môn học, và nó chỉ hiện SAU khi người dùng đã
+        đi qua các bước. Trước đó không có gì ở đây cả — người mới thấy hộp
+        thoại hỏi khoa → ngành → ngành hẹp, đúng trình tự.
+
+        ⚠️ Chỉ hiện khi người dùng nói mình LÀ sinh viên FPTU. Ai đã trả lời
+        "không phải" thì Học viện với họ là một thư viện môn học bình thường,
+        và một khối "Ngành của bạn" trống rỗng chỉ tổ khó hiểu.
+      */}
+      {profile.isStudent === true && major && (
+        <section className="ct-hv-nganh">
+          <span className="ct-hv-nganh-icon" aria-hidden>{combo?.icon ?? major.icon}</span>
+          <div className="ct-hv-nganh-chu">
+            <p className="ct-hv-nganh-nhan">
+              {dich('Ngành của bạn')}{khoa ? ` · ${khoa.nameVi}` : ''}
+            </p>
+            <p className="ct-hv-nganh-ten">{combo ? combo.nameVi : major.nameVi}</p>
+            <p className="ct-muted ct-hv-nganh-phu">
+              {combo ? `${major.nameVi} · ${combo.name}` : major.name}
+            </p>
+          </div>
+          {coLoc && (
+            <span className="ct-hv-nganh-chip">
+              {dichP('Đang lọc {n} môn của ngành', { n: monNganh })}
+            </span>
+          )}
+          <div className="ct-hv-nganh-nut">
+            <button type="button" className="ct-btn ct-btn-ghost"
+              onClick={() => navigate('/academy/so-do-mon-hoc')}>
+              <Network size={14} aria-hidden /> {dich('Sơ đồ môn học')}
+            </button>
+            <button type="button" className="ct-btn ct-btn-ghost"
+              onClick={() => navigate('/academy/tu-van-nganh')}>
+              <Compass size={14} aria-hidden /> {dich('Tư vấn ngành')}
+            </button>
+            {/* `datMoChonLai` mở lại hộp thoại — cùng hộp thoại của lần đầu,
+                nên "đổi ngành" đi qua đúng các bước như lúc chọn. */}
+            <button type="button" className="ct-btn ct-btn-ghost"
+              onClick={() => datMoChonLai(true)}>
+              <RefreshCw size={14} aria-hidden /> {dich('Đổi ngành')}
+            </button>
+          </div>
+          {major.curriculumCode && (
+            <p className="ct-muted ct-hv-nganh-khung">
+              {dich('Khung')} {major.curriculumCode}
+              {major.credits ? ` · ${major.credits} ${dich('tín chỉ')}` : ''} · {dich('nguồn')}: FLM
+            </p>
+          )}
+        </section>
+      )}
 
       <label className="ct-music-search ct-hv-tim">
         <Search size={14} aria-hidden />

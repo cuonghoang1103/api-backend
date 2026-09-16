@@ -93,7 +93,10 @@ export function Sidebar() {
     >
       <div className="ct-sidebar-scroll" ref={listRef} onKeyDown={onKeyDown}>
         {GROUP_ORDER.map((group) => {
-          const items = ROUTES.filter((r) => r.group === group);
+          /* `trangCon` bị loại: chúng có route nhưng là BƯỚC BÊN TRONG một
+             trang khác, không phải tính năng đứng riêng. Xem chú thích ở
+             `routes.ts`. Command palette thì vẫn tìm ra chúng. */
+          const items = ROUTES.filter((r) => r.group === group && !r.trangCon);
           return (
             <div className="ct-nav-group" key={group}>
               {/* Khi thu gọn, nhãn nhóm bị ẩn khỏi mắt nhưng vẫn ở lại cho

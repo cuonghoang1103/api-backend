@@ -76,6 +76,26 @@ export interface RouteDef {
   pro?: boolean;
   /** Từ khoá phụ cho command palette. Viết cả dạng KHÔNG DẤU vì gõ nhanh hay bỏ dấu. */
   keywords?: string[];
+  /**
+   * TRANG CON của một trang khác — có route, nhưng KHÔNG đứng trong thanh bên.
+   *
+   * ⚠️ Đây không phải "ẩn cho gọn". Nó là để app khớp với CẤU TRÚC của web:
+   * một mục thanh bên nói với người dùng rằng "đây là một tính năng riêng, vào
+   * lúc nào cũng được". Với những trang chỉ có nghĩa khi đã đi qua một bước
+   * trước đó, lời hứa ấy là sai.
+   *
+   * Người dùng 17/09/2026, kèm ảnh: *"các phần này đều nằm trong 1 trang
+   * academy như trên web mà… Khi ấn vào academy thì sẽ có các bước chọn ngành,
+   * ngành hẹp,… trình tự như trên web ấy cho những người mới dùng"*. Đúng —
+   * `NavigationDock.tsx` của web, nhóm `learn`, CHỈ có `/academy`.
+   *
+   * Vẫn giữ trong `ROUTES` (chứ không xoá) vì hai lý do, cả hai đều đã cắn:
+   *  • `findRoute` khớp CHÍNH XÁC ⇒ xoá khỏi bảng là bấm nút trong trang Học
+   *    viện rơi thẳng vào màn "Không tìm thấy";
+   *  • command palette vẫn nên tìm ra chúng — gõ "sơ đồ môn học" mà không thấy
+   *    gì thì người dùng kết luận app không có tính năng đó.
+   */
+  trangCon?: boolean;
 }
 
 export const ROUTES: readonly RouteDef[] = [
@@ -105,10 +125,15 @@ export const ROUTES: readonly RouteDef[] = [
   /* Hai trang tư vấn của Học viện — dùng lại nguyên của web (xem
      `dinhTuyenWeb.ts`). Phải khai ở ĐÂY nữa: `findRoute` khớp CHÍNH XÁC, nên
      thiếu là bấm vào rơi thẳng vào màn "Không tìm thấy" — đúng thứ phép kiểm
-     `App.test.ts` vừa bắt được. */
-  { path: '/academy/tu-van-nganh', label: 'Tư vấn ngành', icon: Compass, group: 'hoc',
+     `App.test.ts` vừa bắt được.
+
+     ⚠️ `trangCon: true` — CÓ route, KHÔNG có mục thanh bên. Chúng là hai bước
+     BÊN TRONG Học viện (mở từ nút trên đầu trang và từ hộp thoại chọn ngành),
+     đúng như web. Đứng ngang hàng với Học viện ở thanh bên là kể sai thứ tự:
+     người mới thấy ba tính năng rời rạc thay vì một luồng có bước. */
+  { path: '/academy/tu-van-nganh', label: 'Tư vấn ngành', icon: Compass, group: 'hoc', trangCon: true,
     keywords: ['tu van', 'nganh', 'chon nganh', 'major', 'huong nghiep'] },
-  { path: '/academy/so-do-mon-hoc', label: 'Sơ đồ môn học', icon: Network, group: 'hoc',
+  { path: '/academy/so-do-mon-hoc', label: 'Sơ đồ môn học', icon: Network, group: 'hoc', trangCon: true,
     keywords: ['so do', 'mon hoc', 'curriculum', 'khung chuong trinh'] },
   { path: '/courses', label: 'Khoá học', icon: Library, group: 'hoc',
     keywords: ['courses', 'khoa hoc'] },

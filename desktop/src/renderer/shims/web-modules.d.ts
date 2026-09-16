@@ -459,9 +459,23 @@ declare module '@/hooks/useAcademyProfile' {
 }
 
 declare module '@/data/academyCatalog' {
-  export function getFaculty(id?: string | null): { id: string; name: string } | undefined;
-  export function getCatMajor(faculty?: string | null, major?: string | null): { id: string; name: string } | undefined;
-  export function getCatCombo(faculty?: string | null, major?: string | null, combo?: string | null): { id: string; name: string } | undefined;
+  /* ⚠️ Khai ĐỦ các trường mà trang dùng, không chỉ `{id, name}`.
+     Bản khai thiếu trước đây không sai kiểu — nó chỉ GIẤU dữ liệu có thật:
+     `nameVi`, `icon`, `curriculumCode`, `credits`, `comboNote` đều nằm sẵn
+     trong `frontend/src/data/academyCatalog.ts`. Hậu quả là màn Học viện của
+     app hiện tên TIẾNG ANH (`name`) trong khi web hiện tiếng Việt (`nameVi`),
+     và không có cách nào biết ngoài việc so hai màn cạnh nhau. Shim hẹp hơn
+     mô-đun thật là một cách làm app lệch khỏi web mà `tsc` vẫn xanh. */
+  export interface CatCombo { id: string; code?: string; name: string; nameVi: string; icon: string }
+  export interface CatMajor {
+    id: string; name: string; nameVi: string; icon: string;
+    comboNote?: string; curriculumCode?: string; curriculumId?: string | number; credits?: number;
+    combos: CatCombo[];
+  }
+  export interface CatFaculty { id: string; name: string; nameVi: string; icon: string; majors: CatMajor[] }
+  export function getFaculty(id?: string | null): CatFaculty | undefined;
+  export function getCatMajor(faculty?: string | null, major?: string | null): CatMajor | undefined;
+  export function getCatCombo(faculty?: string | null, major?: string | null, combo?: string | null): CatCombo | undefined;
   export function leafSemesterPlan(faculty?: string | null, major?: string | null, combo?: string | null): Array<{ codes: string[] }>;
 }
 

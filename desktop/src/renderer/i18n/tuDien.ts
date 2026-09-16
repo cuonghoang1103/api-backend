@@ -104,6 +104,13 @@ export const TU_DIEN: Record<string, string> = {
   '“Theo hệ thống” sẽ đổi theo cài đặt sáng/tối của máy.':
     '“Match system” follows your computer’s light/dark setting.',
   'Trợ lý Odin': 'Odin assistant',
+  // ── Học viện: khối "Ngành của bạn" ──
+  'Ngành của bạn': 'Your major',
+  'Đổi ngành': 'Change major',
+  'Đang lọc {n} môn của ngành': 'Showing {n} courses for your major',
+  'Khung': 'Curriculum',
+  'tín chỉ': 'credits',
+  'nguồn': 'source',
   'Hiển thị bảng trợ lý ở cạnh phải. Tắt đi thì app vẫn dùng bình thường.':
     'Show the assistant panel on the right. Turning it off changes nothing else.',
   // ── Cử chỉ và phím tắt của con robot (hiện ngay dưới công tắc trên) ──

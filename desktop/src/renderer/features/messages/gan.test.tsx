@@ -99,12 +99,15 @@ vi.mock('next/navigation', () => ({
 afterEach(() => { vi.clearAllMocks(); });
 
 describe('⭐ cây messenger của web dựng được trong app desktop', () => {
-  it('trang /messages dựng xong mà KHÔNG ném', async () => {
+  /* Trần 30s: nạp cả cây web, và từ 17/09/2026 có thêm một tệp kiểm nữa cũng
+     nạp cây web (`features/academy/gan.test.tsx`). Chạy song song thì cả hai
+     chạm trần 5s mặc định và đỏ vì TẢI MÁY, không vì sản phẩm. */
+  it('trang /messages dựng xong mà KHÔNG ném', { timeout: 30_000 }, async () => {
     const { default: WebMessagesPage } = await import('@/app/messages/page');
     expect(() => render(<WebMessagesPage />)).not.toThrow();
   });
 
-  it('ba component NẶNG NHẤT của cây đều dựng được', async () => {
+  it('ba component NẶNG NHẤT của cây đều dựng được', { timeout: 30_000 }, async () => {
     /*
      * Gắn thẳng từng component thay vì đi qua trang.
      *

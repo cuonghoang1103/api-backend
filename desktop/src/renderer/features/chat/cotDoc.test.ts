@@ -68,8 +68,33 @@ describe('cột đọc là ĐỆM của khung chứa, không phải lề của t
     }
   });
 
-  it('khung web mở bên cạnh ⇒ bỏ cột, dùng cả bề ngang', () => {
-    expect(css).toMatch(/\[data-co-web='true'\][^{]*\.ct-agent\s*\{[^}]*--ct-cot-doc:\s*100%/);
+  it('⭐ khung web mở ⇒ cờ đọc từ CHÍNH `.ct-agent`, không phải từ con của nó', () => {
+    /*
+     * ⚠️ Bản đầu viết `.ct-agent-doi[data-co-web='true'] .ct-agent` — NGƯỢC
+     * chiều lồng nhau (`.ct-agent` là CHA của `.ct-agent-doi`), nên nó không
+     * bao giờ khớp. Hậu quả KHÔNG phải "cột hơi rộng" mà là chữ chết hẳn:
+     * `.ct-agent-doi` mới là khối chứa của `.ct-agent-scroll` và nó rộng bằng
+     * CẢ HAI khung cộng lại, nên đệm `calc((100% - 46rem)/2)` lớn hơn cả khung
+     * chat đang hẹp ⇒ vùng nội dung co về 0 ⇒ MỖI KÝ TỰ MỘT DÒNG.
+     *
+     * Đo lại sau khi sửa: thường 736px, mở web 1248px.
+     */
+    expect(css, 'cờ phải nằm trên chính .ct-agent')
+      .toMatch(/\.ct-agent\[data-co-web='true'\]\s*\{[^}]*--ct-cot-doc:\s*100%/);
+    expect(css, 'selector ngược chiều lồng nhau — không bao giờ khớp')
+      .not.toMatch(/\.ct-agent-doi\[data-co-web='true'\]\s+\.ct-agent\s*\{/);
+  });
+
+  it('⭐ AgentMode PHẢI gắn `data-co-web` lên chính `.ct-agent`', () => {
+    /* CSS không chọn ngược lên cha được, nên cờ phải có mặt ở đó. Thiếu nó
+       thì luật trên không bao giờ có dữ liệu để khớp, và lỗi quay lại y hệt. */
+    const tsx = readFileSync(join(import.meta.dirname, 'AgentMode.tsx'), 'utf8');
+    const i = tsx.indexOf('className="ct-agent"');
+    expect(i).toBeGreaterThan(-1);
+    expect(
+      tsx.slice(i, i + 700),
+      '`.ct-agent` không có data-co-web ⇒ mở khung web là chữ xuống một ký tự một dòng',
+    ).toMatch(/data-co-web=\{webUrl !== null\}/);
   });
 
   it('câu trả lời dùng TRỌN cột, không bó thêm lần nữa', () => {

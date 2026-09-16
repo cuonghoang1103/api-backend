@@ -683,6 +683,12 @@ export function AgentMode({
        Giờ luôn nhận, và nếu thiếu thư mục thì lớp phủ nói thẳng phải làm gì. */
     <div
       className="ct-agent"
+      /* ⚠️ Cờ này nằm ở ĐÂY chứ không chỉ ở `.ct-agent-doi` bên trong, vì cột
+         đọc được khai trên chính phần tử này — và CSS không chọn ngược lên cha
+         được. Thiếu nó thì khi mở khung web, đệm cột tính theo bề ngang của CẢ
+         HAI khung cộng lại, rộng hơn cả khung chat, và chữ bị ép xuống một ký
+         tự một dòng. Người dùng gửi ảnh 16/09/2026. */
+      data-co-web={webUrl !== null}
       data-keo={dk.dangKeo}
       onDragEnter={dk.keoVao}
       onDragOver={dk.keoTren}

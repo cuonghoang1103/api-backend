@@ -53,7 +53,28 @@ async function cuaSoChinh(ung, hanMs = 15000) {
     for (const trang of ung.windows()) {
       if (!trang.url().endsWith('/robot.html')) return trang;
     }
-    if (Date.now() > het) throw new Error('không thấy cửa sổ chính (chỉ có robot?)');
+    if (Date.now() > het) {
+      /*
+       * ⚠️ NGUYÊN NHÂN HAY GẶP NHẤT KHÔNG PHẢI APP HỎNG, MÀ LÀ APP ĐANG MỞ.
+       *
+       * `main/index.ts` gọi `app.requestSingleInstanceLock()`. Bản CuongThai
+       * đã cài mà đang chạy thì giữ khoá, nên thực thể do smoke dựng lên thoát
+       * NGAY — không cửa sổ nào, không lỗi nào. Câu cũ đoán "chỉ có robot?" và
+       * nó gửi người đọc đi sai hướng: 16/09/2026 tôi mất một lượt dựng lại và
+       * suýt tin mình vừa gây hồi quy ở màn khởi động.
+       */
+      const dangMo = await (async () => {
+        try {
+          const { execFileSync } = await import('node:child_process');
+          return execFileSync('/bin/sh', ['-c', 'ps aux | grep -c "[C]uongThai.app"'])
+            .toString().trim() !== '0';
+        } catch { return false; }
+      })();
+      throw new Error(dangMo
+        ? 'không thấy cửa sổ chính — app CuongThai ĐANG MỞ và giữ khoá một-thực-thể. '
+          + 'Đóng app rồi chạy lại.'
+        : 'không thấy cửa sổ chính (cửa sổ duy nhất là robot?)');
+    }
     await new Promise((r) => setTimeout(r, 100));
   }
 }

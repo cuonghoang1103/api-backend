@@ -3761,9 +3761,20 @@ select {
   --ct-le-doc: max(16px, calc((100% - var(--ct-cot-doc)) / 2));
 }
 
-/* Khung web mở bên cạnh ⇒ bảng ghi còn một nửa. Giữ 46rem ở đó là ép chữ vào
-   một dải mỏng giữa hai khoảng trắng. */
-.ct-agent-doi[data-co-web='true'] .ct-agent { --ct-cot-doc: 100%; }
+/**
+ * Khung web mở bên cạnh ⇒ BỎ cột, dùng cả bề ngang còn lại.
+ *
+ * ⚠️⚠️ Cờ đọc từ CHÍNH `.ct-agent`, không phải từ `.ct-agent-doi` bên trong.
+ * Bản đầu viết `.ct-agent-doi[data-co-web='true'] .ct-agent` — ngược chiều
+ * lồng nhau (`.ct-agent` là CHA của `.ct-agent-doi`), nên nó không bao giờ
+ * khớp. Hậu quả không phải "cột hơi rộng" mà là chữ CHẾT HẲN:
+ *
+ * `.ct-agent-doi` mới là khối chứa của `.ct-agent-scroll`, và nó rộng bằng
+ * CẢ HAI khung cộng lại. Đệm `calc((100% - 46rem) / 2)` vì thế tính theo bề
+ * ngang đó — lớn hơn cả khung chat đang hẹp — nên vùng nội dung co về 0 và
+ * mỗi ký tự rơi xuống một dòng. Người dùng gửi ảnh 16/09/2026.
+ */
+.ct-agent[data-co-web='true'] { --ct-cot-doc: 100%; }
 
 .ct-agent-scroll {
   flex: 1;

@@ -232,7 +232,11 @@ adminRouter.post('/grant', async (req: Request, res: Response<ApiResponse>, next
     const userId = parseId(String(req.body?.userId));
     if (Number.isNaN(userId)) { res.status(400).json({ success: false, message: 'userId không hợp lệ' }); return; }
     const durationDays = req.body?.durationDays == null ? null : parseInt(String(req.body.durationDays), 10);
-    const data = await pro.grantProToUser(userId, Number.isFinite(durationDays as number) && (durationDays as number) > 0 ? (durationDays as number) : null, 'ADMIN');
+    // `mode: 'replace'` = ĐỔI GÓI (đặt lại hạn từ bây giờ, kể cả đang vĩnh
+    // viễn). Mặc định vẫn là cộng dồn để không đổi hành vi của mọi thứ đang
+    // gọi endpoint này.
+    const cheDo = String(req.body?.mode ?? '') === 'replace' ? 'thayThe' as const : 'congDon' as const;
+    const data = await pro.grantProToUser(userId, Number.isFinite(durationDays as number) && (durationDays as number) > 0 ? (durationDays as number) : null, 'ADMIN', cheDo);
     res.json({ success: true, data });
   } catch (err) { next(err); }
 });

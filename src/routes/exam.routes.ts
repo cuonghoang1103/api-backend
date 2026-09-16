@@ -228,7 +228,10 @@ router.post('/:examId/attempts', authenticate, async (req, res: Response<ApiResp
 // Mở cho MỌI tài khoản đã đăng nhập (20/09/2026) — chỉ /ai/ask và
 // /ai/ask-stream (chat/hỏi AI thật) mới cần Pro, kiểm ở requireProForAi().
 async function requireProForAi(userId: number | undefined) {
-  if (!(await isProEffective(userId))) throw new AppError('Hỏi CuongMini là tính năng Pro.', 403);
+  if (!(await isProEffective(userId))) {
+    const { cauChanPro } = await import('../services/pro.service.js');
+    throw new AppError(await cauChanPro(userId, 'Hỏi CuongMini là tính năng Pro.'), 403, 'PRO_REQUIRED');
+  }
 }
 
 // "Hiện đáp án" — không gọi AI, tra thẳng đáp án đã có sẵn trên câu hỏi.

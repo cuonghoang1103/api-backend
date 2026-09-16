@@ -71,6 +71,30 @@ export async function getProStatus(userId?: number | null): Promise<ProStatus> {
   };
 }
 
+/**
+ * Câu báo khi một cổng Pro từ chối.
+ *
+ * Người CHƯA TỪNG có Pro và người VỪA HẾT HẠN cần nghe hai câu khác nhau:
+ * câu "đây là tính năng Pro" nói với người vừa hết hạn là sai chuyện — họ đã
+ * trả tiền rồi, thứ họ cần biết là hạn đã hết từ bao giờ và làm gì tiếp.
+ * Trước 16/09/2026 mọi cổng đều dùng chung một câu nên không phân biệt được.
+ *
+ * Truyền `cauMacDinh` là câu riêng của từng tính năng — nó vẫn được dùng cho
+ * người chưa từng có Pro.
+ */
+export async function cauChanPro(userId: number | null | undefined, cauMacDinh: string): Promise<string> {
+  if (!userId) return cauMacDinh;
+  const u = await loadUserPro(userId).catch(() => null);
+  if (!u) return cauMacDinh;
+  // Hết hạn = từng bật Pro, có mốc hết hạn, và mốc đó đã qua.
+  if (u.isPro && u.proExpiresAt && u.proExpiresAt <= new Date()) {
+    const d = u.proExpiresAt;
+    const ngay = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+    return `Gói Pro của bạn đã hết hạn ngày ${ngay}. Vui lòng gia hạn hoặc nhắn tin cho admin để được cấp lại.`;
+  }
+  return cauMacDinh;
+}
+
 /** Fast boolean gate used by feature checks (admin OR valid Pro). One query. */
 export async function isProEffective(userId?: number | null): Promise<boolean> {
   if (!userId) return false;
@@ -103,13 +127,39 @@ export const isProForDisplay = isProEffective;
  * time-limited membership adds days onto the later of now / current expiry; a
  * lifetime membership stays lifetime.
  */
-export async function grantProToUser(userId: number, durationDays: number | null, source: 'CODE' | 'ADMIN' | 'PURCHASE' | 'APPLE_IAP'): Promise<ProStatus> {
+/**
+ * Cấp Pro.
+ *
+ * `cheDo` quyết định cách tính hạn mới, và hai chế độ KHÁC NHAU về bản chất:
+ *
+ * - `'congDon'` (mặc định, giữ nguyên hành vi cũ): cộng thêm vào hạn đang có.
+ *   Đây là điều đúng cho MUA HÀNG và ĐỔI MÃ — người ta trả tiền lần hai thì
+ *   phải được cộng, không phải bị đặt lại. Đang vĩnh viễn thì giữ vĩnh viễn:
+ *   cộng thêm vào vô hạn là vô nghĩa, mà hạ xuống hữu hạn là cướp mất quyền
+ *   họ đang có.
+ *
+ * - `'thayThe'` (16/09/2026, chỉ admin dùng): ĐẶT LẠI hạn kể từ bây giờ, kể cả
+ *   khi người đó đang vĩnh viễn. Đây là thứ cần cho việc "đổi gói" — hạ một
+ *   người từ vĩnh viễn xuống 30 ngày, hay nâng từ 30 ngày lên vĩnh viễn.
+ *   Trước khi có nó, cấp 30 ngày cho người đang vĩnh viễn chạy XONG mà không
+ *   đổi gì cả: lệnh báo thành công, trạng thái vẫn vĩnh viễn, và không có lỗi
+ *   nào để thấy.
+ */
+export async function grantProToUser(
+  userId: number,
+  durationDays: number | null,
+  source: 'CODE' | 'ADMIN' | 'PURCHASE' | 'APPLE_IAP',
+  cheDo: 'congDon' | 'thayThe' = 'congDon',
+): Promise<ProStatus> {
   const u = await prisma.user.findUnique({ where: { id: userId }, select: { isPro: true, proExpiresAt: true, proSince: true } });
   if (!u) throw new NotFoundError('User không tồn tại');
 
   let newExpiry: Date | null;
   if (durationDays == null) {
     newExpiry = null; // lifetime
+  } else if (cheDo === 'thayThe') {
+    // Đặt lại hoàn toàn: đếm từ BÂY GIỜ, bỏ qua hạn cũ lẫn trạng thái vĩnh viễn.
+    newExpiry = new Date(Date.now() + durationDays * DAY_MS);
   } else if (u.isPro && u.proExpiresAt == null) {
     newExpiry = null; // already lifetime → keep lifetime
   } else {

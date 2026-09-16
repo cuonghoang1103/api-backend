@@ -5041,7 +5041,19 @@ export const proAdminApi = {
     api.put<{ data: ProCode }>(`/admin/pro/codes/${id}`, data),
   deleteCode: (id: number) => api.delete(`/admin/pro/codes/${id}`),
   listUsers: () => api.get<{ data: ProUser[] }>('/admin/pro/users'),
-  grant: (userId: number, durationDays: number | null) => api.post<{ data: ProStatus }>('/admin/pro/grant', { userId, durationDays }),
+  /**
+   * Cấp Pro.
+   *
+   * `mode: 'replace'` = ĐỔI GÓI — đặt lại hạn kể từ bây giờ, kể cả khi người
+   * đó đang vĩnh viễn. Bỏ trống = cộng dồn vào hạn đang có (hành vi cũ, đúng
+   * cho mua hàng và đổi mã).
+   *
+   * ⚠️ Không có `replace` thì cấp 30 ngày cho một người ĐANG VĨNH VIỄN sẽ
+   * chạy xong mà không đổi gì cả — API trả thành công, trạng thái vẫn vĩnh
+   * viễn, và không có lỗi nào để thấy.
+   */
+  grant: (userId: number, durationDays: number | null, mode?: 'replace') =>
+    api.post<{ data: ProStatus }>('/admin/pro/grant', { userId, durationDays, ...(mode ? { mode } : {}) }),
   revoke: (userId: number) => api.post<{ data: ProStatus }>('/admin/pro/revoke', { userId }),
 };
 

@@ -18,7 +18,7 @@ import {
   TECH_TREND_CATEGORIES,
   type TechTrendCategory,
 } from '../services/techTrends/ai.service.js';
-import { isProEffective } from '../services/pro.service.js';
+import { isProEffective, cauChanPro } from '../services/pro.service.js';
 import {
   ingestAllFeeds,
   seedDefaultFeeds,
@@ -493,7 +493,7 @@ const PRO_MESSAGE =
 async function assertReaderPro(req: unknown): Promise<number> {
   const userId = (req as { userId?: number }).userId ?? null;
   if (!userId || !(await isProEffective(userId))) {
-    throw new AppError(PRO_MESSAGE, 403, 'PRO_REQUIRED');
+    throw new AppError(await cauChanPro(userId, PRO_MESSAGE), 403, 'PRO_REQUIRED');
   }
   return userId;
 }

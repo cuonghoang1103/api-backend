@@ -382,6 +382,56 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
+  // ─── Nhắc gói Pro sắp hết hạn — 09:00 giờ VN ────────────────────
+  //
+  // ⚠️ Container chạy giờ UTC (xem CLAUDE.md), nên 09:00 Việt Nam là 02:00
+  // UTC. Đặt '0 9' ở đây là thông báo rơi vào 16:00 chiều — đúng lúc không ai
+  // nhìn điện thoại.
+  //
+  // Nhắc ở hai mốc: còn 2 ngày và còn 1 ngày. Job chạy mỗi ngày một lần nên
+  // mỗi người nhận tối đa hai lần — không cần cột đánh dấu "đã nhắc", thứ mà
+  // muốn có thì phải thêm migration.
+  //
+  // KHÔNG nhắc người dùng vĩnh viễn (`proExpiresAt = null`) và không nhắc
+  // người đã hết hạn — người đã hết hạn nhận câu khác, ngay tại cổng tính
+  // năng (`cauChanPro`).
+  cron.schedule('0 2 * * *', async () => {
+    try {
+      const { nhacSapHetPro } = await import('./notification.service.js');
+      const bayGio = new Date();
+      const hanChot = new Date(bayGio.getTime() + 2 * 24 * 60 * 60 * 1000);
+
+      const sapHet = await prisma.user.findMany({
+        where: { isPro: true, proExpiresAt: { gt: bayGio, lte: hanChot } },
+        select: { id: true, proExpiresAt: true },
+      });
+      if (sapHet.length === 0) return;
+
+      // Người gửi phải là một tài khoản THẬT khác người nhận. Lấy admin đầu
+      // tiên; không có admin nào thì thôi, chứ đừng gửi với id bịa.
+      const admin = await prisma.user.findFirst({
+        where: { roles: { some: { role: { name: { in: ['ADMIN', 'ROLE_ADMIN'] } } } } },
+        select: { id: true },
+        orderBy: { id: 'asc' },
+      });
+      if (!admin) {
+        logger.warn('cron nhắc Pro: không tìm thấy admin nào để làm người gửi');
+        return;
+      }
+
+      let daGui = 0;
+      for (const u of sapHet) {
+        if (!u.proExpiresAt) continue;
+        const conLai = Math.ceil((u.proExpiresAt.getTime() - bayGio.getTime()) / (24 * 60 * 60 * 1000));
+        if (conLai !== 1 && conLai !== 2) continue;
+        if (await nhacSapHetPro(u.id, conLai, u.proExpiresAt, admin.id)) daGui += 1;
+      }
+      if (daGui) logger.info('cron nhắc Pro sắp hết hạn', { daGui, xet: sapHet.length });
+    } catch (err) {
+      logger.error('cron nhắc Pro sắp hết hạn failed', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── IndexNow — báo Bing/Coc Coc/Yandex crawl URL (mỗi 6 giờ) ───
   // Nộp toàn bộ URL trong sitemap.xml cho IndexNow. Rẻ, idempotent,
   // và service tự nuốt mọi lỗi (không bao giờ throw) — nên đây chỉ

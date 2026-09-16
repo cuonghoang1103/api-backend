@@ -165,7 +165,8 @@ router.post('/project-zip', zipUpload.single('archive'), async (req: Request, re
   try {
     const { isProEffective } = await import('../services/pro.service.js');
     if (!(await isProEffective(req.userId!))) {
-      res.status(403).json({ success: false, message: 'Phỏng vấn theo project dành cho tài khoản Pro/Max.' });
+      const { cauChanPro } = await import('../services/pro.service.js');
+      res.status(403).json({ success: false, code: 'PRO_REQUIRED', message: await cauChanPro(req.userId, 'Phỏng vấn theo project dành cho tài khoản Pro/Max.') });
       return;
     }
     const file = (req as unknown as { file?: { buffer: Buffer; originalname?: string } }).file;

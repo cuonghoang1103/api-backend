@@ -465,6 +465,55 @@ export async function fanoutAnnouncement(args: {
   return written;
 }
 
+/* ─── Nhắc gói Pro sắp hết hạn (16/09/2026) ─────────────────── */
+
+/**
+ * Báo cho một người rằng gói Pro của họ sắp hết.
+ *
+ * Dùng chung kiểu `ADMIN_ANNOUNCEMENT` thay vì thêm kiểu mới: cột `type` là
+ * `VARCHAR(20)` và client (web, iOS, Android) đều đã biết vẽ kiểu này. Thêm
+ * một kiểu mới nghĩa là mọi client CŨ hiện nó thành thông báo trống cho tới
+ * khi người dùng cập nhật app — mà bản chất ở đây đúng là một lời nhắn từ
+ * admin.
+ *
+ * `senderId` phải là một người THẬT khác người nhận: `pushNotification` bỏ
+ * qua sự kiện tự-gửi-cho-mình, và cột này không cho null.
+ */
+export async function nhacSapHetPro(
+  userId: number,
+  soNgayConLai: number,
+  ngayHet: Date,
+  adminId: number,
+): Promise<boolean> {
+  if (userId === adminId) return false;
+  const d = ngayHet;
+  const ngay = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+  const tieuDe =
+    soNgayConLai <= 1
+      ? 'Gói Pro của bạn hết hạn ngày mai'
+      : `Gói Pro của bạn còn ${soNgayConLai} ngày`;
+  try {
+    await prisma.socialNotification.create({
+      data: {
+        receiverId: userId,
+        senderId: adminId,
+        type: 'ADMIN_ANNOUNCEMENT',
+        entityId: null,
+        payload: {
+          title: tieuDe,
+          body: `Gói Pro hết hạn ngày ${ngay}. Gia hạn để không mất quyền dùng các tính năng Pro, hoặc nhắn tin cho admin để được cấp lại.`,
+          loai: 'PRO_SAP_HET_HAN',
+          ngayHet: d.toISOString(),
+        },
+      },
+    });
+    return true;
+  } catch (err) {
+    logger.warn('nhacSapHetPro failed', { error: (err as Error).message, userId });
+    return false;
+  }
+}
+
 /* ─── Email-only admin alerts (unchanged contract) ─────────── */
 
 /** Send admin alert when a new post is submitted */

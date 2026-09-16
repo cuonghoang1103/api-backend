@@ -19,7 +19,7 @@
 import { Router, type NextFunction, type Response } from 'express';
 
 import { authenticate } from '../middleware/auth.js';
-import { isProEffective } from '../services/pro.service.js';
+import { isProEffective, cauChanPro } from '../services/pro.service.js';
 import { logger } from '../utils/logger.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
@@ -50,7 +50,7 @@ async function chiPro(req: any, res: Response<ApiResponse>, next: NextFunction):
     if (await isProEffective(req.userId)) return next();
     res.status(403).json({
       success: false,
-      message: 'Chế độ Lập trình là tính năng của tài khoản Pro. Nâng cấp để agent đọc được dự án trên máy bạn.',
+      message: await cauChanPro(req.userId, 'Chế độ Lập trình là tính năng của tài khoản Pro. Nâng cấp để agent đọc được dự án trên máy bạn.'),
       code: 'PRO_REQUIRED',
     });
   } catch (err) {

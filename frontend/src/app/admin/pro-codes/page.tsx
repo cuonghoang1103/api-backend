@@ -21,6 +21,9 @@ const DURATIONS = [
 
 export default function AdminProCodesPage() {
   const [codes, setCodes] = useState<ProCode[]>([]);
+  // Hàng đang mở ô "đổi gói" (null = không hàng nào) + gói được chọn.
+  const [doiId, setDoiId] = useState<number | null>(null);
+  const [doiIdx, setDoiIdx] = useState(0);
   const [users, setUsers] = useState<ProUser[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -139,7 +142,44 @@ export default function AdminProCodesPage() {
                         {u.source && <span> · {u.source}</span>}
                       </div>
                     </div>
-                    <button onClick={async () => { if (confirm(`Thu hồi Pro của @${u.username}?`)) { await proAdminApi.revoke(u.id).catch(() => toast.error('Lỗi')); load(); } }} className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded bg-red-500/10 text-red-300 hover:bg-red-500/20"><ShieldOff className="w-3 h-3" /> Thu hồi</button>
+                    {doiId === u.id ? (
+                      <div className="flex items-center gap-1">
+                        <select
+                          value={doiIdx}
+                          onChange={(e) => setDoiIdx(Number(e.target.value))}
+                          className="bg-white/5 border border-white/10 rounded px-2 py-1 text-[11px]"
+                        >
+                          {DURATIONS.map((d, i) => <option key={d.label} value={i}>{d.label}</option>)}
+                        </select>
+                        <button
+                          onClick={async () => {
+                            const moi = DURATIONS[doiIdx];
+                            // Hạ một người ĐANG VĨNH VIỄN xuống gói có hạn là
+                            // lấy bớt quyền họ đang có — hỏi lại một nhịp.
+                            if (u.lifetime && moi.days != null &&
+                                !confirm(`@${u.username} đang có Pro VĨNH VIỄN.\nHạ xuống ${moi.label}?`)) return;
+                            try {
+                              // `'replace'` = đặt lại hạn từ bây giờ. Thiếu cờ
+                              // này thì backend CỘNG DỒN, và người vĩnh viễn
+                              // thì lệnh bị bỏ qua hoàn toàn.
+                              await proAdminApi.grant(u.id, moi.days, 'replace');
+                              toast.success(`Đã đổi @${u.username} sang ${moi.label}`);
+                              setDoiId(null);
+                              load();
+                            } catch { toast.error('Không đổi được gói'); }
+                          }}
+                          className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded bg-violet-500/20 text-violet-200 hover:bg-violet-500/30"
+                        >
+                          <Check className="w-3 h-3" /> Lưu
+                        </button>
+                        <button onClick={() => setDoiId(null)} className="text-[11px] px-2 py-1 rounded bg-white/5 text-slate-400 hover:bg-white/10">Huỷ</button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => { setDoiId(u.id); setDoiIdx(0); }} className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded bg-white/5 text-slate-300 hover:bg-white/10">Đổi gói</button>
+                        <button onClick={async () => { if (confirm(`Thu hồi Pro của @${u.username}?`)) { await proAdminApi.revoke(u.id).catch(() => toast.error('Lỗi')); load(); } }} className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded bg-red-500/10 text-red-300 hover:bg-red-500/20"><ShieldOff className="w-3 h-3" /> Thu hồi</button>
+                      </div>
+                    )}
                   </div>
                 ))}
                 {!users.length && <div className="px-3 py-4 text-sm text-slate-500">Chưa có ai là Pro.</div>}

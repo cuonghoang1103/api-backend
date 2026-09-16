@@ -814,7 +814,13 @@ router.get('/check', authenticate, async (req, res: Response<ApiResponse>, next)
       include: { roles: { include: { role: true } } },
     });
     const roles = user?.roles.map((ur) => ur.role.name) || [];
-    const isAdmin = roles.includes('ROLE_ADMIN');
+    // ⚠️ Chuẩn hoá y HỆT `requireAdmin` (middleware/auth.ts): bỏ tiền tố
+    // `ROLE_` rồi mới so. Trước 16/09/2026 chỗ này so THÔ với 'ROLE_ADMIN',
+    // nên một tài khoản có vai trò tên `ADMIN` qua được MỌI endpoint quản trị
+    // (chúng đi qua `requireAdmin`) nhưng lại bị chính `/check` trả
+    // `isAdmin: false`. Hai chỗ kiểm cùng một quyền bằng hai luật khác nhau
+    // thì sớm muộn cũng lệch — app Quản trị iPad đã dính đúng cửa này.
+    const isAdmin = roles.some((r) => r.toUpperCase().replace('ROLE_', '') === 'ADMIN');
     res.json({ success: true, data: { isAdmin, roles } });
   } catch (error) { next(error); }
 });

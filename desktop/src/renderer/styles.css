@@ -3739,36 +3739,45 @@ select {
  * 46rem ≈ 736px ở cỡ chữ gốc, tức khoảng 75-85 ký tự mỗi dòng — đúng khoảng
  * mà mọi tài liệu về đọc đều hội tụ, và cũng là khoảng Claude đang dùng.
  */
-.ct-agent-scroll {
+/**
+ * ⚠️⚠️ CỘT ĐỌC LÀ THUỘC TÍNH CỦA KHUNG CHỨA, KHÔNG PHẢI CỦA TỪNG CON.
+ *
+ * Bản đầu (16/09/2026) căn giữa từng phần tử con bằng `max-width` +
+ * `margin-inline: auto`. Sai, và người dùng thấy ngay trong ảnh chụp: bong
+ * bóng của họ vốn có `max-width: 78%`, câu trả lời có `max-width: 92%`, cả hai
+ * khai SAU luật của tôi với cùng độ đặc hiệu — nên chúng thắng, và mọi thứ
+ * quay lại dính mép. Trong khi khung soạn (không có luật riêng) thì vào giữa.
+ * Kết quả là nửa trên dính mép, nửa dưới ở giữa — trông còn hỏng hơn lúc đầu.
+ *
+ * Cách đúng: ĐỆM hai bên khung chứa. Khi đó vùng nội dung CHÍNH LÀ cột đọc,
+ * và mọi luật sẵn có tiếp tục đúng theo nghĩa của nó — `78%` là 78% của cột
+ * (không phải của màn hình), `align-self: flex-end` đẩy bong bóng người dùng
+ * về mép PHẢI CỦA CỘT đúng như Claude. Không còn cuộc tranh đặc hiệu nào.
+ */
+.ct-agent {
   --ct-cot-doc: 46rem;
+  /* Đệm không bao giờ nhỏ hơn 16px: cửa sổ hẹp thì cột chạm mép, và chữ dính
+     mép đọc rất mệt. Xem [[feedback_moi_trang_phai_chiu_duoc_cua_so_hep]]. */
+  --ct-le-doc: max(16px, calc((100% - var(--ct-cot-doc)) / 2));
+}
 
+/* Khung web mở bên cạnh ⇒ bảng ghi còn một nửa. Giữ 46rem ở đó là ép chữ vào
+   một dải mỏng giữa hai khoảng trắng. */
+.ct-agent-doi[data-co-web='true'] .ct-agent { --ct-cot-doc: 100%; }
+
+.ct-agent-scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  /* Đệm hai bên 16px: ở cửa sổ hẹp cột đọc chạm mép, và chữ dính mép đọc rất
-     mệt. Xem [[feedback_moi_trang_phai_chiu_duoc_cua_so_hep]]. */
-  padding: 18px 16px 16px;
+  padding: 18px var(--ct-le-doc, 16px) 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/**
- * Mọi thứ trong bảng ghi nằm trong CÙNG một cột — tin nhắn, thẻ tool, khối mã,
- * thanh trạng thái.
- *
- * ⚠️ Căn giữa từng loại riêng lẻ sẽ làm chúng lệch nhau vài pixel và cả cột
- * trông "rung". Một luật cho mọi con là cách duy nhất giữ mép trái thẳng hàng.
- */
-.ct-agent-scroll > * {
-  width: 100%;
-  max-width: var(--ct-cot-doc);
-  margin-inline: auto;
-}
-
-/* Khung web mở bên cạnh ⇒ bảng ghi hẹp lại còn một nửa. Giữ cột 46rem ở đó là
-   ép chữ vào một dải mỏng giữa hai khoảng trắng. Bỏ trần, dùng cả bề ngang. */
-.ct-agent-doi[data-co-web='true'] .ct-agent-scroll { --ct-cot-doc: 100%; }
+/* ⚠️ Có một khối "Bề rộng đọc" khai LẠI `.ct-agent-scroll` ở phía dưới tệp
+   này và nó THẮNG (cùng độ đặc hiệu, đứng sau). Sửa đệm ở một chỗ thôi là
+   không ăn — đã dẫm phải 16/09/2026. Hai chỗ nay dùng cùng một biến. */
 
 /* ⚠️⚠️ CON CỦA BẢNG GHI KHÔNG ĐƯỢC CO.
  *
@@ -3801,7 +3810,9 @@ select {
 }
 
 .ct-agent-may {
-  max-width: 92%;
+  /* 100% của CỘT (không phải của màn hình) — cột đã là thứ bó chữ lại rồi,
+     bó thêm 8% nữa chỉ làm câu trả lời lệch trái so với ô nhập ngay dưới. */
+  max-width: 100%;
   font-size: 13.5px;
   line-height: 1.65;
   color: var(--ct-text);
@@ -4057,30 +4068,17 @@ select {
  * Đường viền trên thì trải HẾT bề ngang (`::before`), không co theo cột — một
  * gạch ngang cụt giữa màn hình trông như lỗi render.
  */
+/* Khung soạn dùng CÙNG lề với bảng ghi, nên mép trái của ô nhập thẳng hàng
+   với mép trái của câu trả lời. Lệch một chút thôi là cả trang trông "rơi ra
+   ngoài" — mắt đã quen mép trái của chữ. */
 .ct-agent-soan {
-  position: relative;
   display: flex;
   align-items: flex-end;
   gap: 8px;
-  width: 100%;
-  max-width: 46rem;
-  margin-inline: auto;
-  padding-top: 10px;
+  padding: 10px var(--ct-le-doc, 16px) 0;
+  border-top: 1px solid var(--ct-border);
   flex-shrink: 0;
 }
-
-.ct-agent-soan::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 100vw;
-  transform: translateX(-50%);
-  border-top: 1px solid var(--ct-border);
-}
-
-/* Khung web mở bên cạnh ⇒ bỏ trần, theo đúng cách bảng ghi làm. */
-.ct-agent-doi[data-co-web='true'] .ct-agent-soan { max-width: none; }
 
 .ct-agent-o {
   flex: 1;
@@ -4108,12 +4106,16 @@ select {
   background: var(--ct-err);
 }
 
+/* Dòng chân (trạng thái quyền + chi phí phiên) cũng theo CÙNG lề.
+   ⚠️ Thiếu dòng này thì nó bám sát hai mép màn hình trong khi ô nhập ngay
+   trên nó đã vào giữa — đúng thứ người dùng chụp lại 16/09/2026 và hỏi "sao
+   chữ gì gì kia lệch ở sát mép còn khung chat ở giữa". */
 .ct-agent-chan {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-top: 8px;
+  padding: 8px var(--ct-le-doc, 16px) 0;
   color: var(--ct-text-faint);
   font-size: 11.5px;
   flex-shrink: 0;
@@ -4132,9 +4134,12 @@ select {
  *
  * Chỉ chừa khi robot đang bật: tắt robot rồi mà vẫn chừa thì mất chỗ vô cớ.
  */
-.ct-page-full[data-chua-robot='true'] .ct-agent-soan,
-.ct-page-full[data-chua-robot='true'] .ct-agent-chan {
-  padding-right: 90px;
+/* ⚠️ Chừa chỗ cho con robot bằng cách NỚI CẢ CỘT, không phải ép riêng mép
+   phải. Ép một mép thì cột lệch: mép trái ở giữa màn hình, mép phải cách 90px
+   — và ba vùng (bảng ghi · khung soạn · dòng chân) không còn thẳng hàng nhau,
+   đúng thứ người dùng chụp lại 16/09/2026. */
+.ct-page-full[data-chua-robot='true'] .ct-agent {
+  --ct-le-doc: max(90px, calc((100% - var(--ct-cot-doc)) / 2));
 }
 
 /* ── Thẻ duyệt thay đổi (P2) ────────────────────────────
@@ -4929,22 +4934,34 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 /* ── Bề rộng đọc ──
    Chữ dài quá 75-80 ký tự thì mắt lạc dòng khi xuống hàng. Bảng ghi giãn hết
-   màn 27" là không đọc nổi, dù trông "tận dụng chỗ". */
+   màn 27" là không đọc nổi, dù trông "tận dụng chỗ".
+
+   ⚠️⚠️ TRƯỚC 16/09/2026 KHỐI NÀY BÓ CHỮ MÀ KHÔNG CĂN GIỮA.
+   `max-width: 74ch` giới hạn đúng bề rộng, nhưng phần tử vẫn nằm ở mép TRÁI
+   của một khung rộng cả màn hình — nên trên màn 27" là một dải chữ hẹp dính
+   mép trái và hai phần ba màn hình trống bên phải. Người dùng chụp lại và
+   hỏi: *"câu trả lời vẫn nằm sát mép bên trái thế kia, không trả lời ở giữa
+   khung chat như claude"*.
+
+   Nay bề rộng đọc là ĐỆM của khung chứa (`--ct-le-doc`), nên vùng nội dung
+   CHÍNH LÀ cột — mọi thứ trong đó tự thẳng hàng, và `78%` của bong bóng người
+   dùng là 78% của cột chứ không phải của màn hình. */
 .ct-agent-scroll {
-  padding: 18px 2px 8px;
+  padding: 18px var(--ct-le-doc, 16px) 8px;
   gap: 2px;
 }
 
+/* Dùng TRỌN cột. Bó thêm một lần nữa ở đây là đẩy chữ lệch trái so với ô nhập
+   ngay dưới — hai mép không thẳng hàng thì cả trang trông rơi ra ngoài. */
 .ct-agent-may,
-.ct-agent-nguoi,
 .ct-xinphep,
 .ct-lenh-ra {
-  max-width: 74ch;
+  max-width: 100%;
 }
 
 .ct-agent-may {
   margin: 10px 0 14px;
-  max-width: 74ch;
+  max-width: 100%;
 }
 
 .ct-agent-nguoi {

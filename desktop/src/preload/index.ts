@@ -76,6 +76,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'robot:coDoi',
   'app:doiNgonNgu',
   'robot:baiHoc',
+  'academy:giaSuLuot',
   'robot:congTac',
   'robot:viec',
   'oauth:xong',
@@ -271,6 +272,9 @@ const bridge: DesktopBridge = {
       lessonId: number; courseCode?: string; courseTitle?: string; lessonTitle?: string;
       slides?: { so: number; tong: number; bo: string; ten: string }[];
     } | null) => ipcRenderer.invoke('academy:baiDangHoc', b) as Promise<{ ok: boolean }>,
+    /** Báo một lượt hỏi-đáp gia sư vừa xong, để cửa sổ kia ghi vào cùng mạch. */
+    giaSuLuot: (p: { lessonId: number; hoi: string; dap: string }) =>
+      ipcRenderer.invoke('academy:giaSuLuot', p) as Promise<{ ok: boolean }>,
   },
   robotGiaSu: {
     /** Hỏi gia sư của bài đang học, từ cửa sổ robot. Đi vòng qua main. */

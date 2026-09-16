@@ -41,6 +41,8 @@ import LessonQuizPlayer, { type QuizData } from '@/app/courses/[slug]/learn/Less
 import LessonPdfViewer from '@/app/courses/[slug]/learn/LessonPdfViewer';
 import { CourseRoadmapPanel } from '@/components/academy/CourseRoadmap';
 import { docSlide } from '@/components/academy/docSlide';
+import { khoaGiaSu, useGiaSuBaiStore, type LuotGiaSu } from '@/store/giaSuBaiStore';
+import { luotCanGui } from './dongBoGiaSu';
 import { duongTaiLieu, laBaiQuiz, locPdf, useChiTietBai, useChungChi, useTienDo, type TuyChonGoi } from './chiTietBai';
 import { useDich } from '../../i18n';
 
@@ -443,6 +445,59 @@ function DocBai({
     [api],
   );
   const ct = useChiTietBai(goi, mon.id ?? null, bai.id);
+
+  /*
+   * ============================================================
+   * MỘT MẠCH GIA SƯ, HAI CỬA SỔ
+   * ============================================================
+   *
+   * Người dùng 17/09/2026: robot ở góc màn hình phải *"kết nối vào bài học để
+   * học chát trực tiếp cho tiện, lưu lại các câu hỏi hội thoại ai"*.
+   *
+   * Trên web, khung gia sư dưới bài và con robot nổi đọc chung `giaSuBaiStore`
+   * nên hỏi ở đâu cũng là MỘT cuộc. Trong app robot là cửa sổ Electron riêng,
+   * không thấy kho này — nên trước bản này hỏi ở robot xong cuộn xuống khung
+   * dưới bài là một cuộc TRỐNG, và ngược lại.
+   *
+   * Hai chiều, cùng một kênh (`academy:giaSuLuot`), main làm bưu tá:
+   *
+   *  • VÀO  — lượt do robot hỏi ⇒ ghép vào kho, khung dưới bài hiện ngay.
+   *  • RA   — lượt hỏi ở khung dưới bài ⇒ đẩy sang robot.
+   *
+   * ⚠️ `daGui` là thứ chặn VÒNG LẶP. Lượt đi VÀO cũng làm kho dài ra, nên nếu
+   * bộ theo dõi không được báo "phần này tao không gửi", nó sẽ đẩy ngược lượt
+   * ấy về robot, robot ghép thêm lần nữa, và câu hỏi nhân đôi mãi.
+   */
+  const daGui = useRef(0);
+  useEffect(() => {
+    const khoa = khoaGiaSu(bai.id);
+    daGui.current = useGiaSuBaiStore.getState().cuoc[khoa]?.length ?? 0;
+
+    const boNghe = window.cuongthai?.on('academy:giaSuLuot', (p) => {
+      const l = p as { lessonId: number; hoi: string; dap: string };
+      if (l.lessonId !== bai.id || !l.dap) return;
+      useGiaSuBaiStore.getState().datCuoc(khoa, (cu) => {
+        const moi: LuotGiaSu[] = [
+          ...cu,
+          { role: 'user', content: l.hoi },
+          { role: 'assistant', content: l.dap, srcQuestion: l.hoi },
+        ];
+        daGui.current = moi.length;   // đã có ở robot rồi ⇒ đừng gửi ngược
+        return moi;
+      });
+    });
+
+    const boTheoDoi = useGiaSuBaiStore.subscribe((st) => {
+      const ds = st.cuoc[khoa] ?? [];
+      const { gui, moc } = luotCanGui(ds, daGui.current);
+      daGui.current = moc;
+      for (const c of gui) {
+        window.cuongthai?.academy.giaSuLuot({ lessonId: bai.id, ...c }).catch(() => {});
+      }
+    });
+
+    return () => { boNghe?.(); boTheoDoi(); };
+  }, [bai.id]);
 
   /*
    * BÁO SANG CỬA SỔ ROBOT NỔI đang học bài nào.

@@ -87,11 +87,32 @@
   --ct-player-h-thuc: 84px;
   --ct-player-h-thu: 34px;
   --ct-player-h: 0px;
+  /* Chỗ con robot Odin CHIẾM ở góc dưới-phải. Cùng cơ chế với `--ct-player-h`:
+     bằng 0 khi robot tắt, bằng chiều cao thật khi nó được dựng. Trang dùng nó
+     làm ĐỆM ĐÁY để nội dung cuộn qua được robot thay vì nằm dưới nó. */
+  --ct-robot-h-thuc: 122px;
+  --ct-robot-h: 0px;
 
   color-scheme: light;
 }
 
 .ct-shell:has(.ct-player) { --ct-player-h: var(--ct-player-h-thuc); }
+/**
+ * ⚠️ ROBOT ĐÈ LÊN NỘI DUNG Ở GÓC DƯỚI-PHẢI.
+ *
+ * Người dùng 17/09/2026, kèm ảnh: con robot và bong bóng nhắc lịch của nó nằm
+ * đè lên nút "Bài tiếp theo" ở chân trang bài học — *"các khung đè lên nhau bố
+ * cục xấu"*.
+ *
+ * `.odin-dock` là `position: fixed`, nên nó KHÔNG chiếm chỗ trong dòng chảy:
+ * cuộn xuống đáy thì thứ cuối cùng của trang luôn nằm dưới nó. Trước bản này
+ * KHÔNG trang nào chừa chỗ — lỗi có ở mọi trang, chỉ lộ ra ở trang nào tình cờ
+ * có nút ở góc dưới-phải, và trang bài học là trang đó.
+ *
+ * Chừa bằng ĐỆM ĐÁY chứ không đẩy robot lên: đẩy robot lên thì nó lại đè vào
+ * chỗ khác, và vị trí của nó là thứ người dùng kéo được.
+ */
+.ct-shell:has(.odin-dock) { --ct-robot-h: var(--ct-robot-h-thuc); }
 /* Thu gọn thì nó chỉ còn một dải mỏng — thứ nổi ở góc dưới phải tụt theo, nếu
    không sẽ có một khoảng trống 50px không ai hiểu vì sao. */
 .ct-shell:has(.ct-player[data-thu='true']) { --ct-player-h: var(--ct-player-h-thu); }
@@ -497,6 +518,9 @@ code {
 
 .ct-page {
   padding: 26px;
+  /* Chừa chỗ cuộn cho con robot nổi ở góc dưới-phải — xem `--ct-robot-h`.
+     Đặt SAU `padding` (viết tắt) nên không bị nó ghi đè. */
+  padding-bottom: calc(26px + var(--ct-robot-h, 0px));
   max-width: min(var(--ct-page-w), 100%);
   /*
    * ⚠️ CĂN GIỮA. Thiếu dòng này thì `max-width` chỉ có tác dụng CẮT: trên cửa
@@ -8711,14 +8735,34 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-hv-bai-tieude { margin: 0 0 8px; font-size: 21px; line-height: 1.3; }
 .ct-hv-bai-nut { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 18px; }
 
+/* ════════════════════════════════════════════════════════
+   ÁNH XẠ BIẾN CHỦ ĐỀ CỦA WEB SANG TOKEN CỦA APP
+   ════════════════════════════════════════════════════════
+
+   ⚠️⚠️ KHAI TRÊN CẢ TRANG BÀI (`.ct-hv-bai-doc`), KHÔNG chỉ trên phần nội
+   dung (`.ct-hv-noidung`).
+
+   Người dùng 17/09/2026, kèm ảnh: *"giao diện AI xấu quá tối đen khó nhìn và
+   không muốn học… khung nó đậm đậm thô"*.
+
+   Nguyên nhân, đo từ cây DOM chứ không đoán: `CourseTutor` và `ChapterQuiz` là
+   component CỦA WEB, và chúng tô màu bằng `style={{ background:
+   'var(--bg-card)', borderColor: 'var(--border-color)' }}`. Trong app hai biến
+   đó chỉ được khai trên `.ct-hv-noidung` — mà hai khối này là ANH EM của nội
+   dung, nằm NGOÀI nó (xem `monHoc.tsx`: gia sư và đề luyện đặt sau phần đọc).
+
+   `var()` không có giá trị lùi mà không giải được thì trình duyệt VỨT CẢ KHAI
+   BÁO. Nên khối "Hỏi AI" mất nền (rơi về nền trang, đen kịt) và mất màu viền
+   (rơi về `currentColor` — dày, thô, đúng chữ người dùng dùng).
+
+   Không lỗi nào hiện ra, `tsc` xanh, bản dựng xanh. Đây là dạng hỏng chỉ nhìn
+   mới thấy — và chỉ nhìn ĐÚNG TRANG ĐÓ mới thấy, vì phần bài đọc ngay phía
+   trên thì vẫn đẹp.
+
+   Bài học chung: biến của một hệ chủ đề khác phải khai ở GỐC của vùng dùng
+   lại, không phải ở khối đầu tiên tình cờ cần nó. */
+.ct-hv-bai-doc,
 .ct-hv-noidung {
-  font-size: 14.5px;
-  line-height: 1.75;
-  /* ── Ánh xạ biến của chủ đề WEB sang token của APP ──
-     Vùng CSS cắt từ `globals.css` gọi 11 biến này. Chúng không tồn tại ở đây,
-     và `var()` không có giá trị lùi thì trình duyệt BỎ CẢ KHAI BÁO — chữ mất
-     màu, khối mất nền, viền biến mất. Khai ngay trên phần bọc để chúng chỉ có
-     hiệu lực trong nội dung bài, không rò ra phần còn lại của app. */
   --text-primary: var(--ct-text);
   --text-secondary: var(--ct-text-muted);
   --text-muted: var(--ct-text-faint);
@@ -8728,8 +8772,22 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   --neon-violet: var(--ct-accent);
   --neon-indigo: var(--ct-accent);
   --lz-accent: var(--ct-accent);
+  /* Bốn biến dưới đây do khối ĐỀ LUYỆN (`ChapterQuiz`) gọi, và chúng bị bỏ
+     sót cùng lý do với nhóm trên — chỉ khác là triệu chứng nằm ở chỗ ít ai
+     cuộn tới. `--exam-ok` / `--exam-bad` là màu ĐÚNG/SAI của một câu trắc
+     nghiệm: mất chúng thì bấm xong không phân biệt được mình làm đúng hay
+     sai, tức là mất luôn ý nghĩa của phần làm đề. */
+  --accent-color: var(--ct-accent);
+  --bg-surface-active: var(--ct-active);
+  --exam-ok: var(--ct-ok);
+  --exam-bad: var(--ct-err);
   --font-poppins: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --font-jetbrains-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.ct-hv-noidung {
+  font-size: 14.5px;
+  line-height: 1.75;
 }
 /* Nội dung song ngữ: mỗi khối có cả `.ml-en` lẫn `.ml-vi`, hiện đúng một bên.
    Cùng luật với `[data-ml]` của web — thiếu nó là mỗi đoạn hiện HAI LẦN. */

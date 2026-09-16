@@ -1585,6 +1585,25 @@ export const INVOKE_CHANNELS = {
   }).nullable(),
 
   /**
+   * MỘT CUỘC TRÒ CHUYỆN, HAI CHỖ HỎI — bắc qua hai cửa sổ Electron.
+   *
+   * Trên web, khung gia sư cuối bài và con robot nổi dùng CHUNG một kho
+   * zustand (`giaSuBaiStore`), nên hỏi ở dưới bài rồi mở robot là thấy nguyên
+   * mạch. Trong app chúng là HAI CỬA SỔ, không dùng chung bộ nhớ — nên hỏi ở
+   * robot xong cuộn xuống khung dưới bài là một cuộc TRỐNG, và ngược lại.
+   * Đúng cái phiền mà tính năng này sinh ra để bỏ.
+   *
+   * Kênh này chuyển một lượt hỏi-đáp vừa xong sang cửa sổ KIA. Main chỉ làm
+   * bưu tá: nó KHÔNG gửi lại cho chính cửa sổ đã gửi, nếu không lượt vừa thêm
+   * sẽ quay về và bị thêm lần thứ hai.
+   */
+  'academy:giaSuLuot': z.object({
+    lessonId: z.number().int().positive(),
+    hoi: z.string().min(1).max(8000),
+    dap: z.string().max(200_000),
+  }),
+
+  /**
    * Cửa sổ ROBOT hỏi gia sư của bài đang học.
    *
    * ⚠️ PHẢI đi qua main như `robot:hoi`. Cửa sổ robot chạy ở origin `app://`,
@@ -1855,6 +1874,15 @@ export const EVENT_CHANNELS = [
    * đi vòng qua main. `null` = vừa rời trang bài học ⇒ robot về trợ lý thường.
    */
   'robot:baiHoc',
+  /**
+   * Một lượt hỏi-đáp gia sư vừa xảy ra ở CỬA SỔ KIA.
+   *
+   * Trên web, khung gia sư cuối bài và con robot nổi dùng CHUNG một kho
+   * zustand nên hỏi ở đâu cũng là một mạch. Trong app chúng là hai cửa sổ
+   * Electron, không dùng chung bộ nhớ — nên phải bắc cầu qua main, nếu không
+   * hỏi ở robot xong cuộn xuống khung dưới bài là một cuộc TRỐNG.
+   */
+  'academy:giaSuLuot',
   /**
    * Công tắc robot vừa lật — ở BẤT KỲ cửa nào (menu chuột phải, bốn cú bấm lên
    * con robot nổi, phím tắt toàn cục, hay chính công tắc trong Cài đặt).
@@ -2186,6 +2214,8 @@ export interface DesktopBridge {
       lessonTitle?: string;
       slides?: { so: number; tong: number; bo: string; ten: string }[];
     } | null): Promise<{ ok: boolean }>;
+    /** Báo một lượt hỏi-đáp gia sư vừa xong, để cửa sổ kia ghi vào cùng mạch. */
+    giaSuLuot(p: { lessonId: number; hoi: string; dap: string }): Promise<{ ok: boolean }>;
   };
 
   robotGiaSu: {

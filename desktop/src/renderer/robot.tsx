@@ -754,6 +754,18 @@ function KhungChat({ onDong }: { onDong: () => void }) {
   const [muonChung, datMuonChung] = useState(false);
   const cheDoGiaSu = !!bai && !muonChung;
 
+  /**
+   * Lượt hỏi-đáp vừa xảy ra ở KHUNG DƯỚI BÀI ⇒ ghép vào mạch của robot.
+   *
+   * ⚠️ Lọc theo `lessonId`. Người dùng đổi bài trong lúc khung robot đang mở
+   * thì một lượt của bài CŨ vẫn có thể tới sau — ghép vào là trộn hai bài.
+   */
+  useEffect(() => window.cuongthai?.on('academy:giaSuLuot', (p) => {
+    const l = p as { lessonId: number; hoi: string; dap: string };
+    if (!bai || l.lessonId !== bai.lessonId || !l.dap) return;
+    datLuot((c) => [...c, { toi: true, chu: l.hoi }, { toi: false, chu: l.dap }]);
+  }), [bai]);
+
   useEffect(() => {
     const bo = window.cuongthai?.on('robot:baiHoc', (b) => {
       const moi = (b ?? null) as BaiHoc | null;
@@ -837,6 +849,21 @@ function KhungChat({ onDong }: { onDong: () => void }) {
    * đều nhận CÙNG một câu trả lời lấy từ cache, tức thì và không tốn thêm lượt
    * gọi model. Cùng khoá với web nên hai bên dùng chung một kho cache.
    */
+  /**
+   * Chuyển lượt vừa xong sang KHUNG GIA SƯ DƯỚI BÀI ở cửa sổ chính.
+   *
+   * Trên web hai chỗ này dùng chung một kho, nên hỏi ở đâu cũng là một mạch.
+   * Trong app chúng là hai cửa sổ Electron riêng — thiếu cầu này thì người
+   * dùng hỏi ở robot, cuộn xuống khung dưới bài và thấy một cuộc TRỐNG, phải
+   * kể lại từ đầu. Đúng cái phiền mà con robot sinh ra để bỏ.
+   *
+   * Lỗi ở đây KHÔNG được làm hỏng câu trả lời vừa nhận — nó chỉ là đồng bộ.
+   */
+  const chuyenLuot = (lessonId: number, hoi: string, dap: string): void => {
+    if (!dap) return;
+    window.cuongthai?.academy.giaSuLuot({ lessonId, hoi, dap }).catch(() => {});
+  };
+
   const hoiNhanh = async (cau: string, cacheKey?: string): Promise<void> => {
     if (!bai || dangCho) return;
     datLuot((c) => [...c, { toi: true, chu: cau }]);
@@ -845,7 +872,11 @@ function KhungChat({ onDong }: { onDong: () => void }) {
       const g = await window.cuongthai?.robotGiaSu.hoi({
         lessonId: bai.lessonId, chu: cau, ...(cacheKey ? { cacheKey } : {}),
       });
-      datLuot((c) => [...c, { toi: false, chu: g?.chu || (g?.loi ?? dich('Không nhận được trả lời.')) }]);
+      const dap = g?.chu || (g?.loi ?? dich('Không nhận được trả lời.'));
+      datLuot((c) => [...c, { toi: false, chu: dap }]);
+      /* Chỉ chuyển khi CÓ câu trả lời thật. Chuyển cả câu lỗi sang khung dưới
+         bài là bày một thông báo lỗi ở chỗ người dùng không hề bấm gì. */
+      if (g?.chu) chuyenLuot(bai.lessonId, cau, g.chu);
     } finally {
       datDangCho(false);
     }
@@ -886,7 +917,9 @@ function KhungChat({ onDong }: { onDong: () => void }) {
              biết, vì họ ĐANG NHÌN THẤY ảnh mình vừa dán. */
           ...(keo.length ? { anh: keo } : {}),
         });
-        datLuot((c) => [...c, { toi: false, chu: g?.chu || (g?.loi ?? dich('Không nhận được trả lời.')) }]);
+        const dapAnh = g?.chu || (g?.loi ?? dich('Không nhận được trả lời.'));
+        datLuot((c) => [...c, { toi: false, chu: dapAnh }]);
+        if (g?.chu) chuyenLuot(bai.lessonId, t || '(ảnh)', g.chu);
         return;
       }
       const r = await window.cuongthai?.robot.hoi(t || dich('Xem ảnh này giúp mình.'), {

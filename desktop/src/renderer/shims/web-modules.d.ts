@@ -351,6 +351,8 @@ declare module '@/store/giaSuBaiStore' {
     <T>(sel: (s: GiaSuBaiState) => T): T;
     getState(): GiaSuBaiState;
     setState(s: Partial<GiaSuBaiState>): void;
+    /** zustand có `subscribe`; app dùng nó để theo dõi lượt mới của mạch gia sư. */
+    subscribe(f: (s: GiaSuBaiState, truoc: GiaSuBaiState) => void): () => void;
   };
 }
 

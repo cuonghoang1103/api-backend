@@ -148,6 +148,22 @@ export function registerRobotHandlers(): void {
     return { ok: true };
   });
 
+  /**
+   * BƯU TÁ cho một lượt hỏi-đáp gia sư.
+   *
+   * ⚠️ KHÔNG gửi lại cho cửa sổ đã gửi. Gửi cho `getAllWindows()` không trừ ai
+   * thì lượt vừa thêm quay về đúng chỗ nó ra đi và bị thêm LẦN THỨ HAI — người
+   * dùng thấy câu hỏi của mình nhân đôi, và lịch sử gửi lên model cũng nhân
+   * đôi theo (tốn token, và model đọc thấy mình vừa nói hai lần cùng một câu).
+   */
+  handle('academy:giaSuLuot', async (p, event) => {
+    for (const w of BrowserWindow.getAllWindows()) {
+      if (w.isDestroyed() || w.webContents.id === event.sender.id) continue;
+      w.webContents.send('academy:giaSuLuot', p);
+    }
+    return { ok: true };
+  });
+
   handle('robot:hoiGiaSu', async ({ lessonId, chu, cacheKey, lichSu, anh }) => {
     const phien = readStoredSession();
     if (!phien) return { chu: '', loi: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.' };

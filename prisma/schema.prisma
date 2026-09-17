@@ -4375,7 +4375,7 @@ model NoteSubject {
   shareRecipients NoteSubjectShareRecipient[] @relation("SubjectShareRecipients")
   databases       NoteDatabase[]
 
-  @@unique([userId, clientId], name: "uk_note_subject_client")
+  @@unique([userId, clientId], name: "uk_note_subject_client", map: "uk_note_subject_client")
   @@index([userId, sortOrder], name: "idx_note_subjects_user_sort")
   @@index([userId, isPinned], name: "idx_note_subjects_user_pinned")
   @@map("note_subjects")
@@ -4445,7 +4445,7 @@ model NoteChapter {
   attachments NoteAttachment[]
   links       NoteLink[]
 
-  @@unique([userId, clientId], name: "uk_note_chapter_client")
+  @@unique([userId, clientId], name: "uk_note_chapter_client", map: "uk_note_chapter_client")
   @@index([userId, subjectId, sortOrder], name: "idx_note_chapters_user_subject")
   @@map("note_chapters")
 }
@@ -4536,7 +4536,7 @@ model Note {
 
   // Postgres cho phép NHIỀU hàng NULL trong một UNIQUE, nên mọi ghi chú cũ
   // (clientId = NULL) không hề vướng ràng buộc này.
-  @@unique([userId, clientId], name: "uk_note_client")
+  @@unique([userId, clientId], name: "uk_note_client", map: "uk_note_client")
   @@index([userId, subjectId, chapterId, sortOrder], name: "idx_notes_user_tree")
   @@index([userId, updatedAt(sort: Desc)], name: "idx_notes_user_recent")
   @@index([userId, isPinned], name: "idx_notes_user_pinned")

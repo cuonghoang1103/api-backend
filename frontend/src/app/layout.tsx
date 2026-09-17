@@ -51,6 +51,7 @@ import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider'
 import ServiceWorkerRegister from '@/components/providers/ServiceWorkerRegister'
 import AppBootSplash from '@/components/ui/AppBootSplash'
 import AuthBoot from '@/components/providers/AuthBoot'
+import BaoHoatDong from '@/components/providers/BaoHoatDong'
 import MusicAudioController from '@/components/music/MusicAudioController'
 import MusicHistoryRecorder from '@/components/music/MusicHistoryRecorder'
 import LocaleWrapper from '@/components/providers/LocaleWrapper'
@@ -369,6 +370,7 @@ export default function RootLayout({
         {/* Must be inside AuthProvider so useAuth() works if any future
             callers need it, and inside SessionProvider for consistency. */}
         <AuthBoot />
+        <BaoHoatDong />
         <ToasterProvider />
         <TanStackQueryProvider>
        <ThemeProvider>

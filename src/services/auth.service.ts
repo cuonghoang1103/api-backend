@@ -629,6 +629,8 @@ export class AuthService {
       emailVerified: user.emailVerified,
       // Whether other users (with no prior thread) can DM this user
       allowMessagesFromStrangers: user.allowMessagesFromStrangers,
+      // Công tắc "cho người khác thấy trạng thái hoạt động của tôi".
+      showActiveStatus: user.showActiveStatus,
       coverPhotoUrl: user.coverPhotoUrl,
       lastActiveAt: user.lastActiveAt,
       roles: user.roles.map((ur) => ur.role.name),
@@ -668,6 +670,7 @@ export class AuthService {
     phone?: string | null;
     socialLinks?: Record<string, string> | null;
     allowMessagesFromStrangers?: boolean;
+    showActiveStatus?: boolean;
     coverPhotoUrl?: string | null;
   }) {
     const updates: Record<string, unknown> = {};
@@ -762,6 +765,9 @@ export class AuthService {
       }
     }
 
+    if (data.showActiveStatus !== undefined) {
+      updates.showActiveStatus = !!data.showActiveStatus;
+    }
     if (data.allowMessagesFromStrangers !== undefined) {
       // Boolean coercion is strict — anything other than a real
       // boolean is treated as "off" so a malicious client can't

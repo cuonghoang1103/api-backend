@@ -27,15 +27,25 @@ model Role {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  username      String    @unique(map: "uk_user_username") @db.VarChar(50)
-  password      String?   @db.VarChar(255)
-  email         String    @unique(map: "uk_user_email") @db.VarChar(100)
-  fullName      String?   @map("full_name") @db.VarChar(100)
-  bio           String?   @db.Text
-  avatarUrl     String?   @map("avatar_url") @db.VarChar(500)
-  coverPhotoUrl String?   @map("cover_photo_url") @db.VarChar(500)
-  lastActiveAt  DateTime? @map("last_active_at")
+  id               Int       @id @default(autoincrement())
+  username         String    @unique(map: "uk_user_username") @db.VarChar(50)
+  password         String?   @db.VarChar(255)
+  email            String    @unique(map: "uk_user_email") @db.VarChar(100)
+  fullName         String?   @map("full_name") @db.VarChar(100)
+  bio              String?   @db.Text
+  avatarUrl        String?   @map("avatar_url") @db.VarChar(500)
+  coverPhotoUrl    String?   @map("cover_photo_url") @db.VarChar(500)
+  lastActiveAt     DateTime? @map("last_active_at")
+  /// Cho người khác thấy mình đang hoạt động / hoạt động lúc nào.
+  ///
+  /// Tắt thì phải chặn CẢ HAI đường, không chỉ giấu dòng chữ:
+  ///   · `peer.lastActiveAt` trả `null` (không có mốc để tính "N phút trước")
+  ///   · socket KHÔNG phát `presence:update` cho mình nữa (không có chấm xanh)
+  /// Giấu một đường thôi thì trạng thái vẫn rò qua đường kia.
+  ///
+  /// Mặc định `true` — đúng với hành vi đang chạy, nên bật cờ này không làm
+  /// đổi trải nghiệm của ai cho tới khi họ tự tắt.
+  showActiveStatus Boolean   @default(true) @map("show_active_status")
 
   // ─── Extended profile (Phase 1) ─────────────────────────
   // displayName: tên hiển thị (có thể khác username, dùng cho UI
@@ -4349,6 +4359,8 @@ model NoteSubject {
   description String?  @db.Text
   sortOrder   Int      @default(0) @map("sort_order")
   isPinned    Boolean  @default(false) @map("is_pinned")
+  /// UUID do máy sinh — khoá chống trùng khi đồng bộ Vở. Xem `Note.clientId`.
+  clientId    String?  @map("client_id") @db.VarChar(64)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -4363,6 +4375,7 @@ model NoteSubject {
   shareRecipients NoteSubjectShareRecipient[] @relation("SubjectShareRecipients")
   databases       NoteDatabase[]
 
+  @@unique([userId, clientId], name: "uk_note_subject_client")
   @@index([userId, sortOrder], name: "idx_note_subjects_user_sort")
   @@index([userId, isPinned], name: "idx_note_subjects_user_pinned")
   @@map("note_subjects")
@@ -4412,14 +4425,19 @@ model NoteSubjectShareRecipient {
 }
 
 model NoteChapter {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  subjectId Int      @map("subject_id")
-  title     String   @db.VarChar(200)
-  isPinned  Boolean  @default(false) @map("is_pinned")
-  sortOrder Int      @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  subjectId  Int      @map("subject_id")
+  title      String   @db.VarChar(200)
+  isPinned   Boolean  @default(false) @map("is_pinned")
+  sortOrder  Int      @default(0) @map("sort_order")
+  /// UUID do máy sinh — khoá chống trùng khi đồng bộ Vở. Xem `Note.clientId`.
+  clientId   String?  @map("client_id") @db.VarChar(64)
+  /// Bìa vở + giấy mặc định, do app iPad đặt. Web bỏ qua.
+  coverColor String?  @map("cover_color") @db.VarChar(20)
+  paperKind  String?  @map("paper_kind") @db.VarChar(24)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
   user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   subject     NoteSubject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
@@ -4427,6 +4445,7 @@ model NoteChapter {
   attachments NoteAttachment[]
   links       NoteLink[]
 
+  @@unique([userId, clientId], name: "uk_note_chapter_client")
   @@index([userId, subjectId, sortOrder], name: "idx_note_chapters_user_subject")
   @@map("note_chapters")
 }
@@ -4466,8 +4485,35 @@ model Note {
   // tìm không ra thì coi như mất.
   isDatabasePage Boolean   @default(false) @map("is_database_page")
   sortOrder      Int       @default(0) @map("sort_order")
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  // ─── Vở viết tay (iPad · PencilKit) ──────────────────────────────────
+  //
+  // MỘT TRANG GIẤY = MỘT `Note`. Nét vẽ KHÔNG nằm trong Postgres: nó là
+  // tệp `PKDrawing` trên R2 (50KB-2MB mỗi trang), ở đây chỉ giữ con trỏ.
+  // Nhét `Bytes` vào đây là bắt cả bảng `notes` phình theo từng nét bút,
+  // trên đúng cái đĩa VPS đã một lần đầy và giết Postgres.
+  //
+  // `inkPreviewKey` là ảnh PNG do app dựng — thứ DUY NHẤT web đọc được,
+  // vì `PKDrawing` là định dạng riêng của Apple. Web XEM được, không sửa.
+  inkKey         String?   @map("ink_key") @db.VarChar(500)
+  inkPreviewKey  String?   @map("ink_preview_key") @db.VarChar(500)
+  // Tăng 1 mỗi lần đẩy thành công. Máy gửi kèm phiên bản nó dựa trên;
+  // lệch nghĩa là máy khác đã ghi trong lúc đó ⇒ xung đột, KHÔNG ghi đè.
+  inkVersion     Int       @default(0) @map("ink_version")
+  // Số nét của bản trên máy chủ. Máy dùng nó để hợp nhất theo TIỀN TỐ nét
+  // mà không phải tải cả tệp về trước.
+  inkStrokeCount Int       @default(0) @map("ink_stroke_count")
+  inkUpdatedAt   DateTime? @map("ink_updated_at")
+  paperKind      String?   @map("paper_kind") @db.VarChar(24)
+  paperOrient    String?   @map("paper_orient") @db.VarChar(12)
+
+  // UUID do MÁY sinh ra, là khoá chống trùng khi đồng bộ. Không có nó thì
+  // một lượt đẩy bị mạng cắt giữa chừng rồi thử lại sẽ tạo ra trang thứ
+  // hai y hệt, và người dùng thấy vở tự nhân đôi.
+  clientId String? @map("client_id") @db.VarChar(64)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   user                  User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
   subject               NoteSubject                @relation(fields: [subjectId], references: [id], onDelete: Cascade)
@@ -4488,6 +4534,9 @@ model Note {
   databaseRow           NoteDatabaseRow?           @relation("NoteDatabaseRowPage")
   NoteEmbedding         NoteEmbedding[]
 
+  // Postgres cho phép NHIỀU hàng NULL trong một UNIQUE, nên mọi ghi chú cũ
+  // (clientId = NULL) không hề vướng ràng buộc này.
+  @@unique([userId, clientId], name: "uk_note_client")
   @@index([userId, subjectId, chapterId, sortOrder], name: "idx_notes_user_tree")
   @@index([userId, updatedAt(sort: Desc)], name: "idx_notes_user_recent")
   @@index([userId, isPinned], name: "idx_notes_user_pinned")

@@ -274,6 +274,10 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         id: user.id,
         username: user.username,
         roles: userRoles,
+        // Cờ "cho người khác thấy trạng thái hoạt động". Đọc MỘT lần lúc nối
+        // — đổi công tắc có hiệu lực từ lần nối kế tiếp, đủ tốt và tránh một
+        // lượt truy vấn cho mỗi lần phát presence.
+        showActiveStatus: user.showActiveStatus,
       };
       return next();
     } catch (err) {
@@ -282,7 +286,7 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
   });
 
   io.on('connection', (socket: Socket) => {
-    const user = socket.data.user as { id: number; username: string; roles: string[] };
+    const user = socket.data.user as { id: number; username: string; roles: string[]; showActiveStatus: boolean };
     socket.join(`user:${user.id}`);
     if (user.roles.includes('ADMIN')) {
       socket.join(`admin:${user.id}`);
@@ -349,14 +353,17 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         }
         const audienceArr = Array.from(audience);
         socket.data.presenceAudience = audienceArr;
-        if (wasOffline) {
+        // ⚠️ Người đã TẮT "hiện trạng thái hoạt động" thì không phát gì cả.
+        // Che `lastActiveAt` ở API mà vẫn phát socket là trạng thái rò qua
+        // đường thứ hai — chấm xanh vẫn sáng đúng lúc họ vừa tắt nó đi.
+        if (wasOffline && user.showActiveStatus) {
           emitPresenceTo(audienceArr, { userId: user.id, online: true, lastSeen: Date.now() });
         }
       } catch (err) {
         logger.error('auto-join/presence-audience failed', { error: err instanceof Error ? err.message : String(err) });
         // Fallback: don't lose the presence signal — broadcast globally
         // (the old behavior) so the online dot still appears.
-        if (wasOffline) {
+        if (wasOffline && user.showActiveStatus) {
           socket.broadcast.emit('presence:update', {
             userId: user.id,
             online: true,
@@ -503,7 +510,11 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         // disconnect / connect-time error) so presence isn't lost.
         const payload = { userId: user.id, online: false, lastSeen: Date.now() };
         const audience = socket.data.presenceAudience as number[] | undefined;
-        if (audience && audience.length > 0) {
+        if (!user.showActiveStatus) {
+          // Không phát "đã online" thì cũng không được phát "đã offline":
+          // một tin offline lẻ loi cũng nói cho người khác biết mình vừa
+          // đóng app, tức vẫn là rò trạng thái.
+        } else if (audience && audience.length > 0) {
           emitPresenceTo(audience, payload);
         } else {
           io?.emit('presence:update', payload);

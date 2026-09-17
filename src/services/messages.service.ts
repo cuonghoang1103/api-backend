@@ -193,16 +193,16 @@ export class MessagesService {
       where: { id: threadId },
       include: {
         user: {
-          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
         },
         adminUser: {
-          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
         },
         userA: {
-          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
         },
         userB: {
-          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
         },
       },
     });
@@ -251,10 +251,10 @@ export class MessagesService {
       },
       orderBy: [{ lastMessageAt: { sort: 'desc', nulls: 'last' } }, { id: 'desc' }],
       include: {
-        user: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
-        adminUser: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
-        userA: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
-        userB: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
+        user: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
+        adminUser: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
+        userA: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
+        userB: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
         messages: {
           orderBy: { createdAt: 'desc' },
           take: 1,
@@ -343,10 +343,10 @@ export class MessagesService {
       where: { type: 'ADMIN', adminUserId: adminId },
       orderBy: [{ lastMessageAt: { sort: 'desc', nulls: 'last' } }, { id: 'desc' }],
       include: {
-        user: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
-        adminUser: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
-        userA: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
-        userB: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
+        user: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
+        adminUser: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
+        userA: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
+        userB: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
         messages: {
           orderBy: { createdAt: 'desc' },
           take: 1,
@@ -429,10 +429,10 @@ export class MessagesService {
       where: { type: 'ADMIN' },
       orderBy: [{ lastMessageAt: { sort: 'desc', nulls: 'last' } }, { id: 'desc' }],
       include: {
-        user: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
-        adminUser: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
-        userA: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
-        userB: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
+        user: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
+        adminUser: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
+        userA: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
+        userB: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true } },
         messages: {
           orderBy: { createdAt: 'desc' },
           take: 1,
@@ -503,7 +503,7 @@ export class MessagesService {
       take: limit,
       include: {
         sender: {
-          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
         },
         attachments: {
           include: { file: { select: { id: true, filePath: true } } },
@@ -696,7 +696,7 @@ export class MessagesService {
       },
       include: {
         sender: {
-          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
         },
         attachments: {
           include: { file: { select: { id: true, filePath: true } } },
@@ -1341,10 +1341,10 @@ export class MessagesService {
       lastMessageAt: Date | null;
       createdAt: Date;
       updatedAt: Date;
-      user?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
-      adminUser?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
-      userA?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
-      userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+      user?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
+      adminUser?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
+      userA?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
+      userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
     },
     viewerId: number,
     /** Pre-fetched nickname map: key = `${threadId}-${peerId}`, value = alias string */
@@ -1382,6 +1382,12 @@ export class MessagesService {
             displayName: alias ?? peer.displayName ?? peer.fullName ?? peer.username,
             avatarUrl: peer.avatarUrl,
             alias,
+            // ⚠️ Chỉ trả mốc hoạt động khi người ta CHO PHÉP.
+            //
+            // Che ở đây là chưa đủ — socket `presence:update` là đường thứ
+            // hai và đã được chặn cùng cờ này ở `messaging.socket.ts`. Bịt
+            // một đường thì trạng thái vẫn rò qua đường kia.
+            lastActiveAt: peer.showActiveStatus ? peer.lastActiveAt : null,
           }
         : null,
       preferences,
@@ -1399,10 +1405,10 @@ export class MessagesService {
       lastMessageAt: Date | null;
       createdAt: Date;
       updatedAt: Date;
-      user?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
-      adminUser?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
-      userA?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
-      userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+      user?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
+      adminUser?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
+      userA?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
+      userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
     },
     viewerId: number,
   ) {
@@ -1423,6 +1429,12 @@ export class MessagesService {
             displayName: peer.displayName ?? peer.fullName ?? peer.username,
             avatarUrl: peer.avatarUrl,
             alias: null as string | null,
+            // ⚠️ Chỉ trả mốc hoạt động khi người ta CHO PHÉP.
+            //
+            // Che ở đây là chưa đủ — socket `presence:update` là đường thứ
+            // hai và đã được chặn cùng cờ này ở `messaging.socket.ts`. Bịt
+            // một đường thì trạng thái vẫn rò qua đường kia.
+            lastActiveAt: peer.showActiveStatus ? peer.lastActiveAt : null,
           }
         : null,
     };
@@ -1540,10 +1552,10 @@ export class MessagesService {
     lastMessageAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
-    user?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
-    adminUser?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
-    userA?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
-    userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+    user?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
+    adminUser?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
+    userA?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
+    userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
   }) {
     const emitter = this.getEmitter();
     if (!emitter) return;
@@ -1566,16 +1578,16 @@ export class MessagesService {
   private threadIncludeForViewer(_viewerId: number) {
     return {
       user: {
-        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
       },
       adminUser: {
-        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
       },
       userA: {
-        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
       },
       userB: {
-        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, lastActiveAt: true, showActiveStatus: true },
       },
       messages: {
         orderBy: { createdAt: 'desc' },

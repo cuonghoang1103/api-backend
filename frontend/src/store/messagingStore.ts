@@ -96,6 +96,8 @@ interface MessagingState {
   restoreChat: (threadId: number) => Promise<void>;
   refreshThreadSummary: (threadId: number) => Promise<void>;
   loadOnlineUsers: () => Promise<void>;
+  /** Gieo presence từ `peer.lastActiveAt` của các hội thoại vừa tải. */
+  gieoMocHoatDong: (list: Array<{ peer?: { id: number; lastActiveAt?: string | null } | null }>) => void;
   refreshUnread: () => Promise<void>;
 
   // Open / switch thread
@@ -487,6 +489,9 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
         threadsLoaded: true,
         threadsLoading: false,
       });
+      // Ảnh chụp trạng thái hoạt động lúc VỪA MỞ — socket chỉ phát khi có
+      // người ĐỔI trạng thái, nên không có bước này thì ai cũng "Ngoại tuyến".
+      get().gieoMocHoatDong(raw);
     } catch (e: any) {
       // A 401 here means the JWT in the httpOnly cookie is stale
       // (e.g. roleVersion bump from a password change). Surface
@@ -555,6 +560,42 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     } catch {
       // ignore
     }
+  },
+
+  /**
+   * Gieo mốc "hoạt động lần cuối" từ danh sách hội thoại vừa tải.
+   *
+   * ⚠️ CHỈ ĐƯỢC BỔ SUNG, TUYỆT ĐỐI KHÔNG HẠ CẤP. Hàm này chạy song song với
+   * `loadOnlineUsers()` trong `Promise.allSettled` của `init()`, nên thứ tự
+   * về đích KHÔNG đoán trước được. Nếu nó ghi đè thẳng thì một lượt tải
+   * chậm sẽ dập tắt chấm xanh mà socket/ảnh chụp online vừa bật, và lỗi ấy
+   * chỉ hiện ra lúc mạng chậm — đúng loại khó tái hiện nhất. Vì vậy:
+   *   · đang `online` → GIỮ online, chỉ nới `lastSeen` lên mốc mới hơn
+   *   · chưa biết gì  → đặt offline kèm mốc, để UI nói "Hoạt động N phút trước"
+   * `lastActiveAt = null` nghĩa là người kia đã TẮT công tắc riêng tư ⇒ bỏ qua,
+   * không được suy ra "ngoại tuyến" hộ họ.
+   */
+  gieoMocHoatDong(list) {
+    const moc: Array<[number, number]> = [];
+    for (const t of list) {
+      const id = t.peer?.id;
+      const raw = t.peer?.lastActiveAt;
+      if (!id || !raw) continue;
+      const ts = new Date(raw).getTime();
+      if (Number.isFinite(ts) && ts > 0) moc.push([id, ts]);
+    }
+    if (moc.length === 0) return;
+    set((s) => {
+      const next = { ...s.presence.byUserId };
+      for (const [id, ts] of moc) {
+        const cu = next[id];
+        next[id] = {
+          online: cu?.online ?? false,
+          lastSeen: Math.max(cu?.lastSeen ?? 0, ts),
+        };
+      }
+      return { presence: { byUserId: next } };
+    });
   },
 
   async loadOnlineUsers() {
@@ -707,7 +748,9 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     // Refresh the thread header info (last message preview, peer)
     try {
       const res = await messagingApi.getThread(threadId);
-      set({ currentThread: res.data.data as MessagingThread });
+      const chiTiet = res.data.data as MessagingThread;
+      set({ currentThread: chiTiet });
+      get().gieoMocHoatDong([chiTiet]);
     } catch {
       // Best effort
     }

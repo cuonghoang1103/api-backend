@@ -220,6 +220,35 @@ async function attachRedisAdapter(server: IOServer): Promise<void> {
   }
 }
 
+/**
+ * Lấy token từ một lượt bắt tay Socket.IO.
+ *
+ * ⚠️ `auth` phải đứng TRƯỚC, và nó không phải chuộng cho đẹp: client nào ép
+ * `transports: ['websocket']` thì **header Authorization không bao giờ tới
+ * đây**. Trình duyệt/Chromium dựng websocket bằng `new WebSocket(uri)`, mà
+ * WebSocket API không cho đặt header, nên engine.io lặng lẽ vứt
+ * `extraHeaders` (chỉ React Native nhận). Đo thật 17/09/2026 bằng một máy chủ
+ * socket.io con nối từ Chromium:
+ *
+ *     transports:['websocket'] → handshake KHÔNG có `authorization`
+ *     mặc định (polling→ws)    → handshake CÓ `authorization`
+ *
+ * App desktop rơi đúng vào nhánh trên và **không giữ cookie nào**, nên nó bị
+ * từ chối ở mọi lượt nối kể từ ngày cắm messenger vào — huy hiệu "Ngoại
+ * tuyến" nằm lì, không tin nhắn thời gian thực, không cuộc gọi. Còn
+ * `handshake.auth` thì đi trong THÂN gói mở màn, nên nó qua được MỌI
+ * transport và không lọt vào URL như `?token=` (URL nằm trong access log).
+ *
+ * `extractToken` vẫn giữ nguyên cho đường web (cookie httpOnly).
+ */
+export function tokenBatTay(socket: Socket): string | undefined {
+  const tuAuth = (socket.handshake.auth as Record<string, unknown> | undefined)?.token;
+  if (typeof tuAuth === 'string' && tuAuth.length > 0) {
+    return tuAuth.startsWith('Bearer ') ? tuAuth.slice(7) : tuAuth;
+  }
+  return extractToken(socket.request as unknown as Request);
+}
+
 export function initSocketServer(httpServer: HttpServer): IOServer {
   if (io) return io;
 
@@ -246,13 +275,14 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
   void attachRedisAdapter(io);
 
   // Auth middleware: read JWT from the same places the Express
-  // middleware does (auth.token, Authorization header, or the
-  // httpOnly `backend_token` cookie via `extractToken`). The
-  // cookie path is the production case — the JWT lives in an
-  // httpOnly cookie and is never exposed to JS.
+  // middleware does (Authorization header or the httpOnly
+  // `backend_token` cookie via `extractToken`), PLUS the Socket.IO
+  // handshake `auth` payload. The cookie path is the production web
+  // case — the JWT lives in an httpOnly cookie and is never exposed
+  // to JS. See `tokenBatTay()` for why `auth` has to exist.
   io.use(async (socket, next) => {
     try {
-      const token = extractToken(socket.request as unknown as Request);
+      const token = tokenBatTay(socket);
       if (!token) {
         return next(new UnauthorizedError('No authentication token provided'));
       }

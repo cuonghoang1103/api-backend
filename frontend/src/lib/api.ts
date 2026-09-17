@@ -3116,6 +3116,17 @@ export interface MessagingPeer {
   username: string;
   displayName: string;
   avatarUrl: string | null;
+  /**
+   * Mốc hoạt động cuối, ISO-8601. `null` khi người kia TẮT công tắc
+   * "cho người khác thấy trạng thái hoạt động" (`users.show_active_status`) —
+   * backend che ngay ở serialiser, không phải việc của client.
+   *
+   * Vì sao cần, khi đã có socket `presence:update`: sự kiện đó chỉ phát lúc
+   * ai đó ĐỔI trạng thái. Vừa mở app thì chưa ai vừa đổi cả, nên nếu chỉ
+   * nghe socket thì mọi người đều hiện "Ngoại tuyến" cho tới khi có người
+   * tình cờ nối/ngắt. Trường này là ẢNH CHỤP lúc mở; socket lo phần sau đó.
+   */
+  lastActiveAt?: string | null;
 }
 
 /**

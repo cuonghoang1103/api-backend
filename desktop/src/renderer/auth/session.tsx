@@ -28,6 +28,7 @@ import {
 import { ApiClient, ApiError } from '../api/client';
 import { countUnsynced } from '../offline/db';
 import { noiSocket, ngatSocket } from '../realtime/socket';
+import { batBaoHoatDong, ngungBaoHoatDong } from '../realtime/baoHoatDong';
 
 export interface CurrentUser {
   userId: number;
@@ -105,10 +106,14 @@ export function SessionProvider({
   useEffect(() => {
     if (phase === 'da-dang-nhap' && apiRef.current && apiOrigin) {
       noiSocket(apiRef.current, apiOrigin);
+      // Nhịp làm mới `users.last_active_at`. Web làm việc này ở layout, mà app
+      // KHÔNG dùng layout của web — xem đầu `realtime/baoHoatDong.ts`.
+      batBaoHoatDong(apiRef.current);
     } else if (phase === 'chua-dang-nhap') {
       // Đăng xuất thì cắt hẳn: socket còn sống nghĩa là người vừa đăng xuất
       // vẫn nhận được tin nhắn và cuộc gọi của tài khoản đó.
       ngatSocket();
+      ngungBaoHoatDong();
     }
   }, [phase, apiOrigin]);
   const [user, setUser] = useState<CurrentUser | null>(null);

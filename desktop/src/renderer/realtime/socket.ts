@@ -31,13 +31,35 @@ export function noiSocket(api: ApiClient, apiOrigin: string): Socket | null {
   // 200 cho `/socket.io/?EIO=4`), nên không cần biến đổi tên miền. Bản nháp
   // trước của tôi tự đổi `api.x` → `x`; thừa, và là một chỗ có thể sai.
   socket = io(apiOrigin, {
+    /* ⛔⛔ ĐỪNG ĐỔI HAI DÒNG DƯỚI MÀ KHÔNG ĐỌC HẾT KHỐI NÀY ⛔⛔
+     *
+     * Token đi trong `auth`, KHÔNG phải `extraHeaders`. Và KHÔNG ép
+     * `transports: ['websocket']`.
+     *
+     * Bản trước làm ngược cả hai, và hậu quả là socket của app **chưa bao giờ
+     * nối được một lần nào** kể từ khi cắm messenger vào (16/09/2026):
+     * `extraHeaders` chỉ đi được bằng polling, vì websocket trong Chromium
+     * dựng bằng `new WebSocket(uri)` mà WebSocket API không cho đặt header —
+     * engine.io lặng lẽ vứt opts (`transports/websocket.js`: chỉ React Native
+     * nhận). Ép websocket-only ⇒ token bay mất ⇒ máy chủ từ chối bắt tay ⇒
+     * `reconnection` quay vô tận ⇒ huy hiệu "Ngoại tuyến" nằm lì, không tin
+     * nhắn thời gian thực, không "đang nhập", và gọi thoại/video chết câm.
+     * App KHÔNG giữ cookie nào nên không có đường lùi nào cứu được.
+     *
+     * Đo thật 17/09/2026 (máy chủ socket.io con, nối từ Chromium):
+     *     transports:['websocket'] → handshake KHÔNG có `authorization`
+     *     mặc định (polling→ws)    → handshake CÓ `authorization`
+     *
+     * `auth` đi trong THÂN gói mở màn nên qua được MỌI transport, và không
+     * lọt vào URL như `?token=` (URL nằm trong access log của nginx).
+     * Máy chủ đọc nó ở `tokenBatTay()` trong `src/socket/messaging.socket.ts`.
+     * Phép kiểm chặn tái diễn: `realtime/socket.test.ts`.
+     */
     path: '/socket.io',
-    // Header thay vì cookie: app không giữ cookie, và máy chủ đọc header
-    // TRƯỚC cookie nên đường này chắc.
-    extraHeaders: { Authorization: `Bearer ${token}` },
-    // Bỏ chặng hỏi-đáp, đi thẳng websocket: chặng đó gửi token trong MỌI lượt
-    // hỏi và tốn thêm một vòng bắt tay.
-    transports: ['websocket'],
+    auth: { token },
+    // Để mặc định polling→nâng cấp websocket. Chặng hỏi-đáp tốn thêm một
+    // vòng bắt tay, nhưng nó là đường lùi cho người ngồi sau proxy nuốt
+    // header Upgrade — và máy chủ cũng mở cả hai (`messaging.socket.ts`).
     reconnection: true,
     reconnectionDelay: 2000,
     reconnectionDelayMax: 30000,

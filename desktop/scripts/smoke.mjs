@@ -8,14 +8,48 @@
  * nó kiểm cái sẽ được đóng gói, không kiểm cái ta định đóng gói.
  *
  * Chạy: npm run smoke
- * Đầy đủ (gồm cả phần cần đăng nhập):
- *   CT_SMOKE_USER=<tên> CT_SMOKE_PASS=<mật khẩu> npm run smoke
+ * Đầy đủ (gồm cả phần cần đăng nhập): đặt tài khoản thử vào `desktop/.env.local`
+ *   CT_SMOKE_USER=<tên hoặc email>
+ *   CT_SMOKE_PASS=<mật khẩu>
+ * hoặc truyền thẳng: `CT_SMOKE_USER=… CT_SMOKE_PASS=… npm run smoke`
  */
+import fs from 'node:fs';
 import { _electron as electron } from 'playwright';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(fileURLToPath(new URL('../package.json', import.meta.url)));
+
+/**
+ * ĐỌC `desktop/.env.local` NẾU CÓ.
+ *
+ * Vì sao cần: bốn phép kiểm cần đăng nhập đã bị BỎ QUA suốt từ ngày viết file
+ * này, đơn giản vì gõ lại `CT_SMOKE_USER=… CT_SMOKE_PASS=…` mỗi lần là phiền
+ * đủ để không ai làm. Một bài kiểm chỉ chạy khi người ta nhớ gõ thêm thì thực
+ * tế là một bài kiểm không chạy.
+ *
+ * `.env.local` đã nằm trong `.gitignore` (dòng 9) nên mật khẩu không thể lọt
+ * vào git. Biến có sẵn trong môi trường thì THẮNG file — dòng lệnh vẫn là thứ
+ * đè lên tất cả, đúng quy ước thường gặp.
+ */
+for (const line of (() => {
+  const f = path.join(root, '.env.local');
+  try { return fs.readFileSync(f, 'utf8').split('\n'); } catch { return []; }
+})()) {
+  const m = /^\s*(?:export\s+)?([A-Z0-9_]+)\s*=\s*(.*)$/.exec(line);
+  if (!m) continue;
+  const ten = m[1];
+  if (process.env[ten] !== undefined) continue;
+  /* Bỏ nháy bao quanh nếu có, và bỏ chú thích đuôi dòng khi giá trị KHÔNG
+     được bọc nháy — mật khẩu có ký tự `#` là chuyện bình thường. */
+  let gt = m[2].trim();
+  if ((gt.startsWith('"') && gt.endsWith('"')) || (gt.startsWith("'") && gt.endsWith("'"))) {
+    gt = gt.slice(1, -1);
+  } else {
+    gt = gt.split(' #')[0].trim();
+  }
+  process.env[ten] = gt;
+}
 
 const results = [];
 let skipped = 0;
@@ -286,8 +320,10 @@ const smokePass = process.env.CT_SMOKE_PASS;
 
 if (!smokeUser || !smokePass) {
   console.log('\n\x1b[33m⚠ BỎ QUA 3 phép kiểm shell — cần tài khoản thật\x1b[0m');
-  console.log('  Chạy đầy đủ bằng:');
-  console.log('  CT_SMOKE_USER=<tên> CT_SMOKE_PASS=<mật khẩu> npm run smoke');
+  console.log('  Đặt một lần vào desktop/.env.local (đã gitignore):');
+  console.log('    CT_SMOKE_USER=<tên hoặc email>');
+  console.log('    CT_SMOKE_PASS=<mật khẩu>');
+  console.log('  hoặc: CT_SMOKE_USER=… CT_SMOKE_PASS=… npm run smoke');
   skipped += 4;
 } else {
   await window.fill('input[autocomplete="username"]', smokeUser);

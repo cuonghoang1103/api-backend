@@ -112,6 +112,10 @@ export function Sidebar() {
                     key={item.path}
                     type="button"
                     data-nav-item
+                    /* Đường dẫn để bộ kiểm bám vào. Nhãn đổi theo ngôn ngữ nên
+                       tìm nút theo nhãn là một phép kiểm chỉ chạy đúng ở máy
+                       để tiếng Việt — smoke đã đổ đúng vì lý do đó (17/09/2026). */
+                    data-route={item.path}
                     className="ct-nav-item"
                     data-active={active}
                     aria-current={active ? 'page' : undefined}

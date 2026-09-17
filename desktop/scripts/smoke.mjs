@@ -14,11 +14,42 @@
  * hoặc truyền thẳng: `CT_SMOKE_USER=… CT_SMOKE_PASS=… npm run smoke`
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import { _electron as electron } from 'playwright';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(fileURLToPath(new URL('../package.json', import.meta.url)));
+
+/**
+ * ============================================================
+ * HỒ SƠ RIÊNG, SẠCH MỖI LƯỢT
+ * ============================================================
+ *
+ * ⚠️⚠️ Trước bản này smoke chạy trên HỒ SƠ THẬT của Electron trên máy. Hai hậu
+ * quả, cả hai chỉ lộ ra ngày 17/09/2026 khi lần đầu có tài khoản thử để chạy
+ * hết bài:
+ *
+ *  1. **Không chạy lại được.** Lượt đầu đăng nhập thành công ⇒ phiên được lưu
+ *     ⇒ lượt sau mở ra đã đăng nhập sẵn, và ba phép kiểm "màn đăng nhập" đổ:
+ *     `chưa đăng nhập thì hiện màn đăng nhập — Notes`. Một bài kiểm chỉ đúng ở
+ *     lần chạy đầu tiên thì nó không phải bài kiểm.
+ *
+ *  2. **Nó ĐO cấu hình của người chạy.** Máy để giao diện tiếng Anh thì phép
+ *     kiểm tìm nút theo nhãn tiếng Việt sẽ treo 30 giây rồi ném `TimeoutError`
+ *     — đúng chuyện vừa xảy ra. Bài kiểm phải tự quyết định môi trường của nó.
+ *
+ * Hồ sơ nằm trong thư mục tạm và **xoá ở cuối**, nhưng CHUNG cho cả hai lượt
+ * khởi động trong một lần chạy — phần "khôi phục cửa sổ sau khi khởi động lại"
+ * cần đúng điều đó.
+ */
+const hoSo = fs.mkdtempSync(path.join(os.tmpdir(), 'ct-smoke-'));
+const MOI_TRUONG = { ...process.env, CT_RENDERER: 'bundle' };
+const THAM_SO = [`--user-data-dir=${hoSo}`, path.join(root, 'dist/main/index.cjs')];
+
+process.on('exit', () => {
+  try { fs.rmSync(hoSo, { recursive: true, force: true }); } catch { /* đã dọn rồi */ }
+});
 
 /**
  * ĐỌC `desktop/.env.local` NẾU CÓ.
@@ -63,7 +94,7 @@ function check(label, pass, detail = '') {
 console.log('\nKhởi động CuongThai Desktop (bản đã build)…\n');
 
 const app = await electron.launch({
-  args: [path.join(root, 'dist/main/index.cjs')],
+  args: THAM_SO,
   // `CT_RENDERER=bundle` là mấu chốt. Không có nó, `app.isPackaged` là false
   // (ta đang chạy Electron từ node_modules, không phải bản đã đóng gói) nên
   // main sẽ trỏ vào Vite dev server — và bài kiểm sẽ đo đường DEV trong khi
@@ -334,12 +365,34 @@ if (!smokeUser || !smokePass) {
   console.log('\nShell (đã đăng nhập bằng tài khoản thật):');
   check('đăng nhập thật thành công', true);
 
-  await window.getByRole('button', { name: 'Tin nhắn' }).first().click();
+  /**
+   * ⚠️⚠️ ĐỪNG TÌM NÚT THEO NHÃN TIẾNG VIỆT.
+   *
+   * Bản trước viết `getByRole('button', { name: 'Tin nhắn' })`. Lần đầu tiên
+   * phép kiểm này thật sự chạy (17/09/2026, khi đã có tài khoản thử), nó đổ
+   * ngay: máy người dùng đang để giao diện **tiếng Anh**, nên nút tên
+   * "Messages". Phép kiểm chờ 30 giây rồi ném `TimeoutError` — và thông điệp
+   * của nó ("waiting for getByRole…") không hề nói rằng vấn đề là NGÔN NGỮ.
+   *
+   * Nó nằm im suốt vì bốn phép kiểm này luôn bị bỏ qua (thiếu tài khoản), nên
+   * chưa ai từng chạy tới đây. Bài kiểm không chạy thì không ai biết nó hỏng.
+   *
+   * Nay khớp theo `data-route` — thuộc tính của chính sidebar, không đổi theo
+   * ngôn ngữ — và so tiêu đề với NHÃN THẬT của nút vừa bấm thay vì một chuỗi
+   * chép tay.
+   */
+  const nutTin = window.locator('.ct-sidebar [data-route="/messages"]').first();
+  const nhanTin = (await nutTin.textContent())?.trim() ?? '';
+  await nutTin.click();
   await window.waitForTimeout(250);
   const afterNav = await window.evaluate(
     () => document.querySelector('.ct-titlebar-title')?.textContent,
   );
-  check('bấm sidebar thì đổi trang', afterNav === 'Tin nhắn', String(afterNav));
+  check(
+    'bấm sidebar thì đổi trang',
+    !!afterNav && nhanTin.includes(afterNav),
+    `${afterNav} (nút: ${nhanTin})`,
+  );
 
   /*
    * ⚠️ TIN NHẮN DÙNG LẠI NGUYÊN CÂY MESSENGER CỦA WEB (16/09/2026).
@@ -360,7 +413,8 @@ if (!smokeUser || !smokePass) {
     return {
       coHost: !!host,
       coDauVet: !!document.querySelector('textarea, [aria-label*="Đính kèm"], [aria-label*="Ghi tin thoại"]')
-        || /tin nhắn|trò chuyện|cuộc trò chuyện/.test(chu),
+        /* Chữ mồi: nhận CẢ HAI ngôn ngữ — cùng lý do với chỗ bấm sidebar ở trên. */
+        || /tin nhắn|trò chuyện|cuộc trò chuyện|message|conversation/.test(chu),
       daiChu: chu.length,
     };
   });
@@ -398,10 +452,7 @@ await app.evaluate(({ BrowserWindow }, size) => {
 await window.waitForTimeout(400); // để handler 'resize' kịp ghi xuống đĩa
 await app.close();
 
-const app2 = await electron.launch({
-  args: [path.join(root, 'dist/main/index.cjs')],
-  env: { ...process.env, CT_RENDERER: 'bundle' },
-});
+const app2 = await electron.launch({ args: THAM_SO, env: MOI_TRUONG });
 const window2 = await cuaSoChinh(app2);
 await window2.waitForLoadState('domcontentloaded');
 const restored = await app2.evaluate(({ BrowserWindow }) =>

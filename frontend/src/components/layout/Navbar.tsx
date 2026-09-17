@@ -283,7 +283,7 @@ export default function Navbar() {
         {/* Phone: tight paddings (just clear the dock toggle at left-6 w-11)
             so the right controls (bell/avatar) stay ON-SCREEN; ≥sm keeps the
             original wide gutters. pr also honors the landscape notch. */}
-        <div className="h-full pl-[4.5rem] pr-[max(0.5rem,env(safe-area-inset-right,0px))] sm:pl-28 sm:pr-28 flex items-center justify-between gap-2">
+        <div className="h-full pl-[4.5rem] pr-[max(0.5rem,env(safe-area-inset-right,0px))] sm:pl-20 sm:pr-[max(1rem,env(safe-area-inset-right,0px))] xl:pl-28 xl:pr-28 flex items-center justify-between gap-2">
 
             {/* Left: Logo (avatar + wordmark) — pulled in past
                 the screen edge so the row never overlaps the
@@ -329,7 +329,9 @@ export default function Navbar() {
             </div>
 
             {/* Center: nav links — icons only, no labels. */}
-            <div className="hidden sm:flex items-center ml-1">
+            {/* `min-w-0 overflow-hidden`: nếu vẫn chật thì dãy icon GIỮA bị cắt bớt,
+                chứ không đẩy cụm điều khiển bên phải (chuông, avatar) ra ngoài màn hình. */}
+            <div className="hidden sm:flex items-center ml-1 min-w-0 overflow-hidden">
               {TOP_NAV_LINKS.filter((l) => {
  if (l.href === '/music') return hasMusicAccess;
  if (l.adminOnly) return isAdmin;
@@ -364,7 +366,12 @@ export default function Navbar() {
             <div className="flex items-center gap-1.5 shrink-0">
 
               {/* Contact icons */}
-              <div className="hidden lg:flex items-center gap-0.5 mr-1">
+              {/* Liên hệ (điện thoại/mail/facebook): chỉ hiện từ XL trở lên.
+                  Trước đây là `lg` (1024px) — đúng bề ngang iPad nằm ngang
+                  (1024-1194px), mà cả cụm bên phải để `shrink-0` nên nó không
+                  co lại được: phần thừa bị CẮT ở mép phải thay vì xuống dòng.
+                  Ba icon này là link phụ, ẩn trên tablet không mất gì. */}
+              <div className="hidden xl:flex items-center gap-0.5 mr-1">
                 {contactItems.map(({ href, icon }) => {
                   const icons: Record<string, React.ReactNode> = {
                     phone: <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1.05h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>,

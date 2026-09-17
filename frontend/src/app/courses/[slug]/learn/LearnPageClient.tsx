@@ -138,6 +138,23 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const [loading, setLoading] = useState(true);
   const [savingProgress, setSavingProgress] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  // Sidebar là w-80 (320px) và shrink-0, nên trên cửa sổ hẹp nó chiếm gần hết
+  // bề ngang: đo 17/09/2026 ở viewport 375px thì vùng nội dung chỉ còn 55px và
+  // tràn 196px — bài học trông như bị sidebar đè. Giá trị KHỞI TẠO vẫn là true
+  // để bản render trên máy chủ không lệch với bản trên trình duyệt; việc đóng
+  // xảy ra sau khi mount. Người dùng bấm mở lại lúc nào cũng được.
+  const [isNarrow, setIsNarrow] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)');
+    const apply = (narrow: boolean) => {
+      setIsNarrow(narrow);
+      if (narrow) setSidebarOpen(false);
+    };
+    apply(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => apply(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
   const [videoKey, setVideoKey] = useState(0);
   // Which of VN / EN / YT is playing. null = "not chosen yet on this lesson",
@@ -312,6 +329,9 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const selectLesson = useCallback(async (lesson: LessonDto) => {
     if (!course) return;
     setCurrentLesson(lesson);
+    // Trên màn hình hẹp sidebar chiếm trọn bề ngang, nên chọn xong phải trả
+    // màn hình lại cho bài học — nếu không người dùng vẫn nhìn vào danh sách.
+    if (isNarrow) setSidebarOpen(false);
     // Keep the section that holds this lesson expanded (sections are
     // collapsed by default).
     const sec = course.sections?.find(s => s.lessons?.some(l => l.id === lesson.id));
@@ -328,7 +348,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     } catch {
       // lesson already set from course data
     }
-  }, [course]);
+  }, [course, isNarrow]);
 
   const isCompleted = (lessonId: number) =>
     progress.find(p => p.lessonId === lessonId)?.isCompleted || false;
@@ -656,7 +676,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
 
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* Sidebar */}
-        <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} bg-darkcard border-r border-darkborder/50 overflow-y-auto thin-scroll transition-all shrink-0 flex-shrink-0`}>
+        <aside className={`${sidebarOpen ? (isNarrow ? 'w-full' : 'w-80') : 'w-0'} bg-darkcard border-r border-darkborder/50 overflow-y-auto thin-scroll transition-all shrink-0 flex-shrink-0`}>
           <div className="p-4">
             <h2 className="font-semibold text-text-primary text-sm mb-4">Course Content</h2>
             <div className="space-y-1">
@@ -787,7 +807,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto thin-scroll">
+        <main className={`flex-1 min-w-0 overflow-y-auto thin-scroll ${isNarrow && sidebarOpen ? 'hidden' : ''}`}>
           {currentLesson ? (
             <div className="max-w-4xl mx-auto px-4 py-8">
               {/* Course-completion banner — appears once every lesson is

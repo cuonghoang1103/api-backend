@@ -35,6 +35,10 @@ import ch22Section from './swr302/ch22.mjs';
 import ch30Section from './swr302/ch30.mjs';
 import ch31Section from './swr302/ch31.mjs';
 import ch32Section from './swr302/ch32.mjs';
+import assignmentSection from './swr302/assignment.mjs';
+import labSection from './swr302/lab.mjs';
+import packageTp1Section from './swr302/package-tp1.mjs';
+import packageTp2Section from './swr302/package-tp2.mjs';
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -146,6 +150,16 @@ export default {
   </tbody>
 </table>
 <div class="callout warn">Two <strong>hard blockers</strong> even with a high coursework score: (1) missing more than 20% of sessions = <strong>barred from the final exam</strong>; (2) the special rule — if <strong>4 ≤ Theory Exam &lt; 5</strong> AND <strong>4 ≤ Practical Exam &lt; 5</strong> AND the final result &lt; 5, you may re-sit only certain components. In short: both final-exam parts should reach <strong>≥ 4.0</strong> or the pass is at risk.</div>
+<a class="link-card exphub" href="/courses/software-requirements/learn?lessonSlug=swr302-assignment-de-bai">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Assignment (20%) — the full brief, both topics and how to build all 8 deliverables</span><span class="lc-sub">Topics TP1 &amp; TP2 in full, the Wiegers template for each deliverable, how five students divide the work, the Week 2 → Week 9 plan, the lecturer's check-in questions, a worked example and a pre-submission checklist.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card exphub" href="/courses/software-requirements/learn?lessonSlug=swr302-lab-tong-quan">
+  <span class="lc-ico">📐</span>
+  <span class="lc-body"><span class="lc-title">LAB (10%) — drawing requirements models</span><span class="lc-sub">Context diagram, swimlane, state diagram, DFD, ERD, decision table and dialog map. Each with notation, a worked exercise from TP1/TP2 and the mistakes that cost marks — and it is direct practice for the Practical Exam.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 <div class="note-ct">The Practical Exam (25%) tests <strong>doing</strong>: given a scenario, you elicit/analyze and produce a use case, a model or a set of well-written requirements under time pressure. Rote memorisation won't save you — do every LAB and the Assignment so your hands are fast at writing requirements and drawing models on exam day.</div>
 </div>
 <div class="ml-vi">
@@ -172,6 +186,16 @@ export default {
   </tbody>
 </table>
 <div class="callout warn">Hai điều kiện <strong>chặn cứng</strong> dù điểm quá trình cao: (1) vắng quá 20% buổi = <strong>cấm thi cuối kỳ</strong>; (2) quy định đặc biệt — nếu <strong>4 ≤ Theory Exam &lt; 5</strong> VÀ <strong>4 ≤ Practical Exam &lt; 5</strong> VÀ kết quả cuối &lt; 5 thì chỉ được thi lại một số phần. Nói gọn: cả hai phần thi cuối kỳ nên đạt <strong>≥ 4.0</strong> nếu không việc qua môn bị đe doạ.</div>
+<a class="link-card exphub" href="/courses/software-requirements/learn?lessonSlug=swr302-assignment-de-bai">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Assignment (20%) — đề bài đầy đủ, cả hai đề tài và cách làm trọn 8 sản phẩm</span><span class="lc-sub">Đề TP1 &amp; TP2 nguyên văn, template Wiegers cho từng deliverable, cách chia việc cho nhóm 5 người, kế hoạch tuần 2 → tuần 9, ngân hàng câu hỏi thầy kiểm tra tiến độ, bài mẫu và bảng tự kiểm trước khi nộp.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card exphub" href="/courses/software-requirements/learn?lessonSlug=swr302-lab-tong-quan">
+  <span class="lc-ico">📐</span>
+  <span class="lc-body"><span class="lc-title">LAB (10%) — vẽ mô hình yêu cầu</span><span class="lc-sub">Context diagram, swimlane, sơ đồ trạng thái, DFD, ERD, bảng quyết định và dialog map. Mỗi loại có ký pháp, bài luyện lấy từ TP1/TP2 kèm lời giải, và những lỗi hay bị trừ điểm — đồng thời là luyện trực tiếp cho Practical Exam.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 <div class="note-ct">Practical Exam (25%) kiểm tra khả năng <strong>làm</strong>: cho một tình huống, bạn khai thác/phân tích và tạo ra một use case, một mô hình hoặc một bộ yêu cầu viết tốt trong thời gian giới hạn. Học thuộc không cứu được — hãy làm hết LAB và Assignment để tay quen viết yêu cầu và vẽ mô hình, đến ngày thi mới nhanh.</div>
 </div>
 `,
@@ -292,6 +316,16 @@ export default {
         },
       ],
     },
+
+    /* ══════════════════ ASSIGNMENT NHÓM (20%) — BỘ TÀI LIỆU YÊU CẦU ══════════════════ */
+    assignmentSection,
+
+    /* ══════════════════ LAB (10%) — VẼ MÔ HÌNH ══════════════════ */
+    labSection,
+
+    /* ══════════════════ BỘ TÀI LIỆU MẪU — TP1 & TP2 ══════════════════ */
+    packageTp1Section,
+    packageTp2Section,
 
     /* ══════════════════ CHƯƠNG 1 — CƠ BẢN VỀ YÊU CẦU PHẦN MỀM ══════════════════ */
     {

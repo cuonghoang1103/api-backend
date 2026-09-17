@@ -161,3 +161,40 @@ describe('⭐ khối "Ngành của bạn" — chỗ đổi ngành và mở sơ �
     expect(container.querySelector('.ct-hv-nganh-ten')?.textContent).toBe(mj!.nameVi);
   });
 });
+
+describe('⭐ khung gia sư mà con robot TRONG APP mở ra', () => {
+  /**
+   * Người dùng 17/09/2026: *"vào academy ấn vào bài học, ấn 1 lần vào icon
+   * robot nó lại nhảy sang AI chat vậy?"*.
+   *
+   * Nay một cú bấm mở khung này ngay tại chỗ. Nó là component CỦA WEB
+   * (`GiaSuTrongRobot`) — `npm run build` chứng minh mọi `import` giải được,
+   * nhưng KHÔNG chứng minh nó dựng được. Khoảng giữa hai thứ đó là chỗ một
+   * hook web-only (`usePro`, `useAuthStore`) sẽ ném, và lỗi rơi vào error
+   * boundary: không log, không màn đỏ, chỉ là một khung trống ở góc màn hình.
+   */
+  it('dựng được trong môi trường của app, KHÔNG ném', { timeout: 30_000 }, async () => {
+    vi.resetModules();
+    const { default: GiaSuTrongRobot } = await import('@/components/chat/GiaSuTrongRobot');
+    /* ⚠️ PHẢI bọc `TanStackQueryProvider` — ĐÚNG cái `main.tsx` bọc quanh cả
+       app. Khung này đi qua `usePro()` → `useQuery`, và thiếu provider thì nó
+       ném "No QueryClient set" NGAY lúc vẽ. Bọc bằng provider của web (không
+       tự tạo `QueryClient` mới) để phép kiểm chạy đúng thứ app thật chạy. */
+    const { default: Provider } = await import('@/components/providers/TanStackQueryProvider');
+    const bai = { lessonId: 1, courseCode: 'FER202', courseTitle: 'React', lessonTitle: '0.1' };
+    expect(() => render(
+      <Provider><GiaSuTrongRobot bai={bai} rong={false} /></Provider>,
+    )).not.toThrow();
+  });
+
+  it('⭐ dùng CHUNG kho với khung gia sư dưới bài — một mạch, không hai cuộc', async () => {
+    // Trong CÙNG một cửa sổ nên không cần bắc cầu qua main: cả hai khung đọc
+    // `giaSuBaiStore`. Chốt lại kho đó có thật và ghi/đọc được, vì nếu shim
+    // của app lệch khỏi mô-đun thật thì hai khung âm thầm thành hai cuộc.
+    const { khoaGiaSu, useGiaSuBaiStore } = await import('@/store/giaSuBaiStore');
+    const khoa = khoaGiaSu(7);
+    useGiaSuBaiStore.getState().datCuoc(khoa, () => [{ role: 'user', content: 'thử' }]);
+    expect(useGiaSuBaiStore.getState().cuoc[khoa]).toHaveLength(1);
+    useGiaSuBaiStore.getState().xoaCuoc(khoa);
+  });
+});

@@ -285,6 +285,17 @@ declare module '@/components/providers/TanStackQueryProvider' {
  * app không có shim — và lỗi đó chỉ lộ ra lúc chạy, dưới dạng màn hình trắng.
  * Khai từng module là mỗi lần dùng lại đều là một quyết định có cân nhắc.
  */
+/**
+ * Khung gia sư mà con robot mở ra khi người dùng đang học — dùng lại nguyên
+ * của web. Nó và `CourseTutor` chạy trên CÙNG `useGiaSuBai` + `giaSuBaiStore`,
+ * nên hỏi ở khung nào cũng là một mạch (trong cùng một cửa sổ).
+ */
+declare module '@/components/chat/GiaSuTrongRobot' {
+  import type { BaiDangHoc } from '@/store/giaSuBaiStore';
+  const GiaSuTrongRobot: (props: { bai: BaiDangHoc; rong: boolean }) => JSX.Element;
+  export default GiaSuTrongRobot;
+}
+
 declare module '@/components/academy/CourseTutor' {
   export function CourseTutor(props: {
     lessonId: number;

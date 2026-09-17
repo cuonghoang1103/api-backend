@@ -688,3 +688,62 @@
 .odin-canh[data-mood='vui'] .odin-body {
   animation: odin-hop 900ms var(--ct-spring) !important;
 }
+
+/* ══════════════════════════════════════════════════════════
+   KHUNG GIA SƯ MỞ NGAY TẠI CHỖ (đang học bài)
+   ══════════════════════════════════════════════════════════
+   Trước bản 17/09/2026, một cú bấm vào con robot trong app là NHẢY sang AI
+   Chat — kể cả khi đang đọc bài. Người ta bấm robot vì đang có câu hỏi về
+   bài, và thứ nhận được là bị kéo ra khỏi bài. Web không làm thế: bấm trợ lý
+   ở đó MỞ KHUNG, không điều hướng bao giờ.
+
+   Khung nằm TRƯỚC robot trong cột flex của `.odin-dock`, nên nó nở lên trên
+   và robot vẫn đứng yên ở góc — robot là thứ tay người dùng đang nhắm vào. */
+.odin-giasu {
+  position: relative;
+  width: min(420px, calc(100vw - var(--ct-sidebar-w) - 60px));
+  /* Cao tối đa theo CỬA SỔ, không phải một con số chép tay: cửa sổ thấp thì
+     khung thấp theo chứ không bị thanh trạng thái cắt mất đáy. */
+  max-height: min(560px, calc(100vh - var(--ct-titlebar-h) - var(--ct-statusbar-h) - 150px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  box-shadow: var(--ct-shadow);
+  /* ⚠️ Bắc cầu biến chủ đề của WEB sang token của APP — `GiaSuTrongRobot` là
+     component của web và nó tô màu bằng `var(--bg-card)`, `var(--border-color)`…
+     Thiếu cầu này thì trình duyệt VỨT CẢ KHAI BÁO và khung ra đen kịt, viền
+     thô — đúng lỗi đã gặp ở khối "Hỏi AI" dưới bài (17/09/2026). */
+  --text-primary: var(--ct-text);
+  --text-secondary: var(--ct-text-muted);
+  --text-muted: var(--ct-text-faint);
+  --bg-card: var(--ct-surface);
+  --bg-surface: var(--ct-surface-2);
+  --bg-surface-active: var(--ct-active);
+  --border-color: var(--ct-border);
+  --accent-color: var(--ct-accent);
+  --neon-violet: var(--ct-accent);
+  --neon-indigo: var(--ct-accent);
+}
+
+.odin-giasu-dong {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 2;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ct-hover);
+  color: var(--ct-text-muted);
+  cursor: pointer;
+}
+.odin-giasu-dong:hover { background: var(--ct-err); color: #fff; }
+.odin-giasu-dong:focus-visible { outline: 2px solid var(--ct-accent); outline-offset: 1px; }

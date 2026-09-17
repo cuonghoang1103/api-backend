@@ -20,6 +20,18 @@ import { OdinRobot } from './OdinRobot';
 import { kepDock, ngoaiKhung, type KhungKep } from './viTriDock';
 import { useOdin } from './useOdin';
 import { SU_KIEN_NHAC } from '../dashboard/nhacLichRobot';
+/*
+ * KHUNG GIA SƯ — DÙNG LẠI nguyên của web, không chép giao diện.
+ *
+ * `GiaSuTrongRobot` là đúng cái khung mà con robot trên web mở ra khi người
+ * dùng đang học: có gợi ý mở màn, chọn slide, câu hỏi thường gặp, bản tiếng
+ * Anh, dán ảnh. Chép lại vỏ này sang app là hẹn ngày hai bên trôi lệch, và
+ * thứ rụng trước sẽ đúng là mấy chi tiết tinh vi đó.
+ *
+ * Nó chỉ dính Next đúng `next/link` — đã có shim từ lâu.
+ */
+import GiaSuTrongRobot from '@/components/chat/GiaSuTrongRobot';
+import { useGiaSuBaiStore } from '@/store/giaSuBaiStore';
 import './odin.css';
 import { useDich } from '../../i18n';
 
@@ -39,6 +51,20 @@ export function OdinDock() {
    * "nghĩ" và làm mất trạng thái nghĩ — robot trông như quên mất việc đang làm.
    */
   const [hovering, setHovering] = useState(false);
+
+  /**
+   * Bài đang mở ở CỬA SỔ NÀY.
+   *
+   * `CourseTutor` ghi vào `giaSuBaiStore` khi nó được gắn, và ở đây là CÙNG
+   * một cửa sổ nên đọc thẳng kho là đủ — không cần đi vòng qua main như con
+   * robot nổi. Cùng kho ⇒ khung gia sư trong robot và khung dưới bài là MỘT
+   * mạch, không phải hai cuộc rời.
+   */
+  const baiDangHoc = useGiaSuBaiStore((st) => st.bai);
+  const [moGiaSu, datMoGiaSu] = useState(false);
+  /* Rời bài ⇒ đóng khung. Không dọn thì khung gia sư của một bài đã đóng vẫn
+     lơ lửng trên trang khác. */
+  useEffect(() => { if (!baiDangHoc) datMoGiaSu(false); }, [baiDangHoc]);
 
   const odin = useOdin({
     api,
@@ -395,6 +421,26 @@ export function OdinDock() {
       data-hover={hovering}
       onContextMenu={(e) => { e.preventDefault(); void window.cuongthai?.robot.menu(true); }}
     >
+      {/*
+        KHUNG GIA SƯ, mở ngay tại chỗ khi đang học.
+        Đặt TRƯỚC con robot trong cột flex nên nó nở lên trên, không đẩy robot
+        ra khỏi góc — robot là thứ người dùng đang nhắm tay vào.
+      */}
+      {baiDangHoc && moGiaSu && (
+        <div className="odin-giasu" data-mo="true">
+          <button
+            type="button"
+            className="odin-giasu-dong"
+            aria-label={dich('Đóng khung gia sư')}
+            title={dich('Đóng')}
+            onClick={(e) => { e.stopPropagation(); datMoGiaSu(false); }}
+          >
+            <X size={13} aria-hidden />
+          </button>
+          <GiaSuTrongRobot bai={baiDangHoc} rong={false} />
+        </div>
+      )}
+
       {/* Nút cỡ chỉ hiện lúc mở khoá — bày thường trực thì hai nút nhỏ đè lên
           robot suốt ngày và người dùng bấm nhầm khi định mở AI Chat. */}
       {keoDuoc && (
@@ -467,6 +513,26 @@ export function OdinDock() {
         onPointerLeave={() => setHovering(false)}
         onFocus={() => setHovering(true)}
         onBlur={() => setHovering(false)}
+        /**
+         * ⚠️⚠️ ĐANG HỌC BÀI thì MỘT cú bấm KHÔNG được rời trang.
+         *
+         * Người dùng 17/09/2026: *"vào academy ấn vào bài học, ấn 1 lần vào
+         * icon robot nó lại nhảy sang AI chat vậy? Tôi nhớ ấn 2 lần nó mới
+         * nhảy sang AI chat cơ mà"*.
+         *
+         * Họ nhớ đúng — nhưng nhớ con robot NỔI (cửa sổ riêng), nơi một cú bấm
+         * mở khung chat nhỏ còn hai cú mới nhảy trang. Con robot TRONG APP thì
+         * từ đầu vẫn nhảy ngay ở cú đầu tiên. Hai con robot, hai luật bấm.
+         *
+         * Và trên trang bài học thì đó là hành vi TỆ NHẤT có thể: người ta bấm
+         * robot vì đang có câu hỏi về bài, và thứ họ nhận được là bị kéo ra
+         * khỏi bài. Web không làm thế — bấm trợ lý ở đó MỞ KHUNG (`setIsOpen`),
+         * không điều hướng bao giờ.
+         *
+         * Nay: đang học ⇒ một cú bấm mở khung GIA SƯ ngay tại chỗ, hai cú mới
+         * sang AI Chat. Không học ⇒ giữ nguyên như cũ (một cú sang AI Chat),
+         * vì cửa sổ chính chưa có khung chat nhỏ nào để mở.
+         */
         onClick={() => {
           /* Vừa KÉO xong thì đây không phải một cú bấm. Không chặn thì mỗi lần
              dời robot lại cộng một nhịp vào bộ đếm ba-cú-bấm, và ba lần dời
@@ -477,6 +543,13 @@ export function OdinDock() {
           if (demVaLat()) return;
           if (keoDuoc) return;   // đang mở khoá ⇒ bấm là để kéo, không điều hướng
           odin.poke();
+          if (baiDangHoc) {
+            /* Cú THỨ HAI khi khung gia sư đang mở ⇒ mới sang AI Chat. Đóng
+               khung rồi mới đi, không thì quay lại bài vẫn thấy nó mở. */
+            if (moGiaSu) { datMoGiaSu(false); setTimeout(() => navigate('/chat'), 260); return; }
+            datMoGiaSu(true);
+            return;
+          }
           // Đợi hết cú nhảy rồi mới chuyển trang — chuyển ngay thì người dùng
           // không kịp thấy phản hồi, và cảm giác là "bấm nhầm cái gì đó".
           setTimeout(() => navigate('/chat'), 260);

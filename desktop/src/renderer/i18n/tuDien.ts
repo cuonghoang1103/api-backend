@@ -106,6 +106,7 @@ export const TU_DIEN: Record<string, string> = {
   'Trợ lý Odin': 'Odin assistant',
   // ── Học viện: khối "Ngành của bạn" ──
   'Ngành của bạn': 'Your major',
+  'Đóng khung gia sư': 'Close the tutor panel',
   'Đổi ngành': 'Change major',
   'Đang lọc {n} môn của ngành': 'Showing {n} courses for your major',
   'Khung': 'Curriculum',

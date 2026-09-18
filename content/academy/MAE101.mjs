@@ -8,6 +8,10 @@
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/MAE101.mjs --apply
  */
 import ch1Slides from './mae101/ch1-slides.mjs';
+import ch9Slides from './mae101/ch9-slides.mjs';
+import ch8Slides from './mae101/ch8-slides.mjs';
+import ch7Slides from './mae101/ch7-slides.mjs';
+import ch6Slides from './mae101/ch6-slides.mjs';
 import ch5Slides from './mae101/ch5-slides.mjs';
 import ch4Slides from './mae101/ch4-slides.mjs';
 import ch3Slides from './mae101/ch3-slides.mjs';
@@ -1030,6 +1034,7 @@ Ma trận bổ sung [1 2 | 5 ; 3 −1 | 1]. Làm R2 → R2 − 3R1: [0 −7 | �
       title: 'Chapter 6 — Matrices|||Chương 6 — Ma trận',
       description: 'Phép cộng, nhân vô hướng, nhân ma trận, chuyển vị và biến đổi.',
       lessons: [
+        ch6Slides,
         {
           title: '6.1 — Matrix operations|||6.1 — Các phép toán ma trận',
           slug: 'mae101-6-1-phep-ma-tran',
@@ -1119,6 +1124,7 @@ AB = [2 1; 1 1], nhưng BA = [1 1; 1 2]. Khác nhau — nhân ma trận không g
       title: 'Chapter 7 — Determinants & Inverse|||Chương 7 — Định thức & Nghịch đảo',
       description: 'Định thức, ma trận nghịch đảo, quy tắc Cramer và chéo hoá.',
       lessons: [
+        ch7Slides,
         {
           title: '7.1 — Determinant & inverse|||7.1 — Định thức & nghịch đảo',
           slug: 'mae101-7-1-dinh-thuc-nghich-dao',
@@ -1282,6 +1288,7 @@ Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
       title: 'Chapter 8 — Vectors & Linear Transformations|||Chương 8 — Vector & Biến đổi tuyến tính',
       description: 'Vector trong R² và R³, các phép vector, và biến đổi tuyến tính.',
       lessons: [
+        ch8Slides,
         {
           title: '8.1 — Vectors in R² and R³|||8.1 — Vector trong R² và R³',
           slug: 'mae101-8-1-vector',
@@ -1421,6 +1428,7 @@ Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
       title: 'Chapter 9 — Vector Spaces: Basis & Dimension|||Chương 9 — Không gian vector: Cơ sở & Số chiều',
       description: 'Không gian con, độc lập tuyến tính, cơ sở và số chiều.',
       lessons: [
+        ch9Slides,
         {
           title: '9.1 — Subspaces, basis & dimension|||9.1 — Không gian con, cơ sở & số chiều',
           slug: 'mae101-9-1-co-so-so-chieu',

@@ -23,6 +23,10 @@ export const DECKS = {
   mae3: { code: 'MAE3', en: 'Ch.3 Applications of Derivatives', vi: 'Ch.3 Ứng dụng đạo hàm', total: 17, w: 1280, h: 720 },
   mae4: { code: 'MAE4', en: 'Ch.4 Integrals', vi: 'Ch.4 Tích phân', total: 17, w: 1280, h: 720 },
   mae5: { code: 'MAE5', en: 'Ch.5 Linear Systems', vi: 'Ch.5 Hệ phương trình tuyến tính', total: 16, w: 1280, h: 720 },
+  mae6: { code: 'MAE6', en: 'Ch.6 Matrices', vi: 'Ch.6 Ma trận', total: 17, w: 1280, h: 720 },
+  mae7: { code: 'MAE7', en: 'Ch.7 Determinants & Eigenvalues', vi: 'Ch.7 Định thức & Trị riêng', total: 17, w: 1280, h: 720 },
+  mae8: { code: 'MAE8', en: 'Ch.8 Vectors & Linear Transformations', vi: 'Ch.8 Vector & Biến đổi tuyến tính', total: 17, w: 1280, h: 720 },
+  mae9: { code: 'MAE9', en: 'Ch.9 Vector Spaces: Basis & Dimension', vi: 'Ch.9 Không gian vector: Cơ sở & Số chiều', total: 17, w: 1280, h: 720 },
 };
 
 export function registerDeck(key, meta) {
@@ -31,6 +35,7 @@ export function registerDeck(key, meta) {
 }
 
 const pad = (n) => String(n).padStart(3, '0');
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 
 export const img = (deck, n) => `${CDN_ROOT}/${DECKS[deck]?.ver || 'v1'}/${deck}/${pad(n)}.webp`;
@@ -41,7 +46,7 @@ export function slide(deck, n, title, en, vi) {
   if (!d) throw new Error(`deck lạ: ${deck}`);
   if (n < 1 || n > d.total) throw new Error(`${deck} có ${d.total} slide, nhận ${n}`);
   return `<div class="anh-slide"><img src="${img(deck, n)}" alt="${attr(`${d.code} slide ${n}: ${title}`)}" loading="lazy" width="${d.w}" height="${d.h}" />` +
-    `<p class="chu-thich">📑 <strong>${d.code}</strong> · slide ${n}/${d.total} — ${title}</p></div>\n` +
+    `<p class="chu-thich">📑 <strong>${esc(d.code)}</strong> · slide ${n}/${d.total} — ${esc(title)}</p></div>\n` +
     `<div class="ml-en giang">${en}</div>\n<div class="ml-vi giang">${vi}</div>`;
 }
 
@@ -51,9 +56,9 @@ export const walk = (deck, rows) => rows.map((r) => slide(deck, ...r)).join('\n'
 /** Tiêu đề mở đầu phần học theo slide. */
 export function walkHead(deck, from, to, noteEn = '', noteVi = '') {
   const d = DECKS[deck];
-  return `<div class="ml-en"><h2>📑 Slide by slide — ${d.code} (${d.en}), slides ${from}–${to}</h2>` +
+  return `<div class="ml-en"><h2>📑 Slide by slide — ${esc(d.code)} (${esc(d.en)}), slides ${from}–${to}</h2>` +
     `<p>Each slide is shown first, then what it means, how to remember it, and the traps. ${noteEn}</p></div>\n` +
-    `<div class="ml-vi"><h2>📑 Học theo từng slide — ${d.code} (${d.vi}), slide ${from}–${to}</h2>` +
+    `<div class="ml-vi"><h2>📑 Học theo từng slide — ${esc(d.code)} (${esc(d.vi)}), slide ${from}–${to}</h2>` +
     `<p>Mỗi slide hiện trước, ngay dưới là giải thích ý nghĩa, cách nhớ và bẫy hay gặp. ${noteVi}</p></div>`;
 }
 

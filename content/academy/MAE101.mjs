@@ -18,6 +18,8 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    // Chèn bài slide 1.0 + các bài 1.3-1.6 vào giữa chương ⇒ seeder phải xếp lại theo đúng thứ tự file.
+    syncOrder: true,
     shortDescription: 'The two pillars of engineering math: single-variable calculus (limits, derivatives, integrals) and linear algebra (systems, matrices, vectors, transformations) — the toolkit behind machine learning, graphics and every quantitative field.|||Hai trụ cột toán kỹ thuật: giải tích một biến (giới hạn, đạo hàm, tích phân) và đại số tuyến tính (hệ phương trình, ma trận, vector, biến đổi) — bộ công cụ đằng sau machine learning, đồ hoạ và mọi ngành định lượng.',
     description: 'Môn toán nền tảng cho ngành kỹ thuật. Nửa đầu là giải tích một biến (giới hạn, đạo hàm, tích phân và ứng dụng); nửa sau là đại số tuyến tính (hệ phương trình, ma trận, định thức, không gian vector, biến đổi tuyến tính). Có thực hành bằng Maxima/Python.',
     whatYouLearn: 'Tính giới hạn, đạo hàm, tích phân hàm một biến & ứng dụng; giải hệ phương trình tuyến tính (Gauss, Cramer, ma trận nghịch đảo); tính định thức & nghịch đảo; biến đổi tuyến tính trong R² và R³; tìm cơ sở & số chiều của không gian vector.',

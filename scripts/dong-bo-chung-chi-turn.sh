@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # Chép chứng chỉ Let's Encrypt sang một bản coturn ĐỌC ĐƯỢC.
 #
+# ⚠️ KHÔNG PHẢI script chạy tự động. Thứ chạy sau mỗi lần certbot gia hạn là
+# `/usr/local/bin/cuongthai-sau-gia-han.sh` trên VPS (bản trong git:
+# `scripts/cuongthai-sau-gia-han.sh`) — nó làm cả nginx lẫn coturn. File này
+# chỉ dùng khi cần chép tay riêng phần coturn. Sửa quyền ở đây thì sửa CẢ hai,
+# không thì hai script lại nói ngược nhau như từ 21/08 tới 18/09/2026.
+#
 # VÌ SAO PHẢI CHÉP: ảnh coturn chạy bằng `nobody`, còn khoá riêng của certbot
 # là `root:root 600`. Container không đọc nổi ⇒ TLS 5349 không bật, mà STUN
 # vẫn chạy nên nhìn ngoài tưởng mọi thứ ổn. Log còn nói mâu thuẫn: "Private
@@ -22,12 +28,15 @@ mkdir -p "$DICH"
 cp -L "$NGUON/fullchain.pem" "$DICH/fullchain.pem"
 cp -L "$NGUON/privkey.pem"  "$DICH/privkey.pem"
 
-# 644 cho khoá riêng nghe đáng ngại, nhưng: thư mục này chỉ chứa bản sao của
-# chứng chỉ, nằm trên máy chủ mà chỉ root đăng nhập được, và container cần
-# đọc bằng `nobody`. Cách chặt hơn là đổi chủ sang uid 65534 — nhưng như thế
-# thì mỗi lần đổi ảnh coturn (uid có thể khác) lại hỏng câm.
+# Cấp cho ĐÚNG NHÓM của coturn (gid 65533 = nogroup), không chmod 644 — 644 là
+# mở khoá riêng cho mọi tiến trình trên máy mà chẳng cần thiết.
+#
+# Nỗi lo "đổi ảnh coturn thì gid đổi, hỏng câm" được xử bằng phép nghiệm thu ở
+# cuối file: gid sai thì 5349 không nghe, và script kêu chứ không im.
 chmod 755 "$DICH"
-chmod 644 "$DICH/fullchain.pem" "$DICH/privkey.pem"
+chmod 644 "$DICH/fullchain.pem"
+chown root:65533 "$DICH/privkey.pem"
+chmod 640 "$DICH/privkey.pem"
 
 echo "✔ đã chép chứng chỉ sang $DICH"
 openssl x509 -in "$DICH/fullchain.pem" -noout -enddate | sed 's/^/  /'

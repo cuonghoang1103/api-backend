@@ -4,6 +4,31 @@
  * VN-primary, thuật ngữ EN giữ nguyên; luyện code → CodeLab; setup/IDE → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/PRF192.mjs --apply
  */
+import s0Slides from './prf192/s0-slides.mjs';
+import ch1aSlides from './prf192/ch1a-slides.mjs';
+import ch1bSlides from './prf192/ch1b-slides.mjs';
+import ch2aSlides from './prf192/ch2a-slides.mjs';
+import ch2bSlides from './prf192/ch2b-slides.mjs';
+import ch3Slides from './prf192/ch3-slides.mjs';
+import ch4aSlides from './prf192/ch4a-slides.mjs';
+import ch4bSlides from './prf192/ch4b-slides.mjs';
+import ch4cSlides from './prf192/ch4c-slides.mjs';
+import ch5aSlides from './prf192/ch5a-slides.mjs';
+import ch5bSlides from './prf192/ch5b-slides.mjs';
+import ch5cSlides from './prf192/ch5c-slides.mjs';
+import ch6aSlides from './prf192/ch6a-slides.mjs';
+import ch6bSlides from './prf192/ch6b-slides.mjs';
+import ch7aSlides from './prf192/ch7a-slides.mjs';
+import ch7bSlides from './prf192/ch7b-slides.mjs';
+import ch7cSlides from './prf192/ch7c-slides.mjs';
+import ch8aSlides from './prf192/ch8a-slides.mjs';
+import ch8bSlides from './prf192/ch8b-slides.mjs';
+import ch8cSlides from './prf192/ch8c-slides.mjs';
+import ch9aSlides from './prf192/ch9a-slides.mjs';
+import ch9bSlides from './prf192/ch9b-slides.mjs';
+import ch10aSlides from './prf192/ch10a-slides.mjs';
+import ch10bSlides from './prf192/ch10b-slides.mjs';
+
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
@@ -117,6 +142,7 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn học là gì, học ra sao, điều kiện qua môn, lộ trình và tài liệu.',
       lessons: [
+        s0Slides,
         {
           title: '0.1 — About PRF192 & Course Map|||0.1 — Giới thiệu môn PRF192 & bản đồ môn học',
           slug: 'prf192-gioi-thieu',
@@ -502,6 +528,8 @@ gcc hello.c -o hello
       title: 'Chapter 1 — Getting started: program & computer|||Chương 1 — Nhập môn: chương trình & máy tính',
       description: 'Lập trình là gì, máy tính chạy chương trình ra sao, và cấu trúc một chương trình C.',
       lessons: [
+        ch1aSlides,
+        ch1bSlides,
         {
           title: '1.1 — What is programming? How a computer runs a program|||1.1 — Lập trình là gì? Máy tính chạy chương trình ra sao',
           slug: 'prf192-1-1-lap-trinh-la-gi',
@@ -715,6 +743,8 @@ gcc hello.c -o hello
       title: 'Chapter 2 — Variables, data types & I/O|||Chương 2 — Biến, kiểu dữ liệu & nhập/xuất',
       description: 'Cách chương trình lưu và nhận dữ liệu: biến, hằng, kiểu, bộ nhớ, scanf/printf.',
       lessons: [
+        ch2aSlides,
+        ch2bSlides,
         {
           title: '2.1 — Variables & constants|||2.1 — Biến & hằng số',
           slug: 'prf192-2-1-bien-hang',
@@ -907,6 +937,7 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
       title: 'Chapter 3 — Expressions & operators|||Chương 3 — Biểu thức & toán tử',
       description: 'Toán tử số học/quan hệ/logic/bit, ép kiểu và thứ tự ưu tiên.',
       lessons: [
+        ch3Slides,
         {
           title: '3.1 — Operator groups|||3.1 — Các nhóm toán tử',
           slug: 'prf192-3-1-toan-tu',
@@ -1031,6 +1062,9 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
       title: 'Chapter 4 — Control structures|||Chương 4 — Cấu trúc điều khiển',
       description: 'Rẽ nhánh (if/switch) và vòng lặp (for/while/do-while) — trái tim của mọi chương trình.',
       lessons: [
+        ch4aSlides,
+        ch4bSlides,
+        ch4cSlides,
         {
           title: '4.1 — Branching: if / else / switch|||4.1 — Rẽ nhánh: if / else / switch',
           slug: 'prf192-4-1-re-nhanh',
@@ -1259,6 +1293,9 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
       title: 'Chapter 5 — Functions & Modules|||Chương 5 — Hàm & Module',
       description: 'Chia bài toán lớn thành các hàm nhỏ, rõ ràng — kỹ năng cốt lõi của lập trình viên.',
       lessons: [
+        ch5aSlides,
+        ch5bSlides,
+        ch5cSlides,
         {
           title: '5.1 — Modules & the decomposition mindset|||5.1 — Module & tư duy chia nhỏ',
           slug: 'prf192-5-1-module',
@@ -1511,6 +1548,8 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
       title: 'Chapter 6 — Pointers|||Chương 6 — Con trỏ',
       description: 'Địa chỉ bộ nhớ và con trỏ — phần "khó nhằn" nhưng là chìa khoá của C.',
       lessons: [
+        ch6aSlides,
+        ch6bSlides,
         {
           title: '6.1 — What is a pointer? The & and * operators|||6.1 — Con trỏ là gì? Toán tử & và *',
           slug: 'prf192-6-1-con-tro',
@@ -1669,6 +1708,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
       title: 'Chapter 7 — The C standard library|||Chương 7 — Thư viện chuẩn C',
       description: 'Tận dụng các hàm có sẵn: stdlib, math, ctype, time.',
       lessons: [
+        ch7aSlides,
+        ch7bSlides,
+        ch7cSlides,
         {
           title: '7.1 — stdlib.h & time.h|||7.1 — stdlib.h & time.h',
           slug: 'prf192-7-1-stdlib-time',
@@ -1797,6 +1839,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
       title: 'Chapter 8 — Arrays & Structs|||Chương 8 — Mảng & Struct',
       description: 'Lưu nhiều dữ liệu cùng lúc: mảng, ma trận, tìm kiếm, sắp xếp và struct.',
       lessons: [
+        ch8aSlides,
+        ch8bSlides,
+        ch8cSlides,
         {
           title: '8.1 — One-dimensional arrays|||8.1 — Mảng một chiều',
           slug: 'prf192-8-1-mang-1-chieu',
@@ -2043,6 +2088,8 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
       title: 'Chapter 9 — Strings|||Chương 9 — Chuỗi (String)',
       description: 'Xử lý văn bản: mảng ký tự, ký tự kết thúc, và thư viện string.h.',
       lessons: [
+        ch9aSlides,
+        ch9bSlides,
         {
           title: '9.1 — Strings are char arrays|||9.1 — Chuỗi là mảng ký tự',
           slug: 'prf192-9-1-chuoi',
@@ -2189,6 +2236,8 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
       title: 'Chapter 10 — Files|||Chương 10 — Tệp tin (File)',
       description: 'Lưu và đọc dữ liệu ra ổ đĩa để không mất khi tắt chương trình.',
       lessons: [
+        ch10aSlides,
+        ch10bSlides,
         {
           title: '10.1 — File concepts · text vs binary|||10.1 — Khái niệm File · text vs binary',
           slug: 'prf192-10-1-file',

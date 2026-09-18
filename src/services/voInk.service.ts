@@ -496,6 +496,61 @@ export async function xacNhanNet(
   };
 }
 
+// ─── 3b. Dọn tệp R2 của những trang sắp bị xoá hẳn ───────────────────────
+
+/**
+ * Trả về danh sách khoá R2 cần xoá cho một mẻ trang sắp bị purge.
+ *
+ * ⚠️ Phải gọi TRƯỚC khi xoá hàng trong DB. Xoá hàng xong thì `inkKey` và
+ * `bgKey` biến mất cùng nó, và object trên R2 thành mồ côi VĨNH VIỄN — không
+ * còn gì trỏ tới để mà tìm ra. Trước 18/09/2026 job dọn thùng rác làm đúng
+ * theo thứ tự sai đó: nó chỉ nhả `noteAttachment`, còn nét vẽ + ảnh xem
+ * trước + nền PDF nằm lại R2 mãi mãi.
+ *
+ * ⚠️ NỀN dùng CHUNG: khoá đánh theo sha256 nội dung nên một PDF nhập 20
+ * trang là 20 hàng cùng trỏ một object. Chỉ được xoá khi KHÔNG CÒN trang nào
+ * sống trỏ vào nó — xoá theo trang là 19 trang còn lại mất nền.
+ */
+export async function khoaCanDonChoTrang(
+  noteIds: number[],
+): Promise<string[]> {
+  if (noteIds.length === 0) return [];
+
+  const trangs = await prisma.note.findMany({
+    where: { id: { in: noteIds } },
+    select: { id: true, userId: true, inkKey: true, inkPreviewKey: true,
+              inkVersion: true, bgKey: true },
+  });
+
+  const khoa = new Set<string>();
+  const nenUngVien = new Set<string>();
+
+  for (const t of trangs) {
+    if (t.inkKey) khoa.add(t.inkKey);
+    if (t.inkPreviewKey) khoa.add(t.inkPreviewKey);
+    // Bản liền trước vẫn còn trên R2 (xem lưới an toàn ở `xacNhanNet`).
+    const cu = t.inkVersion - 1;
+    if (cu >= 1) {
+      khoa.add(khoaNet(t.userId, t.id, cu, 'drawing'));
+      khoa.add(khoaNet(t.userId, t.id, cu, 'png'));
+    }
+    if (t.bgKey) nenUngVien.add(t.bgKey);
+  }
+
+  if (nenUngVien.size > 0) {
+    // Trang nào KHÁC mẻ này còn trỏ vào cùng khoá nền thì giữ lại object.
+    const conDung = await prisma.note.findMany({
+      where: { bgKey: { in: [...nenUngVien] }, id: { notIn: noteIds } },
+      select: { bgKey: true },
+      distinct: ['bgKey'],
+    });
+    const giuLai = new Set(conDung.map((r) => r.bgKey!).filter(Boolean));
+    for (const k of nenUngVien) if (!giuLai.has(k)) khoa.add(k);
+  }
+
+  return [...khoa];
+}
+
 // ─── 4. Kéo cây về (máy thứ hai, hoặc cài lại app) ───────────────────────
 
 export async function layCayVo(userId: number) {

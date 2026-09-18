@@ -669,9 +669,32 @@ export async function purgeExpiredDeletedNotes(retentionDays = 30) {
     where: { noteId: { in: expiring.map((note) => note.id) } },
     select: { fileUrl: true },
   });
+
+  // ⚠️ Gom khoá R2 của vở viết tay TRƯỚC khi xoá hàng. Xoá hàng xong thì
+  // `inkKey`/`bgKey` biến mất cùng nó và object thành mồ côi vĩnh viễn —
+  // không còn gì trỏ tới để tìm ra mà dọn. Đây là chỗ rò dung lượng R2 im
+  // lặng suốt từ khi có Vở iPad tới 18/09/2026.
+  const { khoaCanDonChoTrang } = await import('./voInk.service.js');
+  const khoaVo = await khoaCanDonChoTrang(expiring.map((n) => n.id));
+
   const result = await prisma.note.deleteMany({ where: { deletedAt: { lt: cutoff } } });
   const freed = await releaseOrphanedAttachmentUrls(attachments.map((row) => row.fileUrl));
-  return { notes: result.count, filesDeleted: freed };
+
+  let voDeleted = 0;
+  if (khoaVo.length > 0) {
+    const { deleteObjects } = await import('../config/r2.js');
+    // Dọn hỏng KHÔNG được làm hỏng cả lượt purge: hàng DB đã xoá rồi, và
+    // lượt sau không còn cơ hội gom lại mấy khoá này nữa.
+    try {
+      await deleteObjects(khoaVo);
+      voDeleted = khoaVo.length;
+    } catch (e) {
+      const { logger } = await import('../utils/logger.js');
+      logger.warn(`[vo] dọn tệp R2 của trang hết hạn hỏng: ${String(e)}`);
+    }
+  }
+
+  return { notes: result.count, filesDeleted: freed + voDeleted };
 }
 
 // ─── Immutable version history ───────────────────────────────

@@ -28,6 +28,8 @@ import * as reportsService from '../services/finance/reports.service.js';
 import * as fxService from '../services/finance/fx.service.js';
 import { getDashboard } from '../services/finance/dashboard.service.js';
 import { comparePayoff, type PayoffDebt } from '../services/finance/payoffStrategy.js';
+import { layMucTieu, datMucTieu, nhacNoToiHan, chotChiTieuCuoiNgay } from '../services/finance/nhacNhiem.service.js';
+import { tomTatCoVan, hoiCoVan } from '../services/finance/coVan.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -318,6 +320,53 @@ router.get('/reports/monthly/export', async (req, res, next) => {
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
     res.setHeader('Content-Disposition', `attachment; filename="moneyflow-report-${(req.query.month as string) || 'month'}.csv"`);
     res.send(csv);
+  } catch (e) { next(e); }
+});
+
+// ─── Mục tiêu chi tiêu (ngày / tuần / tháng) ─────────────────
+//
+// Một hàng cho mỗi kỳ, upsert theo `uk_fin_goal_user_period`. `soTien = 0`
+// nghĩa là TẮT mục tiêu kỳ đó — không xoá hàng, để `updatedAt` còn nói được
+// "đặt từ bao giờ".
+router.get('/goals', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await layMucTieu(uid(req))); } catch (e) { next(e); }
+});
+router.put('/goals',
+  body('ky').isIn(['DAY', 'WEEK', 'MONTH', 'day', 'week', 'month']).withMessage('Kỳ phải là DAY, WEEK hoặc MONTH'),
+  body('soTien').exists().withMessage('Thiếu số tiền').bail().isFloat({ min: 0 }).withMessage('Số tiền không hợp lệ'),
+  validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await datMucTieu(uid(req), req.body.ky, Number(req.body.soTien))); } catch (e) { next(e); }
+  });
+
+// ─── Cố vấn AI ───────────────────────────────────────────────
+//
+// Cả hai route đều trả `so` (bảng số liệu do MÃ tính) kèm phần chữ của model.
+// Thiếu khoá AI thì `nhanXet`/`traLoi` về null và `lyDo: 'ai_unavailable'` —
+// client vẫn dựng được màn hình từ `so`.
+router.get('/ai/tom-tat', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await tomTatCoVan(uid(req))); } catch (e) { next(e); }
+});
+router.post('/ai/hoi',
+  body('cauHoi').trim().isLength({ min: 2, max: 500 }).withMessage('Câu hỏi từ 2 đến 500 ký tự'),
+  validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await hoiCoVan(uid(req), req.body.cauHoi)); } catch (e) { next(e); }
+  });
+
+// ─── Chạy tay hai lời nhắc (để kiểm, không phải để client gọi thường) ──
+//
+// Cron gọi thẳng service; hai route này chỉ để kiểm trên máy thật mà không
+// phải chờ tới 8h sáng. Chúng gửi thông báo cho MỌI người dùng khớp điều
+// kiện, nên khoá sau `authenticate` là chưa đủ — chặn hẳn ở production.
+router.post('/dev/chay-nhac', async (req, res: Response<ApiResponse>, next) => {
+  if (process.env.NODE_ENV === 'production' && process.env.FINANCE_NHAC_DEV !== 'true') {
+    res.status(403).json({ success: false, message: 'Chỉ chạy được khi bật FINANCE_NHAC_DEV' });
+    return;
+  }
+  try {
+    const loai = String(req.query.loai ?? 'no');
+    ok(res, loai === 'chot' ? await chotChiTieuCuoiNgay() : await nhacNoToiHan());
   } catch (e) { next(e); }
 });
 

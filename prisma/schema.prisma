@@ -6422,6 +6422,31 @@ model SavingsAccount {
   @@map("finance_savings_accounts")
 }
 
+/// Mục tiêu CHI TIÊU theo kỳ — ngày / tuần / tháng.
+///
+/// Khác `ExpenseCategory.monthlyBudget` (trần cho MỘT nhóm chi): đây là trần
+/// cho TỔNG chi trong kỳ, thứ người dùng thật sự theo dõi hằng ngày.
+///
+/// `amount = 0` + `isActive = false` là TẮT, không xoá hàng — giữ lại
+/// `updatedAt` để còn biết mục tiêu đặt từ bao giờ.
+model FinanceSpendingGoal {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  /// DAY | WEEK | MONTH
+  period    String   @db.VarChar(8)
+  amount    Decimal  @db.Decimal(18, 2)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // ⚠️ KHÔNG khai quan hệ tới `User` — mọi model tiền nong ở đây
+  // (`SavingsGoal`, `FinanceFxRate`, …) đều chỉ giữ `userId` trần. Khai
+  // quan hệ ở một model lẻ thì phải thêm back-relation vào `User`, và
+  // `prisma generate` chết nếu quên.
+  @@unique([userId, period], name: "uk_fin_goal_user_period", map: "uk_fin_goal_user_period")
+  @@map("finance_spending_goals")
+}
+
 model SavingsGoal {
   id            Int       @id @default(autoincrement())
   userId        Int       @map("user_id")

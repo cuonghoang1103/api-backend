@@ -451,6 +451,41 @@ export function startCronJobs(): void {
     submitSitemapToIndexNow().catch(() => {});
   }, 120000);
 
+  // ─── Tiền nong: nhắc nợ 8h/12h/19h VN + chốt chi tiêu 20h VN ───
+  //
+  // ⚠️ GIỜ VIẾT THEO UTC. Container chạy UTC còn người dùng sống ở +07, nên
+  // "8h sáng" ở đây là `0 1 * * *`. Viết nhầm thành `0 8 * * *` thì lời nhắc
+  // nợ rơi vào 15h chiều — vẫn chạy, vẫn log xanh, chỉ là sai giờ, và không
+  // có gì trong hệ thống kêu lên.
+  //
+  // Ba mốc trong ngày là CỐ Ý, theo yêu cầu 18/09/2026: từ 3 ngày trước hạn
+  // cho tới khi kỳ được tích đã trả, mỗi ngày nhắc ba lần. `nhacNoToiHan()`
+  // tự bỏ qua kỳ đã tích và gom mọi khoản của một người vào MỘT thông báo.
+  for (const [bieu, gio] of [['0 1 * * *', '8h'], ['0 5 * * *', '12h'], ['0 12 * * *', '19h']] as const) {
+    cron.schedule(bieu, async () => {
+      // try/catch ở ĐÂY nữa, dù `chayNhacNo` đã tự nuốt lỗi: `await import`
+      // có thể ném trước khi vào được hàm, và một nhịp ném ra ngoài thì
+      // node-cron gỡ lịch — câm luôn lời nhắc cho tới lần restart sau.
+      try {
+        const { chayNhacNo } = await import('./finance/nhacNhiem.service.js');
+        await chayNhacNo(gio);
+      } catch (err) {
+        logger.error('cron nhắc nợ lỗi', { gio, error: (err as Error).message });
+      }
+    }, { timezone: 'UTC' });
+  }
+
+  // 20h VN — "Hôm nay bạn đã chi tiêu những gì?". Chỉ gửi cho người ĐANG
+  // dùng mảng tiền nong (có ví), không gửi cho mọi tài khoản.
+  cron.schedule('0 13 * * *', async () => {
+    try {
+      const { chayChotNgay } = await import('./finance/nhacNhiem.service.js');
+      await chayChotNgay();
+    } catch (err) {
+      logger.error('cron chốt chi tiêu 20h lỗi', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Startup recovery ───
   void recoverPendingJobs();
 
@@ -470,6 +505,7 @@ export function startCronJobs(): void {
     : 'Tech news: TẮT (TECH_NEWS_AUTOPOST chưa bật) — chỉ còn scheduled-publish sweep, không gọi AI',
   'Maker Lab housekeeping hourly (telemetry prune, stale devices, expired commands)',
   'IndexNow sitemap submit every 6h (+ once ~2 min after startup)',
+  'Tiền nong: nhắc nợ 8h/12h/19h VN (01:00/05:00/12:00 UTC) + chốt chi tiêu 20h VN (13:00 UTC)',
   ],
   });
 }

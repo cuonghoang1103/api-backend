@@ -319,7 +319,8 @@ export type LlmPurpose =
   | 'agent_code'          // agent lập trình của app desktop — GỌI TOOL nhiều lượt
   | 'exam_tutor'          // CuongMini — AI đồng hành khi thi (Pro), đi cổng rambo như agent_code
   | 'lab_room'            // Phòng Lab LAB211 — giảng đề, kèm code, chấm bài nộp; cổng rambo, model mạnh nhất
-  | 'academy_advisor';    // Phòng tư vấn chọn ngành hẹp ở /academy — chat tương tác, neo vào dữ liệu curated
+  | 'academy_advisor'     // Phòng tư vấn chọn ngành hẹp ở /academy — chat tương tác, neo vào dữ liệu curated
+  | 'finance_advisor';    // MoneyFlow — đọc số liệu tiền nong của CHÍNH người dùng rồi khuyên
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -401,6 +402,16 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // Tư vấn chọn ngành hẹp: người dùng đọc từng chữ, cần lời khuyên mạch lạc,
   // biết so sánh & nối với môn học — chat tương tác nên dùng sonnet-5.
   academy_advisor: 'claude-sonnet-5',
+
+  /**
+   * Cố vấn tiền nong. `sonnet-5`, KHÔNG hạ xuống model rẻ.
+   *
+   * Việc này đọc số dư, nợ, chi tiêu THẬT của một người rồi khuyên họ trả
+   * khoản nào trước. Một con số đọc nhầm ở đây không phải lỗi hiển thị — nó
+   * là lời khuyên sai về tiền, mà người dùng lại đọc từng chữ và làm theo.
+   * Vặn lại bằng `LLM_MODEL_FINANCE_ADVISOR` nếu cần.
+   */
+  finance_advisor: 'claude-sonnet-5',
 
   cv_critique: 'gpt-5.6-sol',
   cv_writing: 'gpt-5.6-sol',

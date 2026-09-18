@@ -14,7 +14,7 @@ const D = 'mae5';
 export default {
   title: '5.0 — Slide bài giảng: Hệ phương trình tuyến tính (16 slide)|||5.0 — Slide bài giảng: Hệ phương trình tuyến tính (16 slide)',
   slug: 'mae101-5-0-slides-he-tuyen-tinh',
-  type: 'VIDEO',
+  type: 'DOCUMENT',
   description: 'Toàn bộ 16 slide Chương 5 MAE101 — phương trình tuyến tính và ý nghĩa hình học, ma trận hệ số và ma trận bổ sung, ba phép biến đổi sơ cấp, dạng bậc thang và bậc thang rút gọn, khử Gauss và Gauss-Jordan giải từng bước, biến chính và biến tự do, hệ vô nghiệm và hệ thuần nhất — mỗi slide kèm giảng song ngữ, ma trận cụ thể và bẫy hay gặp khi thi.',
   content: [
     walkHead(D, 1, 16),

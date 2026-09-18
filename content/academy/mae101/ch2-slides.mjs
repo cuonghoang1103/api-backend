@@ -16,7 +16,7 @@ const D = 'mae2';
 export default {
   title: '2.0 — Slide bài giảng: Đạo hàm (17 slide)|||2.0 — Slide bài giảng: Đạo hàm (17 slide)',
   slug: 'mae101-2-0-slides-dao-ham',
-  type: 'VIDEO',
+  type: 'DOCUMENT',
   description: 'Toàn bộ 17 slide Chương 2 MAE101 — tốc độ thay đổi, định nghĩa đạo hàm bằng giới hạn, đạo hàm là hàm số, khi nào không khả vi, quy tắc cơ bản, tích, thương, đạo hàm lượng giác, quy tắc dây chuyền một và nhiều tầng, hàm mũ và log, đạo hàm ẩn, đạo hàm logarit và đạo hàm cấp cao — mỗi slide kèm giảng song ngữ, ví dụ giải từng bước và bẫy hay gặp khi thi.',
   content: [
     walkHead(D, 1, 17),

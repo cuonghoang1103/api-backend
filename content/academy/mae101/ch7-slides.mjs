@@ -23,7 +23,7 @@ const D = 'mae7';
 export default {
   title: '7.0 — Slide bài giảng: Định thức & Trị riêng (17 slide)|||7.0 — Slide bài giảng: Định thức & Trị riêng (17 slide)',
   slug: 'mae101-7-0-slides-dinh-thuc',
-  type: 'VIDEO',
+  type: 'DOCUMENT',
   description: 'Toàn bộ 17 slide Chương 7 MAE101 — định thức 2×2 và ý nghĩa diện tích, minor và cofactor, khai triển theo hàng/cột, quy tắc Sarrus cho 3×3, tính chất định thức và cách tính nhanh bằng biến đổi hàng, định thức với tính khả nghịch, ma trận phụ hợp và công thức nghịch đảo, quy tắc Cramer, trị riêng và vector riêng, chéo hoá A = PDP⁻¹ — mỗi slide kèm giảng song ngữ, ma trận cụ thể đã kiểm tay và bẫy hay gặp khi thi.',
   content: [
     walkHead(D, 1, 17),

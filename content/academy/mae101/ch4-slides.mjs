@@ -17,7 +17,7 @@ const D = 'mae4';
 export default {
   title: '4.0 — Slide bài giảng: Tích phân (17 slide)|||4.0 — Slide bài giảng: Tích phân (17 slide)',
   slug: 'mae101-4-0-slides-tich-phan',
-  type: 'VIDEO',
+  type: 'DOCUMENT',
   description: 'Toàn bộ 17 slide Chương 4 MAE101 — bài toán diện tích và tổng Riemann, định nghĩa tích phân xác định, sáu tính chất, hai phần của Định lý cơ bản, bảng nguyên hàm, định lý biến thiên thuần, đổi biến (kèm đổi cận), tích phân từng phần với LIATE, hình thang và Simpson, tích phân suy rộng loại 1 và loại 2 — mỗi slide kèm giảng song ngữ, ví dụ giải từng bước và bẫy hay gặp khi thi.',
   content: [
     walkHead(D, 1, 17),

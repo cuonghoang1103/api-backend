@@ -17,7 +17,7 @@ const D = 'mae3';
 export default {
   title: '3.0 — Slide bài giảng: Ứng dụng đạo hàm (17 slide)|||3.0 — Slide bài giảng: Ứng dụng đạo hàm (17 slide)',
   slug: 'mae101-3-0-slides-ung-dung-dao-ham',
-  type: 'VIDEO',
+  type: 'DOCUMENT',
   description: 'Toàn bộ 17 slide Chương 3 MAE101 — tốc độ liên quan, xấp xỉ tuyến tính và vi phân, cực trị và điểm tới hạn, định lý Rolle và giá trị trung bình, tăng/giảm, lồi/lõm và điểm uốn, khảo sát vẽ đồ thị, bài toán tối ưu hoá, quy tắc L\'Hôpital, phương pháp Newton và nguyên hàm — mỗi slide kèm giảng song ngữ, ví dụ giải từng bước và bẫy hay gặp khi thi.',
   content: [
     walkHead(D, 1, 17),

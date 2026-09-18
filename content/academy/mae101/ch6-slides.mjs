@@ -27,7 +27,7 @@ const D = 'mae6';
 export default {
   title: '6.0 — Slide bài giảng: Ma trận (17 slide)|||6.0 — Slide bài giảng: Ma trận (17 slide)',
   slug: 'mae101-6-0-slides-ma-tran',
-  type: 'VIDEO',
+  type: 'DOCUMENT',
   description: 'Toàn bộ 17 slide Chương 6 MAE101 — ma trận và các loại đặc biệt, cộng và nhân vô hướng, chuyển vị, ma trận đối xứng, Ax như tổ hợp tuyến tính các cột, hệ Ax = b, điều kiện cỡ khi nhân hai ma trận và ví dụ nhân từng bước, tính chất phép nhân với bẫy AB khác BA, biến đổi ma trận trong mặt phẳng, ma trận quay, ma trận nghịch đảo, Gauss-Jordan tìm nghịch đảo và công thức nhanh cho ma trận 2×2 — mỗi slide kèm giảng song ngữ, ma trận cụ thể đã kiểm tay và bẫy hay gặp khi thi.',
   content: [
     walkHead(D, 1, 17),

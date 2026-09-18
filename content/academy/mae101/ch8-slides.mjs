@@ -28,7 +28,7 @@ const D = 'mae8';
 export default {
   title: '8.0 — Slide bài giảng: Vector & Biến đổi tuyến tính (17 slide)|||8.0 — Slide bài giảng: Vector & Biến đổi tuyến tính (17 slide)',
   slug: 'mae101-8-0-slides-vector',
-  type: 'VIDEO',
+  type: 'DOCUMENT',
   description: 'Toàn bộ 17 slide Chương 8 MAE101 — vector trong R² và R³, phép toán và độ dài, tích vô hướng cùng góc giữa hai vector, phép chiếu, đường thẳng trong không gian và khoảng cách điểm tới đường, tích có hướng và diện tích, phương trình mặt phẳng và khoảng cách điểm tới mặt, tích hỗn tạp và thể tích hình hộp, biến đổi tuyến tính trong R³ và ứng dụng đồ hoạ máy tính — mỗi slide kèm giảng song ngữ, toạ độ cụ thể và bẫy hay gặp khi thi.',
   content: [
     walkHead(D, 1, 17),

@@ -13,7 +13,7 @@ const D = 'mae1';
 export default {
   title: '1.0 — Slide bài giảng: Giới hạn (17 slide)|||1.0 — Slide bài giảng: Giới hạn (17 slide)',
   slug: 'mae101-1-0-slides-gioi-han',
-  type: 'VIDEO',
+  type: 'DOCUMENT',
   description: 'Toàn bộ 17 slide Chương 1 MAE101 — ý tưởng giới hạn, giới hạn một phía, 6 luật giới hạn, khử dạng 0/0 bằng phân tích và liên hợp, định lý kẹp, giới hạn lượng giác, giới hạn ở vô cực & tiệm cận, tính liên tục và định lý giá trị trung gian — mỗi slide kèm giảng song ngữ, ví dụ giải từng bước và bẫy hay gặp khi thi.',
   content: [
     walkHead(D, 1, 17),

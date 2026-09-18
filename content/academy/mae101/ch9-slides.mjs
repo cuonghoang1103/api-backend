@@ -36,7 +36,7 @@ const D = 'mae9';
 export default {
   title: '9.0 — Slide bài giảng: Không gian vector (17 slide)|||9.0 — Slide bài giảng: Không gian vector (17 slide)',
   slug: 'mae101-9-0-slides-khong-gian-vector',
-  type: 'VIDEO',
+  type: 'DOCUMENT',
   description: 'Toàn bộ 17 slide Chương 9 MAE101 — không gian con của Rⁿ, tổ hợp tuyến tính và tập sinh, độc lập tuyến tính kiểm bằng khử Gauss, cơ sở và số chiều, tích vô hướng cùng tập trực giao/trực chuẩn, hạng ma trận, nullity và định lý hạng-nullity — mỗi slide kèm giảng song ngữ, ví dụ giải từng bước và bẫy hay gặp khi thi.',
   content: [
     walkHead(D, 1, 17),

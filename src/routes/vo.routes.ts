@@ -18,6 +18,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import {
   dongBoCay, xinDuongDayNet, xacNhanNet, layCayVo, xoaTrangVo, xoaCuonVo,
+  xinDuongNen,
 } from '../services/voInk.service.js';
 
 const router = Router();
@@ -47,6 +48,21 @@ router.post('/sync', async (req, res: Response<ApiResponse>, next) => {
 });
 
 /** Xin URL ký sẵn để PUT tệp nét vẽ (+ ảnh xem trước) thẳng lên R2. */
+/**
+ * Xin đường đẩy một tệp NỀN (PDF giáo trình / ảnh quét).
+ *
+ * Khoá đánh theo sha256 nội dung, nên gọi lại với cùng tệp trả `daCo: true`
+ * và máy khỏi tải lên lần nữa — nhập một PDF 20 trang chỉ tốn một lượt đẩy.
+ */
+router.post('/nen/duong-day', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { sha256, duoi, soByte } = req.body ?? {};
+    const kq = await xinDuongNen(
+      req.userId!, String(sha256 ?? ''), String(duoi ?? ''), Number(soByte ?? 0));
+    res.json({ success: true, data: kq });
+  } catch (e) { next(e); }
+});
+
 router.post('/trang/:id/duong-day', async (req, res: Response<ApiResponse>, next) => {
   try {
     const id = soNguyen(req.params.id, 'Mã trang');

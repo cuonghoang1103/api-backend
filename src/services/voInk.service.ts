@@ -71,6 +71,12 @@ export interface TrangVao {
   /** Phiên bản nét vẽ mà MÁY đang dựa trên. Máy chủ so với `inkVersion`
    *  của nó để biết có ai ghi chen vào giữa không. */
   phienBanNet?: number;
+  /** Nền tài liệu: khoá R2 (đánh theo sha256 nội dung), loại, và trang thứ
+   *  mấy trong PDF. Máy đẩy tệp lên trước qua `xinDuongNen`, rồi lượt đồng
+   *  bộ cây này chỉ mang con trỏ. */
+  nenKhoa?: string | null;
+  nenLoai?: string | null;
+  nenTrang?: number | null;
 }
 
 export interface TrangRa {
@@ -85,6 +91,10 @@ export interface TrangRa {
   /** `true` khi máy chủ đang giữ bản MỚI HƠN bản máy dựa trên ⇒ máy phải
    *  tải về và hợp nhất TRƯỚC khi đẩy, không được ghi đè. */
   xungDot: boolean;
+  /** Nền tài liệu để máy khác tải về. `null` = trang không có nền. */
+  nenUrl: string | null;
+  nenLoai: string | null;
+  nenTrang: number;
 }
 
 // ─── Tiện ích ────────────────────────────────────────────────────────────
@@ -119,6 +129,19 @@ function mauSangHex(mau: unknown): string | null {
  */
 function khoaNet(userId: number, noteId: number, phienBan: number, duoi: 'drawing' | 'png'): string {
   return `notes/u${userId}/ink/${noteId}/v${phienBan}.${duoi}`;
+}
+
+/** Khoá nền đánh theo NỘI DUNG, không theo trang.
+ *
+ * Một PDF nhập thành 8 trang vở thì 8 `Note` cùng trỏ vào MỘT object; nhập
+ * lại đúng tệp đó lần nữa cũng không tốn thêm byte nào. Đây là lý do khoá
+ * mang sha256 chứ không mang `noteId`. */
+function khoaNen(userId: number, sha: string, duoi: string): string {
+  return `notes/u${userId}/bg/${sha}.${duoi}`;
+}
+
+function khoaNenCuaNguoiNay(key: string, userId: number): boolean {
+  return key.startsWith(`notes/u${userId}/bg/`) && !key.includes('..');
 }
 
 /** Khoá có thuộc về đúng người gọi không — chặn một người ký URL đè lên vở
@@ -220,12 +243,14 @@ export async function dongBoCay(
             title: tieuDe,
             sortOrder: Number.isInteger(trang.thuTu) ? trang.thuTu! : 0,
             paperKind: giay, paperOrient: huong,
+            ...nenGhi(trang, userId),
           },
           update: {
             subjectId: monRow.id, chapterId: cuonRow.id,
             title: tieuDe,
             sortOrder: Number.isInteger(trang.thuTu) ? trang.thuTu! : 0,
             paperKind: giay, paperOrient: huong,
+            ...nenGhi(trang, userId),
             // ⚠️ KHÔNG đụng vào `inkKey`/`inkVersion` ở đây. Đồng bộ cây chỉ
             // nói về THỨ TỰ và TÊN; nét vẽ đi đường riêng qua `xacNhanNet`.
             // Gộp hai việc là một lượt đồng bộ tên trang sẽ xoá mất nét.
@@ -233,6 +258,7 @@ export async function dongBoCay(
           select: {
             id: true, clientId: true, inkKey: true, inkPreviewKey: true,
             inkVersion: true, inkStrokeCount: true, inkUpdatedAt: true,
+            bgKey: true, bgKind: true, bgPage: true,
           },
         });
 
@@ -245,6 +271,9 @@ export async function dongBoCay(
           previewUrl: trangRow.inkPreviewKey ? buildPublicUrl(trangRow.inkPreviewKey) : null,
           inkUpdatedAt: trangRow.inkUpdatedAt?.toISOString() ?? null,
           xungDot: (trang.phienBanNet ?? 0) < trangRow.inkVersion,
+          nenUrl: trangRow.bgKey ? buildPublicUrl(trangRow.bgKey) : null,
+          nenLoai: trangRow.bgKind,
+          nenTrang: trangRow.bgPage,
         });
       }
 
@@ -255,6 +284,87 @@ export async function dongBoCay(
   }
 
   return { mons: ketQua };
+}
+
+/**
+ * Phần nền để ghi vào `Note`.
+ *
+ * ⚠️ Trang KHÔNG gửi nền thì trả về `{}` — KHÔNG ghi `null` đè lên. Máy cũ
+ * chưa biết trường này vẫn đồng bộ tên/thứ tự bình thường, và một lượt đồng
+ * bộ từ máy đó sẽ không xoá mất nền máy khác vừa đặt.
+ *
+ * Gửi chuỗi rỗng mới là lệnh GỠ nền — phân biệt rõ "không nói gì" với
+ * "bảo bỏ đi".
+ */
+function nenGhi(trang: TrangVao, userId: number):
+  { bgKey?: string | null; bgKind?: string | null; bgPage?: number } {
+  if (trang.nenKhoa === undefined || trang.nenKhoa === null) return {};
+  const khoa = String(trang.nenKhoa);
+  if (!khoa) return { bgKey: null, bgKind: null, bgPage: 0 };
+  if (!khoaNenCuaNguoiNay(khoa, userId)) {
+    throw new AppError('Khoá nền không hợp lệ', 400, 'INVALID_KEY');
+  }
+  const loai = trang.nenLoai === 'pdf' || trang.nenLoai === 'img' ? trang.nenLoai : null;
+  if (!loai) throw new AppError('Loại nền không hợp lệ', 400, 'INVALID_INPUT');
+  const so = Number(trang.nenTrang);
+  return { bgKey: khoa, bgKind: loai, bgPage: Number.isInteger(so) && so >= 0 ? so : 0 };
+}
+
+// ─── 1b. Xin URL đẩy NỀN tài liệu ────────────────────────────────────────
+
+/** Trần một tệp nền. PDF giáo trình một chương thường 0,5-2MB; 25MB đủ rộng
+ *  cho bản quét ảnh, và chặn một client hỏng đẩy cả cuốn sách lên. */
+const TRAN_NEN_BYTE = 25 * 1024 * 1024;
+
+const DUOI_NEN_HOP_LE: Record<string, string> = {
+  pdf: 'application/pdf',
+  jpg: 'image/jpeg',
+  png: 'image/png',
+};
+
+/**
+ * Xin đường đẩy một tệp nền, đánh khoá theo sha256 nội dung.
+ *
+ * Trả `daCo: true` khi object đã nằm sẵn trên R2 — máy khỏi đẩy lại. Đây là
+ * chỗ khiến nhập một PDF thành 20 trang chỉ tốn MỘT lượt tải lên, và nhập
+ * lại đúng tệp đó lần sau tốn KHÔNG lượt nào.
+ */
+export async function xinDuongNen(
+  userId: number,
+  sha256: string,
+  duoi: string,
+  soByte: number,
+): Promise<{ khoa: string; url: string | null; daCo: boolean; expiresIn: number }> {
+  if (!config.r2.enabled) {
+    throw new AppError('Máy chủ chưa cấu hình kho tệp', 503, 'STORAGE_UNAVAILABLE');
+  }
+  const sha = String(sha256 || '').toLowerCase();
+  if (!/^[0-9a-f]{64}$/.test(sha)) {
+    throw new AppError('sha256 không hợp lệ', 400, 'INVALID_INPUT');
+  }
+  const d = String(duoi || '').toLowerCase();
+  const mime = DUOI_NEN_HOP_LE[d];
+  if (!mime) throw new AppError('Chỉ nhận pdf, jpg, png', 400, 'INVALID_INPUT');
+
+  // Chặn TRƯỚC khi ký URL. Chặn sau thì tệp đã nằm trên R2 rồi mới bị từ
+  // chối — tốn băng thông và để lại rác phải đi dọn. Máy có thể khai dối
+  // kích thước, nhưng đây là chốt chặn nhầm lẫn, không phải chốt chống
+  // tấn công; trần dung lượng thật do chính sách bucket giữ.
+  const n = Number(soByte);
+  if (!Number.isFinite(n) || n <= 0) {
+    throw new AppError('Thiếu kích thước tệp', 400, 'INVALID_INPUT');
+  }
+  if (n > TRAN_NEN_BYTE) {
+    throw new AppError(
+      `Tệp nền quá ${Math.round(TRAN_NEN_BYTE / 1024 / 1024)}MB`, 413, 'FILE_TOO_LARGE');
+  }
+
+  const khoa = khoaNen(userId, sha, d);
+  const co = await headObject(khoa);
+  if (co) return { khoa, url: null, daCo: true, expiresIn: 0 };
+
+  const url = await getSignedUploadUrl(khoa, mime, 900);
+  return { khoa, url, daCo: false, expiresIn: 900 };
 }
 
 // ─── 2. Xin URL đẩy nét vẽ ───────────────────────────────────────────────
@@ -416,6 +526,7 @@ export async function layCayVo(userId: number) {
       id: true, clientId: true, chapterId: true, title: true, sortOrder: true,
       paperKind: true, paperOrient: true, inkKey: true, inkPreviewKey: true,
       inkVersion: true, inkStrokeCount: true, inkUpdatedAt: true,
+      bgKey: true, bgKind: true, bgPage: true,
     },
   });
 
@@ -457,6 +568,9 @@ export async function layCayVo(userId: number) {
           inkUrl: t.inkKey ? buildPublicUrl(t.inkKey) : null,
           previewUrl: t.inkPreviewKey ? buildPublicUrl(t.inkPreviewKey) : null,
           inkUpdatedAt: t.inkUpdatedAt?.toISOString() ?? null,
+          nenUrl: t.bgKey ? buildPublicUrl(t.bgKey) : null,
+          nenLoai: t.bgKind,
+          nenTrang: t.bgPage,
         })),
       })),
     })),

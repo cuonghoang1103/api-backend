@@ -231,6 +231,7 @@ model User {
   dashboardState        DashboardState?
   dashboardTasks        DashboardTask[]
   dashboardCelebrations DashboardCelebration[]
+  dashboardUyTinLog     DashboardUyTinLog[]
 
   // ─── Personal Hub — bookmark manager (Phase 7) ─────
   // User-owned folders + links. Every row is scoped by userId;
@@ -3265,8 +3266,22 @@ model DashboardState {
   // server is the only authority on this — the client's local
   // EXP can drift and we periodically re-sync from here.
   totalExp               Int       @default(0) @map("total_exp")
-  createdAt              DateTime  @default(now()) @map("created_at")
-  updatedAt              DateTime  @updatedAt @map("updated_at")
+
+  // ĐIỂM UY TÍN. Mặc định 100 — người dùng bắt đầu ở mức được tin
+  // tưởng đầy đủ, và tự đánh mất nó, chứ không phải đi kiếm từ 0.
+  //
+  // ⚠️ KHÔNG chặn dưới 0. Âm là một trạng thái HỢP LỆ và có chủ ý:
+  // kẹp sàn ở 0 thì người đã trượt 30 việc và người trượt 3 việc
+  // nhìn giống hệt nhau, và con số mất hết khả năng nói thật.
+  uyTin         Int     @default(100) @map("uy_tin")
+  // Đã cộng bao nhiêu điểm trong NGÀY nào (YYYY-MM-DD). Có cặp này
+  // thì trần cộng mỗi ngày mới thực thi được — thiếu nó, ai cũng
+  // cày được uy tín bằng cách tạo 50 việc vặt rồi tích hết.
+  congNgay      String? @map("cong_ngay") @db.VarChar(10)
+  congTrongNgay Int     @default(0) @map("cong_trong_ngay")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -3338,7 +3353,45 @@ model DashboardTask {
   // việc cũ giữ nguyên cách sắp xếp hiện tại, không đảo lộn gì.
   sortOrder Int @default(0) @map("sort_order")
 
+  // ── BẢNG KẾ HOẠCH CHI TIẾT (18/09/2026) ────────────────────────
+  // 1 = dễ · 2 = vừa · 3 = khó. 0 = việc cũ, chưa ai chọn.
+  // Cùng với `priority` (mức quan trọng) nó cho ra mức trừ uy tín
+  // 1–9 khi trượt: khó × quan trọng.
+  doKho    Int       @default(0) @map("do_kho")
+  // Giờ BẮT ĐẦU dự kiến. Khác `dueAt` (hạn chót) và khác `remindAt`
+  // (lúc nhắc): một việc bắt đầu 14:00, làm 90 phút, hạn 18:00 là
+  // ba mốc khác nhau và gộp lại thì không dựng nổi thời khoá biểu.
+  batDauAt DateTime? @map("bat_dau_at")
+  // Thời lượng dự kiến, tính bằng PHÚT. Phút chứ không giờ: phần lớn
+  // việc thật dài 20–90 phút, và làm tròn về giờ là vứt hết thông tin.
+  phutLam  Int?      @map("phut_lam")
+
+  // ⚠️ KHÔNG có cột `trangThai`. Đã có `done`, thêm một cột trạng
+  // thái nữa là hai nguồn sự thật, và chúng SẼ lệch nhau — chỉ cần
+  // một chỗ quên cập nhật cột kia. Trạng thái được SUY RA:
+  //   done = true                    → xong
+  //   done = false, truotLuc ≠ null  → trượt
+  //   done = false, truotLuc = null  → đang làm
+  // `truotLuc` cũng chính là chốt chống trừ điểm hai lần: quét lại
+  // lần nữa thấy nó khác null thì bỏ qua.
+  truotLuc   DateTime? @map("truot_luc")
+  lyDoTruot  String?   @map("ly_do_truot") @db.Text
+  // Đã trừ đúng bao nhiêu điểm cho lần trượt này. Giữ lại vì công
+  // thức có thể đổi: khi đó lần hoàn tác vẫn cộng lại ĐÚNG con số
+  // đã trừ, không phải con số công thức mới tính ra.
+  daTruUyTin Int?      @map("da_tru_uy_tin")
+  // Đã bắn câu "sắp hết giờ" lúc nào. Thiếu trường này thì vòng dò
+  // 60 giây sẽ nhắc lại cùng một việc mỗi phút cho tới khi hết giờ.
+  canhBaoLuc DateTime? @map("canh_bao_luc")
+  // Đã DỜI sang ngày khác bao nhiêu lần. Dời thì không bị trừ điểm —
+  // nhưng nếu không đếm, dời vô hạn là đường thoát miễn phí và cả
+  // hệ thống uy tín thành trang trí.
+  soLanHoan  Int       @default(0) @map("so_lan_hoan")
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Đối ứng của DashboardUyTinLog.task — thiếu nó `prisma generate` hỏng.
+  uyTinLog DashboardUyTinLog[]
 
   // Active-task index: we read "today's tasks" all the time, so
   // (userId, archivedAt IS NULL, date) is our hottest access path.
@@ -3349,6 +3402,9 @@ model DashboardTask {
   // Dò việc tới hạn nhắc: chạy đều đặn ở nền, nên nó phải rẻ.
   @@index([userId, remindAt], name: "idx_dashboard_tasks_remind")
   @@index([parentId], name: "idx_dashboard_tasks_parent")
+  // Quét việc QUÁ HẠN chưa chấm. Chạy mỗi lần mở trang Tổng quan và
+  // mỗi vòng dò nhắc, nên nó phải rẻ như đường dò nhắc ở trên.
+  @@index([userId, truotLuc, dueAt], name: "idx_dashboard_tasks_truot")
   @@map("dashboard_tasks")
 }
 
@@ -3383,6 +3439,37 @@ model DashboardCelebration {
   // index on Prisma's default name, causing schema drift.
   @@unique([userId, celebratedDate], map: "uniq_dashboard_celeb_user_date")
   @@map("dashboard_celebrations")
+}
+
+// ============================================================
+// SỔ CÁI UY TÍN (18/09/2026)
+// ============================================================
+// Mỗi lần điểm uy tín đổi, một dòng. Không có sổ này thì `uyTin`
+// chỉ là một con số rơi từ trên trời: người dùng thấy 83 mà không
+// biết vì sao 83, và thứ không giải thích được là thứ không ai tin.
+//
+// Giữ cả `diemSau` (điểm SAU khi áp dòng này) chứ không chỉ `delta`:
+// dựng lại lịch sử bằng cách cộng dồn delta là đúng về lý thuyết và
+// sai ngay lần đầu có một dòng bị xoá hoặc một lần sửa tay.
+model DashboardUyTinLog {
+  id        Int            @id @default(autoincrement())
+  userId    Int            @map("user_id")
+  delta     Int
+  diemSau   Int            @map("diem_sau")
+  // 'truot' | 'tre' | 'xong' | 'hoan-tac' | 'tay'
+  loai      String         @db.VarChar(16)
+  lyDo      String         @map("ly_do") @db.VarChar(300)
+  // Việc nào gây ra. `onDelete: SetNull` — xoá việc thì dòng sổ VẪN
+  // ở lại: điểm đã trừ là chuyện đã xảy ra, xoá việc không xoá được
+  // lịch sử. Cascade ở đây sẽ cho phép xoá việc để tẩy trắng điểm.
+  taskId    Int?           @map("task_id")
+  task      DashboardTask? @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  createdAt DateTime       @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt], name: "idx_uy_tin_log_user")
+  @@map("dashboard_uy_tin_log")
 }
 
 // ============================================================
@@ -4506,6 +4593,18 @@ model Note {
   inkUpdatedAt   DateTime? @map("ink_updated_at")
   paperKind      String?   @map("paper_kind") @db.VarChar(24)
   paperOrient    String?   @map("paper_orient") @db.VarChar(12)
+
+  // NỀN TÀI LIỆU của trang: trang PDF giáo trình hoặc ảnh đã quét, nằm DƯỚI
+  // lớp mực. Trước 18/09/2026 nó chỉ sống trên máy — người dùng chú thích cả
+  // học kỳ lên giáo trình, mở máy khác ra thì nét bút trôi trên giấy trắng.
+  //
+  // `bgKey` đánh theo NỘI DUNG (sha256), không theo trang: một PDF nhập 8
+  // trang thì 8 `Note` cùng trỏ vào MỘT object, chỉ khác `bgPage`. Nhập lại
+  // đúng tệp đó lần nữa cũng không tốn thêm byte nào.
+  bgKey  String? @map("bg_key") @db.VarChar(500)
+  // "pdf" hoặc "img"
+  bgKind String? @map("bg_kind") @db.VarChar(8)
+  bgPage Int     @default(0) @map("bg_page")
 
   // UUID do MÁY sinh ra, là khoá chống trùng khi đồng bộ. Không có nó thì
   // một lượt đẩy bị mạng cắt giữa chừng rồi thử lại sẽ tạo ra trang thứ

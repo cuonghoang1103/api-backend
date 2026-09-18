@@ -43,6 +43,7 @@ import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { BangViec, type Scope as PhamVi, type Task as ViecUi, type VaSua } from './BangViec';
 import { LichHoc, mauMon, type Buoi } from './LichHoc';
 import { LichHomNay } from './LichHomNay';
+import { KeHoachNgay } from './KeHoachNgay';
 import { xepLan } from './dai24';
 import { useDich } from '../../i18n';
 
@@ -528,6 +529,12 @@ export function DashboardPage() {
           onDoiThuTu={doiThuTu}
         />
       )}
+
+      {/* Bảng kế hoạch chi tiết đứng NGAY SAU bảng việc: cùng nói về việc
+          phải làm, chỉ khác góc nhìn — bảng trên là "hôm nay/tuần này", bảng
+          này là lịch tháng bấm được vào từng ngày. Tách chúng ra xa nhau thì
+          người dùng phải cuộn qua lại để đối chiếu hai danh sách việc. */}
+      <KeHoachNgay onDoiViec={() => { void nap(true); }} />
 
       {/* "Giờ tới đi đâu" đứng TRƯỚC bảng tuần: đó là câu hỏi gấp nhất, và
           trả lời nó bằng bảng tuần thì phải tìm cột hôm nay rồi tự so giờ. */}

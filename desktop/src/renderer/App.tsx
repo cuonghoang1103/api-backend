@@ -4,6 +4,7 @@ import { LoginScreen } from './auth/LoginScreen';
 import { SessionProvider, useSession } from './auth/session';
 import { batDauDoNhac } from './features/dashboard/nhacNho';
 import { batDauNhacLichRobot, phatCauNhac } from './features/dashboard/nhacLichRobot';
+import { batDauNhacKeHoach } from './features/dashboard/nhacKeHoach';
 import { useCauNoiWeb } from './features/web/TrangWeb';
 import { datBatAm } from './features/dashboard/amThanh';
 import { CommandPalette } from './components/CommandPalette';
@@ -228,7 +229,13 @@ function Gate() {
     /* Đồng hồ đếm ngược của robot. Đọc cài đặt Ở MỖI NHỊP qua `ref` — bấm tắt
        trên khối Lịch học phải có tác dụng ngay, không đợi khởi động lại. */
     const dungLich = batDauNhacLichRobot(api, phatCauNhac, () => batNhacLich.current);
-    return () => { dungNhac(); dungLich(); };
+    /* Nhắc VIỆC SẮP TỚI mỗi 15 phút — đúng con số người dùng đặt hàng. Đi
+       vòng riêng, KHÔNG gộp vào `dungNhac` (60 giây): gộp thì hoặc nhắc
+       việc sắp tới mỗi phút (phiền), hoặc cảnh báo hết giờ mỗi 15 phút
+       (tới muộn). Cùng một `batNhacLich` làm công tắc — người đã tắt robot
+       không muốn nghe nó ở bất kỳ đường nào. */
+    const dungKeHoach = batDauNhacKeHoach(api, phatCauNhac, () => batNhacLich.current);
+    return () => { dungNhac(); dungLich(); dungKeHoach(); };
   }, [phase, api]);
 
   if (phase === 'dang-khoi-phuc') {

@@ -3,6 +3,13 @@ import { prisma } from '../config/database.js';
 import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
+import { isAiAvailable, llmComplete } from '../services/interview/llm/index.js';
+import {
+  ghiUyTin, khiTichXong, layUyTin, ngayVN, quetQuaHan,
+} from '../services/dashboard/chamCong.js';
+import {
+  bacUyTin, mocHetGio, mucTru, TRUOC_HET_GIO_PHUT, UY_TIN_DAU,
+} from '../services/dashboard/uyTin.js';
 import {
   isValidIsoDate,
   normalizeDate,
@@ -353,6 +360,9 @@ router.post('/tasks', async (req: Request, res: Response<ApiResponse>, next) => 
         remindAt: docMoc(body.remindAt, 'remindAt') ?? null,
         priority: docUuTien(body.priority) ?? 0,
         repeat: docNhipLap(body.repeat) ?? 'none',
+        doKho: docDoKho((body as { doKho?: number }).doKho) ?? 0,
+        batDauAt: docMoc((body as { batDauAt?: string | null }).batDauAt, 'batDauAt') ?? null,
+        phutLam: docPhutLam((body as { phutLam?: number | null }).phutLam) ?? null,
         /* Việc con: kiểm CHA có thật và thuộc về đúng người này. Không kiểm thì
            một client thù địch gắn việc của mình vào cây việc của người khác —
            và nó sẽ hiện lên màn hình của họ. */
@@ -473,6 +483,12 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
       repeat?: string;
       /** Đánh dấu ĐÃ NHẮC — app gọi sau khi hiện thông báo. */
       remindedNow?: boolean;
+      doKho?: number;
+      batDauAt?: string | null;
+      phutLam?: number | null;
+      lyDoTruot?: string | null;
+      /** Đã bắn câu "sắp hết giờ" — app gọi sau khi hiện. */
+      canhBaoNow?: boolean;
     };
 
     const data: Record<string, unknown> = {};
@@ -521,10 +537,38 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
     if (body.remindedNow === true) data.remindedAt = new Date();
     const nhip = docNhipLap(body.repeat);
     if (nhip !== undefined) data.repeat = nhip;
+    const kho = docDoKho(body.doKho);
+    if (kho !== undefined) data.doKho = kho;
+    const batDau = docMoc(body.batDauAt, 'batDauAt');
+    if (batDau !== undefined) data.batDauAt = batDau;
+    const phut = docPhutLam(body.phutLam);
+    if (phut !== undefined) data.phutLam = phut;
+    const lyDo = docGhiChu(body.lyDoTruot);
+    if (lyDo !== undefined) data.lyDoTruot = lyDo;
+    if (body.canhBaoNow === true) data.canhBaoLuc = new Date();
+    /* Dời giờ (bắt đầu hoặc hạn) ⇒ XOÁ dấu đã-cảnh-báo, cùng lý do như
+       `remindedAt` ở trên: không xoá thì dời sang chiều xong nó không
+       bao giờ cảnh báo nữa vì hệ thống vẫn nhớ "đã báo rồi". */
+    if (batDau !== undefined || han !== undefined) data.canhBaoLuc = null;
 
     if (Object.keys(data).length === 0) {
       throw new AppError('Khong co truong hop le de cap nhat', 400);
     }
+
+    /* Ảnh chụp TRƯỚC khi sửa. Cần nó để chấm uy tín: sau `update` thì
+       `truotLuc`/`daTruUyTin` vẫn còn, nhưng mốc hết giờ có thể vừa bị
+       chính lời gọi này dời đi — và khi đó "xong đúng hạn hay trễ" sẽ
+       được chấm theo hạn MỚI, tức là ai cũng đúng hạn nếu biết dời hạn
+       trong cùng một request. */
+    const truoc = await prisma.dashboardTask.findFirst({
+      where: { id: taskId, userId },
+      select: {
+        id: true, title: true, done: true, doKho: true, priority: true,
+        dueAt: true, batDauAt: true, phutLam: true,
+        truotLuc: true, daTruUyTin: true,
+      },
+    });
+    if (!truoc) throw new AppError('Task khong ton tai hoac khong thuoc ve ban', 404);
 
     // updateMany returns the count, not the row. We use it
     // because it lets us put userId in the WHERE — that way
@@ -537,10 +581,18 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
       throw new AppError('Task khong ton tai hoac khong thuoc ve ban', 404);
     }
 
+    /* Chỉ chấm khi CHUYỂN từ chưa xong → xong. Không có chốt `!truoc.done`
+       thì mỗi lần PATCH một việc đã xong (đổi tên, đổi ghi chú) lại cộng
+       điểm thêm một lần. */
+    let uyTin: Awaited<ReturnType<typeof khiTichXong>> | null = null;
+    if (body.done === true && !truoc.done) {
+      uyTin = await khiTichXong(userId, truoc);
+    }
+
     const task = await prisma.dashboardTask.findUnique({ where: { id: taskId } });
     if (!task) throw new AppError('Task khong ton tai', 404);
 
-    res.json({ success: true, data: serializeTask(task) });
+    res.json({ success: true, data: { ...serializeTask(task), uyTin } });
   } catch (error) { next(error); }
 });
 
@@ -593,7 +645,272 @@ router.get('/reminders', async (req: Request, res: Response<ApiResponse>, next) 
       take: 20,
       orderBy: { remindAt: 'asc' },
     });
-    res.json({ success: true, data: { tasks: viec.map(serializeTask) } });
+    /* ─── QUÉT QUÁ HẠN ngay trong vòng dò nhắc ───────────────────
+       Vì sao không cron: xem chú thích đầu `chamCong.ts`. Tóm tắt: cron
+       chạy cho TOÀN BỘ người dùng mỗi phút để phục vụ một nhúm đang mở
+       app, và mất một nhịp khi container restart thì không ai biết.
+       Quét ở đây rẻ hơn nhiều bậc và tự lành — `truotLuc` tính từ MỐC
+       THỜI GIAN chứ không từ lúc vòng quét chạy, nên vắng ba ngày rồi
+       mở lại vẫn ra đúng kết quả, đúng một lượt. */
+    const quet = await quetQuaHan(userId, bayGio);
+
+    /* ─── Việc SẮP hết giờ (còn ≤ 15 phút) ───────────────────────
+       Tách khỏi `remindAt` có chủ ý: `remindAt` là lời nhắc người dùng
+       tự đặt, còn cái này là cảnh báo hệ thống tự tính từ hạn. Gộp hai
+       thứ thì đặt nhắc lúc 9h sáng sẽ nuốt mất cảnh báo lúc 17h45. */
+    const sapHet = await prisma.dashboardTask.findMany({
+      where: {
+        userId, done: false, archivedAt: null, truotLuc: null, canhBaoLuc: null,
+        OR: [{ dueAt: { not: null } }, { batDauAt: { not: null } }],
+      },
+      take: 50,
+    });
+    const canhBao = sapHet.filter((t) => {
+      const moc = mocHetGio(t);
+      if (!moc) return false;
+      const conPhut = (moc.getTime() - bayGio.getTime()) / 60_000;
+      return conPhut > 0 && conPhut <= TRUOC_HET_GIO_PHUT;
+    });
+
+    res.json({
+      success: true,
+      data: {
+        tasks: viec.map(serializeTask),
+        sapHetGio: canhBao.map(serializeTask),
+        vuaTruot: quet.truot,
+        uyTin: quet.diem,
+      },
+    });
+  } catch (error) { next(error); }
+});
+
+// ─── GET /api/v1/dashboard/uy-tin ────────────────────────────────
+// Điểm uy tín + 50 dòng sổ gần nhất.
+//
+// Trả cả sổ chứ không chỉ con số: một điểm số không giải thích được là
+// một điểm số không ai tin, và người đầu tiên thấy mình tụt xuống 83 sẽ
+// hỏi "vì sao 83" — nếu không trả lời được thì họ tắt tính năng.
+router.get('/uy-tin', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    /* Quét trước khi đọc: mở thẳng bảng uy tín mà chưa quét thì điểm hiện
+       ra là điểm CŨ, và vài giây sau nó tự tụt — trông như lỗi. */
+    await quetQuaHan(userId);
+    const kq = await layUyTin(userId);
+    res.json({
+      success: true,
+      data: { ...kq, bac: bacUyTin(kq.diem), moc: UY_TIN_DAU },
+    });
+  } catch (error) { next(error); }
+});
+
+// ─── POST /api/v1/dashboard/tasks/:id/hoan ───────────────────────
+// DỜI một việc sang ngày khác. KHÔNG bị trừ điểm.
+//
+// Vì sao phải có: thiếu nó, cách duy nhất để không mất điểm cho một việc
+// không kịp làm là XOÁ nó. Và khi người dùng học được điều đó thì bảng kế
+// hoạch chỉ còn lại những việc đã xong — nó thành một cuốn album, không
+// còn là công cụ. `soLanHoan` đếm lại để dời vô hạn vẫn nhìn thấy được.
+router.post('/tasks/:id/hoan', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    const taskId = Number(req.params.id);
+    if (!Number.isInteger(taskId) || taskId <= 0) throw new AppError('id khong hop le', 400);
+
+    const body = req.body as { date?: string; batDauAt?: string | null };
+    /* Không nói dời đi đâu thì dời sang MAI — đó là ca thường gặp nhất,
+       và `normalizeDate('')` ném `Error` trần (thành 500), không phải
+       `AppError` 400. */
+    const mai = new Date(Date.now() + 7 * 3600_000 + 86_400_000).toISOString().slice(0, 10);
+    let ngayMoi: string;
+    try {
+      ngayMoi = body.date ? normalizeDate(String(body.date)) : mai;
+    } catch { throw new AppError('date khong hop le', 400); }
+
+    const cu = await prisma.dashboardTask.findFirst({
+      where: { id: taskId, userId },
+      select: { id: true, truotLuc: true, daTruUyTin: true, title: true, soLanHoan: true },
+    });
+    if (!cu) throw new AppError('Task khong ton tai hoac khong thuoc ve ban', 404);
+
+    /* Dời một việc ĐÃ trượt thì hoàn lại NGUYÊN số điểm đã trừ: nó không
+       còn là việc bị bỏ, nó là việc được xếp lại. Chỉ hoàn một nửa như
+       ca "làm nốt muộn" sẽ phạt đúng hành vi mình muốn khuyến khích. */
+    let hoanLai = 0;
+    if (cu.truotLuc && cu.daTruUyTin && cu.daTruUyTin > 0) {
+      const kq = await ghiUyTin(userId, cu.daTruUyTin, 'hoan-tac', `Dời sang ${ngayMoi}: ${cu.title}`, cu.id);
+      hoanLai = kq.thuc;
+    }
+
+    const moi = await prisma.dashboardTask.update({
+      where: { id: taskId },
+      data: {
+        date: ngayMoi,
+        batDauAt: docMoc(body.batDauAt, 'batDauAt') ?? null,
+        dueAt: null,
+        truotLuc: null,
+        daTruUyTin: null,
+        canhBaoLuc: null,
+        remindedAt: null,
+        soLanHoan: cu.soLanHoan + 1,
+      },
+    });
+    res.json({ success: true, data: { ...serializeTask(moi), hoanLai } });
+  } catch (error) { next(error); }
+});
+
+// ─── POST /api/v1/dashboard/danh-gia ────────────────────────────
+// AI xem lại kế hoạch của MỘT ngày và nói thẳng chỗ xếp quá tay.
+//
+// ⚠️ Số liệu được TÍNH Ở ĐÂY rồi mới đưa vào lời nhắc — không đưa danh sách
+// thô rồi bảo model tự cộng. Model cộng giờ sai là chuyện thường, và một lời
+// khuyên dựa trên tổng sai thì tệ hơn không có lời khuyên nào.
+// Xem [[feedback_let_model_describe_let_code_compute_geometry]].
+router.post('/danh-gia', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    let date: string;
+    try { date = normalizeDate(String((req.body as { date?: string }).date ?? '')); }
+    catch { throw new AppError('date phai dang YYYY-MM-DD', 400); }
+
+    const ds = await prisma.dashboardTask.findMany({
+      where: { userId, archivedAt: null, date, parentId: null },
+      orderBy: [{ batDauAt: 'asc' }, { id: 'asc' }],
+      take: 60,
+    });
+    if (ds.length === 0) {
+      res.json({ success: true, data: { nhanXet: 'Ngày này chưa có việc nào để xem.', so: null } });
+      return;
+    }
+
+    /* ─── PHẦN SỐ: mã tính, không hỏi model ─── */
+    const tongPhut = ds.reduce((t, v) => t + (v.phutLam ?? 0), 0);
+    const khongGio = ds.filter((v) => !v.batDauAt).length;
+    const khongDoDai = ds.filter((v) => !v.phutLam).length;
+    const kho3 = ds.filter((v) => v.doKho === 3).length;
+    const chuaChon = ds.filter((v) => v.doKho === 0 || v.priority === 0).length;
+    const rui = ds.reduce((t, v) => t + (v.done || v.truotLuc ? 0 : mucTru(v.doKho, v.priority)), 0);
+
+    /* Chồng giờ — tính bằng mã, vì nó là so sánh khoảng, thứ model làm sai
+       lặng lẽ và tự tin. */
+    const coGio = ds
+      .filter((v) => v.batDauAt && v.phutLam)
+      .map((v) => ({ t: v.title, d: v.batDauAt!.getTime(), c: v.batDauAt!.getTime() + v.phutLam! * 60_000 }))
+      .sort((a, b) => a.d - b.d);
+    const chong: string[] = [];
+    for (let i = 1; i < coGio.length; i += 1) {
+      for (let j = i - 1; j >= 0; j -= 1) {
+        if (coGio[j]!.c > coGio[i]!.d) chong.push(`${coGio[j]!.t} ↔ ${coGio[i]!.t}`);
+      }
+    }
+
+    const so = {
+      tongViec: ds.length,
+      tongPhut,
+      khongGio,
+      khongDoDai,
+      viecKho: kho3,
+      chuaChonMuc: chuaChon,
+      chongGio: chong.slice(0, 5),
+      uyTinRuiRo: rui,
+    };
+
+    if (!isAiAvailable()) {
+      /* Không có khoá AI thì vẫn trả SỐ LIỆU. Phần đắt giá nhất của tính năng
+         này là mấy con số — tổng giờ, chỗ chồng, uy tín đang đặt cược — và
+         chúng do mã tính, không cần model. Trả rỗng chỉ vì thiếu khoá là vứt
+         đi thứ vẫn dùng được. */
+      res.json({ success: true, data: { nhanXet: null, so, lyDo: 'ai_unavailable' } });
+      return;
+    }
+
+    const bang = ds.map((v) => [
+      v.batDauAt ? new Date(v.batDauAt.getTime() + 7 * 3600_000).toISOString().slice(11, 16) : '--:--',
+      v.phutLam ? `${v.phutLam}p` : '?',
+      ['?', 'dễ', 'vừa', 'khó'][v.doKho] ?? '?',
+      ['?', 'thường', 'quan trọng', 'rất quan trọng'][v.priority] ?? '?',
+      v.done ? '[xong]' : v.truotLuc ? '[TRƯỢT]' : '[đang]',
+      v.title,
+    ].join(' | ')).join('\n');
+
+    const kq = await llmComplete({
+      step: 'generation',
+      purpose: 'plan_review',
+      feature: 'chat',
+      userId,
+      maxTokens: 420,
+      system: 'Bạn xem kế hoạch trong ngày của một người và nói thẳng, ngắn gọn, bằng TIẾNG VIỆT.\n'
+        + 'Viết TỐI ĐA 4 gạch đầu dòng, mỗi dòng dưới 22 từ. Không mở bài, không chúc, không khen xã giao.\n'
+        + 'CHỈ nói điều RÚT RA TỪ SỐ LIỆU đã cho — TUYỆT ĐỐI không tự cộng lại giờ, không tự suy ra tổng nào khác.\n'
+        + 'Ưu tiên theo thứ tự: xếp quá sức → trùng giờ → việc khó dồn cục → việc thiếu giờ/thiếu thời lượng.\n'
+        + 'Nếu kế hoạch ổn thì nói đúng một dòng là ổn, đừng bịa ra vấn đề.',
+      messages: [{
+        role: 'user',
+        content: `Ngày ${date}.\n`
+          + `Số liệu đã tính sẵn: ${JSON.stringify(so)}\n\n`
+          + `Bảng việc (giờ | thời lượng | khó | quan trọng | trạng thái | tên):\n${bang}`,
+      }],
+    });
+
+    res.json({ success: true, data: { nhanXet: kq?.text?.trim() || null, so } });
+  } catch (error) { next(error); }
+});
+
+// ─── GET /api/v1/dashboard/ngay?date=YYYY-MM-DD ─────────────────
+// Việc của ĐÚNG MỘT ngày, cho bảng kế hoạch chi tiết.
+//
+// Endpoint riêng chứ không lọc từ `GET /`: cái đó trả về MỌI việc chưa
+// lưu trữ ở mọi phạm vi, và bảng kế hoạch chỉ cần một ngày. Tải cả năm
+// về để hiện một ngày là thứ chạy được lúc có 30 việc và chậm dần đều
+// cho tới khi không ai nhớ vì sao.
+router.get('/ngay', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    let date: string;
+    try { date = normalizeDate(String(req.query.date ?? '')); }
+    catch { throw new AppError('date phai dang YYYY-MM-DD', 400); }
+
+    /* Quét TRƯỚC khi đọc: mở một ngày đã qua mà chưa quét thì việc quá
+       hạn hiện ra là "đang làm", rồi vài giây sau tự đổi sang "trượt" —
+       trông như bảng tự sửa sau lưng người dùng. */
+    await quetQuaHan(userId);
+
+    const ds = await prisma.dashboardTask.findMany({
+      where: { userId, archivedAt: null, date },
+      orderBy: [{ batDauAt: 'asc' }, { sortOrder: 'asc' }, { id: 'asc' }],
+    });
+    res.json({ success: true, data: { date, tasks: ds.map(serializeTask) } });
+  } catch (error) { next(error); }
+});
+
+// ─── GET /api/v1/dashboard/thang?ym=YYYY-MM ──────────────────────
+// Tóm tắt từng NGÀY trong tháng, cho các chấm màu dưới ô lịch.
+//
+// Trả về đếm, KHÔNG trả về cả danh sách việc: một tháng dày có thể hàng
+// trăm việc, và lịch chỉ cần biết mỗi ngày có bao nhiêu xong/trượt/còn.
+router.get('/thang', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    const ym = String(req.query.ym ?? '').trim() || ngayVN().slice(0, 7);
+    if (!/^\d{4}-\d{2}$/.test(ym)) throw new AppError('ym phai dang YYYY-MM', 400);
+
+    await quetQuaHan(userId);
+
+    const ds = await prisma.dashboardTask.findMany({
+      where: { userId, archivedAt: null, parentId: null, date: { startsWith: ym } },
+      select: { date: true, done: true, truotLuc: true, doKho: true },
+    });
+
+    const theoNgay: Record<string, { tong: number; xong: number; truot: number; khoNhat: number }> = {};
+    for (const t of ds) {
+      const o = theoNgay[t.date] ?? { tong: 0, xong: 0, truot: 0, khoNhat: 0 };
+      o.tong += 1;
+      if (t.done) o.xong += 1;
+      else if (t.truotLuc) o.truot += 1;
+      if (t.doKho > o.khoNhat) o.khoNhat = t.doKho;
+      theoNgay[t.date] = o;
+    }
+    res.json({ success: true, data: { ym, ngay: theoNgay } });
   } catch (error) { next(error); }
 });
 
@@ -1002,6 +1319,9 @@ function serializeTask(t: {
   note?: string | null; dueAt?: Date | null; remindAt?: Date | null;
   remindedAt?: Date | null; priority?: number;
   repeat?: string; parentId?: number | null; sortOrder?: number;
+  doKho?: number; batDauAt?: Date | null; phutLam?: number | null;
+  truotLuc?: Date | null; lyDoTruot?: string | null;
+  daTruUyTin?: number | null; canhBaoLuc?: Date | null; soLanHoan?: number;
 }) {
   return {
     id: t.id,
@@ -1021,6 +1341,17 @@ function serializeTask(t: {
     repeat: t.repeat ?? 'none',
     parentId: t.parentId ?? null,
     sortOrder: t.sortOrder ?? 0,
+    doKho: t.doKho ?? 0,
+    batDauAt: t.batDauAt?.toISOString() ?? null,
+    phutLam: t.phutLam ?? null,
+    truotLuc: t.truotLuc?.toISOString() ?? null,
+    lyDoTruot: t.lyDoTruot ?? null,
+    daTruUyTin: t.daTruUyTin ?? null,
+    soLanHoan: t.soLanHoan ?? 0,
+    /* Mức sẽ bị trừ NẾU trượt. Gửi kèm để giao diện nói được "trượt
+       mất 6 điểm" ngay trên thẻ việc, thay vì bắt người dùng tự nhân
+       hai con số trong đầu — mà nếu họ phải nhân thì họ sẽ không nhân. */
+    truNeuTruot: mucTru(t.doKho, t.priority),
   };
 }
 
@@ -1050,6 +1381,29 @@ function docMoc(v: unknown, ten: string): Date | null | undefined {
 }
 
 /** Ưu tiên 0..3. Ngoài khoảng ⇒ từ chối, đừng lặng lẽ kẹp về biên. */
+/**
+ * Mức KHÓ: 1 = dễ · 2 = vừa · 3 = khó.
+ *
+ * Nhận `0` để client xoá lựa chọn, nhưng giao diện BẮT chọn 1–3 khi
+ * tạo việc mới — mức trừ uy tín dựa vào nó, và "chưa chọn" nghĩa là
+ * máy chủ phải đoán thay người dùng.
+ */
+function docDoKho(v: unknown): number | undefined {
+  if (v === undefined) return undefined;
+  const n = Number(v);
+  if (!Number.isInteger(n) || n < 0 || n > 3) throw new AppError('doKho phai 0..3', 400);
+  return n;
+}
+
+/** Thời lượng dự kiến, PHÚT. Trần 24 giờ — quá đó là gõ nhầm. */
+function docPhutLam(v: unknown): number | null | undefined {
+  if (v === undefined) return undefined;
+  if (v === null || v === '') return null;
+  const n = Number(v);
+  if (!Number.isInteger(n) || n <= 0 || n > 1440) throw new AppError('phutLam phai 1..1440', 400);
+  return n;
+}
+
 function docUuTien(v: unknown): number | undefined {
   if (v === undefined) return undefined;
   const n = Number(v);

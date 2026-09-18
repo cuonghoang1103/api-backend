@@ -315,6 +315,7 @@ export type LlmPurpose =
   | 'doc_ocr'             // chép đề/bài giảng từ ẢNH ra chữ + công thức
   | 'robot_voice'         // robot Maker Lab — độ trễ quan trọng ngang độ thông minh
   | 'remix_coach'         // Xưởng Remix — đọc số đo của bài rồi kèm người làm nhạc
+  | 'plan_review'         // xem lại kế hoạch trong ngày, chỉ chỗ xếp quá tay
   | 'agent_code'          // agent lập trình của app desktop — GỌI TOOL nhiều lượt
   | 'exam_tutor'          // CuongMini — AI đồng hành khi thi (Pro), đi cổng rambo như agent_code
   | 'lab_room'            // Phòng Lab LAB211 — giảng đề, kèm code, chấm bài nộp; cổng rambo, model mạnh nhất
@@ -416,6 +417,18 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    */
   doc_ocr: 'gpt-5.6-sol',
   news_bulletin: 'gpt-5.4-mini',
+  /**
+   * Xem lại kế hoạch trong ngày. Model RẺ NHẤT, có chủ ý.
+   *
+   * Việc này là số học và nhận dạng mẫu: cộng giờ, tìm chỗ chồng, thấy ba
+   * việc khó xếp liền nhau. Nó KHÔNG cần suy luận sâu — nhưng nó là một nút
+   * người dùng có thể bấm nhiều lần trong ngày, nên giá mỗi lượt mới là thứ
+   * quyết định. `gpt-5.4-mini` rẻ hơn `sonnet-4-6` 5,1 lần (đo 18/08).
+   *
+   * Thấy lời khuyên nhạt thì vặn bằng env, không cần deploy:
+   * `LLM_MODEL_PLAN_REVIEW=claude-sonnet-4-6`.
+   */
+  plan_review: 'gpt-5.4-mini',
   robot_voice: 'gpt-5.4-mini',
 
   /**
@@ -844,6 +857,7 @@ const UU_TIEN: Partial<Record<LlmPurpose, MucUuTien>> = {
   codelab_bulk: 'nen',
   exphub_doc: 'nen',
   news_bulletin: 'nen',
+  plan_review: 'nguoi',
 };
 
 export function uuTienCua(purpose: LlmPurpose): MucUuTien {

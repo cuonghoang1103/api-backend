@@ -16,6 +16,8 @@
  */
 import type { ApiClient } from '../../api/client';
 import { keuNhac } from './amThanh';
+import { phatCauNhac } from './nhacLichRobot';
+import { cauSapHetGio, cauVuaTruot } from './nhacKeHoach';
 import { conMayPhut, ngayISO, type Buoi } from './LichHoc';
 
 /** Nhịp dò. Một phút là đủ mịn cho lời nhắc, và đủ thưa để không tốn gì. */
@@ -110,7 +112,40 @@ export function batDauDoNhac(
          việc thì làm bù được. Lỗi ở đây không được chặn phần việc bên dưới. */
       await doLichHoc(api, onNhac).catch(() => undefined);
 
-      const kq = await api.request<{ tasks: ViecNhac[] }>('/api/v1/dashboard/reminders');
+      const kq = await api.request<{
+        tasks: ViecNhac[];
+        sapHetGio?: ViecNhac[];
+        vuaTruot?: Array<{ id: number; title: string; tru: number }>;
+        uyTin?: number | null;
+      }>('/api/v1/dashboard/reminders');
+      if (dungRoi) return;
+
+      /* ─── SẮP HẾT GIỜ ───────────────────────────────────────────
+         Đi nhờ vòng 60 giây NÀY chứ không nhịp 15 phút của
+         `nhacKeHoach.ts`: một vòng 15 phút có thể bắn câu cảnh báo
+         muộn tới 14 phút — tức là sau khi đã hết giờ. Cảnh báo "sắp
+         hết giờ" tới sau khi hết giờ thì tệ hơn là không có. */
+      const sap = kq?.sapHetGio ?? [];
+      for (const v of sap) {
+        phatCauNhac(cauSapHetGio(v.title));
+        baoHeDieuHanh({ ...v, title: cauSapHetGio(v.title) });
+      }
+      if (sap.length > 0) {
+        keuNhac();
+        /* Đánh dấu ĐÃ CẢNH BÁO — không đánh dấu thì phút sau nó cảnh báo
+           lại đúng việc đó, mỗi phút một lần cho tới khi hết giờ. */
+        await Promise.all(sap.map((v) => api
+          .request(`/api/v1/dashboard/tasks/${v.id}`, { method: 'PATCH', body: { canhBaoNow: true } })
+          .catch(() => undefined)));
+      }
+
+      /* ─── VỪA BỊ ĐÁNH TRƯỢT ─────────────────────────────────────
+         Máy chủ tự chấm khi quét; nếu không báo ra thì điểm uy tín tụt
+         mà người dùng không biết vì sao — và một con số tụt không giải
+         thích được là con số họ sẽ ngừng nhìn. */
+      const truot = kq?.vuaTruot ?? [];
+      if (truot.length > 0) phatCauNhac(cauVuaTruot(truot, kq?.uyTin ?? null));
+
       const ds = kq?.tasks ?? [];
       if (ds.length === 0 || dungRoi) return;
 

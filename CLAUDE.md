@@ -324,11 +324,13 @@ riêng cho việc này — **đừng xoá**, chúng là lối thoát khi mất �
 - `ssh-port-apply.yml` — dựng `ssh993.service`; tự kiểm 5 điều kiện sau khi khởi
   động và **tự gỡ bỏ** nếu bất kỳ cái nào hỏng
 
-⛔ **SSH chưa được siết — việc cần làm.** Khảo sát 18/09/2026 cho thấy cấu hình
-xác thực của sshd và tường lửa VPS đang ở mức mặc định lỏng, và nay có hai cổng
-SSH mở thay vì một. Chi tiết cố ý KHÔNG ghi vào repo — hỏi người vận hành. Việc
-nên làm sớm nhất: tắt xác thực bằng mật khẩu (log cho thấy thực tế chỉ dùng
-khoá) và cài fail2ban.
+🔒 **SSH đã siết 18/09/2026.** `/etc/ssh/sshd_config.d/01-no-password.conf` đặt
+`PasswordAuthentication no`, `KbdInteractiveAuthentication no`,
+`PermitRootLogin prohibit-password`. **Chỉ vào được bằng khoá** — thêm máy mới
+thì phải nạp khoá công khai vào `/root/.ssh/authorized_keys`, không còn đường
+mật khẩu để cứu. Đã nghiệm thu: khoá vào được, mật khẩu bị từ chối, đường hầm
+2222 và runner GitHub không bị ảnh hưởng. Phần tường lửa VPS vẫn ở mức mặc định
+lỏng — chi tiết cố ý không ghi vào repo, hỏi người vận hành.
 
 ⚠️ **Drop-in sshd phải đặt tên sắp xếp TRƯỚC file đang tranh cùng từ khoá.**
 `50-cloud-init.conf` có sẵn `PasswordAuthentication yes`, mà `sshd_config` lấy

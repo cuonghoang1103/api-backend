@@ -1,0 +1,66 @@
+name: SSH Port Diagnostic
+
+# CHỈ ĐỌC. Không sửa bất cứ thứ gì trên VPS.
+# Mục đích: khảo sát trước khi thêm cổng SSH phụ (993) cho trường hợp
+# mạng trường chặn cổng 22. Xem .github/workflows/ssh-port-apply.yml.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ConnectTimeout 30\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Khao sat sshd
+        run: |
+          ssh vps 'bash -s' <<'EOF'
+          echo "===== 1. HE DIEU HANH ====="
+          grep -E "^(NAME|VERSION)=" /etc/os-release
+
+          echo; echo "===== 2. CONG SSHD DANG NGHE (hieu luc thuc te) ====="
+          sshd -T 2>/dev/null | grep -E "^(port|listenaddress)" || echo "!! sshd -T that bai"
+
+          echo; echo "===== 3. SOCKET ACTIVATION? (cai bay quan trong nhat) ====="
+          echo "ssh.socket enabled : $(systemctl is-enabled ssh.socket 2>&1)"
+          echo "ssh.socket active  : $(systemctl is-active ssh.socket 2>&1)"
+          echo "ssh.service active : $(systemctl is-active ssh.service 2>&1)"
+          echo "sshd.service active: $(systemctl is-active sshd.service 2>&1)"
+
+          echo; echo "===== 4. SSHD_CONFIG CO 'Include' KHONG ====="
+          grep -n "^Include" /etc/ssh/sshd_config || echo "KHONG co dong Include"
+          echo "--- thu muc sshd_config.d ---"
+          ls -la /etc/ssh/sshd_config.d/ 2>/dev/null || echo "khong co thu muc"
+
+          echo; echo "===== 5. TUONG LUA ====="
+          echo "--- ufw ---"
+          ufw status verbose 2>&1 | head -25 || echo "khong co ufw"
+          echo "--- iptables INPUT ---"
+          iptables -L INPUT -n --line-numbers 2>&1 | head -25 || echo "khong doc duoc iptables"
+
+          echo; echo "===== 6. CONG 993 CO TRONG KHONG ====="
+          ss -tlnp 2>/dev/null | grep ":993 " || echo "993 TRONG - dung duoc"
+
+          echo; echo "===== 7. DUONG HAM VE MAY NHA (cong 2222) ====="
+          ss -tln 2>/dev/null | grep ":2222 " || echo "!! 2222 KHONG nghe - duong ham ve nha da chet"
+
+          echo; echo "===== 8. FAIL2BAN ====="
+          systemctl is-active fail2ban 2>&1
+          fail2ban-client status sshd 2>&1 | head -6 || true
+
+          echo; echo "===== 9. PHIEN SSH DANG MO ====="
+          ss -tn state established '( sport = :22 )' 2>/dev/null | head -10
+
+          echo; echo "===== XONG ====="
+          EOF

@@ -7,6 +7,8 @@
  * Công cụ (Maxima, GeoGebra, Desmos) → Exp Hub; linear-transformation-with-python → CodeLab.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/MAE101.mjs --apply
  */
+import ch1Slides from './mae101/ch1-slides.mjs';
+
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
@@ -277,6 +279,7 @@ export default {
       title: 'Chapter 1 — Limits|||Chương 1 — Giới hạn',
       description: 'Ý tưởng giới hạn, giới hạn một phía, và cách tính giới hạn.',
       lessons: [
+        ch1Slides,
         {
           title: '1.1 — What is a limit?|||1.1 — Giới hạn là gì?',
           slug: 'mae101-1-1-gioi-han',

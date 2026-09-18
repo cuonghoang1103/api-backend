@@ -10,6 +10,23 @@
  * pseudocode + quiz. Giữ NGUYÊN slug/semester(KY1)/courseCode/thumb(v3).
  * ⚠️ KHÔNG backtick lồng, KHÔNG ${ } trong chuỗi HTML; "&" trong text HTML là &amp;.
  */
+import ch1aSlides from './csi106/ch1a-slides.mjs';
+import ch1bSlides from './csi106/ch1b-slides.mjs';
+import ch2Slides from './csi106/ch2-slides.mjs';
+import ch3aSlides from './csi106/ch3a-slides.mjs';
+import ch3bSlides from './csi106/ch3b-slides.mjs';
+import ch4Slides from './csi106/ch4-slides.mjs';
+import ch5Slides from './csi106/ch5-slides.mjs';
+import ch6Slides from './csi106/ch6-slides.mjs';
+import ch7Slides from './csi106/ch7-slides.mjs';
+import ch8Slides from './csi106/ch8-slides.mjs';
+import ch9aSlides from './csi106/ch9a-slides.mjs';
+import ch9bSlides from './csi106/ch9b-slides.mjs';
+import ch10Slides from './csi106/ch10-slides.mjs';
+import ch11aSlides from './csi106/ch11a-slides.mjs';
+import ch11bSlides from './csi106/ch11b-slides.mjs';
+import ch12Slides from './csi106/ch12-slides.mjs';
+
 const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}</div>`;
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
@@ -1118,18 +1135,18 @@ export default {
   sections: [
     { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách CHÍNH Forouzan, tài liệu miễn phí, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'KHMT là gì, 13 CLO, cơ cấu điểm, lộ trình 12 chương + AI.', lessons: [intro] },
-    { title: 'Chương 1 — Tổ chức máy tính|||Chapter 1 — Computer organization', description: 'von Neumann, thế hệ, phân hệ, CPU/bộ nhớ/I/O, kiến trúc.', lessons: [c1a, c1b, c1q] },
-    { title: 'Chương 2 — Hệ đếm|||Chapter 2 — Numbering systems', description: 'Hệ vị trí, đổi thập phân/nhị phân/bát phân/hex.', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Lưu trữ & thao tác dữ liệu|||Chapter 3 — Data storage & operations', description: 'Bù 2, IEEE 754, chữ/media, phép logic/dịch/số học.', lessons: [c3a, c3b, c3q] },
-    { title: 'Chương 4 — Mạng & Internet|||Chapter 4 — Networks & Internet', description: 'LAN/WAN, TCP/IP & OSI, IP/DNS, TCP vs UDP, web.', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Hệ điều hành|||Chapter 5 — Operating system', description: 'Tiến hoá, giao diện/bộ nhớ/tệp/thiết bị, lập lịch.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Thuật toán|||Chapter 6 — Algorithms', description: 'Ba cấu trúc, lưu đồ/mã giả, tìm kiếm, Big-O.', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Lập trình|||Chapter 7 — Programming', description: 'Mức ngôn ngữ, biên dịch vs thông dịch, mô thức.', lessons: [c7, c7q] },
-    { title: 'Chương 8 — Công nghệ phần mềm|||Chapter 8 — Software engineering', description: 'Vòng đời, phân tích/thiết kế, kiểm thử hộp trắng/đen.', lessons: [c8, c8q] },
-    { title: 'Chương 9 — Cấu trúc dữ liệu|||Chapter 9 — Data structures', description: 'Mảng/bản ghi/liên kết, stack/queue/cây/BST/đồ thị.', lessons: [c9, c9q] },
-    { title: 'Chương 10 — Cấu trúc tệp|||Chapter 10 — File structure', description: 'Text vs binary, truy cập tuần tự/chỉ mục/băm.', lessons: [c10, c10q] },
-    { title: 'Chương 11 — Cơ sở dữ liệu|||Chapter 11 — Database', description: 'DBMS, kiến trúc ba mức, mô hình quan hệ, thiết kế & SQL.', lessons: [c11, c11q] },
-    { title: 'Chương 12 — An toàn & đạo đức|||Chapter 12 — Security & ethics', description: 'CIA, mật mã đối xứng/bất đối xứng, tin tặc, đạo đức nghề.', lessons: [c12, c12q] },
+    { title: 'Chương 1 — Tổ chức máy tính|||Chapter 1 — Computer organization', description: 'von Neumann, thế hệ, phân hệ, CPU/bộ nhớ/I/O, kiến trúc.', lessons: [ch1aSlides, ch1bSlides, c1a, c1b, c1q] },
+    { title: 'Chương 2 — Hệ đếm|||Chapter 2 — Numbering systems', description: 'Hệ vị trí, đổi thập phân/nhị phân/bát phân/hex.', lessons: [ch2Slides, c2, c2q] },
+    { title: 'Chương 3 — Lưu trữ & thao tác dữ liệu|||Chapter 3 — Data storage & operations', description: 'Bù 2, IEEE 754, chữ/media, phép logic/dịch/số học.', lessons: [ch3aSlides, ch3bSlides, c3a, c3b, c3q] },
+    { title: 'Chương 4 — Mạng & Internet|||Chapter 4 — Networks & Internet', description: 'LAN/WAN, TCP/IP & OSI, IP/DNS, TCP vs UDP, web.', lessons: [ch4Slides, c4, c4q] },
+    { title: 'Chương 5 — Hệ điều hành|||Chapter 5 — Operating system', description: 'Tiến hoá, giao diện/bộ nhớ/tệp/thiết bị, lập lịch.', lessons: [ch5Slides, c5, c5q] },
+    { title: 'Chương 6 — Thuật toán|||Chapter 6 — Algorithms', description: 'Ba cấu trúc, lưu đồ/mã giả, tìm kiếm, Big-O.', lessons: [ch6Slides, c6, c6q] },
+    { title: 'Chương 7 — Lập trình|||Chapter 7 — Programming', description: 'Mức ngôn ngữ, biên dịch vs thông dịch, mô thức.', lessons: [ch7Slides, c7, c7q] },
+    { title: 'Chương 8 — Công nghệ phần mềm|||Chapter 8 — Software engineering', description: 'Vòng đời, phân tích/thiết kế, kiểm thử hộp trắng/đen.', lessons: [ch8Slides, c8, c8q] },
+    { title: 'Chương 9 — Cấu trúc dữ liệu|||Chapter 9 — Data structures', description: 'Mảng/bản ghi/liên kết, stack/queue/cây/BST/đồ thị.', lessons: [ch9aSlides, ch9bSlides, c9, c9q] },
+    { title: 'Chương 10 — Cấu trúc tệp|||Chapter 10 — File structure', description: 'Text vs binary, truy cập tuần tự/chỉ mục/băm.', lessons: [ch10Slides, c10, c10q] },
+    { title: 'Chương 11 — Cơ sở dữ liệu|||Chapter 11 — Database', description: 'DBMS, kiến trúc ba mức, mô hình quan hệ, thiết kế & SQL.', lessons: [ch11aSlides, ch11bSlides, c11, c11q] },
+    { title: 'Chương 12 — An toàn & đạo đức|||Chapter 12 — Security & ethics', description: 'CIA, mật mã đối xứng/bất đối xứng, tin tặc, đạo đức nghề.', lessons: [ch12Slides, c12, c12q] },
     { title: 'Chương 13 — Nhập môn AI|||Chapter 13 — Intro to AI', description: 'AI/ML/học sâu, ba kiểu học, ứng dụng & hạn chế, AI For Everyone.', lessons: [c13, c13q] },
   ],
 };

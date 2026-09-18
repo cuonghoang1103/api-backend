@@ -16,6 +16,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     shortDescription: 'How a computer is really built and how it runs: CPU internals, the memory hierarchy and cache, buses, I/O, digital logic, instruction sets, pipelining, RISC and multicore — the hardware layer beneath every program.|||Máy tính thực sự được xây và chạy ra sao: bên trong CPU, phân cấp bộ nhớ & cache, bus, I/O, logic số, tập lệnh, pipeline, RISC và đa nhân — tầng phần cứng bên dưới mọi chương trình.',
     description: 'Môn nhập môn kiến trúc và tổ chức máy tính theo giáo trình Stallings. Đi từ mô hình cỗ máy, hiệu năng, phân cấp bộ nhớ, logic số, tập lệnh, tới cấu trúc bộ xử lý, RISC, pipeline và xử lý song song. Có thực hành hợp ngữ trên MARIE simulator.',
     whatYouLearn: 'Phân biệt organization vs architecture; đo & tối ưu hiệu năng (Amdahl); phân cấp bộ nhớ & cache; bộ nhớ trong/ngoài; I/O (polling/interrupt/DMA); đại số Boole & mạch logic; tập lệnh & addressing modes; cấu trúc CPU & pipeline; RISC vs CISC; ILP/superscalar; đa nhân.',

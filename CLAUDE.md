@@ -294,6 +294,47 @@ git revert <bad_commit_sha>
 
 ---
 
+## Vào VPS khi mạng chặn cổng 22 (18/09/2026)
+
+**VPS nghe SSH trên CẢ hai cổng 22 và 993.** Cổng 993 do `ssh993.service` phục
+vụ (`sshd -D -p 993`), dựng vì mạng trường chỉ mở 80/443/587/993 ra ngoài — cổng
+22 bị chặn nên mất cả `ssh vps` lẫn `ssh linux-nha` (host này `ProxyJump` qua
+VPS). `~/.ssh/config` ở máy Mac có khối `Match host vps,<ip-vps> exec` dò IP của
+`en0`: ở trường tự đi 993, ở nhà tự về 22. Không phải bật tắt gì, và
+`deploy.sh`/`deploy-nha.sh` **không cần sửa** — chúng gọi IP trần nên khớp luôn
+vào khối `Host vps <ip-vps>`.
+
+⚠️ **`Port` trong `sshd_config` KHÔNG có tác dụng trên VPS này.** Ubuntu 24.04
+bật socket activation: `ssh.socket` (enabled) giữ cổng 22 rồi trao fd cho sshd,
+nên sshd bỏ qua mọi `Port`/`ListenAddress`. Kiểm trước khi sửa bất cứ thứ gì:
+`systemctl is-enabled ssh.socket`. Muốn thêm cổng thì khai `ListenStream=` trong
+drop-in của `ssh.socket`, **hoặc** dựng service riêng như `ssh993.service`.
+
+**Service riêng an toàn hơn sửa `ssh.socket`** trên máy đang chạy sản xuất:
+không phải restart socket ⇒ không làm rơi **đường hầm 2222** (máy Fedora ở nhà
+tự mở ra VPS — xem `Host linux-nha`), và nếu hỏng thì cổng 22 vẫn nguyên vẹn.
+
+🔧 **Không SSH vào được VPS? Dùng runner GitHub làm cánh tay nối dài.** 11
+workflow đã có sẵn secrets `VPS_HOST`/`VPS_USER`/`VPS_SSH_PRIVATE_KEY` và chạy
+từ mạng GitHub (không bị chặn bởi mạng bạn đang ngồi). Hai workflow bấm tay dành
+riêng cho việc này — **đừng xoá**, chúng là lối thoát khi mất đường vào máy chủ:
+
+- `ssh-port-diagnostic.yml` — **CHỈ ĐỌC**: cổng nào đang nghe, socket activation,
+  trạng thái tường lửa, cổng 993 còn trống không, đường hầm 2222 còn sống không
+- `ssh-port-apply.yml` — dựng `ssh993.service`; tự kiểm 5 điều kiện sau khi khởi
+  động và **tự gỡ bỏ** nếu bất kỳ cái nào hỏng
+
+⛔ **SSH chưa được siết — việc cần làm.** Khảo sát 18/09/2026 cho thấy cấu hình
+xác thực của sshd và tường lửa VPS đang ở mức mặc định lỏng, và nay có hai cổng
+SSH mở thay vì một. Chi tiết cố ý KHÔNG ghi vào repo — hỏi người vận hành. Việc
+nên làm sớm nhất: tắt xác thực bằng mật khẩu (log cho thấy thực tế chỉ dùng
+khoá) và cài fail2ban.
+
+Gỡ bỏ toàn bộ: xoá khối `Match` trong `~/.ssh/config`, và trên VPS
+`systemctl disable --now ssh993 && rm /etc/systemd/system/ssh993.service`.
+
+---
+
 ## Phát hành app desktop — MỘT CHỖ DUY NHẤT (20/08/2026)
 
 ```bash
@@ -561,6 +602,7 @@ Condensed log of past failures — do not repeat:
 | 2026-08-23 | `next.config.js` khai `Cache-Control: public, max-age=604800` cho `/playground/**` (94MB tài nguyên) — và quy tắc đó **chưa từng có hiệu lực một ngày nào**. `location /` trong `nginx.conf` gọi `proxy_hide_header Cache-Control` rồi dán `no-store` lên MỌI response, nên nó gỡ đúng cái header Next vừa đặt. Cùng cơ chế đó nuốt luôn cache của cả `public/`: 12 logo SVG + robot.json tải lại mỗi lần điều hướng | **nginx thắng `next.config.js`, luôn luôn.** Đặt header cache trong Next mà không mở một `location` tương ứng ở nginx thì chỉ là trang trí. Muốn một nhánh giữ được header của chính nó thì phải cho nó `location` riêng và **không** `proxy_hide_header` ở đó. Kiểm bằng `curl -I`, đừng đọc config rồi tin |
 | 2026-08-23 | `deploy-nha.sh` **chưa bao giờ deploy thay đổi nginx**. Cả file nhắc chữ `nginx` đúng một lần, trong một dòng chú thích; bước trên VPS chỉ có `docker compose up -d --no-build backend frontend`. Mà `nginx/nginx.conf` là bind-mount từ `/home/deployer/repo`, và từ khi bỏ `deploy.sh` (thứ có rsync) thì không còn gì cập nhật thư mục đó. Mọi thay đổi nginx đều "deploy thành công" mà không có hiệu lực — log xanh, smoke-test sạch, config mới nằm im trên máy | Đã thêm bước 6c vào `deploy-nha.sh`: so `sha256`, chỉ đẩy khi khác, `nginx -t` rồi mới `reload`. **Hỏng thì TRẢ BẢN CŨ VỀ NGAY** — `reload` với config sai thì vô hại (nginx giữ config cũ trong bộ nhớ), nhưng để file sai nằm lại trên đĩa là bom hẹn giờ: container `restart: unless-stopped`, lần khởi động lại kế tiếp nginx không lên nổi và cả web chết, vào lúc không ai đang deploy. Bài học chung: **thứ gì bind-mount thì nằm NGOÀI ảnh, nên đẩy ảnh không đụng tới nó** |
 | 2026-08-25 | Bước 6c mới thêm báo `KQ=OK` — `nginx -t` xanh, `reload` xanh — nhưng **HTTP/2 vẫn tắt và mọi header cache vẫn `no-store`**, hai lần deploy liền. Thủ phạm: nó thay file bằng `mv`. `nginx/nginx.conf` là **bind-mount một FILE ĐƠN**, mà Docker gắn file đơn theo **INODE** lúc container khởi động, không theo đường dẫn. `mv` trỏ đường dẫn host sang inode MỚI ⇒ container vẫn đọc inode CŨ ⇒ `nginx -t` kiểm config cũ (hợp lệ), `reload` nạp lại config cũ, script báo OK, không gì thay đổi | **Ghi ĐÈ TẠI CHỖ (`cat mới > conf`), không bao giờ `mv`/`rsync`/`sed -i`/`:w` của vim** — tất cả đều ghi file tạm rồi đổi tên. Và thêm chốt: so `sha256` file trên host với `docker exec … sha256sum /etc/nginx/nginx.conf`; lệch thì trả bản cũ về và dừng. Bài học rộng hơn: **"đã ghi" ≠ "container đọc được"** — với bind-mount file đơn, phải kiểm từ BÊN TRONG container |
+| 2026-09-18 | Mạng trường chặn cổng 22 ⇒ mất cả `ssh vps` lẫn `ssh linux-nha`. Cách sửa hiển nhiên — thêm `Port 993` vào `sshd_config` — **sẽ không có tác dụng nào**: Ubuntu 24.04 bật `ssh.socket`, systemd giữ cổng và trao fd, sshd bỏ qua `Port`. Làm mà không khảo sát trước thì sẽ ngồi nhìn một thay đổi "đã áp dụng thành công" mà không có gì đổi | Khảo sát TRƯỚC khi sửa (`systemctl is-enabled ssh.socket`). Trên máy đang chạy sản xuất, **THÊM** một listener độc lập (`ssh993.service`) an toàn hơn **SỬA** cái đang chạy: không restart `ssh.socket` ⇒ không làm rơi đường hầm 2222 về máy nhà, và hỏng thì cổng 22 vẫn nguyên. Xem mục "Vào VPS khi mạng chặn cổng 22" |
 | 2026-08-25 | Kết luận **SAI** rằng `/blog/<slug>` và `/tech-trends/<slug>` không thể trùng. Lý lẽ đọc từ mã hoàn toàn đúng — hai bảng riêng, hai endpoint riêng, không có đường rẽ chéo, không chỗ nào ghi cả hai. Nhưng production trả 200 cho CẢ HAI CHIỀU: `posts` và `tech_trend_articles` **có slug trùng nhau trong DỮ LIỆU** (cuộc gộp blog 05/08 chép nội dung sang bảng mới mà không xoá bảng cũ) | **Mã nói về khả năng, dữ liệu nói về thực tế.** "Mã không thể tạo ra trạng thái X" không suy ra được "trạng thái X không tồn tại" — dữ liệu có lịch sử riêng, do migration và thao tác tay tạo ra. Câu hỏi về trạng thái dữ liệu thì phải HỎI DỮ LIỆU. Ở đây một lệnh `curl` là đủ, và tôi đã có sẵn nó trong tay mà không chạy |
 
 ---

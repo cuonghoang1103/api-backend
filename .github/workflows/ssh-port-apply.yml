@@ -1,0 +1,121 @@
+name: SSH Port 993 Apply
+
+# Dung mot service sshd THU HAI nghe cong 993, chay song song va doc lap
+# voi ssh.socket/ssh.service dang giu cong 22.
+#
+# KHONG dung vao: ssh.socket, ssh.service, sshd_config, duong ham 2222.
+# Neu buoc nao that bai -> tu dong go bo, cong 22 khong he bi anh huong.
+#
+# Ly do ton tai: mang truong chan cong 22, chi mo 80/443/587/993.
+# Go bo: systemctl disable --now ssh993 && rm /etc/systemd/system/ssh993.service
+
+on:
+  workflow_dispatch:
+
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ConnectTimeout 30\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Them sshd tren cong 993
+        run: |
+          ssh vps 'bash -s' <<'EOF'
+          set -u
+
+          echo "===== TRUOC KHI SUA ====="
+          echo "cong 22 : $(ss -tln | grep -c ':22 ') listener"
+          echo "cong 993: $(ss -tln | grep -c ':993 ') listener"
+          echo "ham 2222: $(ss -tln | grep -c ':2222 ') listener"
+
+          echo; echo "===== 1. KIEM CU PHAP sshd_config ====="
+          if ! sshd -t; then
+            echo "!! sshd_config dang co loi cu phap - DUNG LAI, khong sua gi"
+            exit 1
+          fi
+          echo "OK"
+
+          echo; echo "===== 2. VIET UNIT MOI ====="
+          cat > /etc/systemd/system/ssh993.service <<'UNIT'
+          [Unit]
+          Description=OpenSSH server tren cong 993 (mang truong chan cong 22)
+          Documentation=man:sshd(8) man:sshd_config(5)
+          After=network.target
+
+          [Service]
+          Type=simple
+          ExecStartPre=/usr/sbin/sshd -t
+          ExecStart=/usr/sbin/sshd -D -p 993
+          ExecReload=/bin/kill -HUP $MAINPID
+          KillMode=process
+          Restart=on-failure
+          RestartSec=5
+          RestartPreventExitStatus=255
+
+          [Install]
+          WantedBy=multi-user.target
+          UNIT
+          echo "--- noi dung unit ---"
+          cat /etc/systemd/system/ssh993.service
+
+          echo; echo "===== 3. KHOI DONG ====="
+          systemctl daemon-reload
+          systemctl enable --now ssh993.service
+          sleep 3
+
+          echo; echo "===== 4. KIEM TRA ====="
+          LOI=0
+          if systemctl is-active --quiet ssh993.service; then
+            echo "OK  ssh993.service: active"
+          else
+            echo "LOI ssh993.service KHONG chay"; LOI=1
+          fi
+
+          if ss -tln | grep -q ':993 '; then
+            echo "OK  cong 993 dang nghe"
+          else
+            echo "LOI cong 993 KHONG nghe"; LOI=1
+          fi
+
+          if ss -tln | grep -q ':22 '; then
+            echo "OK  cong 22 VAN nghe binh thuong"
+          else
+            echo "LOI cong 22 bi mat"; LOI=1
+          fi
+
+          if systemctl is-active --quiet ssh.service; then
+            echo "OK  ssh.service goc van chay"
+          else
+            echo "LOI ssh.service goc bi anh huong"; LOI=1
+          fi
+
+          if ss -tln | grep -q ':2222 '; then
+            echo "OK  duong ham 2222 ve may nha van song"
+          else
+            echo "LOI duong ham 2222 bi dut"; LOI=1
+          fi
+
+          if [ "$LOI" -ne 0 ]; then
+            echo; echo "===== CO LOI -> TU DONG GO BO ====="
+            systemctl disable --now ssh993.service 2>&1 || true
+            rm -f /etc/systemd/system/ssh993.service
+            systemctl daemon-reload
+            echo "Da go bo. Cong 22 khong he bi dung toi."
+            exit 1
+          fi
+
+          echo; echo "===== 5. TU KIEM TRA BAT TAY SSH TREN 993 ====="
+          timeout 10 bash -c 'exec 3<>/dev/tcp/127.0.0.1/993; head -c 40 <&3' || echo "(khong doc duoc banner)"
+
+          echo; echo "===== XONG - THANH CONG ====="
+          EOF

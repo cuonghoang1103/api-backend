@@ -8,6 +8,10 @@
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/MAE101.mjs --apply
  */
 import ch1Slides from './mae101/ch1-slides.mjs';
+import ch5Slides from './mae101/ch5-slides.mjs';
+import ch4Slides from './mae101/ch4-slides.mjs';
+import ch3Slides from './mae101/ch3-slides.mjs';
+import ch2Slides from './mae101/ch2-slides.mjs';
 
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
@@ -459,6 +463,7 @@ export default {
       title: 'Chapter 2 — Derivatives|||Chương 2 — Đạo hàm',
       description: 'Đạo hàm là tốc độ thay đổi tức thời và các quy tắc tính đạo hàm.',
       lessons: [
+        ch2Slides,
         {
           title: '2.1 — The derivative as a rate of change|||2.1 — Đạo hàm là tốc độ thay đổi',
           slug: 'mae101-2-1-dao-ham',
@@ -626,6 +631,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
       title: 'Chapter 3 — Applications of Derivatives|||Chương 3 — Ứng dụng đạo hàm',
       description: 'Dùng đạo hàm để phân tích đồ thị và giải bài toán tối ưu.',
       lessons: [
+        ch3Slides,
         {
           title: '3.1 — Analyzing a function|||3.1 — Phân tích một hàm số',
           slug: 'mae101-3-1-phan-tich-ham',
@@ -763,6 +769,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
       title: 'Chapter 4 — Integrals|||Chương 4 — Tích phân',
       description: 'Tích phân xác định, định lý cơ bản và các kỹ thuật tính tích phân.',
       lessons: [
+        ch4Slides,
         {
           title: '4.1 — The definite integral & the Fundamental Theorem|||4.1 — Tích phân xác định & định lý cơ bản',
           slug: 'mae101-4-1-tich-phan',
@@ -928,6 +935,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
       title: 'Chapter 5 — Linear Systems|||Chương 5 — Hệ phương trình tuyến tính',
       description: 'Giải hệ phương trình bằng khử Gauss và dạng bậc thang.',
       lessons: [
+        ch5Slides,
         {
           title: '5.1 — Gaussian elimination|||5.1 — Khử Gauss',
           slug: 'mae101-5-1-khu-gauss',

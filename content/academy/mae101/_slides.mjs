@@ -19,6 +19,10 @@ export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/MAE101';
 
 export const DECKS = {
   mae1: { code: 'MAE1', en: 'Ch.1 Limits', vi: 'Ch.1 Giới hạn', total: 17, w: 1280, h: 720 },
+  mae2: { code: 'MAE2', en: 'Ch.2 Derivatives', vi: 'Ch.2 Đạo hàm', total: 17, w: 1280, h: 720 },
+  mae3: { code: 'MAE3', en: 'Ch.3 Applications of Derivatives', vi: 'Ch.3 Ứng dụng đạo hàm', total: 17, w: 1280, h: 720 },
+  mae4: { code: 'MAE4', en: 'Ch.4 Integrals', vi: 'Ch.4 Tích phân', total: 17, w: 1280, h: 720 },
+  mae5: { code: 'MAE5', en: 'Ch.5 Linear Systems', vi: 'Ch.5 Hệ phương trình tuyến tính', total: 16, w: 1280, h: 720 },
 };
 
 export function registerDeck(key, meta) {

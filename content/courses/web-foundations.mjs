@@ -31,6 +31,10 @@ export default {
     language: 'Vietnamese',
     status: 'PUBLISHED',
     isFeatured: true,
+    // Bắt thứ tự trong CSDL khớp thứ tự FILE. Không có cờ này thì mọi bài THÊM
+    // MỚI bị đẩy xuống cuối chương — bài "N.0 — Slide bài giảng" đặt ở đầu file
+    // lại hiện ra SAU cả bài kiểm tra cuối chương (đo thật 19/09/2026).
+    syncOrder: true,
     // Bìa: chạy TRONG container backend rồi seed lại (đừng sửa tay).
     // node -r dotenv/config scripts/course-cover.mjs --slug web-foundations --icon html5 --color E34F26 \
     //   --title "Nền tảng Web" --subtitle "Zero → sẵn sàng học Node.js & Next.js"

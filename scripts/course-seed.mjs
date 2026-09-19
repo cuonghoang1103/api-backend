@@ -149,6 +149,26 @@ if (!course) {
 
 /* 3. Sections + lessons ---------------------------------------------------- */
 let secN = 0, lesNew = 0, lesUpd = 0;
+/*
+ * course.syncOrder (tuỳ chọn): sau khi seed, bắt thứ tự trong CSDL khớp thứ tự
+ * trong FILE — cả section lẫn lesson bên trong nó.
+ *
+ * ⚠️ VÌ SAO CẦN: `lesOrder` dưới đây bắt đầu từ `max(sortOrder hiện có) + 1`,
+ * nên MỌI bài mới đều bị ĐẨY XUỐNG CUỐI chương, bất kể nó nằm ở đâu trong file.
+ * Bài cũ thì chỉ được cập nhật nội dung, không bao giờ sắp xếp lại.
+ *
+ * Đo thật 19/09/2026: thêm bài "1.0 — Slide bài giảng" vào ĐẦU chương 1 của
+ * `web-foundations`, seed xong nó nằm ở `sortOrder 6` — tức SAU cả bài "1.6 —
+ * Kiểm tra chương 1". Người học đi tìm slide ở đầu chương và không thấy.
+ *
+ * Bộ seed Academy đã có cờ này từ trước (`academy-seed-course.mjs`) vì đúng
+ * chuyện đó từng xảy ra ở đó. Port sang đây, cùng một cách làm.
+ *
+ * Hàng nào còn trong CSDL mà không còn trong file thì GIỮ NGUYÊN thứ tự tương
+ * đối và xếp SAU các hàng của file — không bao giờ xoá.
+ */
+const SYNC = !!c.syncOrder;
+const orderPlan = []; // [{ sectionId, lessonIds: [] }] theo đúng thứ tự file
 if (course) {
   const secs = spec.sections || [];
   const maxSec = await prisma.courseSection.aggregate({ where: { courseId: course.id }, _max: { sortOrder: true } });
@@ -179,6 +199,8 @@ if (course) {
 
     const maxLes = section ? await prisma.lesson.aggregate({ where: { sectionId: section.id }, _max: { sortOrder: true } }) : { _max: { sortOrder: -1 } };
     let lesOrder = (maxLes._max.sortOrder ?? -1) + 1;
+    const plan = section ? { sectionId: section.id, lessonIds: [] } : null;
+    if (plan) orderPlan.push(plan);
 
     for (const l of (s.lessons || [])) {
       const lslug = l.slug || slugify(l.title);
@@ -271,13 +293,17 @@ if (course) {
       if (!existing) {
         const lo = lesOrder++; lesNew++;
         console.log(`      + lesson @${lo} [${lessonCore.lessonType}]: ${l.title}`);
-        if (APPLY && section) await prisma.lesson.create({
-          data: {
-            sectionId: section.id, slug: lslug, sortOrder: lo, ...lessonCore,
-            details: { create: { videoPlatform: 'EMBED', ...detailPatch } },
-          },
-        });
+        if (APPLY && section) {
+          const created = await prisma.lesson.create({
+            data: {
+              sectionId: section.id, slug: lslug, sortOrder: lo, ...lessonCore,
+              details: { create: { videoPlatform: 'EMBED', ...detailPatch } },
+            },
+          });
+          plan?.lessonIds.push(created.id);
+        }
       } else if (!NO_UPDATE) {
+        plan?.lessonIds.push(existing.id);
         lesUpd++;
         console.log(`      ~ lesson [${lessonCore.lessonType}]: ${l.title} (re-author)`);
         if (APPLY) {
@@ -289,10 +315,32 @@ if (course) {
           });
         }
       } else {
+        plan?.lessonIds.push(existing.id);
         console.log(`      = lesson (skip): ${l.title}`);
       }
     }
   }
+
+  /* 3b. syncOrder: bắt thứ tự CSDL khớp thứ tự file ------------------------
+     Hai lượt (+100000 rồi số thật) để không lúc nào có hai hàng tranh cùng
+     một chỗ — hôm nay chưa có unique index, nhưng giao diện sắp theo cột này. */
+  if (SYNC && APPLY) {
+    const renumber = async (model, ids) => {
+      await prisma.$transaction(ids.map((id, i) => prisma[model].update({ where: { id }, data: { sortOrder: 100000 + i } })));
+      await prisma.$transaction(ids.map((id, i) => prisma[model].update({ where: { id }, data: { sortOrder: i } })));
+    };
+    for (const p of orderPlan) {
+      const all = await prisma.lesson.findMany({ where: { sectionId: p.sectionId }, select: { id: true }, orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
+      const rest = all.map((x) => x.id).filter((id) => !p.lessonIds.includes(id));
+      await renumber('lesson', [...p.lessonIds, ...rest]);
+    }
+    const fileSecIds = [...new Set(orderPlan.map((p) => p.sectionId))];
+    const allSec = await prisma.courseSection.findMany({ where: { courseId: course.id }, select: { id: true }, orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
+    const restSec = allSec.map((x) => x.id).filter((id) => !fileSecIds.includes(id));
+    await renumber('courseSection', [...fileSecIds, ...restSec]);
+    console.log(`  ↕ syncOrder: ${fileSecIds.length} section + bài bên trong đã đánh số lại theo thứ tự file`
+      + (restSec.length ? ` (${restSec.length} section không có trong file, giữ lại phía sau)` : ''));
+  } else if (SYNC && !APPLY) console.log('  ↕ syncOrder: sẽ đánh số lại section/bài theo thứ tự file');
 
   /* 4. Roll up counters shown on the course card (lessons / duration). ------
      totalLessons is displayed on every CourseCard; leaving it at 0 makes a

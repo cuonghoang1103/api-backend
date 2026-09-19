@@ -70,7 +70,12 @@ async function main() {
 
   let doc = 0, ghi = 0, boQua = 0, khongCoBai = 0, khongCoMa = 0, coDich = 0;
 
-  async function nap(tep) {
+  // ⚠️ `dungDich` chỉ BẬT ở lượt cuối. Bản dịch được sinh ra theo CÂU MỚI
+  // (đã chấm dấu, cắt lại), nên gán nó vào câu CŨ là sai — kể cả khi số
+  // dòng tình cờ bằng nhau. Đo 20/09/2026: 3 bài rơi đúng vào trường hợp
+  // "tình cờ bằng nhau" đó; lần này lượt sau ghi đè nên không hỏng, nhưng
+  // để nguyên thì một ngày nào đó nó sẽ hỏng im lặng.
+  async function nap(tep, dungDich) {
    if (!existsSync(tep)) return 0;
    let n = 0;
    const rl = createInterface({
@@ -92,7 +97,7 @@ async function main() {
     // ⚠️ CHỈ nhận bản dịch khi SỐ DÒNG khớp số câu. Lệch một dòng là mọi
     // câu sau đó mang nghĩa của câu khác — tệ hơn hẳn không có bản dịch,
     // vì người học không có cách nào biết là nó lệch.
-    const vi = dich.get(d.lessonId);
+    const vi = dungDich ? dich.get(d.lessonId) : undefined;
     const dichVi = Array.isArray(vi) && vi.length === d.cues.length ? vi : undefined;
     if (dichVi) coDich++;
 
@@ -117,8 +122,11 @@ async function main() {
    return n;
   }
 
-  const nBase = await nap(TEP);
-  const nV2 = await nap(TEP_V2);
+  // Bản dịch chỉ gán ở lượt CÓ CÂU MỚI. Khi nào `TEP_V2` phủ đủ 963 bài thì
+  // thay hẳn `TEP` bằng nó và đổi cờ này về lượt duy nhất còn lại.
+  const coV2 = existsSync(TEP_V2);
+  const nBase = await nap(TEP, !coV2);
+  const nV2 = await nap(TEP_V2, true);
 
   console.log(` phụ đề: đọc ${doc} · ${apDung ? 'ghi' : 'sẽ ghi'} ${ghi}` +
     ` · bản chấm câu mới ${nV2}/${nBase + nV2}` +

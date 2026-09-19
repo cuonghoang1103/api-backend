@@ -9,6 +9,8 @@
  * lại cho lần đọc sau — ai `split('\n\n')` rồi vứt phần cuối sẽ mất chữ một
  * cách ngẫu nhiên, và lỗi đó chỉ hiện ra với câu trả lời dài.
  */
+import { lichSuGui, themLuot, type LuotChat } from '../../../shared/nguCanhChat';
+
 interface Api {
   baseUrlForForms(): string;
   authHeaders(): Record<string, string>;
@@ -85,9 +87,23 @@ export function phienNoiHienTai(): string | null {
   return phienNoi;
 }
 
+/**
+ * Vòng nhớ ngữ cảnh cho lượt NÓI.
+ *
+ * ⚠️ `POST /ai/chat` không nhớ hộ: `sessionId` chỉ để GHI, ngữ cảnh model thấy
+ * đến duy nhất từ `history` client gửi. Trước 19/09/2026 chỗ này không gửi
+ * `history`, nên hỏi Odin "thủ đô Pháp là gì" rồi hỏi tiếp "dân số bao nhiêu"
+ * là nó không biết đang nói về cái gì — cùng một lỗi với khung chat nhanh của
+ * robot, chỉ khác đường vào.
+ */
+let luotNoi: LuotChat[] = [];
+
 /** Quên phiên hiện tại — dùng khi đăng xuất hoặc người dùng muốn bắt đầu lại. */
 export function quenPhienNoi(): void {
   phienNoi = null;
+  /* Quên phiên mà GIỮ ngữ cảnh là tệ hơn cả hai: máy chủ mở cuộc mới, còn
+     model vẫn nghe tiếp cuộc cũ. */
+  luotNoi = [];
 }
 
 /**
@@ -147,6 +163,9 @@ export async function hoiOdin(
       /* Máy chủ CHỈ lưu lượt chat khi có `sessionId`. Thiếu nó thì câu trả
          lời chỉ tồn tại trong bong bóng đã bị cắt ngắn. */
       ...(phien ? { sessionId: phien } : {}),
+      /* Ngữ cảnh — CHỘP trước khi thêm lượt này (xem `nguCanhChat.ts`). Đây là
+         thứ DUY NHẤT làm model nhớ câu trước; `sessionId` không làm việc đó. */
+      history: lichSuGui(luotNoi),
       /*
        * ⚠️ TRƯỚC 18/08/2026 CHỖ NÀY GỬI `systemHint` — MỘT TRƯỜNG MÁY CHỦ
        * KHÔNG HỀ ĐỌC. Nó chứa nguyên câu "Answer in English, at most 3 short
@@ -248,5 +267,12 @@ export async function hoiOdin(
       }
     }
   }
-  return tra.trim();
+  const traLoi = tra.trim();
+  /* Ghi SAU khi có câu trả lời, và CHỈ khi có — một lượt hỏng để lại câu hỏi
+     mồ côi thì lượt sau model thấy một câu chưa từng được đáp. */
+  if (traLoi) {
+    luotNoi = themLuot(luotNoi, { vai: 'user', chu: cauHoi });
+    luotNoi = themLuot(luotNoi, { vai: 'assistant', chu: traLoi });
+  }
+  return traLoi;
 }

@@ -1750,6 +1750,15 @@ export const INVOKE_CHANNELS = {
   /** Nạp lại một phiên cũ để chat tiếp. */
   'robot:phienDoc': z.object({ phienId: z.string().min(1).max(120) }),
   /**
+   * Bắt đầu cuộc MỚI: quên phiên và quên ngữ cảnh ở main.
+   *
+   * ⚠️ Không có kênh này thì nút "Mới" chỉ xoá MÀN HÌNH. `phienNoi` và vòng
+   * nhớ ở main vẫn nguyên, nên cuộc "mới" ghi tiếp vào phiên cũ và model vẫn
+   * mang theo ngữ cảnh cũ — khung trống trơn mà nó trả lời như đang giữa
+   * cuộc trò chuyện trước.
+   */
+  'robot:cuocMoi': z.null(),
+  /**
    * Nói với robot nổi. Tiếng thu được gửi lên dạng base64.
    *
    * ⚠️ Gửi CHỮ base64 chứ không gửi `Uint8Array`: kênh IPC có kiểm bằng zod, và
@@ -2509,6 +2518,8 @@ export interface DesktopBridge {
     }>;
     phienDs(): Promise<{ ds: Array<{ id: string; ten: string; luc: string; so: number }> }>;
     phienDoc(phienId: string): Promise<{ luot: Array<{ toi: boolean; chu: string }> }>;
+    /** Quên phiên + ngữ cảnh ở main để bắt đầu cuộc mới thật sự. */
+    cuocMoi(): Promise<{ ok: true }>;
     /**
      * Nói một câu với robot. Nhận vào tiếng đã thu (base64), trả về câu nghe
      * được, câu trả lời, và tiếng đọc (base64) — hoặc `null` nếu người dùng

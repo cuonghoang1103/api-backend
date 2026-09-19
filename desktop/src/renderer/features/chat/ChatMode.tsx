@@ -31,6 +31,7 @@ import { ChuAgent } from './markdown';
 import {
   DaiDinhKem, DinhKemDaGui, NutDinhKem, ODinhKem, useDinhKem, type TepDinhKem,
 } from './DinhKem';
+import { anhKemLai, type LuotChat } from '../../../shared/nguCanhChat';
 import { useDanKhapNoi } from './DinhKemCode';
 import { ChupManHinh, NutChupManHinh } from './ChupManHinh';
 import { NutGoiThoai } from './NutGoiThoai';
@@ -604,6 +605,19 @@ export function ChatMode({ pro }: { pro: boolean }) {
 
       const anh = tep.filter((t) => t.loai === 'image');
       const tai = tep.filter((t) => t.loai === 'tailieu');
+
+      /* ⚠️ Lịch sử lên model là CHỮ THUẦN — ảnh chỉ đi kèm đúng lượt người
+         dùng vừa đính. Nên gửi ảnh đề rồi hỏi tiếp "câu b thì sao" là model
+         KHÔNG CÒN NHÌN THẤY ĐỀ, và nó quay ra xin gửi lại ảnh. Người dùng gửi
+         đúng ảnh chứng minh điều này 19/09/2026.
+         Bản WEB đã vá từ trước (`TAM_NHO_ANH` trong `frontend/.../chat/page.tsx`);
+         app thì chưa — hai kho, một tính năng, chỉ một bên được vá. */
+      const luotCu: LuotChat[] = truoc.slice(0, -1).map((l) => ({
+        vai: l.vai,
+        chu: l.text,
+        anh: l.tep?.filter((t) => t.loai === 'image').map((t) => t.url),
+      }));
+      const anhGui = anhKemLai(luotCu, anh.length ? anh.map((t) => t.url) : undefined);
       const res = await fetch(`${api.baseUrlForForms()}/api/v1/ai/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...api.authHeaders() },
@@ -618,7 +632,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
           // Máy chủ nhận data URL đầy đủ và tự tách phần base64 (`parseChatImages`
           // / `parseChatDocuments`). Gửi kèm TÊN FILE vì nó là nhãn duy nhất
           // model có để nói "trong file hợp-đồng.pdf thì…".
-          ...(anh.length ? { images: anh.map((t) => t.url) } : {}),
+          ...(anhGui?.length ? { images: anhGui } : {}),
           ...(tai.length ? { documents: tai.map((t) => t.url), documentNames: tai.map((t) => t.ten) } : {}),
           ...(tuMicro
             ? { voice: true, ngonNgu: settings.odinNgonNgu === 'en' ? 'en' : 'vi' }

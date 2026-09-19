@@ -469,6 +469,7 @@ const bridge: DesktopBridge = {
     phienDoc: (phienId: string) => ipcRenderer.invoke('robot:phienDoc', { phienId }) as Promise<{
       luot: Array<{ toi: boolean; chu: string }>;
     }>,
+    cuocMoi: () => ipcRenderer.invoke('robot:cuocMoi', null) as Promise<{ ok: true }>,
     noi: (tiengBase64: string) => ipcRenderer.invoke('robot:noi', { tiengBase64 }) as Promise<{
       cauHoi: string; traLoi: string; cau: string[];
     }>,

@@ -840,6 +840,11 @@ function KhungChat({ onDong }: { onDong: () => void }) {
     datAnh([]);
     datBao(null);
     datMoSu(false);
+    /* Xoá cả ở MAIN, không chỉ trên màn hình. Main giữ `phienNoi` và vòng nhớ
+       ngữ cảnh; bỏ bước này thì cuộc "mới" ghi tiếp vào phiên cũ và model vẫn
+       mang theo ngữ cảnh cũ — khung trống mà nó trả lời như đang giữa cuộc
+       trước, và không có gì để người dùng thấy điều đó. */
+    void window.cuongthai?.robot.cuocMoi();
   };
 
   /**

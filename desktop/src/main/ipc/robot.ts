@@ -29,6 +29,9 @@ export function guiLaiBaiDangHoc(): void {
 import { getSettings, setSetting } from '../store';
 import { tachCau } from '../../renderer/features/odin/tachCau';
 import { ganNhan, hoiMay, sanChoLuoiDo } from '../aiCucBo/hoi';
+import {
+  anhKemLai, lichSuGui, themLuot, type LuotChat,
+} from '../../shared/nguCanhChat';
 import { handle } from './index';
 
 export function registerRobotHandlers(): void {
@@ -292,6 +295,11 @@ export function registerRobotHandlers(): void {
   });
 
   /** Nạp một phiên cũ để chat tiếp ngay trong khung mini. */
+  handle('robot:cuocMoi', async () => {
+    xoaNguCanhRobot();
+    return { ok: true as const };
+  });
+
   handle('robot:phienDoc', async ({ phienId }) => {
     const phien = readStoredSession();
     if (!phien) return { luot: [] };
@@ -305,12 +313,22 @@ export function registerRobotHandlers(): void {
          nếu không, người dùng thấy lịch sử nhưng câu trả lời lại đi vào một
          cuộc khác, và lần sau mở lại vẫn không thấy gì. */
       phienNoi = phienId;
-      return {
-        luot: (j.data ?? []).map((m) => ({
-          toi: m.role === 'user',
-          chu: (m.content ?? '').trim(),
-        })).filter((m) => m.chu !== ''),
-      };
+      const luot = (j.data ?? []).map((m) => ({
+        toi: m.role === 'user',
+        chu: (m.content ?? '').trim(),
+      })).filter((m) => m.chu !== '');
+
+      /* NẠP LẠI vòng nhớ theo đúng cuộc vừa mở. Thiếu bước này thì người dùng
+         mở một cuộc cũ, nhìn thấy đầy đủ lịch sử trên màn hình, rồi hỏi tiếp —
+         và model trả lời bằng ngữ cảnh của cuộc TRƯỚC ĐÓ. Màn hình nói một
+         đằng, model nghĩ một nẻo, và không có gì để người dùng thấy điều đó.
+         Ảnh không khôi phục được: máy chủ chỉ trả `content` chữ thuần. */
+      luotRobot = luot.map((m) => ({
+        vai: m.toi ? 'user' as const : 'assistant' as const,
+        chu: m.chu,
+      }));
+
+      return { luot };
     } catch { return { luot: [] }; }
   });
 
@@ -435,6 +453,26 @@ async function docThanhTieng(token: string, chu: string): Promise<string> {
  */
 let phienNoi: string | null = null;
 
+/**
+ * VÒNG NHỚ NGỮ CẢNH của khung chat nhanh.
+ *
+ * ⚠️ Không có nó thì khung nhanh KHÔNG NHỚ GÌ CẢ. `POST /ai/chat` chỉ dùng
+ * `sessionId` để GHI; ngữ cảnh model thấy đến duy nhất từ `history` mà client
+ * gửi lên. Trước 19/09/2026 chỗ này không gửi `history` bao giờ, nên mỗi câu
+ * hỏi là một cuộc đời mới — người dùng gửi ảnh đề rồi hỏi tiếp thì nhận lại
+ * "mình không có đề bài hay nội dung nào cả".
+ *
+ * Chỉ trong BỘ NHỚ, không xuống đĩa: mở app một lần là một cuộc trò chuyện.
+ * Lịch sử để đọc lại vẫn nằm ở máy chủ, lấy qua `robot:phienDoc`.
+ */
+let luotRobot: LuotChat[] = [];
+
+/** Bắt đầu cuộc mới: quên cả phiên lẫn ngữ cảnh. */
+export function xoaNguCanhRobot(): void {
+  phienNoi = null;
+  luotRobot = [];
+}
+
 export function phienNoiHienTai(): string | null {
   return phienNoi;
 }
@@ -474,7 +512,10 @@ export interface KetQuaHoi {
   roiBac: { thanh: string; lyDo: string } | null;
 }
 
-async function hoiTroLy(
+/* `export` để phép kiểm gọi thẳng được. Cái đáng kiểm ở đây — thân yêu cầu có
+   `history` hay không — không lộ ra ở bất kỳ tầng nào khác, và chính chỗ đó đã
+   im lặng hỏng suốt một thời gian dài. */
+export async function hoiTroLy(
   token: string, chu: string, laLoiNoi: boolean, them: ThemHoi = {},
 ): Promise<KetQuaHoi> {
     // Chưa có phiên thì tạo. Hỏng thì KHÔNG chặn đường: mất lịch sử còn hơn
@@ -493,6 +534,12 @@ async function hoiTroLy(
     // Phiên người dùng chỉ định (họ vừa mở một cuộc cũ) thắng phiên hiện hành.
     if (them.phienId) phienNoi = them.phienId;
 
+    /* ⚠️ CHỘP ngữ cảnh TRƯỚC khi thêm lượt vừa gõ. Thêm trước rồi mới chộp thì
+       câu này nằm cả trong `history` lẫn trong `message`, và model đọc nó hai
+       lần — nó trả lời như thể bạn hỏi hai lần. */
+    const lichSu = lichSuGui(luotRobot);
+    const anhGui = anhKemLai(luotRobot, them.anh);
+
     try {
       const res = await fetch(`${API_ORIGIN}/api/v1/ai/chat`, {
         method: 'POST',
@@ -503,7 +550,8 @@ async function hoiTroLy(
           ...(phienNoi ? { sessionId: phienNoi } : {}),
           ...(laLoiNoi ? { voice: true } : {}),
           ...(them.model ? { model: them.model } : {}),
-          ...(them.anh?.length ? { images: them.anh } : {}),
+          history: lichSu,
+          ...(anhGui?.length ? { images: anhGui } : {}),
         }),
       });
       if (!res.ok || !res.body) {
@@ -534,7 +582,18 @@ async function hoiTroLy(
           } catch { /* khung lạ — bỏ qua, app cũ không được vỡ vì khung mới */ }
         }
       }
-      return { chu: ra.trim() || '(không có nội dung)', phienId: phienNoi, roiBac };
+      const traLoi = ra.trim();
+      /* Ghi vào vòng nhớ SAU khi có câu trả lời, và CHỈ khi có.
+         Ghi trước thì một lượt hỏng (mất mạng, 500) vẫn để lại câu hỏi mồ côi
+         trong ngữ cảnh, và lượt sau model thấy một câu hỏi chưa từng được đáp.
+         Ảnh lưu theo `them.anh` — ảnh NGƯỜI DÙNG vừa đính — chứ không theo
+         `anhGui`: `anhGui` có thể là ảnh kèm lại từ lượt cũ, và lưu nó lần nữa
+         là nhân bản cùng một tấm ảnh qua từng lượt cho tới khi vòng nhớ đầy. */
+      if (traLoi) {
+        luotRobot = themLuot(luotRobot, { vai: 'user', chu, anh: them.anh });
+        luotRobot = themLuot(luotRobot, { vai: 'assistant', chu: traLoi });
+      }
+      return { chu: traLoi || '(không có nội dung)', phienId: phienNoi, roiBac };
     } catch (err) {
       return {
         chu: `Không gọi được máy chủ: ${(err as Error).message}`,

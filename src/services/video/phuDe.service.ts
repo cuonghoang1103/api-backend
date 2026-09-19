@@ -17,22 +17,42 @@ export type CauPhuDe = { t: number; en: string };
  * bấm nhầm đúng một lần rồi thôi tin cả màn hình.
  */
 export async function danhMuc() {
-  const ds = await prisma.$queryRaw<
-    { courseId: number; title: string; slug: string | null; thumbnail: string | null; soVideo: bigint }[]
-  >`
-    SELECT c.id AS "courseId", c.title, c.slug, c.thumbnail,
-           COUNT(DISTINCT t.lesson_id) AS "soVideo"
-    FROM lesson_transcripts t
-    JOIN lessons         l ON l.id = t.lesson_id
-    JOIN course_sections s ON s.id = l.section_id
-    JOIN courses         c ON c.id = s.course_id
-    GROUP BY c.id, c.title, c.slug, c.thumbnail
-    ORDER BY COUNT(DISTINCT t.lesson_id) DESC
-  `;
-  // ⚠️ `COUNT` của Postgres về dạng BigInt, mà `JSON.stringify` NÉM trên
-  // BigInt. Quên đổi là cả endpoint trả 500 với log chỉ nói "Do not know
-  // how to serialize a BigInt" — không nhắc gì tới COUNT.
-  return ds.map((d: (typeof ds)[number]) => ({ ...d, soVideo: Number(d.soVideo) }));
+  // ⚠️ KHÔNG dùng SQL thô ở đây nữa.
+  //
+  // Bản đầu viết `SELECT ... c.thumbnail ...` — nhưng cột thật tên
+  // `thumbnail_url`. `tsc` không soi được tên cột nằm trong chuỗi, nên nó
+  // qua sạch mọi phép kiểm, qua cả smoke-test của deploy (route trả 500 vẫn
+  // là "không phải 404"), và chỉ lộ ra khi người dùng bấm vào và thấy
+  // "Không tải được". Truy vấn có kiểu thì đổi tên cột là `tsc` gãy ngay.
+  //
+  // Gom nhóm ở JS: 1.030 hàng nhỏ, rẻ hơn hẳn cái giá của một câu SQL mà
+  // không công cụ nào kiểm hộ.
+  const ds = await prisma.lessonTranscript.findMany({
+    select: {
+      lessonId: true,
+      lesson: {
+        select: {
+          section: {
+            select: {
+              course: { select: { id: true, title: true, slug: true, thumbnailUrl: true } },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const gom = new Map<number, { courseId: number; title: string; slug: string | null;
+                                thumbnail: string | null; soVideo: number }>();
+  for (const d of ds) {
+    const c = d.lesson?.section?.course;
+    if (!c) continue;
+    const cu = gom.get(c.id);
+    if (cu) cu.soVideo += 1;
+    else gom.set(c.id, { courseId: c.id, title: c.title, slug: c.slug,
+                         thumbnail: c.thumbnailUrl, soVideo: 1 });
+  }
+  return [...gom.values()].sort((a, b) => b.soVideo - a.soVideo);
 }
 
 /** Danh sách video trong một khoá. */

@@ -1704,6 +1704,7 @@ export const coursesApi = {
     category?: string;
     level?: string;
     academy?: string; // 'fpt' → only FPTU Academy courses; omit → only GENERAL
+    gon?: 1; // 1 = bản gọn cho trang danh sách (bỏ `sections`) — xem ghi chú dưới
   }) => api.get('/courses', { params }),
 
   // Report a lesson's measured video duration (0-fill only, server-side).
@@ -1713,7 +1714,10 @@ export const coursesApi = {
   getFeatured: (limit = 6) =>
     api.get('/courses/featured', { params: { limit } }),
 
-  getBySlug: (slug: string) => api.get(`/courses/${slug}`),
+  // `gon`: bản gọn cho TRANG GIỚI THIỆU — bỏ `content` của từng bài (89%
+  // payload) vì trang đó chỉ vẽ mục lục. Trang HỌC phải gọi không có cờ này.
+  getBySlug: (slug: string, gon?: boolean) =>
+    api.get(`/courses/${slug}`, gon ? { params: { gon: 1 } } : undefined),
 
   getReviews: (courseId: number) =>
     api.get(`/courses/${courseId}/reviews`),

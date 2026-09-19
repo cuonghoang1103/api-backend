@@ -373,7 +373,7 @@ export default function CourseDetailPage() {
     const fetch = async () => {
       setLoading(true);
       try {
-        const res = await coursesApi.getBySlug(slug);
+        const res = await coursesApi.getBySlug(slug, true);
         setCourse(res.data.data);
         if (res.data.data?.id) {
           // Wrap the optional reviews call in its own try/catch

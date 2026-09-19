@@ -834,6 +834,97 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
     const wantAcademy = ['1', 'fpt', 'true', 'FPT'].includes(String(academy));
     where.semesterId = wantAcademy ? { not: null } : null;
 
+    /*
+     * ?gon=1 — DANH SÁCH, không phải chi tiết. Cùng lối với nhánh Academy ở trên.
+     *
+     * ⚠️ Đường mặc định ở dưới gọi `serializeCourse` MỘT LẦN CHO MỖI MÔN, mà
+     * mỗi lần đó kéo TOÀN BỘ cây chương → bài → chi tiết bài → tài liệu →
+     * bài tập. Đo thật trên production 19/09/2026, `GET /api/v1/courses`:
+     *
+     *     2.857.047 B (2,86 MB) cho 12 khoá · TTFB 0,55s · tổng 0,96s
+     *     trường `sections` chiếm 44,5 KB MỖI KHOÁ = 2,5 MB (87%)
+     *
+     * Mà `CourseCard.tsx` đọc đúng 18 trường vô hướng và KHÔNG đụng
+     * `sections` lấy một lần. Cộng thêm N+1: 12 khoá = 12 lượt truy vấn nặng
+     * chạy song song, tranh nhau ở máy chủ.
+     *
+     * ⛔ KHÔNG cắt `sections` khỏi đường mặc định — app desktop và app iOS
+     * đang lấy cây chương từ chính endpoint này. Đây là đường MỚI chọn bằng
+     * tham số: ai không truyền gì thì không đổi gì.
+     */
+    if (String(req.query.gon || '') === '1') {
+      const [danhSach, total] = await Promise.all([
+        prisma.course.findMany({
+          where, skip,
+          take: Number(size),
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true, slug: true, title: true, courseCode: true,
+            shortDescription: true, thumbnailUrl: true,
+            price: true, discountPrice: true, isFree: true, isFeatured: true,
+            isPublished: true, level: true, language: true, status: true,
+            totalLessons: true, totalDurationSeconds: true, totalReviews: true,
+            avgRating: true, createdAt: true,
+            category: { select: { name: true, slug: true } },
+            instructor: { select: { username: true, avatarUrl: true } },
+            _count: { select: { enrollments: { where: CHI_GHI_DANH_THAT } } },
+          },
+        }),
+        prisma.course.count({ where }),
+      ]);
+
+      // `isEnrolled` bằng MỘT truy vấn cho cả trang, không phải mỗi khoá một
+      // lượt — đó chính là cái N+1 mà nhánh này sinh ra để tránh.
+      let daGhiDanh = new Set<number>();
+      if (req.userId && danhSach.length > 0) {
+        const rows = await prisma.enrollment.findMany({
+          where: { userId: req.userId, courseId: { in: danhSach.map((c) => c.id) } },
+          select: { courseId: true },
+        });
+        daGhiDanh = new Set(rows.map((r) => r.courseId));
+      }
+
+      res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=600');
+      res.json({
+        success: true,
+        data: danhSach.map((c) => ({
+          id: c.id,
+          slug: c.slug,
+          title: c.title,
+          courseCode: c.courseCode,
+          shortDescription: c.shortDescription,
+          thumbnailUrl: c.thumbnailUrl,
+          // ⚠️ `Number(...)` KHÔNG được bỏ: `price`/`discountPrice`/`avgRating`
+          // là Decimal trong Prisma và ra JSON thành CHUỖI. App iOS khai
+          // `let price: Double`, gặp chuỗi là JSONDecoder ném lỗi và màn hình
+          // trắng trơn — hỏng câm. Đường cũ đã làm đúng ở `serializeCourse`.
+          price: Number(c.price),
+          discountPrice: c.discountPrice ? Number(c.discountPrice) : undefined,
+          isFree: c.isFree,
+          isFeatured: c.isFeatured,
+          isPublished: c.isPublished,
+          level: c.level,
+          language: c.language,
+          status: c.status,
+          totalLessons: c.totalLessons,
+          totalDurationSeconds: c.totalDurationSeconds,
+          totalReviews: c.totalReviews,
+          avgRating: Number(c.avgRating),
+          createdAt: c.createdAt,
+          categoryName: c.category?.name,
+          categorySlug: c.category?.slug,
+          instructorName: c.instructor?.username,
+          instructorAvatar: c.instructor?.avatarUrl,
+          // Đếm thật như `serializeCourse`, không lấy cột `totalStudents` —
+          // cột đó trôi vì không phải lối ghi danh nào cũng cộng vào.
+          totalStudents: c._count.enrollments,
+          isEnrolled: daGhiDanh.has(c.id),
+        })),
+        pagination: { page: Number(page), limit: Number(size), total, totalPages: Math.ceil(total / Number(size)) },
+      });
+      return;
+    }
+
     const [courses, total] = await Promise.all([
       prisma.course.findMany({
         where, skip,
@@ -1831,6 +1922,42 @@ router.get('/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next)
       course.id,
       req.userId ? { userId: req.userId, includeDraftLessons: isAdminViewer } : undefined,
     );
+
+    /*
+     * ?gon=1 — TRANG GIỚI THIỆU khoá học, không phải trang học.
+     *
+     * Trang landing (`CoursePageClient.tsx`) vẽ mục lục: tên chương, tên bài,
+     * thời lượng, bài nào học thử được. Nó KHÔNG đọc `lesson.content` một lần
+     * nào — grep `.content` trong file đó chỉ ra `review.content`.
+     *
+     * Đo thật 19/09/2026 trên `GET /api/v1/courses/linux-bash`:
+     *
+     *     474 KB tổng · 69 bài trong 13 chương
+     *     `content` của các bài chiếm 421 KB = 89% payload — tải về rồi vứt
+     *
+     * ⛔ KHÔNG bỏ `content` ở đường mặc định: TRANG HỌC
+     * (`LearnPageClient.tsx`) vẽ ngay `currentLesson.content` lấy từ gói này
+     * để có chữ hiện liền, rồi mới gọi `getLesson` bổ sung sau (fire-and-
+     * forget). Cắt đi là bài học chớp một nhịp trống trước khi chữ hiện.
+     * Nên đây là đường MỚI chọn bằng tham số.
+     */
+    if (String(req.query.gon || '') === '1') {
+      const goiGon = {
+        ...serializedCourse,
+        sections: serializedCourse.sections.map((sec) => ({
+          ...sec,
+          lessons: sec.lessons.map((bai) => {
+            // Bỏ đúng hai thứ nặng; giữ nguyên mọi trường mục lục cần
+            // (title, duration, type, isFreePreview, sortOrder...).
+            const { content: _content, details: _details, ...mucLuc } = bai as Record<string, unknown>;
+            return mucLuc;
+          }),
+        })),
+      };
+      res.json({ success: true, data: goiGon });
+      return;
+    }
+
     res.json({ success: true, data: serializedCourse });
   } catch (error) { next(error); }
 });

@@ -49,6 +49,11 @@ function CoursesContent() {
         category: academyMode ? undefined : (category || undefined),
         level: level || undefined,
         academy: academyMode ? 'fpt' : undefined,
+        // Bản gọn: trang này chỉ vẽ CourseCard (18 trường vô hướng) và không
+        // đọc `sections`. Không có tham số này thì máy chủ trả cả cây chương →
+        // bài cho TỪNG khoá — đo thật 19/09/2026: 2,86 MB cho 12 khoá, trong
+        // đó `sections` chiếm 2,5 MB, cộng 12 lượt truy vấn nặng song song.
+        gon: 1,
       });
       const coursesData = res.data?.data;
       const pagination = res.data?.pagination;

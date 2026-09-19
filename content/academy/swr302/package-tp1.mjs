@@ -424,10 +424,12 @@ students learn the answer immediately and staff handle only the exceptions.</p>
 <p>Release 1.0 targets <strong>BO-1, BO-2, BO-3 and BO-4</strong> — the registration window itself and
 the three checks that sit behind it. It must be live for a full registration window.</p>
 <p>Included: <strong>FE-1, FE-2, FE-3, FE-4, FE-5, FE-6, FE-7, FE-8, FE-12</strong>.</p>
-<p>Scope boundaries for Release 1.0:
-- All six faculties from day one. Registration cannot be piloted on part of the student body, because sections are shared across faculties.
-- Degree audit (FE-9) is <strong>not</strong> included; prerequisite checking (FE-4) is, and the two use the same curriculum rules, so FE-9 becomes largely configuration in 1.1.
-- Financial eligibility uses whichever interface the vendor makes available (RI-1).</p>
+<p>Scope boundaries for Release 1.0:</p>
+<ul>
+<li>All six faculties from day one. Registration cannot be piloted on part of the student body, because sections are shared across faculties.</li>
+<li>Degree audit (FE-9) is <strong>not</strong> included; prerequisite checking (FE-4) is, and the two use the same curriculum rules, so FE-9 becomes largely configuration in 1.1.</li>
+<li>Financial eligibility uses whichever interface the vendor makes available (RI-1).</li>
+</ul>
 <h3>2.3 Scope of Subsequent Releases</h3>
 <table>
 <thead>
@@ -1849,11 +1851,13 @@ therefore appears in SRS §4.4 rather than here.</p>
 <hr />
 <h3>4. Use Case Diagram</h3>
 <p>See <code>diagrams/use-case-diagram.drawio</code> (editable) and <code>diagrams/use-case-diagram.png</code> (for the SRS Appendix B).</p>
-<p><strong>Reading the diagram</strong>
-- Primary actors are on the <strong>left</strong>, secondary (system) actors on the <strong>right</strong>.
-- The rectangle is the <strong>system boundary</strong>. The finance system, SSO, timetable system and LMS sit outside it deliberately (Vision &amp; Scope §2.4).
-- <code>«include»</code> arrows point <strong>from</strong> the base use case <strong>to</strong> the always-executed use case.
-- <code>«extend»</code> arrows point <strong>from</strong> the optional use case <strong>to</strong> the base it extends.</p>
+<p><strong>Reading the diagram</strong></p>
+<ul>
+<li>Primary actors are on the <strong>left</strong>, secondary (system) actors on the <strong>right</strong>.</li>
+<li>The rectangle is the <strong>system boundary</strong>. The finance system, SSO, timetable system and LMS sit outside it deliberately (Vision &amp; Scope §2.4).</li>
+<li><code>«include»</code> arrows point <strong>from</strong> the base use case <strong>to</strong> the always-executed use case.</li>
+<li><code>«extend»</code> arrows point <strong>from</strong> the optional use case <strong>to</strong> the base it extends.</li>
+</ul>
 <p><strong>Relationships shown</strong></p>
 <table>
 <thead>
@@ -5423,37 +5427,51 @@ is a share of the column total.</p>
 <p><strong>The ranking and the release plan disagree, and the release plan is right.</strong></p>
 <p>Look at what the model rewards and what it punishes:</p>
 <ul>
-<li><strong>FE-4, FE-5 and FE-9 carry the three highest Value % scores in the table</strong> — 10.19,
+<li>
+<p><strong>FE-4, FE-5 and FE-9 carry the three highest Value % scores in the table</strong> — 10.19,
   9.06 and 9.43. They are the most valuable things in the project, and the model knows
   it. They rank 9th, 12th and 13th anyway, because they are also the most expensive and
-  the riskiest.</li>
-<li><strong>FE-12 wins</strong> on being cheap, safe and unavoidable — not on being important.</li>
+  the riskiest.</p>
+</li>
+<li>
+<p><strong>FE-12 wins</strong> on being cheap, safe and unavoidable — not on being important.</p>
+</li>
 <li><strong>FE-13 ranks 3rd</strong> and is deferred to Release 1.2, which nobody disputes.</li>
 </ul>
 <p>This is the model working correctly and then being overruled for reasons it cannot see:</p>
 <ol>
-<li><strong>The model has no concept of the business case.</strong> BO-2 (640 staff-hours) and BO-4
+<li>
+<p><strong>The model has no concept of the business case.</strong> BO-2 (640 staff-hours) and BO-4
    (240 staff-hours) are what the Vice-Rector funded. Only FE-4 and FE-5 deliver them.
    A Release 1.0 built from the top of this ranking would open a registration window
-   beautifully and still check every prerequisite by hand.</li>
-<li><strong>The model treats risk as a reason to defer.</strong> FE-5's risk of 8 is entirely RI-1 —
+   beautifully and still check every prerequisite by hand.</p>
+</li>
+<li>
+<p><strong>The model treats risk as a reason to defer.</strong> FE-5's risk of 8 is entirely RI-1 —
    the finance vendor. Deferring FE-5 does not reduce that risk; it discovers it later,
    when there is less time to route around it. Constraint CO-7 (the adapter) exists
-   precisely so the project can start FE-5 <em>before</em> the vendor's answer is known.</li>
-<li><strong>The model cannot see dependency.</strong> FE-10 ranks 6th but is worthless without FE-5:
-   it displays the data FE-5 obtains.</li>
+   precisely so the project can start FE-5 <em>before</em> the vendor's answer is known.</p>
+</li>
+<li>
+<p><strong>The model cannot see dependency.</strong> FE-10 ranks 6th but is worthless without FE-5:
+   it displays the data FE-5 obtains.</p>
+</li>
 </ol>
 <p><strong>Decision:</strong> the release plan in Vision &amp; Scope §2.2 stands. The worksheet is used for
 two narrower questions instead:</p>
 <ul>
-<li><strong>Sequencing inside Release 1.0.</strong> Build FE-12, FE-1 and FE-2 first — they are cheap,
+<li>
+<p><strong>Sequencing inside Release 1.0.</strong> Build FE-12, FE-1 and FE-2 first — they are cheap,
   low-risk and they are what a rehearsal window needs in order to load-test anything at
-  all.</li>
-<li><strong>What to drop if the schedule slips.</strong> Rank order says <strong>FE-7 (waitlist) goes
+  all.</p>
+</li>
+<li>
+<p><strong>What to drop if the schedule slips.</strong> Rank order says <strong>FE-7 (waitlist) goes
   first</strong> — rank 11, and UC-06 overrides cover the same need less fairly but adequately
   for one semester. <strong>FE-4 and FE-5 cannot be dropped</strong>, because dropping them means
   the project delivers a faster registration window and none of the staff-hour savings
-  that justified it.</li>
+  that justified it.</p>
+</li>
 </ul>
 <div class="callout">
 <p>A prioritization worksheet whose output is simply obeyed is a worksheet nobody
@@ -5673,12 +5691,16 @@ screens and only five interfacing systems, none of them large. The three methods
 measure different things but, on a system this shaped, they land in the same place.</p>
 <p>That is a genuine finding rather than a coincidence, and it cuts both ways:</p>
 <ul>
-<li><strong>It raises confidence in the number.</strong> Three independent methods agreeing within
-  0.45 of a BA is stronger evidence than any one of them alone.</li>
-<li><strong>It does not mean the estimate is complete.</strong> All three methods price <em>artifacts and
+<li>
+<p><strong>It raises confidence in the number.</strong> Three independent methods agreeing within
+  0.45 of a BA is stronger evidence than any one of them alone.</p>
+</li>
+<li>
+<p><strong>It does not mean the estimate is complete.</strong> All three methods price <em>artifacts and
   headcount</em>. None of them prices the two things this project's own risk register says
   will consume analyst time: <strong>RI-2</strong>, the curriculum-rule data audit, and <strong>TBD-5</strong>,
-  finding out which programmes cannot be expressed as machine-evaluable rules.</li>
+  finding out which programmes cannot be expressed as machine-evaluable rules.</p>
+</li>
 </ul>
 <h3>4. What we commit to, and what would change it</h3>
 <div class="callout">

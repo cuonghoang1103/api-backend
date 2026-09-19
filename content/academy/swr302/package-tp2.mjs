@@ -412,11 +412,13 @@ time)</strong> — the objectives that unblock growth — and establishes the or
 every later feature depends on.</p>
 <p>Included: <strong>FE-1, FE-2, FE-3, FE-4, FE-5, FE-6, FE-7</strong>, plus manual label purchase
 retained as-is.</p>
-<p>Scope boundaries for Release 1.0:
-- Storefront and Shopee channels only; Lazada and TikTok Shop follow in 1.1.
-- All three FCs from day one (routing is meaningless with one FC).
-- Routing rule configurable by an operations administrator, but with a single
-  scoring formula; multi-formula per-brand routing is deferred.</p>
+<p>Scope boundaries for Release 1.0:</p>
+<ul>
+<li>Storefront and Shopee channels only; Lazada and TikTok Shop follow in 1.1.</li>
+<li>All three FCs from day one (routing is meaningless with one FC).</li>
+<li>Routing rule configurable by an operations administrator, but with a single
+  scoring formula; multi-formula per-brand routing is deferred.</li>
+</ul>
 <h3>2.3 Scope of Subsequent Releases</h3>
 <table>
 <thead>
@@ -1843,26 +1845,98 @@ Nova Retail Group (NRG)
 <hr />
 <h3>4. Use Case Diagram</h3>
 <p>See <code>diagrams/use-case-diagram.drawio</code> (editable) and <code>diagrams/use-case-diagram.png</code> (for the SRS Appendix B).</p>
-<p><strong>Reading the diagram</strong>
-- Primary actors are on the <strong>left</strong>, secondary (system) actors on the <strong>right</strong>.
-- The rectangle is the <strong>system boundary</strong> — everything inside it is OMFS's responsibility; the web storefront, payment gateway and ERP sit outside deliberately (see Vision &amp; Scope §2.4 Limitations and Exclusions).
-- <code>«include»</code> arrows point <strong>from</strong> the base use case <strong>to</strong> the always-executed use case.
-- <code>«extend»</code> arrows point <strong>from</strong> the optional use case <strong>to</strong> the base it extends.</p>
-<p><strong>Relationships shown</strong>
-| Relationship | From | To | Why |
-|---|---|---|---|
-| «include» | UC-01 Ingest an order | UC-02 Screen and validate | Every ingested order is screened before it can reserve stock |
-| «include» | UC-02 Screen and validate | UC-03 Reserve inventory | Every validated order reserves stock |
-| «include» | UC-03 Reserve inventory | UC-04 Route and split | Every reserved order is routed |
-| «include» | UC-06 Pick and pack | UC-07 Rate-shop and label | Every packed shipment is labelled |
-| «include» | UC-03 Reserve inventory | UC-13 Synchronize stock | Every reservation changes sellable stock, always |
-| «include» | UC-06 Pick and pack | UC-13 Synchronize stock | Picking deducts on-hand stock, always |
-| «include» | UC-11 Cancel or modify | UC-13 Synchronize stock | Cancellation releases stock, always |
-| «include» | UC-07 Rate-shop and label | UC-09 Track an order | Labelling always issues the customer tracking link |
-| «extend» | UC-10 Handle exception | UC-03 Reserve inventory | Only when reservation fails |
-| «extend» | UC-10 Handle exception | UC-04 Route and split | Only when routing fails |
-| «extend» | UC-10 Handle exception | UC-07 Rate-shop and label | Only when no carrier is eligible |
-| «extend» | UC-12 Process a return | UC-08 Ingest tracking event | Only when the carrier returns an undeliverable parcel |</p>`,
+<p><strong>Reading the diagram</strong></p>
+<ul>
+<li>Primary actors are on the <strong>left</strong>, secondary (system) actors on the <strong>right</strong>.</li>
+<li>The rectangle is the <strong>system boundary</strong> — everything inside it is OMFS's responsibility; the web storefront, payment gateway and ERP sit outside deliberately (see Vision &amp; Scope §2.4 Limitations and Exclusions).</li>
+<li><code>«include»</code> arrows point <strong>from</strong> the base use case <strong>to</strong> the always-executed use case.</li>
+<li><code>«extend»</code> arrows point <strong>from</strong> the optional use case <strong>to</strong> the base it extends.</li>
+</ul>
+<p><strong>Relationships shown</strong></p>
+<table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>From</th>
+<th>To</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>«include»</td>
+<td>UC-01 Ingest an order</td>
+<td>UC-02 Screen and validate</td>
+<td>Every ingested order is screened before it can reserve stock</td>
+</tr>
+<tr>
+<td>«include»</td>
+<td>UC-02 Screen and validate</td>
+<td>UC-03 Reserve inventory</td>
+<td>Every validated order reserves stock</td>
+</tr>
+<tr>
+<td>«include»</td>
+<td>UC-03 Reserve inventory</td>
+<td>UC-04 Route and split</td>
+<td>Every reserved order is routed</td>
+</tr>
+<tr>
+<td>«include»</td>
+<td>UC-06 Pick and pack</td>
+<td>UC-07 Rate-shop and label</td>
+<td>Every packed shipment is labelled</td>
+</tr>
+<tr>
+<td>«include»</td>
+<td>UC-03 Reserve inventory</td>
+<td>UC-13 Synchronize stock</td>
+<td>Every reservation changes sellable stock, always</td>
+</tr>
+<tr>
+<td>«include»</td>
+<td>UC-06 Pick and pack</td>
+<td>UC-13 Synchronize stock</td>
+<td>Picking deducts on-hand stock, always</td>
+</tr>
+<tr>
+<td>«include»</td>
+<td>UC-11 Cancel or modify</td>
+<td>UC-13 Synchronize stock</td>
+<td>Cancellation releases stock, always</td>
+</tr>
+<tr>
+<td>«include»</td>
+<td>UC-07 Rate-shop and label</td>
+<td>UC-09 Track an order</td>
+<td>Labelling always issues the customer tracking link</td>
+</tr>
+<tr>
+<td>«extend»</td>
+<td>UC-10 Handle exception</td>
+<td>UC-03 Reserve inventory</td>
+<td>Only when reservation fails</td>
+</tr>
+<tr>
+<td>«extend»</td>
+<td>UC-10 Handle exception</td>
+<td>UC-04 Route and split</td>
+<td>Only when routing fails</td>
+</tr>
+<tr>
+<td>«extend»</td>
+<td>UC-10 Handle exception</td>
+<td>UC-07 Rate-shop and label</td>
+<td>Only when no carrier is eligible</td>
+</tr>
+<tr>
+<td>«extend»</td>
+<td>UC-12 Process a return</td>
+<td>UC-08 Ingest tracking event</td>
+<td>Only when the carrier returns an undeliverable parcel</td>
+</tr>
+</tbody>
+</table>`,
   ].join('\n'),
 };
 
@@ -5707,14 +5781,20 @@ FE-3, FE-4 and FE-5 — sit at ranks 6, 8 and 10. Meanwhile FE-10, which the mod
 <p>This is not an error in the model and not an error in the plan. It is the model working
 as designed and then being overruled for a reason the model cannot see:</p>
 <ul>
-<li><strong>The model rewards cheap, safe, useful features.</strong> FE-10 is genuinely cheap, safe
-  and useful, which is why it wins. FE-5 is expensive and complex, which is why it loses.</li>
-<li><strong>The model has no concept of dependency or sequencing.</strong> FE-10 shows customers their
+<li>
+<p><strong>The model rewards cheap, safe, useful features.</strong> FE-10 is genuinely cheap, safe
+  and useful, which is why it wins. FE-5 is expensive and complex, which is why it loses.</p>
+</li>
+<li>
+<p><strong>The model has no concept of dependency or sequencing.</strong> FE-10 shows customers their
   order status. Showing a customer a status that is wrong — because stock was oversold
   (FE-3) and the order is about to be cancelled — is worse than showing them nothing.
-  FE-10 delivers its value only <em>after</em> status is trustworthy.</li>
-<li><strong>The model has no concept of the business case.</strong> BO-1 and BO-2 are what the COO
-  funded. FE-3, FE-4 and FE-5 are the only features that deliver them.</li>
+  FE-10 delivers its value only <em>after</em> status is trustworthy.</p>
+</li>
+<li>
+<p><strong>The model has no concept of the business case.</strong> BO-1 and BO-2 are what the COO
+  funded. FE-3, FE-4 and FE-5 are the only features that deliver them.</p>
+</li>
 </ul>
 <p><strong>Decision:</strong> the release plan in Vision &amp; Scope §2.2 stands. The worksheet is used for
 two things instead — sequencing <strong>within</strong> a release, and deciding what to drop if the
@@ -5979,19 +6059,25 @@ and the disagreement is the useful part.</p>
 because it counts real artifacts one by one. Here it comes out <strong>lowest</strong>, and the
 reason is worth stating precisely:</p>
 <ul>
-<li><strong>OMFS is a small-artifact, high-integration system.</strong> Only 14 use cases and 20
+<li>
+<p><strong>OMFS is a small-artifact, high-integration system.</strong> Only 14 use cases and 20
   screens — modest counts that the activity model prices cheaply — but <strong>12 interfacing
   systems</strong>, which is a large number for a project this size. Integration analysis is
   concentrated in the 300.8 hours of system modelling; it does not scale with the use
-  case count that dominates the model elsewhere.</li>
-<li><strong>The activity model prices artifacts, not conversations.</strong> It includes project
+  case count that dominates the model elsewhere.</p>
+</li>
+<li>
+<p><strong>The activity model prices artifacts, not conversations.</strong> It includes project
   kick-off, status reporting and traceability links, but it does not price the four
   elicitation sessions, the requirements inspections recommended in Chapter 17, or the
-  change control that will run from the Week-8 baseline through to release.</li>
-<li><strong>Methods A and B are insensitive to what the system actually is.</strong> Method A is a
+  change control that will run from the Week-8 baseline through to release.</p>
+</li>
+<li>
+<p><strong>Methods A and B are insensitive to what the system actually is.</strong> Method A is a
   function of the budget alone; method B is a function of the developer count alone.
   Neither has looked at OMFS. That they land near each other is coincidence, not
-  corroboration.</li>
+  corroboration.</p>
+</li>
 </ul>
 <h3>4. What we commit to, and what would change it</h3>
 <div class="callout">

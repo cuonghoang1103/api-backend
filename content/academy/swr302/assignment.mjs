@@ -14,6 +14,7 @@
 import { bi } from './_slides.mjs';
 import topics from './assignment-topics.mjs';
 import guide from './assignment-guide.mjs';
+import { WALKS, TAILS } from './assignment-slides.mjs';
 
 /* ─────────── A.1 — the brief ─────────── */
 const A1 = {
@@ -755,5 +756,11 @@ const A10 = {
 export default {
   title: 'Group Assignment (20%) — Build a complete requirements package|||Assignment nhóm (20%) — Xây bộ tài liệu yêu cầu hoàn chỉnh',
   description: 'Bài tập nhóm chiếm 20% điểm môn (CLO2–9): 5 sinh viên, 8 sản phẩm, nhận đề tuần 2 và thuyết trình tuần 9. Đề tài TP1 & TP2 đầy đủ, hướng dẫn làm từng deliverable theo đúng template Wiegers, phân công nhóm 5 người, kế hoạch 8 tuần, ngân hàng câu hỏi thầy kiểm tra tiến độ, bài mẫu end-to-end và bảng tự kiểm trước khi nộp.',
-  lessons: [A1, ...topics, A4, A5, ...guide, A9, A10],
+  // Each lesson opens with its slide deck (assignment-slides.mjs); the long-form
+  // reference text written in this file follows underneath it.
+  lessons: [A1, ...topics, A4, A5, ...guide, A9, A10].map((l) =>
+    WALKS[l.slug] || TAILS[l.slug]
+      ? { ...l, content: [WALKS[l.slug], l.content, TAILS[l.slug]].filter(Boolean).join('\n') }
+      : l,
+  ),
 };

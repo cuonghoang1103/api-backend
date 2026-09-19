@@ -68,6 +68,28 @@ table.t.big2 td{text-align:left;font-size:23px}
 .cover h1{font-size:60px;color:#fff}
 .cover h1::after{margin:18px auto 0;background:#7ad0c7}
 .cover .sub{font-size:28px;color:#cfe4f7;margin-top:20px}
+/* ── sơ đồ: dùng cho LAB (context / swimlane / state / DFD / ERD) ── */
+.dg{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin:4px 0}
+.dg .bx{background:#fff;border:2.5px solid #1b5fa8;border-radius:10px;padding:12px 16px;font-size:20px;
+  font-weight:700;color:#0f2a4a;text-align:center;min-width:120px}
+.dg .bx.ext{border-color:#6b8199;border-radius:4px;color:#3c5570;font-weight:600}
+.dg .bx.st{border-radius:26px;background:#eef5fc}
+.dg .oval{background:#f5f9fd;border:2.5px solid #1b5fa8;border-radius:50%;padding:16px 26px;font-size:20px;
+  font-weight:700;color:#0f2a4a;text-align:center}
+.dg .dia{background:#fff8e8;border:2.5px solid #b4690e;padding:11px 15px;font-size:19px;font-weight:700;
+  color:#7a4708;text-align:center;transform:rotate(0deg);border-radius:6px}
+.dg .ar{font-size:26px;color:#1b5fa8;font-weight:800;white-space:nowrap}
+.dg .ar small{display:block;font-size:14px;color:#5d7288;font-weight:600;text-align:center;margin-top:-4px}
+.dg .store{border:2.5px solid #2f7d4f;border-left:none;border-right:none;background:#f1f9f4;padding:11px 18px;
+  font-size:19px;font-weight:700;color:#1d5c39;text-align:center}
+.lanes{display:grid;gap:0;border:2px solid #cfe2f5;border-radius:10px;overflow:hidden;font-size:18px}
+.lanes .row{display:grid;grid-template-columns:150px 1fr;border-bottom:1.5px solid #cfe2f5}
+.lanes .row:last-child{border-bottom:none}
+.lanes .who{background:#eef5fc;padding:12px 10px;font-weight:800;color:#1b5fa8;display:flex;align-items:center}
+.lanes .acts{padding:10px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lanes .acts span.a{background:#fff;border:2px solid #1b5fa8;border-radius:8px;padding:7px 11px;font-weight:600}
+.lanes .acts span.d{background:#fff8e8;border:2px solid #b4690e;border-radius:6px;padding:7px 11px;font-weight:700;color:#7a4708}
+.lanes .acts span.x{color:#1b5fa8;font-weight:800;font-size:20px}
 .cover .cov-meta{font-size:19px;color:#a8c9e8;margin-top:34px;line-height:1.6}
 `;
 
@@ -79,7 +101,7 @@ const page_html = (s, i) => `<!doctype html><meta charset="utf-8">
   <h1>${s.t}</h1>
   ${s.sub ? `<p class="sub">${s.sub}</p>` : ''}
   <div class="bd">${s.body || ''}</div>
-  ${s.kind === 'cover' ? '' : `<div class="ft"><span>MAE101 · Mathematics for Engineering</span><span>cuongthai.com</span></div>`}
+  ${s.kind === 'cover' ? '' : `<div class="ft"><span>${deck.sub || 'MAE101 · Mathematics for Engineering'}</span><span>cuongthai.com</span></div>`}
 </div>
 <script>${katexJs}</script>
 <script>

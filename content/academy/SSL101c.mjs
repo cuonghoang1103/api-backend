@@ -7,6 +7,21 @@
  * link MOOC gốc Coursera trong nội dung.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/SSL101c.mjs --apply
  */
+import m1aSlides from './ssl101c/m1a-slides.mjs';
+import m1bSlides from './ssl101c/m1b-slides.mjs';
+import m1cSlides from './ssl101c/m1c-slides.mjs';
+import m1dSlides from './ssl101c/m1d-slides.mjs';
+import m2aSlides from './ssl101c/m2a-slides.mjs';
+import m2bSlides from './ssl101c/m2b-slides.mjs';
+import m2cSlides from './ssl101c/m2c-slides.mjs';
+import m2dSlides from './ssl101c/m2d-slides.mjs';
+import m3Slides from './ssl101c/m3-slides.mjs';
+import m4aSlides from './ssl101c/m4a-slides.mjs';
+import m4bSlides from './ssl101c/m4b-slides.mjs';
+import m4cSlides from './ssl101c/m4c-slides.mjs';
+import m5aSlides from './ssl101c/m5a-slides.mjs';
+import m5bSlides from './ssl101c/m5b-slides.mjs';
+
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
@@ -16,6 +31,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     shortDescription: 'The four university survival skills — finding & judging information, solving problems, thinking critically, and communicating clearly — plus academic integrity. The habits that make every other course easier.|||Bốn kỹ năng sống còn ở đại học — tìm & đánh giá thông tin, giải quyết vấn đề, tư duy phản biện, và giao tiếp rõ ràng — cùng liêm chính học thuật. Những thói quen làm mọi môn khác dễ hơn.',
     description: 'Môn kỹ năng học tập nền tảng, dựa trên bộ Coursera "Academic Skills for University Success" (Đại học Sydney). Học cách tìm và đánh giá nguồn tin, giải quyết vấn đề, tư duy phản biện, giao tiếp học thuật và tránh đạo văn — nền cho toàn bộ 4 năm đại học.',
     whatYouLearn: 'Tìm–lọc–quản lý thông tin & đánh giá độ tin cậy nguồn; định nghĩa và giải bài toán mở; tư duy phản biện, nhận diện lập luận & thiên kiến; giao tiếp nói/viết/hình ảnh; trích dẫn đúng cách & tránh đạo văn; hoàn thành một dự án capstone.',
@@ -252,7 +268,7 @@ export default {
     {
       title: 'Chapter 1 — Information & Digital Literacy|||Chương 1 — Thông tin & Kỹ năng số',
       description: 'Tìm, đánh giá độ tin cậy, quản lý và trích dẫn thông tin.',
-      lessons: [
+      lessons: [m1aSlides, m1bSlides, 
         {
           title: '1.1 — Finding & evaluating information|||1.1 — Tìm & đánh giá thông tin',
           slug: 'ssl101c-1-1-tim-danh-gia',
@@ -385,7 +401,7 @@ export default {
     {
       title: 'Chapter 2 — Problem Solving & Creativity|||Chương 2 — Giải quyết vấn đề & Sáng tạo',
       description: 'Định nghĩa vấn đề mở và tạo ra giải pháp bằng tư duy sáng tạo.',
-      lessons: [
+      lessons: [m2aSlides, m2bSlides, m2cSlides, m2dSlides, 
         {
           title: '2.1 — Defining the real problem|||2.1 — Định nghĩa đúng vấn đề',
           slug: 'ssl101c-2-1-dinh-nghia-van-de',
@@ -510,7 +526,7 @@ export default {
     {
       title: 'Chapter 3 — Critical Thinking|||Chương 3 — Tư duy phản biện',
       description: 'Phân tích lập luận, nhận diện thiên kiến và đánh giá khẳng định.',
-      lessons: [
+      lessons: [m3Slides, 
         {
           title: '3.1 — Arguments & reasoning|||3.1 — Lập luận & suy luận',
           slug: 'ssl101c-3-1-lap-luan',
@@ -643,7 +659,7 @@ export default {
     {
       title: 'Chapter 4 — Communication|||Chương 4 — Giao tiếp',
       description: 'Giao tiếp học thuật nói/viết/hình ảnh và trình bày lập luận.',
-      lessons: [
+      lessons: [m4aSlides, m4bSlides, m4cSlides, 
         {
           title: '4.1 — Academic communication|||4.1 — Giao tiếp học thuật',
           slug: 'ssl101c-4-1-giao-tiep-hoc-thuat',
@@ -773,7 +789,7 @@ export default {
     {
       title: 'Chapter 5 — Academic Integrity & Avoiding Plagiarism|||Chương 5 — Liêm chính & Tránh đạo văn',
       description: 'Đạo văn là gì, hậu quả, và cách trích dẫn/diễn giải để tránh.',
-      lessons: [
+      lessons: [m1cSlides, m1dSlides, 
         {
           title: '5.1 — What plagiarism is & how to avoid it|||5.1 — Đạo văn là gì & cách tránh',
           slug: 'ssl101c-5-1-tranh-dao-van',
@@ -852,7 +868,7 @@ export default {
     {
       title: 'Chapter 6 — Capstone: Research & Communication|||Chương 6 — Capstone: Nghiên cứu & Giao tiếp',
       description: 'Ghép cả bốn kỹ năng vào một dự án nghiên cứu hoàn chỉnh.',
-      lessons: [
+      lessons: [m5aSlides, m5bSlides, 
         {
           title: '6.1 — Bringing the skills together|||6.1 — Ghép các kỹ năng lại',
           slug: 'ssl101c-6-1-capstone',

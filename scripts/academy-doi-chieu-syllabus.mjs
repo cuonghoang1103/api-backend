@@ -133,7 +133,25 @@ function doiChieu(ma, spec, syl) {
   }
   if (thieuBuoi.length) loi.push(`KHÔNG phủ ${thieuBuoi.length}/${buoiRows.length} buổi:\n      - ` + thieuBuoi.slice(0, 12).join('\n      - '));
 
-  // ── 7. Chốt kỹ thuật: title/slug ≤255, slug không trùng, có syncOrder ──
+  // ── 7a. Trần độ dài các cột CẤP KHOÁ HỌC ──
+  //
+  // ⚠️ 19/09/2026 PRF193 chết nguyên môn vì `shortDescription` dài **508** ký
+  // tự trong khi cột là VarChar(500) — vượt đúng 8 ký tự. Prisma ném P2000 ở
+  // `course.update()`, seed bỏ luôn cả môn, mà deploy vẫn báo xanh (chỉ một
+  // dòng `[WARN] Academy seed reported errors`). Chuỗi song ngữ `EN|||VI` tính
+  // CẢ HAI VẾ nên rất dễ vượt. Cùng họ với feedback_title_lesson_toi_da_255_ky_tu.
+  const TRAN_COURSE = {
+    title: 255, slug: 255, shortDescription: 500, thumbnailUrl: 500,
+    previewVideoUrl: 500, courseCode: 50, academyType: 30, accessType: 10,
+    level: 20, language: 20,
+  };
+  for (const [khoa, tran] of Object.entries(TRAN_COURSE)) {
+    const v = spec.course?.[khoa];
+    if (typeof v === 'string' && v.length > tran)
+      loi.push(`course.${khoa} dài ${v.length} > ${tran} ký tự — seed sẽ CHẾT cả môn (P2000)`);
+  }
+
+  // ── 7b. Chốt kỹ thuật: title/slug ≤255, slug không trùng, có syncOrder ──
   const slugs = [];
   for (const s of spec.sections || []) for (const l of s.lessons || []) {
     slugs.push(l.slug);

@@ -18,6 +18,7 @@ import { validate } from '../middleware/validate.js';
 import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/ielts/ielts.service.js';
 import { hoiVeChu, chamBaiViet, CAC_Y } from '../services/ielts/hoiAI.service.js';
+import { dungDe, nopDe, lichSuThi } from '../services/ielts/deThi.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -61,6 +62,25 @@ router.post('/ai/cham-viet',
   validate,
   async (req, res: Response<ApiResponse>, next) => {
     try { ok(res, await chamBaiViet(uid(req), req.body)); } catch (e) { next(e); }
+  });
+
+// ─── Phòng thi ───────────────────────────────────────────────
+//
+// `hat` giữ cho "làm lại đúng đề này" ra đúng bộ câu cũ — so điểm lần hai
+// với lần một chỉ có nghĩa khi hai lần cùng một đề.
+router.get('/de-thi/lich-su', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await lichSuThi(uid(req))); } catch (e) { next(e); }
+});
+router.get('/de-thi/:chang', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const hat = Number(req.query.hat);
+    ok(res, await dungDe(String(req.params.chang), Number.isFinite(hat) && hat > 0 ? Math.floor(hat) : Date.now() % 100000));
+  } catch (e) { next(e); }
+});
+router.post('/de-thi/nop',
+  body('chang').notEmpty(), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await nopDe(uid(req), req.body)); } catch (e) { next(e); }
   });
 
 // ─── Tiến độ ─────────────────────────────────────────────────

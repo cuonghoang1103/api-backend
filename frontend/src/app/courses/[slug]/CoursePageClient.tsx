@@ -627,17 +627,33 @@ export default function CourseDetailPage() {
 
               <PrerequisiteBanner prerequisites={getPrerequisites(course.slug)} />
 
-              {/* Instructor */}
+              {/* Instructor — ảnh & tên lấy từ TÀI KHOẢN thật (course.instructorId
+                  → users), nên admin đổi avatar là trang này đổi theo. Bấm vào
+                  dẫn sang hồ sơ, nơi đã có Kết bạn / Nhắn tin / Theo dõi. */}
               <div className="flex items-center gap-3 mb-6">
-                <AnhDaiDien
-                  src={course.instructorAvatar}
-                  ten={course.instructorName || 'CuongHoangDev'}
-                  className="w-10 h-10"
-                />
-                <div>
-                  <p className="text-text-primary font-medium text-sm">Instructor</p>
-                  <p className="text-text-muted text-sm">{course.instructorName || 'CuongHoangDev'}</p>
-                </div>
+                {course.instructorId ? (
+                  <Link
+                    href={`/profile/${course.instructorId}`}
+                    className="flex items-center gap-3 group/gv rounded-xl -m-1 p-1 transition-colors hover:bg-white/5"
+                    title={`Xem hồ sơ ${course.instructorName || 'giảng viên'}`}
+                  >
+                    <AnhDaiDien src={course.instructorAvatar} ten={course.instructorName} className="w-10 h-10" />
+                    <div>
+                      <p className="text-text-primary font-medium text-sm">Instructor</p>
+                      <p className="text-text-muted text-sm group-hover/gv:text-neon-violet transition-colors">
+                        {course.instructorName}
+                      </p>
+                    </div>
+                  </Link>
+                ) : (
+                  <>
+                    <AnhDaiDien src={course.instructorAvatar} ten={course.instructorName || 'CuongHoangDev'} className="w-10 h-10" />
+                    <div>
+                      <p className="text-text-primary font-medium text-sm">Instructor</p>
+                      <p className="text-text-muted text-sm">{course.instructorName || 'CuongHoangDev'}</p>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Stats */}

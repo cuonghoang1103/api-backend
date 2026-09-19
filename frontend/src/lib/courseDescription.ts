@@ -14,7 +14,7 @@
  * đoạn văn và dãy thẻ bước. Bất biến bắt buộc: **không mất chữ nào**.
  */
 
-import { giaiMaThucThe } from './courseBlurb';
+import { giaiMaThucThe, hoaChuDau } from './courseBlurb';
 
 export type KhoiMoTa =
   | { loai: 'doan'; html: string }
@@ -86,7 +86,7 @@ export function phanTichMoTa(html: string | null | undefined): KhoiMoTa[] {
       .split(/→|->/)
       // Bước hiển thị dạng TEXT nên phải tự giải mã `&amp;` — 460 môn lưu
       // thực thể HTML nguyên văn, để nguyên là người học đọc thấy "&amp;".
-      .map((s) => giaiMaThucThe(boThe(s)).replace(/^[\s.,;]+|[\s.,;]+$/g, '').trim())
+      .map((s) => hoaChuDau(giaiMaThucThe(boThe(s)).replace(/^[\s.,;]+|[\s.,;]+$/g, '').trim()))
       .filter((s) => s.length > 0);
 
     if (buoc.length >= TOI_THIEU_MUI_TEN) khoi.push({ loai: 'chuoi', buoc });

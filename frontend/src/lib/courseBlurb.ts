@@ -21,6 +21,36 @@
 const DAI_TOI_DA = 220;
 
 /**
+ * Tên riêng mà dạng CHUẨN của nó là viết thường — viết hoa lên là viết SAI tên,
+ * không phải "chuyên nghiệp hơn". Danh sách lấy từ chính dữ liệu đang có.
+ */
+const GIU_NGUYEN_CHU_THUONG = new Set([
+  'npm', 'pnpm', 'yarn', 'pip', 'conda', 'nginx', 'systemd', 'bash', 'zsh',
+  'pandas', 'numpy', 'scipy', 'matplotlib', 'seaborn', 'pytest', 'unittest',
+  'jamovi', 'ggplot2', 'scikit-learn', 'jQuery', 'iOS', 'iPadOS', 'macOS',
+  'watchOS', 'tvOS', 'eKYC', 'gRPC', 'openSSL', 'xUnit',
+]);
+
+/**
+ * Viết hoa chữ cái đầu mỗi gạch đầu dòng. **63% mục (3388/5351) bắt đầu bằng
+ * chữ thường** vì người viết cắt chúng ra từ giữa một câu dài — nhìn thiếu
+ * chỉn chu.
+ *
+ * ⚠️ KHÔNG viết hoa khi từ đầu có chữ HOA ở bên trong (`eKYC`, `gRPC`,
+ * `setState`): đó là tên kỹ thuật, `eKYC` → `EKYC` là sai hẳn. Đo thật: 3 mục
+ * rơi vào diện này.
+ */
+export function hoaChuDau(s: string): string {
+  if (!s) return s;
+  const tuDau = s.split(/[\s,(/]/)[0];
+  if (/[a-z0-9][A-Z]/.test(tuDau)) return s; // camelCase / eKYC / gRPC
+  if (GIU_NGUYEN_CHU_THUONG.has(tuDau)) return s;
+  const dau = s[0];
+  const hoa = dau.toUpperCase();
+  return hoa === dau ? s : hoa + s.slice(1);
+}
+
+/**
  * Giải mã thực thể HTML. **153/573 môn** lưu `&amp;` nguyên văn trong
  * `whatYouLearn`/`requirements`, mà chỗ hiển thị render dạng TEXT (React tự
  * escape) ⇒ người học đọc được đúng chuỗi "&amp;" trên màn hình. Chỉ nhận
@@ -92,7 +122,7 @@ export function tachGachDauDong(value: string | null | undefined): string[] {
     // Giải mã SAU khi cắt: `&amp;` chứa dấu `;`, giải mã trước sẽ làm
     // catNgoaiNgoac() không còn nhận ra đó là thực thể.
     .map(giaiMaThucThe)
-    .map((s) => s.trim())
+    .map((s) => hoaChuDau(s.trim()))
     .filter((s) => s.length > 2);
 }
 

@@ -1062,17 +1062,48 @@ model Lesson {
   createdAt            DateTime @default(now()) @map("created_at")
   updatedAt            DateTime @updatedAt @map("updated_at")
 
-  section        CourseSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  section        CourseSection     @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   details        LessonDetail?
   documents      CourseDocument[]
   assignments    Assignment[]
   lessonProgress LessonProgress[]
   aiAnswers      LessonAiAnswer[]
   tutorAsks      LessonTutorAsk[]
+  phuDe          LessonTranscript?
 
   @@index([sectionId], name: "idx_lessons_section")
   @@index([isPublished], name: "idx_lessons_published")
   @@map("lessons")
+}
+
+/// Phụ đề tiếng Anh của video bài giảng, đã LÀM SẠCH.
+///
+/// ⚠️ Lưu `cues` đã khử trùng lặp, KHÔNG lưu VTT thô. Phụ đề tự động của
+/// YouTube chạy kiểu cửa sổ trượt: mỗi dòng lặp lại đuôi dòng trước, nên
+/// bản thô 98 KB chỉ còn 13 KB sau khi ghép thành dòng từ liên tục rồi cắt
+/// theo câu (đo thật 19/09/2026 trên bài 159). Nhập thô thì bảng phụ đề
+/// hiện ra 70% là chữ lặp — không ai đọc nổi.
+model LessonTranscript {
+  id       Int    @id @default(autoincrement())
+  lessonId Int    @unique @map("lesson_id")
+  videoId  String @map("video_id") @db.VarChar(24)
+  lang     String @default("en") @db.VarChar(12)
+
+  /// [{ "t": giây, "en": "câu" }] — đã cắt theo câu, có mốc để chạm là tua.
+  cues  Json @db.JsonB
+  soCau Int  @map("so_cau")
+  soTu  Int  @map("so_tu")
+
+  /// Bản dịch tiếng Việt, sinh sau bằng Qwen máy nhà. `null` = chưa dịch.
+  dichVi Json? @map("dich_vi") @db.JsonB
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([videoId], name: "idx_lesson_transcripts_video")
+  @@map("lesson_transcripts")
 }
 
 // Cache câu trả lời gia sư AI cho các câu hỏi GỢI Ý cố định (chip) của một bài.

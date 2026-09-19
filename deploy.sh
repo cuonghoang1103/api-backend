@@ -607,6 +607,19 @@ CVIDEO_SEED_RC="$(printf '%s\n' "$CVIDEO_SEED_OUT" | sed -n 's/^__SEED_RC__=//p'
 CVIDEO_SEED_OUT="$(printf '%s\n' "$CVIDEO_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Course video-track seed" "seed-course-videos" "$CVIDEO_SEED_OUT" "${CVIDEO_SEED_RC:-0}" || true
 
+# ── Step 3.12b: phụ đề tiếng Anh của video bài giảng ────────────
+# Nguồn đã làm sạch sẵn trong repo (content/phu-de/*.jsonl.gz). Idempotent,
+# upsert theo lessonId. Phải nằm TRƯỚC `report_seed "IELTS seed"` vì
+# deploy-nha.sh cắt khối seed từ `SEED_ERR_RE=` tới đúng dòng đó.
+info "Running lesson transcript seed..."
+PHUDE_SEED_OUT=$($DC exec -T backend sh -c '
+  node scripts/phu-de-seed.mjs --apply 2>&1
+  echo "__SEED_RC__=$?"
+') || true
+PHUDE_SEED_RC="$(printf '%s\n' "$PHUDE_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+PHUDE_SEED_OUT="$(printf '%s\n' "$PHUDE_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Lesson transcript seed" "seed-phu-de" "$PHUDE_SEED_OUT" "${PHUDE_SEED_RC:-0}" || true
+
 # ── Step 3.13: Exp Hub setup guides (per-subject, idempotent) ───
 # One .mjs per subject under content/exphub/ → upsert SnippetCategory +
 # Snippet (guide) by slug. Academy courses link "Cài đặt" cards to
@@ -947,6 +960,7 @@ fi
 info "Smoke-testing core API routes are mounted..."
 smoke_failed=false
 for route in \
+    video-hoc/danh-muc \
     gifs \
     voice-mini/voices \
     messages/threads \

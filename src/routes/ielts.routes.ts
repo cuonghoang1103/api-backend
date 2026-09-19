@@ -17,6 +17,7 @@ import { authenticate } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/ielts/ielts.service.js';
+import { hoiVeChu, chamBaiViet, CAC_Y } from '../services/ielts/hoiAI.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -41,6 +42,26 @@ router.get('/chung/:kind', async (req, res: Response<ApiResponse>, next) => {
 router.get('/chang/:stage/:kind', async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, await svc.phanCuaChang(String(req.params.stage), String(req.params.kind))); } catch (e) { next(e); }
 });
+
+// ─── Hỏi AI về một mẩu chữ trong bài ─────────────────────────
+//
+// `y` là câu hỏi đặt sẵn (nghia | doc | nguphap | dich | day | dethi); `cauHoi`
+// là câu người học tự gõ. Có ít nhất một trong hai.
+router.post('/ai/hoi',
+  body('chu').isLength({ min: 1, max: 2000 }).withMessage('Chưa chọn chữ nào'),
+  body('y').optional().isIn(CAC_Y),
+  validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await hoiVeChu(uid(req), req.body)); } catch (e) { next(e); }
+  });
+
+/** Chấm bài viết theo 4 tiêu chí IELTS. */
+router.post('/ai/cham-viet',
+  body('bai').isLength({ min: 50, max: 8000 }).withMessage('Bài viết từ 50 đến 8000 ký tự'),
+  validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await chamBaiViet(uid(req), req.body)); } catch (e) { next(e); }
+  });
 
 // ─── Tiến độ ─────────────────────────────────────────────────
 

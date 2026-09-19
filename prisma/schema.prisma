@@ -9418,3 +9418,68 @@ model AdminNotification {
   @@index([createdAt(sort: Desc)], name: "idx_admin_notif_thoi_gian")
   @@map("admin_notifications")
 }
+
+/// Nội dung IELTS phục vụ cho app (iOS/iPad) — MỘT bảng, payload JSON.
+///
+/// ⚠️ BẢNG NÀY LÀ BẢN SAO, KHÔNG PHẢI NGUỒN. Nguồn sự thật vẫn là các tệp
+/// TypeScript của web ở `frontend/src/app/tech-trends/ielts/data/**`, và
+/// `scripts/ielts-seed.mjs` đọc THẲNG chúng rồi ghi vào đây. Trang web không
+/// đọc bảng này — nó vẫn import tệp TS như cũ.
+///
+/// Vì sao không chép dữ liệu sang app: `seed.ts` từng tự chép lại một union
+/// enum, qua sạch cả checklist, rồi vỡ trên production (08/08/2026). Bản chép
+/// tay là mầm trôi dạt. Ở đây bản sao do MÁY dựng lại từ đúng tệp gốc mỗi lần
+/// seed, nên nó không thể lệch khỏi web quá một lần chạy seeder.
+///
+/// Vì sao MỘT bảng chứ không 10 bảng: backend không truy vấn vào trong payload
+/// — nó chỉ trả nguyên khối cho app. Dựng 10 bảng để rồi `SELECT *` cả 10 là
+/// công việc không ai trả tiền.
+///
+/// Vì sao chia theo `kind` chứ không một khối `bundle`: chặng 1 nặng ~300 KB.
+/// App mở tab Đọc thì chỉ nên tải phần đọc, không phải cả chặng qua 4G.
+model IeltsContent {
+  id        Int      @id @default(autoincrement())
+  /// `stage1`…`stage4`, hoặc `shared` cho thứ dùng chung cả khoá.
+  stage     String   @db.VarChar(12)
+  /// meta | units | vocab | readings | listenings | writings | speakings
+  /// | exercises | questionTypes — hoặc roadmap | life | exam | typing (shared).
+  kind      String   @db.VarChar(24)
+  payload   Json     @db.JsonB
+  /// Số mục trong payload — để `/roadmap` nói được "chặng 1 có 5 bài đọc"
+  /// mà không phải tải cả payload lên rồi đếm.
+  soMuc     Int      @default(0) @map("so_muc")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([stage, kind], name: "uk_ielts_stage_kind", map: "uk_ielts_stage_kind")
+  @@map("ielts_content")
+}
+
+/// Tiến độ học IELTS của từng người.
+///
+/// Trang web cất tiến độ trong `localStorage` (khoá `ielts:…`), nên nó chết
+/// theo trình duyệt và iPad không bao giờ thấy được thứ đã học trên iPhone.
+/// Bảng này để tiến độ đi theo NGƯỜI, không theo máy.
+///
+/// `muc` là id của mục trong payload JSON (id bài đọc, id từ, id bài tập…) —
+/// không có khoá ngoại tới đâu cả, vì nội dung sống trong JSON chứ không phải
+/// trong bảng quan hệ. Đổi lại: xoá một bài đọc khỏi web sẽ để lại một hàng
+/// tiến độ mồ côi, vô hại và rẻ hơn nhiều so với dựng 10 bảng nội dung.
+model IeltsProgress {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  stage     String   @db.VarChar(12)
+  /// units | vocab | readings | listenings | writings | speakings | exercises
+  kind      String   @db.VarChar(24)
+  muc       String   @db.VarChar(120)
+  /// Xong hẳn chưa. Từ vựng thì đây là "đã thuộc".
+  xong      Boolean  @default(true)
+  /// Điểm/phần trăm nếu mục đó có chấm (bài tập, đề thi). Không có thì null.
+  diem      Int?
+  ghiChu    String?  @db.Text
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, stage, kind, muc], name: "uk_ielts_tien_do", map: "uk_ielts_tien_do")
+  @@index([userId, stage], name: "idx_ielts_tien_do_user_stage")
+  @@map("ielts_progress")
+}

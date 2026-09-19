@@ -164,6 +164,8 @@ const announcementRoutes = (await import(path.join(__dirname, 'routes', 'announc
 const myLanguageModule = await import(path.join(__dirname, 'routes', 'myLanguage.routes.js'));
 const myLanguagePublicRoutes = myLanguageModule.publicRouter;
 const myLanguageAdminRoutes = myLanguageModule.adminRouter;
+// IELTS — nội dung khoá học + tiến độ, phục vụ app iOS/iPad
+const ieltsRoutes = (await import(path.join(__dirname, 'routes', 'ielts.routes.js'))).default;
 // MoneyFlow — private per-user personal finance module
 const financeRoutes = (await import(path.join(__dirname, 'routes', 'finance.routes.js'))).default;
 // Interview Simulator — STATIC mock-interview engine (user + admin)
@@ -626,6 +628,7 @@ app.use('/api/v1/about', aboutRoutes);
 app.use('/api/v1/landing', landingRoutes);
 app.use('/api/v1/admin/landing', landingAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);
+app.use('/api/v1/ielts', ieltsRoutes);
 app.use('/api/v1/maker-lab', makerLabRoutes);
 app.use('/api/v1/admin/maker-lab', makerLabAdminRoutes);
 app.use('/api/v1/messages', messagesRoutes);

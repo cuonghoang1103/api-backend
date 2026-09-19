@@ -19,6 +19,7 @@ import pe from './swt301/pe.mjs';
 import lab1 from './swt301/lab1.mjs';
 import lab3 from './swt301/lab3.mjs';
 import lab2 from './swt301/lab2.mjs';
+import labProject from './swt301/lab-project.mjs';
 import sec0 from './swt301/sec0.mjs';
 import practice from './swt301/practice.mjs';
 import { pt1, pt2, pt3, finalExam } from './swt301/pt.mjs';
@@ -48,6 +49,8 @@ export default {
     ch1,
     /* ══════════════════ CHƯƠNG 2 — module riêng: swt301/ch2.mjs (SWT2, 143 slide) ══════════════════ */
     ch2,
+    /* ══════════ LAB 2.5 — swt301/lab-project.mjs (Project + Tool: tìm defect & viết report) ══════════ */
+    labProject,
     /* ══════════ PROGRESS TEST 1 — swt301/pt.mjs ══════════ */
     pt1,
     /* ══════════ CHƯƠNG 3 — swt301/ch3.mjs (SWT3, 106 slide) ══════════ */

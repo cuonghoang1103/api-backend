@@ -21,6 +21,18 @@ Bất biến cần phát biểu không phải *"một phiếu mượn mỗi bả
 
 > 📚 Bản dạy từng bước: [**INT602 — Library Management System**](/courses/library-management-system) trên Academy (10 mục, 24 bài).
 
+> 💾 **Tải mã nguồn.** Toàn bộ project nằm trên GitHub: [**cuonghoang1103/Library-Management-System**](https://github.com/cuonghoang1103/Library-Management-System) — backend, frontend, migration, `docker-compose.yml` và 112 test JUnit sẵn có.
+>
+> ```bash
+> git clone https://github.com/cuonghoang1103/Library-Management-System.git
+> cd Library-Management-System
+> docker compose up --build        # giao diện :3000 · API :8080
+> ```
+>
+> Chạy bộ test: `cd backend && export JAVA_HOME=$(/usr/libexec/java_home -v 21) && mvn test`. **Bắt buộc JDK 21** — Maven chạy JDK mới hơn sẽ làm Mockito và JaCoCo hỏng hàng loạt.
+
+> 🧪 **Dùng project này để làm bài Lab.** Nó là project mẫu của [**Lab 2.5 — Project + Tool: tìm defect và viết báo cáo**](/courses/software-testing) trong môn SWT301: chọn một công cụ, tìm 3 defect, sửa và viết report.
+
 ---
 
 ## Đầu sách không phải là bản sao

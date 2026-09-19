@@ -21,6 +21,18 @@ The invariant you actually need is not *"one loan per copy"* but *"at most one *
 
 > 📚 The step-by-step course: [**INT602 — Library Management System**](/courses/library-management-system) on the Academy (10 sections, 24 lessons).
 
+> 💾 **Get the source.** The whole project is on GitHub: [**cuonghoang1103/Library-Management-System**](https://github.com/cuonghoang1103/Library-Management-System) — backend, frontend, migrations, `docker-compose.yml` and 112 JUnit tests already in place.
+>
+> ```bash
+> git clone https://github.com/cuonghoang1103/Library-Management-System.git
+> cd Library-Management-System
+> docker compose up --build        # web :3000 · API :8080
+> ```
+>
+> Run the suite: `cd backend && export JAVA_HOME=$(/usr/libexec/java_home -v 21) && mvn test`. **JDK 21 is required** — a newer JDK breaks Mockito and JaCoCo wholesale.
+
+> 🧪 **Use this project for the lab.** It is the sample project of [**Lab 2.5 — Project + Tool: find defects and write the report**](/courses/software-testing) in SWT301: pick a tool, find 3 defects, fix them and write the report.
+
 ---
 
 ## A title is not a copy

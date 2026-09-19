@@ -39,6 +39,19 @@ import assignmentSection from './swr302/assignment.mjs';
 import labSection from './swr302/lab.mjs';
 import packageTp1Section from './swr302/package-tp1.mjs';
 import packageTp2Section from './swr302/package-tp2.mjs';
+import { WALKS as PACKAGE_WALKS } from './swr302/package-slides.mjs';
+
+/**
+ * package-tp1/tp2.mjs are GENERATED from Markdown by scratchpad/tp{1,2}.py, so the
+ * slide walkthroughs are attached here instead of being written into them.
+ * Deliverables 2 and 6 already carry the real use case diagram and mock-ups.
+ */
+const withSlides = (section) => ({
+  ...section,
+  lessons: section.lessons.map((l) =>
+    PACKAGE_WALKS[l.slug] ? { ...l, content: `${PACKAGE_WALKS[l.slug]}\n${l.content}` } : l,
+  ),
+});
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -324,8 +337,8 @@ export default {
     labSection,
 
     /* ══════════════════ BỘ TÀI LIỆU MẪU — TP1 & TP2 ══════════════════ */
-    packageTp1Section,
-    packageTp2Section,
+    withSlides(packageTp1Section),
+    withSlides(packageTp2Section),
 
     /* ══════════════════ CHƯƠNG 1 — CƠ BẢN VỀ YÊU CẦU PHẦN MỀM ══════════════════ */
     {

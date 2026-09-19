@@ -11,13 +11,17 @@
  * xoá phụ đề của bài không còn trong tệp — bài bị xoá khỏi tệp có thể chỉ
  * là lần thu hỏng, mà xoá phụ đề thì mất luôn công sức thu.
  */
-import { createReadStream } from 'node:fs';
+import { createReadStream, existsSync } from 'node:fs';
 import { createGunzip } from 'node:zlib';
 import { createInterface } from 'node:readline';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 const TEP = 'content/phu-de/phu-de-bai-giang.jsonl.gz';
+/// Bản dịch tiếng Việt — TUỲ CHỌN. Máy nhà dịch dần bằng Qwen (~15 giờ cho
+/// 1.030 bài), nên tệp này có thể chưa tồn tại hoặc mới có một phần. Thiếu
+/// thì bỏ qua, KHÔNG làm hỏng seed: phụ đề tiếng Anh vẫn dùng được trọn vẹn.
+const TEP_DICH = 'content/phu-de/dich-vi.jsonl.gz';
 const apDung = process.argv.includes('--apply');
 
 /** Lấy mã video từ mọi dạng link YouTube đang có trong `lessons.video_url`. */
@@ -41,7 +45,22 @@ async function main() {
   });
   const banDo = new Map(bai.map((b) => [b.id, maVideo(b.videoUrl)]));
 
-  let doc = 0, ghi = 0, boQua = 0, khongCoBai = 0, khongCoMa = 0;
+  // Nạp trước bản dịch (nếu có) vào bộ nhớ: 1.030 mảng chuỗi, vài chục MB —
+  // rẻ hơn hẳn việc mở lại tệp nén cho từng bài.
+  const dich = new Map();
+  if (existsSync(TEP_DICH)) {
+    const rlD = createInterface({
+      input: createReadStream(TEP_DICH).pipe(createGunzip()), crlfDelay: Infinity });
+    for await (const d of rlD) {
+      if (!d.trim()) continue;
+      try {
+        const o = JSON.parse(d);
+        if (o.lessonId && Array.isArray(o.vi)) dich.set(o.lessonId, o.vi);
+      } catch { /* dòng hỏng thì bỏ, không dừng cả seed */ }
+    }
+  }
+
+  let doc = 0, ghi = 0, boQua = 0, khongCoBai = 0, khongCoMa = 0, coDich = 0;
   const rl = createInterface({
     input: createReadStream(TEP).pipe(createGunzip()),
     crlfDelay: Infinity,
@@ -58,21 +77,35 @@ async function main() {
     const ma = banDo.get(d.lessonId);
     if (!ma) { khongCoMa++; continue; }
 
+    // ⚠️ CHỈ nhận bản dịch khi SỐ DÒNG khớp số câu. Lệch một dòng là mọi
+    // câu sau đó mang nghĩa của câu khác — tệ hơn hẳn không có bản dịch,
+    // vì người học không có cách nào biết là nó lệch.
+    const vi = dich.get(d.lessonId);
+    const dichVi = Array.isArray(vi) && vi.length === d.cues.length ? vi : undefined;
+    if (dichVi) coDich++;
+
     if (apDung) {
       await prisma.lessonTranscript.upsert({
         where: { lessonId: d.lessonId },
         create: {
           lessonId: d.lessonId, videoId: ma, lang: 'en',
           cues: d.cues, soCau: d.soCau, soTu: d.soTu,
+          ...(dichVi ? { dichVi } : {}),
         },
-        update: { videoId: ma, cues: d.cues, soCau: d.soCau, soTu: d.soTu },
+        update: {
+          videoId: ma, cues: d.cues, soCau: d.soCau, soTu: d.soTu,
+          // Không ghi đè bản dịch bằng `null` khi lượt này chưa có: bản dịch
+          // tới dần theo từng đợt, và xoá cái đã có là mất công dịch.
+          ...(dichVi ? { dichVi } : {}),
+        },
       });
     }
     ghi++;
   }
 
   console.log(` phụ đề: đọc ${doc} · ${apDung ? 'ghi' : 'sẽ ghi'} ${ghi}` +
-    ` · bài không còn ${khongCoBai} · không rút được mã video ${khongCoMa} · hỏng ${boQua}`);
+    ` · bài không còn ${khongCoBai} · không rút được mã video ${khongCoMa} · hỏng ${boQua}` +
+    ` · kèm bản dịch ${coDich}`);
 
   // ⚠️ CHỐT: khớp dưới 60% nghĩa là đang chạy nhầm database, hoặc id bài đã
   // đổi sau một lần re-seed. Không có dòng này thì seed vẫn "Done." và

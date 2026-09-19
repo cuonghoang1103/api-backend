@@ -6,7 +6,8 @@
  * vừa là điều kiện để qua App Review.
  */
 import { prisma } from '../../config/database.js';
-import { NotFoundError } from '../../middleware/errorHandler.js';
+import { NotFoundError, BadRequestError } from '../../middleware/errorHandler.js';
+import { transcribeWithGroq } from '../interview/voice/stt.js';
 
 export type CauPhuDe = { t: number; en: string };
 
@@ -74,4 +75,41 @@ export async function phuDe(lessonId: number) {
     cues: d.cues as CauPhuDe[],
     dichVi: (d.dichVi as string[] | null) ?? null,
   };
+}
+
+// ════════════════════════════════════════════════════════════════
+// NHẠI THEO (shadowing)
+// ════════════════════════════════════════════════════════════════
+
+/**
+ * Chỉ PHIÊN ÂM, không chấm bằng LLM.
+ *
+ * ⚠️ Nhại theo là việc làm hàng chục lần mỗi buổi — mỗi câu một lời gọi
+ * LLM thì một buổi học tốn hơn cả ngày dùng chat. Việc cần ở đây không
+ * phải "chấm bốn tiêu chí IELTS" mà là một câu hỏi đơn giản: người học có
+ * nói ra đúng những từ đó không. Câu hỏi ấy chỉ cần bản phiên âm, và so
+ * từ do máy khách làm — vừa rẻ, vừa hiện ngay không phải chờ.
+ *
+ * ⚠️ AUDIO KHÔNG BAO GIỜ ĐƯỢC LƯU: đi thẳng từ RAM sang Whisper rồi bỏ.
+ * Cùng lý lẽ với `chamNoi.service` — giọng nói là dữ liệu sinh trắc học.
+ */
+export async function nhaiTheo(input: {
+  audio: Buffer; filename: string; mimetype: string; cauDich: string;
+}) {
+  if (!input.audio?.length) throw new BadRequestError('Thiếu audio');
+
+  const tr = await transcribeWithGroq(input.audio, input.filename, input.mimetype, {
+    language: 'en',
+    // Đưa câu đích làm gợi ý: Whisper bớt phiên âm nhầm tên riêng và thuật
+    // ngữ. KHÔNG phải là mớm đáp án — nó vẫn chép đúng cái tai nghe được,
+    // gợi ý chỉ thu hẹp không gian từ vựng.
+    hints: input.cauDich.slice(0, 400),
+    detail: true,
+  });
+
+  const chu = (tr.text ?? '').trim();
+  const im = (tr as { noSpeechProb?: number }).noSpeechProb;
+  const imLang = chu.length < 2 || (typeof im === 'number' && im > 0.6);
+
+  return { chu, imLang };
 }

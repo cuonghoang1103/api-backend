@@ -7,6 +7,39 @@
  * CodeLab; simulator (MARIE, CPU-Z, Logisim) → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/CEA201.mjs --apply
  */
+import ch1aSlides from './cea201/ch1a-slides.mjs';
+import ch1bSlides from './cea201/ch1b-slides.mjs';
+import ch2Slides from './cea201/ch2-slides.mjs';
+import ch3aSlides from './cea201/ch3a-slides.mjs';
+import ch3bSlides from './cea201/ch3b-slides.mjs';
+import ch4aSlides from './cea201/ch4a-slides.mjs';
+import ch4bSlides from './cea201/ch4b-slides.mjs';
+import ch4cSlides from './cea201/ch4c-slides.mjs';
+import ch5aSlides from './cea201/ch5a-slides.mjs';
+import ch5bSlides from './cea201/ch5b-slides.mjs';
+import ch6aSlides from './cea201/ch6a-slides.mjs';
+import ch6bSlides from './cea201/ch6b-slides.mjs';
+import ch7aSlides from './cea201/ch7a-slides.mjs';
+import ch7bSlides from './cea201/ch7b-slides.mjs';
+import ch8aSlides from './cea201/ch8a-slides.mjs';
+import ch8bSlides from './cea201/ch8b-slides.mjs';
+import ch9aSlides from './cea201/ch9a-slides.mjs';
+import ch9bSlides from './cea201/ch9b-slides.mjs';
+import ch10aSlides from './cea201/ch10a-slides.mjs';
+import ch10bSlides from './cea201/ch10b-slides.mjs';
+import ch11Slides from './cea201/ch11-slides.mjs';
+import ch12aSlides from './cea201/ch12a-slides.mjs';
+import ch12bSlides from './cea201/ch12b-slides.mjs';
+import ch13aSlides from './cea201/ch13a-slides.mjs';
+import ch13bSlides from './cea201/ch13b-slides.mjs';
+import ch14aSlides from './cea201/ch14a-slides.mjs';
+import ch14bSlides from './cea201/ch14b-slides.mjs';
+import ch15aSlides from './cea201/ch15a-slides.mjs';
+import ch15bSlides from './cea201/ch15b-slides.mjs';
+import ch15cSlides from './cea201/ch15c-slides.mjs';
+import asmaSlides from './cea201/asm-a-slides.mjs';
+import asmbSlides from './cea201/asm-b-slides.mjs';
+
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
@@ -303,7 +336,7 @@ export default {
     {
       title: 'Chapter 1 — Introduction|||Chương 1 — Giới thiệu',
       description: 'Organization vs Architecture và cấu trúc–chức năng của máy tính số.',
-      lessons: [
+      lessons: [ch1aSlides, ch1bSlides, 
         {
           title: '1.1 — Organization vs Architecture|||1.1 — Tổ chức vs Kiến trúc',
           slug: 'cea201-1-1-org-vs-arch',
@@ -416,7 +449,7 @@ export default {
     {
       title: 'Chapter 2 — Computer Evolution & Performance|||Chương 2 — Tiến hoá & Hiệu năng máy tính',
       description: 'Lịch sử máy tính, định luật Moore, các động lực hiệu năng và định luật Amdahl.',
-      lessons: [
+      lessons: [ch2Slides, 
         {
           title: '2.1 — A brief history & Moore\'s law|||2.1 — Lịch sử ngắn gọn & định luật Moore',
           slug: 'cea201-2-1-history-moore',
@@ -549,7 +582,7 @@ export default {
     {
       title: 'Chapter 3 — Top-Level View & Interconnection|||Chương 3 — Cái nhìn tổng thể & Kết nối',
       description: 'Các thành phần chính, chu trình lệnh và cấu trúc bus nối chúng.',
-      lessons: [
+      lessons: [ch3aSlides, ch3bSlides, 
         {
           title: '3.1 — Components & the instruction cycle|||3.1 — Thành phần & chu trình lệnh',
           slug: 'cea201-3-1-components-cycle',
@@ -673,7 +706,7 @@ export default {
     {
       title: 'Chapter 4 — Cache Memory|||Chương 4 — Bộ nhớ Cache',
       description: 'Tính cục bộ, nguyên lý cache, các cách ánh xạ và chính sách thay thế.',
-      lessons: [
+      lessons: [ch4aSlides, ch4bSlides, ch4cSlides, 
         {
           title: '4.1 — Locality & the cache principle|||4.1 — Tính cục bộ & nguyên lý cache',
           slug: 'cea201-4-1-locality',
@@ -818,7 +851,7 @@ export default {
     {
       title: 'Chapter 5 — Internal Memory|||Chương 5 — Bộ nhớ trong',
       description: 'RAM/ROM, khác biệt DRAM vs SRAM và ý niệm sửa lỗi bộ nhớ.',
-      lessons: [
+      lessons: [ch5aSlides, ch5bSlides, 
         {
           title: '5.1 — RAM, ROM, DRAM vs SRAM|||5.1 — RAM, ROM, DRAM vs SRAM',
           slug: 'cea201-5-1-ram-rom',
@@ -937,7 +970,7 @@ export default {
     {
       title: 'Chapter 6 — External Memory|||Chương 6 — Bộ nhớ ngoài',
       description: 'Đĩa từ, RAID, ổ thể rắn (SSD/flash) và đĩa quang.',
-      lessons: [
+      lessons: [ch6aSlides, ch6bSlides, 
         {
           title: '6.1 — Magnetic disk & how it stores data|||6.1 — Đĩa từ & cách lưu dữ liệu',
           slug: 'cea201-6-1-magnetic-disk',
@@ -1060,7 +1093,7 @@ export default {
     {
       title: 'Chapter 7 — Input/Output|||Chương 7 — Nhập/Xuất (I/O)',
       description: 'Module I/O và ba kỹ thuật: programmed I/O, interrupt-driven, DMA.',
-      lessons: [
+      lessons: [ch7aSlides, ch7bSlides, 
         {
           title: '7.1 — I/O modules & three techniques|||7.1 — Module I/O & ba kỹ thuật',
           slug: 'cea201-7-1-io-techniques',
@@ -1131,7 +1164,7 @@ export default {
     {
       title: 'Chapter 8 — Operating System Support|||Chương 8 — Hỗ trợ Hệ điều hành',
       description: 'Vai trò OS, lập lịch, quản lý bộ nhớ và bộ nhớ ảo/phân trang.',
-      lessons: [
+      lessons: [ch8aSlides, ch8bSlides, 
         {
           title: '8.1 — Scheduling, memory management & virtual memory|||8.1 — Lập lịch, quản lý bộ nhớ & bộ nhớ ảo',
           slug: 'cea201-8-1-os-support',
@@ -1214,7 +1247,7 @@ export default {
     {
       title: 'Chapter 9 — Digital Logic|||Chương 9 — Logic số',
       description: 'Đại số Boole, cổng logic, mạch tổ hợp và mạch tuần tự (CLO6).',
-      lessons: [
+      lessons: [ch9aSlides, ch9bSlides, 
         {
           title: '9.1 — Boolean algebra & logic gates|||9.1 — Đại số Boole & cổng logic',
           slug: 'cea201-9-1-boolean-gates',
@@ -1367,7 +1400,7 @@ export default {
     {
       title: 'Chapter 10 — Instruction Sets: Characteristics|||Chương 10 — Tập lệnh: Đặc điểm',
       description: 'Một lệnh máy gồm gì: mã lệnh, toán hạng, phép toán và kiểu dữ liệu.',
-      lessons: [
+      lessons: [ch10aSlides, ch10bSlides, 
         {
           title: '10.1 — Anatomy of a machine instruction|||10.1 — Giải phẫu một lệnh máy',
           slug: 'cea201-10-1-instruction-anatomy',
@@ -1449,7 +1482,7 @@ export default {
     {
       title: 'Chapter 11 — Instruction Sets: Addressing Modes|||Chương 11 — Tập lệnh: Addressing Modes',
       description: 'Các cách một lệnh chỉ ra toán hạng nằm ở đâu.',
-      lessons: [
+      lessons: [ch11Slides, 
         {
           title: '11.1 — Addressing modes|||11.1 — Các addressing mode',
           slug: 'cea201-11-1-addressing-modes',
@@ -1517,7 +1550,7 @@ export default {
     {
       title: 'Chapter 12 — Processor Structure & Function|||Chương 12 — Cấu trúc & Chức năng CPU',
       description: 'Thanh ghi, chu trình lệnh chi tiết và pipeline.',
-      lessons: [
+      lessons: [ch12aSlides, ch12bSlides, 
         {
           title: '12.1 — Registers & the instruction cycle|||12.1 — Thanh ghi & chu trình lệnh',
           slug: 'cea201-12-1-registers-cycle',
@@ -1653,7 +1686,7 @@ export default {
     {
       title: 'Chapter 13 — Reduced Instruction Set Computers (RISC)|||Chương 13 — Máy tính tập lệnh rút gọn (RISC)',
       description: 'Triết lý RISC vs CISC và vì sao điện thoại của bạn là RISC.',
-      lessons: [
+      lessons: [ch13aSlides, ch13bSlides, 
         {
           title: '13.1 — RISC vs CISC|||13.1 — RISC vs CISC',
           slug: 'cea201-13-1-risc-cisc',
@@ -1731,7 +1764,7 @@ export default {
     {
       title: 'Chapter 14 — ILP & Superscalar|||Chương 14 — ILP & Superscalar',
       description: 'Thực thi nhiều lệnh cùng lúc bằng song song mức lệnh.',
-      lessons: [
+      lessons: [ch14aSlides, ch14bSlides, 
         {
           title: '14.1 — Instruction-level parallelism & superscalar|||14.1 — Song song mức lệnh & superscalar',
           slug: 'cea201-14-1-ilp-superscalar',
@@ -1797,7 +1830,7 @@ export default {
     {
       title: 'Chapter 15 — Parallel Processing & Multicore|||Chương 15 — Xử lý song song & Đa nhân',
       description: 'Nhiều nhân, SMP, nhất quán cache và GPU.',
-      lessons: [
+      lessons: [ch15aSlides, ch15bSlides, ch15cSlides, 
         {
           title: '15.1 — Multicore, SMP & cache coherence|||15.1 — Đa nhân, SMP & nhất quán cache',
           slug: 'cea201-15-1-multicore',
@@ -1867,7 +1900,7 @@ export default {
     {
       title: 'Practical Assembly Language with MARIE (sessions 39–44)|||Thực hành hợp ngữ với MARIE (buổi 39–44)',
       description: 'Trong syllabus: 6 buổi "Practical Assembly Language" (39–44), MARIE simulator là tài liệu được liệt kê, CLO7 & CLO10 — viết và chạy một chương trình hợp ngữ thật.',
-      lessons: [
+      lessons: [asmaSlides, asmbSlides, 
         {
           title: 'N1.1 — Write & run a MARIE program|||N1.1 — Viết & chạy một chương trình MARIE',
           slug: 'cea201-n1-1-marie',

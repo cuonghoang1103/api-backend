@@ -67,19 +67,20 @@ export function phanTichUrl(raw: string): { nguon: NguonVideo; videoId: string }
     return { nguon: 'youtube', videoId: id };
   }
 
-  // ── TikTok ──
+  // ── TikTok: CHƯA nhận, và nói rõ vì sao ──
+  //
+  // ⚠️ Không phải "chưa kịp làm". Cả màn học dựa vào việc TUA tới đúng câu
+  // khi chạm vào phụ đề, mà trình nhúng của TikTok KHÔNG có API đọc/đặt
+  // thời điểm phát — nên phụ đề sẽ nằm đó như một trang chữ chết, không
+  // khớp với tiếng. Thêm vào mà không đồng bộ được thì tệ hơn là không có.
+  // (Và đa số video TikTok cũng không có phụ đề để lấy.)
   if (host === 'tiktok.com' || host.endsWith('.tiktok.com')) {
-    const m = u.pathname.match(/\/video\/(\d{6,25})/);
-    if (m) return { nguon: 'tiktok', videoId: m[1] };
-    // Link rút gọn (vm.tiktok.com/xxx) chưa có mã trong đường dẫn — để
-    // `yt-dlp` tự bám theo chuyển hướng, nhưng vẫn giữ nguyên HOST đã duyệt.
-    if (/^[A-Za-z0-9._-]{3,64}$/.test(u.pathname.slice(1))) {
-      return { nguon: 'tiktok', videoId: `@${u.pathname.slice(1)}` };
-    }
-    throw new BadRequestError('Không đọc được mã video TikTok trong link này');
+    throw new BadRequestError(
+      'Chưa học được bằng video TikTok: trình phát nhúng của TikTok không cho tua theo phụ đề, '
+      + 'nên phụ đề sẽ không khớp với tiếng. Hiện dùng được link YouTube.');
   }
 
-  throw new BadRequestError('Hiện chỉ nhận link YouTube hoặc TikTok');
+  throw new BadRequestError('Hiện chỉ nhận link YouTube');
 }
 
 function urlChuan(nguon: NguonVideo, videoId: string): string {
@@ -212,11 +213,7 @@ export async function themTuUrl(userId: number, rawUrl: string, nhomLon?: string
       throw new BadRequestError('Video dài hơn 4 tiếng — chưa nhận');
     }
     if (!vtt) {
-      throw new BadRequestError(
-        nguon === 'tiktok'
-          ? 'Video TikTok này không có phụ đề nên chưa học được'
-          : 'Video này không có phụ đề tiếng Anh (kể cả phụ đề tự động)',
-      );
+      throw new BadRequestError('Video này không có phụ đề tiếng Anh (kể cả phụ đề tự động)');
     }
 
     const { cues, soTu } = lamSachVtt(vtt);
@@ -300,4 +297,51 @@ export async function doiNhom(userId: number, id: number, nhomLon: string) {
   });
   if (!n.count) throw new BadRequestError('Không tìm thấy video này');
   return { nhomLon };
+}
+
+// ════════════════════════════════════════════════════════════════
+// YÊU THÍCH
+// ════════════════════════════════════════════════════════════════
+
+/**
+ * App dùng MỘT con số để chỉ video: `lessonId` dương = bài giảng của web,
+ * ÂM = video người dùng tự thêm (`-id`). Quy ước đó có từ `thuVien()`, giữ
+ * nguyên ở đây để màn hình không phải mang hai loại khoá.
+ */
+function tachKhoa(ma: number): { lessonId: number | null; videoTuThemId: number | null } {
+  return ma < 0 ? { lessonId: null, videoTuThemId: -ma } : { lessonId: ma, videoTuThemId: null };
+}
+
+/** Bật/tắt yêu thích. Trả về trạng thái SAU khi đổi. */
+export async function doiYeuThich(userId: number, ma: number) {
+  const { lessonId, videoTuThemId } = tachKhoa(ma);
+
+  const cu = await prisma.videoYeuThich.findFirst({
+    where: { userId, lessonId, videoTuThemId },
+    select: { id: true },
+  });
+  if (cu) {
+    await prisma.videoYeuThich.delete({ where: { id: cu.id } });
+    return { ma, yeuThich: false };
+  }
+
+  try {
+    await prisma.videoYeuThich.create({ data: { userId, lessonId, videoTuThemId } });
+  } catch {
+    // Khoá ngoại hỏng = video không còn. Nói thẳng, đừng để nút tim bấm
+    // xong không có gì xảy ra và người dùng tưởng app đơ.
+    throw new BadRequestError('Video này không còn tồn tại');
+  }
+  return { ma, yeuThich: true };
+}
+
+/** Danh sách mã video đã thích, mới nhất trước. */
+export async function maYeuThich(userId: number): Promise<number[]> {
+  const ds = await prisma.videoYeuThich.findMany({
+    where: { userId },
+    select: { lessonId: true, videoTuThemId: true },
+    orderBy: { createdAt: 'desc' },
+  });
+  return ds.map((d: (typeof ds)[number]) =>
+    d.lessonId ?? -(d.videoTuThemId as number));
 }

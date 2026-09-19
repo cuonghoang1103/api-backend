@@ -380,6 +380,7 @@ model User {
   llmKeyRequests    LlmKeyRequest[]
   /// Video người dùng tự thêm vào màn "Học bằng video".
   videoTuThem       VideoNguoiDung[]        @relation("VideoNguoiDungChuSoHuu")
+  videoYeuThich     VideoYeuThich[]         @relation("VideoYeuThichChuSoHuu")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -1072,6 +1073,7 @@ model Lesson {
   aiAnswers      LessonAiAnswer[]
   tutorAsks      LessonTutorAsk[]
   phuDe          LessonTranscript?
+  videoYeuThich  VideoYeuThich[]   @relation("VideoYeuThichBaiGiang")
 
   @@index([sectionId], name: "idx_lessons_section")
   @@index([isPublished], name: "idx_lessons_published")
@@ -1140,10 +1142,32 @@ model VideoNguoiDung {
 
   user User @relation("VideoNguoiDungChuSoHuu", fields: [userId], references: [id], onDelete: Cascade)
 
+  yeuThich VideoYeuThich[] @relation("VideoYeuThichTuThem")
+
   @@unique([userId, nguon, videoId], name: "uk_video_nguoi_dung")
   @@index([userId], name: "idx_video_nguoi_dung_user")
   @@index([userId, nhomLon], name: "idx_video_nguoi_dung_nhom_lon")
   @@map("video_nguoi_dung")
+}
+
+/// Video yêu thích trong màn "Học bằng video".
+///
+/// Trỏ tới ĐÚNG MỘT nguồn: bài giảng của web hoặc video người dùng tự thêm.
+/// Ràng buộc CHECK nằm trong migration (Prisma không khai được CHECK).
+model VideoYeuThich {
+  id            Int  @id @default(autoincrement())
+  userId        Int  @map("user_id")
+  lessonId      Int? @map("lesson_id")
+  videoTuThemId Int? @map("video_tu_them_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user        User            @relation("VideoYeuThichChuSoHuu", fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson?         @relation("VideoYeuThichBaiGiang", fields: [lessonId], references: [id], onDelete: Cascade)
+  videoTuThem VideoNguoiDung? @relation("VideoYeuThichTuThem", fields: [videoTuThemId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt], name: "idx_video_yeu_thich_user")
+  @@map("video_yeu_thich")
 }
 
 // Cache câu trả lời gia sư AI cho các câu hỏi GỢI Ý cố định (chip) của một bài.

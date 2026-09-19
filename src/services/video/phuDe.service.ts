@@ -195,7 +195,17 @@ export async function thuVien(userId: number) {
              soVideo: cua.reduce((t, k) => t + k.soVideo, 0) };
   }).filter((n) => n.soVideo > 0);
 
-  return { nhomLon, nhom, khoa, cuaToi };
+  // Mã video đã thích — app tự tô tim và tự dựng hàng "Yêu thích" từ danh
+  // sách này, không cần thêm một lời gọi nữa.
+  const yt = await prisma.videoYeuThich.findMany({
+    where: { userId },
+    select: { lessonId: true, videoTuThemId: true },
+    orderBy: { createdAt: 'desc' },
+  });
+  const yeuThich = yt.map((d: (typeof yt)[number]) =>
+    d.lessonId ?? -(d.videoTuThemId as number));
+
+  return { nhomLon, nhom, khoa, cuaToi, yeuThich };
 }
 
 /** Danh sách video trong một khoá. */

@@ -69,6 +69,20 @@ router.get('/cua-toi/:id(\\d+)/phu-de', param('id').isInt(), validate,
     } catch (e) { next(e); }
   });
 
+// ── Yêu thích ──
+// `ma` ÂM = video người dùng tự thêm, nên KHÔNG dùng `:id(\\d+)` (nó không
+// khớp dấu trừ và route sẽ 404 đúng với những video tự thêm).
+router.post('/yeu-thich/:ma(-?\\d+)', param('ma').isInt(), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      ok(res, await them.doiYeuThich(idNguoiDung(req), Number(req.params.ma)));
+    } catch (e) { next(e); }
+  });
+
+router.get('/yeu-thich', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await them.maYeuThich(idNguoiDung(req))); } catch (e) { next(e); }
+});
+
 router.delete('/cua-toi/:id(\\d+)', param('id').isInt(), validate,
   async (req, res: Response<ApiResponse>, next) => {
     try {

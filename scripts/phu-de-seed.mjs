@@ -18,6 +18,14 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 const TEP = 'content/phu-de/phu-de-bai-giang.jsonl.gz';
+/// Bản CHỒNG LÊN — câu đã chấm dấu, viết hoa, cắt theo câu thật (máy nhà
+/// làm dần, ~17 giờ cho 963 bài). Nạp SAU `TEP` nên bài nào có ở đây thì
+/// bản này thắng.
+///
+/// ⚠️ Cố ý để RIÊNG chứ không trộn vào `TEP`: trộn thì mỗi đợt xong thêm
+/// vài chục bài lại phải commit lại cả tệp 9MB. Tệp chồng nhỏ, lớn dần, và
+/// khi nào đủ 963 bài thì thay hẳn `TEP` bằng nó.
+const TEP_V2 = 'content/phu-de/phu-de-v2.jsonl.gz';
 /// Bản dịch tiếng Việt — TUỲ CHỌN. Máy nhà dịch dần bằng Qwen (~15 giờ cho
 /// 1.030 bài), nên tệp này có thể chưa tồn tại hoặc mới có một phần. Thiếu
 /// thì bỏ qua, KHÔNG làm hỏng seed: phụ đề tiếng Anh vẫn dùng được trọn vẹn.
@@ -61,12 +69,16 @@ async function main() {
   }
 
   let doc = 0, ghi = 0, boQua = 0, khongCoBai = 0, khongCoMa = 0, coDich = 0;
-  const rl = createInterface({
-    input: createReadStream(TEP).pipe(createGunzip()),
-    crlfDelay: Infinity,
-  });
 
-  for await (const dong of rl) {
+  async function nap(tep) {
+   if (!existsSync(tep)) return 0;
+   let n = 0;
+   const rl = createInterface({
+    input: createReadStream(tep).pipe(createGunzip()),
+    crlfDelay: Infinity,
+   });
+
+   for await (const dong of rl) {
     if (!dong.trim()) continue;
     doc++;
     let d;
@@ -100,10 +112,16 @@ async function main() {
         },
       });
     }
-    ghi++;
+    ghi++; n++;
+   }
+   return n;
   }
 
+  const nBase = await nap(TEP);
+  const nV2 = await nap(TEP_V2);
+
   console.log(` phụ đề: đọc ${doc} · ${apDung ? 'ghi' : 'sẽ ghi'} ${ghi}` +
+    ` · bản chấm câu mới ${nV2}/${nBase + nV2}` +
     ` · bài không còn ${khongCoBai} · không rút được mã video ${khongCoMa} · hỏng ${boQua}` +
     ` · kèm bản dịch ${coDich}`);
 

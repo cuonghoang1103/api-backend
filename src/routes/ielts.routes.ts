@@ -19,6 +19,8 @@ import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/ielts/ielts.service.js';
 import { hoiVeChu, chamBaiViet, CAC_Y } from '../services/ielts/hoiAI.service.js';
 import { dungDe, nopDe, lichSuThi } from '../services/ielts/deThi.service.js';
+import { chamBaiNoi } from '../services/ielts/chamNoi.service.js';
+import multer from 'multer';
 
 const router = Router();
 router.use(authenticate);
@@ -63,6 +65,31 @@ router.post('/ai/cham-viet',
   async (req, res: Response<ApiResponse>, next) => {
     try { ok(res, await chamBaiViet(uid(req), req.body)); } catch (e) { next(e); }
   });
+
+/**
+ * Chấm phần NÓI: nhận audio, phiên âm, chấm theo tiêu chí IELTS Speaking.
+ *
+ * ⚠️ `memoryStorage` — audio KHÔNG chạm đĩa và không lên R2. Giọng nói là dữ
+ * liệu sinh trắc học; một bản sao nằm lại trên máy chủ là thứ phải xin phép
+ * riêng, mà tính năng này không cần tới nó.
+ *
+ * Dùng multer RIÊNG chứ không mượn `upload` dùng chung của app: cái chung ghi
+ * xuống đĩa, và "mượn tạm" là cách những tệp không định lưu vẫn được lưu.
+ */
+const audioNoi = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 } });
+router.post('/ai/cham-noi', audioNoi.single('audio'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const f = req.file;
+    if (!f?.buffer?.length) throw new Error('Thiếu audio');
+    ok(res, await chamBaiNoi(uid(req), {
+      audio: f.buffer,
+      filename: f.originalname || 'noi.m4a',
+      mimetype: f.mimetype || 'audio/m4a',
+      cauHoi: req.body?.cauHoi ? String(req.body.cauHoi) : undefined,
+      part: req.body?.part ? String(req.body.part) : undefined,
+    }));
+  } catch (e) { next(e); }
+});
 
 // ─── Phòng thi ───────────────────────────────────────────────
 //

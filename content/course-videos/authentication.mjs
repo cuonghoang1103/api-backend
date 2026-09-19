@@ -30,7 +30,7 @@ export default {
     'auth-0-3-dang-nhap-sai': { yt: 'ZKM5IiBmqO4', credit: 'Technical MotaBhai — OWASP TOP 10 - Broken Authentication and Session Managment' },  // OWASP TOP 10 - Broken Authentication and Session Management
 
     /* ── Chương 1 — Tín vật, và những nguyên thuỷ bên dưới ── */
-    'auth-1-1-tin-vat-mang-theo': { yt: 'AYXvbe6vd2g', credit: 'Glabay — Why JWT? Sessions vs Stateless Auth Breakdown' },        // Why JWT? Sessions vs Stateless Auth Breakdown
+    'auth-1-1-tin-vat-mang-theo': { yt: 'AYXvbe6vd2g', credit: 'The Midnight Coder — Why JWT? Sessions vs Stateless Auth Breakdown' },        // Why JWT? Sessions vs Stateless Auth Breakdown
     'auth-1-2-ngau-nhien': { yt: '-8JHxAKJ3Cw', credit: 'procademy — Hashing Password with Salt Using Bcrypt | Complete Node JS + Express Course with MongoDB | Part #149' },               // Hashing Password with Salt Using Bcrypt | Complete Node JS
     'auth-1-3-so-sanh-hang-thoi-gian': { yt: 'Y4joeekt5Ew', credit: 'Learning Software — jwt signature and validation explained' },   // jwt signature and validation explained
     'auth-1-4-bam-mac-chu-ky': { yt: 'PG9_lJsOShM', credit: 'Sudipto Kumar Mukherjee — JWT Token Explained in Depth | Header, Payload, Signature | HS256 | .NET & Web API Interview Guide' },           // JWT Token Explained in Depth | Header, Payload, Signature | HS256

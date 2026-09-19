@@ -19,6 +19,8 @@ import { sanitizeHtml } from '@/lib/utils';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { getPrerequisites, hasAcknowledgedPrereq, acknowledgePrereq } from '@/lib/coursePrerequisites';
 import { PrerequisiteModal, PrerequisiteBanner } from '@/components/courses/PrerequisiteGate';
+import { tachGachDauDong, nenMotCot } from '@/lib/courseBlurb';
+import { CourseDescription } from '@/components/courses/CourseDescription';
 import type { Course, CourseReview } from '@/types';
 
 function formatDuration(seconds: number): string {
@@ -520,8 +522,8 @@ export default function CourseDetailPage() {
   // For CODE courses, hasPaidAccess=true only when enrollment.source='CODE'.
   const isPaidCourse = accessType === 'PAID';
   const isCodeCourse = accessType === 'CODE';
-  const whatYouLearnList = course.whatYouLearn ? course.whatYouLearn.split('\n').filter(Boolean) : [];
-  const requirementsList = course.requirements ? course.requirements.split('\n').filter(Boolean) : [];
+  const whatYouLearnList = tachGachDauDong(course.whatYouLearn);
+  const requirementsList = tachGachDauDong(course.requirements);
 
   // Only enrolled learners (or admin/instructor) may post a review.
   const canReview = Boolean(course.isEnrolled || course.hasPaidAccess || (course as any).isAdmin);
@@ -751,11 +753,15 @@ export default function CourseDetailPage() {
                   <Award className="w-5 h-5 text-neon-violet" />
                   What You Will Learn
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div
+                  className={`grid gap-x-6 gap-y-3 ${
+                    nenMotCot(whatYouLearnList) ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
+                  }`}
+                >
                   {whatYouLearnList.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3 text-sm text-text-secondary">
+                    <div key={i} className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed">
                       <CheckCircle className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
-                      {item.replace(/^[-•*]\s*/, '')}
+                      <span className="min-w-0">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -766,7 +772,7 @@ export default function CourseDetailPage() {
             {course.description && (
               <section className="bg-darkcard border border-darkborder/50 rounded-2xl p-6">
                 <h2 className="text-xl font-heading font-bold text-text-primary mb-4">Course Description</h2>
-                <div className="text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(course.description) }} />
+                <CourseDescription html={course.description} />
               </section>
             )}
 
@@ -852,9 +858,9 @@ export default function CourseDetailPage() {
                 <h2 className="text-xl font-heading font-bold text-text-primary mb-4">Requirements</h2>
                 <ul className="space-y-2">
                   {requirementsList.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-text-secondary text-sm">
-                      <span className="text-neon-violet mt-1">•</span>
-                      {item.replace(/^[-•*]\s*/, '')}
+                    <li key={i} className="flex items-start gap-3 text-text-secondary text-sm leading-relaxed">
+                      <span className="text-neon-violet mt-1 shrink-0">•</span>
+                      <span className="min-w-0">{item}</span>
                     </li>
                   ))}
                 </ul>

@@ -21,6 +21,8 @@ import Curriculum from '@/components/academy/Curriculum';
 import Reviews from '@/components/academy/Reviews';
 import CourseCard from '@/components/academy/CourseCard';
 import PaymentQrModal, { type QrPaymentStatus } from '@/components/payment/PaymentQrModal';
+import { tachGachDauDong, nenMotCot } from '@/lib/courseBlurb';
+import { CourseDescription } from '@/components/courses/CourseDescription';
 
 interface CourseDetailClientProps {
   slug: string;
@@ -33,11 +35,9 @@ function formatDuration(seconds: number) {
   return `${m}m`;
 }
 
-// Safe string split helper - prevents crash when value is null/undefined
-function safeSplitLines(value: string | null | undefined): string[] {
-  if (!value || typeof value !== 'string') return [];
-  return value.split('\n').filter(Boolean);
-}
+// Tách gạch đầu dòng: xem `@/lib/courseBlurb` — split('\n') trần cho ra ĐÚNG
+// một mục khổng lồ vì 545/573 môn viết cả đoạn trên một dòng, ngăn bằng `;`.
+const safeSplitLines = tachGachDauDong;
 
 function toEmbedUrl(raw?: string): string {
   if (!raw) return '';
@@ -324,20 +324,24 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                 {course.description && (
                   <div className="bg-darkcard border border-darkborder rounded-2xl p-6">
                     <h3 className="text-lg font-heading font-bold text-text-primary mb-4">Giới thiệu khóa học</h3>
-                    <div className="prose prose-invert max-w-none text-text-secondary leading-relaxed whitespace-pre-line">
-                      {course.description}
-                    </div>
+                    {/* Trước đây render {course.description} dạng TEXT ⇒ thẻ <strong>
+                        của spec hiện nguyên văn ra màn hình. */}
+                    <CourseDescription html={course.description} />
                   </div>
                 )}
 
                 {course.whatYouLearn && (
                   <div className="bg-darkcard border border-darkborder rounded-2xl p-6">
                     <h3 className="text-lg font-heading font-bold text-text-primary mb-4">Bạn sẽ học được</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div
+                      className={`grid gap-x-6 gap-y-3 ${
+                        nenMotCot(safeSplitLines(course.whatYouLearn)) ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'
+                      }`}
+                    >
                       {safeSplitLines(course.whatYouLearn).map((item, i) => (
                         <div key={i} className="flex items-start gap-3">
                           <CheckCircle className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
-                          <span className="text-sm text-text-secondary">{item.replace(/^[-•*]\s*/, '')}</span>
+                          <span className="text-sm text-text-secondary leading-relaxed min-w-0">{item}</span>
                         </div>
                       ))}
                     </div>
@@ -349,9 +353,9 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                     <h3 className="text-lg font-heading font-bold text-text-primary mb-4">Yêu cầu</h3>
                     <ul className="space-y-2">
                       {safeSplitLines(course.requirements).map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm text-text-secondary">
+                        <li key={i} className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed">
                           <Shield className="w-4 h-4 text-neon-indigo shrink-0 mt-0.5" />
-                          {item.replace(/^[-•*]\s*/, '')}
+                          <span className="min-w-0">{item}</span>
                         </li>
                       ))}
                     </ul>

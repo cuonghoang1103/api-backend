@@ -378,6 +378,8 @@ model User {
   proOrders         ProOrder[]
   keyReplacements   KeyReplacementRequest[]
   llmKeyRequests    LlmKeyRequest[]
+  /// Video người dùng tự thêm vào màn "Học bằng video".
+  videoTuThem       VideoNguoiDung[]        @relation("VideoNguoiDungChuSoHuu")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -1104,6 +1106,39 @@ model LessonTranscript {
 
   @@index([videoId], name: "idx_lesson_transcripts_video")
   @@map("lesson_transcripts")
+}
+
+/// Video do NGƯỜI DÙNG tự thêm (dán link hoặc chia sẻ từ app YouTube/TikTok).
+///
+/// Tách hẳn khỏi `LessonTranscript` vì nó không gắn với `Lesson` nào: bài
+/// giảng là nội dung của web, còn đây là video riêng của từng người.
+model VideoNguoiDung {
+  id      Int    @id @default(autoincrement())
+  userId  Int    @map("user_id")
+  /// 'youtube' | 'tiktok'
+  nguon   String @db.VarChar(16)
+  videoId String @map("video_id") @db.VarChar(64)
+
+  tieuDe String  @db.VarChar(300)
+  tacGia String? @map("tac_gia") @db.VarChar(200)
+  anhBia String? @map("anh_bia") @db.VarChar(600)
+  giay   Int?
+
+  /// [{ "t": giây, "en": "câu" }] — cùng dạng với `LessonTranscript.cues`.
+  cues  Json @db.JsonB
+  soCau Int  @map("so_cau")
+  soTu  Int  @map("so_tu")
+
+  dichVi Json? @map("dich_vi") @db.JsonB
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation("VideoNguoiDungChuSoHuu", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, nguon, videoId], name: "uk_video_nguoi_dung")
+  @@index([userId], name: "idx_video_nguoi_dung_user")
+  @@map("video_nguoi_dung")
 }
 
 // Cache câu trả lời gia sư AI cho các câu hỏi GỢI Ý cố định (chip) của một bài.

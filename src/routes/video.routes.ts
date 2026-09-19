@@ -4,22 +4,66 @@
  * Đặt sau `authenticate` như mọi route nội dung khác: phụ đề là kết quả của
  * một đợt thu tốn công, không phải thứ để mở cho cả internet cào về.
  */
-import { Router, type Response } from 'express';
+import { Router, type Request, type Response } from 'express';
 import multer from 'multer';
 import { param } from 'express-validator';
 import { authenticate } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/video/phuDe.service.js';
+import * as them from '../services/video/themVideo.service.js';
+import { body } from 'express-validator';
 
 const router = Router();
 router.use(authenticate);
 
 const ok = (res: Response<ApiResponse>, data: unknown) => res.json({ success: true, data });
 
+// ⚠️ `req.user.id` KHÔNG tồn tại trong repo này — middleware `authenticate`
+// gắn `req.userId`. Dùng nhầm thì `tsc` im, còn route thì 500 lúc chạy.
+const idNguoiDung = (req: Request): number => req.userId!;
+
 router.get('/danh-muc', async (_req, res: Response<ApiResponse>, next) => {
   try { ok(res, await svc.danhMuc()); } catch (e) { next(e); }
 });
+
+/**
+ * Cả thư viện trong MỘT lời gọi — nhóm chủ đề + khoá + video (có `videoId`
+ * để lấy ảnh bìa từ CDN YouTube). Màn duyệt của app dùng route này; hai
+ * route dưới giữ lại cho bản app cũ.
+ */
+router.get('/thu-vien', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await svc.thuVien(idNguoiDung(req))); } catch (e) { next(e); }
+});
+
+// ════════════════════════════════════════════════════════════════
+// VIDEO NGƯỜI DÙNG TỰ THÊM
+// ════════════════════════════════════════════════════════════════
+
+router.post('/cua-toi', body('url').isString().isLength({ min: 8, max: 2048 }), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      ok(res, await them.themTuUrl(idNguoiDung(req), String(req.body.url)));
+    } catch (e) { next(e); }
+  });
+
+router.get('/cua-toi', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await them.videoCuaToi(idNguoiDung(req))); } catch (e) { next(e); }
+});
+
+router.get('/cua-toi/:id(\\d+)/phu-de', param('id').isInt(), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      ok(res, await them.phuDeCuaToi(idNguoiDung(req), Number(req.params.id)));
+    } catch (e) { next(e); }
+  });
+
+router.delete('/cua-toi/:id(\\d+)', param('id').isInt(), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      ok(res, await them.xoaVideo(idNguoiDung(req), Number(req.params.id)));
+    } catch (e) { next(e); }
+  });
 
 router.get('/khoa/:id(\\d+)', param('id').isInt(), validate,
   async (req, res: Response<ApiResponse>, next) => {

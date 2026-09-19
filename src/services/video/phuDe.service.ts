@@ -8,6 +8,7 @@
 import { prisma } from '../../config/database.js';
 import { NotFoundError, BadRequestError } from '../../middleware/errorHandler.js';
 import { transcribeWithGroq } from '../interview/voice/stt.js';
+import { NHOM_CHU_DE, nhomCuaKhoa, tachTieuDe } from './nhomChuDe.js';
 
 export type CauPhuDe = { t: number; en: string };
 
@@ -55,6 +56,115 @@ export async function danhMuc() {
   return [...gom.values()].sort((a, b) => b.soVideo - a.soVideo);
 }
 
+/**
+ * THƯ VIỆN — tất cả những gì màn duyệt video cần, trong MỘT lời gọi.
+ *
+ * Màn duyệt vẽ các HÀNG NGANG có ảnh bìa (như Netflix/YouTube), nên nó cần
+ * video của nhiều khoá cùng lúc. Nếu để app gọi `/khoa/:id` cho từng khoá
+ * thì mở màn hình là 48 lời gọi — chậm, và mỗi lần đổi chip lọc lại gọi
+ * thêm. Gửi một cục: đo thật ~170 KB thô, nén gzip còn ~40 KB, đổi lấy việc
+ * lọc/tìm/“xem tất cả” đều xảy ra tức thì và chạy được cả khi mất mạng.
+ *
+ * KHÔNG kèm ảnh bìa trong payload: ảnh lấy thẳng từ CDN của YouTube theo
+ * `videoId` (`i.ytimg.com/vi/<id>/hqdefault.jpg`) — đo 24 ảnh ngẫu nhiên
+ * 19/09/2026 đều là ảnh thật, không có ảnh xám placeholder nào.
+ */
+export async function thuVien(userId: number) {
+  const ds = await prisma.lessonTranscript.findMany({
+    select: {
+      lessonId: true, videoId: true, soCau: true, soTu: true,
+      lesson: {
+        select: {
+          title: true, videoDurationSeconds: true,
+          section: {
+            select: {
+              course: {
+                select: { id: true, title: true, slug: true, courseCode: true },
+              },
+            },
+          },
+        },
+      },
+    },
+    orderBy: { lessonId: 'asc' },
+  });
+
+  type Video = {
+    lessonId: number; videoId: string; tieuDe: string; tieuDeVi: string | null;
+    giay: number | null; soCau: number; soTu: number;
+  };
+  type Khoa = {
+    courseId: number; title: string; slug: string | null; nhom: string;
+    soVideo: number; video: Video[];
+  };
+
+  const gom = new Map<number, Khoa>();
+  for (const d of ds) {
+    const c = d.lesson?.section?.course;
+    if (!c) continue;
+    let k = gom.get(c.id);
+    if (!k) {
+      k = {
+        courseId: c.id,
+        title: c.title,
+        slug: c.slug,
+        nhom: nhomCuaKhoa(c.courseCode, c.title),
+        soVideo: 0,
+        video: [],
+      };
+      gom.set(c.id, k);
+    }
+    const t = tachTieuDe(d.lesson.title);
+    k.video.push({
+      lessonId: d.lessonId,
+      videoId: d.videoId,
+      tieuDe: t.en,
+      tieuDeVi: t.vi,
+      giay: d.lesson.videoDurationSeconds || null,
+      soCau: d.soCau,
+      soTu: d.soTu,
+    });
+    k.soVideo += 1;
+  }
+
+  const khoa = [...gom.values()].sort((a, b) => b.soVideo - a.soVideo);
+
+  // Chỉ trả nhóm THẬT SỰ có video — một chip lọc mở ra trống rỗng là thứ
+  // người dùng bấm nhầm đúng một lần rồi thôi tin cả hàng chip.
+  const nhom = NHOM_CHU_DE.map((n) => {
+    const cua = khoa.filter((k) => k.nhom === n.ma);
+    return {
+      ...n,
+      soKhoa: cua.length,
+      soVideo: cua.reduce((t, k) => t + k.soVideo, 0),
+    };
+  }).filter((n) => n.soVideo > 0);
+
+  // ── Video người dùng tự thêm ──
+  // Trả ĐÚNG hình dạng của một video bài giảng để app không phải có hai
+  // nhánh vẽ. Khác biệt duy nhất: `lessonId` ÂM (= -id trong bảng riêng) và
+  // có `nguon`, nhờ đó app biết gọi endpoint phụ đề nào.
+  const tuThem = await prisma.videoNguoiDung.findMany({
+    where: { userId },
+    select: { id: true, nguon: true, videoId: true, tieuDe: true, anhBia: true,
+              giay: true, soCau: true, soTu: true, tacGia: true },
+    orderBy: { createdAt: 'desc' },
+  });
+  const cuaToi = tuThem.map((v: (typeof tuThem)[number]) => ({
+    lessonId: -v.id,
+    videoId: v.videoId,
+    nguon: v.nguon,
+    tieuDe: v.tieuDe,
+    tieuDeVi: v.tacGia,
+    anhBiaUrl: v.anhBia,
+    giay: v.giay,
+    soCau: v.soCau,
+    soTu: v.soTu,
+  }));
+
+  return { nhom, khoa, cuaToi };
+}
+
 /** Danh sách video trong một khoá. */
 export async function videoCuaKhoa(courseId: number) {
   const ds = await prisma.lessonTranscript.findMany({
@@ -65,14 +175,18 @@ export async function videoCuaKhoa(courseId: number) {
     },
     orderBy: { lessonId: 'asc' },
   });
-  return ds.map((d: (typeof ds)[number]) => ({
-    lessonId: d.lessonId,
-    videoId: d.videoId,
-    tieuDe: d.lesson.title,
-    giay: d.lesson.videoDurationSeconds || null,
-    soCau: d.soCau,
-    soTu: d.soTu,
-  }));
+  return ds.map((d: (typeof ds)[number]) => {
+    const t = tachTieuDe(d.lesson.title);
+    return {
+      lessonId: d.lessonId,
+      videoId: d.videoId,
+      tieuDe: t.en,
+      tieuDeVi: t.vi,
+      giay: d.lesson.videoDurationSeconds || null,
+      soCau: d.soCau,
+      soTu: d.soTu,
+    };
+  });
 }
 
 /** Phụ đề đầy đủ của MỘT video. */
@@ -85,10 +199,12 @@ export async function phuDe(lessonId: number) {
     },
   });
   if (!d) throw new NotFoundError('Chưa có phụ đề cho bài này');
+  const tach = tachTieuDe(d.lesson.title);
   return {
     lessonId,
     videoId: d.videoId,
-    tieuDe: d.lesson.title,
+    tieuDe: tach.en,
+    tieuDeVi: tach.vi,
     lang: d.lang,
     soCau: d.soCau,
     soTu: d.soTu,

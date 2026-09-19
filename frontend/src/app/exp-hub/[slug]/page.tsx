@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { cache } from 'react';
+import ToMauCodeToanTrang from '@/components/lesson/ToMauCodeToanTrang';
 import { notFound } from 'next/navigation';
 import hljs from '@/components/exp-hub/hljsCore';
 import { ArrowLeft, Github, Download, BookOpen, ExternalLink } from 'lucide-react';
@@ -215,6 +216,8 @@ export default async function ExpHubSnippetPage({ params, searchParams }: PagePr
           </Link>
         </div>
       </div>
+      {/* Tô màu code + nút Sao chép cho các khối .rich-content ở trên. */}
+      <ToMauCodeToanTrang />
     </div>
   );
 }

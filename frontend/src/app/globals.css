@@ -1258,20 +1258,22 @@ aside ::-webkit-scrollbar-thumb:hover {
   border-radius: 0;
 }
 
-/* Highlight a few token-ish colors that we may get from
- * pasted HTML or future server-side syntax highlighting. */
+/* Bảng màu token — tông VS Code Dark+ (người học yêu cầu 19/09/2026: "code
+ * phải có màu như VSCode rõ ràng"). Trước đó là tông github-dark, VÀ quan
+ * trọng hơn: chưa bao giờ có thẻ .hljs-* nào được sinh ra vì không bộ tô màu
+ * nào chạy trên nội dung bài — xem src/lib/toMauCode.ts. */
 .rich-content pre .tok-keyword,
-.rich-content pre .hljs-keyword { color: #ff7b72; }
+.rich-content pre .hljs-keyword { color: #569cd6; }          /* if, for, class */
 .rich-content pre .tok-string,
-.rich-content pre .hljs-string { color: #a5d6ff; }
+.rich-content pre .hljs-string { color: #ce9178; }           /* "chuỗi" */
 .rich-content pre .tok-number,
-.rich-content pre .hljs-number { color: #79c0ff; }
+.rich-content pre .hljs-number { color: #b5cea8; }           /* 42, 3.14 */
 .rich-content pre .tok-comment,
-.rich-content pre .hljs-comment { color: #8b949e; font-style: italic; }
+.rich-content pre .hljs-comment { color: #6a9955; font-style: italic; }  /* // chú thích */
 .rich-content pre .tok-function,
-.rich-content pre .hljs-function { color: #d2a8ff; }
+.rich-content pre .hljs-function { color: #dcdcaa; }         /* tên hàm */
 .rich-content pre .tok-type,
-.rich-content pre .hljs-type { color: #ffa657; }
+.rich-content pre .hljs-type { color: #4ec9b0; }             /* int, struct, class name */
 /* The 6 rules above only cover Java/plain-code tokens (what the first exam
  * decks — PRO192 — needed). JSX/HTML/TS-heavy decks (FER202, ITE302c, SWR302,
  * SWT301, …) emit several more highlight.js token classes that were falling
@@ -1308,6 +1310,62 @@ aside ::-webkit-scrollbar-thumb:hover {
 .rich-content pre .hljs-strong { font-weight: 700; }
 .rich-content pre .hljs-addition { color: #aff5b4; background-color: rgba(46, 160, 67, 0.15); }
 .rich-content pre .hljs-deletion { color: #ffdcd7; background-color: rgba(248, 81, 73, 0.15); }
+
+/* ── Thanh nhãn ngôn ngữ + nút SAO CHÉP trên mỗi khối code ──────────────
+ * Do src/lib/toMauCode.ts gắn vào sau khi nội dung được đổ ra DOM.
+ * Người học yêu cầu 19/09/2026: code phải có màu như VS Code + nút copy. */
+.rich-content pre.khoi-code { position: relative; padding-top: 2.35rem; }
+
+.rich-content pre .khoi-code-thanh {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.3rem 0.6rem 0.3rem 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px 12px 0 0;
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+}
+
+.rich-content pre .khoi-code-ngonngu {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b949e;
+  user-select: none;
+}
+
+.rich-content pre .khoi-code-chep {
+  margin-left: auto;
+  font-size: 0.7rem;
+  line-height: 1;
+  padding: 0.32rem 0.6rem;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #c9d1d9;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.rich-content pre .khoi-code-chep:hover {
+  background: rgba(255, 255, 255, 0.11);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.24);
+}
+.rich-content pre .khoi-code-chep.da-chep {
+  color: #7ee787;
+  border-color: rgba(126, 231, 135, 0.45);
+  background: rgba(126, 231, 135, 0.12);
+}
+
+/* Khổ hẹp: bỏ nhãn ngôn ngữ, giữ nút chép — nút mới là thứ cần thật. */
+@media (max-width: 480px) {
+  .rich-content pre .khoi-code-ngonngu { display: none; }
+}
 
 /* ══════════════════════════════════════════════════════════════════════
  * ACADEMY LESSON DESIGN SYSTEM

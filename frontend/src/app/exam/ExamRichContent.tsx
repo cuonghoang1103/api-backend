@@ -21,6 +21,7 @@
  */
 import { memo, useEffect, useId, useRef } from 'react';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
+import { toMauTrong } from '@/lib/toMauCode';
 // Static top-level import (not a dynamic import() inside the effect below) —
 // Next's webpack CSS handling only reliably extracts/injects node_modules
 // stylesheets from a top-level import. A dynamic import() of this same path
@@ -68,6 +69,10 @@ function ExamRichContent({ html, L, className = '', inline = false }: {
     const el = ref.current;
     if (!el) return;
     let cancelled = false;
+
+    // ── Tô màu cú pháp + nút Sao chép cho khối code ──
+    // Đề thi có bài đọc code; trước đây hiện ra trắng trơn như bài học.
+    void toMauTrong(el);
 
     // ── Math (KaTeX) — only when a delimiter is present ──
     if (MATH_RE.test(el.textContent || '')) {

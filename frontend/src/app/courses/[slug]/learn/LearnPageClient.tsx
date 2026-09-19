@@ -21,6 +21,7 @@ import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
 import type { Course, LessonDto, LessonProgress, LessonDetail, LessonVideoTrack, VideoTrackKey } from '@/types';
+import { useToMauCode } from '@/lib/toMauCode';
 
 function formatDuration(seconds: number): string {
   if (!seconds) return '0:00';
@@ -162,6 +163,10 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   // lesson's own default.
   const [videoTrack, setVideoTrack] = useState<VideoTrackKey | null>(null);
   const trackPrefRef = useRef<VideoTrackKey | null>(null);
+  // Khung chứa nội dung bài — dùng để tô màu code + gắn nút Sao chép.
+  const khungNoiDungRef = useRef<HTMLDivElement | null>(null);
+  // Chạy lại mỗi khi đổi bài hoặc đổi ngôn ngữ hiển thị (nội dung được thay).
+  useToMauCode(() => khungNoiDungRef.current, [currentLesson?.id, currentLesson?.content, locale]);
   // Only the setter is used now (we reset it on lesson change / completion);
   // the value itself is no longer read since we dropped the YouTube auto-mark.
   const [, setVideoCompleted] = useState(false);
@@ -1086,7 +1091,9 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     <BookOpen className="w-5 h-5 text-neon-violet" />
                     <h3 className="font-semibold text-text-primary">Lesson Content</h3>
                   </div>
-                  <div data-ml={locale} className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: withLessonRef(sanitizeHtml(stripInlineColors(currentLesson.content || "")), currentLesson.id) }} />
+                  {/* ref: để useToMauCode tô màu cú pháp + gắn nút Sao chép
+                      cho mọi khối code sau khi HTML được đổ ra DOM. */}
+                  <div ref={khungNoiDungRef} data-ml={locale} className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: withLessonRef(sanitizeHtml(stripInlineColors(currentLesson.content || "")), currentLesson.id) }} />
                 </div>
               )}
 

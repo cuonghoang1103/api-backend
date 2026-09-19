@@ -73,3 +73,83 @@ export function tachTieuDe(title: string): { en: string; vi: string | null } {
   const vi = title.slice(i + 3).trim();
   return { en: en || vi, vi: vi || null };
 }
+
+// ════════════════════════════════════════════════════════════════
+// NHÓM LỚN — tầng ngoài của hàng chip
+//
+// Hai tầng, vì hai loại nội dung khác hẳn nhau:
+//   · Academy = bài giảng của web, đã chia sẵn theo môn/chương/bài. Tầng
+//     trong của nó là 12 nhóm chuyên môn ở trên.
+//   · Còn lại = video người dùng tự thêm để vừa giải trí vừa nghe tiếng
+//     Anh (hoạt hình, nhạc, lịch sử…). Trộn chung với bài giảng thì cả hai
+//     cùng khó tìm — và Academy sắp có thêm khối kinh doanh, ngôn ngữ,
+//     bán dẫn, nên phải tách ngay từ bây giờ chứ không phải lúc đã lộn.
+// ════════════════════════════════════════════════════════════════
+
+export type NhomLon = { ma: string; ten: string; icon: string };
+
+export const NHOM_LON: NhomLon[] = [
+  { ma: 'swe',       ten: 'Software Engineering', icon: 'laptopcomputer' },
+  { ma: 'ngonngu',   ten: 'Ngôn ngữ',            icon: 'character.bubble' },
+  { ma: 'hoathinh',  ten: 'Hoạt hình & Phim',    icon: 'film' },
+  { ma: 'nhac',      ten: 'Âm nhạc',             icon: 'music.note' },
+  { ma: 'giaitri',   ten: 'Giải trí & Hài',      icon: 'face.smiling' },
+  { ma: 'lichsu',    ten: 'Lịch sử',             icon: 'building.columns' },
+  { ma: 'kinhdoanh', ten: 'Kinh doanh',          icon: 'chart.line.uptrend.xyaxis' },
+  { ma: 'khoahoc',   ten: 'Khoa học & Công nghệ', icon: 'atom' },
+  { ma: 'tintuc',    ten: 'Tin tức',             icon: 'newspaper' },
+  { ma: 'doisong',   ten: 'Đời sống & Du lịch',  icon: 'figure.walk' },
+  { ma: 'game',      ten: 'Game',                icon: 'gamecontroller' },
+  { ma: 'thethao',   ten: 'Thể thao',            icon: 'sportscourt' },
+  { ma: 'hoc',       ten: 'Học thuật khác',      icon: 'book' },
+  { ma: 'khac',      ten: 'Khác',                icon: 'square.grid.2x2' },
+];
+
+/** Nhóm lớn có danh mục con (12 nhóm chuyên môn). Hiện chỉ Software Engineering. */
+export const NHOM_LON_CO_CON = 'swe';
+
+/**
+ * Nhóm LỚN của một khoá Academy.
+ *
+ * ⚠️ KHÔNG gom hết vào một rổ "Academy": Academy sắp có thêm khối kinh
+ * doanh, ngôn ngữ, bán dẫn — gom chung thì tới lúc đó phải tách giữa lúc
+ * đã lộn, và người học mở "Academy" ra thấy tiếng Nhật nằm cạnh Docker.
+ * Tách ngay từ MÃ MÔN, y như tầng trong.
+ */
+const NHOM_LON_THEO_MA: Record<string, string> = {
+  EXE: 'kinhdoanh', MKT: 'kinhdoanh', RMB: 'kinhdoanh', LDS: 'kinhdoanh',
+  LAW: 'kinhdoanh', IBC: 'kinhdoanh', EEC: 'kinhdoanh', MGT: 'kinhdoanh',
+  ACC: 'kinhdoanh', FIN: 'kinhdoanh', ECO: 'kinhdoanh',
+  JPD: 'ngonngu', ENW: 'ngonngu', ENT: 'ngonngu', KOR: 'ngonngu',
+  CHN: 'ngonngu', GER: 'ngonngu', FRE: 'ngonngu',
+};
+
+export function nhomLonCuaKhoa(courseCode: string | null, title: string): string {
+  const ma = (courseCode ?? '').trim().toUpperCase().slice(0, 3);
+  if (ma && NHOM_LON_THEO_MA[ma]) return NHOM_LON_THEO_MA[ma];
+  if (/tiếng nhật|tiếng anh|japanese|english|korean|ielts|toeic/i.test(title)) return 'ngonngu';
+  if (/kinh doanh|marketing|khởi nghiệp|business|entrepreneur/i.test(title)) return 'kinhdoanh';
+  return 'swe';
+}
+
+export const MA_NHOM_LON = new Set(NHOM_LON.map((n) => n.ma));
+
+/**
+ * Đoán nhóm lớn từ thể loại YouTube tự khai (`categories` trong info.json
+ * của yt-dlp). Chỉ là GỢI Ý — người dùng đổi được khi thêm, vì YouTube gom
+ * rất thô: một phim tài liệu lịch sử vẫn nằm trong "Education".
+ */
+export function nhomLonTuTheLoai(theLoai: string[] | null | undefined): string {
+  const t = (theLoai ?? []).join(' ').toLowerCase();
+  if (!t) return 'khac';
+  if (/film|animation/.test(t)) return 'hoathinh';
+  if (/music/.test(t)) return 'nhac';
+  if (/comedy|entertainment/.test(t)) return 'giaitri';
+  if (/science|technology/.test(t)) return 'khoahoc';
+  if (/news|politics/.test(t)) return 'tintuc';
+  if (/gaming/.test(t)) return 'game';
+  if (/sport/.test(t)) return 'thethao';
+  if (/travel|events|people|blogs|howto|style|pets|animals/.test(t)) return 'doisong';
+  if (/education/.test(t)) return 'hoc';
+  return 'khac';
+}

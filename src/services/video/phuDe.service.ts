@@ -8,7 +8,7 @@
 import { prisma } from '../../config/database.js';
 import { NotFoundError, BadRequestError } from '../../middleware/errorHandler.js';
 import { transcribeWithGroq } from '../interview/voice/stt.js';
-import { NHOM_CHU_DE, nhomCuaKhoa, tachTieuDe } from './nhomChuDe.js';
+import { NHOM_CHU_DE, NHOM_LON, NHOM_LON_CO_CON, nhomCuaKhoa, nhomLonCuaKhoa, tachTieuDe } from './nhomChuDe.js';
 
 export type CauPhuDe = { t: number; en: string };
 
@@ -94,7 +94,8 @@ export async function thuVien(userId: number) {
     giay: number | null; soCau: number; soTu: number;
   };
   type Khoa = {
-    courseId: number; title: string; slug: string | null; nhom: string;
+    courseId: number; title: string; slug: string | null;
+    nhomLon: string; nhom: string | null;
     soVideo: number; video: Video[];
   };
 
@@ -108,6 +109,7 @@ export async function thuVien(userId: number) {
         courseId: c.id,
         title: c.title,
         slug: c.slug,
+        nhomLon: nhomLonCuaKhoa(c.courseCode, c.title),
         nhom: nhomCuaKhoa(c.courseCode, c.title),
         soVideo: 0,
         video: [],
@@ -132,7 +134,9 @@ export async function thuVien(userId: number) {
   // Chỉ trả nhóm THẬT SỰ có video — một chip lọc mở ra trống rỗng là thứ
   // người dùng bấm nhầm đúng một lần rồi thôi tin cả hàng chip.
   const nhom = NHOM_CHU_DE.map((n) => {
-    const cua = khoa.filter((k) => k.nhom === n.ma);
+    // Chỉ đếm trong nhóm lớn CÓ danh mục con. Đếm cả EXE (đã chuyển sang
+    // "Kinh doanh") thì chip con hiện 34 video mà bấm vào không ra hàng nào.
+    const cua = khoa.filter((k) => k.nhomLon === NHOM_LON_CO_CON && k.nhom === n.ma);
     return {
       ...n,
       soKhoa: cua.length,
@@ -146,14 +150,15 @@ export async function thuVien(userId: number) {
   // có `nguon`, nhờ đó app biết gọi endpoint phụ đề nào.
   const tuThem = await prisma.videoNguoiDung.findMany({
     where: { userId },
-    select: { id: true, nguon: true, videoId: true, tieuDe: true, anhBia: true,
-              giay: true, soCau: true, soTu: true, tacGia: true },
+    select: { id: true, nguon: true, nhomLon: true, videoId: true, tieuDe: true,
+              anhBia: true, giay: true, soCau: true, soTu: true, tacGia: true },
     orderBy: { createdAt: 'desc' },
   });
   const cuaToi = tuThem.map((v: (typeof tuThem)[number]) => ({
     lessonId: -v.id,
     videoId: v.videoId,
     nguon: v.nguon,
+    nhomLon: v.nhomLon,
     tieuDe: v.tieuDe,
     tieuDeVi: v.tacGia,
     anhBiaUrl: v.anhBia,
@@ -162,7 +167,35 @@ export async function thuVien(userId: number) {
     soTu: v.soTu,
   }));
 
-  return { nhom, khoa, cuaToi };
+  // Video tự thêm cũng thành các HÀNG như khoá học, gom theo nhóm lớn — để
+  // màn duyệt chỉ có một cách vẽ, không phải hai nhánh.
+  const theoNhomLon = new Map<string, typeof cuaToi>();
+  for (const v of cuaToi) {
+    const cu = theoNhomLon.get(v.nhomLon);
+    if (cu) cu.push(v);
+    else theoNhomLon.set(v.nhomLon, [v]);
+  }
+  for (const [ma, ds] of theoNhomLon) {
+    const ten = NHOM_LON.find((n) => n.ma === ma)?.ten ?? 'Khác';
+    khoa.push({
+      courseId: -1000 - NHOM_LON.findIndex((n) => n.ma === ma),
+      title: ten,
+      slug: null,
+      nhomLon: ma,
+      nhom: null,
+      soVideo: ds.length,
+      video: ds,
+    });
+  }
+
+  // Chỉ trả nhóm lớn THẬT SỰ có video.
+  const nhomLon = NHOM_LON.map((n) => {
+    const cua = khoa.filter((k) => k.nhomLon === n.ma);
+    return { ...n, soKhoa: cua.length,
+             soVideo: cua.reduce((t, k) => t + k.soVideo, 0) };
+  }).filter((n) => n.soVideo > 0);
+
+  return { nhomLon, nhom, khoa, cuaToi };
 }
 
 /** Danh sách video trong một khoá. */

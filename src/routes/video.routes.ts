@@ -40,10 +40,21 @@ router.get('/thu-vien', async (req, res: Response<ApiResponse>, next) => {
 // VIDEO NGƯỜI DÙNG TỰ THÊM
 // ════════════════════════════════════════════════════════════════
 
-router.post('/cua-toi', body('url').isString().isLength({ min: 8, max: 2048 }), validate,
+router.post('/cua-toi', body('url').isString().isLength({ min: 8, max: 2048 }),
+  body('nhomLon').optional().isString().isLength({ max: 24 }), validate,
   async (req, res: Response<ApiResponse>, next) => {
     try {
-      ok(res, await them.themTuUrl(idNguoiDung(req), String(req.body.url)));
+      ok(res, await them.themTuUrl(idNguoiDung(req), String(req.body.url),
+                                   req.body.nhomLon ? String(req.body.nhomLon) : undefined));
+    } catch (e) { next(e); }
+  });
+
+router.patch('/cua-toi/:id(\\d+)/nhom', param('id').isInt(),
+  body('nhomLon').isString().isLength({ max: 24 }), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      ok(res, await them.doiNhom(idNguoiDung(req), Number(req.params.id),
+                                 String(req.body.nhomLon)));
     } catch (e) { next(e); }
   });
 

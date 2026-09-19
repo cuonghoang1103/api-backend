@@ -1119,6 +1119,10 @@ model VideoNguoiDung {
   nguon   String @db.VarChar(16)
   videoId String @map("video_id") @db.VarChar(64)
 
+  /// Nhóm lớn của hàng chip: hoathinh | nhac | lichsu | kinhdoanh | ...
+  /// Bài giảng Academy không dùng cột này (luôn là 'academy').
+  nhomLon String @default("khac") @map("nhom_lon") @db.VarChar(24)
+
   tieuDe String  @db.VarChar(300)
   tacGia String? @map("tac_gia") @db.VarChar(200)
   anhBia String? @map("anh_bia") @db.VarChar(600)
@@ -1138,6 +1142,7 @@ model VideoNguoiDung {
 
   @@unique([userId, nguon, videoId], name: "uk_video_nguoi_dung")
   @@index([userId], name: "idx_video_nguoi_dung_user")
+  @@index([userId, nhomLon], name: "idx_video_nguoi_dung_nhom_lon")
   @@map("video_nguoi_dung")
 }
 

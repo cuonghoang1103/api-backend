@@ -14,6 +14,7 @@ import { prisma } from '../../config/database.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
 import type { CauPhuDe } from './phuDe.service.js';
+import { MA_NHOM_LON, nhomLonTuTheLoai } from './nhomChuDe.js';
 
 const execFileAsync = promisify(execFile);
 const YT_DLP = process.env.YT_DLP_PATH || 'yt-dlp';
@@ -157,7 +158,7 @@ export function lamSachVtt(raw: string): { cues: CauPhuDe[]; soTu: number } {
 // ════════════════════════════════════════════════════════════════
 
 type ThongTin = { title: string; duration: number | null; uploader: string | null;
-                  thumbnail: string | null; id: string };
+                  thumbnail: string | null; id: string; theLoai: string[] };
 
 async function layPhuDe(nguon: NguonVideo, videoId: string):
     Promise<{ tin: ThongTin; vtt: string | null }> {
@@ -186,6 +187,7 @@ async function layPhuDe(nguon: NguonVideo, videoId: string):
       duration: typeof info.duration === 'number' ? Math.round(info.duration) : null,
       uploader: (info.uploader ?? info.channel ?? null) as string | null,
       thumbnail: (info.thumbnail ?? null) as string | null,
+      theLoai: Array.isArray(info.categories) ? (info.categories as string[]) : [],
     };
 
     const vttF = files.find((f) => f.endsWith('.vtt'));
@@ -196,7 +198,7 @@ async function layPhuDe(nguon: NguonVideo, videoId: string):
   }
 }
 
-export async function themTuUrl(userId: number, rawUrl: string) {
+export async function themTuUrl(userId: number, rawUrl: string, nhomLon?: string) {
   const { nguon, videoId } = phanTichUrl(rawUrl);
 
   if (dangChay) {
@@ -223,7 +225,14 @@ export async function themTuUrl(userId: number, rawUrl: string) {
     }
 
     const ma = tin.id || videoId;
+    // Người dùng chọn thì nghe người dùng; không chọn thì đoán từ thể loại
+    // YouTube tự khai. Đoán sai cũng không sao — đổi được sau, và một video
+    // nằm nhầm nhóm vẫn tìm ra bằng ô tìm kiếm.
+    const nhom = nhomLon && MA_NHOM_LON.has(nhomLon)
+      ? nhomLon
+      : nhomLonTuTheLoai(tin.theLoai);
     const ghi = {
+      nhomLon: nhom,
       tieuDe: tin.title.slice(0, 300),
       tacGia: tin.uploader?.slice(0, 200) ?? null,
       anhBia: tin.thumbnail?.slice(0, 600) ?? null,
@@ -249,8 +258,9 @@ export async function themTuUrl(userId: number, rawUrl: string) {
 export async function videoCuaToi(userId: number) {
   const ds = await prisma.videoNguoiDung.findMany({
     where: { userId },
-    select: { id: true, nguon: true, videoId: true, tieuDe: true, tacGia: true,
-              anhBia: true, giay: true, soCau: true, soTu: true, createdAt: true },
+    select: { id: true, nguon: true, nhomLon: true, videoId: true, tieuDe: true,
+              tacGia: true, anhBia: true, giay: true, soCau: true, soTu: true,
+              createdAt: true },
     orderBy: { createdAt: 'desc' },
   });
   return ds;
@@ -280,4 +290,14 @@ export async function xoaVideo(userId: number, id: number) {
   const n = await prisma.videoNguoiDung.deleteMany({ where: { id, userId } });
   if (!n.count) throw new BadRequestError('Không tìm thấy video này');
   return { daXoa: true };
+}
+
+/** Đổi nhóm lớn của một video đã thêm. */
+export async function doiNhom(userId: number, id: number, nhomLon: string) {
+  if (!MA_NHOM_LON.has(nhomLon)) throw new BadRequestError('Nhóm không hợp lệ');
+  const n = await prisma.videoNguoiDung.updateMany({
+    where: { id, userId }, data: { nhomLon },
+  });
+  if (!n.count) throw new BadRequestError('Không tìm thấy video này');
+  return { nhomLon };
 }

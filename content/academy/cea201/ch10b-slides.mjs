@@ -59,7 +59,7 @@ import { walk, walkHead } from './_slides.mjs';
 const D = 'cea13';
 
 export default {
-  title: '10.0b — Slide by slide: types of operations, transfer of control, procedure calls and the stack, x86 and ARM instruction sets (slides 25–48)|||10.0b — Slide bài giảng: các loại phép toán, lệnh chuyển điều khiển, gọi thủ tục & ngăn xếp, tập lệnh x86 và ARM (slide 25–48)',
+  title: '10.0b — Slide by slide: Operation types, transfer of control, the stack, x86 and ARM (slides 25–48)|||10.0b — Slide bài giảng: Các loại phép toán, chuyển điều khiển, ngăn xếp, x86 & ARM (slide 25–48)',
   slug: 'cea201-10-0b-slides-phep-toan-chuyen-dieu-khien-x86-arm',
   type: 'DOCUMENT',
   description: 'Nửa sau Chương 10 (deck Chapter 13 bản 11e) của CEA201 — slide 25 đến 48. Đi hết SÁU loại phép toán của một tập lệnh (chuyển dữ liệu, số học, logic, dịch/quay, chuyển đổi, vào-ra, điều khiển hệ thống), rồi vào phần nặng điểm nhất: LỆNH CHUYỂN ĐIỀU KHIỂN — rẽ nhánh đọc cờ trạng thái, lệnh bỏ qua, gọi thủ tục lồng nhau và cơ chế NGĂN XẾP (Figure 13.8/13.9/13.10, có bảng chạy tay từng bước và khung ngăn xếp), khép lại bằng tập lệnh thật: x86 (CISC, cờ EFLAGS, điều kiện nhảy, MMX/SIMD) và ARM (RISC, lệnh nào cũng có điều kiện). Mọi bảng dịch bit, mọi bố trí byte (endianness), mọi con số độ dài lệnh và mọi khung ngăn xếp trong bài đều đã chạy thật bằng C và otool trên máy trước khi viết — kể cả hai chỗ SLIDE GỐC IN SAI, được nêu thẳng.',

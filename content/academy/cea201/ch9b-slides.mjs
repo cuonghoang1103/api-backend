@@ -72,7 +72,7 @@ import { walk, walkHead } from './_slides.mjs';
 const D = 'cea12';
 
 export default {
-  title: '9.0b — Slide by slide: Decoders, ROM and adders, then sequential circuits — flip-flops, registers, counters and programmable logic (slides 29–56)|||9.0b — Slide bài giảng: Bộ giải mã, ROM, bộ cộng, rồi mạch tuần tự — flip-flop, thanh ghi, bộ đếm & logic khả trình (slide 29–56)',
+  title: '9.0b — Slide by slide: Decoders, ROM, adders and sequential circuits (slides 29–56)|||9.0b — Slide bài giảng: Bộ giải mã, ROM, bộ cộng & mạch tuần tự (slide 29–56)',
   slug: 'cea201-9-0b-slides-giai-ma-rom-cong-mach-tuan-tu',
   type: 'DOCUMENT',
   description: 'Nửa sau Chương 9 (= Chapter 12 bản 11e) của CEA201, 28 slide. Mười slide đầu đóng nốt phần MẠCH TỔ HỢP: bộ giải mã 3→8 và ứng dụng chọn chip nhớ, demultiplexer, ROM nhìn như một mạch tổ hợp khổng lồ, bộ cộng đầy đủ và bộ cộng ripple-carry 4/32 bit. Mười tám slide còn lại là phần ra thi nặng nhất của chương: MẠCH TUẦN TỰ — chốt SR bằng cổng NOR, phân biệt chốt (theo mức) với flip-flop (theo sườn xung), bảng đặc tính và bảng kích thích đủ bốn loại SR · JK · D · T, thanh ghi song song và thanh ghi dịch, bộ đếm ripple so với bộ đếm đồng bộ (có tính trễ tích luỹ ra con số), một bài thiết kế bộ đếm đồng bộ 3 bit làm trọn từng bước, rồi khép lại bằng PLA và FPGA. Mọi bảng trạng thái, mọi giản đồ thời gian đều đã chạy bằng python3 và đối chiếu với chính bảng in trên slide.',

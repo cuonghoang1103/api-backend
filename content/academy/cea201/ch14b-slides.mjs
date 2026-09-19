@@ -50,7 +50,7 @@ import { walk, walkHead } from './_slides.mjs';
 const D = 'cea18';
 
 export default {
-  title: '14.0b — Slide by slide: The Intel Core front end, reorder buffer, register renaming and the ARM Cortex-A8/M3 pipelines (slides 21–40)|||14.0b — Slide bài giảng: Front end của Intel Core, bộ đệm sắp xếp lại, đổi tên thanh ghi & đường ống ARM Cortex-A8/M3 (slide 21–40)',
+  title: '14.0b — Slide by slide: Intel Core front end, register renaming and the ARM Cortex pipelines (slides 21–40)|||14.0b — Slide bài giảng: Front end Intel Core, đổi tên thanh ghi & đường ống ARM Cortex (slide 21–40)',
   slug: 'cea201-14-0b-slides-intel-core-va-arm-cortex',
   type: 'DOCUMENT',
   description: 'Nửa sau Chương 18 bản 11e (slide 21–40) — phần biến lý thuyết superscalar thành hai con chip thật. Nửa Intel Core: khối dự đoán rẽ nhánh và BTB, nạp/tiền giải mã 16 byte, giải mã một lệnh x86 thành 1–4 micro-op rộng 118 bit, khối thực thi không theo thứ tự với bộ đệm sắp xếp lại 126 mục, và đổi tên 16 thanh ghi kiến trúc thành 128 thanh ghi vật lý — có ví dụ WAR/WAW giải trọn bằng máy, 9 chu kỳ xuống 4. Nửa ARM: Cortex-A8 phát đôi THEO THỨ TỰ 13 tầng (không đổi tên thanh ghi), bảng sự kiện replay, sáu luật cấm phát đôi, và một dãy 21 lệnh chạy tay từng chu kỳ; kết bằng Cortex-M3 ba tầng. Kèm hai phần mở rộng có ghi nhãn: thực thi suy đoán đẻ ra Spectre/Meltdown ra sao, và vì sao ILP đụng trần khiến cả ngành quay sang đa lõi.',

@@ -96,6 +96,10 @@ export const NHOM_LON: NhomLon[] = [
   { ma: 'giaitri',   ten: 'Giải trí & Hài',      icon: 'face.smiling' },
   { ma: 'lichsu',    ten: 'Lịch sử',             icon: 'building.columns' },
   { ma: 'kinhdoanh', ten: 'Kinh doanh',          icon: 'chart.line.uptrend.xyaxis' },
+  // ⚠️ Mã là `kynangmem`, KHÔNG phải `kynang`: `kynang` đã là mã một nhóm
+  // CON trong Software Engineering ("Kỹ năng & Học thuật"). Hai tầng nằm ở
+  // hai cột khác nhau nên trùng mã không gây lỗi, nhưng đọc mã thì nhầm.
+  { ma: 'kynangmem', ten: 'Kỹ năng',             icon: 'person.2.wave.2' },
   { ma: 'khoahoc',   ten: 'Khoa học & Công nghệ', icon: 'atom' },
   { ma: 'tintuc',    ten: 'Tin tức',             icon: 'newspaper' },
   { ma: 'doisong',   ten: 'Đời sống & Du lịch',  icon: 'figure.walk' },

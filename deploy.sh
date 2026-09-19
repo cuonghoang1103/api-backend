@@ -620,6 +620,19 @@ PHUDE_SEED_RC="$(printf '%s\n' "$PHUDE_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' |
 PHUDE_SEED_OUT="$(printf '%s\n' "$PHUDE_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Lesson transcript seed" "seed-phu-de" "$PHUDE_SEED_OUT" "${PHUDE_SEED_RC:-0}" || true
 
+# ── Step 3.12c: video giải trí đã biên tập (hoạt hình, nhạc, kỹ năng…) ──
+# Nguồn: content/phu-de/video-hay.jsonl.gz. Mỗi video đã qua 4 chốt lúc
+# chọn (thời lượng, lượt xem, TẢI ĐƯỢC phụ đề tiếng Anh thật ≥3KB) rồi mới
+# chấm câu + dịch. Idempotent, upsert theo (userId, nguon, videoId).
+info "Running curated video seed..."
+VHAY_SEED_OUT=$($DC exec -T backend sh -c '
+  node scripts/video-hay-seed.mjs 2>&1
+  echo "__SEED_RC__=$?"
+') || true
+VHAY_SEED_RC="$(printf '%s\n' "$VHAY_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+VHAY_SEED_OUT="$(printf '%s\n' "$VHAY_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Curated video seed" "seed-video-hay" "$VHAY_SEED_OUT" "${VHAY_SEED_RC:-0}" || true
+
 # ── Step 3.13: Exp Hub setup guides (per-subject, idempotent) ───
 # One .mjs per subject under content/exphub/ → upsert SnippetCategory +
 # Snippet (guide) by slug. Academy courses link "Cài đặt" cards to

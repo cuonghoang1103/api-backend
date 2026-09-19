@@ -21,6 +21,7 @@ import { getPrerequisites, hasAcknowledgedPrereq, acknowledgePrereq } from '@/li
 import { PrerequisiteModal, PrerequisiteBanner } from '@/components/courses/PrerequisiteGate';
 import { tachGachDauDong, nenMotCot } from '@/lib/courseBlurb';
 import { CourseDescription } from '@/components/courses/CourseDescription';
+import { AnhDaiDien } from '@/components/ui/AnhDaiDien';
 import type { Course, CourseReview } from '@/types';
 
 function formatDuration(seconds: number): string {
@@ -628,10 +629,10 @@ export default function CourseDetailPage() {
 
               {/* Instructor */}
               <div className="flex items-center gap-3 mb-6">
-                <img
-                  src={course.instructorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(course.instructorName || 'T')}&background=random&size=64`}
-                  alt={course.instructorName || 'Instructor'}
-                  className="w-10 h-10 rounded-full"
+                <AnhDaiDien
+                  src={course.instructorAvatar}
+                  ten={course.instructorName || 'CuongHoangDev'}
+                  className="w-10 h-10"
                 />
                 <div>
                   <p className="text-text-primary font-medium text-sm">Instructor</p>
@@ -937,11 +938,7 @@ export default function CourseDetailPage() {
                   {reviews.map((review) => (
                     <div key={review.id} className="border-b border-darkborder/20 pb-4 last:border-0">
                       <div className="flex items-center gap-3 mb-2">
-                        <img
-                          src={review.userAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.userFullName)}&background=random&size=40`}
-                          alt={review.userFullName}
-                          className="w-9 h-9 rounded-full"
-                        />
+                        <AnhDaiDien src={review.userAvatar} ten={review.userFullName} className="w-9 h-9" />
                         <div>
                           <p className="font-medium text-text-primary text-sm">{review.userFullName}</p>
                           <div className="flex items-center gap-1">

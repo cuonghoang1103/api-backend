@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Star, Loader2, Trash2, Eye, EyeOff } from 'lucide-react';
 import { adminReviewsApi, type AdminReview } from '@/lib/api';
 import { toast } from 'sonner';
+import { AnhDaiDien } from '@/components/ui/AnhDaiDien';
 
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState<AdminReview[]>([]);
@@ -52,7 +53,7 @@ export default function AdminReviewsPage() {
           {reviews.map((r) => (
             <div key={r.id} className={`rounded-2xl border p-4 ${r.isApproved ? 'border-darkborder bg-darkcard' : 'border-red-500/30 bg-red-500/5'}`}>
               <div className="flex items-start gap-3">
-                <img src={r.userAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.userFullName)}&size=40`} alt="" className="w-9 h-9 rounded-full" />
+                <AnhDaiDien src={r.userAvatar} ten={r.userFullName} className="w-9 h-9" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-sm font-medium text-text-primary">{r.userFullName}</span>

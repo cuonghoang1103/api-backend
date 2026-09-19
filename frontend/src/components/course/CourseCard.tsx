@@ -6,6 +6,7 @@ import { Star, Users, BookOpen, Clock, Play, ShoppingCart, Check } from 'lucide-
 import type { Course } from '@/types';
 import { useTranslation } from '@/context/LocaleContext';
 import { pickLang } from '@/lib/utils';
+import { AnhDaiDien } from '@/components/ui/AnhDaiDien';
 import { useCartStore } from '@/store/cartStore';
 import { COURSE_PAYMENT_ENABLED } from '@/lib/featureFlags';
 import { toast } from 'sonner';
@@ -102,11 +103,7 @@ export default function CourseCard({ course }: { course: Course }) {
 
           {course.instructorName && (
             <p className="text-text-muted text-xs mb-4 flex items-center gap-1.5">
-              <img
-                src={course.instructorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(course.instructorName)}&background=random`}
-                alt={course.instructorName}
-                className="w-5 h-5 rounded-full"
-              />
+              <AnhDaiDien src={course.instructorAvatar} ten={course.instructorName} className="w-5 h-5" />
               {course.instructorName}
             </p>
           )}

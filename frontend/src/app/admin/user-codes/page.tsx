@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Ticket, Loader2, Send, Search, X, Check } from 'lucide-react';
 import { myCodesApi, socialUserApi } from '@/lib/api';
 import { toast } from 'sonner';
+import { AnhDaiDien } from '@/components/ui/AnhDaiDien';
 
 interface UserHit { id: number; username: string; displayName: string | null; avatarUrl: string | null }
 
@@ -73,7 +74,7 @@ export default function AdminUserCodesPage() {
           {selected ? (
             <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-darkbg border border-neon-violet/40">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={selected.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(selected.username)}&size=32`} alt="" className="w-8 h-8 rounded-full" />
+              <AnhDaiDien src={selected.avatarUrl} ten={selected.username} className="w-8 h-8" />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium text-text-primary truncate">{selected.displayName || selected.username}</p>
                 <p className="text-xs text-text-muted truncate">@{selected.username} · ID {selected.id}</p>
@@ -93,7 +94,7 @@ export default function AdminUserCodesPage() {
                   ) : results.map((u) => (
                     <button key={u.id} onClick={() => { setSelected(u); setResults([]); }} className="w-full flex items-center gap-3 px-3 py-2 hover:bg-neon-violet/10 text-left">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={u.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.username)}&size=32`} alt="" className="w-7 h-7 rounded-full" />
+                      <AnhDaiDien src={u.avatarUrl} ten={u.username} className="w-7 h-7" />
                       <div className="min-w-0 flex-1">
                         <p className="text-sm text-text-primary truncate">{u.displayName || u.username}</p>
                         <p className="text-xs text-text-muted truncate">@{u.username} · ID {u.id}</p>

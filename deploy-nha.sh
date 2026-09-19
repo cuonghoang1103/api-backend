@@ -644,7 +644,11 @@ fi
 # tráo, không đụng gì tới cây REPO_DIR).
 info "Chạy seed nội dung (Step 3.5→3.17 từ deploy.sh)..."
 KHOI_SEED_FILE=$(mktemp)
-sed -n '/^SEED_ERR_RE=/,/^report_seed "Repo Hub seed"/p' deploy.sh > "$KHOI_SEED_FILE"
+# ⚠️ MỐC CẮT PHẢI LÀ BƯỚC SEED CUỐI CÙNG TRONG deploy.sh. Thêm một bước seed
+# mới SAU mốc này trong deploy.sh thì `deploy-nha.sh` — tức đường deploy CHUẨN
+# — lặng lẽ bỏ qua nó: log vẫn xanh, "seed xong" vẫn in ra, chỉ là bảng rỗng
+# trên production. Thêm bước mới thì DỜI mốc này xuống theo.
+sed -n '/^SEED_ERR_RE=/,/^report_seed "IELTS seed"/p' deploy.sh > "$KHOI_SEED_FILE"
 if [ ! -s "$KHOI_SEED_FILE" ]; then
     warn "Không trích được khối seed từ deploy.sh — BỎ QUA (kiểm tay: ssh VPS rồi docker exec ${COMPOSE_PROJECT}_backend node scripts/academy-seed-exam.mjs --file content/exams/<file>.mjs --apply)"
 else

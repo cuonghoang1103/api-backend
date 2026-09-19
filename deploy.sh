@@ -853,6 +853,30 @@ REPOS_SEED_OUT_RC="$(printf '%s\n' "$REPOS_SEED_OUT" | sed -n 's/^__SEED_RC__=//
 REPOS_SEED_OUT="$(printf '%s\n' "$REPOS_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Repo Hub seed" "seed-repos" "$REPOS_SEED_OUT" "${REPOS_SEED_OUT_RC:-0}" || true
 
+# ─── IELTS: nạp nội dung khoá học cho app iOS/iPad ───
+#
+# Nguồn là tệp TS của web, nhưng ảnh backend KHÔNG chứa `frontend/` — nên bước
+# này chỉ đọc `content/ielts/noi-dung.json` (bản sao do `scripts/ielts-dung-json.mts`
+# dựng ở máy nhà và đi theo git). Chốt chống trôi nằm ở `npm test`.
+#
+# ⚠️ `deploy-nha.sh` TRÍCH khối seed này ra bằng `sed -n '/^SEED_ERR_RE=/,…'`
+# và mốc cắt của nó là `report_seed "IELTS seed"` — tức ĐÚNG bước cuối cùng ở
+# dưới. Thêm bước seed mới SAU bước IELTS thì phải dời mốc cắt trong
+# `deploy-nha.sh` xuống theo, nếu không đường deploy CHUẨN sẽ lặng lẽ bỏ qua
+# bước mới: log xanh, "seed xong" vẫn in, chỉ là bảng rỗng trên production.
+info "Running IELTS content seed..."
+IELTS_SEED_OUT=$($DC exec -T backend sh -c '
+  if [ ! -f content/ielts/noi-dung.json ]; then
+    echo "no ielts content file"
+  else
+    node scripts/ielts-seed.mjs --apply 2>&1
+  fi
+  echo "__SEED_RC__=$?"
+') || true
+IELTS_SEED_RC="$(printf '%s\n' "$IELTS_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+IELTS_SEED_OUT="$(printf '%s\n' "$IELTS_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "IELTS seed" "seed-ielts" "$IELTS_SEED_OUT" "${IELTS_SEED_RC:-0}" || true
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false

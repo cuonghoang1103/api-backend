@@ -29,6 +29,10 @@ export const DECKS = {
   'wf-sql':   { code: 'Chương 8',  en: 'Data & SQL',               vi: 'Dữ liệu & SQL',           total: 13, w: W, h: H },
   'wf-ts':    { code: 'Chương 9',  en: 'TypeScript basics',        vi: 'TypeScript cơ bản',       total: 12, w: W, h: H },
   'wf-think': { code: 'Chương 10', en: 'Thinking & debugging',     vi: 'Tư duy & gỡ lỗi',         total: 12, w: W, h: H },
+  'wf-js3':   { code: 'Chương 11', en: 'Advanced JavaScript',       vi: 'JavaScript nâng cao',     total: 12, w: W, h: H },
+  'wf-css2':  { code: 'Chương 12', en: 'Advanced CSS',              vi: 'CSS nâng cao',            total: 12, w: W, h: H },
+  'wf-test':  { code: 'Chương 13', en: 'Testing',                   vi: 'Kiểm thử',                total: 12, w: W, h: H },
+  'wf-ship':  { code: 'Chương 14', en: 'Shipping it',               vi: 'Đưa lên mạng',            total: 12, w: W, h: H },
 };
 
 const pad = (n) => String(n).padStart(3, '0');

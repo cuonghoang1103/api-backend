@@ -1,7 +1,7 @@
 /**
  * Web Foundations — khoá NỀN TẢNG của CuongThai (Courses, academyType=GENERAL).
  * Zero → đủ nền để vào Node.js và Next.js/React. Song ngữ EN/VI.
- * 11 chương (Mục 0 + Ch1-10). Sections tách theo file ./web-foundations/sNN-*.mjs.
+ * 15 chương (Mục 0 + Ch1-14). Sections tách theo file ./web-foundations/sNN-*.mjs.
  *
  * Seed: node scripts/course-seed.mjs --file ./content/courses/web-foundations.mjs --apply
  * Kiểm:  node scripts/course-content-check.mjs ./content/courses/web-foundations.mjs
@@ -17,6 +17,10 @@ import s07 from './web-foundations/s07-auth.mjs';
 import s08 from './web-foundations/s08-data-sql.mjs';
 import s09 from './web-foundations/s09-typescript.mjs';
 import s10 from './web-foundations/s10-thinking-debugging.mjs';
+import s11 from './web-foundations/s11-js-advanced.mjs';
+import s12 from './web-foundations/s12-css-advanced.mjs';
+import s13 from './web-foundations/s13-testing.mjs';
+import s14 from './web-foundations/s14-ship.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -32,9 +36,9 @@ export default {
     //   --title "Nền tảng Web" --subtitle "Zero → sẵn sàng học Node.js & Next.js"
     // Đã upload R2 09/08 (?v=1 dính cache 404 của Cloudflare từ trước khi ảnh tồn tại → dùng ?v=2).
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/web-foundations.png?v=3',
-    shortDescription: 'The bedrock every web course assumes: how the web works, the tools, HTML, CSS, JavaScript, HTTP and APIs, cookies and auth, data and SQL, TypeScript, and how to think like a programmer — so Node.js and Next.js finally make sense.|||Nền móng mà mọi khoá web đều mặc định bạn đã có: web hoạt động thế nào, công cụ, HTML, CSS, JavaScript, HTTP và API, cookie và xác thực, dữ liệu và SQL, TypeScript, và cách tư duy như một lập trình viên — để Node.js và Next.js cuối cùng trở nên dễ hiểu.',
-    description: 'Khoá nền tảng do CuongThai biên soạn cho người mới hoàn toàn. Nếu bạn từng mở một khoá Node.js hay Next.js và thấy "chả hiểu gì" — thường không phải vì bạn kém, mà vì khoá đó mặc định bạn đã biết HTML/CSS/JavaScript, hiểu luồng client–server, HTTP, cookie, API… Khoá này lấp đúng khoảng trống đó: 11 chương đi từ "một trang web hiện ra thế nào" tới đủ vốn để tự tin vào các khoá chuyên sâu. Mỗi khái niệm đều được định nghĩa, ví von cho dễ nhớ, có ví dụ mô phỏng chạy được và video minh hoạ nhúng từ YouTube.',
-    whatYouLearn: 'Hiểu một trang web đi từ URL tới màn hình thế nào (client/server, DNS, HTTP/HTTPS); dùng thành thạo bộ công cụ (terminal, VS Code, Git/GitHub, Node & npm); viết HTML có cấu trúc và CSS bố cục/responsive; nắm JavaScript cốt lõi và JS bất đồng bộ (Promise, async/await, event loop, fetch); đọc hiểu luồng HTTP và REST API (method, status, headers, JSON, query/params); hiểu cookie, session, đăng nhập/JWT, CORS và HTTPS; nắm khái niệm cơ sở dữ liệu, SQL và CRUD; đọc được TypeScript cơ bản; và tư duy lập trình — chia nhỏ vấn đề, gỡ lỗi, đọc thông báo lỗi.',
+    shortDescription: 'The bedrock every web course assumes: how the web works, the tools, HTML, CSS, JavaScript, HTTP and APIs, cookies and auth, data and SQL, TypeScript, and how to think like a programmer — then four advanced chapters on deep JavaScript, deep CSS, testing, and shipping.|||Nền móng mà mọi khoá web đều mặc định bạn đã có: web hoạt động thế nào, công cụ, HTML, CSS, JavaScript, HTTP và API, cookie và xác thực, dữ liệu và SQL, TypeScript, và cách tư duy như một lập trình viên — rồi bốn chương nâng cao: JavaScript sâu, CSS sâu, kiểm thử, và đưa sản phẩm lên mạng.',
+    description: 'Khoá nền tảng do CuongThai biên soạn cho người mới hoàn toàn. Nếu bạn từng mở một khoá Node.js hay Next.js và thấy "chả hiểu gì" — thường không phải vì bạn kém, mà vì khoá đó mặc định bạn đã biết HTML/CSS/JavaScript, hiểu luồng client–server, HTTP, cookie, API… Khoá này lấp đúng khoảng trống đó: 15 chương đi từ "một trang web hiện ra thế nào" tới đủ vốn để tự tin vào các khoá chuyên sâu — mười chương nền tảng, rồi bốn chương nâng cao (JavaScript sâu, CSS sâu, kiểm thử, và đưa sản phẩm lên mạng). Mỗi khái niệm đều được định nghĩa, ví von cho dễ nhớ, có ví dụ mô phỏng chạy được và video minh hoạ nhúng từ YouTube.',
+    whatYouLearn: 'Hiểu một trang web đi từ URL tới màn hình thế nào (client/server, DNS, HTTP/HTTPS); dùng thành thạo bộ công cụ (terminal, VS Code, Git/GitHub, Node & npm); viết HTML có cấu trúc và CSS bố cục/responsive; nắm JavaScript cốt lõi và JS bất đồng bộ (Promise, async/await, event loop, fetch); đọc hiểu luồng HTTP và REST API (method, status, headers, JSON, query/params); hiểu cookie, session, đăng nhập/JWT, CORS và HTTPS; nắm khái niệm cơ sở dữ liệu, SQL và CRUD; đọc được TypeScript cơ bản; và tư duy lập trình — chia nhỏ vấn đề, gỡ lỗi, đọc thông báo lỗi. Bốn chương nâng cao đi tiếp: closure, this, prototype & class, Map/Set, regex và tư duy bất biến; position & stacking context, transition/animation, kiến trúc CSS và token cho chế độ sáng/tối; viết unit test và kiểm thử giao diện bằng Testing Library, giả lập mạng và chạy test trong CI; dựng bản production, quản lý biến môi trường và khoá bí mật, deploy có HTTPS, rồi đo hiệu năng bằng Core Web Vitals.',
     requirements: 'Không cần biết lập trình từ trước — khoá bắt đầu từ số 0. Chỉ cần một máy tính (Windows, macOS hoặc Linux) nối mạng, và sự kiên nhẫn gõ theo từng ví dụ. Mọi phần mềm dùng trong khoá đều miễn phí.',
     documentsNote: 'Tài liệu tham chiếu chính: developer.mozilla.org (MDN — bách khoa toàn thư về web, chuẩn nhất) • roadmap.sh (lộ trình học trực quan) • javascript.info (JavaScript từ cơ bản tới sâu). Học xong khoá này, bước tiếp theo là khoá Node.js (backend) và Next.js & React (frontend) của CuongThai.',
   },
@@ -50,5 +54,9 @@ export default {
     s08,
     s09,
     s10,
+    s11,
+    s12,
+    s13,
+    s14,
   ],
 };

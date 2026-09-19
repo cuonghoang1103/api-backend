@@ -54,9 +54,10 @@ export async function hoiVeChu(
     system: 'Bạn là gia sư IELTS, trả lời bằng TIẾNG VIỆT, ngắn và thẳng.\n'
       + `${dan ?? 'Trả lời đúng câu người học hỏi, tối đa 6 câu.'}\n`
       + 'Không mở bài, không chúc, không nhắc lại câu hỏi.\n'
-      // App vẽ câu trả lời bằng `Text` trơn, không dựng markdown. Để model
-      // tự do thì `**từ**` hiện ra nguyên dấu sao ngay giữa câu.
-      + 'KHÔNG dùng markdown: không **đậm**, không *nghiêng*, không ```khối mã```.\n'
+      // Từ 19/09/2026 app DỰNG markdown thật (`NoiDungMarkdown`), nên ở đây
+      // KHÔNG cấm nữa — chữ đậm ở từ khoá và danh sách gạch đầu dòng làm câu
+      // trả lời dễ đọc hơn hẳn một khối chữ phẳng.
+      + 'Được dùng **đậm** cho từ khoá và gạch đầu dòng. Không dùng bảng.\n'
       + 'Giữ nguyên từ tiếng Anh khi trích dẫn, đừng phiên âm kiểu Việt hoá.',
     messages: [{
       role: 'user',

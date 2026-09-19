@@ -63,7 +63,7 @@ export async function chamBaiNoi(
     maxTokens: 1000,
     system: [
       'Bạn là giám khảo IELTS Speaking. Trả lời bằng TIẾNG VIỆT.',
-      'KHÔNG dùng markdown: không **đậm**, không *nghiêng*.',
+      'Được dùng **đậm** cho tên tiêu chí và band. App dựng markdown thật.',
       '',
       'Bạn nhận BẢN PHIÊN ÂM câu trả lời, không nghe được giọng thật. Vì vậy:',
       '  · Chấm được: Fluency & Coherence, Lexical Resource, Grammatical Range & Accuracy',

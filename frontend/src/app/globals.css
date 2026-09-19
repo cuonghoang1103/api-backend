@@ -6126,3 +6126,111 @@ html.theme-dark .chat-studio {
 .rich-content .dap-an { background: rgba(47, 158, 107, 0.14); border: 1px solid rgba(47, 158, 107, 0.35); }
 .rich-content .ghi-chu { font-size: 0.88em; color: var(--text-muted, var(--text-secondary)); }
 .rich-content .giang .pitfall { margin: 0.85rem 0 0.4rem; }
+
+/* ══════════════════════════════════════════════════════════════════════
+ * KHỐI SÁCH / TÀI LIỆU — `.khoi-sach` + `.the-sach`
+ *
+ * Người dùng yêu cầu 20/09/2026: sách giáo trình thầy cô chỉ định, nhất là
+ * sách MIỄN PHÍ, phải là THẺ BẤM ĐƯỢC nổi bật — không được viết link như chữ
+ * thường lẫn trong đoạn văn vì "sinh viên không biết và để ý".
+ *
+ * Dùng trong bài giảng (Academy / courses / Code Lab):
+ *
+ *   <div class="khoi-sach">
+ *     <a class="the-sach chinh" href="https://py4e.com/" target="_blank" rel="noopener">
+ *       <span class="sach-ico">📗</span>
+ *       <span class="sach-than">
+ *         <span class="sach-ten">Python for Everybody</span>
+ *         <span class="sach-phu">Charles R. Severance · 2016 · ISBN 978-1530051120</span>
+ *         <span class="sach-nhan-nhom">
+ *           <span class="sach-nhan chinh">Giáo trình chính</span>
+ *           <span class="sach-nhan mien-phi">Miễn phí</span>
+ *         </span>
+ *       </span>
+ *       <span class="sach-nut">Đọc online →</span>
+ *     </a>
+ *   </div>
+ * ════════════════════════════════════════════════════════════════════ */
+
+.rich-content .khoi-sach { margin: 1.1rem 0; display: flex; flex-direction: column; gap: 0.7rem; }
+
+.rich-content .the-sach {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.95rem 1.05rem;
+  border: 1px solid var(--border-color, rgba(255,255,255,0.12));
+  /* Vạch màu bên trái: dấu hiệu nhìn-là-biết-đây-là-sách, phân biệt ngay với
+     .link-card (CodeLab/Exp Hub) và với đoạn văn xung quanh. */
+  border-left: 4px solid var(--neon-violet, #8b5cf6);
+  border-radius: 12px;
+  background: var(--bg-card, rgba(139, 92, 246, 0.06));
+  text-decoration: none !important;
+  transition: border-color 0.15s, transform 0.15s, background 0.15s;
+}
+.rich-content .the-sach:hover {
+  border-color: var(--neon-violet, #8b5cf6);
+  background: rgba(139, 92, 246, 0.12);
+  transform: translateY(-1px);
+}
+/* Sách CHÍNH của môn: viền trái dày hơn + nền đậm hơn để nổi hơn sách tham khảo. */
+.rich-content .the-sach.chinh { border-left-width: 6px; background: rgba(139, 92, 246, 0.1); }
+
+.rich-content .the-sach .sach-ico { font-size: 1.6rem; line-height: 1; flex-shrink: 0; }
+
+/* min-width:0 — nếu không, tên sách dài đẩy nút CTA tràn khỏi thẻ ở khung hẹp
+   (đúng lỗi đã gặp với .link-card). */
+.rich-content .the-sach .sach-than { flex: 1; min-width: 0; display: block; }
+
+/* display:block BẮT BUỘC: nội dung viết bằng <span>, để inline thì các mẩu chữ
+   chảy liền nhau trên một dòng. */
+.rich-content .the-sach .sach-ten {
+  display: block;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+.rich-content .the-sach .sach-phu {
+  display: block;
+  font-size: 0.84em;
+  color: var(--text-secondary);
+  margin-top: 0.15rem;
+}
+
+.rich-content .the-sach .sach-nhan-nhom { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+.rich-content .the-sach .sach-nhan {
+  display: inline-block;
+  font-size: 0.7em;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.16rem 0.48rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.rich-content .the-sach .sach-nhan.chinh    { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+.rich-content .the-sach .sach-nhan.mien-phi { background: rgba(34, 197, 94, 0.18);  color: #86efac; }
+.rich-content .the-sach .sach-nhan.tham-khao{ background: rgba(255, 255, 255, 0.08); color: var(--text-secondary); }
+.rich-content .the-sach .sach-nhan.giay     { background: rgba(245, 158, 11, 0.18); color: #fcd34d; }
+
+.rich-content .the-sach .sach-nut {
+  flex-shrink: 0;
+  font-size: 0.82em;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  border-radius: 9px;
+  background: rgba(139, 92, 246, 0.18);
+  color: #c4b5fd;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  white-space: nowrap;
+}
+.rich-content .the-sach:hover .sach-nut { background: rgba(139, 92, 246, 0.3); color: #fff; }
+
+/* Sách giấy (không có link) — vẫn là thẻ nổi bật nhưng không giả vờ bấm được. */
+.rich-content .the-sach.khong-link { cursor: default; border-left-color: rgba(245, 158, 11, 0.6); }
+.rich-content .the-sach.khong-link:hover { transform: none; background: var(--bg-card, rgba(139,92,246,0.06)); }
+
+/* Khổ hẹp: nút xuống dòng dưới, không bóp chữ. */
+@media (max-width: 540px) {
+  .rich-content .the-sach { flex-wrap: wrap; }
+  .rich-content .the-sach .sach-nut { margin-left: 2.5rem; }
+}

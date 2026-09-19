@@ -231,3 +231,62 @@ int main() {
 - Không viết "chúng ta sẽ học ở bài sau" quá nhiều; nói cụ thể tên bài/buổi.
 - Xong thì báo lại: bao nhiêu bài, bao nhiêu chương trình đã biên dịch & chạy,
   title dài nhất bao nhiêu ký tự, có gì bạn không chắc.
+
+---
+
+## 📗 SÁCH & TÀI LIỆU — BẮT BUỘC dùng thẻ, KHÔNG viết link chữ thường
+
+**Luật user đặt 20/09/2026:**
+
+> "mấy cuốn sách được thầy cô hay giáo trình bảo đọc hay gắn miễn phí để sinh
+> viên học thì bạn nhớ làm 1 mục book hay tài liệu có nút hay tô đậm hoặc điểm
+> nhấn để sinh viên biết đó là sách để ấn vào liên kết hoặc gì đó đọc nha, chứ
+> đừng viết thường cái link sách như các chữ bình thường làm sinh viên không
+> biết và để ý"
+
+Áp cho **mọi** môn: Academy · courses · Code Lab · Deep Dives.
+
+### Markup chuẩn
+
+```html
+<div class="khoi-sach">
+  <a class="the-sach chinh" href="https://www.py4e.com/" target="_blank" rel="noopener">
+    <span class="sach-ico">📗</span>
+    <span class="sach-than">
+      <span class="sach-ten">Python for Everybody: Exploring Data Using Python 3</span>
+      <span class="sach-phu">Charles R. Severance · 2016 · 1st ed · ISBN 978-1530051120</span>
+      <span class="sach-nhan-nhom">
+        <span class="sach-nhan chinh">Giáo trình chính</span>
+        <span class="sach-nhan mien-phi">Miễn phí</span>
+      </span>
+    </span>
+    <span class="sach-nut">Đọc online →</span>
+  </a>
+
+  <!-- Sách giấy, KHÔNG có link: vẫn là thẻ, nhưng đừng giả vờ bấm được -->
+  <div class="the-sach khong-link">
+    <span class="sach-ico">📘</span>
+    <span class="sach-than">
+      <span class="sach-ten">The C Programming Language</span>
+      <span class="sach-phu">Brian W. Kernighan, Dennis M. Ritchie · Pearson · 1988 · 2nd ed · ISBN 978-0131103627</span>
+      <span class="sach-nhan-nhom">
+        <span class="sach-nhan tham-khao">Tham khảo</span>
+        <span class="sach-nhan giay">Sách giấy</span>
+      </span>
+    </span>
+  </div>
+</div>
+```
+
+### Quy tắc
+
+1. **Mọi giáo trình trong syllabus FLM đều phải nằm trong `.khoi-sach`** ở bài 0.4, không được viết thành gạch đầu dòng chữ thường.
+2. Dùng nhãn đúng sự thật, lấy từ syllabus:
+   - `chinh` — cột *Is Main Material* = True
+   - `mien-phi` — sách/MOOC đọc online không mất tiền (nói rõ vì sinh viên rất cần biết)
+   - `tham-khao` — tài liệu tham khảo
+   - `giay` — chỉ có bản in, không có link
+3. **Có link thì dùng `<a>` kèm `target="_blank" rel="noopener"` và có `.sach-nut`**; không có link thì dùng `<div class="the-sach khong-link">` và **bỏ** `.sach-nut`.
+4. `.sach-phu` ghi đủ **tác giả · NXB · năm · bản · ISBN** đúng nguyên văn syllabus. Thiếu trường nào thì bỏ trường đó, **không bịa**.
+5. Sách nào được nhắc lại trong một bài cụ thể (ví dụ "đọc chương 6 trước buổi 21") thì **lặp lại thẻ đó ngay trong bài**, đừng bắt sinh viên lật về mục 0.
+6. Link MOOC / khoá học online (Coursera, OpenStax, EdTech Books…) cũng dùng thẻ này, nút ghi `Học miễn phí →` hoặc `Mở khoá học →`.

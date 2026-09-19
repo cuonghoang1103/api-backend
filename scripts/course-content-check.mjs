@@ -11,6 +11,8 @@
  *   4. cân bằng <pre>/</pre>, <code>/</code>, <span>/</span>
  *   5. title bài có dấu ngăn |||
  *   6. quiz: câu hỏi có |||, correctIndex nằm trong khoảng options
+ *   8. độ dài các cột VarChar của bảng `courses` (shortDescription 500, …) —
+ *      vượt giới hạn thì seed CHẾT trên production mà deploy vẫn báo xanh
  *   7. dấu gạch chéo ngược đơn VÀ backtick trần trong template literal (đọc
  *      MÃ NGUỒN, không phải module đã nạp — lúc nạp xong thì JS đã ăn mất
  *      gạch chéo, còn backtick trần thì làm cả file không phân tích được)
@@ -25,6 +27,33 @@ const file = path.resolve(process.cwd(), process.argv[2] ?? './content/courses/n
 const mod = (await import(file)).default;
 const sections = mod.sections ?? [mod];
 let bad = 0, chars = 0, n = 0;
+
+/*
+ * Độ dài các cột VarChar của bảng `courses`.
+ *
+ * ⚠️ VÌ SAO CÓ PHÉP KIỂM NÀY: 19/09/2026 một `shortDescription` dài 560 ký tự
+ * (giới hạn 500) làm `course-seed.mjs` ném lỗi giữa chừng trên production.
+ * Deploy vẫn chạy tiếp và kết thúc bằng "✅ XONG" — chỉ có một dòng WARN lọt
+ * giữa hàng trăm dòng log. Hậu quả: mã lên tới nơi, ảnh Docker có đủ file nội
+ * dung, mà DỮ LIỆU thì thiếu bốn chương — và không ai biết cho tới khi đi đếm
+ * số bài bằng API. Cùng ngày, một môn Academy chết y hệt vì 508 > 500.
+ *
+ * Bộ kiểm chạy TRƯỚC khi commit thì bắt được trong một giây. Đây là chỗ đúng
+ * để bắt, không phải ở log deploy.
+ *
+ * ⚠️ Đếm CẢ CHUỖI `EN|||VI`, không đếm từng ngôn ngữ — cột trong CSDL lưu
+ * nguyên chuỗi ghép, dấu ||| nằm trong đó.
+ */
+const GIOI_HAN = { shortDescription: 500, title: 255, slug: 255, courseCode: 50 };
+if (mod.course) {
+  for (const [truong, max] of Object.entries(GIOI_HAN)) {
+    const v = mod.course[truong];
+    if (typeof v === 'string' && v.length > max) {
+      bad++;
+      console.log(`❌ course.${truong}: ${v.length} ký tự > ${max} (VarChar(${max})) — seed sẽ CHẾT, rút ngắn trước khi deploy`);
+    }
+  }
+}
 const cnt = (s, re) => (s.match(re) ?? []).length;
 for (const sec of sections) {
   for (const l of sec.lessons) {

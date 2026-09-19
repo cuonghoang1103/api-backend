@@ -6,10 +6,43 @@
  * thành \${. Quiz có field content.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 7 — Authentication & security|||Chương 7 — Xác thực & bảo mật',
   description: 'Chương 6 cho thấy HTTP không lưu trạng thái — server quên bạn ngay sau mỗi yêu cầu. Chương 7 giải bài toán đó: authentication vs authorization, cookie và session, JWT và Authorization: Bearer, cách mật khẩu phải được hash và salt (không bao giờ lưu thô), và HTTPS/CORS — hai lớp bảo vệ khác nhau mà mọi API thật đều cần.',
   lessons: [
+    /* ─────────────────── 7.0 slide bài giảng ─────────────────── */
+    {
+      title: '7.0 — Lecture slides: auth & security in 12 slides|||7.0 — Slide bài giảng: xác thực & bảo mật trong 12 slide',
+      slug: 'wf-7-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Cookie, session, JWT, mật khẩu, HTTPS và CORS — kèm ba lỗ hổng phải biết tên.',
+      content: `
+<div class="ml-en"><h2>📑 Lecture slides: auth & security in 12 slides</h2>
+<p>Slide 10 is CORS. You will hit that error in your first week of connecting React to a backend, so read it before you need it.</p>
+<p>Two ways to use it: skim before the chapter to see what is coming, then come back afterwards to revise. If a slide still does not make sense, the lesson that teaches it is right below.</p></div>
+<div class="ml-vi"><h2>📑 Slide bài giảng: xác thực & bảo mật trong 12 slide</h2>
+<p>Slide 10 là CORS. Bạn chắc chắn gặp lỗi đó trong tuần đầu nối React với backend — đọc trước khi cần thì đỡ hoảng.</p>
+<p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
+${gallery('wf-auth', [
+  [1, "Bìa"],
+  [2, "Nội dung chương"],
+  [3, "Xác thực vs phân quyền"],
+  [4, "HTTP không nhớ gì — nên cần cookie"],
+  [5, "Token & JWT ⭐"],
+  [6, "Session hay Token — chọn cái nào"],
+  [7, "Mật khẩu — ba luật không được phá"],
+  [8, "Thông báo lỗi đăng nhập — đừng nói quá nhiều"],
+  [9, "HTTPS — vì sao bắt buộc"],
+  [10, "CORS — lỗi bạn chắc chắn sẽ gặp ⭐"],
+  [11, "Ba lỗ hổng phải biết tên"],
+  [12, "Tự luyện"],
+])}
+`,
+    },
+
     /* ─────────────────────────── 7.1 ─────────────────────────── */
     {
       title: '7.1 — Authentication vs authorization|||7.1 — Xác thực vs phân quyền',

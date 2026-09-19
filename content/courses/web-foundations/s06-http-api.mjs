@@ -5,10 +5,43 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 6 — HTTP & APIs|||Chương 6 — HTTP & API',
   description: 'Mọi ứng dụng web là các máy tính trò chuyện qua HTTP: trình duyệt gửi một yêu cầu, server trả một phản hồi. Học chu trình request/response, các method (GET/POST/PUT/DELETE), mã trạng thái, headers, định dạng JSON, và cách một REST API tổ chức URL — đúng ngôn ngữ mà backend Node.js của bạn sẽ nói.',
   lessons: [
+    /* ─────────────────── 6.0 slide bài giảng ─────────────────── */
+    {
+      title: '6.0 — Lecture slides: HTTP & APIs in 12 slides|||6.0 — Slide bài giảng: HTTP & API trong 12 slide',
+      slug: 'wf-6-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Request/response, method, mã trạng thái, headers, JSON và REST — kèm cách đọc tab Network.',
+      content: `
+<div class="ml-en"><h2>📑 Lecture slides: HTTP & APIs in 12 slides</h2>
+<p>Slide 6 (401 vs 403 vs 404) and slide 10 (reading the Network tab) are the two that pay off immediately when something does not load.</p>
+<p>Two ways to use it: skim before the chapter to see what is coming, then come back afterwards to revise. If a slide still does not make sense, the lesson that teaches it is right below.</p></div>
+<div class="ml-vi"><h2>📑 Slide bài giảng: HTTP & API trong 12 slide</h2>
+<p>Slide 6 (401 vs 403 vs 404) và slide 10 (đọc tab Network) là hai cái có ích ngay lần đầu bạn gặp "sao dữ liệu không hiện".</p>
+<p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
+${gallery('wf-http', [
+  [1, "Bìa"],
+  [2, "Nội dung chương"],
+  [3, "Một lượt trao đổi HTTP"],
+  [4, "HTTP method — các động từ ⭐"],
+  [5, "Mã trạng thái — nhớ theo nhóm ⭐⭐"],
+  [6, "401 · 403 · 404 — ba cái hay nhầm"],
+  [7, "Headers — ba cái gặp mỗi ngày"],
+  [8, "JSON — định dạng trao đổi của cả web"],
+  [9, "REST — route param và query string ⭐"],
+  [10, "Đọc tab Network — kỹ năng đáng giá nhất"],
+  [11, "Bảng đối chiếu: chương 6 dùng ở đâu trong FER202"],
+  [12, "Tự luyện"],
+])}
+`,
+    },
+
     /* ─────────────────────────── 6.1 ─────────────────────────── */
     {
       title: '6.1 — The request/response cycle|||6.1 — Chu trình yêu cầu/phản hồi',

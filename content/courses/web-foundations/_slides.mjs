@@ -18,8 +18,17 @@ export const CDN = 'https://media.cuongthai.com/images/academy/WF/v1';
 const W = 1280, H = 720;
 
 export const DECKS = {
-  'wf-js1': { code: 'Chương 4', en: 'JavaScript fundamentals', vi: 'JavaScript nền tảng',   total: 22, w: W, h: H },
-  'wf-js2': { code: 'Chương 5', en: 'Asynchronous JavaScript', vi: 'JavaScript bất đồng bộ', total: 15, w: W, h: H },
+  'wf-web0':  { code: 'Mục 0',     en: 'Getting started',          vi: 'Giới thiệu & nền tảng',   total: 11, w: W, h: H },
+  'wf-tools': { code: 'Chương 1',  en: 'The toolbox',              vi: 'Bộ công cụ',              total: 13, w: W, h: H },
+  'wf-html':  { code: 'Chương 2',  en: 'HTML',                     vi: 'HTML',                    total: 12, w: W, h: H },
+  'wf-css':   { code: 'Chương 3',  en: 'CSS & responsive',         vi: 'CSS & responsive',        total: 14, w: W, h: H },
+  'wf-js1':   { code: 'Chương 4',  en: 'JavaScript fundamentals',  vi: 'JavaScript nền tảng',     total: 22, w: W, h: H },
+  'wf-js2':   { code: 'Chương 5',  en: 'Asynchronous JavaScript',  vi: 'JavaScript bất đồng bộ',  total: 15, w: W, h: H },
+  'wf-http':  { code: 'Chương 6',  en: 'HTTP & APIs',              vi: 'HTTP & API',              total: 12, w: W, h: H },
+  'wf-auth':  { code: 'Chương 7',  en: 'Auth & security',          vi: 'Xác thực & bảo mật',      total: 12, w: W, h: H },
+  'wf-sql':   { code: 'Chương 8',  en: 'Data & SQL',               vi: 'Dữ liệu & SQL',           total: 13, w: W, h: H },
+  'wf-ts':    { code: 'Chương 9',  en: 'TypeScript basics',        vi: 'TypeScript cơ bản',       total: 12, w: W, h: H },
+  'wf-think': { code: 'Chương 10', en: 'Thinking & debugging',     vi: 'Tư duy & gỡ lỗi',         total: 12, w: W, h: H },
 };
 
 const pad = (n) => String(n).padStart(3, '0');

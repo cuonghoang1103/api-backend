@@ -5,10 +5,43 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 9 — TypeScript basics|||Chương 9 — TypeScript cơ bản',
   description: 'JavaScript chạy được, nhưng không nói cho bạn biết một hàm mong đợi gì cho tới khi nó nổ lúc chạy. TypeScript thêm một lớp "types" lên trên JavaScript bạn đã học ở Chương 4-5 — cùng cú pháp, cùng cách suy nghĩ, chỉ thêm annotation để trình biên dịch bắt lỗi TRƯỚC khi bạn bấm chạy. Học interface, function/generic cơ bản, và cách dự án api-backend này (và Node.js/Next.js nói chung) dùng TypeScript thật.',
   lessons: [
+    /* ─────────────────── 9.0 slide bài giảng ─────────────────── */
+    {
+      title: '9.0 — Lecture slides: TypeScript in 12 slides|||9.0 — Slide bài giảng: TypeScript trong 12 slide',
+      slug: 'wf-9-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Kiểu cơ bản, interface, hàm có kiểu và generic nhập môn — đủ để đọc hiểu mã TypeScript.',
+      content: `
+<div class="ml-en"><h2>📑 Lecture slides: TypeScript in 12 slides</h2>
+<p>The goal here is reading, not writing. You will meet TypeScript in other people code long before you choose it yourself.</p>
+<p>Two ways to use it: skim before the chapter to see what is coming, then come back afterwards to revise. If a slide still does not make sense, the lesson that teaches it is right below.</p></div>
+<div class="ml-vi"><h2>📑 Slide bài giảng: TypeScript trong 12 slide</h2>
+<p>Mục tiêu ở đây là ĐỌC HIỂU, chưa phải viết. Bạn sẽ gặp TypeScript trong mã người khác từ lâu trước khi tự chọn dùng nó.</p>
+<p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
+${gallery('wf-ts', [
+  [1, "Bìa"],
+  [2, "Nội dung chương"],
+  [3, "Vì sao thêm một bước biên dịch"],
+  [4, "Kiểu cơ bản"],
+  [5, "Suy luận kiểu — đừng gõ thừa"],
+  [6, "interface — mô tả hình dáng object ⭐"],
+  [7, "type vs interface"],
+  [8, "Hàm có kiểu"],
+  [9, "Generic — nhập môn nhẹ nhàng"],
+  [10, "TypeScript trong thực tế"],
+  [11, "Ba lỗi TypeScript hay gặp nhất"],
+  [12, "Tự luyện"],
+])}
+`,
+    },
+
     /* ─────────────────────────── 9.1 ─────────────────────────── */
     {
       title: '9.1 — Why TypeScript|||9.1 — Vì sao dùng TypeScript',

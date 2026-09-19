@@ -4,10 +4,45 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 3 — CSS & responsive design|||Chương 3 — CSS & thiết kế responsive',
   description: 'Nếu HTML là bộ xương, CSS là làn da và trang phục: màu sắc, phông chữ, khoảng cách và — quan trọng nhất — bố cục. Học chọn phần tử, hộp (box model), hai hệ dàn trang hiện đại Flexbox và Grid, rồi làm trang vừa vặn từ điện thoại tới màn hình lớn.',
   lessons: [
+    /* ─────────────────── 3.0 slide bài giảng ─────────────────── */
+    {
+      title: '3.0 — Lecture slides: CSS in 14 slides|||3.0 — Slide bài giảng: CSS trong 14 slide',
+      slug: 'wf-3-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Bộ chọn, box model, Flexbox, Grid và responsive — nền để hiểu các class của Bootstrap.',
+      content: `
+<div class="ml-en"><h2>📑 Lecture slides: CSS in 14 slides</h2>
+<p>Slides 7 and 10 (Flexbox and breakpoints) are what Bootstrap wraps up into class names. Understand them and Bootstrap stops being magic.</p>
+<p>Two ways to use it: skim before the chapter to see what is coming, then come back afterwards to revise. If a slide still does not make sense, the lesson that teaches it is right below.</p></div>
+<div class="ml-vi"><h2>📑 Slide bài giảng: CSS trong 14 slide</h2>
+<p>Slide 7 và 10 (Flexbox và breakpoint) chính là thứ Bootstrap gói lại thành tên class. Hiểu hai cái đó thì Bootstrap hết là phép thuật.</p>
+<p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
+${gallery('wf-css', [
+  [1, "Bìa"],
+  [2, "Nội dung chương"],
+  [3, "Ba cách gắn CSS"],
+  [4, "Bộ chọn — bốn loại dùng nhiều nhất"],
+  [5, "Xếp tầng & độ ưu tiên — vì sao CSS không ăn"],
+  [6, "Box model và một dòng chữa hết"],
+  [7, "Flexbox — xếp theo một chiều ⭐"],
+  [8, "Canh giữa — bài toán kinh điển"],
+  [9, "CSS Grid — dàn trang hai chiều"],
+  [10, "Responsive — mobile first ⭐⭐"],
+  [11, "Đơn vị — dùng cái nào khi nào"],
+  [12, "Biến CSS — đổi màu cả trang một dòng"],
+  [13, "Bốn lỗi CSS hay gặp"],
+  [14, "Tự luyện"],
+])}
+`,
+    },
+
     /* ─────────────────────────── 3.1 ─────────────────────────── */
     {
       title: '3.1 — CSS basics: selectors, properties, the cascade|||3.1 — CSS căn bản: bộ chọn, thuộc tính, và sự "xếp tầng"',

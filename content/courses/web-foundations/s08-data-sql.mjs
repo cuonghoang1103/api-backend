@@ -5,10 +5,44 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 8 — Data & SQL|||Chương 8 — Dữ liệu & SQL',
   description: 'API của bạn ở Chương 6 trả về dữ liệu — nhưng dữ liệu đó nằm ở đâu, và làm sao đọc/ghi nó một cách đáng tin cậy? Học cách một cơ sở dữ liệu quan hệ tổ chức dữ liệu thành bảng, cách đọc dữ liệu bằng SELECT, cách thay đổi dữ liệu an toàn với INSERT/UPDATE/DELETE, cách nối nhiều bảng bằng JOIN, và cách một ORM như Prisma (đúng công cụ dự án này dùng) biến các dòng SQL thành object JavaScript quen thuộc.',
   lessons: [
+    /* ─────────────────── 8.0 slide bài giảng ─────────────────── */
+    {
+      title: '8.0 — Lecture slides: data & SQL in 13 slides|||8.0 — Slide bài giảng: dữ liệu & SQL trong 13 slide',
+      slug: 'wf-8-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Bảng, SELECT, INSERT/UPDATE/DELETE, JOIN, chỉ mục, injection và ORM.',
+      content: `
+<div class="ml-en"><h2>📑 Lecture slides: data & SQL in 13 slides</h2>
+<p>Slide 7 carries the single most expensive mistake in this chapter: forgetting WHERE on an UPDATE or DELETE.</p>
+<p>Two ways to use it: skim before the chapter to see what is coming, then come back afterwards to revise. If a slide still does not make sense, the lesson that teaches it is right below.</p></div>
+<div class="ml-vi"><h2>📑 Slide bài giảng: dữ liệu & SQL trong 13 slide</h2>
+<p>Slide 7 mang lỗi đắt nhất của cả chương: quên WHERE khi UPDATE hoặc DELETE.</p>
+<p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
+${gallery('wf-sql', [
+  [1, "Bìa"],
+  [2, "Nội dung chương"],
+  [3, "Vì sao không lưu vào file cho xong"],
+  [4, "Bảng · hàng · cột · khoá"],
+  [5, "SELECT — câu lệnh dùng nhiều nhất"],
+  [6, "Gộp nhóm: COUNT · SUM · GROUP BY"],
+  [7, "Thay đổi dữ liệu — và bẫy quên WHERE"],
+  [8, "Quan hệ — ba kiểu"],
+  [9, "JOIN — ghép dữ liệu nhiều bảng"],
+  [10, "Chỉ mục — vì sao truy vấn chậm"],
+  [11, "SQL Injection và cách chặn"],
+  [12, "ORM & Prisma ⭐"],
+  [13, "Tự luyện"],
+])}
+`,
+    },
+
     /* ─────────────────────────── 8.1 ─────────────────────────── */
     {
       title: '8.1 — What a database is|||8.1 — Cơ sở dữ liệu là gì',

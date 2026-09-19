@@ -4,10 +4,44 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 1 — Your toolbox: terminal, VS Code, Git, npm|||Chương 1 — Bộ công cụ: terminal, VS Code, Git, npm',
   description: 'Dùng thành thạo bốn công cụ nền: dòng lệnh, trình soạn thảo, quản lý phiên bản, và trình chạy JavaScript cùng npm. Đây là những thứ bạn gõ mỗi ngày trong mọi khoá sau.',
   lessons: [
+    /* ─────────────────── 1.0 slide bài giảng ─────────────────── */
+    {
+      title: '1.0 — Lecture slides: the toolbox in 13 slides|||1.0 — Slide bài giảng: bộ công cụ trong 13 slide',
+      slug: 'wf-1-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Terminal, VS Code, Git, GitHub, Node & npm — gom mọi lệnh cần thuộc vào một chỗ tra nhanh.',
+      content: `
+<div class="ml-en"><h2>📑 Lecture slides: the toolbox in 13 slides</h2>
+<p>Use this as a cheat sheet. The terminal and git slides are the ones you will come back to most.</p>
+<p>Two ways to use it: skim before the chapter to see what is coming, then come back afterwards to revise. If a slide still does not make sense, the lesson that teaches it is right below.</p></div>
+<div class="ml-vi"><h2>📑 Slide bài giảng: bộ công cụ trong 13 slide</h2>
+<p>Dùng như một tờ tra nhanh. Slide terminal và git là hai cái bạn sẽ quay lại nhiều nhất.</p>
+<p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
+${gallery('wf-tools', [
+  [1, "Bìa"],
+  [2, "Nội dung chương"],
+  [3, "Terminal — mười lệnh đủ dùng"],
+  [4, "Hai mẹo tiết kiệm nửa thời gian gõ"],
+  [5, "VS Code — bốn tiện ích nên cài"],
+  [6, "Phím tắt VS Code đáng thuộc"],
+  [7, "Git — ba vùng phải hiểu"],
+  [8, "Git — bốn lệnh gỡ khi lỡ tay"],
+  [9, ".gitignore — làm trước lần add đầu"],
+  [10, "GitHub — đẩy mã lên lần đầu"],
+  [11, "Node & npm ⭐"],
+  [12, "Ba file quyết định mọi thứ"],
+  [13, "Tự luyện"],
+])}
+`,
+    },
+
     /* ─────────────────────────── 1.1 ─────────────────────────── */
     {
       title: '1.1 — The terminal: talking to your computer with words|||1.1 — Terminal: nói chuyện với máy tính bằng chữ',

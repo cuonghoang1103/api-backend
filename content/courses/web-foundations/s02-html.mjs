@@ -4,10 +4,43 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 2 — HTML: the structure of every web page|||Chương 2 — HTML: cấu trúc của mọi trang web',
   description: 'HTML là bộ khung của mọi trang web: các thẻ đặt tên cho từng mẩu nội dung — tiêu đề, đoạn văn, ảnh, liên kết, biểu mẫu. Học viết HTML có cấu trúc, đúng ngữ nghĩa và tiếp cận được, làm nền cho CSS (Chương 3) tô điểm và JavaScript (Chương 4) làm sống động.',
   lessons: [
+    /* ─────────────────── 2.0 slide bài giảng ─────────────────── */
+    {
+      title: '2.0 — Lecture slides: HTML in 12 slides|||2.0 — Slide bài giảng: HTML trong 12 slide',
+      slug: 'wf-2-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Phần tử, thẻ ngữ nghĩa, biểu mẫu — kèm bảng đối chiếu HTML với JSX của React.',
+      content: `
+<div class="ml-en"><h2>📑 Lecture slides: HTML in 12 slides</h2>
+<p>Slide 9 compares HTML with JSX side by side. If you are heading to React, that one slide saves a lot of confusion.</p>
+<p>Two ways to use it: skim before the chapter to see what is coming, then come back afterwards to revise. If a slide still does not make sense, the lesson that teaches it is right below.</p></div>
+<div class="ml-vi"><h2>📑 Slide bài giảng: HTML trong 12 slide</h2>
+<p>Slide 9 đặt HTML cạnh JSX. Nếu bạn sắp học React thì riêng slide đó tiết kiệm rất nhiều lúng túng.</p>
+<p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
+${gallery('wf-html', [
+  [1, "Bìa"],
+  [2, "Nội dung chương"],
+  [3, "Một phần tử HTML gồm gì"],
+  [4, "Bộ khung một trang"],
+  [5, "Chữ, liên kết, ảnh"],
+  [6, "Thẻ ngữ nghĩa — đặt tên đúng cho từng vùng"],
+  [7, "Biểu mẫu ⭐⭐"],
+  [8, "Các loại input hay dùng"],
+  [9, "HTML khác JSX ở bốn chỗ ⭐"],
+  [10, "Bảng và media"],
+  [11, "Khả năng tiếp cận — bốn việc rẻ mà hiệu quả"],
+  [12, "Tự luyện"],
+])}
+`,
+    },
+
     /* ─────────────────────────── 2.1 ─────────────────────────── */
     {
       title: '2.1 — What HTML is: elements, tags, attributes|||2.1 — HTML là gì: phần tử, thẻ, thuộc tính',

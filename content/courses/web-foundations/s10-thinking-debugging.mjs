@@ -6,10 +6,43 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 10 — Thinking, debugging & Git workflow|||Chương 10 — Tư duy lập trình, gỡ lỗi & quy trình Git',
   description: 'Chương cuối khoá gói lại thứ quan trọng nhất: cách nghĩ về một vấn đề trước khi gõ code, cách đọc một lỗi thay vì sợ nó, cách làm việc với Git như một lập trình viên thật (nhánh, Pull Request, merge), cách tự học sau khi hết khoá, và một bức tranh tổng kết nối mọi mảnh — trình duyệt, HTTP, server, database — lại với nhau.',
   lessons: [
+    /* ─────────────────── 10.0 slide bài giảng ─────────────────── */
+    {
+      title: '10.0 — Lecture slides: thinking & debugging in 12 slides|||10.0 — Slide bài giảng: tư duy & gỡ lỗi trong 12 slide',
+      slug: 'wf-10-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Chia nhỏ vấn đề, đọc lỗi, vòng lặp gỡ lỗi, quy trình Git và lộ trình học tiếp.',
+      content: `
+<div class="ml-en"><h2>📑 Lecture slides: thinking & debugging in 12 slides</h2>
+<p>No new syntax in this deck — it is about how to work. Slides 5 and 6 (reading an error, the debugging loop) are the ones worth rereading whenever you feel stuck.</p>
+<p>Two ways to use it: skim before the chapter to see what is coming, then come back afterwards to revise. If a slide still does not make sense, the lesson that teaches it is right below.</p></div>
+<div class="ml-vi"><h2>📑 Slide bài giảng: tư duy & gỡ lỗi trong 12 slide</h2>
+<p>Deck này không có cú pháp mới — nó nói về cách làm việc. Slide 5 và 6 (đọc lỗi, vòng lặp gỡ lỗi) đáng đọc lại mỗi khi bạn thấy bí.</p>
+<p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
+${gallery('wf-think', [
+  [1, "Bìa"],
+  [2, "Nội dung chương"],
+  [3, "Chia nhỏ — kỹ năng quan trọng nhất"],
+  [4, "Bốn bước trước khi gõ dòng nào"],
+  [5, "Đọc thông báo lỗi — từ trên xuống ⭐"],
+  [6, "Vòng lặp gỡ lỗi — năm bước"],
+  [7, "console.log cho ra thông tin, không phải tiếng ồn"],
+  [8, "Rubber duck — nói thành lời"],
+  [9, "Quy trình Git thật"],
+  [10, "Viết lời nhắn commit"],
+  [11, "Bức tranh full-stack"],
+  [12, "Học tiếp gì sau khoá này"],
+])}
+`,
+    },
+
     /* ─────────────────────────── 10.1 ─────────────────────────── */
     {
       title: '10.1 — Thinking like a programmer|||10.1 — Tư duy như một lập trình viên',

@@ -5,10 +5,46 @@
  * trong code escape thành \${. Câu "in ra gì" (thứ tự event loop) đã CHẠY THẬT.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 5 — Asynchronous JavaScript & modules|||Chương 5 — JavaScript bất đồng bộ & modules',
   description: 'Web đầy những việc phải chờ: tải dữ liệu từ server, đọc file, hẹn giờ. JavaScript xử lý chúng mà không "đứng hình" nhờ mô hình bất đồng bộ. Học event loop, Promise, async/await, gọi API bằng fetch, và cách chia code thành module với import/export — đúng những thứ Node.js và React dựa vào.',
   lessons: [
+    /* ─────────────────────── 5.0 slide bài giảng ─────────────────────── */
+    {
+      title: '5.0 — Lecture slides: the whole chapter in 15 slides|||5.0 — Slide bài giảng: cả chương trong 15 slide',
+      slug: 'wf-5-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Bộ slide bài giảng chương 5 — event loop, Promise, async/await, fetch và ES Modules. Mã tô màu như VS Code, đánh dấu ⭐ phần sẽ gặp lại ở FER202.',
+      content: `
+<div class="ml-en"><h2>📑 Chapter 5 in 15 slides</h2>
+<p>This is the hardest chapter of the course, so use the deck twice: skim it before you start so the vocabulary is familiar, then come back after the lessons to check that each slide now makes sense on its own.</p>
+<p>Slide 4 (the event loop) and slide 8 (<code>res.ok</code>) are the two that people skip and then lose an afternoon to. Give them an extra minute.</p></div>
+<div class="ml-vi"><h2>📑 Chương 5 trong 15 slide</h2>
+<p>Đây là chương khó nhất của khoá, nên dùng bộ slide này hai lần: lướt trước khi học để quen từ ngữ, rồi quay lại sau khi học xong để kiểm xem mỗi slide giờ tự nó đã dễ hiểu chưa.</p>
+<p>Slide 4 (event loop) và slide 8 (<code>res.ok</code>) là hai chỗ người ta hay bỏ qua rồi mất cả buổi chiều vì nó. Dành thêm một phút cho chúng.</p></div>
+${gallery('wf-js2', [
+  [1, 'Bìa chương'],
+  [2, 'Nội dung chương — bảy phần'],
+  [3, 'JavaScript chỉ có MỘT luồng — vì sao trang bị đứng hình'],
+  [4, 'Event loop: call stack · Web APIs · hàng đợi'],
+  [5, 'Callback và "callback hell"'],
+  [6, 'Promise — ba trạng thái, .then / .catch / .finally'],
+  [7, 'async / await — viết bất đồng bộ như đồng bộ ⭐'],
+  [8, 'try / catch — và bẫy res.ok của fetch'],
+  [9, 'fetch — GET và POST JSON ⭐⭐'],
+  [10, 'Promise.all — chạy song song thay vì tuần tự'],
+  [11, 'ES Modules: export / import · default vs named ⭐'],
+  [12, 'Bốn bẫy bất đồng bộ hay gặp'],
+  [13, 'Bảng đối chiếu: chương 5 dùng ở đâu trong FER202'],
+  [14, 'Tự luyện — bốn bài với API công khai'],
+  [15, 'Học thêm ở đâu'],
+])}
+`,
+    },
+
     /* ─────────────────────────── 5.1 ─────────────────────────── */
     {
       title: '5.1 — Synchronous vs asynchronous: the event loop|||5.1 — Đồng bộ vs bất đồng bộ: event loop',

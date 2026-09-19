@@ -5,10 +5,53 @@
  * Mọi câu "in ra gì" đã CHẠY THẬT bằng node để lấy đáp án. Quiz có field content.
  */
 
+import { gallery } from './_slides.mjs';
+
 export default {
   title: 'Chapter 4 — JavaScript fundamentals|||Chương 4 — JavaScript nền tảng',
   description: 'HTML là cấu trúc, CSS là vẻ ngoài, còn JavaScript là hành vi: nó khiến trang phản ứng, tính toán, đổi nội dung theo thời gian thực. Học biến và kiểu dữ liệu, điều kiện và vòng lặp, hàm, mảng và đối tượng, rồi dùng DOM để biến HTML tĩnh thành trang tương tác — nền cho cả Node.js lẫn React.',
   lessons: [
+    /* ─────────────────────── 4.0 slide bài giảng ─────────────────────── */
+    {
+      title: '4.0 — Lecture slides: the whole chapter in 22 slides|||4.0 — Slide bài giảng: cả chương trong 22 slide',
+      slug: 'wf-4-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Bộ slide bài giảng chương 4 — xem trước để nắm bản đồ cả chương, hoặc xem lại để ôn nhanh. Mã nguồn tô màu như trong VS Code, có đánh dấu ⭐ những kiến thức sẽ gặp lại ở môn FER202.',
+      content: `
+<div class="ml-en"><h2>📑 Chapter 4 in 22 slides</h2>
+<p>Two good ways to use this deck. <strong>Before the chapter</strong> — scroll through once to see the map: what is coming and in what order. <strong>After the chapter</strong> — come back and use it to revise; if a slide does not make sense yet, the lesson that covers it is right below.</p>
+<p>The <strong>⭐ FER202</strong> badge marks the things you will meet again in the React course — arrow functions, <code>.map()</code>, destructuring and spread. Those are the ones to make sure you really own.</p></div>
+<div class="ml-vi"><h2>📑 Chương 4 trong 22 slide</h2>
+<p>Có hai cách dùng bộ slide này. <strong>Trước khi học chương</strong> — lướt một lượt để thấy bản đồ: sắp học gì, theo thứ tự nào. <strong>Sau khi học xong</strong> — quay lại ôn; slide nào chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p>
+<p>Nhãn <strong>⭐ FER202</strong> đánh dấu những thứ bạn sẽ gặp lại ở môn React — arrow function, <code>.map()</code>, destructuring và spread. Đó là những chỗ cần nắm chắc nhất.</p></div>
+${gallery('wf-js1', [
+  [1, 'Bìa chương'],
+  [2, 'Nội dung chương — tám phần'],
+  [3, 'JavaScript chạy ở đâu: trình duyệt và Node.js'],
+  [4, 'Biến — const, let, và vì sao tránh var'],
+  [5, 'const khoá CÁI TÊN, không khoá giá trị'],
+  [6, 'Sáu kiểu dữ liệu gặp đầu tiên · typeof'],
+  [7, 'Chuỗi và template literal ⭐'],
+  [8, 'Bẫy: dấu + vừa cộng vừa nối chuỗi'],
+  [9, 'So sánh — dùng === chứ không dùng =='],
+  [10, 'Điều kiện: if / else · ba ngôi · ?? · ?. ⭐'],
+  [11, 'Vòng lặp: for · for...of · while'],
+  [12, 'Hàm — tham số, return, giá trị mặc định'],
+  [13, 'Arrow function — ba cách viết một hàm ⭐'],
+  [14, 'Mảng — chỉ số từ 0, length, push'],
+  [15, 'map / filter / find / some / every ⭐⭐'],
+  [16, 'reduce · sort và hai cái bẫy của sort'],
+  [17, 'Object · destructuring · spread ⭐'],
+  [18, 'DOM — querySelector và addEventListener'],
+  [19, 'Bốn lỗi người mới hay gặp'],
+  [20, 'Bảng đối chiếu: chương 4 dùng ở đâu trong FER202'],
+  [21, 'Tự luyện — năm bài làm ngay trong Console'],
+  [22, 'Học thêm ở đâu'],
+])}
+`,
+    },
+
     /* ─────────────────────────── 4.1 ─────────────────────────── */
     {
       title: '4.1 — Variables and data types|||4.1 — Biến và kiểu dữ liệu',

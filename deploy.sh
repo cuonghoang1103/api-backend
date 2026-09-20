@@ -976,6 +976,7 @@ for route in \
     video-hoc/danh-muc \
     video-hoc/thu-vien \
     video-hoc/cua-toi \
+    xuong-3d/bo-phan \
     gifs \
     voice-mini/voices \
     messages/threads \

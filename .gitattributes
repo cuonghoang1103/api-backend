@@ -1,0 +1,12 @@
+
+# ── Nhận dạng ngôn ngữ (github/linguist) ────────────────────────────────
+# GitHub đang gắn kho này là "JavaScript" vì `content/` chứa ~2,2 TRIỆU dòng
+# dữ liệu bài giảng sinh ra dưới dạng .mjs — nhiều gấp ~3 lần toàn bộ mã
+# viết tay. Đó là DỮ LIỆU, không phải mã, nên đánh dấu để linguist bỏ qua và
+# thanh ngôn ngữ phản ánh đúng thứ thật sự được viết (TypeScript).
+content/**              linguist-generated=true
+prisma/migrations/**    linguist-generated=true
+frontend/public/**      linguist-vendored=true
+desktop/dist/**         linguist-generated=true
+*.lock                  linguist-generated=true
+package-lock.json       linguist-generated=true

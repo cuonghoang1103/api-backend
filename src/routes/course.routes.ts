@@ -3136,6 +3136,12 @@ router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response
       refresh: req.body?.refresh === true,
       quizContext: Array.isArray(req.body?.quizContext) ? req.body.quizContext : undefined,
       images: docAnhDan(req.body?.images),
+      // Đường LÙI cũng phải nhận bối cảnh phòng video. Chỉ gắn ở đường
+      // stream thì lúc SSE hỏng, gia sư đột nhiên "quên" mất video — người
+      // dùng thấy câu trả lời chung chung mà không hiểu vì sao.
+      phongVideo: req.body?.phongVideo === true,
+      phuDeGiay: Number.isFinite(Number(req.body?.phuDeGiay))
+        ? Math.max(0, Math.floor(Number(req.body.phuDeGiay))) : undefined,
     });
     res.json({ success: true, data: out });
     // Cả đường LÙI (không stream) cũng phải lưu. Chỉ gắn ở đường stream thì
@@ -3178,6 +3184,12 @@ router.post('/lessons/:id(\\d+)/ai/ask-stream', authenticate, async (req, res) =
         refresh: req.body?.refresh === true,
         quizContext: Array.isArray(req.body?.quizContext) ? req.body.quizContext : undefined,
         images: docAnhDan(req.body?.images),
+        // PHÒNG HỌC VIDEO: gia sư được nạp phụ đề của chính video đang xem,
+        // và `phuDeGiay` cho biết người học đang ở giây nào để câu "giải
+        // thích đoạn này" trả lời đúng chỗ thay vì đoán.
+        phongVideo: req.body?.phongVideo === true,
+        phuDeGiay: Number.isFinite(Number(req.body?.phuDeGiay))
+          ? Math.max(0, Math.floor(Number(req.body.phuDeGiay))) : undefined,
       },
       (delta) => send({ type: 'delta', text: delta }),
     );

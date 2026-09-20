@@ -209,6 +209,13 @@ const NHAN_NGU_CANH = {
         trong: '(this lesson is mostly video — little or no text content)' },
 } as const;
 
+/** Trần ký tự cho phụ đề đưa vào prompt. Một bài giảng dài có tới 900 câu
+ *  (~45.000 ký tự); nhét hết thì vừa đắt vừa loãng, mà phần người học đang
+ *  hỏi thường nằm quanh chỗ họ vừa nghe. */
+const TRAN_PHU_DE = 14_000;
+/** Bán kính cửa sổ quanh mốc đang xem, tính bằng giây. */
+const BAN_KINH_GIAY = 100;
+
 /** Nhắc lại yêu cầu ngôn ngữ ngay đầu lượt NGƯỜI DÙNG — chỗ gần chỗ sinh chữ
  *  nhất. Chỉ cần khi đòi tiếng Anh: mặc định vốn đã là tiếng Việt. */
 const nhacNgonNgu = (english?: boolean): string =>
@@ -280,6 +287,18 @@ export interface TutorAskOpts {
    * Xem `khongDungCache()`.
    */
   images?: AnhHoi[];
+  /**
+   * Giây người học ĐANG XEM trong video. Có nó thì gia sư được đưa nguyên
+   * đoạn phụ đề quanh mốc đó, nên câu "giải thích đoạn này" trả lời đúng
+   * chỗ thay vì đoán.
+   */
+  phuDeGiay?: number;
+  /**
+   * `true` ⇒ đang ở PHÒNG HỌC VIDEO. Gia sư đổi giọng: bám vào lời giảng
+   * trong video, và được phép giảng sâu kiến thức chuyên môn chứ không chỉ
+   * ngôn ngữ.
+   */
+  phongVideo?: boolean;
 }
 
 /** Có ảnh thì cache phải đứng ngoài — xem chú thích ở `images`. */
@@ -328,6 +347,80 @@ function hoiKemAnh(chu: string, anh?: AnhHoi[]): string | ClaudeContentBlock[] {
 }
 
 // Dựng system + messages một chỗ để bản STREAM và bản thường luôn giống hệt nhau.
+/**
+ * Khối PHỤ ĐỀ VIDEO đưa vào bối cảnh gia sư.
+ *
+ * Đây là thứ khiến "hỏi về video" ở đây hơn hẳn trợ lý của YouTube: ta có
+ * NGUYÊN LỜI GIẢNG đã ghi kèm mốc thời gian, nên gia sư trả lời theo cái
+ * người giảng thật sự nói, chứ không suy từ tiêu đề và mô tả.
+ *
+ * Hai phần: một cửa sổ quanh chỗ đang xem (đầy đủ, để "giải thích đoạn
+ * này" trúng đích) và phần còn lại của bài (rút gọn, để biết mạch chung).
+ */
+async function khoiPhuDe(lessonId: number, giay?: number): Promise<string> {
+  const t = await prisma.lessonTranscript.findUnique({
+    where: { lessonId },
+    select: { cues: true, soCau: true },
+  });
+  const cues = (t?.cues as Array<{ t: number; en: string }> | undefined) ?? [];
+  if (!cues.length) return '';
+
+  const moc = (g: number) => `${Math.floor(g / 60)}:${String(Math.floor(g % 60)).padStart(2, '0')}`;
+  const dong = (c: { t: number; en: string }) => `[${moc(c.t)}] ${c.en}`;
+
+  let ra = '';
+  if (typeof giay === 'number' && giay >= 0) {
+    const gan = cues.filter((c) => Math.abs(c.t - giay) <= BAN_KINH_GIAY);
+    if (gan.length) {
+      ra += `\n\nĐOẠN NGƯỜI HỌC ĐANG XEM (quanh mốc ${moc(giay)}):\n`
+          + gan.map(dong).join('\n');
+    }
+  }
+
+  const toanBai = cues.map(dong).join('\n');
+  const conLai = Math.max(2000, TRAN_PHU_DE - ra.length);
+  ra += `\n\nPHỤ ĐỀ TOÀN VIDEO (${t?.soCau ?? cues.length} câu`
+      + (toanBai.length > conLai ? ', đã cắt bớt' : '') + `):\n`
+      + (toanBai.length > conLai ? toanBai.slice(0, conLai) + '\n…' : toanBai);
+  return ra;
+}
+
+/** Phần prompt THÊM khi ở phòng học video. */
+const THEM_PHONG_VIDEO = `
+
+YOU ARE NOW IN THE VIDEO LEARNING ROOM. The student is watching the lecture video for this
+lesson and the full transcript is given above, with [mm:ss] timestamps.
+
+- Ground every answer in what the speaker ACTUALLY SAYS. Quote the transcript and cite the
+  timestamp, e.g. "at [12:40] he says …". Never invent content that is not in the transcript.
+- The student is learning BOTH the subject knowledge AND English from this video. When a
+  technical term appears, give the English term, the Vietnamese meaning, and one plain
+  sentence of what it means — in that order.
+- If the student asks about "this part" / "đoạn này", answer about the section marked
+  "ĐOẠN NGƯỜI HỌC ĐANG XEM" above.
+- Prefer a DIAGRAM when the content is a process, an architecture, a comparison or a
+  hierarchy. Use a fenced code block whose language tag is: mermaid. Keep node labels short.
+- When the answer has steps or parts, use a numbered list and a short bold heading per part.
+
+TIMESTAMPS — always write them as [mm:ss] in square brackets, taken from the transcript.
+The app turns every [mm:ss] into a button that jumps the video there, so a timestamp that
+is only approximate sends the student to the wrong place. Use the timestamp of the cue the
+statement actually comes from.
+
+When the student asks for a SUMMARY / "tóm tắt", answer in exactly this shape:
+
+  One short paragraph saying what the whole video is about.
+
+  **Các phần trong video**
+  - **[mm:ss - mm:ss] Tên phần** — 1-2 câu nói phần đó dạy gì, nêu thuật ngữ chính.
+  - (tiếp tục cho từng phần; chia theo Ý, thường 4-8 phần, không chia đều máy móc)
+
+  **Thuật ngữ cần nhớ**
+  - **term** (nghĩa tiếng Việt) — một câu giải thích.
+
+  **Điều quan trọng nhất**
+  Một đoạn ngắn: thứ người học phải nhớ sau khi xem xong.`;
+
 export async function buildTutorCall(
   lessonId: number,
   opts: TutorAskOpts,
@@ -352,6 +445,9 @@ export async function buildTutorCall(
   const cauQuiz = opts.quizContext?.length ? opts.quizContext
     : lesson.lessonType === 'QUIZ' ? quizTuDuLieuBai(lesson.details?.quizData, english) : undefined;
   const quizBlock = buildQuizBlock(cauQuiz);
+  // Phụ đề chỉ nạp khi ĐANG Ở phòng video: bài chữ không cần, mà nạp thừa
+  // thì mỗi câu hỏi đắt thêm hàng nghìn token cho không.
+  const phuDe = opts.phongVideo ? await khoiPhuDe(lessonId, opts.phuDeGiay) : '';
   const messages: TutorMessage[] = [
     {
       role: 'user',
@@ -359,13 +455,15 @@ export async function buildTutorCall(
         `THE LESSON\n${heading}\n${L.bai}: ${lesson.title}\n\n` +
         `${L.noiDung}\n${vanBanBai(lesson.content, english) || L.trong}` +
         notes +
+        phuDe +
         (quizBlock ? `\n\n${quizBlock}` : ''),
     },
     { role: 'assistant', content: MOI_TRO_LY[langOf(opts.english)] },
     ...(opts.history || []).slice(-MAX_HISTORY),
     { role: 'user', content: hoiKemAnh(nhacNgonNgu(opts.english) + question, opts.images) },
   ];
-  return { system: tutorSystem(opts.english), messages };
+  const system = tutorSystem(opts.english) + (opts.phongVideo ? THEM_PHONG_VIDEO : '');
+  return { system, messages };
 }
 
 /** Trả lời một câu (không stream) — đường lùi khi SSE hỏng. Có cache cho chip. */

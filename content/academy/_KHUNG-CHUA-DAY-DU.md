@@ -38,6 +38,13 @@ ngay, phần giảng sâu bổ sung dần sau.
 |---|---|---|---|---|
 | **PFP191** | Programming Fundamentals with Python | 20/09/2026 | 12 mục / 70 bài | Mục 0 + Chương 1 (buổi 1–9) đầy đủ, 50 khối Python chạy thật · Chương 2–10 chỉ khung · 4 giáo trình đều miễn phí · chưa có video |
 | **SSA101** | Academic skills — Kỹ năng học thuật | 20/09/2026 | 11 mục / 30 bài | Mục 0 + Chương 1 (buổi 1–12) đầy đủ · Chương 2–10 chỉ khung · 6 giáo trình đều miễn phí, đã dựng thẻ sách · chưa có video |
+| **DTG102** | Digital Graphic Design — Thiết kế đồ hoạ số | 20/09/2026 | 10 mục / 40 bài | Mục 0 + Chương 1 (buổi 1–10, Illustrator cơ bản) đầy đủ · Chương 2–9 chỉ khung · môn KHÔNG có thi cuối kỳ, 100% điểm quá trình · sinh viên phải dùng tài khoản Adobe cá nhân · chưa có video |
+| **VCM202** | Visual Communication — Truyền thông thị giác | 20/09/2026 | 11 mục / 30 bài | Mục 0 + Chương 1 (buổi 1–6) đầy đủ · Chương 2–10 chỉ khung · môn KHÔNG có thi cuối kỳ · 5 assignment là toàn bộ điểm · 4 giáo trình đều sách giấy không link · chưa có video |
+| **EEI101** | Introduction to Electrical–Electronics Engineering | 20/09/2026 | 15 mục / 67 bài | Mục 0 + Chương 1 (buổi 1–9) đầy đủ, mọi phép tính đã kiểm bằng `python3` · Chương 2–13 chỉ khung · giáo trình chính là bản **3rd (2006)**, đừng mua nhầm bản 5th · link sách là books24x7 **trả phí** · chưa có video |
+| **SDI101m** | Introduction to Semiconductor Devices | 20/09/2026 | 13 mục / 67 bài | Mục 0 + Chương 1 (buổi 1–11, vật lý điện từ) đầy đủ, 160 giá trị đã kiểm bằng `python3` · Chương 2–11 chỉ khung · **BA giáo trình chính** (Streetman + 2 khoá Coursera KAIST) · môn chia hai nửa: buổi 1–21 vật lý, 22–60 bán dẫn · chưa có video |
+| **ASI101** | Introduction to Automotive System — Nhập môn ô tô | 20/09/2026 | 16 mục / 51 bài | Mục 0 + Chương 1 (buổi 1–6) đầy đủ · Chương 2–15 chỉ khung · ⚠️ giáo trình chính là **sách Ấn Độ**, phần pháp lý CMVR/MVA KHÔNG phải luật Việt Nam · syllabus mới nhất (QĐ 1028 ngày 21/08/2026) · chưa có video |
+| **DRS102** | Drawing – Form, Still-life — Hình hoạ: vẽ khối, tĩnh vật | 20/09/2026 | 12 mục / 30 bài | Mục 0 + Chương 1 (buổi 1–4, 13–14) đầy đủ · Chương 2–11 chỉ khung · môn học **trong xưởng vẽ**, nội dung web chỉ hỗ trợ lý thuyết + tự luyện · KHÔNG có thi cuối kỳ, cặp Lab 9-10 chiếm 30% · học TRƯỚC DRP101 · chưa có video |
+| **DRP101** | Drawing plaster stature – portrait — Vẽ đầu tượng, chân dung | 20/09/2026 | 7 mục / 25 bài | Mục 0 + Chương 1 (buổi 1–12, Unit 1) đầy đủ · Chương 2–6 chỉ khung · môn có **người mẫu thật**, web không thay được buổi vẽ · KHÔNG có thi cuối kỳ · chỉ MỘT giáo trình (Andrew Loomis) · chưa có video |
 
 ## Môn ĐÃ đầy đủ (không nằm trong diện còn nợ)
 
@@ -47,6 +54,37 @@ ngay, phần giảng sâu bổ sung dần sau.
 | MAE101 | slide tự thiết kế + giảng chi tiết + video |
 | PRF193 | bài giảng đầy đủ 60 buổi + 470 khối code (chưa có slide ảnh) |
 | SWR302 · SWT301 · SWP391 · FER202 | đã có bài + video |
+
+## Việc kế tiếp user đã chốt (20/09/2026)
+
+Xong khung Kỳ 1 thì chuyển sang **làm FULL** (slide từng ảnh + giảng chi tiết +
+video, chuẩn như CEA201/CSI106) cho 5 môn user tự chọn, theo thứ tự ưu tiên:
+
+1. **`NWC204`** — Mạng máy tính. ⭐ User xếp **QUAN TRỌNG NHẤT**, cần hiểu trọn
+   vẹn để tự SSH, deploy, xử lý cổng mạng mà không cần hỏi ai.
+   ⚠️ Dùng **NWC204** (sylID 14520, QĐ 968 ngày 07/08/2026) chứ KHÔNG dùng
+   `NWC203c` — đã đo: NWC203c chỉ 12 buổi tự học Coursera, không slide, không
+   giáo trình; NWC204 là 60 buổi CCNA ITN có slide + 36 video + 24 lab + 31 bài
+   Packet Tracer.
+   ⚠️ Phải **bù Cisco Module 5 (hệ nhị phân/thập lục phân)** — trường bỏ hẳn
+   module này nhưng buổi 30–33 chia subnet lại bắt buộc phải biết.
+   ⚠️ Phải thêm **lớp "thực chiến" ngoài giáo trình**: `sshd_config` + xác thực
+   bằng khoá, `ssh.socket` của systemd, đường hầm/ProxyJump, `ufw`/`iptables`,
+   NAT/port-forward trên Linux, nginx + TLS, mạng Docker. Không môn nào của
+   FPTU dạy những phần này (NWC303 và OSP201 chỉ phủ một phần).
+2. **`DBI202`** — Cơ sở dữ liệu (sylID 12039). ⚠️ Trường **nhảy từ Chapter 4
+   sang Chapter 6** của Ullman, bỏ Chapter 5.
+3. **`CSD201`** — Cấu trúc dữ liệu & giải thuật (sylID 10368). Có 120 câu hỏi
+   kiến tạo (2 câu/buổi) — dùng làm xương sống câu hỏi.
+4. **`SDN302`** — Server-side Node.js (sylID 12175). ⚠️ CLO8 ghi "EJB" nhưng
+   môn dạy **EJS**; buổi 35–36 bảo dùng Multer để TẢI XUỐNG (sai); buổi 48 dạy
+   Heroku (đã bỏ gói miễn phí 11/2022).
+5. **`WED201c`** — Thiết kế web (sylID 13172). ⚠️ Cũng là môn **tự học Coursera**
+   12 buổi (University of Michigan, 5 MOOC) ⇒ nội dung ta viết sẽ là bài giảng
+   tiếng Việt DUY NHẤT, phải viết đủ để học được mà không cần mở Coursera.
+   Cách tính điểm thật nằm ở ô **Note**: `FR = min(10, (TE+PE)/2 + Bonus)`.
+
+Syllabus của cả 5 môn đã thu xong, nằm ở `content/academy/_syllabus-flm/`.
 
 ## Liên quan
 

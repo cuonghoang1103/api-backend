@@ -6,6 +6,41 @@
 
 ---
 
+## 0. 🔴 PHIÊN SAU BẮT ĐẦU TỪ ĐÂY (chốt 21/09/2026)
+
+**Hai việc còn treo, làm theo đúng thứ tự này:**
+
+1. **HỎI NGƯỜI DÙNG CÓ DEPLOY KHÔNG.** Đang có **2 commit ở máy chưa push**:
+   `1f6aba5e` (Chương 5) và `8170093b` (Chương 6). Nhớ nói thẳng trước khi chạy:
+   **`bash deploy-nha.sh` TỰ PUSH lên `origin/main` ở cuối** — deploy và push là
+   một việc, không có chuyện đẩy lên production rồi chờ user test mới push.
+   Chạy nền thì phải `echo y | bash deploy-nha.sh`.
+   Sau khi deploy xong, **ĐẾM BẰNG API/DB, đừng tin log deploy**: môn phải ra
+   **8 mục / 37 bài**, và 53 ảnh mới (`nwc204-ch05/` 27 + `nwc204-ch06/` 26)
+   phải trả 200. Xem bài học `feedback_log_xanh_khong_chung_minh_du_lieu_da_vao`.
+2. **Làm tiếp Chương 7 — Network Layer (buổi 21–23, Cisco Module 8).**
+   Buổi 21: 7.1 Network Layer Characteristics, 7.2 IPv4 Packet. Buổi 22: bảng
+   câu hỏi BỎ TRỐNG (tự soạn câu ★). Buổi 23: Review. Câu hỏi kiến tạo có sẵn:
+   **CQ7.3 ở buổi 21** — nhưng nội dung nó hỏi là *"How does Ethernet works in a
+   switched network?"*, tức thuộc chương 6 và **đã trả lời trong bài 6.3**; ở
+   chương 7 chỉ cần nhắc lại một dòng rằng nó đã được trả lời ở đâu.
+
+**Quy trình đã chạy trơn cho Ch.5 và Ch.6, cứ lặp lại y hệt** (chi tiết ở mục 3):
+viết deck → `_kiem-tran-slide.mjs` → render → **mở 4–5 ảnh ra NHÌN** → upload →
+**so byte với CDN** → viết bài → `node --check` → audit riêng cho môn → commit.
+
+**Yêu cầu của người dùng, chốt 21/09, áp dụng cho mọi chương còn lại:**
+- Bám **100% giáo trình FLM trước**, rồi **bổ sung thêm cho sâu** để dùng được
+  trong công việc — và **mọi phần bổ sung phải đánh dấu ★**.
+- Slide **ít chữ**, thiên sơ đồ; phần giảng dài nằm ở dưới ảnh.
+- Code trong bài phải **có nhãn `language-`** (tô màu VS Code + nút Sao chép);
+  sơ đồ phải là `<pre><code class="language-mermaid">` và **luôn tô màu**.
+- **Tối đa 3 subagent** một lúc (siết lại từ 10, để tiết kiệm token). Opus 5 cho
+  việc cần chính xác; Sonnet 5 cho việc thường. Ch.5 và Ch.6 làm **không dùng
+  agent nào** — soạn bài liên tục thì tung agent chỉ tốn thêm token đọc lại file.
+
+---
+
 ## 1. ĐANG CÓ GÌ TRÊN PRODUCTION (đã kiểm bằng DB thật, không tin log deploy)
 
 ### Kỳ 1 — xong 9/9 môn khung, **419 bài**

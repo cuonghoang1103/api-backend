@@ -116,7 +116,7 @@ Thuyết trình + hỏi  Tuần 11    15%</code></pre>
 <div class="callout"><span class="badge">Nguyên tắc vàng</span> Chủ đề là <em>của bạn</em>, nhưng tiêu chuẩn thì cố định: chọn thứ làm xong được, trích dẫn nguồn, và chứng minh nó chạy.</div>`,
   ]]);
 
-const c1 = doc('as-gra-ele-1-1-what-elective', '1.1 — What an elective is &amp; choosing by career|||1.1 — Học phần tự chọn là gì &amp; chọn theo nghề',
+const c1 = doc('as-gra-ele-1-1-what-elective', '1.1 — What an elective is & choosing by career|||1.1 — Học phần tự chọn là gì & chọn theo nghề',
   'Phân biệt học phần tự chọn với môn bắt buộc; tiêu chí chọn chủ đề (khớp định hướng nghề, khả thi, có tài liệu, đo được); ma trận chủ đề ↔ nghề.',
   [[
     `<span class="eyebrow">AS_GRA_ELE · Chapter 1 · Lesson 1.1</span>
@@ -161,7 +161,7 @@ Nhúng RTOS                Kỹ sư firmware / thời gian thực</code></pre>
 <div class="callout"><span class="badge">Tránh</span> Chủ đề quá rộng ("làm xe tự hành") hoặc không có công cụ miễn phí. Hãy thu hẹp: "hiện thực một AUTOSAR SWC đọc một tín hiệu CAN" hơn hẳn "làm chủ AUTOSAR".</div>`,
   ]]);
 
-const c1q = quiz('as-gra-ele-quiz-1', 'Quiz 1 — Elective &amp; choosing|||Quiz 1 — Tự chọn &amp; cách chọn', [
+const c1q = quiz('as-gra-ele-quiz-1', 'Quiz 1 — Elective & choosing|||Quiz 1 — Tự chọn & cách chọn', [
   { id: 'q1', question: 'Điểm khác biệt cốt lõi của học phần tự chọn tốt nghiệp so với môn bắt buộc?', options: ['Có nhiều bài giảng cố định hơn', 'Bạn tự chọn chủ đề và tự học có hướng dẫn', 'Không cần nộp sản phẩm nào', 'Không được trích dẫn tài liệu'], correctIndex: 1, explanation: 'Học phần tự chọn không có giáo trình cố định — bạn chọn chủ đề và tự học dưới sự hướng dẫn của giảng viên.' },
   { id: 'q2', question: 'Tiêu chí nào KHÔNG nên dùng khi chọn chủ đề?', options: ['Khớp định hướng nghề', 'Khả thi trong một kỳ', 'Chủ đề càng rộng và mơ hồ càng tốt', 'Có tài liệu học miễn phí'], correctIndex: 2, explanation: 'Chủ đề quá rộng, mơ hồ khiến không thể làm xong; nên thu hẹp thành mục tiêu đo được.' },
   { id: 'q3', question: 'Chủ đề nào hợp nhất cho vị trí "kỹ sư an ninh ô tô"?', options: ['ISO 26262 (an toàn chức năng)', 'ISO/SAE 21434 (an ninh mạng)', 'Model-based design Simulink', 'AUTOSAR Classic'], correctIndex: 1, explanation: 'ISO/SAE 21434 là chuẩn an ninh mạng cho xe, khớp trực tiếp với vị trí kỹ sư an ninh ô tô.' },
@@ -222,7 +222,7 @@ const c2q = quiz('as-gra-ele-quiz-2', 'Quiz 2 — Topic map|||Quiz 2 — Bản �
   { id: 'q3', question: 'Một chủ đề "nặng lý thuyết, nhẹ công sức làm" điển hình là?', options: ['Demo SOME/IP trên AUTOSAR Adaptive', 'Phân tích nguy cơ theo ISO 26262', 'Phát hiện làn đường bằng OpenCV', 'Bộ điều khiển Simulink có sinh mã'], correctIndex: 1, explanation: 'Phân tích nguy cơ/TARA thiên về tài liệu chặt chẽ, ít cần dựng sản phẩm chạy được.' },
 ]);
 
-const c3 = doc('as-gra-ele-3-1-tools', '3.1 — Tools &amp; environment|||3.1 — Công cụ &amp; môi trường',
+const c3 = doc('as-gra-ele-3-1-tools', '3.1 — Tools & environment|||3.1 — Công cụ & môi trường',
   'CANoe/CANalyzer (mô phỏng bus), MATLAB/Simulink (model-based), target hardware & HIL; chọn công cụ theo chủ đề, dựng môi trường tái lập được.',
   [[
     `<span class="eyebrow">AS_GRA_ELE · Chapter 3 · Lesson 3.1</span>
@@ -267,7 +267,7 @@ const c3q = quiz('as-gra-ele-quiz-3', 'Quiz 3 — Tools|||Quiz 3 — Công cụ'
   { id: 'q3', question: 'Vì sao cần ghi lại phiên bản, license và các bước cài trong README?', options: ['Để tăng dung lượng báo cáo', 'Để môi trường tái lập được, giúp giảng viên dựng lại', 'Vì bắt buộc phải mua license đắt', 'Không cần thiết'], correctIndex: 1, explanation: 'Môi trường tái lập được là một phần của điểm số; README giúp người khác dựng lại đúng môi trường của bạn.' },
 ]);
 
-const c4 = doc('as-gra-ele-4-1-learning-contract', '4.1 — Self-study method &amp; learning contract|||4.1 — Phương pháp tự học &amp; learning contract',
+const c4 = doc('as-gra-ele-4-1-learning-contract', '4.1 — Self-study method & learning contract|||4.1 — Phương pháp tự học & learning contract',
   'Kỹ thuật tự học (chia nhỏ, mục tiêu SMART, sổ nhật ký học); learning contract (mục tiêu, phạm vi, cột mốc, tiêu chí hoàn thành) ký với giảng viên.',
   [[
     `<span class="eyebrow">AS_GRA_ELE · Chapter 4 · Lesson 4.1</span>
@@ -412,7 +412,7 @@ const c6q = quiz('as-gra-ele-quiz-6', 'Quiz 6 — Mini-project|||Quiz 6 — Mini
   { id: 'q3', question: 'Vì sao phải ghi kết quả trung thực, kể cả thất bại?', options: ['Để báo cáo đẹp hơn khi giấu lỗi', 'Vì tính chặt chẽ khoa học và tái lập là một phần điểm số', 'Vì thất bại không quan trọng', 'Để tăng số trang'], correctIndex: 1, explanation: 'Ghi trung thực cả thất bại thể hiện tính chặt chẽ, giúp người khác tái lập và học từ kết quả thật.' },
 ]);
 
-const c7 = doc('as-gra-ele-7-1-report', '7.1 — Writing the report &amp; documentation|||7.1 — Viết báo cáo &amp; tài liệu hoá',
+const c7 = doc('as-gra-ele-7-1-report', '7.1 — Writing the report & documentation|||7.1 — Viết báo cáo & tài liệu hoá',
   'Cấu trúc báo cáo (tóm tắt, giới thiệu, phương pháp, kết quả, bàn luận, kết luận, tham khảo); văn phong kỹ thuật; danh sách kiểm trước khi nộp.',
   [[
     `<span class="eyebrow">AS_GRA_ELE · Chapter 7 · Lesson 7.1</span>
@@ -473,7 +473,7 @@ const c7q = quiz('as-gra-ele-quiz-7', 'Quiz 7 — Report|||Quiz 7 — Báo cáo'
   { id: 'q3', question: 'Người chấm thường đánh giá cao điều gì hơn?', options: ['Một khẳng định bóng bẩy không bảo vệ được', 'Một câu trung thực nêu rõ hạn chế và lý do', 'Báo cáo dài nhất', 'Giấu hết mọi lỗi'], correctIndex: 1, explanation: 'Trung thực nêu hạn chế thể hiện tư duy kỹ thuật chín chắn và được đánh giá cao hơn.' },
 ]);
 
-const c8 = doc('as-gra-ele-8-1-defense-career', '8.1 — Presenting, defending &amp; career direction|||8.1 — Trình bày, phản biện &amp; định hướng nghề',
+const c8 = doc('as-gra-ele-8-1-defense-career', '8.1 — Presenting, defending & career direction|||8.1 — Trình bày, phản biện & định hướng nghề',
   'Chuẩn bị thuyết trình & demo; trả lời câu hỏi phản biện; chứng chỉ ngành (AUTOSAR, ISO, Coursera) & định hướng nghề phần mềm ô tô.',
   [[
     `<span class="eyebrow">AS_GRA_ELE · Chapter 8 · Lesson 8.1</span>
@@ -524,7 +524,7 @@ Model-based design    chứng chỉ Simulink MathWorks</code></pre>
 <div class="callout"><span class="badge">Ngoài điểm số</span> Học phần này là một sản phẩm cho portfolio. Một repo sạch, báo cáo trung thực và chủ đề khớp với công việc thật mới là thứ bạn khoe với nhà tuyển dụng — điểm số chỉ là thứ yếu.</div>`,
   ]]);
 
-const c8q = quiz('as-gra-ele-quiz-8', 'Quiz 8 — Defense &amp; career|||Quiz 8 — Phản biện &amp; nghề', [
+const c8q = quiz('as-gra-ele-quiz-8', 'Quiz 8 — Defense & career|||Quiz 8 — Phản biện & nghề', [
   { id: 'q1', question: 'Khi bị hỏi một câu bạn chưa biết trong phản biện, nên làm gì?', options: ['Bịa một câu trả lời nghe hợp lý', 'Nói thẳng chưa biết và suy luận thành tiếng', 'Im lặng bỏ qua', 'Đổ lỗi cho công cụ'], correctIndex: 1, explanation: 'Trung thực nói chưa biết rồi suy luận thể hiện tư duy kỹ thuật, tốt hơn bịa câu trả lời không bảo vệ được.' },
   { id: 'q2', question: 'Vì sao nên chuẩn bị một bản demo ghi sẵn dự phòng?', options: ['Vì demo trực tiếp bị cấm', 'Phòng khi phần cứng/mạng chập chờn lúc trình bày', 'Để không phải demo trực tiếp bao giờ', 'Không có lý do'], correctIndex: 1, explanation: 'Phần cứng hoặc môi trường có thể trục trặc lúc trình bày; bản ghi dự phòng giúp buổi bảo vệ không đổ vỡ.' },
   { id: 'q3', question: 'Nếu bạn làm chủ đề AUTOSAR, bước chứng chỉ/định hướng tiếp theo hợp lý là?', options: ['Khoá đào tạo hãng như Vector hoặc EB', 'Chứng chỉ nấu ăn', 'Bỏ hẳn ngành ô tô', 'Không cần học thêm gì'], correctIndex: 0, explanation: 'Sau khi làm chủ AUTOSAR, các khoá đào tạo của hãng như Vector hay Elektrobit là bước tiến nghề tự nhiên.' },

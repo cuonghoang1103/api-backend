@@ -456,7 +456,7 @@ const b5q = quiz('chi121-quiz-5', 'Quiz 5 — Visiting a friend|||Quiz 5 — Th�
   { id: 'q3', question: 'Câu 这个礼物又好又便宜 nghĩa là? / What does 这个礼物又好又便宜 mean?', options: ['Món quà vừa đẹp vừa rẻ|||both nice and cheap', 'Món quà đắt|||the gift is expensive', 'Món quà xấu|||the gift is ugly', 'Không có quà|||there is no gift'], correctIndex: 0, explanation: '又…又… nối hai tính chất: 又好又便宜 = vừa tốt/đẹp vừa rẻ.' },
 ]);
 
-const b6 = doc('chi121-6-1-appointments', 'Lesson 6 — Doctor appointments &amp; being busy|||Bài 6 — Hẹn khám bệnh &amp; bận rộn',
+const b6 = doc('chi121-6-1-appointments', 'Lesson 6 — Doctor appointments & being busy|||Bài 6 — Hẹn khám bệnh & bận rộn',
   'Từ vựng: 帮, 为, 别, 正在, 得(děi), 看病, 医生, 忙, 药, 舒服. Ngữ pháp: 正在 (đang), 得 děi (phải), 帮 (giúp), 为 (vì/cho), 别 (đừng).',
   [[
     `<span class="eyebrow">CHI121 · Lesson 6 · Appointments</span>
@@ -529,7 +529,7 @@ const b6q = quiz('chi121-quiz-6', 'Quiz 6 — Appointments|||Quiz 6 — Hẹn kh
   { id: 'q3', question: '"不舒服" (bù shūfu) nghĩa là? / What does 不舒服 mean?', options: ['rất khoẻ|||very well', 'không khoẻ / khó chịu|||unwell / uncomfortable', 'rất bận|||very busy', 'rất vui|||very happy'], correctIndex: 1, explanation: '舒服 = dễ chịu/khoẻ; 不舒服 = không khoẻ, khó chịu (ốm).' },
 ]);
 
-const b7 = doc('chi121-7-1-directions', 'Lesson 7 — Getting around &amp; directions|||Bài 7 — Đi lại &amp; chỉ đường',
+const b7 = doc('chi121-7-1-directions', 'Lesson 7 — Getting around & directions|||Bài 7 — Đi lại & chỉ đường',
   'Từ vựng: 往, 一直, 拐, 过, 中间, 离, 远, 近, 路口, 红绿灯. Ngữ pháp: 往+hướng+ĐT, 一直走, 拐 (rẽ), 过 (qua), 离…远/近.',
   [[
     `<span class="eyebrow">CHI121 · Lesson 7 · Directions</span>
@@ -687,7 +687,7 @@ export default {
     requirements: 'Cần hoàn thành CHI111 hoặc nắm vững pinyin, 4 thanh điệu, số đếm, ngày giờ và các mẫu câu cơ bản (是, 有/没有, 都, 喜欢). Nên cài Pleco hoặc dùng từ điển hanzii.net để tra chữ &amp; nghe phát âm; luyện viết chữ Hán theo thứ tự nét.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (L1P1 nửa sau → L1P2), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (L1P1 nửa sau → L1P2), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHI111, track Integrated Chinese, mục tiêu HSK2, cách học.', lessons: [intro] },
     { title: 'Bài 1 — Mua sắm|||Lesson 1 — Shopping', description: '买东西, 多少钱, 块/毛/分, 便宜/贵, 换, 双/件.', lessons: [b1, b1q] },
     { title: 'Bài 2 — Giao thông|||Lesson 2 — Transportation', description: '怎么走, 坐, 开车, 地铁, 离, 从…到…, 花时间.', lessons: [b2, b2q] },

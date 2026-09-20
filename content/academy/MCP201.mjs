@@ -168,7 +168,7 @@ const c1q = quiz('mcp201-quiz-1', 'Quiz 1 — What is an MCU|||Quiz 1 — Vi đi
   { id: 'q3', question: 'Họ vi điều khiển 32-bit phổ biến nhất hiện nay?', options: ['AVR 8-bit', 'ARM Cortex-M', '8051', 'Z80'], correctIndex: 1, explanation: 'Lõi ARM Cortex-M (STM32, RP2040, nRF) thống trị MCU 32-bit hiện đại.' },
 ]);
 
-const c2 = doc('mcp201-2-1-embedded-c', '2.1 — Embedded C &amp; registers|||2.1 — Lập trình C nhúng &amp; thanh ghi',
+const c2 = doc('mcp201-2-1-embedded-c', '2.1 — Embedded C & registers|||2.1 — Lập trình C nhúng & thanh ghi',
   'Đặc trưng C nhúng (không heap, gần phần cứng); thanh ghi (register) là cổng điều khiển; thao tác bit (set/clear/toggle/read); từ khoá volatile.',
   [[
     `<span class="eyebrow">MCP201 · Chapter 2 · Lesson 2.1</span>
@@ -213,13 +213,13 @@ if (PINB &amp; (1 &lt;&lt; 2)) { /* bit 2 đang ở mức cao */ }
 <div class="callout"><span class="badge">Tư duy theo bit</span> OR để set, AND với mặt nạ đảo để clear, XOR để toggle, AND để kiểm tra. Bốn thao tác này bao gần hết việc với thanh ghi.</div>`,
   ]]);
 
-const c2q = quiz('mcp201-quiz-2', 'Quiz 2 — Embedded C &amp; registers|||Quiz 2 — C nhúng &amp; thanh ghi', [
+const c2q = quiz('mcp201-quiz-2', 'Quiz 2 — Embedded C & registers|||Quiz 2 — C nhúng & thanh ghi', [
   { id: 'q1', question: 'Từ khoá volatile trong C nhúng báo cho trình biên dịch điều gì?', options: ['Biến là hằng số', 'Biến có thể đổi ngoài luồng chương trình (ngắt/phần cứng), đừng tối ưu bỏ đi', 'Biến chỉ được đọc một lần', 'Biến phải là toàn cục'], correctIndex: 1, explanation: 'volatile cấm compiler cache/loại bỏ việc đọc biến, vì phần cứng hoặc ISR có thể thay đổi nó bất cứ lúc nào.' },
   { id: 'q2', question: 'Cách đặt (set) một bit lên 1 mà KHÔNG đụng các bit khác của thanh ghi?', options: ['Gán trực tiếp REG bằng mặt nạ', 'OR thanh ghi với mặt nạ bit (REG |= mask)', 'AND thanh ghi với mặt nạ', 'XOR toàn bộ với 0xFF'], correctIndex: 1, explanation: 'Phép OR với mặt nạ chỉ đặt đúng bit lên 1 và giữ nguyên phần còn lại; AND với đảo mặt nạ mới dùng để xoá bit.' },
   { id: 'q3', question: 'Thao tác bit nào dùng để XOÁ (clear) một bit về 0?', options: ['OR với mặt nạ', 'AND với đảo của mặt nạ (~mask)', 'XOR với mặt nạ', 'Dịch trái thanh ghi'], correctIndex: 1, explanation: 'AND với ~mask xoá đúng bit trong mặt nạ; XOR dùng để đảo (toggle) bit.' },
 ]);
 
-const c3 = doc('mcp201-3-1-gpio', '3.1 — GPIO: digital input &amp; output|||3.1 — GPIO: vào/ra số',
+const c3 = doc('mcp201-3-1-gpio', '3.1 — GPIO: digital input & output|||3.1 — GPIO: vào/ra số',
   'Chân số vào/ra; đặt hướng chân; điều khiển LED; đọc nút nhấn; điện trở pull-up/pull-down chống trôi nổi (floating).',
   [[
     `<span class="eyebrow">MCP201 · Chapter 3 · Lesson 3.1</span>
@@ -264,7 +264,7 @@ const c3q = quiz('mcp201-quiz-3', 'Quiz 3 — GPIO|||Quiz 3 — GPIO', [
   { id: 'q3', question: 'Muốn ĐỌC mức logic thực tế trên một chân input của AVR, đọc thanh ghi nào?', options: ['DDRx', 'PORTx', 'PINx', 'TCNTx'], correctIndex: 2, explanation: 'PINx phản ánh mức logic thật đang hiện diện trên chân.' },
 ]);
 
-const c4 = doc('mcp201-4-1-interrupts-timers', '4.1 — Interrupts &amp; timers|||4.1 — Ngắt &amp; timer',
+const c4 = doc('mcp201-4-1-interrupts-timers', '4.1 — Interrupts & timers|||4.1 — Ngắt & timer',
   'Ngắt (interrupt) vs hỏi vòng (polling); hàm phục vụ ngắt (ISR); timer/counter đếm thời gian; điều chế độ rộng xung (PWM).',
   [[
     `<span class="eyebrow">MCP201 · Chapter 4 · Lesson 4.1</span>
@@ -307,13 +307,13 @@ OCR0A = 128;   // 128/255 công suất tối đa
 <div class="callout"><span class="badge">Làm ít trong ISR</span> Đặt một cờ trong ISR, xử lý phần nặng lại ở vòng lặp chính. ISR dài sẽ chặn các ngắt khác.</div>`,
   ]]);
 
-const c4q = quiz('mcp201-quiz-4', 'Quiz 4 — Interrupts &amp; timers|||Quiz 4 — Ngắt &amp; timer', [
+const c4q = quiz('mcp201-quiz-4', 'Quiz 4 — Interrupts & timers|||Quiz 4 — Ngắt & timer', [
   { id: 'q1', question: 'Ngắt (interrupt) hơn hỏi vòng (polling) ở điểm nào?', options: ['Luôn tốn điện hơn', 'CPU phản ứng ngay sự kiện mà không phải liên tục kiểm tra', 'Luôn chậm hơn polling', 'Không cần viết ISR'], correctIndex: 1, explanation: 'Ngắt cho CPU làm việc khác hoặc ngủ, chỉ chạy ISR khi sự kiện xảy ra, thay vì bận kiểm tra liên tục.' },
   { id: 'q2', question: 'Một ISR (hàm phục vụ ngắt) nên như thế nào?', options: ['Càng dài càng tốt', 'Ngắn gọn và nhanh, tránh tác vụ chậm', 'Chứa vòng delay dài', 'Không dùng biến volatile'], correctIndex: 1, explanation: 'ISR phải ngắn để không chặn ngắt khác; biến chia sẻ với main nên khai báo volatile.' },
   { id: 'q3', question: 'PWM (điều chế độ rộng xung) thường dùng để?', options: ['Đọc cảm biến analog', 'Điều chỉnh độ sáng LED hoặc tốc độ động cơ qua duty cycle', 'Giao tiếp bus I2C', 'Ghi dữ liệu vào EEPROM'], correctIndex: 1, explanation: 'PWM đổi tỉ lệ bật/tắt (duty cycle) để điều khiển công suất trung bình: độ sáng, tốc độ, góc servo.' },
 ]);
 
-const c5 = doc('mcp201-5-1-adc', '5.1 — ADC &amp; analog signals|||5.1 — ADC &amp; tín hiệu analog',
+const c5 = doc('mcp201-5-1-adc', '5.1 — ADC & analog signals|||5.1 — ADC & tín hiệu analog',
   'Thế giới analog vs số; bộ chuyển đổi ADC; đọc cảm biến analog (nhiệt độ, ánh sáng); độ phân giải (8/10/12-bit) & điện áp tham chiếu Vref.',
   [[
     `<span class="eyebrow">MCP201 · Chapter 5 · Lesson 5.1</span>
@@ -399,7 +399,7 @@ const c6q = quiz('mcp201-quiz-6', 'Quiz 6 — Serial buses|||Quiz 6 — Bus nố
   { id: 'q3', question: 'SPI chọn thiết bị đích để nói chuyện bằng cách nào?', options: ['Địa chỉ 7-bit trên bus', 'Một dây chip-select (CS/SS) riêng cho mỗi thiết bị', 'Đặt baud rate khác nhau', 'Gửi lệnh START'], correctIndex: 1, explanation: 'SPI dùng chân chip-select cho mỗi slave; địa chỉ trên bus là đặc trưng của I2C.' },
 ]);
 
-const c7 = doc('mcp201-7-1-memory-power', '7.1 — Memory &amp; power management|||7.1 — Bộ nhớ &amp; quản lý năng lượng',
+const c7 = doc('mcp201-7-1-memory-power', '7.1 — Memory & power management|||7.1 — Bộ nhớ & quản lý năng lượng',
   'Flash vs SRAM vs EEPROM (dùng vào việc gì); lưu cấu hình bền qua EEPROM; chế độ ngủ (sleep) tiết kiệm điện; watchdog timer chống treo.',
   [[
     `<span class="eyebrow">MCP201 · Chapter 7 · Lesson 7.1</span>
@@ -444,13 +444,13 @@ sleep_mode();   // CPU dừng ở đây tới khi một ngắt đánh thức
 <div class="callout"><span class="badge">Ngủ là pin miễn phí</span> Cú tiết kiệm điện lớn nhất thường không phải clock nhanh hơn mà là ngủ lâu hơn giữa các sự kiện.</div>`,
   ]]);
 
-const c7q = quiz('mcp201-quiz-7', 'Quiz 7 — Memory &amp; power|||Quiz 7 — Bộ nhớ &amp; năng lượng', [
+const c7q = quiz('mcp201-quiz-7', 'Quiz 7 — Memory & power|||Quiz 7 — Bộ nhớ & năng lượng', [
   { id: 'q1', question: 'Bộ nhớ nào lưu biến khi chạy chương trình nhưng MẤT khi tắt nguồn?', options: ['Flash', 'EEPROM', 'SRAM', 'ROM'], correctIndex: 2, explanation: 'SRAM bay hơi (mất khi mất điện); Flash chứa chương trình, EEPROM lưu cấu hình bền.' },
   { id: 'q2', question: 'Watchdog timer dùng để làm gì?', options: ['Đo nhiệt độ chip', 'Tự khởi động lại MCU nếu chương trình treo không kịp reset nó', 'Tạo tín hiệu PWM', 'Giao tiếp SPI'], correctIndex: 1, explanation: 'Watchdog reset chip nếu code không kick nó đúng hạn, giúp hệ thống tự phục hồi khỏi treo.' },
   { id: 'q3', question: 'Chế độ sleep (ngủ) của MCU giúp gì?', options: ['Tăng tốc độ CPU', 'Giảm tiêu thụ điện khi rảnh, một ngắt sẽ đánh thức lại', 'Xoá sạch EEPROM', 'Tăng độ phân giải ADC'], correctIndex: 1, explanation: 'Sleep mode tắt bớt các khối để tiết kiệm điện; một ngắt sẽ đánh thức CPU dậy làm việc.' },
 ]);
 
-const c8 = doc('mcp201-8-1-project-debug', '8.1 — Project &amp; debugging|||8.1 — Dự án &amp; gỡ lỗi',
+const c8 = doc('mcp201-8-1-project-debug', '8.1 — Project & debugging|||8.1 — Dự án & gỡ lỗi',
   'Nền real-time cơ bản (super-loop hợp tác, RTOS là gì); gỡ lỗi qua JTAG/SWD (breakpoint, xem biến); một dự án nhúng hoàn chỉnh (từ yêu cầu tới firmware).',
   [[
     `<span class="eyebrow">MCP201 · Chapter 8 · Lesson 8.1</span>
@@ -487,7 +487,7 @@ while (1) {
 <div class="callout"><span class="badge">Gỡ cả hệ thống, đừng gỡ từng dòng</span> Tái hiện lỗi, cô lập bằng breakpoint và máy phân tích logic, dựng giả thuyết rồi sửa — đoán mò tốn hàng giờ trên phần cứng.</div>`,
   ]]);
 
-const c8q = quiz('mcp201-quiz-8', 'Quiz 8 — Project &amp; debug|||Quiz 8 — Dự án &amp; gỡ lỗi', [
+const c8q = quiz('mcp201-quiz-8', 'Quiz 8 — Project & debug|||Quiz 8 — Dự án & gỡ lỗi', [
   { id: 'q1', question: 'JTAG/SWD dùng để làm gì?', options: ['Cấp nguồn cho MCU', 'Nạp chương trình và gỡ lỗi (đặt breakpoint, xem biến trực tiếp)', 'Đọc cảm biến analog', 'Tạo âm thanh'], correctIndex: 1, explanation: 'JTAG/SWD là giao diện debug/nạp phần cứng: đặt breakpoint, chạy từng bước, xem biến trực tiếp.' },
   { id: 'q2', question: 'Vòng lặp super-loop hợp tác (không RTOS) hoạt động thế nào?', options: ['Chạy nhiều luồng ưu tiên song song', 'Lần lượt kiểm tra và chạy từng tác vụ theo nhịp thời gian trong while(1)', 'Chỉ dùng ngắt, không có hàm main', 'Bắt buộc cần hệ điều hành Linux'], correctIndex: 1, explanation: 'Super-loop chạy tuần tự các tác vụ theo cờ/nhịp thời gian; đơn giản, không cần bộ lập lịch RTOS.' },
   { id: 'q3', question: 'Khi gỡ lỗi nhúng, biến chia sẻ giữa ISR và vòng lặp chính nên khai báo là?', options: ['const', 'static cục bộ', 'volatile', 'register'], correctIndex: 2, explanation: 'volatile đảm bảo vòng lặp chính luôn đọc giá trị mới nhất mà ISR cập nhật.' },

@@ -10,7 +10,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('emf301c-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('emf301c-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Giáo trình chuẩn (Sadiku, Pozar, Ulaby, Balanis), tài liệu miễn phí, YouTube, công cụ (Smith chart, mô phỏng trường), lộ trình tự học.',
   [[
     `<span class="eyebrow">EMF301c · Materials</span>
@@ -81,7 +81,7 @@ const taiLieu = doc('emf301c-0-0-tai-lieu', '📚 Course materials &amp; referen
 </ol></div>`,
   ]]);
 
-const intro = doc('emf301c-0-1-overview', 'Course overview: EM field theory &amp; microwave fundamentals|||Tổng quan: Trường điện từ &amp; cơ sở siêu cao tần',
+const intro = doc('emf301c-0-1-overview', 'Course overview: EM field theory & microwave fundamentals|||Tổng quan: Trường điện từ & cơ sở siêu cao tần',
   'Môn học làm gì; vì sao trường điện từ nền cho RF/vi mạch; lộ trình 8 chương: giải tích vector & tĩnh điện → tĩnh từ → Maxwell → sóng phẳng → đường truyền/Smith → ống dẫn sóng → tham số S → anten.',
   [[
     `<span class="eyebrow">EMF301c · Lesson 0.1 · Overview</span>
@@ -110,7 +110,7 @@ const intro = doc('emf301c-0-1-overview', 'Course overview: EM field theory &amp
 <div class="callout"><span class="badge">Một mạch xuyên suốt</span> Trường (tĩnh) → Maxwell (động) → sóng dẫn hướng (đường truyền, ống dẫn) → hệ thống (tham số S, anten). Mỗi chương dựng trên chương trước.</div>`,
   ]]);
 
-const c1 = doc('emf301c-1-1-vector-electrostatics', '1.1 — Vector calculus &amp; electrostatics|||1.1 — Giải tích vector &amp; tĩnh điện',
+const c1 = doc('emf301c-1-1-vector-electrostatics', '1.1 — Vector calculus & electrostatics|||1.1 — Giải tích vector & tĩnh điện',
   'Hệ toạ độ & vector; grad/div/curl; định luật Coulomb & trường E; định luật Gauss; điện thế V; E = -grad V; tụ điện & năng lượng.',
   [[
     `<span class="eyebrow">EMF301c · Chapter 1 · Lesson 1.1</span>
@@ -155,7 +155,7 @@ Nang luong tich:             W = (1/2) * C * V^2
 <div class="callout"><span class="badge">Ý chính</span> Định luật Gauss cho phép tìm E chỉ nhờ tính đối xứng — vẽ một mặt kín, đếm điện tích bao bên trong là xong. Nó tái xuất thành phương trình Maxwell thứ nhất.</div>`,
   ]]);
 
-const c1q = quiz('emf301c-quiz-1', 'Quiz 1 — Vector &amp; electrostatics|||Quiz 1 — Vector &amp; tĩnh điện', [
+const c1q = quiz('emf301c-quiz-1', 'Quiz 1 — Vector & electrostatics|||Quiz 1 — Vector & tĩnh điện', [
   { id: 'q1', question: 'Toán tử nào đo "trường chảy RA khỏi một điểm" (nguồn/hố)?', options: ['Gradient', 'Divergence (div)', 'Curl', 'Laplacian'], correctIndex: 1, explanation: 'Divergence đo thông lượng ròng ra khỏi một điểm — dương ở nguồn, âm ở hố.' },
   { id: 'q2', question: 'Liên hệ giữa trường điện E và điện thế V là?', options: ['E = grad V', 'E = -grad V', 'E = div V', 'E = curl V'], correctIndex: 1, explanation: 'E hướng theo chiều giảm nhanh nhất của thế: E = -grad V.' },
   { id: 'q3', question: 'Định luật Gauss dạng điểm phát biểu?', options: ['div D = rho', 'curl E = 0', 'div B = 0', 'E = Q/V'], correctIndex: 0, explanation: 'div D = rho: mật độ thông lượng điện phân kỳ tại nơi có mật độ điện tích rho.' },
@@ -210,7 +210,7 @@ const c2q = quiz('emf301c-quiz-2', 'Quiz 2 — Magnetostatics|||Quiz 2 — Tĩnh
   { id: 'q3', question: 'Năng lượng tích trong một cuộn cảm là?', options: ['W = C*V', 'W = (1/2)*L*I^2', 'W = L*I', 'W = (1/2)*Q*V'], correctIndex: 1, explanation: 'Năng lượng từ trong điện cảm: W = (1/2)*L*I^2.' },
 ]);
 
-const c3 = doc('emf301c-3-1-maxwell', '3.1 — Maxwell equations &amp; time-varying fields|||3.1 — Hệ Maxwell &amp; trường biến thiên',
+const c3 = doc('emf301c-3-1-maxwell', '3.1 — Maxwell equations & time-varying fields|||3.1 — Hệ Maxwell & trường biến thiên',
   'Định luật Faraday; dòng dịch của Maxwell; bốn phương trình Maxwell (vi phân & tích phân); phương trình sóng; điều kiện biên.',
   [[
     `<span class="eyebrow">EMF301c · Chapter 3 · Lesson 3.1</span>
@@ -261,7 +261,7 @@ const c3q = quiz('emf301c-quiz-3', 'Quiz 3 — Maxwell|||Quiz 3 — Maxwell', [
   { id: 'q3', question: 'Tốc độ sóng điện từ trong môi trường là?', options: ['v = mu*epsilon', 'v = 1/sqrt(mu*epsilon)', 'v = sqrt(mu*epsilon)', 'v = mu/epsilon'], correctIndex: 1, explanation: 'v = 1/sqrt(mu*epsilon); trong chân không bằng tốc độ ánh sáng c.' },
 ]);
 
-const c4 = doc('emf301c-4-1-plane-waves', '4.1 — Uniform plane waves &amp; propagation|||4.1 — Sóng phẳng đồng nhất &amp; lan truyền',
+const c4 = doc('emf301c-4-1-plane-waves', '4.1 — Uniform plane waves & propagation|||4.1 — Sóng phẳng đồng nhất & lan truyền',
   'Sóng phẳng đồng nhất; hằng số truyền & pha; trở kháng nội của môi trường; sóng trong điện môi tổn hao & vật dẫn (độ sâu thấm); phân cực; vector Poynting.',
   [[
     `<span class="eyebrow">EMF301c · Chapter 4 · Lesson 4.1</span>
@@ -308,7 +308,7 @@ const c4q = quiz('emf301c-quiz-4', 'Quiz 4 — Plane waves|||Quiz 4 — Sóng ph
   { id: 'q3', question: 'Trong sóng phẳng TEM, quan hệ giữa E, H và hướng truyền là?', options: ['E song song H', 'E, H vuông góc nhau và vuông góc hướng truyền', 'E cùng hướng truyền', 'H bằng 0'], correctIndex: 1, explanation: 'Sóng TEM: E vuông góc H, cả hai vuông góc với hướng lan truyền.' },
 ]);
 
-const c5 = doc('emf301c-5-1-transmission-lines', '5.1 — Transmission lines &amp; the Smith chart|||5.1 — Đường truyền &amp; đồ thị Smith',
+const c5 = doc('emf301c-5-1-transmission-lines', '5.1 — Transmission lines & the Smith chart|||5.1 — Đường truyền & đồ thị Smith',
   'Mô hình đường truyền (RLGC); trở kháng đặc tính Z0; hệ số phản xạ & VSWR; trở kháng vào; đồ thị Smith & phối hợp trở kháng.',
   [[
     `<span class="eyebrow">EMF301c · Chapter 5 · Lesson 5.1</span>
@@ -451,7 +451,7 @@ const c7q = quiz('emf301c-quiz-7', 'Quiz 7 — S-parameters|||Quiz 7 — Tham s�
   { id: 'q3', question: 'Với mạng KHÔNG tổn hao, quan hệ nào đúng?', options: ['S12 = 2*S21', '|S11|^2 + |S21|^2 = 1', 'S11 = S21', 'S11 = 1'], correctIndex: 1, explanation: 'Bảo toàn công suất: |S11|^2 + |S21|^2 = 1 với mạng hai cổng không tổn hao.' },
 ]);
 
-const c8 = doc('emf301c-8-1-antennas', '8.1 — Antennas &amp; microwave components fundamentals|||8.1 — Cơ sở anten &amp; linh kiện siêu cao tần',
+const c8 = doc('emf301c-8-1-antennas', '8.1 — Antennas & microwave components fundamentals|||8.1 — Cơ sở anten & linh kiện siêu cao tần',
   'Anten là gì; vùng gần/xa; độ lợi, độ định hướng, hiệu suất; giản đồ bức xạ; dipole nửa sóng; phương trình truyền Friis; linh kiện siêu cao tần cơ bản.',
   [[
     `<span class="eyebrow">EMF301c · Chapter 8 · Lesson 8.1</span>

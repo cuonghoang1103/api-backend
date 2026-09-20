@@ -100,7 +100,7 @@ const intro = doc('chs111-0-1-overview', 'Course overview: Chinese Speaking 1|||
 <p>Phát âm &amp; thanh điệu → chào hỏi &amp; làm quen → thông tin cá nhân → lớp học &amp; công sở → mua sắm &amp; mặc cả → ăn uống &amp; gọi món → hỏi đường &amp; đi lại → hẹn &amp; mời.</p>`,
   ]]);
 
-const b1 = doc('chs111-1-1-pronunciation', 'Lesson 1 — Standard pronunciation &amp; tones|||Bài 1 — Phát âm chuẩn &amp; thanh điệu',
+const b1 = doc('chs111-1-1-pronunciation', 'Lesson 1 — Standard pronunciation & tones|||Bài 1 — Phát âm chuẩn & thanh điệu',
   'Thanh mẫu/vận mẫu khó (zh ch sh r, j q x, z c s, ü); 4 thanh + thanh nhẹ; quy tắc biến điệu; bài luyện thanh (tone drill).',
   [[
     `<span class="eyebrow">CHS111 · Lesson 1 · Pronunciation</span>
@@ -169,13 +169,13 @@ nǐ hǎo → ní hǎo      (luyện biến điệu 3+3)
 <div class="callout"><span class="badge">Ghi chú phát âm</span> Dấu thanh đặt trên nguyên âm chính. Thanh 3 ǎ hạ xuống rồi nâng lên. Hãy tự thu âm rồi so với audio Pleco — tai bạn tiến nhanh hơn miệng.</div>`,
   ]]);
 
-const b1q = quiz('chs111-quiz-1', 'Quiz 1 — Pronunciation &amp; tones|||Quiz 1 — Phát âm &amp; thanh điệu', [
+const b1q = quiz('chs111-quiz-1', 'Quiz 1 — Pronunciation & tones|||Quiz 1 — Phát âm & thanh điệu', [
   { id: 'q1', question: 'Tiếng phổ thông có mấy thanh điệu (không kể thanh nhẹ)? / How many tones does Mandarin have (not counting the neutral tone)?', options: ['2', '3', '4', '6'], correctIndex: 2, explanation: '4 thanh: ā (cao ngang), á (lên), ǎ (xuống-lên), à (xuống gắt).' },
   { id: 'q2', question: 'Khi 你 (nǐ) + 好 (hǎo) đứng cạnh nhau thì đọc thế nào? / When nǐ + hǎo meet, how are they read?', options: ['nì hǎo', 'ní hǎo', 'nǐ háo', 'nī hao'], correctIndex: 1, explanation: 'Hai thanh 3 liền nhau: thanh 3 đầu biến thành thanh 2 → ní hǎo.' },
   { id: 'q3', question: 'Nhóm âm nào phát âm bằng cách CONG lưỡi ra sau? / Which group is pronounced with the tongue curled back?', options: ['j q x', 'z c s', 'zh ch sh r', 'b p m'], correctIndex: 2, explanation: 'zh ch sh r là âm cong lưỡi (chī 吃, shì 是); j q x thì lưỡi bẹt.' },
 ]);
 
-const b2 = doc('chs111-2-1-greetings', 'Lesson 2 — Greetings &amp; getting acquainted|||Bài 2 — Chào hỏi &amp; làm quen',
+const b2 = doc('chs111-2-1-greetings', 'Lesson 2 — Greetings & getting acquainted|||Bài 2 — Chào hỏi & làm quen',
   'Mẫu câu: 你好/您好, 请问, 很高兴认识你, 你是哪国人; đại từ 我/你/他; luyện chào hỏi và tự giới thiệu khi gặp lần đầu.',
   [[
     `<span class="eyebrow">CHS111 · Lesson 2 · Greetings</span>
@@ -311,7 +311,7 @@ const b3q = quiz('chs111-quiz-3', 'Quiz 3 — Personal information|||Quiz 3 — 
   { id: 'q3', question: 'Khi gọi điện, chữ số 1 (一) thường được đọc là? / On the phone, the digit 1 is usually read as?', options: ['qī', 'yāo', 'liǎng', 'líng'], correctIndex: 1, explanation: 'Số 1 đọc là 幺 yāo khi đọc số điện thoại, tránh lẫn với 七 (qī, 7).' },
 ]);
 
-const b4 = doc('chs111-4-1-classroom-office', 'Lesson 4 — In the classroom &amp; office|||Bài 4 — Trong lớp học &amp; công sở',
+const b4 = doc('chs111-4-1-classroom-office', 'Lesson 4 — In the classroom & office|||Bài 4 — Trong lớp học & công sở',
   'Mẫu câu xoay xở: 请再说一遍, 我听不懂, 是什么意思, 请慢一点儿, 用中文怎么说; luyện nhờ nhắc lại và hỏi nghĩa.',
   [[
     `<span class="eyebrow">CHS111 · Lesson 4 · Classroom &amp; office</span>
@@ -374,13 +374,13 @@ const b4 = doc('chs111-4-1-classroom-office', 'Lesson 4 — In the classroom &am
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 听不懂 có chữ 不 thanh nhẹ ở giữa — đọc nhanh và nhẹ: tīng·bu·dǒng. Đừng nhấn vào 不.</div>`,
   ]]);
 
-const b4q = quiz('chs111-quiz-4', 'Quiz 4 — Classroom &amp; office|||Quiz 4 — Lớp học &amp; công sở', [
+const b4q = quiz('chs111-quiz-4', 'Quiz 4 — Classroom & office|||Quiz 4 — Lớp học & công sở', [
   { id: 'q1', question: 'Nhờ "nói lại một lần" đúng là? / How do you ask someone to say it again?', options: ['请慢一点儿', '请再说一遍', '什么意思？', '再见！'], correctIndex: 1, explanation: '再说 (nói lại) + 一遍 (một lần) → 请再说一遍.' },
   { id: 'q2', question: '"我听不懂" nghĩa là gì? / What does 我听不懂 mean?', options: ['Tôi không nhìn thấy', 'Tôi nghe không hiểu', 'Tôi không nói được', 'Tôi rất vui'], correctIndex: 1, explanation: '听 (nghe) + 不懂 (không hiểu) = nghe không hiểu.' },
   { id: 'q3', question: 'Hỏi nghĩa của một từ bằng câu nào? / Which phrase asks the meaning of a word?', options: ['… 是什么意思？', '… 多少钱？', '… 在哪儿？', '… 几点？'], correctIndex: 0, explanation: '… 是什么意思? = … nghĩa là gì?' },
 ]);
 
-const b5 = doc('chs111-5-1-shopping-bargain', 'Lesson 5 — Shopping &amp; bargaining|||Bài 5 — Mua sắm &amp; mặc cả',
+const b5 = doc('chs111-5-1-shopping-bargain', 'Lesson 5 — Shopping & bargaining|||Bài 5 — Mua sắm & mặc cả',
   'Mẫu câu: 多少钱, 太贵了, 便宜点儿, 我要这个, 能不能…; tiền 块, chỉ vật 这个/那个; luyện mua hàng và trả giá.',
   [[
     `<span class="eyebrow">CHS111 · Lesson 5 · Shopping</span>
@@ -445,13 +445,13 @@ const b5 = doc('chs111-5-1-shopping-bargain', 'Lesson 5 — Shopping &amp; barga
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 太…了 (tài … le) là khung cảm thán — kéo dài 太 và buông 了 thật nhẹ: tài guì·le. Nó thể hiện cảm xúc thật, rất hợp khi mặc cả.</div>`,
   ]]);
 
-const b5q = quiz('chs111-quiz-5', 'Quiz 5 — Shopping &amp; bargaining|||Quiz 5 — Mua sắm &amp; mặc cả', [
+const b5q = quiz('chs111-quiz-5', 'Quiz 5 — Shopping & bargaining|||Quiz 5 — Mua sắm & mặc cả', [
   { id: 'q1', question: 'Câu "rẻ chút đi" đúng là? / How do you say "a bit cheaper"?', options: ['太贵了', '便宜点儿', '多少钱', '我要这个'], correctIndex: 1, explanation: '便宜 (rẻ) + 点儿 (một chút) = 便宜点儿.' },
   { id: 'q2', question: 'Đơn vị tiền khi nói (khẩu ngữ) là chữ nào? / Which spoken word is the money unit?', options: ['岁 suì', '块 kuài', '点 diǎn', '路 lù'], correctIndex: 1, explanation: '块 kuài là đơn vị tiền (tệ) khi nói: 五块 = 5 tệ.' },
   { id: 'q3', question: '"能不能便宜点儿?" là kiểu câu gì? / What kind of question is 能不能便宜点儿?', options: ['câu cảm thán', 'câu hỏi có/không lịch sự', 'câu mệnh lệnh', 'câu chào hỏi'], correctIndex: 1, explanation: '能不能 = có thể … không, một câu hỏi có/không lịch sự; đáp 能 hoặc 不能.' },
 ]);
 
-const b6 = doc('chs111-6-1-eating-ordering', 'Lesson 6 — Eating &amp; ordering food|||Bài 6 — Ăn uống &amp; gọi món',
+const b6 = doc('chs111-6-1-eating-ordering', 'Lesson 6 — Eating & ordering food|||Bài 6 — Ăn uống & gọi món',
   'Mẫu câu: 你想吃什么, 来一个…, 好吃/好喝, 买单; 服务员/菜单; luyện gọi món và tính tiền ở nhà hàng.',
   [[
     `<span class="eyebrow">CHS111 · Lesson 6 · Eating &amp; ordering</span>
@@ -518,13 +518,13 @@ const b6 = doc('chs111-6-1-eating-ordering', 'Lesson 6 — Eating &amp; ordering
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 好吃 (hǎochī) và 好喝 (hǎohē) đều bắt đầu bằng thanh 3 好 — trước một thanh đầy đủ nó giữ ở thấp; đọc hǎo·chī, không đọc háo. Một câu 好吃！ ngay sau miếng đầu làm chủ nhà rất vui.</div>`,
   ]]);
 
-const b6q = quiz('chs111-quiz-6', 'Quiz 6 — Eating &amp; ordering|||Quiz 6 — Ăn uống &amp; gọi món', [
+const b6q = quiz('chs111-quiz-6', 'Quiz 6 — Eating & ordering|||Quiz 6 — Ăn uống & gọi món', [
   { id: 'q1', question: 'Gọi tính tiền ở nhà hàng nói thế nào? / How do you ask for the bill?', options: ['买单', '菜单', '好吃', '再见'], correctIndex: 0, explanation: '买单 mǎidān = tính tiền/thanh toán; 菜单 càidān = thực đơn.' },
   { id: 'q2', question: 'Khen "ngon" cho ĐỒ UỐNG dùng chữ nào? / Which word praises a drink as tasty?', options: ['好吃 hǎochī', '好喝 hǎohē', '好看 hǎokàn', '好听 hǎotīng'], correctIndex: 1, explanation: '喝 (uống) → 好喝 cho đồ uống; 吃 (ăn) → 好吃 cho đồ ăn.' },
   { id: 'q3', question: 'Cách gọi món thân mật "cho một phần…" là? / Which casual phrase orders "one …"?', options: ['来一个…', '多少钱？', '在哪儿？', '几点见？'], correctIndex: 0, explanation: '来一个… = cho một cái/phần…; thêm nữa thì 再来一个.' },
 ]);
 
-const b7 = doc('chs111-7-1-directions', 'Lesson 7 — Directions &amp; getting around|||Bài 7 — Hỏi đường &amp; đi lại',
+const b7 = doc('chs111-7-1-directions', 'Lesson 7 — Directions & getting around|||Bài 7 — Hỏi đường & đi lại',
   'Mẫu câu: 怎么走, …在哪儿, 坐几路车, 离这儿远吗; hướng 往前走/往左拐; phương tiện 地铁/公交车; luyện hỏi đường.',
   [[
     `<span class="eyebrow">CHS111 · Lesson 7 · Directions</span>
@@ -587,13 +587,13 @@ B: 不远，很近。           Bù yuǎn, hěn jìn.              (Không xa, r
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 往 (wǎng, về hướng) + hướng + 走/拐 là một cụm cố định — nói liền một khối: wǎng-qián-zǒu, wǎng-zuǒ-guǎi. 就到了 (jiù dào le) gắn thêm ý "là tới ngay".</div>`,
   ]]);
 
-const b7q = quiz('chs111-quiz-7', 'Quiz 7 — Directions|||Quiz 7 — Hỏi đường &amp; đi lại', [
+const b7q = quiz('chs111-quiz-7', 'Quiz 7 — Directions|||Quiz 7 — Hỏi đường & đi lại', [
   { id: 'q1', question: 'Hỏi "đi … thế nào?" đúng là? / How do you ask how to get somewhere?', options: ['… 多少钱？', '… 怎么走？', '… 几点？', '… 好吃吗？'], correctIndex: 1, explanation: '怎么 (thế nào) + 走 (đi) → … 怎么走?' },
   { id: 'q2', question: '"往左拐" nghĩa là gì? / What does 往左拐 mean?', options: ['đi thẳng', 'rẽ trái', 'rẽ phải', 'quay lại'], correctIndex: 1, explanation: '往 (về hướng) + 左 (trái) + 拐 (rẽ) = rẽ trái.' },
   { id: 'q3', question: 'Hỏi "đi xe buýt số mấy?" là? / How do you ask which bus number to take?', options: ['坐几路车？', '离这儿远吗？', '在哪儿工作？', '几点见？'], correctIndex: 0, explanation: '坐 (đi/ngồi) + 几路 (tuyến số mấy) + 车 (xe) → 坐几路车?' },
 ]);
 
-const b8 = doc('chs111-8-1-appointments', 'Lesson 8 — Appointments &amp; invitations|||Bài 8 — Hẹn &amp; mời',
+const b8 = doc('chs111-8-1-appointments', 'Lesson 8 — Appointments & invitations|||Bài 8 — Hẹn & mời',
   'Mẫu câu: 你有时间吗, 一起去…, 几点见, 在…等你; 好啊 nhận lời; luyện rủ bạn đi chơi và hẹn giờ-địa điểm.',
   [[
     `<span class="eyebrow">CHS111 · Lesson 8 · Appointments</span>
@@ -658,7 +658,7 @@ A: 三点，我在咖啡馆等你。 Sān diǎn, wǒ zài kāfēiguǎn děng nǐ
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 好啊！(hǎo a) với 啊 lên giọng tươi nghe ấm áp, sẵn lòng — 好 nói phẳng lại nghe miễn cưỡng. Các trợ từ nhỏ 吗 / 吧 / 啊 mang sắc thái, nên hãy cho chúng một nhịp nhẹ riêng.</div>`,
   ]]);
 
-const b8q = quiz('chs111-quiz-8', 'Quiz 8 — Appointments &amp; invitations|||Quiz 8 — Hẹn &amp; mời', [
+const b8q = quiz('chs111-quiz-8', 'Quiz 8 — Appointments & invitations|||Quiz 8 — Hẹn & mời', [
   { id: 'q1', question: 'Rủ "chúng ta cùng đi… nhé!" dùng trợ từ nào ở cuối? / Which particle turns a suggestion friendly at the end?', options: ['吗 ma', '吧 ba', '的 de', '了 le'], correctIndex: 1, explanation: '一起去…吧! — 吧 ba làm câu thành lời gợi ý/rủ rê thân thiện.' },
   { id: 'q2', question: 'Hỏi "mấy giờ gặp?" đúng là? / How do you ask "what time shall we meet?"', options: ['几点见？', '在哪儿？', '多少钱？', '怎么走？'], correctIndex: 0, explanation: '几点 (mấy giờ) + 见 (gặp) → 几点见?' },
   { id: 'q3', question: '"我在咖啡馆等你" nghĩa là gì? / What does 我在咖啡馆等你 mean?', options: ['Tôi đi quán cà phê', 'Tôi đợi bạn ở quán cà phê', 'Tôi thích cà phê', 'Quán cà phê ở đâu'], correctIndex: 1, explanation: '在咖啡馆 (ở quán cà phê) + 等你 (đợi bạn) = tôi đợi bạn ở quán cà phê.' },
@@ -682,15 +682,15 @@ export default {
     requirements: 'Không cần kiến thức tiếng Trung trước đó. Nên cài Pleco hoặc HelloChinese để nghe audio bản ngữ &amp; luyện nói theo; hãy nói to và tự thu âm để so với mẫu. Học kèm CHN113 (đọc-viết) sẽ bổ trợ tốt cho phần nói.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Mục tiêu giao tiếp, tầm quan trọng của phát âm & thanh điệu, cách luyện nói.', lessons: [intro] },
-    { title: 'Bài 1 — Phát âm chuẩn &amp; thanh điệu|||Lesson 1 — Pronunciation &amp; tones', description: 'Âm khó, 4 thanh + thanh nhẹ, biến điệu, luyện thanh.', lessons: [b1, b1q] },
-    { title: 'Bài 2 — Chào hỏi &amp; làm quen|||Lesson 2 — Greetings', description: '请问, 很高兴认识你, 哪国人.', lessons: [b2, b2q] },
+    { title: 'Bài 1 — Phát âm chuẩn & thanh điệu|||Lesson 1 — Pronunciation & tones', description: 'Âm khó, 4 thanh + thanh nhẹ, biến điệu, luyện thanh.', lessons: [b1, b1q] },
+    { title: 'Bài 2 — Chào hỏi & làm quen|||Lesson 2 — Greetings', description: '请问, 很高兴认识你, 哪国人.', lessons: [b2, b2q] },
     { title: 'Bài 3 — Hỏi thông tin cá nhân|||Lesson 3 — Personal information', description: '多大, 在哪儿工作, 电话号码.', lessons: [b3, b3q] },
-    { title: 'Bài 4 — Trong lớp học &amp; công sở|||Lesson 4 — Classroom & office', description: '请再说一遍, 听不懂, 什么意思.', lessons: [b4, b4q] },
-    { title: 'Bài 5 — Mua sắm &amp; mặc cả|||Lesson 5 — Shopping & bargaining', description: '多少钱, 便宜点儿, 能不能, 我要这个.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Ăn uống &amp; gọi món|||Lesson 6 — Eating & ordering', description: '你想吃什么, 来一个, 好吃, 买单.', lessons: [b6, b6q] },
-    { title: 'Bài 7 — Hỏi đường &amp; đi lại|||Lesson 7 — Directions', description: '怎么走, 坐几路车, 离这儿远吗.', lessons: [b7, b7q] },
-    { title: 'Bài 8 — Hẹn &amp; mời|||Lesson 8 — Appointments', description: '你有时间吗, 一起去, 几点见, 在…等你.', lessons: [b8, b8q] },
+    { title: 'Bài 4 — Trong lớp học & công sở|||Lesson 4 — Classroom & office', description: '请再说一遍, 听不懂, 什么意思.', lessons: [b4, b4q] },
+    { title: 'Bài 5 — Mua sắm & mặc cả|||Lesson 5 — Shopping & bargaining', description: '多少钱, 便宜点儿, 能不能, 我要这个.', lessons: [b5, b5q] },
+    { title: 'Bài 6 — Ăn uống & gọi món|||Lesson 6 — Eating & ordering', description: '你想吃什么, 来一个, 好吃, 买单.', lessons: [b6, b6q] },
+    { title: 'Bài 7 — Hỏi đường & đi lại|||Lesson 7 — Directions', description: '怎么走, 坐几路车, 离这儿远吗.', lessons: [b7, b7q] },
+    { title: 'Bài 8 — Hẹn & mời|||Lesson 8 — Appointments', description: '你有时间吗, 一起去, 几点见, 在…等你.', lessons: [b8, b8q] },
   ],
 };

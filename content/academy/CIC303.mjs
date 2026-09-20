@@ -10,7 +10,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const c1 = doc('cic303-1-1-society-issues', '1.1 — Society &amp; contemporary issues|||1.1 — Xã hội &amp; các vấn đề đương đại',
+const c1 = doc('cic303-1-1-society-issues', '1.1 — Society & contemporary issues|||1.1 — Xã hội & các vấn đề đương đại',
   'Từ vựng học thuật về xã hội (khoảng cách giàu nghèo, lão hoá dân số, đô thị hoá); mẫu câu 随着…, 不仅…而且…, 尽管…但是…, 就…而言.',
   [[
     `<span class="eyebrow">CIC303 · Chapter 1 · Lesson 1.1</span>
@@ -97,13 +97,13 @@ cạnh tranh việc làm của thế hệ trẻ."
 <div class="callout"><span class="badge">Mẹo thi</span> Bài viết/nói HSK6 chấm điểm cao đúng khung này: nêu xu hướng bằng <strong>随着…</strong>, rồi tách <em>hai</em> hệ quả bằng <strong>不仅…而且…</strong>. Học thuộc cái khung, không chỉ từ vựng bên trong.</div>`,
   ]]);
 
-const c1q = quiz('cic303-quiz-1', 'Quiz 1 — Society &amp; issues|||Quiz 1 — Xã hội &amp; vấn đề', [
+const c1q = quiz('cic303-quiz-1', 'Quiz 1 — Society & issues|||Quiz 1 — Xã hội & vấn đề', [
   { id: 'q1', question: '"贫富差距" nghĩa là gì?', options: ['Tăng trưởng kinh tế', 'Khoảng cách giàu nghèo', 'Lão hoá dân số', 'An sinh xã hội'], correctIndex: 1, explanation: '贫(nghèo)+富(giàu)+差距(khoảng cách) → khoảng cách giàu nghèo.' },
   { id: 'q2', question: 'Mẫu câu "不仅…而且…" dùng để làm gì?', options: ['So sánh hơn kém', 'Nối hai vế tăng tiến (không những… mà còn…)', 'Diễn tả điều kiện', 'Diễn tả nhượng bộ'], correctIndex: 1, explanation: '不仅…而且… là cấu trúc tăng tiến, thêm ý thứ hai mạnh hơn ý đầu.' },
   { id: 'q3', question: 'Từ nào có nghĩa "phát triển bền vững"?', options: ['可持续发展', '社会保障', '就业压力', '弱势群体'], correctIndex: 0, explanation: '可持续(bền vững, có thể duy trì)+发展(phát triển) = phát triển bền vững.' },
 ]);
 
-const c2 = doc('cic303-2-1-economy-globalization', '2.1 — Economy, trade &amp; globalization|||2.1 — Kinh tế, thương mại &amp; toàn cầu hoá',
+const c2 = doc('cic303-2-1-economy-globalization', '2.1 — Economy, trade & globalization|||2.1 — Kinh tế, thương mại & toàn cầu hoá',
   'Từ vựng kinh tế học thuật (lạm phát, tỷ giá, thâm hụt/thặng dư thương mại, chuỗi cung ứng); mẫu câu 一方面…另一方面…, 无论…都…, 由于…因此….',
   [[
     `<span class="eyebrow">CIC303 · Chapter 2 · Lesson 2.1</span>
@@ -189,13 +189,13 @@ thách thức mới."
 <div class="callout"><span class="badge">Lưu ý văn phong</span> 由于…因此… là văn viết/trang trọng — loại xuất hiện trong bình luận thời sự và bài đọc HSK6. 因为…所以… là bản khẩu ngữ đời thường tương đương; biết cả hai, nhưng dùng bản trang trọng khi viết luận.</div>`,
   ]]);
 
-const c2q = quiz('cic303-quiz-2', 'Quiz 2 — Economy &amp; globalization|||Quiz 2 — Kinh tế &amp; toàn cầu hoá', [
+const c2q = quiz('cic303-quiz-2', 'Quiz 2 — Economy & globalization|||Quiz 2 — Kinh tế & toàn cầu hoá', [
   { id: 'q1', question: '"贸易逆差" nghĩa là gì?', options: ['Thặng dư thương mại', 'Thâm hụt thương mại', 'Tỷ giá hối đoái', 'Lạm phát'], correctIndex: 1, explanation: '逆差(nghịch/ngược) → nhập nhiều hơn xuất, tức thâm hụt thương mại; ngược lại 顺差 là thặng dư.' },
   { id: 'q2', question: 'Cấu trúc "一方面…另一方面…" dùng để làm gì?', options: ['Liệt kê hai mặt của cùng một vấn đề', 'Diễn tả nguyên nhân — kết quả', 'So sánh hơn kém', 'Diễn tả trình tự thời gian'], correctIndex: 0, explanation: 'Cấu trúc trình bày hai khía cạnh song song của một sự việc, không phải quan hệ đối lập.' },
   { id: 'q3', question: '"由于…因此…" biểu thị quan hệ gì?', options: ['Tương phản', 'Nhân — quả (trang trọng)', 'Lựa chọn', 'Song song ngang hàng'], correctIndex: 1, explanation: '由于(do) nêu nguyên nhân, 因此(vì vậy) nêu kết quả — quan hệ nhân quả ở văn phong trang trọng.' },
 ]);
 
-const c3 = doc('cic303-3-1-science-technology', '3.1 — Science, technology &amp; the future|||3.1 — Khoa học, công nghệ &amp; tương lai',
+const c3 = doc('cic303-3-1-science-technology', '3.1 — Science, technology & the future|||3.1 — Khoa học, công nghệ & tương lai',
   'Từ vựng công nghệ (AI, dữ liệu lớn, điện toán đám mây, năng lượng tái tạo); mẫu câu 一旦…就…, 除非…否则…, 之所以…是因为….',
   [[
     `<span class="eyebrow">CIC303 · Chapter 3 · Lesson 3.1</span>
@@ -281,13 +281,13 @@ công nghệ sẽ không ngừng gia tăng."
 <div class="callout"><span class="badge">Mẹo thi</span> 之所以…是因为… là cách an toàn nhất để trả lời câu hỏi "tại sao" trong bài viết HSK6 — buộc bạn nêu luận điểm trước rồi mới đến nguyên nhân, giám khảo theo dõi được ngay.</div>`,
   ]]);
 
-const c3q = quiz('cic303-quiz-3', 'Quiz 3 — Science &amp; technology|||Quiz 3 — Khoa học &amp; công nghệ', [
+const c3q = quiz('cic303-quiz-3', 'Quiz 3 — Science & technology|||Quiz 3 — Khoa học & công nghệ', [
   { id: 'q1', question: '"人工智能" là gì?', options: ['Dữ liệu lớn', 'Trí tuệ nhân tạo', 'Điện toán đám mây', 'Năng lượng tái tạo'], correctIndex: 1, explanation: '人工(nhân tạo)+智能(trí tuệ) = trí tuệ nhân tạo (AI).' },
   { id: 'q2', question: 'Mẫu "一旦…就…" nghĩa là gì?', options: ['Một khi… thì…', 'Trừ khi… nếu không…', 'Mặc dù… nhưng…', 'Không những… mà còn…'], correctIndex: 0, explanation: '一旦(một khi) nêu tác nhân, 就(thì) nêu kết quả xảy ra ngay sau đó.' },
   { id: 'q3', question: 'Cấu trúc "之所以…是因为…" dùng để làm gì?', options: ['Nêu kết quả trước rồi giải thích nguyên nhân', 'Nêu điều kiện duy nhất', 'Diễn tả sự tương phản', 'Diễn tả trình tự thời gian'], correctIndex: 0, explanation: '之所以(sở dĩ) đặt trước kết quả/luận điểm, 是因为(là vì) mới nêu nguyên nhân phía sau.' },
 ]);
 
-const c4 = doc('cic303-4-1-history-thought', '4.1 — Chinese history &amp; thought|||4.1 — Lịch sử &amp; tư tưởng Trung Hoa',
+const c4 = doc('cic303-4-1-history-thought', '4.1 — Chinese history & thought|||4.1 — Lịch sử & tư tưởng Trung Hoa',
   'Các triều đại, Nho-Đạo-Pháp gia, chế độ khoa cử, Con đường tơ lụa, Tứ đại phát minh, cải cách mở cửa; mẫu câu 从…到…, 与其…不如….',
   [[
     `<span class="eyebrow">CIC303 · Chapter 4 · Lesson 4.1</span>
@@ -374,13 +374,13 @@ trường phái."
 <div class="callout"><span class="badge">Ghi chú văn hoá</span> 诸子百家 gọi tên cả một thời đại nhiều trường phái tư tưởng cạnh tranh (Nho, Đạo, Pháp, Mặc…) — đừng dịch thành "một trường phái"; đó là cả một lĩnh vực số nhiều mà các trường phái ấy thuộc về.</div>`,
   ]]);
 
-const c4q = quiz('cic303-quiz-4', 'Quiz 4 — History &amp; thought|||Quiz 4 — Lịch sử &amp; tư tưởng', [
+const c4q = quiz('cic303-quiz-4', 'Quiz 4 — History & thought|||Quiz 4 — Lịch sử & tư tưởng', [
   { id: 'q1', question: '"儒家" là trường phái tư tưởng nào?', options: ['Pháp gia', 'Đạo gia', 'Nho gia', 'Mặc gia'], correctIndex: 2, explanation: '儒家 (rújiā) là Nho gia, do Khổng Tử sáng lập.' },
   { id: 'q2', question: '"科举制度" là gì?', options: ['Con đường tơ lụa', 'Chế độ khoa cử', 'Tứ đại phát minh', 'Cải cách mở cửa'], correctIndex: 1, explanation: '科举(khoa cử)+制度(chế độ) = hệ thống thi cử tuyển quan lại thời phong kiến.' },
   { id: 'q3', question: 'Cấu trúc "与其…不如…" biểu thị điều gì?', options: ['Càng…càng…', 'Thà…còn hơn… (so sánh, nghiêng về lựa chọn sau)', 'Không những…mà còn…', 'Một khi…thì…'], correctIndex: 1, explanation: '与其(thà)…不如(còn hơn/chi bằng)… so sánh hai phương án và chọn phương án thứ hai.' },
 ]);
 
-const c5 = doc('cic303-5-1-literature-art', '5.1 — Advanced literature &amp; art|||5.1 — Văn học &amp; nghệ thuật nâng cao',
+const c5 = doc('cic303-5-1-literature-art', '5.1 — Advanced literature & art|||5.1 — Văn học & nghệ thuật nâng cao',
   'Ý cảnh, thủ pháp tu từ, thư pháp, tranh thuỷ mặc, kinh kịch; mẫu câu 借景抒情, 富有…色彩, phân tích ẩn dụ &amp; biểu tượng.',
   [[
     `<span class="eyebrow">CIC303 · Chapter 5 · Lesson 5.1</span>
@@ -457,13 +457,13 @@ cùng."
 <div class="callout"><span class="badge">Mẹo phân tích</span> Khi bài đọc HSK6 hỏi "tác giả dùng thủ pháp gì", hãy tìm đoạn miêu tả cảnh vật/sự vật đi kèm một từ cảm xúc gần đó — sự kết hợp ấy hầu như luôn là 借景抒情 hoặc 象征.</div>`,
   ]]);
 
-const c5q = quiz('cic303-quiz-5', 'Quiz 5 — Literature &amp; art|||Quiz 5 — Văn học &amp; nghệ thuật', [
+const c5q = quiz('cic303-quiz-5', 'Quiz 5 — Literature & art|||Quiz 5 — Văn học & nghệ thuật', [
   { id: 'q1', question: '"意境" trong văn học nghĩa gần nhất là gì?', options: ['Vần điệu', 'Ý cảnh — tứ thơ tạo ra từ sự hoà quyện cảnh và tình', 'Thể loại văn bản', 'Đối tượng được miêu tả'], correctIndex: 1, explanation: '意境 chỉ không gian cảm xúc/thẩm mỹ mà cảnh và tình cùng tạo nên trong tác phẩm.' },
   { id: 'q2', question: '"借景抒情" là thủ pháp gì?', options: ['Mượn cảnh để tả tình', 'Dùng số liệu để chứng minh', 'Liệt kê sự kiện theo thời gian', 'Đối thoại trực tiếp giữa nhân vật'], correctIndex: 0, explanation: '借(mượn)+景(cảnh)+抒(bày tỏ)+情(tình) = mượn cảnh vật để bộc lộ cảm xúc.' },
   { id: 'q3', question: '"水墨画" là gì?', options: ['Thư pháp', 'Tranh thuỷ mặc', 'Kinh kịch', 'Tản văn'], correctIndex: 1, explanation: '水(nước)+墨(mực)+画(tranh) = tranh vẽ bằng mực nước, tức tranh thuỷ mặc.' },
 ]);
 
-const c6 = doc('cic303-6-1-news-argumentative', '6.1 — Journalistic language &amp; argumentative style|||6.1 — Ngôn ngữ báo chí &amp; văn phong nghị luận',
+const c6 = doc('cic303-6-1-news-argumentative', '6.1 — Journalistic language & argumentative style|||6.1 — Ngôn ngữ báo chí & văn phong nghị luận',
   'Cấu trúc bản tin (标题/导语), xã luận, lập luận (论点/论据/论证/反驳); mẫu câu 据报道, 众所周知, 综上所述, 不可否认.',
   [[
     `<span class="eyebrow">CIC303 · Chapter 6 · Lesson 6.1</span>
@@ -558,13 +558,13 @@ giác."</code></pre>
 <div class="callout"><span class="badge">Mẹo cấu trúc</span> Khung bốn câu này — trích nguồn (据报道) → tiền đề chung (众所周知) → nhượng bộ (不可否认) → kết luận (综上所述) — là khung dựng sẵn cho bài viết nghị luận HSK6.</div>`,
   ]]);
 
-const c6q = quiz('cic303-quiz-6', 'Quiz 6 — News &amp; argumentative style|||Quiz 6 — Báo chí &amp; nghị luận', [
+const c6q = quiz('cic303-quiz-6', 'Quiz 6 — News & argumentative style|||Quiz 6 — Báo chí & nghị luận', [
   { id: 'q1', question: '"社论" nghĩa là gì?', options: ['Tin tức thường', 'Bài xã luận', 'Tiêu đề', 'Lời dẫn'], correctIndex: 1, explanation: '社论 là bài viết thể hiện quan điểm chính thức của toà soạn, tức xã luận.' },
   { id: 'q2', question: '"据报道" dùng khi nào?', options: ['Khi trích dẫn nguồn tin', 'Khi phủ định hoàn toàn', 'Khi tổng kết bài viết', 'Khi đặt câu hỏi'], correctIndex: 0, explanation: '据(căn cứ theo)+报道(tin đưa) = mở đầu câu dẫn nguồn tin.' },
   { id: 'q3', question: '"综上所述" thường xuất hiện ở đâu trong bài nghị luận?', options: ['Mở bài', 'Đoạn kết luận, tổng kết', 'Giữa thân bài, khi nêu ví dụ', 'Trong tiêu đề'], correctIndex: 1, explanation: '综(tổng hợp)+上(trên)+所述(đã trình bày) = câu mở đầu chuẩn cho phần kết luận.' },
 ]);
 
-const c7 = doc('cic303-7-1-idioms-culture', '7.1 — Idioms, allusions &amp; deep culture|||7.1 — Thành ngữ, điển cố &amp; văn hoá sâu',
+const c7 = doc('cic303-7-1-idioms-culture', '7.1 — Idioms, allusions & deep culture|||7.1 — Thành ngữ, điển cố & văn hoá sâu',
   '8 thành ngữ điển cố quan trọng (画蛇添足, 亡羊补牢, 守株待兔, 滥竽充数, 狐假虎威, 对牛弹琴, 井底之蛙, 塞翁失马) — nguồn gốc, nghĩa &amp; cách dùng.',
   [[
     `<span class="eyebrow">CIC303 · Chapter 7 · Lesson 7.1</span>
@@ -621,13 +621,13 @@ const c7 = doc('cic303-7-1-idioms-culture', '7.1 — Idioms, allusions &amp; dee
 <div class="callout"><span class="badge">Mẹo thi</span> HSK6 thường kiểm tra thành ngữ bằng cách đưa một tình huống ngắn rồi hỏi 成语 nào phù hợp — cách chắc ăn là biết <em>câu chuyện gốc</em>, không chỉ nghĩa tiếng Việt, vì nhiều thành ngữ có bề mặt giống nhau nhưng sắc thái khác nhau.</div>`,
   ]]);
 
-const c7q = quiz('cic303-quiz-7', 'Quiz 7 — Idioms &amp; culture|||Quiz 7 — Thành ngữ &amp; văn hoá', [
+const c7q = quiz('cic303-quiz-7', 'Quiz 7 — Idioms & culture|||Quiz 7 — Thành ngữ & văn hoá', [
   { id: 'q1', question: '"守株待兔" khuyên điều gì?', options: ['Kiên trì làm việc chăm chỉ', 'Đừng ỷ lại vào may mắn ngẫu nhiên thay vì nỗ lực', 'Cẩn thận trong lời nói', 'Học từ sai lầm của người khác'], correctIndex: 1, explanation: 'Người nông dân ôm gốc cây chờ thỏ đâm đầu vào lần nữa — phê phán việc trông chờ may rủi thay vì hành động.' },
   { id: 'q2', question: '"亡羊补牢" gần nghĩa nhất với câu tục ngữ Việt nào?', options: ['Mất bò mới lo làm chuồng', 'Nước đến chân mới nhảy', 'Được voi đòi tiên', 'Đứng núi này trông núi nọ'], correctIndex: 0, explanation: 'Cả hai đều nói về việc sửa chữa sau khi đã mất mát, nhưng vẫn còn kịp — muộn còn hơn không.' },
   { id: 'q3', question: '"塞翁失马" hàm ý điều gì?', options: ['Trong cái rủi có cái may, hoạ phúc khôn lường', 'Tham thì thâm', 'Cẩn tắc vô áy náy', 'Có công mài sắt có ngày nên kim'], correctIndex: 0, explanation: 'Câu chuyện ông lão mất ngựa cho thấy rủi ro và may mắn có thể đảo chiều lẫn nhau.' },
 ]);
 
-const c8 = doc('cic303-8-1-hsk6-review', '8.1 — HSK6 review: advanced writing, academic reading &amp; paraphrasing|||8.1 — Ôn tập HSK6: viết luận nâng cao, đọc hiểu học thuật &amp; tóm tắt diễn đạt lại',
+const c8 = doc('cic303-8-1-hsk6-review', '8.1 — HSK6 review: advanced writing, academic reading & paraphrasing|||8.1 — Ôn tập HSK6: viết luận nâng cao, đọc hiểu học thuật & tóm tắt diễn đạt lại',
   'Cấu trúc bài thi viết HSK6 (缩写 tóm tắt ~400 chữ từ bài đọc ~1000 chữ), chiến lược đọc hiểu học thuật, kỹ thuật diễn đạt lại (改写); liên từ tổ chức đoạn văn.',
   [[
     `<span class="eyebrow">CIC303 · Chapter 8 · Lesson 8.1</span>
@@ -702,13 +702,13 @@ export default {
     requirements: 'Đã đạt trình độ HSK5 (hoặc tương đương): đọc hiểu 2.500 từ vựng cơ bản, nắm ngữ pháp trung cấp. Môn tiếp nối trực tiếp lên HSK6.',
   },
   sections: [
-    { title: 'Chương 1 — Xã hội &amp; các vấn đề đương đại|||Chapter 1 — Society &amp; contemporary issues', description: 'Khoảng cách giàu nghèo, lão hoá dân số, đô thị hoá; 随着…, 不仅…而且….', lessons: [c1, c1q] },
-    { title: 'Chương 2 — Kinh tế, thương mại &amp; toàn cầu hoá|||Chapter 2 — Economy, trade &amp; globalization', description: 'Lạm phát, tỷ giá, thương mại, chuỗi cung ứng; 一方面…另一方面…, 由于…因此….', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Khoa học, công nghệ &amp; tương lai|||Chapter 3 — Science, technology &amp; the future', description: 'AI, dữ liệu lớn, năng lượng tái tạo; 一旦…就…, 除非…否则…, 之所以…是因为….', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Lịch sử &amp; tư tưởng Trung Hoa|||Chapter 4 — Chinese history &amp; thought', description: 'Nho-Đạo-Pháp gia, khoa cử, Con đường tơ lụa; 从…到…, 与其…不如….', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Văn học &amp; nghệ thuật nâng cao|||Chapter 5 — Advanced literature &amp; art', description: 'Ý cảnh, tu từ, thư pháp, tranh thuỷ mặc, kinh kịch; 借景抒情.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Ngôn ngữ báo chí &amp; văn phong nghị luận|||Chapter 6 — Journalistic language &amp; argumentative style', description: 'Bản tin, xã luận, lập luận; 据报道, 众所周知, 综上所述.', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Thành ngữ, điển cố &amp; văn hoá sâu|||Chapter 7 — Idioms, allusions &amp; deep culture', description: '8 thành ngữ kinh điển kèm điển tích, nghĩa &amp; cách dùng.', lessons: [c7, c7q] },
+    { title: 'Chương 1 — Xã hội & các vấn đề đương đại|||Chapter 1 — Society & contemporary issues', description: 'Khoảng cách giàu nghèo, lão hoá dân số, đô thị hoá; 随着…, 不仅…而且….', lessons: [c1, c1q] },
+    { title: 'Chương 2 — Kinh tế, thương mại & toàn cầu hoá|||Chapter 2 — Economy, trade & globalization', description: 'Lạm phát, tỷ giá, thương mại, chuỗi cung ứng; 一方面…另一方面…, 由于…因此….', lessons: [c2, c2q] },
+    { title: 'Chương 3 — Khoa học, công nghệ & tương lai|||Chapter 3 — Science, technology & the future', description: 'AI, dữ liệu lớn, năng lượng tái tạo; 一旦…就…, 除非…否则…, 之所以…是因为….', lessons: [c3, c3q] },
+    { title: 'Chương 4 — Lịch sử & tư tưởng Trung Hoa|||Chapter 4 — Chinese history & thought', description: 'Nho-Đạo-Pháp gia, khoa cử, Con đường tơ lụa; 从…到…, 与其…不如….', lessons: [c4, c4q] },
+    { title: 'Chương 5 — Văn học & nghệ thuật nâng cao|||Chapter 5 — Advanced literature & art', description: 'Ý cảnh, tu từ, thư pháp, tranh thuỷ mặc, kinh kịch; 借景抒情.', lessons: [c5, c5q] },
+    { title: 'Chương 6 — Ngôn ngữ báo chí & văn phong nghị luận|||Chapter 6 — Journalistic language & argumentative style', description: 'Bản tin, xã luận, lập luận; 据报道, 众所周知, 综上所述.', lessons: [c6, c6q] },
+    { title: 'Chương 7 — Thành ngữ, điển cố & văn hoá sâu|||Chapter 7 — Idioms, allusions & deep culture', description: '8 thành ngữ kinh điển kèm điển tích, nghĩa &amp; cách dùng.', lessons: [c7, c7q] },
     { title: 'Chương 8 — Ôn tập HSK6|||Chapter 8 — HSK6 review', description: 'Viết luận (缩写), đọc hiểu học thuật, tóm tắt &amp; diễn đạt lại (改写).', lessons: [c8, c8q] },
   ],
 };

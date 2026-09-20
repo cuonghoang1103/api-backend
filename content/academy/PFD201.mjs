@@ -114,7 +114,7 @@ const intro = doc('pfd201-0-1-overview', 'Course overview: Photography for desig
 <p>Máy ảnh &amp; cơ bản → tam giác phơi sáng → khẩu độ &amp; độ sâu trường ảnh → tốc độ &amp; chuyển động → bố cục → ánh sáng → màu &amp; cân bằng trắng → hậu kỳ &amp; ứng dụng thiết kế. Song ngữ, có thông số thật và ví dụ mẫu, kèm quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('pfd201-1-1-camera-basics', '1.1 — The camera &amp; the basics|||1.1 — Máy ảnh &amp; cơ bản',
+const c1 = doc('pfd201-1-1-camera-basics', '1.1 — The camera & the basics|||1.1 — Máy ảnh & cơ bản',
   'Loại máy (DSLR, mirrorless, điện thoại), cảm biến (full-frame vs crop), ống kính, tiêu cự (mm) và góc nhìn; RAW vs JPEG.',
   [[
     `<span class="eyebrow">PFD201 · Chapter 1 · Lesson 1.1</span>
@@ -157,7 +157,7 @@ Tele      70-200mm+ -> chân dung, nén cảnh, chủ thể ở xa
 <div class="callout"><span class="badge">Cho nhà thiết kế</span> Tiêu cự làm đổi tỉ lệ: ống rộng phóng đại sản phẩm ở tiền cảnh; tele ngắn (85&nbsp;mm) làm khuôn mặt đẹp hơn cho chân dung thương hiệu.</div>`,
   ]]);
 
-const c1q = quiz('pfd201-quiz-1', 'Quiz 1 — Camera &amp; basics|||Quiz 1 — Máy ảnh &amp; cơ bản', [
+const c1q = quiz('pfd201-quiz-1', 'Quiz 1 — Camera & basics|||Quiz 1 — Máy ảnh & cơ bản', [
   { id: 'q1', question: 'A larger (full-frame) sensor generally makes it easier to?|||Cảm biến lớn hơn (full-frame) nhìn chung giúp dễ?', options: ['Blur the background|||Xoá phông', 'Freeze fast motion by itself|||Tự đóng băng chuyển động nhanh', 'Zoom optically|||Zoom quang học', 'Add colour|||Thêm màu'], correctIndex: 0, explanation: 'Cảm biến lớn thu nhiều sáng và tạo độ sâu trường ảnh mỏng dễ hơn → xoá phông.' },
   { id: 'q2', question: 'Which focal length is typical for flattering brand portraits?|||Tiêu cự nào hợp cho chân dung thương hiệu đẹp?', options: ['16mm rộng|||16mm góc rộng', '85mm tele ngắn|||85mm tele ngắn', '8mm mắt cá|||8mm mắt cá', 'Không liên quan|||Không liên quan'], correctIndex: 1, explanation: 'Tele ngắn (~85mm) ít méo khuôn mặt, cho tỉ lệ tự nhiên.' },
   { id: 'q3', question: 'Why should designers shoot RAW?|||Vì sao nhà thiết kế nên chụp RAW?', options: ['File nhỏ hơn|||File nhỏ hơn', 'Giữ mọi dữ liệu để chỉnh sáng/màu/WB sau|||Giữ mọi dữ liệu để chỉnh sáng/màu/WB sau', 'Đăng web nhanh hơn|||Đăng web nhanh hơn', 'Máy chụp nhanh hơn|||Máy chụp nhanh hơn'], correctIndex: 1, explanation: 'RAW giữ toàn bộ dữ liệu cảm biến → biên độ chỉnh sửa lớn nhất.' },
@@ -208,7 +208,7 @@ const c2q = quiz('pfd201-quiz-2', 'Quiz 2 — Exposure triangle|||Quiz 2 — Tam
   { id: 'q3', question: 'Raising ISO makes the image brighter but also?|||Tăng ISO làm ảnh sáng hơn nhưng cũng?', options: ['Nét hơn|||Nét hơn', 'Nhiễu (noise) hơn|||Nhiễu (noise) hơn', 'Mờ phông hơn|||Mờ phông hơn', 'Đổi màu|||Đổi màu'], correctIndex: 1, explanation: 'ISO cao khuếch đại tín hiệu → tăng độ sáng kèm nhiễu.' },
 ]);
 
-const c3 = doc('pfd201-3-1-aperture-dof', '3.1 — Aperture &amp; depth of field|||3.1 — Khẩu độ &amp; độ sâu trường ảnh',
+const c3 = doc('pfd201-3-1-aperture-dof', '3.1 — Aperture & depth of field|||3.1 — Khẩu độ & độ sâu trường ảnh',
   'Khẩu độ điều khiển độ sâu trường ảnh (DOF): f nhỏ = phông mờ (bokeh), f lớn = mọi thứ nét; khẩu độ sáng tạo cho chân dung, sản phẩm, phong cảnh.',
   [[
     `<span class="eyebrow">PFD201 · Chapter 3 · Lesson 3.1</span>
@@ -245,13 +245,13 @@ Phong cảnh: 24mm  ·  f/11   -> đá VÀ núi đều nét
 <div class="callout"><span class="badge">Cho nhà thiết kế</span> DOF mỏng dọn sạch phông rối để sản phẩm hoặc chủ thể "đọc" ngay — và chừa vùng trống mịn để đặt chữ.</div>`,
   ]]);
 
-const c3q = quiz('pfd201-quiz-3', 'Quiz 3 — Aperture &amp; DOF|||Quiz 3 — Khẩu độ &amp; DOF', [
+const c3q = quiz('pfd201-quiz-3', 'Quiz 3 — Aperture & DOF|||Quiz 3 — Khẩu độ & DOF', [
   { id: 'q1', question: 'To blur the background of a portrait, you use?|||Muốn xoá phông chân dung, bạn dùng?', options: ['Khẩu khép nhỏ f/16|||Khẩu khép nhỏ f/16', 'Khẩu mở lớn f/1.8|||Khẩu mở lớn f/1.8', 'ISO cao|||ISO cao', 'Tốc độ chậm|||Tốc độ chậm'], correctIndex: 1, explanation: 'Khẩu mở lớn (số f nhỏ) → DOF mỏng → phông mờ.' },
   { id: 'q2', question: 'For a landscape where near rocks and far mountains are both sharp, use?|||Cảnh cần cả đá gần và núi xa đều nét thì dùng?', options: ['f/2.8', 'f/11 hoặc f/16|||f/11 hoặc f/16', 'ISO 6400', 'Tele 200mm|||Tele 200mm'], correctIndex: 1, explanation: 'Khẩu khép nhỏ (f/11-f/16) cho DOF dày, nét từ gần tới xa.' },
   { id: 'q3', question: 'Bokeh refers to?|||Bokeh chỉ điều gì?', options: ['Độ nhiễu của ảnh|||Độ nhiễu của ảnh', 'Chất lượng vùng mờ ngoài nét|||Chất lượng vùng mờ ngoài nét', 'Cân bằng trắng|||Cân bằng trắng', 'Tốc độ màn trập|||Tốc độ màn trập'], correctIndex: 1, explanation: 'Bokeh = chất của phần out-focus, đẹp nhất với khẩu lớn + ống dài.' },
 ]);
 
-const c4 = doc('pfd201-4-1-shutter-motion', '4.1 — Shutter speed &amp; motion|||4.1 — Tốc độ màn trập &amp; chuyển động',
+const c4 = doc('pfd201-4-1-shutter-motion', '4.1 — Shutter speed & motion|||4.1 — Tốc độ màn trập & chuyển động',
   'Tốc độ màn trập điều khiển chuyển động: nhanh để đóng băng (freeze), chậm để nhoè (motion blur); lia máy (panning); phơi sáng dài; quy tắc chống rung.',
   [[
     `<span class="eyebrow">PFD201 · Chapter 4 · Lesson 4.1</span>
@@ -290,7 +290,7 @@ Lia xe:        1/40s   -> xe nét, phông kéo vệt
 <div class="callout"><span class="badge">Quy tắc nghịch đảo</span> Muốn cầm tay nét, giữ tốc độ ít nhất bằng 1/tiêu-cự: ống 100&nbsp;mm thì dùng 1/100s trở lên (chống rung mua thêm vài stop).</div>`,
   ]]);
 
-const c4q = quiz('pfd201-quiz-4', 'Quiz 4 — Shutter &amp; motion|||Quiz 4 — Tốc độ &amp; chuyển động', [
+const c4q = quiz('pfd201-quiz-4', 'Quiz 4 — Shutter & motion|||Quiz 4 — Tốc độ & chuyển động', [
   { id: 'q1', question: 'To freeze a fast-moving athlete, use?|||Muốn đóng băng vận động viên chuyển động nhanh, dùng?', options: ['1/15s chậm|||1/15s chậm', '1/1000s nhanh|||1/1000s nhanh', 'Khẩu f/16|||Khẩu f/16', 'ISO 100'], correctIndex: 1, explanation: 'Tốc độ nhanh (1/1000s+) đóng băng chuyển động.' },
   { id: 'q2', question: 'A silky, smooth waterfall needs?|||Thác nước mượt như tơ cần?', options: ['Tốc độ chậm + chân máy|||Tốc độ chậm + chân máy', 'Tốc độ 1/2000s|||Tốc độ 1/2000s', 'Đèn flash|||Đèn flash', 'Ống mắt cá|||Ống mắt cá'], correctIndex: 0, explanation: 'Tốc độ chậm (khoảng 1s) làm nước nhoè mượt; cần chân máy để phần còn lại nét.' },
   { id: 'q3', question: 'The reciprocal rule for hand-holding a 100mm lens suggests at least?|||Quy tắc nghịch đảo khi cầm tay ống 100mm gợi ý tốc độ tối thiểu?', options: ['1/10s', '1/100s', '1s', '1/2000s'], correctIndex: 1, explanation: 'Ít nhất 1/tiêu-cự → ống 100mm dùng 1/100s trở lên.' },
@@ -386,7 +386,7 @@ const c6q = quiz('pfd201-quiz-6', 'Quiz 6 — Light|||Quiz 6 — Ánh sáng', [
   { id: 'q3', question: 'To get soft, gentle shadows on a face you want a source that is?|||Muốn bóng mềm, dịu trên khuôn mặt cần nguồn sáng?', options: ['Nhỏ và ở xa|||Nhỏ và ở xa', 'Lớn so với chủ thể (cửa sổ/softbox)|||Lớn so với chủ thể (cửa sổ/softbox)', 'Nắng trưa gắt|||Nắng trưa gắt', 'Đèn flash trực diện nhỏ|||Đèn flash trực diện nhỏ'], correctIndex: 1, explanation: 'Nguồn càng lớn so với chủ thể thì bóng càng mềm.' },
 ]);
 
-const c7 = doc('pfd201-7-1-color-white-balance', '7.1 — Colour &amp; white balance|||7.1 — Màu &amp; cân bằng trắng',
+const c7 = doc('pfd201-7-1-color-white-balance', '7.1 — Colour & white balance|||7.1 — Màu & cân bằng trắng',
   'Cân bằng trắng (white balance) và nhiệt màu (Kelvin); màu ám (warm/cool cast); vai trò của màu trong nhiếp ảnh và cách khớp màu ảnh với bảng màu thiết kế.',
   [[
     `<span class="eyebrow">PFD201 · Chapter 7 · Lesson 7.1</span>
@@ -427,13 +427,13 @@ Trời mây / bóng râm ~7000-8000K  -> lạnh, xanh
 <div class="callout"><span class="badge">Cho nhà thiết kế</span> Nắn cân bằng trắng và sắc độ khi chỉnh để màu ảnh rơi đúng bảng màu thương hiệu — cách nhanh nhất khiến ảnh stock hay buổi chụp trông "được thiết kế".</div>`,
   ]]);
 
-const c7q = quiz('pfd201-quiz-7', 'Quiz 7 — Colour &amp; white balance|||Quiz 7 — Màu &amp; cân bằng trắng', [
+const c7q = quiz('pfd201-quiz-7', 'Quiz 7 — Colour & white balance|||Quiz 7 — Màu & cân bằng trắng', [
   { id: 'q1', question: 'On the Kelvin scale, a low number (~3000K) light is?|||Trên thang Kelvin, ánh sáng số thấp (~3000K) là?', options: ['Lạnh, xanh|||Lạnh, xanh', 'Ấm, cam|||Ấm, cam', 'Trung tính trắng|||Trung tính trắng', 'Không màu|||Không màu'], correctIndex: 1, explanation: 'Ngược trực giác: Kelvin thấp = ấm/cam, Kelvin cao = lạnh/xanh.' },
   { id: 'q2', question: 'A wrong white balance produces?|||Cân bằng trắng sai gây ra?', options: ['Ám màu (colour cast)|||Ám màu (colour cast)', 'Nhoè chuyển động|||Nhoè chuyển động', 'Phông mờ|||Phông mờ', 'Nhiễu ISO|||Nhiễu ISO'], correctIndex: 0, explanation: 'WB sai → ảnh bị ám cam/xanh; chụp RAW sửa được không mất chất.' },
   { id: 'q3', question: 'Complementary colours like blue and orange are used to?|||Cặp màu bổ túc như xanh dương và cam dùng để?', options: ['Giảm tương phản|||Giảm tương phản', 'Tạo tương phản mạnh, bắt mắt|||Tạo tương phản mạnh, bắt mắt', 'Làm ảnh xám|||Làm ảnh xám', 'Xoá phông|||Xoá phông'], correctIndex: 1, explanation: 'Màu đối nhau trên vòng màu tạo tương phản punchy, hút mắt.' },
 ]);
 
-const c8 = doc('pfd201-8-1-postprocessing-design', '8.1 — Post-processing &amp; design use|||8.1 — Hậu kỳ &amp; ứng dụng thiết kế',
+const c8 = doc('pfd201-8-1-postprocessing-design', '8.1 — Post-processing & design use|||8.1 — Hậu kỳ & ứng dụng thiết kế',
   'Quy trình Lightroom: cull → chỉnh sáng (exposure/contrast) → chỉnh màu (WB/HSL) → cắt (crop) → xuất; ảnh cho thiết kế/branding; đạo đức chỉnh sửa.',
   [[
     `<span class="eyebrow">PFD201 · Chapter 8 · Lesson 8.1</span>
@@ -470,7 +470,7 @@ const c8 = doc('pfd201-8-1-postprocessing-design', '8.1 — Post-processing &amp
 <div class="callout"><span class="badge">Không phá huỷ</span> Chỉnh sửa trong Lightroom là các chỉ dẫn xếp chồng trên RAW gốc — luôn reset lại được. Giữ RAW; chỉ xuất bản sao.</div>`,
   ]]);
 
-const c8q = quiz('pfd201-quiz-8', 'Quiz 8 — Post-processing &amp; design|||Quiz 8 — Hậu kỳ &amp; thiết kế', [
+const c8q = quiz('pfd201-quiz-8', 'Quiz 8 — Post-processing & design|||Quiz 8 — Hậu kỳ & thiết kế', [
   { id: 'q1', question: 'Which colour space should you export in for the web?|||Nên xuất ảnh cho web ở không gian màu nào?', options: ['CMYK', 'sRGB', 'ProPhoto RGB', 'Grayscale'], correctIndex: 1, explanation: 'sRGB là không gian màu chuẩn cho web, hiển thị nhất quán trên mọi trình duyệt.' },
   { id: 'q2', question: 'Lightroom edits are non-destructive, which means?|||Chỉnh sửa Lightroom là không phá huỷ, nghĩa là?', options: ['Ảnh gốc bị ghi đè|||Ảnh gốc bị ghi đè', 'Chỉnh sửa là chỉ dẫn trên RAW, luôn reset được|||Chỉnh sửa là chỉ dẫn trên RAW, luôn reset được', 'Không xuất được|||Không xuất được', 'Chỉ dùng cho JPEG|||Chỉ dùng cho JPEG'], correctIndex: 1, explanation: 'Chỉnh sửa xếp chồng trên RAW gốc; luôn quay lại được, giữ nguyên file gốc.' },
   { id: 'q3', question: 'Which editing is ethically problematic?|||Chỉnh sửa nào gây vấn đề về đạo đức?', options: ['Sửa cân bằng trắng|||Sửa cân bằng trắng', 'Bịa hình dạng sản phẩm trong quảng cáo gây hiểu lầm|||Bịa hình dạng sản phẩm trong quảng cáo gây hiểu lầm', 'Tăng nhẹ tương phản|||Tăng nhẹ tương phản', 'Cắt khung lại|||Cắt khung lại'], correctIndex: 1, explanation: 'Chỉnh tông/màu là công bằng; bịa hoặc đánh lừa trong quảng cáo/báo chí là không.' },

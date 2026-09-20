@@ -125,7 +125,7 @@ const intro = doc('ana401-0-1-overview', 'Course overview: 3D Character Animatio
 <div class="callout"><span class="badge">Thói quen quan trọng nhất</span> Quay <strong>video tham chiếu</strong> chính bạn diễn cảnh đó, rồi phân tích từng khung hình. Dân chuyên nghiệp nào cũng làm vậy — diễn hoạt là quan sát trước khi là phần mềm.</div>`,
   ]]);
 
-const c1 = doc('ana401-1-1-twelve-principles', '1.1 — The 12 principles &amp; 3D application|||1.1 — 12 nguyên tắc &amp; ứng dụng 3D',
+const c1 = doc('ana401-1-1-twelve-principles', '1.1 — The 12 principles & 3D application|||1.1 — 12 nguyên tắc & ứng dụng 3D',
   '12 nguyên tắc của Disney (Thomas & Johnston): squash & stretch, anticipation, staging, straight-ahead/pose-to-pose, follow-through & overlap, slow in/out, arcs, secondary action, timing, exaggeration, solid drawing, appeal — và cách chúng biến đổi khi lên 3D.',
   [[
     `<span class="eyebrow">ANA401 · Chapter 1 · Lesson 1.1</span>
@@ -184,7 +184,7 @@ const c1q = quiz('ana401-quiz-1', 'Quiz 1 — 12 principles|||Quiz 1 — 12 nguy
   { id: 'q3', question: 'Hai cuốn/nhân vật nào là NGUỒN của 12 nguyên tắc hoạt hình?', options: ['Richard Williams', 'Jeremy Cantor', 'Thomas & Johnston (The Illusion of Life)', 'Tài liệu Maya'], correctIndex: 2, explanation: '12 nguyên tắc do Frank Thomas & Ollie Johnston đúc kết trong "The Illusion of Life: Disney Animation".' },
 ]);
 
-const c2 = doc('ana401-2-1-pose-timing-spacing', '2.1 — Pose-to-pose, timing &amp; spacing|||2.1 — Pose-to-pose, timing &amp; spacing',
+const c2 = doc('ana401-2-1-pose-timing-spacing', '2.1 — Pose-to-pose, timing & spacing|||2.1 — Pose-to-pose, timing & spacing',
   'Straight-ahead vs pose-to-pose; key/breakdown/inbetween; timing (số khung → cảm giác trọng lượng) vs spacing (khoảng cách giữa các khung → gia tốc); slow in/out.',
   [[
     `<span class="eyebrow">ANA401 · Chapter 2 · Lesson 2.1</span>
@@ -298,7 +298,7 @@ const c3q = quiz('ana401-quiz-3', 'Quiz 3 — Body mechanics|||Quiz 3 — Body m
   { id: 'q3', question: 'Khi nhân vật đang bay giữa cú nhảy, điều gì KHÔNG thể thay đổi?', options: ['Tư thế tay chân', 'Biểu cảm khuôn mặt', 'Cung parabol của trọng tâm (C.O.G.)', 'Hướng nhìn'], correctIndex: 2, explanation: 'Khi bay, trọng tâm đi theo cung đạn đạo cố định — vung tay chân được nhưng không đổi được quỹ đạo trọng tâm.' },
 ]);
 
-const c4 = doc('ana401-4-1-weight-balance', '4.1 — Weight &amp; balance|||4.1 — Weight &amp; balance (trọng lượng &amp; thăng bằng)',
+const c4 = doc('ana401-4-1-weight-balance', '4.1 — Weight & balance|||4.1 — Weight & balance (trọng lượng & thăng bằng)',
   'Cách bán trọng lượng: center of gravity trên đế đỡ (base of support), counterbalance khi nâng vật nặng, nén trước lực, easing đúng khối lượng; tránh cảm giác "float".',
   [[
     `<span class="eyebrow">ANA401 · Chapter 4 · Lesson 4.1</span>
@@ -351,7 +351,7 @@ const c4q = quiz('ana401-quiz-4', 'Quiz 4 — Weight & balance|||Quiz 4 — Weig
   { id: 'q3', question: 'Nhân vật bị cảm giác "float" (lơ lửng như trên mặt trăng) thường do?', options: ['Easing quá mềm và pose down chưa đủ thấp', 'Quá nhiều key pose', 'Camera sai tiêu cự', 'Thiếu texture'], correctIndex: 0, explanation: 'Trọng lượng thật cần snap ở đoạn nhanh và pose down lún đủ sâu; easing quá mềm khiến mọi thứ trôi nhẹ.' },
 ]);
 
-const c5 = doc('ana401-5-1-facial-lipsync', '5.1 — Facial animation &amp; lip-sync|||5.1 — Diễn hoạt khuôn mặt &amp; lip-sync',
+const c5 = doc('ana401-5-1-facial-lipsync', '5.1 — Facial animation & lip-sync|||5.1 — Diễn hoạt khuôn mặt & lip-sync',
   'Rig khuôn mặt (blendshapes/joints), phonemes & visemes, quy trình lip-sync (phân tích audio → key hàm/môi → khớp mở đầu), mắt & chân mày dẫn cảm xúc; tránh "mỏi hàm".',
   [[
     `<span class="eyebrow">ANA401 · Chapter 5 · Lesson 5.1</span>
@@ -406,7 +406,7 @@ const c5q = quiz('ana401-quiz-5', 'Quiz 5 — Facial & lip-sync|||Quiz 5 — Khu
   { id: 'q3', question: 'Trong quy trình lip-sync nên key bộ phận nào TRƯỚC?', options: ['Hình môi chi tiết từng phoneme', 'Hàm (jaw) theo nhịp', 'Chân mày', 'Lưỡi'], correctIndex: 1, explanation: 'Key hàm mở/đóng theo nhịp trước, rồi mới thêm viseme ở phụ âm mạnh và nguyên âm; tránh "mỏi hàm".' },
 ]);
 
-const c6 = doc('ana401-6-1-acting-expression', '6.1 — Acting &amp; character expression|||6.1 — Acting &amp; biểu cảm nhân vật',
+const c6 = doc('ana401-6-1-acting-expression', '6.1 — Acting & character expression|||6.1 — Acting & biểu cảm nhân vật',
   'Diễn xuất = suy nghĩ hiện ra hành động; một suy nghĩ rõ mỗi cảnh; chuỗi think → act; dùng reference video, thay đổi pose (change of pose) và moving hold; tránh diễn "chung chung".',
   [[
     `<span class="eyebrow">ANA401 · Chapter 6 · Lesson 6.1</span>
@@ -455,7 +455,7 @@ const c6q = quiz('ana401-quiz-6', 'Quiz 6 — Acting|||Quiz 6 — Acting', [
   { id: 'q3', question: 'Vì sao nên tắt tiếng (mute) và cho người khác xem cảnh diễn?', options: ['Để kiểm tra chất lượng render', 'Để xem người xem có đọc được ý định/cảm xúc nhân vật không', 'Để đo dung lượng file', 'Để test lip-sync'], correctIndex: 1, explanation: 'Nếu tắt tiếng mà người xem vẫn hiểu nhân vật muốn gì thì acting đã rõ; polish không cứu được ý định mờ.' },
 ]);
 
-const c7 = doc('ana401-7-1-polish-graph-editor', '7.1 — Polish, graph editor &amp; splining|||7.1 — Polish, graph editor &amp; splining',
+const c7 = doc('ana401-7-1-polish-graph-editor', '7.1 — Polish, graph editor & splining|||7.1 — Polish, graph editor & splining',
   'Từ blocking stepped → spline; đọc & nắn f-curve (tangent, ease); dọn gimbal & counter-animation; sửa arc; xử lý pop/hitch; loại "computer average"; nguyên tắc polish có kỷ luật.',
   [[
     `<span class="eyebrow">ANA401 · Chapter 7 · Lesson 7.1</span>
@@ -502,7 +502,7 @@ const c7q = quiz('ana401-quiz-7', 'Quiz 7 — Polish & graph editor|||Quiz 7 —
   { id: 'q3', question: 'Cái "CG look" trôi nổi, đều đều thường do đâu và sửa thế nào?', options: ['Do nội suy mặc định; phá bằng tương phản nhanh/chậm rõ hơn', 'Do thiếu texture; thêm vật liệu', 'Do camera; đổi tiêu cự', 'Do rig; thêm xương'], correctIndex: 0, explanation: 'Nội suy mặc định cho spacing đều nên chuyển động trôi; nắn tangent để có tương phản nhanh/chậm, đồng thời sửa arc.' },
 ]);
 
-const c8 = doc('ana401-8-1-showreel-pipeline', '8.1 — Showreel &amp; studio production pipeline|||8.1 — Showreel &amp; pipeline sản xuất studio',
+const c8 = doc('ana401-8-1-showreel-pipeline', '8.1 — Showreel & studio production pipeline|||8.1 — Showreel & pipeline sản xuất studio',
   'Dựng showreel: best-first, ngắn, chỉ acting/body mechanics của bạn; pipeline studio (story/layout → blocking → spline → polish → final; review dailies); vai trò animator; playblast & format nộp.',
   [[
     `<span class="eyebrow">ANA401 · Chapter 8 · Lesson 8.1</span>

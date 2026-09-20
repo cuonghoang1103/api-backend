@@ -533,7 +533,7 @@ const c2note = doc('ssa101-3-1-note-taking', '1.2 — Studying: Note-taking with
 <div class="callout"><span class="badge">Viết tay có lợi</span> Viết tay buộc bạn tóm ý thay vì chép lại — chính sự tóm ý đó xây nên trí nhớ.</div>`,
   ]]);
 
-const c3memory = doc('ssa101-5-1-memory-learning', '1.3 — Memory &amp; Test-taking Strategies (buổi 4, 6, LO1/LO2/LO11)|||1.3 — Ghi nhớ &amp; Chiến lược làm bài thi (buổi 4, 6, LO1/LO2/LO11)',
+const c3memory = doc('ssa101-5-1-memory-learning', '1.3 — Memory & Test-taking Strategies (buổi 4, 6, LO1/LO2/LO11)|||1.3 — Ghi nhớ & Chiến lược làm bài thi (buổi 4, 6, LO1/LO2/LO11)',
   'Buổi 4 &amp; 6, LO1/LO2/LO11. Ghi nhớ chủ động, lặp lại ngắt quãng; chiến lược làm bài thi (đọc đề, quản lý thời gian phòng thi, loại trừ đáp án).',
   [[
     `<span class="eyebrow">SSA101 · Chapter 1 · Lesson 1.3 · Buổi 4 &amp; 6 · LO1, LO2, LO11</span>
@@ -582,7 +582,7 @@ Ngắt quãng: cùng tổng thời gian, trải ra -> nhớ nhiều tháng
 <div class="callout"><span class="badge">Quy tắc vàng</span> Tự kiểm tra, trải khoảng cách, ngủ đủ.</div>`,
   ]]);
 
-const c4time = doc('ssa101-2-1-time-goals', '1.4 — Time Management &amp; Managing Stress (buổi 7-12, LO3-6/LO11)|||1.4 — Quản lý thời gian &amp; Căng thẳng (buổi 7-12, LO3-6/LO11)',
+const c4time = doc('ssa101-2-1-time-goals', '1.4 — Time Management & Managing Stress (buổi 7-12, LO3-6/LO11)|||1.4 — Quản lý thời gian & Căng thẳng (buổi 7-12, LO3-6/LO11)',
   'Buổi 7-12, LO3/LO4/LO5/LO6/LO11. SMART, Eisenhower, Pomodoro, chống trì hoãn, và nhận diện/quản lý căng thẳng.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 1 · Lesson 1.4 · Buổi 7-12 · LO3, LO4, LO5, LO6, LO11</span>
@@ -659,7 +659,7 @@ const c1quiz = quiz('ssa101-1-5-quiz-chuong-1', 'Quiz — Chapter 1 (buổi 1-12
 // KHÔNG viết bài giảng chi tiết — chi tiết sẽ bổ sung sau.
 // ─────────────────────────────────────────────────────────────────────────
 
-const k21 = doc('ssa101-2-1-du-an-p1-chon-de-tai', '2.1 — Project Part 1: Topic selection &amp; planning (khung)|||2.1 — Đồ án Phần 1: Chọn đề tài &amp; lên kế hoạch (khung)',
+const k21 = doc('ssa101-2-1-du-an-p1-chon-de-tai', '2.1 — Project Part 1: Topic selection & planning (khung)|||2.1 — Đồ án Phần 1: Chọn đề tài & lên kế hoạch (khung)',
   'Buổi 13, LO6/LO11. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 2 · Lesson 2.1 · Buổi 13 · LO6, LO11 · Khung</span>
@@ -684,7 +684,7 @@ const k21 = doc('ssa101-2-1-du-an-p1-chon-de-tai', '2.1 — Project Part 1: Topi
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k22 = doc('ssa101-2-2-du-an-p1-nghien-cuu', '2.2 — Project Part 1: Research &amp; preparation (khung)|||2.2 — Đồ án Phần 1: Nghiên cứu &amp; chuẩn bị (khung)',
+const k22 = doc('ssa101-2-2-du-an-p1-nghien-cuu', '2.2 — Project Part 1: Research & preparation (khung)|||2.2 — Đồ án Phần 1: Nghiên cứu & chuẩn bị (khung)',
   'Buổi 14-15, LO6/LO11. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 2 · Lesson 2.2 · Buổi 14-15 · LO6, LO11 · Khung</span>
@@ -709,7 +709,7 @@ const k22 = doc('ssa101-2-2-du-an-p1-nghien-cuu', '2.2 — Project Part 1: Resea
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k31 = doc('ssa101-3-1-giao-tiep-tong-quan', '3.1 — Communication: overview &amp; technology (khung)|||3.1 — Giao tiếp: tổng quan &amp; công nghệ (khung)',
+const k31 = doc('ssa101-3-1-giao-tiep-tong-quan', '3.1 — Communication: overview & technology (khung)|||3.1 — Giao tiếp: tổng quan & công nghệ (khung)',
   'Buổi 16-17, LO6/LO11. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 3 · Lesson 3.1 · Buổi 16-17 · LO6, LO11 · Khung</span>
@@ -734,7 +734,7 @@ const k31 = doc('ssa101-3-1-giao-tiep-tong-quan', '3.1 — Communication: overvi
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k32 = doc('ssa101-3-2-giao-tiep-boi-canh-rao-can', '3.2 — Communication: context &amp; barriers (khung)|||3.2 — Giao tiếp: bối cảnh &amp; rào cản (khung)',
+const k32 = doc('ssa101-3-2-giao-tiep-boi-canh-rao-can', '3.2 — Communication: context & barriers (khung)|||3.2 — Giao tiếp: bối cảnh & rào cản (khung)',
   'Buổi 18, LO6/LO11. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 3 · Lesson 3.2 · Buổi 18 · LO6, LO11 · Khung</span>
@@ -809,7 +809,7 @@ const k51 = doc('ssa101-5-1-thong-tin-hoc-lieu', '5.1 — Information Literacy (
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k52 = doc('ssa101-5-2-on-tap-quiz1', '5.2 — Review Session I &amp; Quiz 1 (khung)|||5.2 — Ôn tập buổi I &amp; Quiz 1 (khung)',
+const k52 = doc('ssa101-5-2-on-tap-quiz1', '5.2 — Review Session I & Quiz 1 (khung)|||5.2 — Ôn tập buổi I & Quiz 1 (khung)',
   'Buổi 24, LO8/LO11. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 5 · Lesson 5.2 · Buổi 24 · LO8, LO11 · Khung</span>
@@ -832,7 +832,7 @@ const k52 = doc('ssa101-5-2-on-tap-quiz1', '5.2 — Review Session I &amp; Quiz 
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k61 = doc('ssa101-6-1-ai-va-tri-thuc-so', '6.1 — AI &amp; Digital Literacy (khung)|||6.1 — AI &amp; Năng lực số (khung)',
+const k61 = doc('ssa101-6-1-ai-va-tri-thuc-so', '6.1 — AI & Digital Literacy (khung)|||6.1 — AI & Năng lực số (khung)',
   'Buổi 25-27, LO8/LO11. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 6 · Lesson 6.1 · Buổi 25-27 · LO8, LO11 · Khung</span>
@@ -857,7 +857,7 @@ const k61 = doc('ssa101-6-1-ai-va-tri-thuc-so', '6.1 — AI &amp; Digital Litera
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k62 = doc('ssa101-6-2-dao-duc-dung-ai', '6.2 — Ethics of Using AI &amp; Academic Integrity (khung)|||6.2 — Đạo đức dùng AI &amp; Liêm chính học thuật (khung)',
+const k62 = doc('ssa101-6-2-dao-duc-dung-ai', '6.2 — Ethics of Using AI & Academic Integrity (khung)|||6.2 — Đạo đức dùng AI & Liêm chính học thuật (khung)',
   'Buổi 28-30, LO8/LO11. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 6 · Lesson 6.2 · Buổi 28-30 · LO8, LO11 · Khung</span>
@@ -882,7 +882,7 @@ const k62 = doc('ssa101-6-2-dao-duc-dung-ai', '6.2 — Ethics of Using AI &amp; 
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k63 = doc('ssa101-6-3-dung-ai-dung-cach-on-tap', '6.3 — Using AI to Help Your Learning &amp; Review (khung)|||6.3 — Dùng AI hỗ trợ học tập &amp; Ôn tập (khung)',
+const k63 = doc('ssa101-6-3-dung-ai-dung-cach-on-tap', '6.3 — Using AI to Help Your Learning & Review (khung)|||6.3 — Dùng AI hỗ trợ học tập & Ôn tập (khung)',
   'Buổi 31-33, LO9/LO11/LO8-9. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 6 · Lesson 6.3 · Buổi 31-33 · LO9, LO11 · Khung</span>
@@ -1032,7 +1032,7 @@ const k84 = doc('ssa101-8-4-giai-quyet-van-de', '8.4 — Problem-Solving (khung)
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k85 = doc('ssa101-8-5-metacognition-on-tap', '8.5 — Metacognition &amp; Review Session III (khung)|||8.5 — Siêu nhận thức &amp; Ôn tập buổi III (khung)',
+const k85 = doc('ssa101-8-5-metacognition-on-tap', '8.5 — Metacognition & Review Session III (khung)|||8.5 — Siêu nhận thức & Ôn tập buổi III (khung)',
   'Buổi 49-51, LO10/LO11. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 8 · Lesson 8.5 · Buổi 49-51 · LO10, LO11 · Khung</span>
@@ -1082,7 +1082,7 @@ const k91 = doc('ssa101-9-1-progress-test', '9.1 — Individual Progress Test (k
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k101 = doc('ssa101-10-1-du-an-p3', '10.1 — Project Part 3: Presentation &amp; Final Report (khung)|||10.1 — Đồ án Phần 3: Thuyết trình &amp; báo cáo cuối (khung)',
+const k101 = doc('ssa101-10-1-du-an-p3', '10.1 — Project Part 3: Presentation & Final Report (khung)|||10.1 — Đồ án Phần 3: Thuyết trình & báo cáo cuối (khung)',
   'Buổi 55-58, LO1-11. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 10 · Lesson 10.1 · Buổi 55-58 · LO1-11 · Khung</span>
@@ -1107,7 +1107,7 @@ const k101 = doc('ssa101-10-1-du-an-p3', '10.1 — Project Part 3: Presentation 
 <p><em>Nguồn: FLM · Syllabus 13785.</em></p>`,
   ]]);
 
-const k102 = doc('ssa101-10-2-on-thi-cuoi-ky', '10.2 — Final exam revision (khung)|||10.2 — Ôn tập &amp; chuẩn bị thi cuối kỳ (khung)',
+const k102 = doc('ssa101-10-2-on-thi-cuoi-ky', '10.2 — Final exam revision (khung)|||10.2 — Ôn tập & chuẩn bị thi cuối kỳ (khung)',
   'Buổi 59-60, LO1-10. Khung.',
   [[
     `<span class="eyebrow">SSA101 · Chapter 10 · Lesson 10.2 · Buổi 59-60 · LO1-10 · Khung</span>

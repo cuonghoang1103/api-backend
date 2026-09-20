@@ -9,7 +9,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('apo202-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('apo202-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: giáo trình FLM, sách tham khảo (Fluent Python, Python Cookbook, Effective Python), tài liệu chính thức docs.python.org, YouTube, công cụ, lộ trình tự học.',
   [[
     `<span class="eyebrow">APO202 · Materials</span>
@@ -119,7 +119,7 @@ True
 <p>Mô hình dữ liệu &amp; dunder methods → lớp &amp; bốn trụ cột → kế thừa, đa hình, MRO &amp; ABC → property, descriptor &amp; decorator → iterator, generator &amp; context manager → ngoại lệ, package &amp; venv → functional Python &amp; type hints → kiểm thử (pytest), đóng gói &amp; SOLID. Song ngữ, có ví dụ chạy được và một quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('apo202-1-1-data-model', '1.1 — Python quick review &amp; the data model|||1.1 — Ôn nhanh Python &amp; mô hình dữ liệu',
+const c1 = doc('apo202-1-1-data-model', '1.1 — Python quick review & the data model|||1.1 — Ôn nhanh Python & mô hình dữ liệu',
   'Ôn kiểu dữ liệu, tham chiếu & tính bất biến; "mọi thứ là đối tượng"; mô hình dữ liệu và các dunder methods (__init__, __repr__, __str__, __len__, __eq__) biến lớp tự viết thành công dân hạng nhất.',
   [[
     `<span class="eyebrow">APO202 · Chapter 1 · Lesson 1.1</span>
@@ -184,7 +184,7 @@ const c1q = quiz('apo202-quiz-1', 'Quiz 1 — Data model|||Quiz 1 — Mô hình 
   { id: 'q3', question: 'Nếu một lớp chỉ định nghĩa __repr__ mà không có __str__ thì str(obj) sẽ?', options: ['Báo lỗi', 'Trả về địa chỉ bộ nhớ', 'Dùng __repr__ làm dự phòng', 'Trả về chuỗi rỗng'], correctIndex: 2, explanation: 'Khi thiếu __str__, str() rơi về __repr__.' },
 ]);
 
-const c2 = doc('apo202-2-1-classes-pillars', '2.1 — Classes, objects &amp; the four OOP pillars|||2.1 — Lớp, đối tượng &amp; 4 trụ cột OOP',
+const c2 = doc('apo202-2-1-classes-pillars', '2.1 — Classes, objects & the four OOP pillars|||2.1 — Lớp, đối tượng & 4 trụ cột OOP',
   'Định nghĩa lớp, instance vs class attribute, self; bốn trụ cột trong Python: đóng gói (quy ước _/__ và name mangling), trừu tượng, kế thừa, đa hình; so sánh với dataclass.',
   [[
     `<span class="eyebrow">APO202 · Chapter 2 · Lesson 2.1</span>
@@ -245,13 +245,13 @@ const c2 = doc('apo202-2-1-classes-pillars', '2.1 — Classes, objects &amp; the
 <div class="callout"><span class="badge">dataclass</span> Với lớp chỉ chứa dữ liệu, <code>@dataclass</code> tự sinh <code>__init__</code>, <code>__repr__</code> và <code>__eq__</code> — ít mã lặp, cùng hành vi.</div>`,
   ]]);
 
-const c2q = quiz('apo202-quiz-2', 'Quiz 2 — Classes &amp; pillars|||Quiz 2 — Lớp &amp; trụ cột', [
+const c2q = quiz('apo202-quiz-2', 'Quiz 2 — Classes & pillars|||Quiz 2 — Lớp & trụ cột', [
   { id: 'q1', question: 'Thuộc tính khai báo ngay trong thân lớp (ngoài __init__) là loại gì?', options: ['Thuộc tính instance', 'Thuộc tính lớp (dùng chung mọi instance)', 'Biến cục bộ', 'Hằng số module'], correctIndex: 1, explanation: 'Đó là class attribute, chia sẻ cho mọi instance.' },
   { id: 'q2', question: 'Tiền tố hai gạch dưới __balance trong lớp Account gây ra hiện tượng gì?', options: ['Xoá thuộc tính', 'Name mangling: đổi tên thành _Account__balance', 'Biến thành class attribute', 'Cấm mọi truy cập vĩnh viễn'], correctIndex: 1, explanation: 'Hai gạch dưới kích hoạt name mangling thành _Account__balance.' },
   { id: 'q3', question: 'Duck typing trong Python nghĩa là?', options: ['Phải khai báo kiểu tường minh', 'Chỉ quan tâm đối tượng CÓ hành vi cần dùng, không quan tâm kiểu chính xác', 'Chỉ dùng được với lớp con', 'Cấm đa hình'], correctIndex: 1, explanation: 'Duck typing: nếu đối tượng hỗ trợ hành vi cần thiết thì dùng được, bất kể kiểu.' },
 ]);
 
-const c3 = doc('apo202-3-1-inheritance-mro-abc', '3.1 — Inheritance, polymorphism, MRO &amp; ABCs|||3.1 — Kế thừa, đa hình, MRO &amp; abstract base class',
+const c3 = doc('apo202-3-1-inheritance-mro-abc', '3.1 — Inheritance, polymorphism, MRO & ABCs|||3.1 — Kế thừa, đa hình, MRO & abstract base class',
   'Kế thừa đơn/đa; super() và MRO (C3 linearization); đa hình qua ghi đè method; abstract base class (abc) buộc lớp con hiện thực; isinstance với ABC.',
   [[
     `<span class="eyebrow">APO202 · Chapter 3 · Lesson 3.1</span>
@@ -332,13 +332,13 @@ class Circle(Shape):
 <div class="callout"><span class="badge">Vì sao dùng ABC</span> ABC định nghĩa một hợp đồng: mọi lớp con BẮT BUỘC hiện thực các method trừu tượng, nếu không sẽ không tạo được instance. Rất hợp để ép một giao diện chung cho một họ kiểu.</div>`,
   ]]);
 
-const c3q = quiz('apo202-quiz-3', 'Quiz 3 — Inheritance &amp; MRO|||Quiz 3 — Kế thừa &amp; MRO', [
+const c3q = quiz('apo202-quiz-3', 'Quiz 3 — Inheritance & MRO|||Quiz 3 — Kế thừa & MRO', [
   { id: 'q1', question: 'super() trong một method của lớp con dùng để?', options: ['Xoá lớp cha', 'Gọi phiên bản method của lớp cha', 'Tạo instance mới', 'Bỏ qua kế thừa'], correctIndex: 1, explanation: 'super() truy cập hiện thực của lớp cha theo MRO.' },
   { id: 'q2', question: 'MRO (Method Resolution Order) trong Python được tính bằng?', options: ['Thứ tự chữ cái', 'Thuật toán C3 linearization', 'Ngẫu nhiên', 'Thứ tự định nghĩa file'], correctIndex: 1, explanation: 'Python dùng C3 linearization để xác định thứ tự tra cứu.' },
   { id: 'q3', question: 'Điều gì xảy ra khi cố tạo instance của một lớp ABC còn abstractmethod chưa hiện thực?', options: ['Chạy bình thường', 'TypeError: không thể tạo instance', 'Trả về None', 'Tự động hiện thực method rỗng'], correctIndex: 1, explanation: 'Lớp còn abstractmethod chưa cài đặt không thể được instantiate → TypeError.' },
 ]);
 
-const c4 = doc('apo202-4-1-property-descriptor-decorator', '4.1 — Properties, descriptors &amp; decorators|||4.1 — Property, descriptor &amp; decorator',
+const c4 = doc('apo202-4-1-property-descriptor-decorator', '4.1 — Properties, descriptors & decorators|||4.1 — Property, descriptor & decorator',
   'property (getter/setter/deleter) để kiểm soát truy cập; giao thức descriptor (__get__/__set__) đứng sau property; decorator hàm và decorator có tham số; functools.wraps.',
   [[
     `<span class="eyebrow">APO202 · Chapter 4 · Lesson 4.1</span>
@@ -419,13 +419,13 @@ def work(n): return sum(range(n))
 <div class="callout"><span class="badge">functools.wraps</span> Luôn bọc hàm bên trong bằng <code>@functools.wraps(func)</code> để hàm đã trang trí giữ nguyên <code>__name__</code> và docstring gốc — nếu không thì introspection và debug sẽ hỏng.</div>`,
   ]]);
 
-const c4q = quiz('apo202-quiz-4', 'Quiz 4 — Property &amp; decorator|||Quiz 4 — Property &amp; decorator', [
+const c4q = quiz('apo202-quiz-4', 'Quiz 4 — Property & decorator|||Quiz 4 — Property & decorator', [
   { id: 'q1', question: '@property dùng để làm gì?', options: ['Xoá thuộc tính', 'Cho một method trông như thuộc tính, thêm được kiểm tra khi đọc/ghi', 'Tạo class attribute', 'Ép kiểu dữ liệu'], correctIndex: 1, explanation: 'property biến method thành thuộc tính có kiểm soát mà không đổi API.' },
   { id: 'q2', question: 'Một descriptor là đối tượng định nghĩa method nào?', options: ['__init__', '__get__ / __set__ / __delete__', '__str__', '__call__'], correctIndex: 1, explanation: 'Descriptor cài đặt giao thức __get__/__set__/__delete__.' },
   { id: 'q3', question: 'Vì sao nên dùng @functools.wraps trong decorator?', options: ['Tăng tốc hàm', 'Giữ __name__ và docstring gốc của hàm được trang trí', 'Bắt buộc để decorator chạy', 'Ẩn hàm khỏi module'], correctIndex: 1, explanation: 'functools.wraps sao chép metadata (tên, docstring) sang wrapper, giữ introspection đúng.' },
 ]);
 
-const c5 = doc('apo202-5-1-iterator-generator-context', '5.1 — Iterators, generators &amp; context managers|||5.1 — Iterator, generator &amp; context manager',
+const c5 = doc('apo202-5-1-iterator-generator-context', '5.1 — Iterators, generators & context managers|||5.1 — Iterator, generator & context manager',
   'Giao thức iterator (__iter__/__next__) và StopIteration; generator với yield để lười tính, tiết kiệm bộ nhớ; generator expression; context manager (__enter__/__exit__) và with, contextlib.contextmanager.',
   [[
     `<span class="eyebrow">APO202 · Chapter 5 · Lesson 5.1</span>
@@ -488,13 +488,13 @@ with open("data.txt") as f:   # file tự động được đóng
 <div class="callout"><span class="badge">contextlib</span> Thay vì viết lớp, hãy trang trí một generator bằng <code>@contextlib.contextmanager</code>: mã trước <code>yield</code> là thiết lập, mã sau là dọn dẹp. <code>__exit__</code> luôn chạy, nên tài nguyên được giải phóng ngay cả khi có ngoại lệ.</div>`,
   ]]);
 
-const c5q = quiz('apo202-quiz-5', 'Quiz 5 — Generators &amp; context|||Quiz 5 — Generator &amp; context manager', [
+const c5q = quiz('apo202-quiz-5', 'Quiz 5 — Generators & context|||Quiz 5 — Generator & context manager', [
   { id: 'q1', question: 'Từ khoá nào biến một hàm thành generator?', options: ['return', 'yield', 'async', 'lambda'], correctIndex: 1, explanation: 'Hàm chứa yield trở thành generator, sinh giá trị theo yêu cầu.' },
   { id: 'q2', question: 'Ưu điểm chính của generator so với việc trả về một list đầy đủ?', options: ['Luôn nhanh hơn tuyệt đối', 'Tính lười, tiết kiệm bộ nhớ (không lưu hết phần tử cùng lúc)', 'Tự động sắp xếp', 'Không thể lặp lại'], correctIndex: 1, explanation: 'Generator sinh từng phần tử theo yêu cầu nên tiết kiệm bộ nhớ, làm được dãy vô hạn.' },
   { id: 'q3', question: 'Trong context manager, method __exit__ được gọi khi nào?', options: ['Chỉ khi không có lỗi', 'Chỉ khi có lỗi', 'Luôn luôn, kể cả khi khối with ném ngoại lệ', 'Không bao giờ tự gọi'], correctIndex: 2, explanation: '__exit__ luôn chạy khi rời khối with, đảm bảo dọn dẹp tài nguyên.' },
 ]);
 
-const c6 = doc('apo202-6-1-exceptions-packages-venv', '6.1 — Exceptions, modules, packages &amp; virtual environments|||6.1 — Xử lý ngoại lệ, module, package &amp; môi trường ảo',
+const c6 = doc('apo202-6-1-exceptions-packages-venv', '6.1 — Exceptions, modules, packages & virtual environments|||6.1 — Xử lý ngoại lệ, module, package & môi trường ảo',
   'try/except/else/finally; cây kế thừa Exception & ngoại lệ tự định nghĩa; raise/raise from; module vs package (__init__.py); import tuyệt đối/tương đối; venv & pip cách ly phụ thuộc.',
   [[
     `<span class="eyebrow">APO202 · Chapter 6 · Lesson 6.1</span>
@@ -561,13 +561,13 @@ pip freeze &gt; requirements.txt # ghim phiên bản phụ thuộc
 <div class="callout"><span class="badge">Vì sao dùng venv</span> Môi trường ảo cách ly phụ thuộc của từng dự án để các phiên bản không xung đột — đừng <code>pip install</code> thẳng vào Python hệ thống khi làm dự án.</div>`,
   ]]);
 
-const c6q = quiz('apo202-quiz-6', 'Quiz 6 — Exceptions &amp; packages|||Quiz 6 — Ngoại lệ &amp; package', [
+const c6q = quiz('apo202-quiz-6', 'Quiz 6 — Exceptions & packages|||Quiz 6 — Ngoại lệ & package', [
   { id: 'q1', question: 'Khối nào trong try/except LUÔN chạy dù có hay không có ngoại lệ?', options: ['else', 'except', 'finally', 'raise'], correctIndex: 2, explanation: 'finally luôn chạy, thường dùng để dọn dẹp tài nguyên.' },
   { id: 'q2', question: 'Sự khác nhau giữa module và package là?', options: ['Không khác gì', 'Module là một file .py; package là thư mục chứa các module', 'Package là một hàm', 'Module phải có __init__.py'], correctIndex: 1, explanation: 'Module = một file .py; package = thư mục các module (thường có __init__.py).' },
   { id: 'q3', question: 'Lệnh "python -m venv .venv" làm gì?', options: ['Cài mọi thư viện toàn cục', 'Tạo một môi trường ảo cách ly phụ thuộc cho dự án', 'Chạy test', 'Xoá Python hệ thống'], correctIndex: 1, explanation: 'venv tạo môi trường cách ly để phụ thuộc dự án không xung đột nhau.' },
 ]);
 
-const c7 = doc('apo202-7-1-functional-typehints', '7.1 — Functional Python &amp; type hints|||7.1 — Functional Python &amp; type hints',
+const c7 = doc('apo202-7-1-functional-typehints', '7.1 — Functional Python & type hints|||7.1 — Functional Python & type hints',
   'lambda, map/filter/reduce; list/dict/set comprehension & generator expression thay thế vòng lặp; hàm bậc cao, closure; type hints (typing: List, Dict, Optional, Callable) và kiểm tra tĩnh với mypy.',
   [[
     `<span class="eyebrow">APO202 · Chapter 7 · Lesson 7.1</span>
@@ -628,13 +628,13 @@ scores: dict[str, int] = {"a": 90}
 <div class="callout"><span class="badge">Hints không bị ép buộc</span> Python không kiểm tra kiểu lúc chạy — <code>greet(123)</code> vẫn chạy. Chạy <code>mypy</code> trong CI để bắt sai kiểu trước khi lên production.</div>`,
   ]]);
 
-const c7q = quiz('apo202-quiz-7', 'Quiz 7 — Functional &amp; type hints|||Quiz 7 — Functional &amp; type hints', [
+const c7q = quiz('apo202-quiz-7', 'Quiz 7 — Functional & type hints|||Quiz 7 — Functional & type hints', [
   { id: 'q1', question: 'Biểu thức [n for n in nums if n % 2 == 0] là gì?', options: ['Một lambda', 'Một list comprehension lọc số chẵn', 'Một generator vô hạn', 'Một câu lệnh import'], correctIndex: 1, explanation: 'List comprehension tạo list mới gồm các phần tử thoả điều kiện.' },
   { id: 'q2', question: 'Type hint "user: Optional[str]" nghĩa là user có kiểu?', options: ['Chỉ str', 'str hoặc None', 'Chỉ None', 'Bất kỳ kiểu nào'], correctIndex: 1, explanation: 'Optional[str] tương đương "str hoặc None".' },
   { id: 'q3', question: 'Type hints ảnh hưởng thế nào lúc chạy (runtime)?', options: ['Ép buộc kiểu, sai kiểu là lỗi ngay', 'Không đổi hành vi runtime; chỉ công cụ như mypy kiểm tra tĩnh', 'Làm chương trình chạy nhanh hơn', 'Chuyển đổi kiểu tự động'], correctIndex: 1, explanation: 'Python không ép kiểu lúc chạy; type hints để công cụ tĩnh (mypy) và IDE dùng.' },
 ]);
 
-const c8 = doc('apo202-8-1-testing-packaging-pro', '8.1 — Testing (pytest), packaging &amp; professional practice|||8.1 — Testing (pytest), đóng gói &amp; thực hành chuyên nghiệp',
+const c8 = doc('apo202-8-1-testing-packaging-pro', '8.1 — Testing (pytest), packaging & professional practice|||8.1 — Testing (pytest), đóng gói & thực hành chuyên nghiệp',
   'pytest: viết test, assert, fixture, parametrize; đóng gói dự án (pyproject.toml, pip install -e); PEP 8 & công cụ định dạng; nguyên lý SOLID áp dụng cho lớp Python.',
   [[
     `<span class="eyebrow">APO202 · Chapter 8 · Lesson 8.1</span>
@@ -701,7 +701,7 @@ def test_deposit(account):
 <div class="callout"><span class="badge">Thói quen chuyên nghiệp</span> Lớp nhỏ một trách nhiệm, test ghim hành vi, và phong cách nhất quán là thứ tách một script khỏi một mã nguồn dễ bảo trì — và là thứ người review tìm kiếm.</div>`,
   ]]);
 
-const c8q = quiz('apo202-quiz-8', 'Quiz 8 — Testing &amp; SOLID|||Quiz 8 — Testing &amp; SOLID', [
+const c8q = quiz('apo202-quiz-8', 'Quiz 8 — Testing & SOLID|||Quiz 8 — Testing & SOLID', [
   { id: 'q1', question: 'Trong pytest, một hàm test thường kiểm tra kết quả bằng?', options: ['print()', 'câu lệnh assert', 'return True', 'try/except bắt buộc'], correctIndex: 1, explanation: 'pytest dùng assert thuần; assert sai thì test thất bại.' },
   { id: 'q2', question: '@pytest.fixture dùng để?', options: ['Bỏ qua test', 'Cung cấp dữ liệu/thiết lập tái sử dụng cho nhiều test', 'Đo thời gian chạy', 'Đóng gói dự án'], correctIndex: 1, explanation: 'Fixture cung cấp thiết lập tái sử dụng, được inject vào test theo tên tham số.' },
   { id: 'q3', question: 'Chữ "S" trong SOLID là nguyên lý nào?', options: ['Static typing', 'Single Responsibility (một lớp một trách nhiệm)', 'Simple design', 'Standard library'], correctIndex: 1, explanation: 'S = Single Responsibility Principle: mỗi lớp nên có một lý do để thay đổi.' },

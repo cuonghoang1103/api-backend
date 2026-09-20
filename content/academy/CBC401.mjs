@@ -13,7 +13,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const c1 = doc('cbc401-1-1-format-style', 'Chapter 1 — Format &amp; style of Chinese business letters|||Chương 1 — Định dạng &amp; văn phong thư tín thương mại tiếng Trung',
+const c1 = doc('cbc401-1-1-format-style', 'Chapter 1 — Format & style of Chinese business letters|||Chương 1 — Định dạng & văn phong thư tín thương mại tiếng Trung',
   'Cấu trúc chuẩn một thư thương mại tiếng Trung: 信头, 日期, 封内地址, 称呼, 正文, 结尾敬语, 签名. Văn phong trang trọng (敬语) khác khẩu ngữ.',
   [[
     `<span class="eyebrow">CBC401 · Chapter 1</span>
@@ -124,13 +124,13 @@ const c1 = doc('cbc401-1-1-format-style', 'Chapter 1 — Format &amp; style of C
 <div class="callout"><span class="badge">Quy tắc vàng</span> Mỗi đoạn một ý, câu văn khách quan súc tích, và luôn kết bằng 此致 敬礼 trên dòng riêng. Mọi loại thư trong môn này đều dùng đúng khung này với mục đích khác nhau ở thân thư.</div>`,
   ]]);
 
-const c1q = quiz('cbc401-quiz-1', 'Quiz 1 — Format &amp; style|||Quiz 1 — Định dạng &amp; văn phong', [
+const c1q = quiz('cbc401-quiz-1', 'Quiz 1 — Format & style|||Quiz 1 — Định dạng & văn phong', [
   { id: 'q1', question: 'Công thức kết thư chuẩn của một thư thương mại tiếng Trung là gì?', options: ['谢谢，再见', '此致 敬礼', '你好，拜拜', '祝你快乐'], correctIndex: 1, explanation: '此致 敬礼 là công thức kết thư trang trọng chuẩn, viết trên hai dòng riêng ở cuối thư.' },
   { id: 'q2', question: 'Mở đầu một thư thương mại trang trọng lần đầu liên hệ nên dùng cách nào?', options: ['喂，你好', '尊敬的 + họ + 先生/女士：', '嗨，朋友', 'Không cần lời chào, viết thẳng nội dung'], correctIndex: 1, explanation: '尊敬的 + họ + 先生/女士 là cách mở đầu trang trọng, an toàn cho lần đầu liên hệ.' },
   { id: 'q3', question: 'Nguyên tắc viết đoạn văn (正文) trong thư thương mại tiếng Trung là?', options: ['Viết một đoạn dài duy nhất cho gọn', 'Mỗi đoạn nêu MỘT ý, câu văn khách quan', 'Dùng nhiều từ đệm khẩu ngữ cho tự nhiên', 'Không cần nêu mục đích viết thư'], correctIndex: 1, explanation: 'Chuẩn viết thư thương mại: mỗi đoạn một ý (mục đích → nội dung cụ thể → đề nghị hồi âm), câu văn khách quan súc tích.' },
 ]);
 
-const c2 = doc('cbc401-2-1-inquiry-offer', 'Chapter 2 — Inquiry &amp; offer letters (询盘, 报盘)|||Chương 2 — Thư hỏi hàng &amp; chào hàng (询盘, 报盘)',
+const c2 = doc('cbc401-2-1-inquiry-offer', 'Chapter 2 — Inquiry & offer letters (询盘, 报盘)|||Chương 2 — Thư hỏi hàng & chào hàng (询盘, 报盘)',
   'Từ vựng: 询盘, 报盘, 报价, 单价, 起订量, 现货, 有效期, 目录, 样品. Khung viết thư hỏi hàng và thư chào hàng phản hồi.',
   [[
     `<span class="eyebrow">CBC401 · Chapter 2</span>
@@ -275,13 +275,13 @@ const c2 = doc('cbc401-2-1-inquiry-offer', 'Chapter 2 — Inquiry &amp; offer le
 <div class="callout"><span class="badge">Ghi chú</span> Một 报盘 luôn phải kèm 有效期 (thời hạn hiệu lực) — báo giá không có hạn có thể bị rút bất cứ lúc nào, dễ gây tranh chấp. Luôn đi kèm giá với điều kiện thương mại (FOB/CIF) — một số tiền trần trụi vô nghĩa trong ngoại thương.</div>`,
   ]]);
 
-const c2q = quiz('cbc401-quiz-2', 'Quiz 2 — Inquiry &amp; offer|||Quiz 2 — Hỏi hàng &amp; chào hàng', [
+const c2q = quiz('cbc401-quiz-2', 'Quiz 2 — Inquiry & offer|||Quiz 2 — Hỏi hàng & chào hàng', [
   { id: 'q1', question: '"询盘" (xúnpán) nghĩa là gì?', options: ['Chào hàng chính thức', 'Hỏi hàng, hỏi giá/điều khoản', 'Đặt hàng', 'Khiếu nại'], correctIndex: 1, explanation: '询盘 = thư hỏi hàng, bên mua hỏi giá và điều khoản trước khi đặt hàng.' },
   { id: 'q2', question: 'Vì sao một thư 报盘 (chào hàng) luôn cần kèm 有效期?', options: ['Để thư dài hơn cho trang trọng', 'Vì thiếu hạn thì báo giá có thể bị rút bất cứ lúc nào, dễ tranh chấp', 'Không cần thiết, chỉ là hình thức', 'Vì luật thương mại tiếng Trung yêu cầu ghi ngày sinh'], correctIndex: 1, explanation: '有效期 (thời hạn hiệu lực) bảo vệ cả hai bên: bên bán không bị ràng buộc giá vô hạn, bên mua biết hạn để quyết định.' },
   { id: 'q3', question: '"起订量" (qǐdìngliàng) trong thư chào hàng nghĩa là?', options: ['Giá đơn vị', 'Số lượng đặt hàng tối thiểu (MOQ)', 'Thời hạn hiệu lực báo giá', 'Hàng có sẵn trong kho'], correctIndex: 1, explanation: '起订量 = MOQ, số lượng tối thiểu bên mua phải đặt trong một đơn hàng.' },
 ]);
 
-const c3 = doc('cbc401-3-1-counter-offer', 'Chapter 3 — Counter-offer &amp; negotiation letters (还盘)|||Chương 3 — Thư đàm phán giá &amp; điều khoản (还盘)',
+const c3 = doc('cbc401-3-1-counter-offer', 'Chapter 3 — Counter-offer & negotiation letters (还盘)|||Chương 3 — Thư đàm phán giá & điều khoản (还盘)',
   'Từ vựng: 还盘, 让步, 折扣, 底价, 成交, 付款方式, 汇率, 让利. Khung viết thư hoàn giá và thư phản hồi nhượng bộ.',
   [[
     `<span class="eyebrow">CBC401 · Chapter 3</span>
@@ -380,13 +380,13 @@ const c3 = doc('cbc401-3-1-counter-offer', 'Chapter 3 — Counter-offer &amp; ne
 <div class="callout"><span class="badge">Ghi chú</span> Một thư 还盘 về mặt pháp lý HUỶ báo giá gốc — bên bán không còn bị ràng buộc bởi giá đầu tiên khi bạn 还盘. Luôn đi kèm yêu cầu giảm giá với điều gì đó bạn đổi lại (số lượng, tốc độ thanh toán); yêu cầu một chiều hiếm khi được 让步 nhanh.</div>`,
   ]]);
 
-const c3q = quiz('cbc401-quiz-3', 'Quiz 3 — Counter-offer &amp; negotiation|||Quiz 3 — Đàm phán &amp; hoàn giá', [
+const c3q = quiz('cbc401-quiz-3', 'Quiz 3 — Counter-offer & negotiation|||Quiz 3 — Đàm phán & hoàn giá', [
   { id: 'q1', question: 'Về mặt giao dịch, một thư 还盘 (hoàn giá) có tác dụng gì với báo giá gốc?', options: ['Không ảnh hưởng gì, báo giá gốc vẫn còn hiệu lực', 'Huỷ báo giá gốc, bên bán không còn bị ràng buộc bởi giá đầu tiên', 'Tự động chấp nhận báo giá gốc', 'Kéo dài thêm thời hạn hiệu lực của báo giá gốc'], correctIndex: 1, explanation: '还盘 huỷ bỏ 报盘 ban đầu — khi trả giá lại, người mua không còn quyền chốt theo giá cũ nữa.' },
   { id: 'q2', question: 'Khi viết thư hoàn giá, vì sao chỉ nói "giá quá đắt" là chưa đủ thuyết phục?', options: ['Vì phải viết bằng tiếng Anh mới thuyết phục', 'Vì cần đưa lý do có căn cứ như giá thị trường hoặc báo giá đối thủ', 'Vì thư hoàn giá không cần lý do', 'Vì bên bán không đọc lý do'], correctIndex: 1, explanation: 'Một 还盘 thuyết phục cần lý do cụ thể (thị trường, đối thủ, khối lượng) thay vì nhận định chủ quan.' },
   { id: 'q3', question: '"让步" (ràngbù) trong đàm phán thương mại nghĩa là?', options: ['Chốt giao dịch', 'Nhượng bộ, nhường một phần yêu cầu', 'Từ chối hoàn toàn', 'Tỷ giá hối đoái'], correctIndex: 1, explanation: '让步 = nhượng bộ — một bên nhường một phần điều kiện để tiến tới thoả thuận.' },
 ]);
 
-const c4 = doc('cbc401-4-1-order-confirmation', 'Chapter 4 — Order &amp; confirmation letters (订单)|||Chương 4 — Thư đặt hàng &amp; xác nhận đơn (订单)',
+const c4 = doc('cbc401-4-1-order-confirmation', 'Chapter 4 — Order & confirmation letters (订单)|||Chương 4 — Thư đặt hàng & xác nhận đơn (订单)',
   'Từ vựng: 订单, 确认, 装箱单, 交货期, 唛头, 合同, 生效, 型号. Khung viết thư đặt hàng và thư xác nhận đơn hàng.',
   [[
     `<span class="eyebrow">CBC401 · Chapter 4</span>
@@ -495,13 +495,13 @@ const c4 = doc('cbc401-4-1-order-confirmation', 'Chapter 4 — Order &amp; confi
 <div class="callout"><span class="badge">Ghi chú</span> Thư 确认 phải nhắc lại ĐẦY ĐỦ mọi số liệu của đơn hàng, không chỉ nói "OK" — nếu một số sai mà không ai phát hiện, số đó sẽ thành hợp đồng. 唛头 (ký hiệu vận chuyển) được thống nhất ở đây để nhà máy in lên từng thùng hàng trước khi giao.</div>`,
   ]]);
 
-const c4q = quiz('cbc401-quiz-4', 'Quiz 4 — Order &amp; confirmation|||Quiz 4 — Đặt hàng &amp; xác nhận', [
+const c4q = quiz('cbc401-quiz-4', 'Quiz 4 — Order & confirmation|||Quiz 4 — Đặt hàng & xác nhận', [
   { id: 'q1', question: '"唛头" (màitóu) trong thư đặt hàng/xác nhận dùng để làm gì?', options: ['Là mức chiết khấu cho đơn hàng lớn', 'Là ký hiệu vận chuyển in trên từng thùng hàng', 'Là tên ngân hàng phát hành tín dụng thư', 'Là ngày hết hạn báo giá'], correctIndex: 1, explanation: '唛头 (shipping mark) là ký hiệu được thống nhất để in lên bao bì/thùng hàng, giúp nhận diện lô hàng khi vận chuyển.' },
   { id: 'q2', question: 'Vì sao thư 确认 (xác nhận đơn hàng) phải nhắc lại đầy đủ mọi số liệu thay vì chỉ nói "đồng ý"?', options: ['Để thư dài hơn cho trang trọng', 'Vì đây là chứng cứ pháp lý hai bên đồng ý; sai số mà không phát hiện sẽ thành hợp đồng', 'Vì quy định bắt buộc phải viết dài', 'Không cần thiết, chỉ cần nói ngắn gọn'], correctIndex: 1, explanation: 'Thư xác nhận là căn cứ ràng buộc — mọi số liệu (mã hàng, số lượng, giá, ngày) phải khớp chính xác với thoả thuận trước đó.' },
   { id: 'q3', question: '"交货期" (jiāohuòqī) nghĩa là gì?', options: ['Phiếu đóng gói', 'Thời gian/ngày giao hàng', 'Hợp đồng có hiệu lực', 'Số lượng đặt hàng tối thiểu'], correctIndex: 1, explanation: '交货期 = thời gian giao hàng, một trong các mục bắt buộc phải có trong đơn đặt hàng.' },
 ]);
 
-const c5 = doc('cbc401-5-1-lc-payment', 'Chapter 5 — Payment &amp; letter of credit letters (信用证 L/C)|||Chương 5 — Thư về thanh toán &amp; tín dụng thư (信用证 L/C)',
+const c5 = doc('cbc401-5-1-lc-payment', 'Chapter 5 — Payment & letter of credit letters (信用证 L/C)|||Chương 5 — Thư về thanh toán & tín dụng thư (信用证 L/C)',
   'Từ vựng: 信用证, 开证行, 不可撤销, 议付, 汇票, 提单, 保兑, 单据. Khung viết thư yêu cầu mở L/C và thư báo đã nhận L/C.',
   [[
     `<span class="eyebrow">CBC401 · Chapter 5</span>
@@ -600,13 +600,13 @@ const c5 = doc('cbc401-5-1-lc-payment', 'Chapter 5 — Payment &amp; letter of c
 <div class="callout"><span class="badge">Ghi chú</span> Mọi điều khoản của L/C phải khớp CHÍNH XÁC với hợp đồng — ngân hàng trả tiền dựa trên chứng từ, không dựa trên hàng hoá thực tế, nên một từ hoặc số liệu sai lệch là lý do để từ chối thanh toán. 不可撤销 (không thể huỷ ngang) là điều tối thiểu người bán nên chấp nhận; L/C có thể huỷ ngang có thể bị bên mua hủy mà không cần báo trước.</div>`,
   ]]);
 
-const c5q = quiz('cbc401-quiz-5', 'Quiz 5 — L/C &amp; payment|||Quiz 5 — Tín dụng thư &amp; thanh toán', [
+const c5q = quiz('cbc401-quiz-5', 'Quiz 5 — L/C & payment|||Quiz 5 — Tín dụng thư & thanh toán', [
   { id: 'q1', question: 'Vì sao ngân hàng có thể từ chối thanh toán dù hàng đã giao đúng thực tế?', options: ['Vì ngân hàng không tin người bán', 'Vì ngân hàng trả tiền dựa trên chứng từ khớp L/C, không dựa trên hàng hoá thực tế', 'Vì hàng hoá luôn bị kiểm tra lại', 'Vì L/C chỉ áp dụng cho hàng nội địa'], correctIndex: 1, explanation: 'Nguyên tắc của L/C: ngân hàng chỉ đối chiếu chứng từ (单据) với điều khoản L/C — chứng từ sai một chi tiết là đủ để bị từ chối, bất kể hàng thật thế nào.' },
   { id: 'q2', question: '"不可撤销" (bùkě chèxiāo) trong tín dụng thư nghĩa là gì, và vì sao quan trọng với người bán?', options: ['Có thể huỷ bất cứ lúc nào — không quan trọng', 'Không thể huỷ ngang — bảo vệ người bán khỏi việc bên mua tự ý huỷ mà không báo trước', 'Là loại tiền tệ thanh toán', 'Là ngân hàng chiết khấu chứng từ'], correctIndex: 1, explanation: '不可撤销 (irrevocable) là mức tối thiểu người bán nên yêu cầu; L/C loại này không thể bị bên mua huỷ đơn phương.' },
   { id: 'q3', question: '"提单" (tídān) là loại chứng từ gì?', options: ['Hối phiếu', 'Vận đơn (bill of lading)', 'Giấy chứng nhận bảo hiểm', 'Phiếu đóng gói'], correctIndex: 1, explanation: '提单 = vận đơn (B/L), một trong các chứng từ bắt buộc để trình ngân hàng nhận thanh toán qua L/C.' },
 ]);
 
-const c6 = doc('cbc401-6-1-shipment-claim', 'Chapter 6 — Shipment &amp; claim letters (装运, 索赔)|||Chương 6 — Thư giao hàng, vận chuyển &amp; khiếu nại (装运, 索赔)',
+const c6 = doc('cbc401-6-1-shipment-claim', 'Chapter 6 — Shipment & claim letters (装运, 索赔)|||Chương 6 — Thư giao hàng, vận chuyển & khiếu nại (装运, 索赔)',
   'Từ vựng: 装运, 提单, 保险, 索赔, 破损, 短装, 赔偿, 理赔. Khung viết thư báo giao hàng và thư khiếu nại khi hàng có vấn đề.',
   [[
     `<span class="eyebrow">CBC401 · Chapter 6</span>
@@ -715,13 +715,13 @@ const c6 = doc('cbc401-6-1-shipment-claim', 'Chapter 6 — Shipment &amp; claim 
 <div class="callout"><span class="badge">Ghi chú</span> Một thư khiếu nại mạnh hay yếu phụ thuộc vào bằng chứng — luôn kèm 检验证书 (giấy kiểm định) hoặc ảnh, và nêu CHÍNH XÁC số lượng, số tiền. Việc 保险 (bảo hiểm) hay người bán trả tuỳ vào điều kiện thương mại (FOB/CIF) và ai mua bảo hiểm — kiểm tra hợp đồng trước khi quyết định khiếu nại bên nào.</div>`,
   ]]);
 
-const c6q = quiz('cbc401-quiz-6', 'Quiz 6 — Shipment &amp; claim|||Quiz 6 — Giao hàng &amp; khiếu nại', [
+const c6q = quiz('cbc401-quiz-6', 'Quiz 6 — Shipment & claim|||Quiz 6 — Giao hàng & khiếu nại', [
   { id: 'q1', question: 'Một thư khiếu nại (索赔信) thuyết phục cần có yếu tố gì?', options: ['Chỉ cần nói chung là hàng không tốt', 'Bằng chứng cụ thể (giấy kiểm định/ảnh) và số lượng, số tiền chính xác', 'Viết bằng giọng gay gắt để gây áp lực', 'Không cần nêu số đơn hàng'], correctIndex: 1, explanation: 'Thư khiếu nại mạnh dựa trên bằng chứng rõ (检验证书, ảnh) và số liệu chính xác — yêu cầu mơ hồ nhận phản hồi mơ hồ, chậm.' },
   { id: 'q2', question: '"短装" (duǎnzhuāng) nghĩa là gì?', options: ['Hàng bị hư hỏng khi vận chuyển', 'Giao hàng với số lượng ít hơn số đã đặt', 'Giao hàng chậm hơn hợp đồng', 'Hàng bị sai mẫu mã'], correctIndex: 1, explanation: '短装 = giao thiếu, tức số lượng thực nhận ít hơn số lượng đã đặt trong đơn hàng.' },
   { id: 'q3', question: 'Việc bên nào (người bán hay bảo hiểm) chịu trách nhiệm cho hàng hư hỏng khi vận chuyển phụ thuộc vào điều gì?', options: ['Luôn luôn là người bán chịu, không có ngoại lệ', 'Điều kiện thương mại (FOB/CIF) và ai là người mua bảo hiểm theo hợp đồng', 'Luôn luôn là bên mua tự chịu', 'Không liên quan đến hợp đồng, tuỳ thoả thuận miệng'], correctIndex: 1, explanation: 'Trách nhiệm phụ thuộc điều kiện thương mại (FOB/CIF...) quy định trong hợp đồng — phải kiểm tra trước khi xác định bên chịu trách nhiệm bồi thường.' },
 ]);
 
-const c7 = doc('cbc401-7-1-email-notice-cooperation', 'Chapter 7 — Business emails, notices &amp; cooperation invitations (商务邮件与通知)|||Chương 7 — Email thương mại, thông báo &amp; mời hợp tác (商务邮件与通知)',
+const c7 = doc('cbc401-7-1-email-notice-cooperation', 'Chapter 7 — Business emails, notices & cooperation invitations (商务邮件与通知)|||Chương 7 — Email thương mại, thông báo & mời hợp tác (商务邮件与通知)',
   'Từ vựng: 邮件, 附件, 通知, 合作, 洽谈, 展会, 诚邀, 回复, 主题. Khung viết email thương mại, thư thông báo nội bộ/khách hàng và thư mời hợp tác.',
   [[
     `<span class="eyebrow">CBC401 · Chapter 7</span>
@@ -839,13 +839,13 @@ const c7 = doc('cbc401-7-1-email-notice-cooperation', 'Chapter 7 — Business em
 <div class="callout"><span class="badge">Ghi chú</span> Một 主题 (tiêu đề email) cụ thể có nhắc số đơn hàng/hợp đồng là điều khiến người mua bận rộn mở email trước tiên — tiêu đề mơ hồ dễ bị bỏ sót. Luôn liệt kê 附件 theo tên ở cuối email để người nhận biết cần kiểm tra gì.</div>`,
   ]]);
 
-const c7q = quiz('cbc401-quiz-7', 'Quiz 7 — Email &amp; cooperation|||Quiz 7 — Email &amp; mời hợp tác', [
+const c7q = quiz('cbc401-quiz-7', 'Quiz 7 — Email & cooperation|||Quiz 7 — Email & mời hợp tác', [
   { id: 'q1', question: 'Vì sao tiêu đề email (主题) nên cụ thể, ví dụ nhắc số đơn hàng, thay vì viết chung như "Question"?', options: ['Vì tiêu đề dài mới trang trọng', 'Vì tiêu đề cụ thể giúp người bận rộn nhận biết và mở email trước, tiêu đề mơ hồ dễ bị bỏ sót', 'Không có sự khác biệt nào', 'Vì hệ thống email tự động xoá tiêu đề ngắn'], correctIndex: 1, explanation: 'Tiêu đề cụ thể (có số đơn hàng/hợp đồng) giúp người nhận ưu tiên xử lý; tiêu đề mơ hồ dễ bị lẫn và bỏ sót.' },
   { id: 'q2', question: '"附件" (fùjiàn) trong một email thương mại nên được xử lý thế nào?', options: ['Không cần nhắc đến trong nội dung email', 'Liệt kê rõ tên từng tài liệu đính kèm ở cuối email', 'Chỉ cần nói "có đính kèm" mà không cần liệt kê', 'Gửi riêng một email khác không liên quan'], correctIndex: 1, explanation: 'Liệt kê tên từng 附件 ở cuối email giúp người nhận biết chính xác cần kiểm tra/tải xuống gì, tránh sót tài liệu.' },
   { id: 'q3', question: 'Một thư thông báo (通知) khác với một thư yêu cầu/đề nghị ở điểm nào?', options: ['Thông báo luôn phải xin phép trước khi công bố', 'Thông báo là công bố sự kiện/thay đổi một cách trực tiếp, không phải lời đề nghị chờ phản hồi', 'Thông báo luôn cần chữ ký của khách hàng', 'Không có sự khác biệt gì'], correctIndex: 1, explanation: 'Thư thông báo (通知) nêu thẳng sự kiện, ngày hiệu lực và hành động cần làm — mang tính công bố, khác với thư đề nghị/yêu cầu cần chờ đồng ý.' },
 ]);
 
-const c8 = doc('cbc401-8-1-review-full-set', 'Chapter 8 — Review: a complete transaction set &amp; foreign-trade terms|||Chương 8 — Ôn tập: bộ thư tín giao dịch hoàn chỉnh &amp; thuật ngữ ngoại thương',
+const c8 = doc('cbc401-8-1-review-full-set', 'Chapter 8 — Review: a complete transaction set & foreign-trade terms|||Chương 8 — Ôn tập: bộ thư tín giao dịch hoàn chỉnh & thuật ngữ ngoại thương',
   'Ôn toàn bộ quy trình 询盘→报盘→还盘→订单→信用证→装运→索赔 qua một giao dịch mẫu; bảng thuật ngữ Incoterms & ngoại thương cốt lõi.',
   [[
     `<span class="eyebrow">CBC401 · Chapter 8 · Review</span>
@@ -922,7 +922,7 @@ const c8 = doc('cbc401-8-1-review-full-set', 'Chapter 8 — Review: a complete t
 <div class="callout"><span class="badge">Mẹo làm bài</span> Khi được yêu cầu soạn một lá thư, trước tiên xác định thư đó NẰM ĐÂU trong chuỗi trên — điều đó cho biết số liệu nào đã cố định (mang từ thư trước) và số liệu nào là mới (đề xuất/quyết định của chính lá thư này).</div>`,
   ]]);
 
-const c8q = quiz('cbc401-quiz-8', 'Quiz 8 — Review: full transaction &amp; terms|||Quiz 8 — Ôn tập: giao dịch hoàn chỉnh &amp; thuật ngữ', [
+const c8q = quiz('cbc401-quiz-8', 'Quiz 8 — Review: full transaction & terms|||Quiz 8 — Ôn tập: giao dịch hoàn chỉnh & thuật ngữ', [
   { id: 'q1', question: 'Trong chuỗi giao dịch ngoại thương, thư nào diễn ra NGAY SAU khi 还盘 (hoàn giá) được hai bên đồng ý (成交)?', options: ['索赔 (khiếu nại)', '订单 (đặt hàng)', '询盘 (hỏi hàng)', '信用证 (tín dụng thư) luôn đến trước đơn hàng'], correctIndex: 1, explanation: 'Chuỗi chuẩn: 询盘 → 报盘 → 还盘 → 成交 → 订单 → 确认 → 信用证 → 装运 → (索赔 nếu có vấn đề). Sau khi chốt giá (成交), bên mua gửi 订单 chính thức.' },
   { id: 'q2', question: 'Sự khác biệt chính giữa 离岸价 (FOB) và 到岸价 (CIF) là gì?', options: ['FOB và CIF là một, chỉ khác tên gọi', 'CIF bên bán chịu cước vận chuyển + bảo hiểm đến cảng đích, FOB thì hết trách nhiệm khi hàng qua lan can tàu', 'FOB chỉ dùng cho hàng nội địa, CIF chỉ dùng cho hàng quốc tế', 'CIF không cần hợp đồng, FOB cần hợp đồng'], correctIndex: 1, explanation: 'FOB: người bán hết trách nhiệm khi hàng qua lan can tàu tại cảng đi. CIF: người bán còn chịu cước vận chuyển và bảo hiểm đến cảng đích.' },
   { id: 'q3', question: 'Khi soạn một lá thư thương mại bất kỳ, bước đầu tiên nên làm gì theo phần ôn tập này?', options: ['Viết ngay không cần suy nghĩ vì mọi thư đều giống nhau', 'Xác định thư đó nằm ở đâu trong chuỗi giao dịch để biết số liệu nào đã cố định, số liệu nào là mới', 'Luôn bắt đầu bằng một lời khiếu nại để gây chú ý', 'Bỏ qua khung 信头/称呼/结尾敬语 nếu là email'], correctIndex: 1, explanation: 'Xác định vị trí trong chuỗi (询盘→报盘→还盘→订单→确认→信用证→装运→索赔) giúp biết số liệu nào phải khớp với thư trước và số liệu nào là đề xuất mới trong thư đang soạn.' },
@@ -946,13 +946,13 @@ export default {
     requirements: 'Đã có nền tiếng Trung tương đương các môn CHI trước đó trong khung ngành Ngôn ngữ Trung (đọc hiểu chữ Hán cơ bản, pinyin, ngữ pháp trình trung cấp). Nên cài Pleco hoặc dùng từ điển hanzii.net để tra chữ &amp; nghe phát âm.',
   },
   sections: [
-    { title: 'Chương 1 — Định dạng &amp; văn phong thư tín|||Chapter 1 — Letter format &amp; style', description: '信头, 日期, 称呼, 正文, 结尾敬语, 签名; văn phong trang trọng.', lessons: [c1, c1q] },
-    { title: 'Chương 2 — Thư hỏi hàng &amp; chào hàng|||Chapter 2 — Inquiry &amp; offer letters', description: '询盘, 报盘, 报价, 单价, 起订量, 现货, 有效期.', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Thư đàm phán giá &amp; điều khoản|||Chapter 3 — Counter-offer &amp; negotiation letters', description: '还盘, 让步, 折扣, 底价, 成交, 付款方式.', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Thư đặt hàng &amp; xác nhận đơn|||Chapter 4 — Order &amp; confirmation letters', description: '订单, 确认, 装箱单, 交货期, 唛头, 合同, 生效.', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Thư thanh toán &amp; tín dụng thư|||Chapter 5 — Payment &amp; letter of credit letters', description: '信用证, 开证行, 不可撤销, 议付, 汇票, 提单, 单据.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Thư giao hàng, vận chuyển &amp; khiếu nại|||Chapter 6 — Shipment &amp; claim letters', description: '装运, 提单, 保险, 索赔, 破损, 短装, 赔偿.', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Email thương mại, thông báo &amp; mời hợp tác|||Chapter 7 — Business emails, notices &amp; cooperation', description: '邮件, 附件, 通知, 合作, 洽谈, 展会, 诚邀.', lessons: [c7, c7q] },
+    { title: 'Chương 1 — Định dạng & văn phong thư tín|||Chapter 1 — Letter format & style', description: '信头, 日期, 称呼, 正文, 结尾敬语, 签名; văn phong trang trọng.', lessons: [c1, c1q] },
+    { title: 'Chương 2 — Thư hỏi hàng & chào hàng|||Chapter 2 — Inquiry & offer letters', description: '询盘, 报盘, 报价, 单价, 起订量, 现货, 有效期.', lessons: [c2, c2q] },
+    { title: 'Chương 3 — Thư đàm phán giá & điều khoản|||Chapter 3 — Counter-offer & negotiation letters', description: '还盘, 让步, 折扣, 底价, 成交, 付款方式.', lessons: [c3, c3q] },
+    { title: 'Chương 4 — Thư đặt hàng & xác nhận đơn|||Chapter 4 — Order & confirmation letters', description: '订单, 确认, 装箱单, 交货期, 唛头, 合同, 生效.', lessons: [c4, c4q] },
+    { title: 'Chương 5 — Thư thanh toán & tín dụng thư|||Chapter 5 — Payment & letter of credit letters', description: '信用证, 开证行, 不可撤销, 议付, 汇票, 提单, 单据.', lessons: [c5, c5q] },
+    { title: 'Chương 6 — Thư giao hàng, vận chuyển & khiếu nại|||Chapter 6 — Shipment & claim letters', description: '装运, 提单, 保险, 索赔, 破损, 短装, 赔偿.', lessons: [c6, c6q] },
+    { title: 'Chương 7 — Email thương mại, thông báo & mời hợp tác|||Chapter 7 — Business emails, notices & cooperation', description: '邮件, 附件, 通知, 合作, 洽谈, 展会, 诚邀.', lessons: [c7, c7q] },
     { title: 'Chương 8 — Ôn tập: bộ thư tín giao dịch hoàn chỉnh|||Chapter 8 — Review: complete transaction set', description: 'Chuỗi 询盘→报盘→还盘→订单→信用证→装运→索赔; bảng thuật ngữ Incoterms.', lessons: [c8, c8q] },
   ],
 };

@@ -116,7 +116,7 @@ const intro = doc('dic301-0-1-overview', 'Course overview: Digital ICs|||Tổng 
 <p>Inverter (DC &amp; chuyển mạch) → logic tổ hợp → logic tuần tự &amp; định thời → interconnect &amp; trễ dây → logic động &amp; công suất → mạch số học → bộ nhớ → xung nhịp, timing closure &amp; tiết kiệm điện. Song ngữ, có công thức và ví dụ Verilog/SPICE, kèm quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('dic301-1-1-cmos-inverter', '1.1 — CMOS inverter: DC &amp; switching|||1.1 — Inverter CMOS: DC &amp; chuyển mạch',
+const c1 = doc('dic301-1-1-cmos-inverter', '1.1 — CMOS inverter: DC & switching|||1.1 — Inverter CMOS: DC & chuyển mạch',
   'Cấu trúc PMOS+NMOS, đường đặc tuyến truyền VTC, ngưỡng chuyển VM, biên nhiễu NMH/NML, trễ lan truyền tp và mô hình RC; ví dụ SPICE.',
   [[
     `<span class="eyebrow">DIC301 · Chapter 1 · Lesson 1.1</span>
@@ -226,7 +226,7 @@ const c2q = quiz('dic301-quiz-2', 'Quiz 2 — Combinational logic|||Quiz 2 — L
   { id: 'q3', question: 'Vì sao dùng transmission gate (NMOS+PMOS song song) thay cho một NMOS đơn?', options: ['Để tiết kiệm transistor', 'Để truyền cả mức 0 và 1 trọn vẹn, không mất Vt', 'Để tăng công suất tĩnh', 'Vì NMOS không dẫn được'], correctIndex: 1, explanation: 'NMOS đơn truyền mức 1 yếu (mất một Vt); transmission gate truyền cả 0 và 1 đầy đủ.' },
 ]);
 
-const c3 = doc('dic301-3-1-sequential', '3.1 — Sequential logic &amp; timing|||3.1 — Logic tuần tự &amp; định thời',
+const c3 = doc('dic301-3-1-sequential', '3.1 — Sequential logic & timing|||3.1 — Logic tuần tự & định thời',
   'Latch (mức) vs flip-flop (cạnh), cấu trúc master-slave, ràng buộc setup/hold, thời gian clk-to-Q, và metastability; ví dụ Verilog D flip-flop.',
   [[
     `<span class="eyebrow">DIC301 · Chapter 3 · Lesson 3.1</span>
@@ -271,13 +271,13 @@ endmodule</code></pre>
 <div class="callout"><span class="badge">Lưu ý</span> Dùng non-blocking (&lt;=) cho logic tuần tự và blocking (=) cho logic tổ hợp — trộn lẫn gây lệch giữa mô phỏng và tổng hợp.</div>`,
   ]]);
 
-const c3q = quiz('dic301-quiz-3', 'Quiz 3 — Sequential &amp; timing|||Quiz 3 — Tuần tự &amp; định thời', [
+const c3q = quiz('dic301-quiz-3', 'Quiz 3 — Sequential & timing|||Quiz 3 — Tuần tự & định thời', [
   { id: 'q1', question: 'Khác biệt chính giữa latch và flip-flop là gì?', options: ['Latch nhanh hơn flip-flop', 'Latch nhạy theo mức; flip-flop kích theo cạnh', 'Flip-flop không cần xung nhịp', 'Chúng giống hệt nhau'], correctIndex: 1, explanation: 'Latch trong suốt theo mức xung; flip-flop chỉ lấy mẫu tại cạnh xung.' },
   { id: 'q2', question: 'Chu kỳ xung nhịp tối thiểu của một tầng pipeline thỏa điều kiện nào?', options: ['T ≥ tcq + tlogic + tsu', 'T ≥ tsu − th', 'T ≥ tcq × tlogic', 'T ≤ th'], correctIndex: 0, explanation: 'T ≥ tcq + tlogic + tsu — cộng trễ clk-to-Q, trễ logic và thời gian setup.' },
   { id: 'q3', question: 'Trong Verilog, nên dùng phép gán nào cho logic tuần tự (trong always @(posedge clk))?', options: ['Blocking (=)', 'Non-blocking (<=)', 'assign liên tục', 'Cả hai trộn lẫn'], correctIndex: 1, explanation: 'Non-blocking (<=) cho tuần tự; blocking (=) cho tổ hợp — tránh lệch mô phỏng/tổng hợp.' },
 ]);
 
-const c4 = doc('dic301-4-1-interconnect', '4.1 — Interconnect &amp; wire delay|||4.1 — Interconnect &amp; trễ dây',
+const c4 = doc('dic301-4-1-interconnect', '4.1 — Interconnect & wire delay|||4.1 — Interconnect & trễ dây',
   'Dây không còn lý tưởng: điện trở + điện dung phân bố, mô hình RC, trễ Elmore, tại sao trễ dây tăng theo bình phương chiều dài, và chèn repeater/buffer.',
   [[
     `<span class="eyebrow">DIC301 · Chapter 4 · Lesson 4.1</span>
@@ -314,7 +314,7 @@ const c4q = quiz('dic301-quiz-4', 'Quiz 4 — Interconnect|||Quiz 4 — Intercon
   { id: 'q3', question: 'Vì sao interconnect ngày càng quan trọng ở công nghệ hiện đại?', options: ['Vì transistor chậm đi', 'Vì khi transistor thu nhỏ, trễ dây có thể chiếm phần lớn đường tới hạn', 'Vì dây không có điện dung', 'Vì xung nhịp giảm'], correctIndex: 1, explanation: 'Transistor nhanh lên nhưng dây không, nên trễ interconnect có thể áp đảo critical path.' },
 ]);
 
-const c5 = doc('dic301-5-1-dynamic-power', '5.1 — Dynamic logic &amp; power dissipation|||5.1 — Logic động &amp; tiêu tán công suất',
+const c5 = doc('dic301-5-1-dynamic-power', '5.1 — Dynamic logic & power dissipation|||5.1 — Logic động & tiêu tán công suất',
   'Logic động (precharge/evaluate), domino, ưu/nhược so với static; ba thành phần công suất: động, ngắn mạch, rò; công thức P và cách hạ.',
   [[
     `<span class="eyebrow">DIC301 · Chapter 5 · Lesson 5.1</span>
@@ -353,7 +353,7 @@ const c5 = doc('dic301-5-1-dynamic-power', '5.1 — Dynamic logic &amp; power di
 <div class="callout"><span class="badge">Đòn bẩy chính</span> Vì P<sub>dyn</sub> tỉ lệ V<sub>DD</sub><sup>2</sup>, hạ điện áp là nút chỉnh tiết kiệm năng lượng mạnh nhất trong thiết kế số.</div>`,
   ]]);
 
-const c5q = quiz('dic301-quiz-5', 'Quiz 5 — Dynamic logic &amp; power|||Quiz 5 — Logic động &amp; công suất', [
+const c5q = quiz('dic301-quiz-5', 'Quiz 5 — Dynamic logic & power|||Quiz 5 — Logic động & công suất', [
   { id: 'q1', question: 'Công suất động (switching) của một cổng CMOS tỉ lệ với điện áp nguồn theo kiểu nào?', options: ['Tuyến tính với VDD', 'Với VDD bình phương (VDD²)', 'Không phụ thuộc VDD', 'Với căn bậc hai của VDD'], correctIndex: 1, explanation: 'Pdyn = α·C·VDD²·f — nên hạ VDD là đòn bẩy tiết kiệm điện mạnh nhất.' },
   { id: 'q2', question: 'Logic động chạy theo hai pha nào?', options: ['Setup và hold', 'Precharge và evaluate', 'AND và OR', 'Nạp và ổn áp'], correctIndex: 1, explanation: 'Precharge (kéo ra lên VDD) rồi evaluate (mạng NMOS xả có điều kiện).' },
   { id: 'q3', question: 'Ở công nghệ rất nhỏ, thành phần công suất nào ngày càng áp đảo?', options: ['Công suất động', 'Công suất ngắn mạch', 'Công suất tĩnh (rò dòng)', 'Công suất cơ học'], correctIndex: 2, explanation: 'Rò dưới ngưỡng và rò cổng (công suất tĩnh) tăng mạnh khi kích thước co lại.' },
@@ -443,7 +443,7 @@ const c7q = quiz('dic301-quiz-7', 'Quiz 7 — Memory|||Quiz 7 — Bộ nhớ', [
   { id: 'q3', question: 'So với SRAM, DRAM có đặc điểm gì?', options: ['Mật độ cao hơn nhưng chậm hơn và cần refresh', 'Nhanh hơn và không bay hơi', 'Ít transistor hơn nhưng nhanh hơn SRAM', 'Không cần nguồn điện'], correctIndex: 0, explanation: 'DRAM (1T1C) đặc hơn SRAM (6T) nhưng chậm hơn, bay hơi và cần refresh.' },
 ]);
 
-const c8 = doc('dic301-8-1-clocking-lowpower', '8.1 — Clocking, timing closure &amp; low-power|||8.1 — Xung nhịp, timing closure &amp; tiết kiệm điện',
+const c8 = doc('dic301-8-1-clocking-lowpower', '8.1 — Clocking, timing closure & low-power|||8.1 — Xung nhịp, timing closure & tiết kiệm điện',
   'Phân phối xung nhịp (H-tree), lệch xung (skew) và jitter, timing closure (setup/hold trên toàn chip), và kỹ thuật low-power: clock gating, đa Vt, DVFS.',
   [[
     `<span class="eyebrow">DIC301 · Chapter 8 · Lesson 8.1</span>
@@ -488,7 +488,7 @@ Hold:  t_cq + t_logic_min  &gt;=  t_h + t_skew
 <div class="callout"><span class="badge">Bức tranh lớn</span> Tốc độ, công suất và diện tích là một ngân sách gắn kết. Thiết kế IC số giỏi là chọn mỗi khối nằm ở đâu trên mặt đánh đổi đó.</div>`,
   ]]);
 
-const c8q = quiz('dic301-quiz-8', 'Quiz 8 — Clocking &amp; low-power|||Quiz 8 — Xung nhịp &amp; tiết kiệm điện', [
+const c8q = quiz('dic301-quiz-8', 'Quiz 8 — Clocking & low-power|||Quiz 8 — Xung nhịp & tiết kiệm điện', [
   { id: 'q1', question: 'Clock skew là gì?', options: ['Dao động chu kỳ-qua-chu kỳ của một cạnh xung', 'Chênh lệch thời điểm xung nhịp tới giữa hai thanh ghi khác nhau', 'Tần số xung nhịp tối đa', 'Độ rộng xung nhịp'], correctIndex: 1, explanation: 'Skew là chênh lệch không gian về thời điểm xung tới các thanh ghi; jitter mới là dao động theo chu kỳ.' },
   { id: 'q2', question: 'Kỹ thuật clock gating tiết kiệm điện bằng cách nào?', options: ['Tăng điện áp nguồn', 'Ngắt xung nhịp tới các khối đang rảnh, triệt tiêu công suất động của chúng', 'Thêm nhiều flip-flop', 'Tăng tần số xung nhịp'], correctIndex: 1, explanation: 'Không có cạnh xung → khối không chuyển mạch → công suất động của nó về ~0.' },
   { id: 'q3', question: 'Vì sao DVFS (hạ VDD khi không cần tốc độ) tiết kiệm điện mạnh?', options: ['Vì công suất động tỉ lệ VDD²', 'Vì nó tăng dòng rò', 'Vì nó tăng số transistor', 'Vì nó bỏ qua timing closure'], correctIndex: 0, explanation: 'Pdyn = α·C·VDD²·f, nên hạ VDD giảm công suất động theo bình phương.' },
@@ -516,11 +516,11 @@ export default {
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Digital IC, công nghệ CMOS, ba thước đo tốc độ/công suất/diện tích.', lessons: [intro] },
     { title: 'Chương 1 — Inverter CMOS|||Chapter 1 — CMOS inverter', description: 'VTC, ngưỡng VM, biên nhiễu, trễ tp, SPICE.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Logic tổ hợp|||Chapter 2 — Combinational logic', description: 'CMOS tĩnh (PUN/PDN), pass-transistor, transmission gate.', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Logic tuần tự &amp; định thời|||Chapter 3 — Sequential logic &amp; timing', description: 'Latch, flip-flop, setup/hold, metastability.', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Interconnect &amp; trễ dây|||Chapter 4 — Interconnect &amp; wire delay', description: 'Mô hình RC, trễ Elmore, chèn repeater.', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Logic động &amp; công suất|||Chapter 5 — Dynamic logic &amp; power', description: 'Precharge/evaluate, domino, động/ngắn mạch/rò.', lessons: [c5, c5q] },
+    { title: 'Chương 3 — Logic tuần tự & định thời|||Chapter 3 — Sequential logic & timing', description: 'Latch, flip-flop, setup/hold, metastability.', lessons: [c3, c3q] },
+    { title: 'Chương 4 — Interconnect & trễ dây|||Chapter 4 — Interconnect & wire delay', description: 'Mô hình RC, trễ Elmore, chèn repeater.', lessons: [c4, c4q] },
+    { title: 'Chương 5 — Logic động & công suất|||Chapter 5 — Dynamic logic & power', description: 'Precharge/evaluate, domino, động/ngắn mạch/rò.', lessons: [c5, c5q] },
     { title: 'Chương 6 — Mạch số học|||Chapter 6 — Arithmetic circuits', description: 'Full adder, ripple-carry, carry-lookahead, bộ nhân.', lessons: [c6, c6q] },
     { title: 'Chương 7 — Bộ nhớ|||Chapter 7 — Memory', description: 'SRAM 6T, DRAM 1T1C, ROM.', lessons: [c7, c7q] },
-    { title: 'Chương 8 — Xung nhịp &amp; tiết kiệm điện|||Chapter 8 — Clocking &amp; low-power', description: 'Skew/jitter, timing closure, clock gating, DVFS.', lessons: [c8, c8q] },
+    { title: 'Chương 8 — Xung nhịp & tiết kiệm điện|||Chapter 8 — Clocking & low-power', description: 'Skew/jitter, timing closure, clock gating, DVFS.', lessons: [c8, c8q] },
   ],
 };

@@ -10,7 +10,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('anb402-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('anb402-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: giáo trình & slide (FLM), sách nghề (Fowkes, Gurney, Framed Ink), studio tham khảo, YouTube, công cụ, lộ trình tự học.',
   [[
     `<span class="eyebrow">ANB402 · Materials</span>
@@ -157,7 +157,7 @@ const c1q = quiz('anb402-quiz-1', 'Quiz 1 — Storytelling role|||Quiz 1 — Vai
   { id: 'q3', question: 'Vì sao nói bối cảnh là "diễn xuất không lời"?', options: ['Vì nó luôn im lặng', 'Vì nó truyền thời gian, tâm trạng, tính cách trước cả lời thoại', 'Vì nó không quan trọng bằng nhân vật', 'Vì nó chỉ là nền tô màu'], correctIndex: 1, explanation: 'Không gian kể thời-đại, không khí và chủ nhân trước khi nhân vật kịp nói hay hành động.' },
 ]);
 
-const c2 = doc('anb402-2-1-perspective', '2.1 — Perspective (1/2/3-point) &amp; space|||2.1 — Phối cảnh (1/2/3 điểm tụ) &amp; không gian',
+const c2 = doc('anb402-2-1-perspective', '2.1 — Perspective (1/2/3-point) & space|||2.1 — Phối cảnh (1/2/3 điểm tụ) & không gian',
   'Đường chân trời &amp; điểm tụ; phối cảnh 1, 2, 3 điểm tụ; tầm mắt (eye level) kể chuyện; foreground/midground/background dựng chiều sâu.',
   [[
     `<span class="eyebrow">ANB402 · Chapter 2 · Lesson 2.1</span>
@@ -202,7 +202,7 @@ const c2q = quiz('anb402-quiz-2', 'Quiz 2 — Perspective|||Quiz 2 — Phối c�
   { id: 'q3', question: 'Để tạo chiều sâu, hậu cảnh (background) thường nên được xử lý thế nào?', options: ['Tương phản mạnh, sắc nét, màu nóng', 'Mờ nhẹ, tương phản thấp, ngả lạnh', 'Đậm hơn tiền cảnh', 'Chi tiết nhiều nhất'], correctIndex: 1, explanation: 'Khí quyển làm vật ở xa mờ, tương phản thấp và ngả lạnh, nhờ đó chúng lùi ra sau.' },
 ]);
 
-const c3 = doc('anb402-3-1-composition', '3.1 — Composition &amp; leading the eye|||3.1 — Bố cục &amp; dẫn mắt',
+const c3 = doc('anb402-3-1-composition', '3.1 — Composition & leading the eye|||3.1 — Bố cục & dẫn mắt',
   'Điểm nhấn (focal point) &amp; tương phản; đường dẫn (leading lines), quy tắc 1/3, khung trong khung; nhóm hình lớn (big shapes) &amp; nhịp; Framed Ink.',
   [[
     `<span class="eyebrow">ANB402 · Chapter 3 · Lesson 3.1</span>
@@ -249,7 +249,7 @@ const c3q = quiz('anb402-quiz-3', 'Quiz 3 — Composition|||Quiz 3 — Bố cụ
   { id: 'q3', question: '"Phép nheo mắt" (squint test) giúp kiểm tra điều gì?', options: ['Độ sắc của chi tiết', 'Cấu trúc mảng sắc độ lớn & điểm nhấn có rõ không', 'Màu có đúng không', 'Kích thước file'], correctIndex: 1, explanation: 'Nheo mắt xoá chi tiết, chỉ còn mảng lớn — nếu bố cục vẫn đọc rõ thì nền móng vững.' },
 ]);
 
-const c4 = doc('anb402-4-1-color-light', '4.1 — Color theory &amp; light for backgrounds|||4.1 — Lý thuyết màu &amp; ánh sáng cho bối cảnh',
+const c4 = doc('anb402-4-1-color-light', '4.1 — Color theory & light for backgrounds|||4.1 — Lý thuyết màu & ánh sáng cho bối cảnh',
   'Sắc độ (value) trước màu; hue/saturation/value; nhiệt màu &amp; ánh sáng/bóng; nguồn sáng &amp; ánh sáng phản; bảng màu giới hạn; Gurney "Color and Light".',
   [[
     `<span class="eyebrow">ANB402 · Chapter 4 · Lesson 4.1</span>
@@ -290,13 +290,13 @@ const c4 = doc('anb402-4-1-color-light', '4.1 — Color theory &amp; light for b
 <div class="callout"><span class="badge">Bảng màu giới hạn</span> Chọn một nhóm nhỏ (vd một nóng, một lạnh, một trung tính) và ở trong đó. Bảng màu giới hạn cho cảm giác <strong>một nguồn sáng thống nhất</strong> — trộn quá nhiều sắc sẽ làm đục không khí.</div>`,
   ]]);
 
-const c4q = quiz('anb402-quiz-4', 'Quiz 4 — Color &amp; light|||Quiz 4 — Màu &amp; ánh sáng', [
+const c4q = quiz('anb402-quiz-4', 'Quiz 4 — Color & light|||Quiz 4 — Màu & ánh sáng', [
   { id: 'q1', question: 'Theo Gurney, thuộc tính nào của màu dựng nên khối và chiều sâu mạnh nhất?', options: ['Sắc (hue)', 'Độ tươi (saturation)', 'Sắc độ (value)', 'Nhiệt độ file'], correctIndex: 2, explanation: '"Value does the work" — sắc độ (sáng/tối) tạo hình khối và chiều sâu; hãy dựng nó trước khi tô màu.' },
   { id: 'q2', question: 'Nếu nguồn sáng chính là nắng ấm (nóng), bóng đổ thường nên ngả về?', options: ['Nóng hơn nữa', 'Lạnh (xanh do trời chiếu)', 'Đen tuyền', 'Trắng'], correctIndex: 1, explanation: 'Quy tắc nóng/lạnh: sáng nóng thì bóng lạnh (và ngược lại), khiến ánh sáng thật hơn.' },
   { id: 'q3', question: 'Vì sao nên dùng bảng màu giới hạn (limited palette)?', options: ['Vẽ nhanh hơn', 'Cho cảm giác một nguồn sáng thống nhất, tránh đục không khí', 'Tiết kiệm màu', 'Bắt buộc trong mọi phần mềm'], correctIndex: 1, explanation: 'Bảng màu giới hạn giữ cảnh trong một ánh sáng thống nhất; trộn quá nhiều sắc làm mood bị đục.' },
 ]);
 
-const c5 = doc('anb402-5-1-mood', '5.1 — Building mood: time of day &amp; weather|||5.1 — Xây dựng không khí: thời gian trong ngày &amp; thời tiết',
+const c5 = doc('anb402-5-1-mood', '5.1 — Building mood: time of day & weather|||5.1 — Xây dựng không khí: thời gian trong ngày & thời tiết',
   'Không khí (mood) từ sắc độ + màu + ánh sáng; bình minh/trưa/hoàng hôn/đêm; sương, mưa, tuyết, bão; key (high/low) &amp; contrast quyết định cảm xúc.',
   [[
     `<span class="eyebrow">ANB402 · Chapter 5 · Lesson 5.1</span>
@@ -345,7 +345,7 @@ const c5q = quiz('anb402-quiz-5', 'Quiz 5 — Mood|||Quiz 5 — Không khí', [
   { id: 'q3', question: 'Sương mù ảnh hưởng thế nào tới bối cảnh?', options: ['Tăng tương phản và làm rõ hậu cảnh', 'Hạ tương phản và giấu hậu cảnh, gợi cô lập/bí ẩn', 'Làm màu rực hơn', 'Không ảnh hưởng chiều sâu'], correctIndex: 1, explanation: 'Sương hạ tương phản, làm mờ và ẩn vật ở xa, tạo cảm giác cô lập, bí ẩn.' },
 ]);
 
-const c6 = doc('anb402-6-1-architecture-nature', '6.1 — Architecture &amp; natural environments|||6.1 — Thiết kế kiến trúc &amp; môi trường tự nhiên',
+const c6 = doc('anb402-6-1-architecture-nature', '6.1 — Architecture & natural environments|||6.1 — Thiết kế kiến trúc & môi trường tự nhiên',
   'Kiến trúc kể văn hoá/thời đại; ngôn ngữ hình khối &amp; silhouette; vật liệu; môi trường tự nhiên (cây, đá, nước, địa hình); tính nhất quán thế giới &amp; nghiên cứu tư liệu.',
   [[
     `<span class="eyebrow">ANB402 · Chapter 6 · Lesson 6.1</span>
@@ -388,7 +388,7 @@ const c6 = doc('anb402-6-1-architecture-nature', '6.1 — Architecture &amp; nat
 <div class="callout"><span class="badge">Nghiên cứu rồi cách điệu</span> Thu thập tư liệu (ảnh, nơi thật, lịch sử). Hiểu <em>vì sao</em> một hình khối tồn tại, rồi đơn giản hoá theo phong cách phim. Thế giới bịa từ hư không sẽ rỗng.</div>`,
   ]]);
 
-const c6q = quiz('anb402-quiz-6', 'Quiz 6 — Architecture &amp; nature|||Quiz 6 — Kiến trúc &amp; thiên nhiên', [
+const c6q = quiz('anb402-quiz-6', 'Quiz 6 — Architecture & nature|||Quiz 6 — Kiến trúc & thiên nhiên', [
   { id: 'q1', question: 'Vì sao "silhouette" (đường viền) quan trọng khi thiết kế công trình?', options: ['Vì nó tô màu nhanh', 'Vì thiết kế nên đọc được từ đường viền trước cả khi có chi tiết', 'Vì nó đo phối cảnh', 'Vì nó chỉ dùng cho nhân vật'], correctIndex: 1, explanation: 'Một thiết kế tốt nhận ra được chỉ từ silhouette; nếu outline mờ nhạt thì chi tiết cũng không cứu được.' },
   { id: 'q2', question: 'Kiến trúc trong bối cảnh chủ yếu kể cho khán giả điều gì?', options: ['Giá xây dựng', 'Văn hoá, thời đại, khí hậu & tầng lớp của người dựng', 'Phần mềm dùng để vẽ', 'Độ phân giải cảnh'], correctIndex: 1, explanation: 'Ngôn ngữ hình khối, vật liệu và hao mòn của công trình bộc lộ văn hoá, thời đại và xã hội.' },
   { id: 'q3', question: 'Cách làm đúng khi thiết kế môi trường tự nhiên (cây, đá, nước) là?', options: ['Bịa hoàn toàn cho khác lạ', 'Nghiên cứu quy luật thật rồi cách điệu, gom thành mảng lớn trước', 'Vẽ từng chiếc lá thật chi tiết ngay từ đầu', 'Sao chép nguyên ảnh chụp'], correctIndex: 1, explanation: 'Hiểu logic tự nhiên (cây vươn sáng, nước chảy xuống) rồi đơn giản hoá thành mảng lớn, sau mới thêm chi tiết.' },
@@ -449,7 +449,7 @@ const c7q = quiz('anb402-quiz-7', 'Quiz 7 — 2D vs game|||Quiz 7 — 2D vs game
   { id: 'q3', question: 'Điểm chung giữa bối cảnh phim 2D và môi trường game là?', options: ['Đều chỉ vẽ một góc nhìn', 'Bố cục, mood, màu/ánh sáng và kể chuyện vẫn chi phối cả hai', 'Đều dùng chung engine', 'Đều không cần chừa chỗ nhân vật'], correctIndex: 1, explanation: 'Dù ràng buộc khác nhau, nguyên lý kể chuyện, bố cục và ánh sáng áp dụng cho cả hai môi trường.' },
 ]);
 
-const c8 = doc('anb402-8-1-pipeline', '8.1 — Pipeline: concept → line → color, matte painting &amp; handoff|||8.1 — Quy trình: concept → line → color, matte painting &amp; bàn giao',
+const c8 = doc('anb402-8-1-pipeline', '8.1 — Pipeline: concept → line → color, matte painting & handoff|||8.1 — Quy trình: concept → line → color, matte painting & bàn giao',
   'Quy trình sản xuất: thumbnail → concept/color key → line/rough → color/paint → matte painting → cleanup &amp; bàn giao (layer, tài liệu, model pack) cho sản xuất.',
   [[
     `<span class="eyebrow">ANB402 · Chapter 8 · Lesson 8.1</span>
@@ -492,7 +492,7 @@ const c8 = doc('anb402-8-1-pipeline', '8.1 — Pipeline: concept → line → co
 <div class="callout"><span class="badge">Giải sớm</span> Đừng bao giờ cứu một bố cục hỏng bằng cách tô kỹ. Hãy làm đúng thumbnail và color key trước — độ bóng bẩy không cứu nổi nền móng yếu, và sửa muộn là tốn kém nhất.</div>`,
   ]]);
 
-const c8q = quiz('anb402-quiz-8', 'Quiz 8 — Pipeline &amp; handoff|||Quiz 8 — Quy trình &amp; bàn giao', [
+const c8q = quiz('anb402-quiz-8', 'Quiz 8 — Pipeline & handoff|||Quiz 8 — Quy trình & bàn giao', [
   { id: 'q1', question: 'Bước đầu tiên nên làm trong quy trình thiết kế một bối cảnh là?', options: ['Tô màu chi tiết ngay', 'Phác thumbnail trắng-đen để thử bố cục & sắc độ', 'Matte painting', 'Gắn nhãn layer'], correctIndex: 1, explanation: 'Giải bố cục và sắc độ sớm bằng thumbnail nhỏ; các bước sau chỉ là thực thi khi nền móng đã vững.' },
   { id: 'q2', question: '"Color key" trong quy trình dùng để làm gì?', options: ['Chốt mã màu cho lập trình', 'Nghiên cứu màu nhỏ để chốt mood & ánh sáng trước khi vẽ lớn', 'Đặt tên file', 'Kiểm tra phối cảnh'], correctIndex: 1, explanation: 'Color key là study màu nhỏ giúp khoá không khí và ánh sáng trước khi đầu tư vẽ bản lớn.' },
   { id: 'q3', question: 'Khi bàn giao bối cảnh cho sản xuất, điều quan trọng nhất là?', options: ['Xuất một ảnh bẹt duy nhất', 'Tổ chức lớp, ghi chú màu/tỉ lệ, nhất quán với model pack', 'Nén file nhỏ nhất', 'Xoá hết layer cho gọn'], correctIndex: 1, explanation: 'Sản phẩm giao phải có các lớp tách riêng, ghi chú và nhất quán thế giới để người khác dựng tiếp.' },

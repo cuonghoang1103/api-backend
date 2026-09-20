@@ -1574,7 +1574,7 @@ RTT 9: 1 → 2 · RTT 10: 2 → 4 · RTT 11: 4 → 8 · RTT 12: 8 → 10 (ssthre
     },
     /* ══════════════════ NÂNG CAO 1 — TẦNG ỨNG DỤNG & HÀNH TRÌNH (CAPSTONE) ══════════════════ */
     {
-      title: 'Advanced 1 — The application layer & a request&#39;s journey|||Nâng cao 1 — Tầng ứng dụng & hành trình một yêu cầu',
+      title: 'Advanced 1 — The application layer & a request\'s journey|||Nâng cao 1 — Tầng ứng dụng & hành trình một yêu cầu',
       description: 'Ngoài giáo trình — bài tổng kết: DNS, HTTP và cả hành trình một lần tải trang.',
       lessons: [
         {

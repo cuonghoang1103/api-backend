@@ -113,7 +113,7 @@ const intro = doc('exe401-0-1-overview', 'Course overview: building a startup, e
 <div class="callout"><span class="badge">Nguyên tắc vàng</span> Nói chuyện với người dùng trước khi viết một dòng code. Phần lớn startup đồ án thất bại không vì code tệ, mà vì <strong>không ai cần sản phẩm</strong>.</div>`,
   ]]);
 
-const c1 = doc('exe401-1-1-idea-problem', '1 — Idea &amp; the problem (problem-solution fit)|||1 — Ý tưởng &amp; vấn đề (khớp vấn đề-giải pháp)',
+const c1 = doc('exe401-1-1-idea-problem', '1 — Idea & the problem (problem-solution fit)|||1 — Ý tưởng & vấn đề (khớp vấn đề-giải pháp)',
   'Bắt đầu từ vấn đề, không từ giải pháp; tiêu chí ý tưởng tốt; phỏng vấn vấn đề (Mom Test); khớp vấn đề-giải pháp.',
   [[
     `<span class="eyebrow">EXE401 · Stage 1</span>
@@ -162,7 +162,7 @@ const c1q = quiz('exe401-quiz-1', 'Quiz 1 — Idea & problem|||Quiz 1 — Ý tư
   { id: 'q3', question: '"Problem-solution fit" (khớp vấn đề-giải pháp) đạt khi?', options: ['Đã viết xong toàn bộ code', 'Khách hàng xác định rõ đồng ý vấn đề có thật và giải pháp gỡ được đau, kiểm qua trò chuyện', 'Đã đăng ký nhãn hiệu', 'Đã có logo và website'], correctIndex: 1, explanation: 'Khớp vấn đề-giải pháp được xác nhận bằng bằng chứng từ khách hàng trước khi dựng sản phẩm.' },
 ]);
 
-const c2 = doc('exe401-2-1-market-customers', '2 — Market & customer discovery|||2 — Thị trường &amp; khám phá khách hàng',
+const c2 = doc('exe401-2-1-market-customers', '2 — Market & customer discovery|||2 — Thị trường & khám phá khách hàng',
   'Chân dung khách hàng & early adopter; quy mô thị trường TAM/SAM/SOM; phỏng vấn khám phá; đối thủ & phân khúc.',
   [[
     `<span class="eyebrow">EXE401 · Stage 2</span>
@@ -209,7 +209,7 @@ const c2q = quiz('exe401-quiz-2', 'Quiz 2 — Market & customers|||Quiz 2 — Th
   { id: 'q3', question: 'Khi lập bản đồ đối thủ, "giải pháp thay thế" cần tính cả?', options: ['Chỉ các app đối thủ trực tiếp', 'Cách chống chế hiện tại như dùng Excel hoặc không làm gì cả', 'Chỉ các công ty niêm yết', 'Chỉ đối thủ nước ngoài'], correctIndex: 1, explanation: 'Đối thủ thật sự gồm mọi cách khách hàng đang giải quyết vấn đề, kể cả thủ công hay bỏ qua.' },
 ]);
 
-const c3 = doc('exe401-3-1-business-model-canvas', '3 — Business Model Canvas & value proposition|||3 — Business Model Canvas &amp; đề xuất giá trị',
+const c3 = doc('exe401-3-1-business-model-canvas', '3 — Business Model Canvas & value proposition|||3 — Business Model Canvas & đề xuất giá trị',
   'Đề xuất giá trị (value proposition); 9 ô Business Model Canvas của Osterwalder; dòng doanh thu & cấu trúc chi phí.',
   [[
     `<span class="eyebrow">EXE401 · Stage 3</span>
@@ -254,7 +254,7 @@ const c3q = quiz('exe401-quiz-3', 'Quiz 3 — BMC & value proposition|||Quiz 3 �
   { id: 'q3', question: 'Theo Thiel (Zero to One), lợi thế bền vững KHÔNG phải là?', options: ['Hiệu ứng mạng', 'Công nghệ độc quyền', 'Làm y hệt đối thủ nhưng rẻ hơn một chút', 'Thương hiệu mạnh'], correctIndex: 2, explanation: 'Chỉ rẻ hơn thì dễ bị sao chép; lợi thế thật đến từ điều khó copy.' },
 ]);
 
-const c4 = doc('exe401-4-1-mvp-product', '4 — MVP & product development|||4 — MVP &amp; phát triển sản phẩm',
+const c4 = doc('exe401-4-1-mvp-product', '4 — MVP & product development|||4 — MVP & phát triển sản phẩm',
   'MVP là gì và không là gì; các loại MVP (landing, concierge, Wizard of Oz); build-measure-learn; ưu tiên tính năng.',
   [[
     `<span class="eyebrow">EXE401 · Stage 4</span>
@@ -305,7 +305,7 @@ const c4q = quiz('exe401-quiz-4', 'Quiz 4 — MVP & product|||Quiz 4 — MVP & s
   { id: 'q3', question: 'Vòng lặp cốt lõi của Lean Startup là?', options: ['Lập kế hoạch → Thực thi → Báo cáo', 'Dựng → Đo → Học', 'Thiết kế → Gọi vốn → Mở rộng', 'Marketing → Bán → Hỗ trợ'], correctIndex: 1, explanation: 'Build-Measure-Learn: mỗi vòng kiểm một giả định rủi ro rồi điều chỉnh.' },
 ]);
 
-const c5 = doc('exe401-5-1-validation-pmf', '5 — Validation & product-market fit|||5 — Kiểm chứng &amp; product-market fit',
+const c5 = doc('exe401-5-1-validation-pmf', '5 — Validation & product-market fit|||5 — Kiểm chứng & product-market fit',
   'Học có kiểm chứng; chỉ số phễu AARRR & metric ảo; pivot hay kiên trì; dấu hiệu product-market fit.',
   [[
     `<span class="eyebrow">EXE401 · Stage 5</span>
@@ -346,7 +346,7 @@ const c5q = quiz('exe401-quiz-5', 'Quiz 5 — Validation & PMF|||Quiz 5 — Ki�
   { id: 'q3', question: '"Pivot" nghĩa là?', options: ['Bỏ hẳn dự án', 'Đổi một yếu tố cốt lõi (phân khúc/vấn đề/giải pháp) nhưng giữ điều đã học', 'Gọi thêm vốn', 'Tăng giá sản phẩm'], correctIndex: 1, explanation: 'Pivot là thay đổi hướng có chủ đích dựa trên điều đã học, không phải bỏ cuộc.' },
 ]);
 
-const c6 = doc('exe401-6-1-go-to-market', '6 — Marketing, sales & growth (go-to-market)|||6 — Marketing, bán hàng &amp; tăng trưởng (go-to-market)',
+const c6 = doc('exe401-6-1-go-to-market', '6 — Marketing, sales & growth (go-to-market)|||6 — Marketing, bán hàng & tăng trưởng (go-to-market)',
   'Chiến lược go-to-market; kênh tiếp cận; phễu bán hàng; CAC & LTV; kênh tăng trưởng bền.',
   [[
     `<span class="eyebrow">EXE401 · Stage 6</span>
@@ -393,7 +393,7 @@ const c6q = quiz('exe401-quiz-6', 'Quiz 6 — Go-to-market|||Quiz 6 — Go-to-ma
   { id: 'q3', question: 'Nếu CAC lớn hơn số tiền khách hàng từng trả (LTV), thì tăng trưởng?', options: ['Càng nhanh càng tốt', 'Chỉ khiến đốt tiền nhanh hơn', 'Không ảnh hưởng gì', 'Tự động sinh lời'], correctIndex: 1, explanation: 'Thu hút mỗi khách lỗ thì mở rộng chỉ làm khoản lỗ lớn nhanh hơn.' },
 ]);
 
-const c7 = doc('exe401-7-1-finance-fundraising', '7 — Finance, fundraising & pitch deck|||7 — Tài chính, gọi vốn &amp; pitch deck',
+const c7 = doc('exe401-7-1-finance-fundraising', '7 — Finance, fundraising & pitch deck|||7 — Tài chính, gọi vốn & pitch deck',
   'Mô hình tài chính & dự báo; điểm hoà vốn; các vòng gọi vốn & định giá; cấu trúc pitch deck 10 slide.',
   [[
     `<span class="eyebrow">EXE401 · Stage 7</span>
@@ -454,7 +454,7 @@ const c7q = quiz('exe401-quiz-7', 'Quiz 7 — Finance & pitch|||Quiz 7 — Tài 
   { id: 'q3', question: 'Điều gì thuyết phục nhà đầu tư mạnh nhất trong pitch?', options: ['Slide thiết kế đẹp', 'Traction thật — bằng chứng lượng dùng hoặc doanh thu đang tăng', 'Định giá cao', 'Nhiều tính năng đã lên kế hoạch'], correctIndex: 1, explanation: 'Nhà đầu tư rót tiền vào bằng chứng; traction thật thuyết phục hơn dự báo.' },
 ]);
 
-const c8 = doc('exe401-8-1-ops-legal-defense', '8 — Operations, legal, scaling & the defense|||8 — Vận hành, pháp lý, mở rộng &amp; bảo vệ đồ án',
+const c8 = doc('exe401-8-1-ops-legal-defense', '8 — Operations, legal, scaling & the defense|||8 — Vận hành, pháp lý, mở rộng & bảo vệ đồ án',
   'Vận hành & đội ngũ; pháp lý (loại hình doanh nghiệp, sở hữu trí tuệ, hợp đồng); mở rộng; chuẩn bị buổi bảo vệ.',
   [[
     `<span class="eyebrow">EXE401 · Stage 8</span>

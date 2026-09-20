@@ -14,7 +14,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const c1 = doc('cem501-1-1-intro-variables', 'Chapter 1 — Introduction to macroeconomics &amp; key variables (宏观经济学导论)|||Chương 1 — Nhập môn kinh tế vĩ mô &amp; các biến số cơ bản (宏观经济学导论)',
+const c1 = doc('cem501-1-1-intro-variables', 'Chapter 1 — Introduction to macroeconomics & key variables (宏观经济学导论)|||Chương 1 — Nhập môn kinh tế vĩ mô & các biến số cơ bản (宏观经济学导论)',
   'Kinh tế vĩ mô là gì, khác kinh tế vi mô ra sao; 4 biến số/mục tiêu kinh điển: tăng trưởng, thất nghiệp, lạm phát, cán cân đối ngoại; hai công cụ chính sách 财政政策/货币政策.',
   [[
     `<span class="eyebrow">CEM501 · Chapter 1</span>
@@ -83,13 +83,13 @@ const c1 = doc('cem501-1-1-intro-variables', 'Chapter 1 — Introduction to macr
 <div class="callout"><span class="badge">Vì sao gọi là "vĩ mô"</span> Mỗi chương của môn này thực chất trả lời chi tiết hơn cho một trong bốn mục tiêu trên — GDP đo tăng trưởng, thất nghiệp/lạm phát có chương riêng, chính sách tiền tệ &amp; tài khoá là đòn bẩy, và chương kinh tế mở trả lời cho cân bằng đối ngoại.</div>`,
   ]]);
 
-const c1q = quiz('cem501-quiz-1', 'Quiz 1 — Introduction &amp; key variables|||Quiz 1 — Nhập môn &amp; biến số cơ bản', [
+const c1q = quiz('cem501-quiz-1', 'Quiz 1 — Introduction & key variables|||Quiz 1 — Nhập môn & biến số cơ bản', [
   { id: 'q1', question: '"宏观经济学" (hóngguān jīngjìxué) nghiên cứu điều gì?', options: ['Giá của một sản phẩm cụ thể tại một cửa hàng', 'Nền kinh tế như một tổng thể: tổng sản lượng, mức giá chung, việc làm toàn xã hội', 'Chiến lược kinh doanh của một doanh nghiệp đơn lẻ', 'Hành vi tiêu dùng của một hộ gia đình'], correctIndex: 1, explanation: '宏观经济学 (kinh tế vĩ mô) nhìn nền kinh tế như một khối — khác với 微观经济学 (vi mô) nhìn từng thị trường/chủ thể riêng lẻ.' },
   { id: 'q2', question: 'Đâu KHÔNG phải là một trong bốn mục tiêu vĩ mô kinh điển?', options: ['经济增长 (tăng trưởng kinh tế)', '低失业率 (thất nghiệp thấp)', '物价稳定 (ổn định giá cả)', '提高单一企业利润 (tối đa hoá lợi nhuận một doanh nghiệp)'], correctIndex: 3, explanation: 'Bốn mục tiêu vĩ mô là tăng trưởng, thất nghiệp thấp, ổn định giá cả, cân bằng đối ngoại — tối đa hoá lợi nhuận một doanh nghiệp là vấn đề vi mô.' },
   { id: 'q3', question: '"货币政策" (huòbì zhèngcè) và "财政政策" (cáizhèng zhèngcè) khác nhau ở chỗ nào?', options: ['Cả hai đều do doanh nghiệp tư nhân quyết định', '货币政策 do ngân hàng trung ương quản lý tiền/lãi suất; 财政政策 do chính phủ quản lý thuế/chi tiêu', '货币政策 là thuế, 财政政策 là lãi suất', 'Không có sự khác biệt, chỉ là hai tên gọi khác nhau của cùng một chính sách'], correctIndex: 1, explanation: '货币政策 (chính sách tiền tệ) do ngân hàng trung ương điều hành qua tiền tệ/lãi suất; 财政政策 (chính sách tài khoá) do chính phủ điều hành qua thuế và chi tiêu công.' },
 ]);
 
-const c2 = doc('cem501-2-1-gdp-growth', 'Chapter 2 — GDP, growth &amp; measuring output (国内生产总值)|||Chương 2 — GDP, tăng trưởng &amp; đo lường sản lượng (国内生产总值)',
+const c2 = doc('cem501-2-1-gdp-growth', 'Chapter 2 — GDP, growth & measuring output (国内生产总值)|||Chương 2 — GDP, tăng trưởng & đo lường sản lượng (国内生产总值)',
   'GDP danh nghĩa/thực tế, GDP bình quân đầu người, phương pháp chi tiêu GDP=C+I+G+NX, phương pháp thu nhập, chỉ số giảm phát GDP.',
   [[
     `<span class="eyebrow">CEM501 · Chapter 2</span>
@@ -164,13 +164,13 @@ Chỉ số giảm phát GDP = (GDP danh nghĩa ÷ GDP thực tế) × 100
 <div class="callout"><span class="badge">Bẫy cần nhớ</span> Một nước có 名义GDP tăng 10% nhưng mức giá (通货膨胀) cũng tăng 10% thì tăng trưởng THỰC bằng 0 — chỉ 实际GDP mới cho biết người dân có thật sự nhiều hàng hoá/dịch vụ hơn hay không, nên mục tiêu tăng trưởng trong kinh tế vĩ mô luôn được nói theo giá trị THỰC.</div>`,
   ]]);
 
-const c2q = quiz('cem501-quiz-2', 'Quiz 2 — GDP &amp; growth measurement|||Quiz 2 — GDP &amp; đo lường tăng trưởng', [
+const c2q = quiz('cem501-quiz-2', 'Quiz 2 — GDP & growth measurement|||Quiz 2 — GDP & đo lường tăng trưởng', [
   { id: 'q1', question: 'Theo phương pháp chi tiêu, công thức tính GDP là gì?', options: ['GDP = C − I − G − NX', 'GDP = C + I + G + NX', 'GDP = C × I × G × NX', 'GDP = C + I − G + NX'], correctIndex: 1, explanation: 'GDP = C (消费) + I (投资) + G (政府支出) + NX (净出口).' },
   { id: 'q2', question: 'Vì sao mục tiêu tăng trưởng kinh tế luôn được nêu theo 实际GDP (GDP thực tế) thay vì 名义GDP (GDP danh nghĩa)?', options: ['Vì 名义GDP không thể tính được', 'Vì 名义GDP có thể tăng chỉ do giá cả tăng (lạm phát), không phản ánh sản lượng thực', 'Vì 实际GDP luôn lớn hơn 名义GDP', 'Vì hai chỉ số này hoàn toàn giống nhau'], correctIndex: 1, explanation: '名义GDP đo theo giá hiện hành nên có thể tăng chỉ vì lạm phát; 实际GDP đo theo giá cố định mới phản ánh đúng lượng sản xuất tăng thêm.' },
   { id: 'q3', question: '"GDP平减指数" (GDP deflator) được tính như thế nào?', options: ['(实际GDP ÷ 名义GDP) × 100', '(名义GDP ÷ 实际GDP) × 100', '名义GDP − 实际GDP', '名义GDP + 实际GDP'], correctIndex: 1, explanation: 'GDP平减指数 = (名义GDP ÷ 实际GDP) × 100 — thước đo mức giá chung của toàn nền kinh tế.' },
 ]);
 
-const c3 = doc('cem501-3-1-ad-as', 'Chapter 3 — Aggregate demand &amp; aggregate supply (总需求-总供给)|||Chương 3 — Tổng cầu &amp; tổng cung (总需求-总供给)',
+const c3 = doc('cem501-3-1-ad-as', 'Chapter 3 — Aggregate demand & aggregate supply (总需求-总供给)|||Chương 3 — Tổng cầu & tổng cung (总需求-总供给)',
   'Mô hình AD-AS: đường tổng cầu 总需求, đường tổng cung ngắn hạn/dài hạn 总供给, sản lượng cân bằng, các cú sốc dịch chuyển đường.',
   [[
     `<span class="eyebrow">CEM501 · Chapter 3</span>
@@ -243,13 +243,13 @@ Cân bằng dài hạn tại giao điểm AD với 长期AS (Y = Y*, sản lư�
 <div class="callout"><span class="badge">Đọc một cú sốc</span> Cú sốc cầu (AD dịch chuyển) làm mức giá VÀ sản lượng cùng chiều; cú sốc cung (AS dịch chuyển, vd giá dầu tăng vọt) làm chúng NGƯỢC chiều — giá tăng, sản lượng giảm. Phân biệt được hai loại này là bước đầu để chẩn đoán bất kỳ đợt suy thoái thực tế nào.</div>`,
   ]]);
 
-const c3q = quiz('cem501-quiz-3', 'Quiz 3 — Aggregate demand &amp; supply|||Quiz 3 — Tổng cầu &amp; tổng cung', [
+const c3q = quiz('cem501-quiz-3', 'Quiz 3 — Aggregate demand & supply|||Quiz 3 — Tổng cầu & tổng cung', [
   { id: 'q1', question: 'Vì sao đường 总需求 (AD) dốc xuống theo mức giá?', options: ['Vì doanh nghiệp luôn muốn sản xuất ít hơn khi giá giảm', 'Vì khi giá giảm, sức mua thực tăng nên tổng cầu về sản lượng tăng', '总需求 luôn là một đường thẳng đứng', 'Vì lãi suất luôn giảm theo giá'], correctIndex: 1, explanation: 'Giá giảm làm giá trị thực của tiền/thu nhập tăng, kích thích chi tiêu C, I, NX → tổng cầu tăng khi giá giảm, nên AD dốc xuống.' },
   { id: 'q2', question: 'Đường 长期总供给 (AS dài hạn) có đặc điểm gì?', options: ['Dốc lên theo giá', 'Dốc xuống theo giá', 'Thẳng đứng tại sản lượng tiềm năng, không phụ thuộc mức giá', 'Trùng với đường 总需求'], correctIndex: 2, explanation: 'Trong dài hạn, sản lượng bị giới hạn bởi năng lực thực (lao động, vốn, công nghệ) nên đường AS dài hạn thẳng đứng tại Y* (sản lượng tiềm năng).' },
   { id: 'q3', question: 'Một cú sốc CUNG (vd giá dầu tăng vọt) tác động thế nào đến giá và sản lượng?', options: ['Giá và sản lượng cùng tăng', 'Giá và sản lượng cùng giảm', 'Giá tăng, sản lượng giảm (ngược chiều nhau)', 'Không ảnh hưởng gì đến giá hay sản lượng'], correctIndex: 2, explanation: 'Cú sốc cung dịch AS sang trái: chi phí sản xuất tăng đẩy giá lên trong khi sản lượng giảm — giá và sản lượng đi ngược chiều, khác cú sốc cầu (cùng chiều).' },
 ]);
 
-const c4 = doc('cem501-4-1-unemployment-inflation', 'Chapter 4 — Unemployment &amp; inflation (失业, 通货膨胀)|||Chương 4 — Thất nghiệp &amp; lạm phát (失业, 通货膨胀)',
+const c4 = doc('cem501-4-1-unemployment-inflation', 'Chapter 4 — Unemployment & inflation (失业, 通货膨胀)|||Chương 4 — Thất nghiệp & lạm phát (失业, 通货膨胀)',
   'Ba loại thất nghiệp (摩擦性/结构性/周期性), tỷ lệ thất nghiệp tự nhiên; lạm phát, CPI, đường cong Phillips 菲利普斯曲线 (đánh đổi ngắn hạn).',
   [[
     `<span class="eyebrow">CEM501 · Chapter 4</span>
@@ -316,13 +316,13 @@ const c4 = doc('cem501-4-1-unemployment-inflation', 'Chapter 4 — Unemployment 
 <div class="callout"><span class="badge">CPI vs. chỉ số giảm phát GDP</span> CPI (消费者价格指数) theo dõi một GIỎ HÀNG cố định của người tiêu dùng, còn chỉ số giảm phát GDP (Chương 2) bao trùm TẤT CẢ hàng hoá sản xuất trong nước — chúng thường đi cùng chiều nhưng có thể lệch nhau (vd giá hàng nhập khẩu tăng vọt ảnh hưởng CPI nhiều hơn chỉ số giảm phát).</div>`,
   ]]);
 
-const c4q = quiz('cem501-quiz-4', 'Quiz 4 — Unemployment &amp; inflation|||Quiz 4 — Thất nghiệp &amp; lạm phát', [
+const c4q = quiz('cem501-quiz-4', 'Quiz 4 — Unemployment & inflation|||Quiz 4 — Thất nghiệp & lạm phát', [
   { id: 'q1', question: 'Loại thất nghiệp nào do SUY THOÁI kinh tế gây ra và là mục tiêu chính của chính sách chống thất nghiệp?', options: ['摩擦性失业 (tạm thời)', '结构性失业 (cơ cấu)', '周期性失业 (chu kỳ)', '自然失业率 (tỷ lệ tự nhiên) luôn bằng 0'], correctIndex: 2, explanation: '周期性失业 (thất nghiệp chu kỳ) sinh ra khi tổng cầu giảm trong suy thoái — đây là phần chính sách tiền tệ/tài khoá có thể tác động, khác với 摩擦性 và 结构性 vốn tồn tại ngay cả khi kinh tế khoẻ mạnh.' },
   { id: 'q2', question: 'Đường cong Phillips (菲利普斯曲线) mô tả điều gì?', options: ['Mối quan hệ giữa GDP và dân số', 'Sự đánh đổi ngắn hạn: thất nghiệp thấp thường đi kèm lạm phát cao, và ngược lại', 'Công thức tính GDP theo phương pháp chi tiêu', 'Tỷ giá hối đoái giữa hai đồng tiền'], correctIndex: 1, explanation: 'Phillips curve cho thấy trong ngắn hạn, thất nghiệp thấp thường đi kèm lạm phát cao do thị trường lao động căng thẳng đẩy lương/giá lên.' },
   { id: 'q3', question: 'Chỉ số CPI (消费者价格指数) khác chỉ số giảm phát GDP (GDP平减指数) ở điểm nào?', options: ['CPI đo giỏ hàng cố định của người tiêu dùng, còn chỉ số giảm phát GDP bao trùm mọi hàng hoá sản xuất trong nước', 'Hai chỉ số hoàn toàn giống nhau, chỉ khác tên gọi', 'CPI chỉ áp dụng cho hàng xuất khẩu', 'Chỉ số giảm phát GDP chỉ tính giá hàng nhập khẩu'], correctIndex: 0, explanation: 'CPI theo dõi giỏ hàng tiêu dùng cố định; chỉ số giảm phát GDP bao trùm toàn bộ sản lượng trong nước — hai chỉ số có thể lệch nhau, ví dụ khi giá hàng nhập khẩu biến động mạnh.' },
 ]);
 
-const c5 = doc('cem501-5-1-money-banking-monetary-policy', 'Chapter 5 — Money, banking &amp; monetary policy (货币政策)|||Chương 5 — Tiền tệ, ngân hàng &amp; chính sách tiền tệ (货币政策)',
+const c5 = doc('cem501-5-1-money-banking-monetary-policy', 'Chapter 5 — Money, banking & monetary policy (货币政策)|||Chương 5 — Tiền tệ, ngân hàng & chính sách tiền tệ (货币政策)',
   'Ngân hàng trung ương 中央银行, ba công cụ chính sách tiền tệ (存款准备金率, 再贴现率, 公开市场业务), số nhân tiền, thuyết số lượng tiền tệ MV=PY.',
   [[
     `<span class="eyebrow">CEM501 · Chapter 5</span>
@@ -389,13 +389,13 @@ const c5 = doc('cem501-5-1-money-banking-monetary-policy', 'Chapter 5 — Money,
 <div class="callout"><span class="badge">Công cụ vs. mục tiêu</span> Lãi suất (利率) thường là MỤC TIÊU mà ngân hàng trung ương công bố; nghiệp vụ thị trường mở (公开市场业务) là CÔNG CỤ dùng hàng ngày để đạt mục tiêu đó — đừng nhầm đòn bẩy với cái đồng hồ nó điều chỉnh.</div>`,
   ]]);
 
-const c5q = quiz('cem501-quiz-5', 'Quiz 5 — Money &amp; monetary policy|||Quiz 5 — Tiền tệ &amp; chính sách tiền tệ', [
+const c5q = quiz('cem501-quiz-5', 'Quiz 5 — Money & monetary policy|||Quiz 5 — Tiền tệ & chính sách tiền tệ', [
   { id: 'q1', question: 'Nếu 存款准备金率 (tỷ lệ dự trữ bắt buộc) là 20%, 货币乘数 (số nhân tiền) bằng bao nhiêu?', options: ['2', '5', '10', '20'], correctIndex: 1, explanation: '货币乘数 = 1 ÷ 存款准备金率 = 1 ÷ 0.20 = 5.' },
   { id: 'q2', question: 'Công cụ nào của ngân hàng trung ương được dùng HÀNG NGÀY để điều tiết cung tiền?', options: ['存款准备金率', '再贴现率', '公开市场业务 (mua/bán trái phiếu chính phủ)', '财政政策'], correctIndex: 2, explanation: '公开市场业务 (nghiệp vụ thị trường mở) là công cụ linh hoạt, dùng thường xuyên hàng ngày; hai công cụ kia ít thay đổi hơn, còn 财政政策 thuộc về chính phủ chứ không phải ngân hàng trung ương.' },
   { id: 'q3', question: 'Chính sách tiền tệ MỞ RỘNG (giảm lãi suất, tăng cung tiền) nhằm mục đích gì?', options: ['Giảm tổng cầu để hạ lạm phát', 'Tăng tổng cầu (AD) để kích thích sản lượng và việc làm', 'Tăng tỷ lệ dự trữ bắt buộc', 'Giảm 货币供给 (cung tiền)'], correctIndex: 1, explanation: 'Chính sách tiền tệ mở rộng đẩy AD sang phải qua giảm lãi suất/tăng cung tiền, kích thích chi tiêu, sản lượng và việc làm — đánh đổi là rủi ro lạm phát cao hơn.' },
 ]);
 
-const c6 = doc('cem501-6-1-fiscal-policy-budget', 'Chapter 6 — Fiscal policy &amp; the government budget (财政政策)|||Chương 6 — Chính sách tài khoá &amp; ngân sách nhà nước (财政政策)',
+const c6 = doc('cem501-6-1-fiscal-policy-budget', 'Chapter 6 — Fiscal policy & the government budget (财政政策)|||Chương 6 — Chính sách tài khoá & ngân sách nhà nước (财政政策)',
   'Thu ngân sách 财政收入, chi ngân sách 财政支出, thâm hụt 财政赤字, nợ công 公共债务; chính sách tài khoá mở rộng/thắt chặt.',
   [[
     `<span class="eyebrow">CEM501 · Chapter 6</span>
@@ -458,13 +458,13 @@ const c6 = doc('cem501-6-1-fiscal-policy-budget', 'Chapter 6 — Fiscal policy &
 <div class="callout"><span class="badge">Tài khoá vs. tiền tệ, cùng mục tiêu khác đòn bẩy</span> Cả chính sách tài khoá (Chương 6) và tiền tệ (Chương 5) đều có thể đẩy AD cùng một hướng — lựa chọn giữa chúng phụ thuộc tốc độ, tác dụng phụ (nợ vs. lạm phát) và ai kiểm soát đòn bẩy (chính phủ dân cử vs. ngân hàng trung ương độc lập).</div>`,
   ]]);
 
-const c6q = quiz('cem501-quiz-6', 'Quiz 6 — Fiscal policy &amp; budget|||Quiz 6 — Chính sách tài khoá &amp; ngân sách', [
+const c6q = quiz('cem501-quiz-6', 'Quiz 6 — Fiscal policy & budget|||Quiz 6 — Chính sách tài khoá & ngân sách', [
   { id: 'q1', question: 'Khi 财政支出 (G) lớn hơn 财政收入 (T), ngân sách ở trạng thái nào?', options: ['财政盈余 (thặng dư)', '预算平衡 (cân bằng)', '财政赤字 (thâm hụt)', '公共债务 bằng 0'], correctIndex: 2, explanation: 'Khi chi (G) vượt thu (T), ngân sách thâm hụt (财政赤字); thâm hụt tích luỹ nhiều năm tạo thành 公共债务 (nợ công).' },
   { id: 'q2', question: '扩张性财政政策 (chính sách tài khoá mở rộng) thường dùng công cụ nào?', options: ['Tăng thuế và giảm chi tiêu chính phủ', 'Giảm thuế và/hoặc tăng chi tiêu chính phủ để đẩy AD sang phải', 'Chỉ điều chỉnh tỷ lệ dự trữ bắt buộc của ngân hàng', 'Chỉ can thiệp vào tỷ giá hối đoái'], correctIndex: 1, explanation: 'Chính sách tài khoá mở rộng tăng G và/hoặc giảm T để kích thích tổng cầu, chống suy thoái — đổi lại thâm hụt ngân sách có thể tăng.' },
   { id: 'q3', question: '"自动稳定器" (bộ ổn định tự động) như trợ cấp thất nghiệp hoạt động như thế nào?', options: ['Cần Quốc hội thông qua luật mới mỗi lần kinh tế suy thoái', 'Tự động tăng chi/giảm thu khi kinh tế suy yếu mà không cần quyết định chính sách mới', 'Chỉ hoạt động khi lạm phát cao', 'Là công cụ của chính sách tiền tệ, không phải tài khoá'], correctIndex: 1, explanation: '自动稳定器 vận hành tự động theo tình hình kinh tế (vd trợ cấp thất nghiệp tăng khi suy thoái, thuế luỹ tiến giảm khi thu nhập giảm) mà không cần một đạo luật mới mỗi lần.' },
 ]);
 
-const c7 = doc('cem501-7-1-open-economy-exchange-bop', 'Chapter 7 — Open economy: exchange rates &amp; balance of payments (汇率, 国际收支)|||Chương 7 — Kinh tế mở: tỷ giá &amp; cán cân thanh toán (汇率, 国际收支)',
+const c7 = doc('cem501-7-1-open-economy-exchange-bop', 'Chapter 7 — Open economy: exchange rates & balance of payments (汇率, 国际收支)|||Chương 7 — Kinh tế mở: tỷ giá & cán cân thanh toán (汇率, 国际收支)',
   'Tỷ giá cố định/thả nổi 固定汇率/浮动汇率, cán cân thanh toán 国际收支 (tài khoản vãng lai + tài khoản vốn), thặng dư/thâm hụt thương mại.',
   [[
     `<span class="eyebrow">CEM501 · Chapter 7</span>
@@ -537,13 +537,13 @@ const c7 = doc('cem501-7-1-open-economy-exchange-bop', 'Chapter 7 — Open econo
 <div class="callout"><span class="badge">Liên hệ tỷ giá &amp; cán cân thương mại</span> Một đồng tiền LÊN GIÁ (mạnh lên, 升值 shēngzhí) làm hàng xuất khẩu đắt hơn ở nước ngoài và hàng nhập khẩu rẻ hơn trong nước, đẩy cán cân thương mại về phía 贸易逆差; một đồng tiền MẤT GIÁ (yếu đi, 贬值 biǎnzhí) làm ngược lại — đây là lý do tỷ giá và NX (Chương 2/3) gắn chặt với nhau.</div>`,
   ]]);
 
-const c7q = quiz('cem501-quiz-7', 'Quiz 7 — Open economy &amp; exchange rates|||Quiz 7 — Kinh tế mở &amp; tỷ giá', [
+const c7q = quiz('cem501-quiz-7', 'Quiz 7 — Open economy & exchange rates|||Quiz 7 — Kinh tế mở & tỷ giá', [
   { id: 'q1', question: 'Khi xuất khẩu lớn hơn nhập khẩu, cán cân thương mại ở trạng thái nào?', options: ['贸易逆差 (nhập siêu)', '贸易顺差 (xuất siêu)', '固定汇率', '资本账户 âm vô hạn'], correctIndex: 1, explanation: 'Xuất khẩu > nhập khẩu → 贸易顺差 (thặng dư thương mại, xuất siêu).' },
   { id: 'q2', question: 'Khác biệt chính giữa 固定汇率 (tỷ giá cố định) và 浮动汇率 (tỷ giá thả nổi) là gì?', options: ['Không có khác biệt, chỉ là hai tên gọi', '固定汇率 do thị trường tự quyết định hoàn toàn', '固定汇率 được neo và ngân hàng trung ương can thiệp giữ ổn định; 浮动汇率 do cung/cầu thị trường quyết định', 'Chỉ nước nghèo mới dùng 浮动汇率'], correctIndex: 2, explanation: '固定汇率 (cố định) cần ngân hàng trung ương can thiệp (mua/bán dự trữ) để giữ tỷ giá; 浮动汇率 (thả nổi) để thị trường tự điều chỉnh qua cung/cầu.' },
   { id: 'q3', question: 'Khi đồng nội tệ LÊN GIÁ (升值), điều gì xảy ra với xuất khẩu và nhập khẩu?', options: ['Xuất khẩu rẻ hơn, nhập khẩu đắt hơn — đẩy về xuất siêu', 'Xuất khẩu đắt hơn ở nước ngoài, nhập khẩu rẻ hơn trong nước — đẩy về nhập siêu', 'Không ảnh hưởng đến xuất nhập khẩu', 'Chỉ ảnh hưởng đến 资本账户, không ảnh hưởng thương mại'], correctIndex: 1, explanation: 'Đồng tiền lên giá làm hàng xuất khẩu đắt hơn với người mua nước ngoài và hàng nhập khẩu rẻ hơn trong nước, có xu hướng đẩy cán cân thương mại về phía nhập siêu (贸易逆差).' },
 ]);
 
-const c8 = doc('cem501-8-1-business-cycles-review', 'Chapter 8 — Business cycles, long-run growth &amp; terminology review (经济周期)|||Chương 8 — Chu kỳ kinh tế, tăng trưởng dài hạn &amp; ôn tập thuật ngữ (经济周期)',
+const c8 = doc('cem501-8-1-business-cycles-review', 'Chapter 8 — Business cycles, long-run growth & terminology review (经济周期)|||Chương 8 — Chu kỳ kinh tế, tăng trưởng dài hạn & ôn tập thuật ngữ (经济周期)',
   '4 pha chu kỳ kinh tế (繁荣/衰退/萧条/复苏), tăng trưởng dài hạn &amp; mô hình Solow 索洛增长模型; bảng ôn tập thuật ngữ toàn môn.',
   [[
     `<span class="eyebrow">CEM501 · Chapter 8</span>
@@ -630,7 +630,7 @@ const c8 = doc('cem501-8-1-business-cycles-review', 'Chapter 8 — Business cycl
 <div class="callout"><span class="badge">Ghép lại thành một bức tranh</span> Một "câu chuyện" vĩ mô đầy đủ về bất kỳ quốc gia nào nối liền cả tám chương: đo trạng thái bằng GDP/thất nghiệp/lạm phát (Ch.2/4), giải thích bằng AD-AS (Ch.3), và chẩn đoán đòn bẩy nào (货币政策 Ch.5, 财政政策 Ch.6) hay yếu tố bên ngoài (汇率 Ch.7) đang chi phối pha hiện tại của 经济周期 (Ch.8).</div>`,
   ]]);
 
-const c8q = quiz('cem501-quiz-8', 'Quiz 8 — Business cycles &amp; review|||Quiz 8 — Chu kỳ kinh tế &amp; ôn tập', [
+const c8q = quiz('cem501-quiz-8', 'Quiz 8 — Business cycles & review|||Quiz 8 — Chu kỳ kinh tế & ôn tập', [
   { id: 'q1', question: 'Thứ tự đúng của bốn pha trong 经济周期 (chu kỳ kinh tế) là?', options: ['繁荣 → 复苏 → 衰退 → 萧条', '衰退 → 萧条 → 复苏 → 繁荣', '萧条 → 繁荣 → 衰退 → 复苏', '复苏 → 萧条 → 繁荣 → 衰退'], correctIndex: 1, explanation: 'Chu kỳ chuẩn: 衰退 (suy thoái) → 萧条 (khủng hoảng, nếu suy thoái sâu) → 复苏 (phục hồi) → 繁荣 (hưng thịnh) → rồi lặp lại.' },
   { id: 'q2', question: 'Theo mô hình 索洛增长模型 (Solow), yếu tố nào quan trọng NHẤT cho tăng trưởng bền vững trong DÀI hạn?', options: ['Chỉ cần tích luỹ thêm vốn (máy móc, nhà xưởng)', 'Tiến bộ công nghệ (技术进步) và năng suất, vì tích luỹ vốn đơn thuần gặp lợi suất giảm dần', 'Chỉ cần tăng dân số/lực lượng lao động', 'Chính sách tiền tệ mở rộng liên tục'], correctIndex: 1, explanation: 'Mô hình Solow chỉ ra tích luỹ vốn đơn thuần gặp quy luật lợi suất giảm dần; tăng trưởng bền vững mức sống dài hạn đến từ tiến bộ công nghệ (技术进步) và năng suất.' },
   { id: 'q3', question: 'Trong chuỗi phân tích vĩ mô "đo → giải thích → chẩn đoán" của môn này, công cụ nào dùng để GIẢI THÍCH vì sao mức giá và sản lượng thay đổi?', options: ['GDP (国内生产总值) — chỉ đo lường, không giải thích', 'Mô hình 总需求-总供给 (AD-AS, Chương 3)', '汇率 (tỷ giá) — chỉ áp dụng cho kinh tế mở', '经济周期 — chỉ là tên gọi các pha, không giải thích cơ chế'], correctIndex: 1, explanation: 'GDP/thất nghiệp/lạm phát (Ch.2/4) ĐO trạng thái; mô hình AD-AS (Ch.3) GIẢI THÍCH cơ chế; chính sách tiền tệ/tài khoá/tỷ giá (Ch.5/6/7) là đòn bẩy để CHẨN ĐOÁN và tác động vào pha hiện tại của chu kỳ (Ch.8).' },
@@ -654,13 +654,13 @@ export default {
     requirements: 'Đã có nền tiếng Trung tương đương các môn CHI trước đó trong khung ngành Ngôn ngữ Trung (đọc hiểu chữ Hán cơ bản, pinyin). Không cần nền kinh tế trước đó — mọi khái niệm vĩ mô được giải thích từ đầu bằng tiếng Việt. Nên cài Pleco hoặc dùng hanzii.net để tra thêm chữ Hán.',
   },
   sections: [
-    { title: 'Chương 1 — Nhập môn &amp; biến số cơ bản|||Chapter 1 — Introduction &amp; key variables', description: '宏观经济学, bốn mục tiêu vĩ mô, 财政政策/货币政策.', lessons: [c1, c1q] },
-    { title: 'Chương 2 — GDP &amp; đo lường sản lượng|||Chapter 2 — GDP &amp; measuring output', description: '国内生产总值, 名义/实际GDP, GDP平减指数.', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Tổng cầu &amp; tổng cung|||Chapter 3 — Aggregate demand &amp; supply', description: '总需求-总供给, 均衡产出, cú sốc cầu/cung.', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Thất nghiệp &amp; lạm phát|||Chapter 4 — Unemployment &amp; inflation', description: '失业率, CPI, 通货膨胀, 菲利普斯曲线.', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Tiền tệ &amp; chính sách tiền tệ|||Chapter 5 — Money &amp; monetary policy', description: '中央银行, 货币政策 ba công cụ, số nhân tiền.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Chính sách tài khoá &amp; ngân sách|||Chapter 6 — Fiscal policy &amp; budget', description: '财政政策, 财政赤字, 公共债务.', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Kinh tế mở, tỷ giá &amp; cán cân thanh toán|||Chapter 7 — Open economy &amp; exchange rates', description: '汇率, 国际收支, 贸易顺差/逆差.', lessons: [c7, c7q] },
-    { title: 'Chương 8 — Chu kỳ kinh tế &amp; ôn tập thuật ngữ|||Chapter 8 — Business cycles &amp; terminology review', description: '经济周期, 索洛增长模型, ôn tập toàn môn.', lessons: [c8, c8q] },
+    { title: 'Chương 1 — Nhập môn & biến số cơ bản|||Chapter 1 — Introduction & key variables', description: '宏观经济学, bốn mục tiêu vĩ mô, 财政政策/货币政策.', lessons: [c1, c1q] },
+    { title: 'Chương 2 — GDP & đo lường sản lượng|||Chapter 2 — GDP & measuring output', description: '国内生产总值, 名义/实际GDP, GDP平减指数.', lessons: [c2, c2q] },
+    { title: 'Chương 3 — Tổng cầu & tổng cung|||Chapter 3 — Aggregate demand & supply', description: '总需求-总供给, 均衡产出, cú sốc cầu/cung.', lessons: [c3, c3q] },
+    { title: 'Chương 4 — Thất nghiệp & lạm phát|||Chapter 4 — Unemployment & inflation', description: '失业率, CPI, 通货膨胀, 菲利普斯曲线.', lessons: [c4, c4q] },
+    { title: 'Chương 5 — Tiền tệ & chính sách tiền tệ|||Chapter 5 — Money & monetary policy', description: '中央银行, 货币政策 ba công cụ, số nhân tiền.', lessons: [c5, c5q] },
+    { title: 'Chương 6 — Chính sách tài khoá & ngân sách|||Chapter 6 — Fiscal policy & budget', description: '财政政策, 财政赤字, 公共债务.', lessons: [c6, c6q] },
+    { title: 'Chương 7 — Kinh tế mở, tỷ giá & cán cân thanh toán|||Chapter 7 — Open economy & exchange rates', description: '汇率, 国际收支, 贸易顺差/逆差.', lessons: [c7, c7q] },
+    { title: 'Chương 8 — Chu kỳ kinh tế & ôn tập thuật ngữ|||Chapter 8 — Business cycles & terminology review', description: '经济周期, 索洛增长模型, ôn tập toàn môn.', lessons: [c8, c8q] },
   ],
 };

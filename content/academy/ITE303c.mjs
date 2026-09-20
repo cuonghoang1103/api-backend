@@ -111,7 +111,7 @@ const intro = doc('ite303c-0-1-overview', 'Course overview: Ethics in IT|||Tổn
 <div class="callout"><span class="badge">Vì sao quan trọng</span> Một lần triển khai có thể làm lộ hàng triệu bản ghi hoặc khuếch đại một lời dối tới hàng triệu bảng tin. Biết các câu hỏi đạo đức <em>trước</em> khi ship là kỹ năng nghề cốt lõi, không phải chuyện làm sau.</div>`,
   ]]);
 
-const c1 = doc('ite303c-1-1-moral-theories', '1.1 — Ethics &amp; moral theories|||1.1 — Đạo đức học &amp; lý thuyết đạo đức',
+const c1 = doc('ite303c-1-1-moral-theories', '1.1 — Ethics & moral theories|||1.1 — Đạo đức học & lý thuyết đạo đức',
   'Đạo đức học là gì; ba trường phái lớn: vị lợi (hệ quả), nghĩa vụ luận (bổn phận/quyền), đức hạnh (phẩm chất); dùng chúng để soi một tình huống công nghệ.',
   [[
     `<span class="eyebrow">ITE303c · Chapter 1 · Lesson 1.1</span>
@@ -164,7 +164,7 @@ const c1q = quiz('ite303c-quiz-1', 'Quiz 1 — Moral theories|||Quiz 1 — Lý t
   { id: 'q3', question: 'Đạo đức đức hạnh (virtue ethics) tập trung vào?', options: ['Phẩm chất của người hành động (trung thực, công bằng...)', 'Bảng tính lợi-hại', 'Điều luật thành văn', 'Hợp đồng lao động'], correctIndex: 0, explanation: 'Đức hạnh hỏi: một người làm nghề có phẩm chất tốt sẽ hành xử thế nào?' },
 ]);
 
-const c2 = doc('ite303c-2-1-professional-codes', '2.1 — Professional ethics &amp; ACM/IEEE codes|||2.1 — Đạo đức nghề nghiệp &amp; quy tắc ACM/IEEE',
+const c2 = doc('ite303c-2-1-professional-codes', '2.1 — Professional ethics & ACM/IEEE codes|||2.1 — Đạo đức nghề nghiệp & quy tắc ACM/IEEE',
   'Vì sao CNTT là một nghề có trách nhiệm; bộ Quy tắc ACM (public good là ưu tiên số một) và bộ IEEE-CS/ACM cho kỹ nghệ phần mềm; cách dùng quy tắc để soi tình huống.',
   [[
     `<span class="eyebrow">ITE303c · Chapter 2 · Lesson 2.1</span>
@@ -215,7 +215,7 @@ const c2q = quiz('ite303c-quiz-2', 'Quiz 2 — Professional codes|||Quiz 2 — Q
   { id: 'q3', question: 'Cách dùng đúng một bộ quy tắc đạo đức nghề là?', options: ['Tra như bảng tra để có câu trả lời có/không', 'Xác định các bên liên quan, nêu nguyên tắc xung đột và lập luận nguyên tắc nào thắng', 'Bỏ qua nếu chưa có luật cấm', 'Chỉ dùng khi bị kiện'], correctIndex: 1, explanation: 'Quy tắc là khung lập luận: nhận diện bên liên quan, nguyên tắc căng thẳng, rồi biện minh lựa chọn.' },
 ]);
 
-const c3 = doc('ite303c-3-1-privacy', '3.1 — Privacy &amp; personal data protection|||3.1 — Quyền riêng tư &amp; bảo vệ dữ liệu cá nhân',
+const c3 = doc('ite303c-3-1-privacy', '3.1 — Privacy & personal data protection|||3.1 — Quyền riêng tư & bảo vệ dữ liệu cá nhân',
   'Quyền riêng tư là gì và vì sao đáng bảo vệ; thu thập, tổng hợp và giám sát dữ liệu; nguyên tắc bảo vệ dữ liệu (đồng thuận, tối thiểu hoá, mục đích); GDPR và Nghị định 13/2023 của Việt Nam.',
   [[
     `<span class="eyebrow">ITE303c · Chapter 3 · Lesson 3.1</span>
@@ -264,7 +264,7 @@ const c3q = quiz('ite303c-quiz-3', 'Quiz 3 — Privacy|||Quiz 3 — Quyền riê
   { id: 'q3', question: 'Văn bản nào của Việt Nam quy định về bảo vệ dữ liệu cá nhân?', options: ['Nghị định 13/2023/NĐ-CP', 'Luật Giao thông đường bộ', 'GDPR', 'Luật Doanh nghiệp'], correctIndex: 0, explanation: 'Nghị định 13/2023/NĐ-CP quy định bảo vệ dữ liệu cá nhân, đồng thuận và báo cáo vi phạm ở Việt Nam.' },
 ]);
 
-const c4 = doc('ite303c-4-1-intellectual-property', '4.1 — Intellectual property &amp; open source|||4.1 — Sở hữu trí tuệ &amp; mã nguồn mở',
+const c4 = doc('ite303c-4-1-intellectual-property', '4.1 — Intellectual property & open source|||4.1 — Sở hữu trí tuệ & mã nguồn mở',
   'Bản quyền, bằng sáng chế, bí mật thương mại và nhãn hiệu áp dụng cho phần mềm ra sao; giấy phép mã nguồn mở (copyleft GPL vs dễ dãi MIT); đạo văn mã và vi phạm giấy phép.',
   [[
     `<span class="eyebrow">ITE303c · Chapter 4 · Lesson 4.1</span>
@@ -311,13 +311,13 @@ Không có giấy phép nào
 <div class="callout"><span class="badge">Đọc giấy phép</span> "Có trên GitHub" không có nghĩa "tự do dùng lại". Hãy kiểm tra file LICENSE; không có giấy phép nghĩa là bảo lưu mọi quyền.</div>`,
   ]]);
 
-const c4q = quiz('ite303c-quiz-4', 'Quiz 4 — IP &amp; open source|||Quiz 4 — SHTT &amp; mã nguồn mở', [
+const c4q = quiz('ite303c-quiz-4', 'Quiz 4 — IP & open source|||Quiz 4 — SHTT & mã nguồn mở', [
   { id: 'q1', question: 'Giấy phép nào buộc bạn phải chia sẻ mã nguồn của bản sửa đổi khi phát hành (copyleft)?', options: ['MIT', 'GPL', 'BSD', 'Apache'], correctIndex: 1, explanation: 'GPL là giấy phép copyleft: phát hành bản sửa thì phải công bố mã nguồn theo cùng giấy phép.' },
   { id: 'q2', question: 'Một kho mã trên GitHub KHÔNG có file LICENSE thì bạn được phép?', options: ['Tự do sao chép và bán lại', 'Không có quyền tái sử dụng — mặc định bảo lưu mọi quyền', 'Dùng nếu ghi công tác giả', 'Dùng cho mục đích thương mại'], correctIndex: 1, explanation: 'Không giấy phép nghĩa là mặc định bản quyền: mọi quyền được bảo lưu, bạn không có quyền dùng lại.' },
   { id: 'q3', question: 'Bản quyền (copyright) bảo hộ điều gì trong phần mềm?', options: ['Ý tưởng và thuật toán trừu tượng', 'Cách thể hiện cụ thể — mã nguồn được viết ra', 'Tên thương hiệu', 'Quy trình sản xuất phần cứng'], correctIndex: 1, explanation: 'Bản quyền bảo hộ cách thể hiện (mã nguồn cụ thể), không bảo hộ ý tưởng phía sau.' },
 ]);
 
-const c5 = doc('ite303c-5-1-security-cybercrime', '5.1 — Cybersecurity &amp; computer crime|||5.1 — An ninh mạng &amp; tội phạm máy tính',
+const c5 = doc('ite303c-5-1-security-cybercrime', '5.1 — Cybersecurity & computer crime|||5.1 — An ninh mạng & tội phạm máy tính',
   'Đạo đức an ninh; tam giác CIA; các loại tội phạm máy tính (xâm nhập, mã độc, lừa đảo); hacker mũ trắng/xám/đen, tiết lộ lỗ hổng có trách nhiệm; ranh giới đạo đức của kiểm thử xâm nhập.',
   [[
     `<span class="eyebrow">ITE303c · Chapter 5 · Lesson 5.1</span>
@@ -374,13 +374,13 @@ Tiết lộ có trách nhiệm:
 <div class="callout"><span class="badge">Ý định là chưa đủ</span> "Tôi chỉ muốn giúp" không làm cho việc truy cập trái phép trở nên có đạo đức. Sự cho phép (phạm vi, luật bug-bounty, hợp đồng) mới là ranh giới giữa kiểm thử xâm nhập và tội phạm.</div>`,
   ]]);
 
-const c5q = quiz('ite303c-quiz-5', 'Quiz 5 — Security &amp; crime|||Quiz 5 — An ninh &amp; tội phạm', [
+const c5q = quiz('ite303c-quiz-5', 'Quiz 5 — Security & crime|||Quiz 5 — An ninh & tội phạm', [
   { id: 'q1', question: 'Tam giác CIA trong an ninh thông tin gồm?', options: ['Chi phí, Tốc độ, Độ tin cậy', 'Bảo mật, Toàn vẹn, Sẵn sàng', 'Mã hoá, Sao lưu, Kiểm toán', 'Client, Internet, Admin'], correctIndex: 1, explanation: 'CIA = Confidentiality (bảo mật), Integrity (toàn vẹn), Availability (sẵn sàng).' },
   { id: 'q2', question: 'Điều gì phân biệt kiểm thử xâm nhập (pentest) có đạo đức với một tội phạm?', options: ['Kỹ năng cao hơn', 'Có sự cho phép/phạm vi được thoả thuận trước', 'Dùng công cụ đắt tiền', 'Thực hiện vào ban đêm'], correctIndex: 1, explanation: 'Sự cho phép (scope, hợp đồng, luật bug-bounty) là ranh giới giữa mũ trắng và phạm pháp.' },
   { id: 'q3', question: 'Tiết lộ có trách nhiệm (responsible disclosure) nghĩa là?', options: ['Công bố lỗ hổng công khai ngay lập tức', 'Báo riêng cho nhà cung cấp, cho thời gian vá rồi mới công bố', 'Bán lỗ hổng cho bên trả giá cao nhất', 'Giữ bí mật mãi mãi'], correctIndex: 1, explanation: 'Báo riêng cho nhà cung cấp, cho thời gian vá, chỉ công bố sau khi vá hoặc sau thời hạn hợp lý.' },
 ]);
 
-const c6 = doc('ite303c-6-1-free-speech', '6.1 — Free speech, censorship &amp; social media|||6.1 — Tự do ngôn luận, kiểm duyệt &amp; mạng xã hội',
+const c6 = doc('ite303c-6-1-free-speech', '6.1 — Free speech, censorship & social media|||6.1 — Tự do ngôn luận, kiểm duyệt & mạng xã hội',
   'Giá trị và giới hạn của tự do ngôn luận trên mạng; kiểm duyệt của nhà nước và của nền tảng; kiểm duyệt nội dung; tin giả, buồng vọng và thuật toán khuếch đại; trách nhiệm của nền tảng.',
   [[
     `<span class="eyebrow">ITE303c · Chapter 6 · Lesson 6.1</span>
@@ -419,13 +419,13 @@ Kiểm duyệt nền tảng - công ty tư nhân đặt &amp; thực thi luật 
 <div class="callout"><span class="badge">Phát ngôn khác tầm với</span> Gỡ một bài là giới hạn phát ngôn; từ chối <em>khuếch đại</em> nó tới hàng triệu người là một đòn bẩy khác, nhẹ hơn. Phần lớn đạo đức nền tảng nằm ở tầm với, không chỉ ở việc gỡ bỏ.</div>`,
   ]]);
 
-const c6q = quiz('ite303c-quiz-6', 'Quiz 6 — Speech &amp; moderation|||Quiz 6 — Ngôn luận &amp; kiểm duyệt', [
+const c6q = quiz('ite303c-quiz-6', 'Quiz 6 — Speech & moderation|||Quiz 6 — Ngôn luận & kiểm duyệt', [
   { id: 'q1', question: 'Vì sao thuật toán xếp hạng theo tương tác lại khuếch đại tin giả?', options: ['Vì máy chủ chậm', 'Vì nội dung gây phẫn nộ tạo nhiều tương tác nên được đẩy lên', 'Vì người dùng yêu cầu', 'Vì thiếu dung lượng lưu trữ'], correctIndex: 1, explanation: 'Tối ưu cho engagement khiến nội dung gây phẫn nộ (thường là tin giả) được khuếch đại.' },
   { id: 'q2', question: 'Loại phát ngôn nào thường KHÔNG được bảo vệ?', options: ['Phê bình chính sách', 'Quan điểm không được lòng số đông', 'Kích động bạo lực và đe doạ đáng tin', 'Ý kiến trái chiều'], correctIndex: 2, explanation: 'Kích động bạo lực, phỉ báng, đe doạ đáng tin... là các giới hạn phổ biến của tự do ngôn luận.' },
   { id: 'q3', question: 'Phân biệt "speech" (phát ngôn) và "reach" (tầm với) có ý nghĩa gì?', options: ['Không có gì khác nhau', 'Từ chối khuếch đại nội dung là đòn bẩy nhẹ hơn so với gỡ bỏ hoàn toàn', 'Tầm với luôn quan trọng hơn nội dung', 'Chỉ nhà nước mới kiểm soát được tầm với'], correctIndex: 1, explanation: 'Gỡ bài giới hạn phát ngôn; giảm khuếch đại là một lựa chọn nhẹ hơn, cốt lõi của đạo đức nền tảng.' },
 ]);
 
-const c7 = doc('ite303c-7-1-ai-ethics', '7.1 — AI ethics, algorithmic bias &amp; automation|||7.1 — Đạo đức AI, thuật toán thiên lệch &amp; tự động hoá việc làm',
+const c7 = doc('ite303c-7-1-ai-ethics', '7.1 — AI ethics, algorithmic bias & automation|||7.1 — Đạo đức AI, thuật toán thiên lệch & tự động hoá việc làm',
   'Vì sao AI đặt ra vấn đề đạo đức mới; thiên lệch thuật toán từ đâu ra; minh bạch và giải trình (hộp đen); trách nhiệm khi AI gây hại; tác động lên việc làm; các nguyên tắc AI đáng tin cậy.',
   [[
     `<span class="eyebrow">ITE303c · Chapter 7 · Lesson 7.1</span>
@@ -474,7 +474,7 @@ const c7q = quiz('ite303c-quiz-7', 'Quiz 7 — AI ethics|||Quiz 7 — Đạo đ�
   { id: 'q3', question: 'Vấn đề đạo đức của tự động hoá việc làm chủ yếu là?', options: ['Máy tính tốn điện', 'Ai gánh chi phí chuyển đổi và ai hưởng lợi — vấn đề công bằng', 'Phần mềm khó cài đặt', 'Robot chạy chậm'], correctIndex: 1, explanation: 'Không chỉ là "có thể tự động hoá không" mà là phân bổ chi phí và lợi ích công bằng ra sao.' },
 ]);
 
-const c8 = doc('ite303c-8-1-professional-responsibility', '8.1 — Professional responsibility, whistleblowing &amp; Vietnam law|||8.1 — Trách nhiệm nghề nghiệp, tố giác &amp; pháp lý Việt Nam',
+const c8 = doc('ite303c-8-1-professional-responsibility', '8.1 — Professional responsibility, whistleblowing & Vietnam law|||8.1 — Trách nhiệm nghề nghiệp, tố giác & pháp lý Việt Nam',
   'Trách nhiệm của người làm CNTT với chủ, khách hàng và công chúng; khi nào và tố giác (whistleblowing) thế nào cho có đạo đức; một khung ra quyết định đạo đức; bối cảnh pháp luật CNTT ở Việt Nam.',
   [[
     `<span class="eyebrow">ITE303c · Chapter 8 · Lesson 8.1</span>
@@ -521,7 +521,7 @@ const c8 = doc('ite303c-8-1-professional-responsibility', '8.1 — Professional 
 <div class="callout"><span class="badge">Ghi lại lập luận</span> Sự bảo vệ tốt nhất — cả về nghề lẫn pháp lý — là một hồ sơ rõ ràng, có ngày tháng về sự việc bạn thấy, các phương án bạn cân nhắc và vì sao bạn chọn như vậy.</div>`,
   ]]);
 
-const c8q = quiz('ite303c-quiz-8', 'Quiz 8 — Responsibility &amp; law|||Quiz 8 — Trách nhiệm &amp; pháp lý', [
+const c8q = quiz('ite303c-quiz-8', 'Quiz 8 — Responsibility & law|||Quiz 8 — Trách nhiệm & pháp lý', [
   { id: 'q1', question: 'Tố giác (whistleblowing) có đạo đức nên được coi là?', options: ['Bước đầu tiên, làm ngay khi thấy sai', 'Biện pháp cuối cùng, sau khi các kênh nội bộ đã thất bại', 'Việc không bao giờ nên làm', 'Cách trả thù cấp trên'], correctIndex: 1, explanation: 'Whistleblowing là biện pháp cuối: nêu nội bộ trước, có bằng chứng, chỉ ra ngoài khi mọi cách khác thất bại.' },
   { id: 'q2', question: 'Trong khung ra quyết định đạo đức, bước đầu tiên nên là?', options: ['Quyết định ngay theo cảm tính', 'Nắm rõ sự việc — chuyện gì đang thực sự diễn ra', 'Công bố ra công chúng', 'Từ chức'], correctIndex: 1, explanation: 'Nắm sự việc trước, rồi mới xác định bên liên quan, liệt kê phương án và kiểm qua các lăng kính đạo đức.' },
   { id: 'q3', question: 'Văn bản nào KHÔNG thuộc khung pháp lý CNTT của Việt Nam nêu trong bài?', options: ['Luật An ninh mạng 2018', 'Luật An toàn thông tin mạng 2015', 'Nghị định 13/2023 về dữ liệu cá nhân', 'GDPR của Liên minh châu Âu'], correctIndex: 3, explanation: 'GDPR là luật của EU; khung pháp lý CNTT Việt Nam gồm Luật An ninh mạng, An toàn thông tin mạng, NĐ 13/2023 và Luật SHTT.' },

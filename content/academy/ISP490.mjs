@@ -10,7 +10,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức giai đoạn.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('isp490-0-0-tai-lieu', '📚 Materials &amp; references|||📚 Tài liệu tham khảo',
+const taiLieu = doc('isp490-0-0-tai-lieu', '📚 Materials & references|||📚 Tài liệu tham khảo',
   'Trung tâm tài liệu: quy định đồ án tốt nghiệp (FLM), sách nền tảng (Sommerville, PMBOK), chuẩn trích dẫn APA/IEEE, công cụ, lộ trình làm đồ án.',
   [[
     `<span class="eyebrow">ISP490 · Materials</span>
@@ -128,7 +128,7 @@ Hội đồng = GV hướng dẫn + phản biện + chủ tịch.
 <div class="callout"><span class="badge">Tư duy</span> Hội đồng chấm bằng chứng, không chấm công sức. Mọi khẳng định khi bảo vệ phải có tài liệu chống lưng — một sơ đồ, một kết quả test, một chỉ số, một commit.</div>`,
   ]]);
 
-const p1 = doc('isp490-1-1-proposal', 'Phase 1 — Topic, supervisor &amp; proposal|||Giai đoạn 1 — Đề tài, GVHD &amp; đề cương',
+const p1 = doc('isp490-1-1-proposal', 'Phase 1 — Topic, supervisor & proposal|||Giai đoạn 1 — Đề tài, GVHD & đề cương',
   'Chọn đề tài đúng tầm, tìm giảng viên hướng dẫn, viết đề cương: bối cảnh, vấn đề, mục tiêu, phạm vi, phương pháp, kế hoạch sơ bộ.',
   [[
     `<span class="eyebrow">ISP490 · Phase 1</span>
@@ -175,13 +175,13 @@ GVHD duyệt trước khi bắt đầu làm.
 <div class="callout"><span class="badge">Mẹo với GVHD</span> Đến gặp GVHD với một đoạn phát biểu vấn đề và 2-3 đề tài ứng viên, đừng đến tay trắng. Chốt phạm vi sớm tránh làm lại về sau.</div>`,
   ]]);
 
-const p1q = quiz('isp490-quiz-1', 'Quiz 1 — Đề tài &amp; đề cương', [
+const p1q = quiz('isp490-quiz-1', 'Quiz 1 — Đề tài & đề cương', [
   { id: 'q1', question: 'Nguyên nhân trượt đồ án tốt nghiệp phổ biến nhất khi chọn đề tài là?', options: ['Đề tài quá nhỏ', 'Phạm vi quá lớn, không làm xong trong kỳ', 'Có GVHD', 'Viết đề cương'], correctIndex: 1, explanation: 'Ôm phạm vi quá to là lỗi số một; đề tài phải khả thi trong một kỳ.' },
   { id: 'q2', question: 'Mục tiêu SMART trong đề cương nên như thế nào?', options: ['Mơ hồ để dễ đạt', 'Cụ thể, đo được', 'Không cần đo', 'Do hội đồng đặt'], correctIndex: 1, explanation: 'SMART = cụ thể, đo được, khả thi, liên quan, có thời hạn.' },
   { id: 'q3', question: 'Ai duyệt đề cương trước khi nhóm bắt đầu làm?', options: ['Chủ tịch hội đồng', 'Giảng viên phản biện', 'Giảng viên hướng dẫn (GVHD)', 'Phòng đào tạo'], correctIndex: 2, explanation: 'GVHD ký duyệt đề cương và chốt phạm vi trước khi triển khai.' },
 ]);
 
-const p2 = doc('isp490-2-1-survey-requirements', 'Phase 2 — Current-state survey &amp; requirements|||Giai đoạn 2 — Khảo sát hiện trạng &amp; yêu cầu',
+const p2 = doc('isp490-2-1-survey-requirements', 'Phase 2 — Current-state survey & requirements|||Giai đoạn 2 — Khảo sát hiện trạng & yêu cầu',
   'Khảo sát hiện trạng, tổng quan tài liệu (literature review), thu thập & phân tích yêu cầu; viết SRS: yêu cầu chức năng/phi chức năng, use case.',
   [[
     `<span class="eyebrow">ISP490 · Phase 2</span>
@@ -238,13 +238,13 @@ Use case: "Đặt hàng"
 <div class="callout"><span class="badge">Sommerville</span> Yêu cầu là nền móng — một lỗi sửa ở giai đoạn yêu cầu tốn một phần nhỏ so với chính lỗi đó phát hiện sau khi đã hiện thực.</div>`,
   ]]);
 
-const p2q = quiz('isp490-quiz-2', 'Quiz 2 — Khảo sát &amp; yêu cầu', [
+const p2q = quiz('isp490-quiz-2', 'Quiz 2 — Khảo sát & yêu cầu', [
   { id: 'q1', question: '"Thời gian phản hồi dưới 2 giây" là loại yêu cầu nào?', options: ['Yêu cầu chức năng', 'Yêu cầu phi chức năng', 'Use case', 'Đề cương'], correctIndex: 1, explanation: 'Hiệu năng là yêu cầu phi chức năng (NFR); chức năng nói hệ thống làm gì.' },
   { id: 'q2', question: 'Mục đích chính của tổng quan tài liệu (literature review) là?', options: ['Làm dày báo cáo', 'Hiểu giải pháp đã có và khoảng trống của chúng', 'Thay cho khảo sát hiện trạng', 'Viết use case'], correctIndex: 1, explanation: 'Literature review chỉ ra hệ thống/giải pháp hiện có và khoảng trống đề tài lấp.' },
   { id: 'q3', question: 'Theo Sommerville, sửa một lỗi yêu cầu sớm so với sửa sau khi đã hiện thực thì?', options: ['Đắt hơn nhiều', 'Rẻ hơn nhiều', 'Chi phí như nhau', 'Không sửa được'], correctIndex: 1, explanation: 'Lỗi bắt ở giai đoạn yêu cầu rẻ hơn nhiều so với bắt sau khi code xong.' },
 ]);
 
-const p3 = doc('isp490-3-1-analysis-design', 'Phase 3 — System analysis &amp; design|||Giai đoạn 3 — Phân tích &amp; thiết kế hệ thống',
+const p3 = doc('isp490-3-1-analysis-design', 'Phase 3 — System analysis & design|||Giai đoạn 3 — Phân tích & thiết kế hệ thống',
   'Thiết kế kiến trúc (layered, client-server), mô hình dữ liệu (ERD, chuẩn hoá), UML (class, sequence, activity), thiết kế giao diện.',
   [[
     `<span class="eyebrow">ISP490 · Phase 3</span>
@@ -293,13 +293,13 @@ Kiến trúc phân lớp:
 <div class="callout"><span class="badge">Truy vết</span> Mọi thành phần thiết kế phải truy về được một yêu cầu (FR/NFR). Một bảng hay màn hình không phục vụ yêu cầu nào thì phải hỏi vì sao nó tồn tại.</div>`,
   ]]);
 
-const p3q = quiz('isp490-quiz-3', 'Quiz 3 — Phân tích &amp; thiết kế', [
+const p3q = quiz('isp490-quiz-3', 'Quiz 3 — Phân tích & thiết kế', [
   { id: 'q1', question: 'Chuẩn hoá cơ sở dữ liệu tới 3NF chủ yếu để?', options: ['Tăng dư thừa', 'Loại dư thừa và bất thường dữ liệu', 'Vẽ UML', 'Tăng tốc mạng'], correctIndex: 1, explanation: 'Chuẩn hoá loại dư thừa và tránh anomaly khi thêm/sửa/xoá.' },
   { id: 'q2', question: 'Sơ đồ UML nào mô tả tương tác giữa các đối tượng theo thời gian?', options: ['Sơ đồ lớp (class)', 'Sơ đồ tuần tự (sequence)', 'ERD', 'Sơ đồ triển khai'], correctIndex: 1, explanation: 'Sequence diagram thể hiện chuỗi thông điệp giữa các đối tượng theo thời gian.' },
   { id: 'q3', question: 'Nguyên tắc "truy vết" trong thiết kế nghĩa là?', options: ['Ghi log hệ thống', 'Mỗi thành phần thiết kế truy về được một yêu cầu', 'Theo dõi người dùng', 'Debug bằng breakpoint'], correctIndex: 1, explanation: 'Traceability: mỗi phần thiết kế phải gắn với một FR/NFR cụ thể.' },
 ]);
 
-const p4 = doc('isp490-4-1-planning', 'Phase 4 — Project planning &amp; management|||Giai đoạn 4 — Lập kế hoạch &amp; quản lý dự án',
+const p4 = doc('isp490-4-1-planning', 'Phase 4 — Project planning & management|||Giai đoạn 4 — Lập kế hoạch & quản lý dự án',
   'Quản lý dự án Agile/Scrum: product backlog, sprint, milestone, phân công, quản lý rủi ro, theo dõi tiến độ (burndown, Gantt).',
   [[
     `<span class="eyebrow">ISP490 · Phase 4</span>
@@ -354,7 +354,7 @@ Sổ rủi ro: [khả năng x tác động] -&gt; giảm thiểu
 <div class="callout"><span class="badge">Theo dõi</span> Dùng burndown hoặc bảng GitHub Projects để GVHD thấy tiến độ bất cứ lúc nào — "cứ tin em, ổn mà" không phải bằng chứng.</div>`,
   ]]);
 
-const p4q = quiz('isp490-quiz-4', 'Quiz 4 — Kế hoạch &amp; quản lý', [
+const p4q = quiz('isp490-quiz-4', 'Quiz 4 — Kế hoạch & quản lý', [
   { id: 'q1', question: 'Trong Scrum, một "sprint" là gì?', options: ['Toàn bộ đồ án', 'Chu kỳ ngắn cho ra một phần chạy được', 'Buổi bảo vệ', 'Sơ đồ Gantt'], correctIndex: 1, explanation: 'Sprint là chu kỳ 1-2 tuần tạo ra một increment chạy được.' },
   { id: 'q2', question: 'Product backlog là?', options: ['Danh sách lỗi', 'Danh sách tính năng ưu tiên (user story)', 'Báo cáo kiểm thử', 'Sổ rủi ro'], correctIndex: 1, explanation: 'Backlog là danh sách công việc/tính năng đã sắp ưu tiên.' },
   { id: 'q3', question: 'Cách xử lý rủi ro "phình phạm vi" (scope creep) hợp lý là?', options: ['Nhận mọi yêu cầu mới', 'Đóng băng backlog sau khi chốt phạm vi', 'Bỏ kiểm thử', 'Kéo dài vô hạn'], correctIndex: 1, explanation: 'Đóng băng phạm vi/backlog sau milestone chốt giúp chặn phình phạm vi.' },
@@ -413,7 +413,7 @@ const p5q = quiz('isp490-quiz-5', 'Quiz 5 — Hiện thực', [
   { id: 'q3', question: 'Nên hiện thực tính năng theo thứ tự nào khi thời gian eo hẹp?', options: ['Ngẫu nhiên', 'Theo ưu tiên yêu cầu, làm must-have trước', 'Dễ trước, không theo ưu tiên', 'Đẹp giao diện trước'], correctIndex: 1, explanation: 'Làm yêu cầu bắt buộc (must-have) trước để đảm bảo phần lõi hoàn thành.' },
 ]);
 
-const p6 = doc('isp490-6-1-testing-qa', 'Phase 6 — Testing, evaluation &amp; QA|||Giai đoạn 6 — Kiểm thử, đánh giá &amp; QA',
+const p6 = doc('isp490-6-1-testing-qa', 'Phase 6 — Testing, evaluation & QA|||Giai đoạn 6 — Kiểm thử, đánh giá & QA',
   'Kiểm thử: unit/integration/system/UAT, test case, độ phủ, kiểm thử phi chức năng; đánh giá kết quả so với yêu cầu; viết báo cáo kiểm thử.',
   [[
     `<span class="eyebrow">ISP490 · Phase 6</span>
@@ -462,7 +462,7 @@ Tóm tắt báo cáo kiểm thử
 <div class="callout"><span class="badge">Đánh giá trung thực</span> Một đồ án nêu rõ giới hạn đã ghi nhận trông rất chín về kỹ thuật. Giấu case trượt rồi bị bắt lúc bảo vệ thì tệ hơn nhiều.</div>`,
   ]]);
 
-const p6q = quiz('isp490-quiz-6', 'Quiz 6 — Kiểm thử &amp; QA', [
+const p6q = quiz('isp490-quiz-6', 'Quiz 6 — Kiểm thử & QA', [
   { id: 'q1', question: 'Kiểm thử ở mức "tích hợp" (integration) kiểm cái gì?', options: ['Từng hàm riêng lẻ', 'Các module phối hợp với nhau', 'Toàn hệ thống với người dùng', 'Giao diện màu sắc'], correctIndex: 1, explanation: 'Integration test kiểm việc các module ghép nối và làm việc cùng nhau.' },
   { id: 'q2', question: 'UAT (User Acceptance Testing) tốt nhất nên có?', options: ['Chỉ nhóm tự kiểm', 'Bên liên quan/người dùng thật nghiệm thu', 'Chỉ GVHD', 'Không ai'], correctIndex: 1, explanation: 'UAT là nghiệm thu bởi người dùng/bên liên quan thực tế.' },
   { id: 'q3', question: 'Cách xử lý các lỗi còn tồn khi bảo vệ nên là?', options: ['Giấu đi', 'Ghi nhận rõ ràng và nêu giới hạn', 'Xoá test case trượt', 'Đổ cho công cụ'], correctIndex: 1, explanation: 'Ghi nhận lỗi và giới hạn thể hiện sự chín về kỹ thuật; giấu là rủi ro.' },
@@ -521,7 +521,7 @@ const p7q = quiz('isp490-quiz-7', 'Quiz 7 — Viết luận văn', [
   { id: 'q3', question: 'Diễn giải ý của người khác trong luận văn thì?', options: ['Không cần ghi nguồn', 'Vẫn phải trích dẫn nguồn', 'Chỉ ghi nếu sao chép nguyên văn', 'Ghi vào phụ lục là đủ'], correctIndex: 1, explanation: 'Cả trích nguyên văn lẫn diễn giải đều phải trích dẫn để tránh đạo văn.' },
 ]);
 
-const p8 = doc('isp490-8-1-defense', 'Phase 8 — Slides, defense &amp; Q&amp;A|||Giai đoạn 8 — Slide, bảo vệ &amp; phản biện',
+const p8 = doc('isp490-8-1-defense', 'Phase 8 — Slides, defense & Q&A|||Giai đoạn 8 — Slide, bảo vệ & phản biện',
   'Chuẩn bị slide bảo vệ, demo hệ thống, trình bày trong thời gian giới hạn, trả lời phản biện của hội đồng, quản lý câu hỏi khó.',
   [[
     `<span class="eyebrow">ISP490 · Phase 8</span>
@@ -576,7 +576,7 @@ const p8 = doc('isp490-8-1-defense', 'Phase 8 — Slides, defense &amp; Q&amp;A|
 <div class="callout"><span class="badge">Tập trước</span> Bấm giờ, nạp sẵn demo, và chuẩn bị câu trả lời cho những câu khó rõ ràng (bảo mật, khả năng mở rộng, vì sao chọn công nghệ này). Hội đồng chấm cả báo cáo LẪN phần trình bày.</div>`,
   ]]);
 
-const p8q = quiz('isp490-quiz-8', 'Quiz 8 — Bảo vệ &amp; phản biện', [
+const p8q = quiz('isp490-quiz-8', 'Quiz 8 — Bảo vệ & phản biện', [
   { id: 'q1', question: 'Trong slide bảo vệ, phần nào thường là "ngôi sao"?', options: ['Trang bìa', 'Demo hệ thống trực tiếp', 'Danh mục tham khảo', 'Lời cảm ơn'], correctIndex: 1, explanation: 'Demo trực tiếp cho hội đồng thấy sản phẩm chạy thật là điểm nhấn.' },
   { id: 'q2', question: 'Khi bị hỏi một câu bạn không biết trả lời, tốt nhất nên?', options: ['Bịa cho qua', 'Thừa nhận chưa biết và nói cách sẽ tìm ra', 'Im lặng', 'Đổi chủ đề'], correctIndex: 1, explanation: 'Thành thật và nêu hướng tìm câu trả lời tốt hơn là bịa và bị bắt.' },
   { id: 'q3', question: 'Vì sao nên quay sẵn video demo?', options: ['Để không phải nói', 'Làm phương án dự phòng nếu demo trực tiếp hỏng', 'Thay cho slide', 'Bắt buộc nộp'], correctIndex: 1, explanation: 'Video dự phòng cứu buổi bảo vệ khi demo trực tiếp gặp sự cố.' },

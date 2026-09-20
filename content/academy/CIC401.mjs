@@ -16,7 +16,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const c1 = doc('cic401-1-1-social-commentary', 'Chapter 1 — Contemporary social issues &amp; commentary|||Chương 1 — Vấn đề xã hội đương đại &amp; bình luận',
+const c1 = doc('cic401-1-1-social-commentary', 'Chapter 1 — Contemporary social issues & commentary|||Chương 1 — Vấn đề xã hội đương đại & bình luận',
   'Từ vựng hiện tượng xã hội mới (内卷, 躺平, 信息茧房…); mẫu câu 不仅仅是…更是…, 说到底, 不容忽视的是.',
   [[
     `<span class="eyebrow">CIC401 · Chapter 1 · Lesson 1</span>
@@ -85,7 +85,7 @@ const c1q = quiz('cic401-quiz-1', 'Quiz 1 — Social commentary|||Quiz 1 — Bì
   { id: 'q3', question: 'Mẫu câu "不仅仅是…更是…" dùng để làm gì?', options: ['Nhấn mạnh điều gì đó không chỉ là A mà còn ở mức cao hơn là B', 'Diễn tả điều kiện giả định', 'Nêu quan hệ nguyên nhân — kết quả đơn giản', 'Liệt kê các bước theo trình tự thời gian'], correctIndex: 0, explanation: '不仅仅是(không chỉ là)…更是(mà còn/hơn nữa là)… nâng mức độ của nhận định từ A lên B.' },
 ]);
 
-const c2 = doc('cic401-2-1-startup-innovation', 'Chapter 2 — Economy, innovation &amp; entrepreneurship|||Chương 2 — Kinh tế, đổi mới &amp; khởi nghiệp',
+const c2 = doc('cic401-2-1-startup-innovation', 'Chapter 2 — Economy, innovation & entrepreneurship|||Chương 2 — Kinh tế, đổi mới & khởi nghiệp',
   'Từ vựng khởi nghiệp-đổi mới (独角兽企业, 颠覆式创新…); mẫu câu 在…的背景下, 只有…才能…, 以…为核心.',
   [[
     `<span class="eyebrow">CIC401 · Chapter 2 · Lesson 2</span>
@@ -146,13 +146,13 @@ const c2 = doc('cic401-2-1-startup-innovation', 'Chapter 2 — Economy, innovati
 <div class="callout"><span class="badge">Mẹo thi</span> Bài luận HSK6 về khởi nghiệp được đánh giá cao khi thí sinh nêu được một <em>điều kiện</em> (只有…才能…) thay vì chỉ miêu tả thành công — giám khảo đọc đây là lối viết phân tích, không chỉ tường thuật.</div>`,
   ]]);
 
-const c2q = quiz('cic401-quiz-2', 'Quiz 2 — Startups &amp; innovation|||Quiz 2 — Khởi nghiệp &amp; đổi mới', [
+const c2q = quiz('cic401-quiz-2', 'Quiz 2 — Startups & innovation|||Quiz 2 — Khởi nghiệp & đổi mới', [
   { id: 'q1', question: '"独角兽企业" nghĩa là gì?', options: ['Doanh nghiệp khởi nghiệp được định giá trên 1 tỷ đô la ("kỳ lân")', 'Doanh nghiệp nhà nước lâu đời', 'Doanh nghiệp đã phá sản', 'Doanh nghiệp kinh doanh gia đình nhỏ'], correctIndex: 0, explanation: '独角兽(kỳ lân, con vật huyền thoại hiếm)+企业(doanh nghiệp) — ẩn dụ cho startup hiếm và có giá trị cao.' },
   { id: 'q2', question: '"孵化器" trong ngữ cảnh khởi nghiệp nghĩa là gì?', options: ['Vườn ươm hỗ trợ startup ở giai đoạn đầu', 'Ngân hàng trung ương', 'Sàn giao dịch chứng khoán', 'Cơ quan thuế nhà nước'], correctIndex: 0, explanation: '孵化(ấp trứng)+器(công cụ) — ẩn dụ cho tổ chức "ấp" và hỗ trợ startup non trẻ.' },
   { id: 'q3', question: 'Mẫu câu "只有…才能…" biểu thị điều gì?', options: ['Điều kiện DUY NHẤT để đạt được một kết quả ("chỉ có... mới có thể...")', 'Sự nhượng bộ trước khi phản bác', 'Sự liệt kê ngang hàng nhiều ý', 'Sự so sánh hơn — kém giữa hai lựa chọn'], correctIndex: 0, explanation: '只有(chỉ có)…才能(mới có thể)… nêu điều kiện bắt buộc, thiếu nó thì kết quả không xảy ra.' },
 ]);
 
-const c3 = doc('cic401-3-1-ai-ethics', 'Chapter 3 — Science, AI &amp; ethics|||Chương 3 — Khoa học, trí tuệ nhân tạo &amp; đạo đức',
+const c3 = doc('cic401-3-1-ai-ethics', 'Chapter 3 — Science, AI & ethics|||Chương 3 — Khoa học, trí tuệ nhân tạo & đạo đức',
   'Từ vựng đạo đức công nghệ (算法偏见, 问责机制…); mẫu câu 假如/倘若…就…, 与其说…不如说…, 从…角度来看.',
   [[
     `<span class="eyebrow">CIC401 · Chapter 3 · Lesson 3</span>
@@ -213,13 +213,13 @@ const c3 = doc('cic401-3-1-ai-ethics', 'Chapter 3 — Science, AI &amp; ethics||
 <div class="callout"><span class="badge">Dáng lập luận</span> Chú ý cách chuyển từ "đổ lỗi cho công nghệ" sang "đổ lỗi cho cơ chế còn thiếu" bằng 与其说…不如说… — giám khảo HSK6 đánh giá cao cách tái định hướng này hơn nhiều so với câu khẳng định phẳng "AI nguy hiểm".</div>`,
   ]]);
 
-const c3q = quiz('cic401-quiz-3', 'Quiz 3 — AI &amp; ethics|||Quiz 3 — AI &amp; đạo đức', [
+const c3q = quiz('cic401-quiz-3', 'Quiz 3 — AI & ethics|||Quiz 3 — AI & đạo đức', [
   { id: 'q1', question: '"算法偏见" nghĩa là gì?', options: ['Định kiến/thiên lệch trong thuật toán', 'An toàn dữ liệu', 'Chỉnh sửa gen', 'Cơ chế quy trách nhiệm'], correctIndex: 0, explanation: '算法(thuật toán)+偏见(định kiến) = kết quả thuật toán thiên lệch, thường do dữ liệu huấn luyện thiên lệch.' },
   { id: 'q2', question: '"问责机制" nghĩa là gì?', options: ['Cơ chế quy trách nhiệm', 'Cơ chế bảo mật kỹ thuật', 'Cơ chế huy động vốn', 'Cơ chế đào tạo nhân sự'], correctIndex: 0, explanation: '问责(hỏi/truy trách nhiệm)+机制(cơ chế) = hệ thống xác định và xử lý ai chịu trách nhiệm khi có sai sót.' },
   { id: 'q3', question: 'Mẫu câu "与其说…不如说…" dùng để làm gì?', options: ['Điều chỉnh lại một phát biểu cho chính xác/đúng bản chất hơn', 'Đưa ra một ví dụ minh hoạ cụ thể', 'Kết luận toàn bộ bài viết', 'Diễn tả một điều kiện giả định'], correctIndex: 0, explanation: '与其说A不如说B — phủ nhận nhẹ cách nói A để khẳng định cách nói B mô tả đúng bản chất hơn.' },
 ]);
 
-const c4 = doc('cic401-4-1-philosophy', 'Chapter 4 — Philosophy &amp; traditional Chinese thought|||Chương 4 — Triết học &amp; tư tưởng truyền thống Trung Hoa',
+const c4 = doc('cic401-4-1-philosophy', 'Chapter 4 — Philosophy & traditional Chinese thought|||Chương 4 — Triết học & tư tưởng truyền thống Trung Hoa',
   'Khái niệm cốt lõi Nho-Đạo (中庸之道, 天人合一, 无为而治…); mẫu câu 正如…所说, 既是…又是…, 归根结底.',
   [[
     `<span class="eyebrow">CIC401 · Chapter 4 · Lesson 4</span>
@@ -284,7 +284,7 @@ const c4q = quiz('cic401-quiz-4', 'Quiz 4 — Philosophy|||Quiz 4 — Triết h�
   { id: 'q3', question: 'Mẫu câu "正如…所说" dùng để làm gì?', options: ['Trích dẫn lời một ai đó để làm luận cứ củng cố quan điểm', 'Phủ định hoàn toàn một quan điểm', 'Đặt một câu hỏi tu từ', 'Nêu điều kiện giả định'], correctIndex: 0, explanation: '正如(đúng như)…所说(đã nói) = dẫn lời người khác (thường là danh nhân) để làm căn cứ cho lập luận.' },
 ]);
 
-const c5 = doc('cic401-5-1-literature', 'Chapter 5 — Classic &amp; modern Chinese literature|||Chương 5 — Văn học kinh điển &amp; hiện đại',
+const c5 = doc('cic401-5-1-literature', 'Chapter 5 — Classic & modern Chinese literature|||Chương 5 — Văn học kinh điển & hiện đại',
   'Văn học hiện thực phê phán, tiểu thuyết (乡土文学, 批判现实主义…); mẫu câu 通过…表达了…, 字里行间, 令人深思.',
   [[
     `<span class="eyebrow">CIC401 · Chapter 5 · Lesson 5</span>
@@ -349,7 +349,7 @@ const c5q = quiz('cic401-quiz-5', 'Quiz 5 — Literature|||Quiz 5 — Văn học
   { id: 'q3', question: '"批判现实主义" là trường phái văn học đặc trưng bởi điều gì?', options: ['Phê phán các vấn đề xã hội hiện thực qua tác phẩm', 'Ca ngợi thiên nhiên một cách thuần tuý', 'Kể chuyện thần tiên, kỳ ảo', 'Chỉ miêu tả tình yêu lãng mạn'], correctIndex: 0, explanation: '批判(phê phán)+现实主义(chủ nghĩa hiện thực) = dùng ngòi bút hiện thực để phê phán xã hội, như Lỗ Tấn.' },
 ]);
 
-const c6 = doc('cic401-6-1-argumentation', 'Chapter 6 — Argumentative language &amp; critical thinking|||Chương 6 — Ngôn ngữ chính luận &amp; phản biện',
+const c6 = doc('cic401-6-1-argumentation', 'Chapter 6 — Argumentative language & critical thinking|||Chương 6 — Ngôn ngữ chính luận & phản biện',
   'Từ vựng lỗi lập luận (逻辑漏洞, 以偏概全, 循环论证…); mẫu câu 诚然…但是…, 不难看出, 值得商榷的是.',
   [[
     `<span class="eyebrow">CIC401 · Chapter 6 · Lesson 6</span>
@@ -412,13 +412,13 @@ const c6 = doc('cic401-6-1-argumentation', 'Chapter 6 — Argumentative language
 <div class="callout"><span class="badge">Mẹo thi</span> HSK6 đôi khi đưa một đoạn lập luận có lỗi và hỏi lỗi đó là gì — biết gọi tên 偷换概念/以偏概全/循环论证/人身攻击 (không chỉ nói "cái này sai") mới là điều được cho điểm tối đa.</div>`,
   ]]);
 
-const c6q = quiz('cic401-quiz-6', 'Quiz 6 — Argumentation &amp; critical thinking|||Quiz 6 — Phản biện &amp; tư duy phê phán', [
+const c6q = quiz('cic401-quiz-6', 'Quiz 6 — Argumentation & critical thinking|||Quiz 6 — Phản biện & tư duy phê phán', [
   { id: 'q1', question: '"偷换概念" là một loại lỗi gì trong lập luận?', options: ['Đánh lận khái niệm giữa chừng lập luận để đánh lạc hướng', 'Trích dẫn nguồn tin chính xác', 'Đưa ra bằng chứng thống kê đầy đủ', 'Kết luận hợp lý dựa trên dữ liệu'], correctIndex: 0, explanation: '偷(lén)+换(đổi)+概念(khái niệm) — lén thay đổi nghĩa của một khái niệm giữa lập luận để lừa người nghe.' },
   { id: 'q2', question: '"以偏概全" nghĩa là gì?', options: ['Suy rộng từ một trường hợp riêng lẻ thành kết luận chung (khái quát vội vàng)', 'Nhìn nhận vấn đề đa chiều, khách quan', 'Trích dẫn nguồn tin chính thức', 'Phản bác có căn cứ vững vàng'], correctIndex: 0, explanation: '以偏(lấy cái lệch/riêng lẻ)+概全(khái quát toàn bộ) — lỗi lập luận dùng ví dụ nhỏ để kết luận cho cả tổng thể.' },
   { id: 'q3', question: '"循环论证" là lỗi lập luận như thế nào?', options: ['Dùng chính kết luận (hoặc một dạng của nó) để làm căn cứ chứng minh cho nó', 'Dùng số liệu thống kê sai lệch', 'Công kích cá nhân người phản đối thay vì luận điểm', 'Bỏ qua hoàn toàn bằng chứng đối lập'], correctIndex: 0, explanation: '循环(vòng tròn)+论证(lập luận) — lập luận quay lại chính nó, không thực sự chứng minh được gì mới.' },
 ]);
 
-const c7 = doc('cic401-7-1-idioms', 'Chapter 7 — Idioms, allusions &amp; cultural metaphor|||Chương 7 — Thành ngữ, điển cố &amp; ẩn dụ văn hoá',
+const c7 = doc('cic401-7-1-idioms', 'Chapter 7 — Idioms, allusions & cultural metaphor|||Chương 7 — Thành ngữ, điển cố & ẩn dụ văn hoá',
   '10 thành ngữ HSK6 mới (画龙点睛, 破釜沉舟, 未雨绸缪, 前车之鉴…) kèm điển tích và cách dùng trong văn viết.',
   [[
     `<span class="eyebrow">CIC401 · Chapter 7 · Lesson 7</span>
@@ -471,13 +471,13 @@ const c7 = doc('cic401-7-1-idioms', 'Chapter 7 — Idioms, allusions &amp; cultu
 <div class="callout"><span class="badge">Mẹo ghi nhớ</span> Nhóm thành ngữ theo cảm xúc chúng mang: <strong>tự lừa dối</strong> (掩耳盗铃, 望梅止渴), <strong>tư duy cứng nhắc</strong> (刻舟求剑, 杯弓蛇影), <strong>quyết tâm/chuẩn bị</strong> (破釜沉舟, 未雨绸缪, 熟能生巧) — nhớ theo nhóm nhanh hơn nhớ từng thành ngữ riêng lẻ.</div>`,
   ]]);
 
-const c7q = quiz('cic401-quiz-7', 'Quiz 7 — Idioms &amp; cultural metaphor|||Quiz 7 — Thành ngữ &amp; ẩn dụ văn hoá', [
+const c7q = quiz('cic401-quiz-7', 'Quiz 7 — Idioms & cultural metaphor|||Quiz 7 — Thành ngữ & ẩn dụ văn hoá', [
   { id: 'q1', question: 'Thành ngữ "未雨绸缪" khuyên điều gì?', options: ['Chuẩn bị trước khi việc xấu xảy ra', 'Hành động liều lĩnh không tính toán', 'Chờ đợi vận may từ trên trời rơi xuống', 'Sao chép cách làm của người khác'], correctIndex: 0, explanation: '未(chưa)+雨(mưa)+绸缪(buộc chặt, chuẩn bị) — lo buộc mái nhà trước khi mưa đến, tức chuẩn bị từ sớm.' },
   { id: 'q2', question: 'Thành ngữ nào có nghĩa "tự lừa dối bản thân, không muốn đối mặt sự thật"?', options: ['掩耳盗铃', '画龙点睛', '一箭双雕', '熟能生巧'], correctIndex: 0, explanation: '掩(bịt)+耳(tai)+盗(trộm)+铃(chuông) — bịt tai mình lại rồi trộm chuông, tưởng người khác không nghe thấy như mình.' },
   { id: 'q3', question: '"前车之鉴" dùng để chỉ điều gì?', options: ['Bài học/lời cảnh báo rút ra từ một thất bại trước đó', 'Một chiến thắng vẻ vang, đáng tự hào', 'Một kế hoạch được cho là hoàn hảo', 'Một lời khen ngợi chân thành'], correctIndex: 0, explanation: '前车(xe đi trước)+之鉴(bài học) — xe trước lật đổ là lời cảnh báo cho xe đi sau, tức bài học từ thất bại người/việc trước.' },
 ]);
 
-const c8 = doc('cic401-8-1-hsk6-review', 'Chapter 8 — HSK6 review: academic writing, deep reading &amp; synthesis|||Chương 8 — Ôn tập HSK6: viết luận học thuật, đọc hiểu chuyên sâu &amp; tổng hợp',
+const c8 = doc('cic401-8-1-hsk6-review', 'Chapter 8 — HSK6 review: academic writing, deep reading & synthesis|||Chương 8 — Ôn tập HSK6: viết luận học thuật, đọc hiểu chuyên sâu & tổng hợp',
   'Khung bài luận nghị luận 5 đoạn, chiến thuật đọc hiểu, bảng tổng hợp mẫu câu 7 chương, đoạn kết luận mẫu.',
   [[
     `<span class="eyebrow">CIC401 · Chapter 8 · Lesson 8</span>
@@ -572,13 +572,13 @@ export default {
     requirements: 'Đã học xong CIC303 (hoặc đạt HSK5-6 tương đương): đọc hiểu 2.500+ từ vựng, nắm ngữ pháp trung-cao cấp. Đây là môn cuối cùng của chuỗi CIC, tiếp nối trực tiếp CIC303.',
   },
   sections: [
-    { title: 'Chương 1 — Vấn đề xã hội đương đại &amp; bình luận|||Chapter 1 — Contemporary social issues &amp; commentary', description: '内卷, 躺平, 信息茧房; 不仅仅是…更是…, 说到底.', lessons: [c1, c1q] },
-    { title: 'Chương 2 — Kinh tế, đổi mới &amp; khởi nghiệp|||Chapter 2 — Economy, innovation &amp; entrepreneurship', description: '独角兽企业, 颠覆式创新, 估值; 在…的背景下, 只有…才能….', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Khoa học, trí tuệ nhân tạo &amp; đạo đức|||Chapter 3 — Science, AI &amp; ethics', description: '算法偏见, 问责机制, 双刃剑; 与其说…不如说….', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Triết học &amp; tư tưởng truyền thống Trung Hoa|||Chapter 4 — Philosophy &amp; traditional Chinese thought', description: '中庸之道, 天人合一, 无为而治; 归根结底.', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Văn học kinh điển &amp; hiện đại|||Chapter 5 — Classic &amp; modern Chinese literature', description: '乡土文学, 批判现实主义; 通过…表达了…, 字里行间.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Ngôn ngữ chính luận &amp; phản biện|||Chapter 6 — Argumentative language &amp; critical thinking', description: '逻辑漏洞, 以偏概全, 循环论证; 诚然…但是….', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Thành ngữ, điển cố &amp; ẩn dụ văn hoá|||Chapter 7 — Idioms, allusions &amp; cultural metaphor', description: '10 thành ngữ mới (画龙点睛, 破釜沉舟, 未雨绸缪…) kèm điển tích.', lessons: [c7, c7q] },
+    { title: 'Chương 1 — Vấn đề xã hội đương đại & bình luận|||Chapter 1 — Contemporary social issues & commentary', description: '内卷, 躺平, 信息茧房; 不仅仅是…更是…, 说到底.', lessons: [c1, c1q] },
+    { title: 'Chương 2 — Kinh tế, đổi mới & khởi nghiệp|||Chapter 2 — Economy, innovation & entrepreneurship', description: '独角兽企业, 颠覆式创新, 估值; 在…的背景下, 只有…才能….', lessons: [c2, c2q] },
+    { title: 'Chương 3 — Khoa học, trí tuệ nhân tạo & đạo đức|||Chapter 3 — Science, AI & ethics', description: '算法偏见, 问责机制, 双刃剑; 与其说…不如说….', lessons: [c3, c3q] },
+    { title: 'Chương 4 — Triết học & tư tưởng truyền thống Trung Hoa|||Chapter 4 — Philosophy & traditional Chinese thought', description: '中庸之道, 天人合一, 无为而治; 归根结底.', lessons: [c4, c4q] },
+    { title: 'Chương 5 — Văn học kinh điển & hiện đại|||Chapter 5 — Classic & modern Chinese literature', description: '乡土文学, 批判现实主义; 通过…表达了…, 字里行间.', lessons: [c5, c5q] },
+    { title: 'Chương 6 — Ngôn ngữ chính luận & phản biện|||Chapter 6 — Argumentative language & critical thinking', description: '逻辑漏洞, 以偏概全, 循环论证; 诚然…但是….', lessons: [c6, c6q] },
+    { title: 'Chương 7 — Thành ngữ, điển cố & ẩn dụ văn hoá|||Chapter 7 — Idioms, allusions & cultural metaphor', description: '10 thành ngữ mới (画龙点睛, 破釜沉舟, 未雨绸缪…) kèm điển tích.', lessons: [c7, c7q] },
     { title: 'Chương 8 — Ôn tập HSK6|||Chapter 8 — HSK6 review', description: 'Khung bài luận 议论文, chiến thuật đọc hiểu, bảng tổng hợp mẫu câu.', lessons: [c8, c8q] },
   ],
 };

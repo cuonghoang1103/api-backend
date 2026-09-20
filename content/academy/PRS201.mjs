@@ -84,7 +84,7 @@ const taiLieu = doc('prs201-0-0-tai-lieu', '📚 Course materials & references||
 </ol></div>`,
   ]]);
 
-const intro = doc('prs201-0-1-overview', 'Course overview: Policy &amp; Risk Management|||Tổng quan: Chính sách &amp; Quản lý rủi ro',
+const intro = doc('prs201-0-1-overview', 'Course overview: Policy & Risk Management|||Tổng quan: Chính sách & Quản lý rủi ro',
   'Vì sao rủi ro & chính sách quan trọng; bộ ba CIA; rủi ro = tài sản × đe doạ × lỗ hổng; lộ trình 8 chương từ quản trị → khung → đánh giá → xử lý → chính sách → kiểm soát → liên tục kinh doanh.',
   [[
     `<span class="eyebrow">PRS201 · Lesson 0.1 · Overview</span>
@@ -127,7 +127,7 @@ Không lỗ hổng HOẶC không đe doạ -> rủi ro rất thấp/không có
 <p>Quản trị &amp; rủi ro cơ bản → khung chuẩn (NIST RMF, ISO 27005, COBIT) → nhận diện tài sản/đe doạ/lỗ hổng → đánh giá rủi ro (định tính &amp; định lượng: SLE/ARO/ALE) → xử lý rủi ro → viết chính sách bảo mật → kiểm soát, giám sát &amp; tuân thủ → liên tục kinh doanh, ứng phó sự cố &amp; pháp lý Việt Nam. Song ngữ, có ví dụ mẫu và quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('prs201-1-1-governance', '1.1 — IS governance &amp; risk overview|||1.1 — Tổng quan quản trị &amp; rủi ro HTTT',
+const c1 = doc('prs201-1-1-governance', '1.1 — IS governance & risk overview|||1.1 — Tổng quan quản trị & rủi ro HTTT',
   'Quản trị (governance) khác quản lý; vai trò lãnh đạo & khẩu vị rủi ro (risk appetite); rủi ro/mối đe doạ/lỗ hổng/tác động; vòng đời quản lý rủi ro.',
   [[
     `<span class="eyebrow">PRS201 · Chapter 1 · Lesson 1.1</span>
@@ -172,13 +172,13 @@ const c1 = doc('prs201-1-1-governance', '1.1 — IS governance &amp; risk overvi
 <div class="callout"><span class="badge">Ý chính</span> Bạn không thể xoá hết rủi ro, và cố làm vậy sẽ khiến tổ chức phá sản. Việc của quản lý rủi ro là kéo rủi ro xuống mức mà lãnh đạo đã <em>chủ động chấp nhận</em> — không hơn, không kém.</div>`,
   ]]);
 
-const c1q = quiz('prs201-quiz-1', 'Quiz 1 — Governance &amp; risk|||Quiz 1 — Quản trị &amp; rủi ro', [
+const c1q = quiz('prs201-quiz-1', 'Quiz 1 — Governance & risk|||Quiz 1 — Quản trị & rủi ro', [
   { id: 'q1', question: 'Điểm khác nhau cốt lõi giữa "governance" (quản trị) và "management" (quản lý) là?', options: ['Governance vận hành kiểm soát hằng ngày, management đặt định hướng', 'Governance đặt định hướng & trách nhiệm, management thực thi hằng ngày', 'Hai từ đồng nghĩa hoàn toàn', 'Governance chỉ là việc của bộ phận IT'], correctIndex: 1, explanation: 'Governance đặt định hướng và trách nhiệm giải trình; management thực thi các kiểm soát hằng ngày.' },
   { id: 'q2', question: 'Trong quản lý rủi ro, "lỗ hổng" (vulnerability) là gì?', options: ['Nguyên nhân gây hại tiềm tàng', 'Điểm yếu mà mối đe doạ có thể khai thác', 'Thiệt hại khi sự cố xảy ra', 'Thứ có giá trị cần bảo vệ'], correctIndex: 1, explanation: 'Lỗ hổng là điểm yếu; mối đe doạ (threat) mới là nguyên nhân gây hại, còn tài sản (asset) là thứ có giá trị.' },
   { id: 'q3', question: '"Risk appetite" (khẩu vị rủi ro) nói về điều gì?', options: ['Mức rủi ro lãnh đạo sẵn sàng chấp nhận', 'Số lượng lỗ hổng trong hệ thống', 'Chi phí mua công cụ bảo mật', 'Tốc độ vá lỗi'], correctIndex: 0, explanation: 'Khẩu vị rủi ro là mức rủi ro mà lãnh đạo chủ động chấp nhận — cơ sở để quyết định xử lý tới đâu.' },
 ]);
 
-const c2 = doc('prs201-2-1-frameworks', '2.1 — Frameworks &amp; standards|||2.1 — Khung &amp; tiêu chuẩn',
+const c2 = doc('prs201-2-1-frameworks', '2.1 — Frameworks & standards|||2.1 — Khung & tiêu chuẩn',
   'NIST RMF (7 bước), ISO/IEC 27005 (quy trình lặp), ISO 27001/27002, COBIT (quản trị CNTT); mỗi khung dùng khi nào và bổ trợ nhau ra sao.',
   [[
     `<span class="eyebrow">PRS201 · Chapter 2 · Lesson 2.1</span>
@@ -225,7 +225,7 @@ const c2q = quiz('prs201-quiz-2', 'Quiz 2 — Frameworks|||Quiz 2 — Khung chu�
   { id: 'q3', question: 'COBIT khác NIST/ISO ở chỗ nó tập trung chủ yếu vào?', options: ['Cấu hình tường lửa', 'Quản trị CNTT & gắn CNTT với mục tiêu kinh doanh', 'Mã hoá dữ liệu', 'Kiểm thử xâm nhập'], correctIndex: 1, explanation: 'COBIT là khung quản trị CNTT: nó trả lời "CNTT có được quản trị tốt và tạo giá trị không", không chỉ vấn đề kỹ thuật bảo mật.' },
 ]);
 
-const c3 = doc('prs201-3-1-asset-threat-vuln', '3.1 — Assets, threats &amp; vulnerabilities|||3.1 — Nhận diện tài sản, mối đe doạ &amp; lỗ hổng',
+const c3 = doc('prs201-3-1-asset-threat-vuln', '3.1 — Assets, threats & vulnerabilities|||3.1 — Nhận diện tài sản, mối đe doạ & lỗ hổng',
   'Kiểm kê & phân loại tài sản (định giá); phân loại mối đe doạ (con người/tự nhiên/kỹ thuật, cố ý/vô ý); tìm lỗ hổng (CVE/CWE, quét, kiểm thử); ghép thành cặp đe doạ-lỗ hổng.',
   [[
     `<span class="eyebrow">PRS201 · Chapter 3 · Lesson 3.1</span>
@@ -260,13 +260,13 @@ const c3 = doc('prs201-3-1-asset-threat-vuln', '3.1 — Assets, threats &amp; vu
 <div class="callout"><span class="badge">Đe doạ + lỗ hổng = phơi nhiễm</span> Mối đe doạ không có lỗ hổng tương ứng thì không hại được bạn; lỗ hổng không có mối đe doạ thì ưu tiên thấp. Rủi ro nằm ở nơi một mối đe doạ thật gặp một điểm yếu thật trên tài sản giá trị.</div>`,
   ]]);
 
-const c3q = quiz('prs201-quiz-3', 'Quiz 3 — Assets &amp; threats|||Quiz 3 — Tài sản &amp; đe doạ', [
+const c3q = quiz('prs201-quiz-3', 'Quiz 3 — Assets & threats|||Quiz 3 — Tài sản & đe doạ', [
   { id: 'q1', question: 'Bước đầu tiên trong nhận diện rủi ro thường là?', options: ['Mua bảo hiểm mạng', 'Kiểm kê & định giá/phân loại tài sản', 'Viết chính sách bảo mật', 'Cài tường lửa'], correctIndex: 1, explanation: 'Không thể bảo vệ thứ chưa liệt kê — phải kiểm kê và định giá/phân loại tài sản trước, để biết ưu tiên bảo vệ cái gì.' },
   { id: 'q2', question: 'CVE dùng để tra cứu điều gì?', options: ['Các mối đe doạ tự nhiên', 'Lỗ hổng bảo mật đã biết (đã công bố)', 'Chính sách nhân sự', 'Chi phí thiết bị'], correctIndex: 1, explanation: 'CVE là danh mục lỗ hổng đã biết được công bố; CWE là loại điểm yếu, còn CVSS chấm mức nghiêm trọng.' },
   { id: 'q3', question: 'Một mối đe doạ KHÔNG có lỗ hổng tương ứng thì?', options: ['Vẫn là rủi ro cao nhất', 'Gần như không gây hại được — ưu tiên thấp', 'Luôn dẫn tới mất dữ liệu', 'Phải mua bảo hiểm ngay'], correctIndex: 1, explanation: 'Rủi ro chỉ hiện thực khi mối đe doạ gặp lỗ hổng phù hợp trên tài sản giá trị; thiếu lỗ hổng thì đe doạ khó gây hại.' },
 ]);
 
-const c4 = doc('prs201-4-1-assessment', '4.1 — Qualitative &amp; quantitative assessment|||4.1 — Đánh giá định tính &amp; định lượng',
+const c4 = doc('prs201-4-1-assessment', '4.1 — Qualitative & quantitative assessment|||4.1 — Đánh giá định tính & định lượng',
   'Định tính (ma trận khả năng × tác động, thang thấp/vừa/cao); định lượng bằng tiền: EF, SLE = AV × EF, ARO, ALE = SLE × ARO; ví dụ tính toán.',
   [[
     `<span class="eyebrow">PRS201 · Chapter 4 · Lesson 4.1</span>
@@ -323,7 +323,7 @@ Một vụ ransomware phá 60% giá trị -> EF = 0,6
 <div class="callout"><span class="badge">Định tính vs định lượng</span> Định tính nhanh, không cần số liệu cứng nhưng chủ quan; định lượng có căn cứ, theo tiền nhưng cần số đáng tin. Đa số chương trình thực tế dùng cả hai — định tính để sàng lọc, định lượng để biện minh chi tiêu.</div>`,
   ]]);
 
-const c4q = quiz('prs201-quiz-4', 'Quiz 4 — Assessment &amp; ALE|||Quiz 4 — Đánh giá &amp; ALE', [
+const c4q = quiz('prs201-quiz-4', 'Quiz 4 — Assessment & ALE|||Quiz 4 — Đánh giá & ALE', [
   { id: 'q1', question: 'Công thức tính SLE (Single Loss Expectancy) là?', options: ['SLE = AV × EF', 'SLE = SLE × ARO', 'SLE = AV × ARO', 'SLE = EF / AV'], correctIndex: 0, explanation: 'SLE = Giá trị tài sản (AV) × Hệ số phơi nhiễm (EF) — tổn thất kỳ vọng của MỘT sự cố.' },
   { id: 'q2', question: 'Tài sản AV = 20.000 $, EF = 0,5, ARO = 2 lần/năm. ALE bằng?', options: ['10.000 $', '20.000 $', '40.000 $', '5.000 $'], correctIndex: 1, explanation: 'SLE = 20.000 × 0,5 = 10.000 $; ALE = SLE × ARO = 10.000 × 2 = 20.000 $/năm.' },
   { id: 'q3', question: 'So với định lượng, đánh giá định tính có đặc điểm?', options: ['Luôn chính xác hơn về tiền bạc', 'Nhanh, không cần số liệu cứng nhưng mang tính chủ quan', 'Không cần con người tham gia', 'Bắt buộc phải có theo luật'], correctIndex: 1, explanation: 'Định tính dùng thang khả năng × tác động — nhanh và không cần số liệu cứng, nhưng chủ quan; định lượng theo tiền thì có căn cứ hơn nhưng cần số đáng tin.' },
@@ -419,7 +419,7 @@ const c6q = quiz('prs201-quiz-6', 'Quiz 6 — Security policy|||Quiz 6 — Chín
   { id: 'q3', question: 'Yếu tố nào KHÔNG cần thiết để một chính sách có hiệu lực thực tế?', options: ['Được lãnh đạo ủng hộ', 'Được truyền đạt & thực thi được', 'Khả thi để người dùng tuân theo', 'Được viết bằng càng nhiều thuật ngữ kỹ thuật càng tốt'], correctIndex: 3, explanation: 'Chính sách cần được ủng hộ, truyền đạt, khả thi và thực thi được; viết rối rắm bằng thuật ngữ không giúp ích mà còn khiến không ai tuân theo.' },
 ]);
 
-const c7 = doc('prs201-7-1-controls-compliance', '7.1 — Controls, monitoring &amp; compliance|||7.1 — Kiểm soát, giám sát &amp; tuân thủ',
+const c7 = doc('prs201-7-1-controls-compliance', '7.1 — Controls, monitoring & compliance|||7.1 — Kiểm soát, giám sát & tuân thủ',
   'Phân loại kiểm soát (phòng ngừa/phát hiện/khắc phục; hành chính/kỹ thuật/vật lý); giám sát liên tục & KRI; kiểm toán (audit) nội bộ/độc lập; tuân thủ khung/luật.',
   [[
     `<span class="eyebrow">PRS201 · Chapter 7 · Lesson 7.1</span>
@@ -460,13 +460,13 @@ Theo bản chất:
 <div class="callout"><span class="badge">Phòng thủ nhiều lớp</span> Kết hợp kiểm soát phòng ngừa, phát hiện và khắc phục xuyên các lớp hành chính, kỹ thuật, vật lý. Một lớp hỏng thì lớp khác bắt được sự cố — không kiểm soát đơn lẻ nào được là điểm hỏng duy nhất.</div>`,
   ]]);
 
-const c7q = quiz('prs201-quiz-7', 'Quiz 7 — Controls &amp; compliance|||Quiz 7 — Kiểm soát &amp; tuân thủ', [
+const c7q = quiz('prs201-quiz-7', 'Quiz 7 — Controls & compliance|||Quiz 7 — Kiểm soát & tuân thủ', [
   { id: 'q1', question: 'Hệ thống phát hiện xâm nhập (IDS) và log là loại kiểm soát theo chức năng nào?', options: ['Phòng ngừa (preventive)', 'Phát hiện (detective)', 'Khắc phục (corrective)', 'Vật lý (physical)'], correctIndex: 1, explanation: 'IDS/log giúp nhận ra sự cố khi đang xảy ra — đó là kiểm soát phát hiện (detective).' },
   { id: 'q2', question: 'KRI (Key Risk Indicator) dùng để làm gì?', options: ['Mã hoá dữ liệu', 'Cảnh báo sớm khi mức rủi ro đang tăng', 'Xoá log cũ', 'Thay thế cho chính sách bảo mật'], correctIndex: 1, explanation: 'KRI là thước đo cảnh báo rủi ro đang tăng (vd % hệ thống chưa vá), đóng vai trò bảng cảnh báo sớm.' },
   { id: 'q3', question: 'Nhận định nào ĐÚNG về tuân thủ (compliance)?', options: ['Tuân thủ đảm bảo tuyệt đối là an toàn', 'Tuân thủ là mức sàn tối thiểu, không đảm bảo an toàn', 'Tuân thủ chỉ liên quan tới phần cứng', 'Tuân thủ thay thế hoàn toàn cho quản lý rủi ro'], correctIndex: 1, explanation: 'Tuân thủ khung/luật là sàn tối thiểu; đạt tuân thủ không đồng nghĩa với an toàn thực sự.' },
 ]);
 
-const c8 = doc('prs201-8-1-bcp-ir-legal', '8.1 — Continuity, incident response &amp; VN law|||8.1 — Liên tục kinh doanh, ứng phó sự cố &amp; pháp lý VN',
+const c8 = doc('prs201-8-1-bcp-ir-legal', '8.1 — Continuity, incident response & VN law|||8.1 — Liên tục kinh doanh, ứng phó sự cố & pháp lý VN',
   'BCP/DRP & BIA (RTO/RPO); quy trình ứng phó sự cố (chuẩn bị→phát hiện→ngăn chặn→diệt→khôi phục→bài học); pháp lý Việt Nam (Luật An ninh mạng 2018, Nghị định 13/2023 bảo vệ dữ liệu cá nhân).',
   [[
     `<span class="eyebrow">PRS201 · Chapter 8 · Lesson 8.1</span>
@@ -517,7 +517,7 @@ DRP : khôi phục CÔNG NGHỆ/CNTT (hệ thống, dữ liệu, sao lưu)
 <div class="callout"><span class="badge">Ghép lại toàn cảnh</span> Quản lý rủi ro, chính sách, kiểm soát, liên tục kinh doanh và tuân thủ pháp lý là một chu trình liên tục — nhận diện, bảo vệ, phát hiện, ứng phó, khôi phục — rồi đưa bài học trở lại vòng đánh giá rủi ro kế tiếp.</div>`,
   ]]);
 
-const c8q = quiz('prs201-quiz-8', 'Quiz 8 — Continuity &amp; law|||Quiz 8 — Liên tục &amp; pháp lý', [
+const c8q = quiz('prs201-quiz-8', 'Quiz 8 — Continuity & law|||Quiz 8 — Liên tục & pháp lý', [
   { id: 'q1', question: 'RPO (Recovery Point Objective) trả lời câu hỏi nào?', options: ['Bao lâu hệ thống phải hoạt động trở lại', 'Chấp nhận mất tối đa bao nhiêu dữ liệu', 'Chi phí một sự cố là bao nhiêu', 'Ai chịu trách nhiệm ứng phó'], correctIndex: 1, explanation: 'RPO xác định lượng dữ liệu tối đa có thể mất (tính theo thời gian); RTO mới là thời gian phải khôi phục hoạt động.' },
   { id: 'q2', question: 'Trong vòng đời ứng phó sự cố, bước "Ngăn chặn (Containment)" nhằm?', options: ['Loại bỏ hẳn nguyên nhân gốc', 'Ngăn sự cố lan rộng thêm ("cầm máu")', 'Rút ra bài học', 'Chuẩn bị công cụ trước sự cố'], correctIndex: 1, explanation: 'Containment là "cầm máu" — hạn chế phạm vi lan rộng; diệt trừ (eradication) mới loại bỏ nguyên nhân gốc.' },
   { id: 'q3', question: 'Văn bản pháp luật Việt Nam nào điều chỉnh việc bảo vệ dữ liệu cá nhân?', options: ['Nghị định 13/2023/NĐ-CP', 'ISO/IEC 27005', 'NIST SP 800-30', 'PCI DSS'], correctIndex: 0, explanation: 'Nghị định 13/2023/NĐ-CP về Bảo vệ dữ liệu cá nhân (PDPD); các mục còn lại là tiêu chuẩn/khung quốc tế, không phải luật Việt Nam.' },

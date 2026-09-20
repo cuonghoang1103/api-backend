@@ -111,7 +111,7 @@ const intro = doc('oct202-0-1-overview', 'Course overview: what OJT is and how i
   ]]);
 
 /* ── M1 — OJT là gì & mục tiêu ─────────────────────────────────────────────── */
-const m1 = doc('oct202-1-1-vai-tro-muc-tieu', 'M1 — What OJT is: role, outcomes, rights &amp; duties|||M1 — OJT là gì: vai trò, chuẩn đầu ra, quyền &amp; nghĩa vụ',
+const m1 = doc('oct202-1-1-vai-tro-muc-tieu', 'M1 — What OJT is: role, outcomes, rights & duties|||M1 — OJT là gì: vai trò, chuẩn đầu ra, quyền & nghĩa vụ',
   'Vai trò của thực tập sinh, chuẩn đầu ra kỹ năng nghề, quyền lợi và nghĩa vụ của sinh viên khi thực tập.',
   [[
     `<span class="eyebrow">OCT202 · Module 1 · Prepare</span>
@@ -151,7 +151,7 @@ const m1 = doc('oct202-1-1-vai-tro-muc-tieu', 'M1 — What OJT is: role, outcome
 </code></pre>
 <div class="callout"><span class="badge">Checklist — tuần 0</span> Xác nhận ngày bắt đầu · biết tên &amp; liên hệ mentor · nắm giờ làm việc · hiểu "hoàn thành" của việc đầu tiên là gì.</div>`,
   ]]);
-const m1q = quiz('oct202-quiz-1', 'Quiz M1 — Role &amp; outcomes|||Quiz M1 — Vai trò &amp; chuẩn đầu ra', [
+const m1q = quiz('oct202-quiz-1', 'Quiz M1 — Role & outcomes|||Quiz M1 — Vai trò & chuẩn đầu ra', [
   { id: 'q1', question: 'OJT (On-the-Job Training) chủ yếu là gì?|||What is OJT primarily?', options: ['Một môn lý thuyết trên lớp|||A theory class', 'Kỳ đi làm thật tại doanh nghiệp, có điểm & tín chỉ|||A graded, credit-bearing term working in a real company', 'Kỳ nghỉ giữa khoá|||A mid-course break', 'Một bài thi cuối kỳ|||A final exam'], correctIndex: 1, explanation: 'OJT là kỳ thực tập doanh nghiệp có điểm và tín chỉ.' },
   { id: 'q2', question: 'Đâu là NGHĨA VỤ của thực tập sinh?|||Which is a DUTY of an intern?', options: ['Được trả lương cao|||Getting a high salary', 'Giữ bí mật thông tin công ty & cập nhật nhật ký|||Protecting confidential info & keeping the logbook', 'Được tự chọn mọi việc|||Choosing any task freely', 'Nghỉ khi nào muốn|||Taking days off at will'], correctIndex: 1, explanation: 'Bảo mật và ghi nhật ký là nghĩa vụ; mentor và phản hồi là quyền lợi.' },
   { id: 'q3', question: 'Chuẩn đầu ra chính của OJT là?|||A core OJT learning outcome is?', options: ['Học thuộc lý thuyết marketing|||Memorizing marketing theory', 'Áp dụng kiến thức vào sản phẩm thật & hành xử chuyên nghiệp|||Applying knowledge to real deliverables & acting professionally', 'Viết một bài luận|||Writing one essay', 'Đạt điểm thi trắc nghiệm|||Passing a quiz'], correctIndex: 1, explanation: 'OJT xác nhận năng lực làm việc thật, không phải thuộc lòng.' },
@@ -198,7 +198,7 @@ Theo dõi: gửi lời cảm ơn ngắn sau phỏng vấn
 </code></pre>
 <div class="callout"><span class="badge">Mẹo</span> Nộp 8–10 nơi, đừng chỉ một. Ghi vào bảng: công ty · vị trí · ngày nộp · trạng thái.</div>`,
   ]]);
-const m2q = quiz('oct202-quiz-2', 'Quiz M2 — CV &amp; interview|||Quiz M2 — CV &amp; phỏng vấn', [
+const m2q = quiz('oct202-quiz-2', 'Quiz M2 — CV & interview|||Quiz M2 — CV & phỏng vấn', [
   { id: 'q1', question: 'Một CV thực tập tốt nên?|||A good intern CV should?', options: ['Dài 3–4 trang liệt kê mọi thứ|||Be 3–4 pages listing everything', 'Một trang, nêu kết quả bằng số trước|||Be one page, lead with results in numbers', 'Không cần link portfolio|||Skip the portfolio link', 'Chỉ ghi sở thích cá nhân|||List only hobbies'], correctIndex: 1, explanation: 'CV một trang, ưu tiên kết quả đo được.' },
   { id: 'q2', question: 'STAR trong trả lời phỏng vấn là?|||STAR in interview answers means?', options: ['Situation-Task-Action-Result', 'Start-Talk-Ask-Rest', 'Skill-Time-Ability-Role', 'Study-Test-Apply-Report'], correctIndex: 0, explanation: 'STAR = Tình huống - Nhiệm vụ - Hành động - Kết quả.' },
   { id: 'q3', question: 'Chiến lược ứng tuyển hợp lý là?|||A sensible application strategy is?', options: ['Chỉ nộp đúng 1 công ty mơ ước|||Apply to only 1 dream company', 'Nộp 8–10 nơi & theo dõi trạng thái trong bảng|||Apply to 8–10 places & track status in a sheet', 'Gửi cùng một CV không chỉnh cho mọi nơi|||Send one untailored CV everywhere', 'Đợi công ty tự tìm đến|||Wait to be found'], correctIndex: 1, explanation: 'Nộp nhiều, chỉnh CV theo tin, và theo dõi trạng thái.' },
@@ -245,7 +245,7 @@ Họp:    chuẩn bị trước, lắng nghe, ghi việc cần làm &amp; ngư�
 <p>Không chia sẻ dữ liệu nội bộ, danh sách khách hàng hay chiến dịch chưa công bố. Không đăng chuyện công ty lên mạng khi chưa được phép. Ghi nguồn; không đạo nhái. Thấy điều bất ổn thì nói với mentor.</p>
 <div class="callout"><span class="badge">Nguyên tắc vàng</span> Bạn là khách đại diện cho FPTU. Lịch sự, trung thực và kín đáo đều được chấm dù không ai nói ra.</div>`,
   ]]);
-const m3q = quiz('oct202-quiz-3', 'Quiz M3 — Culture &amp; conduct|||Quiz M3 — Văn hoá &amp; tác phong', [
+const m3q = quiz('oct202-quiz-3', 'Quiz M3 — Culture & conduct|||Quiz M3 — Văn hoá & tác phong', [
   { id: 'q1', question: 'Khi không rõ quy tắc ở công ty, bạn nên?|||When unsure about a company norm, you should?', options: ['Đoán rồi làm theo ý mình|||Guess and do your own thing', 'Quan sát & hỏi mentor|||Observe & ask your mentor', 'Bỏ qua, không ai để ý|||Ignore it, nobody notices', 'Đăng hỏi lên mạng xã hội|||Post the question on social media'], correctIndex: 1, explanation: 'Hỏi là chuyên nghiệp; quan sát rồi hỏi mentor.' },
   { id: 'q2', question: 'Một email công sở tốt nên có?|||A good work email has?', options: ['Không tiêu đề, viết dài lan man|||No subject, long ramble', 'Tiêu đề rõ, một yêu cầu, chữ ký & trả lời trong ngày|||Clear subject, one ask, sign-off & same-day reply', 'Toàn từ viết tắt teen|||All slang', 'Gửi cho toàn công ty|||CC the whole company'], correctIndex: 1, explanation: 'Rõ ràng, đúng một yêu cầu, lịch sự và kịp thời.' },
   { id: 'q3', question: 'Về bảo mật, thực tập sinh KHÔNG được?|||On confidentiality, an intern must NOT?', options: ['Ghi nhật ký công việc của mình|||Keep a personal logbook', 'Đăng chiến dịch chưa công bố hay dữ liệu khách hàng lên mạng|||Post unreleased campaigns or client data online', 'Hỏi mentor khi chưa rõ|||Ask the mentor when unsure', 'Ghi nguồn khi trích dẫn|||Credit sources'], correctIndex: 1, explanation: 'Không lộ dữ liệu nội bộ/khách hàng/chiến dịch chưa công bố.' },
@@ -350,7 +350,7 @@ const m5q = quiz('oct202-quiz-5', 'Quiz M5 — Communication work|||Quiz M5 — 
 ]);
 
 /* ── M6 — Ghi nhật ký & thu thập minh chứng ────────────────────────────────── */
-const m6 = doc('oct202-6-1-nhat-ky-minh-chung', 'M6 — Logbook &amp; evidence: capture as you go|||M6 — Nhật ký &amp; minh chứng: ghi ngay khi làm',
+const m6 = doc('oct202-6-1-nhat-ky-minh-chung', 'M6 — Logbook & evidence: capture as you go|||M6 — Nhật ký & minh chứng: ghi ngay khi làm',
   'Viết nhật ký thực tập, log công việc theo tuần, lưu sản phẩm/portfolio, xin nhận xét & minh chứng ngay trong lúc thực tập.',
   [[
     `<span class="eyebrow">OCT202 · Module 6 · Report</span>
@@ -392,7 +392,7 @@ const m6 = doc('oct202-6-1-nhat-ky-minh-chung', 'M6 — Logbook &amp; evidence: 
 <p>Gần cuối, xin mentor một nhận xét ngắn bằng văn bản và nếu được thì thư giới thiệu. Đưa họ bản nháp thành tích để họ xác nhận sự thật — đừng để họ bắt đầu từ trang trắng.</p>
 <div class="callout"><span class="badge">Quy tắc</span> Không có trong nhật ký nghĩa là không xảy ra — với báo cáo và người chấm là như vậy.</div>`,
   ]]);
-const m6q = quiz('oct202-quiz-6', 'Quiz M6 — Logbook &amp; evidence|||Quiz M6 — Nhật ký &amp; minh chứng', [
+const m6q = quiz('oct202-quiz-6', 'Quiz M6 — Logbook & evidence|||Quiz M6 — Nhật ký & minh chứng', [
   { id: 'q1', question: 'Vì sao nên chụp số liệu ngay lúc làm?|||Why screenshot metrics as you go?', options: ['Cho vui|||For fun', 'Vì về sau thường không lấy lại được|||Because you often cannot retrieve them later', 'Vì mentor bắt buộc mỗi giờ|||Because the mentor demands it hourly', 'Không cần thiết|||It is unnecessary'], correctIndex: 1, explanation: 'Reach/tương tác thay đổi và khó lấy lại — chụp ngay.' },
   { id: 'q2', question: 'Nhật ký tuần nên gồm?|||A weekly logbook should include?', options: ['Chỉ cảm xúc cá nhân|||Only personal feelings', 'Việc đã làm, kỹ năng dùng, bài học, minh chứng|||Tasks done, skills used, lessons, evidence', 'Chỉ tên công ty|||Just the company name', 'Không cần link|||No links'], correctIndex: 1, explanation: 'Ghi đủ việc-kỹ năng-bài học-minh chứng theo tuần.' },
   { id: 'q3', question: 'Khi xin nhận xét của mentor, bạn nên?|||When asking your mentor for a comment, you should?', options: ['Đợi tới ngày cuối rồi mới hỏi|||Wait until the last day', 'Xin sớm & đưa bản nháp thành tích để họ xác nhận|||Ask early & give a draft of achievements to confirm', 'Tự viết hộ họ|||Write it for them secretly', 'Không cần xin|||Not ask at all'], correctIndex: 1, explanation: 'Xin sớm và giúp mentor bằng bản nháp sự thật.' },
@@ -456,7 +456,7 @@ const m7q = quiz('oct202-quiz-7', 'Quiz M7 — Writing the report|||Quiz M7 — 
 ]);
 
 /* ── M8 — Đánh giá, bảo vệ & định hướng nghề ───────────────────────────────── */
-const m8 = doc('oct202-8-1-bao-ve-dinh-huong', 'M8 — Evaluation, defense &amp; career next steps|||M8 — Đánh giá, bảo vệ &amp; định hướng nghề',
+const m8 = doc('oct202-8-1-bao-ve-dinh-huong', 'M8 — Evaluation, defense & career next steps|||M8 — Đánh giá, bảo vệ & định hướng nghề',
   'Tiêu chí chấm, chuẩn bị bảo vệ/thuyết trình & hỏi đáp, xin thư giới thiệu, chuyển tiếp từ thực tập sang việc làm.',
   [[
     `<span class="eyebrow">OCT202 · Module 8 · Report</span>
@@ -496,7 +496,7 @@ Bằng chứng: sẵn minh chứng để trình
 </ul>
 <div class="callout"><span class="badge">Chốt lại</span> OJT có điểm, nhưng giá trị thật là thư giới thiệu, portfolio và cánh cửa nó mở. Làm mọi việc như thể công việc kế tiếp phụ thuộc vào nó — thường là đúng vậy.</div>`,
   ]]);
-const m8q = quiz('oct202-quiz-8', 'Quiz M8 — Defense &amp; career|||Quiz M8 — Bảo vệ &amp; định hướng nghề', [
+const m8q = quiz('oct202-quiz-8', 'Quiz M8 — Defense & career|||Quiz M8 — Bảo vệ & định hướng nghề', [
   { id: 'q1', question: 'Điểm OJT thường gồm những phần nào?|||An OJT grade usually combines?', options: ['Chỉ báo cáo|||The report only', 'Đánh giá công ty + báo cáo + bảo vệ|||Company evaluation + report + defense', 'Chỉ điểm chuyên cần|||Attendance only', 'Một bài trắc nghiệm|||One quiz'], correctIndex: 1, explanation: 'Ba nguồn: đánh giá công ty, báo cáo và buổi bảo vệ.' },
   { id: 'q2', question: 'Khi bị hỏi câu chưa biết trong buổi bảo vệ, tốt nhất là?|||When asked something you don\'t know at the defense?', options: ['Chém đại cho qua|||Bluff confidently', 'Thành thật: "Em chưa rõ, nhưng sẽ tìm bằng..."|||Be honest: "I don\'t know, but I\'d find out by..."', 'Im lặng bỏ qua|||Stay silent', 'Đổ lỗi cho công ty|||Blame the company'], correctIndex: 1, explanation: 'Trung thực + cách sẽ tìm ra hơn hẳn chém gió.' },
   { id: 'q3', question: 'Để biến OJT thành việc làm, bạn nên?|||To turn OJT into a job, you should?', options: ['Rời đi im lặng|||Leave quietly', 'Xin thư giới thiệu, cập nhật CV/portfolio, hỏi vị trí trống|||Get a reference, update CV/portfolio, ask about openings', 'Xoá mọi liên hệ|||Delete all contacts', 'Không cập nhật gì|||Update nothing'], correctIndex: 1, explanation: 'Giữ quan hệ, xin tham chiếu và cập nhật hồ sơ ngay.' },

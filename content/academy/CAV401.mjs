@@ -98,7 +98,7 @@ const intro = doc('cav401-0-1-overview', 'Course overview: Advanced Audio-Visual
 <p>Phim &amp; phân tích lời thoại → thời sự &amp; bản tin chuyên sâu → tranh luận &amp; talk show truyền hình → diễn thuyết &amp; TED tiếng Trung → phim tài liệu lịch sử-xã hội → chương trình kinh tế &amp; công nghệ → nghệ thuật, âm nhạc &amp; văn hoá đại chúng → ôn tập tổng hợp: nghe dài, bình luận &amp; thuyết trình phản biện. Mỗi bài có văn bản mẫu (汉字 + pinyin + nghĩa), bảng từ vựng, mẹo nghe-nói, và quiz.</p>`,
   ]]);
 
-const c1 = doc('cav401-1-1-movie-dialogue', 'Chapter 1 — Movies &amp; dialogue analysis|||Chương 1 — Phim điện ảnh &amp; phân tích lời thoại',
+const c1 = doc('cav401-1-1-movie-dialogue', 'Chapter 1 — Movies & dialogue analysis|||Chương 1 — Phim điện ảnh & phân tích lời thoại',
   'Từ vựng: 台词, 剧情, 情节, 配音, 字幕, 伏笔, 隐喻, 潜台词, 演技. Mẹo nghe: bắt thành ngữ/khẩu ngữ, giọng điệu cảm xúc, câu rút gọn.',
   [[
     `<span class="eyebrow">CAV401 · Chapter 1 · Movies</span>
@@ -159,13 +159,13 @@ const c1 = doc('cav401-1-1-movie-dialogue', 'Chapter 1 — Movies &amp; dialogue
 <div class="callout"><span class="badge">Mẹo nói</span> Luyện kể lại 剧情 một cảnh bằng lời của mình, rồi trích một câu 台词 và giải thích 潜台词 của nó — đây đúng là kỹ năng được kiểm khi thảo luận về một đoạn phim.</div>`,
   ]]);
 
-const c1q = quiz('cav401-quiz-1', 'Quiz 1 — Movies &amp; dialogue|||Quiz 1 — Phim &amp; lời thoại', [
+const c1q = quiz('cav401-quiz-1', 'Quiz 1 — Movies & dialogue|||Quiz 1 — Phim & lời thoại', [
   { id: 'q1', question: '"潜台词" (qiántáicí) nghĩa là gì?', options: ['Lời thoại được viết sẵn', 'Hàm ý, điều không nói ra trực tiếp', 'Phụ đề của phim', 'Nhạc nền của phim'], correctIndex: 1, explanation: '潜台词 là ý nghĩa ẩn sau câu nói — điều nhân vật thực sự muốn nói nhưng không nói thẳng.' },
   { id: 'q2', question: 'Trong câu "你的沉默就是答案" (Nǐ de chénmò jiùshì dá\'àn), "沉默" nghĩa là gì?', options: ['Sự im lặng', 'Câu trả lời', 'Sự tức giận', 'Lời hứa'], correctIndex: 0, explanation: '沉默 (chénmò) = sự im lặng; cả câu nghĩa là "Sự im lặng của anh/em chính là câu trả lời."' },
   { id: 'q3', question: 'Khi phân tích một đoạn phim, "伏笔" (fúbǐ) dùng để chỉ điều gì?', options: ['Diễn viên chính', 'Chi tiết được cài trước để dẫn tới tình tiết sau', 'Bản dịch phụ đề', 'Giọng lồng tiếng'], correctIndex: 1, explanation: '伏笔 là kỹ thuật kể chuyện: gài một chi tiết nhỏ trước, để sau đó nó có ý nghĩa quan trọng.' },
 ]);
 
-const c2 = doc('cav401-2-1-news-report', 'Chapter 2 — News &amp; in-depth reports|||Chương 2 — Thời sự &amp; bản tin chuyên sâu',
+const c2 = doc('cav401-2-1-news-report', 'Chapter 2 — News & in-depth reports|||Chương 2 — Thời sự & bản tin chuyên sâu',
   'Từ vựng: 播报, 时政, 综述, 据报道, 权威人士, 数据显示, 舆论, 评论员. Mẹo nghe: công thức bản tin CCTV, ghi chú tiêu đề + 5W.',
   [[
     `<span class="eyebrow">CAV401 · Chapter 2 · News</span>
@@ -228,13 +228,13 @@ zēngsù bǎochí wěndìng.
 <div class="callout"><span class="badge">Mẹo nói</span> Luyện tóm tắt 综述 30 giây cho một đoạn thời sự theo công thức 据…报道，…数据显示，… — đây đúng là văn phong trang trọng mà phần thi nói HSK5 về thời sự yêu cầu.</div>`,
   ]]);
 
-const c2q = quiz('cav401-quiz-2', 'Quiz 2 — News &amp; reports|||Quiz 2 — Thời sự &amp; bản tin', [
+const c2q = quiz('cav401-quiz-2', 'Quiz 2 — News & reports|||Quiz 2 — Thời sự & bản tin', [
   { id: 'q1', question: 'Cụm "据报道" (jù bàodào) thường đứng ở đâu trong một bản tin?', options: ['Cuối bản tin, để kết luận', 'Đầu câu, để dẫn nguồn tin', 'Chỉ dùng trong phim', 'Chỉ dùng khi phỏng vấn'], correctIndex: 1, explanation: '据报道 = "theo tin đưa", luôn mở đầu câu để dẫn nguồn thông tin, đúng công thức bản tin.' },
   { id: 'q2', question: '"数据显示" (shùjù xiǎnshì) nghĩa là gì?', options: ['Dư luận cho rằng', 'Số liệu cho thấy', 'Nguồn tin từ chối', 'Bình luận viên nói'], correctIndex: 1, explanation: '数据显示 = "số liệu cho thấy", dùng để đưa dữ kiện thống kê trong bản tin.' },
   { id: 'q3', question: 'Khi nghe bản tin thời sự, mẹo ghi chú hiệu quả nhất là gì?', options: ['Chép lại nguyên văn từng chữ', 'Chỉ nghe phần mở đầu rồi bỏ qua phần sau', 'Ghi theo tiêu đề + 5W (ai/việc gì/khi nào/ở đâu/vì sao)', 'Không cần ghi chú vì đã có phụ đề'], correctIndex: 2, explanation: 'Bản tin nói nhanh nên ghi tiêu đề + 5W hiệu quả hơn chép nguyên văn.' },
 ]);
 
-const c3 = doc('cav401-3-1-debate-talkshow', 'Chapter 3 — TV debates &amp; talk shows|||Chương 3 — Tranh luận &amp; talk show truyền hình',
+const c3 = doc('cav401-3-1-debate-talkshow', 'Chapter 3 — TV debates & talk shows|||Chương 3 — Tranh luận & talk show truyền hình',
   'Từ vựng: 辩论, 观点, 反驳, 立场, 论据, 主持人, 嘉宾, 打断, 达成共识. Mẹo nghe: bắt điểm ngắt lời, cụm phản bác, giữ mạch lập luận.',
   [[
     `<span class="eyebrow">CAV401 · Chapter 3 · Debate</span>
@@ -302,13 +302,13 @@ chōngfèn.
 <div class="callout"><span class="badge">Mẹo nói</span> Xây một câu 反驳 theo khung cố định: ghi nhận → 恕我打断/我理解您的观点，但是… → đưa 论据 của mình. Luyện khung này giúp bạn chen vào tranh luận mà không mất 立场.</div>`,
   ]]);
 
-const c3q = quiz('cav401-quiz-3', 'Quiz 3 — Debate &amp; talk show|||Quiz 3 — Tranh luận &amp; talk show', [
+const c3q = quiz('cav401-quiz-3', 'Quiz 3 — Debate & talk show|||Quiz 3 — Tranh luận & talk show', [
   { id: 'q1', question: 'Cụm "恕我打断一下" dùng để làm gì?', options: ['Kết thúc chương trình', 'Xin phép ngắt lời người khác một cách lịch sự', 'Giới thiệu khách mời', 'Đồng ý hoàn toàn với đối phương'], correctIndex: 1, explanation: '恕我打断一下 = "xin lỗi vì ngắt lời", một cách lịch sự để chen vào tranh luận trước khi 反驳.' },
   { id: 'q2', question: '"论据" (lùnjù) nghĩa là gì?', options: ['Quan điểm cá nhân', 'Luận cứ, bằng chứng để bảo vệ một quan điểm', 'Người dẫn chương trình', 'Sự đồng thuận'], correctIndex: 1, explanation: '论据 là bằng chứng/lý lẽ dùng để bảo vệ một 观点 trong tranh luận.' },
   { id: 'q3', question: 'Khi nghe một cuộc tranh luận có nhiều người nói chồng lên nhau, nên ưu tiên bắt điều gì?', options: ['Chỉ nghe người nói to nhất', 'Ai đang giữ lượt nói và lập trường (立场) của họ', 'Bỏ qua, chỉ nghe kết luận cuối', 'Đếm số lần ngắt lời'], correctIndex: 1, explanation: 'Kỹ năng nghe tranh luận là bắt được người giữ lượt nói và lập trường của họ, kể cả giữa câu.' },
 ]);
 
-const c4 = doc('cav401-4-1-speech-ted', 'Chapter 4 — Speeches &amp; TED talks|||Chương 4 — Diễn thuyết &amp; TED tiếng Trung',
+const c4 = doc('cav401-4-1-speech-ted', 'Chapter 4 — Speeches & TED talks|||Chương 4 — Diễn thuyết & TED tiếng Trung',
   'Từ vựng: 演讲稿, 开场白, 论点, 举例, 呼吁, 感染力, 停顿, 语调. Mẹo nghe: khung mở-luận điểm-ví dụ-kết, từ nối chuyển ý.',
   [[
     `<span class="eyebrow">CAV401 · Chapter 4 · Speeches</span>
@@ -375,13 +375,13 @@ Zuìhòu, wǒ xiǎng hūyù dàjiā, cóng jīntiān kāishǐ xíngdòng.
 <div class="callout"><span class="badge">Mẹo nói</span> Soạn một bài nói ngắn của riêng bạn theo cùng khung — một 论点, một 举例 cụ thể, một 呼吁 — và luyện ngắt (停顿) có chủ đích trước câu quan trọng nhất để tăng 感染力.</div>`,
   ]]);
 
-const c4q = quiz('cav401-quiz-4', 'Quiz 4 — Speeches &amp; TED|||Quiz 4 — Diễn thuyết &amp; TED', [
+const c4q = quiz('cav401-quiz-4', 'Quiz 4 — Speeches & TED|||Quiz 4 — Diễn thuyết & TED', [
   { id: 'q1', question: 'Trong khung một bài diễn thuyết, "举例" nằm ở vị trí nào?', options: ['Trước 开场白', 'Sau 论点, để minh hoạ cho luận điểm', 'Chỉ xuất hiện ở phần kết', 'Không cần thiết trong diễn thuyết'], correctIndex: 1, explanation: 'Khung chuẩn là 开场白 → 论点 → 举例 (minh hoạ) → 呼吁/总结.' },
   { id: 'q2', question: 'Từ nối nào KHÔNG dùng để đánh dấu chuyển ý trong diễn thuyết?', options: ['首先', '其次', '最后', '打断'], correctIndex: 3, explanation: '打断 nghĩa là "ngắt lời", không phải từ nối chuyển ý; 首先/其次/最后 mới là từ nối.' },
   { id: 'q3', question: '"感染力" (gǎnrǎnlì) trong một bài diễn thuyết nghĩa là gì?', options: ['Tốc độ nói nhanh', 'Sức thuyết phục, khả năng lay động cảm xúc người nghe', 'Số lượng ví dụ đưa ra', 'Độ dài của bài diễn thuyết'], correctIndex: 1, explanation: '感染力 = sức lan toả cảm xúc/thuyết phục của người nói, thường tạo ra nhờ 停顿 và 语调.' },
 ]);
 
-const c5 = doc('cav401-5-1-documentary', 'Chapter 5 — History &amp; society documentaries|||Chương 5 — Phim tài liệu lịch sử - xã hội',
+const c5 = doc('cav401-5-1-documentary', 'Chapter 5 — History & society documentaries|||Chương 5 — Phim tài liệu lịch sử - xã hội',
   'Từ vựng: 纪录片, 旁白, 史料, 变迁, 见证, 沧桑, 传承, 时代背景. Mẹo nghe: nhịp chậm trang trọng, số liệu/năm tháng, ẩn dụ văn hoá.',
   [[
     `<span class="eyebrow">CAV401 · Chapter 5 · Documentary</span>
@@ -448,7 +448,7 @@ const c5q = quiz('cav401-quiz-5', 'Quiz 5 — Documentaries|||Quiz 5 — Phim t�
   { id: 'q3', question: '"传承" (chuánchéng) nghĩa là gì?', options: ['Phá bỏ truyền thống cũ', 'Kế thừa và truyền lại (một nghề, văn hoá)', 'Chứng kiến một sự kiện', 'Ghi chép tư liệu lịch sử'], correctIndex: 1, explanation: '传承 = kế thừa, truyền lại từ thế hệ này sang thế hệ khác.' },
 ]);
 
-const c6 = doc('cav401-6-1-economy-tech', 'Chapter 6 — Economy &amp; tech programs|||Chương 6 — Chương trình kinh tế &amp; công nghệ',
+const c6 = doc('cav401-6-1-economy-tech', 'Chapter 6 — Economy & tech programs|||Chương 6 — Chương trình kinh tế & công nghệ',
   'Từ vựng: 经济增长, 人工智能, 创新, 产业链, 投资, 数字化, 竞争力, 泡沫. Mẹo nghe: bắt số liệu/phần trăm, thuật ngữ chuyên ngành.',
   [[
     `<span class="eyebrow">CAV401 · Chapter 6 · Economy &amp; tech</span>
@@ -509,13 +509,13 @@ tóuzī pàomò.
 <div class="callout"><span class="badge">Mẹo nói</span> Luyện nêu một nhận định + một ý phản biện theo đúng khung trên: "专家认为…，但也有观点认为…" — cấu trúc nhìn hai chiều này chính là điều một câu trả lời quan điểm HSK5 về kinh tế/công nghệ cần có.</div>`,
   ]]);
 
-const c6q = quiz('cav401-quiz-6', 'Quiz 6 — Economy &amp; tech|||Quiz 6 — Kinh tế &amp; công nghệ', [
+const c6q = quiz('cav401-quiz-6', 'Quiz 6 — Economy & tech|||Quiz 6 — Kinh tế & công nghệ', [
   { id: 'q1', question: '"产业链" (chǎnyèliàn) nghĩa là gì?', options: ['Bong bóng kinh tế', 'Chuỗi ngành, chuỗi cung ứng', 'Năng lực cạnh tranh', 'Trí tuệ nhân tạo'], correctIndex: 1, explanation: '产业链 = chuỗi ngành/cung ứng, khác với 泡沫 (bong bóng) hay 竞争力 (năng lực cạnh tranh).' },
   { id: 'q2', question: 'Khi nghe một chương trình kinh tế có nhiều số liệu, nên tập trung vào điều gì để không hiểu sai?', options: ['Chỉ nghe thuật ngữ chuyên ngành', 'Nghe chính xác con số/phần trăm vì một số sai làm đổi cả ý', 'Bỏ qua số liệu, chỉ nghe kết luận', 'Chỉ cần nhớ tên chương trình'], correctIndex: 1, explanation: 'Số liệu/phần trăm rất dày trong chương trình kinh tế; nghe sai một số làm sai lệch cả ý nghĩa.' },
   { id: 'q3', question: 'Cấu trúc "专家认为…，但也有观点认为…" dùng để thể hiện điều gì?', options: ['Một quan điểm duy nhất, không phản biện', 'Đưa một nhận định rồi đưa ý kiến trái chiều', 'Kết luận cuối cùng của bản tin', 'Số liệu thống kê chính xác'], correctIndex: 1, explanation: 'Cấu trúc này đưa hai chiều quan điểm: nhận định chính rồi ý kiến phản biện, dùng phổ biến khi bàn kinh tế/công nghệ.' },
 ]);
 
-const c7 = doc('cav401-7-1-arts-culture', 'Chapter 7 — Arts, music &amp; pop culture|||Chương 7 — Nghệ thuật, âm nhạc &amp; văn hoá đại chúng',
+const c7 = doc('cav401-7-1-arts-culture', 'Chapter 7 — Arts, music & pop culture|||Chương 7 — Nghệ thuật, âm nhạc & văn hoá đại chúng',
   'Từ vựng: 流行文化, 歌词, 旋律, 展览, 审美, 网红, 走红, 传统文化. Mẹo nghe: bắt từ lóng/hot trend, phân biệt nói-hát.',
   [[
     `<span class="eyebrow">CAV401 · Chapter 7 · Arts &amp; culture</span>
@@ -575,13 +575,13 @@ xīnshēng, jiāshang xuánlǜ hěn shàngkǒu.
 <div class="callout"><span class="badge">Mẹo nói</span> Luyện giải thích vì sao một thứ 走红了 theo khung nhân-quả: "因为…，所以…走红了" — cách nói tự nhiên khi bàn về trend, bài hát hay người nổi tiếng mạng.</div>`,
   ]]);
 
-const c7q = quiz('cav401-quiz-7', 'Quiz 7 — Arts &amp; pop culture|||Quiz 7 — Nghệ thuật &amp; văn hoá đại chúng', [
+const c7q = quiz('cav401-quiz-7', 'Quiz 7 — Arts & pop culture|||Quiz 7 — Nghệ thuật & văn hoá đại chúng', [
   { id: 'q1', question: '"走红" (zǒuhóng) nghĩa là gì?', options: ['Bị chê bai', 'Trở nên nổi tiếng, viral', 'Ngừng hoạt động', 'Tổ chức triển lãm'], correctIndex: 1, explanation: '走红 = nổi lên, trở nên nổi tiếng/viral, thường dùng cho bài hát, người nổi tiếng mạng.' },
   { id: 'q2', question: 'Vì sao phần 歌词 (lời hát) trong một video ca nhạc thường khó nghe hơn phần phỏng vấn?', options: ['Vì lời hát dùng từ khó hơn nhiều', 'Vì lời hát được hát/kéo dài khác với tốc độ nói chuyện bình thường', 'Vì không có phụ đề', 'Vì ca sĩ luôn nói giọng địa phương'], correctIndex: 1, explanation: '歌词 được hát và kéo dài âm khác với lời nói bình thường trong 旁白/采访, nên khó bắt hơn.' },
   { id: 'q3', question: '"网红" (wǎnghóng) chỉ đối tượng nào?', options: ['Nhà báo truyền hình', 'Người nổi tiếng trên mạng, KOL', 'Ca sĩ truyền thống', 'Nhân vật trong phim tài liệu'], correctIndex: 1, explanation: '网红 = người nổi tiếng nhờ mạng xã hội, tương đương "influencer/KOL".' },
 ]);
 
-const c8 = doc('cav401-8-1-review', 'Chapter 8 — Review: long-form listening, commentary &amp; rebuttal|||Chương 8 — Ôn tập: nghe dài, bình luận &amp; thuyết trình phản biện',
+const c8 = doc('cav401-8-1-review', 'Chapter 8 — Review: long-form listening, commentary & rebuttal|||Chương 8 — Ôn tập: nghe dài, bình luận & thuyết trình phản biện',
   'Tổng ôn 7 chương: kết hợp phim/thời sự/tranh luận/diễn thuyết/tài liệu/kinh tế/văn hoá trong một bài nghe dài; khung thuyết trình phản biện HSK5.',
   [[
     `<span class="eyebrow">CAV401 · Chapter 8 · Review</span>
@@ -658,13 +658,13 @@ export default {
   sections: [
     { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình 高级视听说, nguồn phim/thời sự/TED thật, từ điển, YouTube, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CAV301, nâng HSK4→HSK5, lộ trình 8 chương theo thể loại.', lessons: [intro] },
-    { title: 'Chương 1 — Phim &amp; lời thoại|||Chapter 1 — Movies & dialogue', description: 'Phân tích 台词, 潜台词, 伏笔; giọng điệu và câu rút gọn.', lessons: [c1, c1q] },
-    { title: 'Chương 2 — Thời sự &amp; bản tin|||Chapter 2 — News & reports', description: 'Công thức bản tin CCTV, ghi chú 5W.', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Tranh luận &amp; talk show|||Chapter 3 — Debate & talk show', description: 'Ngắt lời, phản bác, giữ lập trường.', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Diễn thuyết &amp; TED|||Chapter 4 — Speeches & TED', description: 'Khung mở-luận điểm-ví dụ-kết, từ nối chuyển ý.', lessons: [c4, c4q] },
+    { title: 'Chương 1 — Phim & lời thoại|||Chapter 1 — Movies & dialogue', description: 'Phân tích 台词, 潜台词, 伏笔; giọng điệu và câu rút gọn.', lessons: [c1, c1q] },
+    { title: 'Chương 2 — Thời sự & bản tin|||Chapter 2 — News & reports', description: 'Công thức bản tin CCTV, ghi chú 5W.', lessons: [c2, c2q] },
+    { title: 'Chương 3 — Tranh luận & talk show|||Chapter 3 — Debate & talk show', description: 'Ngắt lời, phản bác, giữ lập trường.', lessons: [c3, c3q] },
+    { title: 'Chương 4 — Diễn thuyết & TED|||Chapter 4 — Speeches & TED', description: 'Khung mở-luận điểm-ví dụ-kết, từ nối chuyển ý.', lessons: [c4, c4q] },
     { title: 'Chương 5 — Phim tài liệu|||Chapter 5 — Documentaries', description: 'Nghe旁白 chậm trang trọng, số liệu, ẩn dụ văn hoá.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Kinh tế &amp; công nghệ|||Chapter 6 — Economy & tech', description: 'Số liệu/phần trăm, thuật ngữ chuyên ngành.', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Nghệ thuật &amp; văn hoá|||Chapter 7 — Arts & culture', description: 'Từ lóng, hot trend, phân biệt nói-hát.', lessons: [c7, c7q] },
+    { title: 'Chương 6 — Kinh tế & công nghệ|||Chapter 6 — Economy & tech', description: 'Số liệu/phần trăm, thuật ngữ chuyên ngành.', lessons: [c6, c6q] },
+    { title: 'Chương 7 — Nghệ thuật & văn hoá|||Chapter 7 — Arts & culture', description: 'Từ lóng, hot trend, phân biệt nói-hát.', lessons: [c7, c7q] },
     { title: 'Chương 8 — Ôn tập tổng hợp|||Chapter 8 — Final review', description: 'Nghe dài đa thể loại, khung thuyết trình phản biện.', lessons: [c8, c8q] },
   ],
 };

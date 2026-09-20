@@ -84,7 +84,7 @@ const intro = doc('lsc201c-0-1-overview', 'Course overview: leading community tr
 <p>Cộng đồng &amp; SDGs → vẽ bản đồ tài sản &amp; huy động (ABCD) → lãnh đạo phục vụ &amp; tập thể → bên liên quan &amp; đối thoại → thiết kế dự án (theory of change) → đổi mới xã hội &amp; doanh nghiệp → vận động &amp; huy động → đo lường tác động xã hội &amp; nhân rộng. Song ngữ, có dự án cộng đồng thật và quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('lsc201c-1-1-community-sdg', '1.1 — Community &amp; sustainable development|||1.1 — Cộng đồng &amp; phát triển bền vững',
+const c1 = doc('lsc201c-1-1-community-sdg', '1.1 — Community & sustainable development|||1.1 — Cộng đồng & phát triển bền vững',
   'Cộng đồng (place/interest), phát triển cộng đồng, ba trụ bền vững, SDGs ở cấp cộng đồng (SDG 11 & 17).',
   [[
     `<span class="eyebrow">LSC201c · Chapter 1 · Lesson 1.1</span>
@@ -123,7 +123,7 @@ const c1q = quiz('lsc201c-quiz-1', 'Quiz 1 — Community & sustainability|||Quiz
   { id: 'q3', question: 'Chuyển đổi cộng đồng "bền vững" nghĩa là?|||"Sustainable" community transformation means?', options: ['Xong khi có tiền tài trợ|||It ends when funding ends', 'Tồn tại sau khi nhóm ngoài rút đi|||It lasts after the outside team leaves', 'Chỉ do chính quyền làm|||Only government does it', 'Không cần đo lường|||No measurement needed'], correctIndex: 1, explanation: 'Bền vững = duy trì được nhờ năng lực nội tại của cộng đồng.' },
 ]);
 
-const c2 = doc('lsc201c-2-1-abcd', '2.1 — Asset-based development &amp; mobilization|||2.1 — Phát triển dựa trên tài sản &amp; huy động',
+const c2 = doc('lsc201c-2-1-abcd', '2.1 — Asset-based development & mobilization|||2.1 — Phát triển dựa trên tài sản & huy động',
   'ABCD (Kretzmann & McKnight), needs vs assets, năm loại tài sản, asset mapping, mobilizing sự tham gia.',
   [[
     `<span class="eyebrow">LSC201c · Chapter 2 · Lesson 2.1</span>
@@ -164,7 +164,7 @@ const c2q = quiz('lsc201c-quiz-2', 'Quiz 2 — ABCD & mobilization|||Quiz 2 — 
   { id: 'q3', question: '"Asset mapping" dùng để làm gì?|||What is asset mapping used for?', options: ['Chỉ liệt kê vấn đề|||List problems only', 'Ghi lại nguồn lực đang có để huy động|||Chart existing resources to mobilize', 'Xin ngân sách|||Request budget', 'Đánh giá rủi ro tài chính|||Assess financial risk'], correctIndex: 1, explanation: 'Asset mapping ghi lại tài sản đang có rồi nối chúng quanh mục tiêu chung.' },
 ]);
 
-const c3 = doc('lsc201c-3-1-leadership', '3.1 — Servant leadership &amp; leading change|||3.1 — Lãnh đạo phục vụ &amp; dẫn dắt thay đổi',
+const c3 = doc('lsc201c-3-1-leadership', '3.1 — Servant leadership & leading change|||3.1 — Lãnh đạo phục vụ & dẫn dắt thay đổi',
   'Servant leadership (Greenleaf), collective/shared leadership, facilitation, trao quyền, mô hình thay đổi Kotter/Lewin.',
   [[
     `<span class="eyebrow">LSC201c · Chapter 3 · Lesson 3.1</span>
@@ -203,7 +203,7 @@ const c3q = quiz('lsc201c-quiz-3', 'Quiz 3 — Leadership & change|||Quiz 3 — 
   { id: 'q3', question: 'Trong lãnh đạo cộng đồng, "trao quyền" nghĩa là?|||In community leadership, "empowerment" means?', options: ['Giữ mọi quyết định cho mình|||Keep all decisions yourself', 'Giao quyết định & kỹ năng cho thành viên|||Hand decisions & skills to members', 'Thuê chuyên gia ngoài|||Hire outside experts', 'Bỏ qua ý kiến dân|||Ignore residents'], correctIndex: 1, explanation: 'Trao quyền = chuyển năng lực và quyết định về cho cộng đồng để nó tự chạy.' },
 ]);
 
-const c4 = doc('lsc201c-4-1-stakeholders', '4.1 — Stakeholders &amp; multi-party dialogue|||4.1 — Bên liên quan &amp; đối thoại đa bên',
+const c4 = doc('lsc201c-4-1-stakeholders', '4.1 — Stakeholders & multi-party dialogue|||4.1 — Bên liên quan & đối thoại đa bên',
   'Stakeholder analysis (power/interest grid), participatory approaches, multi-stakeholder dialogue, xử lý xung đột lợi ích.',
   [[
     `<span class="eyebrow">LSC201c · Chapter 4 · Lesson 4.1</span>
@@ -279,7 +279,7 @@ const c5q = quiz('lsc201c-quiz-5', 'Quiz 5 — Project design|||Quiz 5 — Thi�
   { id: 'q3', question: 'Chữ "M" trong mục tiêu SMART là?|||The "M" in SMART goals stands for?', options: ['Motivating|||Motivating', 'Measurable (đo được)|||Measurable', 'Major|||Major', 'Managed|||Managed'], correctIndex: 1, explanation: 'SMART: Specific, Measurable, Achievable, Relevant, Time-bound.' },
 ]);
 
-const c6 = doc('lsc201c-6-1-social-innovation', '6.1 — Social innovation &amp; changemaking|||6.1 — Đổi mới xã hội &amp; khởi nghiệp tạo tác động',
+const c6 = doc('lsc201c-6-1-social-innovation', '6.1 — Social innovation & changemaking|||6.1 — Đổi mới xã hội & khởi nghiệp tạo tác động',
   'Social innovation, social enterprise (double bottom line), changemaking (Ashoka), mô hình kinh doanh vì tác động.',
   [[
     `<span class="eyebrow">LSC201c · Chapter 6 · Lesson 6.1</span>
@@ -308,7 +308,7 @@ const c6q = quiz('lsc201c-quiz-6', 'Quiz 6 — Social innovation|||Quiz 6 — Đ
   { id: 'q3', question: 'Thông điệp cốt lõi của Ashoka về changemaking?|||Ashoka\'s core message about changemaking?', options: ['Chỉ chuyên gia mới đổi được|||Only experts can change things', 'Ai cũng có thể là changemaker|||Everyone can be a changemaker', 'Thay đổi cần nhiều tiền|||Change needs a lot of money', 'Thay đổi là việc của nhà nước|||Change is the state\'s job'], correctIndex: 1, explanation: 'Ashoka: everyone a changemaker — chủ động giải quyết vấn đề vì lợi ích chung.' },
 ]);
 
-const c7 = doc('lsc201c-7-1-advocacy', '7.1 — Advocacy, storytelling &amp; mobilization|||7.1 — Truyền thông vận động &amp; huy động',
+const c7 = doc('lsc201c-7-1-advocacy', '7.1 — Advocacy, storytelling & mobilization|||7.1 — Truyền thông vận động & huy động',
   'Advocacy vs campaign, community storytelling, mobilization, kênh & thông điệp, gây quỹ (crowdfunding/grants).',
   [[
     `<span class="eyebrow">LSC201c · Chapter 7 · Lesson 7.1</span>
@@ -343,7 +343,7 @@ const c7q = quiz('lsc201c-quiz-7', 'Quiz 7 — Advocacy & mobilization|||Quiz 7 
   { id: 'q3', question: 'Vì sao câu chuyện thường huy động tốt hơn số liệu?|||Why do stories often mobilize better than statistics?', options: ['Số liệu luôn sai|||Statistics are always wrong', 'Câu chuyện lay động cảm xúc & thôi thúc hành động|||Stories move emotion & prompt action', 'Số liệu bị cấm|||Statistics are banned', 'Câu chuyện rẻ hơn|||Stories are cheaper'], correctIndex: 1, explanation: 'Số liệu để hiểu, câu chuyện để lay động và kêu gọi hành động.' },
 ]);
 
-const c8 = doc('lsc201c-8-1-impact-measurement', '8.1 — Social impact measurement &amp; scaling|||8.1 — Đo lường tác động xã hội &amp; nhân rộng',
+const c8 = doc('lsc201c-8-1-impact-measurement', '8.1 — Social impact measurement & scaling|||8.1 — Đo lường tác động xã hội & nhân rộng',
   'Output vs outcome vs impact, chỉ số & bằng chứng, SROI, tính bền vững, chiến lược nhân rộng (scale up/out/deep).',
   [[
     `<span class="eyebrow">LSC201c · Chapter 8 · Lesson 8.1</span>

@@ -9,7 +9,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức giai đoạn.', quiz: { timeLimitSeconds: 300, questions } });
 
-const taiLieu = doc('ade301-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('ade301-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: giáo trình & slide (FLM), sách nền tảng, nguồn cảm hứng, công cụ, lộ trình làm đồ án.',
   [[
     `<span class="eyebrow">ADE301 · Materials</span>
@@ -139,7 +139,7 @@ const intro = doc('ade301-0-1-overview', 'Course overview: how this project runs
 <div class="callout"><span class="badge">Quy tắc vàng</span> Mọi quyết định thị giác phải truy ngược về brief. Nếu bạn không nói được <em>vì sao</em> một màu, font hay layout phục vụ mục tiêu truyền thông và đối tượng, thì đó là trang trí — và trang trí không qua nổi buổi bảo vệ đồ án.</div>`,
   ]]);
 
-const s1 = doc('ade301-1-1-brief', 'Stage 1 — Receive &amp; analyse the brief|||Giai đoạn 1 — Nhận &amp; phân tích brief',
+const s1 = doc('ade301-1-1-brief', 'Stage 1 — Receive & analyse the brief|||Giai đoạn 1 — Nhận & phân tích brief',
   'Đọc và mổ brief, xác định vấn đề truyền thông thật, đối tượng mục tiêu, mục tiêu đo được, ràng buộc, tiêu chí thành công.',
   [[
     `<span class="eyebrow">ADE301 · Stage 1</span>
@@ -192,7 +192,7 @@ const s1q = quiz('ade301-quiz-1', 'Quiz 1 — Brief|||Quiz 1 — Phân tích bri
   { id: 'q3', question: 'Vì sao cần tiêu chí thành công (success metric) ngay từ giai đoạn 1?', options: ['Để trang trí brief', 'Để có thước đo đánh giá thiết kế có giải đúng vấn đề không', 'Vì giảng viên bắt buộc', 'Không cần thiết'], correctIndex: 1, explanation: 'Không có tiêu chí thành công thì không thể phán "thiết kế hiệu quả" — chỉ còn cảm tính đẹp/xấu.' },
 ]);
 
-const s2 = doc('ade301-2-1-research', 'Stage 2 — Research &amp; insight|||Giai đoạn 2 — Nghiên cứu &amp; thu thập insight',
+const s2 = doc('ade301-2-1-research', 'Stage 2 — Research & insight|||Giai đoạn 2 — Nghiên cứu & thu thập insight',
   'Nghiên cứu đối tượng &amp; bối cảnh, dựng moodboard, benchmark và phân tích đối thủ để tìm khoảng trống và insight dẫn ý tưởng.',
   [[
     `<span class="eyebrow">ADE301 · Stage 2</span>
@@ -239,7 +239,7 @@ const s2q = quiz('ade301-quiz-2', 'Quiz 2 — Research|||Quiz 2 — Nghiên cứ
   { id: 'q3', question: 'Insight trong nghiên cứu là gì?', options: ['Một tấm ảnh đẹp', 'Mệnh đề đúng, hữu ích, không hiển nhiên — cầu nối từ nghiên cứu sang ý tưởng', 'Danh sách màu', 'Số liệu khảo sát thô'], correctIndex: 1, explanation: 'Insight cô đọng quan sát thành một phát hiện dẫn hướng cho big idea; nó không phải dữ liệu thô hay ảnh.' },
 ]);
 
-const s3 = doc('ade301-3-1-strategy', 'Stage 3 — Creative strategy &amp; big idea|||Giai đoạn 3 — Chiến lược sáng tạo &amp; big idea',
+const s3 = doc('ade301-3-1-strategy', 'Stage 3 — Creative strategy & big idea|||Giai đoạn 3 — Chiến lược sáng tạo & big idea',
   'Từ insight ra chiến lược sáng tạo: concept/big idea, thông điệp cốt lõi, giọng điệu (tone of voice) và định hướng thị giác.',
   [[
     `<span class="eyebrow">ADE301 · Stage 3</span>
@@ -288,7 +288,7 @@ const s3q = quiz('ade301-quiz-3', 'Quiz 3 — Strategy|||Quiz 3 — Chiến lư�
   { id: 'q3', question: 'Vì sao phải chốt concept statement TRƯỚC khi vào thiết kế?', options: ['Để nộp cho đủ bài', 'Vì nó là "hợp đồng" mà mọi quyết định thiết kế sau phải trả lời', 'Không cần, cứ thiết kế trước', 'Để chọn phần mềm'], correctIndex: 1, explanation: 'Concept chốt sớm giúp mọi lựa chọn màu/chữ/layout có neo; thiết kế trước rồi gán concept sau dễ rời rạc.' },
 ]);
 
-const s4 = doc('ade301-4-1-ideation', 'Stage 4 — Ideation &amp; development|||Giai đoạn 4 — Phác thảo &amp; phát triển ý tưởng',
+const s4 = doc('ade301-4-1-ideation', 'Stage 4 — Ideation & development|||Giai đoạn 4 — Phác thảo & phát triển ý tưởng',
   'Bung ý tưởng bằng sketch/thumbnail, tạo nhiều phương án khác nhau, rồi sàng lọc theo concept để chọn 2-3 hướng phát triển.',
   [[
     `<span class="eyebrow">ADE301 · Stage 4</span>
@@ -337,7 +337,7 @@ const s4q = quiz('ade301-quiz-4', 'Quiz 4 — Ideation|||Quiz 4 — Phác thảo
   { id: 'q3', question: 'Nên làm gì với các phương án bị loại?', options: ['Xoá ngay cho gọn', 'Giữ lại để thể hiện quy trình tư duy trong case study', 'Nộp hết cho khách', 'Không quan trọng'], correctIndex: 1, explanation: 'Phương án bị loại là bằng chứng của quá trình cân nhắc — rất giá trị khi trình bày và làm portfolio.' },
 ]);
 
-const s5 = doc('ade301-5-1-system', 'Stage 5 — Design &amp; identity system|||Giai đoạn 5 — Thiết kế &amp; hệ thống nhận diện',
+const s5 = doc('ade301-5-1-system', 'Stage 5 — Design & identity system|||Giai đoạn 5 — Thiết kế & hệ thống nhận diện',
   'Xây hệ thống thị giác nhất quán: typography, bảng màu, layout &amp; lưới (grid), và các phần tử nhận diện lặp lại.',
   [[
     `<span class="eyebrow">ADE301 · Stage 5</span>
@@ -437,7 +437,7 @@ const s6q = quiz('ade301-quiz-6', 'Quiz 6 — Production|||Quiz 6 — Triển kh
   { id: 'q3', question: 'Vì sao phải chuẩn bị file "sẵn sàng sản xuất" (đúng kích thước, hệ màu, export)?', options: ['Không quan trọng', 'Vì bản in/export sai (mờ, sai màu) làm hỏng cả chất lượng cảm nhận và buổi bảo vệ', 'Chỉ để làm màu', 'Vì phần mềm bắt buộc'], correctIndex: 1, explanation: 'Chi tiết kỹ thuật (bleed, CMYK, độ phân giải, tỉ lệ) quyết định sản phẩm cuối trông chuyên nghiệp hay lỗi.' },
 ]);
 
-const s7 = doc('ade301-7-1-critique', 'Stage 7 — Critique, revise &amp; test|||Giai đoạn 7 — Phản biện, chỉnh sửa &amp; kiểm thử',
+const s7 = doc('ade301-7-1-critique', 'Stage 7 — Critique, revise & test|||Giai đoạn 7 — Phản biện, chỉnh sửa & kiểm thử',
   'Nhận phản biện có cấu trúc, lặp chỉnh sửa, và kiểm thử với chính đối tượng mục tiêu để xác nhận thông điệp truyền đạt đúng.',
   [[
     `<span class="eyebrow">ADE301 · Stage 7</span>
@@ -484,7 +484,7 @@ const s7q = quiz('ade301-quiz-7', 'Quiz 7 — Critique & test|||Quiz 7 — Phả
   { id: 'q3', question: 'Cách phân biệt phản hồi đáng theo và ý kiến nhiễu là gì?', options: ['Nghe người nói to nhất', 'Phản ứng LẶP LẠI ở nhiều người là dữ liệu; một ý kiến đơn lẻ thì chưa', 'Chỉ nghe giảng viên', 'Bỏ hết mọi phản hồi'], correctIndex: 1, explanation: 'Mẫu lặp lại (pattern) đáng tin hơn một tiếng nói lớn đơn lẻ; đó là cách tách tín hiệu khỏi nhiễu.' },
 ]);
 
-const s8 = doc('ade301-8-1-present', 'Stage 8 — Present, defend &amp; portfolio|||Giai đoạn 8 — Trình bày, bảo vệ đồ án &amp; portfolio',
+const s8 = doc('ade301-8-1-present', 'Stage 8 — Present, defend & portfolio|||Giai đoạn 8 — Trình bày, bảo vệ đồ án & portfolio',
   'Kể câu chuyện đồ án từ vấn đề tới giải pháp, bảo vệ quyết định trước hội đồng, và dựng case study portfolio (Behance).',
   [[
     `<span class="eyebrow">ADE301 · Stage 8</span>

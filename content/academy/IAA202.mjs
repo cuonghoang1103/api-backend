@@ -101,7 +101,7 @@ const intro = doc('iaa202-0-1-overview', 'Course overview: risk management in in
 <div class="callout"><span class="badge">Vì sao quan trọng</span> Ngân sách an ninh có hạn. Quản trị rủi ro là cách tiêu tiền vào nơi cắt được nhiều tổn thất kỳ vọng nhất, chứ không phải nơi trông đáng sợ nhất.</div>`,
   ]]);
 
-const c1 = doc('iaa202-1-1-risk-basics', '1.1 — Risk &amp; risk management|||1.1 — Rủi ro &amp; quản trị rủi ro',
+const c1 = doc('iaa202-1-1-risk-basics', '1.1 — Risk & risk management|||1.1 — Rủi ro & quản trị rủi ro',
   'Khái niệm risk/threat/vulnerability/asset và quan hệ giữa chúng; risk = likelihood × impact; vì sao tổ chức cần quản trị rủi ro.',
   [[
     `<span class="eyebrow">IAA202 · Chapter 1 · Lesson 1.1</span>
@@ -191,7 +191,7 @@ const c2q = quiz('iaa202-quiz-2', 'Quiz 2 — Frameworks|||Quiz 2 — Khung', [
   { id: 'q3', question: 'Điểm chung của mọi khung quản trị rủi ro là vòng?', options: ['Mua → cài → quên', 'Bối cảnh → đánh giá → xử lý → giám sát', 'Chỉ đánh giá một lần', 'Sao lưu → khôi phục'], correctIndex: 1, explanation: 'Tất cả đều lặp: lập bối cảnh, đánh giá, xử lý, rồi giám sát liên tục.' },
 ]);
 
-const c3 = doc('iaa202-3-1-asset-valuation', '3.1 — Asset identification &amp; valuation|||3.1 — Nhận diện tài sản &amp; định giá',
+const c3 = doc('iaa202-3-1-asset-valuation', '3.1 — Asset identification & valuation|||3.1 — Nhận diện tài sản & định giá',
   'Kiểm kê và phân loại tài sản; định giá theo CIA (bí mật/toàn vẹn/sẵn sàng); asset owner; xác định giá trị cho việc tính rủi ro.',
   [[
     `<span class="eyebrow">IAA202 · Chapter 3 · Lesson 3.1</span>
@@ -248,7 +248,7 @@ const c3q = quiz('iaa202-quiz-3', 'Quiz 3 — Assets & CIA|||Quiz 3 — Tài s�
   { id: 'q3', question: 'Việc gán "owner" cho tài sản nhằm?', options: ['Tăng lỗ hổng', 'Chịu trách nhiệm bảo vệ & phân loại nó', 'Xoá tài sản', 'Che giấu tài sản'], correctIndex: 1, explanation: 'Chủ sở hữu chịu trách nhiệm phân loại và bảo vệ tài sản.' },
 ]);
 
-const c4 = doc('iaa202-4-1-threat-vuln', '4.1 — Threat &amp; vulnerability assessment|||4.1 — Đánh giá mối đe doạ &amp; lỗ hổng',
+const c4 = doc('iaa202-4-1-threat-vuln', '4.1 — Threat & vulnerability assessment|||4.1 — Đánh giá mối đe doạ & lỗ hổng',
   'Nguồn đe doạ (con người/tự nhiên/kỹ thuật), threat modeling (STRIDE), đánh giá lỗ hổng (quét/pentest), CVE/CVSS.',
   [[
     `<span class="eyebrow">IAA202 · Chapter 4 · Lesson 4.1</span>
@@ -299,7 +299,7 @@ const c4q = quiz('iaa202-quiz-4', 'Quiz 4 — Threats & vulnerabilities|||Quiz 4
   { id: 'q3', question: 'Kỹ thuật mô phỏng tấn công thật để tìm lỗ hổng gọi là?', options: ['Kiểm thử xâm nhập (pentest)', 'Sao lưu', 'Kiểm toán tài chính', 'Định giá CIA'], correctIndex: 0, explanation: 'Pentest mô phỏng kẻ tấn công; quét lỗ hổng thì tự động và rộng hơn.' },
 ]);
 
-const c5 = doc('iaa202-5-1-risk-analysis', '5.1 — Risk analysis: qualitative &amp; quantitative|||5.1 — Phân tích rủi ro: định tính &amp; định lượng',
+const c5 = doc('iaa202-5-1-risk-analysis', '5.1 — Risk analysis: qualitative & quantitative|||5.1 — Phân tích rủi ro: định tính & định lượng',
   'Định tính (ma trận likelihood×impact) vs định lượng; công thức SLE = AV × EF, ALE = SLE × ARO; xếp hạng và ưu tiên rủi ro.',
   [[
     `<span class="eyebrow">IAA202 · Chapter 5 · Lesson 5.1</span>
@@ -354,7 +354,7 @@ const c5q = quiz('iaa202-quiz-5', 'Quiz 5 — Risk analysis|||Quiz 5 — Phân t
   { id: 'q3', question: 'Phân tích ĐỊNH TÍNH khác định lượng ở chỗ?', options: ['Luôn chính xác tới USD', 'Dùng thang Thấp/Vừa/Cao & ma trận, mang tính chủ quan', 'Không cần likelihood', 'Chỉ dùng cho phần cứng'], correctIndex: 1, explanation: 'Định tính xếp hạng bằng ma trận likelihood×impact; định lượng gắn số tiền (SLE/ALE).' },
 ]);
 
-const c6 = doc('iaa202-6-1-risk-treatment', '6.1 — Risk treatment &amp; controls|||6.1 — Xử lý rủi ro &amp; kiểm soát',
+const c6 = doc('iaa202-6-1-risk-treatment', '6.1 — Risk treatment & controls|||6.1 — Xử lý rủi ro & kiểm soát',
   'Bốn lựa chọn: chấp nhận/giảm/chuyển/tránh; risk appetite & residual risk; phân loại kiểm soát (phòng ngừa/phát hiện/khắc phục; hành chính/kỹ thuật/vật lý).',
   [[
     `<span class="eyebrow">IAA202 · Chapter 6 · Lesson 6.1</span>
@@ -401,7 +401,7 @@ const c6q = quiz('iaa202-quiz-6', 'Quiz 6 — Risk treatment|||Quiz 6 — Xử l
   { id: 'q3', question: 'Sao lưu để khôi phục sau sự cố là loại kiểm soát?', options: ['Phòng ngừa', 'Khắc phục (corrective)', 'Phát hiện', 'Hành chính'], correctIndex: 1, explanation: 'Khắc phục: phục hồi sau khi sự cố đã xảy ra (IDS là phát hiện, tường lửa là phòng ngừa).' },
 ]);
 
-const c7 = doc('iaa202-7-1-monitoring-compliance', '7.1 — Monitoring &amp; compliance|||7.1 — Giám sát &amp; tuân thủ',
+const c7 = doc('iaa202-7-1-monitoring-compliance', '7.1 — Monitoring & compliance|||7.1 — Giám sát & tuân thủ',
   'Giám sát liên tục, KRI/KPI, kiểm toán nội bộ & độc lập, tuân thủ (ISO 27001, GDPR) và khung pháp lý VN (Luật An ninh mạng, ATTT mạng).',
   [[
     `<span class="eyebrow">IAA202 · Chapter 7 · Lesson 7.1</span>
@@ -444,7 +444,7 @@ const c7q = quiz('iaa202-quiz-7', 'Quiz 7 — Monitoring & compliance|||Quiz 7 �
   { id: 'q3', question: 'Ở Việt Nam, văn bản pháp lý cốt lõi về an ninh mạng là?', options: ['GDPR', 'Luật An ninh mạng 2018 & Luật ATTT mạng 2015', 'HIPAA', 'PCI-DSS'], correctIndex: 1, explanation: 'Luật An ninh mạng 2018 và Luật An toàn thông tin mạng 2015 là khung pháp lý VN.' },
 ]);
 
-const c8 = doc('iaa202-8-1-incident-bcp', '8.1 — Incident response &amp; business continuity|||8.1 — Ứng phó sự cố &amp; liên tục kinh doanh',
+const c8 = doc('iaa202-8-1-incident-bcp', '8.1 — Incident response & business continuity|||8.1 — Ứng phó sự cố & liên tục kinh doanh',
   'Vòng ứng phó sự cố (NIST SP 800-61), BCP/DRP, RTO/RPO, lessons learned và cải tiến liên tục sau sự cố.',
   [[
     `<span class="eyebrow">IAA202 · Chapter 8 · Lesson 8.1</span>

@@ -10,7 +10,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức giai đoạn.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('isp392-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('isp392-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: giáo trình & slide (FLM), sách kinh điển (Sommerville), Scrum Guide, tài liệu Git & CI/CD, công cụ, quy trình nộp đồ án.',
   [[
     `<span class="eyebrow">ISP392 · Materials</span>
@@ -122,7 +122,7 @@ const intro = doc('isp392-0-1-overview', 'Course overview: a real software proje
 <div class="callout"><span class="badge">Tư duy cốt lõi</span> Điểm thưởng cho <strong>quy trình, không chỉ bản demo</strong>. Một demo bóng bẩy 5 phút mà không có yêu cầu, không test và chỉ một người commit sẽ điểm thấp hơn nhiều so với một app vừa phải nhưng có SRS rõ, sprint thật, có test và lịch sử Git chia đều.</div>`,
   ]]);
 
-const s1 = doc('isp392-1-1-requirements', 'Stage 1 — Idea, survey &amp; requirements analysis (SRS)|||Giai đoạn 1 — Ý tưởng, khảo sát &amp; phân tích yêu cầu (SRS)',
+const s1 = doc('isp392-1-1-requirements', 'Stage 1 — Idea, survey & requirements analysis (SRS)|||Giai đoạn 1 — Ý tưởng, khảo sát & phân tích yêu cầu (SRS)',
   'Chọn ý tưởng khả thi, khảo sát người dùng/đối thủ, gom yêu cầu; phân biệt yêu cầu chức năng và phi chức năng; viết use case và user story; đóng gói thành SRS.',
   [[
     `<span class="eyebrow">ISP392 · Stage 1 · Requirements</span>
@@ -182,13 +182,13 @@ Tiêu chí chấp nhận:
 </code></pre>
 <div class="callout"><span class="badge">Kinh nghiệm</span> Một yêu cầu không <strong>kiểm thử được</strong> thì chưa xong. "App nên nhanh" là mong ước; "tìm kiếm trả về dưới 2 giây với 10.000 bản ghi" mới là yêu cầu.</div>`,
   ]]);
-const s1q = quiz('isp392-quiz-1', 'Quiz 1 — Requirements &amp; SRS|||Quiz 1 — Yêu cầu &amp; SRS', [
+const s1q = quiz('isp392-quiz-1', 'Quiz 1 — Requirements & SRS|||Quiz 1 — Yêu cầu & SRS', [
   { id: 'q1', question: 'Yêu cầu nào là PHI CHỨC NĂNG (non-functional)?', options: ['Người dùng đăng nhập được', 'Trang phải tải dưới 2 giây', 'Admin xoá được bài viết', 'Khách đặt được đơn hàng'], correctIndex: 1, explanation: 'Yêu cầu phi chức năng nói hệ thống làm TỐT đến đâu (hiệu năng, bảo mật...), còn "đăng nhập/đặt đơn/xoá" là chức năng — hệ thống LÀM gì.' },
   { id: 'q2', question: 'Đúng cấu trúc một user story?', options: ['Nếu... thì... nếu không...', 'Là [vai trò], tôi muốn [mục tiêu] để [lợi ích]', 'Cho... với... trả về...', 'Bảng dữ liệu gồm các cột...'], correctIndex: 1, explanation: 'User story chuẩn theo mẫu "Là [vai trò], tôi muốn [mục tiêu] để [lợi ích]", giúp gắn tính năng với người dùng và giá trị.' },
   { id: 'q3', question: 'Tài liệu SRS đóng vai trò gì trong đồ án?', options: ['Bản vẽ giao diện chi tiết từng pixel', 'Nguồn sự thật duy nhất về những gì hệ thống phải làm', 'Nhật ký commit Git', 'Kịch bản thuyết trình bảo vệ'], correctIndex: 1, explanation: 'SRS (Software Requirements Specification) là nguồn sự thật duy nhất về yêu cầu; mọi thiết kế, code và test đều đối chiếu lại nó.' },
 ]);
 
-const s2 = doc('isp392-2-1-planning-stack', 'Stage 2 — Project planning &amp; choosing the tech stack|||Giai đoạn 2 — Lập kế hoạch dự án &amp; chọn công nghệ',
+const s2 = doc('isp392-2-1-planning-stack', 'Stage 2 — Project planning & choosing the tech stack|||Giai đoạn 2 — Lập kế hoạch dự án & chọn công nghệ',
   'Chia backlog thành sprint (Scrum), phân vai nhóm, ước lượng công việc, lập timeline; chọn công nghệ (frontend/backend/database) theo yêu cầu, không theo mốt; dựng kho Git và quy trình nhánh.',
   [[
     `<span class="eyebrow">ISP392 · Stage 2 · Planning</span>
@@ -244,7 +244,7 @@ const s2 = doc('isp392-2-1-planning-stack', 'Stage 2 — Project planning &amp; 
 </code></pre>
 <div class="callout"><span class="badge">Nhánh Git</span> Thống nhất quy trình sớm: <code>main</code> luôn deploy được; mỗi tính năng một nhánh (<code>feature/login</code>), gộp qua Pull Request sau khi review. Đừng commit thẳng vào <code>main</code>.</div>`,
   ]]);
-const s2q = quiz('isp392-quiz-2', 'Quiz 2 — Planning &amp; stack|||Quiz 2 — Kế hoạch &amp; công nghệ', [
+const s2q = quiz('isp392-quiz-2', 'Quiz 2 — Planning & stack|||Quiz 2 — Kế hoạch & công nghệ', [
   { id: 'q1', question: 'Trong Scrum, "sprint" là gì?', options: ['Buổi thuyết trình cuối kỳ', 'Một chu kỳ phát triển ngắn (thường 1–2 tuần) cho ra phần chạy được', 'Tên một công cụ vẽ ERD', 'Lệnh gộp nhánh Git'], correctIndex: 1, explanation: 'Sprint là chu kỳ ngắn cố định (thường 1–2 tuần); mỗi sprint giao một phần tăng trưởng (increment) chạy được của sản phẩm.' },
   { id: 'q2', question: 'Tiêu chí ĐÚNG nhất khi chọn công nghệ cho đồ án nhóm?', options: ['Chọn công nghệ mới nhất, thời thượng nhất', 'Chọn theo yêu cầu dự án và kỹ năng sẵn có của nhóm', 'Chọn cái nào nặng nhất để gây ấn tượng', 'Mỗi người chọn một stack khác nhau'], correctIndex: 1, explanation: 'Nên chọn stack hợp yêu cầu và kỹ năng nhóm, nhiều tài liệu; chạy theo mốt dễ tốn cả kỳ để vật lộn.' },
   { id: 'q3', question: 'Thực hành Git nào phù hợp cho nhóm?', options: ['Ai cũng commit thẳng vào main', 'Mỗi tính năng một nhánh, gộp vào main qua Pull Request sau review', 'Chỉ một người được dùng Git', 'Không dùng nhánh, gửi code qua email'], correctIndex: 1, explanation: 'Giữ main luôn deploy được; làm mỗi tính năng trên nhánh riêng và gộp qua Pull Request có review giúp tránh xung đột và giữ chất lượng.' },
@@ -310,7 +310,7 @@ const s3q = quiz('isp392-quiz-3', 'Quiz 3 — System design|||Quiz 3 — Thiết
   { id: 'q3', question: 'Chuẩn hoá (normalization) CSDL nhằm mục đích chính gì?', options: ['Tăng tốc độ mạng', 'Loại bỏ dữ liệu trùng lặp và giữ tính nhất quán', 'Làm giao diện đẹp hơn', 'Giảm số dòng code frontend'], correctIndex: 1, explanation: 'Chuẩn hoá tách dữ liệu thành các bảng hợp lý để loại trùng lặp và tránh bất thường khi thêm/sửa/xoá, giữ dữ liệu nhất quán.' },
 ]);
 
-const s4 = doc('isp392-4-1-uiux-api', 'Stage 4 — UI/UX design &amp; the API contract|||Giai đoạn 4 — Thiết kế UI/UX &amp; API',
+const s4 = doc('isp392-4-1-uiux-api', 'Stage 4 — UI/UX design & the API contract|||Giai đoạn 4 — Thiết kế UI/UX & API',
   'Thiết kế trải nghiệm: wireframe → mockup → prototype (Figma); nguyên tắc UX (nhất quán, phản hồi, phòng lỗi); thống nhất hợp đồng API RESTful (endpoint, method, request/response) giữa frontend và backend trước khi code.',
   [[
     `<span class="eyebrow">ISP392 · Stage 4 · UI/UX &amp; API</span>
@@ -372,13 +372,13 @@ Phản hồi 201:
 </code></pre>
 <div class="callout"><span class="badge">Vì sao chốt hợp đồng trước</span> Có hợp đồng cố định, frontend dùng dữ liệu giả còn backend test bằng Postman — không bên nào phải chờ bên kia. Chỉ đổi hợp đồng khi cả hai đồng ý.</div>`,
   ]]);
-const s4q = quiz('isp392-quiz-4', 'Quiz 4 — UI/UX &amp; API|||Quiz 4 — UI/UX &amp; API', [
+const s4q = quiz('isp392-quiz-4', 'Quiz 4 — UI/UX & API|||Quiz 4 — UI/UX & API', [
   { id: 'q1', question: 'Thứ tự đúng khi thiết kế giao diện?', options: ['Prototype → mockup → wireframe', 'Wireframe → mockup → prototype', 'Mockup → wireframe → prototype', 'Code trước, thiết kế sau'], correctIndex: 1, explanation: 'Đi từ thô đến tinh: wireframe (khung) → mockup (chi tiết màu/font) → prototype (bấm được) để thử trước khi code.' },
   { id: 'q2', question: 'Trong REST, muốn TẠO một đơn đặt mới thường dùng method nào?', options: ['GET', 'POST', 'DELETE', 'HEAD'], correctIndex: 1, explanation: 'POST dùng để tạo tài nguyên mới; GET để đọc, PUT/PATCH để cập nhật, DELETE để xoá.' },
   { id: 'q3', question: 'Vì sao nên chốt "hợp đồng API" trước khi code?', options: ['Để frontend và backend xây song song mà không chờ nhau', 'Để không phải viết test', 'Để bỏ qua bước thiết kế CSDL', 'Vì rubric bắt buộc dùng GraphQL'], correctIndex: 0, explanation: 'Hợp đồng API cố định cho phép frontend dùng dữ liệu giả và backend test bằng Postman độc lập, nên hai bên làm song song, giảm phụ thuộc.' },
 ]);
 
-const s5 = doc('isp392-5-1-backend-database', 'Stage 5 — Building the backend &amp; database|||Giai đoạn 5 — Triển khai backend &amp; database',
+const s5 = doc('isp392-5-1-backend-database', 'Stage 5 — Building the backend & database|||Giai đoạn 5 — Triển khai backend & database',
   'Dựng CSDL từ ERD (migration); xây API theo lớp (route → service → repository); xác thực/uỷ quyền (hash mật khẩu, JWT); kiểm tra dữ liệu đầu vào; thử endpoint bằng Postman.',
   [[
     `<span class="eyebrow">ISP392 · Stage 5 · Backend</span>
@@ -436,13 +436,13 @@ const s5 = doc('isp392-5-1-backend-database', 'Stage 5 — Building the backend 
 </code></pre>
 <div class="callout"><span class="badge">Vừa xây vừa test</span> Dùng <strong>Postman</strong> (hoặc curl) gọi từng endpoint ngay khi viết xong — đừng chờ frontend. Route trả 404 là chưa mount; 401 là cần xác thực; 200/201 là chạy được.</div>`,
   ]]);
-const s5q = quiz('isp392-quiz-5', 'Quiz 5 — Backend &amp; database|||Quiz 5 — Backend &amp; database', [
+const s5q = quiz('isp392-quiz-5', 'Quiz 5 — Backend & database|||Quiz 5 — Backend & database', [
   { id: 'q1', question: 'Cách lưu mật khẩu người dùng đúng đắn là?', options: ['Lưu dạng văn bản thô cho dễ đối chiếu', 'Băm (hash) bằng bcrypt/argon2 rồi lưu bản băm', 'Lưu trong mã nguồn frontend', 'Gửi qua email để dự phòng'], correctIndex: 1, explanation: 'Không bao giờ lưu mật khẩu thô. Băm một chiều bằng bcrypt/argon2; khi đăng nhập thì so bản băm, kể cả admin cũng không đọc được mật khẩu gốc.' },
   { id: 'q2', question: 'Sự khác nhau giữa authentication và authorization?', options: ['Chúng là một', 'Authentication = kiểm tra danh tính; authorization = kiểm tra quyền', 'Authentication = kiểm tra quyền; authorization = mã hoá', 'Cả hai chỉ dùng cho admin'], correctIndex: 1, explanation: 'Authentication trả lời "bạn là ai" (đăng nhập); authorization trả lời "bạn được làm gì" (kiểm tra vai trò/quyền).' },
   { id: 'q3', question: 'Gọi một endpoint mới bằng Postman trả về HTTP 404 nghĩa là?', options: ['Route chạy tốt', 'Route cần xác thực', 'Route chưa được mount / chưa tồn tại', 'Dữ liệu đầu vào sai'], correctIndex: 2, explanation: '404 = không tìm thấy route (chưa mount / sai đường dẫn). 401 nghĩa là cần xác thực; 200/201 nghĩa là chạy được.' },
 ]);
 
-const s6 = doc('isp392-6-1-frontend-integration', 'Stage 6 — Building the frontend &amp; integration|||Giai đoạn 6 — Triển khai frontend &amp; tích hợp',
+const s6 = doc('isp392-6-1-frontend-integration', 'Stage 6 — Building the frontend & integration|||Giai đoạn 6 — Triển khai frontend & tích hợp',
   'Dựng giao diện theo mockup bằng component tái dùng; quản lý trạng thái; gọi API thật thay dữ liệu giả; xử lý ba trạng thái loading/success/error; tích hợp end-to-end và xử lý lỗi tích hợp thường gặp (CORS, sai kiểu dữ liệu).',
   [[
     `<span class="eyebrow">ISP392 · Stage 6 · Frontend</span>
@@ -498,13 +498,13 @@ const bookings = await res.json();
 </ul>
 <div class="callout"><span class="badge">Hợp đồng là vua</span> Khi frontend và backend bất đồng, kiểm <strong>hợp đồng API</strong> trước: tên trường gì, kiểu gì, mã trạng thái gì? Đa số lỗi tích hợp là một bên trôi khỏi hình dạng đã thống nhất.</div>`,
   ]]);
-const s6q = quiz('isp392-quiz-6', 'Quiz 6 — Frontend &amp; integration|||Quiz 6 — Frontend &amp; tích hợp', [
+const s6q = quiz('isp392-quiz-6', 'Quiz 6 — Frontend & integration|||Quiz 6 — Frontend & tích hợp', [
   { id: 'q1', question: 'Khi gọi API để lấy dữ liệu, frontend nên xử lý những trạng thái nào?', options: ['Chỉ trạng thái thành công', 'loading, success và error', 'Chỉ loading', 'Không cần xử lý gì'], correctIndex: 1, explanation: 'Mỗi lời gọi API có ba trạng thái cần xử lý: đang tải (loading), thành công (success) và lỗi (error) — bỏ sót error khiến app "đứng hình" khi mạng lỗi.' },
   { id: 'q2', question: 'Mọi lời gọi API sau đăng nhập đều trả HTTP 401. Nguyên nhân thường gặp?', options: ['Backend chưa chạy', 'Frontend quên gắn token xác thực vào request', 'CSDL đầy', 'Dùng sai màu nút bấm'], correctIndex: 1, explanation: '401 = chưa xác thực. Nguyên nhân phổ biến là frontend quên đính token (vd header Authorization: Bearer ...) vào request.' },
   { id: 'q3', question: 'Frontend mong có trường "customerName" nhưng backend trả về "userName". Đây là lỗi gì?', options: ['Lỗi CORS', 'Lệch hình dạng dữ liệu — hai bên trôi khỏi hợp đồng API', 'Lỗi cú pháp SQL', 'Lỗi phần cứng'], correctIndex: 1, explanation: 'Đây là lệch hình dạng (shape mismatch) do một bên không theo đúng hợp đồng API đã thống nhất; sửa bằng cách đối chiếu lại tên trường/kiểu trong hợp đồng.' },
 ]);
 
-const s7 = doc('isp392-7-1-testing', 'Stage 7 — Testing (unit/integration/UAT) &amp; bug-fixing|||Giai đoạn 7 — Kiểm thử (unit/integration/UAT) &amp; sửa lỗi',
+const s7 = doc('isp392-7-1-testing', 'Stage 7 — Testing (unit/integration/UAT) & bug-fixing|||Giai đoạn 7 — Kiểm thử (unit/integration/UAT) & sửa lỗi',
   'Các cấp kiểm thử (unit → integration → system → UAT); viết test case từ yêu cầu (input, bước, kết quả mong đợi); phân biệt kiểm thử thủ công và tự động; quy trình theo dõi và sửa lỗi.',
   [[
     `<span class="eyebrow">ISP392 · Stage 7 · Testing</span>
@@ -570,7 +570,7 @@ const s7q = quiz('isp392-quiz-7', 'Quiz 7 — Testing|||Quiz 7 — Kiểm thử'
   { id: 'q3', question: 'Sau khi sửa một lỗi, vì sao cần chạy lại cả các ca kiểm thử liên quan?', options: ['Để tốn thời gian cho đủ quy trình', 'Để phát hiện lỗi hồi quy — bản sửa vô tình làm hỏng phần khác', 'Vì rubric cấm sửa lỗi', 'Không cần, sửa xong là xong'], correctIndex: 1, explanation: 'Một bản sửa có thể vô tình làm hỏng chức năng khác (lỗi hồi quy); chạy lại ca lỗi và các ca liên quan giúp phát hiện sớm.' },
 ]);
 
-const s8 = doc('isp392-8-1-deploy-report-defense', 'Stage 8 — Deployment, documentation, report &amp; defense|||Giai đoạn 8 — Triển khai (deploy), tài liệu, báo cáo &amp; bảo vệ',
+const s8 = doc('isp392-8-1-deploy-report-defense', 'Stage 8 — Deployment, documentation, report & defense|||Giai đoạn 8 — Triển khai (deploy), tài liệu, báo cáo & bảo vệ',
   'Đưa app lên server/cloud (build → cấu hình env → chạy); CI/CD tự động hoá build và deploy; viết README/hướng dẫn cài; hoàn thiện báo cáo cuối; chuẩn bị và thực hiện buổi bảo vệ trước hội đồng.',
   [[
     `<span class="eyebrow">ISP392 · Stage 8 · Deploy &amp; defense</span>
@@ -614,7 +614,7 @@ const s8 = doc('isp392-8-1-deploy-report-defense', 'Stage 8 — Deployment, docu
 <p>Báo cáo gói mọi thứ lại: bài toán, yêu cầu (SRS), thiết kế (ERD/UML), triển khai, kết quả kiểm thử, và đóng góp của từng thành viên. Ở buổi <strong>bảo vệ</strong>, bạn demo app chạy thật và trả lời câu hỏi của hội đồng.</p>
 <div class="callout"><span class="badge">Mẹo bảo vệ</span> Demo app <strong>đã deploy</strong>, không phải localhost. Sẵn sàng giải thích code và quyết định <em>của chính bạn</em> — hội đồng hỏi từng thành viên riêng. Có sẵn video dự phòng phòng khi mạng lỗi.</div>`,
   ]]);
-const s8q = quiz('isp392-quiz-8', 'Quiz 8 — Deploy, report &amp; defense|||Quiz 8 — Deploy, báo cáo &amp; bảo vệ', [
+const s8q = quiz('isp392-quiz-8', 'Quiz 8 — Deploy, report & defense|||Quiz 8 — Deploy, báo cáo & bảo vệ', [
   { id: 'q1', question: 'CI/CD (vd GitHub Actions) giúp gì cho đồ án?', options: ['Vẽ ERD tự động', 'Tự động chạy test, build và triển khai khi có commit/push', 'Thay thế hoàn toàn việc viết code', 'Tăng dung lượng ổ cứng server'], correctIndex: 1, explanation: 'CI/CD tự động hoá kiểm thử, build và deploy; pipeline xanh cho ta bằng chứng và sự yên tâm trước khi phát hành.' },
   { id: 'q2', question: 'Tài liệu README trong dự án chủ yếu để làm gì?', options: ['Ghi điểm từng thành viên', 'Hướng dẫn cách cài đặt và chạy dự án (setup, env, lệnh)', 'Thay cho toàn bộ báo cáo cuối', 'Lưu mật khẩu người dùng'], correctIndex: 1, explanation: 'README hướng dẫn người khác cài và chạy dự án ở máy cục bộ — cấu hình môi trường, lệnh khởi động, phụ thuộc.' },
   { id: 'q3', question: 'Lời khuyên nào đúng cho buổi bảo vệ đồ án?', options: ['Chỉ cần demo trên localhost là đủ', 'Demo bản đã deploy và sẵn sàng giải thích code, quyết định của chính mình', 'Để một người nói hết, người khác im lặng', 'Không cần chuẩn bị video dự phòng'], correctIndex: 1, explanation: 'Nên demo app đã triển khai (không phải localhost), mỗi thành viên chuẩn bị giải thích phần việc và quyết định của mình, và có video dự phòng phòng khi mạng lỗi.' },

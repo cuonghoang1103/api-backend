@@ -215,7 +215,7 @@ const c3q = quiz('kms301-quiz-3', 'Quiz 3 — Knowledge life cycle|||Quiz 3 — 
   { id: 'q3', question: 'Vì sao vòng đời tri thức được gọi là "vòng"?|||Why is the knowledge life cycle called a "cycle"?', options: ['Vì nó chỉ chạy một lần|||Because it runs only once', 'Vì áp dụng bộc lộ chỗ thiếu, kích hoạt thu nhận mới|||Because applying reveals gaps that trigger new capture', 'Vì dữ liệu bị xoá định kỳ|||Because data is deleted periodically', 'Vì nó không có điểm bắt đầu|||Because it has no start'], correctIndex: 1, explanation: 'Phản hồi từ áp dụng khép vòng và bắt đầu lại.|||Feedback from application closes the loop and restarts it.' },
 ]);
 
-const c4 = doc('kms301-4-1-strategy-culture', '4.1 — KM strategy &amp; culture|||4.1 — Chiến lược &amp; văn hoá KM',
+const c4 = doc('kms301-4-1-strategy-culture', '4.1 — KM strategy & culture|||4.1 — Chiến lược & văn hoá KM',
   'Hai chiến lược: codification (mã hoá, người-tới-tài liệu) vs personalization (cá nhân hoá, người-tới-người); văn hoá chia sẻ tri thức.',
   [[
     `<span class="eyebrow">KMS301 · Chapter 4 · Lesson 4.1</span>
@@ -242,7 +242,7 @@ const c4 = doc('kms301-4-1-strategy-culture', '4.1 — KM strategy &amp; culture
 <div class="callout"><span class="badge">Ví dụ thật</span> HBR so sánh <strong>Accenture &amp; Ernst &amp; Young</strong> (mã hoá — phương pháp luận tái dùng trong kho khổng lồ) với <strong>McKinsey &amp; Bain</strong> (cá nhân hoá — mạng lưới chuyên gia và &quot;ai biết cái gì&quot;). Cùng ngành, chiến lược KM cố tình ngược nhau, cả hai đều thành công.</div>`,
   ]]);
 
-const c4q = quiz('kms301-quiz-4', 'Quiz 4 — Strategy &amp; culture|||Quiz 4 — Chiến lược &amp; văn hoá', [
+const c4q = quiz('kms301-quiz-4', 'Quiz 4 — Strategy & culture|||Quiz 4 — Chiến lược & văn hoá', [
   { id: 'q1', question: 'Chiến lược "người-tới-tài liệu", viết tri thức vào kho để tái dùng, gọi là?|||The "people-to-documents" strategy of writing knowledge into repositories is?', options: ['Personalization (people-to-people)|||Cá nhân hoá (người-tới-người)', 'Codification (people-to-documents)|||Mã hoá (người-tới-tài liệu)', 'Socialization', 'Internalization'], correctIndex: 1, explanation: 'Codification lưu tri thức hiện để tái dùng.|||Codification stores explicit knowledge for reuse.' },
   { id: 'q2', question: 'Rào cản lớn nhất khiến KM thất bại thường là?|||The biggest barrier that makes KM fail is usually?', options: ['Thiếu phần cứng máy chủ|||Lack of server hardware', 'Văn hoá giữ tri thức làm quyền lực, không chịu chia sẻ|||A culture of hoarding knowledge as power', 'Băng thông mạng chậm|||Slow network bandwidth', 'Quá nhiều tài liệu|||Too many documents'], correctIndex: 1, explanation: 'Công nghệ là phần dễ; văn hoá chia sẻ mới quyết định.|||Technology is easy; a sharing culture is decisive.' },
   { id: 'q3', question: 'Theo HBR, công ty nên?|||According to HBR, a company should?', options: ['Làm cả hai chiến lược ngang 50/50|||Do both strategies equally 50/50', 'Chọn một chiến lược chính (~80/20)|||Choose one primary strategy (~80/20)', 'Bỏ hẳn chiến lược KM|||Drop KM strategy entirely', 'Chỉ dùng phần mềm đắt tiền|||Only use expensive software'], correctIndex: 1, explanation: 'Chọn một chiến lược chính, cái kia hỗ trợ.|||Pick one primary strategy, the other supports it.' },
@@ -281,7 +281,7 @@ const c5q = quiz('kms301-quiz-5', 'Quiz 5 — KMS technology|||Quiz 5 — Công 
   { id: 'q3', question: 'Nhận định nào đúng về công nghệ KMS?|||Which statement about KMS technology is correct?', options: ['Mua phần mềm là đủ để có KM|||Buying software is enough for KM', 'Công cụ không đồng nghĩa KM; cần cả quy trình và văn hoá|||Tools do not equal KM; process and culture are also needed', 'KMS thay thế hoàn toàn con người|||KMS fully replaces people', 'Chỉ tập đoàn lớn mới cần KMS|||Only big corporations need KMS'], correctIndex: 1, explanation: 'Thiếu quy trình và văn hoá, KMS chỉ là cổng trống.|||Without process and culture, a KMS is just an empty portal.' },
 ]);
 
-const c6 = doc('kms301-6-1-communities-sharing', '6.1 — Communities &amp; knowledge sharing|||6.1 — Cộng đồng &amp; chia sẻ tri thức',
+const c6 = doc('kms301-6-1-communities-sharing', '6.1 — Communities & knowledge sharing|||6.1 — Cộng đồng & chia sẻ tri thức',
   'Cộng đồng thực hành (community of practice), kể chuyện (storytelling), cố vấn (mentoring), định vị chuyên gia (expert location).',
   [[
     `<span class="eyebrow">KMS301 · Chapter 6 · Lesson 6.1</span>
@@ -306,13 +306,13 @@ const c6 = doc('kms301-6-1-communities-sharing', '6.1 — Communities &amp; know
 <div class="callout"><span class="badge">Ví dụ thật</span> <strong>Eureka của Xerox</strong>: kỹ thuật viên sửa máy hiện trường chia sẻ mẹo sửa trong một cơ sở dữ liệu do cộng đồng biên tập. Nhà nhân học Julian Orr chỉ ra thợ giải quyết sự cố bằng cách kể <em>chuyện nghề</em> cho nhau, không phải đọc cẩm nang — Eureka thu lại những câu chuyện đó và được cho là giúp Xerox tiết kiệm khoảng 100 triệu đô.</div>`,
   ]]);
 
-const c6q = quiz('kms301-quiz-6', 'Quiz 6 — Communities &amp; sharing|||Quiz 6 — Cộng đồng &amp; chia sẻ', [
+const c6q = quiz('kms301-quiz-6', 'Quiz 6 — Communities & sharing|||Quiz 6 — Cộng đồng & chia sẻ', [
   { id: 'q1', question: 'Nhóm người cùng nghề, học hỏi lẫn nhau theo thời gian, gọi là?|||A group of same-craft people who learn from each other over time is?', options: ['Cộng đồng thực hành (CoP)|||Community of practice (CoP)', 'Phòng ban chính thức|||A formal department', 'Cơ sở dữ liệu|||A database', 'Uỷ ban kỷ luật|||A disciplinary board'], correctIndex: 0, explanation: 'Community of practice là trung tâm của chia sẻ tri thức ẩn.|||A community of practice is central to sharing tacit knowledge.' },
   { id: 'q2', question: 'Vì sao kể chuyện (storytelling) hiệu quả để truyền tri thức?|||Why is storytelling effective for transferring knowledge?', options: ['Vì nó ngắn hơn tài liệu|||Because it is shorter than documents', 'Vì nó mang ngữ cảnh và cảm xúc mà gạch đầu dòng đánh mất|||Because it carries context and emotion that bullet points lose', 'Vì nó không cần con người|||Because it needs no people', 'Vì nó tự động hoá|||Because it is automated'], correctIndex: 1, explanation: 'Chuyện giữ ngữ cảnh, làm bài học dễ nhớ và dễ truyền.|||Stories keep context, making lessons memorable and transferable.' },
   { id: 'q3', question: 'Hệ thống trả lời câu hỏi "ai biết về chủ đề X?" được gọi là?|||A system answering "who knows about topic X?" is called?', options: ['Định vị chuyên gia (expert location)|||Expert location', 'Quản lý phiên bản|||Version control', 'Sao lưu dữ liệu|||Data backup', 'Tường lửa|||Firewall'], correctIndex: 0, explanation: 'Expert location giúp tìm đúng người nắm tri thức.|||Expert location helps find the right knowledge holder.' },
 ]);
 
-const c7 = doc('kms301-7-1-km-new-tech', '7.1 — KM &amp; new technology|||7.1 — KM &amp; công nghệ mới',
+const c7 = doc('kms301-7-1-km-new-tech', '7.1 — KM & new technology|||7.1 — KM & công nghệ mới',
   'AI/chatbot tri thức, web ngữ nghĩa (semantic) & ontology, knowledge graph — công nghệ mới thay đổi KM thế nào.',
   [[
     `<span class="eyebrow">KMS301 · Chapter 7 · Lesson 7.1</span>
@@ -337,13 +337,13 @@ const c7 = doc('kms301-7-1-km-new-tech', '7.1 — KM &amp; new technology|||7.1 
 <div class="callout"><span class="badge">Ví dụ thật</span> <strong>Knowledge Graph của Google</strong> tạo ra các bảng thông tin trong tìm kiếm bằng cách nối hàng tỷ thực thể (người, nơi chốn, sự vật) và quan hệ của chúng. Trong doanh nghiệp, cùng ý tưởng đó nằm dưới các trợ lý AI trả lời câu hỏi nhân viên từ wiki và ticket nội bộ.</div>`,
   ]]);
 
-const c7q = quiz('kms301-quiz-7', 'Quiz 7 — KM &amp; new tech|||Quiz 7 — KM &amp; công nghệ mới', [
+const c7q = quiz('kms301-quiz-7', 'Quiz 7 — KM & new tech|||Quiz 7 — KM & công nghệ mới', [
   { id: 'q1', question: 'Tri thức lưu dưới dạng mạng lưới thực thể và quan hệ (nút và cạnh) gọi là?|||Knowledge stored as a network of entities and relationships (nodes and edges) is a?', options: ['Bảng tính|||Spreadsheet', 'Knowledge graph', 'Tệp PDF|||PDF file', 'Hàng đợi tin nhắn|||Message queue'], correctIndex: 1, explanation: 'Knowledge graph nối thực thể và quan hệ.|||A knowledge graph links entities and relationships.' },
   { id: 'q2', question: 'Một "ontology" trong KM dùng để?|||An "ontology" in KM is used to?', options: ['Nén dữ liệu|||Compress data', 'Định nghĩa hình thức các khái niệm và quan hệ để máy suy luận theo ý nghĩa|||Formally define concepts and relationships so machines reason about meaning', 'Tăng tốc mạng|||Speed up the network', 'Sao lưu ổ cứng|||Back up disks'], correctIndex: 1, explanation: 'Ontology cho máy hiểu ý nghĩa, không chỉ khớp từ khoá.|||An ontology lets machines grasp meaning, not just match keywords.' },
   { id: 'q3', question: 'Chatbot tri thức doanh nghiệp (RAG) vẫn phụ thuộc điều gì?|||An enterprise knowledge chatbot (RAG) still depends on?', options: ['Tri thức nguồn tốt và việc quản trị|||Good source knowledge and governance', 'Không phụ thuộc gì cả|||Nothing at all', 'Chỉ tốc độ GPU|||Only GPU speed', 'Số lượng nhân viên|||Headcount'], correctIndex: 0, explanation: 'AI chỉ tốt khi tri thức nguồn tốt và được quản trị.|||AI is only as good as its governed source knowledge.' },
 ]);
 
-const c8 = doc('kms301-8-1-metrics-implementation', '8.1 — Measurement &amp; implementation|||8.1 — Đo lường &amp; triển khai',
+const c8 = doc('kms301-8-1-metrics-implementation', '8.1 — Measurement & implementation|||8.1 — Đo lường & triển khai',
   'Thước đo KM (KM metrics), vốn trí tuệ (intellectual capital), các bước triển khai, thách thức, ví dụ doanh nghiệp thật.',
   [[
     `<span class="eyebrow">KMS301 · Chapter 8 · Lesson 8.1</span>
@@ -382,7 +382,7 @@ const c8 = doc('kms301-8-1-metrics-implementation', '8.1 — Measurement &amp; i
 <div class="callout"><span class="badge">Ví dụ thật</span> Công ty <strong>Skandia</strong> (Thuỵ Điển) công bố phụ lục <em>Vốn trí tuệ</em> đầu tiên trong báo cáo thường niên và xây <strong>Skandia Navigator</strong> để đo vốn con người và vốn cấu trúc — một nỗ lực mang tính cột mốc cho thấy tài sản tri thức vô hình tạo ra giá trị thật.</div>`,
   ]]);
 
-const c8q = quiz('kms301-quiz-8', 'Quiz 8 — Metrics &amp; implementation|||Quiz 8 — Đo lường &amp; triển khai', [
+const c8q = quiz('kms301-quiz-8', 'Quiz 8 — Metrics & implementation|||Quiz 8 — Đo lường & triển khai', [
   { id: 'q1', question: 'Vốn trí tuệ (intellectual capital) thường gồm ba loại vốn nào?|||Intellectual capital usually comprises which three types of capital?', options: ['Con người, cấu trúc, quan hệ|||Human, structural, relational', 'Tiền mặt, cổ phiếu, trái phiếu|||Cash, stocks, bonds', 'Đất, nhà, máy móc|||Land, buildings, machines', 'Dữ liệu, thông tin, nhiễu|||Data, information, noise'], correctIndex: 0, explanation: 'Vốn con người, cấu trúc và quan hệ.|||Human, structural and relational capital.' },
   { id: 'q2', question: 'Bước ĐẦU TIÊN khi triển khai một chương trình KM nên là?|||The FIRST step in implementing a KM program should be?', options: ['Mua phần mềm đắt nhất|||Buy the most expensive software', 'Bắt đầu từ mục tiêu kinh doanh, không phải công nghệ|||Start from a business goal, not technology', 'Sa thải chuyên gia cũ|||Fire senior experts', 'Xoá kho dữ liệu cũ|||Delete old repositories'], correctIndex: 1, explanation: 'KM phục vụ mục tiêu kinh doanh; công nghệ đến sau.|||KM serves a business goal; technology comes later.' },
   { id: 'q3', question: 'Vì sao đo lường KM khó?|||Why is measuring KM difficult?', options: ['Vì không ai quan tâm|||Because nobody cares', 'Vì khó tách riêng tác động của tri thức, nên cần kết hợp con số với câu chuyện|||Because the impact of knowledge is hard to isolate, so numbers must be paired with stories', 'Vì tri thức luôn miễn phí|||Because knowledge is always free', 'Vì máy tính không đếm được|||Because computers cannot count'], correctIndex: 1, explanation: 'Tác động tri thức khó tách bạch; kết hợp định lượng và định tính.|||Knowledge impact is hard to isolate; mix quantitative and qualitative evidence.' },

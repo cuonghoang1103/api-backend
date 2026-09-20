@@ -95,7 +95,7 @@ const intro = doc('chi111-0-1-overview', 'Course overview: Integrated Chinese 1|
 <p>Pinyin &amp; thanh điệu → chào hỏi &amp; tên → gia đình → ngày &amp; giờ (sinh nhật) → sở thích → gọi điện &amp; thăm hỏi → học tiếng Trung → đời sống trường lớp. Mỗi bài có bảng từ vựng (汉字 | pinyin | nghĩa), điểm ngữ pháp kèm ví dụ, một hội thoại ngắn, ghi chú, và quiz.</p>`,
   ]]);
 
-const b1 = doc('chi111-1-1-pinyin-tones', 'Lesson 1 — Pinyin &amp; the four tones|||Bài 1 — Ngữ âm &amp; thanh điệu',
+const b1 = doc('chi111-1-1-pinyin-tones', 'Lesson 1 — Pinyin & the four tones|||Bài 1 — Ngữ âm & thanh điệu',
   'Pinyin: thanh mẫu (initials) & vận mẫu (finals); 4 thanh + thanh nhẹ; dấu thanh ā á ǎ à; quy tắc biến điệu.',
   [[
     `<span class="eyebrow">CHI111 · Lesson 1 · Pronunciation</span>
@@ -148,13 +148,13 @@ const b1 = doc('chi111-1-1-pinyin-tones', 'Lesson 1 — Pinyin &amp; the four to
 <div class="callout"><span class="badge">Ghi chú</span> Dấu thanh đặt trên nguyên âm chính; thanh 3 ǎ hạ xuống rồi nâng lên. Luyện mā / má / mǎ / mà đến khi nghe rõ khác nhau.</div>`,
   ]]);
 
-const b1q = quiz('chi111-quiz-1', 'Quiz 1 — Pinyin &amp; tones|||Quiz 1 — Ngữ âm &amp; thanh điệu', [
+const b1q = quiz('chi111-quiz-1', 'Quiz 1 — Pinyin & tones|||Quiz 1 — Ngữ âm & thanh điệu', [
   { id: 'q1', question: 'Tiếng phổ thông có mấy thanh điệu (không kể thanh nhẹ)? / How many tones does Mandarin have (not counting the neutral tone)?', options: ['2', '3', '4', '6'], correctIndex: 2, explanation: '4 thanh: ā (cao ngang), á (lên), ǎ (xuống-lên), à (xuống gắt).' },
   { id: 'q2', question: 'Chữ 马 (con ngựa) mang thanh nào? / Which tone does 马 (horse) carry?', options: ['mā (thanh 1)', 'má (thanh 2)', 'mǎ (thanh 3)', 'mà (thanh 4)'], correctIndex: 2, explanation: '马 = mǎ, thanh 3 (xuống rồi lên).' },
   { id: 'q3', question: 'Khi 你 (nǐ) + 好 (hǎo) đứng cạnh nhau thì đọc thế nào? / When nǐ + hǎo meet, how are they read?', options: ['nì hǎo', 'ní hǎo', 'nǐ háo', 'nī hao'], correctIndex: 1, explanation: 'Hai thanh 3 liền nhau: thanh 3 đầu biến thành thanh 2 → ní hǎo.' },
 ]);
 
-const b2 = doc('chi111-2-1-greetings', 'Lesson 2 — Greetings &amp; names|||Bài 2 — Chào hỏi &amp; tên gọi',
+const b2 = doc('chi111-2-1-greetings', 'Lesson 2 — Greetings & names|||Bài 2 — Chào hỏi & tên gọi',
   'Từ vựng: 你好, 请问, 您, 贵姓, 姓, 叫, 什么, 名字, 呢, 老师. Ngữ pháp: 姓 vs 叫, hỏi lịch sự 您贵姓, hỏi tiếp với 呢.',
   [[
     `<span class="eyebrow">CHI111 · Lesson 2 · Greetings</span>
@@ -215,7 +215,7 @@ A: 我叫李友。         Wǒ jiào Lǐ Yǒu.           (Tôi tên Lý Hữu.)
 <div class="callout"><span class="badge">Ghi chú chữ viết</span> 好 (hǎo, tốt) = 女 (nữ) + 子 (tử/con) ghép cạnh nhau — một chữ dễ, hợp để bắt đầu tập viết.</div>`,
   ]]);
 
-const b2q = quiz('chi111-quiz-2', 'Quiz 2 — Greetings &amp; names|||Quiz 2 — Chào hỏi &amp; tên', [
+const b2q = quiz('chi111-quiz-2', 'Quiz 2 — Greetings & names|||Quiz 2 — Chào hỏi & tên', [
   { id: 'q1', question: '"Xin chào" trong tiếng Trung là? / How do you say "hello"?', options: ['你好 nǐ hǎo', '谢谢 xièxie', '再见 zàijiàn', '请问 qǐng wèn'], correctIndex: 0, explanation: '你好 nǐ hǎo = xin chào; 谢谢 = cảm ơn; 再见 = tạm biệt.' },
   { id: 'q2', question: 'Hỏi họ một cách lịch sự dùng cụm nào? / Which phrase politely asks someone surname?', options: ['你几岁？', '您贵姓？', '你好吗？', '你叫什么？'], correctIndex: 1, explanation: '您贵姓? là cách hỏi họ trân trọng; đáp lại 我姓…' },
   { id: 'q3', question: 'Chữ 姓 (xìng) nghĩa là gì? / What does 姓 mean?', options: ['tên gọi|||given name', 'họ|||surname', 'quốc gia|||country', 'tuổi|||age'], correctIndex: 1, explanation: '姓 xìng = họ; 叫 jiào dùng cho tên gọi.' },
@@ -292,7 +292,7 @@ const b3q = quiz('chi111-quiz-3', 'Quiz 3 — Family|||Quiz 3 — Gia đình', [
   { id: 'q3', question: 'Phủ định của 有 (yǒu, có) là? / What is the negative of 有?', options: ['不有 bù yǒu', '没有 méiyǒu', '无有 wú yǒu', '别有 bié yǒu'], correctIndex: 1, explanation: '有 luôn phủ định bằng 没有, không dùng 不有.' },
 ]);
 
-const b4 = doc('chi111-4-1-dates-time', 'Lesson 4 — Dates, time &amp; birthdays|||Bài 4 — Ngày giờ &amp; sinh nhật',
+const b4 = doc('chi111-4-1-dates-time', 'Lesson 4 — Dates, time & birthdays|||Bài 4 — Ngày giờ & sinh nhật',
   'Từ vựng: 年 月 日/号 星期 天, 点 分 半, 生日, 请客, 怎么样, 岁. Ngữ pháp: ngày lớn→nhỏ, 星期+số, xem giờ, mời khách 请客.',
   [[
     `<span class="eyebrow">CHI111 · Lesson 4 · Dates &amp; time</span>
@@ -355,7 +355,7 @@ A: 好，我请客！       Hǎo, wǒ qǐng kè!         (Được, tôi mời!)
 <div class="callout"><span class="badge">Ghi chú</span> 号 (hào) dùng khi nói; 日 (rì) là dạng viết/trang trọng cho ngày trong tháng.</div>`,
   ]]);
 
-const b4q = quiz('chi111-quiz-4', 'Quiz 4 — Dates &amp; time|||Quiz 4 — Ngày giờ &amp; sinh nhật', [
+const b4q = quiz('chi111-quiz-4', 'Quiz 4 — Dates & time|||Quiz 4 — Ngày giờ & sinh nhật', [
   { id: 'q1', question: 'Chữ nào chỉ "giờ" khi xem đồng hồ? / Which word means the hour (o clock)?', options: ['分 fēn', '点 diǎn', '号 hào', '岁 suì'], correctIndex: 1, explanation: '点 diǎn = giờ; 分 fēn = phút. 两点半 = 2 giờ rưỡi.' },
   { id: 'q2', question: '"生日" (shēngrì) nghĩa là? / What does 生日 mean?', options: ['ngày mai|||tomorrow', 'sinh nhật|||birthday', 'tuần|||week', 'buổi tối|||evening'], correctIndex: 1, explanation: '生 (sinh) + 日 (nhật/ngày) = sinh nhật.' },
   { id: 'q3', question: '"请客" (qǐng kè) nghĩa là? / What does 请客 mean?', options: ['mời/đãi khách|||to treat someone', 'đi học|||go to school', 'gọi điện|||make a call', 'xem phim|||watch a movie'], correctIndex: 0, explanation: '请客 = mời khách, đãi (ai đó) một bữa; 今天我请客 = hôm nay tôi mời.' },
@@ -430,7 +430,7 @@ const b5q = quiz('chi111-quiz-5', 'Quiz 5 — Hobbies|||Quiz 5 — Sở thích',
   { id: 'q3', question: '"看电影" (kàn diànyǐng) nghĩa là? / What does 看电影 mean?', options: ['nghe nhạc|||listen to music', 'xem phim|||watch a movie', 'hát|||to sing', 'nhảy múa|||to dance'], correctIndex: 1, explanation: '看 (xem) + 电影 (phim) = xem phim.' },
 ]);
 
-const b6 = doc('chi111-6-1-appointments', 'Lesson 6 — Phone calls &amp; visiting|||Bài 6 — Thăm hỏi &amp; sắp xếp',
+const b6 = doc('chi111-6-1-appointments', 'Lesson 6 — Phone calls & visiting|||Bài 6 — Thăm hỏi & sắp xếp',
   'Từ vựng: 打电话, 喂, 在, 帮忙, 别, 客气, 别客气, 请进, 忙, 时间, 见面, 可以. Ngữ pháp: 在(ở nhà?), 别+ĐT, 帮忙, 可以.',
   [[
     `<span class="eyebrow">CHI111 · Lesson 6 · Appointments</span>
@@ -495,7 +495,7 @@ B: 可以。别客气！   Kěyǐ. Bié kèqi!      (Được. Đừng khách s�
 <div class="callout"><span class="badge">Ghi chú</span> Khi nghe điện thoại, người ta đáp 喂 wéi (thường đọc thanh 2); chỉ dùng lúc gọi điện, không dùng khi gặp trực tiếp.</div>`,
   ]]);
 
-const b6q = quiz('chi111-quiz-6', 'Quiz 6 — Phone calls &amp; visiting|||Quiz 6 — Thăm hỏi &amp; sắp xếp', [
+const b6q = quiz('chi111-quiz-6', 'Quiz 6 — Phone calls & visiting|||Quiz 6 — Thăm hỏi & sắp xếp', [
   { id: 'q1', question: '"打电话" (dǎ diànhuà) nghĩa là? / What does 打电话 mean?', options: ['gọi điện thoại|||make a phone call', 'giúp đỡ|||to help', 'gặp mặt|||to meet', 'vào nhà|||to enter'], correctIndex: 0, explanation: '打 (đánh/thực hiện) + 电话 (điện thoại) = gọi điện thoại.' },
   { id: 'q2', question: 'Đáp lại lời cảm ơn một cách thân mật dùng câu nào? / Which phrase means "you are welcome"?', options: ['对不起 duìbuqǐ', '别客气 bié kèqi', '再见 zàijiàn', '请进 qǐng jìn'], correctIndex: 1, explanation: '别客气 = đừng khách sáo / không có gì; 别 + động từ = đừng làm.' },
   { id: 'q3', question: '"别 + động từ" diễn đạt điều gì? / What does 别 + verb express?', options: ['đã làm xong|||already done', 'đừng làm|||do not do', 'muốn làm|||want to do', 'thích làm|||like to do'], correctIndex: 1, explanation: '别 bié + động từ = mệnh lệnh phủ định (đừng): 别去 = đừng đi.' },
@@ -659,14 +659,14 @@ export default {
     requirements: 'Không cần kiến thức tiếng Trung trước đó. Nên cài Pleco hoặc dùng từ điển hanzii.net để tra chữ &amp; nghe phát âm; luyện viết chữ Hán theo thứ tự nét.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese, workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese, workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Track Integrated Chinese, pinyin, thanh điệu, cách học.', lessons: [intro] },
-    { title: 'Bài 1 — Ngữ âm &amp; thanh điệu|||Lesson 1 — Pinyin &amp; tones', description: 'Pinyin, 4 thanh + thanh nhẹ, biến điệu.', lessons: [b1, b1q] },
-    { title: 'Bài 2 — Chào hỏi &amp; tên|||Lesson 2 — Greetings &amp; names', description: '你好, 请问, 贵姓, 叫什么名字; 姓 vs 叫, 呢.', lessons: [b2, b2q] },
+    { title: 'Bài 1 — Ngữ âm & thanh điệu|||Lesson 1 — Pinyin & tones', description: 'Pinyin, 4 thanh + thanh nhẹ, biến điệu.', lessons: [b1, b1q] },
+    { title: 'Bài 2 — Chào hỏi & tên|||Lesson 2 — Greetings & names', description: '你好, 请问, 贵姓, 叫什么名字; 姓 vs 叫, 呢.', lessons: [b2, b2q] },
     { title: 'Bài 3 — Gia đình|||Lesson 3 — Family', description: '家, 有, 几口人, 都, 老师/学生.', lessons: [b3, b3q] },
-    { title: 'Bài 4 — Ngày giờ &amp; sinh nhật|||Lesson 4 — Dates &amp; time', description: '年月日星期, 点, 生日, 请客.', lessons: [b4, b4q] },
+    { title: 'Bài 4 — Ngày giờ & sinh nhật|||Lesson 4 — Dates & time', description: '年月日星期, 点, 生日, 请客.', lessons: [b4, b4q] },
     { title: 'Bài 5 — Sở thích|||Lesson 5 — Hobbies', description: '喜欢, 看电影, 唱歌跳舞, 觉得, 因为…所以…', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Thăm hỏi &amp; sắp xếp|||Lesson 6 — Appointments', description: '打电话, 在, 帮忙, 别客气.', lessons: [b6, b6q] },
+    { title: 'Bài 6 — Thăm hỏi & sắp xếp|||Lesson 6 — Appointments', description: '打电话, 在, 帮忙, 别客气.', lessons: [b6, b6q] },
     { title: 'Bài 7 — Học tiếng Trung|||Lesson 7 — Studying Chinese', description: '学, 写字, 说, 太…了, 复习/预习, 比.', lessons: [b7, b7q] },
     { title: 'Bài 8 — Trường lớp|||Lesson 8 — School life', description: '上课, 教室, 图书馆, 以前/以后, 的时候.', lessons: [b8, b8q] },
   ],

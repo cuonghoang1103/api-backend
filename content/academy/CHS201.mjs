@@ -99,7 +99,7 @@ const intro = doc('chs201-0-1-overview', 'Course overview: Chinese Speaking 3|||
 <p>Bản thân &amp; học tập → sức khoẻ &amp; lời khuyên → ý kiến &amp; cảm xúc → kể lại sự việc → phàn nàn ở nhà hàng → du lịch &amp; đặt chỗ → công việc &amp; phỏng vấn → so sánh &amp; lựa chọn.</p>`,
   ]]);
 
-const b1 = doc('chs201-1-1-about-yourself', 'Lesson 1 — Yourself &amp; your studies|||Bài 1 — Kể về bản thân &amp; học tập',
+const b1 = doc('chs201-1-1-about-yourself', 'Lesson 1 — Yourself & your studies|||Bài 1 — Kể về bản thân & học tập',
   'Mẫu câu: 自我介绍一下, 我的专业是…, 我学中文已经…年了, 因为…所以…; từ 专业/经历/兴趣/提高; luyện giới thiệu bản thân sâu hơn.',
   [[
     `<span class="eyebrow">CHS201 · Lesson 1 · Yourself</span>
@@ -164,13 +164,13 @@ B: 已经两年了。我学中文是因为对中国文化很有兴趣。 Yǐjīn
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 一下 (yíxià) làm lời đề nghị dịu đi — đọc nhẹ sau động từ: 介绍一下. Khung 因为…所以… đặt lý do trước, kết quả sau; ngắt một nhịp trước 所以.</div>`,
   ]]);
 
-const b1q = quiz('chs201-quiz-1', 'Quiz 1 — Yourself &amp; your studies|||Quiz 1 — Bản thân &amp; học tập', [
+const b1q = quiz('chs201-quiz-1', 'Quiz 1 — Yourself & your studies|||Quiz 1 — Bản thân & học tập', [
   { id: 'q1', question: 'Mời ai đó "tự giới thiệu một chút" đúng là? / How do you ask someone to introduce themselves?', options: ['请你自我介绍一下', '多少钱？', '你打错了', '再见'], correctIndex: 0, explanation: '自我介绍 (tự giới thiệu) + 一下 (một chút) → 请你自我介绍一下.' },
   { id: 'q2', question: '"我的专业是国际贸易" nghĩa là gì? / What does 我的专业是国际贸易 mean?', options: ['Chuyên ngành của tôi là thương mại quốc tế|||My major is international trade', 'Tôi bị cảm|||I have a cold', 'Tôi muốn thuê nhà|||I want to rent', 'Tôi đến muộn|||I am late'], correctIndex: 0, explanation: '专业 (chuyên ngành) + 国际贸易 (thương mại quốc tế).' },
   { id: 'q3', question: 'Cặp từ nào nêu "bởi vì … cho nên …"? / Which pair means because … therefore …?', options: ['因为…所以…', '先…然后…', '还是…吗', '有没有'], correctIndex: 0, explanation: '因为 (bởi vì) … 所以 (cho nên) … — khung nêu lý do và kết quả.' },
 ]);
 
-const b2 = doc('chs201-2-1-health-advice', 'Lesson 2 — Health &amp; giving advice|||Bài 2 — Sức khoẻ &amp; lời khuyên',
+const b2 = doc('chs201-2-1-health-advice', 'Lesson 2 — Health & giving advice|||Bài 2 — Sức khoẻ & lời khuyên',
   'Mẫu câu: 我身体不舒服, 你应该…, 你最好…, 我建议你…; từ 肚子疼/头疼/看医生/注意; luyện đưa lời khuyên.',
   [[
     `<span class="eyebrow">CHS201 · Lesson 2 · Health &amp; advice</span>
@@ -235,13 +235,13 @@ B: 我建议你先休息，别吃太凉的东西，最好多喝热水。 Wǒ ji�
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> Ba cách khuyên, từ chắc đến nhẹ: 应该 → 最好 → 建议. 疼 (téng) là thanh 2; giữ giọng lên trong 肚子疼 và 头疼.</div>`,
   ]]);
 
-const b2q = quiz('chs201-quiz-2', 'Quiz 2 — Health &amp; advice|||Quiz 2 — Sức khoẻ &amp; lời khuyên', [
+const b2q = quiz('chs201-quiz-2', 'Quiz 2 — Health & advice|||Quiz 2 — Sức khoẻ & lời khuyên', [
   { id: 'q1', question: '"你应该去看医生" nghĩa là gì? / What does 你应该去看医生 mean?', options: ['Bạn nên đi khám bác sĩ|||You should see a doctor', 'Bạn gọi nhầm số|||Wrong number', 'Bạn đến muộn|||You are late', 'Bạn về nhà|||Go home'], correctIndex: 0, explanation: '应该 (nên) + 去看医生 (đi khám bác sĩ).' },
   { id: 'q2', question: 'Cách khuyên nhẹ nhàng nhất trong ba cách dưới đây? / Which is the gentlest way to advise?', options: ['我建议你…', '你必须…', '你应该…', '你最好…'], correctIndex: 0, explanation: '建议 (đề nghị) nhẹ nhàng nhất; 应该 và 最好 chắc/mạnh hơn.' },
   { id: 'q3', question: '"最好" (zuìhǎo) đứng trước lời khuyên nghĩa là? / What does 最好 add to advice?', options: ['tốt nhất là…|||had better…', 'quá đắt|||too expensive', 'khi nào|||when', 'ở đâu|||where'], correctIndex: 0, explanation: '最好 = tốt nhất là: 最好多喝热水 (tốt nhất là uống nhiều nước ấm).' },
 ]);
 
-const b3 = doc('chs201-3-1-opinions-feelings', 'Lesson 3 — Opinions &amp; feelings|||Bài 3 — Bày tỏ ý kiến &amp; cảm xúc',
+const b3 = doc('chs201-3-1-opinions-feelings', 'Lesson 3 — Opinions & feelings|||Bài 3 — Bày tỏ ý kiến & cảm xúc',
   'Mẫu câu: 我觉得…, 我认为…, 我同意/不同意, 你说得对; từ 意见/高兴/生气/担心/其实; luyện nêu ý kiến và cảm xúc.',
   [[
     `<span class="eyebrow">CHS201 · Lesson 3 · Opinions</span>
@@ -306,7 +306,7 @@ B: 也许吧，不过我很喜欢。 Yěxǔ ba, búguò wǒ hěn xǐhuan. (Có l
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 觉得 (jué·de) kết bằng 得 thanh nhẹ. Muốn phản đối nhẹ nhàng, nói 不太同意 thay vì 不同意 gọn lỏn — 不太 (không lắm) giữ phép lịch sự.</div>`,
   ]]);
 
-const b3q = quiz('chs201-quiz-3', 'Quiz 3 — Opinions &amp; feelings|||Quiz 3 — Ý kiến &amp; cảm xúc', [
+const b3q = quiz('chs201-quiz-3', 'Quiz 3 — Opinions & feelings|||Quiz 3 — Ý kiến & cảm xúc', [
   { id: 'q1', question: 'Hỏi "bạn thấy … thế nào?" dùng động từ nào? / Which verb asks for someone opinion?', options: ['觉得 juéde', '迟到 chídào', '投诉 tóusù', '出发 chūfā'], correctIndex: 0, explanation: '你觉得…怎么样? = bạn thấy … thế nào? 觉得 = cảm thấy, thấy.' },
   { id: 'q2', question: '"我不太同意" nghĩa là gì? / What does 我不太同意 mean?', options: ['Tôi không đồng ý lắm|||I do not quite agree', 'Tôi rất vui|||I am very happy', 'Tôi lo lắng|||I am worried', 'Tôi đồng ý hoàn toàn|||I fully agree'], correctIndex: 0, explanation: '不太 (không lắm) + 同意 (đồng ý) = không đồng ý lắm — cách phản đối lịch sự.' },
   { id: 'q3', question: '"你说得对" nghĩa là gì? / What does 你说得对 mean?', options: ['Bạn nói đúng|||You are right', 'Bạn nói sai|||You are wrong', 'Bạn tức giận|||You are angry', 'Bạn bận|||You are busy'], correctIndex: 0, explanation: '说得对 = nói đúng; 得 ở đây là trợ từ, đọc nhẹ (shuō·de duì).' },
@@ -383,7 +383,7 @@ const b4q = quiz('chs201-quiz-4', 'Quiz 4 — Narrating events|||Quiz 4 — Kể
   { id: 'q3', question: '"结果还是迟到了" nghĩa là gì? / What does 结果还是迟到了 mean?', options: ['Cuối cùng vẫn đến muộn|||In the end still late', 'Cuối cùng đến sớm|||Ended up early', 'Không đi nữa|||Did not go', 'Đi nhầm đường|||Wrong way'], correctIndex: 0, explanation: '结果 (kết quả là) + 还是 (vẫn) + 迟到了 (đến muộn rồi).' },
 ]);
 
-const b5 = doc('chs201-5-1-restaurant-complaints', 'Lesson 5 — Restaurant &amp; complaining|||Bài 5 — Nhà hàng &amp; phàn nàn',
+const b5 = doc('chs201-5-1-restaurant-complaints', 'Lesson 5 — Restaurant & complaining|||Bài 5 — Nhà hàng & phàn nàn',
   'Mẫu câu: 你们上错菜了, 太咸了能不能换, 菜凉了请重新做, 我要投诉; từ 太淡了/不新鲜/服务/退; luyện phàn nàn lịch sự.',
   [[
     `<span class="eyebrow">CHS201 · Lesson 5 · Complaining</span>
@@ -448,13 +448,13 @@ const b5 = doc('chs201-5-1-restaurant-complaints', 'Lesson 5 — Restaurant &amp
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 太…了 tạo khung phàn nàn: 太咸了, 太淡了, 太凉了 — nhấn vào tính từ ở giữa. 换 = đổi món; 退 = lấy lại tiền. Làm dịu bằng 能不能… và 请….</div>`,
   ]]);
 
-const b5q = quiz('chs201-quiz-5', 'Quiz 5 — Restaurant &amp; complaining|||Quiz 5 — Nhà hàng &amp; phàn nàn', [
+const b5q = quiz('chs201-quiz-5', 'Quiz 5 — Restaurant & complaining|||Quiz 5 — Nhà hàng & phàn nàn', [
   { id: 'q1', question: '"你们上错菜了" nghĩa là gì? / What does 你们上错菜了 mean?', options: ['Các bạn bưng nhầm món rồi|||You brought the wrong dish', 'Món này rất ngon|||This is tasty', 'Cho tính tiền|||The bill please', 'Thêm một bát cơm|||One more rice'], correctIndex: 0, explanation: '上错菜 (bưng nhầm món) + 了 = các bạn bưng nhầm món rồi.' },
   { id: 'q2', question: 'Nói "món này mặn quá, đổi được không?" dùng cụm nào? / How do you say it is too salty and ask to change it?', options: ['太咸了，能不能换一个？', '多少钱？', '你好吗？', '怎么走？'], correctIndex: 0, explanation: '太咸了 (mặn quá) + 能不能换一个 (đổi món khác được không).' },
   { id: 'q3', question: '"我要投诉" nghĩa là gì? / What does 我要投诉 mean?', options: ['Tôi muốn khiếu nại|||I want to complain', 'Tôi muốn gọi món|||I want to order', 'Tôi rất no|||I am full', 'Tôi trả tiền|||I pay'], correctIndex: 0, explanation: '投诉 tóusù = khiếu nại, phàn nàn chính thức.' },
 ]);
 
-const b6 = doc('chs201-6-1-travel-booking', 'Lesson 6 — Travel &amp; booking|||Bài 6 — Du lịch &amp; đặt chỗ',
+const b6 = doc('chs201-6-1-travel-booking', 'Lesson 6 — Travel & booking|||Bài 6 — Du lịch & đặt chỗ',
   'Mẫu câu: 我想订…票, 订一个双人间, 你能推荐景点吗, 行程几天; từ 单程/来回/出发/预订; luyện đặt vé, đặt phòng.',
   [[
     `<span class="eyebrow">CHS201 · Lesson 6 · Travel</span>
@@ -519,13 +519,13 @@ B: 当然可以，我建议你去外滩，还可以订一个江边的房间。 D
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 订 (dìng, thanh 4) là động từ chính cho vé và phòng — đọc ngắn và xuống giọng. 单程 (một chiều) đối với 来回 (khứ hồi): lựa chọn đi kèm 还是.</div>`,
   ]]);
 
-const b6q = quiz('chs201-quiz-6', 'Quiz 6 — Travel &amp; booking|||Quiz 6 — Du lịch &amp; đặt chỗ', [
+const b6q = quiz('chs201-quiz-6', 'Quiz 6 — Travel & booking|||Quiz 6 — Du lịch & đặt chỗ', [
   { id: 'q1', question: 'Động từ "đặt (vé, phòng)" là từ nào? / Which verb means to book (a ticket or room)?', options: ['订 dìng', '换 huàn', '疼 téng', '投诉 tóusù'], correctIndex: 0, explanation: '订 dìng = đặt trước: 订票 (đặt vé), 订房间 (đặt phòng).' },
   { id: 'q2', question: '"单程还是来回?" hỏi điều gì? / What does 单程还是来回 ask?', options: ['Một chiều hay khứ hồi|||One-way or round-trip', 'Sáng hay chiều|||Morning or afternoon', 'To hay nhỏ|||Big or small', 'Đắt hay rẻ|||Cheap or expensive'], correctIndex: 0, explanation: '单程 (một chiều) 还是 来回 (khứ hồi) — hỏi lựa chọn loại vé.' },
   { id: 'q3', question: 'Nhờ ai đó "gợi ý vài điểm tham quan" dùng cụm nào? / How do you ask for scenic-spot recommendations?', options: ['你能推荐几个景点吗？', '你几岁？', '多少钱？', '你打错了'], correctIndex: 0, explanation: '推荐 (gợi ý) + 景点 (điểm tham quan) → 你能推荐几个景点吗?' },
 ]);
 
-const b7 = doc('chs201-7-1-job-interview', 'Lesson 7 — Work &amp; the job interview|||Bài 7 — Công việc &amp; phỏng vấn',
+const b7 = doc('chs201-7-1-job-interview', 'Lesson 7 — Work & the job interview|||Bài 7 — Công việc & phỏng vấn',
   'Mẫu câu: 我来应聘…, 我以前负责…, 我的优点是…缺点是…, 对工资的期望; từ 面试/经验/能力/合作; luyện trả lời phỏng vấn.',
   [[
     `<span class="eyebrow">CHS201 · Lesson 7 · Interview</span>
@@ -590,13 +590,13 @@ const b7 = doc('chs201-7-1-job-interview', 'Lesson 7 — Work &amp; the job inte
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 优点 (yōudiǎn) và 缺点 (quēdiǎn) nghe khá giống — đọc rõ 优 (thanh 1, cao) và 缺 (thanh 1, cao). 负责 + việc = chịu trách nhiệm việc đó. Hãy biến 缺点 thành thứ bạn đang cải thiện.</div>`,
   ]]);
 
-const b7q = quiz('chs201-quiz-7', 'Quiz 7 — Work &amp; interview|||Quiz 7 — Công việc &amp; phỏng vấn', [
+const b7q = quiz('chs201-quiz-7', 'Quiz 7 — Work & interview|||Quiz 7 — Công việc & phỏng vấn', [
   { id: 'q1', question: '"面试" (miànshì) nghĩa là gì? / What does 面试 mean?', options: ['phỏng vấn|||interview', 'lương|||salary', 'nghỉ ngơi|||to rest', 'khứ hồi|||round trip'], correctIndex: 0, explanation: '面试 miànshì = buổi phỏng vấn xin việc.' },
   { id: 'q2', question: '"我的优点是认真" nghĩa là gì? / What does 我的优点是认真 mean?', options: ['Ưu điểm của tôi là cẩn thận|||My strength is being careful', 'Tôi bị cảm|||I have a cold', 'Tôi muốn thuê nhà|||I want to rent', 'Tôi đến muộn|||I am late'], correctIndex: 0, explanation: '优点 (ưu điểm) + 认真 (cẩn thận, nghiêm túc).' },
   { id: 'q3', question: '"负责" (fùzé) đi với một công việc nghĩa là? / What does 负责 + a task mean?', options: ['phụ trách, chịu trách nhiệm|||to be in charge of', 'từ chối|||to refuse', 'đặt vé|||to book', 'phàn nàn|||to complain'], correctIndex: 0, explanation: '负责市场工作 = phụ trách mảng thị trường.' },
 ]);
 
-const b8 = doc('chs201-8-1-comparing-choosing', 'Lesson 8 — Comparing &amp; choosing|||Bài 8 — So sánh &amp; lựa chọn',
+const b8 = doc('chs201-8-1-comparing-choosing', 'Lesson 8 — Comparing & choosing|||Bài 8 — So sánh & lựa chọn',
   'Mẫu câu: A比B更…, 哪个更好, 我比较喜欢…, 因为…所以我决定…; từ 比较/选择/决定/方便; luyện so sánh và đưa quyết định.',
   [[
     `<span class="eyebrow">CHS201 · Lesson 8 · Comparing</span>
@@ -661,7 +661,7 @@ B: 那个比较便宜，也很方便。因为我的钱不多，所以我决定�
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> A 比 B + tính từ là phép so sánh cốt lõi; thêm 更 để nói hơn hẳn. 因为…所以… nêu lý do rồi đến quyết định — đây là cách nói ra để biện minh cho lựa chọn.</div>`,
   ]]);
 
-const b8q = quiz('chs201-quiz-8', 'Quiz 8 — Comparing &amp; choosing|||Quiz 8 — So sánh &amp; lựa chọn', [
+const b8q = quiz('chs201-quiz-8', 'Quiz 8 — Comparing & choosing|||Quiz 8 — So sánh & lựa chọn', [
   { id: 'q1', question: '"这个比那个贵" nghĩa là gì? / What does 这个比那个贵 mean?', options: ['Cái này đắt hơn cái kia|||This is more expensive than that', 'Cái này rẻ nhất|||This is the cheapest', 'Cái kia đẹp hơn|||That is prettier', 'Hai cái bằng nhau|||They are the same'], correctIndex: 0, explanation: 'A 比 B + tính từ: 这个 比 那个 贵 = cái này đắt hơn cái kia.' },
   { id: 'q2', question: 'Từ "更" (gèng) thêm vào câu so sánh nghĩa là? / What does 更 add to a comparison?', options: ['hơn nữa, càng hơn|||more, even more', 'ít hơn|||less', 'bằng nhau|||equal', 'không hơn|||no more'], correctIndex: 0, explanation: '功能更多 = nhiều tính năng hơn nữa; 更 làm mức so sánh mạnh hơn.' },
   { id: 'q3', question: '"因为…所以我决定…" dùng để làm gì? / What is 因为…所以我决定… used for?', options: ['Nêu lý do rồi đưa quyết định|||Give a reason then a decision', 'Hỏi giờ|||Ask the time', 'Chào tạm biệt|||Say goodbye', 'Gọi món|||Order food'], correctIndex: 0, explanation: '因为 (lý do) … 所以我决定 (nên tôi quyết định) … — biện minh cho lựa chọn.' },
@@ -685,15 +685,15 @@ export default {
     requirements: 'Nên học xong CHS121 (giao tiếp HSK2: sở thích, sức khoẻ, gọi điện, nhà hàng, mua sắm, hỏi đường) trước khi vào môn này. Cài Pleco hoặc HelloChinese để nghe audio bản ngữ &amp; luyện nói theo; hãy nói to và tự thu âm để so với mẫu.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成 提高篇, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成 提高篇, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHS121: nhắc nền phát âm/thanh điệu, mục tiêu giao tiếp HSK3, cách luyện hội thoại tình huống dài hơn.', lessons: [intro] },
-    { title: 'Bài 1 — Kể về bản thân &amp; học tập|||Lesson 1 — Yourself & studies', description: '自我介绍一下, 我的专业是, 因为…所以…, 兴趣.', lessons: [b1, b1q] },
-    { title: 'Bài 2 — Sức khoẻ &amp; lời khuyên|||Lesson 2 — Health & advice', description: '不舒服, 应该, 最好, 我建议你, 看医生.', lessons: [b2, b2q] },
-    { title: 'Bài 3 — Bày tỏ ý kiến &amp; cảm xúc|||Lesson 3 — Opinions & feelings', description: '我觉得, 我认为, 同意/不同意, 你说得对.', lessons: [b3, b3q] },
+    { title: 'Bài 1 — Kể về bản thân & học tập|||Lesson 1 — Yourself & studies', description: '自我介绍一下, 我的专业是, 因为…所以…, 兴趣.', lessons: [b1, b1q] },
+    { title: 'Bài 2 — Sức khoẻ & lời khuyên|||Lesson 2 — Health & advice', description: '不舒服, 应该, 最好, 我建议你, 看医生.', lessons: [b2, b2q] },
+    { title: 'Bài 3 — Bày tỏ ý kiến & cảm xúc|||Lesson 3 — Opinions & feelings', description: '我觉得, 我认为, 同意/不同意, 你说得对.', lessons: [b3, b3q] },
     { title: 'Bài 4 — Kể lại sự việc|||Lesson 4 — Narrating events', description: '先…接着…后来…结果, 一…就…, 突然, 终于.', lessons: [b4, b4q] },
-    { title: 'Bài 5 — Nhà hàng &amp; phàn nàn|||Lesson 5 — Restaurant complaints', description: '上错菜, 太咸了, 换, 重新做, 我要投诉.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Du lịch &amp; đặt chỗ|||Lesson 6 — Travel & booking', description: '订票, 订房间, 单程还是来回, 推荐景点, 行程.', lessons: [b6, b6q] },
-    { title: 'Bài 7 — Công việc &amp; phỏng vấn|||Lesson 7 — Work & interview', description: '面试, 应聘, 负责, 优点缺点, 期望.', lessons: [b7, b7q] },
-    { title: 'Bài 8 — So sánh &amp; lựa chọn|||Lesson 8 — Comparing & choosing', description: 'A比B更, 哪个更好, 我比较喜欢, 因为…所以我决定.', lessons: [b8, b8q] },
+    { title: 'Bài 5 — Nhà hàng & phàn nàn|||Lesson 5 — Restaurant complaints', description: '上错菜, 太咸了, 换, 重新做, 我要投诉.', lessons: [b5, b5q] },
+    { title: 'Bài 6 — Du lịch & đặt chỗ|||Lesson 6 — Travel & booking', description: '订票, 订房间, 单程还是来回, 推荐景点, 行程.', lessons: [b6, b6q] },
+    { title: 'Bài 7 — Công việc & phỏng vấn|||Lesson 7 — Work & interview', description: '面试, 应聘, 负责, 优点缺点, 期望.', lessons: [b7, b7q] },
+    { title: 'Bài 8 — So sánh & lựa chọn|||Lesson 8 — Comparing & choosing', description: 'A比B更, 哪个更好, 我比较喜欢, 因为…所以我决定.', lessons: [b8, b8q] },
   ],
 };

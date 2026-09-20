@@ -102,7 +102,7 @@ const intro = doc('cad301-0-1-overview', 'Course overview: Creative Advertising|
 <div class="callout"><span class="badge">Chuẩn cần đạt</span> <em>Just Do It</em> của Nike chỉ ba chữ, nhưng sau nó là một chiến lược chính xác — bán sự can đảm, không bán giày. Đó là quảng cáo sáng tạo: chiến lược mà bạn cảm được.</div>`,
   ]]);
 
-const c1 = doc('cad301-1-1-advertising-role', '1.1 — Advertising &amp; the creative role|||1.1 — Quảng cáo &amp; vai trò sáng tạo',
+const c1 = doc('cad301-1-1-advertising-role', '1.1 — Advertising & the creative role|||1.1 — Quảng cáo & vai trò sáng tạo',
   'Quảng cáo là gì & vì sao tồn tại; các bên (client, agency, media); creative brief và các thành phần lõi.',
   [[
     `<span class="eyebrow">CAD301 · Chapter 1 · Lesson 1.1</span>
@@ -143,13 +143,13 @@ const c1 = doc('cad301-1-1-advertising-role', '1.1 — Advertising &amp; the cre
 <div class="callout"><span class="badge">Chiến dịch thật</span> Brief của Nike luôn trỏ vào cảm xúc, không vào thông số. Từ tiêu điểm đó ra đời <em>Just Do It</em> — một proposition ("sự vĩ đại dành cho mọi người") mà công chúng có thể hành động theo.</div>`,
   ]]);
 
-const c1q = quiz('cad301-quiz-1', 'Quiz 1 — Advertising &amp; the brief|||Quiz 1 — Quảng cáo &amp; brief', [
+const c1q = quiz('cad301-quiz-1', 'Quiz 1 — Advertising & the brief|||Quiz 1 — Quảng cáo & brief', [
   { id: 'q1', question: 'Mục đích gốc của một mẩu quảng cáo là?|||What is the root purpose of an ad?', options: ['Giải một bài toán kinh doanh bằng truyền thông|||Solve a business problem with communication', 'Đoạt giải sáng tạo|||Win a creativity award', 'Khoe kỹ xảo|||Show off production tricks', 'Chạy càng nhiều kênh càng tốt|||Run on as many channels as possible'], correctIndex: 0, explanation: 'Quảng cáo tồn tại để giải bài toán kinh doanh (nhận biết, nhận thức, hành động).' },
   { id: 'q2', question: 'Trong creative brief, "proposition" nên là?|||In a creative brief, the proposition should be?', options: ['Năm thông điệp cho chắc|||Five messages to be safe', 'MỘT điều đơn nhất để nói|||The ONE single-minded thing to say', 'Danh sách tính năng sản phẩm|||A list of product features', 'Ngân sách chiến dịch|||The campaign budget'], correctIndex: 1, explanation: 'Proposition là một thông điệp đơn nhất — dòng khó và giá trị nhất của brief.' },
   { id: 'q3', question: 'Ba bên chính trong hệ quảng cáo là?|||The three main parties in advertising are?', options: ['Client, agency, media', 'Nhà in, đài, rạp|||Printer, radio, cinema', 'Copywriter, diễn viên, đạo diễn|||Copywriter, actor, director', 'Facebook, Google, TikTok'], correctIndex: 0, explanation: 'Client sở hữu bài toán, agency tạo tác phẩm, media đưa tới công chúng.' },
 ]);
 
-const c2 = doc('cad301-2-1-big-idea', '2.1 — The creative process &amp; the big idea|||2.1 — Quy trình sáng tạo &amp; big idea',
+const c2 = doc('cad301-2-1-big-idea', '2.1 — The creative process & the big idea|||2.1 — Quy trình sáng tạo & big idea',
   'Insight → concept → execution; big idea là gì; kỹ thuật sinh ý tưởng (Pricken); phân biệt idea vs execution.',
   [[
     `<span class="eyebrow">CAD301 · Chapter 2 · Lesson 2.1</span>
@@ -268,7 +268,7 @@ const c4q = quiz('cad301-quiz-4', 'Quiz 4 — Copywriting|||Quiz 4 — Copywriti
   { id: 'q3', question: 'Tagline khác headline ở chỗ?|||A tagline differs from a headline in that?', options: ['Tagline chỉ dùng một lần|||A tagline is used once', 'Tagline là câu bền của thương hiệu qua nhiều chiến dịch|||A tagline endures across campaigns', 'Tagline luôn dài hơn|||A tagline is always longer', 'Tagline chỉ có trên TV|||A tagline is TV-only'], correctIndex: 1, explanation: 'Tagline gắn với thương hiệu lâu dài; headline riêng cho từng mẩu.' },
 ]);
 
-const c5 = doc('cad301-5-1-art-direction', '5.1 — Art direction &amp; visual design|||5.1 — Art direction &amp; thiết kế thị giác',
+const c5 = doc('cad301-5-1-art-direction', '5.1 — Art direction & visual design|||5.1 — Art direction & thiết kế thị giác',
   'Layout (grid, focal point, Gestalt), typography, màu sắc & tâm lý màu, hình ảnh; quan hệ copy–visual.',
   [[
     `<span class="eyebrow">CAD301 · Chapter 5 · Lesson 5.1</span>
@@ -373,7 +373,7 @@ const c7q = quiz('cad301-quiz-7', 'Quiz 7 — Integrated campaigns|||Quiz 7 — 
   { id: 'q3', question: '"Nhất quán" trong chiến dịch 360° nghĩa là?|||Consistency in a 360° campaign means?', options: ['Mọi kênh phải giống hệt nhau|||Every channel must be identical', 'Giữ ý tưởng/tone/key visual, để mỗi điểm chạm đóng đúng vai|||Keep idea/tone/key visual; each touchpoint plays its role', 'Chỉ giữ logo giống nhau|||Only keep the logo the same', 'Đổi tone theo từng kênh|||Change tone per channel'], correctIndex: 1, explanation: 'Nhất quán ≠ giống hệt: giữ lõi (ý tưởng, tone, key visual) nhưng thích ứng vai trò từng kênh.' },
 ]);
 
-const c8 = doc('cad301-8-1-measurement-ethics', '8.1 — Measurement &amp; advertising ethics|||8.1 — Đo lường &amp; đạo đức quảng cáo',
+const c8 = doc('cad301-8-1-measurement-ethics', '8.1 — Measurement & advertising ethics|||8.1 — Đo lường & đạo đức quảng cáo',
   'Đo hiệu quả (reach, recall, brand lift, ROI); brand safety; đạo đức & quy định; tránh khủng hoảng.',
   [[
     `<span class="eyebrow">CAD301 · Chapter 8 · Lesson 8.1</span>
@@ -410,7 +410,7 @@ Kinh doanh     -> doanh số, thị phần, ROI (phép thử cuối cùng)
 <div class="callout"><span class="badge">Chiến dịch thật</span> Mẩu quảng cáo Pepsi có Kendall Jenner (2017) bị gỡ trong một ngày vì tầm thường hoá biểu tình — lời nhắc rằng việc lệch nhịp văn hoá phá giá trị rất nhanh. Tuyên bố "greenwashing" nay bị cơ quan quản lý xử: đạo đức là quản trị rủi ro, không chỉ là nguyên tắc.</div>`,
   ]]);
 
-const c8q = quiz('cad301-quiz-8', 'Quiz 8 — Measurement &amp; ethics|||Quiz 8 — Đo lường &amp; đạo đức', [
+const c8q = quiz('cad301-quiz-8', 'Quiz 8 — Measurement & ethics|||Quiz 8 — Đo lường & đạo đức', [
   { id: 'q1', question: 'Phép thử cuối cùng cho hiệu quả một chiến dịch thường là?|||The ultimate test of campaign effectiveness is usually?', options: ['Số lượt xem|||View count', 'ROI / doanh số / thị phần|||ROI / sales / market share', 'Số giải thưởng|||Number of awards', 'Số kênh chạy|||Number of channels'], correctIndex: 1, explanation: 'Con số phù phiếm (view) ≠ hiệu quả; đích cuối là ROI, doanh số, thị phần — về lại mục tiêu brief.' },
   { id: 'q2', question: '"Brand safety" nghĩa là?|||Brand safety means?', options: ['Bảo hiểm cho agency|||Insurance for the agency', 'Kiểm soát nơi quảng cáo xuất hiện, tránh nội dung độc hại|||Controlling where ads appear, away from harmful content', 'Đăng ký nhãn hiệu|||Registering the trademark', 'Sao lưu file thiết kế|||Backing up design files'], correctIndex: 1, explanation: 'Brand safety: đảm bảo quảng cáo không xuất hiện cạnh nội dung gây hại cho thương hiệu.' },
   { id: 'q3', question: 'Bài học từ mẩu Pepsi–Kendall Jenner 2017 là?|||The lesson from the 2017 Pepsi–Kendall Jenner ad is?', options: ['Ngân sách lớn luôn thắng|||Big budgets always win', 'Việc lệch nhịp văn hoá/đạo đức phá giá trị rất nhanh|||Culturally/ethically tone-deaf work destroys value fast', 'Càng nhiều người nổi tiếng càng tốt|||More celebrities is always better', 'Chỉ cần chạy nhiều kênh|||Just run more channels'], correctIndex: 1, explanation: 'Đạo đức & nhạy cảm văn hoá là quản trị rủi ro — lệch nhịp có thể huỷ chiến dịch trong một ngày.' },

@@ -99,7 +99,7 @@ const intro = doc('chn123-0-1-overview', 'Course overview: Elementary Chinese 2|
 <p>Ôn &amp; mở rộng chào hỏi → sở thích &amp; năng lực → mua sắm &amp; giá cả → ăn uống &amp; nhà hàng → thời tiết &amp; mùa → phương hướng &amp; đi lại → thời gian biểu &amp; tần suất → sức khoẻ &amp; hẹn gặp. Mỗi bài có bảng từ vựng (汉字 / pinyin / nghĩa), điểm ngữ pháp kèm ví dụ, một hội thoại ngắn, ghi chú, và quiz.</p>`,
   ]]);
 
-const b1 = doc('chn123-1-1-review-greetings', 'Lesson 1 — Review &amp; expanding introductions|||Bài 1 — Ôn tập &amp; mở rộng giới thiệu',
+const b1 = doc('chn123-1-1-review-greetings', 'Lesson 1 — Review & expanding introductions|||Bài 1 — Ôn tập & mở rộng giới thiệu',
   'Ôn 是/叫/姓; mở rộng 认识 (quen biết), 请问 (xin hỏi), 贵姓; trợ từ 呢; phó từ 也/都.',
   [[
     `<span class="eyebrow">CHN123 · Lesson 1 · Review</span>
@@ -160,13 +160,13 @@ B: 我也很高兴。     Wǒ yě hěn gāoxìng.     (Tôi cũng rất vui.)
 <div class="callout"><span class="badge">Ghi chú</span> 贵姓 lịch sự và chỉ hỏi họ, nên trả lời bằng 姓 (我姓王), không dùng 叫.</div>`,
   ]]);
 
-const b1q = quiz('chn123-quiz-1', 'Quiz 1 — Review &amp; introductions|||Quiz 1 — Ôn tập &amp; giới thiệu', [
+const b1q = quiz('chn123-quiz-1', 'Quiz 1 — Review & introductions|||Quiz 1 — Ôn tập & giới thiệu', [
   { id: 'q1', question: 'Hỏi họ một cách lịch sự "ngài họ gì?" là? / How do you politely ask someone their surname?', options: ['你叫什么？', '你贵姓？', '你几岁？', '你好吗？'], correctIndex: 1, explanation: '你贵姓? hỏi họ lịch sự; trả lời bằng 我姓… (我姓王).' },
   { id: 'q2', question: 'Phó từ 也 (yě, cũng) và 都 (dōu, đều) đứng ở đâu? / Where do 也 and 都 sit?', options: ['sau động từ', 'trước động từ', 'cuối câu', 'trước chủ ngữ'], correctIndex: 1, explanation: '也/都 là phó từ, luôn đứng trước động từ: 我也是学生; 我们都是学生.' },
   { id: 'q3', question: 'Trợ từ nào dùng để hỏi vặn "còn bạn?" / Which particle bounces a question back ("and you?")', options: ['吗 ma', '呢 ne', '了 le', '的 de'], correctIndex: 1, explanation: '呢 ne: 我很好，你呢? = Tôi khoẻ, còn bạn?' },
 ]);
 
-const b2 = doc('chn123-2-1-hobbies-abilities', 'Lesson 2 — Hobbies &amp; abilities|||Bài 2 — Sở thích &amp; năng lực',
+const b2 = doc('chn123-2-1-hobbies-abilities', 'Lesson 2 — Hobbies & abilities|||Bài 2 — Sở thích & năng lực',
   'Từ vựng sở thích (打篮球, 踢足球, 看书, 唱歌, 运动); động từ 喜欢; năng nguyện 会 (kỹ năng) vs 能 (có thể).',
   [[
     `<span class="eyebrow">CHN123 · Lesson 2 · Hobbies</span>
@@ -229,13 +229,13 @@ B: 我不会，但是我喜欢看。 Wǒ bú huì, dànshì wǒ xǐhuan kàn. (K
 <div class="callout"><span class="badge">Ghi chú</span> Dùng 会 cho kỹ năng đã luyện (会说汉语), và 能 cho việc có thể thực hiện lúc này (今天不能去).</div>`,
   ]]);
 
-const b2q = quiz('chn123-quiz-2', 'Quiz 2 — Hobbies &amp; abilities|||Quiz 2 — Sở thích &amp; năng lực', [
+const b2q = quiz('chn123-quiz-2', 'Quiz 2 — Hobbies & abilities|||Quiz 2 — Sở thích & năng lực', [
   { id: 'q1', question: '"Tôi thích đọc sách" nói đúng là? / How do you say "I like reading"?', options: ['我会看书。', '我喜欢看书。', '我能看书。', '我要看书。'], correctIndex: 1, explanation: '喜欢 + động từ: 我喜欢看书 = Tôi thích đọc sách.' },
   { id: 'q2', question: 'Diễn đạt một kỹ năng đã học (biết hát) dùng chữ nào? / Which word expresses a learned skill (know how to sing)?', options: ['会 huì', '要 yào', '想 xiǎng', '在 zài'], correctIndex: 0, explanation: '会 huì chỉ kỹ năng đã học: 我会唱歌 = Tôi biết hát.' },
   { id: 'q3', question: '"打篮球" (dǎ lánqiú) nghĩa là gì? / What does 打篮球 mean?', options: ['đá bóng', 'chơi bóng rổ', 'hát', 'nhảy múa'], correctIndex: 1, explanation: '打篮球 = chơi bóng rổ; 踢足球 = đá bóng.' },
 ]);
 
-const b3 = doc('chn123-3-1-shopping-prices', 'Lesson 3 — Shopping &amp; prices|||Bài 3 — Mua sắm &amp; giá cả',
+const b3 = doc('chn123-3-1-shopping-prices', 'Lesson 3 — Shopping & prices|||Bài 3 — Mua sắm & giá cả',
   'Từ vựng mua sắm (衣服, 件, 颜色, 便宜/贵); hỏi giá 多少钱; cấu trúc 太…了; 想买.',
   [[
     `<span class="eyebrow">CHN123 · Lesson 3 · Shopping</span>
@@ -300,13 +300,13 @@ A: 太贵了！          Tài guì le!                (Đắt quá!)
 <div class="callout"><span class="badge">Ghi chú</span> 件 jiàn là lượng từ cho quần áo: 一件衣服. Chỉ vào bằng 这件 / 那件 (cái này / cái kia).</div>`,
   ]]);
 
-const b3q = quiz('chn123-quiz-3', 'Quiz 3 — Shopping &amp; prices|||Quiz 3 — Mua sắm &amp; giá cả', [
+const b3q = quiz('chn123-quiz-3', 'Quiz 3 — Shopping & prices|||Quiz 3 — Mua sắm & giá cả', [
   { id: 'q1', question: 'Lượng từ dùng cho quần áo là? / Which measure word is used for clothes?', options: ['个 gè', '件 jiàn', '口 kǒu', '杯 bēi'], correctIndex: 1, explanation: '件 jiàn dùng cho quần áo: 一件衣服 = một cái áo.' },
   { id: 'q2', question: 'Kêu "đắt quá!" đúng là? / How do you exclaim "too expensive!"', options: ['很贵。', '太贵了！', '不贵。', '贵吗？'], correctIndex: 1, explanation: 'Cấu trúc 太…了 diễn đạt mức độ quá: 太贵了! = Đắt quá!' },
   { id: 'q3', question: '"便宜" (piányi) nghĩa là gì? / What does 便宜 mean?', options: ['đắt', 'rẻ', 'to', 'đẹp'], correctIndex: 1, explanation: '便宜 piányi = rẻ; trái nghĩa là 贵 guì (đắt).' },
 ]);
 
-const b4 = doc('chn123-4-1-food-restaurant', 'Lesson 4 — Food &amp; restaurants|||Bài 4 — Ăn uống &amp; nhà hàng',
+const b4 = doc('chn123-4-1-food-restaurant', 'Lesson 4 — Food & restaurants|||Bài 4 — Ăn uống & nhà hàng',
   'Gọi món (点菜, 服务员, 饭馆); động từ 要/来; tính từ 好吃; lượng từ 杯/碗.',
   [[
     `<span class="eyebrow">CHN123 · Lesson 4 · Restaurant</span>
@@ -369,13 +369,13 @@ A: 这个面条很好吃！     Zhège miàntiáo hěn hǎochī! (Mì này ngon 
 <div class="callout"><span class="badge">Ghi chú</span> 来 lái nghĩa gốc là "đến", nhưng ở quán ăn dùng như "cho tôi": 来一个… là cách gọi món tự nhiên.</div>`,
   ]]);
 
-const b4q = quiz('chn123-quiz-4', 'Quiz 4 — Food &amp; restaurants|||Quiz 4 — Ăn uống &amp; nhà hàng', [
+const b4q = quiz('chn123-quiz-4', 'Quiz 4 — Food & restaurants|||Quiz 4 — Ăn uống & nhà hàng', [
   { id: 'q1', question: 'Lượng từ cho "một ly cà phê" là? / Which measure word fits "a cup of coffee"?', options: ['碗 wǎn', '杯 bēi', '件 jiàn', '个 gè'], correctIndex: 1, explanation: '杯 bēi đếm ly/cốc: 一杯咖啡 = một ly cà phê. 碗 wǎn dùng cho bát.' },
   { id: 'q2', question: '"点菜" (diǎn cài) nghĩa là gì? / What does 点菜 mean?', options: ['nấu ăn', 'gọi món', 'rửa bát', 'trả tiền'], correctIndex: 1, explanation: '点菜 diǎn cài = gọi món ở nhà hàng.' },
   { id: 'q3', question: 'Khen món ăn "rất ngon" đúng là? / How do you say a dish is "very delicious"?', options: ['很好。', '很好吃。', '很贵。', '很大。'], correctIndex: 1, explanation: '好吃 hǎochī = ngon: 这个菜很好吃 = Món này rất ngon.' },
 ]);
 
-const b5 = doc('chn123-5-1-weather-seasons', 'Lesson 5 — Weather &amp; seasons|||Bài 5 — Thời tiết &amp; mùa',
+const b5 = doc('chn123-5-1-weather-seasons', 'Lesson 5 — Weather & seasons|||Bài 5 — Thời tiết & mùa',
   'Từ vựng thời tiết (天气, 冷/热, 下雨/下雪, 4 mùa); so sánh cơ bản A 比 B + tính từ.',
   [[
     `<span class="eyebrow">CHN123 · Lesson 5 · Weather</span>
@@ -438,13 +438,13 @@ B: 对，北京冬天很冷，常常下雪。 Duì, Běijīng dōngtiān hěn l�
 <div class="callout"><span class="badge">Ghi chú</span> 怎么样 zěnmeyàng ("thế nào / ra sao") rất tiện để hỏi ý kiến: 今天天气怎么样?</div>`,
   ]]);
 
-const b5q = quiz('chn123-quiz-5', 'Quiz 5 — Weather &amp; seasons|||Quiz 5 — Thời tiết &amp; mùa', [
+const b5q = quiz('chn123-quiz-5', 'Quiz 5 — Weather & seasons|||Quiz 5 — Thời tiết & mùa', [
   { id: 'q1', question: '"Hôm nay nóng hơn hôm qua" đúng là? / How do you say "today is hotter than yesterday"?', options: ['今天很热昨天。', '今天比昨天热。', '今天昨天热比。', '今天比昨天很热。'], correctIndex: 1, explanation: 'Mẫu A 比 B + tính từ: 今天比昨天热. Không thêm 很 trong câu 比.' },
   { id: 'q2', question: '"下雪" (xià xuě) nghĩa là gì? / What does 下雪 mean?', options: ['trời mưa', 'tuyết rơi', 'trời nóng', 'trời lạnh'], correctIndex: 1, explanation: '下雪 = tuyết rơi; 下雨 = mưa.' },
   { id: 'q3', question: '"夏天" (xiàtiān) là mùa nào? / Which season is 夏天?', options: ['mùa xuân', 'mùa hè', 'mùa thu', 'mùa đông'], correctIndex: 1, explanation: '春天 xuân, 夏天 hè, 秋天 thu, 冬天 đông.' },
 ]);
 
-const b6 = doc('chn123-6-1-directions', 'Lesson 6 — Directions &amp; getting around|||Bài 6 — Phương hướng &amp; đi lại',
+const b6 = doc('chn123-6-1-directions', 'Lesson 6 — Directions & getting around|||Bài 6 — Phương hướng & đi lại',
   'Hỏi đường 怎么走; phương tiện 坐车 (公共汽车, 出租车); phương hướng 左/右/前/后, 往; khoảng cách 离.',
   [[
     `<span class="eyebrow">CHN123 · Lesson 6 · Directions</span>
@@ -509,13 +509,13 @@ B: 不远，你可以坐公共汽车。 Bù yuǎn, nǐ kěyǐ zuò gōnggòng q�
 <div class="callout"><span class="badge">Ghi chú</span> Với 离, đặt hai địa điểm ở hai bên: 学校离我家很近 (trường gần nhà tôi).</div>`,
   ]]);
 
-const b6q = quiz('chn123-quiz-6', 'Quiz 6 — Directions|||Quiz 6 — Phương hướng &amp; đi lại', [
+const b6q = quiz('chn123-quiz-6', 'Quiz 6 — Directions|||Quiz 6 — Phương hướng & đi lại', [
   { id: 'q1', question: '"Rẽ trái" nói đúng là? / How do you say "turn left"?', options: ['往右走', '往左走', '往后走', '往前走'], correctIndex: 1, explanation: '往 + hướng + 走: 往左走 = rẽ trái; 往前走 = đi thẳng.' },
   { id: 'q2', question: 'Chữ nào chỉ khoảng cách "A cách B"? / Which word marks the distance "A is from B"?', options: ['离 lí', '往 wǎng', '坐 zuò', '在 zài'], correctIndex: 0, explanation: 'A 离 B + 远/近: 学校离这儿远吗? = Trường cách đây có xa không?' },
   { id: 'q3', question: '"坐公共汽车" nghĩa là gì? / What does 坐公共汽车 mean?', options: ['đi taxi', 'đi xe buýt', 'đi tàu', 'đi bộ'], correctIndex: 1, explanation: '坐 (đi bằng) + 公共汽车 (xe buýt) = đi xe buýt; 出租车 = taxi.' },
 ]);
 
-const b7 = doc('chn123-7-1-schedule-frequency', 'Lesson 7 — Schedules &amp; frequency|||Bài 7 — Thời gian biểu &amp; tần suất',
+const b7 = doc('chn123-7-1-schedule-frequency', 'Lesson 7 — Schedules & frequency|||Bài 7 — Thời gian biểu & tần suất',
   'Sinh hoạt (起床, 睡觉, 上班, 上课); 每天; tần suất 常常/有时候; mẫu 从…到…, …的时候, 先…再….',
   [[
     `<span class="eyebrow">CHN123 · Lesson 7 · Routine</span>
@@ -580,13 +580,13 @@ B: 从八点到十一点。我常常先上课再运动。 Cóng bā diǎn dào s
 <div class="callout"><span class="badge">Ghi chú</span> 睡觉 và 起床 là từ động-tân; giữ nguyên cả cụm — nói 我要睡觉, không nói cụt 我要睡.</div>`,
   ]]);
 
-const b7q = quiz('chn123-quiz-7', 'Quiz 7 — Schedules &amp; frequency|||Quiz 7 — Thời gian biểu &amp; tần suất', [
+const b7q = quiz('chn123-quiz-7', 'Quiz 7 — Schedules & frequency|||Quiz 7 — Thời gian biểu & tần suất', [
   { id: 'q1', question: '"Từ 8 giờ đến 5 giờ" đúng là? / How do you say "from 8 to 5"?', options: ['八点五点', '从八点到五点', '到八点从五点', '八点到五点从'], correctIndex: 1, explanation: 'Mẫu 从…到…: 从八点到五点 = từ 8 giờ đến 5 giờ.' },
   { id: 'q2', question: '"先吃饭再看书" nghĩa là gì? / What does 先吃饭再看书 mean?', options: ['vừa ăn vừa học', 'ăn cơm trước rồi học sau', 'không ăn không học', 'học trước rồi ăn'], correctIndex: 1, explanation: '先…再… = trước…rồi…: ăn cơm trước, sau đó học.' },
   { id: 'q3', question: 'Cụm nào nghĩa là "khi…" (lúc làm gì đó)? / Which phrase means "when…"?', options: ['的时候 de shíhou', '每天 měitiān', '常常 chángcháng', '有时候 yǒu shíhou'], correctIndex: 0, explanation: '…的时候: 吃饭的时候 = khi ăn cơm. 有时候 = đôi khi (tần suất).' },
 ]);
 
-const b8 = doc('chn123-8-1-health-plans', 'Lesson 8 — Health &amp; making plans|||Bài 8 — Sức khoẻ &amp; hẹn gặp',
+const b8 = doc('chn123-8-1-health-plans', 'Lesson 8 — Health & making plans|||Bài 8 — Sức khoẻ & hẹn gặp',
   'Sức khoẻ (身体, 生病, 看病, 医生, 药, 休息, 累); hẹn gặp 约/见面; năng nguyện 可以; mệnh lệnh phủ định 别.',
   [[
     `<span class="eyebrow">CHN123 · Lesson 8 · Health</span>
@@ -649,7 +649,7 @@ B: 好，我们明天再约见面吧。 Hǎo, wǒmen míngtiān zài yuē jiànm
 <div class="callout"><span class="badge">Ghi chú</span> 别 bié là dạng rút gọn của 不要; 别去 = đừng đi. Thêm 了 để nói "dừng ngay bây giờ": 别看手机了.</div>`,
   ]]);
 
-const b8q = quiz('chn123-quiz-8', 'Quiz 8 — Health &amp; making plans|||Quiz 8 — Sức khoẻ &amp; hẹn gặp', [
+const b8q = quiz('chn123-quiz-8', 'Quiz 8 — Health & making plans|||Quiz 8 — Sức khoẻ & hẹn gặp', [
   { id: 'q1', question: '"Đừng đi làm nữa" đúng là? / How do you say "do not go to work anymore"?', options: ['不上班。', '别上班了。', '没上班。', '要上班。'], correctIndex: 1, explanation: '别 + động từ (+ 了) là mệnh lệnh phủ định: 别上班了 = đừng đi làm nữa.' },
   { id: 'q2', question: '"看病" (kàn bìng) nghĩa là gì? / What does 看病 mean?', options: ['nghỉ ngơi', 'đi khám bệnh', 'uống thuốc', 'bị mệt'], correctIndex: 1, explanation: '看病 = đi khám bệnh; 生病 = bị ốm; 吃药 = uống thuốc.' },
   { id: 'q3', question: 'Xin phép "tôi có thể vào không?" dùng chữ nào? / Which word asks permission "may I come in?"', options: ['会 huì', '可以 kěyǐ', '别 bié', '累 lèi'], correctIndex: 1, explanation: '可以 kěyǐ chỉ sự được phép: 我可以进来吗? = Tôi có thể vào không?' },
@@ -673,15 +673,15 @@ export default {
     requirements: 'Cần vốn tiếng Trung tương đương CHN113 (Elementary Chinese 1): pinyin, 4 thanh &amp; vốn lõi HSK1. Nên cài Pleco hoặc dùng hanzii.net để tra chữ &amp; nghe phát âm; luyện viết chữ Hán theo thứ tự nét.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình|||📚 Course materials', description: 'Giáo trình HSK1-2, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình|||📚 Course materials', description: 'Giáo trình HSK1-2, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHN113, mục tiêu HSK2, ngữ pháp mới, cách học.', lessons: [intro] },
-    { title: 'Bài 1 — Ôn tập &amp; mở rộng giới thiệu|||Lesson 1 — Review &amp; introductions', description: '认识, 请问, 贵姓; 也/都; 呢.', lessons: [b1, b1q] },
-    { title: 'Bài 2 — Sở thích &amp; năng lực|||Lesson 2 — Hobbies &amp; abilities', description: '喜欢, 会 vs 能, 打篮球/踢足球.', lessons: [b2, b2q] },
-    { title: 'Bài 3 — Mua sắm &amp; giá cả|||Lesson 3 — Shopping &amp; prices', description: '多少钱, 太…了, 便宜/贵, 想买.', lessons: [b3, b3q] },
-    { title: 'Bài 4 — Ăn uống &amp; nhà hàng|||Lesson 4 — Food &amp; restaurants', description: '点菜, 要/来, 好吃, 杯/碗.', lessons: [b4, b4q] },
-    { title: 'Bài 5 — Thời tiết &amp; mùa|||Lesson 5 — Weather &amp; seasons', description: '天气, 冷/热, 下雨, so sánh 比.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Phương hướng &amp; đi lại|||Lesson 6 — Directions', description: '怎么走, 坐车, 左右前后, 离.', lessons: [b6, b6q] },
-    { title: 'Bài 7 — Thời gian biểu &amp; tần suất|||Lesson 7 — Schedules &amp; frequency', description: '每天, 从…到, 的时候, 先…再.', lessons: [b7, b7q] },
-    { title: 'Bài 8 — Sức khoẻ &amp; hẹn gặp|||Lesson 8 — Health &amp; making plans', description: '身体, 看病, 约, 可以, 别.', lessons: [b8, b8q] },
+    { title: 'Bài 1 — Ôn tập & mở rộng giới thiệu|||Lesson 1 — Review & introductions', description: '认识, 请问, 贵姓; 也/都; 呢.', lessons: [b1, b1q] },
+    { title: 'Bài 2 — Sở thích & năng lực|||Lesson 2 — Hobbies & abilities', description: '喜欢, 会 vs 能, 打篮球/踢足球.', lessons: [b2, b2q] },
+    { title: 'Bài 3 — Mua sắm & giá cả|||Lesson 3 — Shopping & prices', description: '多少钱, 太…了, 便宜/贵, 想买.', lessons: [b3, b3q] },
+    { title: 'Bài 4 — Ăn uống & nhà hàng|||Lesson 4 — Food & restaurants', description: '点菜, 要/来, 好吃, 杯/碗.', lessons: [b4, b4q] },
+    { title: 'Bài 5 — Thời tiết & mùa|||Lesson 5 — Weather & seasons', description: '天气, 冷/热, 下雨, so sánh 比.', lessons: [b5, b5q] },
+    { title: 'Bài 6 — Phương hướng & đi lại|||Lesson 6 — Directions', description: '怎么走, 坐车, 左右前后, 离.', lessons: [b6, b6q] },
+    { title: 'Bài 7 — Thời gian biểu & tần suất|||Lesson 7 — Schedules & frequency', description: '每天, 从…到, 的时候, 先…再.', lessons: [b7, b7q] },
+    { title: 'Bài 8 — Sức khoẻ & hẹn gặp|||Lesson 8 — Health & making plans', description: '身体, 看病, 约, 可以, 别.', lessons: [b8, b8q] },
   ],
 };

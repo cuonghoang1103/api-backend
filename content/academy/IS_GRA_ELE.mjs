@@ -13,7 +13,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('is-gra-ele-0-0-tai-lieu', '📚 Materials &amp; references|||📚 Tài liệu &amp; nguồn học liệu',
+const taiLieu = doc('is-gra-ele-0-0-tai-lieu', '📚 Materials & references|||📚 Tài liệu & nguồn học liệu',
   'Trung tâm tài liệu: quy định học phần tự chọn (FLM), nền tảng khoá học mở (Coursera/edX), tài liệu ngành ERP/BI/Cloud/Security, YouTube, công cụ.',
   [[
     `<span class="eyebrow">IS_GRA_ELE · Materials</span>
@@ -119,7 +119,7 @@ Trình bày &amp; phản biện ......... 15%</code></pre>
 <div class="callout"><span class="badge">Ý cốt lõi</span> Bạn KHÔNG được chấm điểm vì chọn chủ đề khó nhất. Bạn được chấm vì <strong>phạm vi rõ, học trung thực, và có kết quả áp dụng chạy được</strong>. Một chủ đề nhỏ làm tốt hơn hẳn một chủ đề khổng lồ bỏ dở.</div>`,
   ]]);
 
-const c1 = doc('is-gra-ele-1-1-choosing', '1.1 — What an elective is &amp; how to choose your topic|||1.1 — Học phần tự chọn &amp; cách chọn chủ đề',
+const c1 = doc('is-gra-ele-1-1-choosing', '1.1 — What an elective is & how to choose your topic|||1.1 — Học phần tự chọn & cách chọn chủ đề',
   'Học phần tự chọn khác môn bắt buộc thế nào; ba tiêu chí chọn chủ đề (định hướng nghề, khả thi, có nguồn học); tránh chủ đề quá rộng.',
   [[
     `<span class="eyebrow">IS_GRA_ELE · Chapter 1 · Lesson 1.1</span>
@@ -217,7 +217,7 @@ const c2q = quiz('is-gra-ele-quiz-2', 'Quiz 2 — Topic map|||Quiz 2 — Bản �
   { id: 'q3', question: 'Một mini-project điển hình cho chủ đề BI & Data Warehouse là?', options: ['Vá lỗ hổng OWASP', 'Dựng star-schema + dashboard trên dữ liệu bán hàng', 'Viết pipeline CI/CD', 'Huấn luyện mô hình dự đoán rời bỏ'], correctIndex: 1, explanation: 'BI/DW xoay quanh mô hình hoá dữ liệu (star-schema) và báo cáo/dashboard.' },
 ]);
 
-const c3 = doc('is-gra-ele-3-1-self-study', '3.1 — Effective self-study &amp; judging sources|||3.1 — Tự học hiệu quả &amp; đánh giá nguồn',
+const c3 = doc('is-gra-ele-3-1-self-study', '3.1 — Effective self-study & judging sources|||3.1 — Tự học hiệu quả & đánh giá nguồn',
   'Kỹ thuật tự học (active recall, spaced, học theo dự án); tiêu chí đánh giá độ tin cậy của nguồn học liệu; tránh nguồn lỗi thời/lệch.',
   [[
     `<span class="eyebrow">IS_GRA_ELE · Chapter 3 · Lesson 3.1</span>
@@ -266,7 +266,7 @@ const c3q = quiz('is-gra-ele-quiz-3', 'Quiz 3 — Self-study|||Quiz 3 — Tự h
   { id: 'q3', question: 'Nên dùng nguồn nào làm "xương sống" khi tự học một chủ đề kỹ thuật?', options: ['Bình luận mạng xã hội', 'Tài liệu chính thức &amp; khoá học uy tín', 'Một blog vô danh', 'Quảng cáo của hãng'], correctIndex: 1, explanation: 'Tài liệu chính thức và khoá học uy tín làm nền; blog/video chỉ để gỡ bí và cần đối chiếu.' },
 ]);
 
-const c4 = doc('is-gra-ele-4-1-learning-contract', '4.1 — Study plan &amp; the learning contract|||4.1 — Kế hoạch học &amp; learning contract',
+const c4 = doc('is-gra-ele-4-1-learning-contract', '4.1 — Study plan & the learning contract|||4.1 — Kế hoạch học & learning contract',
   'Learning contract: mục tiêu SMART, phạm vi, cột mốc theo tuần, tiêu chí "xong"; biến chủ đề thành lịch học cụ thể.',
   [[
     `<span class="eyebrow">IS_GRA_ELE · Chapter 4 · Lesson 4.1</span>
@@ -362,7 +362,7 @@ const c5q = quiz('is-gra-ele-quiz-5', 'Quiz 5 — Deep research|||Quiz 5 — Ngh
   { id: 'q3', question: 'Trong vòng lặp đào sâu, "hands-on" nhấn mạnh điều gì?', options: ['Chỉ xem người khác làm', 'Tự tay làm lab/tutorial', 'Đọc thật nhanh', 'Bỏ qua thực hành'], correctIndex: 1, explanation: 'Thực hành bằng chính tay mình giúp kiến thức bám lại và lộ ra chỗ chưa hiểu.' },
 ]);
 
-const c6 = doc('is-gra-ele-6-1-mini-project', '6.1 — Designing &amp; building the applied mini-project|||6.1 — Thiết kế &amp; làm mini-project áp dụng',
+const c6 = doc('is-gra-ele-6-1-mini-project', '6.1 — Designing & building the applied mini-project|||6.1 — Thiết kế & làm mini-project áp dụng',
   'Từ mục tiêu tới sản phẩm: chọn phạm vi MVP, kiến trúc đơn giản, mốc tăng dần, kiểm thử, và giữ bằng chứng "chạy được".',
   [[
     `<span class="eyebrow">IS_GRA_ELE · Chapter 6 · Lesson 6.1</span>
@@ -409,7 +409,7 @@ const c6q = quiz('is-gra-ele-quiz-6', 'Quiz 6 — Mini-project|||Quiz 6 — Mini
   { id: 'q3', question: 'Đâu là dấu hiệu của một mini-project "áp dụng" tốt?', options: ['Slide mô tả công nghệ chưa từng đụng', 'Dashboard/API/pipeline chạy được với input mẫu và output kỳ vọng', 'Bài văn dài', 'Danh sách thuật ngữ'], correctIndex: 1, explanation: 'Sản phẩm chạy được, dùng đúng khái niệm đã học, có input/output rõ mới là áp dụng thực sự.' },
 ]);
 
-const c7 = doc('is-gra-ele-7-1-report', '7.1 — Writing the report &amp; documenting results|||7.1 — Viết báo cáo &amp; tài liệu hoá kết quả',
+const c7 = doc('is-gra-ele-7-1-report', '7.1 — Writing the report & documenting results|||7.1 — Viết báo cáo & tài liệu hoá kết quả',
   'Cấu trúc báo cáo (vấn đề–phương pháp–kết quả–phản tư); trích dẫn nguồn đúng; tài liệu hoá để người khác tái lập; trung thực về giới hạn.',
   [[
     `<span class="eyebrow">IS_GRA_ELE · Chapter 7 · Lesson 7.1</span>
@@ -456,7 +456,7 @@ const c7q = quiz('is-gra-ele-quiz-7', 'Quiz 7 — Report|||Quiz 7 — Báo cáo'
   { id: 'q3', question: 'Chép đoạn mã của người khác vào báo cáo mà không trích dẫn là?', options: ['Được phép nếu ngắn', 'Gian lận học thuật, có thể trượt môn', 'Chuyện bình thường', 'Bắt buộc phải làm'], correctIndex: 1, explanation: 'Sao chép không trích dẫn là đạo văn — phải luôn ghi nguồn.' },
 ]);
 
-const c8 = doc('is-gra-ele-8-1-present-defend', '8.1 — Presenting, defending &amp; the career link|||8.1 — Trình bày, phản biện &amp; liên hệ nghề',
+const c8 = doc('is-gra-ele-8-1-present-defend', '8.1 — Presenting, defending & the career link|||8.1 — Trình bày, phản biện & liên hệ nghề',
   'Trình bày kết quả (kể chuyện, demo), trả lời phản biện, và biến chủ đề đã học thành lợi thế nghề nghiệp/chứng chỉ (portfolio, certificate).',
   [[
     `<span class="eyebrow">IS_GRA_ELE · Chapter 8 · Lesson 8.1</span>
@@ -503,7 +503,7 @@ chủ đề đã học      ->  một lộ trình chứng chỉ:
 <div class="callout"><span class="badge">Phần thưởng thật</span> Điểm số phai đi; kỹ năng và sản phẩm portfolio ở lại. Định hình học phần tự chọn quanh vai trò bạn muốn tới, và bạn tốt nghiệp với bằng chứng — không chỉ một dòng bảng điểm.</div>`,
   ]]);
 
-const c8q = quiz('is-gra-ele-quiz-8', 'Quiz 8 — Present &amp; career|||Quiz 8 — Trình bày &amp; nghề', [
+const c8q = quiz('is-gra-ele-quiz-8', 'Quiz 8 — Present & career|||Quiz 8 — Trình bày & nghề', [
   { id: 'q1', question: 'Cách trình bày kết quả hiệu quả nhất là?', options: ['Đọc nguyên slide đầy gạch đầu dòng', 'Kể một câu chuyện và cho xem demo ngắn', 'Nói càng dài càng tốt', 'Không cần chuẩn bị'], correctIndex: 1, explanation: 'Kể chuyện (vấn đề–làm gì–tìm ra gì) kèm demo ngắn thuyết phục hơn tường gạch đầu dòng.' },
   { id: 'q2', question: 'Khi bị hỏi phản biện về giới hạn dự án, nên?', options: ['Nói vống lên cho hoành tráng', 'Trả lời trung thực, cụ thể (kể cả "chưa kịp làm X")', 'Im lặng', 'Đổ lỗi cho công cụ'], correctIndex: 1, explanation: 'Trả lời trung thực, cụ thể tạo tin tưởng hơn là nói vống.' },
   { id: 'q3', question: 'Nếu chủ đề tự chọn của bạn là BI/Analytics, chứng chỉ liên quan gợi ý là?', options: ['AZ-900', 'PL-300 (Power BI)', 'Security+', 'Nền tảng SAP'], correctIndex: 1, explanation: 'PL-300 (Power BI Data Analyst) khớp với hướng BI/Analytics; các chứng chỉ khác hợp hướng khác.' },
@@ -527,7 +527,7 @@ export default {
     requirements: 'Đã học phần lớn khung ngành Hệ thống thông tin (gần tốt nghiệp). Xem quy định học phần tự chọn &amp; điều kiện tiên quyết trên FLM (flm.fpt.edu.vn).',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; nguồn học|||📚 Materials &amp; references', description: 'Quy định FLM, Coursera/edX, tài liệu ERP/BI/Cloud/Security, YouTube, công cụ.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & nguồn học|||📚 Materials & references', description: 'Quy định FLM, Coursera/edX, tài liệu ERP/BI/Cloud/Security, YouTube, công cụ.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Học phần tự chọn là gì, deliverable, rubric, vòng học 8 bước.', lessons: [intro] },
     { title: 'Chương 1 — Chọn chủ đề|||Chapter 1 — Choosing a topic', description: 'Tự chọn vs bắt buộc; ba bộ lọc; thu hẹp phạm vi.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Bản đồ chủ đề|||Chapter 2 — Topic map', description: 'ERP, BI/DW, Analytics, Cloud, DevOps, InfoSec.', lessons: [c2, c2q] },
@@ -536,6 +536,6 @@ export default {
     { title: 'Chương 5 — Nghiên cứu sâu|||Chapter 5 — Deep research', description: 'Vòng đào sâu, study log, khoảng trống kiến thức.', lessons: [c5, c5q] },
     { title: 'Chương 6 — Mini-project|||Chapter 6 — Mini-project', description: 'MVP, kiến trúc đơn giản, tăng dần, kiểm thử.', lessons: [c6, c6q] },
     { title: 'Chương 7 — Viết báo cáo|||Chapter 7 — Report', description: 'Cấu trúc báo cáo, trích dẫn, tái lập, trung thực.', lessons: [c7, c7q] },
-    { title: 'Chương 8 — Trình bày &amp; nghề|||Chapter 8 — Present &amp; career', description: 'Kể chuyện + demo, phản biện, portfolio &amp; chứng chỉ.', lessons: [c8, c8q] },
+    { title: 'Chương 8 — Trình bày & nghề|||Chapter 8 — Present & career', description: 'Kể chuyện + demo, phản biện, portfolio &amp; chứng chỉ.', lessons: [c8, c8q] },
   ],
 };

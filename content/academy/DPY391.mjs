@@ -84,7 +84,7 @@ const taiLieu = doc('dpy391-0-0-tai-lieu', '📚 Course materials & references||
 </ol></div>`,
   ]]);
 
-const intro = doc('dpy391-0-1-overview', 'Course overview: Data Security &amp; Privacy|||Tổng quan: Bảo mật &amp; Quyền riêng tư dữ liệu',
+const intro = doc('dpy391-0-1-overview', 'Course overview: Data Security & Privacy|||Tổng quan: Bảo mật & Quyền riêng tư dữ liệu',
   'Môn học làm gì; bảo mật vs quyền riêng tư; vì sao quan trọng; lộ trình 8 chương từ nền tảng → bảo vệ → kỹ thuật quyền riêng tư → tuân thủ & sự cố.',
   [[
     `<span class="eyebrow">DPY391 · Lesson 0.1 · Overview</span>
@@ -111,7 +111,7 @@ const intro = doc('dpy391-0-1-overview', 'Course overview: Data Security &amp; P
 <p>Nền tảng (bảo mật vs quyền riêng tư, CIA, PII) → vòng đời &amp; phân loại dữ liệu → mã hoá &amp; quản lý khoá → kiểm soát truy cập → nguyên tắc quyền riêng tư &amp; GDPR → Privacy by Design → tuân thủ &amp; pháp lý → ứng phó sự cố &amp; quản trị. Song ngữ, có kỹ thuật, điều luật thật, ví dụ và quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('dpy391-1-1-security-vs-privacy', '1.1 — Security &amp; privacy of data|||1.1 — Bảo mật &amp; quyền riêng tư dữ liệu',
+const c1 = doc('dpy391-1-1-security-vs-privacy', '1.1 — Security & privacy of data|||1.1 — Bảo mật & quyền riêng tư dữ liệu',
   'Bảo mật vs quyền riêng tư; bộ ba CIA (bí mật/toàn vẹn/sẵn sàng); PII là gì; vì sao dữ liệu cá nhân quan trọng.',
   [[
     `<span class="eyebrow">DPY391 · Chapter 1 · Lesson 1.1</span>
@@ -150,13 +150,13 @@ const c1 = doc('dpy391-1-1-security-vs-privacy', '1.1 — Security &amp; privacy
 <div class="callout"><span class="badge">Ý chính</span> Bảo mật là phương tiện; quyền riêng tư là mục tiêu. Kỹ sư quyền riêng tư vừa bảo vệ dữ liệu vừa hỏi liệu nó có nên tồn tại.</div>`,
   ]]);
 
-const c1q = quiz('dpy391-quiz-1', 'Quiz 1 — Security &amp; privacy|||Quiz 1 — Bảo mật &amp; quyền riêng tư', [
+const c1q = quiz('dpy391-quiz-1', 'Quiz 1 — Security & privacy|||Quiz 1 — Bảo mật & quyền riêng tư', [
   { id: 'q1', question: 'What does the CIA triad consist of?|||Bộ ba CIA trong bảo mật gồm?', options: ['Confidentiality, Integrity, Availability|||Bí mật, Toàn vẹn, Sẵn sàng', 'Control, Identity, Access|||Kiểm soát, Định danh, Truy cập', 'Consent, Integrity, Audit|||Đồng thuận, Toàn vẹn, Kiểm toán', 'Cipher, Index, Alert|||Mã, Chỉ mục, Cảnh báo'], correctIndex: 0, explanation: 'CIA = Confidentiality (bí mật), Integrity (toàn vẹn), Availability (sẵn sàng).' },
   { id: 'q2', question: 'What is the core difference between security and privacy?|||Khác biệt cốt lõi giữa bảo mật và quyền riêng tư?', options: ['They are identical|||Chúng giống hệt nhau', 'Security keeps data safe; privacy governs whether to collect/use personal data and how|||Bảo mật giữ dữ liệu an toàn; quyền riêng tư quyết định có nên thu thập/dùng dữ liệu và dùng thế nào', 'Privacy is only for big companies|||Quyền riêng tư chỉ dành cho công ty lớn', 'Security needs no encryption|||Bảo mật không cần mã hoá'], correctIndex: 1, explanation: 'Bảo mật = an toàn dữ liệu; quyền riêng tư = quyền kiểm soát dữ liệu cá nhân.' },
   { id: 'q3', question: 'What is PII?|||PII là gì?', options: ['A network protocol|||Giao thức mạng', 'Personally Identifiable Information (name, email, location...)|||Thông tin định danh cá nhân (tên, email, vị trí...)', 'An encryption algorithm|||Một thuật toán mã hoá', 'A type of firewall|||Một loại tường lửa'], correctIndex: 1, explanation: 'PII = dữ liệu nhận diện một cá nhân; loại nhạy cảm cần bảo vệ mạnh hơn.' },
 ]);
 
-const c2 = doc('dpy391-2-1-lifecycle-classification', '2.1 — Data lifecycle &amp; classification|||2.1 — Vòng đời &amp; phân loại dữ liệu',
+const c2 = doc('dpy391-2-1-lifecycle-classification', '2.1 — Data lifecycle & classification|||2.1 — Vòng đời & phân loại dữ liệu',
   'Vòng đời dữ liệu (thu thập→lưu→dùng→chia sẻ→lưu trữ→huỷ); phân loại theo độ nhạy; data governance & quyền sở hữu dữ liệu.',
   [[
     `<span class="eyebrow">DPY391 · Chapter 2 · Lesson 2.1</span>
@@ -205,7 +205,7 @@ Tiêu huỷ -> xoá an toàn khi không còn cần
 <div class="callout"><span class="badge">Nguyên tắc</span> Không thể bảo vệ hay xoá thứ mình không biết là mình có — hãy bắt đầu bằng kiểm kê.</div>`,
   ]]);
 
-const c2q = quiz('dpy391-quiz-2', 'Quiz 2 — Lifecycle &amp; classification|||Quiz 2 — Vòng đời &amp; phân loại', [
+const c2q = quiz('dpy391-quiz-2', 'Quiz 2 — Lifecycle & classification|||Quiz 2 — Vòng đời & phân loại', [
   { id: 'q1', question: 'Which lifecycle stage most reduces privacy risk when done right?|||Giai đoạn nào của vòng đời dữ liệu giảm rủi ro quyền riêng tư nhiều nhất khi làm đúng?', options: ['Collect as little as possible + delete on time|||Thu thập ít nhất có thể + xoá đúng hạn', 'Store as much as possible|||Lưu càng nhiều càng tốt', 'Share widely|||Chia sẻ rộng rãi', 'Ignore retention limits|||Bỏ qua thời hạn lưu'], correctIndex: 0, explanation: 'Dữ liệu an toàn nhất là dữ liệu chưa thu thập hoặc đã xoá đúng hạn.' },
   { id: 'q2', question: 'Which data class needs the strongest controls?|||Nhóm dữ liệu nào cần kiểm soát mạnh nhất?', options: ['Public|||Công khai (Public)', 'Internal|||Nội bộ (Internal)', 'Restricted / Sensitive (health, payment, biometrics)|||Hạn chế / Nhạy cảm (sức khoẻ, thanh toán, sinh trắc)', 'Marketing pages|||Trang marketing'], correctIndex: 2, explanation: 'Dữ liệu nhạy cảm/hạn chế cần mức bảo vệ cao nhất.' },
   { id: 'q3', question: 'What is the first step of data governance?|||Bước đầu tiên của quản trị dữ liệu là?', options: ['Delete all data|||Xoá hết dữ liệu', 'Build a data inventory / record of processing (know what you hold and why)|||Lập kho kiểm kê / hồ sơ xử lý (biết mình giữ gì và vì sao)', 'Make all data public|||Công khai mọi dữ liệu', 'Turn off encryption|||Tắt mã hoá'], correctIndex: 1, explanation: 'Không thể bảo vệ thứ mình không biết là có — bắt đầu bằng kiểm kê (GDPR Điều 30).' },
@@ -329,7 +329,7 @@ const c4q = quiz('dpy391-quiz-4', 'Quiz 4 — Access control|||Quiz 4 — Kiểm
   { id: 'q3', question: 'What are the three IAM steps in order?|||Ba bước của IAM theo thứ tự là?', options: ['Authorization → Authentication → Identification|||Uỷ quyền → Xác thực → Định danh', 'Identification → Authentication → Authorization|||Định danh → Xác thực → Uỷ quyền', 'Encrypt → Hash → Log|||Mã hoá → Băm → Log', 'Backup → Restore → Audit|||Backup → Restore → Audit'], correctIndex: 1, explanation: 'Định danh (ai) → Xác thực (chứng minh) → Uỷ quyền (được làm gì).' },
 ]);
 
-const c5 = doc('dpy391-5-1-privacy-principles', '5.1 — Privacy principles &amp; GDPR|||5.1 — Nguyên tắc quyền riêng tư &amp; GDPR',
+const c5 = doc('dpy391-5-1-privacy-principles', '5.1 — Privacy principles & GDPR|||5.1 — Nguyên tắc quyền riêng tư & GDPR',
   'Nguyên tắc quyền riêng tư; GDPR (căn cứ hợp pháp, đồng thuận); tối thiểu hoá dữ liệu; giới hạn mục đích; giới hạn lưu trữ.',
   [[
     `<span class="eyebrow">DPY391 · Chapter 5 · Lesson 5.1</span>
@@ -378,7 +378,7 @@ const c5q = quiz('dpy391-quiz-5', 'Quiz 5 — Privacy principles|||Quiz 5 — Ng
   { id: 'q3', question: 'What does purpose limitation mean?|||Giới hạn mục đích (purpose limitation) nghĩa là?', options: ['Use data for anything|||Dùng dữ liệu cho bất kỳ việc gì', 'Use data only for the specific stated purpose it was collected for|||Chỉ dùng dữ liệu cho mục đích cụ thể đã nêu khi thu thập', 'Limit the number of users|||Giới hạn số người dùng', 'Limit disk space|||Giới hạn dung lượng đĩa'], correctIndex: 1, explanation: 'Dữ liệu thu cho mục đích A không được tái sử dụng cho mục đích B khác.' },
 ]);
 
-const c6 = doc('dpy391-6-1-privacy-by-design', '6.1 — Privacy by Design &amp; techniques|||6.1 — Privacy by Design &amp; kỹ thuật',
+const c6 = doc('dpy391-6-1-privacy-by-design', '6.1 — Privacy by Design & techniques|||6.1 — Privacy by Design & kỹ thuật',
   'Privacy by Design (7 nguyên tắc); ẩn danh (anonymization) vs bút danh (pseudonymization); riêng tư vi phân (differential privacy).',
   [[
     `<span class="eyebrow">DPY391 · Chapter 6 · Lesson 6.1</span>
@@ -423,7 +423,7 @@ const c6q = quiz('dpy391-quiz-6', 'Quiz 6 — Privacy by Design|||Quiz 6 — Pri
   { id: 'q3', question: 'How does differential privacy work?|||Riêng tư vi phân (differential privacy) hoạt động bằng cách?', options: ['Deleting all data|||Xoá toàn bộ dữ liệu', 'Adding calibrated noise so one individual presence barely changes the result|||Thêm nhiễu cân chỉnh để sự có mặt của một cá nhân gần như không đổi kết quả', 'Encrypting with AES|||Mã hoá bằng AES', 'Compressing data|||Nén dữ liệu'], correctIndex: 1, explanation: 'Thêm nhiễu để cho bảo đảm toán học về riêng tư cá nhân khi công bố thống kê.' },
 ]);
 
-const c7 = doc('dpy391-7-1-compliance-law', '7.1 — Compliance &amp; law|||7.1 — Tuân thủ &amp; pháp lý',
+const c7 = doc('dpy391-7-1-compliance-law', '7.1 — Compliance & law|||7.1 — Tuân thủ & pháp lý',
   'GDPR & CCPA; NĐ 13/2023 VN; ISO/IEC 27701 (PIMS); DPIA (đánh giá tác động); quyền của chủ thể dữ liệu.',
   [[
     `<span class="eyebrow">DPY391 · Chapter 7 · Lesson 7.1</span>
@@ -460,13 +460,13 @@ const c7 = doc('dpy391-7-1-compliance-law', '7.1 — Compliance &amp; law|||7.1 
 <div class="callout"><span class="badge">Thực tế</span> Hãy dựng luồng "xoá tài khoản" và tính năng xuất dữ liệu từ sớm — quyền chủ thể dữ liệu là bắt buộc, và lắp thêm về sau rất cực.</div>`,
   ]]);
 
-const c7q = quiz('dpy391-quiz-7', 'Quiz 7 — Compliance &amp; law|||Quiz 7 — Tuân thủ &amp; pháp lý', [
+const c7q = quiz('dpy391-quiz-7', 'Quiz 7 — Compliance & law|||Quiz 7 — Tuân thủ & pháp lý', [
   { id: 'q1', question: 'Which Vietnamese decree governs personal data protection?|||Nghị định nào của Việt Nam về bảo vệ dữ liệu cá nhân?', options: ['NĐ 13/2023/NĐ-CP|||NĐ 13/2023/NĐ-CP', 'GDPR (EU)|||GDPR (EU)', 'CCPA (California)|||CCPA (California)', 'ISO 9001|||ISO 9001'], correctIndex: 0, explanation: 'NĐ 13/2023/NĐ-CP là Nghị định Bảo vệ dữ liệu cá nhân của Việt Nam.' },
   { id: 'q2', question: 'When is a DPIA used?|||DPIA (Đánh giá tác động bảo vệ dữ liệu) dùng khi nào?', options: ['After a breach has happened|||Sau khi rò rỉ đã xảy ra', 'Before high-risk data processing (GDPR Art. 35)|||Trước khi thực hiện việc xử lý dữ liệu rủi ro cao (GDPR Điều 35)', 'Only during financial audits|||Chỉ khi kiểm toán tài chính', 'Never required|||Không bao giờ bắt buộc'], correctIndex: 1, explanation: 'DPIA làm TRƯỚC hoạt động xử lý rủi ro cao để đánh giá và giảm thiểu rủi ro.' },
   { id: 'q3', question: 'The right to be forgotten is which data-subject right?|||Quyền được lãng quên là quyền nào của chủ thể dữ liệu?', options: ['Right to access|||Quyền truy cập', 'Right to erasure|||Quyền xoá (erasure)', 'Right to portability|||Quyền di chuyển dữ liệu', 'Right to object|||Quyền phản đối'], correctIndex: 1, explanation: 'Right to be forgotten = quyền yêu cầu xoá dữ liệu cá nhân.' },
 ]);
 
-const c8 = doc('dpy391-8-1-incident-governance', '8.1 — Incident response &amp; governance|||8.1 — Sự cố &amp; quản trị',
+const c8 = doc('dpy391-8-1-incident-governance', '8.1 — Incident response & governance|||8.1 — Sự cố & quản trị',
   'Ứng phó rò rỉ dữ liệu (phát hiện→cô lập→thông báo); nghĩa vụ thông báo 72h; DLP; kiểm toán (audit); đạo đức dữ liệu.',
   [[
     `<span class="eyebrow">DPY391 · Chapter 8 · Lesson 8.1</span>
@@ -509,7 +509,7 @@ const c8 = doc('dpy391-8-1-incident-governance', '8.1 — Incident response &amp
 <div class="callout"><span class="badge">Quy tắc vàng</span> Hãy xử lý dữ liệu của người khác như cách bạn muốn dữ liệu của mình được xử lý. Hợp pháp + an toàn + đạo đức — đủ cả ba.</div>`,
   ]]);
 
-const c8q = quiz('dpy391-quiz-8', 'Quiz 8 — Incident &amp; governance|||Quiz 8 — Sự cố &amp; quản trị', [
+const c8q = quiz('dpy391-quiz-8', 'Quiz 8 — Incident & governance|||Quiz 8 — Sự cố & quản trị', [
   { id: 'q1', question: 'Under GDPR Art. 33, how soon must a breach be reported to the authority?|||Theo GDPR Điều 33, phải thông báo cơ quan giám sát về vụ rò rỉ trong bao lâu?', options: ['Within 72 hours of becoming aware|||Trong 72 giờ kể từ khi biết', 'Within 1 year|||Trong 1 năm', 'No notification needed|||Không cần thông báo', 'Only if sued|||Chỉ khi bị kiện'], correctIndex: 0, explanation: 'GDPR yêu cầu thông báo trong vòng 72 giờ khi bên kiểm soát biết về vụ rò rỉ.' },
   { id: 'q2', question: 'What does DLP (Data Loss Prevention) do?|||DLP (Data Loss Prevention) làm gì?', options: ['Encrypt disks|||Mã hoá ổ đĩa', 'Detect and block sensitive data leaving the organization|||Phát hiện và chặn dữ liệu nhạy cảm rời khỏi tổ chức', 'Create passwords|||Tạo mật khẩu', 'Compress backup files|||Nén file backup'], correctIndex: 1, explanation: 'DLP ngăn dữ liệu nhạy cảm thất thoát ra ngoài (vd email chứa số thẻ).' },
   { id: 'q3', question: 'Why does data ethics matter beyond legal compliance?|||Vì sao đạo đức dữ liệu quan trọng ngoài việc tuân thủ luật?', options: ['Because laws do not exist|||Vì luật không tồn tại', 'Because compliance is the floor — doing right (avoiding dark patterns, bias, surveillance) goes beyond the letter of the law|||Vì tuân thủ là mức sàn — đúng đắn (tránh dark pattern, thiên lệch, giám sát) vượt ngoài câu chữ luật', 'Because ethics replaces encryption|||Vì đạo đức thay cho mã hoá', 'Because ethics makes systems faster|||Vì đạo đức làm hệ thống nhanh hơn'], correctIndex: 1, explanation: 'Hợp pháp là tối thiểu; đạo đức hỏi việc dùng dữ liệu có đúng đắn không.' },

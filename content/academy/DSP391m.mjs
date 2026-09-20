@@ -11,7 +11,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức giai đoạn.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('dsp391m-0-0-tai-lieu', '📚 Materials &amp; references|||📚 Tài liệu tham khảo',
+const taiLieu = doc('dsp391m-0-0-tai-lieu', '📚 Materials & references|||📚 Tài liệu tham khảo',
   'Trung tâm tài liệu đồ án: giáo trình FLM, sách kinh điển (McKinney, Géron), CRISP-DM, Kaggle, công cụ, lộ trình đồ án.',
   [[
     `<span class="eyebrow">DSP391m · Materials</span>
@@ -84,7 +84,7 @@ const taiLieu = doc('dsp391m-0-0-tai-lieu', '📚 Materials &amp; references|||�
 </ol></div>`,
   ]]);
 
-const intro = doc('dsp391m-0-1-overview', 'Capstone overview &amp; deliverables|||Tổng quan đồ án &amp; sản phẩm nộp',
+const intro = doc('dsp391m-0-1-overview', 'Capstone overview & deliverables|||Tổng quan đồ án & sản phẩm nộp',
   'Capstone là gì; sản phẩm nộp (đề xuất, notebook, mô hình, demo, báo cáo, bảo vệ); rubric chấm; lộ trình 8 giai đoạn CRISP-DM.',
   [[
     `<span class="eyebrow">DSP391m · Lesson 0.1 · Overview</span>
@@ -131,7 +131,7 @@ Tái lập &amp; đạo đức             -- chạy lại được không? có 
 <div class="callout"><span class="badge">Nguyên tắc vàng</span> Dành thời gian thật cho xác định bài toán và dữ liệu — một mô hình xuất sắc trên câu hỏi sai, hoặc trên dữ liệu rò rỉ, thì điểm bằng không. Đa số đồ án hỏng ở giai đoạn 1–3, không phải giai đoạn 5.</div>`,
   ]]);
 
-const c1 = doc('dsp391m-1-1-problem', 'Phase 1 — Problem &amp; business objective|||Giai đoạn 1 — Bài toán &amp; mục tiêu kinh doanh',
+const c1 = doc('dsp391m-1-1-problem', 'Phase 1 — Problem & business objective|||Giai đoạn 1 — Bài toán & mục tiêu kinh doanh',
   'Business understanding (CRISP-DM): biến câu hỏi kinh doanh thành bài toán data science; loại bài toán; success metric; scope & giả định.',
   [[
     `<span class="eyebrow">DSP391m · Phase 1 · Business Understanding</span>
@@ -180,7 +180,7 @@ const c1q = quiz('dsp391m-quiz-1', 'Quiz 1 — Problem framing|||Quiz 1 — Xác
   { id: 'q3', question: 'Vì sao accuracy có thể gây hiểu lầm với dữ liệu churn mất cân bằng?', options: ['Vì accuracy luôn thấp', 'Vì mô hình đoán "không ai rời bỏ" vẫn có accuracy cao nhưng vô dụng', 'Vì accuracy chỉ dùng cho hồi quy', 'Vì accuracy cần dữ liệu ảnh'], correctIndex: 1, explanation: 'Khi lớp thiểu số hiếm, đoán toàn lớp đa số cho accuracy cao mà không bắt được ca cần bắt; nên dùng recall/F1/AUC.' },
 ]);
 
-const c2 = doc('dsp391m-2-1-data', 'Phase 2 — Data collection &amp; understanding|||Giai đoạn 2 — Thu thập &amp; hiểu dữ liệu',
+const c2 = doc('dsp391m-2-1-data', 'Phase 2 — Data collection & understanding|||Giai đoạn 2 — Thu thập & hiểu dữ liệu',
   'Data understanding (CRISP-DM): nguồn dữ liệu (API, CSV, SQL, scraping), data dictionary, kiểm chất lượng ban đầu, quyền & rò rỉ dữ liệu.',
   [[
     `<span class="eyebrow">DSP391m · Phase 2 · Data Understanding</span>
@@ -237,7 +237,7 @@ const c2q = quiz('dsp391m-quiz-2', 'Quiz 2 — Data collection|||Quiz 2 — Thu 
   { id: 'q3', question: 'Data leakage (rò rỉ dữ liệu) điển hình là gì?', options: ['Dữ liệu bị mất khi lưu', 'Dùng đặc trưng chỉ có SAU khi kết quả xảy ra để dự đoán kết quả đó', 'Dữ liệu quá lớn không tải nổi', 'Thiếu quyền truy cập API'], correctIndex: 1, explanation: 'Đặc trưng biết được kết quả (như ngày huỷ khi dự đoán churn) làm điểm ảo cao nhưng vô dụng thực tế.' },
 ]);
 
-const c3 = doc('dsp391m-3-1-clean', 'Phase 3 — Cleaning &amp; feature engineering|||Giai đoạn 3 — Làm sạch &amp; tạo đặc trưng',
+const c3 = doc('dsp391m-3-1-clean', 'Phase 3 — Cleaning & feature engineering|||Giai đoạn 3 — Làm sạch & tạo đặc trưng',
   'Data preparation (CRISP-DM): xử lý thiếu, ngoại lệ, trùng lặp; mã hoá categorical; scaling; feature engineering; tách train/test đúng cách.',
   [[
     `<span class="eyebrow">DSP391m · Phase 3 · Data Preparation</span>
@@ -290,13 +290,13 @@ X_test_scaled = scaler.transform(X_test)   # rồi transform test
 <div class="callout"><span class="badge">Tách trước, fit sau</span> Hãy <strong>tách train/test TRƯỚC</strong> khi fit scaler hay bộ điền thiếu, và chỉ fit trên tập train. Fit trên toàn bộ dữ liệu làm rò rỉ thông tin test và thổi phồng điểm.</div>`,
   ]]);
 
-const c3q = quiz('dsp391m-quiz-3', 'Quiz 3 — Cleaning &amp; features|||Quiz 3 — Làm sạch &amp; đặc trưng', [
+const c3q = quiz('dsp391m-quiz-3', 'Quiz 3 — Cleaning & features|||Quiz 3 — Làm sạch & đặc trưng', [
   { id: 'q1', question: 'Vì sao phải tách train/test TRƯỚC khi fit scaler/imputer?', options: ['Để chạy nhanh hơn', 'Để tránh rò rỉ thông tin của tập test vào quá trình huấn luyện', 'Vì scaler không dùng được trên train', 'Để giảm dung lượng file'], correctIndex: 1, explanation: 'Fit trên toàn bộ dữ liệu (gồm test) làm mô hình "thấy trước" test → điểm ảo cao; chỉ fit trên train.' },
   { id: 'q2', question: 'Cách xử lý giá trị thiếu bằng cách điền giá trị thay thế gọi là?', options: ['Encoding', 'Imputation (điền khuyết)', 'Scaling', 'Sampling'], correctIndex: 1, explanation: 'Imputation là điền giá trị thiếu bằng mean/median/mode hoặc mô hình.' },
   { id: 'q3', question: 'pd.get_dummies() dùng để làm gì?', options: ['Chuẩn hoá số về cùng thang', 'Mã hoá biến phân loại (categorical) thành các cột số 0/1', 'Xoá dòng trùng', 'Vẽ biểu đồ'], correctIndex: 1, explanation: 'get_dummies thực hiện one-hot encoding: biến mỗi giá trị hạng mục thành một cột 0/1.' },
 ]);
 
-const c4 = doc('dsp391m-4-1-eda', 'Phase 4 — Exploratory analysis &amp; visualisation|||Giai đoạn 4 — Phân tích khám phá &amp; trực quan hoá',
+const c4 = doc('dsp391m-4-1-eda', 'Phase 4 — Exploratory analysis & visualisation|||Giai đoạn 4 — Phân tích khám phá & trực quan hoá',
   'EDA: phân phối, tương quan, phát hiện mẫu & giả thuyết; chọn đúng biểu đồ; tránh biểu đồ đánh lừa; kể chuyện bằng dữ liệu.',
   [[
     `<span class="eyebrow">DSP391m · Phase 4 · EDA</span>
@@ -339,13 +339,13 @@ Tương quan giữa nhiều biến số  -&gt; heatmap
 <div class="callout"><span class="badge">Sản phẩm nộp</span> Một notebook EDA kèm một nhận xét ngắn dưới mỗi biểu đồ quan trọng — "khách gói tháng rời bỏ gấp 3 lần khách gói năm" — chứ không phải một bức tường toàn biểu đồ.</div>`,
   ]]);
 
-const c4q = quiz('dsp391m-quiz-4', 'Quiz 4 — EDA &amp; visualisation|||Quiz 4 — EDA &amp; trực quan', [
+const c4q = quiz('dsp391m-quiz-4', 'Quiz 4 — EDA & visualisation|||Quiz 4 — EDA & trực quan', [
   { id: 'q1', question: 'EDA (phân tích khám phá dữ liệu) chủ yếu nhằm mục đích gì?', options: ['Triển khai mô hình lên server', 'Xây trực giác, phát hiện mẫu và hình thành giả thuyết trước khi mô hình hoá', 'Viết báo cáo cuối', 'Thu thập dữ liệu từ API'], correctIndex: 1, explanation: 'EDA giúp hiểu phân phối, quan hệ và bất thường để định hướng đặc trưng và mô hình.' },
   { id: 'q2', question: 'Muốn xem quan hệ giữa HAI biến số liên tục, biểu đồ nào phù hợp nhất?', options: ['Biểu đồ tròn', 'Scatter plot (biểu đồ phân tán)', 'Biểu đồ cột chồng', 'Bảng tần suất'], correctIndex: 1, explanation: 'Scatter plot cho thấy quan hệ/tương quan giữa hai biến số liên tục.' },
   { id: 'q3', question: 'Phát biểu nào ĐÚNG về trực quan hoá trung thực?', options: ['Trục biểu đồ cột nên bắt đầu từ 0 và ghi rõ đơn vị', 'Tương quan cao chứng minh quan hệ nhân quả', 'Biểu đồ tròn 3-D dễ đọc hơn', 'Nên chọn khoảng dữ liệu làm nổi kết luận mong muốn'], correctIndex: 0, explanation: 'Trục từ 0 và ghi đơn vị tránh gây hiểu lầm; tương quan ≠ nhân quả; không cắt xén dữ liệu.' },
 ]);
 
-const c5 = doc('dsp391m-5-1-model', 'Phase 5 — Modeling &amp; training|||Giai đoạn 5 — Xây dựng &amp; huấn luyện mô hình',
+const c5 = doc('dsp391m-5-1-model', 'Phase 5 — Modeling & training|||Giai đoạn 5 — Xây dựng & huấn luyện mô hình',
   'Modeling (CRISP-DM): chọn thuật toán theo bài toán, baseline trước, train/validation, cross-validation, tránh overfit/underfit.',
   [[
     `<span class="eyebrow">DSP391m · Phase 5 · Modeling</span>
@@ -408,7 +408,7 @@ const c5q = quiz('dsp391m-quiz-5', 'Quiz 5 — Modeling|||Quiz 5 — Mô hình h
   { id: 'q3', question: 'Cross-validation (kiểm định chéo) đem lại lợi ích gì?', options: ['Loại bỏ mọi giá trị thiếu', 'Ước lượng hiệu năng đáng tin hơn so với một lần chia train/test đơn lẻ', 'Tăng tốc độ triển khai', 'Tự động vẽ biểu đồ'], correctIndex: 1, explanation: 'CV chia dữ liệu nhiều lần và lấy trung bình, giảm may rủi của một lần chia duy nhất.' },
 ]);
 
-const c6 = doc('dsp391m-6-1-eval', 'Phase 6 — Evaluation, tuning &amp; comparison|||Giai đoạn 6 — Đánh giá, tinh chỉnh &amp; so sánh',
+const c6 = doc('dsp391m-6-1-eval', 'Phase 6 — Evaluation, tuning & comparison|||Giai đoạn 6 — Đánh giá, tinh chỉnh & so sánh',
   'Evaluation (CRISP-DM): metric phân loại/hồi quy, confusion matrix, ROC/AUC; hyperparameter tuning (grid/random); so sánh & chọn mô hình cuối.',
   [[
     `<span class="eyebrow">DSP391m · Phase 6 · Evaluation</span>
@@ -451,13 +451,13 @@ search.best_params_    # tinh chỉnh trên train/validation, KHÔNG trên test
 <div class="callout"><span class="badge">Bẫy</span> Tinh chỉnh dựa trên tập test, hoặc báo cáo kết quả tốt nhất trong nhiều lần chạy, cũng là một dạng rò rỉ. Dùng tập validation riêng (hoặc CV) để tinh chỉnh; giữ tập test niêm phong.</div>`,
   ]]);
 
-const c6q = quiz('dsp391m-quiz-6', 'Quiz 6 — Evaluation &amp; tuning|||Quiz 6 — Đánh giá &amp; tinh chỉnh', [
+const c6q = quiz('dsp391m-quiz-6', 'Quiz 6 — Evaluation & tuning|||Quiz 6 — Đánh giá & tinh chỉnh', [
   { id: 'q1', question: 'Recall (độ nhạy) đo lường điều gì?', options: ['Trong số ca ta gắn cờ dương, bao nhiêu đúng', 'Trong số ca dương thật, mô hình bắt được bao nhiêu', 'Sai số bình phương trung bình', 'Tỉ lệ dữ liệu thiếu'], correctIndex: 1, explanation: 'Recall = TP / (TP + FN): trong toàn bộ ca dương thật, mô hình phát hiện được bao nhiêu.' },
   { id: 'q2', question: 'Nên tinh chỉnh siêu tham số (hyperparameter tuning) dựa trên tập nào?', options: ['Tập test', 'Tập train/validation (hoặc cross-validation)', 'Toàn bộ dữ liệu gồm cả test', 'Dữ liệu production'], correctIndex: 1, explanation: 'Tinh chỉnh trên train/validation; tập test phải giữ niêm phong, chỉ dùng một lần ở cuối.' },
   { id: 'q3', question: 'Thước đo nào phù hợp cho bài toán HỒI QUY?', options: ['F1-score', 'ROC-AUC', 'RMSE (sai số căn bậc hai trung bình bình phương)', 'Confusion matrix'], correctIndex: 2, explanation: 'MAE, RMSE, R2 dùng cho hồi quy; F1/AUC/confusion matrix dùng cho phân loại.' },
 ]);
 
-const c7 = doc('dsp391m-7-1-deploy', 'Phase 7 — Deployment, MLOps &amp; dashboard|||Giai đoạn 7 — Triển khai, MLOps &amp; dashboard',
+const c7 = doc('dsp391m-7-1-deploy', 'Phase 7 — Deployment, MLOps & dashboard|||Giai đoạn 7 — Triển khai, MLOps & dashboard',
   'Deployment (CRISP-DM): lưu mô hình, phục vụ qua API/dashboard (Streamlit/FastAPI), theo dõi thí nghiệm & phiên bản, giám sát drift.',
   [[
     `<span class="eyebrow">DSP391m · Phase 7 · Deployment</span>
@@ -508,13 +508,13 @@ pred = loaded.predict(new_data)
 <div class="callout"><span class="badge">Môi trường tái lập</span> Ghim phụ thuộc (<code>requirements.txt</code>) và tiền xử lý đầu vào bằng <em>đúng</em> pipeline đã fit khi huấn luyện — lệch tiền xử lý giữa train và serve là lỗi production kinh điển.</div>`,
   ]]);
 
-const c7q = quiz('dsp391m-quiz-7', 'Quiz 7 — Deployment &amp; MLOps|||Quiz 7 — Triển khai &amp; MLOps', [
+const c7q = quiz('dsp391m-quiz-7', 'Quiz 7 — Deployment & MLOps|||Quiz 7 — Triển khai & MLOps', [
   { id: 'q1', question: 'Công cụ nào phù hợp nhất để dựng nhanh một dashboard bấm được cho demo mô hình?', options: ['pandas', 'Streamlit', 'NumPy', 'Matplotlib'], correctIndex: 1, explanation: 'Streamlit biến script Python thành app web tương tác rất nhanh, hợp cho demo đồ án.' },
   { id: 'q2', question: 'Data drift (trôi dữ liệu) trong production là gì?', options: ['Dữ liệu bị mất khi lưu', 'Phân bố đầu vào ở production dần lệch khỏi dữ liệu huấn luyện, làm độ chính xác giảm', 'Mô hình chạy quá chậm', 'Thiếu thư viện phụ thuộc'], correctIndex: 1, explanation: 'Khi dữ liệu thực tế thay đổi so với lúc train, mô hình mất chính xác dần → cần giám sát và huấn luyện lại.' },
   { id: 'q3', question: 'Vì sao phải dùng CÙNG pipeline tiền xử lý khi train và khi phục vụ (serve)?', options: ['Để tiết kiệm bộ nhớ', 'Vì lệch tiền xử lý giữa train và serve khiến mô hình nhận đầu vào khác định dạng và cho kết quả sai', 'Để tăng tốc GridSearch', 'Vì joblib bắt buộc'], correctIndex: 1, explanation: 'Nếu serve xử lý đầu vào khác lúc train, mô hình nhận dữ liệu sai định dạng/thang → dự đoán sai, một lỗi production kinh điển.' },
 ]);
 
-const c8 = doc('dsp391m-8-1-report', 'Phase 8 — Report, storytelling, defense &amp; ethics|||Giai đoạn 8 — Báo cáo, kể chuyện, bảo vệ &amp; đạo đức',
+const c8 = doc('dsp391m-8-1-report', 'Phase 8 — Report, storytelling, defense & ethics|||Giai đoạn 8 — Báo cáo, kể chuyện, bảo vệ & đạo đức',
   'Truyền đạt kết quả: cấu trúc báo cáo, data storytelling cho stakeholder; bảo vệ đồ án; đạo đức dữ liệu (bias, quyền riêng tư, minh bạch).',
   [[
     `<span class="eyebrow">DSP391m · Phase 8 · Communicate</span>
@@ -561,7 +561,7 @@ const c8 = doc('dsp391m-8-1-report', 'Phase 8 — Report, storytelling, defense 
 <div class="callout"><span class="badge">Sản phẩm nộp</span> Báo cáo cuối + bộ slide + demo trực tiếp. Tập bảo vệ; canh giờ; chuẩn bị trả lời "nếu dữ liệu thiên lệch thì sao?" và "mô hình này sẽ hỏng thế nào ở production?"</div>`,
   ]]);
 
-const c8q = quiz('dsp391m-quiz-8', 'Quiz 8 — Report &amp; ethics|||Quiz 8 — Báo cáo &amp; đạo đức', [
+const c8q = quiz('dsp391m-quiz-8', 'Quiz 8 — Report & ethics|||Quiz 8 — Báo cáo & đạo đức', [
   { id: 'q1', question: 'Data storytelling tốt cho stakeholder nên bắt đầu bằng gì?', options: ['Confusion matrix chi tiết', 'Phát hiện/khuyến nghị chính và giá trị kinh doanh', 'Mã nguồn tiền xử lý', 'Danh sách siêu tham số'], correctIndex: 1, explanation: 'Dẫn dắt bằng phát hiện và giá trị kinh doanh; chi tiết kỹ thuật để ở phụ lục.' },
   { id: 'q2', question: 'Vì sao nên nêu rõ GIỚI HẠN của mô hình khi bảo vệ?', options: ['Để giấu lỗi', 'Vì nói thẳng giới hạn tạo niềm tin hơn là giả vờ mô hình hoàn hảo', 'Vì rubric cấm nói kết quả tốt', 'Để kéo dài thời gian trình bày'], correctIndex: 1, explanation: 'Hiểu và trình bày trung thực giới hạn cho thấy tư duy phản biện và xây dựng niềm tin của hội đồng.' },
   { id: 'q3', question: 'Kiểm "công bằng (fairness)" trong đạo đức dữ liệu nghĩa là gì?', options: ['Kiểm xem mô hình chạy nhanh không', 'Kiểm xem mô hình có đối xử bất bình đẳng/hiệu năng khác nhau giữa các nhóm không', 'Kiểm dung lượng file mô hình', 'Kiểm số dòng dữ liệu'], correctIndex: 1, explanation: 'Fairness xét mô hình có thiên lệch với nhóm nào không, thường bằng cách so hiệu năng theo từng nhóm nhỏ.' },

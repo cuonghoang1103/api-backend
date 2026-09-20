@@ -121,7 +121,7 @@ const intro = doc('spm401-0-1-overview', 'Course overview: Security Project Mana
 <p>Vòng đời &amp; nhóm quy trình → khởi tạo (charter, bên liên quan) → lập kế hoạch (WBS, lịch trình, ước lượng) → rủi ro → nguồn lực, chi phí &amp; mua sắm → thực thi &amp; chất lượng/an toàn → giám sát, kiểm soát thay đổi &amp; tuân thủ (RMF/ISO 27001) → kết thúc, bài học &amp; Agile/Scrum. Song ngữ, mỗi chương một quiz.</p>`,
   ]]);
 
-const c1 = doc('spm401-1-1-lifecycle', '1.1 — Project management &amp; the security project life cycle|||1.1 — Quản lý dự án &amp; vòng đời dự án an ninh',
+const c1 = doc('spm401-1-1-lifecycle', '1.1 — Project management & the security project life cycle|||1.1 — Quản lý dự án & vòng đời dự án an ninh',
   'Quản lý dự án là gì; vai trò PM; năm nhóm quy trình PMBOK (khởi tạo→lập kế hoạch→thực thi→giám sát→kết thúc); vòng đời dự đoán (waterfall) vs thích ứng (agile); đặc thù dự án an ninh.',
   [[
     `<span class="eyebrow">SPM401 · Chapter 1 · Lesson 1.1</span>
@@ -166,7 +166,7 @@ const c1q = quiz('spm401-quiz-1', 'Quiz 1 — Life cycle|||Quiz 1 — Vòng đ�
   { id: 'q3', question: 'Vòng đời "thích ứng" (agile) phù hợp nhất khi?', options: ['Phạm vi đã rõ và cố định hoàn toàn', 'Công việc còn nhiều bất định, phạm vi tiến hoá theo vòng lặp ngắn', 'Không có bên liên quan nào', 'Ngân sách bằng không'], correctIndex: 1, explanation: 'Agile hợp với việc bất định, phạm vi làm rõ dần qua các vòng lặp ngắn.' },
 ]);
 
-const c2 = doc('spm401-2-1-initiating', '2.1 — Initiating &amp; defining scope|||2.1 — Khởi tạo &amp; xác định phạm vi',
+const c2 = doc('spm401-2-1-initiating', '2.1 — Initiating & defining scope|||2.1 — Khởi tạo & xác định phạm vi',
   'Business case; project charter (mục tiêu, phạm vi cao cấp, PM, ngân sách sơ bộ); phân tích bên liên quan (ma trận quyền lực/quan tâm); tuyên bố phạm vi & tiêu chí nghiệm thu; scope creep.',
   [[
     `<span class="eyebrow">SPM401 · Chapter 2 · Lesson 2.1</span>
@@ -203,7 +203,7 @@ const c2q = quiz('spm401-quiz-2', 'Quiz 2 — Initiating|||Quiz 2 — Khởi t�
   { id: 'q3', question: '"Scope creep" là hiện tượng?', options: ['Phạm vi phình to không kiểm soát, phá lịch trình và ngân sách', 'Dự án kết thúc sớm', 'Chi phí giảm bất ngờ', 'Rủi ro tự biến mất'], correctIndex: 0, explanation: 'Scope creep = phạm vi mở rộng ngoài kiểm soát; chống bằng scope statement rõ và kiểm soát thay đổi.' },
 ]);
 
-const c3 = doc('spm401-3-1-planning', '3.1 — Planning: WBS, schedule &amp; estimation|||3.1 — Lập kế hoạch: WBS, lịch trình &amp; ước lượng',
+const c3 = doc('spm401-3-1-planning', '3.1 — Planning: WBS, schedule & estimation|||3.1 — Lập kế hoạch: WBS, lịch trình & ước lượng',
   'Work Breakdown Structure (WBS) & gói công việc; sơ đồ mạng, đường găng (critical path); biểu đồ Gantt & mốc; ước lượng thời gian/chi phí (analogous, parametric, three-point PERT).',
   [[
     `<span class="eyebrow">SPM401 · Chapter 3 · Lesson 3.1</span>
@@ -307,7 +307,7 @@ const c4q = quiz('spm401-quiz-4', 'Quiz 4 — Risk|||Quiz 4 — Rủi ro', [
   { id: 'q3', question: 'Phát biểu nào đúng về "rủi ro dự án" so với "rủi ro an ninh thông tin"?', options: ['Chúng luôn giống hệt nhau', 'Rủi ro dự án đe doạ lịch trình/ngân sách; rủi ro ATTT là thứ dự án nhằm giảm', 'Rủi ro dự án không cần quản lý', 'Rủi ro ATTT do PM chịu trách nhiệm về lịch trình'], correctIndex: 1, explanation: 'Rủi ro dự án ảnh hưởng mục tiêu dự án; rủi ro ATTT là lý do triển khai dự án bảo mật.' },
 ]);
 
-const c5 = doc('spm401-5-1-resource-cost-procurement', '5.1 — Resource, cost &amp; procurement management|||5.1 — Quản lý nguồn lực, chi phí &amp; mua sắm',
+const c5 = doc('spm401-5-1-resource-cost-procurement', '5.1 — Resource, cost & procurement management|||5.1 — Quản lý nguồn lực, chi phí & mua sắm',
   'Ma trận trách nhiệm RACI; lập ngân sách & đường cơ sở chi phí (cost baseline); quỹ dự phòng (contingency vs management reserve); mua sắm: loại hợp đồng (fixed-price vs T&M), quy trình chọn nhà cung cấp.',
   [[
     `<span class="eyebrow">SPM401 · Chapter 5 · Lesson 5.1</span>
@@ -354,7 +354,7 @@ const c5q = quiz('spm401-quiz-5', 'Quiz 5 — Resource/cost/procurement|||Quiz 5
   { id: 'q3', question: '"Đường cơ sở chi phí" (cost baseline) là?', options: ['Chi phí thực tế cuối dự án', 'Ngân sách đã duyệt, phân theo thời gian, dùng làm mốc đo hiệu suất', 'Lương của PM', 'Giá thị trường của công cụ'], correctIndex: 1, explanation: 'Cost baseline là ngân sách phê duyệt phân theo thời gian, dùng so với chi tiêu thực.' },
 ]);
 
-const c6 = doc('spm401-6-1-executing-quality', '6.1 — Executing &amp; managing quality/safety|||6.1 — Thực thi &amp; quản lý chất lượng/an toàn',
+const c6 = doc('spm401-6-1-executing-quality', '6.1 — Executing & managing quality/safety|||6.1 — Thực thi & quản lý chất lượng/an toàn',
   'Chỉ đạo & quản lý công việc; xây dựng và dẫn dắt nhóm; quản lý chất lượng (planning/assurance/control); phân biệt QA vs QC; đảm bảo an toàn trong thi công bảo mật (thay đổi có kiểm soát, không làm gián đoạn dịch vụ).',
   [[
     `<span class="eyebrow">SPM401 · Chapter 6 · Lesson 6.1</span>
@@ -393,7 +393,7 @@ const c6q = quiz('spm401-quiz-6', 'Quiz 6 — Executing/quality|||Quiz 6 — Th�
   { id: 'q3', question: 'Trong dự án, nhóm quy trình nào tiêu tốn phần lớn ngân sách và công sức?', options: ['Khởi tạo', 'Thực thi (executing)', 'Kết thúc', 'Chỉ lập kế hoạch'], correctIndex: 1, explanation: 'Thực thi là nơi công việc thực sự diễn ra, chiếm phần lớn chi phí và nỗ lực.' },
 ]);
 
-const c7 = doc('spm401-7-1-monitoring-compliance', '7.1 — Monitoring, change control &amp; compliance|||7.1 — Giám sát, kiểm soát thay đổi &amp; tuân thủ',
+const c7 = doc('spm401-7-1-monitoring-compliance', '7.1 — Monitoring, change control & compliance|||7.1 — Giám sát, kiểm soát thay đổi & tuân thủ',
   'Giám sát tiến độ; giá trị thu được (EVM: PV/EV/AC, SV/CV, SPI/CPI); kiểm soát thay đổi tích hợp & CCB; lồng tuân thủ vào dự án — NIST RMF (6 bước) và triển khai/chứng nhận ISO/IEC 27001.',
   [[
     `<span class="eyebrow">SPM401 · Chapter 7 · Lesson 7.1</span>
@@ -446,7 +446,7 @@ const c7q = quiz('spm401-quiz-7', 'Quiz 7 — Monitoring/compliance|||Quiz 7 —
   { id: 'q3', question: 'NIST SP 800-37 (RMF) gồm sáu bước theo thứ tự nào?', options: ['Chọn → Phân loại → Đánh giá → Triển khai → Giám sát → Cấp phép', 'Phân loại → Chọn → Triển khai → Đánh giá → Cấp phép → Giám sát', 'Triển khai → Chọn → Phân loại → Cấp phép → Giám sát → Đánh giá', 'Giám sát → Cấp phép → Đánh giá → Triển khai → Chọn → Phân loại'], correctIndex: 1, explanation: 'RMF: Categorize → Select → Implement → Assess → Authorize → Monitor.' },
 ]);
 
-const c8 = doc('spm401-8-1-closing-agile', '8.1 — Closing, lessons learned &amp; Agile/Scrum|||8.1 — Kết thúc, bài học kinh nghiệm &amp; Agile/Scrum',
+const c8 = doc('spm401-8-1-closing-agile', '8.1 — Closing, lessons learned & Agile/Scrum|||8.1 — Kết thúc, bài học kinh nghiệm & Agile/Scrum',
   'Kết thúc dự án: nghiệm thu, đóng hợp đồng, giải phóng nguồn lực; báo cáo bài học kinh nghiệm; chuyển giao sang vận hành; Agile/Scrum trong dự án bảo mật (vai trò, sự kiện, artifact) và khi nào chọn agile.',
   [[
     `<span class="eyebrow">SPM401 · Chapter 8 · Lesson 8.1</span>

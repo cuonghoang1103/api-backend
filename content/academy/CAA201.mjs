@@ -41,7 +41,7 @@ const intro = doc('caa201-0-1-overview', 'Course overview: Communications & Adve
 <div class="callout"><span class="badge">Kệ sách tham khảo</span> Ogilvy, <em>Ogilvy on Advertising</em> · Sullivan, <em>Hey Whipple, Squeeze This</em> · Belch, <em>Advertising &amp; Promotion</em> · thư viện case của D&amp;AD và Cannes Lions.</div>`,
   ]]);
 
-const c1 = doc('caa201-1-1-adv-communication', '1.1 — Advertising &amp; communication|||1.1 — Quảng cáo &amp; truyền thông',
+const c1 = doc('caa201-1-1-adv-communication', '1.1 — Advertising & communication|||1.1 — Quảng cáo & truyền thông',
   'Quảng cáo là gì, lịch sử ngắn; vị trí trong marketing mix (4P); mô hình truyền thông người gửi–thông điệp–người nhận; xác định đối tượng mục tiêu.',
   [[
     `<span class="eyebrow">CAA201 · Chapter 1 · Lesson 1.1</span>
@@ -84,7 +84,7 @@ const c1q = quiz('caa201-quiz-1', 'Quiz 1 — Advertising & communication|||Quiz
   { id: 'q3', question: '"Nhiễu" (noise) trong mô hình truyền thông là?', options: ['Ngân sách quảng cáo', 'Sự lộn xộn/phân tâm làm rơi rụng thông điệp', 'Tên thương hiệu', 'Kênh phát sóng'], correctIndex: 1, explanation: 'Noise là clutter/phân tâm — vì nó mà thông điệp phải giản dị, ý tưởng phải sắc.' },
 ]);
 
-const c2 = doc('caa201-2-1-strategy-insight', '2.1 — Strategy &amp; insight|||2.1 — Chiến lược &amp; insight',
+const c2 = doc('caa201-2-1-strategy-insight', '2.1 — Strategy & insight|||2.1 — Chiến lược & insight',
   'Creative brief (bản tóm sáng tạo); consumer insight — sự thật ngầm hiểu; định vị (positioning); từ chiến lược tới big idea.',
   [[
     `<span class="eyebrow">CAA201 · Chapter 2 · Lesson 2.1</span>
@@ -324,7 +324,7 @@ const c7q = quiz('caa201-quiz-7', 'Quiz 7 — Integrated campaign|||Quiz 7 — C
   { id: 'q3', question: 'Trong storytelling thương hiệu, ai thường là "người hùng"?', options: ['Thương hiệu', 'Khách hàng', 'Đối thủ', 'Đạo diễn quảng cáo'], correctIndex: 1, explanation: 'Thương hiệu hiếm khi là người hùng; khách hàng mới là, thương hiệu là người trợ giúp.' },
 ]);
 
-const c8 = doc('caa201-8-1-measurement-ethics', '8.1 — Measurement &amp; ethics|||8.1 — Đo lường &amp; đạo đức',
+const c8 = doc('caa201-8-1-measurement-ethics', '8.1 — Measurement & ethics|||8.1 — Đo lường & đạo đức',
   'Đo hiệu quả quảng cáo (mục tiêu, chỉ số, hiệu ứng thương hiệu vs bán hàng); đạo đức & quảng cáo có trách nhiệm; giải thưởng ngành (Cannes Lions, D&AD).',
   [[
     `<span class="eyebrow">CAA201 · Chapter 8 · Lesson 8.1</span>
@@ -363,7 +363,7 @@ const c8q = quiz('caa201-quiz-8', 'Quiz 8 — Measurement & ethics|||Quiz 8 — 
   { id: 'q3', question: 'Cannes Lions và D&D (D&AD) là gì?', options: ['Kênh phát TV', 'Giải thưởng đặt chuẩn toàn cầu cho sáng tạo quảng cáo', 'Phần mềm thiết kế', 'Công ty in ấn'], correctIndex: 1, explanation: 'Chúng tôn vinh ý tưởng xuất sắc mà vẫn chạy được; học case đoạt giải để biết "hay" trông ra sao.' },
 ]);
 
-const taiLieu = doc('caa201-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('caa201-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: giáo trình & slide (FLM), sách chuẩn ngành (Ogilvy, Sullivan, Belch), case Cannes Lions & D&AD, YouTube, công cụ, lộ trình 4 bước.',
   [[
     `<span class="eyebrow">CAA201 · Materials</span>

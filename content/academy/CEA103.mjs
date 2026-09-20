@@ -84,7 +84,7 @@ const taiLieu = doc('cea103-0-0-tai-lieu', '📚 Course materials & references||
 </ol></div>`,
   ]]);
 
-const intro = doc('cea103-0-1-overview', 'Course overview: Computer Organization &amp; Architecture|||Tổng quan: Tổ chức &amp; Kiến trúc máy tính',
+const intro = doc('cea103-0-1-overview', 'Course overview: Computer Organization & Architecture|||Tổng quan: Tổ chức & Kiến trúc máy tính',
   'Kiến trúc vs tổ chức máy tính; mô hình von Neumann; các lớp trừu tượng từ transistor tới phần mềm; lộ trình 8 chương từ biểu diễn dữ liệu tới vào/ra & hiệu năng.',
   [[
     `<span class="eyebrow">CEA103 · Lesson 0.1 · Overview</span>
@@ -131,7 +131,7 @@ const intro = doc('cea103-0-1-overview', 'Course overview: Computer Organization
 <p>Biểu diễn dữ liệu &amp; hệ đếm → logic số &amp; mạch → tập lệnh (ISA) → số học máy tính → datapath &amp; control của bộ xử lý → pipeline → phân cấp bộ nhớ (cache) → vào/ra, ngắt &amp; hiệu năng. Song ngữ, có ví dụ mẫu và đoạn assembly/mạch.</p>`,
   ]]);
 
-const c1 = doc('cea103-1-1-data-representation', '1.1 — Data representation &amp; number systems|||1.1 — Biểu diễn dữ liệu &amp; hệ đếm',
+const c1 = doc('cea103-1-1-data-representation', '1.1 — Data representation & number systems|||1.1 — Biểu diễn dữ liệu & hệ đếm',
   'Von Neumann; hệ nhị phân/thập lục phân, đổi cơ số; số bù 2 (số âm); dấu phẩy động IEEE 754.',
   [[
     `<span class="eyebrow">CEA103 · Chapter 1 · Lesson 1.1</span>
@@ -172,7 +172,7 @@ const c1q = quiz('cea103-quiz-1', 'Quiz 1 — Data representation|||Quiz 1 — B
   { id: 'q3', question: 'Chuẩn IEEE 754 dùng để biểu diễn?', options: ['Số nguyên không dấu', 'Ký tự Unicode', 'Số dấu phẩy động (số thực)', 'Địa chỉ bộ nhớ'], correctIndex: 2, explanation: 'IEEE 754 mã hoá số thực bằng dấu + mũ + phần lẻ (mantissa).' },
 ]);
 
-const c2 = doc('cea103-2-1-digital-logic', '2.1 — Digital logic &amp; circuits|||2.1 — Logic số &amp; mạch',
+const c2 = doc('cea103-2-1-digital-logic', '2.1 — Digital logic & circuits|||2.1 — Logic số & mạch',
   'Cổng logic (AND/OR/NOT/XOR); đại số Boole; mạch tổ hợp (bộ cộng, MUX); mạch tuần tự & flip-flop (nhớ trạng thái).',
   [[
     `<span class="eyebrow">CEA103 · Chapter 2 · Lesson 2.1</span>
@@ -329,7 +329,7 @@ const c4q = quiz('cea103-quiz-4', 'Quiz 4 — Arithmetic|||Quiz 4 — Số học
   { id: 'q3', question: 'Cộng số 8-bit có dấu: 127 + 1 cho kết quả -128. Đây là hiện tượng?', options: ['Làm tròn', 'Tràn số (overflow)', 'Số bù 1', 'Dấu phẩy động'], correctIndex: 1, explanation: 'Kết quả vượt tầm biểu diễn của thanh ghi → tràn số, dấu bị lật.' },
 ]);
 
-const c5 = doc('cea103-5-1-datapath', '5.1 — Processor: datapath &amp; control|||5.1 — Bộ xử lý: datapath &amp; control',
+const c5 = doc('cea103-5-1-datapath', '5.1 — Processor: datapath & control|||5.1 — Bộ xử lý: datapath & control',
   'Datapath (PC, thanh ghi, ALU, bộ nhớ); bộ điều khiển (control unit); chu kỳ lệnh fetch-decode-execute.',
   [[
     `<span class="eyebrow">CEA103 · Chapter 5 · Lesson 5.1</span>
@@ -362,7 +362,7 @@ const c5 = doc('cea103-5-1-datapath', '5.1 — Processor: datapath &amp; control
 <div class="callout"><span class="badge">Datapath + control = CPU</span> Đưa datapath đúng tín hiệu điều khiển theo đúng thứ tự là bạn có một bộ xử lý chạy được. Mọi thứ sau đây (pipeline) là làm chu kỳ này <em>nhanh hơn</em>.</div>`,
   ]]);
 
-const c5q = quiz('cea103-quiz-5', 'Quiz 5 — Datapath &amp; control|||Quiz 5 — Datapath &amp; control', [
+const c5q = quiz('cea103-quiz-5', 'Quiz 5 — Datapath & control|||Quiz 5 — Datapath & control', [
   { id: 'q1', question: 'Bước đầu tiên của chu kỳ lệnh là?', options: ['Execute (thực thi)', 'Fetch (nạp lệnh từ Memory[PC])', 'Write-back', 'Decode'], correctIndex: 1, explanation: 'Chu kỳ bắt đầu bằng FETCH: nạp lệnh tại địa chỉ trong PC, rồi PC tiến lên.' },
   { id: 'q2', question: 'Thanh ghi PC (Program Counter) giữ gì?', options: ['Kết quả của ALU', 'Địa chỉ của lệnh kế tiếp', 'Dữ liệu vừa đọc từ cache', 'Tín hiệu điều khiển'], correctIndex: 1, explanation: 'PC trỏ tới lệnh tiếp theo cần nạp; sau fetch thường PC = PC + 4.' },
   { id: 'q3', question: 'Bộ phận nào sinh tín hiệu điều khiển lái datapath dựa trên lệnh hiện tại?', options: ['ALU', 'Register file', 'Control unit (bộ điều khiển)', 'Cache'], correctIndex: 2, explanation: 'Control unit giải mã lệnh và phát tín hiệu điều khiển các thành phần datapath.' },
@@ -415,7 +415,7 @@ const c6q = quiz('cea103-quiz-6', 'Quiz 6 — Pipelining|||Quiz 6 — Pipeline',
   { id: 'q3', question: 'Lệnh rẽ nhánh làm ta không biết chắc lệnh kế tiếp cần nạp — đây là loại hazard nào?', options: ['Structural hazard', 'Data hazard', 'Control hazard', 'Không phải hazard'], correctIndex: 2, explanation: 'Rẽ nhánh gây control hazard; giảm bằng dự đoán nhánh (branch prediction).' },
 ]);
 
-const c7 = doc('cea103-7-1-memory-hierarchy', '7.1 — Memory hierarchy &amp; cache|||7.1 — Phân cấp bộ nhớ &amp; cache',
+const c7 = doc('cea103-7-1-memory-hierarchy', '7.1 — Memory hierarchy & cache|||7.1 — Phân cấp bộ nhớ & cache',
   'Phân cấp bộ nhớ (thanh ghi→cache→RAM→đĩa); tính cục bộ (locality); ánh xạ cache (mapping); hit/miss; bộ nhớ chính.',
   [[
     `<span class="eyebrow">CEA103 · Chapter 7 · Lesson 7.1</span>
@@ -464,7 +464,7 @@ const c7q = quiz('cea103-quiz-7', 'Quiz 7 — Memory hierarchy|||Quiz 7 — Phâ
   { id: 'q3', question: 'Khi CPU cần dữ liệu MÀ cache KHÔNG có, phải lấy từ tầng chậm hơn — gọi là?', options: ['Cache hit', 'Cache miss', 'Forwarding', 'Overflow'], correctIndex: 1, explanation: 'Không tìm thấy trong cache = cache miss, phải lấy từ RAM/đĩa.' },
 ]);
 
-const c8 = doc('cea103-8-1-io-performance', '8.1 — I/O, buses &amp; system performance|||8.1 — Vào/ra, bus &amp; hiệu năng',
+const c8 = doc('cea103-8-1-io-performance', '8.1 — I/O, buses & system performance|||8.1 — Vào/ra, bus & hiệu năng',
   'Vào/ra (I/O); bus hệ thống; polling vs ngắt (interrupt); DMA (truy cập bộ nhớ trực tiếp); đo hiệu năng & định luật Amdahl.',
   [[
     `<span class="eyebrow">CEA103 · Chapter 8 · Lesson 8.1</span>
@@ -501,7 +501,7 @@ tăng tốc = 1 / (0.1 + 0.9/10) = 1 / 0.19 = 5.26x  (không phải 10x)</code><
 <div class="callout"><span class="badge">Tối ưu trường hợp phổ biến</span> Định luật Amdahl là lý do kỹ sư nhắm vào thứ chiếm phần lớn thời gian — tăng tốc đường hiếm gặp gần như không nhích được tổng.</div>`,
   ]]);
 
-const c8q = quiz('cea103-quiz-8', 'Quiz 8 — I/O &amp; performance|||Quiz 8 — Vào/ra &amp; hiệu năng', [
+const c8q = quiz('cea103-quiz-8', 'Quiz 8 — I/O & performance|||Quiz 8 — Vào/ra & hiệu năng', [
   { id: 'q1', question: 'Cơ chế nào cho phép thiết bị báo CPU khi xong, thay vì CPU liên tục thăm dò?', options: ['Polling', 'Ngắt (interrupt)', 'Caching', 'Pipelining'], correctIndex: 1, explanation: 'Ngắt để thiết bị chủ động báo CPU, tránh phí chu kỳ như polling.' },
   { id: 'q2', question: 'DMA (Direct Memory Access) giúp ích thế nào?', options: ['Chuyển cả khối giữa thiết bị và bộ nhớ mà không cần CPU chép từng byte', 'Tăng số thanh ghi', 'Dự đoán nhánh', 'Nén dữ liệu cache'], correctIndex: 0, explanation: 'DMA controller lo truyền khối, CPU chỉ bị ngắt khi hoàn tất — giải phóng CPU.' },
   { id: 'q3', question: 'Một phần chiếm 90% thời gian được tăng tốc 10 lần; phần còn lại giữ nguyên. Theo định luật Amdahl, tăng tốc tổng là?', options: ['10x', '9x', '≈ 5,26x', '1x'], correctIndex: 2, explanation: '1 / (0,1 + 0,9/10) = 1/0,19 ≈ 5,26x — phần không tăng tốc chặn lợi ích tổng.' },

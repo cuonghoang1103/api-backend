@@ -117,7 +117,7 @@ const intro = doc('aic211-0-1-overview', 'Course overview: AI for cyber security
 <p>Nền tảng &amp; quy trình ML → dữ liệu &amp; đặc trưng an ninh → phát hiện mã độc → phát hiện xâm nhập &amp; bất thường → thư rác/phishing &amp; NLP → gian lận &amp; UEBA → adversarial ML (phòng thủ) → đạo đức, XAI &amp; MLSecOps. Song ngữ, có ví dụ Python (scikit-learn/pandas) và quiz.</p>`,
   ]]);
 
-const c1 = doc('aic211-1-1-intersection', '1.1 — AI &amp; cybersecurity intersection; ML overview|||1.1 — Giao thoa AI &amp; an ninh mạng; tổng quan ML',
+const c1 = doc('aic211-1-1-intersection', '1.1 — AI & cybersecurity intersection; ML overview|||1.1 — Giao thoa AI & an ninh mạng; tổng quan ML',
   'Phòng thủ theo luật vs học máy; quy trình ML (thu thập → đặc trưng → huấn luyện → đánh giá → triển khai); đánh giá lệch lớp: precision, recall, F1, ma trận nhầm lẫn.',
   [[
     `<span class="eyebrow">AIC211 · Chapter 1 · Lesson 1.1</span>
@@ -174,7 +174,7 @@ const c1q = quiz('aic211-quiz-1', 'Quiz 1 — AI & security, ML basics|||Quiz 1 
   { id: 'q3', question: 'Ưu điểm của học máy so với bộ luật/chữ ký thuần là?', options: ['Luôn không có cảnh báo sai', 'Tổng quát hoá, bắt được biến thể chưa thấy nguyên văn', 'Không cần dữ liệu', 'Chạy chậm hơn nên an toàn hơn'], correctIndex: 1, explanation: 'ML học khuôn mẫu nên tổng quát hoá sang biến thể mới; luật chỉ khớp cái đã biết chính xác.' },
 ]);
 
-const c2 = doc('aic211-2-1-data-features', '2.1 — Security data preparation &amp; features (logs, netflow)|||2.1 — Chuẩn bị dữ liệu an ninh &amp; đặc trưng (logs, netflow)',
+const c2 = doc('aic211-2-1-data-features', '2.1 — Security data preparation & features (logs, netflow)|||2.1 — Chuẩn bị dữ liệu an ninh & đặc trưng (logs, netflow)',
   'Nguồn dữ liệu an ninh (log, netflow, PCAP, sự kiện endpoint); làm sạch & phân tích cú pháp; đặc trưng số/danh mục; chuẩn hoá & mã hoá one-hot; đặc trưng theo cửa sổ thời gian.',
   [[
     `<span class="eyebrow">AIC211 · Chapter 2 · Lesson 2.1</span>
@@ -292,7 +292,7 @@ const c3q = quiz('aic211-quiz-3', 'Quiz 3 — Malware detection|||Quiz 3 — Ph�
   { id: 'q3', question: 'Vì sao mô hình phát hiện mã độc cần huấn luyện lại định kỳ?', options: ['Vì Python hết hạn', 'Vì họ mã độc tiến hoá và kỹ thuật né tránh thay đổi', 'Vì ổ cứng đầy', 'Vì màu biểu đồ cũ'], correctIndex: 1, explanation: 'Mã độc biến đổi liên tục (packing, biến thể mới) nên mô hình cũ mất hiệu lực nếu không cập nhật dữ liệu.' },
 ]);
 
-const c4 = doc('aic211-4-1-intrusion-anomaly', '4.1 — Intrusion detection &amp; anomaly detection|||4.1 — Phát hiện xâm nhập &amp; bất thường',
+const c4 = doc('aic211-4-1-intrusion-anomaly', '4.1 — Intrusion detection & anomaly detection|||4.1 — Phát hiện xâm nhập & bất thường',
   'IDS theo chữ ký vs theo bất thường; học "bình thường" rồi báo lệch; Isolation Forest & One-Class SVM; ngưỡng điểm bất thường; đánh đổi cảnh báo sai.',
   [[
     `<span class="eyebrow">AIC211 · Chapter 4 · Lesson 4.1</span>
@@ -343,7 +343,7 @@ const c4q = quiz('aic211-quiz-4', 'Quiz 4 — Intrusion & anomaly|||Quiz 4 — X
   { id: 'q3', question: 'Hạ ngưỡng để bắt nhiều bất thường hơn thường kéo theo?', options: ['Ít cảnh báo sai hơn', 'Nhiều cảnh báo sai hơn, làm ngập analyst', 'Mô hình chạy nhanh hơn', 'Không ảnh hưởng gì'], correctIndex: 1, explanation: 'Ngưỡng nhạy hơn tăng recall nhưng cũng tăng dương tính giả — phải cân với ngân sách cảnh báo của đội.' },
 ]);
 
-const c5 = doc('aic211-5-1-spam-phishing-nlp', '5.1 — Spam/phishing filtering &amp; NLP|||5.1 — Lọc thư rác/phishing &amp; NLP',
+const c5 = doc('aic211-5-1-spam-phishing-nlp', '5.1 — Spam/phishing filtering & NLP|||5.1 — Lọc thư rác/phishing & NLP',
   'Biểu diễn văn bản (bag-of-words, TF-IDF); Naive Bayes lọc thư rác; đặc trưng phishing (URL, tên miền, tiêu đề); vì sao cần đặc trưng ngoài nội dung chữ.',
   [[
     `<span class="eyebrow">AIC211 · Chapter 5 · Lesson 5.1</span>
@@ -394,7 +394,7 @@ const c5q = quiz('aic211-quiz-5', 'Quiz 5 — Spam/phishing & NLP|||Quiz 5 — T
   { id: 'q3', question: 'Thuật toán kinh điển hay dùng để lọc thư rác dạng văn bản là?', options: ['Isolation Forest', 'Naive Bayes', 'K-Means trên ảnh', 'Chỉ dùng biểu thức chính quy'], correctIndex: 1, explanation: 'Multinomial Naive Bayes trên đặc trưng từ (BoW/TF-IDF) là chuẩn mực lâu đời và hiệu quả cho lọc thư rác.' },
 ]);
 
-const c6 = doc('aic211-6-1-fraud-ueba', '6.1 — Fraud detection &amp; user behaviour analytics (UEBA)|||6.1 — Phát hiện gian lận &amp; phân tích hành vi người dùng (UEBA)',
+const c6 = doc('aic211-6-1-fraud-ueba', '6.1 — Fraud detection & user behaviour analytics (UEBA)|||6.1 — Phát hiện gian lận & phân tích hành vi người dùng (UEBA)',
   'Gian lận là bài toán cực lệch lớp; đặc trưng giao dịch & hành vi; đường cơ sở mỗi người dùng (UEBA); xử lý mất cân bằng (class_weight, PR-AUC); tài khoản bị chiếm.',
   [[
     `<span class="eyebrow">AIC211 · Chapter 6 · Lesson 6.1</span>
@@ -445,7 +445,7 @@ const c6q = quiz('aic211-quiz-6', 'Quiz 6 — Fraud & UEBA|||Quiz 6 — Gian l�
   { id: 'q3', question: 'Tham số class_weight="balanced" giúp gì khi dữ liệu mất cân bằng?', options: ['Xoá lớp thiểu số', 'Tăng trọng số cho lớp hiếm để mô hình không phớt lờ nó', 'Làm mô hình chạy nhanh gấp đôi', 'Chuyển bài toán thành hồi quy'], correctIndex: 1, explanation: 'Nó tăng phạt khi sai ở lớp hiếm, buộc mô hình chú ý tới gian lận thay vì tối ưu cho lớp đa số.' },
 ]);
 
-const c7 = doc('aic211-7-1-adversarial-ml', '7.1 — Adversarial ML &amp; attacks on models (defence)|||7.1 — Adversarial ML &amp; tấn công vào mô hình (phòng thủ)',
+const c7 = doc('aic211-7-1-adversarial-ml', '7.1 — Adversarial ML & attacks on models (defence)|||7.1 — Adversarial ML & tấn công vào mô hình (phòng thủ)',
   'Mối đe doạ với chính mô hình: né tránh (evasion), đầu độc dữ liệu (poisoning), trích xuất/đảo ngược; MITRE ATLAS; hướng phòng thủ: kiểm thử đối kháng, vệ sinh dữ liệu, giám sát.',
   [[
     `<span class="eyebrow">AIC211 · Chapter 7 · Lesson 7.1</span>
@@ -506,7 +506,7 @@ const c7q = quiz('aic211-quiz-7', 'Quiz 7 — Adversarial ML|||Quiz 7 — Advers
   { id: 'q3', question: 'Biện pháp phòng thủ nào giúp chống trích xuất mô hình (model extraction) qua API?', options: ['Bỏ hết log', 'Giới hạn tần suất truy vấn và giám sát phân bố đầu vào', 'Công khai trọng số mô hình', 'Tắt xác thực'], correctIndex: 1, explanation: 'Rate limit và theo dõi mẫu truy vấn bất thường làm khó việc dò/sao chép mô hình qua nhiều lần gọi.' },
 ]);
 
-const c8 = doc('aic211-8-1-xai-mlsecops-ethics', '8.1 — Ethics, explainability (XAI) &amp; operating security ML (MLSecOps)|||8.1 — Đạo đức, giải thích được (XAI) &amp; vận hành ML an ninh (MLSecOps)',
+const c8 = doc('aic211-8-1-xai-mlsecops-ethics', '8.1 — Ethics, explainability (XAI) & operating security ML (MLSecOps)|||8.1 — Đạo đức, giải thích được (XAI) & vận hành ML an ninh (MLSecOps)',
   'NIST AI RMF (Govern/Map/Measure/Manage); XAI (feature importance, SHAP) vì analyst cần lý do; MLSecOps: giám sát trôi dạt, huấn luyện lại, human-in-the-loop; thiên lệch & quyền riêng tư.',
   [[
     `<span class="eyebrow">AIC211 · Chapter 8 · Lesson 8.1</span>

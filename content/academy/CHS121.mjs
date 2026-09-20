@@ -98,7 +98,7 @@ const intro = doc('chs121-0-1-overview', 'Course overview: Chinese Speaking 2|||
 <p>Sở thích &amp; cuối tuần → thời tiết &amp; sức khoẻ → gọi điện &amp; hẹn → gọi món ở nhà hàng → mua sắm → hỏi đường &amp; phương tiện → thuê nhà → kể chuyện đơn giản.</p>`,
   ]]);
 
-const b1 = doc('chs121-1-1-hobbies-weekend', 'Lesson 1 — Hobbies &amp; the weekend|||Bài 1 — Sở thích &amp; cuối tuần',
+const b1 = doc('chs121-1-1-hobbies-weekend', 'Lesson 1 — Hobbies & the weekend|||Bài 1 — Sở thích & cuối tuần',
   'Mẫu câu: 周末做什么, 喜欢…, 你有什么爱好, 一起去…吧; động từ sở thích 看电影/运动/唱歌; luyện hỏi-đáp về sở thích.',
   [[
     `<span class="eyebrow">CHS121 · Lesson 1 · Hobbies</span>
@@ -161,13 +161,13 @@ B: 好啊！             Hǎo a!                          (Được thôi!)
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 喜欢 (xǐhuan) kết bằng 欢 thanh nhẹ — đọc nhẹ: xǐ·huan. 也 (yě, cũng) nối hai sở thích: 我喜欢 A，也喜欢 B.</div>`,
   ]]);
 
-const b1q = quiz('chs121-quiz-1', 'Quiz 1 — Hobbies &amp; the weekend|||Quiz 1 — Sở thích &amp; cuối tuần', [
+const b1q = quiz('chs121-quiz-1', 'Quiz 1 — Hobbies & the weekend|||Quiz 1 — Sở thích & cuối tuần', [
   { id: 'q1', question: 'Hỏi "cuối tuần bạn làm gì?" đúng là? / How do you ask what someone does on the weekend?', options: ['周末你做什么？', '你几岁？', '多少钱？', '你是谁？'], correctIndex: 0, explanation: '周末 (cuối tuần) + 你做什么 (bạn làm gì) → 周末你做什么?' },
   { id: 'q2', question: '"我喜欢看电影" nghĩa là gì? / What does 我喜欢看电影 mean?', options: ['Tôi thích xem phim|||I like watching movies', 'Tôi muốn ăn cơm|||I want to eat', 'Tôi đi làm|||I go to work', 'Tôi không khoẻ|||I am unwell'], correctIndex: 0, explanation: '喜欢 (thích) + 看电影 (xem phim) = tôi thích xem phim.' },
   { id: 'q3', question: 'Rủ ai đó "cùng đi… nhé" dùng cụm nào? / Which phrase invites doing something together?', options: ['一起去…吧', '再见', '多喝水', '打错了'], correctIndex: 0, explanation: '一起去…吧 — 一起 (cùng nhau) + 吧 làm câu thành lời rủ thân thiện.' },
 ]);
 
-const b2 = doc('chs121-2-1-weather-health', 'Lesson 2 — Weather &amp; health|||Bài 2 — Thời tiết &amp; sức khoẻ',
+const b2 = doc('chs121-2-1-weather-health', 'Lesson 2 — Weather & health|||Bài 2 — Thời tiết & sức khoẻ',
   'Mẫu câu: 今天天气怎么样, 我有点儿不舒服, 你怎么了, 多喝水多休息; từ 热/冷/下雨/感冒/发烧; luyện hỏi thăm sức khoẻ.',
   [[
     `<span class="eyebrow">CHS121 · Lesson 2 · Weather &amp; health</span>
@@ -232,13 +232,13 @@ B: 谢谢！               Xièxie!                    (Cảm ơn!)
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 怎么样 (zěnmeyàng) có 么 thanh nhẹ — đọc nhanh: zěn·me·yàng. 了 trong 感冒了 báo một sự thay đổi: nay đã (bị) cảm.</div>`,
   ]]);
 
-const b2q = quiz('chs121-quiz-2', 'Quiz 2 — Weather &amp; health|||Quiz 2 — Thời tiết &amp; sức khoẻ', [
+const b2q = quiz('chs121-quiz-2', 'Quiz 2 — Weather & health|||Quiz 2 — Thời tiết & sức khoẻ', [
   { id: 'q1', question: 'Hỏi "hôm nay thời tiết thế nào?" đúng là? / How do you ask what the weather is like today?', options: ['今天天气怎么样？', '你叫什么？', '多少钱？', '几点见？'], correctIndex: 0, explanation: '今天天气 (thời tiết hôm nay) + 怎么样 (thế nào) → 今天天气怎么样?' },
   { id: 'q2', question: '"我感冒了" nghĩa là gì? / What does 我感冒了 mean?', options: ['Tôi bị cảm|||I have a cold', 'Tôi đói|||I am hungry', 'Tôi vui|||I am happy', 'Tôi bận|||I am busy'], correctIndex: 0, explanation: '感冒 (cảm cúm) + 了 (báo thay đổi) = tôi bị cảm.' },
   { id: 'q3', question: 'Lời khuyên quen thuộc cho người bị ốm là? / A common piece of advice for someone who is sick?', options: ['多喝水，多休息', '太贵了', '打错了', '一起去'], correctIndex: 0, explanation: '多喝水 (uống nhiều nước) + 多休息 (nghỉ nhiều) — lời chúc cho người ốm.' },
 ]);
 
-const b3 = doc('chs121-3-1-phone-appointments', 'Lesson 3 — Phone calls &amp; making plans|||Bài 3 — Gọi điện &amp; hẹn',
+const b3 = doc('chs121-3-1-phone-appointments', 'Lesson 3 — Phone calls & making plans|||Bài 3 — Gọi điện & hẹn',
   'Mẫu câu: 喂, 请问…在吗, 你打错了, 你是哪位, 什么时候方便, 请稍等; luyện gọi điện và hẹn gặp.',
   [[
     `<span class="eyebrow">CHS121 · Lesson 3 · Phone calls</span>
@@ -449,7 +449,7 @@ const b5q = quiz('chs121-quiz-5', 'Quiz 5 — Shopping|||Quiz 5 — Đi mua sắ
   { id: 'q3', question: '"大一点儿" nghĩa là gì? / What does 大一点儿 mean?', options: ['To hơn một chút|||A bit bigger', 'Rẻ hơn|||Cheaper', 'Nhỏ hơn nhiều|||Much smaller', 'Đắt quá|||Too expensive'], correctIndex: 0, explanation: '大 (to) + 一点儿 (một chút) = to hơn một chút.' },
 ]);
 
-const b6 = doc('chs121-6-1-directions-transport', 'Lesson 6 — Directions &amp; transport|||Bài 6 — Hỏi đường &amp; phương tiện',
+const b6 = doc('chs121-6-1-directions-transport', 'Lesson 6 — Directions & transport|||Bài 6 — Hỏi đường & phương tiện',
   'Mẫu câu: 到…怎么走, 坐地铁还是坐公交, 要换乘吗, 大概多长时间; từ 站/一直走/换乘; luyện hỏi đường và chọn phương tiện.',
   [[
     `<span class="eyebrow">CHS121 · Lesson 6 · Directions</span>
@@ -512,13 +512,13 @@ B: 要，在中心站换乘，大概二十分钟。 Yào, zài zhōngxīn zhàn 
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 还是 (háishi) có 是 đọc nhẹ và ngăn hai lựa chọn — nhấn vào hai vế (地铁 … 公交), đừng nhấn vào 还是.</div>`,
   ]]);
 
-const b6q = quiz('chs121-quiz-6', 'Quiz 6 — Directions &amp; transport|||Quiz 6 — Hỏi đường &amp; phương tiện', [
+const b6q = quiz('chs121-quiz-6', 'Quiz 6 — Directions & transport|||Quiz 6 — Hỏi đường & phương tiện', [
   { id: 'q1', question: 'Hỏi "đến ga tàu đi thế nào?" đúng là? / How do you ask the way to the train station?', options: ['到火车站怎么走？', '多少钱？', '你几岁？', '有家具吗？'], correctIndex: 0, explanation: '到火车站 (đến ga tàu) + 怎么走 (đi thế nào) → 到火车站怎么走?' },
   { id: 'q2', question: 'Từ "还是" (háishi) dùng để làm gì? / What is 还是 used for?', options: ['Hỏi lựa chọn A hay B|||To ask a choice: A or B', 'Chào hỏi|||To greet', 'Tính tiền|||To pay', 'Cảm ơn|||To thank'], correctIndex: 0, explanation: '还是 nối hai lựa chọn trong câu hỏi: A 还是 B (A hay B).' },
   { id: 'q3', question: 'Hỏi "khoảng mất bao lâu?" đúng là? / How do you ask how long it takes?', options: ['大概要多长时间？', '多少钱？', '你是谁？', '几点见？'], correctIndex: 0, explanation: '大概 (khoảng) + 多长时间 (mất bao lâu) → 大概要多长时间?' },
 ]);
 
-const b7 = doc('chs121-7-1-renting', 'Lesson 7 — Renting a place &amp; asking the price|||Bài 7 — Thuê nhà &amp; hỏi giá',
+const b7 = doc('chs121-7-1-renting', 'Lesson 7 — Renting a place & asking the price|||Bài 7 — Thuê nhà & hỏi giá',
   'Mẫu câu: 我想租房, 一个月多少钱, 有没有…, 我想看房, 押金是多少; từ 房子/厨房/卫生间/家具; luyện hỏi thuê nhà.',
   [[
     `<span class="eyebrow">CHS121 · Lesson 7 · Renting</span>
@@ -676,15 +676,15 @@ export default {
     requirements: 'Nên học xong CHS111 (nền phát âm, 4 thanh, câu giao tiếp cơ bản) trước khi vào môn này. Cài Pleco hoặc HelloChinese để nghe audio bản ngữ &amp; luyện nói theo; hãy nói to và tự thu âm để so với mẫu.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成 基础篇, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成 基础篇, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHS111: nhắc nền phát âm/thanh điệu, mục tiêu giao tiếp HSK2, cách luyện nói theo chủ đề mở rộng.', lessons: [intro] },
-    { title: 'Bài 1 — Sở thích &amp; cuối tuần|||Lesson 1 — Hobbies & the weekend', description: '周末做什么, 喜欢, 爱好, 一起去…吧.', lessons: [b1, b1q] },
-    { title: 'Bài 2 — Thời tiết &amp; sức khoẻ|||Lesson 2 — Weather & health', description: '今天天气怎么样, 不舒服, 感冒, 多喝水.', lessons: [b2, b2q] },
-    { title: 'Bài 3 — Gọi điện &amp; hẹn|||Lesson 3 — Phone calls', description: '喂, 请问…在吗, 打错了, 什么时候方便.', lessons: [b3, b3q] },
+    { title: 'Bài 1 — Sở thích & cuối tuần|||Lesson 1 — Hobbies & the weekend', description: '周末做什么, 喜欢, 爱好, 一起去…吧.', lessons: [b1, b1q] },
+    { title: 'Bài 2 — Thời tiết & sức khoẻ|||Lesson 2 — Weather & health', description: '今天天气怎么样, 不舒服, 感冒, 多喝水.', lessons: [b2, b2q] },
+    { title: 'Bài 3 — Gọi điện & hẹn|||Lesson 3 — Phone calls', description: '喂, 请问…在吗, 打错了, 什么时候方便.', lessons: [b3, b3q] },
     { title: 'Bài 4 — Ở nhà hàng|||Lesson 4 — At the restaurant', description: '有什么好吃的, 不要太辣, 再来一个, 结账.', lessons: [b4, b4q] },
     { title: 'Bài 5 — Đi mua sắm|||Lesson 5 — Shopping', description: '试试, 大一点儿, 别的颜色, 太贵了能不能便宜.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Hỏi đường &amp; phương tiện|||Lesson 6 — Directions & transport', description: '到…怎么走, 坐地铁还是公交, 换乘, 大概多长时间.', lessons: [b6, b6q] },
-    { title: 'Bài 7 — Thuê nhà &amp; hỏi giá|||Lesson 7 — Renting a place', description: '房子, 一个月多少钱, 有没有, 看房.', lessons: [b7, b7q] },
+    { title: 'Bài 6 — Hỏi đường & phương tiện|||Lesson 6 — Directions & transport', description: '到…怎么走, 坐地铁还是公交, 换乘, 大概多长时间.', lessons: [b6, b6q] },
+    { title: 'Bài 7 — Thuê nhà & hỏi giá|||Lesson 7 — Renting a place', description: '房子, 一个月多少钱, 有没有, 看房.', lessons: [b7, b7q] },
     { title: 'Bài 8 — Kể chuyện đơn giản|||Lesson 8 — Telling a simple story', description: '先…然后…最后, 觉得, 有意思.', lessons: [b8, b8q] },
   ],
 };

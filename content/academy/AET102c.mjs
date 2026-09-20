@@ -177,7 +177,7 @@ const c2q = quiz('aet102c-quiz-2', 'Quiz 2 — History of aesthetics|||Quiz 2 �
   { id: 'q3', question: 'Ba dấu hiệu cái đẹp của Aquinas là?|||Aquinas named which three marks of beauty?', options: ['Màu, đường, khối|||Colour, line, mass', 'Toàn vẹn, tỉ lệ, rạng rỡ (integritas, consonantia, claritas)|||Wholeness, proportion, radiance', 'Nhanh, rẻ, tốt|||Fast, cheap, good', 'Đối xứng, lặp, tương phản|||Symmetry, repetition, contrast'], correctIndex: 1, explanation: 'Aquinas: integritas, consonantia, claritas.' },
 ]);
 
-const c3 = doc('aet102c-3-1-kant', '3.1 — Kant &amp; modern aesthetics|||3.1 — Mỹ học Kant &amp; hiện đại',
+const c3 = doc('aet102c-3-1-kant', '3.1 — Kant & modern aesthetics|||3.1 — Mỹ học Kant & hiện đại',
   'Kant: phán đoán thẩm mỹ, cái đẹp là khoái cảm vô tư (disinterested), tính phổ quát chủ quan, cái cao cả (sublime); Hegel về nghệ thuật là hiện thân của tinh thần.',
   [[
     `<span class="eyebrow">AET102c · Chapter 3 · Lesson 3.1</span>
@@ -204,7 +204,7 @@ const c3 = doc('aet102c-3-1-kant', '3.1 — Kant &amp; modern aesthetics|||3.1 �
 <p><strong>Hegel</strong> chuyển tiêu điểm sang nội dung nghệ thuật: nghệ thuật là <em>sự hiện ra cảm tính của Ý niệm</em> — tinh thần được làm cho thấy được — và các hình thức của nó (tượng trưng, cổ điển, lãng mạn) trải ra qua lịch sử.</p>`,
   ]]);
 
-const c3q = quiz('aet102c-quiz-3', 'Quiz 3 — Kant &amp; modern aesthetics|||Quiz 3 — Kant &amp; mỹ học hiện đại', [
+const c3q = quiz('aet102c-quiz-3', 'Quiz 3 — Kant & modern aesthetics|||Quiz 3 — Kant & mỹ học hiện đại', [
   { id: 'q1', question: 'Với Kant, phán đoán về cái đẹp là "vô tư" nghĩa là?|||For Kant, a judgment of beauty is "disinterested" means?', options: ['Ta thờ ơ, không quan tâm|||We are indifferent and bored', 'Ta khoái cảm trước hình thức mà không muốn sở hữu/dùng nó|||We enjoy the form without wanting to own or use it', 'Ta phán đoán vì tiền|||We judge for money', 'Cái đẹp là khách quan tuyệt đối|||Beauty is fully objective'], correctIndex: 1, explanation: 'Disinterested: khoái cảm với hình thức, tách khỏi ham muốn.' },
   { id: 'q2', question: '"Tính phổ quát chủ quan" của Kant nói rằng phán đoán đẹp?|||Kant "subjective universality" says a beauty judgment?', options: ['Chỉ đúng với riêng tôi|||Is true for me only', 'Là cảm giác nhưng nói như thể mọi người nên đồng ý|||Is a feeling that yet claims everyone should agree', 'Là sự thật toán học|||Is a mathematical fact', 'Không có giá trị gì|||Has no validity'], correctIndex: 1, explanation: 'Cảm giác mà đòi hỏi tính phổ quát — chủ quan nhưng phổ quát.' },
   { id: 'q3', question: 'Cái cao cả (sublime) khác cái đẹp ở chỗ?|||The sublime differs from beauty in that?', options: ['Nó luôn nhỏ và dễ thương|||It is always small and cute', 'Nó trỗi lên trước cái vô hình thức, áp đảo (bão, núi lớn)|||It arises before the formless and overwhelming', 'Nó chỉ có trong âm nhạc|||It exists only in music', 'Nó cần màu sắc rực rỡ|||It requires bright colours'], correctIndex: 1, explanation: 'Cái đẹp = hình thức có trật tự; cái cao cả = vô hình thức, áp đảo.' },
@@ -247,7 +247,7 @@ const c4q = quiz('aet102c-quiz-4', 'Quiz 4 — Aesthetic categories|||Quiz 4 —
   { id: 'q3', question: 'Câu nào ĐÚNG về cái xấu trong nghệ thuật?|||Which is TRUE about the ugly in art?', options: ['Cái xấu không bao giờ có giá trị thẩm mỹ|||The ugly can never have aesthetic value', 'Cái xấu có thể mang sức mạnh thẩm mỹ (Goya, Bacon)|||The ugly can carry real aesthetic power (Goya, Bacon)', 'Cái xấu chỉ là thiếu màu|||The ugly is merely a lack of colour', 'Cái xấu đồng nghĩa cái cao cả|||The ugly is the same as the sublime'], correctIndex: 1, explanation: 'Nghệ thuật hiện đại cho thấy cái xấu có thể có sức mạnh thẩm mỹ.' },
 ]);
 
-const c5 = doc('aet102c-5-1-experience', '5.1 — Aesthetic experience &amp; taste|||5.1 — Trải nghiệm &amp; thị hiếu thẩm mỹ',
+const c5 = doc('aet102c-5-1-experience', '5.1 — Aesthetic experience & taste|||5.1 — Trải nghiệm & thị hiếu thẩm mỹ',
   'Trải nghiệm thẩm mỹ (chú ý vô tư, đắm mình), tri giác & Gestalt, cảm xúc trong nghệ thuật, thị hiếu (taste) và việc rèn giũa nó.',
   [[
     `<span class="eyebrow">AET102c · Chapter 5 · Lesson 5.1</span>
@@ -272,7 +272,7 @@ const c5 = doc('aet102c-5-1-experience', '5.1 — Aesthetic experience &amp; tas
 <p><strong>Thị hiếu (taste)</strong> là năng lực tri giác và phán đoán chất lượng thẩm mỹ. Nó không cố định: sự tiếp xúc, so sánh và tri thức <em>rèn</em> nó — con mắt bạn mang đến một bức tranh sau một năm ngắm nhìn là một khí cụ tốt hơn.</p>`,
   ]]);
 
-const c5q = quiz('aet102c-quiz-5', 'Quiz 5 — Experience &amp; taste|||Quiz 5 — Trải nghiệm &amp; thị hiếu', [
+const c5q = quiz('aet102c-quiz-5', 'Quiz 5 — Experience & taste|||Quiz 5 — Trải nghiệm & thị hiếu', [
   { id: 'q1', question: 'Nguyên lý Gestalt mô tả điều gì?|||Gestalt principles describe?', options: ['Cách pha màu sơn dầu|||How to mix oil paint', 'Cách mắt gộp các thành phần thành tổng thể (gần nhau, tương tự, khép kín...)|||How the eye groups elements into wholes (proximity, similarity, closure...)', 'Giá tranh trên thị trường|||Art market prices', 'Lịch sử Phục Hưng|||Renaissance history'], correctIndex: 1, explanation: 'Gestalt: proximity, similarity, closure, figure/ground.' },
   { id: 'q2', question: '"Nghịch lý của bi kịch" (paradox of tragedy) là?|||The "paradox of tragedy" is?', options: ['Bi kịch luôn có kết vui|||Tragedies always end happily', 'Ta tìm đến tác phẩm khơi cảm xúc đau đớn mà vẫn thấy được đền đáp|||We seek works arousing painful emotions yet feel rewarded', 'Bi kịch không có cảm xúc|||Tragedy has no emotion', 'Chỉ trẻ em thích bi kịch|||Only children like tragedy'], correctIndex: 1, explanation: 'Cảm xúc đau ở khoảng cách an toàn, được cho hình thức và ý nghĩa.' },
   { id: 'q3', question: 'Theo bài, thị hiếu (taste)?|||According to the lesson, taste?', options: ['Cố định từ khi sinh|||Is fixed from birth', 'Rèn giũa được nhờ tiếp xúc, so sánh, tri thức|||Can be trained by exposure, comparison and knowledge', 'Không liên quan tri giác|||Has nothing to do with perception', 'Chỉ là ý kiến vô căn cứ|||Is just groundless opinion'], correctIndex: 1, explanation: 'Thị hiếu là năng lực rèn giũa được, không cố định.' },
@@ -315,7 +315,7 @@ const c6q = quiz('aet102c-quiz-6', 'Quiz 6 — Beauty in design|||Quiz 6 — Cá
   { id: 'q3', question: 'Câu "ít hơn, nhưng tốt hơn" gắn với nguyên lý và nhà thiết kế nào?|||"Less, but better" is tied to which principle and designer?', options: ['Tương phản — Josef Albers|||Contrast — Josef Albers', 'Tối giản — Dieter Rams|||Minimalism — Dieter Rams', 'Nhịp điệu — William Morris|||Rhythm — William Morris', 'Đối xứng — Vitruvius|||Symmetry — Vitruvius'], correctIndex: 1, explanation: 'Dieter Rams: "Weniger, aber besser" — tối giản.' },
 ]);
 
-const c7 = doc('aet102c-7-1-east-asian-vietnamese', '7.1 — East Asian &amp; Vietnamese aesthetics|||7.1 — Mỹ học Á Đông &amp; Việt Nam',
+const c7 = doc('aet102c-7-1-east-asian-vietnamese', '7.1 — East Asian & Vietnamese aesthetics|||7.1 — Mỹ học Á Đông & Việt Nam',
   'Mỹ học phương Đông: khoảng trống & khí vận (Trung Hoa), wabi-sabi, ma, mono no aware (Nhật); thẩm mỹ truyền thống Việt (đình chùa, gốm, tranh dân gian).',
   [[
     `<span class="eyebrow">AET102c · Chapter 7 · Lesson 7.1</span>
@@ -346,13 +346,13 @@ const c7 = doc('aet102c-7-1-east-asian-vietnamese', '7.1 — East Asian &amp; Vi
 <div class="callout"><span class="badge">Với người thiết kế</span> Mỹ học phương Đông dạy rằng <strong>khoảng trống cũng là nội dung</strong> và sự bất toàn có thể là chủ ý — một đối trọng mạnh với tính đối xứng và độ hoàn thiện của phương Tây.</div>`,
   ]]);
 
-const c7q = quiz('aet102c-quiz-7', 'Quiz 7 — East Asian &amp; Vietnamese|||Quiz 7 — Á Đông &amp; Việt Nam', [
+const c7q = quiz('aet102c-quiz-7', 'Quiz 7 — East Asian & Vietnamese|||Quiz 7 — Á Đông & Việt Nam', [
   { id: 'q1', question: '"Wabi-sabi" (Nhật Bản) tôn vinh cái đẹp ở đâu?|||Japanese "wabi-sabi" finds beauty in?', options: ['Sự hoàn hảo bóng bẩy|||Glossy perfection', 'Sự bất toàn, vô thường và dang dở|||The imperfect, impermanent and incomplete', 'Tính đối xứng tuyệt đối|||Absolute symmetry', 'Màu sắc rực rỡ nhất|||The brightest colours'], correctIndex: 1, explanation: 'Wabi-sabi: đẹp trong bất toàn, vô thường, dang dở.' },
   { id: 'q2', question: 'Trong tranh cổ điển Trung Hoa, "khoảng trống" (lưu bạch) là?|||In classical Chinese painting, empty space (liubai) is?', options: ['Lỗi kỹ thuật|||A technical mistake', 'Một yếu tố chủ động, mặt lụa để trống mà thở|||An active element — the unpainted silk breathes', 'Nơi ký tên|||Where the signature goes only', 'Không có ý nghĩa|||Meaningless'], correctIndex: 1, explanation: 'Lưu bạch là yếu tố chủ động, không phải chỗ thừa.' },
   { id: 'q3', question: 'Tranh dân gian Đông Hồ (Việt Nam) đặc trưng bởi?|||Vietnamese Đông Hồ folk prints are characterized by?', options: ['Sơn dầu phối cảnh phương Tây|||Western oil and perspective', 'Màu bệt tươi trên giấy điệp, mô-típ mùa màng|||Bold flat colour on điệp paper, harvest motifs', 'Chỉ đen trắng|||Black and white only', 'Điêu khắc kim loại|||Metal sculpture'], correctIndex: 1, explanation: 'Đông Hồ: màu bệt trên giấy điệp, mô-típ mùa màng, phồn thực.' },
 ]);
 
-const c8 = doc('aet102c-8-1-contemporary-digital', '8.1 — Contemporary, digital &amp; AI aesthetics|||8.1 — Mỹ học đương đại, số &amp; AI',
+const c8 = doc('aet102c-8-1-contemporary-digital', '8.1 — Contemporary, digital & AI aesthetics|||8.1 — Mỹ học đương đại, số & AI',
   'Nghệ thuật đương đại (ý niệm, Duchamp, thể chế nghệ thuật), thẩm mỹ số & new media, generative/AI art, và thẩm mỹ đại chúng (kitsch, thị giác mạng).',
   [[
     `<span class="eyebrow">AET102c · Chapter 8 · Lesson 8.1</span>
@@ -377,7 +377,7 @@ const c8 = doc('aet102c-8-1-contemporary-digital', '8.1 — Contemporary, digita
 <p><strong>Kitsch</strong> (cái đẹp &quot;dễ dãi&quot;, uỷ mị, sản xuất hàng loạt), meme, và văn hoá thị giác trên nền tảng nay là đối tượng chính đáng của mỹ học — thị hiếu vận hành ở quy mô lớn, được định hình bởi dòng tin và thuật toán.</p>`,
   ]]);
 
-const c8q = quiz('aet102c-quiz-8', 'Quiz 8 — Contemporary &amp; digital|||Quiz 8 — Đương đại &amp; số', [
+const c8q = quiz('aet102c-quiz-8', 'Quiz 8 — Contemporary & digital|||Quiz 8 — Đương đại & số', [
   { id: 'q1', question: 'Tác phẩm "Fountain" (1917) của Duchamp chủ yếu đặt câu hỏi gì?|||Duchamp "Fountain" (1917) mainly asks?', options: ['Cách vẽ phối cảnh|||How to draw perspective', 'Nghệ thuật có phải do ý niệm và thể chế định nghĩa, chứ không do vẻ đẹp hình thức?|||Whether art is defined by idea and institution, not beauty of form', 'Màu nào đẹp nhất|||Which colour is best', 'Cách nung gốm|||How to fire ceramics'], correctIndex: 1, explanation: 'Duchamp mở nghệ thuật ý niệm & thuyết thể chế (Dickie).' },
   { id: 'q2', question: 'Đâu là thuộc tính RIÊNG mà mỹ học số/new-media thêm vào?|||Which is a property distinctive to digital/new-media aesthetics?', options: ['Tính tương tác, sinh tạo, mã như chất liệu|||Interactivity, generativity, code as medium', 'Sơn dầu trên vải|||Oil on canvas', 'Đá cẩm thạch|||Marble', 'Chỉ có màu đen|||Only black'], correctIndex: 0, explanation: 'Màn hình thêm tương tác, sinh tạo, hành vi hệ thống, mã.' },
   { id: 'q3', question: 'Với nghệ thuật AI, câu hỏi thẩm mỹ nổi bật là?|||For AI art, a key aesthetic question is?', options: ['Nên dùng khung tranh nào|||Which frame to use', 'Quyền tác giả nằm ở đâu (câu lệnh, dữ liệu, mô hình, người tuyển chọn)?|||Where authorship lies (prompt, data, model, curator)', 'Giá điện của máy tính|||The electricity bill', 'Cỡ màn hình|||Screen size'], correctIndex: 1, explanation: 'AI art mở lại câu hỏi quyền tác giả và sáng tạo vs tái tổ hợp.' },

@@ -121,7 +121,7 @@ const intro = doc('cry303c-0-1-overview', 'Course overview: Applied Cryptography
   ]]);
 
 // ── Module 1 — Cryptography & Information Theory (CLO1) ───────────────────────
-const m1 = doc('cry303c-1-1-info-theory', '1.1 — Cryptography &amp; information theory|||1.1 — Mật mã &amp; lý thuyết thông tin',
+const m1 = doc('cry303c-1-1-info-theory', '1.1 — Cryptography & information theory|||1.1 — Mật mã & lý thuyết thông tin',
   'Thuật ngữ (plaintext/ciphertext/key), nguyên lý Kerckhoff, deterministic vs random, entropy; tấn công (brute force, cryptanalysis, side-channel); ôn số học (số nguyên tố, modular, nghịch đảo, Euclid mở rộng, luỹ thừa modular).',
   [[
     `<span class="eyebrow">CRY303c · Module 1 · Lesson 1.1</span>
@@ -248,7 +248,7 @@ print(caesar('KHOOR', -3))         # HELLO
 <div class="callout"><span class="badge">Confusion + diffusion</span> Mã hiện đại lặp thay thế và hoán vị qua nhiều vòng — một vòng thì yếu, nhiều vòng giấu hết cấu trúc.</div>`,
   ]]);
 
-const m2b = doc('cry303c-2-2-des-aes', '2.2 — DES, 3DES &amp; AES|||2.2 — DES, 3DES &amp; AES',
+const m2b = doc('cry303c-2-2-des-aes', '2.2 — DES, 3DES & AES|||2.2 — DES, 3DES & AES',
   'DES; Double-DES & meet-in-the-middle; Triple-DES; AES (SubBytes/ShiftRows/MixColumns/AddRoundKey); trường hữu hạn GF(2^8); ví dụ AES-GCM bằng thư viện cryptography.',
   [[
     `<span class="eyebrow">CRY303c · Module 2 · Lesson 2.2</span>
@@ -308,7 +308,7 @@ const m2q = quiz('cry303c-quiz-2', 'Quiz 2 — Symmetric crypto|||Quiz 2 — Mã
 ]);
 
 // ── Module 3 — Asymmetric Cryptography & Key Management (CLO3) ────────────────
-const m3a = doc('cry303c-3-1-rsa', '3.1 — Public-key crypto &amp; RSA|||3.1 — Mã khoá công khai &amp; RSA',
+const m3a = doc('cry303c-3-1-rsa', '3.1 — Public-key crypto & RSA|||3.1 — Mã khoá công khai & RSA',
   'Ý tưởng mã bất đối xứng & chữ ký; RSA: sinh khoá (p,q,n,φ,e,d), mã/giải (c=m^e, m=c^d), độ bảo mật (khó phân tích n); ví dụ RSA-OAEP bằng thư viện cryptography.',
   [[
     `<span class="eyebrow">CRY303c · Module 3 · Lesson 3.1</span>
@@ -365,7 +365,7 @@ print(pt)          # b'hi Bob'
 <div class="callout"><span class="badge">Dễ một chiều</span> Nhân hai số nguyên tố lớn là tức thì; phân tích tích trở lại được tin là bất khả thi — khoảng cách đó là bảo mật của RSA.</div>`,
   ]]);
 
-const m3b = doc('cry303c-3-2-dh-pki', '3.2 — Diffie-Hellman, certificates &amp; PKI|||3.2 — Diffie-Hellman, chứng chỉ &amp; PKI',
+const m3b = doc('cry303c-3-2-dh-pki', '3.2 — Diffie-Hellman, certificates & PKI|||3.2 — Diffie-Hellman, chứng chỉ & PKI',
   'Bài toán logarithm rời rạc & trao đổi khoá Diffie-Hellman; tấn công man-in-the-middle; phân phối khoá, chứng chỉ khoá công khai & PKI (CA).',
   [[
     `<span class="eyebrow">CRY303c · Module 3 · Lesson 3.2</span>
@@ -412,14 +412,14 @@ print(s_alice, s_bob) # bằng nhau -> khoá chung bí mật
 <div class="callout"><span class="badge">Tin cậy cần danh tính</span> Trao đổi khoá mà không xác thực thì hở toang cho man-in-the-middle — chứng chỉ và PKI bổ sung phần "ai" còn thiếu.</div>`,
   ]]);
 
-const m3q = quiz('cry303c-quiz-3', 'Quiz 3 — Asymmetric &amp; keys|||Quiz 3 — Bất đối xứng &amp; khoá', [
+const m3q = quiz('cry303c-quiz-3', 'Quiz 3 — Asymmetric & keys|||Quiz 3 — Bất đối xứng & khoá', [
   { id: 'q1', question: 'RSA security relies on the hardness of…?|||Bảo mật RSA dựa trên độ khó của…?', options: ['Sorting|||Sắp xếp', 'Factoring a large n|||Phân tích số n lớn', 'Hashing|||Băm', 'XOR|||XOR'], correctIndex: 1, explanation: 'Nhân p·q dễ, phân tích n về p,q khó.' },
   { id: 'q2', question: 'Plain Diffie-Hellman without authentication is vulnerable to…?|||DH trần không xác thực dễ bị…?', options: ['Brute force only|||Chỉ vét cạn', 'Man-in-the-middle|||Kẻ đứng giữa (MITM)', 'Frequency analysis|||Phân tích tần suất', 'Nothing|||Không gì'], correctIndex: 1, explanation: 'Không danh tính -> kẻ giữa tráo giá trị công khai.' },
   { id: 'q3', question: 'A certificate signed by a CA binds…?|||Chứng chỉ do CA ký gắn kết…?', options: ['Two private keys|||Hai khoá riêng', 'An identity to a public key|||Danh tính với khoá công khai', 'A hash to a salt|||Băm với salt', 'A nonce to a block|||Nonce với khối'], correctIndex: 1, explanation: 'PKI: CA ký chứng chỉ gắn danh tính với khoá công khai.' },
 ]);
 
 // ── Module 4 — Cryptographic Hash & Integrity Protection (CLO4) ───────────────
-const m4 = doc('cry303c-4-1-hash-mac', '4.1 — Hashes, MACs &amp; digital signatures|||4.1 — Hàm băm, MAC &amp; chữ ký số',
+const m4 = doc('cry303c-4-1-hash-mac', '4.1 — Hashes, MACs & digital signatures|||4.1 — Hàm băm, MAC & chữ ký số',
   'Hàm băm mật mã & thuộc tính (preimage, second-preimage, collision resistance); hash chain, S/Key OTP; cryptocurrency & Bitcoin; MAC (HMAC); yêu cầu & thuộc tính chữ ký số; ví dụ SHA-256 + HMAC bằng Python.',
   [[
     `<span class="eyebrow">CRY303c · Module 4 · Lesson 4.1</span>
@@ -484,7 +484,7 @@ print(hmac.compare_digest(tag, tag))
 <div class="callout"><span class="badge">Hash vs MAC vs chữ ký</span> Hash = toàn vẹn. MAC = toàn vẹn + xác thực (khoá chung). Chữ ký = toàn vẹn + xác thực + chống chối bỏ (khoá công khai).</div>`,
   ]]);
 
-const m4q = quiz('cry303c-quiz-4', 'Quiz 4 — Hash &amp; integrity|||Quiz 4 — Băm &amp; toàn vẹn', [
+const m4q = quiz('cry303c-quiz-4', 'Quiz 4 — Hash & integrity|||Quiz 4 — Băm & toàn vẹn', [
   { id: 'q1', question: 'Collision resistance means you cannot find…?|||Kháng va chạm nghĩa là không tìm được…?', options: ['One input for a given digest|||Một đầu vào cho digest cho trước', 'Any two inputs with the same digest|||Bất kỳ hai đầu vào cùng digest', 'The key from the tag|||Khoá từ tag', 'A prime factor|||Một thừa số nguyên tố'], correctIndex: 1, explanation: 'Collision: không có hai đầu vào khác nhau cùng băm.' },
   { id: 'q2', question: 'What does a MAC add over a plain hash?|||MAC thêm gì so với băm trần?', options: ['Compression|||Nén', 'Authentication via a shared key|||Xác thực nhờ khoá chung', 'A larger digest|||Digest lớn hơn', 'Encryption|||Mã hoá'], correctIndex: 1, explanation: 'MAC dùng khoá bí mật -> chứng minh cả nguồn gốc lẫn toàn vẹn.' },
   { id: 'q3', question: 'A digital signature uniquely provides…?|||Chữ ký số cung cấp riêng biệt tính…?', options: ['Confidentiality|||Bí mật', 'Non-repudiation|||Chống chối bỏ', 'Compression|||Nén', 'Faster hashing|||Băm nhanh hơn'], correctIndex: 1, explanation: 'Ký bằng khoá riêng -> người ký không thể phủ nhận.' },

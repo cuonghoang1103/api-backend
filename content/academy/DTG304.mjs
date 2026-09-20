@@ -103,7 +103,7 @@ const intro = doc('dtg304-0-1-overview', 'Course overview: Principles of Composi
 <div class="callout"><span class="badge">Quy tắc vàng</span> "Nếu bạn nhìn ra được chỗ ghép, tức là chưa xong." Một bản ghép giỏi là bản vô hình — mọi đường nối biến mất.</div>`,
   ]]);
 
-const c1 = doc('dtg304-1-1-pipeline', '1.1 — Compositing overview &amp; the VFX pipeline|||1.1 — Tổng quan compositing &amp; pipeline VFX',
+const c1 = doc('dtg304-1-1-pipeline', '1.1 — Compositing overview & the VFX pipeline|||1.1 — Tổng quan compositing & pipeline VFX',
   'Compositing đứng ở đâu trong VFX pipeline; các bước plate → CG → comp → grade → delivery; vai trò compositor; định dạng EXR & linear.',
   [[
     `<span class="eyebrow">DTG304 · Chapter 1 · Lesson 1.1</span>
@@ -158,7 +158,7 @@ const c1q = quiz('dtg304-quiz-1', 'Quiz 1 — Pipeline|||Quiz 1 — Pipeline', [
   { id: 'q3', question: '"Tích hợp" (integrate) một phần tử CG vào plate nghĩa là gì?', options: ['Đổi định dạng file', 'Khớp màu, sáng, grain, độ nét, viền để CG hòa vào plate', 'Xóa toàn bộ CG', 'Tăng độ phân giải'], correctIndex: 1, explanation: 'Tích hợp là làm CG "ngồi" vào plate: khớp màu/sáng/tương phản/grain/defocus/viền.' },
 ]);
 
-const c2 = doc('dtg304-2-1-color-alpha', '2.1 — Colour space, alpha channel &amp; premultiply|||2.1 — Không gian màu, kênh alpha &amp; premultiply',
+const c2 = doc('dtg304-2-1-color-alpha', '2.1 — Colour space, alpha channel & premultiply|||2.1 — Không gian màu, kênh alpha & premultiply',
   'RGB + kênh alpha; linear vs gamma/sRGB; premultiplied vs straight (unmatte/matte); công thức Over của Porter-Duff; vì sao viền đen/sáng là do sai premultiply.',
   [[
     `<span class="eyebrow">DTG304 · Chapter 2 · Lesson 2.1</span>
@@ -205,7 +205,7 @@ const c2q = quiz('dtg304-quiz-2', 'Quiz 2 — Colour & alpha|||Quiz 2 — Màu &
   { id: 'q3', question: 'Thứ tự đúng khi chỉnh màu một phần tử đã key rồi ghép Over?', options: ['Premultiply → grade → Over', 'Grade khi chưa premultiply (unpremult) → premultiply → Over', 'Over → grade', 'Không cần quan tâm premultiply'], correctIndex: 1, explanation: 'Grade ở unpremultiplied rồi re-premultiply trước Over — nếu không, viền sẽ tối/sáng.' },
 ]);
 
-const c3 = doc('dtg304-3-1-keying', '3.1 — Keying: chroma key, luma key &amp; green screen|||3.1 — Keying: chroma key, luma key &amp; phông xanh',
+const c3 = doc('dtg304-3-1-keying', '3.1 — Keying: chroma key, luma key & green screen|||3.1 — Keying: chroma key, luma key & phông xanh',
   'Nguyên lý key; vì sao dùng xanh/lam; chroma vs luma key; despill; core matte vs edge matte; garbage matte; cắm sáng phông đều để key sạch.',
   [[
     `<span class="eyebrow">DTG304 · Chapter 3 · Lesson 3.1</span>
@@ -248,7 +248,7 @@ const c3q = quiz('dtg304-quiz-3', 'Quiz 3 — Keying|||Quiz 3 — Keying', [
   { id: 'q3', question: '"Garbage matte" dùng để làm gì?', options: ['Tạo viền tóc mềm', 'Mask vẽ tay để cắt bỏ rig/đèn/mép phông ngoài vùng key', 'Tự động sinh alpha theo màu', 'Chỉnh màu chủ thể'], correctIndex: 1, explanation: 'Garbage matte là mask thô vẽ tay để loại rig, đèn, mép phông mà keyer không xử lý.' },
 ]);
 
-const c4 = doc('dtg304-4-1-roto-mask', '4.1 — Rotoscoping &amp; masking|||4.1 — Rotoscoping &amp; masking',
+const c4 = doc('dtg304-4-1-roto-mask', '4.1 — Rotoscoping & masking|||4.1 — Rotoscoping & masking',
   'Khi keying không được thì roto; bezier/spline shape, keyframe theo thời gian; feather viền; tracking hỗ trợ roto; motion blur trên shape; chia mảnh theo khớp cử động.',
   [[
     `<span class="eyebrow">DTG304 · Chapter 4 · Lesson 4.1</span>
@@ -297,7 +297,7 @@ const c4q = quiz('dtg304-quiz-4', 'Quiz 4 — Roto & masking|||Quiz 4 — Roto &
   { id: 'q3', question: 'Cách hiệu quả để giảm số keyframe khi roto một nhân vật?', options: ['Vẽ cả thân bằng một hình lớn', 'Chia thân thành mảnh theo khớp, mỗi mảnh chuyển động đơn giản', 'Tăng độ phân giải', 'Tắt motion blur'], correctIndex: 1, explanation: 'Chia theo khớp cử động: mỗi mảnh đi đường đơn giản nên cần ít keyframe hơn hẳn.' },
 ]);
 
-const c5 = doc('dtg304-5-1-blend-grade', '5.1 — Blending modes &amp; colour grading/matching|||5.1 — Blending modes &amp; chỉnh & khớp màu',
+const c5 = doc('dtg304-5-1-blend-grade', '5.1 — Blending modes & colour grading/matching|||5.1 — Blending modes & chỉnh & khớp màu',
   'Công thức blend (multiply/screen/add/over); lift-gamma-gain; scopes (waveform, vectorscope); khớp black point/white point/màu để phần tử ngồi vào plate.',
   [[
     `<span class="eyebrow">DTG304 · Chapter 5 · Lesson 5.1</span>
@@ -413,7 +413,7 @@ const c6q = quiz('dtg304-quiz-6', 'Quiz 6 — Node vs layer|||Quiz 6 — Node vs
   { id: 'q3', question: 'Trong node graph, dữ liệu tổ chức thế nào?', options: ['Các lớp xếp chồng trên đè dưới', 'Chảy qua các node nối nhau, nhìn cây thấy cái gì nuôi cái gì', 'Ngẫu nhiên', 'Theo bảng tính'], correctIndex: 1, explanation: 'Node-based: ảnh chảy qua các node kết nối; cấu trúc cây thể hiện rõ luồng xử lý.' },
 ]);
 
-const c7 = doc('dtg304-7-1-tracking-3d', '7.1 — Tracking, match-move &amp; 3D integration|||7.1 — Tracking, match-move &amp; tích hợp 3D',
+const c7 = doc('dtg304-7-1-tracking-3d', '7.1 — Tracking, match-move & 3D integration|||7.1 — Tracking, match-move & tích hợp 3D',
   '2D tracking (point/planar) vs 3D camera tracking (match-move/solve); multi-pass render & AOV (beauty, diffuse, spec, shadow, depth, normal); dựng lại comp từ pass để kiểm soát.',
   [[
     `<span class="eyebrow">DTG304 · Chapter 7 · Lesson 7.1</span>
@@ -468,7 +468,7 @@ const c7q = quiz('dtg304-quiz-7', 'Quiz 7 — Tracking & 3D|||Quiz 7 — Trackin
   { id: 'q3', question: 'Lợi ích chính của việc dựng comp lại từ nhiều AOV/pass?', options: ['File nhỏ hơn', 'Tinh chỉnh từng phần (phản chiếu, bóng, sương) mà không render lại 3D', 'Không cần tracking', 'Tự động key'], correctIndex: 1, explanation: 'Tái kết hợp pass cho phép kiểm soát riêng từng contribution mà khỏi render lại cảnh 3D tốn kém.' },
 ]);
 
-const c8 = doc('dtg304-8-1-finishing', '8.1 — Motion blur, depth of field, grain &amp; final render|||8.1 — Motion blur, depth of field, grain &amp; kết xuất cuối',
+const c8 = doc('dtg304-8-1-finishing', '8.1 — Motion blur, depth of field, grain & final render|||8.1 — Motion blur, depth of field, grain & kết xuất cuối',
   'Các bước "làm cho có vẻ được quay": motion blur khớp shutter, defocus theo Z, thêm grain/noise khớp plate, lens distortion; kết xuất & giao nộp đúng chuẩn màu/định dạng.',
   [[
     `<span class="eyebrow">DTG304 · Chapter 8 · Lesson 8.1</span>

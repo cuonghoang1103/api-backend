@@ -72,7 +72,7 @@ const taiLieu = doc('csb201-0-0-tai-lieu', '📚 Course materials & references||
 </ol></div>`,
   ]]);
 
-const intro = doc('csb201-0-1-overview', 'Course overview: celebrities, influencers &amp; brands|||Tổng quan: người nổi tiếng, influencer &amp; thương hiệu',
+const intro = doc('csb201-0-1-overview', 'Course overview: celebrities, influencers & brands|||Tổng quan: người nổi tiếng, influencer & thương hiệu',
   'Vì sao thương hiệu "mượn" người có ảnh hưởng; từ celebrity endorsement cổ điển đến influencer marketing hiện đại; lộ trình 8 chương.',
   [[
     `<span class="eyebrow">CSB201 · Lesson 0.1 · Overview</span>
@@ -111,7 +111,7 @@ const intro = doc('csb201-0-1-overview', 'Course overview: celebrities, influenc
 <div class="callout"><span class="badge">Ý lớn</span> Influencer không phải tấm biển quảng cáo — đó là một <em>mối quan hệ</em> mà thương hiệu thuê lại. Tôn trọng mối quan hệ thì nó chuyển đổi; lạm dụng thì cả nhà sáng tạo lẫn thương hiệu đều mất niềm tin của khán giả.</div>`,
   ]]);
 
-const c1 = doc('csb201-1-1-who', '1.1 — Celebrities, KOLs &amp; influencers|||1.1 — Người nổi tiếng, KOL &amp; influencer',
+const c1 = doc('csb201-1-1-who', '1.1 — Celebrities, KOLs & influencers|||1.1 — Người nổi tiếng, KOL & influencer',
   'Định nghĩa celebrity / KOL / influencer; phân bậc nano/micro/macro/mega; phân biệt KOL vs KOC; đánh đổi quy mô ↔ độ tin.',
   [[
     `<span class="eyebrow">CSB201 · Chapter 1 · Lesson 1.1</span>
@@ -293,7 +293,7 @@ const c4q = quiz('csb201-quiz-4', 'Quiz 4 — Campaign|||Quiz 4 — Chiến dị
   { id: 'q3', question: 'Hợp tác kiểu "ambassador" đặc trưng bởi?', options: ['Một bài đăng duy nhất', 'Chỉ tặng sản phẩm miễn phí', 'Quan hệ dài hạn, creator gắn liền với thương hiệu', 'Không có hợp đồng'], correctIndex: 2, explanation: 'Ambassador là hợp tác dài hạn (tháng/năm), tạo niềm tin và gắn kết sâu nhất.' },
 ]);
 
-const c5 = doc('csb201-5-1-content', '5.1 — Content &amp; co-creation|||5.1 — Nội dung &amp; đồng sáng tạo',
+const c5 = doc('csb201-5-1-content', '5.1 — Content & co-creation|||5.1 — Nội dung & đồng sáng tạo',
   'Đồng sáng tạo (creator giữ giọng riêng); tính chân thực (authenticity) là tài sản; brand safety — bảo vệ thương hiệu khỏi nội dung/ngữ cảnh rủi ro.',
   [[
     `<span class="eyebrow">CSB201 · Chapter 5 · Lesson 5.1</span>
@@ -387,7 +387,7 @@ const c6q = quiz('csb201-quiz-6', 'Quiz 6 — Measurement|||Quiz 6 — Đo lư�
   { id: 'q3', question: 'Một chiến dịch HIỆU SUẤT (bán hàng) nên chấm chủ yếu bằng?', options: ['Reach thô', 'Số like', 'Conversion và ROI', 'Số hashtag'], correctIndex: 2, explanation: 'Khớp thước đo với mục tiêu: bán hàng → conversion + ROI, không phải reach/like.' },
 ]);
 
-const c7 = doc('csb201-7-1-risk', '7.1 — Risk, ethics &amp; disclosure|||7.1 — Rủi ro, đạo đức &amp; công bố tài trợ',
+const c7 = doc('csb201-7-1-risk', '7.1 — Risk, ethics & disclosure|||7.1 — Rủi ro, đạo đức & công bố tài trợ',
   'Khủng hoảng influencer; follower/engagement ảo; công bố tài trợ theo FTC (#ad); minh bạch để giữ niềm tin — ca Fyre Festival.',
   [[
     `<span class="eyebrow">CSB201 · Chapter 7 · Lesson 7.1</span>
@@ -432,7 +432,7 @@ const c7q = quiz('csb201-quiz-7', 'Quiz 7 — Risk & ethics|||Quiz 7 — Rủi r
   { id: 'q3', question: 'Vì sao Fyre Festival (2017) là ca kinh điển về đạo đức influencer?', options: ['Vì có quá nhiều nano-creator', 'Vì loạt influencer quảng bá không công bố tài trợ cho một sự kiện lừa đảo', 'Vì dùng affiliate', 'Vì đo ROI sai'], correctIndex: 1, explanation: 'Quảng bá không công bố + không thẩm định cho một cú lừa → bài học về minh bạch và brand safety.' },
 ]);
 
-const c8 = doc('csb201-8-1-trends', '8.1 — Trends: creator economy &amp; beyond|||8.1 — Xu hướng: creator economy &amp; hơn nữa',
+const c8 = doc('csb201-8-1-trends', '8.1 — Trends: creator economy & beyond|||8.1 — Xu hướng: creator economy & hơn nữa',
   'Creator economy (nhà sáng tạo là doanh nghiệp một người); live commerce (bán qua livestream); virtual influencer; và AI trong sáng tạo/ghép nội dung.',
   [[
     `<span class="eyebrow">CSB201 · Chapter 8 · Lesson 8.1</span>

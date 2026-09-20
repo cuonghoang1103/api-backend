@@ -97,7 +97,7 @@ const intro = doc('chi401-0-1-overview', 'Course overview: Integrated Chinese 6|
 <p>Kinh tế &amp; mua sắm online → việc làm &amp; phỏng vấn → du học → xã hội &amp; thế hệ → truyền thông &amp; mạng xã hội → văn hóa &amp; nghệ thuật → sức khỏe &amp; tâm lý → toàn cầu hóa &amp; tương lai. Mỗi bài có bảng từ vựng (汉字 | pinyin | nghĩa), điểm ngữ pháp kèm ví dụ, một hội thoại ngắn, ghi chú, và quiz.</p>`,
   ]]);
 
-const b1 = doc('chi401-1-1-economy-shopping', 'Lesson 1 — Economy &amp; online shopping|||Bài 1 — Kinh tế &amp; mua sắm online',
+const b1 = doc('chi401-1-1-economy-shopping', 'Lesson 1 — Economy & online shopping|||Bài 1 — Kinh tế & mua sắm online',
   'Từ vựng: 经济, 网购, 消费, 支付, 优惠, 打折, 购物, 价格, 既. Ngữ pháp: 既…又 (vừa…vừa), 支付/打折.',
   [[
     `<span class="eyebrow">CHI401 · Lesson 1 · Economy</span>
@@ -160,13 +160,13 @@ B: 用手机支付，很快。 Yòng shǒujī zhīfù, hěn kuài. (Thanh toán 
 <div class="callout"><span class="badge">Ghi chú</span> 既 … 又 … nối hai đặc điểm của cùng một sự vật, hai vế thường là tính từ hoặc động từ dài tương đương: 这件衣服<strong>既</strong>好看<strong>又</strong>便宜 (áo này vừa đẹp vừa rẻ). Thành ngữ 一举两得 (yī jǔ liǎng dé, một công đôi việc) rất hợp để nói về săn ưu đãi online.</div>`,
   ]]);
 
-const b1q = quiz('chi401-quiz-1', 'Quiz 1 — Economy &amp; online shopping|||Quiz 1 — Kinh tế &amp; mua sắm online', [
+const b1q = quiz('chi401-quiz-1', 'Quiz 1 — Economy & online shopping|||Quiz 1 — Kinh tế & mua sắm online', [
   { id: 'q1', question: 'Mẫu "既…又…" nghĩa là? / What does 既…又… mean?', options: ['vừa … vừa …|||both … and …', 'chỉ cần … là …|||as long as … then …', 'không phải … mà là …|||not … but …', 'tuy … nhưng …|||although … but …'], correctIndex: 0, explanation: '既…又… nối hai đặc điểm của một sự vật: 网购既方便又便宜.' },
   { id: 'q2', question: '"支付" (zhīfù) nghĩa là? / What does 支付 mean?', options: ['tiết kiệm|||to save', 'chi trả, thanh toán|||to pay', 'giảm giá|||to discount', 'mua sắm|||to shop'], correctIndex: 1, explanation: '支付 = chi trả, thanh toán: 用手机支付 = thanh toán bằng điện thoại.' },
   { id: 'q3', question: '"打折" (dǎzhé) nghĩa là? / What does 打折 mean?', options: ['tăng giá|||to raise the price', 'giảm giá|||to give a discount', 'trả tiền|||to pay', 'đặt hàng|||to order'], correctIndex: 1, explanation: '打折 = giảm giá: 商店常常打折 = cửa hàng thường giảm giá.' },
 ]);
 
-const b2 = doc('chi401-2-1-jobs-interviews', 'Lesson 2 — Jobs &amp; interviews|||Bài 2 — Việc làm &amp; phỏng vấn',
+const b2 = doc('chi401-2-1-jobs-interviews', 'Lesson 2 — Jobs & interviews|||Bài 2 — Việc làm & phỏng vấn',
   'Từ vựng: 求职, 简历, 面试, 能力, 薪水, 经验, 应聘, 招聘, 与其. Ngữ pháp: 与其…不如 (chẳng thà), 之所以…是因为 (sở dĩ…là vì).',
   [[
     `<span class="eyebrow">CHI401 · Lesson 2 · Jobs</span>
@@ -229,13 +229,13 @@ B: 之所以紧张，是因为准备得不够。 Zhīsuǒyǐ jǐnzhāng, shì y�
 <div class="callout"><span class="badge">Ghi chú</span> 与其 … 不如 … so sánh hai lựa chọn và nghiêng về vế sau: 与其坐车，不如走路 (thay vì đi xe, chẳng bằng đi bộ). 之所以 … 是因为 … nêu kết quả trước, lý do sau — ngược với 因为 … 所以 …</div>`,
   ]]);
 
-const b2q = quiz('chi401-quiz-2', 'Quiz 2 — Jobs &amp; interviews|||Quiz 2 — Việc làm &amp; phỏng vấn', [
+const b2q = quiz('chi401-quiz-2', 'Quiz 2 — Jobs & interviews|||Quiz 2 — Việc làm & phỏng vấn', [
   { id: 'q1', question: 'Mẫu "与其…不如…" nghĩa là? / What does 与其…不如… mean?', options: ['vừa … vừa …|||both … and …', 'chẳng thà … không bằng …|||rather than … better …', 'bất kể … đều …|||no matter … all …', 'sở dĩ … là vì …|||the reason … is that …'], correctIndex: 1, explanation: '与其…不如… so sánh và nghiêng về vế sau: 与其抱怨薪水低，不如提高能力.' },
   { id: 'q2', question: 'Mẫu "之所以…是因为…" nghĩa là? / What does 之所以…是因为… mean?', options: ['nếu … thì …|||if … then …', 'sở dĩ … là vì …|||the reason … is that …', 'tuy … nhưng …|||although … but …', 'chỉ cần … là …|||as long as … then …'], correctIndex: 1, explanation: '之所以…是因为… nêu kết quả trước, lý do sau: 他之所以被录取，是因为经验丰富.' },
   { id: 'q3', question: '"简历" (jiǎnlì) nghĩa là? / What does 简历 mean?', options: ['phỏng vấn|||interview', 'sơ yếu lý lịch, CV|||résumé / CV', 'lương|||salary', 'kinh nghiệm|||experience'], correctIndex: 1, explanation: '简历 = sơ yếu lý lịch, CV: 投简历 = nộp CV.' },
 ]);
 
-const b3 = doc('chi401-3-1-study-abroad', 'Lesson 3 — Education &amp; study abroad|||Bài 3 — Giáo dục &amp; du học',
+const b3 = doc('chi401-3-1-study-abroad', 'Lesson 3 — Education & study abroad|||Bài 3 — Giáo dục & du học',
   'Từ vựng: 留学, 申请, 奖学金, 适应, 挑战, 专业, 提前, 尽管, 以便. Ngữ pháp: 尽管…还是 (mặc dù…vẫn), 以便 (để tiện).',
   [[
     `<span class="eyebrow">CHI401 · Lesson 3 · Study abroad</span>
@@ -298,13 +298,13 @@ B: 对，我要提前申请奖学金，以便减轻压力。 Duì, wǒ yào tíq
 <div class="callout"><span class="badge">Ghi chú</span> 尽管 nêu một sự thật bạn chấp nhận, vế chính đẩy lại bằng 还是 / 但是: 尽管很累，他还是坚持了 (dù mệt, anh ấy vẫn kiên trì). 以便 luôn mở đầu vế sau và nêu mục đích trở nên dễ hơn nhờ vế trước.</div>`,
   ]]);
 
-const b3q = quiz('chi401-quiz-3', 'Quiz 3 — Education &amp; study abroad|||Quiz 3 — Giáo dục &amp; du học', [
+const b3q = quiz('chi401-quiz-3', 'Quiz 3 — Education & study abroad|||Quiz 3 — Giáo dục & du học', [
   { id: 'q1', question: '"尽管有挑战，他还是去留学" nghĩa là? / What does it mean?', options: ['vì có thử thách nên anh ấy không đi|||because of challenges he did not go', 'mặc dù có thử thách, anh ấy vẫn đi du học|||although there are challenges, he still goes abroad', 'nếu có thử thách thì đi|||if there are challenges, go', 'chỉ khi hết thử thách mới đi|||only when challenges end will he go'], correctIndex: 1, explanation: '尽管…还是… = mặc dù … vẫn …: 尽管有挑战，他还是去留学.' },
   { id: 'q2', question: '"以便" (yǐbiàn) nghĩa là? / What does 以便 mean?', options: ['vì vậy nên khó|||so it is hard', 'để, để tiện (làm gì)|||so that / in order to', 'mặc dù|||although', 'ngoài ra|||besides'], correctIndex: 1, explanation: '以便 mở đầu vế sau nêu mục đích: 提前申请，以便早点儿准备.' },
   { id: 'q3', question: '"适应" (shìyìng) nghĩa là? / What does 适应 mean?', options: ['từ chối|||to refuse', 'thích nghi|||to adapt', 'nộp đơn|||to apply', 'thử thách|||to challenge'], correctIndex: 1, explanation: '适应 = thích nghi: 慢慢适应新环境 = dần thích nghi môi trường mới.' },
 ]);
 
-const b4 = doc('chi401-4-1-society-generations', 'Lesson 4 — Society &amp; generations|||Bài 4 — Xã hội &amp; thế hệ',
+const b4 = doc('chi401-4-1-society-generations', 'Lesson 4 — Society & generations|||Bài 4 — Xã hội & thế hệ',
   'Từ vựng: 社会, 年轻人, 父母, 代沟, 观念, 沟通, 理解, 尊重, 不管. Ngữ pháp: 不管…都 (bất kể…đều), 沟通/代沟.',
   [[
     `<span class="eyebrow">CHI401 · Lesson 4 · Society</span>
@@ -367,13 +367,13 @@ B: 不管谁对谁错，都应该多沟通、互相理解。 Bùguǎn shéi duì
 <div class="callout"><span class="badge">Ghi chú</span> 不管 dùng như 无论: phải đi với một lựa chọn hoặc từ để hỏi (谁 / 还是 / 多少), vế chính dùng 都 hoặc 也. 不管 khẩu ngữ hơn 无论 một chút.</div>`,
   ]]);
 
-const b4q = quiz('chi401-quiz-4', 'Quiz 4 — Society &amp; generations|||Quiz 4 — Xã hội &amp; thế hệ', [
+const b4q = quiz('chi401-quiz-4', 'Quiz 4 — Society & generations|||Quiz 4 — Xã hội & thế hệ', [
   { id: 'q1', question: 'Mẫu "不管…都…" nghĩa là? / What does 不管…都… mean?', options: ['chẳng thà … không bằng …|||rather than … better …', 'bất kể … đều …|||no matter … all …', 'vừa … vừa …|||both … and …', 'mặc dù … vẫn …|||although … still …'], correctIndex: 1, explanation: '不管…都… = bất kể … đều: 不管年轻人还是父母，都需要多沟通.' },
   { id: 'q2', question: '"代沟" (dàigōu) nghĩa là? / What does 代沟 mean?', options: ['bạn cùng lứa|||peers', 'khoảng cách thế hệ|||generation gap', 'gia đình|||family', 'quan niệm|||concept'], correctIndex: 1, explanation: '代沟 = khoảng cách thế hệ: 两代人之间有代沟.' },
   { id: 'q3', question: '"沟通" (gōutōng) nghĩa là? / What does 沟通 mean?', options: ['tranh cãi|||to argue', 'giao tiếp, trao đổi|||to communicate', 'im lặng|||to stay silent', 'tôn trọng|||to respect'], correctIndex: 1, explanation: '沟通 = giao tiếp, trao đổi: 多沟通才能减少误会.' },
 ]);
 
-const b5 = doc('chi401-5-1-media-social', 'Lesson 5 — Media &amp; social networks|||Bài 5 — Truyền thông &amp; mạng xã hội',
+const b5 = doc('chi401-5-1-media-social', 'Lesson 5 — Media & social networks|||Bài 5 — Truyền thông & mạng xã hội',
   'Từ vựng: 媒体, 新闻, 社交网络, 信息, 影响, 传播, 真假, 判断, 从而. Ngữ pháp: 从而 (từ đó, do đó), 传播/判断.',
   [[
     `<span class="eyebrow">CHI401 · Lesson 5 · Media</span>
@@ -436,13 +436,13 @@ B: 所以我们要学会判断真假，从而不被假信息影响。 Suǒyǐ w�
 <div class="callout"><span class="badge">Ghi chú</span> 从而 mang tính văn viết, trang trọng; nối nguyên nhân ở vế trước với kết quả tự nhiên ở vế sau, chủ ngữ thường giống nhau. Nó gần với 因此 nhưng nhấn rằng kết quả tiếp nối ngay hành động vừa nêu.</div>`,
   ]]);
 
-const b5q = quiz('chi401-quiz-5', 'Quiz 5 — Media &amp; social networks|||Quiz 5 — Truyền thông &amp; mạng xã hội', [
+const b5q = quiz('chi401-quiz-5', 'Quiz 5 — Media & social networks|||Quiz 5 — Truyền thông & mạng xã hội', [
   { id: 'q1', question: '"从而" (cóng ér) nghĩa là? / What does 从而 mean?', options: ['trước khi|||before', 'từ đó, do đó|||thus / thereby', 'tuy nhiên|||however', 'chẳng thà|||rather than'], correctIndex: 1, explanation: '从而 nối nguyên nhân với kết quả: 信息传播得快，从而影响很多人.' },
   { id: 'q2', question: '"判断信息的真假" nghĩa là? / What does it mean?', options: ['lan truyền thông tin|||to spread information', 'đánh giá thông tin thật hay giả|||to judge whether information is true or false', 'giấu thông tin|||to hide information', 'quên thông tin|||to forget information'], correctIndex: 1, explanation: '判断 (đánh giá) + 真假 (thật giả) = đánh giá thông tin thật hay giả.' },
   { id: 'q3', question: '"传播" (chuánbō) nghĩa là? / What does 传播 mean?', options: ['dừng lại|||to stop', 'lan truyền, truyền bá|||to spread', 'phán đoán|||to judge', 'sửa chữa|||to fix'], correctIndex: 1, explanation: '传播 = lan truyền: 假新闻传播得很快.' },
 ]);
 
-const b6 = doc('chi401-6-1-arts-culture', 'Lesson 6 — Arts &amp; culture|||Bài 6 — Văn hóa &amp; nghệ thuật',
+const b6 = doc('chi401-6-1-arts-culture', 'Lesson 6 — Arts & culture|||Bài 6 — Văn hóa & nghệ thuật',
   'Từ vựng: 艺术, 表演, 欣赏, 传统, 现代, 作品, 京剧, 结合, 既. Ngữ pháp: 既…又 (vừa…vừa), 欣赏/结合.',
   [[
     `<span class="eyebrow">CHI401 · Lesson 6 · Arts</span>
@@ -505,13 +505,13 @@ B: 对，它既传统又现代，把两者结合起来了。 Duì, tā jì chuá
 <div class="callout"><span class="badge">Ghi chú</span> 欣赏 là thưởng thức, cảm thụ có gu (nghệ thuật, cảnh đẹp, phẩm chất người), còn 喜欢 chỉ đơn giản là thích. 结合 hay đi với 起来 để nhấn việc gộp những thứ riêng lẻ lại.</div>`,
   ]]);
 
-const b6q = quiz('chi401-quiz-6', 'Quiz 6 — Arts &amp; culture|||Quiz 6 — Văn hóa &amp; nghệ thuật', [
+const b6q = quiz('chi401-quiz-6', 'Quiz 6 — Arts & culture|||Quiz 6 — Văn hóa & nghệ thuật', [
   { id: 'q1', question: '"这个表演既传统又现代" nghĩa là? / What does it mean?', options: ['buổi biểu diễn không truyền thống cũng không hiện đại|||neither traditional nor modern', 'buổi biểu diễn vừa truyền thống vừa hiện đại|||both traditional and modern', 'buổi biểu diễn chỉ truyền thống|||only traditional', 'buổi biểu diễn thay đổi liên tục|||constantly changing'], correctIndex: 1, explanation: '既…又… = vừa … vừa …: 既传统又现代.' },
   { id: 'q2', question: '"欣赏" (xīnshǎng) nghĩa là? / What does 欣赏 mean?', options: ['phê bình|||to criticize', 'thưởng thức, cảm thụ|||to appreciate / enjoy', 'biểu diễn|||to perform', 'sao chép|||to copy'], correctIndex: 1, explanation: '欣赏 = thưởng thức: 欣赏艺术家的作品 = thưởng thức tác phẩm của nghệ sĩ.' },
   { id: 'q3', question: '"结合" (jiéhé) nghĩa là? / What does 结合 mean?', options: ['tách rời|||to separate', 'kết hợp|||to combine', 'so sánh|||to compare', 'thay thế|||to replace'], correctIndex: 1, explanation: '结合 = kết hợp: 把传统和现代结合起来.' },
 ]);
 
-const b7 = doc('chi401-7-1-health-psychology', 'Lesson 7 — Health &amp; psychology|||Bài 7 — Sức khỏe &amp; tâm lý',
+const b7 = doc('chi401-7-1-health-psychology', 'Lesson 7 — Health & psychology|||Bài 7 — Sức khỏe & tâm lý',
   'Từ vựng: 心理, 压力, 情绪, 平衡, 幸福, 放松, 宁可, 万一, 保持. Ngữ pháp: 宁可…也 (thà…chứ), 万一 (nhỡ, lỡ).',
   [[
     `<span class="eyebrow">CHI401 · Lesson 7 · Health</span>
@@ -574,13 +574,13 @@ B: 万一压力太大，我就去运动，放松一下情绪。 Wànyī yālì t
 <div class="callout"><span class="badge">Ghi chú</span> 宁可 … 也 … cố ý chọn phương án kém dễ chịu hơn để bảo vệ điều quan trọng hơn; thường đi với 也要 (để mà) hoặc 也不 (chứ không). 万一 nêu một tình huống xấu ít khả năng nhưng có thể xảy ra, gần với nhỡ như xảy ra.</div>`,
   ]]);
 
-const b7q = quiz('chi401-quiz-7', 'Quiz 7 — Health &amp; psychology|||Quiz 7 — Sức khỏe &amp; tâm lý', [
+const b7q = quiz('chi401-quiz-7', 'Quiz 7 — Health & psychology|||Quiz 7 — Sức khỏe & tâm lý', [
   { id: 'q1', question: '"我宁可少赚一点儿，也要保持健康" nghĩa là? / What does it mean?', options: ['tôi muốn kiếm nhiều tiền hơn|||I want to earn more money', 'thà kiếm ít hơn, cũng phải giữ sức khỏe|||I would rather earn less to stay healthy', 'sức khỏe không quan trọng|||health is not important', 'tôi không muốn làm việc|||I do not want to work'], correctIndex: 1, explanation: '宁可…也… cố ý chọn vế kém hơn để giữ điều quan trọng hơn: 宁可少赚，也要保持健康.' },
   { id: 'q2', question: '"万一" (wànyī) nghĩa là? / What does 万一 mean?', options: ['chắc chắn|||definitely', 'nhỡ, lỡ (như xảy ra)|||in case / if by chance', 'ngay lập tức|||immediately', 'mỗi ngày|||every day'], correctIndex: 1, explanation: '万一 nêu tình huống xấu có thể xảy ra: 万一压力太大，就找朋友聊聊.' },
   { id: 'q3', question: '"保持平衡" nghĩa là? / What does 保持平衡 mean?', options: ['mất cân bằng|||to lose balance', 'giữ cân bằng|||to keep balance', 'tăng áp lực|||to raise pressure', 'thay đổi tâm trạng|||to change mood'], correctIndex: 1, explanation: '保持 (giữ) + 平衡 (cân bằng) = giữ cân bằng: 工作和生活的平衡.' },
 ]);
 
-const b8 = doc('chi401-8-1-globalization-future', 'Lesson 8 — Globalization &amp; the future|||Bài 8 — Toàn cầu hóa &amp; tương lai',
+const b8 = doc('chi401-8-1-globalization-future', 'Lesson 8 — Globalization & the future|||Bài 8 — Toàn cầu hóa & tương lai',
   'Từ vựng: 全球化, 发展, 机会, 变化, 趋势, 科技, 竞争, 之所以, 随着. Ngữ pháp: 之所以…是因为 (sở dĩ…là vì), 随着 (cùng với).',
   [[
     `<span class="eyebrow">CHI401 · Lesson 8 · Globalization</span>
@@ -643,7 +643,7 @@ B: 是啊，随着科技发展，我们要不断学习，抓住机会。 Shì a,
 <div class="callout"><span class="badge">Ghi chú</span> 之所以 … 是因为 … nêu sự thật trước rồi giải thích nguyên nhân sau — rất hợp cho bài luận và thảo luận. Thành ngữ 机不可失 (jī bù kě shī, cơ hội không thể bỏ lỡ) hợp với một bài nói về nắm bắt cơ hội.</div>`,
   ]]);
 
-const b8q = quiz('chi401-quiz-8', 'Quiz 8 — Globalization &amp; the future|||Quiz 8 — Toàn cầu hóa &amp; tương lai', [
+const b8q = quiz('chi401-quiz-8', 'Quiz 8 — Globalization & the future|||Quiz 8 — Toàn cầu hóa & tương lai', [
   { id: 'q1', question: '"全球化之所以重要，是因为它带来了机会" nghĩa là? / What does it mean?', options: ['toàn cầu hóa không quan trọng|||globalization is not important', 'sở dĩ toàn cầu hóa quan trọng là vì nó mang lại cơ hội|||the reason globalization matters is that it brings opportunities', 'nếu quan trọng thì có cơ hội|||if important, there are chances', 'cơ hội làm toàn cầu hóa quan trọng hơn|||chances make it more important'], correctIndex: 1, explanation: '之所以…是因为… nêu sự thật rồi nêu nguyên nhân: 之所以重要，是因为带来了机会.' },
   { id: 'q2', question: '"随着科技的发展" nghĩa là? / What does it mean?', options: ['trước khi công nghệ phát triển|||before technology develops', 'cùng với sự phát triển của khoa học công nghệ|||as science &amp; technology develops', 'không cần công nghệ|||without technology', 'công nghệ ngừng phát triển|||technology stops developing'], correctIndex: 1, explanation: '随着 = cùng với, theo: 随着科技的发展，世界变化得越来越快.' },
   { id: 'q3', question: '"趋势" (qūshì) nghĩa là? / What does 趋势 mean?', options: ['nguyên nhân|||cause', 'xu thế, xu hướng|||trend', 'cơ hội|||opportunity', 'cạnh tranh|||competition'], correctIndex: 1, explanation: '趋势 = xu thế: 全球化是不可避免的趋势.' },
@@ -667,15 +667,15 @@ export default {
     requirements: 'Cần hoàn thành CHI331 hoặc nắm vững pinyin, 4 thanh điệu, các liên từ 无论…都, 只要…就, 即使…也, bổ ngữ xu hướng phức hợp 起来 / 下去, cùng từ vựng về văn hóa, học tập, môi trường, công nghệ và sức khỏe. Nên cài Pleco hoặc dùng từ điển hanzii.net để tra chữ &amp; nghe phát âm; luyện viết chữ Hán theo thứ tự nét.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (Level 2 Part 2), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (Level 2 Part 2), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHI331, track Integrated Chinese, mục tiêu HSK4, cách học.', lessons: [intro] },
-    { title: 'Bài 1 — Kinh tế &amp; mua sắm online|||Lesson 1 — Economy &amp; online shopping', description: '经济, 网购, 消费, 支付, 优惠, 打折, 既…又.', lessons: [b1, b1q] },
-    { title: 'Bài 2 — Việc làm &amp; phỏng vấn|||Lesson 2 — Jobs &amp; interviews', description: '求职, 简历, 面试, 能力, 薪水, 与其…不如, 之所以…是因为.', lessons: [b2, b2q] },
-    { title: 'Bài 3 — Giáo dục &amp; du học|||Lesson 3 — Education &amp; study abroad', description: '留学, 申请, 奖学金, 适应, 挑战, 尽管…还是, 以便.', lessons: [b3, b3q] },
-    { title: 'Bài 4 — Xã hội &amp; thế hệ|||Lesson 4 — Society &amp; generations', description: '社会, 年轻人, 父母, 代沟, 观念, 沟通, 不管…都.', lessons: [b4, b4q] },
-    { title: 'Bài 5 — Truyền thông &amp; mạng xã hội|||Lesson 5 — Media &amp; social networks', description: '媒体, 新闻, 社交网络, 信息, 传播, 判断, 从而.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Văn hóa &amp; nghệ thuật|||Lesson 6 — Arts &amp; culture', description: '艺术, 表演, 欣赏, 传统, 现代, 结合, 既…又.', lessons: [b6, b6q] },
-    { title: 'Bài 7 — Sức khỏe &amp; tâm lý|||Lesson 7 — Health &amp; psychology', description: '心理, 压力, 情绪, 平衡, 幸福, 宁可…也, 万一.', lessons: [b7, b7q] },
-    { title: 'Bài 8 — Toàn cầu hóa &amp; tương lai|||Lesson 8 — Globalization &amp; the future', description: '全球化, 发展, 机会, 变化, 趋势, 竞争, 之所以…是因为, 随着.', lessons: [b8, b8q] },
+    { title: 'Bài 1 — Kinh tế & mua sắm online|||Lesson 1 — Economy & online shopping', description: '经济, 网购, 消费, 支付, 优惠, 打折, 既…又.', lessons: [b1, b1q] },
+    { title: 'Bài 2 — Việc làm & phỏng vấn|||Lesson 2 — Jobs & interviews', description: '求职, 简历, 面试, 能力, 薪水, 与其…不如, 之所以…是因为.', lessons: [b2, b2q] },
+    { title: 'Bài 3 — Giáo dục & du học|||Lesson 3 — Education & study abroad', description: '留学, 申请, 奖学金, 适应, 挑战, 尽管…还是, 以便.', lessons: [b3, b3q] },
+    { title: 'Bài 4 — Xã hội & thế hệ|||Lesson 4 — Society & generations', description: '社会, 年轻人, 父母, 代沟, 观念, 沟通, 不管…都.', lessons: [b4, b4q] },
+    { title: 'Bài 5 — Truyền thông & mạng xã hội|||Lesson 5 — Media & social networks', description: '媒体, 新闻, 社交网络, 信息, 传播, 判断, 从而.', lessons: [b5, b5q] },
+    { title: 'Bài 6 — Văn hóa & nghệ thuật|||Lesson 6 — Arts & culture', description: '艺术, 表演, 欣赏, 传统, 现代, 结合, 既…又.', lessons: [b6, b6q] },
+    { title: 'Bài 7 — Sức khỏe & tâm lý|||Lesson 7 — Health & psychology', description: '心理, 压力, 情绪, 平衡, 幸福, 宁可…也, 万一.', lessons: [b7, b7q] },
+    { title: 'Bài 8 — Toàn cầu hóa & tương lai|||Lesson 8 — Globalization & the future', description: '全球化, 发展, 机会, 变化, 趋势, 竞争, 之所以…是因为, 随着.', lessons: [b8, b8q] },
   ],
 };

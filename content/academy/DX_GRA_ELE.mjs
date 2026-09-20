@@ -8,7 +8,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('dx-gra-ele-0-0-tai-lieu', '📚 Materials &amp; references|||📚 Tài liệu tham khảo',
+const taiLieu = doc('dx-gra-ele-0-0-tai-lieu', '📚 Materials & references|||📚 Tài liệu tham khảo',
   'Trung tâm tài liệu: sách nền tảng CĐS, báo cáo tư vấn (McKinsey/Gartner), khoá học miễn phí (Coursera/edX), YouTube, công cụ, quy định FPTU.',
   [[
     `<span class="eyebrow">DX_GRA_ELE · Materials</span>
@@ -134,7 +134,7 @@ Thuyết trình + Q&amp;A     15%     rõ ràng, bằng chứng, phản biện
 <div class="callout"><span class="badge">Nguyên tắc</span> Hẹp thắng rộng. Một chủ đề khoanh gọn làm sâu ăn điểm cao hơn nhiều so với năm chủ đề lướt qua. Xem trọng số chính xác trên <strong>FLM</strong> — nó mới có hiệu lực, bảng này chỉ để tham khảo.</div>`,
   ]]);
 
-const c1 = doc('dx-gra-ele-1-1-choosing', '1.1 — What an elective is &amp; how to choose|||1.1 — Học phần tự chọn là gì &amp; cách chọn',
+const c1 = doc('dx-gra-ele-1-1-choosing', '1.1 — What an elective is & how to choose|||1.1 — Học phần tự chọn là gì & cách chọn',
   'Bản chất học phần tự chọn; chọn chủ đề theo định hướng nghề; tiêu chí chọn (đam mê, nhu cầu thị trường, khả thi, có dữ liệu/công cụ).',
   [[
     `<span class="eyebrow">DX_GRA_ELE · Chapter 1 · Lesson 1.1</span>
@@ -238,7 +238,7 @@ const c2q = quiz('dx-gra-ele-quiz-2', 'Quiz 2 — Topic map|||Quiz 2 — Bản �
   { id: 'q3', question: 'Chủ đề thiên công nghệ (analytics, AI, RPA, IoT) thường ăn điểm cao nhất nhờ?', options: ['Chỉ đọc thật nhiều tài liệu', 'Một prototype/sản phẩm chạy được', 'Trình bày dài nhất', 'Chọn chủ đề rộng nhất'], correctIndex: 1, explanation: 'Chủ đề thiên công nghệ ăn điểm bằng prototype chạy được; chủ đề thiên kinh doanh ăn điểm bằng business case mạnh.' },
 ]);
 
-const c3 = doc('dx-gra-ele-3-1-frameworks', '3.1 — Frameworks &amp; methods|||3.1 — Khung &amp; phương pháp',
+const c3 = doc('dx-gra-ele-3-1-frameworks', '3.1 — Frameworks & methods|||3.1 — Khung & phương pháp',
   'Digital maturity model (đo mức trưởng thành số), Agile (làm lặp/tăng dần), Design Thinking (đồng cảm → định nghĩa → ý tưởng → prototype → test).',
   [[
     `<span class="eyebrow">DX_GRA_ELE · Chapter 3 · Lesson 3.1</span>
@@ -289,7 +289,7 @@ const c3q = quiz('dx-gra-ele-quiz-3', 'Quiz 3 — Frameworks|||Quiz 3 — Khung 
   { id: 'q3', question: 'Thứ tự đúng của Design Thinking là?', options: ['Prototype → Test → Empathize → Define → Ideate', 'Empathize → Define → Ideate → Prototype → Test', 'Ideate → Empathize → Test → Define → Prototype', 'Define → Test → Ideate → Empathize → Prototype'], correctIndex: 1, explanation: 'Design Thinking: Đồng cảm → Định nghĩa → Ý tưởng → Prototype → Kiểm thử, rồi lặp lại.' },
 ]);
 
-const c4 = doc('dx-gra-ele-4-1-learning-contract', '4.1 — Self-study &amp; the learning contract|||4.1 — Tự học &amp; learning contract',
+const c4 = doc('dx-gra-ele-4-1-learning-contract', '4.1 — Self-study & the learning contract|||4.1 — Tự học & learning contract',
   'Kỹ năng tự học có kỷ luật; learning contract (mục tiêu, phạm vi, cột mốc, tiêu chí đạt); lịch tuần; nhật ký học tập.',
   [[
     `<span class="eyebrow">DX_GRA_ELE · Chapter 4 · Lesson 4.1</span>
@@ -442,7 +442,7 @@ const c6q = quiz('dx-gra-ele-quiz-6', 'Quiz 6 — Mini-project|||Quiz 6 — Mini
   { id: 'q3', question: 'Người chấm đánh giá cao điều gì nhất ở mini-project?', options: ['"Nó sẽ chạy được nếu có thời gian"', 'Bằng chứng nó thật sự chạy: ảnh/video/dữ liệu/số liệu trước-sau', 'Số lượng công nghệ mới nhắc tới', 'Slide đẹp nhưng không có demo'], correctIndex: 1, explanation: 'Bằng chứng chạy được thật (demo, ảnh, số liệu) được thưởng cao hơn lời hứa "nó sẽ chạy".' },
 ]);
 
-const c7 = doc('dx-gra-ele-7-1-report-business-case', '7.1 — Report &amp; business case|||7.1 — Báo cáo &amp; business case',
+const c7 = doc('dx-gra-ele-7-1-report-business-case', '7.1 — Report & business case|||7.1 — Báo cáo & business case',
   'Cấu trúc báo cáo; business case (vấn đề, giải pháp, chi phí, lợi ích, rủi ro, ROI); viết cho người ra quyết định; trích dẫn đúng.',
   [[
     `<span class="eyebrow">DX_GRA_ELE · Chapter 7 · Lesson 7.1</span>
@@ -499,7 +499,7 @@ const c7q = quiz('dx-gra-ele-quiz-7', 'Quiz 7 — Report & business case|||Quiz 
   { id: 'q3', question: 'Yếu tố "ROI" trong business case trả lời câu hỏi nào?', options: ['Công cụ nào đẹp nhất', 'Lợi ích có lớn hơn chi phí không, và đến khi nào', 'Ai là người viết báo cáo', 'Sáng kiến dùng bao nhiêu dòng code'], correctIndex: 1, explanation: 'ROI xét lợi ích có vượt chi phí không và hoàn vốn khi nào — trọng tâm để thuyết phục đầu tư.' },
 ]);
 
-const c8 = doc('dx-gra-ele-8-1-defense-career', '8.1 — Presentation, defense &amp; career path|||8.1 — Trình bày, phản biện &amp; định hướng nghề',
+const c8 = doc('dx-gra-ele-8-1-defense-career', '8.1 — Presentation, defense & career path|||8.1 — Trình bày, phản biện & định hướng nghề',
   'Kể chuyện qua slide; demo sống; trả lời phản biện; nối chủ đề tới nghề nghiệp và chứng chỉ (Coursera/edX, chứng chỉ nhà cung cấp).',
   [[
     `<span class="eyebrow">DX_GRA_ELE · Chapter 8 · Lesson 8.1</span>

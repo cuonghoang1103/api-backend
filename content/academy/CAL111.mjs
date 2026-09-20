@@ -119,7 +119,7 @@ Tích phân: diện tích dưới f từ a đến b  =  F(b) - F(a),  với F' =
 <div class="callout"><span class="badge">Vì sao quan trọng với CNTT</span> Gradient là nền của học máy, giới hạn định nghĩa độ tăng thuật toán, và tích phân mô hình xác suất — giải tích là ngôn ngữ nằm dưới phần lớn khoa học máy tính.</div>`,
   ]]);
 
-const c1 = doc('cal111-1-1-functions', '1.1 — Functions &amp; models|||1.1 — Hàm số &amp; mô hình',
+const c1 = doc('cal111-1-1-functions', '1.1 — Functions & models|||1.1 — Hàm số & mô hình',
   'Hàm số (định nghĩa, tập xác định/giá trị, đồ thị); các họ hàm cơ bản (đa thức, mũ, log, lượng giác); biến đổi đồ thị (tịnh tiến, co giãn); hàm hợp và hàm ngược.',
   [[
     `<span class="eyebrow">CAL111 · Chapter 1 · Lesson 1.1</span>
@@ -172,13 +172,13 @@ Hàm ngược: đảo lại f
 <div class="callout"><span class="badge">Mô hình trước</span> "Mô hình" chỉ là một hàm được chọn để mô tả dữ liệu — tuyến tính cho tăng đều, mũ cho tăng kép, lượng giác cho mọi thứ lặp lại.</div>`,
   ]]);
 
-const c1q = quiz('cal111-quiz-1', 'Quiz 1 — Functions &amp; models|||Quiz 1 — Hàm số &amp; mô hình', [
+const c1q = quiz('cal111-quiz-1', 'Quiz 1 — Functions & models|||Quiz 1 — Hàm số & mô hình', [
   { id: 'q1', question: 'Với f(x) = x^2 và g(x) = x + 1, hàm hợp f(g(x)) bằng?', options: ['x^2 + 1', '(x + 1)^2', 'x^2 + x', '2x + 1'], correctIndex: 1, explanation: 'f(g(x)) = (g(x))^2 = (x + 1)^2.' },
   { id: 'q2', question: 'Đồ thị y = f(x - 3) so với y = f(x) là?', options: ['Tịnh tiến sang trái 3', 'Tịnh tiến sang phải 3', 'Tịnh tiến lên 3', 'Co theo trục tung'], correctIndex: 1, explanation: 'Thay x bởi x - 3 dịch đồ thị SANG PHẢI 3 đơn vị.' },
   { id: 'q3', question: 'Hàm ngược của f(x) = 2x + 3 là?', options: ['(x - 3)/2', '2x - 3', '(x + 3)/2', '1/(2x + 3)'], correctIndex: 0, explanation: 'Giải y = 2x + 3 theo x: x = (y - 3)/2.' },
 ]);
 
-const c2 = doc('cal111-2-1-limits', '2.1 — Limits &amp; continuity|||2.1 — Giới hạn &amp; liên tục',
+const c2 = doc('cal111-2-1-limits', '2.1 — Limits & continuity|||2.1 — Giới hạn & liên tục',
   'Khái niệm giới hạn (trực giác + ký hiệu); các luật giới hạn; giới hạn một bên; giới hạn tại vô cực & vô cực; định nghĩa tính liên tục và ba điều kiện.',
   [[
     `<span class="eyebrow">CAL111 · Chapter 2 · Lesson 2.1</span>
@@ -225,13 +225,13 @@ Kiểm tra liên tục tại a:  f(a) xác định  VÀ  lim = f(a)
 <div class="callout"><span class="badge">Giới hạn then chốt</span> lim (x-&gt;0) (sin x)/x = 1 — nền tảng cho đạo hàm của sin x.</div>`,
   ]]);
 
-const c2q = quiz('cal111-quiz-2', 'Quiz 2 — Limits &amp; continuity|||Quiz 2 — Giới hạn &amp; liên tục', [
+const c2q = quiz('cal111-quiz-2', 'Quiz 2 — Limits & continuity|||Quiz 2 — Giới hạn & liên tục', [
   { id: 'q1', question: 'lim (x->3) (x^2 - 9)/(x - 3) bằng?', options: ['0', '3', '6', 'Không tồn tại'], correctIndex: 2, explanation: 'Phân tích (x-3)(x+3)/(x-3) = x+3 -> 6.' },
   { id: 'q2', question: 'Giới hạn hai bên tại a KHÔNG tồn tại khi?', options: ['f(a) không xác định', 'Giới hạn trái khác giới hạn phải', 'f là đa thức', 'lim bằng f(a)'], correctIndex: 1, explanation: 'Hai giới hạn một bên khác nhau thì giới hạn hai bên không tồn tại.' },
   { id: 'q3', question: 'f liên tục tại a đòi hỏi?', options: ['Chỉ f(a) tồn tại', 'Chỉ lim tồn tại', 'f(a) tồn tại, lim tồn tại và lim = f(a)', 'f là hàm mũ'], correctIndex: 2, explanation: 'Đủ ba điều kiện: f(a) có, lim có, và bằng nhau.' },
 ]);
 
-const c3 = doc('cal111-3-1-derivatives', '3.1 — The derivative &amp; rules|||3.1 — Đạo hàm &amp; quy tắc',
+const c3 = doc('cal111-3-1-derivatives', '3.1 — The derivative & rules|||3.1 — Đạo hàm & quy tắc',
   'Định nghĩa đạo hàm qua giới hạn (độ dốc tiếp tuyến); quy tắc tổng/hằng/luỹ thừa; quy tắc tích, thương, chuỗi; đạo hàm hàm lượng giác, mũ, log.',
   [[
     `<span class="eyebrow">CAL111 · Chapter 3 · Lesson 3.1</span>
@@ -333,7 +333,7 @@ const c4q = quiz('cal111-quiz-4', 'Quiz 4 — Applications of derivative|||Quiz 
   { id: 'q3', question: 'Dùng LHopital, lim (x->0) (sin x)/x bằng?', options: ['0', '1', 'Vô cực', 'Không tồn tại'], correctIndex: 1, explanation: 'Đạo hàm tử/mẫu: cos x / 1 -> 1.' },
 ]);
 
-const c5 = doc('cal111-5-1-antiderivatives', '5.1 — Antiderivatives &amp; indefinite integrals|||5.1 — Nguyên hàm &amp; tích phân bất định',
+const c5 = doc('cal111-5-1-antiderivatives', '5.1 — Antiderivatives & indefinite integrals|||5.1 — Nguyên hàm & tích phân bất định',
   'Nguyên hàm (đảo ngược đạo hàm) và hằng số C; tích phân bất định; bảng tích phân cơ bản (luỹ thừa, mũ, log, lượng giác); phương pháp đổi biến (u-substitution).',
   [[
     `<span class="eyebrow">CAL111 · Chapter 5 · Lesson 5.1</span>
@@ -466,7 +466,7 @@ const c7q = quiz('cal111-quiz-7', 'Quiz 7 — Techniques|||Quiz 7 — Kỹ thu�
   { id: 'q3', question: 'Kỹ thuật phù hợp cho ∫ 1/[x(x+1)] dx là?', options: ['Tích phân từng phần', 'Phân thức hữu tỉ', 'Phép thế lượng giác', 'Đạo hàm bậc hai'], correctIndex: 1, explanation: 'Tách 1/x - 1/(x+1) rồi tích phân từng số hạng.' },
 ]);
 
-const c8 = doc('cal111-8-1-applications-integral', '8.1 — Applications of integration &amp; Taylor series|||8.1 — Ứng dụng tích phân &amp; chuỗi Taylor',
+const c8 = doc('cal111-8-1-applications-integral', '8.1 — Applications of integration & Taylor series|||8.1 — Ứng dụng tích phân & chuỗi Taylor',
   'Diện tích giữa hai đường cong; thể tích vật thể tròn xoay (đĩa/vỏ); tổng quan chuỗi số & chuỗi Taylor/Maclaurin xấp xỉ hàm bằng đa thức.',
   [[
     `<span class="eyebrow">CAL111 · Chapter 8 · Lesson 8.1</span>
@@ -507,7 +507,7 @@ sin x = x - x^3/3! + x^5/5! - ...
 <div class="callout"><span class="badge">Chỗ CNTT gặp giải tích</span> Chuỗi Taylor cắt ngắn cho xấp xỉ số nhanh; tích phân cho kỳ vọng trong xác suất và diện tích trong đồ hoạ.</div>`,
   ]]);
 
-const c8q = quiz('cal111-quiz-8', 'Quiz 8 — Applications &amp; series|||Quiz 8 — Ứng dụng &amp; chuỗi', [
+const c8q = quiz('cal111-quiz-8', 'Quiz 8 — Applications & series|||Quiz 8 — Ứng dụng & chuỗi', [
   { id: 'q1', question: 'Diện tích giữa y = x và y = x^2 trên [0,1] bằng?', options: ['1/2', '1/3', '1/6', '1'], correctIndex: 2, explanation: '∫(x - x^2)dx = 1/2 - 1/3 = 1/6.' },
   { id: 'q2', question: 'Thể tích khi quay y = f(x) quanh Ox (phương pháp đĩa) là?', options: ['∫ π f(x) dx', '∫ π [f(x)]^2 dx', '∫ 2π x f(x) dx', '∫ f(x)^2 dx'], correctIndex: 1, explanation: 'Mỗi đĩa có diện tích π[f(x)]^2, tích phân theo x.' },
   { id: 'q3', question: 'Chuỗi Taylor của e^x bắt đầu bằng?', options: ['1 + x + x^2/2! + ...', 'x - x^3/3! + ...', '1 - x + x^2 - ...', 'x + x^2 + x^3 + ...'], correctIndex: 0, explanation: 'e^x = 1 + x + x^2/2! + x^3/3! + ...' },

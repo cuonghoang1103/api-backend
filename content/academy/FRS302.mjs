@@ -10,7 +10,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('frs302-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('frs302-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: giáo trình chuẩn (Davidoff/Ham, Casey), chuẩn NIST SP 800-86, SANS FOR572, công cụ (Wireshark/Zeek), lộ trình tự học.',
   [[
     `<span class="eyebrow">FRS302 · Materials</span>
@@ -116,7 +116,7 @@ const intro = doc('frs302-0-1-overview', 'Course overview: Network Forensics|||T
 <p>Nguyên lý &amp; chuỗi hành trình → thu thập (tap/SPAN) → phân tích gói (Wireshark/tcpdump) → phân tích luồng (NetFlow/Zeek) → điều tra giao thức (HTTP/DNS/email) → điều tra tấn công (C2, rò rỉ) → log firewall/IDS &amp; thiết bị mạng → báo cáo, khía cạnh pháp lý &amp; trình bày chứng cứ. Song ngữ, có ví dụ công cụ và quiz.</p>`,
   ]]);
 
-const c1 = doc('frs302-1-1-principles-coc', '1.1 — Forensic principles &amp; chain of custody|||1.1 — Nguyên lý điều tra số &amp; chuỗi hành trình chứng cứ',
+const c1 = doc('frs302-1-1-principles-coc', '1.1 — Forensic principles & chain of custody|||1.1 — Nguyên lý điều tra số & chuỗi hành trình chứng cứ',
   'Quy trình điều tra 4 bước (thu thập → giám định → phân tích → báo cáo, NIST SP 800-86); toàn vẹn chứng cứ bằng hàm băm; chuỗi hành trình; nguyên tắc trao đổi Locard.',
   [[
     `<span class="eyebrow">FRS302 · Chapter 1 · Lesson 1.1</span>
@@ -161,13 +161,13 @@ sha256sum -c evidence.pcap.sha256
 <div class="callout"><span class="badge">Thứ tự bay hơi</span> Bắt chứng cứ dễ mất trước (kết nối đang sống, bộ nhớ, bảng ARP) rồi mới tới cái bền (đĩa, log lưu trữ) — RFC 3227.</div>`,
   ]]);
 
-const c1q = quiz('frs302-quiz-1', 'Quiz 1 — Principles &amp; chain of custody|||Quiz 1 — Nguyên lý &amp; chuỗi hành trình', [
+const c1q = quiz('frs302-quiz-1', 'Quiz 1 — Principles & chain of custody|||Quiz 1 — Nguyên lý & chuỗi hành trình', [
   { id: 'q1', question: 'Thứ tự đúng của quy trình điều tra số theo NIST SP 800-86?', options: ['Phân tích → thu thập → báo cáo → giám định', 'Thu thập → giám định → phân tích → báo cáo', 'Báo cáo → phân tích → thu thập → giám định', 'Giám định → báo cáo → thu thập → phân tích'], correctIndex: 1, explanation: 'NIST SP 800-86: Collection → Examination → Analysis → Reporting.' },
   { id: 'q2', question: 'Vì sao ta băm (sha256) file pcap ngay khi thu thập?', options: ['Để nén file nhỏ lại', 'Để mã hoá chứng cứ', 'Để sau này chứng minh chứng cứ KHÔNG bị sửa đổi', 'Để tăng tốc phân tích'], correctIndex: 2, explanation: 'Băm khớp giữa hai thời điểm chứng minh từng byte y hệt → toàn vẹn.' },
   { id: 'q3', question: '"Chuỗi hành trình chứng cứ" (chain of custody) ghi lại điều gì?', options: ['Cấu hình của switch', 'Mọi người đã chạm vào chứng cứ, khi nào và vì sao', 'Danh sách địa chỉ IP nội bộ', 'Tốc độ đường truyền'], correctIndex: 1, explanation: 'Một khoảng trống không giải thích được có thể khiến chứng cứ bị bác.' },
 ]);
 
-const c2 = doc('frs302-2-1-acquisition', '2.1 — Acquiring &amp; preserving network data|||2.1 — Thu thập &amp; bảo toàn dữ liệu mạng',
+const c2 = doc('frs302-2-1-acquisition', '2.1 — Acquiring & preserving network data|||2.1 — Thu thập & bảo toàn dữ liệu mạng',
   'Điểm bắt lưu lượng: TAP thụ động vs cổng SPAN/mirror; bắt bằng tcpdump; capture filter (BPF) vs display filter; xoay vòng file; bảo toàn & write-once.',
   [[
     `<span class="eyebrow">FRS302 · Chapter 2 · Lesson 2.1</span>
@@ -277,7 +277,7 @@ const c3q = quiz('frs302-quiz-3', 'Quiz 3 — Packet analysis|||Quiz 3 — Phân
   { id: 'q3', question: 'Tính năng nào của Wireshark ghép các gói rời rạc thành văn bản một cuộc trao đổi?', options: ['Capture filter', 'Follow TCP Stream', 'Coloring rules', 'IO Graph'], correctIndex: 1, explanation: 'Follow TCP Stream tái dựng luồng thành text đọc được — công cụ then chốt.' },
 ]);
 
-const c4 = doc('frs302-4-1-flow-netflow-zeek', '4.1 — Flow analysis: NetFlow &amp; Zeek logs|||4.1 — Phân tích luồng: NetFlow &amp; log Zeek',
+const c4 = doc('frs302-4-1-flow-netflow-zeek', '4.1 — Flow analysis: NetFlow & Zeek logs|||4.1 — Phân tích luồng: NetFlow & log Zeek',
   'Luồng (flow) là gì vs gói đầy đủ; NetFlow/IPFIX; Zeek biến lưu lượng thành log (conn.log, dns.log); dùng flow để phát hiện beaconing & khối lượng bất thường khi không có full pcap.',
   [[
     `<span class="eyebrow">FRS302 · Chapter 4 · Lesson 4.1</span>
@@ -318,7 +318,7 @@ const c4q = quiz('frs302-quiz-4', 'Quiz 4 — Flow analysis|||Quiz 4 — Phân t
   { id: 'q3', question: 'Trong dữ liệu luồng, "beaconing" của malware hiện ra như thế nào?', options: ['Một kết nối lớn duy nhất', 'Nhiều kết nối nhỏ, cách đều nhau tới cùng một đích', 'Không để lại dấu vết nào', 'Chỉ thấy trong một gói đơn'], correctIndex: 1, explanation: 'Gọi về nhà theo chu kỳ đều → mẫu chỉ lộ khi nhìn qua nhiều luồng theo thời gian.' },
 ]);
 
-const c5 = doc('frs302-5-1-http-dns-email', '5.1 — Investigating HTTP, DNS &amp; email|||5.1 — Điều tra giao thức HTTP/DNS/email',
+const c5 = doc('frs302-5-1-http-dns-email', '5.1 — Investigating HTTP, DNS & email|||5.1 — Điều tra giao thức HTTP/DNS/email',
   'Đọc yêu cầu/phản hồi HTTP, header & User-Agent; điều tra DNS (truy vấn, DGA, tunneling); dấu vết email (SMTP, header Received, đọc ngược đường đi).',
   [[
     `<span class="eyebrow">FRS302 · Chapter 5 · Lesson 5.1</span>
@@ -361,7 +361,7 @@ const c5q = quiz('frs302-quiz-5', 'Quiz 5 — HTTP/DNS/email|||Quiz 5 — HTTP/D
   { id: 'q3', question: 'Đọc header "Received:" của email theo chiều nào để dựng lại đường đi thật?', options: ['Từ trên xuống', 'Từ dưới lên', 'Theo thứ tự bảng chữ cái', 'Ngẫu nhiên'], correctIndex: 1, explanation: 'Mỗi máy chủ chèn Received: lên đầu → đọc từ dưới lên cho ra trình tự đi qua các server.' },
 ]);
 
-const c6 = doc('frs302-6-1-attack-c2-exfil', '6.1 — Detecting &amp; investigating attacks|||6.1 — Phát hiện &amp; điều tra tấn công',
+const c6 = doc('frs302-6-1-attack-c2-exfil', '6.1 — Detecting & investigating attacks|||6.1 — Phát hiện & điều tra tấn công',
   'Chuỗi tấn công (recon → khai thác → C2 → di chuyển ngang → rò rỉ); nhận diện C2 (beaconing, domain lạ, TLS bất thường); dấu hiệu exfiltration (upload lớn/ra ngoài giờ); IOC.',
   [[
     `<span class="eyebrow">FRS302 · Chapter 6 · Lesson 6.1</span>
@@ -410,7 +410,7 @@ const c6q = quiz('frs302-quiz-6', 'Quiz 6 — Attack investigation|||Quiz 6 — 
   { id: 'q3', question: 'IOC (Indicator of Compromise) là gì?', options: ['Một loại firewall', 'Dấu vết cụ thể (IP, domain, hash, URI) đánh dấu cuộc tấn công', 'Tên của một hàm băm', 'Một cổng SPAN'], correctIndex: 1, explanation: 'IOC được rút ra để chia sẻ và truy tìm cùng mối đe doạ ở nơi khác.' },
 ]);
 
-const c7 = doc('frs302-7-1-wireless-devices-logs', '7.1 — Wireless &amp; network-device logs|||7.1 — Điều tra không dây &amp; log thiết bị mạng',
+const c7 = doc('frs302-7-1-wireless-devices-logs', '7.1 — Wireless & network-device logs|||7.1 — Điều tra không dây & log thiết bị mạng',
   'Chứng cứ Wi-Fi (802.11, SSID/BSSID, khung quản lý, rogue AP); log firewall (allow/deny, 5-tuple); log IDS/IPS (Snort/Suricata) và cảnh báo; tương quan log tập trung (syslog/SIEM); đồng bộ thời gian NTP.',
   [[
     `<span class="eyebrow">FRS302 · Chapter 7 · Lesson 7.1</span>
@@ -445,13 +445,13 @@ cat ./out/fast.log
 <div class="callout"><span class="badge">Một đồng hồ</span> Ghi và chuẩn hoá mọi nguồn về UTC. Đồng hồ lệch năm phút có thể khiến nguyên nhân trông như hệ quả.</div>`,
   ]]);
 
-const c7q = quiz('frs302-quiz-7', 'Quiz 7 — Wireless &amp; device logs|||Quiz 7 — Không dây &amp; log thiết bị', [
+const c7q = quiz('frs302-quiz-7', 'Quiz 7 — Wireless & device logs|||Quiz 7 — Không dây & log thiết bị', [
   { id: 'q1', question: '"5-tuple" trong log firewall gồm những gì?', options: ['5 địa chỉ MAC', 'IP nguồn, cổng nguồn, IP đích, cổng đích, giao thức', 'Tên miền, SSID, kênh, RSSI, thời gian', '5 dòng cảnh báo IDS'], correctIndex: 1, explanation: '5-tuple định danh một luồng: src IP/port, dst IP/port, protocol.' },
   { id: 'q2', question: 'Nên coi một cảnh báo IDS (Snort/Suricata) là gì?', options: ['Phán quyết cuối cùng, kết luận ngay', 'Manh mối cần xác nhận lại với gói/luồng trước khi kết luận', 'Bằng chứng đủ để truy tố', 'Lỗi cấu hình, nên bỏ qua'], correctIndex: 1, explanation: 'Signature có thể báo nhầm/sót → luôn đối chiếu với dữ liệu gốc.' },
   { id: 'q3', question: 'Vì sao đồng bộ thời gian (NTP) quan trọng khi tương quan log nhiều thiết bị?', options: ['Để tiết kiệm băng thông', 'Để đồng hồ lệch không phá dòng thời gian, tránh nguyên nhân trông như hệ quả', 'Để mã hoá log', 'Để giảm dung lượng log'], correctIndex: 1, explanation: 'Lệch giờ vài phút có thể đảo lộn trình tự sự kiện khi ghép log.' },
 ]);
 
-const c8 = doc('frs302-8-1-reporting-legal', '8.1 — Reporting, legal aspects &amp; presenting evidence|||8.1 — Báo cáo, khía cạnh pháp lý &amp; trình bày chứng cứ',
+const c8 = doc('frs302-8-1-reporting-legal', '8.1 — Reporting, legal aspects & presenting evidence|||8.1 — Báo cáo, khía cạnh pháp lý & trình bày chứng cứ',
   'Cấu trúc báo cáo điều tra (tóm tắt điều hành → phương pháp → phát hiện → kết luận); tính chấp nhận được của chứng cứ; hợp pháp/riêng tư khi bắt lưu lượng; báo cáo dựa trên sự thật, nhân chứng chuyên môn.',
   [[
     `<span class="eyebrow">FRS302 · Chapter 8 · Lesson 8.1</span>
@@ -488,7 +488,7 @@ const c8 = doc('frs302-8-1-reporting-legal', '8.1 — Reporting, legal aspects &
 <div class="callout"><span class="badge">Tái lập được</span> Một đồng nghiệp làm theo báo cáo của bạn với cùng chứng cứ và công cụ phải ra cùng kết quả — đó là điều làm một phát hiện có thể bảo vệ được.</div>`,
   ]]);
 
-const c8q = quiz('frs302-quiz-8', 'Quiz 8 — Reporting &amp; legal|||Quiz 8 — Báo cáo &amp; pháp lý', [
+const c8q = quiz('frs302-quiz-8', 'Quiz 8 — Reporting & legal|||Quiz 8 — Báo cáo & pháp lý', [
   { id: 'q1', question: 'Điều kiện nào KHÔNG thể thiếu để chứng cứ được chấp nhận (admissible)?', options: ['Báo cáo dài nhiều trang', 'Xác thực, toàn vẹn chứng minh được, xử lý được ghi chép, thu thập hợp pháp', 'Dùng công cụ đắt tiền', 'Có nhiều biểu đồ màu'], correctIndex: 1, explanation: 'Chứng cứ từ một lần bắt trái phép có thể bị loại bỏ hoàn toàn dù nội dung có giá trị.' },
   { id: 'q2', question: 'Trong báo cáo điều tra, nên trình bày sự thật và diễn giải như thế nào?', options: ['Trộn lẫn cho gọn', 'Tách bạch: sự thật (dữ liệu đo được) riêng, diễn giải/nhận định riêng', 'Chỉ ghi nhận định', 'Chỉ ghi sự thật, không kết luận gì'], correctIndex: 1, explanation: 'Nhận định chuyên môn phải dựa trên các sự thật đã nêu, và tách khỏi chúng cho minh bạch.' },
   { id: 'q3', question: 'Yêu cầu về pháp lý/riêng tư khi bắt lưu lượng để điều tra là gì?', options: ['Bắt càng nhiều càng tốt, không cần xin phép', 'Chỉ giám sát khi có thẩm quyền hợp lệ, thu vừa đủ nhu cầu, tuân luật &amp; chính sách', 'Được phép chặn mọi liên lạc riêng tư bất cứ lúc nào', 'Không cần quan tâm luật vì là phòng thủ'], correctIndex: 1, explanation: 'Giám sát cần thẩm quyền (chính sách/banner/lệnh), thu tối thiểu, theo luật và chính sách tổ chức.' },

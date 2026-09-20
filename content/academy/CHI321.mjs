@@ -97,7 +97,7 @@ const intro = doc('chi321-0-1-overview', 'Course overview: Integrated Chinese 4|
 <p>Khai giảng &amp; chọn môn → ký túc &amp; chuyển nhà → mua sắm nâng cao → giao thông &amp; chỉ đường → sức khỏe &amp; thể thao → việc làm thêm → lễ hội → kế hoạch tương lai. Mỗi bài có bảng từ vựng (汉字 | pinyin | nghĩa), điểm ngữ pháp kèm ví dụ, một hội thoại ngắn, ghi chú, và quiz.</p>`,
   ]]);
 
-const b1 = doc('chi321-1-1-new-semester', 'Lesson 1 — New semester &amp; courses|||Bài 1 — Khai giảng &amp; học kỳ',
+const b1 = doc('chi321-1-1-new-semester', 'Lesson 1 — New semester & courses|||Bài 1 — Khai giảng & học kỳ',
   'Từ vựng: 开学, 学期, 选课, 专业, 复习, 打算, 决定, 报名, 除了. Ngữ pháp: 除了…以外, 打算 (dự định), 决定 (quyết định), 报名 (đăng ký).',
   [[
     `<span class="eyebrow">CHI321 · Lesson 1 · New semester</span>
@@ -160,13 +160,13 @@ B: 决定了，明天就去报名。 Juédìng le, míngtiān jiù qù bàomíng
 <div class="callout"><span class="badge">Ghi chú</span> 除了 … 以外 có hai nghĩa: đi với 还 hoặc 也 nghĩa là ngoài … ra (thêm vào); đi với 都 nghĩa là trừ … ra (loại một cái). Nhìn từ đứng sau để phân biệt.</div>`,
   ]]);
 
-const b1q = quiz('chi321-quiz-1', 'Quiz 1 — New semester &amp; courses|||Quiz 1 — Khai giảng &amp; học kỳ', [
+const b1q = quiz('chi321-quiz-1', 'Quiz 1 — New semester & courses|||Quiz 1 — Khai giảng & học kỳ', [
   { id: 'q1', question: 'Câu 除了汉语以外，我还学日语 nghĩa là? / What does 除了汉语以外，我还学日语 mean?', options: ['Tôi chỉ học tiếng Trung|||I only study Chinese', 'Ngoài tiếng Trung ra, tôi còn học tiếng Nhật|||besides Chinese, I also study Japanese', 'Tôi không học tiếng Nhật|||I do not study Japanese', 'Tôi thích tiếng Nhật hơn|||I prefer Japanese'], correctIndex: 1, explanation: '除了…以外 đi với 还 nghĩa là ngoài … ra, thêm vào: ngoài tiếng Trung còn học tiếng Nhật.' },
   { id: 'q2', question: '"打算" (dǎsuàn) nghĩa là? / What does 打算 mean?', options: ['quyết định xong|||already decided', 'dự định, tính|||to plan / intend', 'từ chối|||to refuse', 'quên mất|||to forget'], correctIndex: 1, explanation: '打算 = dự định làm gì: 我打算选四门课 = tôi định chọn bốn môn.' },
   { id: 'q3', question: '"选课" (xuǎnkè) nghĩa là? / What does 选课 mean?', options: ['nghỉ học|||skip class', 'chọn / đăng ký môn học|||to choose or register courses', 'thi cử|||to take exams', 'dạy học|||to teach'], correctIndex: 1, explanation: '选 (chọn) + 课 (môn học) = chọn môn, đăng ký môn. Đầu học kỳ phải 报名选课.' },
 ]);
 
-const b2 = doc('chi321-2-1-dorm-moving', 'Lesson 2 — Dorm life &amp; moving|||Bài 2 — Ở ký túc &amp; chuyển nhà',
+const b2 = doc('chi321-2-1-dorm-moving', 'Lesson 2 — Dorm life & moving|||Bài 2 — Ở ký túc & chuyển nhà',
   'Từ vựng: 宿舍, 搬家, 搬, 家具, 整齐, 干净, 放, 空调, 舒服. Ngữ pháp: câu chữ 把 (把家具搬进来), 放在…上, 搬进/搬出, 整齐/干净.',
   [[
     `<span class="eyebrow">CHI321 · Lesson 2 · Dorm life</span>
@@ -229,13 +229,13 @@ B: 房间又整齐又干净，真舒服。 Fángjiān yòu zhěngqí yòu gānj�
 <div class="callout"><span class="badge">Ghi chú</span> Câu chữ 把 bắt buộc có thành phần sau động từ — kết quả, xu hướng, hoặc nơi chốn. Không nói 把书放 trơ trọi; phải nói 把书放在桌子上 (đặt sách lên bàn).</div>`,
   ]]);
 
-const b2q = quiz('chi321-quiz-2', 'Quiz 2 — Dorm life &amp; moving|||Quiz 2 — Ở ký túc &amp; chuyển nhà', [
+const b2q = quiz('chi321-quiz-2', 'Quiz 2 — Dorm life & moving|||Quiz 2 — Ở ký túc & chuyển nhà', [
   { id: 'q1', question: 'Câu chữ 把 dùng để làm gì? / What is the 把 sentence for?', options: ['so sánh hai vật|||to compare two things', 'đưa tân ngữ lên trước động từ để nói điều xảy ra với nó|||to move the object before the verb to say what happens to it', 'hỏi giờ|||to ask the time', 'phủ định câu|||to negate a sentence'], correctIndex: 1, explanation: 'Câu 把: 把 + tân ngữ + động từ + kết quả, ví dụ 把家具搬进宿舍.' },
   { id: 'q2', question: 'Câu nào ĐÚNG? / Which sentence is correct?', options: ['把书放|||把书放', '把书放在桌子上|||把书放在桌子上', '书把放桌子|||书把放桌子', '放把书桌子上|||放把书桌子上'], correctIndex: 1, explanation: 'Câu 把 phải có kết quả hoặc nơi chốn sau động từ: 把书放在桌子上 = đặt sách lên bàn.' },
   { id: 'q3', question: '"整齐" (zhěngqí) nghĩa là? / What does 整齐 mean?', options: ['bẩn thỉu|||dirty', 'gọn gàng, ngăn nắp|||tidy / neat', 'ồn ào|||noisy', 'rộng rãi|||spacious'], correctIndex: 1, explanation: '整齐 = gọn gàng; khác 干净 (sạch, không bẩn). 把房间收拾整齐 = dọn phòng cho gọn.' },
 ]);
 
-const b3 = doc('chi321-3-1-shopping', 'Lesson 3 — Shopping &amp; comparison|||Bài 3 — Mua sắm &amp; so sánh',
+const b3 = doc('chi321-3-1-shopping', 'Lesson 3 — Shopping & comparison|||Bài 3 — Mua sắm & so sánh',
   'Từ vựng: 质量, 牌子, 比较, 贵, 便宜, 退, 换, 打折, 售货员. Ngữ pháp: 比较 (tương đối), 越来越 (càng ngày càng), bổ ngữ khả năng 退得了/退不了, 买得起/买不起.',
   [[
     `<span class="eyebrow">CHI321 · Lesson 3 · Shopping</span>
@@ -298,13 +298,13 @@ B: 现在打折，还可以退换。 Xiànzài dǎzhé, hái kěyǐ tuìhuàn. (
 <div class="callout"><span class="badge">Ghi chú</span> Bổ ngữ khả năng đặt 得 (được) hoặc 不 (không) giữa động từ và kết quả: 买得起 (mua nổi) và 买不起 (không mua nổi). Không dùng 能 kèm theo nó.</div>`,
   ]]);
 
-const b3q = quiz('chi321-quiz-3', 'Quiz 3 — Shopping &amp; comparison|||Quiz 3 — Mua sắm &amp; so sánh', [
+const b3q = quiz('chi321-quiz-3', 'Quiz 3 — Shopping & comparison|||Quiz 3 — Mua sắm & so sánh', [
   { id: 'q1', question: '"买不起" (mǎi bù qǐ) nghĩa là? / What does 买不起 mean?', options: ['không muốn mua|||do not want to buy', 'mua không nổi (không đủ tiền)|||cannot afford', 'đã mua rồi|||already bought', 'mua rất nhiều|||buy a lot'], correctIndex: 1, explanation: '买得起 = mua nổi, 买不起 = không mua nổi. Đây là bổ ngữ khả năng với 得 / 不.' },
   { id: 'q2', question: 'Phân biệt 退 và 换? / Tell 退 from 换?', options: ['退 là đổi cái khác, 换 là trả lấy tiền|||退 exchange, 换 refund', '退 là trả lại lấy tiền, 换 là đổi cái khác|||退 return for refund, 换 exchange for another', 'Hai từ giống nhau|||both the same', '退 là mua, 换 là bán|||退 buy, 换 sell'], correctIndex: 1, explanation: '退 = trả lại lấy tiền; 换 = đổi lấy cái khác. Ghép lại 退换 = đổi trả.' },
   { id: 'q3', question: '"这个牌子比较贵" nghĩa là? / What does 这个牌子比较贵 mean?', options: ['Nhãn này rất rẻ|||this brand is very cheap', 'Nhãn này khá đắt|||this brand is rather expensive', 'Nhãn này không có hàng|||this brand is out of stock', 'Nhãn này chất lượng kém|||this brand is low quality'], correctIndex: 1, explanation: '比较 đứng trước tính từ nghĩa là tương đối / khá: 比较贵 = khá đắt.' },
 ]);
 
-const b4 = doc('chi321-4-1-traffic-directions', 'Lesson 4 — Traffic &amp; directions|||Bài 4 — Giao thông &amp; chỉ đường',
+const b4 = doc('chi321-4-1-traffic-directions', 'Lesson 4 — Traffic & directions|||Bài 4 — Giao thông & chỉ đường',
   'Từ vựng: 堵车, 地铁, 打车, 迷路, 拐, 路口, 方向, 地图, 附近. Ngữ pháp: bổ ngữ khả năng 找得到/找不到, 往…拐 (rẽ về…), 一…就 (hễ…là…).',
   [[
     `<span class="eyebrow">CHI321 · Lesson 4 · Traffic</span>
@@ -367,13 +367,13 @@ B: 坐地铁更快，一出站就到了。 Zuò dìtiě gèng kuài, yì chū zh
 <div class="callout"><span class="badge">Ghi chú</span> 往 nêu hướng và theo sau là nơi chốn hoặc bên cạnh cùng một động từ di chuyển: 往前走 (đi tới trước), 往左拐 (rẽ trái). Đừng bỏ động từ sau hướng.</div>`,
   ]]);
 
-const b4q = quiz('chi321-quiz-4', 'Quiz 4 — Traffic &amp; directions|||Quiz 4 — Giao thông &amp; chỉ đường', [
+const b4q = quiz('chi321-quiz-4', 'Quiz 4 — Traffic & directions|||Quiz 4 — Giao thông & chỉ đường', [
   { id: 'q1', question: '"往左拐" (wǎng zuǒ guǎi) nghĩa là? / What does 往左拐 mean?', options: ['đi thẳng|||go straight', 'rẽ trái|||turn left', 'quay lại|||turn back', 'dừng lại|||stop'], correctIndex: 1, explanation: '往 (về phía) + 左 (trái) + 拐 (rẽ) = rẽ trái. 往右拐 = rẽ phải.' },
   { id: 'q2', question: '"找不到" (zhǎo bú dào) nghĩa là? / What does 找不到 mean?', options: ['tìm được|||can find', 'không tìm được|||cannot find', 'không muốn tìm|||do not want to look', 'tìm thấy rồi|||already found'], correctIndex: 1, explanation: '找得到 = tìm được; 找不到 = không tìm được. Bổ ngữ khả năng với 得 / 不.' },
   { id: 'q3', question: 'Khi 堵车 (kẹt xe) nên đi bằng gì cho nhanh? / When there is a jam, what is faster?', options: ['打车 dǎchē (taxi)', '地铁 dìtiě (tàu điện ngầm)', '迷路 mílù', '路口 lùkǒu'], correctIndex: 1, explanation: 'Khi 堵车 thì 地铁 (tàu điện ngầm) nhanh hơn: 一出站就到了.' },
 ]);
 
-const b5 = doc('chi321-5-1-health-sports', 'Lesson 5 — Health &amp; sports|||Bài 5 — Sức khỏe &amp; thể thao',
+const b5 = doc('chi321-5-1-health-sports', 'Lesson 5 — Health & sports|||Bài 5 — Sức khỏe & thể thao',
   'Từ vựng: 锻炼, 减肥, 受伤, 坚持, 习惯, 健康, 运动, 累, 撞. Ngữ pháp: câu bị động 被 (被车撞伤了), 越…越 (càng…càng), 坚持 + động từ.',
   [[
     `<span class="eyebrow">CHI321 · Lesson 5 · Health &amp; sports</span>
@@ -436,7 +436,7 @@ B: 昨天我朋友被车撞伤了，要小心。 Zuótiān wǒ péngyou bèi ch�
 <div class="callout"><span class="badge">Ghi chú</span> Câu bị động 被 thường nói về điều không may. Sau động từ phải có kết quả: 被撞<strong>伤</strong>了 (bị thương), 被吃<strong>完</strong>了 (bị ăn hết).</div>`,
   ]]);
 
-const b5q = quiz('chi321-quiz-5', 'Quiz 5 — Health &amp; sports|||Quiz 5 — Sức khỏe &amp; thể thao', [
+const b5q = quiz('chi321-quiz-5', 'Quiz 5 — Health & sports|||Quiz 5 — Sức khỏe & thể thao', [
   { id: 'q1', question: 'Câu 他被车撞伤了 nghĩa là? / What does 他被车撞伤了 mean?', options: ['Anh ấy đâm vào xe|||he hit a car', 'Anh ấy bị xe đâm bị thương|||he was hit and hurt by a car', 'Anh ấy lái xe|||he drives a car', 'Anh ấy sửa xe|||he fixes a car'], correctIndex: 1, explanation: 'Câu bị động 被: chủ ngữ + 被 + tác nhân + động từ + kết quả. 被车撞伤了 = bị xe đâm bị thương.' },
   { id: 'q2', question: 'Mẫu "越…越…" nghĩa là? / What does 越…越… mean?', options: ['càng … càng …|||the more … the more …', 'không những … mà còn …|||not only … but also …', 'tuy … nhưng …|||although … but …', 'ngoài … ra …|||besides …'], correctIndex: 0, explanation: '越…越… = càng … càng: 越锻炼越健康 = càng tập luyện càng khỏe.' },
   { id: 'q3', question: '"坚持每天运动" nghĩa là? / What does 坚持每天运动 mean?', options: ['thỉnh thoảng vận động|||exercise sometimes', 'kiên trì vận động mỗi ngày|||keep exercising every day', 'không vận động|||do not exercise', 'muốn vận động|||want to exercise'], correctIndex: 1, explanation: '坚持 = kiên trì, giữ vững thói quen: 坚持每天运动 = kiên trì vận động mỗi ngày.' },
@@ -511,7 +511,7 @@ const b6q = quiz('chi321-quiz-6', 'Quiz 6 — Applying for a part-time job|||Qui
   { id: 'q3', question: '"面试" (miànshì) nghĩa là? / What does 面试 mean?', options: ['lương|||salary', 'phỏng vấn|||interview', 'kinh nghiệm|||experience', 'cơ hội|||opportunity'], correctIndex: 1, explanation: '面试 = phỏng vấn xin việc; thường cần chuẩn bị 简历 (CV) trước.' },
 ]);
 
-const b7 = doc('chi321-7-1-festivals', 'Lesson 7 — Birthdays &amp; festivals|||Bài 7 — Sinh nhật &amp; lễ hội',
+const b7 = doc('chi321-7-1-festivals', 'Lesson 7 — Birthdays & festivals|||Bài 7 — Sinh nhật & lễ hội',
   'Từ vựng: 过节, 礼物, 热闹, 传统, 习俗, 生日, 庆祝, 邀请, 节日. Ngữ pháp: 不但…而且 (không những…mà còn), 给…送礼物, 热闹/传统.',
   [[
     `<span class="eyebrow">CHI321 · Lesson 7 · Festivals</span>
@@ -574,7 +574,7 @@ B: 中国过节不但热闹，而且有很多传统习俗。 Zhōngguó guòjié
 <div class="callout"><span class="badge">Ghi chú</span> 不但 … 而且 … thêm một ý cùng chiều. 而且 có thể đi với 还 hoặc 也 để nhấn mạnh: 不但便宜，而且质量也好.</div>`,
   ]]);
 
-const b7q = quiz('chi321-quiz-7', 'Quiz 7 — Birthdays &amp; festivals|||Quiz 7 — Sinh nhật &amp; lễ hội', [
+const b7q = quiz('chi321-quiz-7', 'Quiz 7 — Birthdays & festivals|||Quiz 7 — Sinh nhật & lễ hội', [
   { id: 'q1', question: 'Mẫu "不但…而且…" nghĩa là? / What does 不但…而且… mean?', options: ['tuy … nhưng …|||although … but …', 'không những … mà còn …|||not only … but also …', 'nếu … thì …|||if … then …', 'càng … càng …|||the more … the more …'], correctIndex: 1, explanation: '不但…而且… = không những … mà còn: 不但热闹，而且有很多传统习俗.' },
   { id: 'q2', question: '"给朋友送礼物" nghĩa là? / What does 给朋友送礼物 mean?', options: ['nhận quà từ bạn|||get a gift from a friend', 'tặng quà cho bạn|||give a gift to a friend', 'mua quà cho mình|||buy a gift for oneself', 'trả lại quà|||return a gift'], correctIndex: 1, explanation: '给 (cho) + 朋友 + 送礼物 = tặng quà cho bạn.' },
   { id: 'q3', question: '"热闹" (rènao) nghĩa là? / What does 热闹 mean?', options: ['yên tĩnh|||quiet', 'náo nhiệt, nhộn nhịp|||lively / bustling', 'lạnh lẽo|||cold', 'buồn chán|||boring'], correctIndex: 1, explanation: '热闹 = náo nhiệt, đông vui: 节日很热闹 = ngày lễ rất nhộn nhịp.' },
@@ -667,15 +667,15 @@ export default {
     requirements: 'Cần hoàn thành CHI311 hoặc nắm vững pinyin, 4 thanh điệu, bổ ngữ kết quả (听懂/看懂), bổ ngữ trình độ với 得 (考得好), các mẫu 一…就 và 越来越, cùng từ vựng sinh hoạt, sức khỏe và du lịch. Nên cài Pleco hoặc dùng từ điển hanzii.net để tra chữ &amp; nghe phát âm; luyện viết chữ Hán theo thứ tự nét.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (Level 2 Part 1), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (Level 2 Part 1), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHI311, track Integrated Chinese, mục tiêu HSK3, cách học.', lessons: [intro] },
-    { title: 'Bài 1 — Khai giảng &amp; học kỳ|||Lesson 1 — New semester &amp; courses', description: '开学, 学期, 选课, 专业, 打算/决定, 除了…以外.', lessons: [b1, b1q] },
-    { title: 'Bài 2 — Ở ký túc &amp; chuyển nhà|||Lesson 2 — Dorm life &amp; moving', description: '宿舍, 搬家, 家具, 整齐/干净, câu chữ 把.', lessons: [b2, b2q] },
-    { title: 'Bài 3 — Mua sắm &amp; so sánh|||Lesson 3 — Shopping &amp; comparison', description: '质量, 牌子, 比较, 退换, 打折, 买不起, 越来越.', lessons: [b3, b3q] },
-    { title: 'Bài 4 — Giao thông &amp; chỉ đường|||Lesson 4 — Traffic &amp; directions', description: '堵车, 地铁, 打车, 迷路, 往…拐, 找得到/找不到.', lessons: [b4, b4q] },
-    { title: 'Bài 5 — Sức khỏe &amp; thể thao|||Lesson 5 — Health &amp; sports', description: '锻炼, 减肥, 受伤, 坚持, câu bị động 被, 越…越.', lessons: [b5, b5q] },
+    { title: 'Bài 1 — Khai giảng & học kỳ|||Lesson 1 — New semester & courses', description: '开学, 学期, 选课, 专业, 打算/决定, 除了…以外.', lessons: [b1, b1q] },
+    { title: 'Bài 2 — Ở ký túc & chuyển nhà|||Lesson 2 — Dorm life & moving', description: '宿舍, 搬家, 家具, 整齐/干净, câu chữ 把.', lessons: [b2, b2q] },
+    { title: 'Bài 3 — Mua sắm & so sánh|||Lesson 3 — Shopping & comparison', description: '质量, 牌子, 比较, 退换, 打折, 买不起, 越来越.', lessons: [b3, b3q] },
+    { title: 'Bài 4 — Giao thông & chỉ đường|||Lesson 4 — Traffic & directions', description: '堵车, 地铁, 打车, 迷路, 往…拐, 找得到/找不到.', lessons: [b4, b4q] },
+    { title: 'Bài 5 — Sức khỏe & thể thao|||Lesson 5 — Health & sports', description: '锻炼, 减肥, 受伤, 坚持, câu bị động 被, 越…越.', lessons: [b5, b5q] },
     { title: 'Bài 6 — Xin việc làm thêm|||Lesson 6 — Part-time job', description: '打工, 应聘, 面试, 工资, 简历, 虽然…但是.', lessons: [b6, b6q] },
-    { title: 'Bài 7 — Sinh nhật &amp; lễ hội|||Lesson 7 — Birthdays &amp; festivals', description: '过节, 礼物, 热闹, 传统, 习俗, 不但…而且.', lessons: [b7, b7q] },
+    { title: 'Bài 7 — Sinh nhật & lễ hội|||Lesson 7 — Birthdays & festivals', description: '过节, 礼物, 热闹, 传统, 习俗, 不但…而且.', lessons: [b7, b7q] },
     { title: 'Bài 8 — Kế hoạch tương lai|||Lesson 8 — Future plans', description: '打算, 将来, 毕业, 出国, 留学, 希望.', lessons: [b8, b8q] },
   ],
 };

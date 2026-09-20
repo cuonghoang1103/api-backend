@@ -13,7 +13,7 @@ const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', desc
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức module.', quiz: { timeLimitSeconds: 480, questions } });
 
 /* ── 📚 Tài liệu tham khảo ─────────────────────────────────────────────── */
-const taiLieu = doc('dpl302m-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('dpl302m-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: DeepLearning.AI Specialization, TensorFlow/Keras, sách Goodfellow miễn phí, d2l.ai, HuggingFace; công cụ Colab/Jupyter; lộ trình 4 bước.',
   [[
     `<span class="eyebrow">DPL302m · Materials</span>
@@ -180,7 +180,7 @@ model.compile(optimizer='sgd', loss='binary_crossentropy',
 <div class="callout"><span class="badge">Ý chính</span> Mạng nơ-ron chỉ là một hàm khả vi; backprop cho mọi tham số một gradient, gradient descent đi xuống theo gradient đó.</div>`,
   ]]);
 
-const m1b = doc('dpl302m-1-2-shallow-deep', '1.2 — Shallow &amp; deep networks|||1.2 — Mạng nông &amp; mạng sâu',
+const m1b = doc('dpl302m-1-2-shallow-deep', '1.2 — Shallow & deep networks|||1.2 — Mạng nông & mạng sâu',
   'Mạng một lớp ẩn (shallow); vector hoá; vì sao cần lớp sâu (deep) — học biểu diễn phân cấp; ký hiệu lớp; dựng deep NN bằng Keras.',
   [[
     `<span class="eyebrow">DPL302m · Module 1 · Lesson 1.2</span>
@@ -234,7 +234,7 @@ const m1q = quiz('dpl302m-quiz-1', 'Quiz 1 — Neural networks|||Quiz 1 — Mạ
 ]);
 
 /* ── Module 2 — Improving Deep Neural Networks (CLO2) ──────────────────── */
-const m2a = doc('dpl302m-2-1-practical-optim', '2.1 — Practical aspects, regularization &amp; optimization|||2.1 — Thực hành, regularization &amp; tối ưu',
+const m2a = doc('dpl302m-2-1-practical-optim', '2.1 — Practical aspects, regularization & optimization|||2.1 — Thực hành, regularization & tối ưu',
   'Chia train/dev/test; bias/variance; regularization (L2, dropout); khởi tạo Xavier/He; mini-batch; tối ưu Momentum/RMSprop/Adam; Batch Normalization; framework TensorFlow.',
   [[
     `<span class="eyebrow">DPL302m · Module 2 · Lesson 2.1</span>
@@ -425,7 +425,7 @@ model = keras.Sequential([
 <div class="callout"><span class="badge">Vì sao CNN thắng với ảnh</span> Chia sẻ trọng số + trường tiếp nhận cục bộ = ít tham số, và một mẫu học được ở góc này nhận ra ở mọi nơi.</div>`,
   ]]);
 
-const m4b = doc('dpl302m-4-2-cnn-cases-apps', '4.2 — Case studies &amp; applications|||4.2 — Kiến trúc kinh điển &amp; ứng dụng',
+const m4b = doc('dpl302m-4-2-cnn-cases-apps', '4.2 — Case studies & applications|||4.2 — Kiến trúc kinh điển & ứng dụng',
   'Kiến trúc: LeNet, AlexNet, VGG, ResNet (skip connection), Inception; object detection (YOLO); face recognition (siamese/triplet loss); neural style transfer.',
   [[
     `<span class="eyebrow">DPL302m · Module 4 · Lesson 4.2</span>
@@ -483,7 +483,7 @@ const m4q = quiz('dpl302m-quiz-4', 'Quiz 4 — CNN|||Quiz 4 — Mạng tích ch�
 ]);
 
 /* ── Module 5 — Sequence Models (CLO5) ────────────────────────────────── */
-const m5a = doc('dpl302m-5-1-rnn-lstm', '5.1 — RNN, LSTM &amp; GRU|||5.1 — RNN, LSTM &amp; GRU',
+const m5a = doc('dpl302m-5-1-rnn-lstm', '5.1 — RNN, LSTM & GRU|||5.1 — RNN, LSTM & GRU',
   'Dữ liệu chuỗi; RNN & trạng thái ẩn theo thời gian; vanishing gradient; LSTM (cổng quên/vào/ra) & GRU; word embeddings (Word2Vec/GloVe); dựng RNN Keras.',
   [[
     `<span class="eyebrow">DPL302m · Module 5 · Lesson 5.1</span>
@@ -528,7 +528,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy',
 <div class="callout"><span class="badge">Trực giác cổng</span> Cell LSTM quyết định quên gì, lưu gì, xuất gì — nhờ vậy nó nhớ ngữ cảnh qua chuỗi dài.</div>`,
   ]]);
 
-const m5b = doc('dpl302m-5-2-attention-transformer', '5.2 — Attention &amp; Transformers|||5.2 — Attention &amp; Transformer',
+const m5b = doc('dpl302m-5-2-attention-transformer', '5.2 — Attention & Transformers|||5.2 — Attention & Transformer',
   'Cơ chế attention; self-attention (query/key/value); kiến trúc Transformer (multi-head, positional encoding); vì sao thay RNN; nền của mô hình ngôn ngữ lớn.',
   [[
     `<span class="eyebrow">DPL302m · Module 5 · Lesson 5.2</span>

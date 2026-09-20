@@ -70,7 +70,7 @@ const taiLieu = doc('lae101-0-0-tai-lieu', '📚 Course materials & references||
 </ol></div>`,
   ]]);
 
-const intro = doc('lae101-0-1-overview', 'Course overview: Law &amp; ethics in media|||Tổng quan: Luật &amp; đạo đức truyền thông',
+const intro = doc('lae101-0-1-overview', 'Course overview: Law & ethics in media|||Tổng quan: Luật & đạo đức truyền thông',
   'Môn học làm gì; vì sao người làm truyền thông cần biết luật lẫn đạo đức; lộ trình 8 chương từ khái niệm → khung VN → phỉ báng, riêng tư, bản quyền → đạo đức nghề → nội dung nhạy cảm → đạo đức số & AI.',
   [[
     `<span class="eyebrow">LAE101 · Lesson 0.1 · Overview</span>
@@ -109,7 +109,7 @@ const intro = doc('lae101-0-1-overview', 'Course overview: Law &amp; ethics in m
 <div class="callout"><span class="badge">Một câu tự hỏi</span> Nếu bạn chưa gọi tên được <em>ai có thể bị tổn hại</em> và <em>quyền hay điều luật nào đang liên quan</em>, thì bạn chưa sẵn sàng đăng.</div>`,
   ]]);
 
-const c1 = doc('lae101-1-1-law-vs-ethics', '1.1 — What are media law &amp; ethics?|||1.1 — Luật &amp; đạo đức truyền thông là gì',
+const c1 = doc('lae101-1-1-law-vs-ethics', '1.1 — What are media law & ethics?|||1.1 — Luật & đạo đức truyền thông là gì',
   'Phân biệt luật (bắt buộc, có chế tài) với đạo đức (tự nguyện, tự chịu trách nhiệm); vai trò báo chí; tự do ngôn luận và giới hạn hợp pháp.',
   [[
     `<span class="eyebrow">LAE101 · Chapter 1 · Lesson 1.1</span>
@@ -144,13 +144,13 @@ const c1 = doc('lae101-1-1-law-vs-ethics', '1.1 — What are media law &amp; eth
 <div class="callout"><span class="badge">Vụ việc</span> <em>Near kiện Minnesota</em> (1931, Mỹ) bác một đạo luật cho phép đóng cửa báo trước khi in — xác lập rằng <strong>kiểm duyệt trước (prior restraint)</strong> là giới hạn đáng ngờ nhất.</div>`,
   ]]);
 
-const c1q = quiz('lae101-quiz-1', 'Quiz 1 — Law &amp; ethics|||Quiz 1 — Luật &amp; đạo đức', [
+const c1q = quiz('lae101-quiz-1', 'Quiz 1 — Law & ethics|||Quiz 1 — Luật & đạo đức', [
   { id: 'q1', question: 'Khác biệt cốt lõi giữa luật và đạo đức là?|||Core difference between law and ethics?', options: ['Không có khác biệt|||No difference', 'Luật do nhà nước cưỡng chế; đạo đức do lương tâm/uy tín giữ|||Law is state-enforced; ethics is held by conscience/reputation', 'Đạo đức mạnh hơn luật|||Ethics outranks law', 'Luật chỉ áp dụng cho nhà báo|||Law applies only to journalists'], correctIndex: 1, explanation: 'Luật đặt mức sàn có chế tài; đạo đức là mức trần tự nguyện.' },
   { id: 'q2', question: 'Điều nào bảo đảm tự do ngôn luận, báo chí trong Hiến pháp VN 2013?|||Which article of Vietnam\'s 2013 Constitution guarantees free speech and press?', options: ['Điều 25|||Article 25', 'Điều 156|||Article 156', 'Điều 32|||Article 32', 'Điều 331|||Article 331'], correctIndex: 0, explanation: 'Điều 25 Hiến pháp 2013 bảo đảm tự do ngôn luận, báo chí, tiếp cận thông tin.' },
   { id: 'q3', question: '"Prior restraint" (kiểm duyệt trước khi xuất bản) đáng chú ý vì?|||Why is prior restraint notable?', options: ['Nó luôn hợp pháp|||It is always legal', 'Nó là giới hạn tự do ngôn luận đáng ngờ nhất (vụ Near v. Minnesota)|||It is the most suspect limit on speech (Near v. Minnesota)', 'Chỉ áp dụng cho quảng cáo|||It applies only to ads', 'Không liên quan truyền thông|||Unrelated to media'], correctIndex: 1, explanation: 'Near v. Minnesota (1931) coi kiểm duyệt trước là giới hạn đáng ngờ nhất.' },
 ]);
 
-const c2 = doc('lae101-2-1-vn-framework', '2.1 — Vietnam\'s press &amp; media legal framework|||2.1 — Khung pháp lý báo chí, truyền thông VN',
+const c2 = doc('lae101-2-1-vn-framework', '2.1 — Vietnam\'s press & media legal framework|||2.1 — Khung pháp lý báo chí, truyền thông VN',
   'Luật Báo chí 2016: quyền tự do báo chí, quyền & nghĩa vụ của nhà báo, thẻ nhà báo, cơ quan quản lý nhà nước; trách nhiệm cơ quan báo chí.',
   [[
     `<span class="eyebrow">LAE101 · Chapter 2 · Lesson 2.1</span>
@@ -187,7 +187,7 @@ const c2q = quiz('lae101-quiz-2', 'Quiz 2 — VN legal framework|||Quiz 2 — Kh
   { id: 'q3', question: 'Giấy tờ chứng nhận tư cách hành nghề do nhà nước cấp cho nhà báo là?|||State-issued document evidencing a journalist\'s standing?', options: ['Thẻ nhà báo|||Press card', 'Giấy phép lái xe|||Driving licence', 'Chứng minh thư|||ID card', 'Thẻ hội viên câu lạc bộ|||Club membership'], correctIndex: 0, explanation: 'Thẻ nhà báo do cơ quan quản lý nhà nước về báo chí cấp.' },
 ]);
 
-const c3 = doc('lae101-3-1-defamation', '3.1 — Defamation &amp; protecting reputation|||3.1 — Phỉ báng &amp; bảo vệ danh dự',
+const c3 = doc('lae101-3-1-defamation', '3.1 — Defamation & protecting reputation|||3.1 — Phỉ báng & bảo vệ danh dự',
   'Phỉ báng (defamation), libel vs slander, tội vu khống (Điều 156 BLHS), quyền được bảo vệ danh dự (Điều 34 BLDS), cải chính (Điều 42 Luật Báo chí); chuẩn "actual malice".',
   [[
     `<span class="eyebrow">LAE101 · Chapter 3 · Lesson 3.1</span>
@@ -224,7 +224,7 @@ const c3q = quiz('lae101-quiz-3', 'Quiz 3 — Defamation|||Quiz 3 — Phỉ bán
   { id: 'q3', question: 'Chuẩn "actual malice" (vụ NYT v. Sullivan) yêu cầu chứng minh điều gì với quan chức?|||"Actual malice" (NYT v. Sullivan) requires proving what against officials?', options: ['Chỉ cần thông tin sai|||Merely that a statement was false', 'Người đăng biết sai hoặc bất chấp sự thật liều lĩnh|||Publisher knew it was false or was recklessly indifferent to truth', 'Bài viết dài|||The article was long', 'Có ảnh kèm theo|||It had a photo'], correctIndex: 1, explanation: 'Actual malice bảo vệ phê phán người nắm quyền, đòi ngưỡng lỗi cao hơn.' },
 ]);
 
-const c4 = doc('lae101-4-1-privacy-image', '4.1 — Privacy &amp; the right to one\'s image|||4.1 — Quyền riêng tư &amp; hình ảnh cá nhân',
+const c4 = doc('lae101-4-1-privacy-image', '4.1 — Privacy & the right to one\'s image|||4.1 — Quyền riêng tư & hình ảnh cá nhân',
   'Quyền riêng tư & bí mật đời tư (Điều 21 Hiến pháp, Điều 38 BLDS), quyền với hình ảnh của mình (Điều 32 BLDS 2015 — cần đồng ý), bảo vệ dữ liệu cá nhân theo Nghị định 13/2023.',
   [[
     `<span class="eyebrow">LAE101 · Chapter 4 · Lesson 4.1</span>
@@ -257,7 +257,7 @@ const c4 = doc('lae101-4-1-privacy-image', '4.1 — Privacy &amp; the right to o
 <div class="callout"><span class="badge">Dạng vụ việc</span> Đăng ảnh một cá nhân riêng tư — bệnh nhân, con của nạn nhân — mà không xin phép là vi phạm riêng tư/hình ảnh kinh điển, dù bức ảnh "có thật".</div>`,
   ]]);
 
-const c4q = quiz('lae101-quiz-4', 'Quiz 4 — Privacy &amp; image|||Quiz 4 — Riêng tư &amp; hình ảnh', [
+const c4q = quiz('lae101-quiz-4', 'Quiz 4 — Privacy & image|||Quiz 4 — Riêng tư & hình ảnh', [
   { id: 'q1', question: 'Điều 32 Bộ luật Dân sự 2015 nói gì về hình ảnh cá nhân?|||What does Article 32 of VN Civil Code 2015 say about a person\'s image?', options: ['Ảnh là tài sản công|||Images are public property', 'Dùng hình ảnh của một người cần sự đồng ý của họ|||Using a person\'s image needs their consent', 'Nhà báo được dùng mọi ảnh|||Journalists may use any image', 'Chỉ ảnh trẻ em mới cần xin phép|||Only children\'s photos need permission'], correctIndex: 1, explanation: 'Điều 32 BLDS 2015: cá nhân có quyền với hình ảnh, dùng phải được đồng ý.' },
   { id: 'q2', question: 'Văn bản đầu tiên của VN về bảo vệ dữ liệu cá nhân toàn diện là?|||Vietnam\'s first comprehensive personal-data-protection instrument?', options: ['Nghị định 13/2023/NĐ-CP', 'Luật Báo chí 2016', 'Nghị định 15/2020', 'Luật SHTT 2005'], correctIndex: 0, explanation: 'Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân.' },
   { id: 'q3', question: 'Đăng ảnh một bệnh nhân trong viện mà không xin phép chủ yếu vi phạm?|||Publishing a hospital patient\'s photo without consent mainly violates?', options: ['Bản quyền|||Copyright', 'Quyền riêng tư & hình ảnh cá nhân|||Privacy & right to one\'s image', 'Luật quảng cáo|||Advertising law', 'Không vi phạm gì|||Nothing'], correctIndex: 1, explanation: 'Đây là vi phạm riêng tư/hình ảnh dù bức ảnh có thật.' },
@@ -343,7 +343,7 @@ const c6q = quiz('lae101-quiz-6', 'Quiz 6 — Professional ethics|||Quiz 6 — �
   { id: 'q3', question: 'Bộ quy tắc đạo đức nghề của người làm báo VN do ai ban hành?|||Who issues Vietnam\'s journalists\' professional-ethics code?', options: ['Hội Nhà báo Việt Nam|||Vietnam Journalists\' Association', 'Liên Hợp Quốc|||The United Nations', 'Một công ty tư nhân|||A private company', 'Không ai cả|||No one'], correctIndex: 0, explanation: '10 quy định đạo đức nghề nghiệp người làm báo do Hội Nhà báo VN ban hành.' },
 ]);
 
-const c7 = doc('lae101-7-1-sensitive-content', '7.1 — Sensitive content &amp; responsibility|||7.1 — Nội dung nhạy cảm &amp; trách nhiệm',
+const c7 = doc('lae101-7-1-sensitive-content', '7.1 — Sensitive content & responsibility|||7.1 — Nội dung nhạy cảm & trách nhiệm',
   'Tin giả (Nghị định 15/2020 phạt), ngôn từ thù ghét, quảng cáo (Luật Quảng cáo 2012), bảo vệ trẻ em (Luật Trẻ em 2016), và Luật An ninh mạng 2018.',
   [[
     `<span class="eyebrow">LAE101 · Chapter 7 · Lesson 7.1</span>
@@ -382,7 +382,7 @@ const c7q = quiz('lae101-quiz-7', 'Quiz 7 — Sensitive content|||Quiz 7 — N�
   { id: 'q3', question: 'Luật An ninh mạng 2018 chủ yếu điều chỉnh điều gì?|||The Cybersecurity Law 2018 mainly governs?', options: ['Giá điện|||Electricity prices', 'Ứng xử và nội dung trên không gian mạng|||Conduct and content in cyberspace', 'Bản quyền âm nhạc|||Music copyright', 'Quảng cáo ngoài trời|||Outdoor advertising'], correctIndex: 1, explanation: 'Luật An ninh mạng điều chỉnh ứng xử, nội dung và dữ liệu trên mạng.' },
 ]);
 
-const c8 = doc('lae101-8-1-digital-ai-ethics', '8.1 — Digital &amp; AI ethics|||8.1 — Đạo đức số &amp; AI',
+const c8 = doc('lae101-8-1-digital-ai-ethics', '8.1 — Digital & AI ethics|||8.1 — Đạo đức số & AI',
   'Deepfake và nội dung tổng hợp, quyền riêng tư dữ liệu thời AI, đạo đức mạng xã hội, và dùng AI có trách nhiệm trong báo chí/truyền thông (minh bạch, kiểm chứng, ghi nguồn).',
   [[
     `<span class="eyebrow">LAE101 · Chapter 8 · Lesson 8.1</span>
@@ -417,7 +417,7 @@ const c8 = doc('lae101-8-1-digital-ai-ethics', '8.1 — Digital &amp; AI ethics|
 <div class="callout"><span class="badge">Sợi chỉ xuyên suốt</span> Công cụ mới, nghĩa vụ cũ: sự thật, giảm tổn hại, đồng ý, và chịu trách nhiệm. Công nghệ đổi <em>cách làm</em>, không đổi <em>lý do</em>.</div>`,
   ]]);
 
-const c8q = quiz('lae101-quiz-8', 'Quiz 8 — Digital &amp; AI ethics|||Quiz 8 — Đạo đức số &amp; AI', [
+const c8q = quiz('lae101-quiz-8', 'Quiz 8 — Digital & AI ethics|||Quiz 8 — Đạo đức số & AI', [
   { id: 'q1', question: 'Nguyên tắc đạo đức cốt lõi khi dùng nội dung tổng hợp/deepfake là?|||Core ethical rule for synthetic/deepfake media?', options: ['Giấu để trông thật hơn|||Hide it so it looks more real', 'Ghi nhãn rõ và không trưng ra như thật|||Label it clearly and never pass it as real', 'Chỉ dùng cho quảng cáo|||Use it only for ads', 'Không cần quy tắc nào|||No rule needed'], correctIndex: 1, explanation: 'Deepfake phải được ghi nhãn rõ, không trưng ra như nội dung thật.' },
   { id: 'q2', question: 'Đưa dữ liệu cá nhân của người khác vào công cụ AI công cộng có thể vi phạm?|||Feeding another person\'s data into a public AI tool may violate?', options: ['Nguyên tắc bảo vệ dữ liệu cá nhân (NĐ 13/2023)|||Personal-data protection principles (Decree 13/2023)', 'Luật giao thông|||Traffic law', 'Không gì cả|||Nothing', 'Chỉ bản quyền|||Copyright only'], correctIndex: 0, explanation: 'Nguyên tắc căn cứ hợp pháp, đồng ý, bảo mật của NĐ 13/2023 vẫn áp dụng.' },
   { id: 'q3', question: 'Khi dùng AI để soạn tin bài, ai chịu trách nhiệm cuối cùng cho nội dung đăng?|||When using AI to draft news, who is ultimately accountable for what is published?', options: ['Công cụ AI|||The AI tool', 'Con người (nhà báo/biên tập) phải kiểm chứng và chịu trách nhiệm|||The human (journalist/editor) must verify and be accountable', 'Không ai|||No one', 'Độc giả|||The reader'], correctIndex: 1, explanation: 'AI hỗ trợ, nhưng con người phải kiểm chứng và chịu trách nhiệm.' },

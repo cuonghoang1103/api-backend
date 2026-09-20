@@ -175,7 +175,7 @@ const c1q = quiz('cal121-quiz-1', 'Quiz 1 — Applications of the integral|||Qui
   { id: 'q3', question: 'Thể tích vỏ trụ của y = x^2 quay quanh Oy, x trong [0,2] bằng?', options: ['4π', '8π', '16π', '2π'], correctIndex: 1, explanation: '∫[0,2] 2π x·x^2 dx = 2π·(16/4) = 8π.' },
 ]);
 
-const c2 = doc('cal121-2-1-techniques', '2.1 — Advanced integration &amp; improper integrals|||2.1 — Kỹ thuật tích phân nâng cao & tích phân suy rộng',
+const c2 = doc('cal121-2-1-techniques', '2.1 — Advanced integration & improper integrals|||2.1 — Kỹ thuật tích phân nâng cao & tích phân suy rộng',
   'Ôn nhanh kỹ thuật tích phân; tích phân suy rộng (cận vô hạn, hàm không bị chặn); hội tụ/phân kỳ; tiêu chuẩn so sánh để kết luận hội tụ mà không cần tính.',
   [[
     `<span class="eyebrow">CAL121 · Chapter 2 · Lesson 2.1</span>
@@ -226,7 +226,7 @@ const c2q = quiz('cal121-quiz-2', 'Quiz 2 — Improper integrals|||Quiz 2 — T�
   { id: 'q3', question: '∫[1,∞) 1/x dx thì?', options: ['Hội tụ về 1', 'Hội tụ về 0', 'Phân kỳ (ra ∞)', 'Bằng ln 1'], correctIndex: 2, explanation: 'lim (t->∞) ln t = ∞ nên phân kỳ (đây là p = 1).' },
 ]);
 
-const c3 = doc('cal121-3-1-series', '3.1 — Sequences &amp; series|||3.1 — Dãy số & chuỗi số',
+const c3 = doc('cal121-3-1-series', '3.1 — Sequences & series|||3.1 — Dãy số & chuỗi số',
   'Dãy số và giới hạn dãy; chuỗi số & tổng riêng; hội tụ/phân kỳ; chuỗi hình học & chuỗi p; các tiêu chuẩn: số hạng thứ n, so sánh, tích phân, tỉ số, căn.',
   [[
     `<span class="eyebrow">CAL121 · Chapter 3 · Lesson 3.1</span>
@@ -277,7 +277,7 @@ const c3q = quiz('cal121-quiz-3', 'Quiz 3 — Series|||Quiz 3 — Chuỗi số',
   { id: 'q3', question: 'Dùng tiêu chuẩn tỉ số cho Σ 1/n!, giới hạn L bằng?', options: ['1', '0', '∞', 'e'], correctIndex: 1, explanation: 'a_(n+1)/a_n = 1/(n+1) -> 0 < 1 nên hội tụ.' },
 ]);
 
-const c4 = doc('cal121-4-1-power-taylor', '4.1 — Power series, Taylor &amp; Maclaurin|||4.1 — Chuỗi luỹ thừa, Taylor & Maclaurin',
+const c4 = doc('cal121-4-1-power-taylor', '4.1 — Power series, Taylor & Maclaurin|||4.1 — Chuỗi luỹ thừa, Taylor & Maclaurin',
   'Chuỗi luỹ thừa Σ c_n (x-a)^n; bán kính & khoảng hội tụ (tiêu chuẩn tỉ số); chuỗi Taylor/Maclaurin biểu diễn hàm bằng đa thức vô hạn; các khai triển chuẩn.',
   [[
     `<span class="eyebrow">CAL121 · Chapter 4 · Lesson 4.1</span>
@@ -328,7 +328,7 @@ cos x = 1 - x^2/2! + x^4/4! - ...                (mọi x)
 <div class="callout"><span class="badge">Chỗ CNTT gặp giải tích</span> Cắt ngắn chuỗi Taylor chính là cách máy tính thực sự tính e^x, sin x và ln x — vài số hạng đã cho độ chính xác máy.</div>`,
   ]]);
 
-const c4q = quiz('cal121-quiz-4', 'Quiz 4 — Power series &amp; Taylor|||Quiz 4 — Chuỗi luỹ thừa & Taylor', [
+const c4q = quiz('cal121-quiz-4', 'Quiz 4 — Power series & Taylor|||Quiz 4 — Chuỗi luỹ thừa & Taylor', [
   { id: 'q1', question: 'Chuỗi Maclaurin của e^x là?', options: ['1 + x + x^2/2! + ...', 'x - x^3/3! + ...', '1 - x^2/2! + ...', '1 + x^2 + x^4 + ...'], correctIndex: 0, explanation: 'e^x = Σ x^n/n! = 1 + x + x^2/2! + ...' },
   { id: 'q2', question: 'Bán kính hội tụ của Σ x^n/n là?', options: ['0', '1', '∞', '1/2'], correctIndex: 1, explanation: '|a_(n+1)/a_n| -> |x|, hội tụ khi |x| < 1 nên R = 1.' },
   { id: 'q3', question: 'Chuỗi Taylor của f tại a có hệ số của (x-a)^n là?', options: ['f(a)/n', 'f^(n)(a)/n!', 'f\'(a)·n', 'f^(n)(a)·n!'], correctIndex: 1, explanation: 'Hệ số Taylor thứ n là f^(n)(a)/n!.' },

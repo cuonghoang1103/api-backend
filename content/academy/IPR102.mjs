@@ -149,7 +149,7 @@ const c1q = quiz('ipr102-quiz-1', 'Quiz 1 — Fundamentals|||Quiz 1 — Nền t�
   { id: 'q3', question: 'Luật SHTT Việt Nam 2005 bảo hộ mấy nhóm đối tượng chính?', options: ['Một nhóm', 'Hai nhóm', 'Ba nhóm (tác giả, công nghiệp, giống cây trồng)', 'Năm nhóm'], correctIndex: 2, explanation: 'Ba nhóm: quyền tác giả & quyền liên quan, quyền sở hữu công nghiệp, quyền đối với giống cây trồng.' },
 ]);
 
-const c2 = doc('ipr102-2-1-copyright', '2.1 — Copyright &amp; related rights|||2.1 — Quyền tác giả &amp; quyền liên quan',
+const c2 = doc('ipr102-2-1-copyright', '2.1 — Copyright & related rights|||2.1 — Quyền tác giả & quyền liên quan',
   'Điều kiện bảo hộ (định hình, nguyên gốc, không cần đăng ký); quyền nhân thân & quyền tài sản; quyền liên quan (biểu diễn, ghi âm, phát sóng); thời hạn; Berne.',
   [[
     `<span class="eyebrow">IPR102 · Chapter 2 · Lesson 2.1</span>
@@ -194,7 +194,7 @@ const c2q = quiz('ipr102-quiz-2', 'Quiz 2 — Copyright|||Quiz 2 — Quyền tá
   { id: 'q3', question: 'Đâu là ví dụ của "quyền liên quan"?', options: ['Quyền của người biểu diễn, nhà sản xuất bản ghi, tổ chức phát sóng', 'Quyền đứng tên tác giả', 'Quyền sáng chế', 'Quyền nhãn hiệu'], correctIndex: 0, explanation: 'Quyền liên quan thuộc về người biểu diễn, nhà sản xuất bản ghi âm/ghi hình và tổ chức phát sóng.' },
 ]);
 
-const c3 = doc('ipr102-3-1-patents', '3.1 — Patents &amp; utility solutions|||3.1 — Sáng chế &amp; giải pháp hữu ích',
+const c3 = doc('ipr102-3-1-patents', '3.1 — Patents & utility solutions|||3.1 — Sáng chế & giải pháp hữu ích',
   'Sáng chế là gì; ba điều kiện (mới, trình độ sáng tạo, khả năng áp dụng công nghiệp); bằng độc quyền sáng chế vs giải pháp hữu ích; thời hạn; nguyên tắc first-to-file.',
   [[
     `<span class="eyebrow">IPR102 · Chapter 3 · Lesson 3.1</span>
@@ -247,7 +247,7 @@ const c3q = quiz('ipr102-quiz-3', 'Quiz 3 — Patents|||Quiz 3 — Sáng chế',
   { id: 'q3', question: 'Việt Nam áp dụng nguyên tắc nào khi có nhiều người cùng nộp đơn sáng chế?', options: ['Người sáng tạo trước được (first-to-invent)', 'Người nộp đơn đầu tiên được (first-to-file)', 'Người nổi tiếng hơn được', 'Bốc thăm'], correctIndex: 1, explanation: 'Nguyên tắc nộp đơn đầu tiên (first-to-file): ai nộp trước được ưu tiên bảo hộ.' },
 ]);
 
-const c4 = doc('ipr102-4-1-trademarks', '4.1 — Trademarks &amp; geographical indications|||4.1 — Nhãn hiệu &amp; chỉ dẫn địa lý',
+const c4 = doc('ipr102-4-1-trademarks', '4.1 — Trademarks & geographical indications|||4.1 — Nhãn hiệu & chỉ dẫn địa lý',
   'Nhãn hiệu là gì (dấu hiệu phân biệt); điều kiện bảo hộ & dấu hiệu bị loại; thời hạn 10 năm gia hạn vô hạn; nhãn hiệu nổi tiếng; chỉ dẫn địa lý.',
   [[
     `<span class="eyebrow">IPR102 · Chapter 4 · Lesson 4.1</span>
@@ -296,7 +296,7 @@ const c4q = quiz('ipr102-quiz-4', 'Quiz 4 — Trademarks|||Quiz 4 — Nhãn hi�
   { id: 'q3', question: '"Nước mắm Phú Quốc" là ví dụ của đối tượng nào?', options: ['Sáng chế', 'Nhãn hiệu cá nhân', 'Chỉ dẫn địa lý', 'Kiểu dáng công nghiệp'], correctIndex: 2, explanation: 'Chỉ dẫn địa lý gắn danh tiếng/chất lượng sản phẩm với một địa danh cụ thể.' },
 ]);
 
-const c5 = doc('ipr102-5-1-industrial-designs', '5.1 — Industrial designs &amp; layout designs|||5.1 — Kiểu dáng công nghiệp &amp; thiết kế bố trí',
+const c5 = doc('ipr102-5-1-industrial-designs', '5.1 — Industrial designs & layout designs|||5.1 — Kiểu dáng công nghiệp & thiết kế bố trí',
   'Kiểu dáng công nghiệp bảo hộ hình dáng bên ngoài (mới, sáng tạo, áp dụng công nghiệp); thời hạn; khác quyền tác giả; thiết kế bố trí mạch tích hợp.',
   [[
     `<span class="eyebrow">IPR102 · Chapter 5 · Lesson 5.1</span>
@@ -337,7 +337,7 @@ const c5q = quiz('ipr102-quiz-5', 'Quiz 5 — Industrial designs|||Quiz 5 — Ki
   { id: 'q3', question: 'Thiết kế bố trí (topography) bảo hộ đối tượng nào?', options: ['Bố cục trang web', 'Cách sắp xếp không gian các phần tử trong mạch tích hợp bán dẫn', 'Bản đồ địa lý', 'Sơ đồ tổ chức'], correctIndex: 1, explanation: 'Thiết kế bố trí bảo hộ cấu trúc không gian ba chiều của mạch tích hợp bán dẫn.' },
 ]);
 
-const c6 = doc('ipr102-6-1-registration', '6.1 — Registration &amp; establishing rights|||6.1 — Đăng ký, xác lập &amp; bảo hộ quyền',
+const c6 = doc('ipr102-6-1-registration', '6.1 — Registration & establishing rights|||6.1 — Đăng ký, xác lập & bảo hộ quyền',
   'Quyền nào tự động vs phải đăng ký; quy trình nộp đơn tại Cục SHTT VN (nộp → hình thức → công bố → nội dung → cấp bằng); ngày ưu tiên (Paris); vai trò đăng ký quyền tác giả.',
   [[
     `<span class="eyebrow">IPR102 · Chapter 6 · Lesson 6.1</span>
@@ -388,7 +388,7 @@ const c6q = quiz('ipr102-quiz-6', 'Quiz 6 — Registration|||Quiz 6 — Đăng k
   { id: 'q3', question: '"Ngày ưu tiên" theo Công ước Paris có tác dụng gì?', options: ['Kéo dài thời hạn bảo hộ vĩnh viễn', 'Cho phép giữ ngày nộp đầu tiên khi nộp ở nước khác trong thời hạn quy định', 'Miễn toàn bộ phí', 'Bỏ qua thẩm định nội dung'], correctIndex: 1, explanation: 'Ngày ưu tiên giúp giữ ngày nộp đơn đầu tiên (6 hoặc 12 tháng) khi nộp tiếp ở quốc gia thành viên khác.' },
 ]);
 
-const c7 = doc('ipr102-7-1-enforcement', '7.1 — Infringement, enforcement &amp; disputes|||7.1 — Xâm phạm, thực thi &amp; giải quyết tranh chấp',
+const c7 = doc('ipr102-7-1-enforcement', '7.1 — Infringement, enforcement & disputes|||7.1 — Xâm phạm, thực thi & giải quyết tranh chấp',
   'Thế nào là xâm phạm; các biện pháp thực thi (dân sự, hành chính, hình sự, kiểm soát biên giới); chế tài & bồi thường; ngoại lệ (sử dụng hợp lý, hết quyền).',
   [[
     `<span class="eyebrow">IPR102 · Chapter 7 · Lesson 7.1</span>
@@ -431,7 +431,7 @@ const c7q = quiz('ipr102-quiz-7', 'Quiz 7 — Enforcement|||Quiz 7 — Thực th
   { id: 'q3', question: 'Yếu tố quyết định thành bại khi thực thi quyền SHTT là?', options: ['May mắn', 'Chứng cứ (đăng ký, hồ sơ có ngày, ghi nhận công chứng)', 'Số lượng nhân viên', 'Danh tiếng cá nhân'], correctIndex: 1, explanation: 'Thực thi phụ thuộc vào chứng cứ chứng minh quyền hợp lệ và hành vi xâm phạm.' },
 ]);
 
-const c8 = doc('ipr102-8-1-digital-ip', '8.1 — IP in the digital world &amp; licensing|||8.1 — SHTT thời số &amp; cấp phép',
+const c8 = doc('ipr102-8-1-digital-ip', '8.1 — IP in the digital world & licensing|||8.1 — SHTT thời số & cấp phép',
   'SHTT trong thiết kế mỹ thuật số (ảnh stock, font, tác phẩm phái sinh); giấy phép Creative Commons; AI & bản quyền; hệ thống quốc tế (Berne, Paris, TRIPS, WIPO).',
   [[
     `<span class="eyebrow">IPR102 · Chapter 8 · Lesson 8.1</span>
@@ -505,10 +505,10 @@ export default {
     { title: 'Chương 1 — Nền tảng SHTT|||Chapter 1 — IP fundamentals', description: 'Tài sản vô hình, ba mục tiêu, ba nhóm đối tượng.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Quyền tác giả|||Chapter 2 — Copyright', description: 'Điều kiện, quyền nhân thân/tài sản, quyền liên quan, thời hạn.', lessons: [c2, c2q] },
     { title: 'Chương 3 — Sáng chế|||Chapter 3 — Patents', description: 'Ba điều kiện, giải pháp hữu ích, first-to-file.', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Nhãn hiệu &amp; chỉ dẫn địa lý|||Chapter 4 — Trademarks & GIs', description: 'Dấu hiệu phân biệt, thời hạn, nhãn hiệu nổi tiếng, GI.', lessons: [c4, c4q] },
+    { title: 'Chương 4 — Nhãn hiệu & chỉ dẫn địa lý|||Chapter 4 — Trademarks & GIs', description: 'Dấu hiệu phân biệt, thời hạn, nhãn hiệu nổi tiếng, GI.', lessons: [c4, c4q] },
     { title: 'Chương 5 — Kiểu dáng công nghiệp|||Chapter 5 — Industrial designs', description: 'Hình dáng bên ngoài, thời hạn, thiết kế bố trí.', lessons: [c5, c5q] },
     { title: 'Chương 6 — Đăng ký quyền|||Chapter 6 — Registration', description: 'Tự động vs đăng ký, quy trình Cục SHTT VN, ngày ưu tiên.', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Xâm phạm &amp; thực thi|||Chapter 7 — Enforcement', description: 'Bốn kênh thực thi, chế tài, ngoại lệ.', lessons: [c7, c7q] },
+    { title: 'Chương 7 — Xâm phạm & thực thi|||Chapter 7 — Enforcement', description: 'Bốn kênh thực thi, chế tài, ngoại lệ.', lessons: [c7, c7q] },
     { title: 'Chương 8 — SHTT thời số|||Chapter 8 — Digital IP', description: 'Thiết kế số, Creative Commons, AI, hệ thống quốc tế.', lessons: [c8, c8q] },
   ],
 };

@@ -100,7 +100,7 @@ const intro = doc('chs211-0-1-overview', 'Course overview: Chinese Speaking 3A||
 <p>Sở thích &amp; giải trí → kể chuyện → thuyết phục → tình huống dịch vụ → nhắn điện thoại → miêu tả người &amp; vật → ý kiến xã hội → phỏng vấn &amp; thuyết trình ngắn.</p>`,
   ]]);
 
-const b1 = doc('chs211-1-1-hobbies-entertainment', 'Lesson 1 — Hobbies &amp; entertainment|||Bài 1 — Thảo luận sở thích &amp; giải trí',
+const b1 = doc('chs211-1-1-hobbies-entertainment', 'Lesson 1 — Hobbies & entertainment|||Bài 1 — Thảo luận sở thích & giải trí',
   'Mẫu câu: 你有什么爱好, 我给你推荐一部电影, 因为它很有意思, 一点儿也不无聊; từ 爱好/推荐/音乐/无聊; luyện thảo luận sở thích và giới thiệu phim.',
   [[
     `<span class="eyebrow">CHS211 · Lesson 1 · Hobbies</span>
@@ -165,13 +165,13 @@ B: 你可以看这部，因为故事很有意思，一点儿也不无聊。 Nǐ 
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 爱好 (àihào) là hai thanh 4 — cùng đi xuống. Khung 一点儿也不 + tính từ là phủ định mạnh: 一点儿也不无聊 = chẳng chán chút nào; nhấn vào 也不.</div>`,
   ]]);
 
-const b1q = quiz('chs211-quiz-1', 'Quiz 1 — Hobbies &amp; entertainment|||Quiz 1 — Sở thích &amp; giải trí', [
+const b1q = quiz('chs211-quiz-1', 'Quiz 1 — Hobbies & entertainment|||Quiz 1 — Sở thích & giải trí', [
   { id: 'q1', question: '"你有什么爱好?" hỏi điều gì? / What does 你有什么爱好 ask?', options: ['Bạn có sở thích gì?|||What hobbies do you have?', 'Bạn bao nhiêu tuổi?|||How old are you?', 'Bạn tên gì?|||What is your name?', 'Bạn ở đâu?|||Where do you live?'], correctIndex: 0, explanation: '爱好 àihào = sở thích; 你有什么爱好? = bạn có sở thích gì?' },
   { id: 'q2', question: 'Giới thiệu một bộ phim cho ai đó nói thế nào? / How do you recommend someone a movie?', options: ['我给你推荐一部电影', '我不知道', '多少钱？', '再见'], correctIndex: 0, explanation: '推荐 tuījiàn = giới thiệu, đề cử; 一部电影 = một bộ phim.' },
   { id: 'q3', question: '"一点儿也不无聊" nghĩa là gì? / What does 一点儿也不无聊 mean?', options: ['Chẳng chán chút nào|||Not boring at all', 'Rất chán|||Very boring', 'Hơi chán|||A bit boring', 'Rất đắt|||Very expensive'], correctIndex: 0, explanation: '一点儿也不 + tính từ = chẳng … chút nào (phủ định mạnh); 无聊 = chán.' },
 ]);
 
-const b2 = doc('chs211-2-1-storytelling', 'Lesson 2 — Telling &amp; retelling a story|||Bài 2 — Kể chuyện &amp; thuật lại',
+const b2 = doc('chs211-2-1-storytelling', 'Lesson 2 — Telling & retelling a story|||Bài 2 — Kể chuyện & thuật lại',
   'Mẫu câu: 我给你讲个故事, 有一天…后来…最后, 原来…, 故事的内容是…; từ 讲故事/复述/发现/主人; luyện kể lại một câu chuyện.',
   [[
     `<span class="eyebrow">CHS211 · Lesson 2 · Storytelling</span>
@@ -236,13 +236,13 @@ B: 后来他找到了钱包的主人，最后他们成了好朋友。 Hòulái t
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 有一天…后来…最后 xếp câu chuyện và dẫn tới kết thúc — ngắt một nhịp ở mỗi mốc. 原来 (yuánlái) mở đầu câu mang ý bất ngờ: hoá ra là ...</div>`,
   ]]);
 
-const b2q = quiz('chs211-quiz-2', 'Quiz 2 — Telling a story|||Quiz 2 — Kể chuyện &amp; thuật lại', [
+const b2q = quiz('chs211-quiz-2', 'Quiz 2 — Telling a story|||Quiz 2 — Kể chuyện & thuật lại', [
   { id: 'q1', question: 'Bộ khung nào dùng để thuật lại một câu chuyện? / Which set frames a story?', options: ['有一天…后来…最后', '因为…所以…', '越来越…', '一方面…另一方面…'], correctIndex: 0, explanation: '有一天 (một ngày nọ) … 后来 (sau đó) … 最后 (cuối cùng) — khung kể chuyện.' },
   { id: 'q2', question: '"有一天" nghĩa là gì? / What does 有一天 mean?', options: ['Một ngày nọ|||One day', 'Hôm nay|||Today', 'Ngày mai|||Tomorrow', 'Mỗi ngày|||Every day'], correctIndex: 0, explanation: '有一天 yǒu yì tiān = một ngày nọ, dùng để mở đầu câu chuyện.' },
   { id: 'q3', question: '"原来" (yuánlái) đứng đầu câu mang nghĩa gì? / What does 原来 add?', options: ['Hoá ra (bất ngờ)|||It turns out', 'Cẩn thận|||Be careful', 'Nhanh lên|||Hurry up', 'Tạm biệt|||Goodbye'], correctIndex: 0, explanation: '原来 = hoá ra, dùng khi phát hiện ra điều bất ngờ.' },
 ]);
 
-const b3 = doc('chs211-3-1-persuading', 'Lesson 3 — Debating &amp; persuading|||Bài 3 — Tranh luận &amp; thuyết phục',
+const b3 = doc('chs211-3-1-persuading', 'Lesson 3 — Debating & persuading|||Bài 3 — Tranh luận & thuyết phục',
   'Mẫu câu: 我建议你…，因为…, 你应该考虑一下, 你说得有道理, 不过…; từ 说服/理由/反对/考虑; luyện thuyết phục và tranh luận lịch sự.',
   [[
     `<span class="eyebrow">CHS211 · Lesson 3 · Persuading</span>
@@ -307,7 +307,7 @@ B: 那我们去公园坐一会儿，你觉得怎么样？ Nà wǒmen qù gōngyu
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> Nói 我建议你… rồi nêu lý do 因为… liền một mạch. Công nhận trước bằng 你说得有道理 rồi mới phản biện bằng 不过 (nhưng) — đó là cách tranh luận lịch sự.</div>`,
   ]]);
 
-const b3q = quiz('chs211-quiz-3', 'Quiz 3 — Persuading|||Quiz 3 — Tranh luận &amp; thuyết phục', [
+const b3q = quiz('chs211-quiz-3', 'Quiz 3 — Persuading|||Quiz 3 — Tranh luận & thuyết phục', [
   { id: 'q1', question: 'Khuyên ai đó kèm lý do dùng khung nào? / Which frame gives advice with a reason?', options: ['我建议你…，因为…', '还是…吗', '有没有', '多少钱'], correctIndex: 0, explanation: '我建议你 (tôi khuyên bạn) … 因为 (vì) … — đưa lời khuyên kèm lý do.' },
   { id: 'q2', question: '"你说得有道理" nghĩa là gì? / What does 你说得有道理 mean?', options: ['Bạn nói có lý|||You have a point', 'Bạn nói sai|||You are wrong', 'Bạn nói to quá|||You are too loud', 'Bạn im lặng|||Be quiet'], correctIndex: 0, explanation: '有道理 yǒu dàolǐ = có lý; công nhận ý người kia trước khi phản biện.' },
   { id: 'q3', question: 'Từ "不过" (búguò) nối câu mang nghĩa gì? / What does 不过 mean as a connector?', options: ['nhưng|||but', 'vì thế|||therefore', 'hoặc|||or', 'và|||and'], correctIndex: 0, explanation: '不过 = nhưng, dùng để nêu ý ngược lại một cách nhẹ nhàng.' },
@@ -455,7 +455,7 @@ const b5q = quiz('chs211-quiz-5', 'Quiz 5 — Phone calls|||Quiz 5 — Điện t
   { id: 'q3', question: '"我们能不能改一下时间?" đề nghị điều gì? / What does 我们能不能改一下时间 propose?', options: ['Đổi lại giờ hẹn|||Change the time', 'Huỷ cuộc hẹn|||Cancel it', 'Đến sớm hơn|||Arrive early', 'Gặp ở đâu|||Where to meet'], correctIndex: 0, explanation: '改 gǎi (đổi) + 时间 (giờ) = đổi giờ; 能不能 làm lời đề nghị lịch sự.' },
 ]);
 
-const b6 = doc('chs211-6-1-describing', 'Lesson 6 — Describing people &amp; things|||Bài 6 — Miêu tả người &amp; vật',
+const b6 = doc('chs211-6-1-describing', 'Lesson 6 — Describing people & things|||Bài 6 — Miêu tả người & vật',
   'Mẫu câu: 他长得高高的, 她的性格很…, 它的特点是…; từ 描述/长得/性格/样子/特点/热情/认真; luyện tả ngoại hình và tính cách.',
   [[
     `<span class="eyebrow">CHS211 · Lesson 6 · Describing</span>
@@ -520,7 +520,7 @@ B: 很认真，他最大的特点就是做事很仔细。 Hěn rènzhēn, tā zu
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> Ở đây 长 đọc zhǎng, không phải cháng. 长得 + tính từ để tả ngoại hình; lặp tính từ (高高的, 瘦瘦的) nghe mềm và tự nhiên hơn, 的 đọc nhẹ.</div>`,
   ]]);
 
-const b6q = quiz('chs211-quiz-6', 'Quiz 6 — Describing people|||Quiz 6 — Miêu tả người &amp; vật', [
+const b6q = quiz('chs211-quiz-6', 'Quiz 6 — Describing people|||Quiz 6 — Miêu tả người & vật', [
   { id: 'q1', question: '"他长得高高的" nghĩa là gì? / What does 他长得高高的 mean?', options: ['Anh ấy trông cao cao|||He is quite tall', 'Anh ấy rất giàu|||He is rich', 'Anh ấy đến muộn|||He is late', 'Anh ấy đang bận|||He is busy'], correctIndex: 0, explanation: '长得 zhǎng de + tính từ tả ngoại hình; lặp 高高 nghe tự nhiên hơn.' },
   { id: 'q2', question: 'Từ "性格" (xìnggé) nói về điều gì? / What does 性格 describe?', options: ['Tính cách|||Personality', 'Chiều cao|||Height', 'Tuổi tác|||Age', 'Nghề nghiệp|||Job'], correctIndex: 0, explanation: '性格 = tính cách: 性格很热情 (tính cách rất nhiệt tình).' },
   { id: 'q3', question: '"最大的特点是…" dùng để nói gì? / What does 最大的特点是 introduce?', options: ['Đặc điểm nổi bật nhất|||The biggest trait', 'Giá tiền|||The price', 'Địa chỉ|||The address', 'Thời gian|||The time'], correctIndex: 0, explanation: '特点 tèdiǎn = đặc điểm; 最大的特点 = đặc điểm lớn/nổi bật nhất.' },
@@ -597,7 +597,7 @@ const b7q = quiz('chs211-quiz-7', 'Quiz 7 — Social opinions|||Quiz 7 — Ý ki
   { id: 'q3', question: '"一方面…，另一方面…" dùng để làm gì? / What is 一方面…另一方面 used for?', options: ['Nêu hai mặt của vấn đề|||Present two sides', 'Kể theo thứ tự|||Tell in order', 'Hỏi giá|||Ask the price', 'Xin lỗi|||Apologise'], correctIndex: 0, explanation: '一方面 (một mặt) … 另一方面 (mặt khác) … — trình bày cân bằng hai mặt.' },
 ]);
 
-const b8 = doc('chs211-8-1-interview-talk', 'Lesson 8 — Interview &amp; short talk|||Bài 8 — Phỏng vấn &amp; thuyết trình ngắn',
+const b8 = doc('chs211-8-1-interview-talk', 'Lesson 8 — Interview & short talk|||Bài 8 — Phỏng vấn & thuyết trình ngắn',
   'Mẫu câu: 首先…然后…总之…, 我想介绍一个话题, 我来回答这个问题, 我有…年的工作经验; từ 面试/话题/优点/经验/适合; luyện tự thể hiện và trình bày.',
   [[
     `<span class="eyebrow">CHS211 · Lesson 8 · Interview</span>
@@ -662,7 +662,7 @@ const b8 = doc('chs211-8-1-interview-talk', 'Lesson 8 — Interview &amp; short 
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 首先…然后…总之… giúp bài thuyết trình ngắn mạch lạc — nghỉ một nhịp ở mỗi mốc. 自我展示 nghĩa là chủ động cho người nghe thấy điểm mạnh — nói tự tin, giọng rõ ràng.</div>`,
   ]]);
 
-const b8q = quiz('chs211-quiz-8', 'Quiz 8 — Interview &amp; short talk|||Quiz 8 — Phỏng vấn &amp; thuyết trình', [
+const b8q = quiz('chs211-quiz-8', 'Quiz 8 — Interview & short talk|||Quiz 8 — Phỏng vấn & thuyết trình', [
   { id: 'q1', question: 'Khung nào giúp thuyết trình ngắn mạch lạc? / Which frame structures a short talk?', options: ['首先…然后…总之…', '因为…所以…', '越来越…', '太…了'], correctIndex: 0, explanation: '首先 (trước tiên) … 然后 (sau đó) … 总之 (tóm lại) — khung trình bày.' },
   { id: 'q2', question: '"我有三年的工作经验" nghĩa là gì? / What does 我有三年的工作经验 mean?', options: ['Tôi có ba năm kinh nghiệm làm việc|||I have three years of work experience', 'Tôi làm việc ba giờ|||I work three hours', 'Tôi ba mươi tuổi|||I am thirty', 'Tôi nghỉ ba ngày|||Three days off'], correctIndex: 0, explanation: '经验 jīngyàn = kinh nghiệm; 三年的工作经验 = ba năm kinh nghiệm làm việc.' },
   { id: 'q3', question: '"总之" (zǒngzhī) đứng cuối phần trình bày nghĩa là? / What does 总之 signal?', options: ['Tóm lại|||In short', 'Đầu tiên|||First', 'Có lẽ|||Maybe', 'Tại sao|||Why'], correctIndex: 0, explanation: '总之 = tóm lại, dùng để chốt lại ý ở cuối.' },
@@ -686,15 +686,15 @@ export default {
     requirements: 'Nên học xong CHS201 (giao tiếp HSK3: bản thân, sức khoẻ &amp; lời khuyên, ý kiến, kể sự việc, nhà hàng, du lịch, phỏng vấn, so sánh) hoặc học song song với môn đó. Cài Pleco hoặc HelloChinese để nghe audio bản ngữ &amp; luyện nói theo; hãy nói to và tự thu âm để so với mẫu.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成 提高篇, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成 提高篇, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Song song CHS201: nhắc nền phát âm/thanh điệu, mục tiêu khẩu ngữ HSK3, cách luyện hội thoại đóng vai dài và trình bày chủ đề ngắn.', lessons: [intro] },
-    { title: 'Bài 1 — Thảo luận sở thích &amp; giải trí|||Lesson 1 — Hobbies & entertainment', description: '你有什么爱好, 我给你推荐一部电影, 因为它很有意思, 一点儿也不无聊.', lessons: [b1, b1q] },
-    { title: 'Bài 2 — Kể chuyện &amp; thuật lại|||Lesson 2 — Telling a story', description: '我给你讲个故事, 有一天…后来…最后, 原来, 复述.', lessons: [b2, b2q] },
-    { title: 'Bài 3 — Tranh luận &amp; thuyết phục|||Lesson 3 — Persuading', description: '我建议你…因为, 你应该考虑一下, 你说得有道理, 不过.', lessons: [b3, b3q] },
+    { title: 'Bài 1 — Thảo luận sở thích & giải trí|||Lesson 1 — Hobbies & entertainment', description: '你有什么爱好, 我给你推荐一部电影, 因为它很有意思, 一点儿也不无聊.', lessons: [b1, b1q] },
+    { title: 'Bài 2 — Kể chuyện & thuật lại|||Lesson 2 — Telling a story', description: '我给你讲个故事, 有一天…后来…最后, 原来, 复述.', lessons: [b2, b2q] },
+    { title: 'Bài 3 — Tranh luận & thuyết phục|||Lesson 3 — Persuading', description: '我建议你…因为, 你应该考虑一下, 你说得有道理, 不过.', lessons: [b3, b3q] },
     { title: 'Bài 4 — Xử lý tình huống dịch vụ|||Lesson 4 — Service situations', description: '办手续, 请问需要什么, 请填一下表格, 我要寄一封信.', lessons: [b4, b4q] },
     { title: 'Bài 5 — Giao tiếp qua điện thoại nâng cao|||Lesson 5 — Phone calls', description: '请问…在吗, 您要留言吗, 请转告他, 改时间.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Miêu tả người &amp; vật|||Lesson 6 — Describing people', description: '长得高高的, 性格很热情, 最大的特点是, 样子.', lessons: [b6, b6q] },
+    { title: 'Bài 6 — Miêu tả người & vật|||Lesson 6 — Describing people', description: '长得高高的, 性格很热情, 最大的特点是, 样子.', lessons: [b6, b6q] },
     { title: 'Bài 7 — Trình bày ý kiến về xã hội|||Lesson 7 — Social opinions', description: '你对…有什么看法, 越来越, 一方面…另一方面, 影响.', lessons: [b7, b7q] },
-    { title: 'Bài 8 — Phỏng vấn &amp; thuyết trình ngắn|||Lesson 8 — Interview & short talk', description: '首先…然后…总之, 自我展示, 工作经验, 优点, 适合.', lessons: [b8, b8q] },
+    { title: 'Bài 8 — Phỏng vấn & thuyết trình ngắn|||Lesson 8 — Interview & short talk', description: '首先…然后…总之, 自我展示, 工作经验, 优点, 适合.', lessons: [b8, b8q] },
   ],
 };

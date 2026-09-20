@@ -9,7 +9,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('los201-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('los201-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: giáo trình & slide (FLM), sách (Shotts, Nemeth, Sobell), tài liệu chính thức miễn phí (TLDP, man pages), YouTube, công cụ, lộ trình tự học.',
   [[
     `<span class="eyebrow">LOS201 · Materials</span>
@@ -84,7 +84,7 @@ const taiLieu = doc('los201-0-0-tai-lieu', '📚 Course materials &amp; referenc
 </ol></div>`,
   ]]);
 
-const intro = doc('los201-0-1-overview', 'Course overview: Linux &amp; open source|||Tổng quan: Linux &amp; mã nguồn mở',
+const intro = doc('los201-0-1-overview', 'Course overview: Linux & open source|||Tổng quan: Linux & mã nguồn mở',
   'Linux là gì, vì sao ngành vi mạch dùng Linux; kernel vs distro; triết lý mã nguồn mở; lộ trình 8 chương: giấy phép → shell → tiến trình/quyền → Bash → gói → mạng/systemd → công cụ dev → đóng góp.',
   [[
     `<span class="eyebrow">LOS201 · Lesson 0.1 · Overview</span>
@@ -113,7 +113,7 @@ const intro = doc('los201-0-1-overview', 'Course overview: Linux &amp; open sour
 <p>Lịch sử &amp; giấy phép → shell &amp; hệ thống tập tin → tiến trình, người dùng &amp; quyền → Bash script → quản lý gói → mạng &amp; systemd → công cụ dev mã nguồn mở (git/make/gcc, EDA) → cộng đồng &amp; đóng góp. Song ngữ, có lệnh thực hành và quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('los201-1-1-history-licenses', '1.1 — Linux/GNU history &amp; open-source licenses|||1.1 — Lịch sử Linux/GNU &amp; giấy phép mã nguồn mở',
+const c1 = doc('los201-1-1-history-licenses', '1.1 — Linux/GNU history & open-source licenses|||1.1 — Lịch sử Linux/GNU & giấy phép mã nguồn mở',
   'Unix → GNU (Stallman, 1983) → kernel Linux (Torvalds, 1991); triết lý phần mềm tự do vs mã nguồn mở; giấy phép GPL (copyleft) vs MIT/BSD/Apache (dễ dãi); vì sao chọn giấy phép đúng.',
   [[
     `<span class="eyebrow">LOS201 · Chapter 1 · Lesson 1.1</span>
@@ -164,13 +164,13 @@ less LICENSE
 <div class="callout"><span class="badge">Vì sao quan trọng với vi mạch</span> Công cụ EDA mở và lõi CPU (RISC-V) được phát hành theo các giấy phép này. Chọn GPL hay dễ dãi quyết định cộng đồng có xây tiếp trên việc của bạn được không — và bạn có xây trên việc của họ được không.</div>`,
   ]]);
 
-const c1q = quiz('los201-quiz-1', 'Quiz 1 — History &amp; licenses|||Quiz 1 — Lịch sử &amp; giấy phép', [
+const c1q = quiz('los201-quiz-1', 'Quiz 1 — History & licenses|||Quiz 1 — Lịch sử & giấy phép', [
   { id: 'q1', question: 'Ai khởi tạo nhân (kernel) Linux năm 1991?', options: ['Richard Stallman', 'Linus Torvalds', 'Ken Thompson', 'Dennis Ritchie'], correctIndex: 1, explanation: 'Linus Torvalds viết nhân Linux năm 1991; Stallman lập dự án GNU (1983).' },
   { id: 'q2', question: 'Giấy phép nào là "copyleft" — buộc bản dẫn xuất khi phân phối cũng phải mở mã?', options: ['MIT', 'BSD', 'GPL', 'Apache 2.0'], correctIndex: 2, explanation: 'GPL là copyleft: phân phối bản sửa đổi thì phải công bố mã nguồn theo GPL.' },
   { id: 'q3', question: 'Điểm riêng nổi bật của giấy phép Apache 2.0 so với MIT?', options: ['Cấm dùng thương mại', 'Có điều khoản cấp quyền sáng chế rõ ràng', 'Buộc mở toàn bộ mã', 'Không cho sửa mã'], correctIndex: 1, explanation: 'Apache 2.0 dễ dãi nhưng bổ sung điều khoản cấp quyền sáng chế (patent grant).' },
 ]);
 
-const c2 = doc('los201-2-1-shell-filesystem', '2.1 — The command line &amp; filesystem|||2.1 — Dòng lệnh &amp; hệ thống tập tin',
+const c2 = doc('los201-2-1-shell-filesystem', '2.1 — The command line & filesystem|||2.1 — Dòng lệnh & hệ thống tập tin',
   'Shell là gì; cấu trúc lệnh; cây thư mục FHS (/, /home, /etc, /bin, /var); di chuyển & liệt kê (pwd/ls/cd); thao tác tập tin (cp/mv/rm/mkdir); đường dẫn tuyệt đối/tương đối; đọc file & tìm kiếm; man pages.',
   [[
     `<span class="eyebrow">LOS201 · Chapter 2 · Lesson 2.1</span>
@@ -239,13 +239,13 @@ man ls                      # trang hướng dẫn của mọi lệnh
 <div class="callout"><span class="badge">Tuyệt đối và tương đối</span> Đường dẫn bắt đầu bằng <code>/</code> là tuyệt đối (tính từ gốc); còn lại là tương đối so với thư mục hiện tại. <code>~</code> luôn là thư mục nhà của bạn.</div>`,
   ]]);
 
-const c2q = quiz('los201-quiz-2', 'Quiz 2 — Shell &amp; filesystem|||Quiz 2 — Shell &amp; tập tin', [
+const c2q = quiz('los201-quiz-2', 'Quiz 2 — Shell & filesystem|||Quiz 2 — Shell & tập tin', [
   { id: 'q1', question: 'Thư mục nào chứa tập tin cấu hình hệ thống?', options: ['/home', '/etc', '/var', '/bin'], correctIndex: 1, explanation: '/etc chứa cấu hình hệ thống; /var chứa log & dữ liệu hay đổi.' },
   { id: 'q2', question: 'Lệnh nào in ra thư mục làm việc hiện tại?', options: ['ls', 'cd', 'pwd', 'cat'], correctIndex: 2, explanation: 'pwd (print working directory) cho biết bạn đang ở thư mục nào.' },
   { id: 'q3', question: 'Đường dẫn nào là TUYỆT ĐỐI?', options: ['src/main.c', '../docs', '/etc/hosts', './run.sh'], correctIndex: 2, explanation: 'Đường dẫn tuyệt đối bắt đầu bằng /; các dạng còn lại là tương đối.' },
 ]);
 
-const c3 = doc('los201-3-1-processes-users-permissions', '3.1 — Processes, users &amp; permissions|||3.1 — Tiến trình, người dùng &amp; quyền',
+const c3 = doc('los201-3-1-processes-users-permissions', '3.1 — Processes, users & permissions|||3.1 — Tiến trình, người dùng & quyền',
   'Tiến trình (ps/top/kill, PID, foreground/background); người dùng & nhóm (root, sudo, /etc/passwd); quyền rwx cho owner/group/other, số bát phân (chmod 755), đổi chủ (chown).',
   [[
     `<span class="eyebrow">LOS201 · Chapter 3 · Lesson 3.1</span>
@@ -302,7 +302,7 @@ chown alice:devs file.txt   # đổi chủ và nhóm
 <div class="callout"><span class="badge">Quyền tối thiểu</span> Làm việc dưới tài khoản thường; chỉ dùng <code>sudo</code> khi thật sự cần root. Một lệnh <code>rm -r</code> lỡ tay dưới quyền root có thể xoá cả hệ thống.</div>`,
   ]]);
 
-const c3q = quiz('los201-quiz-3', 'Quiz 3 — Processes &amp; permissions|||Quiz 3 — Tiến trình &amp; quyền', [
+const c3q = quiz('los201-quiz-3', 'Quiz 3 — Processes & permissions|||Quiz 3 — Tiến trình & quyền', [
   { id: 'q1', question: 'Quyền bát phân 755 tương ứng với chuỗi nào?', options: ['rw-r--r--', 'rwxr-xr-x', 'rwxrwxrwx', 'r-xr-xr-x'], correctIndex: 1, explanation: '7=rwx cho chủ, 5=r-x cho nhóm, 5=r-x cho người khác → rwxr-xr-x.' },
   { id: 'q2', question: 'Lệnh nào chạy một lệnh đơn với quyền root?', options: ['chmod', 'sudo', 'chown', 'kill'], correctIndex: 1, explanation: 'sudo cho phép người dùng thường thực thi một lệnh với quyền root.' },
   { id: 'q3', question: 'Số PID dùng để làm gì?', options: ['Định danh một tập tin', 'Định danh một tiến trình đang chạy', 'Định danh một người dùng', 'Định danh một ổ đĩa'], correctIndex: 1, explanation: 'PID (Process ID) định danh duy nhất một tiến trình; kill dùng PID để dừng.' },
@@ -393,7 +393,7 @@ const c4q = quiz('los201-quiz-4', 'Quiz 4 — Bash scripting|||Quiz 4 — Lập 
   { id: 'q3', question: 'Biến $? trong bash cho biết điều gì?', options: ['Số tham số', 'Tên script', 'Mã thoát của lệnh vừa chạy (0 = thành công)', 'PID hiện tại'], correctIndex: 2, explanation: '$? là exit code của lệnh trước; 0 nghĩa là thành công.' },
 ]);
 
-const c5 = doc('los201-5-1-package-management', '5.1 — Package &amp; software management|||5.1 — Quản lý gói &amp; phần mềm',
+const c5 = doc('los201-5-1-package-management', '5.1 — Package & software management|||5.1 — Quản lý gói & phần mềm',
   'Gói & kho phần mềm; APT (Debian/Ubuntu) vs DNF/YUM (Fedora/RHEL); cài/gỡ/cập nhật/tìm; phụ thuộc; build từ mã nguồn (configure/make/make install).',
   [[
     `<span class="eyebrow">LOS201 · Chapter 5 · Lesson 5.1</span>
@@ -450,7 +450,7 @@ const c5q = quiz('los201-quiz-5', 'Quiz 5 — Package management|||Quiz 5 — Qu
   { id: 'q3', question: 'Vì sao nên ưu tiên trình quản lý gói hơn cài tay?', options: ['Chạy nhanh hơn khi thực thi', 'Gói được ký, theo dõi phụ thuộc và dễ gỡ sạch', 'Không cần internet', 'Không cần quyền root bao giờ'], correctIndex: 1, explanation: 'Trình quản lý gói xử lý phụ thuộc, ký xác thực và gỡ cài gọn gàng.' },
 ]);
 
-const c6 = doc('los201-6-1-networking-services', '6.1 — Networking &amp; services (SSH, systemd)|||6.1 — Mạng &amp; dịch vụ (SSH, systemd)',
+const c6 = doc('los201-6-1-networking-services', '6.1 — Networking & services (SSH, systemd)|||6.1 — Mạng & dịch vụ (SSH, systemd)',
   'Công cụ mạng (ip/ping/ss/curl); SSH đăng nhập từ xa & khoá công khai; scp truyền file; systemd & systemctl quản lý dịch vụ (start/enable/status); đọc log bằng journalctl.',
   [[
     `<span class="eyebrow">LOS201 · Chapter 6 · Lesson 6.1</span>
@@ -503,7 +503,7 @@ journalctl -u ssh -e        # đọc log của dịch vụ đó
 <div class="callout"><span class="badge">start và enable</span> <code>start</code> chạy dịch vụ ngay bây giờ; <code>enable</code> khiến nó tự lên khi khởi động máy. Thường bạn cần cả hai.</div>`,
   ]]);
 
-const c6q = quiz('los201-quiz-6', 'Quiz 6 — Networking &amp; services|||Quiz 6 — Mạng &amp; dịch vụ', [
+const c6q = quiz('los201-quiz-6', 'Quiz 6 — Networking & services|||Quiz 6 — Mạng & dịch vụ', [
   { id: 'q1', question: 'SSH dùng để làm gì?', options: ['Biên dịch mã nguồn', 'Mở một shell được mã hoá trên máy từ xa', 'Quản lý gói phần mềm', 'Xem log hệ thống'], correctIndex: 1, explanation: 'SSH cho shell mã hoá trên máy khác; scp truyền file qua chính kênh đó.' },
   { id: 'q2', question: 'Lệnh systemctl nào khiến dịch vụ TỰ CHẠY mỗi lần khởi động máy?', options: ['systemctl start', 'systemctl status', 'systemctl enable', 'systemctl stop'], correctIndex: 2, explanation: 'enable đặt dịch vụ chạy lúc boot; start chỉ chạy ngay lần này.' },
   { id: 'q3', question: 'Lệnh nào đọc log của một dịch vụ do systemd quản lý?', options: ['journalctl -u ssh', 'ps aux', 'ip addr', 'chmod ssh'], correctIndex: 0, explanation: 'journalctl -u <dịch vụ> hiển thị nhật ký của dịch vụ đó từ journal.' },
@@ -588,7 +588,7 @@ const c7q = quiz('los201-quiz-7', 'Quiz 7 — Dev tools|||Quiz 7 — Công cụ 
   { id: 'q3', question: 'Công cụ EDA mã nguồn mở nào dùng để TỔNG HỢP RTL thành cổng logic?', options: ['Yosys', 'gcc', 'curl', 'apt'], correctIndex: 0, explanation: 'Yosys là công cụ tổng hợp (synthesis) mã nguồn mở; OpenROAD lo place & route.' },
 ]);
 
-const c8 = doc('los201-8-1-community-contributing', '8.1 — Community &amp; contributing to open source|||8.1 — Cộng đồng &amp; đóng góp mã nguồn mở',
+const c8 = doc('los201-8-1-community-contributing', '8.1 — Community & contributing to open source|||8.1 — Cộng đồng & đóng góp mã nguồn mở',
   'Vì sao đóng góp; cách cộng đồng vận hành (issue, maintainer, code of conduct); quy trình fork → branch → commit → pull request → review; đóng góp không chỉ là code (docs, dịch, báo lỗi).',
   [[
     `<span class="eyebrow">LOS201 · Chapter 8 · Lesson 8.1</span>

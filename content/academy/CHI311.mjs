@@ -97,7 +97,7 @@ const intro = doc('chi311-0-1-overview', 'Course overview: Integrated Chinese 3|
 <p>Học tập &amp; thi cử → thuê nhà → việc nhà &amp; thói quen → sức khỏe &amp; khám bệnh → du lịch → mùa &amp; khí hậu → mua sắm nâng cao → sở thích &amp; giải trí. Mỗi bài có bảng từ vựng (汉字 | pinyin | nghĩa), điểm ngữ pháp kèm ví dụ, một hội thoại ngắn, ghi chú, và quiz.</p>`,
   ]]);
 
-const b1 = doc('chi311-1-1-study-exams', 'Lesson 1 — Study &amp; exams|||Bài 1 — Học tập &amp; thi cử',
+const b1 = doc('chi311-1-1-study-exams', 'Lesson 1 — Study & exams|||Bài 1 — Học tập & thi cử',
   'Từ vựng: 考试, 复习, 成绩, 懂, 记住, 复杂, 简单, 生词, 预习. Ngữ pháp: 复习/预习, bổ ngữ kết quả 听懂/看懂/记住, bổ ngữ trình độ 考得好, cặp trái nghĩa 复杂/简单.',
   [[
     `<span class="eyebrow">CHI311 · Lesson 1 · Study &amp; exams</span>
@@ -160,13 +160,13 @@ B: 我记住了很多生词。 Wǒ jìzhù le hěn duō shēngcí. (Tôi đã nh
 <div class="callout"><span class="badge">Ghi chú</span> Bổ ngữ kết quả nối động từ với kết quả của nó: 听 (nghe) + 懂 (hiểu) = 听懂 (nghe hiểu). Phủ định dùng 没 trước động từ: 没听懂 (nghe không hiểu).</div>`,
   ]]);
 
-const b1q = quiz('chi311-quiz-1', 'Quiz 1 — Study &amp; exams|||Quiz 1 — Học tập &amp; thi cử', [
+const b1q = quiz('chi311-quiz-1', 'Quiz 1 — Study & exams|||Quiz 1 — Học tập & thi cử', [
   { id: 'q1', question: 'Phân biệt 复习 và 预习? / Tell 复习 from 预习?', options: ['复习 là ôn lại, 预习 là chuẩn bị bài trước|||复习 review, 预习 preview', '复习 là thi, 预习 là học|||复习 exam, 预习 study', 'Hai từ nghĩa giống nhau|||both the same', '复习 là quên, 预习 là nhớ|||复习 forget, 预习 recall'], correctIndex: 0, explanation: '复习 = ôn lại điều đã học; 预习 = xem trước bài trước khi lên lớp.' },
   { id: 'q2', question: '"听懂" (tīng dǒng) nghĩa là? / What does 听懂 mean?', options: ['nghe nhạc|||listen to music', 'nghe hiểu|||to understand by listening', 'nói to|||speak loudly', 'nghe không rõ|||cannot hear'], correctIndex: 1, explanation: '懂 là bổ ngữ kết quả: 听 (nghe) + 懂 (hiểu) = nghe hiểu. Phủ định: 没听懂.' },
   { id: 'q3', question: 'Trong 他考得很好, chữ 得 làm gì? / In 他考得很好, what is 得 for?', options: ['chỉ khả năng|||shows ability', 'nối động từ với bổ ngữ trình độ|||links verb to a degree complement', 'nghĩa là phải|||means must', 'là danh từ|||is a noun'], correctIndex: 1, explanation: '得 (đọc de) nối động từ với bổ ngữ trình độ: 考得很好 = thi rất tốt.' },
 ]);
 
-const b2 = doc('chi311-2-1-renting', 'Lesson 2 — Renting a home|||Bài 2 — Thuê nhà &amp; chỗ ở',
+const b2 = doc('chi311-2-1-renting', 'Lesson 2 — Renting a home|||Bài 2 — Thuê nhà & chỗ ở',
   'Từ vựng: 租房, 公寓, 家具, 安静, 干净, 合适, 押金, 房租, 卧室. Ngữ pháp: 租 (thuê), 合适 (phù hợp), 又…又… (vừa…vừa…), cách hỏi tiền thuê 房租 & 押金.',
   [[
     `<span class="eyebrow">CHI311 · Lesson 2 · Renting a home</span>
@@ -235,7 +235,7 @@ const b2q = quiz('chi311-quiz-2', 'Quiz 2 — Renting a home|||Quiz 2 — Thuê 
   { id: 'q3', question: 'Khoản tiền được trả lại khi dọn đi là? / Which money is returned when you move out?', options: ['房租 fángzū', '押金 yājīn', '成绩 chéngjì', '家具 jiājù'], correctIndex: 1, explanation: '押金 = tiền cọc, được trả lại; 房租 = tiền thuê hằng tháng, không lấy lại.' },
 ]);
 
-const b3 = doc('chi311-3-1-chores-habits', 'Lesson 3 — Chores &amp; habits|||Bài 3 — Việc nhà &amp; thói quen',
+const b3 = doc('chi311-3-1-chores-habits', 'Lesson 3 — Chores & habits|||Bài 3 — Việc nhà & thói quen',
   'Từ vựng: 做饭, 打扫, 习惯, 自己, 洗, 收拾, 房间, 每天. Ngữ pháp: 一…就… (hễ…là…), 自己 (tự mình), 习惯 (quen), động-tân 做饭/打扫.',
   [[
     `<span class="eyebrow">CHI311 · Lesson 3 · Chores &amp; habits</span>
@@ -296,13 +296,13 @@ B: 我自己打扫，已经习惯了。 Wǒ zìjǐ dǎsǎo, yǐjīng xíguàn le
 <div class="callout"><span class="badge">Ghi chú</span> 一…就… nối hai sự việc theo thời gian: việc đầu kích hoạt việc sau. 自己 có thể đứng riêng hoặc theo sau đại từ: 我自己 (tự tôi), 他自己 (tự anh ấy).</div>`,
   ]]);
 
-const b3q = quiz('chi311-quiz-3', 'Quiz 3 — Chores &amp; habits|||Quiz 3 — Việc nhà', [
+const b3q = quiz('chi311-quiz-3', 'Quiz 3 — Chores & habits|||Quiz 3 — Việc nhà', [
   { id: 'q1', question: 'Mẫu "一…就…" diễn đạt điều gì? / What does 一…就… express?', options: ['so sánh|||comparison', 'hễ A là B ngay|||as soon as A, then B', 'phủ định|||negation', 'khả năng|||possibility'], correctIndex: 1, explanation: '一…就… nối hai sự việc: 我一回家就做饭 = hễ về nhà là tôi nấu cơm.' },
   { id: 'q2', question: '"我自己打扫" nghĩa là? / What does 我自己打扫 mean?', options: ['Có người dọn giúp tôi|||someone cleans for me', 'Tôi tự dọn dẹp|||I clean it myself', 'Tôi không dọn|||I do not clean', 'Tôi dọn cho bạn|||I clean for you'], correctIndex: 1, explanation: '自己 = tự mình: 我自己打扫 = tôi tự dọn dẹp.' },
   { id: 'q3', question: '"做饭" (zuò fàn) nghĩa là? / What does 做饭 mean?', options: ['ăn cơm|||to eat', 'nấu cơm|||to cook', 'mua cơm|||to buy food', 'rửa bát|||to wash dishes'], correctIndex: 1, explanation: '做 (làm) + 饭 (cơm) = nấu cơm, nấu ăn.' },
 ]);
 
-const b4 = doc('chi311-4-1-health', 'Lesson 4 — Health &amp; seeing a doctor|||Bài 4 — Sức khỏe &amp; khám bệnh',
+const b4 = doc('chi311-4-1-health', 'Lesson 4 — Health & seeing a doctor|||Bài 4 — Sức khỏe & khám bệnh',
   'Từ vựng: 生病, 感冒, 发烧, 看病, 药, 舒服, 越来越, 医院, 应该, 休息. Ngữ pháp: 越来越+tính từ, 不舒服, 应该 (nên), động-tân 生病/看病/发烧.',
   [[
     `<span class="eyebrow">CHI311 · Lesson 4 · Health</span>
@@ -367,13 +367,13 @@ B: 好，我去医院吃点儿药，休息休息。 Hǎo, wǒ qù yīyuàn chī 
 <div class="callout"><span class="badge">Ghi chú</span> 越来越 đứng ngay trước tính từ hoặc động từ tâm lý — 越来越冷, 越来越喜欢. Không thêm 很 sau nó.</div>`,
   ]]);
 
-const b4q = quiz('chi311-quiz-4', 'Quiz 4 — Health &amp; seeing a doctor|||Quiz 4 — Sức khỏe', [
+const b4q = quiz('chi311-quiz-4', 'Quiz 4 — Health & seeing a doctor|||Quiz 4 — Sức khỏe', [
   { id: 'q1', question: 'Mẫu "越来越 + tính từ" nghĩa là? / What does 越来越 + adjective mean?', options: ['ít hơn|||less and less', 'càng ngày càng|||more and more', 'bằng nhau|||the same', 'đôi khi|||sometimes'], correctIndex: 1, explanation: '越来越 = càng ngày càng: 越来越热 = càng ngày càng nóng. Không thêm 很.' },
   { id: 'q2', question: '"发烧" (fā shāo) nghĩa là? / What does 发烧 mean?', options: ['ho|||to cough', 'sốt|||to have a fever', 'đau bụng|||stomachache', 'buồn ngủ|||sleepy'], correctIndex: 1, explanation: '发烧 = bị sốt; thường đi cùng 感冒 (cảm cúm).' },
   { id: 'q3', question: 'Khuyên ai đó đi khám dùng từ nào? / Which word gives advice to see a doctor?', options: ['应该 yīnggāi', '押金 yājīn', '习惯 xíguàn', '简单 jiǎndān'], correctIndex: 0, explanation: '应该 = nên: 你应该去看病 = bạn nên đi khám bệnh.' },
 ]);
 
-const b5 = doc('chi311-5-1-travel', 'Lesson 5 — Travel|||Bài 5 — Đi lại &amp; du lịch',
+const b5 = doc('chi311-5-1-travel', 'Lesson 5 — Travel|||Bài 5 — Đi lại & du lịch',
   'Từ vựng: 旅行, 火车, 飞机, 订, 护照, 签证, 机票, 行李, 出发. Ngữ pháp: 坐火车/坐飞机, 订 (đặt vé/phòng), 一…就… trong du lịch, 需要 护照和签证.',
   [[
     `<span class="eyebrow">CHI311 · Lesson 5 · Travel</span>
@@ -442,7 +442,7 @@ const b5q = quiz('chi311-quiz-5', 'Quiz 5 — Travel|||Quiz 5 — Du lịch', [
   { id: 'q3', question: 'Câu hỏi lựa chọn "tàu hay máy bay" dùng từ nào? / Which word makes an either-or question?', options: ['或者 huòzhě', '还是 háishi', '因为 yīnwèi', '所以 suǒyǐ'], correctIndex: 1, explanation: '还是 dùng trong câu hỏi lựa chọn: 坐火车还是坐飞机? 或者 dùng trong câu trần thuật.' },
 ]);
 
-const b6 = doc('chi311-6-1-seasons', 'Lesson 6 — Seasons &amp; climate|||Bài 6 — Thời tiết &amp; khí hậu',
+const b6 = doc('chi311-6-1-seasons', 'Lesson 6 — Seasons & climate|||Bài 6 — Thời tiết & khí hậu',
   'Từ vựng: 季节, 春天, 夏天, 秋天, 冬天, 凉快, 暖和, 预报, 可能, 气候. Ngữ pháp: bốn mùa, 比…更… (còn hơn cả), 可能 (có thể), 凉快/暖和.',
   [[
     `<span class="eyebrow">CHI311 · Lesson 6 · Seasons</span>
@@ -507,7 +507,7 @@ B: 预报说可能比今天更冷。 Yùbào shuō kěnéng bǐ jīntiān gèng 
 <div class="callout"><span class="badge">Ghi chú</span> 凉快 là mát mẻ dễ chịu; 冷 là lạnh thường. Thêm 更 vào câu 比 để nói "còn hơn": A 比 B 更 + tính từ.</div>`,
   ]]);
 
-const b6q = quiz('chi311-quiz-6', 'Quiz 6 — Seasons &amp; climate|||Quiz 6 — Khí hậu', [
+const b6q = quiz('chi311-quiz-6', 'Quiz 6 — Seasons & climate|||Quiz 6 — Khí hậu', [
   { id: 'q1', question: '"秋天" (qiūtiān) là mùa nào? / Which season is 秋天?', options: ['mùa xuân|||spring', 'mùa hè|||summer', 'mùa thu|||autumn', 'mùa đông|||winter'], correctIndex: 2, explanation: '春天 xuân, 夏天 hè, 秋天 thu, 冬天 đông.' },
   { id: 'q2', question: 'Câu 今天比昨天更热 nghĩa là? / What does 今天比昨天更热 mean?', options: ['Hôm nay mát hơn|||cooler today', 'Hôm nay còn nóng hơn hôm qua|||even hotter than yesterday', 'Hôm qua nóng hơn|||yesterday was hotter', 'Hai ngày bằng nhau|||the same'], correctIndex: 1, explanation: '比…更… = còn hơn cả: 今天比昨天更热 = hôm nay còn nóng hơn hôm qua.' },
   { id: 'q3', question: '"可能" (kěnéng) nghĩa là? / What does 可能 mean?', options: ['chắc chắn|||certainly', 'có thể / có lẽ|||maybe / possible', 'không bao giờ|||never', 'đã xong|||already done'], correctIndex: 1, explanation: '可能 = có thể, có lẽ: 明天可能下雨 = mai có thể mưa.' },
@@ -580,7 +580,7 @@ const b7q = quiz('chi311-quiz-7', 'Quiz 7 — Advanced shopping|||Quiz 7 — Mua
   { id: 'q3', question: '"退换" (tuìhuàn) nghĩa là? / What does 退换 mean?', options: ['mua thêm|||buy more', 'đổi trả|||return or exchange', 'thanh toán|||pay', 'gói lại|||wrap up'], correctIndex: 1, explanation: '退 (trả lại) + 换 (đổi) = đổi trả hàng: 七天内可以退换.' },
 ]);
 
-const b8 = doc('chi311-8-1-hobbies', 'Lesson 8 — Hobbies &amp; entertainment|||Bài 8 — Sở thích &amp; giải trí',
+const b8 = doc('chi311-8-1-hobbies', 'Lesson 8 — Hobbies & entertainment|||Bài 8 — Sở thích & giải trí',
   'Từ vựng: 爱好, 参加, 比赛, 表演, 唱歌, 跳舞, 练习, 不错. Ngữ pháp: 爱好 (sở thích), 参加比赛, bổ ngữ trình độ 得 (唱得好), 越…越… (càng…càng…).',
   [[
     `<span class="eyebrow">CHI311 · Lesson 8 · Hobbies</span>
@@ -641,7 +641,7 @@ B: 参加！我越练越好。 Cānjiā! Wǒ yuè liàn yuè hǎo. (Tham gia! T�
 <div class="callout"><span class="badge">Ghi chú</span> Chữ 得 ở đây (Động từ + 得 + tính từ) cho biết làm việc gì đó tốt đến mức nào, đọc thanh nhẹ <em>de</em>. Đừng nhầm với 得 đọc <em>děi</em> nghĩa là phải.</div>`,
   ]]);
 
-const b8q = quiz('chi311-quiz-8', 'Quiz 8 — Hobbies &amp; entertainment|||Quiz 8 — Sở thích', [
+const b8q = quiz('chi311-quiz-8', 'Quiz 8 — Hobbies & entertainment|||Quiz 8 — Sở thích', [
   { id: 'q1', question: '"参加比赛" (cānjiā bǐsài) nghĩa là? / What does 参加比赛 mean?', options: ['xem trận đấu|||watch a match', 'tham gia cuộc thi|||to take part in a competition', 'thắng cuộc thi|||win a match', 'huỷ cuộc thi|||cancel a match'], correctIndex: 1, explanation: '参加 = tham gia; 比赛 = cuộc thi; 参加比赛 = tham gia cuộc thi.' },
   { id: 'q2', question: 'Câu 他唱得很好 nghĩa là? / What does 他唱得很好 mean?', options: ['Bạn ấy muốn hát|||he wants to sing', 'Bạn ấy hát rất hay|||he sings very well', 'Bạn ấy phải hát|||he must sing', 'Bạn ấy không hát|||he does not sing'], correctIndex: 1, explanation: 'Động từ + 得 + tính từ là bổ ngữ trình độ: 唱得很好 = hát rất hay. 得 đọc de.' },
   { id: 'q3', question: 'Mẫu "越…越…" nghĩa là? / What does 越…越… mean?', options: ['không những … mà còn …|||not only … but also …', 'càng … càng …|||the more … the more …', 'hễ … là …|||as soon as …', 'vừa … vừa …|||both … and …'], correctIndex: 1, explanation: '越…越… = càng … càng: 我越练越好 = tôi càng luyện càng giỏi.' },
@@ -665,14 +665,14 @@ export default {
     requirements: 'Cần hoàn thành CHI121 hoặc nắm vững pinyin, 4 thanh điệu, cách hỏi giá, 坐 + phương tiện, so sánh với 比, các mẫu 会…的 / 要…了 và từ vựng sinh hoạt cơ bản. Nên cài Pleco hoặc dùng từ điển hanzii.net để tra chữ &amp; nghe phát âm; luyện viết chữ Hán theo thứ tự nét.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (cuối L1P2 → L2P1), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (cuối L1P2 → L2P1), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHI121, track Integrated Chinese, mục tiêu HSK2 lên HSK3, cách học.', lessons: [intro] },
-    { title: 'Bài 1 — Học tập &amp; thi cử|||Lesson 1 — Study &amp; exams', description: '考试, 复习/预习, 成绩, 听懂/看懂/记住, 复杂/简单.', lessons: [b1, b1q] },
+    { title: 'Bài 1 — Học tập & thi cử|||Lesson 1 — Study & exams', description: '考试, 复习/预习, 成绩, 听懂/看懂/记住, 复杂/简单.', lessons: [b1, b1q] },
     { title: 'Bài 2 — Thuê nhà|||Lesson 2 — Renting a home', description: '租房, 公寓, 家具, 安静/干净, 合适, 押金, 房租.', lessons: [b2, b2q] },
-    { title: 'Bài 3 — Việc nhà &amp; thói quen|||Lesson 3 — Chores &amp; habits', description: '做饭, 打扫, 习惯, 自己, 一…就…', lessons: [b3, b3q] },
-    { title: 'Bài 4 — Sức khỏe &amp; khám bệnh|||Lesson 4 — Health', description: '生病, 感冒, 发烧, 看病, 药, 越来越, 应该.', lessons: [b4, b4q] },
+    { title: 'Bài 3 — Việc nhà & thói quen|||Lesson 3 — Chores & habits', description: '做饭, 打扫, 习惯, 自己, 一…就…', lessons: [b3, b3q] },
+    { title: 'Bài 4 — Sức khỏe & khám bệnh|||Lesson 4 — Health', description: '生病, 感冒, 发烧, 看病, 药, 越来越, 应该.', lessons: [b4, b4q] },
     { title: 'Bài 5 — Du lịch|||Lesson 5 — Travel', description: '旅行, 火车/飞机, 订机票, 护照/签证, 还是.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Khí hậu|||Lesson 6 — Seasons &amp; climate', description: '季节, 春夏秋冬, 凉快/暖和, 预报, 可能, 比…更…', lessons: [b6, b6q] },
+    { title: 'Bài 6 — Khí hậu|||Lesson 6 — Seasons & climate', description: '季节, 春夏秋冬, 凉快/暖和, 预报, 可能, 比…更…', lessons: [b6, b6q] },
     { title: 'Bài 7 — Mua sắm nâng cao|||Lesson 7 — Advanced shopping', description: '讨价还价, 质量, 牌子, 打折, 退换, 不但…而且…', lessons: [b7, b7q] },
     { title: 'Bài 8 — Sở thích|||Lesson 8 — Hobbies', description: '爱好, 参加比赛, 表演, bổ ngữ 得, 越…越…', lessons: [b8, b8q] },
   ],

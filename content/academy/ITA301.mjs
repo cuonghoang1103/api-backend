@@ -83,7 +83,7 @@ const taiLieu = doc('ita301-0-0-tai-lieu', '📚 Course materials & references||
 </ol></div>`,
   ]]);
 
-const intro = doc('ita301-0-1-overview', 'Course overview: Analysis &amp; design of information systems|||Tổng quan: Phân tích &amp; thiết kế hệ thống thông tin',
+const intro = doc('ita301-0-1-overview', 'Course overview: Analysis & design of information systems|||Tổng quan: Phân tích & thiết kế hệ thống thông tin',
   'Phân tích thiết kế HT là gì; vì sao dự án cần analyst; lộ trình: SDLC & yêu cầu → mô hình hoá quy trình (DFD) & dữ liệu (ERD) → phân tích hướng đối tượng (UML) → thiết kế → triển khai & bảo trì.',
   [[
     `<span class="eyebrow">ITA301 · Lesson 0.1 · Overview</span>
@@ -114,7 +114,7 @@ const intro = doc('ita301-0-1-overview', 'Course overview: Analysis &amp; design
 <div class="callout"><span class="badge">Ý lớn</span> Mô hình là một sự đơn giản hoá để ta suy luận được. Mô hình phân tích mô tả hệ thống phải làm <em>gì</em>; mô hình thiết kế mô tả nó sẽ làm <em>thế nào</em>.</div>`,
   ]]);
 
-const c1 = doc('ita301-1-1-sdlc', '1.1 — SDLC, the analyst role &amp; process models|||1.1 — SDLC, vai trò analyst &amp; mô hình quy trình',
+const c1 = doc('ita301-1-1-sdlc', '1.1 — SDLC, the analyst role & process models|||1.1 — SDLC, vai trò analyst & mô hình quy trình',
   'Vòng đời phát triển hệ thống (SDLC): các pha planning → analysis → design → implementation → maintenance; vai trò analyst; so sánh waterfall / iterative / agile.',
   [[
     `<span class="eyebrow">ITA301 · Chapter 1 · Lesson 1.1</span>
@@ -157,13 +157,13 @@ Bảo trì       -> sửa, nâng cấp, hỗ trợ khi vận hành
 <div class="callout"><span class="badge">Hệ thống thật</span> Hệ thống đăng ký học ở trường đại học thường dựng theo kiểu lặp: đăng ký môn trước, rồi điểm số, rồi học phí — mỗi lát dùng được trước khi làm lát sau.</div>`,
   ]]);
 
-const c1q = quiz('ita301-quiz-1', 'Quiz 1 — SDLC &amp; analyst|||Quiz 1 — SDLC &amp; analyst', [
+const c1q = quiz('ita301-quiz-1', 'Quiz 1 — SDLC & analyst|||Quiz 1 — SDLC & analyst', [
   { id: 'q1', question: 'Thứ tự đúng các pha kinh điển của SDLC?', options: ['Thiết kế → Phân tích → Lập kế hoạch → Triển khai → Bảo trì', 'Lập kế hoạch → Phân tích → Thiết kế → Triển khai → Bảo trì', 'Phân tích → Lập kế hoạch → Triển khai → Thiết kế → Bảo trì', 'Triển khai → Thiết kế → Phân tích → Lập kế hoạch → Bảo trì'], correctIndex: 1, explanation: 'Planning → Analysis → Design → Implementation → Maintenance.' },
   { id: 'q2', question: 'Vai trò chính của chuyên viên phân tích (analyst) là?', options: ['Viết toàn bộ mã nguồn', 'Cầu nối giữa nghiệp vụ và kỹ thuật, sở hữu yêu cầu', 'Quản trị máy chủ', 'Kiểm thử tự động'], correctIndex: 1, explanation: 'Analyst hiểu vấn đề nghiệp vụ, mô hình hoá và sở hữu bộ yêu cầu.' },
   { id: 'q3', question: 'Đặc trưng của mô hình Agile so với waterfall?', options: ['Chỉ giao sản phẩm một lần ở cuối', 'Sprint ngắn, phần mềm chạy được sớm, yêu cầu tiến hoá', 'Không có tài liệu nào', 'Bỏ qua pha kiểm thử'], correctIndex: 1, explanation: 'Agile giao phần mềm dùng được theo chu kỳ ngắn, yêu cầu thay đổi dần.' },
 ]);
 
-const c2 = doc('ita301-2-1-requirements', '2.1 — Project initiation &amp; requirements|||2.1 — Khởi tạo dự án &amp; khảo sát yêu cầu',
+const c2 = doc('ita301-2-1-requirements', '2.1 — Project initiation & requirements|||2.1 — Khởi tạo dự án & khảo sát yêu cầu',
   'Nghiên cứu khả thi (feasibility: kỹ thuật/kinh tế/tổ chức); kỹ thuật thu thập yêu cầu (phỏng vấn, khảo sát, quan sát, phân tích tài liệu); yêu cầu chức năng vs phi chức năng.',
   [[
     `<span class="eyebrow">ITA301 · Chapter 2 · Lesson 2.1</span>
@@ -214,7 +214,7 @@ Phi chức năng -> LÀM TỐT THẾ NÀO (thuộc tính chất lượng)
 <div class="callout"><span class="badge">Hệ thống thật</span> Với app ngân hàng trực tuyến, "chuyển tiền giữa hai tài khoản" là chức năng; "phản hồi dưới 2 giây và mã hoá mọi giao dịch" là phi chức năng.</div>`,
   ]]);
 
-const c2q = quiz('ita301-quiz-2', 'Quiz 2 — Feasibility &amp; requirements|||Quiz 2 — Khả thi &amp; yêu cầu', [
+const c2q = quiz('ita301-quiz-2', 'Quiz 2 — Feasibility & requirements|||Quiz 2 — Khả thi & yêu cầu', [
   { id: 'q1', question: 'Ba loại khả thi thường xét trong nghiên cứu feasibility là?', options: ['Kỹ thuật, kinh tế, tổ chức/vận hành', 'Frontend, backend, database', 'Sáng, trưa, tối', 'Alpha, beta, release'], correctIndex: 0, explanation: 'Technical, economic, organizational/operational feasibility.' },
   { id: 'q2', question: 'Kỹ thuật thu thập yêu cầu nào tốt nhất để thấy người dùng THỰC SỰ làm gì?', options: ['Phỏng vấn', 'Bảng hỏi', 'Quan sát (observation)', 'Đọc email'], correctIndex: 2, explanation: 'Quan sát lộ ra hành vi thật, khác với điều người dùng tự thuật.' },
   { id: 'q3', question: '"Hệ thống phải phản hồi dưới 2 giây" là loại yêu cầu gì?', options: ['Yêu cầu chức năng', 'Yêu cầu phi chức năng', 'Ràng buộc khả thi', 'Ca sử dụng'], correctIndex: 1, explanation: 'Hiệu năng là thuộc tính chất lượng → yêu cầu phi chức năng.' },
@@ -267,7 +267,7 @@ const c3q = quiz('ita301-quiz-3', 'Quiz 3 — Data Flow Diagrams|||Quiz 3 — S�
   { id: 'q3', question: '"Cân bằng" (balancing) giữa DFD cha và con nghĩa là?', options: ['Số tiến trình cha bằng số con', 'Luồng dữ liệu vào/ra cha khớp với luồng ở sơ đồ con', 'Hai sơ đồ có cùng số kho dữ liệu', 'Các mũi tên cùng độ dài'], correctIndex: 1, explanation: 'Luồng vào/ra ở cha phải nhất quán với luồng ở diagram con.' },
 ]);
 
-const c4 = doc('ita301-4-1-erd', '4.1 — Data modeling: ERD &amp; normalization|||4.1 — Mô hình hoá dữ liệu: ERD &amp; chuẩn hoá',
+const c4 = doc('ita301-4-1-erd', '4.1 — Data modeling: ERD & normalization|||4.1 — Mô hình hoá dữ liệu: ERD & chuẩn hoá',
   'Sơ đồ thực thể - quan hệ (ERD): entity, attribute, relationship, khoá chính/ngoại, lực lượng (1:1, 1:N, M:N); từ điển dữ liệu (data dictionary); chuẩn hoá 1NF/2NF/3NF.',
   [[
     `<span class="eyebrow">ITA301 · Chapter 4 · Lesson 4.1</span>
@@ -318,7 +318,7 @@ M:N  nhiều-nhiều (Sinh viên - Môn học) -> cần bảng trung gian
 <div class="callout"><span class="badge">Hệ thống thật</span> Thư viện: thực thể Sách, Thành viên, Lượt mượn. Một thành viên mượn nhiều sách theo thời gian, nên Lượt mượn là bảng trung gian giải quan hệ M:N giữa Thành viên và Sách.</div>`,
   ]]);
 
-const c4q = quiz('ita301-quiz-4', 'Quiz 4 — ERD &amp; normalization|||Quiz 4 — ERD &amp; chuẩn hoá', [
+const c4q = quiz('ita301-quiz-4', 'Quiz 4 — ERD & normalization|||Quiz 4 — ERD & chuẩn hoá', [
   { id: 'q1', question: 'Quan hệ nhiều-nhiều (M:N) trong ERD thường được giải bằng?', options: ['Bỏ bớt một thực thể', 'Một bảng trung gian (junction table)', 'Thêm một khoá chính kép cho cả hai', 'Không lưu quan hệ đó'], correctIndex: 1, explanation: 'M:N cần bảng trung gian chứa khoá ngoại tới cả hai thực thể.' },
   { id: 'q2', question: 'Khoá dùng để liên kết một thực thể tới thực thể khác gọi là?', options: ['Khoá chính', 'Khoá ngoại (foreign key)', 'Khoá dự tuyển', 'Chỉ mục'], correctIndex: 1, explanation: 'Foreign key tham chiếu tới khoá chính của thực thể khác.' },
   { id: 'q3', question: 'Chuẩn 3NF yêu cầu loại bỏ điều gì (ngoài các điều kiện 2NF)?', options: ['Mọi khoá ngoại', 'Phụ thuộc bắc cầu (transitive dependency)', 'Mọi quan hệ 1:N', 'Các thuộc tính đa trị'], correctIndex: 1, explanation: '3NF: không thuộc tính không khoá nào phụ thuộc bắc cầu vào khoá.' },
@@ -389,7 +389,7 @@ const c5q = quiz('ita301-quiz-5', 'Quiz 5 — UML analysis|||Quiz 5 — Phân t�
   { id: 'q3', question: 'Sơ đồ dùng để thể hiện các đối tượng trao đổi thông điệp theo THỜI GIAN?', options: ['Sequence diagram', 'ERD', 'Class diagram', 'DFD'], correctIndex: 0, explanation: 'Sequence diagram cho thấy trình tự thông điệp giữa các lifeline theo thời gian.' },
 ]);
 
-const c6 = doc('ita301-6-1-system-design', '6.1 — System design: architecture, UI &amp; database|||6.1 — Thiết kế hệ thống: kiến trúc, giao diện &amp; CSDL',
+const c6 = doc('ita301-6-1-system-design', '6.1 — System design: architecture, UI & database|||6.1 — Thiết kế hệ thống: kiến trúc, giao diện & CSDL',
   'Chuyển từ phân tích sang thiết kế; kiến trúc (client-server, 3 lớp presentation/logic/data); thiết kế giao diện & input/output (validation, form); thiết kế cơ sở dữ liệu (bảng, chỉ mục).',
   [[
     `<span class="eyebrow">ITA301 · Chapter 6 · Lesson 6.1</span>
@@ -446,7 +446,7 @@ const c6q = quiz('ita301-quiz-6', 'Quiz 6 — System design|||Quiz 6 — Thiết
   { id: 'q3', question: 'Nguyên tắc thiết kế đầu vào (input) tốt là?', options: ['Bắt người dùng gõ càng nhiều càng tốt', 'Giảm gõ tay, kiểm hợp lệ sớm, chặn lỗi', 'Không cần thông báo lỗi', 'Dùng free text cho mọi trường'], correctIndex: 1, explanation: 'Form tốt tối thiểu hoá nhập liệu và ngăn lỗi ngay khi nhập.' },
 ]);
 
-const c7 = doc('ita301-7-1-detailed-design-patterns', '7.1 — Detailed design, modularity &amp; patterns|||7.1 — Thiết kế chi tiết, mô-đun &amp; mẫu',
+const c7 = doc('ita301-7-1-detailed-design-patterns', '7.1 — Detailed design, modularity & patterns|||7.1 — Thiết kế chi tiết, mô-đun & mẫu',
   'Thiết kế chi tiết mô-đun (coupling thấp, cohesion cao); mẫu thiết kế cơ bản (Singleton, Factory, Observer, MVC); thiết kế UI/UX hệ thống (điều hướng, wireframe, tính nhất quán).',
   [[
     `<span class="eyebrow">ITA301 · Chapter 7 · Lesson 7.1</span>
@@ -495,13 +495,13 @@ MVC       -> tách Model (dữ liệu), View (UI), Controller (đầu vào)
 <div class="callout"><span class="badge">Hệ thống thật</span> Một web framework thường dùng MVC (controller nhận request, model truy vấn DB, view dựng HTML) và Observer để đẩy thông báo trực tiếp lên trình duyệt.</div>`,
   ]]);
 
-const c7q = quiz('ita301-quiz-7', 'Quiz 7 — Design patterns &amp; modularity|||Quiz 7 — Mẫu thiết kế &amp; mô-đun', [
+const c7q = quiz('ita301-quiz-7', 'Quiz 7 — Design patterns & modularity|||Quiz 7 — Mẫu thiết kế & mô-đun', [
   { id: 'q1', question: 'Một thiết kế mô-đun tốt hướng tới?', options: ['Coupling cao, cohesion thấp', 'Coupling thấp, cohesion cao', 'Coupling cao, cohesion cao', 'Coupling thấp, cohesion thấp'], correctIndex: 1, explanation: 'Ít phụ thuộc nhau (low coupling) và mỗi mô-đun tập trung một việc (high cohesion).' },
   { id: 'q2', question: 'Mẫu thiết kế đảm bảo một lớp chỉ có đúng MỘT thực thể dùng chung là?', options: ['Factory', 'Observer', 'Singleton', 'MVC'], correctIndex: 2, explanation: 'Singleton giới hạn đúng một instance được chia sẻ.' },
   { id: 'q3', question: 'Trong MVC, thành phần nào chịu trách nhiệm xử lý đầu vào và điều phối?', options: ['Model', 'View', 'Controller', 'Database'], correctIndex: 2, explanation: 'Controller nhận input, điều phối Model và chọn View để hiển thị.' },
 ]);
 
-const c8 = doc('ita301-8-1-implementation-maintenance', '8.1 — Implementation, testing &amp; maintenance|||8.1 — Triển khai, kiểm thử &amp; bảo trì',
+const c8 = doc('ita301-8-1-implementation-maintenance', '8.1 — Implementation, testing & maintenance|||8.1 — Triển khai, kiểm thử & bảo trì',
   'Kiểm thử (unit/integration/system/acceptance); chiến lược chuyển đổi (direct/parallel/pilot/phased); đào tạo & tài liệu; bảo trì (sửa lỗi/thích nghi/hoàn thiện); quản lý dự án (phạm vi, lịch, rủi ro).',
   [[
     `<span class="eyebrow">ITA301 · Chapter 8 · Lesson 8.1</span>
@@ -556,7 +556,7 @@ Chấp nhận (UAT) -> khách hàng xác nhận đáp ứng nhu cầu
 <div class="callout"><span class="badge">Hệ thống thật</span> Ngân hàng thay hệ lõi hiếm khi big-bang: họ chạy song song hệ mới nhiều tháng, rồi triển khai theo pha từng vùng để giảm rủi ro.</div>`,
   ]]);
 
-const c8q = quiz('ita301-quiz-8', 'Quiz 8 — Implementation &amp; maintenance|||Quiz 8 — Triển khai &amp; bảo trì', [
+const c8q = quiz('ita301-quiz-8', 'Quiz 8 — Implementation & maintenance|||Quiz 8 — Triển khai & bảo trì', [
   { id: 'q1', question: 'Kiểm thử mà KHÁCH HÀNG xác nhận hệ thống đáp ứng nhu cầu của họ là?', options: ['Unit testing', 'Integration testing', 'Kiểm thử chấp nhận (acceptance/UAT)', 'System testing'], correctIndex: 2, explanation: 'UAT (acceptance testing) do khách hàng xác nhận đúng nhu cầu.' },
   { id: 'q2', question: 'Chiến lược chuyển đổi nào AN TOÀN nhất nhưng tốn kém do chạy hai hệ cùng lúc?', options: ['Trực tiếp (big bang)', 'Song song (parallel)', 'Thí điểm (pilot)', 'Theo pha (phased)'], correctIndex: 1, explanation: 'Parallel chạy cả hệ cũ và mới đến khi tin tưởng — an toàn nhưng tốn.' },
   { id: 'q3', question: 'Bảo trì để "theo kịp môi trường thay đổi (OS, luật, phần cứng mới)" gọi là?', options: ['Bảo trì sửa lỗi (corrective)', 'Bảo trì thích nghi (adaptive)', 'Bảo trì hoàn thiện (perfective)', 'Bảo trì phòng ngừa'], correctIndex: 1, explanation: 'Adaptive maintenance thích nghi hệ thống với môi trường đổi.' },

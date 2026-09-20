@@ -119,7 +119,7 @@ const intro = doc('sap321-0-1-overview', 'Course overview: advanced SAP config &
 <div class="callout"><span class="badge">Tư duy consultant</span> Mỗi chương trả lời cùng một câu hỏi ở một lĩnh vực mới: <em>"nghiệp vụ cần X — thiết lập cấu hình nào cho ra X, và làm sao đưa nó lên production an toàn?"</em></div>`,
   ]]);
 
-const c1 = doc('sap321-1-1-customizing-img', '1.1 — Customizing &amp; the IMG (Implementation Guide)|||1.1 — Customizing &amp; IMG (Implementation Guide)',
+const c1 = doc('sap321-1-1-customizing-img', '1.1 — Customizing & the IMG (Implementation Guide)|||1.1 — Customizing & IMG (Implementation Guide)',
   'IMG/SPRO là nơi cấu hình SAP; khái niệm client (customizing vs. master/transaction data), Customizing vs. Workbench requests, và hệ thống chuyển giao (transport) DEV→QAS→PRD.',
   [[
     `<span class="eyebrow">SAP321 · Chapter 1 · Lesson 1.1</span>
@@ -286,7 +286,7 @@ const c3q = quiz('sap321-quiz-3', 'Quiz 3 — FI/CO config|||Quiz 3 — Cấu h�
   { id: 'q3', question: 'Điểm khác cốt lõi giữa FI và CO là gì?', options: ['FI cho báo cáo pháp lý (bên ngoài), CO cho kế toán chi phí nội bộ', 'FI chỉ dùng cho bán hàng, CO cho mua hàng', 'CO thay thế hoàn toàn FI', 'Cả hai chỉ là master data'], correctIndex: 0, explanation: 'FI = báo cáo tài chính pháp lý (external); CO = kế toán chi phí nội bộ; một bút toán có thể nuôi cả hai.' },
 ]);
 
-const c4 = doc('sap321-4-1-mm-sd-config', '4.1 — MM &amp; SD configuration (pricing, output)|||4.1 — Cấu hình MM &amp; SD (pricing, output)',
+const c4 = doc('sap321-4-1-mm-sd-config', '4.1 — MM & SD configuration (pricing, output)|||4.1 — Cấu hình MM & SD (pricing, output)',
   'Cấu hình Materials Management & Sales and Distribution: condition technique cho pricing (condition type, access sequence, pricing procedure), và output determination (in/gửi hoá đơn, đơn hàng qua điều kiện tương tự).',
   [[
     `<span class="eyebrow">SAP321 · Chapter 4 · Lesson 4.1</span>
@@ -337,7 +337,7 @@ const c4q = quiz('sap321-quiz-4', 'Quiz 4 — MM/SD config|||Quiz 4 — Cấu h�
   { id: 'q3', question: 'Access Sequence tìm condition record theo thứ tự nào?', options: ['Từ tổng quát đến cụ thể', 'Từ cụ thể nhất đến tổng quát nhất', 'Ngẫu nhiên', 'Theo bảng chữ cái'], correctIndex: 1, explanation: 'Access sequence thử từ tổ hợp khoá cụ thể nhất xuống tổng quát, lấy record khớp đầu tiên.' },
 ]);
 
-const c5 = doc('sap321-5-1-authorization-workflow', '5.1 — Authorization &amp; workflow|||5.1 — Phân quyền &amp; workflow',
+const c5 = doc('sap321-5-1-authorization-workflow', '5.1 — Authorization & workflow|||5.1 — Phân quyền & workflow',
   'Mô hình phân quyền SAP: authorization object → authorization field → role (PFCG) → profile → user; nguyên tắc least privilege và SoD; và SAP Business Workflow tự động hoá quy trình phê duyệt.',
   [[
     `<span class="eyebrow">SAP321 · Chapter 5 · Lesson 5.1</span>
@@ -443,7 +443,7 @@ const c6q = quiz('sap321-quiz-6', 'Quiz 6 — Integration|||Quiz 6 — Tích h�
   { id: 'q3', question: 'Công nghệ nào đứng sau các app SAP Fiori và client web/mobile bên ngoài?', options: ['IDoc', 'OData / REST qua SAP Gateway', 'SOAP batch', 'Cost center hierarchy'], correctIndex: 1, explanation: 'OData/REST phát qua SAP Gateway là nền của Fiori và tích hợp web/mobile hiện đại.' },
 ]);
 
-const c7 = doc('sap321-7-1-analytics-bw', '7.1 — SAP Analytics, reporting &amp; SAP BW basics|||7.1 — SAP Analytics, reporting &amp; SAP BW cơ bản',
+const c7 = doc('sap321-7-1-analytics-bw', '7.1 — SAP Analytics, reporting & SAP BW basics|||7.1 — SAP Analytics, reporting & SAP BW cơ bản',
   'Từ báo cáo vận hành (SAP Query, ALV, Fiori embedded analytics/CDS) đến kho dữ liệu SAP BW/BW4HANA (InfoObject, InfoProvider/ADSO, ETL) và tầng phân tích SAP Analytics Cloud (SAC).',
   [[
     `<span class="eyebrow">SAP321 · Chapter 7 · Lesson 7.1</span>
@@ -500,7 +500,7 @@ const c7q = quiz('sap321-quiz-7', 'Quiz 7 — Analytics & BW|||Quiz 7 — Analyt
   { id: 'q3', question: 'Khi nào nên dùng kho dữ liệu (SAP BW) thay vì báo cáo ngay trên ERP?', options: ['Khi cần KPI sống của một hệ thống', 'Khi cần dữ liệu lịch sử, xuyên nhiều nguồn, tổng hợp nặng', 'Khi in một hoá đơn', 'Khi tạo một role mới'], correctIndex: 1, explanation: 'BW hợp cho dữ liệu lịch sử, xuyên nguồn, tổng hợp nặng; báo cáo sống một hệ thống thì dùng embedded analytics.' },
 ]);
 
-const c8 = doc('sap321-8-1-sap-activate-migration', '8.1 — SAP Activate, S/4HANA migration &amp; project management|||8.1 — SAP Activate, migration S/4HANA &amp; quản trị dự án',
+const c8 = doc('sap321-8-1-sap-activate-migration', '8.1 — SAP Activate, S/4HANA migration & project management|||8.1 — SAP Activate, migration S/4HANA & quản trị dự án',
   'Phương pháp SAP Activate (Discover→Prepare→Explore→Realize→Deploy→Run) dựa trên best-practice + fit-to-standard; ba con đường lên S/4HANA (greenfield, brownfield, selective); và quản trị dự án SAP.',
   [[
     `<span class="eyebrow">SAP321 · Chapter 8 · Lesson 8.1</span>

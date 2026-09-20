@@ -101,7 +101,7 @@ const intro = doc('chs401-0-1-overview', 'Course overview: Chinese Speaking 5|||
 <p>Kể chuyện &amp; thuật lại → miêu tả &amp; bình luận → bày tỏ &amp; bảo vệ quan điểm → thảo luận nhóm &amp; đàm phán → thuyết trình có cấu trúc → giao tiếp công việc &amp; phỏng vấn → tranh luận chủ đề xã hội → ôn tập: hùng biện, phản biện &amp; lưu loát.</p>`,
   ]]);
 
-const c1 = doc('chs401-1-1-narrating', 'Chapter 1 — Narrating &amp; retelling coherently|||Chương 1 — Kể chuyện &amp; thuật lại có mạch lạc',
+const c1 = doc('chs401-1-1-narrating', 'Chapter 1 — Narrating & retelling coherently|||Chương 1 — Kể chuyện & thuật lại có mạch lạc',
   'Mẫu câu: 事情是这样的, 首先…然后…接着…最后…, 结果; từ 情节/经过/细节/转折; luyện kể lại một sự việc không đứt đoạn.',
   [[
     `<span class="eyebrow">CHS401 · Chapter 1 · Narrating</span>
@@ -166,13 +166,13 @@ B: 结果堵车，又晚了二十分钟，真不好意思。 Jiéguǒ dǔchē, y
 <div class="callout"><span class="badge">Ghi chú lưu loát</span> Kể chuyện mà chỉ liệt kê hành động sẽ nghe khô khan. Nối 首先…然后…接着…最后… thành MỘT hơi thở duy nhất, rồi chốt bằng 结果 cho phần kết — chỉ một từ đó biến danh sách thành câu chuyện.</div>`,
   ]]);
 
-const c1q = quiz('chs401-quiz-1', 'Quiz 1 — Narrating &amp; retelling|||Quiz 1 — Kể chuyện &amp; thuật lại', [
+const c1q = quiz('chs401-quiz-1', 'Quiz 1 — Narrating & retelling|||Quiz 1 — Kể chuyện & thuật lại', [
   { id: 'q1', question: 'Cụm nào dùng để MỞ ĐẦU một lượt thuật lại sự việc? / Which phrase OPENS a retelling?', options: ['事情是这样的|||Here is what happened', '多少钱？|||How much?', '再见|||Goodbye', '谢谢|||Thank you'], correctIndex: 0, explanation: '事情是这样的 shìqing shì zhèyàng de = sự việc là như thế này — câu mở đầu một lượt kể lại.' },
   { id: 'q2', question: 'Chuỗi liên từ "首先…然后…接着…最后…" dùng để làm gì? / What is 首先…然后…接着…最后… used for?', options: ['Giữ đúng trình tự các bước trong câu chuyện|||Keep the story steps in order', 'Hỏi giá tiền|||Ask a price', 'Từ chối lời mời|||Decline an invitation', 'Xin lỗi|||Apologize'], correctIndex: 0, explanation: '首先 (trước tiên) → 然后 (sau đó) → 接着 (tiếp theo) → 最后 (cuối cùng) nối các bước theo đúng thứ tự thời gian.' },
   { id: 'q3', question: 'Vì sao chỉ liệt kê hành động (không dùng 结果) khiến lời kể nghe khô khan? / Why does listing actions without 结果 sound flat?', options: ['Vì thiếu phần kết quả/hệ quả nối các hành động lại thành câu chuyện|||Because it lacks the outcome that ties the actions into a story', 'Vì nói quá nhanh|||Because it is spoken too fast', 'Vì dùng sai thanh điệu|||Because the tones are wrong', 'Vì thiếu chủ ngữ|||Because the subject is missing'], correctIndex: 0, explanation: '结果 jiéguǒ chốt lại hệ quả — thiếu nó, chuỗi hành động chỉ là một danh sách rời rạc.' },
 ]);
 
-const c2 = doc('chs401-2-1-describing-commenting', 'Chapter 2 — Describing &amp; commenting on phenomena|||Chương 2 — Miêu tả &amp; bình luận sự vật, hiện tượng',
+const c2 = doc('chs401-2-1-describing-commenting', 'Chapter 2 — Describing & commenting on phenomena|||Chương 2 — Miêu tả & bình luận sự vật, hiện tượng',
   'Mẫu câu: 给我的印象是, 不可否认, 总的来说; từ 现象/普遍/引起争议/利大于弊; luyện bình luận một hiện tượng xã hội.',
   [[
     `<span class="eyebrow">CHS401 · Chapter 2 · Describing</span>
@@ -237,13 +237,13 @@ B: 不可否认，加班能提高效率，但总的来说，它对健康的消�
 <div class="callout"><span class="badge">Ghi chú lưu loát</span> 不可否认 A，但总的来说 B là khuôn của một bình luận cân bằng: nhượng bộ A rồi chốt ý thật của mình là B — nói 但 hơi lên giọng để báo hiệu cú xoay chuyển sắp tới.</div>`,
   ]]);
 
-const c2q = quiz('chs401-quiz-2', 'Quiz 2 — Describing &amp; commenting|||Quiz 2 — Miêu tả &amp; bình luận', [
+const c2q = quiz('chs401-quiz-2', 'Quiz 2 — Describing & commenting|||Quiz 2 — Miêu tả & bình luận', [
   { id: 'q1', question: '"不可否认…，但总的来说…" là khuôn câu để làm gì? / What is the 不可否认…，但总的来说… frame for?', options: ['Nhượng bộ một ý rồi chốt ý thật của mình — bình luận cân bằng|||Concede a point, then land your real point — a balanced comment', 'Hỏi đường|||Ask for directions', 'Từ chối một lời mời|||Decline an invitation', 'Giới thiệu bản thân|||Introduce yourself'], correctIndex: 0, explanation: '不可否认 A nhượng bộ, 但总的来说 B chốt quan điểm thật — cấu trúc bình luận cân bằng.' },
   { id: 'q2', question: '"利大于弊" (lì dàyú bì) nghĩa là gì? / What does 利大于弊 mean?', options: ['Lợi nhiều hơn hại|||Advantages outweigh disadvantages', 'Hại nhiều hơn lợi|||Disadvantages outweigh advantages', 'Không có lợi cũng không có hại|||Neither good nor bad', 'Chỉ có hại|||Only harmful'], correctIndex: 0, explanation: '利 (lợi) 大于 (lớn hơn) 弊 (hại) = lợi nhiều hơn hại.' },
   { id: 'q3', question: 'Cụm nào dùng để MỞ ĐẦU một nhận xét cá nhân về hiện tượng? / Which phrase OPENS a personal comment on a phenomenon?', options: ['给我的印象是…|||The impression it gives me is …', '多少钱？|||How much?', '再见|||Goodbye', '不客气|||You are welcome'], correctIndex: 0, explanation: '给我的印象是 gěi wǒ de yìnxiàng shì = ấn tượng của tôi là — mở đầu một nhận xét.' },
 ]);
 
-const c3 = doc('chs401-3-1-opinion-defend', 'Chapter 3 — Expressing &amp; defending personal opinions|||Chương 3 — Bày tỏ &amp; bảo vệ quan điểm cá nhân',
+const c3 = doc('chs401-3-1-opinion-defend', 'Chapter 3 — Expressing & defending personal opinions|||Chương 3 — Bày tỏ & bảo vệ quan điểm cá nhân',
   'Mẫu câu: 就我而言, 我坚持认为, 换个角度说, 不得不承认; từ 立场/说服力/理由/让步; luyện bảo vệ quan điểm khi bị phản đối.',
   [[
     `<span class="eyebrow">CHS401 · Chapter 3 · Defending opinions</span>
@@ -310,13 +310,13 @@ B: 换个角度说，不得不承认网课确实节省时间，但面对面交�
 <div class="callout"><span class="badge">Ghi chú lưu loát</span> Bảo vệ quan điểm không phải là lặp lại to hơn. Dùng 不得不承认 để nhượng bộ một điểm thật, rồi chốt bằng 但 + lý do mạnh nhất — nhượng bộ trước khiến ý cuối càng có lực, không phải yếu đi.</div>`,
   ]]);
 
-const c3q = quiz('chs401-quiz-3', 'Quiz 3 — Expressing &amp; defending opinions|||Quiz 3 — Bày tỏ &amp; bảo vệ quan điểm', [
+const c3q = quiz('chs401-quiz-3', 'Quiz 3 — Expressing & defending opinions|||Quiz 3 — Bày tỏ & bảo vệ quan điểm', [
   { id: 'q1', question: 'Vì sao nên dùng 不得不承认 TRƯỚC KHI chốt ý bảo vệ bằng 但…? / Why concede with 不得不承认 BEFORE landing your point with 但…?', options: ['Vì nhượng bộ trước khiến ý chốt sau có lực hơn, nghe khách quan hơn|||Conceding first makes the final point land harder and sound more objective', 'Vì phải nói đủ số câu quy định|||Because a fixed sentence count is required', 'Vì tránh phải dùng 但|||To avoid using 但 at all', 'Vì đó là cách chào hỏi|||Because it is a greeting'], correctIndex: 0, explanation: 'Nhượng bộ một điểm thật (不得不承认) trước rồi chốt lý do mạnh nhất bằng 但 khiến lập luận thuyết phục hơn.' },
   { id: 'q2', question: '"就我而言" (jiù wǒ ér yán) dùng để làm gì? / What is 就我而言 used for?', options: ['Mở đầu quan điểm cá nhân — đối với tôi|||Open a personal opinion — as for me', 'Hỏi giờ|||Ask the time', 'Cảm ơn|||Say thank you', 'Xin lỗi|||Apologize'], correctIndex: 0, explanation: '就我而言 = đối với tôi / as for me — mở đầu một quan điểm cá nhân.' },
   { id: 'q3', question: 'Cấu trúc "虽然…，但是…" trong đoạn hội thoại dùng để làm gì? / What does 虽然…，但是… do in the dialogue?', options: ['Thừa nhận lý do của người khác rồi vẫn giữ lập trường riêng|||Acknowledge the other side\'s reason while still holding one\'s own stance', 'Kết thúc cuộc nói chuyện|||End the conversation', 'Đề nghị giúp đỡ|||Offer help', 'Giới thiệu tên|||Introduce a name'], correctIndex: 0, explanation: '虽然 A 但是 B công nhận A của đối phương rồi vẫn giữ quan điểm B của mình.' },
 ]);
 
-const c4 = doc('chs401-4-1-negotiation', 'Chapter 4 — Group discussion &amp; negotiation|||Chương 4 — Thảo luận nhóm &amp; đàm phán',
+const c4 = doc('chs401-4-1-negotiation', 'Chapter 4 — Group discussion & negotiation|||Chương 4 — Thảo luận nhóm & đàm phán',
   'Mẫu câu: 我同意你的看法,不过, 我们不妨, 折中一下, 各退一步; từ 协商/妥协/达成共识/分歧; luyện đàm phán để đạt thoả thuận.',
   [[
     `<span class="eyebrow">CHS401 · Chapter 4 · Negotiation</span>
@@ -381,7 +381,7 @@ B: 好，那就折中一下，先在图书馆讨论，晚上再去咖啡馆继�
 <div class="callout"><span class="badge">Ghi chú lưu loát</span> 我同意你的看法，不过… đồng ý trước rồi mới bất đồng — đừng bao giờ mở đầu đàm phán bằng một chữ 不 khô khan. Chốt thoả thuận bằng 各退一步，达成共识, một cụm cố định báo hiệu cuộc đàm phán đã XONG.</div>`,
   ]]);
 
-const c4q = quiz('chs401-quiz-4', 'Quiz 4 — Group discussion &amp; negotiation|||Quiz 4 — Thảo luận nhóm &amp; đàm phán', [
+const c4q = quiz('chs401-quiz-4', 'Quiz 4 — Group discussion & negotiation|||Quiz 4 — Thảo luận nhóm & đàm phán', [
   { id: 'q1', question: 'Vì sao KHÔNG nên mở đầu một cuộc đàm phán bằng một chữ 不 khô khan? / Why NOT open a negotiation with a flat 不?', options: ['Vì nó bác bỏ ngay, làm mất cơ hội thương lượng; nên đồng ý trước bằng 我同意你的看法,不过…|||It rejects outright and kills room to negotiate; agree first with 我同意你的看法, 不过…', 'Vì 不 khó phát âm|||Because 不 is hard to pronounce', 'Vì 不 chỉ dùng trong văn viết|||Because 不 is written-only', 'Vì phải nói tiếng Anh trước|||Because English must come first'], correctIndex: 0, explanation: 'Mở đầu bằng đồng ý một phần (我同意你的看法，不过…) giữ được không khí hợp tác trước khi nêu bất đồng.' },
   { id: 'q2', question: '"各退一步，达成共识" báo hiệu điều gì trong một cuộc đàm phán? / What does 各退一步，达成共识 signal in a negotiation?', options: ['Cuộc đàm phán đã kết thúc bằng một thoả thuận|||The negotiation has ended in an agreement', 'Cuộc đàm phán vừa mới bắt đầu|||The negotiation has just started', 'Hai bên không đồng ý gì cả|||Both sides agree on nothing', 'Một bên bỏ cuộc|||One side gave up'], correctIndex: 0, explanation: '各退一步 (mỗi bên lùi một bước) 达成共识 (đạt đồng thuận) là cụm cố định báo hiệu thoả thuận đã đạt được.' },
   { id: 'q3', question: '"折中一下" (zhézhōng yīxià) nghĩa là gì? / What does 折中一下 mean?', options: ['Thoả hiệp/chọn phương án trung gian một chút|||Compromise / find a middle ground a bit', 'Từ chối hoàn toàn|||Reject completely', 'Đồng ý hoàn toàn|||Fully agree', 'Im lặng không nói|||Stay silent'], correctIndex: 0, explanation: '折中 zhézhōng = chọn phương án ở giữa, một dạng thoả hiệp.' },
@@ -458,7 +458,7 @@ const c5q = quiz('chs401-quiz-5', 'Quiz 5 — Structured presentation|||Quiz 5 �
   { id: 'q3', question: 'Cụm nào dùng để MỞ ĐẦU một bài thuyết trình? / Which phrase OPENS a presentation?', options: ['大家好，今天我想跟大家谈谈…|||Hello everyone, today I want to talk to you about …', '谢谢大家的聆听|||Thank you all for listening', '再见|||Goodbye', '多少钱？|||How much?'], correctIndex: 0, explanation: '大家好，今天我想跟大家谈谈… là câu mở đầu quen thuộc của một bài thuyết trình.' },
 ]);
 
-const c6 = doc('chs401-6-1-professional', 'Chapter 6 — Professional &amp; interview communication|||Chương 6 — Giao tiếp công việc &amp; phỏng vấn chuyên nghiệp',
+const c6 = doc('chs401-6-1-professional', 'Chapter 6 — Professional & interview communication|||Chương 6 — Giao tiếp công việc & phỏng vấn chuyên nghiệp',
   'Mẫu câu: 请问, 能否请您, 我的优势在于, 我期待, 敬请指教; từ 简历/胜任/面试官/汇报; luyện trả lời phỏng vấn xin việc.',
   [[
     `<span class="eyebrow">CHS401 · Chapter 6 · Professional</span>
@@ -525,7 +525,7 @@ B: 当然。在上一家公司，我负责每周向经理汇报项目进度，�
 <div class="callout"><span class="badge">Ghi chú lưu loát</span> 我的优势在于… phải đi kèm một VÍ DỤ CỤ THỂ, không chỉ một tính từ suông — đó là lý do hội thoại chuyển ngay sang 举个例子. Điểm mạnh mơ hồ không thuyết phục được 面试官.</div>`,
   ]]);
 
-const c6q = quiz('chs401-quiz-6', 'Quiz 6 — Professional &amp; interview communication|||Quiz 6 — Giao tiếp công việc &amp; phỏng vấn', [
+const c6q = quiz('chs401-quiz-6', 'Quiz 6 — Professional & interview communication|||Quiz 6 — Giao tiếp công việc & phỏng vấn', [
   { id: 'q1', question: 'Sau khi nói "我的优势在于…" nên tiếp tục bằng gì để thuyết phục? / What should follow 我的优势在于… to be persuasive?', options: ['Một ví dụ cụ thể minh chứng cho điểm mạnh đó|||A concrete example proving that strength', 'Chuyển sang chào tạm biệt ngay|||Move straight to a goodbye', 'Hỏi về lương ngay lập tức|||Ask about salary immediately', 'Im lặng chờ câu hỏi tiếp|||Stay silent and wait for the next question'], correctIndex: 0, explanation: 'Điểm mạnh mơ hồ không thuyết phục — phải có ví dụ cụ thể (举个例子) đi kèm.' },
   { id: 'q2', question: '"敬请指教" (jìngqǐng zhǐjiào) dùng trong tình huống nào? / When is 敬请指教 used?', options: ['Câu kết trang trọng, lịch sự trong giao tiếp công việc|||A formal, polite closing in professional communication', 'Khi mặc cả giá|||When haggling over price', 'Khi từ chối phỏng vấn|||When declining an interview', 'Khi gọi món ăn|||When ordering food'], correctIndex: 0, explanation: '敬请指教 = rất mong được chỉ dẫn — câu kết lịch sự, trang trọng.' },
   { id: 'q3', question: '"汇报" (huìbào) trong ngữ cảnh công việc nghĩa là gì? / What does 汇报 mean in a work context?', options: ['Báo cáo (tiến độ công việc)|||To report (work progress)', 'Nghỉ việc|||To resign', 'Tăng lương|||To get a raise', 'Đi họp muộn|||To be late for a meeting'], correctIndex: 0, explanation: '汇报 = báo cáo, thường dùng cho báo cáo tiến độ công việc lên cấp trên.' },
@@ -604,7 +604,7 @@ const c7q = quiz('chs401-quiz-7', 'Quiz 7 — Debating a social topic|||Quiz 7 �
   { id: 'q3', question: '"我方观点是…" mở đầu cho điều gì? / What does 我方观点是… open?', options: ['Việc nêu rõ lập trường của phe mình trong tranh luận|||Stating one\'s side\'s position clearly in a debate', 'Một lời chào hỏi thông thường|||An everyday greeting', 'Một lời mời ăn tối|||A dinner invitation', 'Một câu hỏi giá cả|||A price question'], correctIndex: 0, explanation: '我方观点是 = quan điểm của phe chúng tôi là — câu nêu lập trường rõ ràng khi tranh luận.' },
 ]);
 
-const c8 = doc('chs401-8-1-review-fluency', 'Chapter 8 — Review: rhetoric, rebuttal &amp; fluency drills|||Chương 8 — Ôn tập: hùng biện, phản biện tình huống &amp; luyện nói lưu loát',
+const c8 = doc('chs401-8-1-review-fluency', 'Chapter 8 — Review: rhetoric, rebuttal & fluency drills|||Chương 8 — Ôn tập: hùng biện, phản biện tình huống & luyện nói lưu loát',
   'Mẫu câu: 这么说吧, 怎么说呢, 也就是说, 一言以蔽之; từ 流利/临场/应变能力/连贯; luyện phản biện tại chỗ khi bí từ.',
   [[
     `<span class="eyebrow">CHS401 · Chapter 8 · Review</span>
@@ -669,7 +669,7 @@ B: 怎么说呢，我会用简单的话解释，也就是说，用我会的词�
 <div class="callout"><span class="badge">Ghi chú lưu loát</span> Cả môn học này là một chuỗi: 首先…然后… (Chương 1) kể chuyện, 给我的印象是 (Chương 2) bình luận, 我坚持认为 (Chương 3) bảo vệ, 我们不妨 (Chương 4) đàm phán, 今天我想跟大家谈谈 (Chương 5) thuyết trình, 我的优势在于 (Chương 6) thể hiện bản thân, 我方观点是 (Chương 7) tranh luận — và 这么说吧 / 也就是说 (Chương 8) là lưới an toàn giữ cho BẤT KỲ mẫu nào trong số đó vẫn trôi chảy khi bạn bí một từ.</div>`,
   ]]);
 
-const c8q = quiz('chs401-quiz-8', 'Quiz 8 — Review: rhetoric &amp; fluency|||Quiz 8 — Ôn tập: hùng biện &amp; lưu loát', [
+const c8q = quiz('chs401-quiz-8', 'Quiz 8 — Review: rhetoric & fluency|||Quiz 8 — Ôn tập: hùng biện & lưu loát', [
   { id: 'q1', question: 'Khi bí một từ tiếng Trung giữa lúc nói, cách xử lý ĐÚNG theo bài học là gì? / When you get stuck on a word mid-speech, what is the RIGHT move taught here?', options: ['Ngắt 2-3 giây rồi diễn đạt lại bằng 也就是说/怎么说呢, dùng từ đã biết vòng qua|||Pause 2-3 seconds, then rephrase with 也就是说/怎么说呢, working around it with known words', 'Dừng hẳn cuộc nói và bỏ cuộc|||Stop the talk entirely and give up', 'Nói tiếng Việt xen vào|||Switch to Vietnamese mid-sentence', 'Nói càng nhanh càng tốt để che lấp|||Speed up as much as possible to hide it'], correctIndex: 0, explanation: 'Ngắt ngắn rồi diễn đạt lại bằng từ đã biết (也就是说, 怎么说呢) giữ được sự lưu loát — 流利 quan trọng hơn hoàn hảo.' },
   { id: 'q2', question: '"一言以蔽之" (yī yán yǐ bì zhī) dùng để làm gì? / What is 一言以蔽之 used for?', options: ['Tóm lại một câu, ngay tại chỗ|||To summarize in a word, on the spot', 'Mở đầu một câu chuyện dài|||To open a long story', 'Từ chối trả lời|||To refuse to answer', 'Hỏi lại câu hỏi|||To ask the question back'], correctIndex: 0, explanation: '一言以蔽之 = tóm lại một câu — cách tóm gọn trang trọng, dùng khi cần kết luận nhanh.' },
   { id: 'q3', question: 'Vì sao 这么说吧 / 怎么说呢 được gọi là "lưới an toàn" của cả môn học? / Why are 这么说吧 / 怎么说呢 called the course\'s "safety net"?', options: ['Vì chúng giữ lời nói trôi chảy trong MỌI kỹ năng đã học (kể chuyện, bình luận, tranh luận…) khi người nói cần thời gian nghĩ|||Because they keep speech fluent across EVERY skill learned (narrating, commenting, debating…) when the speaker needs a beat to think', 'Vì chúng chỉ dùng được trong phỏng vấn|||Because they only work in interviews', 'Vì chúng thay thế toàn bộ từ vựng đã học|||Because they replace all vocabulary learned', 'Vì chúng là câu chào hỏi|||Because they are greetings'], correctIndex: 0, explanation: 'Các từ đệm này hoạt động xuyên suốt mọi kỹ năng của 8 chương, giữ lưu loát khi bí từ hoặc cần thời gian tổ chức ý.' },
@@ -693,15 +693,15 @@ export default {
     requirements: 'Nên học xong CHS301 (giao tiếp HSK4: nêu &amp; bảo vệ quan điểm về công việc, giáo dục, công nghệ, môi trường, văn hoá, sức khoẻ, tranh luận, thuyết trình) trước khi vào môn này. Cài Pleco hoặc HelloChinese để nghe audio bản ngữ &amp; luyện nói theo; hãy nói to, tự thu âm để so với mẫu, và tập giữ mạch một lượt nói dài chứ không chỉ một câu.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình luyện nói|||📚 Course materials', description: 'Advanced Spoken Chinese, HSK Standard Course 5 (口语), app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình luyện nói|||📚 Course materials', description: 'Advanced Spoken Chinese, HSK Standard Course 5 (口语), app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHS301: mục tiêu khẩu ngữ HSK5 là sự trôi chảy qua 8 chương.', lessons: [intro] },
-    { title: 'Chương 1 — Kể chuyện &amp; thuật lại có mạch lạc|||Chapter 1 — Narrating &amp; retelling', description: '事情是这样的, 首先…然后…接着…最后…, 结果, 情节, 转折.', lessons: [c1, c1q] },
-    { title: 'Chương 2 — Miêu tả &amp; bình luận sự vật, hiện tượng|||Chapter 2 — Describing &amp; commenting', description: '给我的印象是, 不可否认, 总的来说, 现象, 利大于弊.', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Bày tỏ &amp; bảo vệ quan điểm cá nhân|||Chapter 3 — Expressing &amp; defending opinions', description: '就我而言, 我坚持认为, 换个角度说, 不得不承认, 立场.', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Thảo luận nhóm &amp; đàm phán|||Chapter 4 — Group discussion &amp; negotiation', description: '我同意你的看法不过, 我们不妨, 折中一下, 各退一步, 达成共识.', lessons: [c4, c4q] },
+    { title: 'Chương 1 — Kể chuyện & thuật lại có mạch lạc|||Chapter 1 — Narrating & retelling', description: '事情是这样的, 首先…然后…接着…最后…, 结果, 情节, 转折.', lessons: [c1, c1q] },
+    { title: 'Chương 2 — Miêu tả & bình luận sự vật, hiện tượng|||Chapter 2 — Describing & commenting', description: '给我的印象是, 不可否认, 总的来说, 现象, 利大于弊.', lessons: [c2, c2q] },
+    { title: 'Chương 3 — Bày tỏ & bảo vệ quan điểm cá nhân|||Chapter 3 — Expressing & defending opinions', description: '就我而言, 我坚持认为, 换个角度说, 不得不承认, 立场.', lessons: [c3, c3q] },
+    { title: 'Chương 4 — Thảo luận nhóm & đàm phán|||Chapter 4 — Group discussion & negotiation', description: '我同意你的看法不过, 我们不妨, 折中一下, 各退一步, 达成共识.', lessons: [c4, c4q] },
     { title: 'Chương 5 — Thuyết trình có cấu trúc trước đám đông|||Chapter 5 — Structured presentation', description: '今天我想跟大家谈谈, 接下来, 大家有没有想过, 谢谢大家的聆听, 开场白.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Giao tiếp công việc &amp; phỏng vấn chuyên nghiệp|||Chapter 6 — Professional &amp; interview communication', description: '请问, 能否请您, 我的优势在于, 我期待, 敬请指教.', lessons: [c6, c6q] },
+    { title: 'Chương 6 — Giao tiếp công việc & phỏng vấn chuyên nghiệp|||Chapter 6 — Professional & interview communication', description: '请问, 能否请您, 我的优势在于, 我期待, 敬请指教.', lessons: [c6, c6q] },
     { title: 'Chương 7 — Tranh luận về chủ đề xã hội|||Chapter 7 — Debating a social topic', description: '众所周知, 有人认为…而另一些人认为, 正如…所说, 我方观点是, 从长远来看.', lessons: [c7, c7q] },
-    { title: 'Chương 8 — Ôn tập: hùng biện, phản biện tình huống &amp; luyện nói lưu loát|||Chapter 8 — Review: rhetoric, rebuttal &amp; fluency', description: '这么说吧, 怎么说呢, 也就是说, 一言以蔽之, 流利.', lessons: [c8, c8q] },
+    { title: 'Chương 8 — Ôn tập: hùng biện, phản biện tình huống & luyện nói lưu loát|||Chapter 8 — Review: rhetoric, rebuttal & fluency', description: '这么说吧, 怎么说呢, 也就是说, 一言以蔽之, 流利.', lessons: [c8, c8q] },
   ],
 };

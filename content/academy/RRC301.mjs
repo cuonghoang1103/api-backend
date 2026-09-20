@@ -86,7 +86,7 @@ const taiLieu = doc('rrc301-0-0-tai-lieu', '📚 Course materials & references||
 </ol></div>`,
   ]]);
 
-const intro = doc('rrc301-0-1-overview', 'Course overview: ROS &amp; robot control|||Tổng quan: ROS & điều khiển robot',
+const intro = doc('rrc301-0-1-overview', 'Course overview: ROS & robot control|||Tổng quan: ROS & điều khiển robot',
   'ROS là gì và giải quyết vấn đề gì; lộ trình từ node/topic → service/action → TF/URDF → cảm biến & mô phỏng → điều khiển & định vị → dự án tích hợp.',
   [[
     `<span class="eyebrow">RRC301 · Lesson 0.1 · Overview</span>
@@ -105,7 +105,7 @@ const intro = doc('rrc301-0-1-overview', 'Course overview: ROS &amp; robot contr
 <p>Tổng quan &amp; kiến trúc ROS → node, topic &amp; message → service &amp; action → hệ toạ độ &amp; TF (URDF) → cảm biến &amp; mô phỏng (Gazebo, RViz) → điều khiển chuyển động (cmd_vel, PID) → định vị, SLAM &amp; điều hướng → dự án điều khiển robot cuối môn. Song ngữ, có code Python (rclpy) và C++ (rclcpp), mỗi chương một quiz.</p>`,
   ]]);
 
-const c1 = doc('rrc301-1-1-ros-overview', '1.1 — ROS overview &amp; architecture|||1.1 — Tổng quan & kiến trúc ROS',
+const c1 = doc('rrc301-1-1-ros-overview', '1.1 — ROS overview & architecture|||1.1 — Tổng quan & kiến trúc ROS',
   'ROS là gì, vì sao dùng; ROS 1 vs ROS 2 (DDS, không còn master); kiến trúc phân tán: node, graph, workspace, package.',
   [[
     `<span class="eyebrow">RRC301 · Chapter 1 · Lesson 1.1</span>
@@ -152,7 +152,7 @@ const c1q = quiz('rrc301-quiz-1', 'Quiz 1 — ROS overview|||Quiz 1 — Tổng q
   { id: 'q3', question: 'Một hệ ROS đang chạy được mô tả tốt nhất là?', options: ['Một file duy nhất', 'Đồ thị các node nối bằng topic', 'Một bảng cơ sở dữ liệu', 'Một vòng lặp while'], correctIndex: 1, explanation: 'Computation graph: node (chương trình) nối nhau qua các kênh topic.' },
 ]);
 
-const c2 = doc('rrc301-2-1-node-topic-message', '2.1 — Nodes, topics &amp; messages|||2.1 — Node, topic & message',
+const c2 = doc('rrc301-2-1-node-topic-message', '2.1 — Nodes, topics & messages|||2.1 — Node, topic & message',
   'Node là gì; topic là kênh có tên; message là kiểu dữ liệu; mô hình publisher/subscriber bất đồng bộ, nhiều-tới-nhiều; CLI rostopic/ros2 topic.',
   [[
     `<span class="eyebrow">RRC301 · Chapter 2 · Lesson 2.1</span>
@@ -253,7 +253,7 @@ const c2q = quiz('rrc301-quiz-2', 'Quiz 2 — Nodes & topics|||Quiz 2 — Node &
   { id: 'q3', question: 'Lệnh nào xem dữ liệu đang chảy trên một topic?', options: ['ros2 run', 'ros2 topic echo /chatter', 'colcon build', 'ros2 node kill'], correctIndex: 1, explanation: 'ros2 topic echo in ra message; topic hz đo tần số.' },
 ]);
 
-const c3 = doc('rrc301-3-1-service-action', '3.1 — Services &amp; actions|||3.1 — Service & action',
+const c3 = doc('rrc301-3-1-service-action', '3.1 — Services & actions|||3.1 — Service & action',
   'Service = gọi request/response đồng bộ; action = mục tiêu chạy lâu, có feedback + huỷ được; khi nào dùng topic vs service vs action.',
   [[
     `<span class="eyebrow">RRC301 · Chapter 3 · Lesson 3.1</span>
@@ -314,7 +314,7 @@ const c3q = quiz('rrc301-quiz-3', 'Quiz 3 — Services & actions|||Quiz 3 — Se
   { id: 'q3', question: 'Điểm khác của action so với service?', options: ['Action không trả kết quả', 'Action có feedback liên tục và huỷ được', 'Action luôn nhanh hơn', 'Action không cần server'], correctIndex: 1, explanation: 'Action bất đồng bộ, phát feedback định kỳ, trả result, cho phép cancel.' },
 ]);
 
-const c4 = doc('rrc301-4-1-frames-tf', '4.1 — Coordinate frames &amp; TF|||4.1 — Hệ toạ độ & TF',
+const c4 = doc('rrc301-4-1-frames-tf', '4.1 — Coordinate frames & TF|||4.1 — Hệ toạ độ & TF',
   'Vì sao cần nhiều hệ toạ độ (map, odom, base_link, sensor); tf2 cây transform theo thời gian; URDF mô tả khớp/khâu robot.',
   [[
     `<span class="eyebrow">RRC301 · Chapter 4 · Lesson 4.1</span>
@@ -375,7 +375,7 @@ const c4q = quiz('rrc301-quiz-4', 'Quiz 4 — Frames & TF|||Quiz 4 — Hệ to�
   { id: 'q3', question: 'File URDF mô tả điều gì?', options: ['Bản đồ môi trường', 'Link (khâu) và joint (khớp) của robot', 'Thuật toán SLAM', 'Lịch chạy node'], correctIndex: 1, explanation: 'URDF là XML gồm link nối bằng joint; ROS dùng để phát TF và vẽ RViz.' },
 ]);
 
-const c5 = doc('rrc301-5-1-sensors-simulation', '5.1 — Sensors &amp; simulation|||5.1 — Cảm biến & mô phỏng',
+const c5 = doc('rrc301-5-1-sensors-simulation', '5.1 — Sensors & simulation|||5.1 — Cảm biến & mô phỏng',
   'Cảm biến trong ROS (LaserScan, Image, Imu, Odometry) qua topic; Gazebo mô phỏng vật lý + cảm biến; RViz trực quan hoá dữ liệu, không phải mô phỏng.',
   [[
     `<span class="eyebrow">RRC301 · Chapter 5 · Lesson 5.1</span>
@@ -483,7 +483,7 @@ const c6q = quiz('rrc301-quiz-6', 'Quiz 6 — Motion control|||Quiz 6 — Điề
   { id: 'q3', question: 'Thành phần D trong PID có vai trò gì?', options: ['Khử sai số tĩnh', 'Dập vọt lố / dao động', 'Tăng tốc tối đa', 'Đọc cảm biến'], correctIndex: 1, explanation: 'D phản ứng theo tốc độ thay đổi sai số → giảm overshoot; I khử lệch tĩnh.' },
 ]);
 
-const c7 = doc('rrc301-7-1-localization-slam-nav', '7.1 — Localization, SLAM &amp; navigation|||7.1 — Định vị, SLAM & điều hướng',
+const c7 = doc('rrc301-7-1-localization-slam-nav', '7.1 — Localization, SLAM & navigation|||7.1 — Định vị, SLAM & điều hướng',
   'Định vị (tôi ở đâu trên bản đồ, AMCL); SLAM (vừa lập bản đồ vừa định vị); ngăn xếp điều hướng Nav2: global/local planner, costmap, recovery.',
   [[
     `<span class="eyebrow">RRC301 · Chapter 7 · Lesson 7.1</span>
@@ -524,7 +524,7 @@ const c7q = quiz('rrc301-quiz-7', 'Quiz 7 — Localization & navigation|||Quiz 7
   { id: 'q3', question: 'Vai trò của local planner trong Nav2?', options: ['Tìm đường trên toàn bản đồ tĩnh', 'Sinh cmd_vel ngắn hạn, né vật cản mới', 'Lưu bản đồ ra file', 'Khởi động DDS'], correctIndex: 1, explanation: 'Local planner biến lộ trình thành vận tốc an toàn, phản ứng vật cản mới.' },
 ]);
 
-const c8 = doc('rrc301-8-1-project-integration', '8.1 — Project &amp; integration|||8.1 — Dự án & tích hợp',
+const c8 = doc('rrc301-8-1-project-integration', '8.1 — Project & integration|||8.1 — Dự án & tích hợp',
   'Ghép mọi thứ: node đọc laser (cảm biến) → quyết định → phát cmd_vel (điều khiển); ví dụ tránh vật cản; đóng gói package + launch; kiểm bằng CLI.',
   [[
     `<span class="eyebrow">RRC301 · Chapter 8 · Lesson 8.1</span>

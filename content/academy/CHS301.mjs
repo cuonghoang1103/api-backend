@@ -101,7 +101,7 @@ const intro = doc('chs301-0-1-overview', 'Course overview: Chinese Speaking 4|||
 <p>Công việc &amp; sự nghiệp → giáo dục → công nghệ &amp; AI → môi trường &amp; lối sống → văn hoá &amp; du lịch → sức khoẻ &amp; tâm lý → tranh luận có phản biện → thuyết trình ngắn.</p>`,
   ]]);
 
-const b1 = doc('chs301-1-1-work-careers', 'Lesson 1 — Work &amp; careers|||Bài 1 — Bàn về công việc &amp; sự nghiệp',
+const b1 = doc('chs301-1-1-work-careers', 'Lesson 1 — Work & careers|||Bài 1 — Bàn về công việc & sự nghiệp',
   'Mẫu câu: 在我看来…, 一方面…另一方面…, 与其…不如…; từ 职业规划/跳槽/工作压力/平衡; luyện nêu quan điểm về công việc.',
   [[
     `<span class="eyebrow">CHS301 · Lesson 1 · Work</span>
@@ -166,7 +166,7 @@ B: 你说得有道理。不过我认为，与其每天加班，不如找一个�
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 在我看来 mở đầu quan điểm — đọc liền thành một khối rồi ngắt. 与其 A 不如 B cân hai lựa chọn và ngả về B; nhấn 不如 để báo hiệu điều bạn chọn.</div>`,
   ]]);
 
-const b1q = quiz('chs301-quiz-1', 'Quiz 1 — Work &amp; careers|||Quiz 1 — Công việc &amp; sự nghiệp', [
+const b1q = quiz('chs301-quiz-1', 'Quiz 1 — Work & careers|||Quiz 1 — Công việc & sự nghiệp', [
   { id: 'q1', question: 'Cụm nào mở đầu một quan điểm cá nhân? / Which phrase opens a personal opinion?', options: ['在我看来…', '多少钱？', '怎么走？', '再见'], correctIndex: 0, explanation: '在我看来 zài wǒ kànlái = theo tôi thấy / in my view — mở đầu một ý kiến.' },
   { id: 'q2', question: '"与其每天加班，不如找一个更有前途的工作" nghĩa là gì? / What does 与其…不如… express here?', options: ['Thay vì làm thêm mỗi ngày, chi bằng tìm việc triển vọng hơn|||Rather than overtime daily, better find a job with prospects', 'Vừa làm thêm vừa tìm việc|||Do overtime and job-hunt at once', 'Không làm thêm cũng không tìm việc|||Neither overtime nor job-hunt', 'Làm thêm để được thăng chức|||Overtime to get promoted'], correctIndex: 0, explanation: '与其 A 不如 B = thay vì A, chi bằng B — cân nhắc rồi ngả về B.' },
   { id: 'q3', question: '"跳槽" (tiàocáo) nghĩa là gì? / What does 跳槽 mean?', options: ['Nhảy việc, đổi việc|||To change jobs', 'Làm thêm giờ|||To work overtime', 'Thăng chức|||To be promoted', 'Nghỉ hưu|||To retire'], correctIndex: 0, explanation: '跳槽 tiàocáo = nhảy việc, chuyển sang công ty khác.' },
@@ -314,7 +314,7 @@ const b3q = quiz('chs301-quiz-3', 'Quiz 3 — Views on technology|||Quiz 3 — Q
   { id: 'q3', question: '"我担心的是隐私问题" nghĩa là gì? / What does 我担心的是隐私问题 mean?', options: ['Điều tôi lo là vấn đề riêng tư|||What I worry about is privacy', 'Tôi thích công nghệ|||I like technology', 'Tôi không có mạng|||I have no internet', 'Tôi rất bận|||I am very busy'], correctIndex: 0, explanation: '我担心的是 … = điều tôi lo là …; 隐私 = quyền riêng tư.' },
 ]);
 
-const b4 = doc('chs301-4-1-environment', 'Lesson 4 — Environment &amp; lifestyle|||Bài 4 — Môi trường &amp; lối sống',
+const b4 = doc('chs301-4-1-environment', 'Lesson 4 — Environment & lifestyle|||Bài 4 — Môi trường & lối sống',
   'Mẫu câu: 为了…，我们应该…, 只有…才能…, 我不这么看; từ 环保/低碳/浪费/可持续; luyện thảo luận về môi trường.',
   [[
     `<span class="eyebrow">CHS301 · Lesson 4 · Environment</span>
@@ -379,13 +379,13 @@ B: 我不这么看。只有每个人都行动，才能实现可持续发展。 W
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 只有…才能… nêu một điều kiện cần — nhấn 只有 và 才能 để ý được chắc. 我不这么看 phản đối mà vẫn lịch sự; nói bình tĩnh, đừng gắt.</div>`,
   ]]);
 
-const b4q = quiz('chs301-quiz-4', 'Quiz 4 — Environment &amp; lifestyle|||Quiz 4 — Môi trường &amp; lối sống', [
+const b4q = quiz('chs301-quiz-4', 'Quiz 4 — Environment & lifestyle|||Quiz 4 — Môi trường & lối sống', [
   { id: 'q1', question: 'Cấu trúc "只有…才能…" diễn tả điều gì? / What does 只有…才能… express?', options: ['Chỉ khi … mới có thể …|||Only if … can …', 'Vừa … thì …|||As soon as …', 'Không những … mà còn …|||Not only … but also', 'Nếu … thì không|||If … not'], correctIndex: 0, explanation: '只有 A 才能 B = chỉ khi A mới có thể B — nêu điều kiện cần.' },
   { id: 'q2', question: '"我不这么看" dùng khi nào? / When do you use 我不这么看?', options: ['Khi phản đối một cách lịch sự|||To disagree politely', 'Khi đồng ý hoàn toàn|||To fully agree', 'Khi cảm ơn|||To say thanks', 'Khi xin lỗi|||To apologize'], correctIndex: 0, explanation: '我不这么看 = tôi không nghĩ như vậy — cách nêu ý phản đối nhẹ nhàng.' },
   { id: 'q3', question: '"垃圾分类" (lājī fēnlèi) nghĩa là gì? / What does 垃圾分类 mean?', options: ['Phân loại rác|||To sort garbage', 'Tiết kiệm điện|||Save power', 'Trồng cây|||Plant trees', 'Đổ nước|||Pour water'], correctIndex: 0, explanation: '垃圾 (rác) + 分类 (phân loại) = phân loại rác.' },
 ]);
 
-const b5 = doc('chs301-5-1-culture-travel', 'Lesson 5 — Culture &amp; travel|||Bài 5 — Văn hoá &amp; du lịch',
+const b5 = doc('chs301-5-1-culture-travel', 'Lesson 5 — Culture & travel|||Bài 5 — Văn hoá & du lịch',
   'Mẫu câu: 每个地方都有自己的…, 我印象最深的是…, 入乡随俗; từ 文化差异/风俗/体验/尊重; luyện nói về văn hoá &amp; du lịch.',
   [[
     `<span class="eyebrow">CHS301 · Lesson 5 · Culture</span>
@@ -450,13 +450,13 @@ B: 我觉得应该入乡随俗，尊重当地的习惯，这样也能开阔眼�
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 我印象最深的是… chọn ra điểm mạnh nhất của câu chuyện — nói chậm cho có sức nặng. 入乡随俗 là thành ngữ bốn chữ (rù-xiāng-suí-sú); giữ bốn âm tiết đều nhau.</div>`,
   ]]);
 
-const b5q = quiz('chs301-quiz-5', 'Quiz 5 — Culture &amp; travel|||Quiz 5 — Văn hoá &amp; du lịch', [
+const b5q = quiz('chs301-quiz-5', 'Quiz 5 — Culture & travel|||Quiz 5 — Văn hoá & du lịch', [
   { id: 'q1', question: '"入乡随俗" nghĩa là gì? / What does 入乡随俗 mean?', options: ['Nhập gia tuỳ tục|||When in Rome, do as Romans', 'Đi du lịch một mình|||Travel alone', 'Ở nhà nghỉ ngơi|||Stay home and rest', 'Học một ngoại ngữ|||Learn a language'], correctIndex: 0, explanation: '入乡随俗 = vào làng theo tục của làng — nhập gia tuỳ tục.' },
   { id: 'q2', question: '"我印象最深的是文化差异" nghĩa là gì? / What does the sentence mean?', options: ['Điều tôi ấn tượng nhất là sự khác biệt văn hoá|||What impressed me most is the cultural difference', 'Tôi quên mất đường|||I forgot the way', 'Tôi thích ăn cay|||I like spicy food', 'Tôi đến muộn|||I was late'], correctIndex: 0, explanation: '我印象最深的是 … = điều tôi ấn tượng nhất là …; 文化差异 = khác biệt văn hoá.' },
   { id: 'q3', question: 'Cặp "虽然…但是…" diễn tả điều gì? / What does 虽然…但是… express?', options: ['Tuy … nhưng …|||Although … but …', 'Vì … nên …|||Because … so …', 'Chỉ khi … mới …|||Only if … then', 'Vừa … đã …|||As soon as …'], correctIndex: 0, explanation: '虽然 A 但是 B = tuy A nhưng B — nêu điều tương phản.' },
 ]);
 
-const b6 = doc('chs301-6-1-mental-health', 'Lesson 6 — Health &amp; the mind|||Bài 6 — Sức khoẻ &amp; tâm lý',
+const b6 = doc('chs301-6-1-mental-health', 'Lesson 6 — Health & the mind|||Bài 6 — Sức khoẻ & tâm lý',
   'Mẫu câu: 最近我感到…, 如果…的话，可以…, 保持…的心态; từ 心理健康/情绪/放松/调整; luyện nói về sức khoẻ tâm lý.',
   [[
     `<span class="eyebrow">CHS301 · Lesson 6 · The mind</span>
@@ -521,7 +521,7 @@ B: 如果心情不好的话，可以去锻炼，或者跟朋友聊聊。保持�
 <div class="callout"><span class="badge">Ghi chú ngữ điệu</span> 把…放在心上 nghĩa là để bụng, canh cánh; 别把…放在心上 là lời khuyên thân mật quen thuộc. 保持积极的心态 là cụm đi liền nhau — học bốn chữ như một khối.</div>`,
   ]]);
 
-const b6q = quiz('chs301-quiz-6', 'Quiz 6 — Health &amp; the mind|||Quiz 6 — Sức khoẻ &amp; tâm lý', [
+const b6q = quiz('chs301-quiz-6', 'Quiz 6 — Health & the mind|||Quiz 6 — Sức khoẻ & tâm lý', [
   { id: 'q1', question: '"别把什么事都放在心上" nghĩa là gì? / What does 别把什么事都放在心上 mean?', options: ['Đừng để chuyện gì cũng canh cánh trong lòng|||Do not take everything to heart', 'Đừng đi làm hôm nay|||Do not go to work today', 'Đừng ăn đồ lạnh|||Do not eat cold food', 'Đừng nói chuyện|||Do not talk'], correctIndex: 0, explanation: '把 … 放在心上 = để bụng; 别 … = đừng — đừng để mọi chuyện canh cánh.' },
   { id: 'q2', question: 'Cụm "如果…的话，可以…" dùng để làm gì? / What is 如果…的话，可以… used for?', options: ['Đưa lời khuyên có điều kiện|||Give conditional advice', 'Hỏi đường|||Ask for directions', 'Từ chối|||Decline', 'Khen ngợi|||Praise'], correctIndex: 0, explanation: '如果 … 的话，可以 … = nếu … thì có thể … — đưa gợi ý theo điều kiện.' },
   { id: 'q3', question: '"保持积极的心态" nghĩa là gì? / What does 保持积极的心态 mean?', options: ['Giữ tâm thế tích cực|||Keep a positive mindset', 'Uống nhiều nước|||Drink more water', 'Ngủ sớm|||Sleep early', 'Ăn ít lại|||Eat less'], correctIndex: 0, explanation: '保持 (giữ) + 积极的 (tích cực) + 心态 (tâm thế) = giữ tâm thế tích cực.' },
@@ -687,14 +687,14 @@ export default {
     requirements: 'Nên học xong CHS201 &amp; CHS211 (giao tiếp HSK3: bản thân, lời khuyên, ý kiến, kể chuyện, nhà hàng, du lịch, phỏng vấn, so sánh) trước khi vào môn này. Cài Pleco hoặc HelloChinese để nghe audio bản ngữ &amp; luyện nói theo; hãy nói to và tự thu âm để so với mẫu, tập diễn đạt trọn một ý dài chứ không chỉ một câu.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成 中级篇, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình luyện nói|||📚 Course materials', description: 'Giáo trình khẩu ngữ 汉语口语速成 中级篇, app luyện nói, lộ trình 4 bước: nghe → bắt chước → luyện cặp → ứng dụng.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHS201/CHS211: mục tiêu giao tiếp HSK4, cách nêu &amp; bảo vệ quan điểm về chủ đề trừu tượng.', lessons: [intro] },
-    { title: 'Bài 1 — Bàn về công việc &amp; sự nghiệp|||Lesson 1 — Work &amp; careers', description: '在我看来, 一方面…另一方面, 与其…不如, 跳槽, 平衡.', lessons: [b1, b1q] },
+    { title: 'Bài 1 — Bàn về công việc & sự nghiệp|||Lesson 1 — Work & careers', description: '在我看来, 一方面…另一方面, 与其…不如, 跳槽, 平衡.', lessons: [b1, b1q] },
     { title: 'Bài 2 — Thảo luận giáo dục|||Lesson 2 — Discussing education', description: '从…的角度来看, 不但…而且, 我完全同意, 补习班, 减负.', lessons: [b2, b2q] },
     { title: 'Bài 3 — Quan điểm về công nghệ|||Lesson 3 — Views on technology', description: '随着…的发展, 凡事都有两面性, 我担心的是, 人工智能, 隐私.', lessons: [b3, b3q] },
-    { title: 'Bài 4 — Môi trường &amp; lối sống|||Lesson 4 — Environment &amp; lifestyle', description: '为了…我们应该, 只有…才能, 我不这么看, 低碳, 可持续.', lessons: [b4, b4q] },
-    { title: 'Bài 5 — Văn hoá &amp; du lịch|||Lesson 5 — Culture &amp; travel', description: '每个地方都有自己的, 我印象最深的是, 入乡随俗, 风俗, 尊重.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Sức khoẻ &amp; tâm lý|||Lesson 6 — Health &amp; the mind', description: '最近我感到, 保持积极的心态, 别把…放在心上, 情绪, 调整.', lessons: [b6, b6q] },
+    { title: 'Bài 4 — Môi trường & lối sống|||Lesson 4 — Environment & lifestyle', description: '为了…我们应该, 只有…才能, 我不这么看, 低碳, 可持续.', lessons: [b4, b4q] },
+    { title: 'Bài 5 — Văn hoá & du lịch|||Lesson 5 — Culture & travel', description: '每个地方都有自己的, 我印象最深的是, 入乡随俗, 风俗, 尊重.', lessons: [b5, b5q] },
+    { title: 'Bài 6 — Sức khoẻ & tâm lý|||Lesson 6 — Health & the mind', description: '最近我感到, 保持积极的心态, 别把…放在心上, 情绪, 调整.', lessons: [b6, b6q] },
     { title: 'Bài 7 — Tranh luận có phản biện|||Lesson 7 — Debate with rebuttal', description: '我不完全同意, 换个角度看, 首先…其次…最后, 理由, 立场.', lessons: [b7, b7q] },
     { title: 'Bài 8 — Thuyết trình chủ đề|||Lesson 8 — Giving a short speech', description: '今天我想跟大家谈谈, 我的主要论点是, 比如说, 综上所述, 总结.', lessons: [b8, b8q] },
   ],

@@ -107,7 +107,7 @@ const intro = doc('dgt302-0-1-overview', 'Course overview: Digital Signal Proces
 <p>Tín hiệu &amp; hệ LTI rời rạc (tích chập) → lấy mẫu &amp; khôi phục (Nyquist) → biến đổi Z → DTFT &amp; đáp ứng tần số → DFT &amp; FFT → thiết kế bộ lọc FIR → thiết kế bộ lọc IIR → ứng dụng DSP thực tế. Song ngữ, có công thức, ví dụ mẫu và quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('dgt302-1-1-signals-systems', '1.1 — Discrete signals &amp; LTI systems|||1.1 — Tín hiệu &amp; hệ rời rạc',
+const c1 = doc('dgt302-1-1-signals-systems', '1.1 — Discrete signals & LTI systems|||1.1 — Tín hiệu & hệ rời rạc',
   'Tín hiệu rời rạc x[n], các tín hiệu cơ bản (xung đơn vị, bậc thang, mũ); hệ LTI (tuyến tính, bất biến thời gian); tích chập y[n] = x[n] * h[n].',
   [[
     `<span class="eyebrow">DGT302 · Chapter 1 · Lesson 1.1</span>
@@ -162,7 +162,7 @@ const c1q = quiz('dgt302-quiz-1', 'Quiz 1 — Signals & LTI|||Quiz 1 — Tín hi
   { id: 'q3', question: 'Tính chất "bất biến thời gian" nghĩa là?', options: ['Trễ đầu vào thì đầu ra cũng trễ đúng bằng vậy', 'Đầu ra không đổi theo đầu vào', 'Hệ không có nhớ', 'Tín hiệu tuần hoàn'], correctIndex: 0, explanation: 'Bất biến thời gian: dịch đầu vào n0 mẫu thì đầu ra dịch đúng n0 mẫu.' },
 ]);
 
-const c2 = doc('dgt302-2-1-sampling', '2.1 — Sampling &amp; reconstruction|||2.1 — Lấy mẫu &amp; khôi phục',
+const c2 = doc('dgt302-2-1-sampling', '2.1 — Sampling & reconstruction|||2.1 — Lấy mẫu & khôi phục',
   'Lấy mẫu tín hiệu tương tự thành số; định lý lấy mẫu Nyquist (fs > 2·fmax); hiện tượng chồng phổ (aliasing); ADC/DAC và bộ lọc chống chồng phổ.',
   [[
     `<span class="eyebrow">DGT302 · Chapter 2 · Lesson 2.1</span>
@@ -254,7 +254,7 @@ const c3q = quiz('dgt302-quiz-3', 'Quiz 3 — Z-transform|||Quiz 3 — Biến đ
   { id: 'q3', question: 'Hệ nhân quả ổn định khi các điểm cực (pole) nằm ở đâu?', options: ['Ngoài đường tròn đơn vị', 'Trên trục thực', 'Trong đường tròn đơn vị (|z| < 1)', 'Tại gốc toạ độ'], correctIndex: 2, explanation: 'Mọi cực nằm trong đường tròn đơn vị thì hệ nhân quả ổn định.' },
 ]);
 
-const c4 = doc('dgt302-4-1-dtft', '4.1 — The DTFT &amp; frequency response|||4.1 — DTFT &amp; đáp ứng tần số',
+const c4 = doc('dgt302-4-1-dtft', '4.1 — The DTFT & frequency response|||4.1 — DTFT & đáp ứng tần số',
   'Biến đổi Fourier thời gian rời rạc X(e^jω) = Σ x[n]·e^(-jωn); phổ biên độ/pha; đáp ứng tần số H(e^jω) của hệ; quan hệ với biến đổi Z trên đường tròn đơn vị.',
   [[
     `<span class="eyebrow">DGT302 · Chapter 4 · Lesson 4.1</span>
@@ -301,7 +301,7 @@ const c4q = quiz('dgt302-quiz-4', 'Quiz 4 — DTFT|||Quiz 4 — DTFT', [
   { id: 'q3', question: 'Đáp ứng tần số H(e^jω) của bộ lọc thông thấp lớn ở đâu?', options: ['Ở tần số cao', 'Ở tần số thấp (quanh ω = 0)', 'Ở mọi tần số như nhau', 'Chỉ tại ω = π'], correctIndex: 1, explanation: 'Thông thấp cho qua ω nhỏ (|H| ≈ 1 quanh ω=0), chặn ω cao.' },
 ]);
 
-const c5 = doc('dgt302-5-1-dft-fft', '5.1 — DFT &amp; FFT|||5.1 — DFT &amp; FFT',
+const c5 = doc('dgt302-5-1-dft-fft', '5.1 — DFT & FFT|||5.1 — DFT & FFT',
   'Biến đổi Fourier rời rạc DFT X[k] = Σ x[n]·e^(-j2πkn/N) cho tín hiệu N mẫu; thuật toán FFT hạ độ phức tạp N^2 → N·log N; phân tích phổ, độ phân giải tần số.',
   [[
     `<span class="eyebrow">DGT302 · Chapter 5 · Lesson 5.1</span>

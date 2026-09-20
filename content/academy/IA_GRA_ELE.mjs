@@ -120,7 +120,7 @@ Thuyết trình + phản biện Tuần 12    10%
 <div class="callout"><span class="badge">Tư duy</span> Hãy xem đây như một dự án nghiên cứu + kỹ thuật nhỏ. Giám khảo chấm cao câu hỏi rõ ràng, phạm vi trung thực, phương pháp an toàn, và kết quả chạy được, tài liệu hoá tốt — không phải màn khai thác phô trương.</div>`,
   ]]);
 
-const c1 = doc('ia-gra-ele-1-1-chon-chu-de', '1.1 — What an elective is &amp; how to choose a topic|||1.1 — Học phần tự chọn là gì &amp; cách chọn chủ đề',
+const c1 = doc('ia-gra-ele-1-1-chon-chu-de', '1.1 — What an elective is & how to choose a topic|||1.1 — Học phần tự chọn là gì & cách chọn chủ đề',
   'Tự chọn khác môn thường thế nào; chọn chủ đề theo định hướng nghề (blue team, pentest phòng thủ, forensics, cloud, GRC); tiêu chí SMART; tránh chủ đề quá rộng/quá hẹp/không kiểm được.',
   [[
     `<span class="eyebrow">IA_GRA_ELE · Chapter 1 · Lesson 1.1</span>
@@ -226,7 +226,7 @@ const c2q = quiz('ia-gra-ele-quiz-2', 'Quiz 2 — Topic map|||Quiz 2 — Bản �
   { id: 'q3', question: 'MITRE ATT&CK cung cấp cho dự án điều gì?', options: ['Một bộ mã độc để chạy thử', 'Ngôn ngữ chung mô tả chiến thuật/kỹ thuật của kẻ tấn công', 'Giấy phép thử nghiệm hệ thống bất kỳ', 'Một trình biên dịch mã'], correctIndex: 1, explanation: 'ATT&CK là kho tri thức chuẩn hoá về chiến thuật và kỹ thuật, giúp mô tả và ánh xạ dự án theo ngôn ngữ chung.' },
 ]);
 
-const c3 = doc('ia-gra-ele-3-1-lab-an-toan', '3.1 — Tools &amp; a safe lab|||3.1 — Công cụ &amp; lab an toàn',
+const c3 = doc('ia-gra-ele-3-1-lab-an-toan', '3.1 — Tools & a safe lab|||3.1 — Công cụ & lab an toàn',
   'Dựng lab cách ly bằng VM (host-only/NAT), snapshot; luyện trên nền hợp pháp (TryHackMe, HackTheBox, CTF); nguyên tắc vàng: chỉ thử hệ thống bạn sở hữu hoặc được cho phép.',
   [[
     `<span class="eyebrow">IA_GRA_ELE · Chapter 3 · Lesson 3.1</span>
@@ -277,7 +277,7 @@ const c3q = quiz('ia-gra-ele-quiz-3', 'Quiz 3 — Safe lab|||Quiz 3 — Lab an t
   { id: 'q3', question: 'Snapshot của máy ảo hữu ích nhất vì?', options: ['Tăng RAM cho VM', 'Cho phép lùi ngay về trạng thái trước khi chạy mã độc hoặc cấu hình hỏng', 'Kết nối VM ra internet', 'Mã hoá ổ đĩa tự động'], correctIndex: 1, explanation: 'Snapshot cho phép hoàn tác tức thì sau khi thử nghiệm rủi ro (mã độc, cấu hình sai) — an toàn cho lab.' },
 ]);
 
-const c4 = doc('ia-gra-ele-4-1-tu-hoc', '4.1 — Self-study method &amp; learning contract|||4.1 — Phương pháp tự học &amp; learning contract',
+const c4 = doc('ia-gra-ele-4-1-tu-hoc', '4.1 — Self-study method & learning contract|||4.1 — Phương pháp tự học & learning contract',
   'Viết learning contract (mục tiêu, chuẩn đầu ra, mốc, sản phẩm, cách đánh giá); vòng học chủ động; quản lý thời gian theo tuần; nhật ký học tập làm bằng chứng.',
   [[
     `<span class="eyebrow">IA_GRA_ELE · Chapter 4 · Lesson 4.1</span>
@@ -434,7 +434,7 @@ const c6q = quiz('ia-gra-ele-quiz-6', 'Quiz 6 — Mini-project|||Quiz 6 — Mini
   { id: 'q3', question: 'Vì sao "tái lập được" (reproducible) lại quan trọng?', options: ['Không quan trọng gì cả', 'Để người khác chạy lại từ README và là tiêu chí chấm điểm/thói quen chuyên nghiệp', 'Để giấu cách làm', 'Để dự án chạy nhanh hơn'], correctIndex: 1, explanation: 'Tái lập được (phiên bản, bước cài, dữ liệu, đầu ra kỳ vọng) giúp người khác kiểm chứng và là tiêu chí chấm điểm.' },
 ]);
 
-const c7 = doc('ia-gra-ele-7-1-bao-cao', '7.1 — Writing the report &amp; documentation|||7.1 — Viết báo cáo &amp; tài liệu hoá',
+const c7 = doc('ia-gra-ele-7-1-bao-cao', '7.1 — Writing the report & documentation|||7.1 — Viết báo cáo & tài liệu hoá',
   'Cấu trúc báo cáo (tóm tắt, giới thiệu, phương pháp, kết quả, bàn luận, kết luận, tài liệu); viết rõ ràng; hình/bảng có chú thích; README & tài liệu kỹ thuật; trích dẫn đúng chuẩn.',
   [[
     `<span class="eyebrow">IA_GRA_ELE · Chapter 7 · Lesson 7.1</span>
@@ -493,7 +493,7 @@ const c7q = quiz('ia-gra-ele-quiz-7', 'Quiz 7 — Report|||Quiz 7 — Báo cáo'
   { id: 'q3', question: 'Một README tốt kèm mã nguồn nên có?', options: ['Chỉ tên tác giả', 'Mục đích, cách cài, cách chạy, đầu ra kỳ vọng và lưu ý an toàn', 'Toàn bộ báo cáo dán vào', 'Không cần gì, mã tự nói'], correctIndex: 1, explanation: 'README là "cửa trước": nêu mục đích, hướng dẫn cài/chạy, đầu ra kỳ vọng và lưu ý an toàn để người khác dùng lại.' },
 ]);
 
-const c8 = doc('ia-gra-ele-8-1-trinh-bay-chung-chi', '8.1 — Presenting, defending, certifications &amp; ethics|||8.1 — Trình bày, phản biện, chứng chỉ &amp; đạo đức',
+const c8 = doc('ia-gra-ele-8-1-trinh-bay-chung-chi', '8.1 — Presenting, defending, certifications & ethics|||8.1 — Trình bày, phản biện, chứng chỉ & đạo đức',
   'Chuẩn bị slide & demo; trả lời phản biện; lộ trình chứng chỉ (Security+, CEH, OSCP, CISSP) theo cấp độ; đạo đức nghề & khung pháp lý; hành nghề có trách nhiệm.',
   [[
     `<span class="eyebrow">IA_GRA_ELE · Chapter 8 · Lesson 8.1</span>
@@ -548,7 +548,7 @@ Quản lý      CISSP          Quản trị, cần kinh nghiệm làm việc
 <div class="callout"><span class="badge">Lời hứa cốt lõi</span> Giá trị của môn này không nằm ở những đòn khai thác bạn chạy được — mà ở khả năng phán đoán để biết điều bạn <em>không</em> nên làm, và kỹ năng bảo vệ hệ thống và con người.</div>`,
   ]]);
 
-const c8q = quiz('ia-gra-ele-quiz-8', 'Quiz 8 — Present &amp; ethics|||Quiz 8 — Trình bày &amp; đạo đức', [
+const c8q = quiz('ia-gra-ele-quiz-8', 'Quiz 8 — Present & ethics|||Quiz 8 — Trình bày & đạo đức', [
   { id: 'q1', question: 'Khi demo trực tiếp trong buổi bảo vệ, biện pháp phòng ngừa tốt là?', options: ['Không cần chuẩn bị, cứ chạy ngẫu hứng', 'Có bản ghi (video) dự phòng phòng khi chạy trực tiếp hỏng', 'Chỉ chiếu slide, không demo', 'Chạy thử trên hệ thống thật của người khác'], correctIndex: 1, explanation: 'Demo nên ngắn, tập trước, và có bản ghi dự phòng để không phụ thuộc hoàn toàn vào lần chạy trực tiếp.' },
   { id: 'q2', question: 'Chứng chỉ nào thường yêu cầu kinh nghiệm làm việc và thiên về quản trị an ninh?', options: ['CompTIA Security+', 'OSCP', 'CISSP', 'CEH'], correctIndex: 2, explanation: 'CISSP hướng quản lý/quản trị an ninh và yêu cầu kinh nghiệm làm việc; Security+ là nền nhập môn.' },
   { id: 'q3', question: 'Nguyên tắc đạo đức cốt lõi trước khi thử nghiệm một hệ thống là?', options: ['Cứ thử rồi xin lỗi sau', 'Phải được cho phép rõ ràng, tốt nhất bằng văn bản', 'Chỉ cần dùng VPN che giấu', 'Được phép nếu chỉ để học'], correctIndex: 1, explanation: 'Phải có sự cho phép rõ ràng (nên bằng văn bản) trước khi thử; truy cập trái phép là vi phạm pháp luật.' },

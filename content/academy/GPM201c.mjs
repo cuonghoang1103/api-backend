@@ -11,7 +11,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('gpm201c-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('gpm201c-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: chuẩn quốc tế (PMBOK, Scrum Guide, Kerzner), khoá học miễn phí, công cụ (Jira/Trello/Asana), lộ trình tự học 4 bước.',
   [[
     `<span class="eyebrow">GPM201c · Materials</span>
@@ -158,7 +158,7 @@ const c1q = quiz('gpm201c-quiz-1', 'Quiz 1 — What is PM|||Quiz 1 — QLDA là 
   { id: 'q3', question: 'Muốn rút ngắn thời gian mà giữ nguyên phạm vi thì thường phải?|||To shorten time while keeping scope, you usually must?', options: ['Không đổi gì|||Change nothing', 'Tăng chi phí (thêm nguồn lực)|||Increase cost (add resources)', 'Giảm chất lượng bắt buộc|||Necessarily lower quality', 'Huỷ dự án|||Cancel the project'], correctIndex: 1, explanation: 'Đổi một cạnh → cạnh khác nhường; rút thời gian, giữ phạm vi → thêm chi phí.' },
 ]);
 
-const c2 = doc('gpm201c-2-1-initiation-stakeholders', '2.1 — Initiation &amp; stakeholders|||2.1 — Khởi tạo &amp; các bên liên quan',
+const c2 = doc('gpm201c-2-1-initiation-stakeholders', '2.1 — Initiation & stakeholders|||2.1 — Khởi tạo & các bên liên quan',
   'Project charter, business case, stakeholder analysis (power/interest), mục tiêu SMART; ví dụ ra mắt sản phẩm.',
   [[
     `<span class="eyebrow">GPM201c · Chapter 2 · Lesson 2.1</span>
@@ -209,7 +209,7 @@ const c2q = quiz('gpm201c-quiz-2', 'Quiz 2 — Initiation|||Quiz 2 — Khởi t�
   { id: 'q3', question: 'Trên lưới quyền lực/quan tâm, nhà tài trợ (quyền cao, quan tâm cao) cần?|||On the power/interest grid, a sponsor (high power, high interest) needs?', options: ['Chỉ theo dõi|||Just monitor', 'Quản lý sát|||Manage closely', 'Bỏ qua|||Ignore', 'Giữ hài lòng nhưng không cập nhật|||Keep satisfied but not informed'], correctIndex: 1, explanation: 'Quyền cao + quan tâm cao → quản lý sát, giao tiếp thường xuyên.' },
 ]);
 
-const c3 = doc('gpm201c-3-1-scope-schedule', '3.1 — Planning scope &amp; schedule|||3.1 — Lập kế hoạch phạm vi &amp; tiến độ',
+const c3 = doc('gpm201c-3-1-scope-schedule', '3.1 — Planning scope & schedule|||3.1 — Lập kế hoạch phạm vi & tiến độ',
   'WBS (chia nhỏ công việc), Gantt, đường găng (critical path), milestone; ví dụ tổ chức sự kiện.',
   [[
     `<span class="eyebrow">GPM201c · Chapter 3 · Lesson 3.1</span>
@@ -252,13 +252,13 @@ Thiết kế poster (3n) chạy song song -&gt; có float, không găng.
 <div class="callout"><span class="badge">Ví dụ truyền thông</span> Với một sự kiện, "chốt địa điểm → gửi thư mời → thu hồi đáp" là đường găng. Nếu địa điểm trễ hai ngày, cả tiến độ trễ theo — nên PM bảo vệ chuỗi đó trước tiên.</div>`,
   ]]);
 
-const c3q = quiz('gpm201c-quiz-3', 'Quiz 3 — Scope &amp; schedule|||Quiz 3 — Phạm vi &amp; tiến độ', [
+const c3q = quiz('gpm201c-quiz-3', 'Quiz 3 — Scope & schedule|||Quiz 3 — Phạm vi & tiến độ', [
   { id: 'q1', question: 'WBS dùng để làm gì?|||What is a WBS for?', options: ['Chia dự án thành các gói công việc nhỏ|||Break the project into smaller work packages', 'Tính lợi nhuận|||Calculate profit', 'Chọn nhà tài trợ|||Pick the sponsor', 'Viết thông cáo báo chí|||Write the press release'], correctIndex: 0, explanation: 'WBS = phân rã công việc thành cây gói việc dễ quản lý.' },
   { id: 'q2', question: 'Đường găng (critical path) là?|||The critical path is?', options: ['Việc rẻ nhất|||The cheapest task', 'Chuỗi việc phụ thuộc DÀI NHẤT quyết định thời lượng dự án|||The LONGEST chain of dependent tasks setting project duration', 'Việc có nhiều float nhất|||The task with the most slack', 'Milestone cuối|||The last milestone'], correctIndex: 1, explanation: 'Đường găng = chuỗi dài nhất; trễ nó là trễ cả dự án.' },
   { id: 'q3', question: 'Một milestone trên bảng Gantt là?|||A milestone on a Gantt chart is?', options: ['Một công việc kéo dài nhiều tuần|||A task lasting many weeks', 'Mốc không thời lượng đánh dấu thời điểm quan trọng|||A zero-duration marker of a key moment', 'Ngân sách của dự án|||The project budget', 'Một rủi ro|||A risk'], correctIndex: 1, explanation: 'Milestone = mốc thời điểm quan trọng, thời lượng bằng 0.' },
 ]);
 
-const c4 = doc('gpm201c-4-1-resource-budget-risk', '4.1 — Resources, budget &amp; risk|||4.1 — Nguồn lực, ngân sách &amp; rủi ro',
+const c4 = doc('gpm201c-4-1-resource-budget-risk', '4.1 — Resources, budget & risk|||4.1 — Nguồn lực, ngân sách & rủi ro',
   'Phân bổ nguồn lực, lập ngân sách (bottom-up), sổ rủi ro, phân tích rủi ro (xác suất × tác động); ví dụ chiến dịch.',
   [[
     `<span class="eyebrow">GPM201c · Chapter 4 · Lesson 4.1</span>
@@ -309,13 +309,13 @@ Thời tiết xấu ngày sự kiện TB    TB       Chấp nhận + phương á
 <div class="callout"><span class="badge">Ví dụ truyền thông</span> Trong một chiến dịch, "KOL chủ lực rút lui" là rủi ro tác động cao kinh điển. Giảm nhẹ bằng cách ký thêm một creator dự bị và quay sẵn nội dung dùng lâu dài, để chiến dịch vẫn trụ được.</div>`,
   ]]);
 
-const c4q = quiz('gpm201c-quiz-4', 'Quiz 4 — Budget &amp; risk|||Quiz 4 — Ngân sách &amp; rủi ro', [
+const c4q = quiz('gpm201c-quiz-4', 'Quiz 4 — Budget & risk|||Quiz 4 — Ngân sách & rủi ro', [
   { id: 'q1', question: 'Điểm ưu tiên một rủi ro thường được tính bằng?|||A risk\'s priority score is usually?', options: ['Chi phí + thời gian|||Cost + time', 'Xác suất × tác động|||Probability × impact', 'Số người trong nhóm|||Team size', 'Phạm vi − ngân sách|||Scope − budget'], correctIndex: 1, explanation: 'Điểm rủi ro = xác suất × tác động để xếp thứ tự ưu tiên.' },
   { id: 'q2', question: 'Quỹ dự phòng (contingency) trong ngân sách để?|||A contingency reserve in the budget is for?', options: ['Trả lương PM|||Paying the PM', 'Đối phó rủi ro đã biết|||Covering known risks', 'Mua văn phòng phẩm|||Buying stationery', 'Không có mục đích|||No purpose'], correctIndex: 1, explanation: 'Dự phòng để hấp thụ rủi ro đã lường trước, tránh vỡ ngân sách.' },
   { id: 'q3', question: 'Ký một creator dự bị để phòng KOL chính rút lui là cách ứng phó nào?|||Signing a backup creator in case the main KOL drops is which response?', options: ['Chấp nhận (accept)|||Accept', 'Giảm nhẹ (mitigate)|||Mitigate', 'Né tránh (avoid) — bỏ hẳn KOL|||Avoid — drop KOLs entirely', 'Chuyển giao (transfer)|||Transfer'], correctIndex: 1, explanation: 'Chuẩn bị dự bị làm giảm tác động/xác suất → giảm nhẹ (mitigate).' },
 ]);
 
-const c5 = doc('gpm201c-5-1-execution-team', '5.1 — Execution &amp; team management|||5.1 — Thực thi &amp; quản lý nhóm',
+const c5 = doc('gpm201c-5-1-execution-team', '5.1 — Execution & team management|||5.1 — Thực thi & quản lý nhóm',
   'Xây dựng nhóm (Tuckman), giao tiếp, ma trận RACI, họp hiệu quả, xử lý xung đột; ví dụ nhóm chiến dịch.',
   [[
     `<span class="eyebrow">GPM201c · Chapter 5 · Lesson 5.1</span>
@@ -360,13 +360,13 @@ Duyệt cuối           I          I        R     A
 <div class="callout"><span class="badge">Ví dụ truyền thông</span> Designer và copywriter bất đồng về banner chủ đạo. PM dùng RACI để nhắc PM là người Accountable, lắng nghe cả hai (Consulted), rồi ra quyết định để chiến dịch kịp hạn.</div>`,
   ]]);
 
-const c5q = quiz('gpm201c-quiz-5', 'Quiz 5 — Team &amp; RACI|||Quiz 5 — Nhóm &amp; RACI', [
+const c5q = quiz('gpm201c-quiz-5', 'Quiz 5 — Team & RACI|||Quiz 5 — Nhóm & RACI', [
   { id: 'q1', question: 'Trong RACI, mỗi công việc chỉ nên có đúng MỘT chữ nào?|||In RACI, each task should have exactly ONE of which letter?', options: ['R (Responsible)', 'A (Accountable)', 'C (Consulted)', 'I (Informed)'], correctIndex: 1, explanation: 'Mỗi việc chỉ một A (người chịu trách nhiệm cuối) để tránh mập mờ.' },
   { id: 'q2', question: 'Thứ tự đúng các giai đoạn phát triển nhóm theo Tuckman?|||Correct order of Tuckman team stages?', options: ['Storming → Forming → Performing → Norming', 'Forming → Storming → Norming → Performing', 'Norming → Forming → Storming → Performing', 'Performing → Norming → Storming → Forming'], correctIndex: 1, explanation: 'Tuckman: Hình thành → Sóng gió → Chuẩn hoá → Vận hành hiệu quả.' },
   { id: 'q3', question: 'Cách xử lý xung đột "win-win" khi cả lợi ích lẫn quan hệ đều quan trọng là?|||The "win-win" conflict style when both stakes and relationship matter is?', options: ['Né tránh (avoiding)|||Avoiding', 'Áp đặt (forcing)|||Forcing', 'Hợp tác (collaborating)|||Collaborating', 'Nhượng bộ hoàn toàn (accommodating)|||Fully accommodating'], correctIndex: 2, explanation: 'Hợp tác (collaborating) tìm giải pháp win-win cho cả hai bên.' },
 ]);
 
-const c6 = doc('gpm201c-6-1-monitoring-control', '6.1 — Monitoring &amp; controlling|||6.1 — Giám sát &amp; kiểm soát',
+const c6 = doc('gpm201c-6-1-monitoring-control', '6.1 — Monitoring & controlling|||6.1 — Giám sát & kiểm soát',
   'KPI, giá trị thu được (EVM: PV/EV/AC, SPI/CPI), kiểm soát thay đổi (change control), báo cáo tiến độ; ví dụ chiến dịch.',
   [[
     `<span class="eyebrow">GPM201c · Chapter 6 · Lesson 6.1</span>
@@ -413,13 +413,13 @@ Ví dụ: PV=100tr, EV=80tr, AC=90tr
 <div class="callout"><span class="badge">Ví dụ truyền thông</span> Giữa chiến dịch, khách xin thêm series TikTok. PM viết yêu cầu thay đổi, chỉ ra cần thêm 2 tuần và 30 triệu, và xin duyệt trước khi nhóm bắt tay — tránh phình phạm vi âm thầm.</div>`,
   ]]);
 
-const c6q = quiz('gpm201c-quiz-6', 'Quiz 6 — Monitoring &amp; control|||Quiz 6 — Giám sát &amp; kiểm soát', [
+const c6q = quiz('gpm201c-quiz-6', 'Quiz 6 — Monitoring & control|||Quiz 6 — Giám sát & kiểm soát', [
   { id: 'q1', question: 'CPI = EV/AC = 0.89 nghĩa là dự án đang?|||CPI = EV/AC = 0.89 means the project is?', options: ['Dưới ngân sách|||Under budget', 'Vượt ngân sách|||Over budget', 'Đúng ngân sách|||Exactly on budget', 'Trước tiến độ|||Ahead of schedule'], correctIndex: 1, explanation: 'CPI < 1 → EV nhỏ hơn AC → tiêu nhiều hơn giá trị làm ra → vượt ngân sách.' },
   { id: 'q2', question: 'Việc thêm hạng mục không qua kiểm soát khiến phạm vi lớn dần gọi là?|||Adding work without control so scope grows is called?', options: ['Đường găng|||Critical path', 'Phình phạm vi (scope creep)|||Scope creep', 'Milestone', 'Contingency (dự phòng)|||Contingency'], correctIndex: 1, explanation: 'Scope creep = phạm vi phình ra do thay đổi không kiểm soát.' },
   { id: 'q3', question: 'Trong EVM, EV (Earned Value) là?|||In EVM, EV (Earned Value) is?', options: ['Chi phí thực đã tiêu|||The actual cost spent', 'Chi phí dự toán của công việc THỰC SỰ đã xong|||The budgeted cost of work ACTUALLY done', 'Tổng ngân sách|||The total budget', 'Số việc còn lại|||Tasks remaining'], correctIndex: 1, explanation: 'EV = giá trị dự toán của phần công việc đã hoàn thành thật.' },
 ]);
 
-const c7 = doc('gpm201c-7-1-agile-scrum', '7.1 — Agile &amp; Scrum|||7.1 — Agile &amp; Scrum',
+const c7 = doc('gpm201c-7-1-agile-scrum', '7.1 — Agile & Scrum|||7.1 — Agile & Scrum',
   'Agile manifesto, Scrum (vai trò/sự kiện/tạo phẩm), sprint, Kanban, áp dụng marketing agile; ví dụ nội dung.',
   [[
     `<span class="eyebrow">GPM201c · Chapter 7 · Lesson 7.1</span>
@@ -456,13 +456,13 @@ const c7 = doc('gpm201c-7-1-agile-scrum', '7.1 — Agile &amp; Scrum|||7.1 — A
 <div class="callout"><span class="badge">Ví dụ truyền thông</span> Một nhóm social chạy sprint 2 tuần: lên kế hoạch 8 bài, họp đứng mỗi ngày, sơ kết mức tương tác cuối sprint, và sắp lại backlog sprint sau hướng về những định dạng hiệu quả.</div>`,
   ]]);
 
-const c7q = quiz('gpm201c-quiz-7', 'Quiz 7 — Agile &amp; Scrum|||Quiz 7 — Agile &amp; Scrum', [
+const c7q = quiz('gpm201c-quiz-7', 'Quiz 7 — Agile & Scrum|||Quiz 7 — Agile & Scrum', [
   { id: 'q1', question: 'Trong Scrum, ai sở hữu và sắp thứ tự ưu tiên Product Backlog?|||In Scrum, who owns and prioritizes the Product Backlog?', options: ['Scrum Master', 'Product Owner', 'Nhà tài trợ|||The sponsor', 'Toàn bộ khách hàng|||All customers'], correctIndex: 1, explanation: 'Product Owner sở hữu và ưu tiên backlog; Scrum Master gỡ vướng.' },
   { id: 'q2', question: 'Daily Scrum (họp đứng) điển hình kéo dài?|||A typical Daily Scrum (standup) lasts?', options: ['Khoảng 15 phút|||About 15 minutes', 'Nửa ngày|||Half a day', 'Đúng 2 tuần|||Exactly 2 weeks', 'Không giới hạn|||Unlimited'], correctIndex: 0, explanation: 'Daily Scrum gói trong ~15 phút để đồng bộ nhanh.' },
   { id: 'q3', question: 'Kanban giới hạn điều gì để nhóm làm xong trước khi bắt việc mới?|||Kanban limits what so the team finishes before starting more?', options: ['Số nhân sự|||Headcount', 'Việc đang làm dở (WIP)|||Work-in-progress (WIP)', 'Ngân sách|||Budget', 'Số sprint|||Number of sprints'], correctIndex: 1, explanation: 'Kanban giới hạn WIP để tối ưu luồng và giảm việc dở dang.' },
 ]);
 
-const c8 = doc('gpm201c-8-1-closure-lessons', '8.1 — Closure &amp; lessons learned|||8.1 — Kết thúc &amp; bài học',
+const c8 = doc('gpm201c-8-1-closure-lessons', '8.1 — Closure & lessons learned|||8.1 — Kết thúc & bài học',
   'Kết thúc dự án, nghiệm thu/bàn giao, retrospective, lessons learned, lưu trữ; công cụ Jira/Trello/Asana.',
   [[
     `<span class="eyebrow">GPM201c · Chapter 8 · Lesson 8.1</span>
@@ -503,7 +503,7 @@ const c8 = doc('gpm201c-8-1-closure-lessons', '8.1 — Closure &amp; lessons lea
 <div class="callout"><span class="badge">Ví dụ truyền thông</span> Sau một buổi ra mắt sản phẩm, nhóm họp retro 60 phút, ghi "đặt KOL sớm hơn 3 tuần" và "chỉ một người duyệt", và lưu các mẫu dùng lại trong Asana — để lần ra mắt sau nhanh và nhẹ nhàng hơn.</div>`,
   ]]);
 
-const c8q = quiz('gpm201c-quiz-8', 'Quiz 8 — Closure &amp; lessons|||Quiz 8 — Kết thúc &amp; bài học', [
+const c8q = quiz('gpm201c-quiz-8', 'Quiz 8 — Closure & lessons|||Quiz 8 — Kết thúc & bài học', [
   { id: 'q1', question: 'Một dự án được coi là "kết thúc chính thức" khi?|||A project is "formally closed" when?', options: ['Việc cuối cùng vừa xong|||The last task just finished', 'Sản phẩm được nghiệm thu, hợp đồng tất toán, báo cáo nộp|||Deliverables accepted, contracts settled, report filed', 'Ngân sách đã tiêu hết|||The budget is fully spent', 'Nhóm giải tán|||The team disbands'], correctIndex: 1, explanation: 'Kết thúc chính thức = nghiệm thu + tất toán + báo cáo + giải phóng nguồn lực.' },
   { id: 'q2', question: 'Mục đích chính của retrospective / lessons learned là?|||The main purpose of a retrospective / lessons learned is?', options: ['Tìm người để đổ lỗi|||Find someone to blame', 'Rút kinh nghiệm để dự án sau tốt hơn|||Capture learning so the next project is better', 'Tính lương thưởng|||Compute bonuses', 'Đóng hoá đơn|||Close invoices'], correctIndex: 1, explanation: 'Retro không đổ lỗi; ghi bài học để cải thiện dự án tương lai.' },
   { id: 'q3', question: 'Công cụ nào phù hợp nhất cho một bảng Kanban đơn giản kiểu lịch nội dung?|||Which tool best fits a simple Kanban board like a content calendar?', options: ['Trello', 'EVM', 'WBS', 'RACI'], correctIndex: 0, explanation: 'Trello là bảng Kanban đơn giản, rất hợp lịch nội dung; EVM/WBS/RACI là kỹ thuật, không phải công cụ bảng.' },

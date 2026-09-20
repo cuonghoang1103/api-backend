@@ -97,7 +97,7 @@ const intro = doc('chi331-0-1-overview', 'Course overview: Integrated Chinese 5|
 <p>Văn hóa &amp; phong tục → khác biệt Đông-Tây → học tập &amp; áp lực → môi trường → công nghệ &amp; internet → sức khỏe &amp; thói quen → tình bạn → ước mơ &amp; nghề nghiệp. Mỗi bài có bảng từ vựng (汉字 | pinyin | nghĩa), điểm ngữ pháp kèm ví dụ, một hội thoại ngắn, ghi chú, và quiz.</p>`,
   ]]);
 
-const b1 = doc('chi331-1-1-culture-customs', 'Lesson 1 — Culture &amp; customs|||Bài 1 — Văn hóa &amp; phong tục',
+const b1 = doc('chi331-1-1-culture-customs', 'Lesson 1 — Culture & customs|||Bài 1 — Văn hóa & phong tục',
   'Từ vựng: 文化, 风俗, 传统, 节日, 春节, 庆祝, 习惯, 举行, 随着. Ngữ pháp: 随着 (cùng với), 对…来说 (đối với…mà nói).',
   [[
     `<span class="eyebrow">CHI331 · Lesson 1 · Culture</span>
@@ -160,7 +160,7 @@ B: 随着时代变化，风俗有点儿不同了，但还是很热闹。 Suízhe
 <div class="callout"><span class="badge">Ghi chú</span> 对 … 来说 nêu góc nhìn của ai khi phát biểu. Nó thường đứng đầu câu: 对我来说，学中文很有意思 (đối với tôi, học tiếng Trung rất thú vị).</div>`,
   ]]);
 
-const b1q = quiz('chi331-quiz-1', 'Quiz 1 — Culture &amp; customs|||Quiz 1 — Văn hóa &amp; phong tục', [
+const b1q = quiz('chi331-quiz-1', 'Quiz 1 — Culture & customs|||Quiz 1 — Văn hóa & phong tục', [
   { id: 'q1', question: '"对中国人来说" nghĩa là? / What does 对中国人来说 mean?', options: ['người Trung Quốc nói|||Chinese people say', 'đối với người Trung Quốc mà nói|||for Chinese people', 'hỏi người Trung Quốc|||ask Chinese people', 'giống người Trung Quốc|||like Chinese people'], correctIndex: 1, explanation: '对 … 来说 = đối với … mà nói, nêu góc nhìn: 对中国人来说，春节最重要.' },
   { id: 'q2', question: '"随着" (suízhe) nghĩa là? / What does 随着 mean?', options: ['trước khi|||before', 'cùng với, theo|||along with / as', 'tuy nhiên|||however', 'ngoài ra|||besides'], correctIndex: 1, explanation: '随着 = cùng với, theo (một quá trình): 随着时代的变化，风俗也在变.' },
   { id: 'q3', question: '"春节" (Chūnjié) là gì? / What is 春节?', options: ['Trung thu|||Mid-Autumn Festival', 'Tết Nguyên đán|||Spring Festival / Lunar New Year', 'Quốc khánh|||National Day', 'Tết Đoan Ngọ|||Dragon Boat Festival'], correctIndex: 1, explanation: '春节 = Tết Nguyên đán, ngày lễ truyền thống quan trọng nhất của Trung Quốc.' },
@@ -235,7 +235,7 @@ const b2q = quiz('chi331-quiz-2', 'Quiz 2 — East-West differences|||Quiz 2 —
   { id: 'q3', question: '"接受" (jiēshòu) nghĩa là? / What does 接受 mean?', options: ['từ chối|||to refuse', 'tiếp nhận, chấp nhận|||to accept', 'so sánh|||to compare', 'thay đổi|||to change'], correctIndex: 1, explanation: '接受 = tiếp nhận, chấp nhận: 接受新观念 = tiếp nhận quan niệm mới.' },
 ]);
 
-const b3 = doc('chi331-3-1-study-stress', 'Lesson 3 — Study &amp; stress|||Bài 3 — Học tập &amp; áp lực',
+const b3 = doc('chi331-3-1-study-stress', 'Lesson 3 — Study & stress|||Bài 3 — Học tập & áp lực',
   'Từ vựng: 压力, 成绩, 努力, 放松, 复习, 紧张, 考试, 进步, 只要. Ngữ pháp: 只要…就 (chỉ cần…là), bổ ngữ xu hướng phức hợp 起来 (紧张起来).',
   [[
     `<span class="eyebrow">CHI331 · Lesson 3 · Study &amp; stress</span>
@@ -298,13 +298,13 @@ B: 你说得对，我也要学会放松。 Nǐ shuō de duì, wǒ yě yào xuéh
 <div class="callout"><span class="badge">Ghi chú</span> 起来 sau tính từ hoặc động từ thường chỉ trạng thái hay hành động bắt đầu: 天气热<strong>起来</strong>了 (trời bắt đầu nóng lên), 唱<strong>起来</strong>了 (bắt đầu hát).</div>`,
   ]]);
 
-const b3q = quiz('chi331-quiz-3', 'Quiz 3 — Study &amp; stress|||Quiz 3 — Học tập &amp; áp lực', [
+const b3q = quiz('chi331-quiz-3', 'Quiz 3 — Study & stress|||Quiz 3 — Học tập & áp lực', [
   { id: 'q1', question: 'Mẫu "只要…就…" nghĩa là? / What does 只要…就… mean?', options: ['dù … cũng …|||even if … still …', 'chỉ cần … là …|||as long as … then …', 'không phải … mà là …|||not … but …', 'bất kể … đều …|||no matter … all …'], correctIndex: 1, explanation: '只要…就… nêu điều kiện đủ: 只要努力复习，成绩就会进步.' },
   { id: 'q2', question: '"紧张起来" nghĩa là? / What does 紧张起来 mean?', options: ['hết căng thẳng|||stop being nervous', 'bắt đầu căng thẳng|||start to get nervous', 'rất thoải mái|||very relaxed', 'quên căng thẳng|||forget the tension'], correctIndex: 1, explanation: '起来 chỉ trạng thái bắt đầu: 紧张起来 = bắt đầu căng thẳng.' },
   { id: 'q3', question: '"进步" (jìnbù) nghĩa là? / What does 进步 mean?', options: ['thụt lùi|||to fall behind', 'tiến bộ|||to make progress', 'nghỉ ngơi|||to rest', 'thất bại|||to fail'], correctIndex: 1, explanation: '进步 = tiến bộ: 成绩进步了 = điểm số tiến bộ rồi.' },
 ]);
 
-const b4 = doc('chi331-4-1-environment', 'Lesson 4 — Environment &amp; protection|||Bài 4 — Môi trường &amp; bảo vệ',
+const b4 = doc('chi331-4-1-environment', 'Lesson 4 — Environment & protection|||Bài 4 — Môi trường & bảo vệ',
   'Từ vựng: 环境, 污染, 保护, 节约, 垃圾, 空气, 资源, 无论, 通过. Ngữ pháp: 无论…都 (bất kể…đều), 通过 (thông qua).',
   [[
     `<span class="eyebrow">CHI331 · Lesson 4 · Environment</span>
@@ -367,13 +367,13 @@ B: 通过节约用水用电，少扔垃圾，就能帮忙。 Tōngguò jiéyuē 
 <div class="callout"><span class="badge">Ghi chú</span> 无论 phải đi với một lựa chọn hoặc từ để hỏi (还是 / 多少 / 什么), và vế chính dùng 都 hoặc 也: 无论多难，我都要学好中文 (dù khó thế nào, tôi đều học giỏi tiếng Trung).</div>`,
   ]]);
 
-const b4q = quiz('chi331-quiz-4', 'Quiz 4 — Environment &amp; protection|||Quiz 4 — Môi trường &amp; bảo vệ', [
+const b4q = quiz('chi331-quiz-4', 'Quiz 4 — Environment & protection|||Quiz 4 — Môi trường & bảo vệ', [
   { id: 'q1', question: 'Mẫu "无论…都…" nghĩa là? / What does 无论…都… mean?', options: ['chỉ cần … là …|||as long as … then …', 'bất kể … đều …|||no matter … all …', 'không phải … mà là …|||not … but …', 'cùng với …|||along with …'], correctIndex: 1, explanation: '无论…都… = bất kể … đều: 无论大人还是孩子，都应该保护环境.' },
   { id: 'q2', question: '"通过节约用水" nghĩa là? / What does 通过节约用水 mean?', options: ['vì lãng phí nước|||because of wasting water', 'thông qua (bằng cách) tiết kiệm nước|||by / through saving water', 'quên tiết kiệm nước|||forget to save water', 'thiếu nước|||short of water'], correctIndex: 1, explanation: '通过 = thông qua, bằng cách: 通过节约用水，我们可以保护资源.' },
   { id: 'q3', question: '"保护环境" nghĩa là? / What does 保护环境 mean?', options: ['làm ô nhiễm môi trường|||to pollute the environment', 'bảo vệ môi trường|||to protect the environment', 'thay đổi môi trường|||to change the environment', 'nghiên cứu môi trường|||to study the environment'], correctIndex: 1, explanation: '保护 (bảo vệ) + 环境 (môi trường) = bảo vệ môi trường.' },
 ]);
 
-const b5 = doc('chi331-5-1-technology-internet', 'Lesson 5 — Technology &amp; the internet|||Bài 5 — Công nghệ &amp; internet',
+const b5 = doc('chi331-5-1-technology-internet', 'Lesson 5 — Technology & the internet|||Bài 5 — Công nghệ & internet',
   'Từ vựng: 网络, 手机, 方便, 影响, 沉迷, 上网, 信息, 联系, 即使. Ngữ pháp: 即使…也 (dù…cũng), bổ ngữ xu hướng 下去 (沉迷下去).',
   [[
     `<span class="eyebrow">CHI331 · Lesson 5 · Technology</span>
@@ -436,13 +436,13 @@ B: 对，这样沉迷下去会影响学习和健康。 Duì, zhèyàng chénmí 
 <div class="callout"><span class="badge">Ghi chú</span> 即使 … 也 … nêu một giả định và nói kết quả vẫn không đổi: 即使下雨，我也去 (dù trời mưa, tôi vẫn đi). Nó mạnh hơn 虽然.</div>`,
   ]]);
 
-const b5q = quiz('chi331-quiz-5', 'Quiz 5 — Technology &amp; the internet|||Quiz 5 — Công nghệ &amp; internet', [
+const b5q = quiz('chi331-quiz-5', 'Quiz 5 — Technology & the internet|||Quiz 5 — Công nghệ & internet', [
   { id: 'q1', question: 'Mẫu "即使…也…" nghĩa là? / What does 即使…也… mean?', options: ['dù … cũng …|||even if … still …', 'chỉ cần … là …|||as long as … then …', 'ngoài … ra …|||besides …', 'vừa … vừa …|||both … and …'], correctIndex: 0, explanation: '即使…也… nêu giả định, kết quả không đổi: 即使网络很方便，也不能沉迷.' },
   { id: 'q2', question: '"沉迷下去" nghĩa là? / What does 沉迷下去 mean?', options: ['thôi nghiện|||stop being addicted', 'cứ nghiện tiếp|||keep being addicted', 'bắt đầu nghiện|||start being addicted', 'không nghiện|||not addicted'], correctIndex: 1, explanation: '下去 chỉ hành động tiếp diễn: 沉迷下去 = cứ đắm chìm/nghiện tiếp.' },
   { id: 'q3', question: '"影响" (yǐngxiǎng) nghĩa là? / What does 影响 mean?', options: ['giúp đỡ|||to help', 'ảnh hưởng|||to affect / influence', 'tiết kiệm|||to save', 'liên lạc|||to contact'], correctIndex: 1, explanation: '影响 = ảnh hưởng: 玩手机太多会影响睡眠 = chơi điện thoại nhiều ảnh hưởng giấc ngủ.' },
 ]);
 
-const b6 = doc('chi331-6-1-health-habits', 'Lesson 6 — Health &amp; habits|||Bài 6 — Sức khỏe &amp; thói quen',
+const b6 = doc('chi331-6-1-health-habits', 'Lesson 6 — Health & habits|||Bài 6 — Sức khỏe & thói quen',
   'Từ vựng: 健康, 饮食, 运动, 生活, 习惯, 坚持, 规律, 保持, 睡眠. Ngữ pháp: 对…来说 (đối với…mà nói), bổ ngữ xu hướng 下去 (坚持下去) / 起来 (好起来).',
   [[
     `<span class="eyebrow">CHI331 · Lesson 6 · Health</span>
@@ -505,13 +505,13 @@ B: 保持健康饮食，每天运动，还要坚持下去。 Bǎochí jiànkāng
 <div class="callout"><span class="badge">Ghi chú</span> 坚持下去 và 好起来 dùng bổ ngữ xu hướng theo nghĩa thể: 下去 nói hành động tiếp diễn, 起来 nói trạng thái bắt đầu hay khá lên. Ở đây không phải hướng thật.</div>`,
   ]]);
 
-const b6q = quiz('chi331-quiz-6', 'Quiz 6 — Health &amp; habits|||Quiz 6 — Sức khỏe &amp; thói quen', [
+const b6q = quiz('chi331-quiz-6', 'Quiz 6 — Health & habits|||Quiz 6 — Sức khỏe & thói quen', [
   { id: 'q1', question: '"坚持下去" nghĩa là? / What does 坚持下去 mean?', options: ['bỏ cuộc|||to give up', 'kiên trì tiếp, duy trì|||to keep it up', 'bắt đầu làm|||to start doing', 'làm một lần|||to do once'], correctIndex: 1, explanation: '下去 chỉ hành động tiếp diễn: 好习惯要坚持下去 = thói quen tốt phải kiên trì tiếp.' },
   { id: 'q2', question: '"身体好起来了" nghĩa là? / What does 身体好起来了 mean?', options: ['cơ thể yếu đi|||the body got weaker', 'cơ thể đang khá lên|||the body is getting better', 'cơ thể không đổi|||the body stayed the same', 'cơ thể rất khỏe từ đầu|||the body was always strong'], correctIndex: 1, explanation: '起来 chỉ trạng thái chuyển tốt lên: 好起来了 = khá lên rồi.' },
   { id: 'q3', question: '"保持健康饮食" nghĩa là? / What does 保持健康饮食 mean?', options: ['bỏ ăn uống lành mạnh|||stop eating healthily', 'duy trì ăn uống lành mạnh|||keep a healthy diet', 'thay đổi món ăn|||change the food', 'ăn nhiều hơn|||eat more'], correctIndex: 1, explanation: '保持 = duy trì, giữ gìn: 保持健康饮食 = duy trì chế độ ăn uống lành mạnh.' },
 ]);
 
-const b7 = doc('chi331-7-1-friendship', 'Lesson 7 — Friendship &amp; getting along|||Bài 7 — Tình bạn &amp; xã giao',
+const b7 = doc('chi331-7-1-friendship', 'Lesson 7 — Friendship & getting along|||Bài 7 — Tình bạn & xã giao',
   'Từ vựng: 朋友, 性格, 交往, 帮助, 误会, 理解, 信任, 真诚, 联系. Ngữ pháp: 不是…而是 (không phải…mà là), 一方面…另一方面 (một mặt…mặt khác).',
   [[
     `<span class="eyebrow">CHI331 · Lesson 7 · Friendship</span>
@@ -574,13 +574,13 @@ B: 有过，但一方面真诚，一方面互相信任，就过去了。 Yǒu gu
 <div class="callout"><span class="badge">Ghi chú</span> 交往 là qua lại, giao thiệp với người nói chung; 交朋友 là kết bạn. Quan hệ tốt cần 理解 (hiểu nhau) và 信任 (tin tưởng).</div>`,
   ]]);
 
-const b7q = quiz('chi331-quiz-7', 'Quiz 7 — Friendship &amp; getting along|||Quiz 7 — Tình bạn &amp; xã giao', [
+const b7q = quiz('chi331-quiz-7', 'Quiz 7 — Friendship & getting along|||Quiz 7 — Tình bạn & xã giao', [
   { id: 'q1', question: 'Câu 真正的朋友不是天天见面，而是互相理解 nhấn mạnh điều gì? / What does it stress?', options: ['bạn phải gặp nhau mỗi ngày|||friends must meet daily', 'điều quan trọng là hiểu nhau, không phải gặp nhau nhiều|||understanding matters, not frequent meeting', 'bạn không cần liên lạc|||no need to keep in touch', 'tính cách phải giống nhau|||personalities must be the same'], correctIndex: 1, explanation: '不是…而是… phủ định ý sai (天天见面) rồi nêu ý đúng (互相理解).' },
   { id: 'q2', question: '"误会" (wùhuì) nghĩa là? / What does 误会 mean?', options: ['hiểu lầm|||misunderstanding', 'giúp đỡ|||help', 'tin tưởng|||trust', 'gặp mặt|||meeting'], correctIndex: 0, explanation: '误会 = hiểu lầm: 有误会的时候最好直接说清楚.' },
   { id: 'q3', question: '"互相信任" nghĩa là? / What does 互相信任 mean?', options: ['nghi ngờ lẫn nhau|||suspect each other', 'tin tưởng lẫn nhau|||trust each other', 'giúp đỡ một chiều|||one-sided help', 'ít liên lạc|||rarely contact'], correctIndex: 1, explanation: '互相 (lẫn nhau) + 信任 (tin tưởng) = tin tưởng lẫn nhau.' },
 ]);
 
-const b8 = doc('chi331-8-1-dreams-careers', 'Lesson 8 — Dreams &amp; careers|||Bài 8 — Ước mơ &amp; nghề nghiệp',
+const b8 = doc('chi331-8-1-dreams-careers', 'Lesson 8 — Dreams & careers|||Bài 8 — Ước mơ & nghề nghiệp',
   'Từ vựng: 理想, 职业, 选择, 努力, 成功, 实现, 机会, 坚持, 将来. Ngữ pháp: 只要…就 (chỉ cần…là), 无论…都 (bất kể…đều), bổ ngữ xu hướng 起来.',
   [[
     `<span class="eyebrow">CHI331 · Lesson 8 · Dreams &amp; careers</span>
@@ -643,7 +643,7 @@ B: 是啊，只要坚持努力，无论多难，都能成功。 Shì a, zhǐyào
 <div class="callout"><span class="badge">Ghi chú</span> 只要 (chỉ cần) nêu điều kiện đủ — một điều là đủ; 只有 (chỉ có) nêu điều kiện cần — không còn cách khác. Đừng lẫn: 只要 đi với 就, 只有 đi với 才.</div>`,
   ]]);
 
-const b8q = quiz('chi331-quiz-8', 'Quiz 8 — Dreams &amp; careers|||Quiz 8 — Ước mơ &amp; nghề nghiệp', [
+const b8q = quiz('chi331-quiz-8', 'Quiz 8 — Dreams & careers|||Quiz 8 — Ước mơ & nghề nghiệp', [
   { id: 'q1', question: 'Câu 只要坚持努力，就一定能成功 nghĩa là? / What does it mean?', options: ['Cố gắng cũng không thành công|||effort will not lead to success', 'Chỉ cần kiên trì cố gắng là nhất định thành công|||as long as you keep trying, you will surely succeed', 'Thành công không cần cố gắng|||success needs no effort', 'Khó nên bỏ cuộc|||it is hard so give up'], correctIndex: 1, explanation: '只要…就… nêu điều kiện đủ: chỉ cần 坚持努力 là 一定能成功.' },
   { id: 'q2', question: '"无论多难，都不要放弃" nghĩa là? / What does it mean?', options: ['nếu khó thì bỏ|||if hard, give up', 'bất kể khó thế nào, đều đừng bỏ cuộc|||no matter how hard, do not give up', 'chỉ khó một chút|||only a little hard', 'khó nên nghỉ|||hard so rest'], correctIndex: 1, explanation: '无论…都… = bất kể … đều: 无论多难，都不要放弃.' },
   { id: 'q3', question: '"实现理想" nghĩa là? / What does 实现理想 mean?', options: ['từ bỏ ước mơ|||give up the dream', 'thực hiện được ước mơ|||to realize the dream', 'quên ước mơ|||forget the dream', 'thay đổi ước mơ|||change the dream'], correctIndex: 1, explanation: '实现 = thực hiện, đạt được: 实现理想 = thực hiện được ước mơ.' },
@@ -667,15 +667,15 @@ export default {
     requirements: 'Cần hoàn thành CHI321 hoặc nắm vững pinyin, 4 thanh điệu, câu chữ 把, câu bị động 被, bổ ngữ khả năng (听得懂/买不起), các mẫu 虽然…但是 và 不但…而且, cùng từ vựng đời sống, mua sắm, giao thông và sức khỏe. Nên cài Pleco hoặc dùng từ điển hanzii.net để tra chữ &amp; nghe phát âm; luyện viết chữ Hán theo thứ tự nét.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (Level 2 Part 2), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình|||📚 Course materials', description: 'Giáo trình Integrated Chinese (Level 2 Part 2), workbook, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CHI321, track Integrated Chinese, mục tiêu HSK3 lên HSK4, cách học.', lessons: [intro] },
-    { title: 'Bài 1 — Văn hóa &amp; phong tục|||Lesson 1 — Culture &amp; customs', description: '文化, 风俗, 传统, 节日, 春节, 随着, 对…来说.', lessons: [b1, b1q] },
+    { title: 'Bài 1 — Văn hóa & phong tục|||Lesson 1 — Culture & customs', description: '文化, 风俗, 传统, 节日, 春节, 随着, 对…来说.', lessons: [b1, b1q] },
     { title: 'Bài 2 — So sánh Đông-Tây|||Lesson 2 — East-West differences', description: '中西方, 差别, 区别, 观念, 接受, 不是…而是, 一方面…另一方面.', lessons: [b2, b2q] },
-    { title: 'Bài 3 — Học tập &amp; áp lực|||Lesson 3 — Study &amp; stress', description: '压力, 成绩, 努力, 放松, 复习, 只要…就, 起来.', lessons: [b3, b3q] },
-    { title: 'Bài 4 — Môi trường &amp; bảo vệ|||Lesson 4 — Environment &amp; protection', description: '环境, 污染, 保护, 节约, 垃圾, 无论…都, 通过.', lessons: [b4, b4q] },
-    { title: 'Bài 5 — Công nghệ &amp; internet|||Lesson 5 — Technology &amp; the internet', description: '网络, 手机, 方便, 影响, 沉迷, 即使…也, 下去.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Sức khỏe &amp; thói quen|||Lesson 6 — Health &amp; habits', description: '健康, 饮食, 运动, 规律, 保持, 坚持下去, 对…来说.', lessons: [b6, b6q] },
-    { title: 'Bài 7 — Tình bạn &amp; xã giao|||Lesson 7 — Friendship &amp; getting along', description: '朋友, 性格, 交往, 帮助, 误会, 不是…而是, 一方面…另一方面.', lessons: [b7, b7q] },
-    { title: 'Bài 8 — Ước mơ &amp; nghề nghiệp|||Lesson 8 — Dreams &amp; careers', description: '理想, 职业, 选择, 努力, 成功, 只要…就, 无论…都.', lessons: [b8, b8q] },
+    { title: 'Bài 3 — Học tập & áp lực|||Lesson 3 — Study & stress', description: '压力, 成绩, 努力, 放松, 复习, 只要…就, 起来.', lessons: [b3, b3q] },
+    { title: 'Bài 4 — Môi trường & bảo vệ|||Lesson 4 — Environment & protection', description: '环境, 污染, 保护, 节约, 垃圾, 无论…都, 通过.', lessons: [b4, b4q] },
+    { title: 'Bài 5 — Công nghệ & internet|||Lesson 5 — Technology & the internet', description: '网络, 手机, 方便, 影响, 沉迷, 即使…也, 下去.', lessons: [b5, b5q] },
+    { title: 'Bài 6 — Sức khỏe & thói quen|||Lesson 6 — Health & habits', description: '健康, 饮食, 运动, 规律, 保持, 坚持下去, 对…来说.', lessons: [b6, b6q] },
+    { title: 'Bài 7 — Tình bạn & xã giao|||Lesson 7 — Friendship & getting along', description: '朋友, 性格, 交往, 帮助, 误会, 不是…而是, 一方面…另一方面.', lessons: [b7, b7q] },
+    { title: 'Bài 8 — Ước mơ & nghề nghiệp|||Lesson 8 — Dreams & careers', description: '理想, 职业, 选择, 努力, 成功, 只要…就, 无论…都.', lessons: [b8, b8q] },
   ],
 };

@@ -9,7 +9,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
 
-const taiLieu = doc('tpg302-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('tpg302-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Trung tâm tài liệu: giáo trình & slide (FLM), sách kinh điển (Bringhurst, Lupton, Muller-Brockmann), tài liệu Adobe InDesign, web font, YouTube, công cụ, lộ trình tự học.',
   [[
     `<span class="eyebrow">TPG302 · Materials</span>
@@ -84,7 +84,7 @@ const taiLieu = doc('tpg302-0-0-tai-lieu', '📚 Course materials &amp; referenc
 </ol></div>`,
   ]]);
 
-const intro = doc('tpg302-0-1-overview', 'Course overview: Typography &amp; E-publication|||Tổng quan: Nghệ thuật chữ &amp; Xuất bản điện tử',
+const intro = doc('tpg302-0-1-overview', 'Course overview: Typography & E-publication|||Tổng quan: Nghệ thuật chữ & Xuất bản điện tử',
   'Typography làm gì; vì sao chữ là 95% của thiết kế đồ hoạ; lộ trình: giải phẫu &amp; phân loại chữ → đo lường → lưới &amp; phân cấp → khả năng đọc → chữ cho web → xuất bản điện tử (EPUB/PDF/InDesign).',
   [[
     `<span class="eyebrow">TPG302 · Lesson 0.1 · Overview</span>
@@ -107,7 +107,7 @@ const intro = doc('tpg302-0-1-overview', 'Course overview: Typography &amp; E-pu
 <p>Giải phẫu &amp; lịch sử → phân loại (serif / sans / script) → đo lường (point, leading, kerning, tracking) → lưới &amp; bố cục → phân cấp &amp; tương phản → màu, không gian âm &amp; khả năng đọc → chữ cho màn hình &amp; web → xuất bản điện tử (EPUB, PDF tương tác, InDesign). Song ngữ, có thông số chữ mẫu và quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('tpg302-1-1-anatomy', '1.1 — History &amp; anatomy of type|||1.1 — Lịch sử &amp; giải phẫu chữ',
+const c1 = doc('tpg302-1-1-anatomy', '1.1 — History & anatomy of type|||1.1 — Lịch sử & giải phẫu chữ',
   'Từ Gutenberg đến chữ số; giải phẫu con chữ: baseline, x-height, cap height, ascender, descender, serif, counter, stem, bowl, terminal.',
   [[
     `<span class="eyebrow">TPG302 · Chapter 1 · Lesson 1.1</span>
@@ -264,7 +264,7 @@ const c3q = quiz('tpg302-quiz-3', 'Quiz 3 — Measurement|||Quiz 3 — Đo lư�
   { id: 'q3', question: '1 point bằng bao nhiêu inch?', options: ['1/12 inch', '1/72 inch', '1/6 inch', '1/100 inch'], correctIndex: 1, explanation: '1 point = 1/72 inch; 12 point = 1 pica.' },
 ]);
 
-const c4 = doc('tpg302-4-1-grid', '4.1 — Grid systems &amp; page layout|||4.1 — Hệ lưới &amp; bố cục trang',
+const c4 = doc('tpg302-4-1-grid', '4.1 — Grid systems & page layout|||4.1 — Hệ lưới & bố cục trang',
   'Muller-Brockmann: cột, module, margin, gutter, baseline grid; lưới 12 cột trên web; đặt nội dung theo lưới cho nhất quán.',
   [[
     `<span class="eyebrow">TPG302 · Chapter 4 · Lesson 4.1</span>
@@ -321,7 +321,7 @@ const c4q = quiz('tpg302-quiz-4', 'Quiz 4 — Grid systems|||Quiz 4 — Hệ lư
   { id: 'q3', question: 'Người gắn liền với "Grid Systems in Graphic Design" là?', options: ['Robert Bringhurst', 'Ellen Lupton', 'Josef Muller-Brockmann', 'Gutenberg'], correctIndex: 2, explanation: 'Muller-Brockmann là tác giả kinh điển về hệ lưới.' },
 ]);
 
-const c5 = doc('tpg302-5-1-hierarchy', '5.1 — Hierarchy &amp; contrast|||5.1 — Phân cấp &amp; tương phản chữ',
+const c5 = doc('tpg302-5-1-hierarchy', '5.1 — Hierarchy & contrast|||5.1 — Phân cấp & tương phản chữ',
   'Dẫn mắt người đọc bằng thang chữ (type scale), trọng lượng, hoa/thường, màu, khoảng cách; nhấn qua tương phản (kích thước, weight, style, màu).',
   [[
     `<span class="eyebrow">TPG302 · Chapter 5 · Lesson 5.1</span>
@@ -372,7 +372,7 @@ const c5q = quiz('tpg302-quiz-5', 'Quiz 5 — Hierarchy|||Quiz 5 — Phân cấp
   { id: 'q3', question: 'Nếu MỌI thứ trên trang đều được nhấn mạnh thì?', options: ['Trang trông chuyên nghiệp hơn', 'Không có gì thực sự được nhấn — mất phân cấp', 'Người đọc đọc nhanh hơn', 'Tăng khả năng đọc'], correctIndex: 1, explanation: 'Nhấn tất cả = không nhấn gì; tiết chế mới tạo phân cấp.' },
 ]);
 
-const c6 = doc('tpg302-6-1-readability', '6.1 — Color, negative space &amp; readability|||6.1 — Màu, không gian âm &amp; khả năng đọc',
+const c6 = doc('tpg302-6-1-readability', '6.1 — Color, negative space & readability|||6.1 — Màu, không gian âm & khả năng đọc',
   'Legibility vs readability; độ dài dòng (measure ~45-75 ký tự); tương phản màu (WCAG); không gian âm/khoảng trắng; căn lề trái vs justify.',
   [[
     `<span class="eyebrow">TPG302 · Chapter 6 · Lesson 6.1</span>
@@ -415,7 +415,7 @@ const c6q = quiz('tpg302-quiz-6', 'Quiz 6 — Readability|||Quiz 6 — Khả nă
   { id: 'q3', question: '"Legibility" khác "readability" ở chỗ?', options: ['Không khác gì', 'Legibility = rõ từng mặt chữ; readability = cả đoạn trôi chảy', 'Legibility là về màu, readability là về font', 'Cả hai chỉ về cỡ chữ'], correctIndex: 1, explanation: 'Legibility thuộc kiểu chữ; readability thuộc cách sắp đặt.' },
 ]);
 
-const c7 = doc('tpg302-7-1-screen-web', '7.1 — Typography for screen &amp; web|||7.1 — Typography cho màn hình &amp; web',
+const c7 = doc('tpg302-7-1-screen-web', '7.1 — Typography for screen & web|||7.1 — Typography cho màn hình & web',
   'Web fonts (@font-face, WOFF2, Google Fonts, FOUT/FOIT); đơn vị tương đối (rem/em); responsive &amp; fluid type (clamp); pixel/hinting; system font stack.',
   [[
     `<span class="eyebrow">TPG302 · Chapter 7 · Lesson 7.1</span>
@@ -464,13 +464,13 @@ body { font-family: "Inter", system-ui, sans-serif; }
 <div class="callout"><span class="badge">Hiệu năng cũng là typography</span> Một font 400KB chặn render hại người đọc hơn một system font mộc hơn chút. Hãy subset, dùng WOFF2, và swap.</div>`,
   ]]);
 
-const c7q = quiz('tpg302-quiz-7', 'Quiz 7 — Screen &amp; web|||Quiz 7 — Màn hình &amp; web', [
+const c7q = quiz('tpg302-quiz-7', 'Quiz 7 — Screen & web|||Quiz 7 — Màn hình & web', [
   { id: 'q1', question: 'Định dạng web font nhỏ gọn, hiện đại nên dùng là?', options: ['TTF không nén', 'WOFF2', 'BMP', 'PSD'], correctIndex: 1, explanation: 'WOFF2 nén tốt nhất, được trình duyệt hiện đại hỗ trợ rộng.' },
   { id: 'q2', question: 'Thuộc tính CSS nào tránh "chữ tàng hình" khi font đang tải?', options: ['font-weight: bold', 'font-display: swap', 'text-align: center', 'letter-spacing: 1px'], correctIndex: 1, explanation: 'font-display: swap hiện chữ bằng font dự phòng rồi đổi khi font chính về (FOUT thay vì FOIT).' },
   { id: 'q3', question: 'Hàm CSS nào đặt cỡ chữ co giãn với min/preferred/max trong một dòng?', options: ['calc()', 'clamp()', 'min()', 'var()'], correctIndex: 1, explanation: 'clamp(min, fluid, max) tạo fluid type responsive.' },
 ]);
 
-const c8 = doc('tpg302-8-1-epublishing', '8.1 — Electronic publishing &amp; InDesign|||8.1 — Xuất bản điện tử &amp; InDesign',
+const c8 = doc('tpg302-8-1-epublishing', '8.1 — Electronic publishing & InDesign|||8.1 — Xuất bản điện tử & InDesign',
   'EPUB reflowable vs fixed-layout; PDF tương tác; e-magazine; quy trình InDesign (master pages, paragraph/character styles, xuất EPUB/PDF); kiểm bằng EPUBCheck.',
   [[
     `<span class="eyebrow">TPG302 · Chapter 8 · Lesson 8.1</span>

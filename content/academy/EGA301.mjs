@@ -59,7 +59,7 @@ const taiLieu = doc('ega301-0-0-tai-lieu', '📚 Course materials & references||
 </ol></div>`,
   ]]);
 
-const intro = doc('ega301-0-1-overview', 'Course overview: E-Government &amp; Public Administration|||Tổng quan: Chính phủ điện tử &amp; Hành chính công',
+const intro = doc('ega301-0-1-overview', 'Course overview: E-Government & Public Administration|||Tổng quan: Chính phủ điện tử & Hành chính công',
   'CPĐT làm gì cho người dân và nhà nước; lộ trình: khái niệm & mức trưởng thành → mô hình dịch vụ → hạ tầng & định danh → số hoá quy trình → dữ liệu mở → an ninh/pháp lý → chính phủ số.',
   [[
     `<span class="eyebrow">EGA301 · Lesson 0.1 · Overview</span>
@@ -121,7 +121,7 @@ const c1q = quiz('ega301-quiz-1', 'Quiz 1 — What is e-government?|||Quiz 1 —
   { id: 'q3', question: 'UN E-Government Survey xếp hạng các nước bằng chỉ số nào?|||Which index does the UN E-Government Survey use to rank countries?', options: ['GDP', 'EGDI (dịch vụ trực tuyến + hạ tầng + vốn con người)|||EGDI (online services + infrastructure + human capital)', 'CPI', 'PISA'], correctIndex: 1, explanation: 'EGDI = trung bình 3 thành phần: dịch vụ, hạ tầng viễn thông, vốn con người.' },
 ]);
 
-const c2 = doc('ega301-2-1-service-models', '2.1 — E-service models &amp; the four levels|||2.1 — Mô hình dịch vụ công &amp; bốn mức',
+const c2 = doc('ega301-2-1-service-models', '2.1 — E-service models & the four levels|||2.1 — Mô hình dịch vụ công & bốn mức',
   'Quan hệ G2C/G2B/G2G/G2E; bốn mức dịch vụ công trực tuyến (1 thông tin, 2 tải mẫu, 3 nộp online, 4 thanh toán & trả kết quả điện tử).',
   [[
     `<span class="eyebrow">EGA301 · Chapter 2 · Lesson 2.1</span>
@@ -166,7 +166,7 @@ const c2q = quiz('ega301-quiz-2', 'Quiz 2 — Service models|||Quiz 2 — Mô h�
   { id: 'q3', question: 'Hai cơ quan nhà nước chia sẻ dữ liệu cho nhau là quan hệ?|||Two government agencies sharing data is which relationship?', options: ['G2C', 'G2B', 'G2G', 'B2B'], correctIndex: 2, explanation: 'G2G: Government to Government.' },
 ]);
 
-const c3 = doc('ega301-3-1-infrastructure', '3.1 — Infrastructure &amp; platforms|||3.1 — Hạ tầng &amp; nền tảng CPĐT',
+const c3 = doc('ega301-3-1-infrastructure', '3.1 — Infrastructure & platforms|||3.1 — Hạ tầng & nền tảng CPĐT',
   'Cơ sở dữ liệu quốc gia (dân cư, doanh nghiệp, đất đai), định danh số, cổng DVC làm một cửa, nền tảng chia sẻ dữ liệu (NDXP/LGSP) theo mô hình once-only.',
   [[
     `<span class="eyebrow">EGA301 · Chapter 3 · Lesson 3.1</span>
@@ -211,7 +211,7 @@ const c3q = quiz('ega301-quiz-3', 'Quiz 3 — Infrastructure|||Quiz 3 — Hạ t
   { id: 'q3', question: 'Cổng Dịch vụ công Quốc gia đóng vai trò gì?|||What role does the National Public Service Portal play?', options: ['Trục chia sẻ dữ liệu nội bộ|||Internal data-sharing backbone', 'Một cửa duy nhất cho người dân tra và dùng dịch vụ|||A single front door for citizens to find and use services', 'Cơ sở dữ liệu dân cư|||The population database', 'Hệ thống lương công chức|||Civil-servant payroll'], correctIndex: 1, explanation: 'Cổng DVC là "một cửa" — front door tập trung mọi dịch vụ.' },
 ]);
 
-const c4 = doc('ega301-4-1-digital-id', '4.1 — Digital identity &amp; authentication|||4.1 — Định danh &amp; xác thực số',
+const c4 = doc('ega301-4-1-digital-id', '4.1 — Digital identity & authentication|||4.1 — Định danh & xác thực số',
   'Định danh số (digital ID), VNeID, chữ ký số, eKYC; phân biệt định danh (bạn là ai) và xác thực (chứng minh điều đó); mức độ đảm bảo.',
   [[
     `<span class="eyebrow">EGA301 · Chapter 4 · Lesson 4.1</span>
@@ -297,7 +297,7 @@ const c5q = quiz('ega301-quiz-5', 'Quiz 5 — Process digitisation|||Quiz 5 — 
   { id: 'q3', question: 'Thủ tục "liên thông" (interconnected) nghĩa là?|||What does an interconnected procedure mean?', options: ['Một thủ tục duy nhất, không liên quan gì|||A single unrelated procedure', 'Nhiều thủ tục nối nhau tự động (vd khai sinh kéo theo BHYT, hộ tịch)|||Several chained procedures triggering automatically (e.g. birth registration triggers insurance, residence)', 'Chỉ áp dụng cho doanh nghiệp|||Only for business', 'Xoá dữ liệu giữa các bước|||Deleting data between steps'], correctIndex: 1, explanation: 'Liên thông: một thủ tục kích hoạt các thủ tục liên quan.' },
 ]);
 
-const c6 = doc('ega301-6-1-open-data', '6.1 — Open data &amp; transparency|||6.1 — Dữ liệu mở &amp; minh bạch',
+const c6 = doc('ega301-6-1-open-data', '6.1 — Open data & transparency|||6.1 — Dữ liệu mở & minh bạch',
   'Dữ liệu mở (open data), chính phủ mở (open government), sự tham gia của người dân (e-participation): thông tin, tham vấn, đồng quyết định.',
   [[
     `<span class="eyebrow">EGA301 · Chapter 6 · Lesson 6.1</span>
@@ -332,7 +332,7 @@ const c6q = quiz('ega301-quiz-6', 'Quiz 6 — Open data|||Quiz 6 — Dữ liệu
   { id: 'q3', question: 'Đăng dự thảo luật để dân góp ý nằm ở mức nào của e-participation?|||Publishing a draft law for public feedback is which e-participation level?', options: ['Cung cấp thông tin (e-information)|||E-information', 'Tham vấn (e-consultation)|||E-consultation', 'Đồng quyết định (e-decision)|||E-decision', 'Không thuộc mức nào|||None'], correctIndex: 1, explanation: 'Hỏi ý kiến người dân = tham vấn (e-consultation).' },
 ]);
 
-const c7 = doc('ega301-7-1-security-law-privacy', '7.1 — Security, law &amp; privacy|||7.1 — An ninh, pháp lý &amp; quyền riêng tư',
+const c7 = doc('ega301-7-1-security-law-privacy', '7.1 — Security, law & privacy|||7.1 — An ninh, pháp lý & quyền riêng tư',
   'An toàn thông tin (CIA), khung pháp lý CPĐT, bảo vệ dữ liệu cá nhân (Nghị định 13/2023 của VN): đồng ý, quyền chủ thể, dữ liệu nhạy cảm.',
   [[
     `<span class="eyebrow">EGA301 · Chapter 7 · Lesson 7.1</span>
@@ -373,13 +373,13 @@ const c7 = doc('ega301-7-1-security-law-privacy', '7.1 — Security, law &amp; p
 <div class="callout"><span class="badge">Mâu thuẫn</span> CPĐT muốn <em>chia sẻ</em> dữ liệu để phục vụ một lần khai; luật riêng tư muốn <em>giới hạn</em> chia sẻ. Thiết kế tốt dung hoà: chia sẻ vì mục đích hợp pháp, có đồng ý, ghi log và tối thiểu hoá.</div>`,
   ]]);
 
-const c7q = quiz('ega301-quiz-7', 'Quiz 7 — Security &amp; privacy|||Quiz 7 — An ninh &amp; riêng tư', [
+const c7q = quiz('ega301-quiz-7', 'Quiz 7 — Security & privacy|||Quiz 7 — An ninh & riêng tư', [
   { id: 'q1', question: 'Bộ ba CIA trong an toàn thông tin gồm?|||The CIA triad in information security?', options: ['Chi phí, tốc độ, giao diện|||Cost, speed, interface', 'Bảo mật, Toàn vẹn, Sẵn sàng|||Confidentiality, Integrity, Availability', 'Giấy phép, luật, hợp đồng|||Licence, law, contract', 'Camera, còi, khoá|||Camera, alarm, lock'], correctIndex: 1, explanation: 'CIA = Confidentiality, Integrity, Availability.' },
   { id: 'q2', question: 'Nghị định 13/2023 (NĐ13) của Việt Nam điều chỉnh về?|||Vietnam Decree 13/2023 governs what?', options: ['Hoá đơn điện tử|||E-invoicing', 'Bảo vệ dữ liệu cá nhân (đồng ý, quyền chủ thể, dữ liệu nhạy cảm)|||Personal data protection (consent, data-subject rights, sensitive data)', 'Thuế thu nhập|||Income tax', 'Đăng ký doanh nghiệp|||Company registration'], correctIndex: 1, explanation: 'NĐ13 là quy định toàn diện đầu tiên về bảo vệ dữ liệu cá nhân.' },
   { id: 'q3', question: 'Vì sao dữ liệu chính phủ là mục tiêu nhạy cảm hơn?|||Why is government data a more sensitive target?', options: ['Vì nó ít dữ liệu|||Because it holds little data', 'Vì nó chứa dữ liệu nhạy cảm nhất về mọi người (y tế, sinh trắc, hình sự)|||Because it holds the most sensitive data about everyone (health, biometric, criminal)', 'Vì nó không được mã hoá bao giờ|||Because it is never encrypted', 'Vì nó luôn công khai|||Because it is always public'], correctIndex: 1, explanation: 'Một vụ lộ dữ liệu nhà nước có thể phơi bày cả một dân số.' },
 ]);
 
-const c8 = doc('ega301-8-1-digital-government-trends', '8.1 — Digital government &amp; trends|||8.1 — Chính phủ số &amp; xu hướng',
+const c8 = doc('ega301-8-1-digital-government-trends', '8.1 — Digital government & trends|||8.1 — Chính phủ số & xu hướng',
   'Từ e-government sang digital government; AI trong hành chính, đô thị thông minh, Đề án 06 của VN; các thách thức (khoảng cách số, thay đổi tổ chức, tin cậy).',
   [[
     `<span class="eyebrow">EGA301 · Chapter 8 · Lesson 8.1</span>

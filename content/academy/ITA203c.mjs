@@ -162,7 +162,7 @@ const c1q = quiz('ita203c-quiz-1', 'Quiz 1 — Role of MIS|||Quiz 1 — Vai trò
   { id: 'q3', question: 'Hệ thống nào phục vụ lãnh đạo cấp cao bằng dashboard & KPI cho chiến lược?', options: ['TPS', 'ESS', 'Office system', 'Payroll'], correctIndex: 1, explanation: 'ESS (Executive Support System) tổng hợp dữ liệu thành KPI cho quyết định chiến lược.' },
 ]);
 
-const c2 = doc('ita203c-2-1-competitive-advantage', '2.1 — Information systems &amp; competitive advantage|||2.1 — HTTT &amp; lợi thế cạnh tranh',
+const c2 = doc('ita203c-2-1-competitive-advantage', '2.1 — Information systems & competitive advantage|||2.1 — HTTT & lợi thế cạnh tranh',
   'Mô hình năm lực lượng và chuỗi giá trị của Porter; ba chiến lược chung; HTTT dùng để dẫn đầu chi phí, khác biệt hoá, tập trung; hệ thống liên tổ chức.',
   [[
     `<span class="eyebrow">ITA203c · Chapter 2 · Lesson 2.1</span>
@@ -207,7 +207,7 @@ const c2q = quiz('ita203c-quiz-2', 'Quiz 2 — IS & competitive advantage|||Quiz
   { id: 'q3', question: 'Walmart dùng HTTT tối ưu chuỗi cung ứng để đạt chiến lược nào?', options: ['Dẫn đầu chi phí', 'Khác biệt hoá cao cấp', 'Rút lui khỏi thị trường', 'Tập trung ngách xa xỉ'], correctIndex: 0, explanation: 'HTTT giúp Walmart giảm chi phí vận hành — chiến lược dẫn đầu chi phí (cost leadership).' },
 ]);
 
-const c3 = doc('ita203c-3-1-it-infrastructure', '3.1 — IT infrastructure &amp; the digital platform|||3.1 — Hạ tầng CNTT &amp; nền tảng số',
+const c3 = doc('ita203c-3-1-it-infrastructure', '3.1 — IT infrastructure & the digital platform|||3.1 — Hạ tầng CNTT & nền tảng số',
   'Các thành phần hạ tầng CNTT; điện toán đám mây (IaaS/PaaS/SaaS), di động; xu hướng nền tảng; quản trị hạ tầng và cân nhắc thuê ngoài / tổng chi phí sở hữu.',
   [[
     `<span class="eyebrow">ITA203c · Chapter 3 · Lesson 3.1</span>
@@ -254,7 +254,7 @@ const c3q = quiz('ita203c-quiz-3', 'Quiz 3 — IT infrastructure|||Quiz 3 — H�
   { id: 'q3', question: 'TCO (total cost of ownership) nhắc nhà quản lý điều gì?', options: ['Chỉ nhìn giá mua ban đầu', 'Tính cả hỗ trợ, đào tạo, thời gian chết ngoài giá mua', 'Bỏ qua chi phí vận hành', 'Chỉ đo tốc độ CPU'], correctIndex: 1, explanation: 'TCO gồm toàn bộ chi phí vòng đời: mua, hỗ trợ, đào tạo, downtime — không chỉ giá niêm yết.' },
 ]);
 
-const c4 = doc('ita203c-4-1-data-knowledge', '4.1 — Data, business intelligence &amp; knowledge management|||4.1 — Dữ liệu, BI &amp; quản trị tri thức',
+const c4 = doc('ita203c-4-1-data-knowledge', '4.1 — Data, business intelligence & knowledge management|||4.1 — Dữ liệu, BI & quản trị tri thức',
   'Từ CSDL tới kho dữ liệu và BI; DBMS quan hệ; data warehouse vs data lake; phân tích và trực quan hoá; quản trị tri thức tường minh và ẩn.',
   [[
     `<span class="eyebrow">ITA203c · Chapter 4 · Lesson 4.1</span>
@@ -295,7 +295,7 @@ const c4q = quiz('ita203c-quiz-4', 'Quiz 4 — Data & knowledge|||Quiz 4 — D�
   { id: 'q3', question: 'Tri thức ẩn (tacit knowledge) là?', options: ['Tài liệu và wiki đã viết ra', 'Kinh nghiệm, bí quyết trong đầu con người, khó ghi lại', 'Bảng giá sản phẩm', 'Mã nguồn phần mềm'], correctIndex: 1, explanation: 'Tri thức ẩn nằm ở kỹ năng/kinh nghiệm cá nhân; tri thức tường minh đã được ghi thành văn bản.' },
 ]);
 
-const c5 = doc('ita203c-5-1-enterprise-systems', '5.1 — Enterprise systems: ERP, SCM &amp; CRM|||5.1 — Hệ thống doanh nghiệp: ERP, SCM &amp; CRM',
+const c5 = doc('ita203c-5-1-enterprise-systems', '5.1 — Enterprise systems: ERP, SCM & CRM|||5.1 — Hệ thống doanh nghiệp: ERP, SCM & CRM',
   'Vì sao cần tích hợp quy trình; ERP hợp nhất dữ liệu toàn doanh nghiệp; SCM tối ưu chuỗi cung ứng; CRM quản lý quan hệ khách hàng; lợi ích và thách thức triển khai.',
   [[
     `<span class="eyebrow">ITA203c · Chapter 5 · Lesson 5.1</span>
@@ -336,7 +336,7 @@ const c5q = quiz('ita203c-quiz-5', 'Quiz 5 — Enterprise systems|||Quiz 5 — H
   { id: 'q3', question: 'Rủi ro lớn nhất khi triển khai ERP thường là?', options: ['Thiếu điện', 'Kháng cự thay đổi tổ chức và quy trình, chi phí/thời gian lớn', 'Không có internet', 'Quá rẻ'], correctIndex: 1, explanation: 'ERP là dự án thay đổi tổ chức: chi phí cao, triển khai dài, và con người phải đổi cách làm việc.' },
 ]);
 
-const c6 = doc('ita203c-6-1-ecommerce-digital-firm', '6.1 — E-commerce &amp; the digital firm|||6.1 — TMĐT &amp; doanh nghiệp số',
+const c6 = doc('ita203c-6-1-ecommerce-digital-firm', '6.1 — E-commerce & the digital firm|||6.1 — TMĐT & doanh nghiệp số',
   'Các loại TMĐT (B2C, B2B, C2C); thị trường số và hàng hoá số; thương mại di động (m-commerce); mô hình doanh thu; nền tảng và hiệu ứng mạng.',
   [[
     `<span class="eyebrow">ITA203c · Chapter 6 · Lesson 6.1</span>
@@ -379,7 +379,7 @@ const c6q = quiz('ita203c-quiz-6', 'Quiz 6 — E-commerce|||Quiz 6 — TMĐT', [
   { id: 'q3', question: 'Đặc điểm khiến hàng hoá số (digital goods) đặc biệt là?', options: ['Chi phí biên gần bằng không khi bán thêm một bản', 'Luôn đắt hơn hàng vật lý', 'Không thể sao chép', 'Phải giao bằng xe tải'], correctIndex: 0, explanation: 'Hàng hoá số sao chép và phân phối gần như miễn phí — chi phí biên gần bằng không.' },
 ]);
 
-const c7 = doc('ita203c-7-1-building-systems', '7.1 — Building &amp; managing information systems|||7.1 — Xây dựng &amp; quản lý hệ thống thông tin',
+const c7 = doc('ita203c-7-1-building-systems', '7.1 — Building & managing information systems|||7.1 — Xây dựng & quản lý hệ thống thông tin',
   'Vòng đời phát triển hệ thống (SDLC) và các cách tiếp cận (thác nước, Agile); quản lý dự án HTTT và vì sao dự án thất bại; quản lý thay đổi tổ chức.',
   [[
     `<span class="eyebrow">ITA203c · Chapter 7 · Lesson 7.1</span>
@@ -418,7 +418,7 @@ const c7q = quiz('ita203c-quiz-7', 'Quiz 7 — Building systems|||Quiz 7 — Xâ
   { id: 'q3', question: 'Nguyên nhân phổ biến nhất khiến dự án HTTT thất bại là?', options: ['Ngôn ngữ lập trình sai', 'Yêu cầu mơ hồ và xem nhẹ quản lý thay đổi tổ chức', 'Máy chủ quá mạnh', 'Có quá nhiều tài liệu'], correctIndex: 1, explanation: 'Phần lớn thất bại đến từ yếu tố con người/tổ chức: yêu cầu không rõ, thiếu bảo trợ, thiếu quản lý thay đổi.' },
 ]);
 
-const c8 = doc('ita203c-8-1-security-ethics-governance', '8.1 — Security, ethics &amp; IT governance|||8.1 — Bảo mật, đạo đức &amp; quản trị CNTT',
+const c8 = doc('ita203c-8-1-security-ethics-governance', '8.1 — Security, ethics & IT governance|||8.1 — Bảo mật, đạo đức & quản trị CNTT',
   'Vì sao HTTT dễ tổn thương; bộ ba CIA và kiểm soát; đạo đức HTTT (riêng tư, sở hữu, trách nhiệm); quản trị CNTT và tuân thủ (COBIT, GDPR, NĐ13).',
   [[
     `<span class="eyebrow">ITA203c · Chapter 8 · Lesson 8.1</span>

@@ -10,7 +10,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh từ vựng, mẫu câu & kỹ năng nghe hiểu của chương.', quiz: { timeLimitSeconds: 420, questions } });
 
-const taiLieu = doc('cls201-0-0-tai-lieu', '📚 Course materials &amp; references|||📚 Tài liệu tham khảo môn học',
+const taiLieu = doc('cls201-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Giáo trình chuẩn HSK Standard Course 3 (听说), Short-term Spoken Chinese: Elementary; app nghe/luyện nói, kênh YouTube, chiến lược nghe hiểu HSK3.',
   [[
     `<span class="eyebrow">CLS201 · Materials</span>
@@ -67,7 +67,7 @@ const taiLieu = doc('cls201-0-0-tai-lieu', '📚 Course materials &amp; referenc
 </ol></div>`,
   ]]);
 
-const intro = doc('cls201-0-1-overview', 'Course overview: Chinese Listening &amp; Speaking 2|||Tổng quan: Kỹ năng Nghe - Nói tiếng Trung 2',
+const intro = doc('cls201-0-1-overview', 'Course overview: Chinese Listening & Speaking 2|||Tổng quan: Kỹ năng Nghe - Nói tiếng Trung 2',
   'Nối tiếp CLS101 (HSK1-2), nâng lên HSK3; mỗi bài có từ vựng nghe-nói, mẫu câu, hội thoại tình huống, đoạn nghe dài hơn (độc thoại) và mẹo nghe hiểu.',
   [[
     `<span class="eyebrow">CLS201 · Lesson 0.1 · Overview</span>
@@ -98,7 +98,7 @@ const intro = doc('cls201-0-1-overview', 'Course overview: Chinese Listening &am
 <p>Kể lại trải nghiệm &amp; sự việc quá khứ → miêu tả &amp; so sánh → sức khoẻ &amp; đi khám bệnh → kế hoạch, công việc &amp; học tập → du lịch &amp; đặt phòng → cảm xúc, ý kiến &amp; đề nghị → điện thoại &amp; hẹn gặp → ôn tập: đoạn nghe dài, thuyết trình ngắn &amp; hội thoại tình huống tổng hợp.</p>`,
   ]]);
 
-const c1 = doc('cls201-1-1-past-experience', 'Chapter 1 — Retelling past experiences &amp; events|||Chương 1 — Kể lại trải nghiệm &amp; sự việc quá khứ',
+const c1 = doc('cls201-1-1-past-experience', 'Chapter 1 — Retelling past experiences & events|||Chương 1 — Kể lại trải nghiệm & sự việc quá khứ',
   'Mẫu câu: V+过, 有没有…过, …的时候, 结果; từ 经历/曾经/印象/难忘; luyện kể lại một chuyến đi và nghe một đoạn độc thoại kể chuyện.',
   [[
     `<span class="eyebrow">CLS201 · Chapter 1 · Lesson 1.1</span>
@@ -179,7 +179,7 @@ const c1q = quiz('cls201-quiz-1', 'Quiz 1 — Retelling past experiences|||Quiz 
   { id: 'q3', question: 'Từ "结果" (jiéguǒ) trong đoạn nghe gần nghĩa nhất với gì?', options: ['Kết quả là', 'Có lẽ', 'Chắc chắn', 'Hi vọng'], correctIndex: 0, explanation: '结果 = kết quả là, dùng để nêu điều xảy ra sau một sự việc trước đó.' },
 ]);
 
-const c2 = doc('cls201-2-1-describing-comparing', 'Chapter 2 — Describing &amp; comparing people, things|||Chương 2 — Miêu tả &amp; so sánh người, vật',
+const c2 = doc('cls201-2-1-describing-comparing', 'Chapter 2 — Describing & comparing people, things|||Chương 2 — Miêu tả & so sánh người, vật',
   'Mẫu câu: A比B+adj, A跟B一样, A没有B那么, 越来越; từ 比较/差不多/质量/样子; luyện so sánh hai đồ vật/thành phố.',
   [[
     `<span class="eyebrow">CLS201 · Chapter 2 · Lesson 2.1</span>
@@ -254,13 +254,13 @@ Wǒ qùguo Hángzhōu, yě qùguo Sūzhōu. Zhè liǎng ge chéngshì dōu hěn 
 <div class="callout"><span class="badge">Mẹo nghe</span> Câu so sánh giấu sự thật quan trọng trong một từ nhỏ: 比 (hơn), 没有…那么 (không … bằng), 一样 (giống nhau). Bỏ lỡ đúng từ đó là hiểu ngược cả câu — hãy nghe thật kỹ từ đó.</div>`,
   ]]);
 
-const c2q = quiz('cls201-quiz-2', 'Quiz 2 — Describing &amp; comparing|||Quiz 2 — Miêu tả &amp; so sánh', [
+const c2q = quiz('cls201-quiz-2', 'Quiz 2 — Describing & comparing|||Quiz 2 — Miêu tả & so sánh', [
   { id: 'q1', question: 'Mẫu câu nào dùng để nói "A hơn B một chút"?', options: ['A 比 B + tính từ + 一点儿', 'A 跟 B 一样', 'A 没有 B 那么', '越来越'], correctIndex: 0, explanation: 'A 比 B + tính từ (+一点儿/多了) là cấu trúc so sánh hơn.' },
   { id: 'q2', question: 'Theo đoạn nghe, thành phố nào đông người hơn?', options: ['Hàng Châu', 'Tô Châu', 'Cả hai bằng nhau', 'Không nhắc tới'], correctIndex: 0, explanation: 'Đoạn nghe nói "杭州比苏州大一点儿，人也更多" — Hàng Châu to hơn và đông người hơn.' },
   { id: 'q3', question: '"苏州没有杭州那么热闹" nghĩa là gì?', options: ['Tô Châu không nhộn nhịp bằng Hàng Châu', 'Tô Châu nhộn nhịp hơn Hàng Châu', 'Hai nơi giống hệt nhau', 'Tô Châu không có gì để xem'], correctIndex: 0, explanation: 'A 没有 B 那么 + tính từ = A không [tính từ] bằng B.' },
 ]);
 
-const c3 = doc('cls201-3-1-health-clinic', 'Chapter 3 — Health &amp; seeing a doctor|||Chương 3 — Sức khoẻ &amp; đi khám bệnh',
+const c3 = doc('cls201-3-1-health-clinic', 'Chapter 3 — Health & seeing a doctor|||Chương 3 — Sức khoẻ & đi khám bệnh',
   'Mẫu câu: 你哪儿不舒服, 我从…开始, 医生说要, 最好; từ 挂号/症状/发烧/打针/开药; luyện hội thoại phòng khám và nghe lời dặn của bác sĩ.',
   [[
     `<span class="eyebrow">CLS201 · Chapter 3 · Lesson 3.1</span>
@@ -335,13 +335,13 @@ Zuótiān wǒ juéde bù shūfu, jiù qù yīyuàn guàhào kànbìng. Yīshēng
 <div class="callout"><span class="badge">Mẹo nghe</span> Đoạn về phòng khám hay xếp chồng các lời dặn — 让/叫 + người + V ("bảo [ai] làm gì"). Hãy đếm xem bác sĩ dặn bao nhiêu việc; câu hỏi HSK3 hay hỏi "bác sĩ KHÔNG dặn điều gì."</div>`,
   ]]);
 
-const c3q = quiz('cls201-quiz-3', 'Quiz 3 — Health &amp; the clinic|||Quiz 3 — Sức khoẻ &amp; đi khám bệnh', [
+const c3q = quiz('cls201-quiz-3', 'Quiz 3 — Health & the clinic|||Quiz 3 — Sức khoẻ & đi khám bệnh', [
   { id: 'q1', question: '"你哪儿不舒服？" bác sĩ hỏi điều gì?', options: ['Bạn khó chịu ở đâu', 'Bạn bao nhiêu tuổi', 'Bạn ở đâu', 'Bạn tên gì'], correctIndex: 0, explanation: '哪儿不舒服 = ở đâu khó chịu — câu bác sĩ hỏi triệu chứng.' },
   { id: 'q2', question: 'Theo đoạn nghe, bác sĩ dặn bệnh nhân làm gì?', options: ['Uống thuốc đúng giờ và nghỉ 2 ngày', 'Đi khám ở bệnh viện khác', 'Tiêm ngay lập tức', 'Không cần uống thuốc'], correctIndex: 0, explanation: 'Đoạn nghe: "让我按时吃，还叫我请假在家休息两天".' },
   { id: 'q3', question: '"挂号" (guàhào) nghĩa là gì?', options: ['Đăng ký khám bệnh', 'Trả tiền viện phí', 'Lấy thuốc', 'Đo huyết áp'], correctIndex: 0, explanation: '挂号 = làm thủ tục đăng ký trước khi gặp bác sĩ.' },
 ]);
 
-const c4 = doc('cls201-4-1-plans-work-study', 'Chapter 4 — Plans, work &amp; study|||Chương 4 — Kế hoạch, công việc &amp; học tập',
+const c4 = doc('cls201-4-1-plans-work-study', 'Chapter 4 — Plans, work & study|||Chương 4 — Kế hoạch, công việc & học tập',
   'Mẫu câu: 我打算/计划, 先…然后…最后, 争取; từ 计划/安排/任务/提前/完成; luyện trình bày kế hoạch học tập/công việc.',
   [[
     `<span class="eyebrow">CLS201 · Chapter 4 · Lesson 4.1</span>
@@ -416,13 +416,13 @@ Xià ge yuè wǒ yào cānjiā yí ge zhòngyào de kǎoshì, suǒyǐ wǒ gěi z
 <div class="callout"><span class="badge">Mẹo nghe</span> Đoạn về kế hoạch thường xếp theo 先…然后…晚上/最后 — hãy vẽ nhanh một mốc thời gian trong đầu (sáng → sau đó → tối) khi nghe, thay vì cố nhớ từng câu một.</div>`,
   ]]);
 
-const c4q = quiz('cls201-quiz-4', 'Quiz 4 — Plans, work &amp; study|||Quiz 4 — Kế hoạch, công việc &amp; học tập', [
+const c4q = quiz('cls201-quiz-4', 'Quiz 4 — Plans, work & study|||Quiz 4 — Kế hoạch, công việc & học tập', [
   { id: 'q1', question: '"打算" (dǎsuàn) gần nghĩa nhất với từ nào?', options: ['Dự định', 'Hoàn thành', 'Mục tiêu', 'Nhiệm vụ'], correctIndex: 0, explanation: '打算 = dự định, nói về việc định làm gì.' },
   { id: 'q2', question: 'Trong đoạn nghe, buổi sáng người nói làm gì trước tiên?', options: ['Ôn từ mới', 'Luyện nghe', 'Làm bài tập', 'Đi làm'], correctIndex: 0, explanation: 'Đoạn nghe: "每天早上先复习生词，然后练习听力".' },
   { id: 'q3', question: '"争取按时完成" nghĩa là gì?', options: ['Cố gắng hoàn thành đúng giờ', 'Không cần hoàn thành', 'Hoàn thành muộn cũng được', 'Đã hoàn thành rồi'], correctIndex: 0, explanation: '争取 = cố gắng đạt được; 按时完成 = hoàn thành đúng giờ.' },
 ]);
 
-const c5 = doc('cls201-5-1-travel-hotel', 'Chapter 5 — Travel, hotel booking &amp; asking for information|||Chương 5 — Du lịch, đặt phòng &amp; hỏi thông tin',
+const c5 = doc('cls201-5-1-travel-hotel', 'Chapter 5 — Travel, hotel booking & asking for information|||Chương 5 — Du lịch, đặt phòng & hỏi thông tin',
   'Mẫu câu: 我想预订一间…, …多少钱一晚, 几点退房; từ 预订/前台/押金/景点/门票; luyện đặt phòng qua điện thoại và nghe thông báo lịch trình tour.',
   [[
     `<span class="eyebrow">CLS201 · Chapter 5 · Lesson 5.1</span>
@@ -497,13 +497,13 @@ Gèwèi yóukè, huānyíng cānjiā jīntiān de lǚxíngtuán. Wǒmen xiān q�
 <div class="callout"><span class="badge">Mẹo nghe</span> Đoạn về lịch trình là một chuỗi mốc giờ: 先…大概…下午三点…明天早上八点. Chỉ cần ghi lại giờ và hoạt động tương ứng — vậy là trả lời được hầu hết câu hỏi HSK3 dạng này.</div>`,
   ]]);
 
-const c5q = quiz('cls201-quiz-5', 'Quiz 5 — Travel &amp; hotel booking|||Quiz 5 — Du lịch &amp; đặt phòng', [
+const c5q = quiz('cls201-quiz-5', 'Quiz 5 — Travel & hotel booking|||Quiz 5 — Du lịch & đặt phòng', [
   { id: 'q1', question: '"我想预订一间双人间" nghĩa là gì?', options: ['Tôi muốn đặt một phòng đôi', 'Tôi muốn trả phòng', 'Tôi muốn đổi phòng', 'Tôi muốn huỷ đặt phòng'], correctIndex: 0, explanation: '预订 = đặt trước; 双人间 = phòng đôi.' },
   { id: 'q2', question: 'Theo đoạn nghe, mấy giờ sáng mai đoàn tập trung?', options: ['8 giờ sáng', '12 giờ trưa', '3 giờ chiều', '8 giờ tối'], correctIndex: 0, explanation: 'Đoạn nghe: "明天早上八点在酒店门口集合".' },
   { id: 'q3', question: '"退房" (tuìfáng) nghĩa là gì?', options: ['Trả phòng', 'Đặt phòng', 'Đổi phòng', 'Dọn phòng'], correctIndex: 0, explanation: '退房 = trả phòng khi rời khách sạn.' },
 ]);
 
-const c6 = doc('cls201-6-1-feelings-opinions', 'Chapter 6 — Expressing feelings, opinions &amp; suggestions|||Chương 6 — Bày tỏ cảm xúc, ý kiến &amp; đề nghị',
+const c6 = doc('cls201-6-1-feelings-opinions', 'Chapter 6 — Expressing feelings, opinions & suggestions|||Chương 6 — Bày tỏ cảm xúc, ý kiến & đề nghị',
   'Mẫu câu: 我对…感到…, 我觉得/我认为, 要是我…我会, 你觉得…怎么样; từ 满意/失望/担心/建议/看法; luyện nêu ý kiến và nghe một đoạn chia sẻ cảm xúc.',
   [[
     `<span class="eyebrow">CLS201 · Chapter 6 · Lesson 6.1</span>
@@ -574,13 +574,13 @@ Wǒ péngyou zuìjìn huànle gōngzuò, tā gēn wǒ shuō tā duì xīn gōngz
 <div class="callout"><span class="badge">Mẹo nghe</span> Đoạn về cảm xúc hay ghép một ý tích cực với một cú lật bằng 不过/但是 ("hài lòng … nhưng cũng lo lắng"). Đừng dừng nghe ở từ cảm xúc đầu tiên — câu sau 不过 mới thường là điều câu hỏi nhắm tới.</div>`,
   ]]);
 
-const c6q = quiz('cls201-quiz-6', 'Quiz 6 — Feelings, opinions &amp; suggestions|||Quiz 6 — Cảm xúc, ý kiến &amp; đề nghị', [
+const c6q = quiz('cls201-quiz-6', 'Quiz 6 — Feelings, opinions & suggestions|||Quiz 6 — Cảm xúc, ý kiến & đề nghị', [
   { id: 'q1', question: '"我对新工作感到很满意" nghĩa là gì?', options: ['Tôi rất hài lòng với công việc mới', 'Tôi rất thất vọng về công việc mới', 'Tôi lo lắng về công việc mới', 'Tôi không thích công việc mới'], correctIndex: 0, explanation: '感到满意 = cảm thấy hài lòng.' },
   { id: 'q2', question: 'Trong đoạn nghe, bạn của người nói lo lắng điều gì?', options: ['Sợ làm không tốt nhiệm vụ mới', 'Sợ đồng nghiệp không thân thiện', 'Sợ lương thấp', 'Sợ đi làm xa'], correctIndex: 0, explanation: 'Đoạn nghe: "怕自己做不好新的任务".' },
   { id: 'q3', question: 'Mẫu câu nào dùng để hỏi ý kiến người khác?', options: ['你觉得…怎么样？', '多少钱？', '几点了？', '你叫什么名字？'], correctIndex: 0, explanation: '你觉得…怎么样 = bạn thấy … thế nào — dùng để hỏi ý kiến.' },
 ]);
 
-const c7 = doc('cls201-7-1-phone-appointments', 'Chapter 7 — Phone calls &amp; making appointments|||Chương 7 — Giao tiếp qua điện thoại &amp; hẹn gặp',
+const c7 = doc('cls201-7-1-phone-appointments', 'Chapter 7 — Phone calls & making appointments|||Chương 7 — Giao tiếp qua điện thoại & hẹn gặp',
   'Mẫu câu: 我们几点/在哪儿见面, 你什么时候方便, 到时候见, 别忘了; từ 约/改约/确认/挂电话; luyện hẹn gặp qua điện thoại và nghe một tin nhắn thoại.',
   [[
     `<span class="eyebrow">CLS201 · Chapter 7 · Lesson 7.1</span>
@@ -653,13 +653,13 @@ Nǐ hǎo, wǒ shì Xiǎo Lǐ. Yīnwèi míngtiān yǒudiǎnr jíshì, wǒmen de 
 <div class="callout"><span class="badge">Mẹo nghe</span> Tin nhắn thoại chỉ đưa ra một giờ mới và một địa điểm mới — kế hoạch cũ chỉ được nhắc tới để huỷ. Hãy nghe qua phần lý do (因为…) để bắt thẳng vào 改到… (đổi sang …) — đó mới là chi tiết mới thật sự.</div>`,
   ]]);
 
-const c7q = quiz('cls201-quiz-7', 'Quiz 7 — Phone calls &amp; appointments|||Quiz 7 — Điện thoại &amp; hẹn gặp', [
+const c7q = quiz('cls201-quiz-7', 'Quiz 7 — Phone calls & appointments|||Quiz 7 — Điện thoại & hẹn gặp', [
   { id: 'q1', question: '"我们改约到后天" nghĩa là gì?', options: ['Đổi lịch hẹn sang ngày kia', 'Huỷ hẹn luôn', 'Giữ nguyên lịch hẹn', 'Hẹn sớm hơn'], correctIndex: 0, explanation: '改约 = đổi lịch hẹn; 后天 = ngày kia.' },
   { id: 'q2', question: 'Theo tin nhắn thoại, cuộc hẹn mới diễn ra ở đâu?', options: ['Quán cà phê', 'Thư viện', 'Bệnh viện', 'Sân bay'], correctIndex: 0, explanation: 'Đoạn nghe: "在咖啡馆见面".' },
   { id: 'q3', question: '"别忘了" nghĩa là gì?', options: ['Đừng quên', 'Hãy nhớ trả tiền', 'Xin lỗi', 'Tạm biệt'], correctIndex: 0, explanation: '别忘了 + động từ = đừng quên làm gì.' },
 ]);
 
-const c8 = doc('cls201-8-1-review-comprehensive', 'Chapter 8 — Review: a longer passage, a short talk &amp; a mixed dialogue|||Chương 8 — Ôn tập: nghe đoạn dài, thuyết trình ngắn &amp; hội thoại tình huống',
+const c8 = doc('cls201-8-1-review-comprehensive', 'Chapter 8 — Review: a longer passage, a short talk & a mixed dialogue|||Chương 8 — Ôn tập: nghe đoạn dài, thuyết trình ngắn & hội thoại tình huống',
   'Ôn tổng hợp: đoạn nghe dài (~8 câu), mẫu khung thuyết trình ngắn 首先…然后…总的来说, hội thoại tình huống kết hợp sức khoẻ/du lịch/điện thoại, và mẹo nghe HSK3.',
   [[
     `<span class="eyebrow">CLS201 · Chapter 8 · Lesson 8.1</span>
@@ -746,7 +746,7 @@ Dàjiā hǎo, jīntiān wǒ xiǎng jiǎndān tántan wǒ de tīngshuō xuéxí j
 </ol></div>`,
   ]]);
 
-const c8q = quiz('cls201-quiz-8', 'Quiz 8 — Review: long passage, short talk &amp; dialogue|||Quiz 8 — Ôn tập: đoạn nghe dài, thuyết trình &amp; hội thoại', [
+const c8q = quiz('cls201-quiz-8', 'Quiz 8 — Review: long passage, short talk & dialogue|||Quiz 8 — Ôn tập: đoạn nghe dài, thuyết trình & hội thoại', [
   { id: 'q1', question: 'Trong đoạn nghe dài, vì sao người nói không kịp mua vé trước?', options: ['Vì bị cảm/sốt phải nghỉ ở nhà', 'Vì hết vé', 'Vì đổi ý không muốn đi', 'Vì trời mưa'], correctIndex: 0, explanation: 'Đoạn nghe: "我有点儿感冒，还发烧了，医生让我在家休息，所以我没能提前去买票".' },
   { id: 'q2', question: 'Mẹo nghe nào giúp nắm ý chính trước khi nghe chi tiết?', options: ['Đọc câu hỏi trước để đoán nội dung', 'Chỉ nghe đúng một lần rồi thôi', 'Bỏ qua hết số liệu', 'Dịch từng từ một sang tiếng Việt'], correctIndex: 0, explanation: 'Đọc câu hỏi trước giúp đoán chủ đề và biết cần bắt thông tin gì khi nghe.' },
   { id: 'q3', question: '"总的来说" dùng để làm gì trong một bài nói/nghe?', options: ['Tóm lại, chốt ý chung', 'Hỏi lại thông tin', 'Mở đầu câu chuyện', 'Xin lỗi'], correctIndex: 0, explanation: '总的来说 = nhìn chung, dùng để tóm tắt ý chính ở cuối bài nói hoặc đoạn nghe.' },
@@ -772,13 +772,13 @@ export default {
   sections: [
     { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình HSK Standard Course 3 (听说), Short-term Spoken Chinese: Elementary, app luyện nghe/nói, chiến lược nghe hiểu HSK3.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp CLS101, nâng lên HSK3: nghe đoạn dài hơn, hội thoại tình huống, thuyết trình ngắn.', lessons: [intro] },
-    { title: 'Chương 1 — Kể lại trải nghiệm &amp; sự việc quá khứ|||Chapter 1 — Retelling past experiences', description: 'V+过, 有没有…过, …的时候, 结果, 后来.', lessons: [c1, c1q] },
-    { title: 'Chương 2 — Miêu tả &amp; so sánh người, vật|||Chapter 2 — Describing & comparing', description: 'A比B, A跟B一样, A没有B那么, 越来越.', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Sức khoẻ &amp; đi khám bệnh|||Chapter 3 — Health & the clinic', description: '哪儿不舒服, 症状, 发烧, 开药, 按时吃药.', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Kế hoạch, công việc &amp; học tập|||Chapter 4 — Plans, work & study', description: '打算/计划, 先…然后…最后, 提前, 争取完成.', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Du lịch, đặt phòng &amp; hỏi thông tin|||Chapter 5 — Travel & hotel booking', description: '预订房间, 多少钱一晚, 几点退房, 景点, 门票.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Bày tỏ cảm xúc, ý kiến &amp; đề nghị|||Chapter 6 — Feelings, opinions & suggestions', description: '感到满意/失望, 我觉得, 建议, 你觉得…怎么样.', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Giao tiếp qua điện thoại &amp; hẹn gặp|||Chapter 7 — Phone calls & appointments', description: '几点见面, 你什么时候方便, 改约, 确认, 别忘了.', lessons: [c7, c7q] },
-    { title: 'Chương 8 — Ôn tập: nghe đoạn dài, thuyết trình ngắn &amp; hội thoại tình huống|||Chapter 8 — Review: long passage, short talk & dialogue', description: 'Đoạn nghe dài tổng hợp, khung 首先…然后…总的来说, hội thoại tình huống kết hợp.', lessons: [c8, c8q] },
+    { title: 'Chương 1 — Kể lại trải nghiệm & sự việc quá khứ|||Chapter 1 — Retelling past experiences', description: 'V+过, 有没有…过, …的时候, 结果, 后来.', lessons: [c1, c1q] },
+    { title: 'Chương 2 — Miêu tả & so sánh người, vật|||Chapter 2 — Describing & comparing', description: 'A比B, A跟B一样, A没有B那么, 越来越.', lessons: [c2, c2q] },
+    { title: 'Chương 3 — Sức khoẻ & đi khám bệnh|||Chapter 3 — Health & the clinic', description: '哪儿不舒服, 症状, 发烧, 开药, 按时吃药.', lessons: [c3, c3q] },
+    { title: 'Chương 4 — Kế hoạch, công việc & học tập|||Chapter 4 — Plans, work & study', description: '打算/计划, 先…然后…最后, 提前, 争取完成.', lessons: [c4, c4q] },
+    { title: 'Chương 5 — Du lịch, đặt phòng & hỏi thông tin|||Chapter 5 — Travel & hotel booking', description: '预订房间, 多少钱一晚, 几点退房, 景点, 门票.', lessons: [c5, c5q] },
+    { title: 'Chương 6 — Bày tỏ cảm xúc, ý kiến & đề nghị|||Chapter 6 — Feelings, opinions & suggestions', description: '感到满意/失望, 我觉得, 建议, 你觉得…怎么样.', lessons: [c6, c6q] },
+    { title: 'Chương 7 — Giao tiếp qua điện thoại & hẹn gặp|||Chapter 7 — Phone calls & appointments', description: '几点见面, 你什么时候方便, 改约, 确认, 别忘了.', lessons: [c7, c7q] },
+    { title: 'Chương 8 — Ôn tập: nghe đoạn dài, thuyết trình ngắn & hội thoại tình huống|||Chapter 8 — Review: long passage, short talk & dialogue', description: 'Đoạn nghe dài tổng hợp, khung 首先…然后…总的来说, hội thoại tình huống kết hợp.', lessons: [c8, c8q] },
   ],
 };

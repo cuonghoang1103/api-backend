@@ -11,7 +11,7 @@ const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}
 const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
 const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 420, questions } });
 
-const c1 = doc('cpl401-1-1-phonological-system', 'Chapter 1 — Chinese phonological system: initials, finals, tones &amp; pinyin|||Chương 1 — Hệ thống ngữ âm tiếng Trung: thanh mẫu, vận mẫu, thanh điệu &amp; pinyin',
+const c1 = doc('cpl401-1-1-phonological-system', 'Chapter 1 — Chinese phonological system: initials, finals, tones & pinyin|||Chương 1 — Hệ thống ngữ âm tiếng Trung: thanh mẫu, vận mẫu, thanh điệu & pinyin',
   'Thanh mẫu (phụ âm đầu), vận mẫu (phần vần), thanh điệu tiếng Trung phổ thông; cách pinyin ghi âm hệ thống này.',
   [[
     `<span class="eyebrow">CPL401 · Chapter 1 · Phonology</span>
@@ -68,7 +68,7 @@ const c1q = quiz('cpl401-quiz-1', 'Quiz 1 — Phonological system|||Quiz 1 — H
   { id: 'q3', question: 'mā, má, mǎ, mà (妈/麻/马/骂) khác nhau ở điểm gì?', options: ['Chỉ khác thanh điệu, nhưng là 4 từ/nghĩa hoàn toàn khác nhau', 'Chỉ là 4 cách viết khác nhau của cùng một từ', 'Khác thanh mẫu', 'Khác vận mẫu'], correctIndex: 0, explanation: 'Bốn âm tiết này cùng thanh mẫu m- và vận mẫu -a, chỉ khác thanh điệu, nhưng thanh điệu khác thì nghĩa khác hoàn toàn.' },
 ]);
 
-const c2 = doc('cpl401-2-1-syllable-tone-sandhi', 'Chapter 2 — Syllables, tone sandhi &amp; phonological phenomena: neutral tone &amp; érhuà|||Chương 2 — Âm tiết, biến điệu &amp; hiện tượng ngữ âm: nhẹ hoá &amp; nhi hoá',
+const c2 = doc('cpl401-2-1-syllable-tone-sandhi', 'Chapter 2 — Syllables, tone sandhi & phonological phenomena: neutral tone & érhuà|||Chương 2 — Âm tiết, biến điệu & hiện tượng ngữ âm: nhẹ hoá & nhi hoá',
   'Cấu trúc âm tiết; quy tắc biến điệu (thanh 3+3, 不, 一); nhẹ hoá (轻声) ở trợ từ; nhi hoá (儿化).',
   [[
     `<span class="eyebrow">CPL401 · Chapter 2 · Syllable &amp; sandhi</span>
@@ -103,13 +103,13 @@ const c2 = doc('cpl401-2-1-syllable-tone-sandhi', 'Chapter 2 — Syllables, tone
 <div class="callout"><span class="badge">Không phải biến thể tự do</span> Biến điệu và nhi hoá là quy tắc có hệ thống, không phải cách đọc tuỳ ý — người học đọc 你好 với hai thanh 3 đầy đủ, hoặc đọc 儿 thành một âm tiết riêng, sẽ nghe rất "ngoại".</div>`,
   ]]);
 
-const c2q = quiz('cpl401-quiz-2', 'Quiz 2 — Tone sandhi &amp; phonological phenomena|||Quiz 2 — Biến điệu &amp; hiện tượng ngữ âm', [
+const c2q = quiz('cpl401-quiz-2', 'Quiz 2 — Tone sandhi & phonological phenomena|||Quiz 2 — Biến điệu & hiện tượng ngữ âm', [
   { id: 'q1', question: '"你好" phát âm chuẩn theo quy tắc biến điệu là gì?', options: ['nǐhǎo, giữ nguyên hai thanh 3', 'níhǎo, thanh 3 của âm tiết đầu chuyển thành thanh 2', 'nǐhao, âm tiết đầu nhẹ hoá', 'nìhǎo, thanh 4 rồi thanh 3'], correctIndex: 1, explanation: 'Quy tắc biến điệu: hai thanh 3 liên tiếp thì âm tiết đầu đổi thành thanh 2 — 你好 đọc thành níhǎo.' },
   { id: 'q2', question: '轻声 (nhẹ hoá) thường áp dụng cho trường hợp nào?', options: ['Mọi âm tiết trong câu', 'Các trợ từ ngữ pháp/hậu tố như 吗, 了, 的, 们', 'Chỉ danh từ riêng', 'Chỉ số đếm từ 1 đến 10'], correctIndex: 1, explanation: 'Nhẹ hoá xảy ra ở các trợ từ ngữ pháp và một số hậu tố — chúng mất thanh điệu đầy đủ, đọc ngắn và nhẹ.' },
   { id: 'q3', question: '儿化 (nhi hoá) là hiện tượng gì?', options: ['Thêm một âm tiết đầy đủ 儿 sau từ', 'Biến phần cuối âm tiết trước thành âm uốn lưỡi -r, không tách thành âm tiết riêng', 'Đổi thanh điệu của âm tiết trước', 'Bỏ hẳn thanh mẫu của âm tiết trước'], correctIndex: 1, explanation: '儿化 nhập 儿 vào cuối âm tiết trước thành âm uốn lưỡi -r, ví dụ 花儿 huā+ér → huār, không đọc thành hai âm tiết.' },
 ]);
 
-const c3 = doc('cpl401-3-1-word-formation', 'Chapter 3 — Chinese words &amp; word formation: simple, compound &amp; reduplicated words|||Chương 3 — Từ &amp; cấu tạo từ tiếng Trung: từ đơn, từ ghép &amp; từ láy',
+const c3 = doc('cpl401-3-1-word-formation', 'Chapter 3 — Chinese words & word formation: simple, compound & reduplicated words|||Chương 3 — Từ & cấu tạo từ tiếng Trung: từ đơn, từ ghép & từ láy',
   'Từ đơn (单纯词) và liên miên từ; từ ghép (合成词): ghép nghĩa và phụ tố; từ láy (叠词).',
   [[
     `<span class="eyebrow">CPL401 · Chapter 3 · Lexicology</span>
@@ -146,7 +146,7 @@ const c3q = quiz('cpl401-quiz-3', 'Quiz 3 — Word formation|||Quiz 3 — Cấu 
   { id: 'q3', question: '"人人" (rénrén, mọi người) thuộc loại cấu tạo từ nào?', options: ['Từ ghép chính phụ', 'Từ đơn', 'Từ láy (叠词)', 'Từ phái sinh bằng phụ tố'], correctIndex: 2, explanation: '人人 là hình vị 人 được lặp lại (dạng AA) để nhấn mạnh nghĩa "mọi/từng người" — đây là từ láy.' },
 ]);
 
-const c4 = doc('cpl401-4-1-word-meaning', 'Chapter 4 — Word meaning, polysemy, synonymy &amp; antonymy|||Chương 4 — Nghĩa từ, đa nghĩa, đồng nghĩa &amp; trái nghĩa',
+const c4 = doc('cpl401-4-1-word-meaning', 'Chapter 4 — Word meaning, polysemy, synonymy & antonymy|||Chương 4 — Nghĩa từ, đa nghĩa, đồng nghĩa & trái nghĩa',
   'Nghĩa gốc và nghĩa phụ (sắc thái); từ đa nghĩa (多义词); đồng nghĩa (同义词) và trái nghĩa (反义词) có mức độ/bổ sung.',
   [[
     `<span class="eyebrow">CPL401 · Chapter 4 · Semantics</span>
@@ -179,7 +179,7 @@ const c4q = quiz('cpl401-quiz-4', 'Quiz 4 — Word meaning|||Quiz 4 — Nghĩa t
   { id: 'q3', question: 'Khác biệt giữa 变化 (biànhuà) và 变革 (biàngé) chủ yếu nằm ở đâu?', options: ['Nghĩa gốc hoàn toàn khác nhau', 'Sắc thái, mức độ trang trọng và phạm vi sử dụng', 'Cách viết chữ Hán của thanh mẫu', 'Thanh điệu của âm tiết đầu'], correctIndex: 1, explanation: 'Cả hai đều liên quan đến "thay đổi", nhưng 变革 trang trọng hơn và nhấn vào sự thay đổi có hệ thống, còn 变化 trung tính và chung hơn.' },
 ]);
 
-const c5 = doc('cpl401-5-1-idioms-vocabulary-growth', 'Chapter 5 — Idioms, set phrases &amp; vocabulary development|||Chương 5 — Thành ngữ, quán ngữ &amp; sự phát triển từ vựng',
+const c5 = doc('cpl401-5-1-idioms-vocabulary-growth', 'Chapter 5 — Idioms, set phrases & vocabulary development|||Chương 5 — Thành ngữ, quán ngữ & sự phát triển từ vựng',
   'Thành ngữ (成语), quán ngữ (惯用语), tục ngữ (谚语/俗语); từ mới, từ vựng mạng, từ mượn phiên âm (外来词).',
   [[
     `<span class="eyebrow">CPL401 · Chapter 5 · Vocabulary growth</span>
@@ -214,13 +214,13 @@ const c5 = doc('cpl401-5-1-idioms-vocabulary-growth', 'Chapter 5 — Idioms, set
 <div class="callout"><span class="badge">成语 khác 惯用语</span> 成语 mang tính văn học, cố định, thường 4 chữ, không biết điển tích thì không hiểu nghĩa; 惯用语 khẩu ngữ hơn, ngắn hơn, và nghĩa ẩn dụ thường đoán được ngay từ các chữ trong đó.</div>`,
   ]]);
 
-const c5q = quiz('cpl401-quiz-5', 'Quiz 5 — Idioms &amp; vocabulary growth|||Quiz 5 — Thành ngữ &amp; phát triển từ vựng', [
+const c5q = quiz('cpl401-quiz-5', 'Quiz 5 — Idioms & vocabulary growth|||Quiz 5 — Thành ngữ & phát triển từ vựng', [
   { id: 'q1', question: '"成语" (chéngyǔ) thường có đặc điểm gì?', options: ['Tự do thay đổi từ ngữ tuỳ ý', 'Cố định, thường 4 chữ, gốc từ điển tích/lịch sử', 'Chỉ dùng trong văn nói suồng sã', 'Luôn là từ vay mượn nước ngoài'], correctIndex: 1, explanation: '成语 là cụm cố định, thường 4 chữ, phần lớn bắt nguồn từ điển tích/ngụ ngôn/lịch sử — nghĩa không suy trực tiếp từ từng chữ được.' },
   { id: 'q2', question: '"沙发" (shāfā, ghế sofa) là ví dụ của loại từ nào?', options: ['Thành ngữ', 'Từ láy', 'Từ mượn phiên âm (外来词)', 'Từ đơn hai hình vị (联绵词)'], correctIndex: 2, explanation: '沙发 mô phỏng âm "sofa" của tiếng nước ngoài, không mang nghĩa gốc của 沙 (cát) hay 发 (phát) — đây là từ mượn phiên âm.' },
   { id: 'q3', question: '"躺平" (tǎngpíng) là ví dụ của loại từ vựng nào?', options: ['Thành ngữ cổ điển', 'Từ vựng mạng/thời sự mới (网络语言)', 'Quán ngữ cổ từ điển tích', 'Từ trái nghĩa có mức độ'], correctIndex: 1, explanation: '躺平 là từ mới xuất hiện trên mạng xã hội Trung Quốc, chỉ tâm lý buông bỏ cạnh tranh — thuộc lớp từ vựng mạng đang phát triển.' },
 ]);
 
-const c6 = doc('cpl401-6-1-origins-evolution-hanzi', 'Chapter 6 — Origins &amp; evolution of Chinese characters: oracle bones to regular script|||Chương 6 — Nguồn gốc &amp; diễn biến chữ Hán: từ giáp cốt văn đến khải thư',
+const c6 = doc('cpl401-6-1-origins-evolution-hanzi', 'Chapter 6 — Origins & evolution of Chinese characters: oracle bones to regular script|||Chương 6 — Nguồn gốc & diễn biến chữ Hán: từ giáp cốt văn đến khải thư',
   'Diễn biến chữ Hán: giáp cốt văn (甲骨文) → kim văn (金文) → triện thư (篆书) → lệ thư (隶书) → khải thư (楷书).',
   [[
     `<span class="eyebrow">CPL401 · Chapter 6 · Character history</span>
@@ -261,13 +261,13 @@ const c6 = doc('cpl401-6-1-origins-evolution-hanzi', 'Chapter 6 — Origins &amp
 <div class="callout"><span class="badge">Một chữ, một lịch sử dài</span> 马 (mǎ, con ngựa) khởi đầu là hình vẽ bờm và chân ngựa trong 甲骨文, và dạng phồn thể 馬 trong khải thư vẫn giữ bốn chân ngựa dưới dạng bốn dấu chấm ở đáy chữ.</div>`,
   ]]);
 
-const c6q = quiz('cpl401-quiz-6', 'Quiz 6 — Origins &amp; evolution of characters|||Quiz 6 — Nguồn gốc &amp; diễn biến chữ Hán', [
+const c6q = quiz('cpl401-quiz-6', 'Quiz 6 — Origins & evolution of characters|||Quiz 6 — Nguồn gốc & diễn biến chữ Hán', [
   { id: 'q1', question: 'Sắp xếp đúng trình tự các kiểu chữ Hán từ cổ đến hiện đại?', options: ['楷书 → 隶书 → 篆书 → 甲骨文', '甲骨文 → 金文 → 篆书 → 隶书 → 楷书', '金文 → 甲骨文 → 楷书 → 隶书', '篆书 → 甲骨文 → 隶书 → 楷书'], correctIndex: 1, explanation: 'Trình tự đúng là giáp cốt văn (甲骨文) → kim văn (金文) → triện thư (篆书) → lệ thư (隶书) → khải thư (楷书).' },
   { id: 'q2', question: 'Ai chủ trì việc chuẩn hoá chữ viết thành 小篆 sau khi nhà Tần thống nhất Trung Quốc (221 TCN)?', options: ['Lý Tư (李斯), theo lệnh Tần Thuỷ Hoàng', 'Khổng Tử', 'Võ Tắc Thiên', 'Không ai — tự phát triển tự nhiên, không có chính sách nào'], correctIndex: 0, explanation: 'Tần Thuỷ Hoàng ra lệnh thống nhất chữ viết, và thừa tướng Lý Tư (李斯) chủ trì việc chuẩn hoá thành 小篆 (tiểu triện) trên toàn đế quốc.' },
   { id: 'q3', question: 'Bước chuyển nào được coi là thay đổi lớn nhất hướng tới hình dạng chữ Hán hiện đại (nét cong triện thư đổi thành nét thẳng ngang/dọc)?', options: ['甲骨文 → 金文', '篆书 → 隶书', '隶书 → 楷书', '楷书 → 草书'], correctIndex: 1, explanation: 'Khi triện thư (篆书) chuyển sang lệ thư (隶书), bút lông thay cho dao khắc, nét cong triện thư trở thành nét ngang/dọc thẳng — bước nhảy lớn nhất về hình dạng.' },
 ]);
 
-const c7 = doc('cpl401-7-1-liushu-radicals', 'Chapter 7 — Character formation: the Six Categories (六书) &amp; radicals (部首)|||Chương 7 — Cấu tạo chữ Hán: lục thư (六书) &amp; bộ thủ (部首)',
+const c7 = doc('cpl401-7-1-liushu-radicals', 'Chapter 7 — Character formation: the Six Categories (六书) & radicals (部首)|||Chương 7 — Cấu tạo chữ Hán: lục thư (六书) & bộ thủ (部首)',
   'Lục thư (六书): tượng hình, chỉ sự, hội ý, hình thanh, chuyển chú, giả tá; bộ thủ (部首) và cách tra chữ.',
   [[
     `<span class="eyebrow">CPL401 · Chapter 7 · Character structure</span>
@@ -314,13 +314,13 @@ const c7 = doc('cpl401-7-1-liushu-radicals', 'Chapter 7 — Character formation:
 <div class="callout"><span class="badge">Đoán một chữ mới</span> Thấy 河 (hé, sông)? 氵 báo cho biết chữ liên quan đến nước; 可 (kě) báo âm đọc gần "hé/kě". Cách suy luận hai phần này áp dụng được cho phần lớn chữ Hán bạn sẽ gặp.</div>`,
   ]]);
 
-const c7q = quiz('cpl401-quiz-7', 'Quiz 7 — Liushu &amp; radicals|||Quiz 7 — Lục thư &amp; bộ thủ', [
+const c7q = quiz('cpl401-quiz-7', 'Quiz 7 — Liushu & radicals|||Quiz 7 — Lục thư & bộ thủ', [
   { id: 'q1', question: 'Chữ "妈" (mā, mẹ) = 女 + 马 thuộc loại nào trong lục thư?', options: ['象形 (tượng hình)', '会意 (hội ý)', '形声 (hình thanh)', '假借 (giả tá)'], correctIndex: 2, explanation: '妈 gồm 女 (mang nghĩa: nữ) và 马 (mang âm: mǎ→mā) — đúng cấu trúc một-phần-nghĩa một-phần-âm của 形声.' },
   { id: 'q2', question: 'Loại chữ nào chiếm khoảng 80% tổng số chữ Hán hiện có?', options: ['象形 (tượng hình)', '指事 (chỉ sự)', '形声 (hình thanh)', '假借 (giả tá)'], correctIndex: 2, explanation: '形声 là loại năng sản nhất trong lục thư, chiếm khoảng 80% chữ Hán, vì có thể ghép tự do một bộ nghĩa với một bộ âm.' },
   { id: 'q3', question: '部首 (bùshǒu, bộ thủ) dùng để làm gì?', options: ['Chỉ thanh điệu của chữ', 'Là khoá tra chữ trong từ điển, thường mang phần nghĩa', 'Chỉ cách phát âm chính xác của chữ', 'Chỉ số nét bút bắt buộc phải viết'], correctIndex: 1, explanation: '214 bộ thủ Khang Hy là hệ thống khoá để tra chữ trong từ điển, và trong một chữ hình thanh, bộ thủ thường là phần mang nghĩa.' },
 ]);
 
-const c8 = doc('cpl401-8-1-simplified-traditional', 'Chapter 8 — Simplified vs traditional characters &amp; modern standardization|||Chương 8 — Chữ giản thể vs phồn thể &amp; chuẩn hoá chữ Hán hiện đại',
+const c8 = doc('cpl401-8-1-simplified-traditional', 'Chapter 8 — Simplified vs traditional characters & modern standardization|||Chương 8 — Chữ giản thể vs phồn thể & chuẩn hoá chữ Hán hiện đại',
   'Giản thể (简体字) và phồn thể (繁体字); các cách giản hoá chữ Hán; mốc chuẩn hoá 1956/1986/2013.',
   [[
     `<span class="eyebrow">CPL401 · Chapter 8 · Simplified vs traditional</span>
@@ -398,12 +398,12 @@ export default {
   },
   sections: [
     { title: 'Chương 1 — Hệ thống ngữ âm|||Chapter 1 — Phonological system', description: 'Thanh mẫu, vận mẫu, thanh điệu, pinyin.', lessons: [c1, c1q] },
-    { title: 'Chương 2 — Âm tiết &amp; biến điệu|||Chapter 2 — Syllable &amp; tone sandhi', description: 'Biến điệu, nhẹ hoá, nhi hoá.', lessons: [c2, c2q] },
-    { title: 'Chương 3 — Từ &amp; cấu tạo từ|||Chapter 3 — Words &amp; word formation', description: 'Từ đơn, từ ghép, từ láy.', lessons: [c3, c3q] },
+    { title: 'Chương 2 — Âm tiết & biến điệu|||Chapter 2 — Syllable & tone sandhi', description: 'Biến điệu, nhẹ hoá, nhi hoá.', lessons: [c2, c2q] },
+    { title: 'Chương 3 — Từ & cấu tạo từ|||Chapter 3 — Words & word formation', description: 'Từ đơn, từ ghép, từ láy.', lessons: [c3, c3q] },
     { title: 'Chương 4 — Nghĩa từ|||Chapter 4 — Word meaning', description: 'Đa nghĩa, đồng nghĩa, trái nghĩa.', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Thành ngữ &amp; phát triển từ vựng|||Chapter 5 — Idioms &amp; vocabulary growth', description: 'Thành ngữ, quán ngữ, tục ngữ, từ mới.', lessons: [c5, c5q] },
+    { title: 'Chương 5 — Thành ngữ & phát triển từ vựng|||Chapter 5 — Idioms & vocabulary growth', description: 'Thành ngữ, quán ngữ, tục ngữ, từ mới.', lessons: [c5, c5q] },
     { title: 'Chương 6 — Nguồn gốc chữ Hán|||Chapter 6 — Origins of Chinese characters', description: 'Giáp cốt văn đến khải thư.', lessons: [c6, c6q] },
     { title: 'Chương 7 — Cấu tạo chữ Hán|||Chapter 7 — Character structure', description: 'Lục thư, bộ thủ.', lessons: [c7, c7q] },
-    { title: 'Chương 8 — Giản thể &amp; phồn thể|||Chapter 8 — Simplified &amp; traditional', description: 'Giản hoá chữ Hán, chuẩn hoá hiện đại.', lessons: [c8, c8q] },
+    { title: 'Chương 8 — Giản thể & phồn thể|||Chapter 8 — Simplified & traditional', description: 'Giản hoá chữ Hán, chuẩn hoá hiện đại.', lessons: [c8, c8q] },
   ],
 };

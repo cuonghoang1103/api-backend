@@ -96,7 +96,7 @@ const intro = doc('chn113-0-1-overview', 'Course overview: Elementary Chinese 1|
 <p>Pinyin &amp; thanh điệu → chào hỏi → số đếm &amp; tuổi → giới thiệu bản thân → gia đình → thời gian &amp; ngày tháng → đồ ăn &amp; mua sắm → hoạt động hằng ngày. Mỗi bài có bảng từ vựng, điểm ngữ pháp, một hội thoại ngắn, ghi chú phát âm/chữ viết, và quiz.</p>`,
   ]]);
 
-const b1 = doc('chn113-1-1-pinyin-tones', 'Lesson 1 — Pinyin &amp; the four tones|||Bài 1 — Ngữ âm &amp; thanh điệu',
+const b1 = doc('chn113-1-1-pinyin-tones', 'Lesson 1 — Pinyin & the four tones|||Bài 1 — Ngữ âm & thanh điệu',
   'Pinyin: thanh mẫu (initials) & vận mẫu (finals); 4 thanh + thanh nhẹ; dấu thanh ā á ǎ à; quy tắc biến điệu.',
   [[
     `<span class="eyebrow">CHN113 · Lesson 1 · Pronunciation</span>
@@ -149,13 +149,13 @@ const b1 = doc('chn113-1-1-pinyin-tones', 'Lesson 1 — Pinyin &amp; the four to
 <div class="callout"><span class="badge">Ghi chú</span> Dấu thanh đặt trên nguyên âm chính; thanh 3 ǎ hạ xuống rồi nâng lên. Luyện mā / má / mǎ / mà đến khi nghe rõ khác nhau.</div>`,
   ]]);
 
-const b1q = quiz('chn113-quiz-1', 'Quiz 1 — Pinyin &amp; tones|||Quiz 1 — Ngữ âm &amp; thanh điệu', [
+const b1q = quiz('chn113-quiz-1', 'Quiz 1 — Pinyin & tones|||Quiz 1 — Ngữ âm & thanh điệu', [
   { id: 'q1', question: 'Tiếng phổ thông có mấy thanh điệu (không kể thanh nhẹ)? / How many tones does Mandarin have (not counting the neutral tone)?', options: ['2', '3', '4', '6'], correctIndex: 2, explanation: '4 thanh: ā (cao ngang), á (lên), ǎ (xuống-lên), à (xuống gắt).' },
   { id: 'q2', question: 'Chữ 马 (con ngựa) mang thanh nào? / Which tone does 马 (horse) carry?', options: ['mā (thanh 1)', 'má (thanh 2)', 'mǎ (thanh 3)', 'mà (thanh 4)'], correctIndex: 2, explanation: '马 = mǎ, thanh 3 (xuống rồi lên).' },
   { id: 'q3', question: 'Khi 你 (nǐ) + 好 (hǎo) đứng cạnh nhau thì đọc thế nào? / When nǐ + hǎo meet, how are they read?', options: ['nì hǎo', 'ní hǎo', 'nǐ háo', 'nī hao'], correctIndex: 1, explanation: 'Hai thanh 3 liền nhau: thanh 3 đầu biến thành thanh 2 → ní hǎo.' },
 ]);
 
-const b2 = doc('chn113-2-1-greetings', 'Lesson 2 — Greetings &amp; pronouns|||Bài 2 — Chào hỏi &amp; đại từ',
+const b2 = doc('chn113-2-1-greetings', 'Lesson 2 — Greetings & pronouns|||Bài 2 — Chào hỏi & đại từ',
   'Từ vựng: 你好, 你好吗, 谢谢, 再见, 对不起; đại từ 我/你/他/她 và số nhiều 们. Ngữ pháp: câu hỏi với 吗, 很 + tính từ.',
   [[
     `<span class="eyebrow">CHN113 · Lesson 2 · Greetings</span>
@@ -222,7 +222,7 @@ const b2q = quiz('chn113-quiz-2', 'Quiz 2 — Greetings|||Quiz 2 — Chào hỏi
   { id: 'q3', question: '"我们" (wǒmen) nghĩa là gì? / What does 我们 mean?', options: ['tôi', 'họ', 'chúng tôi', 'các bạn'], correctIndex: 2, explanation: '我 (tôi) + 们 (số nhiều) = 我们 chúng tôi.' },
 ]);
 
-const b3 = doc('chn113-3-1-numbers-age', 'Lesson 3 — Numbers &amp; age|||Bài 3 — Số đếm &amp; tuổi',
+const b3 = doc('chn113-3-1-numbers-age', 'Lesson 3 — Numbers & age|||Bài 3 — Số đếm & tuổi',
   'Số 0–100; hỏi số lượng với 几 và 多少; hỏi tuổi với 岁, 你几岁 / 你多大.',
   [[
     `<span class="eyebrow">CHN113 · Lesson 3 · Numbers</span>
@@ -277,7 +277,7 @@ const b3 = doc('chn113-3-1-numbers-age', 'Lesson 3 — Numbers &amp; age|||Bài 
 <div class="callout"><span class="badge">Ghi chú</span> Sau số thường cần lượng từ, nhưng 岁 (suì) tự làm lượng từ luôn: 八岁 = tám tuổi (không thêm chữ nào).</div>`,
   ]]);
 
-const b3q = quiz('chn113-quiz-3', 'Quiz 3 — Numbers &amp; age|||Quiz 3 — Số đếm &amp; tuổi', [
+const b3q = quiz('chn113-quiz-3', 'Quiz 3 — Numbers & age|||Quiz 3 — Số đếm & tuổi', [
   { id: 'q1', question: 'Số 8 viết là? / How is the number 8 written?', options: ['八 bā', '九 jiǔ', '十 shí', '六 liù'], correctIndex: 0, explanation: '八 bā = 8; 九 jiǔ = 9; 十 shí = 10; 六 liù = 6.' },
   { id: 'q2', question: '"二十五" (èrshíwǔ) là số mấy? / What number is 二十五?', options: ['15', '25', '52', '250'], correctIndex: 1, explanation: '二十 (20) + 五 (5) = 25.' },
   { id: 'q3', question: 'Hỏi tuổi bằng chữ nào? / Which word asks about age?', options: ['块 kuài', '岁 suì', '点 diǎn', '个 gè'], correctIndex: 1, explanation: '岁 suì = tuổi: 你几岁? / 我八岁。' },
@@ -419,7 +419,7 @@ const b5q = quiz('chn113-quiz-5', 'Quiz 5 — Family|||Quiz 5 — Gia đình', [
   { id: 'q3', question: '"姐姐" (jiějie) là ai? / Who is 姐姐?', options: ['em gái', 'chị gái', 'anh trai', 'mẹ'], correctIndex: 1, explanation: '姐姐 = chị gái; 妹妹 = em gái; 哥哥 = anh trai.' },
 ]);
 
-const b6 = doc('chn113-6-1-time-date', 'Lesson 6 — Time &amp; dates|||Bài 6 — Thời gian &amp; ngày tháng',
+const b6 = doc('chn113-6-1-time-date', 'Lesson 6 — Time & dates|||Bài 6 — Thời gian & ngày tháng',
   'Năm/tháng/ngày (年 月 日/号), thứ (星期), giờ phút (点 分), 现在; số 2 đặc biệt 两.',
   [[
     `<span class="eyebrow">CHN113 · Lesson 6 · Time</span>
@@ -484,13 +484,13 @@ B: 今天八号，星期一。 Jīntiān bā hào, xīngqīyī. (Ngày 8, Thứ 
 <div class="callout"><span class="badge">Ghi chú</span> 号 (hào) dùng khi nói; 日 (rì) là dạng viết/trang trọng cho ngày trong tháng.</div>`,
   ]]);
 
-const b6q = quiz('chn113-quiz-6', 'Quiz 6 — Time &amp; dates|||Quiz 6 — Thời gian &amp; ngày tháng', [
+const b6q = quiz('chn113-quiz-6', 'Quiz 6 — Time & dates|||Quiz 6 — Thời gian & ngày tháng', [
   { id: 'q1', question: 'Chữ nào chỉ "giờ" khi xem đồng hồ? / Which word means the hour (o clock)?', options: ['分 fēn', '点 diǎn', '号 hào', '岁 suì'], correctIndex: 1, explanation: '点 diǎn = giờ; 分 fēn = phút. 三点十分 = 3 giờ 10.' },
   { id: 'q2', question: '"星期一" (xīngqīyī) là thứ mấy? / Which day is 星期一?', options: ['Chủ Nhật', 'Thứ Hai', 'Thứ Bảy', 'Thứ Tư'], correctIndex: 1, explanation: '星期 + 一 (1) = Thứ Hai (ngày làm việc đầu tuần).' },
   { id: 'q3', question: '"2 giờ" nói đúng là? / How do you say "2 o clock"?', options: ['二点 èr diǎn', '两点 liǎng diǎn', '二时 èr shí', '两号 liǎng hào'], correctIndex: 1, explanation: 'Trước lượng từ dùng 两 chứ không dùng 二 → 两点.' },
 ]);
 
-const b7 = doc('chn113-7-1-food-shopping', 'Lesson 7 — Food &amp; shopping|||Bài 7 — Đồ ăn &amp; mua sắm',
+const b7 = doc('chn113-7-1-food-shopping', 'Lesson 7 — Food & shopping|||Bài 7 — Đồ ăn & mua sắm',
   'Ăn/uống (吃 喝), món & đồ uống (米饭 菜 水 茶), động từ 想/要/买, tiền 钱/块, hỏi giá 多少钱.',
   [[
     `<span class="eyebrow">CHN113 · Lesson 7 · Food &amp; shopping</span>
@@ -555,13 +555,13 @@ B: 三块。          Sān kuài.            (Ba tệ.)
 <div class="callout"><span class="badge">Ghi chú</span> Chỉ vào vật bằng 这个 zhège (cái này) / 那个 nàge (cái kia) — 个 gè là lượng từ chung.</div>`,
   ]]);
 
-const b7q = quiz('chn113-quiz-7', 'Quiz 7 — Food &amp; shopping|||Quiz 7 — Đồ ăn &amp; mua sắm', [
+const b7q = quiz('chn113-quiz-7', 'Quiz 7 — Food & shopping|||Quiz 7 — Đồ ăn & mua sắm', [
   { id: 'q1', question: '"Uống trà" nói đúng là? / How do you say "drink tea"?', options: ['吃茶 chī chá', '喝茶 hē chá', '买茶 mǎi chá', '要水 yào shuǐ'], correctIndex: 1, explanation: '喝 hē = uống (dùng cho đồ lỏng); 吃 chī = ăn.' },
   { id: 'q2', question: 'Hỏi giá "bao nhiêu tiền?" là? / How do you ask "how much?"', options: ['几点？', '多少钱？', '哪国人？', '几岁？'], correctIndex: 1, explanation: '多少钱? = bao nhiêu tiền; trả lời bằng …块.' },
   { id: 'q3', question: '"想 + động từ" diễn đạt điều gì? / What does 想 + verb express?', options: ['đã làm xong', 'muốn/định làm', 'không thể làm', 'đang ở đâu'], correctIndex: 1, explanation: '想 xiǎng + động từ = muốn làm: 我想吃米饭.' },
 ]);
 
-const b8 = doc('chn113-8-1-daily-places', 'Lesson 8 — Daily activities &amp; places|||Bài 8 — Hoạt động hằng ngày &amp; địa điểm',
+const b8 = doc('chn113-8-1-daily-places', 'Lesson 8 — Daily activities & places|||Bài 8 — Hoạt động hằng ngày & địa điểm',
   'Động từ 去 做 看 说; 在 (ở/tại) làm giới từ & động từ; hỏi nơi chốn 哪儿; địa điểm 学校 商店 医院.',
   [[
     `<span class="eyebrow">CHN113 · Lesson 8 · Daily life</span>
@@ -624,7 +624,7 @@ B: 我学习汉语。 Wǒ xuéxí Hànyǔ.  (Tôi học tiếng Trung.)
 <div class="callout"><span class="badge">Trật tự từ</span> Tiếng Trung giữ mẫu <strong>Ai + (khi nào) + (ở đâu 在…) + động từ + cái gì</strong>. Cụm nơi chốn có 在 đứng trước động từ, không đứng sau.</div>`,
   ]]);
 
-const b8q = quiz('chn113-quiz-8', 'Quiz 8 — Daily activities &amp; places|||Quiz 8 — Hoạt động &amp; địa điểm', [
+const b8q = quiz('chn113-quiz-8', 'Quiz 8 — Daily activities & places|||Quiz 8 — Hoạt động & địa điểm', [
   { id: 'q1', question: 'Hỏi "Bạn đi đâu?" đúng là? / How do you ask "Where are you going?"', options: ['你在哪儿？', '你去哪儿？', '你做什么？', '你几岁？'], correctIndex: 1, explanation: '去 (đi) + 哪儿 (đâu) = 你去哪儿? Còn 你在哪儿? = Bạn ở đâu?' },
   { id: 'q2', question: 'Trong câu "我在家看书", cụm nơi chốn 在家 đứng ở đâu? / In 我在家看书, where does the place phrase 在家 sit?', options: ['sau động từ 看', 'trước động từ 看', 'cuối câu', 'trước chủ ngữ'], correctIndex: 1, explanation: 'Cụm 在 + nơi chốn đứng TRƯỚC động từ: 我 在家 看书.' },
   { id: 'q3', question: '"学校" (xuéxiào) là nơi nào? / What place is 学校?', options: ['bệnh viện', 'cửa hàng', 'trường học', 'nhà'], correctIndex: 2, explanation: '学校 = trường học; 商店 = cửa hàng; 医院 = bệnh viện.' },
@@ -648,15 +648,15 @@ export default {
     requirements: 'Không cần kiến thức tiếng Trung trước đó. Nên cài Pleco hoặc dùng từ điển hanzii.net để tra chữ &amp; nghe phát âm; luyện viết chữ Hán theo thứ tự nét.',
   },
   sections: [
-    { title: '📚 Tài liệu &amp; lộ trình|||📚 Course materials', description: 'Giáo trình HSK1, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
+    { title: '📚 Tài liệu & lộ trình|||📚 Course materials', description: 'Giáo trình HSK1, app, từ điển, YouTube, lộ trình 4 bước.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Mục tiêu HSK1, pinyin, thanh điệu, cách học.', lessons: [intro] },
-    { title: 'Bài 1 — Ngữ âm &amp; thanh điệu|||Lesson 1 — Pinyin &amp; tones', description: 'Pinyin, 4 thanh + thanh nhẹ, biến điệu.', lessons: [b1, b1q] },
+    { title: 'Bài 1 — Ngữ âm & thanh điệu|||Lesson 1 — Pinyin & tones', description: 'Pinyin, 4 thanh + thanh nhẹ, biến điệu.', lessons: [b1, b1q] },
     { title: 'Bài 2 — Chào hỏi|||Lesson 2 — Greetings', description: '你好, 谢谢, 再见; đại từ; 吗, 很.', lessons: [b2, b2q] },
-    { title: 'Bài 3 — Số đếm &amp; tuổi|||Lesson 3 — Numbers &amp; age', description: 'Số 0–100, 几/多少, 岁.', lessons: [b3, b3q] },
+    { title: 'Bài 3 — Số đếm & tuổi|||Lesson 3 — Numbers & age', description: 'Số 0–100, 几/多少, 岁.', lessons: [b3, b3q] },
     { title: 'Bài 4 — Giới thiệu bản thân|||Lesson 4 — Self-introduction', description: 'Tên 叫/姓, 是, quốc tịch 国+人.', lessons: [b4, b4q] },
     { title: 'Bài 5 — Gia đình|||Lesson 5 — Family', description: 'Thành viên, 有/没有, lượng từ 个/口.', lessons: [b5, b5q] },
-    { title: 'Bài 6 — Thời gian &amp; ngày tháng|||Lesson 6 — Time &amp; dates', description: '年月日, 星期, 点分, 现在.', lessons: [b6, b6q] },
-    { title: 'Bài 7 — Đồ ăn &amp; mua sắm|||Lesson 7 — Food &amp; shopping', description: '吃/喝, 想/要/买, tiền 钱/块.', lessons: [b7, b7q] },
-    { title: 'Bài 8 — Hoạt động &amp; địa điểm|||Lesson 8 — Daily activities &amp; places', description: '去/做/看, 在, 哪儿, địa điểm.', lessons: [b8, b8q] },
+    { title: 'Bài 6 — Thời gian & ngày tháng|||Lesson 6 — Time & dates', description: '年月日, 星期, 点分, 现在.', lessons: [b6, b6q] },
+    { title: 'Bài 7 — Đồ ăn & mua sắm|||Lesson 7 — Food & shopping', description: '吃/喝, 想/要/买, tiền 钱/块.', lessons: [b7, b7q] },
+    { title: 'Bài 8 — Hoạt động & địa điểm|||Lesson 8 — Daily activities & places', description: '去/做/看, 在, 哪儿, địa điểm.', lessons: [b8, b8q] },
   ],
 };

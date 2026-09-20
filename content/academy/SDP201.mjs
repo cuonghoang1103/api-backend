@@ -202,7 +202,7 @@ const c2q = quiz('sdp201-quiz-2', 'Quiz 2 — Digital audio|||Quiz 2 — Âm tha
   { id: 'q3', question: 'Định dạng nào là nén MẤT dữ liệu, chỉ nên dùng để bàn giao?', options: ['WAV', 'AIFF', 'FLAC', 'MP3'], correctIndex: 3, explanation: 'MP3/AAC nén mất dữ liệu; WAV/AIFF không nén, FLAC nén không mất dữ liệu.' },
 ]);
 
-const c3 = doc('sdp201-3-1-recording-mics', '3.1 — Recording &amp; microphones|||3.1 — Thu âm &amp; micro',
+const c3 = doc('sdp201-3-1-recording-mics', '3.1 — Recording & microphones|||3.1 — Thu âm & micro',
   'Loại micro (động/tụ/ribbon), hướng thu (cardioid/omni/figure-8); kỹ thuật đặt mic (close/room, XY, ORTF); gain staging & headroom.',
   [[
     `<span class="eyebrow">SDP201 · Chapter 3 · Lesson 3.1</span>
@@ -251,13 +251,13 @@ Cặp ORTF  -&gt; hai cardioid cách 17cm / 110 do: rộng, tự nhiên</code></
 <div class="callout"><span class="badge">Nguyên tắc vàng</span> Thu sạch ngay tại nguồn. Không plugin nào cứu trọn một bản thu bị clip, một phòng ồn, hay một mic đặt sai.</div>`,
   ]]);
 
-const c3q = quiz('sdp201-quiz-3', 'Quiz 3 — Recording &amp; mics|||Quiz 3 — Thu âm &amp; micro', [
+const c3q = quiz('sdp201-quiz-3', 'Quiz 3 — Recording & mics|||Quiz 3 — Thu âm & micro', [
   { id: 'q1', question: 'Loại micro nào nhạy, chi tiết, và cần nguồn ảo +48V (phantom)?', options: ['Micro động (dynamic)', 'Micro tụ (condenser)', 'Micro ribbon', 'Loa'], correctIndex: 1, explanation: 'Micro tụ nhạy và chi tiết, cần phantom +48V; hợp thu giọng và Foley trong phòng thu.' },
   { id: 'q2', question: 'Hướng thu cardioid có đặc điểm gì?', options: ['Nghe mọi phía như nhau', 'Bắt phía trước, chặn phía sau', 'Chỉ bắt hai bên', 'Không thu được gì'], correctIndex: 1, explanation: 'Cardioid bắt phía trước và chặn phía sau, tốt để cô lập một nguồn.' },
   { id: 'q3', question: 'Đặt gain để đỉnh to nhất rơi quanh -12 đến -6 dBFS nhằm mục đích gì?', options: ['Để clip cho méo', 'Để chừa headroom, tránh vượt 0 dBFS', 'Để tăng nhiễu nền', 'Để giảm sample rate'], correctIndex: 1, explanation: 'Chừa headroom tránh clipping ở 0 dBFS; clipping là méo gắt không sửa được.' },
 ]);
 
-const c4 = doc('sdp201-4-1-editing-daw', '4.1 — Audio editing &amp; the DAW|||4.1 — Biên tập audio &amp; DAW',
+const c4 = doc('sdp201-4-1-editing-daw', '4.1 — Audio editing & the DAW|||4.1 — Biên tập audio & DAW',
   'DAW (Pro Tools/Reaper/Audacity): track, clip, timeline; cắt/trim/fade, crossfade, comping, khử nhiễu; biên tập không phá huỷ; zero-crossing tránh click.',
   [[
     `<span class="eyebrow">SDP201 · Chapter 4 · Lesson 4.1</span>
@@ -308,13 +308,13 @@ Comp      -&gt; chọn đoạn hay nhất từ nhiều lần thu</code></pre>
 <div class="callout"><span class="badge">Quy trình</span> Nhập ở 48 kHz / 24-bit, biên tập không phá huỷ, fade mọi vết cắt, và đặt tên cùng màu cho track.</div>`,
   ]]);
 
-const c4q = quiz('sdp201-quiz-4', 'Quiz 4 — Editing &amp; DAW|||Quiz 4 — Biên tập &amp; DAW', [
+const c4q = quiz('sdp201-quiz-4', 'Quiz 4 — Editing & DAW|||Quiz 4 — Biên tập & DAW', [
   { id: 'q1', question: 'Vì sao nên cắt clip tại điểm zero-crossing (hoặc thêm fade nhỏ)?', options: ['Để file nhỏ hơn', 'Để tránh tiếng click/pop ở mối cắt', 'Để tăng sample rate', 'Để đổi cao độ'], correctIndex: 1, explanation: 'Cắt giữa sóng để lại bước nhảy biên độ, tai nghe thành click/pop; cắt ở zero-crossing tránh điều đó.' },
   { id: 'q2', question: '"Biên tập không phá huỷ" (non-destructive) nghĩa là gì?', options: ['Xoá vĩnh viễn file gốc', 'Sửa trên tham chiếu, giữ nguyên file gốc', 'Chỉ dùng được với MP3', 'Không thể hoàn tác'], correctIndex: 1, explanation: 'DAW sửa trên một tham chiếu chứ không sửa file gốc, nên luôn hoàn tác/khôi phục được.' },
   { id: 'q3', question: 'Thao tác nào chồng hai clip để mối nối nghe liền mạch?', options: ['Trim', 'Split', 'Crossfade', 'Normalize'], correctIndex: 2, explanation: 'Crossfade chồng đuôi clip này với đầu clip kia để chuyển tiếp mượt.' },
 ]);
 
-const c5 = doc('sdp201-5-1-foley-sfx', '5.1 — Foley &amp; sound effects (SFX) design|||5.1 — Foley &amp; thiết kế hiệu ứng (SFX)',
+const c5 = doc('sdp201-5-1-foley-sfx', '5.1 — Foley & sound effects (SFX) design|||5.1 — Foley & thiết kế hiệu ứng (SFX)',
   'Sonnenschein Sound Design; Foley (bước chân, vải, đạo cụ); hard SFX & ambience; xếp lớp (layering); thư viện (Viers); diegetic vs non-diegetic.',
   [[
     `<span class="eyebrow">SDP201 · Chapter 5 · Lesson 5.1</span>
@@ -359,7 +359,7 @@ const c5 = doc('sdp201-5-1-foley-sfx', '5.1 — Foley &amp; sound effects (SFX) 
 <div class="callout"><span class="badge">Tư duy thiết kế</span> Đừng chỉ khớp hình — hãy biểu đạt nó. Tiếng thịch to hơn, tiếng gãy sắc hơn, tiếng rền sâu hơn báo cho khán giả biết nên cảm thấy thế nào.</div>`,
   ]]);
 
-const c5q = quiz('sdp201-quiz-5', 'Quiz 5 — Foley &amp; SFX|||Quiz 5 — Foley &amp; SFX', [
+const c5q = quiz('sdp201-quiz-5', 'Quiz 5 — Foley & SFX|||Quiz 5 — Foley & SFX', [
   { id: 'q1', question: 'Foley là gì?', options: ['Nhạc nền của phim', 'Âm đời thường diễn live theo hình (bước chân, vải, đạo cụ)', 'Một định dạng file', 'Một loại micro'], correctIndex: 1, explanation: 'Foley là âm đời thường được diễn live khớp hình, đặt theo tên Jack Foley.' },
   { id: 'q2', question: 'Kỹ thuật "layering" trong thiết kế SFX nghĩa là?', options: ['Chỉ dùng một bản thu duy nhất', 'Xếp nhiều lớp âm phủ các dải tần khác nhau thành một hiệu ứng', 'Tăng sample rate', 'Xoá nhiễu nền'], correctIndex: 1, explanation: 'Layering ghép nhiều nguồn (trầm/giữa/cao) để mỗi lớp thêm sức nặng, điểm chạm và chi tiết.' },
   { id: 'q3', question: 'Âm "non-diegetic" là âm?', options: ['Nhân vật trong phim nghe được', 'Chỉ dành cho khán giả, không tồn tại trong thế giới truyện', 'Luôn là tiếng bước chân', 'Chỉ có ở game'], correctIndex: 1, explanation: 'Non-diegetic (vd nhạc nền) chỉ khán giả nghe; diegetic tồn tại trong thế giới truyện.' },
@@ -420,7 +420,7 @@ const c6q = quiz('sdp201-quiz-6', 'Quiz 6 — Signal processing|||Quiz 6 — X�
   { id: 'q3', question: 'Thứ tự chuỗi tín hiệu hợp lý nhất là?', options: ['Reverb → EQ → Nén', 'EQ làm sạch → Nén → thêm không gian (reverb) sau cùng', 'Nén → Reverb → không lọc gì', 'Chỉ reverb'], correctIndex: 1, explanation: 'Lọc rác trước, kiểm soát động, rồi mới thêm không gian; reverb trên tín hiệu ồn/lệch chỉ làm nhoè.' },
 ]);
 
-const c7 = doc('sdp201-7-1-mixing-mastering', '7.1 — Mixing &amp; mastering|||7.1 — Mixing &amp; mastering',
+const c7 = doc('sdp201-7-1-mixing-mastering', '7.1 — Mixing & mastering|||7.1 — Mixing & mastering',
   'Owsinski Mixing Engineer: cân mức, panning, EQ, động, hiệu ứng, bus/group; 6 yếu tố mix; mastering (LUFS, limiting, dither); track tham chiếu.',
   [[
     `<span class="eyebrow">SDP201 · Chapter 7 · Lesson 7.1</span>
@@ -463,13 +463,13 @@ Limiter cuối: đạt LUFS mục tiêu, giữ true-peak dưới 0</code></pre>
 <div class="callout"><span class="badge">Tin vào tham chiếu</span> Tai bị trôi và thích nghi. So với một <strong>track tham chiếu</strong> chuyên nghiệp và nghỉ giải lao — mệt tai làm mọi thứ nghe cũng ổn.</div>`,
   ]]);
 
-const c7q = quiz('sdp201-quiz-7', 'Quiz 7 — Mixing &amp; mastering|||Quiz 7 — Mixing &amp; mastering', [
+const c7q = quiz('sdp201-quiz-7', 'Quiz 7 — Mixing & mastering|||Quiz 7 — Mixing & mastering', [
   { id: 'q1', question: 'Theo Owsinski, yếu tố quan trọng nhất khi mix thường là?', options: ['Reverb thật dài', 'Cân mức (balance) âm lượng giữa các track', 'Thêm càng nhiều plugin càng tốt', 'Panning tất cả sang một bên'], correctIndex: 1, explanation: 'Cân mức âm lượng tương đối là nước đi nền tảng và quan trọng nhất của mixing.' },
   { id: 'q2', question: 'LUFS dùng để đo gì?', options: ['Sample rate', 'Độ to cảm nhận (loudness) theo chuẩn', 'Số track trong phiên', 'Nhiệt độ phòng thu'], correctIndex: 1, explanation: 'LUFS là chuẩn đo độ to cảm nhận, dùng khi master để đạt mức mục tiêu.' },
   { id: 'q3', question: 'Khi hạ bit depth lúc master, "dither" là gì?', options: ['Một loại reverb', 'Một chút nhiễu nhỏ thêm vào để che méo lượng tử hoá', 'Cách tăng sample rate', 'Một kiểu panning'], correctIndex: 1, explanation: 'Dither là nhiễu rất nhỏ giúp che méo lượng tử hoá khi giảm số bit.' },
 ]);
 
-const c8 = doc('sdp201-8-1-audio-for-picture-games', '8.1 — Audio for animation, film &amp; games|||8.1 — Âm thanh cho hoạt hình, phim &amp; game',
+const c8 = doc('sdp201-8-1-audio-for-picture-games', '8.1 — Audio for animation, film & games|||8.1 — Âm thanh cho hoạt hình, phim & game',
   'Đồng bộ theo hình & spotting; thoại/ADR, Foley, nhạc, SFX; âm thanh game tương tác/thích ứng (middleware Wwise/FMOD, loop, one-shot); mix theo chuẩn giao.',
   [[
     `<span class="eyebrow">SDP201 · Chapter 8 · Lesson 8.1</span>
@@ -512,7 +512,7 @@ Middleware (Wwise / FMOD): engine âm thanh
 <div class="callout"><span class="badge">Tuyến tính vs tương tác</span> Âm thanh phim được <em>dựng một lần</em> theo hình cố định; âm thanh game là một <em>hệ thống</em> phải nghe đúng với mọi hướng đi của người chơi.</div>`,
   ]]);
 
-const c8q = quiz('sdp201-quiz-8', 'Quiz 8 — Audio for picture &amp; games|||Quiz 8 — Âm thanh cho hình &amp; game', [
+const c8q = quiz('sdp201-quiz-8', 'Quiz 8 — Audio for picture & games|||Quiz 8 — Âm thanh cho hình & game', [
   { id: 'q1', question: 'ADR (Automated Dialogue Replacement) là gì?', options: ['Một loại reverb', 'Thu lại lời thoại trong phòng thu khớp với hình khi bản thu gốc không dùng được', 'Một định dạng file game', 'Cách nén âm thanh'], correctIndex: 1, explanation: 'ADR là thu lại thoại trong phòng thu khớp hình khi lời thu tại hiện trường không dùng được.' },
   { id: 'q2', question: 'Khác biệt cốt lõi giữa âm thanh phim và âm thanh game là?', options: ['Game không cần âm thanh', 'Phim tuyến tính (cố định theo hình); game phi tuyến, phải phản ứng theo hành động người chơi', 'Phim không dùng SFX', 'Game chỉ dùng nhạc'], correctIndex: 1, explanation: 'Âm thanh phim dựng một lần theo timeline cố định; âm thanh game là hệ thống phản ứng thời gian thực.' },
   { id: 'q3', question: 'Wwise và FMOD là gì trong âm thanh game?', options: ['Hai loại micro', 'Middleware (engine âm thanh) kích hoạt, ngẫu nhiên hoá và mix âm từ sự kiện game', 'Hai định dạng nén', 'Hai track tham chiếu'], correctIndex: 1, explanation: 'Wwise/FMOD là middleware âm thanh, nối sự kiện game với việc phát, ngẫu nhiên hoá và mix âm.' },

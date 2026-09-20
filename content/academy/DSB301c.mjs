@@ -100,7 +100,7 @@ const intro = doc('dsb301c-0-1-overview', 'Course overview: Digital Storytelling
 <p>Chuyện &amp; thương hiệu → cấu trúc chuyện (hero's journey, StoryBrand SB7) → nhân vật &amp; thông điệp → định dạng số → nội dung lan truyền (STEPPS) → kênh &amp; phân phối → sản xuất → đo lường &amp; tối ưu. Song ngữ, bám framework, có chiến dịch thật và quiz mỗi chương.</p>`,
   ]]);
 
-const c1 = doc('dsb301c-1-1-story-and-brand', '1.1 — Storytelling &amp; the brand: why story beats fact|||1.1 — Kể chuyện &amp; thương hiệu: vì sao chuyện thắng dữ kiện',
+const c1 = doc('dsb301c-1-1-story-and-brand', '1.1 — Storytelling & the brand: why story beats fact|||1.1 — Kể chuyện & thương hiệu: vì sao chuyện thắng dữ kiện',
   'Câu chuyện là gì; "facts tell, stories sell"; narrative transportation; chuyện làm não tiết oxytocin & ghi nhớ gấp nhiều lần dữ kiện. Ví dụ: Dove Real Beauty, Nike.',
   [[
     `<span class="eyebrow">DSB301c · Chapter 1 · Lesson 1.1</span>
@@ -131,13 +131,13 @@ const c1 = doc('dsb301c-1-1-story-and-brand', '1.1 — Storytelling &amp; the br
 <div class="callout"><span class="badge">Chiến dịch thật — Dove</span> <em>Real Beauty Sketches</em> của Dove không liệt kê thành phần xà phòng. Nó kể một câu chuyện — phụ nữ tự tả mình cho hoạ sĩ ký hoạ, rồi nghe một người lạ tả họ đẹp hơn — và thành một trong những quảng cáo được xem nhiều nhất, vì khiến người xem <em>cảm</em> được niềm tin của thương hiệu.</div>`,
   ]]);
 
-const c1q = quiz('dsb301c-quiz-1', 'Quiz 1 — Story &amp; brand|||Quiz 1 — Chuyện &amp; thương hiệu', [
+const c1q = quiz('dsb301c-quiz-1', 'Quiz 1 — Story & brand|||Quiz 1 — Chuyện & thương hiệu', [
   { id: 'q1', question: 'Vì sao câu chuyện thường thuyết phục hơn dữ kiện thuần?|||Why does a story usually persuade more than a bare fact?', options: ['Nó dài hơn nên có nhiều thông tin hơn|||It is longer so has more info', 'Nó kích hoạt cả vùng cảm xúc/cảm giác của não (narrative transportation)|||It also engages emotional/sensory brain regions (narrative transportation)', 'Nó luôn có số liệu chính xác hơn|||It always has more precise numbers', 'Nó không cần bằng chứng|||It needs no evidence'], correctIndex: 1, explanation: 'Câu chuyện cuốn người nghe vào (transportation), làm họ cảm và nhớ.' },
   { id: 'q2', question: 'Câu nào là "câu chuyện" chứ không phải "dữ kiện"?|||Which is a "story", not a "fact"?', options: ['Balô nặng 0,5kg|||The backpack weighs 0.5kg', 'Chống nước IPX7|||Waterproof IPX7 rated', 'Đến giờ cuối trên đường mòn, bạn quên mất mình đang đeo balô|||By the last hour of the trail you forget it is even there', 'Có 3 ngăn|||Has 3 compartments'], correctIndex: 2, explanation: 'Câu chuyện gắn lợi ích với trải nghiệm của một người thật, không chỉ nêu thông số.' },
   { id: 'q3', question: 'Chiến dịch Dove Real Beauty Sketches thắng nhờ điều gì?|||What made Dove Real Beauty Sketches work?', options: ['Liệt kê thành phần sản phẩm|||Listing product ingredients', 'Giá rẻ nhất thị trường|||Being the cheapest', 'Khiến người xem CẢM được niềm tin của thương hiệu qua câu chuyện|||Making viewers FEEL the brand belief through a story', 'Quảng cáo trên nhiều kênh truyền hình|||Buying lots of TV airtime'], correctIndex: 2, explanation: 'Không bán tính năng; nó kể chuyện để người xem cảm được giá trị thương hiệu.' },
 ]);
 
-const c2 = doc('dsb301c-2-1-story-structure', '2.1 — Story structure: hero\'s journey &amp; StoryBrand SB7|||2.1 — Cấu trúc chuyện: hero\'s journey &amp; StoryBrand SB7',
+const c2 = doc('dsb301c-2-1-story-structure', '2.1 — Story structure: hero\'s journey & StoryBrand SB7|||2.1 — Cấu trúc chuyện: hero\'s journey & StoryBrand SB7',
   'Hero\'s journey rút gọn; khung StoryBrand SB7 (Miller): khách là ANH HÙNG, thương hiệu là NGƯỜI DẪN (guide) — 7 phần: nhân vật, vấn đề, guide, kế hoạch, kêu gọi, thành công, thất bại. Ví dụ: Apple.',
   [[
     `<span class="eyebrow">DSB301c · Chapter 2 · Lesson 2.1</span>
@@ -176,13 +176,13 @@ const c2 = doc('dsb301c-2-1-story-structure', '2.1 — Story structure: hero\'s 
 <div class="callout"><span class="badge">Chiến dịch thật — Apple</span> Apple hiếm khi tự làm anh hùng. Quảng cáo của họ cho thấy <em>những người sáng tạo</em> (anh hùng) làm điều phi thường; Apple là công cụ/người dẫn tiếp sức. Quảng cáo 1984 đặt khách hàng làm kẻ nổi loạn phá xiềng — Apple chỉ là phương tiện.</div>`,
   ]]);
 
-const c2q = quiz('dsb301c-quiz-2', 'Quiz 2 — Structure &amp; SB7|||Quiz 2 — Cấu trúc &amp; SB7', [
+const c2q = quiz('dsb301c-quiz-2', 'Quiz 2 — Structure & SB7|||Quiz 2 — Cấu trúc & SB7', [
   { id: 'q1', question: 'Trong khung StoryBrand SB7, ai là anh hùng?|||In StoryBrand SB7, who is the hero?', options: ['Thương hiệu|||The brand', 'Khách hàng|||The customer', 'CEO|||The CEO', 'Đối thủ|||The competitor'], correctIndex: 1, explanation: 'Khách là anh hùng; thương hiệu là người dẫn (guide) như Yoda với Luke.' },
   { id: 'q2', question: 'Vai trò đúng của thương hiệu trong SB7 là?|||The brand\'s correct role in SB7 is?', options: ['Anh hùng cứu thế giới|||The hero who saves the world', 'Người dẫn có đồng cảm + uy tín, trao kế hoạch|||The guide with empathy + authority who gives a plan', 'Kẻ phản diện|||The villain', 'Người quan sát|||A bystander'], correctIndex: 1, explanation: 'Guide thể hiện đồng cảm và uy tín, rồi đưa khách một kế hoạch rõ ràng.' },
   { id: 'q3', question: 'Thành phần nào của SB7 nêu "mất gì nếu không hành động"?|||Which SB7 element states "what\'s at stake if they do nothing"?', options: ['Kế hoạch (Plan)|||Plan', 'Thành công (Success)|||Success', 'Thất bại cần tránh (Failure)|||Failure to avoid', 'Nhân vật (Character)|||Character'], correctIndex: 2, explanation: 'Phần Failure nêu rủi ro/hậu quả nếu khách không hành động — tạo động lực.' },
 ]);
 
-const c3 = doc('dsb301c-3-1-persona-and-message', '3.1 — Brand persona &amp; message|||3.1 — Nhân vật &amp; thông điệp thương hiệu',
+const c3 = doc('dsb301c-3-1-persona-and-message', '3.1 — Brand persona & message|||3.1 — Nhân vật & thông điệp thương hiệu',
   'Brand persona & giọng thương hiệu; 12 archetype (Jung); one-liner/tagline; nhất quán thông điệp. Ví dụ: Old Spice (Hề/Người tình), Innocent Drinks (giọng bạn bè hài hước).',
   [[
     `<span class="eyebrow">DSB301c · Chapter 3 · Lesson 3.1</span>
@@ -205,7 +205,7 @@ const c3 = doc('dsb301c-3-1-persona-and-message', '3.1 — Brand persona &amp; m
 <div class="callout"><span class="badge">Chiến dịch thật — Old Spice</span> "The Man Your Man Could Smell Like" khoá một persona duy nhất — Chàng hề/Người tình tự tin, phi lý — xuyên TV, YouTube và hàng trăm video phản hồi chớp nhoáng. Một giọng nhất quán làm thương hiệu già trẻ lại.</div>`,
   ]]);
 
-const c3q = quiz('dsb301c-quiz-3', 'Quiz 3 — Persona &amp; message|||Quiz 3 — Nhân vật &amp; thông điệp', [
+const c3q = quiz('dsb301c-quiz-3', 'Quiz 3 — Persona & message|||Quiz 3 — Nhân vật & thông điệp', [
   { id: 'q1', question: 'Brand persona là gì?|||What is a brand persona?', options: ['Logo và bảng màu|||The logo and colour palette', 'Tính cách/giọng nói nhất quán của thương hiệu như một con người|||The consistent personality/voice of the brand as if it were a person', 'Danh sách tính năng sản phẩm|||A list of product features', 'Ngân sách quảng cáo|||The ad budget'], correctIndex: 1, explanation: 'Persona là tính cách nhất quán quy định giọng nói của thương hiệu.' },
   { id: 'q2', question: 'Bộ "12 archetype" (Jung) dùng để làm gì?|||What are Jung\'s "12 archetypes" used for?', options: ['Tính giá sản phẩm|||Pricing products', 'Cho một lối tắt định hình persona/nhân vật thương hiệu|||A shortcut to shape brand persona/character', 'Đo lượng truy cập|||Measuring traffic', 'Thiết kế logo tự động|||Auto-generating logos'], correctIndex: 1, explanation: 'Archetype (Hero, Jester, Sage...) giúp chọn nhanh một tính cách cốt lõi.' },
   { id: 'q3', question: 'Cấu trúc gọn của một one-liner thương hiệu là?|||The compact structure of a brand one-liner is?', options: ['Tên → giá → khuyến mãi|||Name → price → promo', 'Vấn đề → giải pháp → kết quả|||Problem → solution → result', 'Lịch sử → tầm nhìn → sứ mệnh|||History → vision → mission', 'Tính năng → thông số → bảo hành|||Features → specs → warranty'], correctIndex: 1, explanation: 'One-liner nén câu chuyện: nêu vấn đề, giải pháp của brand, và kết quả cho khách.' },
@@ -291,7 +291,7 @@ const c5q = quiz('dsb301c-quiz-5', 'Quiz 5 — STEPPS|||Quiz 5 — STEPPS', [
   { id: 'q3', question: 'Yếu tố "Triggers" trong STEPPS nghĩa là?|||What does "Triggers" mean in STEPPS?', options: ['Nút bấm kêu gọi hành động|||A call-to-action button', 'Gắn ý tưởng với một tín hiệu thường ngày để luôn được nhớ tới|||Linking the idea to an everyday cue so it stays top-of-mind', 'Cảnh báo nội dung nhạy cảm|||A content warning', 'Bộ đếm ngược khuyến mãi|||A promo countdown'], correctIndex: 1, explanation: 'Trigger là tín hiệu môi trường (giờ nghỉ, mùa...) làm người ta nhớ tới thương hiệu.' },
 ]);
 
-const c6 = doc('dsb301c-6-1-channels-distribution', '6.1 — Channels &amp; distribution: owned, earned, paid|||6.1 — Kênh &amp; phân phối: owned, earned, paid',
+const c6 = doc('dsb301c-6-1-channels-distribution', '6.1 — Channels & distribution: owned, earned, paid|||6.1 — Kênh & phân phối: owned, earned, paid',
   'Mô hình PESO/owned-earned-paid; chiến lược đa nền tảng; mô hình Hero–Hub–Hygiene. Ví dụ: Red Bull Media House (thương hiệu vận hành như hãng truyền thông).',
   [[
     `<span class="eyebrow">DSB301c · Chapter 6 · Lesson 6.1</span>
@@ -383,7 +383,7 @@ const c7q = quiz('dsb301c-quiz-7', 'Quiz 7 — Production|||Quiz 7 — Sản xu�
   { id: 'q3', question: 'Điều nào quan trọng hơn trong sản xuất căn bản?|||Which matters more in basic production?', options: ['Độ phân giải 4K hơn âm thanh sạch|||4K resolution over clean audio', 'Âm thanh sạch thường quan trọng hơn độ phân giải cực cao|||Clean audio usually matters more than ultra-high resolution', 'Càng nhiều hiệu ứng càng tốt|||The more effects the better', 'Quay ngược sáng cửa sổ|||Shooting into a bright window'], correctIndex: 1, explanation: 'Người xem tha thứ hình chưa hoàn hảo hơn là tiếng tệ; ưu tiên âm thanh và ánh sáng.' },
 ]);
 
-const c8 = doc('dsb301c-8-1-measure-optimise', '8.1 — Measure &amp; optimise: engagement, reach, A/B, ROI|||8.1 — Đo lường &amp; tối ưu: engagement, reach, A/B, ROI',
+const c8 = doc('dsb301c-8-1-measure-optimise', '8.1 — Measure & optimise: engagement, reach, A/B, ROI|||8.1 — Đo lường & tối ưu: engagement, reach, A/B, ROI',
   'Chỉ số theo phễu (awareness → consideration → conversion); reach vs engagement vs vanity metrics; A/B testing; nối kể chuyện với ROI (storytelling ROI). Vòng lặp đo → học → cải tiến.',
   [[
     `<span class="eyebrow">DSB301c · Chapter 8 · Lesson 8.1</span>

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Maximize2, Minimize2, X, Send, Zap, Terminal, ChevronRight, Loader2 } from 'lucide-react';
 import DOMPurify from 'isomorphic-dompurify';
+import { taoMachChat, type MachChat } from '@/lib/nguCanhChat';
 
 interface Message {
   id: number;
@@ -55,6 +56,24 @@ export default function CyberTerminal() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  /*
+   * MẠCH HỘI THOẠI — vòng nhớ + việc gửi, nằm ở `@/lib/nguCanhChat`.
+   *
+   * `POST /ai/chat` KHÔNG nhớ hộ: ngữ cảnh model thấy đến duy nhất từ mảng
+   * `history` mà client gửi kèm. Khung này trước đây gửi thân chỉ có
+   * `{ message, topK }` nên mỗi câu là một cuộc đời mới.
+   *
+   * Để ở ref chứ không ở state: nó không vẽ ra gì cả, và `sendMessage` phải
+   * đọc được giá trị MỚI NHẤT — một biến state bị đóng băng trong `useCallback`
+   * sẽ luôn trả về danh sách rỗng.
+   */
+  const machRef = useRef<MachChat | null>(null);
+  const daChaoRef = useRef(false);
+  const mach = useCallback((): MachChat => {
+    if (!machRef.current) machRef.current = taoMachChat();
+    return machRef.current;
+  }, []);
+
   // ── Typewriter effect ─────────────────────────────────────────────────────────
   const typewriter = useCallback((text: string, onChar?: (char: string) => void): Promise<void> => {
     return new Promise((resolve) => {
@@ -73,6 +92,10 @@ export default function CyberTerminal() {
 
   // ── Auto-greet on mount ──────────────────────────────────────────────────────
   useEffect(() => {
+    // Chỉ chào MỘT lần: StrictMode chạy effect hai lượt, và lượt thứ hai sẽ
+    // ghi lời chào lần nữa vào ngữ cảnh.
+    if (daChaoRef.current) return;
+    daChaoRef.current = true;
     const greet = async () => {
       await new Promise((r) => setTimeout(r, 400));
       const fullMsg: Message = { id: Date.now(), role: 'assistant', content: '', timestamp: new Date() };
@@ -84,103 +107,54 @@ export default function CyberTerminal() {
           return updated;
         });
       });
+      // Lời chào là một lượt người dùng ĐỌC THẤY trên màn hình, nên nó phải
+      // nằm trong ngữ cảnh — nếu không, model sẽ chào lại lần nữa.
+      mach().ghiLuot('assistant', INITIAL_GREETING);
       setGreetingDone(true);
     };
     greet();
-  }, [typewriter]);
+  }, [typewriter, mach]);
 
   // ── No auto-scroll — user controls their own scroll position entirely ──
 
   // ── Send message ───────────────────────────────────────────────────────────────
   const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isLoading) return;
+    const noiDung = text.trim();
 
-    const userMsg: Message = { id: Date.now(), role: 'user', content: text.trim(), timestamp: new Date() };
+    const userMsg: Message = { id: Date.now(), role: 'user', content: noiDung, timestamp: new Date() };
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
     setIsLoading(true);
 
+    // Khung trả lời, chỉ dựng khi máy chủ đã nhận — hỏng trước đó thì người
+    // dùng chỉ thấy đúng một dòng báo lỗi, không kèm một ô trống câm.
+    const aiMsg: Message = { id: Date.now() + 1, role: 'assistant', content: '', timestamp: new Date() };
+    let daNhan = '';
+
     try {
-      // Get auth token from localStorage if available (optional auth)
-      const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
-
-      const res = await fetch('/api/v1/ai/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      await mach().hoi(noiDung, {
+        onMoDau: () => setMessages((prev) => [...prev, aiMsg]),
+        onChunk: (chu) => {
+          daNhan += chu;
+          setMessages((prev) => {
+            const updated = [...prev];
+            const cuoi = updated[updated.length - 1];
+            if (cuoi) updated[updated.length - 1] = { ...cuoi, content: daNhan };
+            return updated;
+          });
         },
-        body: JSON.stringify({ message: text.trim(), topK: 5 }),
       });
-
-      if (!res.ok || !res.body) throw new Error('API error');
-
-      // Read SSE stream: backend emits "data: {...}\n\n" chunks
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-      let accumulated = '';
-
-      // Pre-create assistant message so typewriter can fill it
-      const aiMsg: Message = { id: Date.now() + 1, role: 'assistant', content: '', timestamp: new Date() };
-      setMessages((prev) => [...prev, aiMsg]);
-
-      const updateLast = (chunk: string) => {
-        accumulated += chunk;
-        setMessages((prev) => {
-          const updated = [...prev];
-          if (updated[updated.length - 1]) {
-            updated[updated.length - 1] = { ...updated[updated.length - 1], content: accumulated };
-          }
-          return updated;
-        });
-      };
-
-      // Process the stream in background
-      (async () => {
-        try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() ?? '';
-            for (const line of lines) {
-              if (!line.startsWith('data: ')) continue;
-              const dataStr = line.slice(6);
-              if (!dataStr) continue;
-              try {
-                const data = JSON.parse(dataStr);
-                if (data.type === 'chunk' && data.text) {
-                  updateLast(data.text);
-                } else if (data.type === 'error') {
-                  // Only error-out if we got zero content.
-                  // "Premature close" or provider errors after valid chunks are benign.
-                  if (!accumulated.trim()) {
-                    throw new Error(data.error || 'Stream error');
-                  }
-                  // Has content — stream was valid, ignore error silently
-                }
-              } catch (parseErr) {
-                if (parseErr instanceof SyntaxError) {
-                  // ignore partial JSON
-                } else {
-                  throw parseErr;
-                }
-              }
-            }
-          }
-        } catch {
-          // Stream interrupted — keep whatever accumulated
-        }
-      })();
     } catch {
-      const errMsg: Message = { id: Date.now() + 1, role: 'assistant', content: '[ERROR] Kết nối AI thất bại. Vui lòng thử lại.', timestamp: new Date() };
+      const errMsg: Message = { id: Date.now() + 2, role: 'assistant', content: '[ERROR] Kết nối AI thất bại. Vui lòng thử lại.', timestamp: new Date() };
       setMessages((prev) => [...prev, errMsg]);
     } finally {
+      // Chỉ tắt khi luồng đã chảy XONG. Tắt sớm (bản cũ thả ngay lúc nhận được
+      // header) cho phép gửi câu thứ hai trong lúc câu đầu còn đang trả lời —
+      // và câu thứ hai ấy mang đi một ngữ cảnh thiếu mất câu trả lời đang viết.
       setIsLoading(false);
     }
-  }, [isLoading, typewriter]);
+  }, [isLoading, mach]);
 
   // ── Keyboard submit ────────────────────────────────────────────────────────────
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

@@ -383,9 +383,9 @@ export DOCKER_BUILDKIT=1
 #
 # Frontend thì \`./frontend\` đã trỏ đúng \`frontend/Dockerfile\` mà compose
 # dùng — vẫn ghi rõ cho khỏi trôi.
-docker build -f Dockerfile.backend --build-arg YTDLP_NGAY=\$(date +%F) -t ${GHCR_BE}:${SHA} -t ${GHCR_BE}:latest . > /tmp/nha-be.log 2>&1 &
+docker build -f Dockerfile.backend --build-arg YTDLP_NGAY=\$(date +%F) -t ${GHCR_BE}:${SHA} -t ${GHCR_BE}:latest . > /tmp/nha-be-${SHA}.log 2>&1 &
 PID_BE=\$!
-docker build -f frontend/Dockerfile --build-arg BUILD_NUMBER=${SHA} -t ${GHCR_FE}:${SHA} -t ${GHCR_FE}:latest ./frontend > /tmp/nha-fe.log 2>&1 &
+docker build -f frontend/Dockerfile --build-arg BUILD_NUMBER=${SHA} -t ${GHCR_FE}:${SHA} -t ${GHCR_FE}:latest ./frontend > /tmp/nha-fe-${SHA}.log 2>&1 &
 PID_FE=\$!
 
 wait \$PID_BE; MA_BE=\$?
@@ -394,8 +394,8 @@ echo "backend=\$MA_BE frontend=\$MA_FE"
 [ \$MA_BE -eq 0 ] && [ \$MA_FE -eq 0 ]
 EOF
 then
-    warn "Build ở máy nhà HỎNG — đuôi hai bản log:"
-    sshnha 'echo "── backend ──"; tail -12 /tmp/nha-be.log; echo "── frontend ──"; tail -12 /tmp/nha-fe.log' 2>/dev/null | sed 's/^/         /'
+    warn "Build ở máy nhà HỎNG — đuôi hai bản log của commit ${SHA}:"
+    sshnha "echo '── backend (/tmp/nha-be-${SHA}.log) ──'; tail -12 /tmp/nha-be-${SHA}.log; echo '── frontend (/tmp/nha-fe-${SHA}.log) ──'; tail -12 /tmp/nha-fe-${SHA}.log" 2>/dev/null | sed 's/^/         /'
     lui_ve_vps "Build ở máy nhà thất bại"
 fi
 ok "Hai ảnh đã dựng xong ở máy nhà"
@@ -445,7 +445,7 @@ fi
 #
 # Nên: giữ lỗi THẬT, tự thử lại một lần, và chỉ nhắc chuyện đăng nhập KHI lỗi
 # đúng là chuyện đăng nhập.
-NHAT_KY_DAY=/tmp/nha-day-ghcr.log
+NHAT_KY_DAY=/tmp/nha-day-ghcr-${SHA}.log
 
 day_anh_len_ghcr() {
     sshnha "docker push ${GHCR_BE}:${SHA} && docker push ${GHCR_BE}:latest && \

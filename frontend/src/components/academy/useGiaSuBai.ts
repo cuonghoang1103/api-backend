@@ -66,11 +66,19 @@ export interface TuyChonHoi {
   noHistory?: boolean;
 }
 
-export function useGiaSuBai({ lessonId, quizContext, autoAsk }: {
+export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeGiay }: {
   lessonId: number;
   quizContext?: TutorQuizItem[];
   /** Câu hỏi bắn đi NGAY khi `key` đổi — nút "Hỏi AI vì sao sai" ở từng câu quiz. */
   autoAsk?: { key: number; text: string } | null;
+  /**
+   * PHÒNG HỌC VIDEO: máy chủ nạp thêm phụ đề của bài vào ngữ cảnh và bắt gia
+   * sư trích dẫn kèm mốc `[mm:ss]`. Xem `khoiPhuDe()` trong
+   * `courseTutor.service.ts`.
+   */
+  phongVideo?: boolean;
+  /** Giây người học đang xem — máy chủ lấy ±100s quanh đây làm đoạn TRỌNG TÂM. */
+  phuDeGiay?: number;
 }) {
   const inQuiz = !!quizContext?.length;
   const khoa = khoaGiaSu(lessonId, inQuiz);
@@ -101,6 +109,18 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk }: {
    */
   const turnsRef = useRef<LuotGiaSu[]>(turns);
   turnsRef.current = turns;
+
+  /*
+   * ⚠️ GIÂY ĐANG XEM ĐI QUA REF, KHÔNG QUA DEPENDENCY.
+   *
+   * Nó đổi MỖI GIÂY khi video chạy. Đưa vào mảng phụ thuộc của `chayStream`
+   * thì `hoi` cũng được dựng lại mỗi giây, kéo theo `useEffect` của `autoAsk`
+   * chạy lại — tức là một câu hỏi tự bắn có thể bắn lại, mà mỗi lượt là một
+   * lần tính tiền. Đọc qua ref: luôn lấy giá trị MỚI NHẤT lúc bấm Gửi, và
+   * không thứ gì phải dựng lại.
+   */
+  const giayRef = useRef<number | undefined>(phuDeGiay);
+  giayRef.current = phuDeGiay;
 
   /* Đổi bài ⇒ dọn ô nhập. KHÔNG dọn hội thoại: người học quay lại bài cũ thì
      mạch chat cũ vẫn còn, đó là điều mong đợi chứ không phải rác. */
@@ -160,7 +180,12 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk }: {
     const res = await fetch(`${goc}/api/v1/courses/lessons/${lessonId}/ai/ask-stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(layToken() ? { Authorization: `Bearer ${layToken()}` } : {}) },
-      body: JSON.stringify({ question: q, history: history.map(toMsg), english, cacheKey, refresh, ...(images.length ? { images } : {}), ...(inQuiz ? { quizContext } : {}) }),
+      body: JSON.stringify({
+        question: q, history: history.map(toMsg), english, cacheKey, refresh,
+        ...(images.length ? { images } : {}),
+        ...(inQuiz ? { quizContext } : {}),
+        ...(phongVideo ? { phongVideo: true, ...(giayRef.current != null ? { phuDeGiay: Math.round(giayRef.current) } : {}) } : {}),
+      }),
     });
     if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
 
@@ -196,7 +221,7 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk }: {
     }
     if (!acc.trim()) throw new Error('empty stream');
     patch(aIdx, { content: acc, streaming: false });
-  }, [lessonId, inQuiz, quizContext, patch]);
+  }, [lessonId, inQuiz, quizContext, patch, phongVideo]);
 
   /** Hỏi một câu. `showUser:false` + `english:true` là lúc bấm "Bản tiếng Anh". */
   const hoi = useCallback(async (text: string, opts?: TuyChonHoi) => {
@@ -241,7 +266,13 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk }: {
       try {
         const r = await api.post<{ success: boolean; data: { answer: string; cached?: boolean } }>(
           `/courses/lessons/${lessonId}/ai/ask`,
-          { question: q, history: history.map(toMsg), english, cacheKey, refresh, ...(anhGui.length ? { images: anhGui } : {}), ...(inQuiz ? { quizContext } : {}) },
+          /* Đường lùi PHẢI mang theo y hệt cờ phòng video. Thiếu nó thì lúc SSE
+             hỏng gia sư vẫn trả lời, nhưng trả lời MÙ phụ đề — không mốc thời
+             gian, không trích dẫn — và trông y như model tự dưng kém đi. */
+          { question: q, history: history.map(toMsg), english, cacheKey, refresh,
+            ...(anhGui.length ? { images: anhGui } : {}),
+            ...(inQuiz ? { quizContext } : {}),
+            ...(phongVideo ? { phongVideo: true, ...(giayRef.current != null ? { phuDeGiay: Math.round(giayRef.current) } : {}) } : {}) },
           { timeout: 240_000 });
         patch(aIdx, { content: r.data.data.answer, streaming: false, cached: !!r.data.data.cached });
       } catch (e: unknown) {
@@ -251,7 +282,7 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk }: {
         toast.error(status === 403 ? 'Hỏi AI là tính năng Pro.' : 'AI chưa trả lời được. Thử lại nhé.');
       }
     } finally { setAsking(false); }
-  }, [asking, lessonId, inQuiz, quizContext, chayStream, patch, datCuoc, khoa, anhDan]);
+  }, [asking, lessonId, inQuiz, quizContext, chayStream, patch, datCuoc, khoa, anhDan, phongVideo]);
 
   /*
    * ⚠️⚠️ GỬI LỊCH SỬ RỖNG. Đo thật 05/09/2026: gửi kèm lịch sử thì model trả

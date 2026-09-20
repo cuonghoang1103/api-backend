@@ -95,6 +95,13 @@ router.get('/khoa/:id(\\d+)', param('id').isInt(), validate,
     try { ok(res, await svc.videoCuaKhoa(Number(req.params.id))); } catch (e) { next(e); }
   });
 
+// Hỏi ĐÚNG MỘT câu: bài này có phụ đề không? Trang học gọi mỗi lần đổi bài để
+// quyết có mời vào phòng học cùng AI hay không — xem `coPhuDe()`.
+router.get('/co-phu-de/:lessonId(\\d+)', param('lessonId').isInt(), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await svc.coPhuDe(Number(req.params.lessonId))); } catch (e) { next(e); }
+  });
+
 router.get('/phu-de/:lessonId(\\d+)', param('lessonId').isInt(), validate,
   async (req, res: Response<ApiResponse>, next) => {
     try { ok(res, await svc.phuDe(Number(req.params.lessonId))); } catch (e) { next(e); }

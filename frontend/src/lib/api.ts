@@ -5662,3 +5662,47 @@ export const adminVoiceApi = {
     );
   },
 };
+
+// ════════════════════════════════════════════════════════════════
+// HỌC BẰNG VIDEO — phụ đề bài giảng
+// ════════════════════════════════════════════════════════════════
+
+/**
+ * Một câu phụ đề. `t` = giây bắt đầu, `en` = câu tiếng Anh.
+ *
+ * ⚠️ KHÔNG có trường độ dài. Câu kết thúc ở chỗ câu SAU bắt đầu — muốn tô
+ * sáng câu đang đọc thì so với `cues[i+1].t`, đừng đi tìm một `d` không tồn
+ * tại. Đây đúng là hình dạng `phuDe.service.ts` trả về và app iOS đang đọc.
+ */
+export interface CauPhuDe {
+  t: number;
+  en: string;
+}
+
+export interface PhuDeBai {
+  lessonId: number;
+  videoId: string;
+  tieuDe: string;
+  tieuDeVi: string;
+  lang: string;
+  soCau: number;
+  soTu: number;
+  cues: CauPhuDe[];
+  /** Bản dịch tiếng Việt — cùng SỐ PHẦN TỬ với `cues`, ghép theo chỉ số. */
+  dichVi: string[] | null;
+}
+
+export const videoHocApi = {
+  /**
+   * Bài này có phụ đề không — CHỈ đếm, không kéo về cả mảng `cues`.
+   * Trang học gọi mỗi lần đổi bài để quyết có mời vào phòng học cùng AI.
+   */
+  coPhuDe(lessonId: number) {
+    return api.get<{ data: { co: boolean; videoId: string | null; soCau: number; coDich: boolean } }>(
+      `/video-hoc/co-phu-de/${lessonId}`,
+    );
+  },
+  phuDe(lessonId: number) {
+    return api.get<{ data: PhuDeBai }>(`/video-hoc/phu-de/${lessonId}`);
+  },
+};

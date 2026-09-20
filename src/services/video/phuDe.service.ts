@@ -232,6 +232,32 @@ export async function videoCuaKhoa(courseId: number) {
   });
 }
 
+/**
+ * CÓ phụ đề hay không — chỉ đếm, KHÔNG kéo về cả mảng `cues`.
+ *
+ * Trang học gọi cái này mỗi lần đổi bài để quyết có mời vào "phòng học video
+ * cùng AI" hay không. Đo 20/09/2026: 963 bài có phụ đề trên ~11.800 bài đã
+ * xuất bản — mời ở bài không có phụ đề là mời vào một phòng mà gia sư không
+ * đọc được gì, tức tệ hơn không mời.
+ *
+ * ⚠️ ĐỪNG dùng `phuDe()` cho việc này: bài dài có hàng nghìn `cues`, mỗi lần
+ * đổi bài là kéo về vài trăm KB chỉ để hỏi một câu đúng/sai.
+ */
+export async function coPhuDe(lessonId: number) {
+  const d = await prisma.lessonTranscript.findUnique({
+    where: { lessonId },
+    select: { videoId: true, soCau: true, dichVi: true },
+  });
+  return {
+    co: !!d,
+    videoId: d?.videoId ?? null,
+    soCau: d?.soCau ?? 0,
+    /* Có bản dịch tiếng Việt chưa — phòng học hiện được cột song ngữ hay
+       không phụ thuộc chỗ này, và người học nên biết TRƯỚC khi bước vào. */
+    coDich: Array.isArray(d?.dichVi) && (d!.dichVi as string[]).length > 0,
+  };
+}
+
 /** Phụ đề đầy đủ của MỘT video. */
 export async function phuDe(lessonId: number) {
   const d = await prisma.lessonTranscript.findUnique({

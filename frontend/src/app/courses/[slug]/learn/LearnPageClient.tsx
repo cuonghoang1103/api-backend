@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { sanitizeHtml, stripInlineColors, pickLang } from '@/lib/utils';
 import { useTranslation } from '@/context/LocaleContext';
 import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
+import MoiVaoPhongVideo from '@/components/academy/MoiVaoPhongVideo';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
 import type { Course, LessonDto, LessonProgress, LessonDetail, LessonVideoTrack, VideoTrackKey } from '@/types';
@@ -1055,6 +1056,20 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                       {locale === 'en' ? 'Watch on YouTube' : 'Xem trên YouTube'}
                     </a>
                   )}
+
+                  {/*
+                    Mời vào phòng học video cùng AI. Tự ẩn hẳn khi bài không có
+                    phụ đề — xem ghi chú trong `MoiVaoPhongVideo`.
+
+                    ⚠️ Đường về mang theo `?lessonId=`: chọn bài KHÔNG ghi vào
+                    URL (xem `selectLesson`), nên `/courses/<slug>/learn` trần
+                    sẽ mở lại bài ĐẦU TIÊN của khoá. Trang này đã đọc sẵn tham
+                    số đó ở chỗ `requestedLessonId`.
+                  */}
+                  <MoiVaoPhongVideo
+                    lessonId={currentLesson.id}
+                    duongDanVe={`/courses/${slug}/learn?lessonId=${currentLesson.id}`}
+                  />
                 </div>
               )}
 

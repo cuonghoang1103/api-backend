@@ -20,6 +20,7 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { MermaidDiagram } from '@/components/exp-hub/MermaidDiagram';
 import 'katex/dist/katex.min.css';
 import { Check, Copy, Download, Play, Square } from 'lucide-react';
 import { usePythonSandbox, type KetQuaChay } from '@/hooks/usePythonSandbox';
@@ -391,6 +392,25 @@ function ChatMarkdown({ content, renderMath = true }: { content: string; renderM
             // ```svg → dựng thành HÌNH, không phải khối mã.
             if ((match?.[1] ?? '').toLowerCase() === 'svg' || /^<svg[\s>]/i.test(text)) {
               return <SvgFigure source={text} />;
+            }
+            /*
+             * ```mermaid → VẼ THÀNH SƠ ĐỒ.
+             *
+             * Thiếu nhánh này thì mọi câu trả lời AI có sơ đồ đều hiện MÃ
+             * NGUỒN THÔ — đúng lỗi đã vá cho bài học Academy (6d5461e9) mà
+             * khung chat vẫn còn. Gia sư được dặn ưu tiên sơ đồ, nên chỗ này
+             * gặp mermaid rất thường xuyên.
+             *
+             * ⚠️ CHỜ STREAM XONG mới vẽ. `renderMath=false` nghĩa là "câu trả
+             * lời còn đang chảy về"; dựng một sơ đồ mới về một nửa thì mermaid
+             * ném lỗi đỏ nhấp nháy suốt lúc máy còn đang gõ. Trong lúc đó hiện
+             * dạng khối mã — người đọc thấy nội dung tới đâu, rồi nó hoá thành
+             * hình khi xong.
+             */
+            if ((match?.[1] ?? '').toLowerCase() === 'mermaid') {
+              return renderMath
+                ? <MermaidDiagram chart={text} className="my-3" />
+                : <CodeBlock language="mermaid" code={text} />;
             }
             return <CodeBlock language={match?.[1] ?? ''} code={text} />;
           },

@@ -1,4 +1,4 @@
-# 📋 BÀN GIAO — phiên 20/09/2026
+# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 21/09/2026
 
 > **Đọc file này + `_KHUNG-CHUA-DAY-DU.md` trước khi làm tiếp Academy.**
 > Viết lúc người dùng tắt máy nghỉ (máy bật liên tục 10 ngày, quá nóng) và sắp
@@ -27,9 +27,11 @@ phải tự soạn và đánh dấu rõ. Xem `_mon-flm-chua-co-syllabus.md`.
 
 ### NWC204 — môn ưu tiên số 1 của người dùng
 
-**6 mục · 29 bài · 108 ảnh slide · 684 KB nội dung**, phủ **buổi 1–14 / 60**.
-Kiểm trên DB production: 29 bài, 0 bài rỗng, 108/108 ảnh sống, 136/136 khối code
-có nhãn `language-`, **14/14 sơ đồ mermaid đúng dạng**.
+**7 mục · 33 bài · 135 ảnh slide**, phủ **buổi 1–16 / 60** (21/09/2026).
+Kiểm trên spec: 33 bài, 0 bài rỗng, 168/168 khối code có nhãn `language-`,
+**20/20 sơ đồ mermaid đúng dạng**, 0 thực thể thô trong `title`.
+Buổi 1–14 đã kiểm trên DB production 20/09; **Chương 5 (buổi 15–16) viết
+21/09 và CHƯA deploy** — xem mục 2.
 
 ### Bản vá toàn site cùng đợt
 
@@ -43,11 +45,24 @@ có nhãn `language-`, **14/14 sơ đồ mermaid đúng dạng**.
 
 ## 2. CÒN NỢ — làm tiếp từ đây
 
-### NWC204 buổi 15–60 (12 chương)
+### ✅ Chương 5 xong 21/09/2026 (CHƯA DEPLOY)
+
+3 bài + 1 quiz 12 câu, 27 slide đã lên `NWC204/v1/nwc204-ch05/` (đã so byte
+với CDN, lệch 0/27). Nguồn: `scripts/slides-src/nwc204-ch05.mjs`,
+`content/academy/nwc204/ch05.mjs`.
+
+Hai điều mới của chương này, áp dụng cho MỌI chương sau:
+- **Dấu ★** đánh dấu phần cuongthai.com bổ sung ngoài Cisco Module 6 (user yêu
+  cầu 21/09): lệch duplex đọc bằng `ethtool`, 802.1Q, MTU/MSS, lệnh tầng 2 trên
+  Linux, cầu nối Docker. Giáo trình trường phủ đủ trước, ★ thêm vào sau.
+- **Buổi 15 và 16 KHÔNG có câu hỏi kiến tạo** trong bảng gốc (nhảy từ CQ5.2 ở
+  buổi 14 sang CQ6.1 ở buổi 17). Đã nêu trong bài và tự soạn câu thảo luận ★
+  thay thế. Các buổi trống khác: 6, 9, 22, 30, 36, 56 — sẽ gặp lại.
+
+### NWC204 buổi 17–60 (11 chương)
 
 | Chương | Buổi | Nội dung |
 |---|---|---|
-| Ch.5 | 15–16 | Data Link Layer (Cisco Module 6) |
 | Ch.6 | 17–20 | Ethernet Switching + Lab 1.4 (Module 7) |
 | Ch.7 | 21–23 | Network Layer + Review (Module 8) |
 | Ch.8 | 24–25 | Address Resolution / ARP (Module 9) |
@@ -113,7 +128,7 @@ trên netacad, bản quyền, không phát hành lại. Vì thế slide môn nà
 ⇒ **Tối thiểu 60% slide phải là SƠ ĐỒ hoặc BẢNG**, mỗi slide tối đa ~6 dòng chữ.
 Đợt NWC204 đạt 87–96%.
 
-### Bốn bước
+### Năm bước
 
 ```bash
 # 1. Viết deck
@@ -121,16 +136,22 @@ trên netacad, bản quyền, không phát hành lại. Vì thế slide môn nà
 #    export const deck = { key, code, title, sub }
 #    export const slides = [{ kind:'cover'|undefined, t, sub?, body }]
 
-# 2. Render (playwright 1280×720, deviceScaleFactor 2, sharp→webp q92)
-node scripts/_render-slides.mjs --deck scripts/slides-src/nwc204-ch05.mjs --out /tmp/nwc204-slides
+# 2. ĐO TRÀN KHUNG TRƯỚC KHI RENDER (thêm 21/09, ~4 giây, khỏi render lại)
+node scripts/_kiem-tran-slide.mjs --deck scripts/slides-src/nwc204-chNN.mjs
 
-# 3. ⭐ MỞ ẢNH RA NHÌN — bắt buộc, exit code 0 KHÔNG có nghĩa là ảnh đúng
+# 3. Render (playwright 1280×720, deviceScaleFactor 2, sharp→webp q92)
+node scripts/_render-slides.mjs --deck scripts/slides-src/nwc204-chNN.mjs --out <scratchpad>/slides
+
+# 4. ⭐ MỞ ẢNH RA NHÌN — bắt buộc, exit code 0 KHÔNG có nghĩa là ảnh đúng
+#    Bước 2 bắt tràn khung, nhưng KHÔNG bắt được chữ bị cắt trong SVG và nhãn
+#    topo() đè lên hộp — hai lỗi đó chỉ mắt thấy (Ch.5 dính cả hai, 21/09).
 #    Dùng công cụ Read mở ít nhất 4 ảnh mỗi deck, gồm slide phức tạp nhất.
 #    Đợt này nhờ vậy bắt được: khối terminal mất hết xuống dòng, 6 slide tràn
 #    khỏi khung 720px, nhãn topology đè lên hộp, SVG tràn viewBox.
 
-# 4. Upload rồi SO BYTE
-node --env-file=.env scripts/upload-academy-slides.mjs --dir /tmp/nwc204-slides --prefix NWC204/v1
+# 5. Upload rồi SO BYTE
+node --env-file=.env scripts/upload-academy-slides.mjs \
+  --dir <scratchpad>/slides --prefix NWC204/v1 --decks nwc204-chNN
 #    Kiểm: so content-length trên CDN với kích thước file trên đĩa.
 #    HTTP 200 KHÔNG phân biệt được bản cũ với bản mới (cache-control immutable
 #    max-age=31536000). Agent hay render lại nhiều lần ⇒ phải so byte.
@@ -216,9 +237,13 @@ không tồn tại.
   nhãn tên ngôn ngữ. **Đừng đi vá 9 nghìn chỗ đó.**
 - **5/5539 ảnh báo `ERR`** khi chạy 24 luồng song song → thử lại từng cái đều 200.
 
-### 4.4 🔴 LỖI HẠ TẦNG CHƯA VÁ — việc đầu tiên nên làm phiên sau
+### 4.4 ✅ ĐÃ VÁ 21/09/2026 — log deploy trùng đường dẫn
 
-**`deploy-nha.sh` ghi log build vào đường dẫn CỐ ĐỊNH**:
+Commit `506ba729`. Log build và log đẩy GHCR giờ mang theo `${SHA}`:
+`/tmp/nha-{be,fe,day-ghcr}-<sha>.log`, và dòng báo lỗi in kèm mã commit + đúng
+đường dẫn đang đọc. Mô tả lỗi cũ giữ lại bên dưới để hiểu vì sao có bản vá.
+
+**Lỗi cũ — `deploy-nha.sh` ghi log build vào đường dẫn CỐ ĐỊNH**:
 
 ```sh
 # dòng ~386, ~388
@@ -271,6 +296,23 @@ báo lỗi để biết log đang đọc là của ai.
 | `scripts/academy-doi-chieu-ky.mjs` | tìm môn gắn sai kỳ so với khung ngành |
 | `scripts/academy-so-slug-prod.mjs` | slug nào sắp bị `pruneSections` xoá khỏi production |
 | `scripts/academy-doi-chieu-syllabus.mjs` | (có sẵn) chấm file môn với syllabus FLM gốc |
+| **`scripts/_kiem-tran-slide.mjs`** | ⭐ MỚI 21/09 — đo slide nào TRÀN khỏi khung 1280×720, **chạy TRƯỚC khi render** |
+
+⭐ **`_kiem-tran-slide.mjs` thay cho việc mở từng ảnh đoán bằng mắt.** Nó đọc
+khối CSS ra từ `_render-slides.mjs` (không sửa file dùng chung đó), dựng lại
+từng slide trong Chromium và so `slide.scrollHeight` với 720.
+
+Hai cái bẫy đã gặp ngay khi viết nó, ghi lại để đừng vấp lại:
+- **Đo ở `.bd` thì luôn ra 0.** `.bd` là flex item nên `min-height:auto` khiến
+  nó TỰ CAO BẰNG nội dung ⇒ `scrollHeight === clientHeight` kể cả khi tràn.
+  Phần thừa lòi ra ở `.slide`, phải đo ở đó.
+- Vì vậy script **tự dựng một slide giả nhồi 60 dòng và bắt buộc phải bắt
+  được** trước khi tin kết quả; bắt hụt thì thoát mã 2. Nếu không có bước đó,
+  bản đầu tiên đã in "✓ không slide nào tràn" cho cả 27 slide bằng một phép đo
+  hỏng — tức là báo xanh giả.
+- **Nó KHÔNG thấy chữ bị cắt trong SVG** (viewBox tự cắt, không tính là tràn).
+  Slide 19 của Ch.5 mất đuôi một dòng chữ và chỉ mở ảnh ra nhìn mới thấy.
+  ⇒ vẫn phải mở vài ảnh bằng mắt, nhất là slide có SVG và có `topo()`.
 
 ⚠️ `/tmp/nwc204-slides` (7,4 MB, 108 ảnh) **mất cũng được** — đã lên R2 rồi, và
 render lại được từ `scripts/slides-src/`.

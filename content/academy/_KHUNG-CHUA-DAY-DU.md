@@ -1,5 +1,9 @@
 # ⚠️ ĐỌC FILE NÀY TRƯỚC KHI LÀM TIẾP ACADEMY
 
+> 📋 **Kèm theo: `_BAN-GIAO-NWC204.md`** — bàn giao chi tiết phiên 20/09/2026:
+> đang có gì trên production, còn nợ gì, **cách dựng slide chuyên nghiệp**,
+> **mọi lỗi đã gặp + gốc rễ**, các bẫy báo động giả, và lỗi hạ tầng chưa vá.
+
 Các môn liệt kê dưới đây **mới chỉ có BỘ KHUNG**, chưa phải bài giảng hoàn chỉnh.
 
 ## Mức độ hiện tại của các môn trong danh sách
@@ -44,7 +48,7 @@ ngay, phần giảng sâu bổ sung dần sau.
 | **SDI101m** | Introduction to Semiconductor Devices | 20/09/2026 | 13 mục / 67 bài | Mục 0 + Chương 1 (buổi 1–11, vật lý điện từ) đầy đủ, 160 giá trị đã kiểm bằng `python3` · Chương 2–11 chỉ khung · **BA giáo trình chính** (Streetman + 2 khoá Coursera KAIST) · môn chia hai nửa: buổi 1–21 vật lý, 22–60 bán dẫn · chưa có video |
 | **ASI101** | Introduction to Automotive System — Nhập môn ô tô | 20/09/2026 | 16 mục / 51 bài | Mục 0 + Chương 1 (buổi 1–6) đầy đủ · Chương 2–15 chỉ khung · ⚠️ giáo trình chính là **sách Ấn Độ**, phần pháp lý CMVR/MVA KHÔNG phải luật Việt Nam · syllabus mới nhất (QĐ 1028 ngày 21/08/2026) · chưa có video |
 | **DRS102** | Drawing – Form, Still-life — Hình hoạ: vẽ khối, tĩnh vật | 20/09/2026 | 12 mục / 30 bài | Mục 0 + Chương 1 (buổi 1–4, 13–14) đầy đủ · Chương 2–11 chỉ khung · môn học **trong xưởng vẽ**, nội dung web chỉ hỗ trợ lý thuyết + tự luyện · KHÔNG có thi cuối kỳ, cặp Lab 9-10 chiếm 30% · học TRƯỚC DRP101 · chưa có video |
-| **DRP101** | Drawing plaster stature – portrait — Vẽ đầu tượng, chân dung | 20/09/2026 | 7 mục / 25 bài | Mục 0 + Chương 1 (buổi 1–12, Unit 1) đầy đủ · Chương 2–6 chỉ khung · môn có **người mẫu thật**, web không thay được buổi vẽ · KHÔNG có thi cuối kỳ · chỉ MỘT giáo trình (Andrew Loomis) · chưa có video |
+| **DRP101** | Drawing plaster stature – portrait — Vẽ đầu tượng, chân dung | 20/09/2026 | 7 mục / 34 bài | Mục 0 + Chương 1 (buổi 1–12, Unit 1) đầy đủ · Chương 2–6 chỉ khung, mỗi chương có 1 quiz · giữ 16/18 slug cũ · môn có **người mẫu thật**, web không thay được buổi vẽ · KHÔNG có thi cuối kỳ · chỉ MỘT giáo trình (Andrew Loomis) · chưa có video |
 
 ## Môn ĐÃ đầy đủ (không nằm trong diện còn nợ)
 

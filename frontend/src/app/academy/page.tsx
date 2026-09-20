@@ -11,7 +11,7 @@ import { SafeImage } from '@/components/ui/SafeImage';
 import { useSemesters, useCoursesBySemesters } from '@/hooks/useAcademyQueries';
 import { useAcademyProfile } from '@/hooks/useAcademyProfile';
 import { getFaculty, getCatMajor, getCatCombo } from '@/data/academyCatalog';
-import { daChonNganhHep, locMonMotKy, maCuaKhung, type MonHien } from '@/components/academy/locTheoNganh';
+import { daChonNganhHep, locMonMotKy, maCuaKhung, xepTheoKhung, type MonHien, type NhomKy } from '@/components/academy/locTheoNganh';
 import { useTranslation } from '@/context/LocaleContext';
 import { cn, pickLang } from '@/lib/utils';
 
@@ -32,12 +32,9 @@ export default function AcademyPage() {
   const loading = loadingSemesters || coursesQueries.some((q) => q.isLoading && !q.data);
 
   const [expanded, setExpanded] = useState<number[]>([]);
-  useEffect(() => {
-    // Auto-expand the first two semesters once data arrives.
-    if (semesters.length > 0 && expanded.length === 0) {
-      setExpanded(semesters.slice(0, 2).map((s) => s.id));
-    }
-  }, [semesters, expanded.length]);
+  /* ⚠️ Việc tự mở hai kỳ đầu đã chuyển xuống DƯỚI `nhomKy` — nhóm kỳ giờ có thể
+     dựng từ khung ngành nên id khác id của bảng `semesters`, và `nhomKy` khai
+     bằng `const` nên tham chiếu nó ở trên đây sẽ vỡ vì TDZ. */
 
   useEffect(() => {
     if (semestersError) toast.error('Không tải được Academy FPT');
@@ -122,11 +119,29 @@ export default function AcademyPage() {
   );
   const semCourses = (semId: number): MonHien[] =>
     locMonMotKy(coursesBySemester[semId] || [], leafCodes, profile);
-  const shownTotal = useMemo(
-    () => (leafCodes ? semesters.reduce((a, s) => a + semCourses(s.id).length, 0) : totalCourses),
+
+  /* Đã chọn ngành hẹp → xếp theo KỲ TRONG KHUNG NGÀNH, không theo ô `semester`
+     của bản ghi môn. Lý do và số đo ở `locTheoNganh.ts > xepTheoKhung`: một môn
+     chỉ giữ được một kỳ, mà mỗi ngành xếp một kiểu, nên xếp theo bản ghi thì
+     luôn có ngành thấy sai (riêng khung SE đã lệch 9 môn). Chưa chọn ngành thì
+     giữ nguyên danh sách kỳ của DB như trước. */
+  const nhomKy: NhomKy[] = useMemo(
+    () => xepTheoKhung(allCourses, profile, leafActive)
+      ?? semesters.map((s) => ({ id: s.id, name: s.name, code: s.code, description: s.description, mon: semCourses(s.id) })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [leafCodes, semesters, coursesBySemester, totalCourses],
+    [allCourses, profile, leafActive, semesters, coursesBySemester, leafCodes],
   );
+  const shownTotal = useMemo(
+    () => (leafActive ? nhomKy.reduce((a, n) => a + n.mon.length, 0) : totalCourses),
+    [leafActive, nhomKy, totalCourses],
+  );
+
+  useEffect(() => {
+    // Tự mở hai nhóm kỳ đầu tiên khi có dữ liệu.
+    if (nhomKy.length > 0 && expanded.length === 0) {
+      setExpanded(nhomKy.slice(0, 2).map((n) => n.id));
+    }
+  }, [nhomKy, expanded.length]);
 
   const toggleSemester = (semesterId: number) => {
     setExpanded((prev) => prev.includes(semesterId)
@@ -294,9 +309,9 @@ export default function AcademyPage() {
               <h2 className="text-lg font-semibold text-text-primary">Semester navigator</h2>
             </div>
             <div className="space-y-2">
-              {semesters.map((semester) => {
+              {nhomKy.map((semester) => {
                 const isOpen = expanded.includes(semester.id);
-                const courses = semCourses(semester.id);
+                const courses = semester.mon;
                 if (leafActive && courses.length === 0) return null;
                 return (
                   <div key={semester.id} className="rounded-2xl border border-darkborder overflow-hidden bg-darkbg/60">
@@ -331,8 +346,8 @@ export default function AcademyPage() {
           </aside>
 
           <div className="space-y-6">
-            {semesters.map((semester) => {
-              const courses = semCourses(semester.id);
+            {nhomKy.map((semester) => {
+              const courses = semester.mon;
               if (leafActive && courses.length === 0) return null;
               return (
                 <section key={semester.id} className="rounded-2xl border border-darkborder bg-darkcard p-5">

@@ -708,7 +708,7 @@ const c8q = quiz('apo202-quiz-8', 'Quiz 8 — Testing & SOLID|||Quiz 8 — Testi
 ]);
 
 export default {
-  semester: { code: 'FPTU_Hola2', name: 'Kỳ 2', ordinal: 2 },
+  semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
   course: {
     courseCode: 'APO202',
     slug: 'apo202-advanced-python-with-oop',

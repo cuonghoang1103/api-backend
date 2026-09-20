@@ -665,7 +665,7 @@ const c9q = quiz('ssg105-quiz-9', 'Quiz 9 — Culture, ethics & feedback|||Quiz 
 ]);
 
 export default {
-  semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
+  semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
     courseCode: 'SSG105',
     slug: 'ssg105-communication-and-in-group-working-skills',

@@ -472,7 +472,7 @@ const c8q = quiz('rai101-quiz-8', 'Quiz 8 — Applications & ethics|||Quiz 8 —
 ]);
 
 export default {
-  semester: { code: 'FPTU_Hola1', name: 'Kỳ 1', ordinal: 1 },
+  semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
     courseCode: 'RAI101',
     slug: 'rai101-introduction-to-robotics-and-artificial-intelligence',

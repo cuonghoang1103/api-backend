@@ -44,6 +44,28 @@ export function tenChuan(t?: string | null): string {
   return (t || '').split('|||')[0]!.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
+/**
+ * Mã CŨ → mã MỚI thay thế nó, khi HAI MÃ NẰM Ở HAI KỲ KHÁC NHAU.
+ *
+ * Luật dò theo TÊN ở `locMonMotKy` chỉ so trong PHẠM VI MỘT KỲ (tham số `ds`
+ * là môn của đúng một kỳ), nên nó bắt được CSI104 ↔ CSI106 (cùng Kỳ 1) nhưng
+ * KHÔNG bắt được cặp nào bị chuyển kỳ. Bảng này vá đúng chỗ đó.
+ *
+ * SSG104 → SSG105: cùng một môn "Kỹ năng giao tiếp và cộng tác". FLM:
+ * SSG104 = syllabus 11845, QĐ 862/QĐ-ĐHFPT ngày 16/08/2024; SSG105 =
+ * syllabus 14127, QĐ 377/QĐ-ĐHFPT ngày 09/04/2026 (bản thay thế). Khung
+ * BIT_SE_K20B xếp SSG105 ở Kỳ 5, còn SSG104 ở Kỳ 2 của chương trình cũ —
+ * khác kỳ nên luật tên không bao giờ khớp, và SSG104 biến mất khỏi danh sách
+ * kỳ dù tìm kiếm vẫn ra. Người dùng báo 20/09/2026.
+ *
+ * ⚠️ Thêm cặp vào đây thì KHÔNG cần đụng `fptuCurriculum.ts`: môn mã cũ vẫn
+ * hiện ở ĐÚNG KỲ của nó, kèm nhãn "mã cũ", nên sinh viên chương trình mới
+ * không tưởng phải học hai môn.
+ */
+export const MA_CU_THAY_THE: Record<string, string> = {
+  SSG104: 'SSG105',
+};
+
 const laMaProject = (c: Course): boolean => /^INT6\d\d$/i.test((c.courseCode || '').trim());
 const maCua = (c: Course): string => (c.courseCode || '').trim().toUpperCase();
 
@@ -73,6 +95,92 @@ export function maCuaKhung(ho: HoSoNganh, coLoc: boolean): Set<string> | null {
   return s;
 }
 
+/** Một nhóm kỳ để hiển thị — hình dạng đủ dùng thay cho bản ghi `Semester`. */
+export interface NhomKy {
+  id: number;
+  name: string;
+  /** Nhãn dự phòng khi một môn không có mã (trang dùng `course.courseCode || code`). */
+  code?: string;
+  description?: string;
+  mon: MonHien[];
+}
+
+/** Id giả cho nhóm dựng từ khung, tránh đụng id thật của bảng `semesters`. */
+const ID_KHUNG = 10_000;
+const ID_PROJECT = 19_999;
+
+/**
+ * Xếp môn theo KỲ TRONG KHUNG NGÀNH, thay vì theo ô `semester` của bản ghi môn.
+ *
+ * ⚠️ VÌ SAO CẦN: mỗi bản ghi môn chỉ giữ ĐƯỢC MỘT kỳ, trong khi cùng một môn
+ * lại nằm ở kỳ khác nhau tuỳ ngành — `SSG105` là Kỳ 5 với SE/GD/DX nhưng Kỳ 4
+ * với IA/IS/IC/AS/RA. Xếp theo ô `semester` thì luôn có ngành thấy sai, và
+ * sửa ô đó cho ngành này là làm sai cho ngành kia. Đo thật 20/09/2026: riêng
+ * khung SE đã có **9 môn** lệch giữa khung và DB (OTP101, WED201c, MAS291,
+ * CSD201, SWR302, SSG105, WDU203c, EXE101, ITE302c). Người dùng báo sau khi
+ * không thấy SSG104/SSG105 ở kỳ nào.
+ *
+ * Trả `null` khi KHÔNG lọc (chưa chọn ngành hẹp) — lúc đó gọi vẫn dùng danh
+ * sách kỳ của DB như cũ.
+ *
+ * Môn mã CŨ được gắn vào kỳ của **môn mới thay thế nó**, kèm `isOld` — nên
+ * `NWC203c` nằm ngay cạnh `NWC204` ở Kỳ 2, `SSG104` cạnh `SSG105` ở Kỳ 5.
+ */
+export function xepTheoKhung(tatCaMon: Course[], ho: HoSoNganh, coLoc: boolean): NhomKy[] | null {
+  if (!coLoc) return null;
+  const plan = leafSemesterPlan(ho.faculty ?? null, ho.major ?? null, ho.combo ?? null);
+  if (!plan.length) return null;
+
+  const daXep = new Set<number>();
+  const nhom: NhomKy[] = [];
+
+  for (const { semester, codes } of plan) {
+    const ma = new Set(
+      codes.filter((c) => !isPlaceholderCode(c)).map((c) => c.trim().toUpperCase()),
+    );
+    const trongKhung = tatCaMon.filter((c) => ma.has(maCua(c)));
+    const tenTrongKhung = new Set(trongKhung.map((c) => tenChuan(c.title)).filter(Boolean));
+    const maCu = tatCaMon.filter((c) => {
+      if (ma.has(maCua(c))) return false;
+      const thay = MA_CU_THAY_THE[maCua(c)];
+      if (thay && ma.has(thay)) return true;
+      return !!tenChuan(c.title) && tenTrongKhung.has(tenChuan(c.title));
+    });
+
+    const mon: MonHien[] = [
+      ...trongKhung.map((c) => ({ course: c, isOld: false, isProject: laMaProject(c) })),
+      ...maCu.map((c) => ({ course: c, isOld: true, isProject: false })),
+    ].filter((m) => !daXep.has(m.course.id));
+    mon.forEach((m) => daXep.add(m.course.id));
+
+    nhom.push({
+      id: ID_KHUNG + semester,
+      name: semester === 0 ? 'Kỳ chuẩn bị' : 'Kỳ ' + semester,
+      code: 'KY' + semester,
+      description: 'Xếp theo khung chương trình của ngành bạn đã chọn',
+      mon,
+    });
+  }
+
+  /* Project OJT nằm NGOÀI khung nên không có kỳ — gom thành một nhóm cuối,
+     và chỉ cho đúng SE + hai combo web/app như luật cũ. */
+  const hienProject = ho.faculty === 'it' && ho.major === 'se'
+    && (ho.combo === 'react-nodejs' || ho.combo === 'dotnet');
+  if (hienProject) {
+    const pj = tatCaMon.filter((c) => laMaProject(c) && !daXep.has(c.id));
+    if (pj.length) {
+      nhom.push({
+        id: ID_PROJECT,
+        name: 'Project gợi ý',
+        code: 'OJT',
+        description: 'Nằm ngoài khung giáo trình — gợi ý theo combo bạn chọn',
+        mon: pj.map((c) => ({ course: c, isOld: false, isProject: true })),
+      });
+    }
+  }
+  return nhom;
+}
+
 /**
  * Môn hiện cho MỘT kỳ, sau khi lọc theo ngành hẹp.
  *
@@ -88,7 +196,17 @@ export function locMonMotKy(
 
   const trongKhung = ds.filter((c) => khung.has(maCua(c)));
   const tenTrongKhung = new Set(trongKhung.map((c) => tenChuan(c.title)).filter(Boolean));
-  const maCu = ds.filter((c) => !khung.has(maCua(c)) && tenChuan(c.title) && tenTrongKhung.has(tenChuan(c.title)));
+  /* Hai đường nhận ra "mã cũ của môn đang có trong khung":
+     1. cùng TÊN với một môn trong khung Ở CÙNG KỲ này (CSI104 ↔ CSI106);
+     2. có trong bảng MA_CU_THAY_THE và mã mới nằm trong khung — dùng khi hai
+        mã bị xếp ở HAI KỲ KHÁC NHAU nên đường 1 không thể khớp (SSG104 ↔ SSG105).
+     Lọc trùng để một môn không bị thêm hai lần. */
+  const maCu = ds.filter((c) => {
+    if (khung.has(maCua(c))) return false;
+    const thay = MA_CU_THAY_THE[maCua(c)];
+    if (thay && khung.has(thay)) return true;
+    return !!tenChuan(c.title) && tenTrongKhung.has(tenChuan(c.title));
+  });
 
   /* Project chỉ hiện cho SE (CNTT) + combo Node.JS hoặc C#/.NET — đúng loại
      project web/app/API này. Đổ vào ngành khác là gợi ý sai chuyên môn. */

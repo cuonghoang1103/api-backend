@@ -21,7 +21,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Loader2, Languages, MessageCircle, ListVideo, Captions } from 'lucide-react';
 import { videoHocApi, type PhuDeBai } from '@/lib/api';
 import { useGiaSuBai } from '@/components/academy/useGiaSuBai';
@@ -38,9 +38,12 @@ const TAB: { ma: Tab; nhan: string; Icon: typeof Captions }[] = [
   { ma: 'ai', nhan: 'Hỏi AI', Icon: MessageCircle },
 ];
 
-export default function PhongVideoClient({ lessonId }: { lessonId: number }) {
+export default function PhongVideoClient({ lessonId, ve }: {
+  lessonId: number;
+  /** Đường về ĐÃ ĐƯỢC LỌC ở máy chủ — xem `duongVe()` trong `page.tsx`. */
+  ve: string;
+}) {
   const router = useRouter();
-  const sp = useSearchParams();
 
   const [pd, datPd] = useState<PhuDeBai | null>(null);
   const [loi, datLoi] = useState<string | null>(null);
@@ -71,19 +74,6 @@ export default function PhongVideoClient({ lessonId }: { lessonId: number }) {
    * hỏi. Một bản dùng chung thì `asking` chặn được lượt thứ hai.
    */
   const giaSu = useGiaSuBai({ lessonId, phongVideo: true, phuDeGiay: giay });
-
-  /*
-   * Đường về. CHỈ nhận đường dẫn nội bộ bắt đầu bằng đúng một dấu `/`.
-   *
-   * ⚠️ `?ve=` đến từ URL, tức là từ bất cứ ai gửi link. Nhận thẳng thì
-   * `?ve=https://kẻ-xấu` biến nút "Quay lại bài học" thành một cú chuyển
-   * hướng ra ngoài mang đủ vẻ chính danh. `//host` cũng là đường ra ngoài
-   * (giao thức tương đối) nên phải loại luôn.
-   */
-  const ve = (() => {
-    const v = sp.get('ve') ?? '';
-    return /^\/(?!\/)/.test(v) ? v : '/courses';
-  })();
 
   useEffect(() => {
     let huy = false;

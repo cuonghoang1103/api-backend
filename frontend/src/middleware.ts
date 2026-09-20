@@ -56,6 +56,23 @@ export async function middleware(request: NextRequest) {
  if (pathname.startsWith('/learn')) {
  return handleLearnRoute(request, pathname);
  }
+
+ /*
+  * Phòng học video cùng AI — chỉ cần đăng nhập, y như /learn.
+  *
+  * ⚠️ CHỐT PHẢI Ở ĐÂY, KHÔNG PHẢI TRONG `page.tsx`. Trang đó có gọi
+  * `redirect()` ở máy chủ, nhưng nó là trang `force-dynamic` có `<Suspense>`
+  * nên Next đã bắt đầu CHẢY response trước khi tới lệnh đó — không đặt được
+  * mã 307 nữa, và Next lùi về `<meta http-equiv="refresh" content="1;url=…">`.
+  * Đo thật trên production 20/09/2026: HTTP 200, KHÔNG có header `Location`,
+  * người chưa đăng nhập nhìn trang trống TRỌN MỘT GIÂY rồi mới nhảy.
+  *
+  * Middleware chạy ở edge, TRƯỚC khi có byte nào được dựng, nên nó trả được
+  * 307 thật. `redirect()` trong `page.tsx` vẫn giữ làm lưới đỡ.
+  */
+ if (pathname.startsWith('/phong-video')) {
+ return handleLearnRoute(request, pathname);
+ }
  return NextResponse.next();
 }
 
@@ -152,6 +169,7 @@ async function handleLearnRoute(
 export const config = {
  matcher: [
    '/admin/:path*', '/admin', '/creator/:path*', '/creator', '/learn/:path*',
+   '/phong-video/:path*',
    // Commerce routes — intercepted so they redirect home while disabled.
    '/shop/:path*', '/shop', '/cart', '/checkout', '/my-orders',
    '/huong-dan-mua-hang', '/chinh-sach-thanh-toan', '/chinh-sach-giao-hang', '/chinh-sach-doi-tra',

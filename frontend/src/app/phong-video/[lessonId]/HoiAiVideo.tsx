@@ -60,9 +60,19 @@ export default function HoiAiVideo({ giaSu, giay, onTua }: {
     hoi, hoiTiengAnh, hoiLaiMoi, xoaHoiThoai,
   } = giaSu;
 
-  const cuoiRef = useRef<HTMLDivElement | null>(null);
+  /*
+   * ⚠️ CUỘN TRONG CỘT, KHÔNG DÙNG `scrollIntoView`.
+   *
+   * Trên màn hẹp bố cục xếp DỌC (video trên, bảng dưới) nên cả trang cuộn
+   * được — và `scrollIntoView` sẽ kéo luôn cả trang xuống đáy khung chat mỗi
+   * lần AI gõ thêm một mẩu, tức là giật video ra khỏi tầm mắt người đang xem.
+   * Đặt `scrollTop` của đúng cột thì phần còn lại của trang đứng yên.
+   */
+  const khungRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    cuoiRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    const v = khungRef.current;
+    if (!v) return;
+    v.scrollTop = v.scrollHeight;
   }, [turns.length, turns[turns.length - 1]?.content]);
 
   /*
@@ -126,7 +136,7 @@ export default function HoiAiVideo({ giaSu, giay, onTua }: {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex-1 overflow-y-auto px-3 py-3">
+      <div ref={khungRef} className="flex-1 overflow-y-auto px-3 py-3">
         {chuaHoi && (
           <div className="mb-3">
             <p className="mb-2 text-sm text-text-secondary">
@@ -178,7 +188,6 @@ export default function HoiAiVideo({ giaSu, giay, onTua }: {
               </div>
             </div>
           ))}
-          <div ref={cuoiRef} />
         </div>
       </div>
 

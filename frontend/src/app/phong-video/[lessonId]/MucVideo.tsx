@@ -19,7 +19,7 @@
  * TỨC THÌ và không tốn lượt nào.
  */
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Loader2, ListVideo, Sparkles } from 'lucide-react';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { GiaSu } from './HoiAiVideo';
@@ -27,6 +27,10 @@ import { bocPhan, moc, themLienKet, giayTuURL, type Phan } from './mocThoiGian';
 
 const CAU_TOM_TAT = 'Tóm tắt video này theo các phần có mốc thời gian.';
 const KHOA_CACHE = 'video_tomtat';
+
+/** Đã có câu tóm tắt cho mục lục chưa. */
+const coLuot = (ds: { role: string; srcCacheKey?: string }[]) =>
+  ds.some((t) => t.role === 'assistant' && t.srcCacheKey === KHOA_CACHE);
 
 export default function MucVideo({ giaSu, giay, onTua }: {
   giaSu: GiaSu;
@@ -44,18 +48,50 @@ export default function MucVideo({ giaSu, giay, onTua }: {
 
   const phan = useMemo(() => (luot?.content ? bocPhan(luot.content) : []), [luot?.content]);
 
+  const turnsRef = useRef(turns);
+  turnsRef.current = turns;
+
   /* Hỏi MỘT lần khi người học mở tab này — và chỉ khi chưa có. `useRef` chứ
      không phải state: state đổi làm chạy lại effect, và câu hỏi bắn hai lần. */
   const daHoi = useRef(false);
+  const [hong, datHong] = useState(false);
   useEffect(() => {
     /* `asking` giờ là cờ DÙNG CHUNG của cả phòng, nên nó thật sự chặn được
        lượt hỏi đang chảy ở tab chat. `daHoi` chỉ cắm một lần cho mỗi phòng. */
     if (daHoi.current || luot || asking) return;
     daHoi.current = true;
-    void hoi(CAU_TOM_TAT, { cacheKey: KHOA_CACHE });
+    datHong(false);
+    void hoi(CAU_TOM_TAT, { cacheKey: KHOA_CACHE })
+      /*
+       * ⚠️ PHẢI CÓ TRẠNG THÁI HỎNG.
+       *
+       * Khi lượt hỏi thất bại (403 chưa Pro, hết hạn mức ngày, AI tạm nghỉ),
+       * `useGiaSuBai` GỠ BỎ hai bong bóng và chỉ hiện một toast thoáng qua —
+       * nên `luot` quay về `undefined`, và tab này sẽ quay vòng tròn với dòng
+       * "Gia sư đang đọc phụ đề…" VĨNH VIỄN. Người học thấy một cái chờ không
+       * bao giờ kết thúc, không biết vì sao và không có gì để bấm.
+       */
+      /* ⚠️ Đọc `turns` qua REF. Đóng kín mảng cũ vào `.finally` là luôn thấy
+         mảng RỖNG của lúc bắt đầu, nên mọi lượt đều bị coi là hỏng. */
+      .finally(() => { if (!coLuot(turnsRef.current)) datHong(true); });
   }, [luot, asking, hoi]);
 
-  const dangCho = !luot || (luot.streaming && phan.length === 0);
+  const dangCho = !hong && (!luot || (luot.streaming && phan.length === 0));
+
+  if (hong && !luot) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
+        <p className="text-sm text-text-secondary">Chưa tạo được mục lục cho video này.</p>
+        <button
+          onClick={() => { daHoi.current = false; datHong(false); }}
+          className="rounded-lg px-4 py-2 text-sm font-semibold text-white"
+          style={{ background: 'linear-gradient(135deg,#8b5cf6,#6366f1)' }}
+        >
+          Thử lại
+        </button>
+      </div>
+    );
+  }
 
   if (dangCho) {
     return (
@@ -100,7 +136,7 @@ export default function MucVideo({ giaSu, giay, onTua }: {
           ))}
           <div className="h-8" />
         </>
-      ) : (
+      ) : luot ? (
         /* Không bóc được phần nào thì HIỆN NGUYÊN câu tóm tắt, đừng bỏ trống.
            Câu trả lời vẫn hữu ích kể cả khi nó không theo đúng khuôn. */
         <div
@@ -118,7 +154,7 @@ export default function MucVideo({ giaSu, giay, onTua }: {
           </div>
           <ChatMarkdown content={themLienKet(luot.content)} renderMath={!luot.streaming} />
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

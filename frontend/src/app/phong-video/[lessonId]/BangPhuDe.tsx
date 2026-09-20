@@ -11,7 +11,7 @@
  * sẽ tin bản dịch. Lệch thì bỏ HẲN cột tiếng Việt, đó là lựa chọn đúng.
  */
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CauPhuDe } from '@/lib/api';
 import { moc } from './mocThoiGian';
 
@@ -24,6 +24,9 @@ export default function BangPhuDe({ cues, dichVi, giay, hienDich, onTua }: {
 }) {
   const voRef = useRef<HTMLDivElement | null>(null);
   const tuCuonRef = useRef(true);
+  /* Bấm "Bám theo video" phải cuộn NGAY, không đợi giây tiếp theo. `tuCuonRef`
+     là ref nên đổi nó không làm chạy lại effect — cần một mốc state. */
+  const [nhipCuon, datNhipCuon] = useState(0);
 
   const coDich = !!dichVi && dichVi.length === cues.length;
 
@@ -39,18 +42,31 @@ export default function BangPhuDe({ cues, dichVi, giay, hienDich, onTua }: {
     return ra;
   }, [cues, giay]);
 
-  /* Tự cuộn theo câu đang đọc — nhưng NHƯỜNG khi người học tự cuộn đi đọc chỗ
-     khác. Không nhường thì cứ mỗi giây trang lại giật về, và không thể đọc
-     lùi được câu nào. Chạm lại đáy ⇒ bật lại. */
+  /*
+   * Tự cuộn theo câu đang đọc — nhưng NHƯỜNG khi người học tự cuộn đi đọc chỗ
+   * khác. Không nhường thì cứ mỗi giây trang lại giật về, và không đọc lùi
+   * được câu nào.
+   *
+   * ⚠️⚠️ NGHE `wheel`/`touchmove`, TUYỆT ĐỐI KHÔNG NGHE `scroll`.
+   *
+   * `scroll` không phân biệt được ai cuộn. Cú `scrollTo` của chính hàm bám
+   * theo bên dưới cũng phát ra `scroll`, nên một bộ nghe `scroll` sẽ tự tắt
+   * chính nó ngay nhịp đầu — và tính năng "bám theo video" chết câm ngay lần
+   * chạy đầu tiên, trông y như chưa từng được viết. `wheel` và `touchmove`
+   * chỉ phát ra khi NGƯỜI dùng thật sự tác động.
+   *
+   * Bật lại bằng nút "Bám theo video" ở đầu cột.
+   */
   useEffect(() => {
     const v = voRef.current;
     if (!v) return;
-    const onCuon = () => {
-      const dayDuoi = v.scrollHeight - v.scrollTop - v.clientHeight;
-      tuCuonRef.current = dayDuoi < 120 || v.scrollTop < 40 ? tuCuonRef.current : false;
+    const nguoiDungCuon = () => { tuCuonRef.current = false; };
+    v.addEventListener('wheel', nguoiDungCuon, { passive: true });
+    v.addEventListener('touchmove', nguoiDungCuon, { passive: true });
+    return () => {
+      v.removeEventListener('wheel', nguoiDungCuon);
+      v.removeEventListener('touchmove', nguoiDungCuon);
     };
-    v.addEventListener('scroll', onCuon, { passive: true });
-    return () => v.removeEventListener('scroll', onCuon);
   }, []);
 
   useEffect(() => {
@@ -60,7 +76,7 @@ export default function BangPhuDe({ cues, dichVi, giay, hienDich, onTua }: {
     if (!v || !o) return;
     const muon = o.offsetTop - v.clientHeight / 2.6;
     v.scrollTo({ top: Math.max(0, muon), behavior: 'smooth' });
-  }, [dangDoc]);
+  }, [dangDoc, nhipCuon]);
 
   if (!cues.length) {
     return <p className="p-4 text-sm text-text-muted">Bài này chưa có phụ đề.</p>;
@@ -71,7 +87,7 @@ export default function BangPhuDe({ cues, dichVi, giay, hienDich, onTua }: {
       <div className="flex items-center justify-between border-b border-white/10 px-3 py-2 text-xs text-text-muted">
         <span>{cues.length.toLocaleString('vi-VN')} câu</span>
         <button
-          onClick={() => { tuCuonRef.current = true; }}
+          onClick={() => { tuCuonRef.current = true; datNhipCuon((n) => n + 1); }}
           className="rounded-full border border-white/10 px-2.5 py-1 transition-colors hover:border-neon-violet/50 hover:text-neon-violet"
         >
           Bám theo video

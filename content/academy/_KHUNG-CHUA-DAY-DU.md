@@ -36,6 +36,7 @@ ngay, phần giảng sâu bổ sung dần sau.
 
 | Mã | Tên môn | Ngày dựng khung | Mục/bài | Ghi chú |
 |---|---|---|---|---|
+| **PFP191** | Programming Fundamentals with Python | 20/09/2026 | 12 mục / 70 bài | Mục 0 + Chương 1 (buổi 1–9) đầy đủ, 50 khối Python chạy thật · Chương 2–10 chỉ khung · 4 giáo trình đều miễn phí · chưa có video |
 | **SSA101** | Academic skills — Kỹ năng học thuật | 20/09/2026 | 11 mục / 30 bài | Mục 0 + Chương 1 (buổi 1–12) đầy đủ · Chương 2–10 chỉ khung · 6 giáo trình đều miễn phí, đã dựng thẻ sách · chưa có video |
 
 ## Môn ĐÃ đầy đủ (không nằm trong diện còn nợ)

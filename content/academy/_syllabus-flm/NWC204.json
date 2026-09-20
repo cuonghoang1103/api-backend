@@ -218,5 +218,5 @@
     "Đặc điểm mới của bản 2026: gần như MỌI chương đều có mục cuối 'Integrate AI Tools for Explaining Concepts (Self Learning)', và có 2 CLO riêng về dùng AI (CLO9, CLO10); nhiều Lab ghi 'Dialogue-based Assessment & Self Learning'.",
     "Phần môn CÓ dạy mà liên quan trực tiếp việc vận hành máy chủ: buổi 4 'Ports and Addresses' · buổi 42 '13.4 Port Numbers' · buổi 49-50 an ninh mạng + '15.4 Device Security' (làm cứng thiết bị, SSH thay Telnet) · buổi 37-40 ICMP/ping/traceroute · buổi 9 và 19 dùng Wireshark · buổi 5 dùng SSH qua Tera Term.",
     "Phần môn KHÔNG dạy (cần bổ sung riêng nếu muốn vận hành VPS): sshd_config và xác thực bằng khoá trên Linux, systemd ssh.socket, đường hầm SSH/ProxyJump, ufw/iptables, NAT và port-forward trên Linux, nginx + TLS/HTTPS, mạng Docker, DNS bản ghi thực tế, chứng chỉ Let's Encrypt. Trong chương trình FPTU các phần này rải ở NWC303 (CCNA SRWE+ENSA: routing, wireless, NAT/ACL, tự động hoá) và OSP201 (Linux + quản trị mạng + bảo mật: CentOS, Apache, MySQL, Rootkit Hunter, Tripwire) — và vẫn KHÔNG môn nào dạy nginx/TLS/Docker."
-  }
+  ]
 }

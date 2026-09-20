@@ -67,22 +67,21 @@ video, chuẩn như CEA201/CSI106) cho 5 môn user tự chọn, theo thứ tự 
 1. **`NWC204`** — Mạng máy tính. ⭐ User xếp **QUAN TRỌNG NHẤT**, cần hiểu trọn
    vẹn để tự SSH, deploy, xử lý cổng mạng mà không cần hỏi ai.
 
-   🟡 **ĐANG LÀM DỞ — 21/09/2026 xong buổi 1–16 trên 60 (~27% môn).**
+   🟡 **ĐANG LÀM DỞ — 21/09/2026 xong buổi 1–20 trên 60 (~33% môn).**
 
    | Đã xong | Còn nợ |
    |---|---|
    | Mục 0 (7 bài, bảng đủ 60 buổi đối chiếu từng ký tự với FLM) | — |
-   | Ch.1 Networking Today (buổi 1–2) · 18 slide | Ch.6 Ethernet Switching (17–20) |
-   | Ch.2 Cấu hình switch & thiết bị đầu cuối (3–6) · 26 slide | Ch.7 Tầng mạng (21–23) |
-   | Ch.3 Giao thức & mô hình phân tầng (7–10) · 23 slide | Ch.8 Address Resolution/ARP (24–25) |
-   | Ch.4 Tầng vật lý (11–14) · 23 slide | Ch.9 Cấu hình router (26–29) |
-   | **Ch.4B Hệ đếm — chương BÙ**, trường không xếp buổi · 18 slide | **Ch.10 Địa chỉ IPv4 + chia subnet (30–34)** ⭐ nặng nhất |
-   | **Ch.5 Tầng liên kết dữ liệu (15–16) · 27 slide** ✅ 21/09 | Ch.11 IPv6 (35–36) · Ch.12 ICMP (37–40) |
-   | | **Ch.13 Tầng giao vận + SỐ HIỆU CỔNG (41–42)** ⭐ user cần |
-   | | Ch.14 Tầng ứng dụng (45–46) · Ch.15 An ninh mạng (49–50) |
+   | Ch.1 Networking Today (buổi 1–2) · 18 slide | Ch.7 Tầng mạng (21–23) |
+   | Ch.2 Cấu hình switch & thiết bị đầu cuối (3–6) · 26 slide | Ch.8 Address Resolution/ARP (24–25) |
+   | Ch.3 Giao thức & mô hình phân tầng (7–10) · 23 slide | Ch.9 Cấu hình router (26–29) |
+   | Ch.4 Tầng vật lý (11–14) · 23 slide | **Ch.10 Địa chỉ IPv4 + chia subnet (30–34)** ⭐ nặng nhất |
+   | **Ch.4B Hệ đếm — chương BÙ**, trường không xếp buổi · 18 slide | Ch.11 IPv6 (35–36) · Ch.12 ICMP (37–40) |
+   | **Ch.5 Tầng liên kết dữ liệu (15–16) · 27 slide** ✅ 21/09 | **Ch.13 Tầng giao vận + SỐ HIỆU CỔNG (41–42)** ⭐ user cần |
+   | **Ch.6 Chuyển mạch Ethernet (17–20) · 26 slide** ✅ 21/09 | Ch.14 Tầng ứng dụng (45–46) · Ch.15 An ninh mạng (49–50) |
    | | Ch.16 Dựng mạng nhỏ (53–55, 58–60) · Đồ án (43–44, 47–48, 51–52, 56–57) |
 
-   Tổng đang có: **7 mục / 33 bài / 135 ảnh slide** trên
+   Tổng đang có: **8 mục / 37 bài / 161 ảnh slide** trên
    `images/academy/NWC204/v1/`. Slide **do ta tự thiết kế** (FLM không đăng
    slide nào cho môn này; bộ CCNA gốc là bản quyền Cisco trên netacad) —
    toàn tiếng Anh, ≥87% là sơ đồ/bảng theo yêu cầu của user.

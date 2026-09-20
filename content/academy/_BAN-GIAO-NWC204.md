@@ -1,4 +1,4 @@
-# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 21/09/2026
+# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 21/09/2026 (xong Ch.5 + Ch.6)
 
 > **Đọc file này + `_KHUNG-CHUA-DAY-DU.md` trước khi làm tiếp Academy.**
 > Viết lúc người dùng tắt máy nghỉ (máy bật liên tục 10 ngày, quá nóng) và sắp
@@ -27,11 +27,12 @@ phải tự soạn và đánh dấu rõ. Xem `_mon-flm-chua-co-syllabus.md`.
 
 ### NWC204 — môn ưu tiên số 1 của người dùng
 
-**7 mục · 33 bài · 135 ảnh slide**, phủ **buổi 1–16 / 60** (21/09/2026).
-Kiểm trên spec: 33 bài, 0 bài rỗng, 168/168 khối code có nhãn `language-`,
-**20/20 sơ đồ mermaid đúng dạng**, 0 thực thể thô trong `title`.
-Buổi 1–14 đã kiểm trên DB production 20/09; **Chương 5 (buổi 15–16) viết
-21/09 và CHƯA deploy** — xem mục 2.
+**8 mục · 37 bài · 161 ảnh slide**, phủ **buổi 1–20 / 60** (21/09/2026).
+Kiểm trên spec: 37 bài, 0 bài rỗng, 184/184 khối code có nhãn `language-`,
+**22/22 sơ đồ mermaid đúng dạng**, 0 thực thể thô trong `title`, 0 slug trùng,
+title dài nhất 196/255 ký tự.
+Buổi 1–14 đã kiểm trên DB production 20/09; **Chương 5 (buổi 15–16) và
+Chương 6 (buổi 17–20) viết 21/09 và CHƯA deploy** — xem mục 2.
 
 ### Bản vá toàn site cùng đợt
 
@@ -45,13 +46,16 @@ Buổi 1–14 đã kiểm trên DB production 20/09; **Chương 5 (buổi 15–1
 
 ## 2. CÒN NỢ — làm tiếp từ đây
 
-### ✅ Chương 5 xong 21/09/2026 (CHƯA DEPLOY)
+### ✅ Chương 5 và Chương 6 xong 21/09/2026 (CHƯA DEPLOY)
 
-3 bài + 1 quiz 12 câu, 27 slide đã lên `NWC204/v1/nwc204-ch05/` (đã so byte
-với CDN, lệch 0/27). Nguồn: `scripts/slides-src/nwc204-ch05.mjs`,
-`content/academy/nwc204/ch05.mjs`.
+| Chương | Buổi | Bài | Slide | Nguồn |
+|---|---|---|---|---|
+| Ch.5 Tầng liên kết dữ liệu | 15–16 | 3 + quiz 12 câu | 27, lên `NWC204/v1/nwc204-ch05/` | `slides-src/nwc204-ch05.mjs` · `nwc204/ch05.mjs` |
+| Ch.6 Chuyển mạch Ethernet | 17–20 | 3 + quiz 12 câu | 26, lên `NWC204/v1/nwc204-ch06/` | `slides-src/nwc204-ch06.mjs` · `nwc204/ch06.mjs` |
 
-Hai điều mới của chương này, áp dụng cho MỌI chương sau:
+Cả hai đợt slide đã **so byte với CDN**: lệch 0/27 và 0/26.
+
+Hai điều mới từ Ch.5, áp dụng cho MỌI chương sau:
 - **Dấu ★** đánh dấu phần cuongthai.com bổ sung ngoài Cisco Module 6 (user yêu
   cầu 21/09): lệch duplex đọc bằng `ethtool`, 802.1Q, MTU/MSS, lệnh tầng 2 trên
   Linux, cầu nối Docker. Giáo trình trường phủ đủ trước, ★ thêm vào sau.
@@ -59,11 +63,16 @@ Hai điều mới của chương này, áp dụng cho MỌI chương sau:
   buổi 14 sang CQ6.1 ở buổi 17). Đã nêu trong bài và tự soạn câu thảo luận ★
   thay thế. Các buổi trống khác: 6, 9, 22, 30, 36, 56 — sẽ gặp lại.
 
-### NWC204 buổi 17–60 (11 chương)
+Bất thường mới phát hiện ở Ch.6, **đã nêu trong bài 6.3, không tự sửa bảng gốc**:
+FLM đánh số **CQ7.1 / CQ7.2 cho buổi 19–20** (vốn là Lab 1.4 của CHƯƠNG 6), rồi
+**CQ7.3 "How does Ethernet works in a switched network?" cho buổi 21** (vốn đã
+là chương 7 — Network Layer). Ba câu mang số chương 7 mà nội dung đều của chương
+6. Đã trả lời cả ba ngay trong Ch.6.
+
+### NWC204 buổi 21–60 (10 chương)
 
 | Chương | Buổi | Nội dung |
 |---|---|---|
-| Ch.6 | 17–20 | Ethernet Switching + Lab 1.4 (Module 7) |
 | Ch.7 | 21–23 | Network Layer + Review (Module 8) |
 | Ch.8 | 24–25 | Address Resolution / ARP (Module 9) |
 | Ch.9 | 26–29 | Basic Router Configuration + Lab 2.1 (Module 10) |
@@ -223,6 +232,14 @@ không tồn tại.
 - **Chèn nhầm một khối vào giữa bảng markdown** của `_HOP-DONG-SOAN-BAI.md` → vỡ bảng.
 - **Đoán slug `drawing-plaster-stature-portrait`** (đúng là `drp101-drawing-plaster-statue-portrait`)
   → API trả 404. Lặp lại đúng cái bẫy đã ghi trong bộ nhớ: **đọc slug từ dữ liệu, đừng đoán**.
+- **Backtick markdown trong khối `<pre><code>` làm VỠ file bài** (21/09, Ch.6).
+  Viết `-> matches \u0060ip -br link\u0060 exactly` bên trong một khối code — quen tay
+  theo lối markdown — mà cả bài là một **template literal của JS**, nên dấu
+  backtick đó ĐÓNG chuỗi sớm. `node --check` báo `missing ) after argument list`
+  ở dòng mở chuỗi, cách chỗ sai gần 20 dòng, nên nhìn dòng báo lỗi không ra.
+  ⇒ Trong nội dung bài **chỉ dùng `<code>...</code>` hoặc dấu nháy kép**, tuyệt
+  đối không backtick. Hợp đồng đã ghi "KHÔNG backtick lồng" — vẫn vấp.
+
 - **Suýt đi vá 61 slug vô ích**: bắt agent gắn lại slug cũ rồi mới nghĩ ra là phải
   ĐO trước. Đếm trên DB: **0 dòng `lesson_progress` trên cả 9 môn** ⇒ không mất gì.
 

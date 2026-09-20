@@ -552,7 +552,7 @@ const L2 = {
 
     bi(
       `<h3>🧭 Choosing a medium, as a decision tree</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart TD
   A["How long is the run?"] -->|"up to 100 m"| B["Is there heavy EMI nearby?"]
   A -->|"100 m to 550 m"| C["Multimode fibre"]
@@ -561,9 +561,9 @@ flowchart TD
   B -->|"yes, motors or welding"| F["STP, properly grounded"]
   A -->|"devices must move"| G["Wireless 802.11<br/>accept shared, half duplex"]
   D --> H["Lightning risk between<br/>buildings? Fibre is the<br/>only safe answer"]
-</pre>`,
+</code></pre>`,
       `<h3>🧭 Chọn môi trường truyền, dưới dạng cây quyết định</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart TD
   A["Đường dây dài bao nhiêu?"] -->|"tới 100 m"| B["Gần đó có nhiễu mạnh không?"]
   A -->|"100 m tới 550 m"| C["Cáp quang đa mode"]
@@ -572,7 +572,7 @@ flowchart TD
   B -->|"có, động cơ hoặc máy hàn"| F["STP, tiếp đất đúng cách"]
   A -->|"thiết bị phải di chuyển"| G["Không dây 802.11<br/>chấp nhận dùng chung, bán song công"]
   D --> H["Có nguy cơ sét giữa hai<br/>toà nhà? Cáp quang là<br/>câu trả lời an toàn duy nhất"]
-</pre>`,
+</code></pre>`,
     ),
 
     cq(11, [['CQ4.2',

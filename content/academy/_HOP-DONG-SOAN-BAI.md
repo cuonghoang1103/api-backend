@@ -96,6 +96,7 @@ g++ -std=c++17 -Wall -Wextra -o /tmp/p $SCRATCH/cpp/<ten>.cpp && /tmp/p
 | `<p class="nhan">` | nhãn nhỏ in hoa, VD `<p class="nhan">Nguồn: FLM · Syllabus 13190</p>` |
 | `<div class="out">` | **output thật của chương trình**, đặt NGAY sau `</pre>` |
 | `<pre><code class="language-cpp">` / `language-c` | code (thêm ` frag` nếu là mẩu rời) |
+| `<pre><code class="language-mermaid">` | **sơ đồ mermaid** — flowchart, sequence, state… |
 | `<div class="diagram"><pre>…</pre></div>` | sơ đồ ASCII (ô nhớ, stack, lưu đồ) |
 | `<table><thead><tr><th>…</th></tr></thead><tbody><tr><td>…</td></tr></tbody></table>` | bảng |
 | `<div class="kv-grid"><div class="kv"><span class="k">…</span><span class="v">…</span></div></div>` | lưới thông tin khoá–giá trị |
@@ -103,6 +104,48 @@ g++ -std=c++17 -Wall -Wextra -o /tmp/p $SCRATCH/cpp/<ten>.cpp && /tmp/p
 | `<div class="dap-an">` | **đáp án / lời giải** (nền xanh đậm hơn) |
 | `<p class="ghi-chu">` | chú thích nhỏ, chữ mờ |
 | `<div class="formula">` | một công thức đứng riêng |
+
+### ⛔⛔ SƠ ĐỒ và CODE MÀU — hai thứ hay hỏng nhất, đọc kỹ
+
+Người học đã phản ánh cả hai. Sai một ký tự là sinh viên nhìn thấy mã nguồn thô
+thay vì hình, hoặc khối code trắng trơn không đọc nổi.
+
+**1. Sơ đồ mermaid — CHỈ MỘT dạng được vẽ:**
+
+```html
+<!-- ✅ ĐÚNG -->
+<pre><code class="language-mermaid">flowchart LR
+  A["PC-A"] --- S["Switch S1"]
+  S --- R(["Router R1"])
+</code></pre>
+
+<!-- ⛔ SAI — hiện ra mã nguồn thô, người học thấy chữ "flowchart LR" -->
+<pre class="mermaid">flowchart LR …</pre>
+```
+
+Bộ vẽ (`mermaidRuntime.ts`) quét đúng `code.language-mermaid`. Dạng
+`<pre class="mermaid">` và ```fence **không được nhận**. Người dùng báo lỗi này
+ngày 20/09/2026 ở NWC204 bài 1.1; 14 khối phải sửa lại.
+
+Trong nhãn mermaid **đừng dùng thẻ HTML** (kể cả `<br>`): `securityLevel:'strict'`
+sẽ nuốt, còn trình duyệt có thể ăn trước. Xuống dòng trong nhãn thì tách node.
+
+**2. Code màu + nút Sao chép — LUÔN ghi `language-`:**
+
+```html
+<pre><code class="language-bash">ip route show</code></pre>
+```
+
+Nhãn hay dùng: `language-bash` (lệnh shell, cả Cisco IOS) · `language-python` ·
+`language-javascript` · `language-typescript` · `language-sql` · `language-java` ·
+`language-cpp` · `language-json` · `language-ini` (file cấu hình) ·
+`language-plaintext` (KẾT XUẤT lệnh, bảng bit).
+
+- **Lệnh và kết xuất tách thành HAI khối.** Trộn vào nhau là người học sao chép
+  ra dán cả kết xuất vào terminal.
+- Thiếu `language-` thì bộ tô màu vẫn tự đoán và **vẫn có nút Sao chép**, nhưng
+  mất nhãn tên ngôn ngữ và dễ tô sai màu ⇒ cứ ghi cho chắc.
+
 
 Không dùng `<div class="giang">` (dành cho bài dạng slide), không `anh-slide`,
 không `trich-slide`, không `link-card`, không `sim-*`.

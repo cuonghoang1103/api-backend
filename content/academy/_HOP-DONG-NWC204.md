@@ -97,8 +97,11 @@ content/academy/_nwc204/ch03-04-bu05.mjs
   ra là dán cả kết xuất vào terminal.
 - Cấu hình Cisco viết **đủ từ `enable` trở đi**, đừng bắt đầu giữa chế độ. Mỗi
   dòng kèm chú thích `!` nói dòng đó làm gì.
-- Sơ đồ mạng: dùng **mermaid** (```mermaid hoặc `<pre class="mermaid">`) — web
-  render sẵn, **đừng nạp thư viện**, đừng dùng ảnh.
+- Sơ đồ mạng trong BÀI GIẢNG: dùng **mermaid** viết ĐÚNG dạng
+  `<pre><code class="language-mermaid">…</code></pre>` — đừng nạp thư viện, đừng dùng ảnh.
+  ⛔ `<pre class="mermaid">` và ```fence **KHÔNG được vẽ**, chúng hiện ra mã nguồn
+  thô cho người học. Bộ vẽ chỉ quét `code.language-mermaid`. (Lỗi thật, người
+  dùng báo 20/09/2026 — 14 khối của chính môn này phải sửa lại.)
 
 ## 6. Sách & tài liệu
 

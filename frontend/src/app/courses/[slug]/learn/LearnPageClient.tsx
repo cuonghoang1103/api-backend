@@ -167,6 +167,24 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const khungNoiDungRef = useRef<HTMLDivElement | null>(null);
   // Chạy lại mỗi khi đổi bài hoặc đổi ngôn ngữ hiển thị (nội dung được thay).
   useToMauCode(() => khungNoiDungRef.current, [currentLesson?.id, currentLesson?.content, locale]);
+  /* Vẽ sơ đồ mermaid trong bài giảng. Trang này TRƯỚC ĐÂY KHÔNG GỌI bộ vẽ —
+     chỉ `Markdown.tsx` (blog / exp-hub / case-study) gọi — nên mọi sơ đồ trong
+     bài Academy hiện ra dưới dạng mã nguồn thô. Người dùng báo 20/09/2026 khi
+     xem NWC204 bài 1.1.
+     ⚠️ Bộ vẽ chỉ nhận `code.language-mermaid`, KHÔNG nhận `<pre class="mermaid">`.
+     Nội dung phải viết đúng dạng `<pre><code class="language-mermaid">…`; bộ tô
+     màu code đã chừa sẵn lớp này (toMauCode.ts) nên hai bộ không giẫm nhau.
+     Hỏng thì sơ đồ vẫn đọc được dạng chữ — không chặn bài học. */
+  useEffect(() => {
+    const root = khungNoiDungRef.current;
+    if (!root) return;
+    let huy = false;
+    (async () => {
+      const { renderMermaidBlocks } = await import('@/components/markdown/mermaidRuntime');
+      if (!huy && khungNoiDungRef.current) await renderMermaidBlocks(khungNoiDungRef.current);
+    })().catch(() => { /* để nguyên khối mã, vẫn đọc được */ });
+    return () => { huy = true; };
+  }, [currentLesson?.id, currentLesson?.content, locale]);
   // Only the setter is used now (we reset it on lesson change / completion);
   // the value itself is no longer read since we dropped the YouTube auto-mark.
   const [, setVideoCompleted] = useState(false);

@@ -690,7 +690,7 @@ const L3 = {
 
     bi(
       `<h3>🧭 The host's decision, as a flow chart</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart TD
   A["I want to send to<br/>destination IP D"] --> B["my address AND my mask<br/>= my network N1"]
   B --> C["D AND my mask<br/>= network N2"]
@@ -698,9 +698,9 @@ flowchart TD
   D -->|"yes - same network"| E["ARP for D itself<br/>frame goes straight to D"]
   D -->|"no - different network"| F["ARP for the default gateway<br/>frame goes to the router<br/>destination IP stays D"]
   F --> G["no default gateway set?<br/>the packet is dropped here"]
-</pre>`,
+</code></pre>`,
       `<h3>🧭 Quyết định của máy gửi, vẽ thành lưu đồ</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart TD
   A["Tôi muốn gửi tới<br/>địa chỉ đích D"] --> B["địa chỉ của tôi AND mặt nạ của tôi<br/>= mạng N1"]
   B --> C["D AND mặt nạ của tôi<br/>= mạng N2"]
@@ -708,7 +708,7 @@ flowchart TD
   D -->|"có - cùng mạng"| E["ARP tìm chính D<br/>khung đi thẳng tới D"]
   D -->|"không - khác mạng"| F["ARP tìm cổng ra mặc định<br/>khung đi tới router<br/>IP đích vẫn là D"]
   F --> G["chưa đặt cổng ra mặc định?<br/>gói tin bị vứt ngay tại đây"]
-</pre>`,
+</code></pre>`,
     ),
 
     bi(

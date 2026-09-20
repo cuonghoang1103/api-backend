@@ -52,13 +52,13 @@ const L11 = {
 </ul>
 
 <h3>The same picture, as a diagram</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart LR
   A["PC-A&lt;br&gt;192.168.1.10/24"] --- S["Switch S1&lt;br&gt;Layer 2 - MAC"]
   B["PC-B&lt;br&gt;192.168.1.20/24"] --- S
   S --- R(["Router R1&lt;br&gt;Layer 3 - IP&lt;br&gt;default gateway"])
   R --- I(["Internet"])
-</pre>
+</code></pre>
 <p>PC-A reaches PC-B through the switch alone, because they are in the same network. Anything outside 192.168.1.0/24 must go through R1 first. That single sentence is the whole of layer 2 versus layer 3.</p>
 
 <h3>Why the design is like this</h3>
@@ -86,13 +86,13 @@ flowchart LR
 </ul>
 
 <h3>Vẫn bức tranh đó, vẽ thành sơ đồ</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart LR
   A["PC-A&lt;br&gt;192.168.1.10/24"] --- S["Switch S1&lt;br&gt;Tang 2 - MAC"]
   B["PC-B&lt;br&gt;192.168.1.20/24"] --- S
   S --- R(["Router R1&lt;br&gt;Tang 3 - IP&lt;br&gt;default gateway"])
   R --- I(["Internet"])
-</pre>
+</code></pre>
 <p>PC-A tới được PC-B chỉ nhờ cái switch, vì chúng cùng một mạng. Bất cứ thứ gì ngoài 192.168.1.0/24 đều phải đi qua R1 trước. Đúng một câu đó là toàn bộ khác biệt giữa tầng 2 và tầng 3.</p>
 
 <h3>Vì sao thiết kế như vậy</h3>

@@ -542,7 +542,7 @@ const L2 = {
 
     bi(
       `<h3>🧭 The same journey as a diagram</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart TD
   A["HTTP GET /index.html<br/>(data)"] --> B["+ TCP header<br/>src 51544 → dst 80<br/>(segment)"]
   B --> C["+ IP header<br/>192.168.10.10 → 203.0.113.5<br/>(packet)"]
@@ -552,9 +552,9 @@ flowchart TD
   F --> G["is this IP mine?"]
   G --> H["which port is listening?"]
   H --> I["web server reads the GET"]
-</pre>`,
+</code></pre>`,
       `<h3>🧭 Cùng hành trình đó, vẽ thành sơ đồ</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart TD
   A["HTTP GET /index.html<br/>(data)"] --> B["+ tiêu đề TCP<br/>nguồn 51544 → đích 80<br/>(segment)"]
   B --> C["+ tiêu đề IP<br/>192.168.10.10 → 203.0.113.5<br/>(packet)"]
@@ -564,7 +564,7 @@ flowchart TD
   F --> G["IP này của tôi chứ?"]
   G --> H["cổng nào đang nghe?"]
   H --> I["máy chủ web đọc câu GET"]
-</pre>`,
+</code></pre>`,
     ),
 
     cq(8, [['CQ3.2',

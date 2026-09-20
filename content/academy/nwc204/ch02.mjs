@@ -53,7 +53,7 @@ const L21 = {
 </ul>
 
 <h3>The three doors, as a diagram</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart LR
   L["Admin laptop"] -- "rollover cable&lt;br&gt;no IP needed" --> C["Console port"]
   L -- "TCP 22 - encrypted" --> V["vty lines&lt;br&gt;needs an IP"]
@@ -61,7 +61,7 @@ flowchart LR
   C --> U["user EXEC &gt;"]
   V --> U
   U -- "enable secret" --> P["privileged EXEC #"]
-</pre>
+</code></pre>
 <p>Read the two arrows into <code>user EXEC</code>: every way in ends at the same place, so the password that matters is the one after it, not the ones before it.</p>
 
 <h3>Why the design is like this</h3>
@@ -90,7 +90,7 @@ flowchart LR
 </ul>
 
 <h3>Ba cánh cửa, vẽ thành sơ đồ</h3>
-<pre class="mermaid">
+<pre><code class="language-mermaid">
 flowchart LR
   L["Laptop quan tri"] -- "cap rollover&lt;br&gt;khong can IP" --> C["Cong console"]
   L -- "TCP 22 - ma hoa" --> V["Cac duong vty&lt;br&gt;can co IP"]
@@ -98,7 +98,7 @@ flowchart LR
   C --> U["user EXEC &gt;"]
   V --> U
   U -- "enable secret" --> P["privileged EXEC #"]
-</pre>
+</code></pre>
 <p>Hãy đọc hai mũi tên cùng đổ vào <code>user EXEC</code>: mọi lối vào đều kết thúc ở cùng một chỗ, nên mật khẩu đáng kể là mật khẩu đứng SAU nó, không phải mấy cái đứng trước.</p>
 
 <h3>Vì sao thiết kế như vậy</h3>

@@ -399,7 +399,31 @@ lesson and the full transcript is given above, with [mm:ss] timestamps.
 - If the student asks about "this part" / "đoạn này", answer about the section marked
   "ĐOẠN NGƯỜI HỌC ĐANG XEM" above.
 - Prefer a DIAGRAM when the content is a process, an architecture, a comparison or a
-  hierarchy. Use a fenced code block whose language tag is: mermaid. Keep node labels short.
+  hierarchy. Use a fenced code block whose language tag is: mermaid.
+
+DIAGRAM RULES — the student reads these on a phone/tablet panel, so a diagram that is
+technically correct but too wide or too plain is useless. Follow ALL of these:
+  * At most 5 branches side by side. More than that and every box shrinks below reading
+    size. Deep and narrow beats wide and flat: prefer "graph TD" with sub-steps stacked
+    UNDER their parent rather than a row of 12 siblings.
+  * At most ~14 nodes. If the content needs more, draw the 2-3 most important ideas and
+    explain the rest in prose.
+  * Node labels: 2-6 words. Use "<br/>" for a second line. Never a whole sentence.
+  * ALWAYS COLOUR EVERY NODE — the student asked for this explicitly: they want it to
+    look like a slide with coloured boxes, not a grey wireframe. Group nodes by meaning
+    and give each group one colour, using "classDef" (not one "style" line per node):
+
+      classDef nhomA fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#fff
+      classDef nhomB fill:#7c2d12,stroke:#fb923c,stroke-width:2px,color:#fff
+      classDef nhomC fill:#14532d,stroke:#4ade80,stroke-width:2px,color:#fff
+      classDef nhomD fill:#581c87,stroke:#c084fc,stroke-width:2px,color:#fff
+      class A,B,C nhomA
+      class D,E nhomB
+
+    Use DEEP fills with LIGHT strokes and "color:#fff" as above — the app draws diagrams
+    on a dark background, so pale pastel fills leave the text unreadable.
+  * Put the timestamp at the END of the label when a node maps to a moment in the video:
+    "B[Component<br/>hàm JS đơn giản<br/>0:20]".
 - When the answer has steps or parts, use a numbered list and a short bold heading per part.
 
 TIMESTAMPS — always write them as [mm:ss] in square brackets, taken from the transcript.

@@ -7,7 +7,8 @@
  * (constants/dto/main/controller/model/repository/view/utils). Nộp theo cấu
  * trúc kia là "không có cấu trúc → không review".
  *
- * Nguồn: ~/Documents/Lab211_Fall26/HE176322_J1S0055_DoctorManagement/src
+ * Nguồn (từ 22/09/2026): ~/Documents/Source_Lab211_ForCuongThai/HE176322_J1SP0055_DoctorManagement/src
+ * — bản đạt tờ checklist 25 mục (KHUNG_DIR trỏ vào đây). Bản cũ ở Lab211_Fall26 có showMessage, KHÔNG dùng lại.
  * đã biên dịch sạch và chạy thật (10 file, 9 thông báo lỗi đều đúng).
  *
  *   node scripts/codelab-lab211-starter.mjs           # thử khô

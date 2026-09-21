@@ -20,6 +20,98 @@ const p = (html) => B.push({ type: 'prose', html });
 const img = (file, caption) => B.push({ type: 'image', url: `${H}/${file}`, caption });
 const code = (title, titleVi, language, c) => B.push({ type: 'code', title, titleVi, language, code: c });
 
+/**
+ * Tờ "Coding check sheet" GIẤY của thầy — đủ 25 mục (1.1–1.6, 2.1–2.11, 3.1–3.8), chép theo
+ * tờ giấy, kèm cách điền "O" 3 lượt. Dùng chung: module 2375 (phần 5) và module 2378 (bài cuối).
+ */
+export const CHECK_SHEET_HTML = `<p>Thầy review code bằng đúng <strong>tờ "Coding check sheet"</strong> này — <strong>25 mục</strong>,
+chép theo tờ giấy. Sai một mục là bị trả về. Tờ giấy này là chuẩn cao nhất: chỗ nào bài giảng nói khác,
+theo tờ giấy.</p>
+<h4>Cách điền — 3 lượt cho mỗi bài</h4>
+<ul>
+  <li>Đầu tờ ghi <strong>Mã - Tên SV</strong>. Tờ có 5 cột <em>Date</em>, mỗi cột dành cho <strong>một
+  bài</strong>: ghi ngày bắt đầu làm, bên dưới ghi mã bài (vd <code>P0061</code>).</li>
+  <li>Mỗi cột chia <strong>3 ô con = 3 lượt</strong> tự check / yêu cầu review cho bài đó.</li>
+  <li>Code xong, tự review source theo từng mục; mục nào đã OK thì điền <strong>"O"</strong> vào ô của lượt
+  đang làm.</li>
+  <li><strong>Khi tất cả các mục trên cột đó đã là "O"</strong> mới giơ tay yêu cầu thầy review.</li>
+  <li>Thầy trả về → sửa → soát lại <em>cả 25 mục</em> ở ô của lượt kế tiếp (sửa chỗ này hay làm hỏng chỗ
+  khác), điền "O" lại từ đầu.</li>
+</ul>
+<h4>1. Common</h4>
+<ol>
+  <li><strong>1.1 — Đúng MVC chưa?</strong>
+    <ul>
+      <li>☐ <strong>Main</strong> chỉ làm việc với Controller, DTO, Utils. Toàn bộ việc nhập dữ liệu /
+      validate / đọc từ file / mã hoá thực hiện ở Main. (Main được in menu, câu nhắc nhập và lỗi
+      <code>e.getMessage()</code>; <em>kết quả</em> thì qua View.) Mỗi <code>case</code> gọi controller
+      <strong>1 lần</strong>.</li>
+      <li>☐ <strong>Controller</strong> nhận input từ Main qua DTO, gửi/nhận data qua Services (Repository),
+      <strong>không làm việc với Model</strong>, chỉ gửi kết quả cần hiển thị sang View. Không print.</li>
+      <li>☐ <strong>Repository</strong> chỉ chứa data và CRUD đơn giản; có nghiệp vụ tính toán thì thêm
+      Services: Controller ↔ Services ↔ Repository ↔ Model. <strong>Bắt buộc phải có repository.</strong></li>
+      <li>☐ Hiển thị gì cũng gọi qua <strong>View</strong>; rendering chỉ <strong>1 lần cho 1 luồng</strong>
+      (mỗi <code>case</code> của switch ở Main là 1 luồng).</li>
+      <li>☐ <strong>Services/Repository</strong> nhận data từ Controller (qua tham số nếu số tham số
+      &lt; 3, tức tối đa 2 — nhiều hơn thì gói DTO), xử lý rồi trả kết quả về Controller; được làm việc với
+      Model; không print.</li>
+      <li>☐ <strong>Model</strong> chỉ mô tả thực thể, không làm việc với View, không print.</li>
+      <li>☐ <strong>View</strong> chỉ nhận thông tin từ Controller, <strong>qua thuộc tính</strong> (field
+      ResponseDTO + setter, <code>display()</code> không tham số), không qua tham số.</li>
+    </ul></li>
+  <li>☐ <strong>1.2</strong> — Package viết chữ thường, thể hiện ý nghĩa chung của package.</li>
+  <li>☐ <strong>1.3</strong> — Class bắt đầu bằng chữ hoa, tên bắt đầu bằng <strong>danh từ</strong>, thể
+  hiện mục đích; đảm bảo S trong SOLID; class exception kết thúc bằng <code>Exception</code>; interface bắt
+  đầu bằng <code>I</code>.</li>
+  <li>☐ <strong>1.4</strong> — Method bắt đầu bằng chữ thường, tên bắt đầu bằng <strong>động từ</strong>,
+  thể hiện mục đích; đảm bảo SRP.</li>
+  <li>☐ <strong>1.5</strong> — Biến bắt đầu bằng chữ thường, có ý nghĩa; kiểu collection kết thúc bằng
+  <code>List</code>, kiểu Set bằng <code>Set</code>, kiểu Map bằng <code>Map</code>, mảng bằng
+  <code>Array</code>; viết <code>Id</code>, không viết <code>ID</code>.</li>
+  <li>☐ <strong>1.6</strong> — Comment ngắn gọn, rõ ràng (Javadoc nếu cần). <strong>Mỗi method</strong> đều
+  có comment ý nghĩa; <strong>mỗi block source</strong> đều có comment giải thích block đó làm gì.</li>
+</ol>
+<h4>2. Coding Convention (format bằng Alt+Shift+F trong NetBeans)</h4>
+<ol>
+  <li>☐ <strong>2.1</strong> — <code>{</code> nằm cuối dòng, <code>}</code> nằm đầu dòng.</li>
+  <li>☐ <strong>2.2</strong> — Block chỉ 1 dòng code cũng đặt trong <code>{}</code>.</li>
+  <li>☐ <strong>2.3</strong> — 1 dòng (không tính comment) không dài quá <strong>100 ký tự</strong>; dài hơn
+  thì ngắt sau toán tử logic, hạn chế ngắt giữa biểu thức trong <code>()</code>, ngắt trước toán hạng
+  (<code>+ - *</code>…).</li>
+  <li>☐ <strong>2.4</strong> — Mỗi khai báo biến trên 1 dòng.</li>
+  <li>☐ <strong>2.5</strong> — Khai báo mảng thống nhất một kiểu: <code>Type[] anArray;</code></li>
+  <li>☐ <strong>2.6</strong> — Biến khai báo tập trung ở <strong>đầu mỗi block</strong> code.</li>
+  <li>☐ <strong>2.7</strong> — Mỗi statement nằm trên 1 dòng.</li>
+  <li>☐ <strong>2.8</strong> — Có 1 dòng trống: giữa các method, giữa vùng khai báo biến và phần còn lại,
+  trước block comment, trước line comment, giữa các block code xử lý logic.</li>
+  <li>☐ <strong>2.9</strong> — Có 1 dấu cách: trước <code>(</code> (<code>if (</code>, <code>for (</code>),
+  sau <code>,</code>, trước và sau các phép tính (<code>=</code>, <code>+</code>, <code>-</code>,
+  <code>*</code>, <code>;</code> trong for…).</li>
+  <li>☐ <strong>2.10</strong> — Mọi hằng số ở class riêng <code>Constants.java</code>: chữ hoa, phân cách
+  bằng <code>_</code>, khai báo <code>static final</code>.</li>
+  <li>☐ <strong>2.11</strong> — Mọi message ở class riêng <code>Message.java</code>: chữ hoa, phân cách
+  bằng <code>_</code>, khai báo <code>static final</code>.</li>
+</ol>
+<h4>3. Performance</h4>
+<ol>
+  <li>☐ <strong>3.1</strong> — Dùng tên class để truy cập biến, method static
+  (<code>Validation.getChoice(...)</code>).</li>
+  <li>☐ <strong>3.2</strong> — Không khai báo biến local trùng tên với biến ở tầng cao hơn.</li>
+  <li>☐ <strong>3.3</strong> — Dùng <code>()</code> làm tường minh thứ tự phép tính:
+  <code>if ((a == b) &amp;&amp; (c == d))</code>.</li>
+  <li>☐ <strong>3.4</strong> — Class chỉ có static method thì có <code>private</code> constructor và khai báo
+  <code>final</code>.</li>
+  <li>☐ <strong>3.5</strong> — So sánh giá trị object (String…) bằng <code>equals</code>, không dùng
+  <code>==</code>; so sánh text thì chú ý hoa/thường.</li>
+  <li>☐ <strong>3.6</strong> — Không có biến khai báo mà không dùng.</li>
+  <li>☐ <strong>3.7</strong> — Biến khai báo khi bắt đầu xử lý và <strong>được khởi tạo</strong>
+  (<code>int choice = 0;</code>).</li>
+  <li>☐ <strong>3.8</strong> — Cộng chuỗi dùng <code>StringBuilder</code> (hoặc
+  <code>String.format</code>), không <code>String += String</code>.</li>
+</ol>
+<p><strong>Ngoài tờ giấy, slide 10 còn bốn cửa chặn:</strong> đã bấm Alt+Shift+F · đã chạy hết happy case
+và hiện đủ message lỗi · đặt được breakpoint và debug tại chỗ · trả lời được 12 câu review.</p>`;
+
 /** Khối "trên trang in gì" — chép nguyên văn, để đối chiếu với ảnh. */
 const nguyenVan = (...dong) =>
   p(`<div class="trich-slide"><p class="nhan">📄 <strong>Trên trang này in gì</strong></p>` +
@@ -119,13 +211,15 @@ diễn đạt ở mục 3: không phải "access modifier là gì", mà là <em>
   trả lời câu hỏi. Thầy hỏi tiếp và bạn hết vốn.</li>
   <li>⚠️ <strong>Mức nửa vời:</strong> "Em để private cho đúng đóng gói." → nghe như học vẹt.</li>
   <li>✅ <strong>Mức đạt:</strong> "Em để <code>code</code> là private vì mã bác sĩ không được sửa tuỳ tiện
-  từ ngoài. Ai muốn đổi phải qua <code>setCode()</code>, và nếu sau này thầy bắt kiểm tra định dạng mã thì
-  em chỉ thêm một chỗ trong setter, chứ không phải đi sửa mọi nơi gọi." → có <em>lý do</em>, có
-  <em>hệ quả</em>, chỉ được <em>dòng cụ thể</em>.</li>
+  từ ngoài — ai muốn đổi phải qua <code>setCode()</code>. Còn luật định dạng mã thì em không đặt trong
+  setter: tờ checklist 1.1 bắt <em>toàn bộ việc validate thực hiện ở Main</em>, nên em kiểm ở
+  <code>utils/Validation</code> và Main gọi nó; Model chỉ mô tả thực thể. Thầy đổi luật thì em sửa đúng
+  một hàm trong <code>Validation</code>." → có <em>lý do</em>, có <em>hệ quả</em>, chỉ được
+  <em>dòng cụ thể</em>.</li>
 </ul>
 <h4>Việc phải làm</h4>
 <p>Ba chủ đề 1, 3, 4 được dạy đầy đủ trong module <strong>"OOP · SOLID · Design Pattern"</strong>; chủ đề 2
-nằm ở module <strong>"Kiến trúc 8 package"</strong>. Học xong quay lại slide này tự hỏi bốn câu, trả lời
+nằm ở module <strong>"Kiến trúc &amp; bộ khung"</strong>. Học xong quay lại slide này tự hỏi bốn câu, trả lời
 thành tiếng, tay chỉ vào màn hình.</p>`);
 
 // ─── SLIDE 4 ──────────────────────────────────────────────
@@ -145,35 +239,61 @@ p(`<h4>Mục 6 — để ý thầy liệt kê CẢ interface lẫn class</h4>
   <tr><td><code>Map</code></td><td><strong>Interface</strong></td><td>"có put, get theo khoá, khoá là duy nhất"</td></tr>
   <tr><td><code>HashMap</code></td><td><strong>Class</strong></td><td>Cài bằng bảng băm: tra theo khoá gần như tức thì, <strong>KHÔNG giữ thứ tự</strong></td></tr>
 </table>
-<p>⚠️ <strong>Và đây là bẫy lớn nhất của cả môn với người dùng AI.</strong> Thầy yêu cầu khai báo bằng
-<strong><code>ArrayList</code> và <code>HashMap</code></strong> — kiểu cụ thể. Trong khi mọi công cụ AI đều
-sinh ra <code>List&lt;Doctor&gt; ds = new ArrayList&lt;&gt;();</code> vì đó là chuẩn công nghiệp. Bạn dán
-vào là lộ ngay, và nặng hơn: bạn không giải thích được tại sao mình viết thế.</p>`);
-code('Declaration style your mentor requires', 'Cách khai báo thầy yêu cầu', 'java',
-`// ❌ Kieu AI hay sinh ra — chuan cong nghiep, nhung KHONG phai cai thay hoi
-List<Doctor> danhSach = new ArrayList<>();
-Map<String, Doctor> kho = new HashMap<>();
-
-// ✅ Kieu thay yeu cau — khai bao thang bang class cu the
+<p>⚠️ <strong>Chỗ tờ checklist chấm là TÊN biến, không phải kiểu khai báo.</strong> Tờ giấy không quy định
+khai báo bằng <code>List</code> hay <code>ArrayList</code>, <code>Map</code> hay <code>HashMap</code> — chính
+code mẫu View của thầy khai <code>private Map&lt;String, DoctorResponseDTO&gt; doctorMap;</code>. Cái nó quy
+định là mục <strong>1.5</strong>: biến kiểu collection (list…) có tên kết thúc bằng <code>List</code>, kiểu
+Set kết thúc bằng <code>Set</code>, kiểu Map kết thúc bằng <code>Map</code>, mảng kết thúc bằng
+<code>Array</code>, và mã định danh viết <code>Id</code> chứ không viết <code>ID</code>. Code AI sinh ra hay
+đặt <code>ds</code>, <code>list</code>, <code>data</code>, <code>parts</code> — sai đúng mục này, và thầy
+nhìn là thấy ngay.</p>`);
+code('Naming collections — check-sheet item 1.5', 'Đặt tên biến tập hợp — mục 1.5 tờ checklist', 'java',
+`// ❌ Sai muc 1.5: ten bien khong noi no la tap hop gi
 ArrayList<Doctor> danhSach = new ArrayList<>();
-HashMap<String, Doctor> kho = new HashMap<>();`);
+HashMap<String, Doctor> kho = new HashMap<>();
+String[] parts = line.split(Constants.SEPARATOR);
+String doctorID = "";
+
+// ✅ Dung muc 1.5: ...List, ...Set, ...Map, ...Array, va viet "Id" (khong viet "ID")
+ArrayList<Doctor> doctorList = new ArrayList<>();
+HashSet<String> codeSet = new HashSet<>();
+LinkedHashMap<String, Doctor> doctorMap = new LinkedHashMap<>();
+String[] partArray = line.split(Constants.SEPARATOR);
+String doctorId = "";
+
+// Khai bao kieu List hay ArrayList, Map hay HashMap: to checklist KHONG quy dinh.
+// Mau View cua thay: private Map<String, DoctorResponseDTO> doctorMap;`);
 p(`<h4>Mục 5 — "truyền tham số" nối thẳng với slide 5</h4>
 <p>Slide 5 sẽ nói <em>"Đóng gói — Không truyền dữ liệu qua lại"</em>. Ghép hai mục lại thành một luật:
-<strong>tham số phải là một đối tượng (model hoặc DTO), không phải một chuỗi tham số rời</strong>. Đây
-cũng là lý do có luật "không truyền quá 3 tham số cho một hàm".</p>`);
+<strong>dữ liệu đi qua các tầng phải nằm trong một DTO</strong> (không phải Model — Controller không được
+làm việc với Model), <strong>không phải một chuỗi tham số rời</strong>. Tờ checklist 1.1 ghi đúng ngưỡng:
+Services/Repository nhận data từ controller <em>"có thể thông qua param nếu số param &lt; 3"</em> — tức
+<strong>tối đa 2 tham số rời; từ 3 trở lên thì gói vào DTO</strong>.</p>`);
 code('Parameters: loose vs boxed', 'Tham số: rời rạc và đóng hộp', 'java',
 `// ❌ Bon tham so roi — kho doc, de hoan vi nham, va vi pham "khong truyen du lieu qua lai"
-public void addDoctor(String code, String name, String specialization, int availability) { }
-addDoctor(name, code, spec, 5);   // hoan vi 2 tham so dau -> van BIEN DICH DUOC, chay sai
+public void addDoctor(String code, String name, String specialization, int availability) {
+    ...
+}
+addDoctor(name, code, specialization, 5);   // hoan vi 2 tham so dau -> van BIEN DICH DUOC, chay sai
 
 // ✅ Dong vao mot hop (DTO) roi truyen — mot tham so, khong the hoan vi nham
-public void addDoctor(DoctorRequestDTO dto) { }`);
+public void addDoctor(DoctorRequestDTO requestDTO) throws Exception {
+    ...
+}
+
+// ✅ To checklist 1.1: tham so roi chi khi so tham so < 3 — tuc toi da 2
+public boolean isExistDoctor(String code) throws Exception {
+    ...
+}`);
 p(`<h4>Mục 7 — chỉ có bốn chữ, nhưng là chỗ ăn điểm to nhất</h4>
 <p>Slide 10 nói thẳng: <em>"Implement và hiểu SOLID <strong>được cộng LOC</strong>"</em>. Và tài liệu
 <code>OOP_Java_Guide</code> của thầy chốt <strong>5 Design Pattern</strong>: Builder, Singleton,
 Factory Method, Observer, Strategy — không phải 23 mẫu GoF.</p>
-<p>Chiến thuật hợp lý: <strong>hai pattern làm thật thành thạo</strong> (Singleton cho Repository +
-Strategy cho sắp xếp) còn hơn kể tên năm cái. Nhớ nguyên tắc: thầy hỏi <em>"tại sao dùng"</em> chứ không
+<p>Chiến thuật hợp lý: <strong>hai pattern làm thật thành thạo</strong> (Strategy cho sắp xếp, Factory
+Method khi bài có nhiều loại đối tượng cùng gốc — cả hai đặt trong <code>service</code>, không cần
+<code>static</code>, không phá kiến trúc) còn hơn kể tên năm cái. Singleton thì cần field và method
+<code>static</code> ngay trong Repository, trong khi Guide chỉ cho static method ở <code>utils</code> và hàm
+của Main — muốn dùng thì hỏi thầy trước. Nhớ nguyên tắc: thầy hỏi <em>"tại sao dùng"</em> chứ không
 hỏi <em>"có dùng không"</em>.</p>`);
 
 // ─── SLIDE 5 ──────────────────────────────────────────────
@@ -191,10 +311,11 @@ trong một hàm <code>main</code> — vẫn phải có đủ package, đủ cla
 
 <h4>Ô 2: "theo MVC" — và đây là chỗ dễ hiểu sai</h4>
 <p>MVC gốc là mẫu cho ứng dụng có giao diện. Nhưng cái thầy phát cho bạn ở file <code>Guide</code> là
-<strong>tám package</strong>: <code>constants · dto · main · controller · model · repository · service ·
+<strong>chín package</strong>: <code>constants · dto · main · controller · model · repository · service ·
 utils · view</code>. Đó là MVC <em>đã được mở rộng</em> cho ứng dụng console. Bạn làm theo <strong>đúng
-tám package đó</strong>, đừng tự "đơn giản hoá" về ba thư mục Model/View/Controller — thầy so với bài mẫu
-của chính thầy.</p>
+chín package đó</strong> (<code>service</code> chỉ thêm khi bài có nghiệp vụ tính toán; <code>repository</code>
+thì <strong>bắt buộc</strong> — tờ checklist 1.1), đừng tự "đơn giản hoá" về ba thư mục
+Model/View/Controller — thầy so với bài mẫu của chính thầy.</p>
 
 <h4>Ô 3: "Model đáp ứng Single Responsibility"</h4>
 <p>Trong cả năm nguyên lý SOLID, thầy chỉ chỉ đích danh <strong>một</strong>, và chỉ đích danh
@@ -218,14 +339,19 @@ controller.addDoctor("D01", "Nguyen Van An", "Tim mach", 5);
      -> repository.add("D01", "Nguyen Van An", "Tim mach", 5);
 // Them mot truong "phone" = phai sua chu ky ham o CA BA tang.
 
-// ✅ Dong vao hop truoc, roi hop di qua cac tang
-DoctorRequestDTO dto = new DoctorRequestDTO(code, name, spec, availability);
-controller.addDoctor(dto);
-  -> service.addDoctor(dto);
-     -> repository.add(new Doctor(dto));
-// Them mot truong "phone" = chi sua DTO va Model. Ba tang giua KHONG doi mot chu.`);
-p(`<p>Đây chính là <strong>lý do tồn tại của package <code>dto</code></strong>, và cũng là lý do có luật
-"không quá 3 tham số cho một hàm" — quá 3 nghĩa là bạn đang truyền rời, đáng lẽ phải đóng hộp.</p>
+// ✅ Main dong hop truoc (setter tung truong), roi CHI cai hop di qua cac tang
+DoctorRequestDTO requestDTO = new DoctorRequestDTO();
+requestDTO.setCode(code);
+requestDTO.setName(name);
+requestDTO.setSpecialization(specialization);
+requestDTO.setAvailability(availability);
+controller.addDoctor(requestDTO);
+  -> doctorServices.addDoctor(requestDTO);
+     -> doctorRepository.addDoctor(requestDTO);   // Repository moi dung Model tu DTO
+// Them mot truong "phone": Controller va Services KHONG doi mot chu — chung chi chuyen cai hop.`);
+p(`<p>Đây chính là <strong>lý do tồn tại của package <code>dto</code></strong>, và cũng là lý do tờ checklist
+chỉ cho truyền tham số rời khi <strong>số tham số &lt; 3</strong> — tối đa 2; từ 3 trở lên nghĩa là bạn
+đang truyền rời, phải gói DTO.</p>
 <p>💡 Muốn thấy điều này bằng tay: làm <strong>bài luyện số 1 — thêm trường <code>phone</code></strong>
 trong module bộ khung. Bạn sẽ sửa 9 file, và <code>DoctorController</code> nằm trong số những file
 <strong>không phải sửa một chữ nào</strong>. Đó là tiền lãi của quy tắc này.</p>`);
@@ -257,11 +383,12 @@ Bai khac cua ban se la:
     HE176322_J1S0071_TaskManagement`);
 p(`<h4>Ô Package — và một mâu thuẫn bạn phải biết</h4>
 <p>Slide liệt kê <em>"main, controllers/services, exceptions, utils"</em> — bốn cái. Nhưng file
-<code>Guide</code> mà thầy phát ở buổi đầu lại quy định <strong>tám package</strong>:
+<code>Guide</code> mà thầy phát ở buổi đầu lại quy định <strong>chín package</strong>:
 <code>constants · dto · main · controller · model · repository · service · utils · view</code>.</p>
 <p><strong>Theo file <code>Guide</code>, không theo slide này.</strong> Lý do: slide là bản tóm tắt giới
 thiệu, còn <code>Guide</code> là đặc tả kèm mã nguồn mẫu chạy được — và thầy chấm bằng cách so với bài mẫu.
-Chi tiết đầy đủ nằm ở module <strong>"Kiến trúc 8 package"</strong>.</p>
+Tờ checklist mục 1.2 chỉ thêm một luật: <strong>tên package viết thường, thể hiện ý nghĩa chung</strong>.
+Chi tiết đầy đủ nằm ở module <strong>"Kiến trúc &amp; bộ khung"</strong>.</p>
 
 <h4>Ô Class — danh từ số ít, PascalCase</h4>
 <p>Bốn ví dụ <em>Student, Worker, Wallet, Person</em> đều là <strong>danh từ, số ít, viết hoa chữ đầu mỗi
@@ -279,16 +406,23 @@ từ</strong>. Không có <code>StudentManager</code>, không có <code>Students
 <p>Nghĩa là <strong>tên hàm phải khớp với kiểu trả về</strong>. Một hàm tên <code>calcTotal()</code> mà trả
 <code>void</code> rồi in ra màn hình là sai hai lần: sai tên, và sai cả tầng (in là việc của View).</p>`);
 code('Naming — the shape of every name in your project', 'Đặt tên — khuôn của mọi cái tên trong bài', 'java',
-`package    -> tat ca CHU THUONG:              model, repository, utils
-Class      -> PascalCase, danh tu so it:      Doctor, DoctorRepository
-method     -> camelCase, bat dau bang DONG TU: addDoctor(), isDuplicate()
-bien       -> camelCase, danh tu:             doctorCode, availability
-HANG SO    -> IN HOA, gach duoi:              MAX_LENGTH, INVALID_CHOICE
+`package    -> tat ca CHU THUONG, y nghia chung:  model, repository, utils        (muc 1.2)
+Class      -> PascalCase, bat dau bang DANH TU: Doctor, DoctorRepository       (muc 1.3)
+interface  -> bat dau bang "I":                 IDoctorRepository, ISortStrategy
+exception  -> ket thuc bang "Exception":        DoctorNotFoundException
+method     -> camelCase, bat dau bang DONG TU:  addDoctor(), isExistDoctor()  (muc 1.4)
+bien       -> camelCase, danh tu co nghia:      doctorCode, availability       (muc 1.5)
+  tap hop (List, ArrayList, Stack...) -> ...List:   doctorList
+  Set (Set, HashSet...)               -> ...Set:    codeSet
+  Map (Map, HashMap, TreeMap...)      -> ...Map:    doctorMap
+  mang (Type[] tenArray)              -> ...Array:  partArray
+  ma dinh danh: viet "Id", KHONG "ID":              doctorId, getDoctorId()
+HANG SO    -> IN HOA, gach duoi, static final:  MAX_LENGTH, INVALID_CHOICE     (muc 2.10, 2.11)
 
 // Tien to dong tu noi truoc kieu tra ve:
 get...            -> tra ve gia tri
 is... / has...    -> tra ve boolean
-add/remove/update -> void
+add/remove/update -> void (hoac boolean: da lam duoc chua)
 calc/count/sum    -> tra ve so
 find/search       -> tra ve doi tuong hoac tap hop`);
 
@@ -303,11 +437,17 @@ p(`<h4>Nghĩa là gì</h4>
 <p>Thầy dành <strong>nguyên một slide trên mười</strong> cho một nguyên lý duy nhất trong năm nguyên lý
 SOLID. Tỷ lệ đó nói lên mức quan trọng. Và nội dung rút gọn thành một đường ranh giới:</p>
 <table>
-  <tr><th></th><th>Model</th><th>Controller / Service</th></tr>
-  <tr><td>Chứa gì</td><td>Thuộc tính (field)</td><td>Hàm chức năng</td></tr>
-  <tr><td>Trả lời câu hỏi</td><td>"Nó <strong>là</strong> cái gì"</td><td>"Nó <strong>làm</strong> được gì"</td></tr>
-  <tr><td>Được phép có</td><td>field private, constructor, getter/setter, <code>toString()</code></td><td>nghiệp vụ: thêm/xoá/tìm/sắp xếp/kiểm tra trùng</td></tr>
-  <tr><td>Cấm tuyệt đối</td><td><code>System.out</code>, <code>Scanner</code>, nghiệp vụ, <code>static</code></td><td>—</td></tr>
+  <tr><th></th><th>Model</th><th>Controller</th><th>Services / Repository</th></tr>
+  <tr><td>Trả lời câu hỏi</td><td>"Nó <strong>là</strong> cái gì"</td><td>"Việc này <strong>đi đâu</strong>"</td><td>"Việc này <strong>làm thế nào</strong>"</td></tr>
+  <tr><td>Được phép có</td><td>field private, constructor, getter/setter, <code>toString()</code></td>
+      <td>Điều hướng: nhận RequestDTO từ Main → gọi Services (hoặc Repository khi bài không có tính toán) →
+      đưa ResponseDTO cho View, render <strong>1 lần</strong> mỗi luồng</td>
+      <td><strong>Repository</strong> (bắt buộc có): giữ dữ liệu + CRUD đơn giản — thêm/sửa/xoá/tìm, hỏi
+      "mã này có chưa". <strong>Services</strong> (khi có tính toán): sắp xếp, tổng, thống kê, report</td></tr>
+  <tr><td>Cấm tuyệt đối</td><td><code>System.out</code>, <code>Scanner</code>, validate, nghiệp vụ,
+      <code>static</code></td>
+      <td>Import/nhận/trả Model, <code>Scanner</code>, <code>System.out</code>, <code>static</code></td>
+      <td>Nhập/xuất, gọi View, <code>System.out</code></td></tr>
 </table>
 <p><strong>Một lý do để thay đổi</strong> — đó là định nghĩa của SRP. Class <code>Doctor</code> chỉ đổi khi
 <em>thông tin của một bác sĩ</em> đổi (thêm số điện thoại chẳng hạn). Nó <strong>không</strong> được đổi vì
@@ -315,28 +455,74 @@ cách hiển thị đổi, vì cách lưu trữ đổi, hay vì luật nghiệp 
 code('The line this slide draws', 'Đường ranh giới slide này vẽ ra', 'java',
 `// ❌ Model om them viec khong phai cua no
 public class Doctor {
+
+    // Ma bac si
     private String code;
-    public void inThongTin() {                        // <- HIEN THI: viec cua View
-        System.out.println("Ma: " + code);
+
+    // In thong tin  <- HIEN THI: viec cua View
+    public void printInfo() {
+        System.out.println(code);
     }
-    public boolean kiemTraTrung(HashMap<String,Doctor> kho) {   // <- NGHIEP VU: viec cua Service
-        return kho.containsKey(code);
+
+    // Kiem trung ma  <- hoi kho du lieu: viec cua Repository
+    public boolean checkDuplicate(HashMap<String, Doctor> doctorMap) {
+        return doctorMap.containsKey(code);
+    }
+
+    // Doi ma va kiem tra  <- VALIDATE: viec cua Main + utils/Validation
+    public void setCode(String code) throws Exception {
+        // ma rong thi tu choi
+        if (code.isEmpty()) {
+            throw new Exception(Message.CODE_BLANK);
+        }
+
+        this.code = code;
     }
 }
 
-// ✅ Model chi la du lieu
+// ===== model/Doctor.java — ✅ Model chi la du lieu (bai mau P0055 cua thay) =====
+package model;
+
+import constants.Constants;
+
+/**
+ * MODEL: mo ta MOT bac si, khong hon.
+ */
 public class Doctor {
+
+    // Ma bac si
     private String code;
-    public String getCode() { return code; }
+
+    // Ho ten bac si
+    private String name;
+
+    // Tao bac si voi du cac truong
+    public Doctor(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    // Tra ve ma bac si
+    public String getCode() {
+        return code;
+    }
+
+    // Doi ma bac si: chi gan, KHONG kiem tra (Main da validate truoc)
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    // TRA VE chuoi, KHONG in ra; dinh dang cot nam o Constants.ROW_FORMAT (muc 2.10)
     @Override
-    public String toString() {           // TRA VE chuoi, KHONG in ra
-        return String.format("%-10s%-20s", code, name);
+    public String toString() {
+        return String.format(Constants.ROW_FORMAT, code, name);
     }
 }
-// Hien thi -> view/DoctorView.java     Nghiep vu -> service/DoctorServices.java`);
+// Hien thi -> view/   Hoi kho -> repository/   Tinh toan -> service/   Validate -> Main + utils/`);
 p(`<p>💡 <strong>Mẹo tự soát trước khi gọi review:</strong> mở từng file trong <code>model/</code>, bấm
-<code>Ctrl</code>+<code>F</code> tìm <code>System.out</code> và <code>Scanner</code>. Tìm thấy một cái là bạn
-đang vi phạm đúng cái slide này. Đây là lỗi phổ biến nhất ở bài đầu tiên.</p>`);
+<code>Ctrl</code>+<code>F</code> tìm <code>System.out</code>, <code>Scanner</code>, <code>static</code> và
+<code>throw</code>. Tìm thấy một cái là bạn đang vi phạm đúng cái slide này (Model không in, không nhập, không
+static, không validate). Đây là lỗi phổ biến nhất ở bài đầu tiên.</p>`);
 
 // ─── SLIDE 8 ──────────────────────────────────────────────
 head('Slide 8 — The three steps of every session', 'Slide 8 — Quá trình thực hành');
@@ -411,7 +597,7 @@ bạn ngồi học đủ 80 phút còn lại. Ghép với luật <strong>≥ 80%
 <p><code>J1.S.P0055 — Doctor Management</code>, buổi đầu, <strong>được mở file Guide ra chép theo</strong>,
 và <strong>không tính LOC</strong>.</p>
 <p>Nghe như mất một buổi. Thực ra nó là <strong>buổi học có giá trị cao nhất cả kỳ</strong>: bạn được phép
-nhìn bài mẫu, và cái bạn học được ở đó — kiến trúc 8 package — sẽ dùng lại cho <strong>19 buổi còn
+nhìn bài mẫu, và cái bạn học được ở đó — kiến trúc 9 package — sẽ dùng lại cho <strong>19 buổi còn
 lại</strong>. Ai chép cho xong sẽ khổ suốt phần sau; ai hiểu được nó thì mọi bài sau chỉ là đổi tên
 <code>Doctor</code> thành cái khác.</p>
 <p>💡 Nên: về nhà <strong>gõ lại P0055 từ đầu, không nhìn mẫu</strong>. Không phải để nộp — mà để tay quen
@@ -420,7 +606,7 @@ kiến trúc. Module <strong>"Bộ khung P0055"</strong> có sẵn 10 file và b
 <h4>Ba lời cảnh báo chọn bài — đây là bản đồ mìn</h4>
 <ol>
   <li><strong>"Bài thuật toán cũng phải làm MVC"</strong> — Fibonacci, sắp xếp, số nguyên tố… vẫn phải đủ
-  8 package. Chúng <em>ít LOC</em> nhưng <em>không hề nhanh hơn</em>, vì phần khung vẫn phải viết đủ.
+  các package, <strong>kể cả repository</strong> (giữ dữ liệu đầu vào của thuật toán). Chúng <em>ít LOC</em> nhưng <em>không hề nhanh hơn</em>, vì phần khung vẫn phải viết đủ.
   Đừng chọn chúng vì tưởng dễ.</li>
   <li><strong>"Bài candidate → rất khó, không nên liều"</strong> — thầy nói thẳng là <em>không nên</em>.
   Đừng chọn. Đây là lời khuyên hiếm hoi được ghi thành văn bản.</li>
@@ -452,8 +638,8 @@ giấu đề. Đọc kỹ sẽ thấy nó chia làm hai nửa rất khác nhau:<
 <h4>Nửa 1 — bốn cái CHẶN CỬA (không đạt là không được review tiếp)</h4>
 <table>
   <tr><th>Điều kiện</th><th>Cách tự kiểm trong 30 giây</th></tr>
-  <tr><td>Đúng coding convention</td><td>Bấm <strong><code>Alt</code>+<code>Shift</code>+<code>F</code></strong> trong NetBeans. Thầy ghi rõ "ưu tiên" phím này ⇒ thầy nhìn ra ngay thụt lề có chuẩn hay không.</td></tr>
-  <tr><td>Đủ comment cho <em>function</em> và <em>block/rẽ nhánh</em></td><td>Mỗi <code>public</code> method một dòng <code>//</code> phía trên. Mỗi <code>if</code>/<code>for</code>/<code>while</code>/<code>switch</code> một dòng <code>//</code>.</td></tr>
+  <tr><td>Đúng coding convention</td><td>Bấm <strong><code>Alt</code>+<code>Shift</code>+<code>F</code></strong> trong NetBeans. Thầy ghi rõ "ưu tiên" phím này ⇒ thầy nhìn ra ngay thụt lề có chuẩn hay không. Nhưng phím này <strong>không</strong> sửa hộ các mục 2.6 (khai báo đầu block), 2.8 (dòng trống), 3.3 (ngoặc cho từng phép so sánh), 3.7 (khởi tạo biến) của tờ checklist — phải tự soát.</td></tr>
+  <tr><td>Đủ comment cho <em>function</em> và <em>block/rẽ nhánh</em></td><td><strong>Mọi</strong> method — kể cả <code>private</code>, getter/setter — một dòng <code>//</code> phía trên. Mọi block (<code>if</code>/<code>for</code>/<code>while</code>/<code>switch</code>/<code>case</code>/<code>try</code>/<code>catch</code>, mỗi khối lệnh liền nhau) một dòng <code>//</code>. Trước mỗi comment có <strong>1 dòng trống</strong> (tờ checklist 1.6 + 2.8).</td></tr>
   <tr><td>Debug được khi thầy yêu cầu</td><td>Đặt breakpoint <code>Ctrl</code>+<code>F8</code>, chạy <code>Ctrl</code>+<code>F5</code>, bước qua <code>F8</code>, bước vào <code>F7</code>. <strong>Tập ở nhà</strong> — không phải lúc thầy đứng sau lưng.</td></tr>
   <tr><td>Test đủ happy case + đủ message lỗi</td><td>Viết ra giấy danh sách case, gạch từng dòng khi đã chạy. Bộ khung P0055 có <strong>9 message lỗi khác nhau</strong> — phải hiện được cả 9.</td></tr>
 </table>
@@ -834,7 +1020,7 @@ nguyenVan(
 p(`<h4>Ba tiêu chí — và thứ tự của chúng nói lên điều gì</h4>
 <table>
   <tr><th>#</th><th>Tiêu chí</th><th>Nghĩa trong bài của bạn</th></tr>
-  <tr><td>1</td><td><strong>Program structure</strong></td><td>Đúng 8 package của thầy. Slide 10: "không có cấu trúc → không review"</td></tr>
+  <tr><td>1</td><td><strong>Program structure</strong></td><td>Đúng 9 package của thầy (có repository). Slide 10: "không có cấu trúc → không review"</td></tr>
   <tr><td>2</td><td><strong>Coding convention</strong></td><td>Tên file, tên hàm, tên biến, <strong>comment</strong>, định dạng câu lệnh</td></tr>
   <tr><td>3</td><td><strong>Meet the requirements</strong></td><td>Chạy đúng theo đề — kể cả định dạng chữ in ra</td></tr>
 </table>
@@ -851,7 +1037,7 @@ the printed subject notes. <strong>You may use this code in your submissions</st
 assignments. You <strong>do not need to cite</strong> the authors of the code that you have copied from the
 printed subject notes or this web site."</em></blockquote>
 <p>Nghĩa là: <strong>bài mẫu <code>P0055</code> trong file Guide là nguồn được phép dùng lại, không cần trích
-dẫn.</strong> Kiến trúc 8 package, class <code>Validation</code>, cách bố trí <code>Message</code> — dùng
+dẫn.</strong> Kiến trúc 9 package, class <code>Validation</code>, cách bố trí <code>Message</code> — dùng
 thoải mái cho cả 9 bài. Đó chính là điều slide 9 đã nói khi cho bạn mở Guide ở buổi đầu.</p>
 <table>
   <tr><th>✅ Được phép</th><th>❌ Không được phép</th></tr>
@@ -894,8 +1080,8 @@ vấn đáp — mà bước vấn đáp mới là bước cho LOC.</p>`);
 part(5,
   'Everything the four documents demand, in one list',
   'Tổng hợp — mọi thứ bốn tài liệu đòi hỏi, gom vào một danh sách',
-  'Print this. Tick it before every review.',
-  'In ra. Gạch từng dòng trước mỗi lần gọi review.');
+  'Print it. Before every review, fill the teacher\'s 25-item Coding check sheet — an "O" per item, three rounds.',
+  'In ra. Trước mỗi lần gọi review, tự điền tờ Coding check sheet 25 mục của thầy — "O" từng mục, 3 lượt.');
 
 head('Before class — do these at home', 'Trước buổi học — làm ở nhà');
 p(`<ol>
@@ -924,21 +1110,9 @@ p(`<ol>
   <li>☐ Không chọn quá 5 bài; xong bài nào mới chọn tiếp bài mới.</li>
 </ol>`);
 
-head('Before raising your hand for review', 'Trước khi giơ tay gọi review');
-p(`<ol>
-  <li>☐ Đủ <strong>8 package</strong>, đặt tên đúng</li>
-  <li>☐ <code>Scanner</code> <strong>chỉ có trong <code>Main.java</code></strong></li>
-  <li>☐ <code>System.out</code> <strong>chỉ có trong <code>view/</code> và <code>Main</code></strong></li>
-  <li>☐ Mọi field là <code>private</code></li>
-  <li>☐ <code>static</code> chỉ có ở <code>utils/Validation</code></li>
-  <li>☐ Không câu chữ nào hardcode ngoài <code>constants/Message</code></li>
-  <li>☐ Khai báo <code>ArrayList</code>/<code>HashMap</code>, <strong>không phải</strong> <code>List</code>/<code>Map</code></li>
-  <li>☐ Mỗi function + mỗi <code>if</code>/<code>for</code>/<code>while</code> có một dòng <code>//</code></li>
-  <li>☐ Đã bấm <strong><code>Alt</code>+<code>Shift</code>+<code>F</code></strong></li>
-  <li>☐ Đã chạy <strong>hết</strong> happy case và hiện <strong>đủ</strong> message lỗi</li>
-  <li>☐ Đặt được breakpoint và debug được tại chỗ</li>
-  <li>☐ Trả lời được 12 câu review</li>
-</ol>`);
+head('Before raising your hand: the teacher\'s 25-item Coding check sheet',
+  'Trước khi giơ tay gọi review: tờ Coding check sheet 25 mục của thầy');
+p(CHECK_SHEET_HTML);
 
 head('The four penalties, ranked by cost', 'Bốn hình phạt, xếp theo mức thiệt hại');
 p(`<table>

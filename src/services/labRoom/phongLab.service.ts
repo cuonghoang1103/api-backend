@@ -37,6 +37,7 @@ import { heThong, NGAN_HANG_VAN_DAP } from './quyTacThay.js';
 import { locCuaBai, khungChoPrompt } from './khungDuAn.js';
 import { CHECKLIST_THAY, PHIEN_BAN_LUAT, type MucChecklist } from './checklistThay.js';
 import { layTepJava, soatDuAn, tomTatChoPrompt, type BangChung, type KetQuaMay } from './soatJava.js';
+import { giangDeConHan, laLuatMoi, vanTayMau } from './banLuu.js';
 
 const LOC_GOAL_MAC_DINH = 750;
 const LOC_GOAL_MIN = 50;
@@ -497,18 +498,15 @@ export async function gioiThieuBai(userId: number, roomId: number, itemId: numbe
   const cu = await prisma.codeLabRoomItem.findUnique({ where: { id: itemId }, select: { introJson: true } });
   // Bài giảng soạn theo luật CŨ thì soạn lại: 21/09/2026 một bài giảng lưu từ
   // trước vẫn dạy P0001 "không cần controller hay bo" dù prompt đã sửa từ lâu —
-  // vì bản đã lưu không bao giờ tự làm mới.
-  if (cu?.introJson && !lamMoi && laLuatMoi(cu.introJson)) return cu.introJson;
+  // vì bản đã lưu không bao giờ tự làm mới. Cùng lý do, bài giảng soạn theo một
+  // source chuẩn đã được THAY (hoặc khi bài chưa có source chuẩn) cũng soạn lại.
   if (cu?.introJson && !lamMoi) {
+    const { mauDeDay } = await nganhCanh(itemId);
+    if (giangDeConHan(cu.introJson, mauDeDay)) return cu.introJson;
     const moi = await thuSoanLai(() => soanGioiThieu(userId, itemId));
     return moi ?? danhDauCu(cu.introJson);
   }
   return soanGioiThieu(userId, itemId);
-}
-
-/** Bản lưu có đúng phiên bản luật hiện hành không. */
-function laLuatMoi(json: unknown): boolean {
-  return !!json && typeof json === 'object' && (json as Record<string, unknown>)._luat === PHIEN_BAN_LUAT;
 }
 
 /** Trả lại bản cũ nhưng gắn cờ để giao diện nói rõ nó soạn theo luật cũ. */
@@ -553,7 +551,7 @@ async function soanGioiThieu(userId: number, itemId: number) {
 
   const out = docJson<Record<string, unknown>>(res.text);
   if (!out?.tongQuan) throw new BadRequestError('AI chưa soạn được phần giới thiệu. Thử lại giúp mình.');
-  const luu = { ...out, _luat: PHIEN_BAN_LUAT };
+  const luu = { ...out, _luat: PHIEN_BAN_LUAT, _mau: vanTayMau(mauDeDay) };
   await prisma.codeLabRoomItem.update({ where: { id: itemId }, data: { introJson: luu as object } });
   return luu;
 }

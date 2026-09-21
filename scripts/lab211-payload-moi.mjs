@@ -45,6 +45,8 @@ for (const folder of fs.readdirSync(ROOT).sort()) {
   if (!m) continue;
   if (!process.env.ALL && !DAT.has(folder)) continue;
   const lab = `J1.${m[2]}.P${m[3]}`;
+  // CHI=J1.S.P0009,J1.S.P0010 — chỉ dựng mấy bài của đợt này (nạp lại bài cũ sẽ xoá bài giảng AI của nó)
+  if (process.env.CHI && !process.env.CHI.split(',').includes(lab)) continue;
   const dir = path.join(ROOT, folder);
   const files = javaFiles(path.join(dir, 'src'));
   // man-hinh-chay.* là ảnh/bản ghi màn hình của kho, KHÔNG phải dữ liệu chương trình đọc

@@ -9,27 +9,57 @@
 
 **Không còn gì treo. Cây sạch, đã push, production đang chạy `17306442`.**
 
+### 📖 ĐỌC ĐÚNG 4 FILE NÀY TRƯỚC KHI GÕ BẤT CỨ THỨ GÌ
+
+1. `content/academy/_BAN-GIAO-NWC204.md` — chính file này
+2. `content/academy/_HOP-DONG-NWC204.md` — hợp đồng riêng của môn (10 mục, có
+   giới hạn kỹ thuật làm seed CHẾT IM LẶNG nếu vượt)
+3. `content/academy/_HOP-DONG-SOAN-BAI.md` — chuẩn trình bày chung, mục ⛔⛔
+   **"SƠ ĐỒ và CODE MÀU"**
+4. `content/academy/_syllabus-flm/NWC204.json` — dữ liệu gốc, đọc bằng script
+   chứ đừng đọc bằng mắt (61 dòng buổi + 52 câu hỏi kiến tạo)
+
 ### Làm tiếp: **Chương 10 — IPv4 Addressing (buổi 30–34, Cisco Module 11)** ⭐
 
 Đây là **chương NẶNG NHẤT của cả môn** và là chỗ **bắt buộc phải nối vào chương
 bù hệ đếm** (`ch04b`, nhị phân/hex/AND theo bit) — trường KHÔNG xếp buổi nào cho
 Module 5 của Cisco, mà buổi 30–34 thì không làm được nếu không đọc được nhị phân.
 
-| Buổi | Nội dung theo FLM |
-|---|---|
-| 30 | 10.1 IPv4 Address Structure · 10.2 Unicast/Broadcast/Multicast · 10.3 Types of IPv4 Addresses · 10.4 Network Segmentation |
-| 31 | 10.5 Subnet an IPv4 · 10.6 Subnet a /16 and /8 · 10.7 Subnet to Meet Requirements · **10.8 VLSM** · 10.9 Structured Design · 10.10 AI Tools |
-| 32–33 | (đọc trong `_syllabus-flm/NWC204.json`, chưa trích ra đây) |
-| 34 | **Midterm / Progress Test** |
+**Dàn bài đã trích nguyên văn từ `_syllabus-flm/NWC204.json`:**
 
-⚠️ Câu hỏi kiến tạo của chương này: **buổi 30 BỎ TRỐNG**; buổi 31 mang
-`CQ11.1` có nội dung là **"Progress Test 2"** — KHÔNG phải câu hỏi, và môn chỉ
-có MỘT Midterm ở buổi 34. Buổi 32 `CQ11.2` (unicast/broadcast/multicast) và
-buổi 33 `CQ11.3` (mấy loại địa chỉ IPv4) thì khớp nội dung.
-**Nêu chỗ bất thường, đừng tự sửa bảng gốc** — đúng như đã làm ở Ch.7/8/9.
+| Buổi | Topic | LO | ITU | Tài liệu |
+|---|---|---|---|---|
+| 30 | 10.1 IPv4 Address Structure · 10.2 IPv4 Unicast, Broadcast, and Multicast · 10.3 Types of IPv4 Addresses · 10.4 Network Segmentation | CLO5, CLO9 | T | Module 11 |
+| 31 | 10.5 Subnet an IPv4 · 10.6 Subnet a /16 and /8 Prefix · 10.7 Subnet to Meet Requirements · **10.8 Variable Length Subnet Masking** · 10.9 Structured Design · 10.10 Integrate AI Tools (Self Learning) | CLO5, CLO9 | T | Module 11 |
+| 32 | **Lab 2.2** (Dialogue-based Assessment & Self Learning) — Calculate IPv4 Subnets · Design and Implement a VLSM Addressing Scheme · Use AI Tools for Calculating IPv4 Subnets | CLO5, CLO9 | U | 11.6.6 + 11.10.2 Lab Manual |
+| 33 | Lab 2.2 (continue) | CLO5, CLO9 | U | như trên |
+| 34 | **Midterm Progress Test** | CLO1 – CLO9 | — | — |
+
+⇒ Cấu trúc gợi ý: **3 bài + quiz**, giống Ch.7 và Ch.9 —
+10.1 (buổi 30) · 10.2 (buổi 31, phần subnet + VLSM) · 10.3 (buổi 32–33, Lab 2.2).
+
+**⚠️ Câu hỏi kiến tạo của chương này — TRÔI DẠT NẶNG, đã trích để khỏi đoán:**
+
+| Buổi | Câu | Nội dung | Thật ra thuộc |
+|---|---|---|---|
+| **30** | **(BỎ TRỐNG)** | — | — |
+| 31 | `CQ11.1` | **"Progress Test 2"** — KHÔNG phải câu hỏi | môn chỉ có MỘT Midterm, ở buổi 34 |
+| 32 | `CQ11.2` | unicast / broadcast / multicast | mục **10.2**, tức buổi 30 |
+| 33 | `CQ11.3` | mấy loại địa chỉ IPv4, dùng thế nào | mục **10.3**, tức buổi 30 |
+| 34 | `CQ12.1` | cấu trúc một địa chỉ IPv4 | mục **10.1**, tức buổi 30 |
+
+Tức là **cả bốn câu đều lệch**, và ba câu cuối đều hỏi về nội dung của buổi 30
+trong khi được gán cho buổi 32–34 (vốn là Lab 2.2 và Midterm).
+**Nêu trong bài, đừng tự sửa bảng gốc** — đúng như đã làm ở Ch.7/8/9.
 
 ⚠️ **Mọi phép tính subnet trong bài PHẢI kiểm lại bằng `python3`** trước khi
 commit (hợp đồng môn, mục 9). Chương này đầy số; sai một con là hỏng cả bài.
+Dùng `ipaddress` của Python cho nhanh và khỏi tự tính sai:
+```python
+import ipaddress
+n = ipaddress.ip_network('192.168.4.0/26')
+print(n.network_address, n.broadcast_address, n.num_addresses - 2)
+```
 
 **Sau Ch.10 thì theo thứ tự:** Ch.11 IPv6 (buổi 35–36) · Ch.12 ICMP + Lab 2.3
 (37–40) · **Ch.13 Transport Layer — SỐ HIỆU CỔNG (41–42)** ⭐ người dùng cần cho

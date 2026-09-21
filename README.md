@@ -7,10 +7,13 @@ apps.
 
 It runs in production on a VPS I administer myself. Everything here — schema,
 services, UI, deploy tooling — was designed and is operated by one person.
+Much of the code is written by an AI coding agent (Claude Code) working from
+my task breakdown; I review it, verify the real behaviour, deploy it and keep
+it running.
 
 > **On scale:** the interesting numbers here are about the system, not the
-> audience. This is a personal platform with a small user base. What it
-> demonstrates is engineering, not traction.
+> audience. This is a personal platform with a small user base (about 70
+> users). What it demonstrates is engineering, not traction.
 
 ---
 
@@ -21,10 +24,10 @@ services, UI, deploy tooling — was designed and is operated by one person.
 | **API** | Node.js · Express · TypeScript |
 | **Data** | PostgreSQL + Prisma — **319 tables**, 150 applied migrations, pgvector |
 | **Web** | Next.js (App Router) · React · Tailwind |
-| **Desktop** | Electron, signed builds with auto-update |
-| **iOS** | SwiftUI ([separate repo](https://github.com/cuonghoang1103/ios-app)) |
+| **Desktop** | Electron — macOS, Windows and Linux builds with auto-update ([130+ releases](https://github.com/cuonghoang1103/cuongthai-desktop/releases)) |
+| **iOS** | SwiftUI, shipped to TestFlight (source in a private repo) |
 | **Infra** | Docker · GHCR · nginx · Cloudflare R2 · self-hosted VPS |
-| **AI** | Multi-provider LLM gateway — per-feature model routing, response cache, daily spend ceilings |
+| **AI** | Multi-provider LLM gateway — per-feature model routing, per-user token quotas, daily spend limits · a self-hosted Qwen model on a home GPU behind a priority queue |
 
 **Running content:** 592 published courses · 12,100 lessons · 1,058 videos with
 bilingual subtitles (330,936 aligned sentences, 4.8M words).

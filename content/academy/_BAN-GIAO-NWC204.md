@@ -1,43 +1,55 @@
-# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 21/09/2026 (xong Ch.5 + Ch.6)
+# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 21/09/2026 (xong Ch.5 → Ch.9, ĐÃ DEPLOY)
 
 > **Đọc file này + `_KHUNG-CHUA-DAY-DU.md` trước khi làm tiếp Academy.**
-> Viết lúc người dùng tắt máy nghỉ (máy bật liên tục 10 ngày, quá nóng) và sắp
-> hết quota. Ghi đủ để phiên sau làm tiếp mà không hỏi lại gì.
+> Ghi đủ để phiên sau làm tiếp mà không hỏi lại gì.
 
 ---
 
-## 0. 🔴 PHIÊN SAU BẮT ĐẦU TỪ ĐÂY (chốt 21/09/2026)
+## 0. 🔴 PHIÊN SAU BẮT ĐẦU TỪ ĐÂY (chốt 21/09/2026, sau khi deploy xong)
 
-**Hai việc còn treo, làm theo đúng thứ tự này:**
+**Không còn gì treo. Cây sạch, đã push, production đang chạy `17306442`.**
 
-1. **HỎI NGƯỜI DÙNG CÓ DEPLOY KHÔNG.** Đang có **2 commit ở máy chưa push**:
-   `1f6aba5e` (Chương 5) và `8170093b` (Chương 6). Nhớ nói thẳng trước khi chạy:
-   **`bash deploy-nha.sh` TỰ PUSH lên `origin/main` ở cuối** — deploy và push là
-   một việc, không có chuyện đẩy lên production rồi chờ user test mới push.
-   Chạy nền thì phải `echo y | bash deploy-nha.sh`.
-   Sau khi deploy xong, **ĐẾM BẰNG API/DB, đừng tin log deploy**: môn phải ra
-   **8 mục / 37 bài**, và 53 ảnh mới (`nwc204-ch05/` 27 + `nwc204-ch06/` 26)
-   phải trả 200. Xem bài học `feedback_log_xanh_khong_chung_minh_du_lieu_da_vao`.
-2. **Làm tiếp Chương 7 — Network Layer (buổi 21–23, Cisco Module 8).**
-   Buổi 21: 7.1 Network Layer Characteristics, 7.2 IPv4 Packet. Buổi 22: bảng
-   câu hỏi BỎ TRỐNG (tự soạn câu ★). Buổi 23: Review. Câu hỏi kiến tạo có sẵn:
-   **CQ7.3 ở buổi 21** — nhưng nội dung nó hỏi là *"How does Ethernet works in a
-   switched network?"*, tức thuộc chương 6 và **đã trả lời trong bài 6.3**; ở
-   chương 7 chỉ cần nhắc lại một dòng rằng nó đã được trả lời ở đâu.
+### Làm tiếp: **Chương 10 — IPv4 Addressing (buổi 30–34, Cisco Module 11)** ⭐
 
-**Quy trình đã chạy trơn cho Ch.5 và Ch.6, cứ lặp lại y hệt** (chi tiết ở mục 3):
+Đây là **chương NẶNG NHẤT của cả môn** và là chỗ **bắt buộc phải nối vào chương
+bù hệ đếm** (`ch04b`, nhị phân/hex/AND theo bit) — trường KHÔNG xếp buổi nào cho
+Module 5 của Cisco, mà buổi 30–34 thì không làm được nếu không đọc được nhị phân.
+
+| Buổi | Nội dung theo FLM |
+|---|---|
+| 30 | 10.1 IPv4 Address Structure · 10.2 Unicast/Broadcast/Multicast · 10.3 Types of IPv4 Addresses · 10.4 Network Segmentation |
+| 31 | 10.5 Subnet an IPv4 · 10.6 Subnet a /16 and /8 · 10.7 Subnet to Meet Requirements · **10.8 VLSM** · 10.9 Structured Design · 10.10 AI Tools |
+| 32–33 | (đọc trong `_syllabus-flm/NWC204.json`, chưa trích ra đây) |
+| 34 | **Midterm / Progress Test** |
+
+⚠️ Câu hỏi kiến tạo của chương này: **buổi 30 BỎ TRỐNG**; buổi 31 mang
+`CQ11.1` có nội dung là **"Progress Test 2"** — KHÔNG phải câu hỏi, và môn chỉ
+có MỘT Midterm ở buổi 34. Buổi 32 `CQ11.2` (unicast/broadcast/multicast) và
+buổi 33 `CQ11.3` (mấy loại địa chỉ IPv4) thì khớp nội dung.
+**Nêu chỗ bất thường, đừng tự sửa bảng gốc** — đúng như đã làm ở Ch.7/8/9.
+
+⚠️ **Mọi phép tính subnet trong bài PHẢI kiểm lại bằng `python3`** trước khi
+commit (hợp đồng môn, mục 9). Chương này đầy số; sai một con là hỏng cả bài.
+
+**Sau Ch.10 thì theo thứ tự:** Ch.11 IPv6 (buổi 35–36) · Ch.12 ICMP + Lab 2.3
+(37–40) · **Ch.13 Transport Layer — SỐ HIỆU CỔNG (41–42)** ⭐ người dùng cần cho
+công việc · Ch.14 Application (45–46) · Ch.15 Security (49–50) · Ch.16 Build a
+Small Network (53–55, 58–60) · Đồ án (43–44, 47–48, 51–52, 56–57).
+
+### Quy trình đã chạy trơn cho Ch.5 → Ch.9, cứ lặp lại y hệt
+
 viết deck → `_kiem-tran-slide.mjs` → render → **mở 4–5 ảnh ra NHÌN** → upload →
-**so byte với CDN** → viết bài → `node --check` → audit riêng cho môn → commit.
+**so byte với CDN** → viết bài → `node --check` → rà soát riêng cho môn →
+commit → `echo y | bash deploy-nha.sh` → **đếm lại bằng DB, đừng tin log**.
 
 **Yêu cầu của người dùng, chốt 21/09, áp dụng cho mọi chương còn lại:**
 - Bám **100% giáo trình FLM trước**, rồi **bổ sung thêm cho sâu** để dùng được
   trong công việc — và **mọi phần bổ sung phải đánh dấu ★**.
 - Slide **ít chữ**, thiên sơ đồ; phần giảng dài nằm ở dưới ảnh.
-- Code trong bài phải **có nhãn `language-`** (tô màu VS Code + nút Sao chép);
-  sơ đồ phải là `<pre><code class="language-mermaid">` và **luôn tô màu**.
-- **Tối đa 3 subagent** một lúc (siết lại từ 10, để tiết kiệm token). Opus 5 cho
-  việc cần chính xác; Sonnet 5 cho việc thường. Ch.5 và Ch.6 làm **không dùng
-  agent nào** — soạn bài liên tục thì tung agent chỉ tốn thêm token đọc lại file.
+- Code trong bài phải **có nhãn `language-`**; sơ đồ phải là
+  `<pre><code class="language-mermaid">` và **luôn tô màu**.
+- **Tối đa 3 subagent** một lúc. Ch.5 → Ch.9 làm **không dùng agent nào** —
+  soạn bài liên tục thì tung agent chỉ tốn thêm token đọc lại file.
 
 ---
 
@@ -62,12 +74,26 @@ phải tự soạn và đánh dấu rõ. Xem `_mon-flm-chua-co-syllabus.md`.
 
 ### NWC204 — môn ưu tiên số 1 của người dùng
 
-**8 mục · 37 bài · 161 ảnh slide**, phủ **buổi 1–20 / 60** (21/09/2026).
-Kiểm trên spec: 37 bài, 0 bài rỗng, 184/184 khối code có nhãn `language-`,
-**22/22 sơ đồ mermaid đúng dạng**, 0 thực thể thô trong `title`, 0 slug trùng,
-title dài nhất 196/255 ký tự.
-Buổi 1–14 đã kiểm trên DB production 20/09; **Chương 5 (buổi 15–16) và
-Chương 6 (buổi 17–20) viết 21/09 và CHƯA deploy** — xem mục 2.
+**11 mục · 48 bài · 240 ảnh slide**, phủ **buổi 1–29 / 60** (21/09/2026).
+
+**Đã ĐO TRÊN DB PRODUCTION sau khi deploy `17306442`**, không đọc log:
+- `11 mục · 48 bài · 0 bài rỗng`
+- 240 ảnh slide được tham chiếu, chia đúng theo deck:
+  `ch01` 18 · `ch02` 26 · `ch03` 23 · `ch04` 23 · `ch04b` 18 · `ch05` 27 ·
+  `ch06` 26 · `ch07` 31 · `ch08` 22 · `ch09` 26
+- 79 ảnh mới (`ch07`+`ch08`+`ch09`) **đều trả HTTP 200** trên CDN, và đã **so
+  byte** với file trên đĩa lúc upload: lệch 0/31, 0/22, 0/26
+- 3 quiz mới đều có **12 câu, 12 câu có giải thích, 900 giây** trong
+  `lesson_details.quiz_data`
+
+Kiểm trên spec trước khi commit: 48 bài, 0 bài rỗng, **224/224 khối code có nhãn
+`language-`**, **32/32 sơ đồ mermaid đúng dạng**, 0 thực thể thô trong `title`,
+0 slug trùng, title dài nhất **196/255** ký tự, shortDescription 392/500.
+
+⚠️ **Quiz nằm ở `lesson_details.quiz_data` (JSON)**, KHÔNG có bảng `Quiz`
+riêng. Muốn đếm câu hỏi thì đi qua `lesson.details.quizData.questions`.
+⚠️ `CourseSection` **không có trường `order`** — tên đúng là **`sortOrder`**.
+(Hai chỗ này đã làm tôi chạy hỏng script đếm hai lần.)
 
 ### Bản vá toàn site cùng đợt
 
@@ -81,37 +107,57 @@ Chương 6 (buổi 17–20) viết 21/09 và CHƯA deploy** — xem mục 2.
 
 ## 2. CÒN NỢ — làm tiếp từ đây
 
-### ✅ Chương 5 và Chương 6 xong 21/09/2026 (CHƯA DEPLOY)
+### ✅ Chương 5 → 9 XONG và ĐÃ DEPLOY 21/09/2026 (commit `17306442`)
 
 | Chương | Buổi | Bài | Slide | Nguồn |
 |---|---|---|---|---|
-| Ch.5 Tầng liên kết dữ liệu | 15–16 | 3 + quiz 12 câu | 27, lên `NWC204/v1/nwc204-ch05/` | `slides-src/nwc204-ch05.mjs` · `nwc204/ch05.mjs` |
-| Ch.6 Chuyển mạch Ethernet | 17–20 | 3 + quiz 12 câu | 26, lên `NWC204/v1/nwc204-ch06/` | `slides-src/nwc204-ch06.mjs` · `nwc204/ch06.mjs` |
+| Ch.5 Tầng liên kết dữ liệu | 15–16 | 3 + quiz | 27 → `nwc204-ch05/` | `slides-src/nwc204-ch05.mjs` · `nwc204/ch05.mjs` |
+| Ch.6 Chuyển mạch Ethernet | 17–20 | 3 + quiz | 26 → `nwc204-ch06/` | `nwc204-ch06.mjs` · `ch06.mjs` |
+| Ch.7 Tầng mạng | 21–23 | 3 + quiz | 31 → `nwc204-ch07/` | `nwc204-ch07.mjs` · `ch07.mjs` |
+| Ch.8 Phân giải địa chỉ | 24–25 | 2 + quiz | 22 → `nwc204-ch08/` | `nwc204-ch08.mjs` · `ch08.mjs` |
+| Ch.9 Cấu hình router cơ bản | 26–29 | 3 + quiz | 26 → `nwc204-ch09/` | `nwc204-ch09.mjs` · `ch09.mjs` |
 
-Cả hai đợt slide đã **so byte với CDN**: lệch 0/27 và 0/26.
+Sáu commit đã lên `origin/main`: `1f6aba5e` `8170093b` `26b62adb` `39fed066`
+`e2ed4300` `17306442`.
 
-Hai điều mới từ Ch.5, áp dụng cho MỌI chương sau:
-- **Dấu ★** đánh dấu phần cuongthai.com bổ sung ngoài Cisco Module 6 (user yêu
-  cầu 21/09): lệch duplex đọc bằng `ethtool`, 802.1Q, MTU/MSS, lệnh tầng 2 trên
-  Linux, cầu nối Docker. Giáo trình trường phủ đủ trước, ★ thêm vào sau.
-- **Buổi 15 và 16 KHÔNG có câu hỏi kiến tạo** trong bảng gốc (nhảy từ CQ5.2 ở
-  buổi 14 sang CQ6.1 ở buổi 17). Đã nêu trong bài và tự soạn câu thảo luận ★
-  thay thế. Các buổi trống khác: 6, 9, 22, 30, 36, 56 — sẽ gặp lại.
+**Phần ★ đã thêm ở Ch.7/8/9** (ngoài giáo trình, để dùng được cho việc thật):
+- Ch.7 — lỗ đen MTU + cách chứng minh bằng `ping -M do`, cờ DF và MSS clamping,
+  `ip route get`, nhiều bảng định tuyến với `ip rule`, tuyến Docker tự cắm vào máy chủ.
+- Ch.8 — năm trạng thái bảng láng giềng (**STALE là BÌNH THƯỜNG, FAILED mới là
+  lỗi**), ARP tự khai, phát hiện giả mạo ARP và **ba** cách giải thích cho MAC
+  trùng, proxy ARP, `ip -6 neigh` trên máy thật.
+- Ch.9 — ba lệnh Linux `ip addr`/`ip link`/`ip route` là CÙNG ba ý của IOS, siết
+  SSH trên VPS (bẫy thứ tự drop-in `01-`, nghiệm thu bằng `sshd -T`), "chạy được"
+  khác "sống qua khởi động lại", dựng lại Lab 2.1 bằng network namespace.
 
-Bất thường mới phát hiện ở Ch.6, **đã nêu trong bài 6.3, không tự sửa bảng gốc**:
-FLM đánh số **CQ7.1 / CQ7.2 cho buổi 19–20** (vốn là Lab 1.4 của CHƯƠNG 6), rồi
-**CQ7.3 "How does Ethernet works in a switched network?" cho buổi 21** (vốn đã
-là chương 7 — Network Layer). Ba câu mang số chương 7 mà nội dung đều của chương
-6. Đã trả lời cả ba ngay trong Ch.6.
+### 📌 Bất thường của bảng gốc FLM — ĐÃ NÊU TRONG BÀI, KHÔNG TỰ SỬA
 
-### NWC204 buổi 21–60 (10 chương)
+Từ buổi 19 trở đi, **số hiệu câu hỏi kiến tạo chạy chậm hơn kế hoạch buổi học
+khoảng MỘT CHƯƠNG**. Bản đồ đầy đủ cho phần đã làm:
+
+| Buổi | Câu | Nội dung thật thuộc | Đã xử lý ở |
+|---|---|---|---|
+| 19–20 | CQ7.1, CQ7.2 | Ch.6 (Lab 1.4) | bài 6.3 |
+| 21 | CQ7.3 | Ch.6 (Ethernet switching) | 7.1 — trỏ về 6.3 |
+| **22** | **(BỎ TRỐNG)** | — | 7.2 — tự soạn 2 câu ★ |
+| 23 | CQ8.1 | **tiền đề SAI**: hỏi "vì sao cần IP cho truyền thông TIN CẬY" mà IP cố ý KHÔNG tin cậy | 7.3 — đính chính rồi trả lời 3 phần |
+| 24 | CQ8.2 | Ch.7 (bảng định tuyến) | 8.1 — trỏ về 7.2 |
+| 25 | CQ9.1 | **khớp đúng** (ARP) | 8.2 |
+| 26 | CQ9.2 | Ch.8 (Neighbor Discovery) | 9.1 — trỏ về 8.2 |
+| 27 | CQ9.3 | Ch.8 (ARP vs IP) | 9.2 — trỏ về 8.1/8.2 |
+| 28–29 | CQ10.1, CQ10.2 | **khớp đúng** (Lab 2.1) | 9.3 |
+
+Thêm một chỗ nữa: **buổi 27 liệt kê `9.2` rồi NHẢY THẲNG sang `9.4`** — không có
+mục `9.3` ở đâu trong bảng đã công bố. Đã nói thẳng trong bài 9.2.
+
+Các buổi còn trống câu hỏi kiến tạo: **6, 9, 15, 16, 22, 30, 36, 56** — buổi 30
+sẽ gặp ngay ở chương kế tiếp.
+
+### NWC204 buổi 30–60 (7 chương + đồ án) — CÒN LẠI
 
 | Chương | Buổi | Nội dung |
 |---|---|---|
-| Ch.7 | 21–23 | Network Layer + Review (Module 8) |
-| Ch.8 | 24–25 | Address Resolution / ARP (Module 9) |
-| Ch.9 | 26–29 | Basic Router Configuration + Lab 2.1 (Module 10) |
-| **Ch.10** | **30–34** | **IPv4 Addressing + chia subnet + VLSM + Midterm** ⭐ nặng nhất, và là chỗ cần chương bù 4B |
+| **Ch.10** | **30–34** | **IPv4 Addressing + chia subnet + VLSM + Midterm** ⭐ nặng nhất, nối vào chương bù `ch04b` |
 | Ch.11 | 35–36 | IPv6 Addressing (Module 12) |
 | Ch.12 | 37–40 | ICMP + Lab 2.3 (Module 13) |
 | **Ch.13** | **41–42** | **Transport Layer — SỐ HIỆU CỔNG** ⭐ người dùng cần cho công việc |
@@ -246,6 +292,44 @@ không tồn tại.
 
 ---
 
+## 3b. LỖI ĐÃ GẶP KHI DỰNG SLIDE Ch.7/8/9 — đọc trước khi dựng Ch.10
+
+`_kiem-tran-slide.mjs` bắt được **tràn dọc** và không bắt được gì khác. Đợt này
+nó báo "không slide nào tràn" mà **mở ảnh ra vẫn thấy 6 lỗi**, cả sáu đều là
+**chữ bị CẮT trong SVG** hoặc **nhãn đè lên hộp**:
+
+| Lỗi | Slide | Vì sao bộ đo không thấy |
+|---|---|---|
+| Chữ tràn khỏi `viewBox` của SVG bị cắt cụt | ch07 #10, #12, ch09 #13 | viewBox tự cắt, `scrollHeight` không đổi |
+| Nhãn `topo()` rộng hơn hình ô van, đè lên đường nối | ch07 #22, ch08 #2 | nằm trong khung, chỉ xấu chứ không tràn |
+| Nhãn giữa hai hộp SVG đè lên cả hai hộp | ch09 #10 | như trên |
+
+**Cách tính để khỏi vấp lại** — font chữ đơn cách trong SVG rộng ≈ **0,6 × cỡ chữ**:
+
+```
+số ký tự tối đa ≈ (chiều rộng viewBox − x bắt đầu) / (0,6 × font-size)
+```
+
+Cụ thể, với `viewBox` rộng **900** và chữ bắt đầu ở `x="4"`:
+- `font-size="15"` → tối đa **~99 ký tự** một dòng
+- `font-size="14"` → tối đa **~105 ký tự**
+- `font-size="13"` → tối đa **~114 ký tự**
+
+Vượt là bị cắt **câm**, không có cảnh báo nào.
+
+**Quy ước đã chốt cho các deck NWC204:** SVG dùng `viewBox="0 0 900 <h>"` với
+`width="1150"`. Nhãn trong `topo()` giữ **ngắn** (≤ 10 ký tự cho ô van router) —
+địa chỉ IP dài thì đẩy xuống `kv()` bên dưới, đừng nhét vào hình.
+
+**Slide quá dài thì CHIA HAI CỘT, đừng thu nhỏ chữ.** Hai slide cấu hình Lab 2.1
+của Ch.9 tràn +27px và +91px; bọc trong `<div class="two">` với hai khối `code()`
+là vừa khít và dễ đọc hơn hẳn.
+
+⭐ **Vẫn phải mở ít nhất 4–5 ảnh mỗi deck ra NHÌN.** Bộ đo cho bạn sự tự tin sai
+nếu tin nó một mình — xem [[feedback_verify_the_checker_before_the_content]].
+
+---
+
 ## 4. MỌI LỖI ĐÃ GẶP TRONG PHIÊN NÀY
 
 ### 4.1 Lỗi người dùng phát hiện
@@ -337,6 +421,34 @@ báo lỗi để biết log đang đọc là của ai.
   ```bash
   ssh vps "docker exec -w /app cuonghoangdev_backend node scripts/academy-seed-course.mjs --file content/academy/NWC204.mjs --apply"
   ```
+
+---
+
+### 4.7 Đợt deploy chiều 21/09/2026 — chạy trơn, ghi lại con số để so sau
+
+Commit `17306442`, 6 commit một lượt. Không có sự cố nào. Mốc thời gian thật:
+
+| Bước | Hết |
+|---|---|
+| Kiểm đề thi + dựng hai ảnh song song ở máy nhà, đẩy GHCR, VPS tráo | 16:25 → ~16:33 |
+| **Seed Academy** (bước nặng nhất, seed CẢ site chứ không riêng NWC204) | 16:33:32 → 16:39:46 (**6 phút 14**) |
+| Các seed còn lại (phụ đề, video, Exp Hub, Exam Room, RoadMap, repo, IELTS) | → 16:54:48 |
+| Backend khoẻ + smoke-test 65 route | 16:54:57 |
+| nginx.conf không đổi, vẫn reload nhẹ để RAM khớp đĩa | 16:54:58 |
+| **Bộ kiểm CI** (backend tsc · eval:grader · eval:cv-linter · npm test · frontend tsc) | 16:55:03 → 16:55:34 |
+| **`git push origin HEAD:main`** | 16:55:34 |
+| Kiểm lại container đang chạy ĐÚNG ảnh (so mã băm) | 16:55:38 |
+
+**Tổng ~30 phút.** Phần lớn là seed nội dung, không phải build. Biết con số này
+để lần sau đừng tưởng nó treo — và để so khi nó chậm bất thường.
+
+Script có hai chốt đáng tin mà phiên sau nên biết:
+- Nó **kiểm bản sắp deploy có chứa mã production đang chạy không** trước khi làm
+  gì (chống lùi production từ nhánh tách rời).
+- Sau khi tráo nó **so mã băm ảnh** đang chạy trong container, không tin log.
+- Nó **CẢNH BÁO** những file chưa commit sẽ không lên production. Đợt này có 5
+  file `firmware/mini-me-robot/**` + `scripts/lab211-gan-link-github.mjs` còn dở
+  của việc khác — **cố ý để nguyên**, không phải của NWC204.
 
 ---
 

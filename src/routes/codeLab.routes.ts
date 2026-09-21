@@ -376,6 +376,13 @@ router.get('/lab-rooms', authenticate, async (req, res: Response<ApiResponse>, n
   try { res.json({ success: true, data: await phongLab.dsPhong(req.user!.userId) }); } catch (e) { next(e); }
 });
 
+// 25 mục của tờ checklist giấy — tĩnh, không gọi AI, không cần đăng nhập để đọc
+// (chính là tờ thầy phát; bảng bên phải Phòng Lab vẽ từ đây).
+router.get('/lab-rooms/checklist-thay', (_req, res: Response<ApiResponse>) => {
+  res.set('Cache-Control', 'public, max-age=3600');
+  res.json({ success: true, data: phongLab.layChecklistThay() });
+});
+
 router.post('/lab-rooms', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
     const out = await phongLab.taoPhong(req.user!.userId, {

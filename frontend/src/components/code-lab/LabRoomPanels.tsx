@@ -67,7 +67,23 @@ function Loi({ text }: { text: string }) {
 
 // ─── 1. Giới thiệu bài ──────────────────────────────────────────
 
-export function GioiThieuBai({ roomId, item }: { roomId: number; item: LabRoomItem }) {
+/** Dải báo cho bản lưu soạn theo luật CŨ (trước tờ checklist giấy 21/09/2026). */
+function CuLuat({ viec }: { viec: string }) {
+  return (
+    <p className="mb-3 flex items-start gap-2 rounded-xl border px-3 py-2 text-xs"
+      style={{ borderColor: 'rgba(217,119,6,0.4)', background: 'rgba(217,119,6,0.08)', color: '#b45309' }}>
+      <AlertTriangle size={14} className="mt-0.5 shrink-0" />
+      <span>{viec} theo luật CŨ, trước tờ checklist giấy của thầy (repository bắt buộc, View nhận ResponseDTO…). Đừng làm theo phần kiến trúc ở dưới — bấm “soạn lại”.</span>
+    </p>
+  );
+}
+
+export function GioiThieuBai({ roomId, item, onTai }: {
+  roomId: number;
+  item: LabRoomItem;
+  /** Báo lên trang cha để bảng checklist bên phải tô các mục đề này dễ trượt. */
+  onTai?: (intro: LabRoomIntro) => void;
+}) {
   const [data, setData] = useState<LabRoomIntro | null>(null);
   const [chay, setChay] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
@@ -79,8 +95,12 @@ export function GioiThieuBai({ roomId, item }: { roomId: number; item: LabRoomIt
         ? await codeLabApi.regenLabRoomIntro(roomId, item.id)
         : await codeLabApi.labRoomIntro(roomId, item.id);
       setData(res.data.data);
+      onTai?.(res.data.data);
     } catch (e) { setLoi(loiCua(e, 'Chưa soạn được phần giới thiệu.')); }
     finally { setChay(false); }
+    // `onTai` là callback của trang cha; đưa vào deps là mỗi lần cha render lại
+    // bài giảng bị tải lại — đúng thứ tốn một lượt Opus cho không.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId, item.id]);
 
   useEffect(() => { setData(null); void tai(false); }, [tai]);
@@ -98,6 +118,8 @@ export function GioiThieuBai({ roomId, item }: { roomId: number; item: LabRoomIt
 
       {chay && !data && <DangChay viec="Đang đọc đề và soạn bài giảng" />}
       {loi && <Loi text={loi} />}
+
+      {data?._cuLuat && <CuLuat viec="Bài giảng này soạn" />}
 
       {data && (
         <div className="space-y-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
@@ -207,6 +229,22 @@ export function GioiThieuBai({ roomId, item }: { roomId: number; item: LabRoomIt
             </section>
           )}
 
+          {(data.checklistChuY || []).length > 0 && (
+            <section>
+              <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--cl-accent, var(--accent-color))' }}>
+                Mục checklist của thầy mà đề này dễ trượt
+              </h4>
+              <ul className="space-y-1">
+                {(data.checklistChuY || []).map((c, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="w-9 shrink-0 font-mono text-xs font-bold" style={{ color: 'var(--cl-accent, var(--accent-color))' }}>{c.stt}</span>
+                    <span>{c.viSao}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <section>
             <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: '#d97706' }}>Bẫy của riêng đề này</h4>
             <ul className="space-y-1">
@@ -231,11 +269,11 @@ export function GioiThieuBai({ roomId, item }: { roomId: number; item: LabRoomIt
 // ─── 2. Trợ giảng ───────────────────────────────────────────────
 
 const GOI_Y = [
-  'Bắt đầu từ đâu? Liệt kê giúp mình các file cần tạo.',
-  'Viết giúp mình lớp entity, có comment giải thích quyết định.',
-  'Validator của bài này cần những hàm nào?',
-  'Giải thích từng dòng của method vừa gợi ý.',
-  'Vì sao bài này không cần tầng bo?',
+  'Bắt đầu từ đâu? Liệt kê giúp mình các package và file cần tạo.',
+  'Viết giúp mình lớp model, đúng đủ 25 mục checklist của thầy.',
+  'Repository của bài này giữ dữ liệu gì, có những hàm nào?',
+  'View nhận ResponseDTO qua thuộc tính thì viết thế nào?',
+  'Soát giúp mình đoạn code mình vừa dán theo tờ checklist.',
 ];
 
 export function TroGiang({ roomId, item }: { roomId: number; item: LabRoomItem }) {
@@ -288,8 +326,8 @@ export function TroGiang({ roomId, item }: { roomId: number; item: LabRoomItem }
       <div className="mb-3 max-h-[52vh] space-y-3 overflow-y-auto pr-1">
         {turns.length === 0 && !chay && (
           <div className="rounded-xl border px-3 py-3 text-sm" style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)', background: 'var(--bg-surface)' }}>
-            Trợ giảng đã đọc đề của bài này và bộ quy tắc của thầy. Hỏi thẳng: cần tạo file nào,
-            method này viết sao, dòng này để làm gì, vì sao lại tách tầng như vậy.
+            Trợ giảng đã đọc đề của bài này, bộ quy tắc và tờ checklist 25 mục của thầy. Hỏi thẳng:
+            cần tạo file nào, method này viết sao, dòng này để làm gì, đoạn này trượt mục nào.
           </div>
         )}
         {turns.map((t, i) => (
@@ -344,39 +382,32 @@ const MAU_KET: Record<string, { nhan: string; mau: string }> = {
   sai: { nhan: 'Sai', mau: '#dc2626' },
 };
 
-export function NopBai({ roomId, item, onXong }: { roomId: number; item: LabRoomItem; onXong: (p: LabRoom) => void }) {
-  const [ketQua, setKetQua] = useState<LabRoomReview | null>(null);
+/**
+ * Kết quả chấm do TRANG CHA giữ (`ketQua`), không phải tấm này: bảng checklist
+ * bên phải cũng vẽ từ nó, và phải thấy kết quả ngay cả khi đang ở tab khác.
+ */
+export function NopBai({ roomId, item, ketQua, onCham }: {
+  roomId: number;
+  item: LabRoomItem;
+  ketQua: LabRoomReview | null;
+  onCham: (kq: LabRoomReview, phong: LabRoom) => void;
+}) {
   const [chay, setChay] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
   const [tenFile, setTenFile] = useState<string | null>(null);
   const input = useRef<HTMLInputElement | null>(null);
 
-  // Mở lại bài đã nộp thì hiện NGUYÊN bản nhận xét cũ. Chấm lại chỉ để có cùng
-  // một nội dung là đốt một lượt Opus cho không.
-  //
-  // CHỈ chạy một lần cho mỗi bài (trang cha đã `key` theo item nên đổi bài là
-  // remount). Cố ý KHÔNG đặt `item.coKetQuaCham` vào deps: nộp xong thì cờ đó
-  // lật false→true, effect chạy lại, xoá trắng kết quả vừa hiện rồi tải lại
-  // đúng nội dung đó — người dùng thấy màn hình nháy một cái vô cớ.
-  const daTaiBanCu = useRef(false);
-  useEffect(() => {
-    if (daTaiBanCu.current || !item.coKetQuaCham) return;
-    daTaiBanCu.current = true;
-    codeLabApi.labRoomLastReview(roomId, item.id)
-      .then((r) => setKetQua(r.data.data))
-      .catch(() => { /* không đọc được bản cũ thì cứ để trống, nộp lại là có */ });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   async function nop(file: File) {
     setChay(true); setLoi(null); setTenFile(file.name);
     try {
       const res = await codeLabApi.submitLabRoomZip(roomId, item.id, file);
-      setKetQua(res.data.data.ketQua);
-      onXong(res.data.data.phong);
+      onCham(res.data.data.ketQua, res.data.data.phong);
     } catch (e) { setLoi(loiCua(e, 'Chưa chấm được bài nộp.')); }
     finally { setChay(false); if (input.current) input.current.value = ''; }
   }
+
+  const truot = (ketQua?.checklist || []).filter((r) => r.ket === 'truot');
+  const ruiRo = (ketQua?.checklist || []).filter((r) => r.ket === 'ruiRo');
 
   return (
     <Khung>
@@ -422,7 +453,78 @@ export function NopBai({ roomId, item, onXong }: { roomId: number; item: LabRoom
             )}
           </div>
 
+          {(ketQua._cuLuat || !ketQua.checklist?.length) && (
+            <p className="flex items-start gap-2 rounded-xl border px-3 py-2 text-xs"
+              style={{ borderColor: 'rgba(217,119,6,0.4)', background: 'rgba(217,119,6,0.08)', color: '#b45309' }}>
+              <AlertTriangle size={14} className="mt-0.5 shrink-0" />
+              <span>Kết quả này chấm theo luật CŨ, trước tờ checklist 25 mục của thầy. Nộp lại để chấm theo tờ giấy.</span>
+            </p>
+          )}
+
           <p className="leading-relaxed">{ketQua.nhanXet}</p>
+
+          {!!ketQua.checklist?.length && !ketQua._cuLuat && (
+            <section>
+              <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: truot.length ? '#dc2626' : '#2563eb' }}>
+                Tờ checklist của thầy — {ketQua.checklist.length - truot.length - ruiRo.length}/25 đạt
+                {truot.length > 0 && ` · ${truot.length} trượt`}{ruiRo.length > 0 && ` · ${ruiRo.length} rủi ro`}
+              </h4>
+              {truot.length === 0 && ruiRo.length === 0 && (
+                <p>Đủ 25 “O”. Mở bảng checklist để xem từng mục.</p>
+              )}
+              <div className="space-y-1.5">
+                {[...truot, ...ruiRo].map((r) => (
+                  <div key={r.stt} className="rounded-xl border px-3 py-2" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                        style={r.ket === 'truot'
+                          ? { color: '#dc2626', background: 'rgba(220,38,38,0.12)' }
+                          : { color: '#d97706', background: 'rgba(217,119,6,0.12)' }}>
+                        {r.ket === 'truot' ? 'Trượt' : 'Rủi ro'}
+                      </span>
+                      <span className="font-mono text-xs font-bold" style={{ color: 'var(--text-primary)' }}>{r.stt}</span>
+                      <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{r.ngan}</span>
+                      {r.file && <span className="font-mono text-[11px]" style={{ color: 'var(--text-muted)' }}>{r.file}{r.dong ? `:${r.dong}` : ''}</span>}
+                    </div>
+                    {r.chiTiet && <p className="mt-0.5">{r.chiTiet}</p>}
+                    {r.bangChung.length > 1 && (
+                      <details className="mt-1">
+                        <summary className="cursor-pointer text-xs" style={{ color: 'var(--text-muted)' }}>{r.bangChung.length} chỗ máy đo được</summary>
+                        <ul className="mt-1 space-y-0.5 text-xs">
+                          {r.bangChung.map((b, i) => (
+                            <li key={i}><span className="font-mono" style={{ color: 'var(--text-muted)' }}>{b.file}{b.dong ? `:${b.dong}` : ''}</span> {b.ghiChu}</li>
+                          ))}
+                        </ul>
+                      </details>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {!!ketQua.luongChay?.length && (
+            <section>
+              <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+                Luồng chạy chương trình của bạn — tập kể lại như thế này
+              </h4>
+              <ol className="space-y-1">
+                {ketQua.luongChay.map((b, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="w-20 shrink-0 font-mono text-[11px] font-bold" style={{ color: 'var(--cl-accent, var(--accent-color))' }}>{b.tang}</span>
+                    <span>{b.buoc}</span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
+
+          {ketQua.danhGiaThietKe && (
+            <section>
+              <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Đánh giá thiết kế</h4>
+              <p className="leading-relaxed">{ketQua.danhGiaThietKe}</p>
+            </section>
+          )}
 
           {!!ketQua.thieuSoVoiDe?.length && (
             <section>
@@ -525,6 +627,7 @@ export function HuongDanReview({ roomId, item }: { roomId: number; item: LabRoom
 
       {chay && !data && <DangChay viec="Đang soạn kịch bản trình bày" />}
       {loi && <Loi text={loi} />}
+      {data?._cuLuat && <CuLuat viec="Kịch bản này soạn" />}
 
       {data && (
         <div className="space-y-4 text-sm" style={{ color: 'var(--text-secondary)' }}>

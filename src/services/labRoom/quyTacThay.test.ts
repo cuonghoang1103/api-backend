@@ -61,7 +61,10 @@ test('những quy tắc kiến trúc không được phép biến mất', () => 
     ['Scanner chỉ ở main, là biến cục bộ', /created HERE\s+and only here, as a LOCAL variable/],
     ['không được để Scanner trong utils', /never one in utils/],
     ['đọc dòng NGOÀI try, tránh lặp vô hạn khi hết input', /spins for ever/],
-    ['đọc/ghi tệp thuộc repository', /DATA FILE BELONGS IN repository/],
+    ['đọc tệp và mã hoá ở main (tờ checklist 1.1)', /READING THE DATA FILE AND HASHING HAPPEN IN main/],
+    ['repository luôn có', /repository\/ ALWAYS present/],
+    ['view nhận ResponseDTO qua thuộc tính, không tham số', /display\(\)\s+takes NO parameters/],
+    ['mỗi case gọi controller đúng một lần', /calls the controller\s+exactly ONCE/],
     ['thuật toán do đề bắt viết tay nằm ở service', /SortService/],
     ['ca đối chứng P0001', /J1\.S\.P0001/],
     ['tên phương thức khớp đề từng chữ', /checked by name/],
@@ -106,4 +109,37 @@ test('luật chấm: cắt digest thì KHÔNG được cho đạt, và CẤM l�
     'mất luật cấm lộ lời giải mẫu — grader sẽ phát đáp án cho người học');
   assert.match(NHIEM_VU_CHAM, /NOT the only correct answer/,
     'mất câu chống chấm máy móc theo lời giải mẫu');
+});
+
+test('tờ checklist GIẤY của thầy đứng ĐẦU bộ quy tắc, đủ 25 mục nguyên văn', async () => {
+  // 21/09/2026 thầy phát tờ "Coding check sheet" và chấm bằng chính nó. Mọi
+  // prompt LAB211 phải mang đủ 25 mục — rơi một mục là AI dạy thiếu đúng chỗ
+  // người học sẽ bị reject.
+  const { CHECKLIST_THAY } = await import('./checklistThay.js');
+  assert.equal(CHECKLIST_THAY.length, 25);
+  const s = heThong();
+  const dau = s.indexOf("THE LECTURER'S PAPER CHECKLIST");
+  assert.ok(dau >= 0, 'mất khối tờ checklist');
+  assert.ok(dau < s.indexOf('THE RULES THIS COURSE IS GRADED BY'), 'tờ checklist phải đứng TRƯỚC các quy tắc khác');
+  for (const m of CHECKLIST_THAY) {
+    assert.ok(s.includes(`[${m.stt}] ${m.nguyenVan}`), `mất mục ${m.stt} nguyên văn`);
+  }
+  for (const [ten, mau] of [
+    ['repository bắt buộc', /Bắt buộc phải có repository/],
+    ['view render 1 lần mỗi luồng', /chỉ được gọi 1 lần cho 1 luồng xử lý/],
+    ['đuôi List/Map/Array', /\.\.\.List for every list\/collection/],
+    ['viết Id không ID', /Write "Id", never "ID"/],
+    ['ngoặc quanh từng phép so sánh', /if \(\(a == b\) && \(c == d\)\)/],
+  ] as const) {
+    assert.match(s, mau, `mất luật: ${ten}`);
+  }
+});
+
+test('bộ quy tắc không còn câu nào dạy ngược tờ giấy', () => {
+  const s = heThong();
+  assert.doesNotMatch(s, /when the program KEEPS A COLLECTION/, 'còn câu "repository chỉ khi giữ collection"');
+  assert.doesNotMatch(s, /DATA FILE BELONGS IN repository/, 'còn câu "đọc tệp trong repository"');
+  assert.doesNotMatch(s, /they go in the startup\s+class Main/, 'còn câu "hàm đề bắt để trong Main"');
+  assert.doesNotMatch(s, /helper classes in small projects/, 'còn câu cho phép default modifier');
+  assert.doesNotMatch(s, /The bo throws/, 'còn chữ "bo" của kiến trúc cũ');
 });

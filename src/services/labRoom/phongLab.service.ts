@@ -35,6 +35,8 @@ import { buildProjectDigest } from '../interview/projectZip.service.js';
 import { logger } from '../../utils/logger.js';
 import { heThong, NGAN_HANG_VAN_DAP } from './quyTacThay.js';
 import { locCuaBai, khungChoPrompt } from './khungDuAn.js';
+import { CHECKLIST_THAY, PHIEN_BAN_LUAT, type MucChecklist } from './checklistThay.js';
+import { layTepJava, soatDuAn, tomTatChoPrompt, type BangChung, type KetQuaMay } from './soatJava.js';
 
 const LOC_GOAL_MAC_DINH = 750;
 const LOC_GOAL_MIN = 50;
@@ -343,22 +345,66 @@ async function nganhCanh(itemId: number) {
     phan.push('', `CONCEPTS: ${(ex.concepts as unknown[]).map(String).join(', ')}`);
   }
   // Lời giải mẫu ĐÃ VERIFY của đúng đề này (chạy thật, khớp output, cả en_US
-  // lẫn vi_VN). CHỈ dùng cho việc CHẤM, làm thước đo cấu trúc/tên/định dạng —
-  // KHÔNG bao giờ đưa vào phần giảng đề hay trợ giảng, vì ở đó nó là đáp án.
+  // lẫn vi_VN). Khi CHẤM nó là thước đo cấu trúc/tên/định dạng.
+  //
+  // 21/09/2026 người học (chủ trang) yêu cầu trợ giảng và giảng đề DẠY THEO
+  // chính bộ source này — họ gõ lại đúng thiết kế đó để thầy review, nên lời
+  // AI và source phải là một. Chốt an toàn: chỉ đưa vào khi source QUA bộ soát
+  // máy 25 mục (không mục nào "trượt"). Bộ lời giải cũ viết trước tờ checklist
+  // (31/54 bài thiếu repository) thì KHÔNG được dạy lại — `mauDeDay` = null.
   let mauThamChieu: string | null = null;
+  let mauDeDay: string | null = null;
   const sol = ex.solutionCodeJson;
   if (Array.isArray(sol) && sol.length) {
-    const tep = (sol as Array<Record<string, unknown>>)
-      .filter((f) => typeof f?.name === 'string' && typeof f?.code === 'string')
-      .map((f) => `--- ${String(f.name)} ---\n${String(f.code)}`);
+    const hopLe = (sol as Array<Record<string, unknown>>)
+      .filter((f) => typeof f?.name === 'string' && typeof f?.code === 'string');
+    const tep = hopLe.map((f) => `--- ${String(f.name)} ---\n${String(f.code)}`);
     if (tep.length) mauThamChieu = tep.join('\n\n').slice(0, MAX_MAU_THAM_CHIEU);
+    const tepJava = hopLe
+      .filter((f) => /\.java$/i.test(String(f.name)))
+      .map((f) => ({ duong: String(f.name), noiDung: String(f.code) }));
+    if (mauThamChieu && tepJava.length) {
+      const soat = soatDuAn(tepJava);
+      const sach = Object.values(soat.theoMuc).every((m) => m.ket !== 'truot');
+      if (sach) mauDeDay = mauThamChieu;
+    }
   }
   // Khung dự án: TÊN gói + TÊN lớp của lời giải đã verify, không có thân code.
   // Khác hẳn `mauThamChieu` ở trên — cái này KHÔNG phải đáp án, nó là thứ thầy
   // bắt buộc phải có, nên giảng đề và trợ giảng đều được biết. Chính sách chấm
   // của trường cấm "chỉ cho họ cách mình đã làm", không cấm chỉ đúng tầng.
   const khung = khungChoPrompt(ex);
-  return { it, ex, brief: phan.join('\n'), mauThamChieu, khung };
+  return { it, ex, brief: phan.join('\n'), mauThamChieu, mauDeDay, khung };
+}
+
+/**
+ * Khối "source chuẩn để dạy" cho giảng đề / trợ giảng. Có source sạch thì AI
+ * dạy theo đúng nó; chưa có thì nói thẳng để AI dựng từ luật, không bịa khác.
+ */
+function khoiSourceChuan(mauDeDay: string | null, cho: 'giang' | 'tro'): string {
+  if (!mauDeDay) {
+    return 'REFERENCE SOURCE: none that passes the paper check sheet yet. Build every '
+      + 'answer from the rules and the check sheet above; do not claim a reference exists.';
+  }
+  const cach = cho === 'giang'
+    ? 'Your briefing must describe EXACTLY this design: the same packages, the same class '
+      + 'and method names, the same build order. Do not paste its method bodies into the '
+      + 'briefing — name the classes and what each does; the tutor explains the code on request.'
+    : 'Teach FROM this source. When the student asks how to write a class, a method or a '
+      + 'line, show the matching part of THIS source and explain it line by line: what it '
+      + 'does, why it sits in that layer, which check-sheet item it satisfies, and the one '
+      + 'question the lecturer will ask about it with the answer. Never propose a different '
+      + 'design. The student must be able to explain every line they type.';
+  return [
+    '=================================================================',
+    'THE STUDENT\'S REFERENCE SOURCE FOR THIS ASSIGNMENT (verified: runs, matches the',
+    'brief\'s screen, passes the 25-item paper check sheet). The student will type their',
+    'own copy of this design for the lecturer\'s review.',
+    '=================================================================',
+    cach,
+    '',
+    mauDeDay,
+  ].join('\n');
 }
 
 /** Lấy khối JSON đầu tiên trong câu trả lời, kể cả khi nó bị bọc trong ```json. */
@@ -400,6 +446,7 @@ Return ONLY JSON, no prose around it:
  ],
  "bayCanTranh": ["traps specific to THIS brief — a lenient date, a locale-sensitive %f, an off-by-one, a message the screen and the Guidelines disagree on"],
  "cauHoiVanDap": ["3-5 questions the examiner will ask about THIS assignment"],
+ "checklistChuY": [{"stt": "1.5", "viSao": "one sentence: how THIS brief trips this item of the lecturer's paper check sheet, naming the concrete class/field/method (e.g. the array must be named numberArray)"}],
  "locUocTinh": <integer: the LOC the sheet states>
 }
 
@@ -409,11 +456,21 @@ Rules for this task:
   "bayCanTranh" — noticing it earns marks.
 * Do NOT write the solution. This is the briefing, not the answer. Name the
   classes and their responsibilities; do not hand over method bodies.
-* LAYERS: list the packages of Guide.xlsx this assignment uses, and say what
-  goes in each. The set does NOT shrink because the assignment is small — see
-  the rules above. An algorithm the student must write by hand goes in a
-  service class as a private method (J1.S.P0001 -> service/SortService), never
-  in Main. Never suggest dropping the controller to "avoid an empty wrapper".
+* LAYERS: list the packages this assignment uses, and say what goes in each.
+  The set does NOT shrink because the assignment is small — see the rules
+  above, and the paper check sheet at the very top: repository/ is ALWAYS there
+  (it holds this program's data — for an algorithm, the array or numbers), the
+  view receives a ResponseDTO through a setter and display() takes no
+  parameters, main does all input/validation/file reading and calls the
+  controller once per menu case. An algorithm the student must write by hand
+  goes in a service class as a private method (J1.S.P0001 -> repository/ holds
+  the array, service/SortService sorts it), never in Main. Never suggest
+  dropping the controller or the repository to "avoid an empty wrapper".
+* "checklistChuY": 5-8 items of the paper check sheet THIS brief is most likely
+  to fail, each tied to a concrete name or place in this assignment (1.5 for
+  the collection/array names it needs, 3.3 for its range check, 2.6 for its
+  input loop, 1.1 for where its data and algorithm go...). Use the item numbers
+  exactly as on the sheet.
 * "dienTien" is for briefs whose heart is an ALGORITHM (a sort, a search, a
   conversion, a matrix walk). Trace it on a SMALL concrete example, one row per
   pass, showing the array or the state after that pass. This is the single most
@@ -425,8 +482,12 @@ Rules for this task:
   output is random, state the PROPERTY instead of fixed text — "10 integers in
   [0,n), then the same 10 in non-decreasing order" — never invent exact numbers.
 * "khuonMau" is the reusable shape the lecturer expects to see, not this brief's
-  answer: the Validator loop contract, try-with-resources, the menu loop, the
-  Comparator, strict date parsing. Only the ones THIS brief actually needs.
+  answer: the input-helper loop in main + the utils/Validation contract (it
+  answers or throws, never reads or prints), the controller's
+  setResponseDTO + display() hand-off, the menu loop, the Comparator, strict
+  date parsing. Only the ones THIS brief actually needs, and every shape you
+  show must itself pass the check sheet (declarations at the top of the block,
+  blank lines, parentheses, suffixed names).
 `.trim();
 
 export async function gioiThieuBai(userId: number, roomId: number, itemId: number, lamMoi = false) {
@@ -434,10 +495,44 @@ export async function gioiThieuBai(userId: number, roomId: number, itemId: numbe
   if (!room.items.some((i) => i.id === itemId)) throw new NotFoundError('Bài này không có trong phòng.');
 
   const cu = await prisma.codeLabRoomItem.findUnique({ where: { id: itemId }, select: { introJson: true } });
-  if (cu?.introJson && !lamMoi) return cu.introJson;
+  // Bài giảng soạn theo luật CŨ thì soạn lại: 21/09/2026 một bài giảng lưu từ
+  // trước vẫn dạy P0001 "không cần controller hay bo" dù prompt đã sửa từ lâu —
+  // vì bản đã lưu không bao giờ tự làm mới.
+  if (cu?.introJson && !lamMoi && laLuatMoi(cu.introJson)) return cu.introJson;
+  if (cu?.introJson && !lamMoi) {
+    const moi = await thuSoanLai(() => soanGioiThieu(userId, itemId));
+    return moi ?? danhDauCu(cu.introJson);
+  }
+  return soanGioiThieu(userId, itemId);
+}
 
+/** Bản lưu có đúng phiên bản luật hiện hành không. */
+function laLuatMoi(json: unknown): boolean {
+  return !!json && typeof json === 'object' && (json as Record<string, unknown>)._luat === PHIEN_BAN_LUAT;
+}
+
+/** Trả lại bản cũ nhưng gắn cờ để giao diện nói rõ nó soạn theo luật cũ. */
+function danhDauCu(json: unknown): unknown {
+  return json && typeof json === 'object' ? { ...(json as Record<string, unknown>), _cuLuat: true } : json;
+}
+
+/**
+ * Soạn lại một bản đã cũ luật. Hỏng (hết hạn mức, AI đang nghỉ) thì trả null để
+ * nơi gọi đưa bản cũ ra kèm cờ — người học vẫn đọc được, và biết nó đã cũ,
+ * thay vì nhận một trang lỗi cho thứ họ từng xem được.
+ */
+async function thuSoanLai<T>(soan: () => Promise<T>): Promise<T | null> {
+  try {
+    return await soan();
+  } catch (e) {
+    logger.warn('phong-lab: không soạn lại được bản cũ luật', { loi: (e as Error)?.message });
+    return null;
+  }
+}
+
+async function soanGioiThieu(userId: number, itemId: number) {
   await assertAi(userId);
-  const { brief, khung } = await nganhCanh(itemId);
+  const { brief, khung, mauDeDay } = await nganhCanh(itemId);
 
   const res = await llmComplete({
     step: 'generation',
@@ -445,8 +540,8 @@ export async function gioiThieuBai(userId: number, roomId: number, itemId: numbe
     purpose: 'lab_room',
     // `khung` = cây gói/lớp THẬT của bài này. Không có nó, AI phải đoán bố cục
     // và mỗi lượt sinh ra một bố cục khác — người học đọc hai bài thì thấy hai
-    // kiến trúc, không biết tin cái nào.
-    system: heThong(NHIEM_VU_GIOI_THIEU, khung),
+    // kiến trúc, không biết tin cái nào. Có source chuẩn thì giảng theo đúng nó.
+    system: heThong(NHIEM_VU_GIOI_THIEU, khung, khoiSourceChuan(mauDeDay, 'giang')),
     messages: [{ role: 'user', content: brief }],
     // Bài giảng nay có thêm sơ đồ, bảng diễn tiến, bộ test và khuôn mẫu —
     // 4k token cắt ngang JSON là hỏng cả lượt, không phải hỏng một mục.
@@ -458,8 +553,9 @@ export async function gioiThieuBai(userId: number, roomId: number, itemId: numbe
 
   const out = docJson<Record<string, unknown>>(res.text);
   if (!out?.tongQuan) throw new BadRequestError('AI chưa soạn được phần giới thiệu. Thử lại giúp mình.');
-  await prisma.codeLabRoomItem.update({ where: { id: itemId }, data: { introJson: out as object } });
-  return out;
+  const luu = { ...out, _luat: PHIEN_BAN_LUAT };
+  await prisma.codeLabRoomItem.update({ where: { id: itemId }, data: { introJson: luu as object } });
+  return luu;
 }
 
 // ─── 3. gia sư kèm trong lúc làm ────────────────────────────────
@@ -485,6 +581,14 @@ line means, why a rule exists, how to fix an error, what to name something.
   worse than refusing.
 * Stay inside THIS brief. If they ask something the brief does not require, say
   it is not required and why adding it would cost marks here.
+* Every line of Java you hand over must ALREADY pass the lecturer's 25-item
+  paper check sheet (top of this prompt): repository/ present, the view fed a
+  ResponseDTO through a setter with a parameterless display(), names with the
+  List/Set/Map/Array suffix, "Id" not "ID", locals declared and initialised at
+  the top of each block, a blank line before every comment that follows code,
+  parentheses around each comparison next to && / ||, no String +=. When the
+  student's own code breaks an item, name it by its number ("mục 2.8") so they
+  can tick it on their sheet.
 * Use Markdown. Java in \`\`\`java fences.
 `.trim();
 
@@ -509,7 +613,7 @@ export async function chat(userId: number, roomId: number, itemId: number, cauHo
   if (hoi.length > MAX_CAU_HOI) throw new BadRequestError('Câu hỏi dài quá, rút gọn giúp mình.');
   await assertAi(userId);
 
-  const { brief, khung } = await nganhCanh(itemId);
+  const { brief, khung, mauDeDay } = await nganhCanh(itemId);
   const truoc = await prisma.codeLabRoomMessage.findMany({
     where: { itemId },
     orderBy: { createdAt: 'desc' },
@@ -528,7 +632,8 @@ export async function chat(userId: number, roomId: number, itemId: number, cauHo
     // Trợ giảng phải trả lời "cái này viết ở đâu" bằng ĐÚNG gói của bài này,
     // nên `khung` đi kèm đề. Thiếu nó thì câu trả lời hay gặp nhất — "để trong
     // class Manager" — là câu làm người học bị trả bài.
-    system: heThong(NHIEM_VU_CHAT, khung, `THE ASSIGNMENT THIS CONVERSATION IS ABOUT:\n${brief}`),
+    system: heThong(NHIEM_VU_CHAT, khung, `THE ASSIGNMENT THIS CONVERSATION IS ABOUT:\n${brief}`,
+      khoiSourceChuan(mauDeDay, 'tro')),
     messages: [...lichSu, { role: 'user', content: hoi }],
     maxTokens: 6_000,
     maxRetries: 1,
@@ -571,9 +676,13 @@ Return ONLY JSON:
    "khopManHinh": "khop" | "lech" | "khong-chac",
    "lechChoNao": ["each place the console would differ from the expected screen, with the exact expected text and the exact produced text"]
  },
- "theoQuyTac": [
-   {"muc":"the rule, named", "ket":"dat"|"thieu"|"sai", "chiTiet":"what you saw, quoting the code", "file":"src/...", "dong": <int|null>}
+ "checklist": [
+   {"stt":"1.1", "ket":"dat"|"truot"|"ruiRo", "chiTiet":"what you saw in THEIR code for this item of the paper check sheet, quoting it; for truot/ruiRo, the one concrete fix", "file":"src/... or null", "dong": <int|null>}
  ],
+ "luongChay": [
+   {"tang":"main"|"controller"|"service"|"repository"|"model"|"view"|"utils", "buoc":"one step of THEIR program's flow for its main menu case, naming the real Class.method and what data passes (RequestDTO / ResponseDTO)"}
+ ],
+ "danhGiaThietKe": "4-8 sentences: do the layers follow the sheet (who reads input, who holds the data, who prints, how many times the view renders per case); SOLID S; which design pattern is really in their code and whether they could defend it",
  "thieuSoVoiDe": ["every Guidelines requirement that is missing or wrong: a method not implemented, a signature that differs, a message string that does not match"],
  "hieuBaiKhong": [
    {"hoi":"a question about THEIR OWN code — this for loop, this method, this field", "viSao":"what the question is really testing", "traLoiTot":"the answer a student who understands would give, 2-4 sentences"}
@@ -586,6 +695,18 @@ Return ONLY JSON:
 HOW TO MARK
 * Judge against the BRIEF first and the RULES second. A program that ignores a
   Guidelines requirement fails even if the code is beautiful.
+* "checklist" is the lecturer's paper check sheet: EXACTLY 25 entries, one per
+  item, in the sheet's order 1.1, 1.2 ... 1.6, 2.1 ... 2.11, 3.1 ... 3.8. The
+  MACHINE CHECK block in the submission lists what was measured line by line:
+  every item it marks "truot" is a FACT — report it as "truot", cite one of its
+  file:line examples and give the fix. Items the machine cannot see well are
+  yours to judge from the code: 1.1 (is each layer doing only its job), 1.3
+  (class names are nouns, SRP), 1.4 (verbs, one job per method), 1.6 (does each
+  comment say what the method/block does), 3.1, 3.5 (case sensitivity chosen on
+  purpose). "ruiRo" = passes a lenient reading, fails a strict one.
+* "luongChay" walks ONE real menu case of THEIR program layer by layer, 5-10
+  steps, so the student can check they can narrate their own flow the way the
+  lecturer asks ("luồng chạy thế nào?").
 * "hieuBaiKhong" must ask about THEIR code, quoting it — "what is the for loop
   in Main.java line 42 for", "why is this field private", "this method has no
   comment saying what it does — what does it do", "what happens if I type abc
@@ -599,8 +720,10 @@ HOW TO MARK
   main() as a local variable.
 * "dat" is true ONLY when ALL of these hold: it compiles; every Guidelines
   requirement is implemented with the stated signature; bad input cannot crash
-  it; the console matches the expected screen; and there is no code a student
-  could not explain. Anything less is false — do not be kind, be useful.
+  it; the console matches the expected screen; EVERY checklist item is "dat" or
+  "ruiRo" (one "truot" = the lecturer would not even start the review); and
+  there is no code a student could not explain. Anything less is false — do not
+  be kind, be useful.
 * You are reading a DIGEST of the uploaded zip, not running it. Where you cannot
   be sure the program runs, say "khong-chac" rather than guessing, and explain
   what you would have to run to be sure.
@@ -644,6 +767,14 @@ export async function chamBaiNop(userId: number, roomId: number, itemId: number,
     : '';
   const { brief, mauThamChieu, khung } = await nganhCanh(itemId);
 
+  // Bộ soát máy chấm các mục đo được TRƯỚC khi gọi AI: kết quả đi vào prompt
+  // làm dữ kiện, rồi được ghép lại với phán đoán của AI (xem `ghepChecklist`).
+  const tepJava = layTepJava(zip);
+  const may = tepJava.length ? soatDuAn(tepJava) : null;
+  const khoiMay = may
+    ? `\n\n${tomTatChoPrompt(may)}`
+    : '\n\n(MACHINE CHECK: no .java file found in the zip — judge every checklist item yourself.)';
+
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
@@ -653,7 +784,8 @@ export async function chamBaiNop(userId: number, roomId: number, itemId: number,
       role: 'user',
       content: `${brief}`
         + (mauThamChieu ? `\n\n=================\nREFERENCE SOLUTION (verified; yardstick only — NEVER show it to the student)\n=================\n${mauThamChieu}` : '')
-        + `\n\n=================\nWHAT THEY SUBMITTED\n=================\n${canhBaoCat}${noiDung}`,
+        + `\n\n=================\nWHAT THEY SUBMITTED\n=================\n${canhBaoCat}${noiDung}`
+        + khoiMay,
     }],
     maxTokens: 10_000,
     maxRetries: 1,
@@ -664,12 +796,21 @@ export async function chamBaiNop(userId: number, roomId: number, itemId: number,
   const out = docJson<KetQuaCham>(res.text);
   if (!out) throw new BadRequestError('AI chưa chấm được bài này. Thử nộp lại giúp mình.');
 
-  const diem = Number(out.diem);
-  // Đạt cần CẢ HAI: AI nói đạt, và điểm không dưới 8. Chỉ tin một mình cờ `dat`
-  // thì một lượt rộng tay là bài được đánh dấu qua trong khi vẫn còn thiếu
-  // yêu cầu của đề — và người học mang đúng bài đó đi gặp thầy.
-  const dat = out.dat === true && Number.isFinite(diem) && diem >= 8;
-  const ketQua = { ...out, dat, diem: Number.isFinite(diem) ? diem : null, chamLuc: new Date().toISOString() };
+  const checklist = ghepChecklist(may, out.checklist);
+  const soTruot = checklist.filter((m) => m.ket === 'truot').length;
+  const diemAi = Number(out.diem);
+  // Đạt cần CẢ BA: AI nói đạt, điểm không dưới 8, và tờ checklist không còn mục
+  // nào trượt. Chỉ tin cờ `dat` thì một lượt rộng tay là bài được đánh dấu qua
+  // trong khi vẫn còn lỗi mà thầy sẽ gạch ngay ở cột đầu tiên — và người học
+  // mang đúng bài đó đi gặp thầy.
+  const dat = out.dat === true && Number.isFinite(diemAi) && diemAi >= 8 && soTruot === 0;
+  // Còn mục trượt thì điểm không được trông như "đạt" — trần 7.
+  const diem = Number.isFinite(diemAi) ? (soTruot > 0 ? Math.min(diemAi, 7) : diemAi) : null;
+  const ketQua = {
+    ...out, dat, diem, checklist, soTruot,
+    may: may ? { soFileJava: may.soFileJava, goi: may.goi, coRepository: may.coRepository } : null,
+    chamLuc: new Date().toISOString(), _luat: PHIEN_BAN_LUAT,
+  };
 
   // Nộp lại một bài ĐÃ ĐẠT rồi trượt thì KHÔNG gỡ dấu đạt, và LOC không bị trừ:
   // cái mốc đó họ đã đạt thật một lần, còn bản nộp mới có thể chỉ là đang thử
@@ -684,7 +825,7 @@ export async function chamBaiNop(userId: number, roomId: number, itemId: number,
   await prisma.codeLabRoom.update({ where: { id: roomId }, data: { updatedAt: new Date() } });
 
   logger.info('phong-lab: đã chấm bài nộp', {
-    roomId, itemId, userId, dat, diem: ketQua.diem, soFile: digest.stats.filesIncluded,
+    roomId, itemId, userId, dat, diem: ketQua.diem, soTruot, soFile: digest.stats.filesIncluded,
   });
   return { ketQua, phong: tomTat(await phongCuaToi(userId, roomId)) };
 }
@@ -699,7 +840,89 @@ export async function ketQuaChamCu(userId: number, roomId: number, itemId: numbe
   const room = await phongCuaToi(userId, roomId);
   if (!room.items.some((i) => i.id === itemId)) throw new NotFoundError('Bài này không có trong phòng.');
   const it = await prisma.codeLabRoomItem.findUnique({ where: { id: itemId }, select: { reviewJson: true } });
-  return it?.reviewJson ?? null;
+  if (!it?.reviewJson) return null;
+  // Kết quả chấm theo luật cũ KHÔNG tự chấm lại (mỗi lượt là một lần Opus đọc
+  // cả project) — chỉ gắn cờ để giao diện bảo người học nộp lại.
+  return laLuatMoi(it.reviewJson) ? it.reviewJson : danhDauCu(it.reviewJson);
+}
+
+// ─── tờ checklist: định nghĩa + ghép kết quả máy với AI ─────────
+
+/** Một dòng của bảng checklist sau khi chấm. */
+export interface DongChecklist {
+  stt: string;
+  nhom: MucChecklist['nhom'];
+  ngan: string;
+  ket: 'dat' | 'truot' | 'ruiRo';
+  /** mức máy đo được — null khi máy không chấm mục này */
+  may: 'dat' | 'truot' | 'ruiRo' | null;
+  /** mức AI phán — null khi AI bỏ trống mục này */
+  ai: 'dat' | 'truot' | 'ruiRo' | null;
+  chiTiet: string;
+  file: string | null;
+  dong: number | null;
+  bangChung: BangChung[];
+}
+
+const THU_TU_KET = { dat: 0, ruiRo: 1, truot: 2 } as const;
+
+function ketHopLe(x: unknown): 'dat' | 'truot' | 'ruiRo' | null {
+  const k = String(x ?? '').trim();
+  if (k === 'dat' || k === 'truot' || k === 'ruiRo') return k;
+  if (/^(thieu|sai|fail|truot)/i.test(k)) return 'truot';
+  if (/^rui/i.test(k)) return 'ruiRo';
+  return null;
+}
+
+/**
+ * Ghép bộ soát máy với phán đoán của AI thành đúng 25 dòng, theo thứ tự tờ giấy.
+ *
+ * Luật ghép:
+ *   • mục máy đo được (`cham: 'may'`): máy là sự thật — AI chỉ được nâng lên
+ *     "rủi ro", không được tự kết "trượt" (model đếm dòng trống thì hay bịa);
+ *   • mục cần hiểu nghĩa (`ai` / `ca-hai`): lấy mức NẶNG HƠN của hai bên —
+ *     máy thấy import sai tầng, AI thấy controller đang làm việc của service;
+ *   • AI bỏ trống một mục: giữ kết quả máy; cả hai cùng trống: "rủi ro" kèm
+ *     lời nhắc tự soát — không bao giờ tự cho "đạt" một mục chưa ai nhìn.
+ */
+export function ghepChecklist(may: KetQuaMay | null, tuAi: unknown): DongChecklist[] {
+  const dsAi = Array.isArray(tuAi) ? (tuAi as Array<Record<string, unknown>>) : [];
+  return CHECKLIST_THAY.map((muc) => {
+    const a = dsAi.find((x) => String(x?.stt ?? '').trim() === muc.stt);
+    const ketAi = ketHopLe(a?.ket);
+    const mayMuc = may?.theoMuc[muc.stt] ?? null;
+    const ketMay = mayMuc?.ket ?? null;
+    let ket: DongChecklist['ket'];
+    if (muc.cham === 'may' && ketMay) {
+      const aiNangLen = ketAi && ketAi !== 'dat' ? 'ruiRo' : 'dat';
+      ket = THU_TU_KET[ketMay] >= THU_TU_KET[aiNangLen] ? ketMay : aiNangLen;
+    } else if (ketMay && ketAi) {
+      ket = THU_TU_KET[ketMay] >= THU_TU_KET[ketAi] ? ketMay : ketAi;
+    } else {
+      ket = ketMay ?? ketAi ?? 'ruiRo';
+    }
+    const chiTiet = typeof a?.chiTiet === 'string' && a.chiTiet.trim()
+      ? a.chiTiet.trim()
+      : (mayMuc?.bangChung[0]?.ghiChu ?? (ketMay || ketAi ? '' : 'Chưa chấm được mục này — tự soát theo tờ giấy.'));
+    const dongAi = Number(a?.dong);
+    return {
+      stt: muc.stt,
+      nhom: muc.nhom,
+      ngan: muc.ngan,
+      ket,
+      may: ketMay,
+      ai: ketAi,
+      chiTiet,
+      file: typeof a?.file === 'string' && a.file.trim() ? a.file.trim() : (mayMuc?.bangChung[0]?.file ?? null),
+      dong: Number.isFinite(dongAi) && dongAi > 0 ? dongAi : (mayMuc?.bangChung[0]?.dong ?? null),
+      bangChung: (mayMuc?.bangChung ?? []).slice(0, 12),
+    };
+  });
+}
+
+/** Định nghĩa 25 mục cho bảng bên phải Phòng Lab — tĩnh, không gọi AI. */
+export function layChecklistThay() {
+  return { phienBan: PHIEN_BAN_LUAT, muc: CHECKLIST_THAY };
 }
 
 // ─── 5. sau khi đạt: dạy cách trình bày với thầy ────────────────
@@ -729,6 +952,10 @@ Return ONLY JSON:
 * The whole point of the presentation is to demonstrate they can navigate their
   own design. Structure it so each step opens exactly one file and answers one
   question.
+* The lecturer reviews with his paper check sheet in hand. Include in
+  "chiVaoDau" one entry each for item 1.1 (which file shows the layers and the
+  single render per case), 1.5 (a suffixed collection/array name) and 3.3 (a
+  parenthesised condition), pointing at THEIR file.
 `.trim();
 
 export async function huongDanReview(userId: number, roomId: number, itemId: number, lamMoi = false) {
@@ -739,11 +966,18 @@ export async function huongDanReview(userId: number, roomId: number, itemId: num
     throw new BadRequestError('Bài này chưa đạt — nộp và qua vòng chấm trước đã.');
   }
   const cu = await prisma.codeLabRoomItem.findUnique({ where: { id: itemId }, select: { guideJson: true, reviewJson: true } });
-  if (cu?.guideJson && !lamMoi) return cu.guideJson;
+  if (cu?.guideJson && !lamMoi && laLuatMoi(cu.guideJson)) return cu.guideJson;
+  if (cu?.guideJson && !lamMoi) {
+    const moi = await thuSoanLai(() => soanHuongDan(userId, itemId, cu.reviewJson));
+    return moi ?? danhDauCu(cu.guideJson);
+  }
+  return soanHuongDan(userId, itemId, cu?.reviewJson ?? null);
+}
 
+async function soanHuongDan(userId: number, itemId: number, reviewJson: unknown) {
   await assertAi(userId);
   const { brief, khung } = await nganhCanh(itemId);
-  const cham = cu?.reviewJson ? `\n\nWHAT THE MARKING FOUND (use it — the weak spots are what the lecturer will probe):\n${JSON.stringify(cu.reviewJson).slice(0, 12_000)}` : '';
+  const cham = reviewJson ? `\n\nWHAT THE MARKING FOUND (use it — the weak spots are what the lecturer will probe):\n${JSON.stringify(reviewJson).slice(0, 12_000)}` : '';
 
   const res = await llmComplete({
     step: 'generation',
@@ -761,6 +995,7 @@ export async function huongDanReview(userId: number, roomId: number, itemId: num
 
   const out = docJson<Record<string, unknown>>(res.text);
   if (!out?.moDau) throw new BadRequestError('AI chưa soạn được hướng dẫn. Thử lại giúp mình.');
-  await prisma.codeLabRoomItem.update({ where: { id: itemId }, data: { guideJson: out as object } });
-  return out;
+  const luu = { ...out, _luat: PHIEN_BAN_LUAT };
+  await prisma.codeLabRoomItem.update({ where: { id: itemId }, data: { guideJson: luu as object } });
+  return luu;
 }

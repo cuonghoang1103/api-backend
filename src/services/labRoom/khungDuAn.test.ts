@@ -133,3 +133,26 @@ test('escape generic Java, nhưng không đụng dấu < đứng riêng', async 
   assert.equal(vaTheLa('<ul><li><code>x</code></li></ul>'), '<ul><li><code>x</code></li></ul>');
   assert.match(vaTheLa('<p><a href="/x">đi</a></p>'), /<a href="\/x">/);
 });
+
+test('lời giải mẫu thiếu repository/: khối ngữ cảnh phải nói tờ checklist BẮT BUỘC có nó', () => {
+  // 31/54 lời giải viết trước tờ checklist giấy (21/09/2026) không có
+  // repository/. Đưa cây đó cho AI mà không nói gì là AI dạy lại đúng câu tờ
+  // giấy cấm: "bài thuật toán không cần repository".
+  const p0001 = {
+    title: 'J1.S.P0001_Bubble sort algorithm (40 LOC)',
+    solutionCodeJson: [
+      { name: 'src/main/Main.java', code: 'x' },
+      { name: 'src/service/SortService.java', code: 'x' },
+      { name: 'src/view/SortView.java', code: 'x' },
+    ],
+  };
+  const k = khungChoPrompt(p0001);
+  assert.match(k, /NO repository\//);
+  assert.match(k, /MANDATORY/);
+  assert.match(k, /NEVER tell\s+!!\s+the student this assignment needs no repository/);
+  // bài ĐÃ có repository thì không gắn cảnh báo
+  assert.doesNotMatch(khungChoPrompt(P0055), /NO repository\//);
+  // thứ tự gõ: repository là bước bắt buộc, không còn chữ "nếu giữ collection"
+  assert.match(k, /repository - ALWAYS/);
+  assert.doesNotMatch(k, /if this brief keeps a collection/);
+});

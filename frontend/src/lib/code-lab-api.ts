@@ -29,6 +29,7 @@ import type {
   LabRoomReview,
   LabRoomGuide,
   LabRoomChatTurn,
+  ChecklistThayMuc,
 } from '@/types/code-lab';
 import type { DocBlock } from '@/types/exp-hub';
 
@@ -112,6 +113,8 @@ export const codeLabApi = {
   // lượt chấm .zip đọc cả project rồi soạn 6-10 câu hỏi vặn, và 30s mặc định
   // của client dùng chung sẽ bỏ dở đúng lúc server đang làm việc có ích.
   labRooms: () => api.get<Ok<LabRoomSummary[]>>(`${BASE}/lab-rooms`),
+  /** 25 mục của tờ checklist giấy — tĩnh, backend giữ bản duy nhất. */
+  checklistThay: () => api.get<Ok<{ phienBan: string; muc: ChecklistThayMuc[] }>>(`${BASE}/lab-rooms/checklist-thay`),
   createLabRoom: (body: { trackSlug?: string; trackId?: number; exerciseIds: number[]; name?: string; locGoal?: number }) =>
     api.post<Ok<LabRoom>>(`${BASE}/lab-rooms`, body),
   getLabRoom: (id: number) => api.get<Ok<LabRoom>>(`${BASE}/lab-rooms/${id}`),

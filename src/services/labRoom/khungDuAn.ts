@@ -75,13 +75,13 @@ const VAI_TRO: Record<string, string> = {
   constants: 'every printed sentence + every magic number',
   model: 'the JavaBean: private fields, empty ctor, getters/setters, toString',
   dto: 'Request/Response — how main talks to the controller',
-  repository: 'the collection itself + plain CRUD',
+  repository: 'ALWAYS: the program data + plain CRUD (checklist 1.1)',
   service: 'the rules and the algorithms; called only by the controller',
   controller: 'wires main -> service -> view; never reads input, never prints',
-  view: 'the only class besides main that prints',
+  view: 'ResponseDTO as an attribute, display() with no parameters, once per case',
   utils: 'final class, private ctor, static only',
   exceptions: 'only because this brief asks for it',
-  main: 'the menu loop and the ONE Scanner (a local variable)',
+  main: 'the ONE Scanner + all input/validation/file reading; 1 controller call per case',
 };
 
 /** Lấy danh sách đường dẫn file từ một cột JSON dạng `[{name, code}]`. */
@@ -161,11 +161,26 @@ export function khungChoPrompt(ex: BaiCoKhung, coCay = true): string {
   }
   if (cay) {
     phan.push(
-      'THE PACKAGE LAYOUT OF THE ACCEPTED SOLUTION — use exactly this, do not',
-      'invent another one, do not rename a package, do not merge two of them:',
+      'THE PACKAGE LAYOUT OF THE ACCEPTED SOLUTION — keep these packages and',
+      'class names, do not rename a package, do not merge two of them:',
       '',
       cay,
       '',
+    );
+    // Bộ 54 lời giải viết TRƯỚC tờ checklist giấy (21/09/2026); 31 bài thiếu
+    // repository. Đưa cây đó cho AI kèm chữ "dùng y như này" là để AI dạy lại
+    // đúng điều tờ giấy cấm — nên cây thiếu gói nào thì nói thẳng ở đây.
+    if (!/\brepository\//.test(cay)) {
+      phan.push(
+        '!! This reference solution was written BEFORE the paper checklist and has',
+        '!! NO repository/. The checklist (item 1.1) makes repository/ MANDATORY:',
+        '!! add it — it holds this program\'s data (the collection, or the array /',
+        '!! numbers / text an algorithm works on) with plain CRUD — and NEVER tell',
+        '!! the student this assignment needs no repository.',
+        '',
+      );
+    }
+    phan.push(
       'Data files (.txt/.dat/.csv) sit at the PROJECT ROOT next to build.xml,',
       'never inside src/.',
       '',
@@ -176,23 +191,22 @@ export function khungChoPrompt(ex: BaiCoKhung, coCay = true): string {
     '  1. model      - the data. Nothing else compiles until it exists.',
     '  2. constants  - Message + Constants: every sentence and number, once.',
     '  3. utils      - Validation (and FileUtils if this brief reads a file).',
-    '  4. repository - the collection + CRUD, if this brief keeps a collection.',
+    '  4. repository - ALWAYS: the program data + plain CRUD (checklist 1.1).',
     '  5. service    - the rules/algorithm, if this brief calculates anything.',
     '  6. dto        - Request/Response, so no method needs a third parameter.',
     '  7. controller - the wiring. No Scanner, no print.',
-    '  8. view       - the printing.',
-    '  9. main       - the menu loop and the one Scanner.',
+    '  8. view       - ResponseDTO attribute + setter + display(), no parameters.',
+    '  9. main       - the menu loop, the one Scanner, all input/validation/file',
+    '                  reading; ONE controller call per menu case.',
     'Compile after EACH step. Never write all of it and press Run once.',
     '',
     'THE ORDER TO SELF-REVIEW BEFORE CALLING THE LECTURER  (his refusal gates',
     'come first — losing one of them means the work is not even read):',
-    '  1. Structure: are the packages above all present, with the right classes?',
-    '  2. Comments: a one-line // above every method and every branch.',
-    '  3. Naming/convention: class PascalCase, method+variable camelCase,',
-    '     constant UPPER_SNAKE, 4-space indent, no tabs.',
-    '  4. Run the happy path and EVERY validation message; compare the console',
+    '  1. The paper check sheet, item by item: all 25 items "O" — structure (1.1),',
+    '     names (1.2-1.5), comments (1.6), formatting (2.1-2.11), 3.1-3.8.',
+    '  2. Run the happy path and EVERY validation message; compare the console',
     '     with the expected screen character by character.',
-    '  5. Only then: SOLID / design pattern / "what if he changes a requirement".',
+    '  3. Only then: SOLID / design pattern / "what if he changes a requirement".',
   );
   return phan.join('\n');
 }

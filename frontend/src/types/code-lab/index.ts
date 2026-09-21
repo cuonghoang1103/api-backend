@@ -292,7 +292,37 @@ export interface LabRoomIntro {
   khuonMau?: Array<{ ten: string; vietSao: string; khiNao: string }>;
   bayCanTranh: string[];
   cauHoiVanDap: string[];
+  /** Mục của tờ checklist giấy mà riêng đề này dễ trượt nhất. */
+  checklistChuY?: Array<{ stt: string; viSao: string }>;
   locUocTinh: number;
+  /** Bản lưu soạn theo luật CŨ (trước tờ checklist giấy) và chưa soạn lại được. */
+  _cuLuat?: boolean;
+}
+
+/** Một mục của tờ "Coding check sheet" giấy thầy phát (21/09/2026). */
+export interface ChecklistThayMuc {
+  stt: string;
+  nhom: 'Common' | 'Coding Convention' | 'Performance';
+  ngan: string;
+  nguyenVan: string;
+  cachDung: string;
+  cham: 'may' | 'ai' | 'ca-hai';
+}
+
+export type KetChecklist = 'dat' | 'truot' | 'ruiRo';
+
+/** Một dòng của tờ checklist sau khi chấm bài nộp: máy đo + AI phán, đã ghép. */
+export interface LabRoomChecklistRow {
+  stt: string;
+  nhom: ChecklistThayMuc['nhom'];
+  ngan: string;
+  ket: KetChecklist;
+  may: KetChecklist | null;
+  ai: KetChecklist | null;
+  chiTiet: string;
+  file: string | null;
+  dong: number | null;
+  bangChung: Array<{ file: string; dong: number | null; ghiChu: string; ket: 'truot' | 'ruiRo' }>;
 }
 
 export interface LabRoomReview {
@@ -304,13 +334,23 @@ export interface LabRoomReview {
     khopManHinh: 'khop' | 'lech' | 'khong-chac';
     lechChoNao?: string[];
   };
-  theoQuyTac: Array<{ muc: string; ket: 'dat' | 'thieu' | 'sai'; chiTiet: string; file?: string | null; dong?: number | null }>;
+  /** Chỉ có ở kết quả chấm theo luật cũ — bản mới dùng `checklist`. */
+  theoQuyTac?: Array<{ muc: string; ket: 'dat' | 'thieu' | 'sai'; chiTiet: string; file?: string | null; dong?: number | null }>;
+  /** 25 dòng của tờ checklist giấy, đúng thứ tự tờ giấy. */
+  checklist?: LabRoomChecklistRow[];
+  soTruot?: number;
+  /** Luồng chạy của chính chương trình nộp lên, từng tầng. */
+  luongChay?: Array<{ tang: string; buoc: string }>;
+  danhGiaThietKe?: string;
+  may?: { soFileJava: number; goi: string[]; coRepository: boolean } | null;
   thieuSoVoiDe: string[];
   hieuBaiKhong: Array<{ hoi: string; viSao: string; traLoiTot: string }>;
   phaiSuaTruocKhiNop: string[];
   diemManh: string[];
   nhanXet: string;
   chamLuc: string;
+  /** Chấm theo luật cũ — chưa có tờ checklist 25 mục, cần nộp lại. */
+  _cuLuat?: boolean;
 }
 
 export interface LabRoomGuide {
@@ -320,6 +360,7 @@ export interface LabRoomGuide {
   cauHoiChacChanBiHoi: Array<{ hoi: string; traLoiNgan: string }>;
   dungLam: string[];
   chotHa: string;
+  _cuLuat?: boolean;
 }
 
 export interface LabRoomChatTurn {

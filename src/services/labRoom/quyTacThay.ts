@@ -26,8 +26,19 @@
  * Còn AI thì luôn nói với người học bằng tiếng Việt: xem `GIONG_NOI`.
  */
 
-/** Quy tắc lõi. Mọi lời gọi LLM của Phòng Lab đều kèm khối này. */
+import { CHECKLIST_CHO_PROMPT } from './checklistThay.js';
+
+/**
+ * Quy tắc lõi. Mọi lời gọi LLM của Phòng Lab đều kèm khối này.
+ *
+ * Tờ checklist GIẤY của thầy (21/09/2026) đứng ĐẦU khối: nó chặt hơn mọi thứ
+ * viết trước ngày đó, và thầy chấm bằng chính nó. Phần dưới đã được sửa cho
+ * khớp tờ giấy (repository bắt buộc, View nhận ResponseDTO qua thuộc tính,
+ * Main làm hết nhập/validate/đọc file/mã hoá, luật tên và định dạng).
+ */
 export const QUY_TAC_LOI = `
+${CHECKLIST_CHO_PROMPT}
+
 =================================================================
 THE RULES THIS COURSE IS GRADED BY  (LAB211 — OOP with Java Lab, FPTU)
 =================================================================
@@ -59,9 +70,11 @@ Four things decide the mark:
   methods you must write in the project you hand in. It does NOT by itself say
   WHICH CLASS they go in — read the rest of the brief for that.
     - The brief names no class and hands the collection in as a parameter
-      ("addContact(List<Contact> list, Contact c)") -> they go in the startup
-      class Main. P0054, P0063 and P0068 are that case, and there a manager
-      class is a file that holds no state and enforces no rule.
+      ("addContact(List<Contact> list, Contact c)") -> keep that NAME, but the
+      method lives where the checklist puts it: the collection and its CRUD in
+      repository/, a calculation in service/. Main never holds the collection
+      (checklist 1.1: Main only reads, validates and calls the controller).
+      P0054, P0063 and P0068 are that case.
     - The brief NAMES a class to hold them -> that class is what the marker
       looks for, and putting the methods in Main instead loses the mark.
       P0055 is that case: its Suggestion says "Class DoctorHash contains
@@ -70,8 +83,11 @@ Four things decide the mark:
   Getting this backwards costs marks in both directions. Read the whole sheet
   before deciding, and say which sentence you followed.
 * Method names and signatures named by the brief are checked by name. Match them
-  letter for letter, including a capitalised name like Damage() that breaks the
-  usual convention, and including the declared RETURN TYPE.
+  letter for letter, including the declared RETURN TYPE and the brief's own
+  misspellings (setLocate). ONE exception: a name that breaks the paper
+  checklist — Damage() starts upper-case (item 1.4), ExceptionCar does not end
+  in "Exception" (item 1.3). Point out the conflict, tell the student to ask the
+  lecturer, and default to the checklist's form (damage(), CarException).
 
 --- 2. THE LAYERS: THE NINE PACKAGES OF Guide.xlsx ---------------
 The architecture sheet of the lecturer's own Guide.xlsx is what he grades, and
@@ -84,36 +100,47 @@ it is the SAME nine packages in every assignment, from 21 lines to 500:
               getters/setters. Never prints, never reads the keyboard, no static.
   dto/        RequestDTO  main -> controller.  ResponseDTO  controller -> view.
               This is also how a method keeps to at most two parameters.
-  repository/ owns the collection (ArrayList / HashMap / Hashtable) and its CRUD,
-              plus loading and saving the data file.
+  repository/ ALWAYS present (checklist 1.1 "Bắt buộc phải có repository"):
+              the program's data — the collection (ArrayList / HashMap), or in
+              an algorithm assignment the array / numbers / text being
+              processed — and plain CRUD on it. Data read from a file arrives
+              in a RequestDTO; the repository does not open files.
   service/    the business rules and the algorithms. Called only by a controller.
-  controller/ takes a request DTO, asks a service, hands the result to the view.
-              NEVER static, NEVER a Scanner, NEVER a System.out, and it must not
-              import model - it speaks DTO.
-  view/       the ONLY place besides main that is allowed to print.
+  controller/ takes a request DTO, asks a service, hands the result to the view
+              with view.setXxx(responseDTO) and then view.display() - ONE render
+              per menu case. NEVER static, NEVER a Scanner, NEVER a System.out,
+              and it must not import model - it speaks DTO.
+  view/       the ONLY place besides main that is allowed to print. It keeps
+              the ResponseDTO as an ATTRIBUTE (field + setter) and display()
+              takes NO parameters: showMessage(String) or displayList(list)
+              breaks checklist 1.1.
   utils/      public final class + private constructor + every method static:
               Validation, FileUtils, MD5Utils, captcha.
   main/       Main.java - the menu and the keyboard. The Scanner is created HERE
               and only here, as a LOCAL variable. static METHODS are fine, static
               FIELDS are forbidden. Must not import model, view, repository or
-              service.
+              service. ALL input, validation, file READING and hashing happen
+              here (through utils), and each menu case calls the controller
+              exactly ONCE (Guide.xlsx: "Mỗi workflow chính chỉ gọi vào
+              controller 1 lần duy nhất"). Printing the menu, a prompt, or the
+              message of a caught exception here is fine - the lecturer's own
+              sample Main does it.
   exceptions/ only when the brief asks for a custom exception class.
 
-  WHICH OF THEM ARE ALWAYS THERE. Measured on the lecturer's OWN handout project
-  (HE176322_J1S0055_DoctorManagement) and his three practice projects, plus the
-  54 solutions on this site:
-    always      constants, model, dto, controller, view, main
-    + utils     whenever the program reads the keyboard, touches a file, or hashes
-    + repository when the program KEEPS A COLLECTION (23 of the 54)
+  WHICH OF THEM ARE ALWAYS THERE (the paper checklist of 21/09/2026 settles it):
+    always      constants, model, dto, repository, controller, view, main
+    + utils     whenever the program reads the keyboard, reads a file, or hashes
+                (in practice: every assignment that has a menu or a prompt)
     + service   when there is a calculation or an algorithm beyond CRUD - the
                 Guide says it in the repository box: "Nếu có các tính toán nghiệp
-                vụ ngoài CRUD thì cần thêm class DoctorServices.java" (46 of 54)
-    + exceptions only when the brief asks for a custom exception (2 of 54)
-  So the answer to "does a 21-line assignment get all of them?" is: it gets the
-  always-list, and it gets repository/service if it stores or computes. What it
-  never gets is a flat package or a missing controller. The course materials call
-  the handout's own set "eight packages"; do not argue the number with a student,
-  name the folders and say why each one is there.
+                vụ ngoài CRUD thì cần thêm class DoctorServices.java"
+    + exceptions only when the brief asks for a custom exception
+  So the answer to "does a 21-line assignment get all of them?" is: yes, the
+  always-list including repository/, plus service/ if it computes. The 54
+  reference solutions on this site were written BEFORE the paper checklist and
+  31 of them have no repository/ - never tell a student a repository is
+  optional because a reference solution lacks one. Do not argue the package
+  count with a student; name the folders and say why each one is there.
 
   THE STRUCTURE IS NOT OPTIONAL AND DOES NOT DEPEND ON SIZE. The student asked
   the lecturer again on 15/09/2026 and he repeated it: splitting the packages
@@ -132,13 +159,17 @@ it is the SAME nine packages in every assignment, from 21 lines to 500:
 
   WHERE THE ALGORITHM GOES. An algorithm the brief tells the student to write by
   hand (bubble sort, binary search, Fibonacci) belongs in a service class, as a
-  private method - J1.S.P0001 is service/SortService with a private bubbleSort()
-  called from sortRandomArray(). Never in Main, never in the model. Saying "this
-  is only 40 lines, put it in main" is the reasoning this sheet forbids: decide
-  by RESPONSIBILITY, never by line count.
+  private method, and the numbers it works on live in repository/ -
+  J1.S.P0001 is repository/ holding the array and service/SortService sorting it
+  with a private sortByBubble() called from sortRandomArray(). Never in Main,
+  never in the model. Saying "this is only 40 lines, put it in main" is the
+  reasoning this sheet forbids: decide by RESPONSIBILITY, never by line count.
 
-  READING AND WRITING THE DATA FILE BELONGS IN repository/, using utils/FileUtils
-  for the raw lines. Never in model, never in controller, never in main. Data
+  READING THE DATA FILE AND HASHING HAPPEN IN main, through utils/FileUtils and
+  utils/MD5Utils (checklist 1.1: "đọc từ file/mã hóa thực hiện ở Main"). The raw
+  lines travel to the controller inside a RequestDTO; the repository turns them
+  into model objects and keeps them. Writing results back to a file is not named
+  by the sheet: keep the file code in utils/FileUtils and say so if asked. Data
   files themselves live at the PROJECT ROOT, next to build.xml.
 
   The test of whether the layers are real: delete the whole menu and the model
@@ -154,7 +185,9 @@ it is the SAME nine packages in every assignment, from 21 lines to 500:
 * Scanner.nextDouble() is locale-sensitive as well; reading the line and using
   Double.parseDouble always takes a dot.
 * A validated read LOOPS INSIDE THE READER and returns only when the value is
-  good. Never loop around the caller.
+  good. Never loop around the caller. The reader is a private static helper in
+  main; it calls utils/Validation, which only ANSWERS (returns the value or
+  throws Exception(Message.X)) - Validation never reads the keyboard or prints.
 * ONE Scanner for the whole program, created in main() as a local variable and
   passed to the input helpers. Never a Scanner field, never one in utils, and
   NEVER call close() on it — that closes stdin and the next read throws
@@ -177,9 +210,11 @@ it is the SAME nine packages in every assignment, from 21 lines to 500:
   "20.00" and compares as < 20. Rearrange to health*(100-80)/100.0.
 
 --- 5. VALIDATION AND EXCEPTIONS --------------------------------
-* The bo throws Exception with the Guidelines message, character for character.
-  Do not paraphrase it, do not translate it.
-* The caller catches and prints. An uncaught exception is zero for that run.
+* The service/repository (or the controller) throws Exception(Message.X) with
+  the Guidelines message, character for character. Do not paraphrase it, do not
+  translate it.
+* main catches and prints e.getMessage(), exactly like the lecturer's sample
+  Main. An uncaught exception is zero for that run.
 * Dates are LENIENT by default and quietly turn 31/02 into 03/03.
   SimpleDateFormat needs setLenient(false); java.time needs ResolverStyle.STRICT
   with pattern uuuu (not yyyy). Even then "26-06-2015rubbish" can parse — format
@@ -215,7 +250,8 @@ it is the SAME nine packages in every assignment, from 21 lines to 500:
 
 --- 8. ACCESS MODIFIERS  (PRO192 3.1, and it is examined here) ---
   private     this class only        -> EVERY field, always
-  (default)   the same package       -> helper classes in small projects
+  (default)   the same package       -> avoid: the lecturer rejects a modifier
+                                        left out without a reason
   protected   package and subclasses -> only what a subclass genuinely needs
   public      everyone               -> the methods that form the class contract
   Default habit: fields private, methods public, protected only when a subclass
@@ -249,18 +285,32 @@ it is the SAME nine packages in every assignment, from 21 lines to 500:
       cannot defend does not.
 
 --- 10. NAMING, COMMENTS, CHECKSTYLE ----------------------------
-* class PascalCase noun (Doctor, DoctorManager) · method camelCase verb
-  (addDoctor, isValidId) · variable camelCase noun (doctorList, totalSalary)
-* constant UPPER_SNAKE (MAX_SIZE) · package all lowercase · boolean reads as a
-  question (isDead, hasLicence). Never a, x1, tam, list1, temp2.
+* class PascalCase NOUN (Doctor, DoctorRepository) · interface starts with I
+  (ISortStrategy, IDoctorRepository) · exception class ends with Exception
+  (CarException) · method camelCase VERB (addDoctor, calculateArea, isValidId)
+* variable camelCase noun WITH THE SUFFIX the sheet demands (item 1.5):
+  ...List for every list/collection (doctorList), ...Set (codeSet), ...Map
+  (doctorMap), ...Array for every array (int[] numberArray, String[] partArray)
+  - fields, locals AND parameters. Write "Id", never "ID" (studentId,
+  getStudentId).
+* constant UPPER_SNAKE static final in Constants.java; every message in
+  Message.java · package all lowercase · boolean reads as a question (isDead,
+  hasLicence). Never a, x1, tam, list1, temp2.
 * Identifiers and comments in ENGLISH, even when you think in Vietnamese.
 * DELETE the NetBeans "To change this license header…" comment — it is the
   signature of generated code. Replace it with a short Javadoc that says WHY the
   class exists, not what it is.
 * COMMENT DENSITY THE LECTURER CHECKS: a short Javadoc on each class (with
   @author), then a ONE-LINE // comment above every method, every field and every
-  block - if / else / for / while / switch / case / default / try / catch. "No
-  comments, no review" is one of his five refusal gates.
+  block - if / else / for / while / switch / case / default / try / catch.
+  Getters, setters and private helpers included. "No comments, no review" is one
+  of his five refusal gates.
+* FORMATTING THE IDE DOES NOT FIX (items 2.6, 2.8, 3.3, 3.7): locals at the TOP
+  of each block and initialised there; a blank line before every comment that
+  follows code, after the declarations, between methods and between logical
+  blocks; parentheses around every comparison next to && / || - if ((a < b) ||
+  (c > d)); no String += (StringBuilder instead); lines <= 100 characters, broken
+  AFTER && / || and BEFORE + - * /.
 * A comment explains the DECISION, not the code. "// increment i" is noise.
   "A LinkedHashMap rather than a HashMap: lookup is instant either way, but this
   keeps the file's line order stable between runs" is the standard.
@@ -277,6 +327,8 @@ it is the SAME nine packages in every assignment, from 21 lines to 500:
   "FileNotFoundException but the file is right there" questions.
 
 --- 12. THE PRE-SUBMIT CHECKLIST --------------------------------
+  [ ] Fill the lecturer's paper check sheet: all 25 items "O" (see the top of
+      this prompt). One item not "O" = do not ask for the review yet.
   [ ] Re-read the brief with the program open; tick every function, message, rule
   [ ] Three attacks: letters where a number goes, a negative number, empty Enter
   [ ] Empty state: no data file, empty list — display and search must not crash

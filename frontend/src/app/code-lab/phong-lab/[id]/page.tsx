@@ -21,9 +21,27 @@ import {
   Pencil, Presentation, Target, Trash2, PlayCircle,
 } from 'lucide-react';
 import { codeLabApi } from '@/lib/code-lab-api';
-import type { LabRoom, LabRoomItem } from '@/types/code-lab';
+import type { LabRoom, LabRoomIntro, LabRoomItem, LabRoomReview } from '@/types/code-lab';
 import { DifficultyBadge, ProgressRing } from '@/components/code-lab/shared';
 import { GioiThieuBai, TroGiang, NopBai, HuongDanReview } from '@/components/code-lab/LabRoomPanels';
+import { ChecklistThay } from '@/components/code-lab/ChecklistThay';
+
+/**
+ * Màn đủ rộng cho cột checklist thứ ba (Tailwind `xl`). Vẽ bảng ở MỘT chỗ duy
+ * nhất theo bề rộng thay vì vẽ hai lần rồi ẩn bằng CSS — hai bản thì ô "Tự
+ * soát" ở bản ẩn không cập nhật theo bản đang hiện.
+ */
+function useManHinhRong(): boolean {
+  const [rong, setRong] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1280px)');
+    const doi = () => setRong(mq.matches);
+    doi();
+    mq.addEventListener('change', doi);
+    return () => mq.removeEventListener('change', doi);
+  }, []);
+  return rong;
+}
 
 type Tab = 'gioi-thieu' | 'tro-giang' | 'nop-bai' | 'review';
 
@@ -44,6 +62,11 @@ export default function PhongLabPage() {
   const [suaTen, setSuaTen] = useState(false);
   const [tenMoi, setTenMoi] = useState('');
   const [goalMoi, setGoalMoi] = useState<number>(750);
+  // Kết quả chấm của bài đang mở: tấm "Nộp bài" và bảng checklist cùng đọc.
+  const [ketQua, setKetQua] = useState<LabRoomReview | null>(null);
+  // Mục checklist mà phần giảng đề nói đề này dễ trượt.
+  const [chuY, setChuY] = useState<string[]>([]);
+  const rong = useManHinhRong();
 
   const tai = useCallback(async () => {
     try {
@@ -62,6 +85,28 @@ export default function PhongLabPage() {
     () => room?.items.find((i) => i.id === room.activeItemId) || null,
     [room],
   );
+
+  // Đổi bài thì tải kết quả chấm gần nhất của bài đó (nếu có) — bảng checklist
+  // cần nó ngay cả khi người học chưa mở tab "Nộp bài". Cố ý chỉ phụ thuộc id
+  // bài: nộp xong thì `coKetQuaCham` lật true và kết quả MỚI đã có trong state
+  // qua `onCham`, tải lại lúc đó chỉ làm màn hình nháy.
+  const idDangMo = active?.id ?? null;
+  const coChamCu = !!active?.coKetQuaCham;
+  useEffect(() => {
+    setKetQua(null);
+    setChuY([]);
+    if (!idDangMo || !coChamCu) return;
+    let conDung = true;
+    codeLabApi.labRoomLastReview(roomId, idDangMo)
+      .then((r) => { if (conDung) setKetQua(r.data.data); })
+      .catch(() => { /* không đọc được bản cũ: để trống, nộp lại là có */ });
+    return () => { conDung = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId, idDangMo]);
+
+  const khiTaiGioiThieu = useCallback((intro: LabRoomIntro) => {
+    setChuY((intro.checklistChuY || []).map((c) => String(c.stt)));
+  }, []);
 
   // Mở bài đầu tiên chưa đạt khi vào phòng lần đầu — không ai vào phòng để
   // ngắm danh sách, họ vào để làm bài tiếp theo.
@@ -168,7 +213,7 @@ export default function PhongLabPage() {
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[300px_minmax(0,1fr)]">
+      <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_300px]">
         {/* Danh sách bài trong phòng */}
         <aside className="rounded-2xl border" style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
           <header className="border-b px-4 py-3 text-sm font-bold" style={{ borderColor: 'var(--border-color)' }}>
@@ -249,13 +294,39 @@ export default function PhongLabPage() {
                 ))}
               </div>
 
-              {tabHienHanh === 'gioi-thieu' && <GioiThieuBai key={`i-${active.id}`} roomId={roomId} item={active} />}
+              {/* Màn hẹp: bảng checklist gập lại ngay trên nội dung tab. */}
+              {!rong && (
+                <details className="mb-4" open={!!ketQua?.checklist?.length}>
+                  <summary className="cursor-pointer rounded-xl border px-3 py-2 text-xs font-semibold"
+                    style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-secondary)' }}>
+                    Tờ checklist 25 mục của thầy
+                    {ketQua?.checklist?.length ? ` — ${ketQua.checklist.filter((r) => r.ket === 'truot').length} mục trượt` : ''}
+                  </summary>
+                  <div className="mt-2">
+                    <ChecklistThay itemId={active.id} ketQua={ketQua} chuY={chuY} />
+                  </div>
+                </details>
+              )}
+
+              {tabHienHanh === 'gioi-thieu' && <GioiThieuBai key={`i-${active.id}`} roomId={roomId} item={active} onTai={khiTaiGioiThieu} />}
               {tabHienHanh === 'tro-giang' && <TroGiang key={`c-${active.id}`} roomId={roomId} item={active} />}
-              {tabHienHanh === 'nop-bai' && <NopBai key={`s-${active.id}`} roomId={roomId} item={active} onXong={setRoom} />}
+              {tabHienHanh === 'nop-bai' && (
+                <NopBai key={`s-${active.id}`} roomId={roomId} item={active} ketQua={ketQua}
+                  onCham={(kq, phong) => { setKetQua(kq); setRoom(phong); }} />
+              )}
               {tabHienHanh === 'review' && active.status === 'PASSED' && <HuongDanReview key={`g-${active.id}`} roomId={roomId} item={active} />}
             </>
           )}
         </main>
+
+        {/* Màn rộng: bảng checklist là cột thứ ba, luôn trong tầm mắt. */}
+        {rong && active && (
+          <aside className="min-w-0">
+            <div className="sticky top-20">
+              <ChecklistThay itemId={active.id} ketQua={ketQua} chuY={chuY} />
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   );

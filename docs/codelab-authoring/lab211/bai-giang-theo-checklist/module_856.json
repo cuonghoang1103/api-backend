@@ -1,0 +1,176 @@
+{
+ "id": 856,
+ "name": "Algorithm Reference — usage, code review, measured comparisons",
+ "blocks": [
+  {
+   "text": "Choosing an algorithm",
+   "type": "part",
+   "number": "1",
+   "textVi": "Chọn thuật toán",
+   "subtitle": "Read the brief first: seven assignments name the algorithm and forbid the library",
+   "subtitleVi": "Đọc đề trước đã: bảy bài chỉ đích danh thuật toán và cấm dùng thư viện"
+  },
+  {
+   "html": "<p>Every algorithm below appears in a LAB211 brief by name. This page gives each one the same four things: the idea, code you can compile, the bugs a marker looks for, and an honest comparison with its neighbours.</p><p>The comparison numbers on this page were <strong>measured on a real run</strong>, not quoted from a textbook. Where a number looks surprising, it surprised the author too.</p><p>The sort and search methods are written to the LAB211 coding check sheet — verb names (<code>sortByBubble</code>, <code>searchBinary</code>), <code>{}</code> on every <code>if</code>/<code>for</code>/<code>else</code>, one statement and one declaration per line, parentheses around each comparison — so they are the shape to copy into your Service. The counters (<code>comparisonCount</code>, <code>moveCount</code>, <code>stepCount</code>) and <code>main()</code> exist only to measure: leave them out of your submission. Every program compiles with <code>javac --release 8</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Mọi thuật toán dưới đây đều được một đề LAB211 gọi đích danh. Trang này cho mỗi cái bốn thứ như nhau: ý tưởng, code biên dịch được, những lỗi mà người chấm sẽ soi, và một so sánh trung thực với các thuật toán họ hàng.</p><p>Các con số so sánh trên trang này được <strong>đo bằng một lần chạy thật</strong>, không phải chép từ sách. Chỗ nào con số trông lạ thì nó cũng đã làm chính người viết bất ngờ.</p><p>Các method sắp xếp và tìm kiếm được viết theo tờ Coding check sheet của LAB211 — tên mở đầu bằng động từ (<code>sortByBubble</code>, <code>searchBinary</code>), mọi <code>if</code>/<code>for</code>/<code>else</code> đều có <code>{}</code>, mỗi dòng một lệnh và một khai báo, ngoặc quanh từng phép so sánh — nên đó là khuôn để chép vào Service của bạn. Các biến đếm (<code>comparisonCount</code>, <code>moveCount</code>, <code>stepCount</code>) và <code>main()</code> chỉ để đo: đừng đưa chúng vào bài nộp. Mọi chương trình đều biên dịch được bằng <code>javac --release 8</code>.</p>"
+  },
+  {
+   "html": "<table><thead><tr><th>The brief says…</th><th>Use</th><th>Never use</th></tr></thead><tbody><tr><td>\"using bubble sort\"</td><td>your own bubble sort</td><td><code>Collections.sort</code> — zero marks</td></tr><tr><td>\"sort by salary ascending\"</td><td><code>Comparator</code></td><td>a hand-written sort — slower and more code</td></tr><tr><td>\"search by a part of name\"</td><td>linear scan + <code>contains</code></td><td>binary search — it cannot do this</td></tr><tr><td>\"find by Id\"</td><td><code>Map.containsKey</code>, or a linear <code>findById</code></td><td>sorting first, then searching</td></tr><tr><td>\"check duplicate Id\"</td><td><code>containsKey</code> / <code>findById != null</code></td><td>comparing every pair</td></tr><tr><td>nothing about order</td><td>keep insertion order</td><td>sorting you were not asked for</td></tr></tbody></table>",
+   "type": "prose",
+   "htmlVi": "<table><thead><tr><th>Đề nói…</th><th>Dùng</th><th>Đừng dùng</th></tr></thead><tbody><tr><td>\"using bubble sort\"</td><td>tự viết bubble sort</td><td><code>Collections.sort</code> — không điểm</td></tr><tr><td>\"sắp xếp theo lương tăng dần\"</td><td><code>Comparator</code></td><td>tự viết thuật toán — chậm hơn và dài hơn</td></tr><tr><td>\"tìm theo một phần của tên\"</td><td>duyệt tuyến tính + <code>contains</code></td><td>tìm nhị phân — nó không làm được việc này</td></tr><tr><td>\"tìm theo Id\"</td><td><code>Map.containsKey</code>, hoặc <code>findById</code> tuyến tính</td><td>sắp xếp trước rồi mới tìm</td></tr><tr><td>\"kiểm tra trùng Id\"</td><td><code>containsKey</code> / <code>findById != null</code></td><td>so sánh từng cặp một</td></tr><tr><td>không nói gì về thứ tự</td><td>giữ nguyên thứ tự thêm vào</td><td>tự ý sắp xếp khi không được yêu cầu</td></tr></tbody></table>"
+  },
+  {
+   "text": "The three O(n²) sorts, measured",
+   "type": "part",
+   "number": "2",
+   "textVi": "Ba thuật toán sắp xếp O(n²), có đo đạc",
+   "subtitle": "Bubble, selection and insertion do the same job at very different costs",
+   "subtitleVi": "Nổi bọt, chọn và chèn cùng làm một việc nhưng chi phí rất khác nhau"
+  },
+  {
+   "html": "<p>All three are O(n²), which suggests they cost the same. They do not. This program counts the actual comparisons and moves each one performs on identical data.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Cả ba đều là O(n²), nghe như chi phí ngang nhau. Thực tế thì không. Chương trình dưới đây đếm số phép so sánh và số phép di chuyển thật sự của từng thuật toán trên cùng một bộ dữ liệu.</p>"
+  },
+  {
+   "code": "import java.util.Random;\nimport java.util.function.Consumer;\n\n/**\n * Counts the comparisons and the moves (writes into the array) that bubble, selection and\n * insertion sort really make on the same data. The three sort methods have the shape of a\n * LAB211 SortService; the counters and main() only exist to measure.\n */\npublic class SortCost {\n\n    // Comparisons made by the sort being measured.\n    private long comparisonCount;\n\n    // Writes into the array made by the sort being measured: a swap is 3, a shift is 1.\n    private long moveCount;\n\n    // Measures the three sorts on 200 random values, then on 200 values already in order.\n    public static void main(String[] args) {\n        SortCost sortCost = new SortCost();\n        int[] randomArray = generateSeededArray(200, 42);\n        int[] sortedArray = new int[200];\n\n        // the same random data for all three sorts\n        System.out.println(\"--- 200 random values ---\");\n        sortCost.measureSort(\"bubble\", sortCost::sortByBubble, randomArray);\n        sortCost.measureSort(\"selection\", sortCost::sortBySelection, randomArray);\n        sortCost.measureSort(\"insertion\", sortCost::sortByInsertion, randomArray);\n\n        // 0, 1, 2 ... 199: data that is already in order\n        for (int i = 0; i < sortedArray.length; i++) {\n            sortedArray[i] = i;\n        }\n\n        System.out.println(\"--- 200 ALREADY sorted ---\");\n        sortCost.measureSort(\"bubble\", sortCost::sortByBubble, sortedArray);\n        sortCost.measureSort(\"selection\", sortCost::sortBySelection, sortedArray);\n        sortCost.measureSort(\"insertion\", sortCost::sortByInsertion, sortedArray);\n    }\n\n    // Bubble sort, ascending, in place: swaps neighbours that are in the wrong order; a pass\n    // without any swap ends the sort early.\n    private void sortByBubble(int[] valueArray) {\n        // pass i moves the biggest remaining value to position length - 1 - i\n        for (int i = 0; i < (valueArray.length - 1); i++) {\n            boolean swapped = false;\n\n            // the last i values are already in place, so stop before them\n            for (int j = 0; j < (valueArray.length - 1 - i); j++) {\n                comparisonCount++;\n\n                // wrong order: swap the two neighbours (a swap is three writes)\n                if (valueArray[j] > valueArray[j + 1]) {\n                    int temp = valueArray[j];\n\n                    valueArray[j] = valueArray[j + 1];\n                    valueArray[j + 1] = temp;\n                    moveCount += 3;\n                    swapped = true;\n                }\n            }\n\n            // no swap in a whole pass: the array is already sorted\n            if (!swapped) {\n                return;\n            }\n        }\n    }\n\n    // Selection sort, ascending, in place: swaps the smallest remaining value to the front;\n    // it cannot stop early, sorted input or not.\n    private void sortBySelection(int[] valueArray) {\n        // position i receives the smallest value of valueArray[i..end]\n        for (int i = 0; i < (valueArray.length - 1); i++) {\n            int minIndex = i;\n\n            // look at every value after i for a smaller one\n            for (int j = i + 1; j < valueArray.length; j++) {\n                comparisonCount++;\n\n                // a smaller value: remember where it is\n                if (valueArray[j] < valueArray[minIndex]) {\n                    minIndex = j;\n                }\n            }\n\n            // the smallest is somewhere else: swap it into position i (three writes)\n            if (minIndex != i) {\n                int temp = valueArray[i];\n\n                valueArray[i] = valueArray[minIndex];\n                valueArray[minIndex] = temp;\n                moveCount += 3;\n            }\n        }\n    }\n\n    // Insertion sort, ascending, in place: shifts the bigger values right and drops each\n    // value into the gap; on data already in order it barely moves.\n    private void sortByInsertion(int[] valueArray) {\n        // valueArray[0..i-1] is already sorted; insert valueArray[i] into it\n        for (int i = 1; i < valueArray.length; i++) {\n            int key = valueArray[i];\n            int j = i - 1;\n\n            // walk left while the values are bigger than key\n            while (j >= 0) {\n                comparisonCount++;\n\n                // a value not bigger than key: the gap is right after it\n                if (valueArray[j] <= key) {\n                    break;\n                }\n\n                // a shift is ONE write\n                valueArray[j + 1] = valueArray[j];\n                moveCount++;\n                j--;\n            }\n\n            // after the loop j is one position before the gap\n            valueArray[j + 1] = key;\n            moveCount++;\n        }\n    }\n\n    // Makes size random values from 0 to 999; a fixed seed gives the same array every run.\n    private static int[] generateSeededArray(int size, long seed) {\n        Random random = new Random(seed);\n        int[] valueArray = new int[size];\n\n        // one random value per position\n        for (int i = 0; i < size; i++) {\n            valueArray[i] = random.nextInt(1000);\n        }\n\n        return valueArray;\n    }\n\n    // Sorts a copy of the data with one method, then prints both counters and whether the\n    // result really is in order.\n    private void measureSort(String name, Consumer<int[]> sortMethod, int[] dataArray) {\n        int[] copyArray = dataArray.clone();\n        boolean sorted = true;\n\n        // start from zero, then sort the copy - the original stays for the next sort\n        comparisonCount = 0;\n        moveCount = 0;\n        sortMethod.accept(copyArray);\n\n        // any neighbour pair in the wrong order means the sort failed\n        for (int i = 1; i < copyArray.length; i++) {\n            // this pair is in the wrong order\n            if (copyArray[i - 1] > copyArray[i]) {\n                sorted = false;\n            }\n        }\n\n        System.out.printf(\"%-10s comparisons=%-7d moves=%-7d sorted=%b%n\",\n                name, comparisonCount, moveCount, sorted);\n    }\n}",
+   "type": "code",
+   "title": "Counting what each sort really does",
+   "titleVi": "Đếm xem mỗi thuật toán thật sự làm gì",
+   "language": "java"
+  },
+  {
+   "code": "--- 200 random values ---\nbubble     comparisons=19575   moves=28746   sorted=true\nselection  comparisons=19900   moves=576     sorted=true\ninsertion  comparisons=9777    moves=9781    sorted=true\n--- 200 ALREADY sorted ---\nbubble     comparisons=199     moves=0       sorted=true\nselection  comparisons=19900   moves=0       sorted=true\ninsertion  comparisons=199     moves=199     sorted=true",
+   "type": "code",
+   "title": "Real measured output",
+   "titleVi": "Kết quả đo thật",
+   "language": "text"
+  },
+  {
+   "html": "<p>Three things in those numbers are worth saying out loud in a defence.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Ba điều trong đám số đó rất đáng nói to trong buổi vấn đáp.</p>"
+  },
+  {
+   "html": "<ul><li><strong>Selection sort always makes the same number of comparisons</strong> — sorted or not. It cannot finish early, because it does not know it is done until it has looked at everything.</li><li><strong>Insertion sort collapses to almost nothing on sorted data.</strong> That is why it is the one real algorithm of the three: on nearly-ordered input it behaves like O(n).</li><li><strong>Selection sort moves the fewest items — 576 against bubble's 28,746.</strong> If a \"move\" were expensive — swapping large objects rather than ints — it would be the cheapest of the three despite comparing the most.</li></ul>",
+   "type": "prose",
+   "htmlVi": "<ul><li><strong>Sắp xếp chọn luôn thực hiện đúng bấy nhiêu phép so sánh</strong> — dù mảng đã sắp hay chưa. Nó không thể dừng sớm, vì nó không biết mình đã xong cho tới khi nhìn hết mọi phần tử.</li><li><strong>Sắp xếp chèn tụt xuống gần như không tốn gì trên dữ liệu đã sắp.</strong> Đó là lý do nó là thuật toán thực dụng nhất trong ba cái: với dữ liệu gần như đã có thứ tự, nó hành xử như O(n).</li><li><strong>Sắp xếp chọn di chuyển ít phần tử nhất.</strong> Nếu một phép \"di chuyển\" đắt đỏ — đổi chỗ các đối tượng lớn thay vì số int — thì nó lại là rẻ nhất, dù so sánh nhiều nhất.</li></ul>"
+  },
+  {
+   "text": "O(n²) against O(n log n) — where the wall is",
+   "type": "part",
+   "number": "3",
+   "textVi": "O(n²) so với O(n log n) — bức tường nằm ở đâu",
+   "subtitle": "The size at which a hand-written sort stops being acceptable",
+   "subtitleVi": "Kích thước mà tại đó thuật toán tự viết không còn chấp nhận được"
+  },
+  {
+   "code": "import java.util.Random;\n\n/**\n * Doubles the input of insertion sort and counts the shifts: O(n^2) means about 4x the work\n * for 2x the data.\n */\npublic final class GrowthDemo {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private GrowthDemo() {\n    }\n\n    // Sorts 500, 1000, 2000 and 4000 random values and compares each count with the last.\n    public static void main(String[] args) {\n        int[] sizeArray = {500, 1000, 2000, 4000};\n        long previousCount = 0;\n        long shiftCount = 0;\n        String ratio = \"\";\n\n        // one row per size; the same seed makes every run give the same numbers\n        for (int size : sizeArray) {\n            shiftCount = sortByInsertion(generateSeededArray(size, 7));\n\n            // the first row has nothing to compare with\n            if (previousCount == 0) {\n                ratio = \"-\";\n            } else {\n                ratio = String.format(\"%.2fx\", ((double) shiftCount) / previousCount);\n            }\n\n            // Deliberately NOT a stopwatch: the first timed run also pays for the JVM\n            // compiling the method, so timings are not reproducible. Counting operations\n            // is, and a count is what you can defend.\n            System.out.printf(\"n=%-5d insertion shifts=%-10d ratio vs previous=%s%n\",\n                    size, shiftCount, ratio);\n            previousCount = shiftCount;\n        }\n    }\n\n    // Insertion sort, ascending, in place; returns how many shifts (one write each) it made.\n    private static long sortByInsertion(int[] valueArray) {\n        long shiftCount = 0;\n\n        // valueArray[0..i-1] is already sorted; insert valueArray[i] into it\n        for (int i = 1; i < valueArray.length; i++) {\n            int key = valueArray[i];\n            int j = i - 1;\n\n            // shift every bigger value one place to the right\n            while ((j >= 0) && (valueArray[j] > key)) {\n                shiftCount++;\n                valueArray[j + 1] = valueArray[j];\n                j--;\n            }\n\n            // after the loop j is one position before the gap\n            valueArray[j + 1] = key;\n        }\n\n        return shiftCount;\n    }\n\n    // Makes size random values from 0 to 99999; a fixed seed gives the same array every run.\n    private static int[] generateSeededArray(int size, long seed) {\n        Random random = new Random(seed);\n        int[] valueArray = new int[size];\n\n        // one random value per position\n        for (int i = 0; i < size; i++) {\n            valueArray[i] = random.nextInt(100000);\n        }\n\n        return valueArray;\n    }\n}",
+   "type": "code",
+   "title": "Doubling the input and watching the cost",
+   "titleVi": "Nhân đôi dữ liệu và quan sát chi phí",
+   "language": "java"
+  },
+  {
+   "code": "n=500   insertion shifts=62897      ratio vs previous=-\nn=1000  insertion shifts=250886     ratio vs previous=3.99x\nn=2000  insertion shifts=985874     ratio vs previous=3.93x\nn=4000  insertion shifts=4011891    ratio vs previous=4.07x",
+   "type": "code",
+   "title": "Real measured output",
+   "titleVi": "Kết quả đo thật",
+   "language": "text"
+  },
+  {
+   "html": "<p>Notice the program counts operations instead of using a stopwatch. A single timed run is not reproducible — the first measurement also pays for the JVM compiling the method to machine code, so a smaller input can appear slower than a larger one. A count gives the same answer on every machine, which is what makes it something you can defend.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Để ý là chương trình đếm số phép toán chứ không bấm giờ. Bấm giờ một lần chạy thì không lặp lại được — lần đo đầu tiên còn phải gánh cả việc JVM biên dịch hàm sang mã máy, nên dữ liệu nhỏ hơn có thể trông chậm hơn dữ liệu lớn. Một phép đếm cho ra cùng kết quả trên mọi máy, và chính điều đó làm nó trở thành thứ bạn bảo vệ được.</p>"
+  },
+  {
+   "html": "<p>Read the shift column: every time <code>n</code> doubles, the work roughly <strong>quadruples</strong> — the measured ratios are 3.99x, 3.93x, 4.07x. That is what O(n²) means in practice, and it is a far better answer than reciting the definition.</p><p>For the array sizes a LAB211 marker will type in — ten, twenty values — none of this matters and a hand-written sort is completely fine. Knowing <em>where</em> it stops being fine is the part that earns the mark.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Hãy đọc cột số phép dịch: mỗi lần <code>n</code> nhân đôi thì khối lượng công việc <strong>gấp bốn</strong> — các tỉ lệ đo được là 3,99x; 3,93x; 4,07x. Đó là ý nghĩa thực tế của O(n²), và nó là câu trả lời hay hơn nhiều so với việc đọc thuộc định nghĩa.</p><p>Với cỡ mảng mà người chấm LAB211 sẽ gõ vào — mười, hai mươi phần tử — chuyện này hoàn toàn không quan trọng và thuật toán tự viết là thừa đủ. Biết được nó <em>ngừng</em> ổn ở đâu mới là phần được điểm.</p>"
+  },
+  {
+   "text": "Searching — and why sorting first is usually wrong",
+   "type": "part",
+   "number": "4",
+   "textVi": "Tìm kiếm — và vì sao sắp xếp trước thường là sai",
+   "subtitle": "Linear, binary, and the Map that beats both",
+   "subtitleVi": "Tuyến tính, nhị phân, và Map đánh bại cả hai"
+  },
+  {
+   "code": "import java.util.Arrays;\nimport java.util.Collections;\nimport java.util.HashMap;\nimport java.util.Map;\nimport java.util.Random;\n\n/**\n * Finds one record three ways - linear, binary, Map - and counts the steps; then shows binary\n * search failing on data that is not sorted.\n */\npublic class SearchCost {\n\n    // Steps made by the search being measured.\n    private long stepCount;\n\n    // Looks for the last of 1000 ids three ways, then runs binary search on shuffled data.\n    public static void main(String[] args) {\n        SearchCost searchCost = new SearchCost();\n        String[] idArray = new String[1000];\n        String[] sortedIdArray = null;\n        String[] shuffledIdArray = null;\n        Map<String, Integer> indexMap = new HashMap<>();\n        String target = \"E0999\";\n        int sortedIndex = 0;\n        int shuffledIndex = 0;\n\n        // ids E0000 ... E0999; the last one is the worst case for linear search\n        for (int i = 0; i < idArray.length; i++) {\n            idArray[i] = String.format(\"E%04d\", i);\n        }\n\n        // linear: one step per id until the target\n        searchCost.stepCount = 0;\n        searchCost.searchLinear(idArray, target);\n        System.out.printf(\"linear steps: %d%n\", searchCost.stepCount);\n\n        // binary: sort a copy first, then halve the search part each step\n        sortedIdArray = idArray.clone();\n        Arrays.sort(sortedIdArray);\n        searchCost.stepCount = 0;\n        searchCost.searchBinary(sortedIdArray, target);\n        System.out.printf(\"binary steps: %d%n\", searchCost.stepCount);\n\n        // Map: build the index once, then every lookup is one step\n        for (int i = 0; i < idArray.length; i++) {\n            indexMap.put(idArray[i], i);\n        }\n\n        System.out.printf(\"map lookup:   1 step, result %d%n\", indexMap.get(target));\n\n        // and the catch: the same binary search on idArray (in order) and on a shuffled copy\n        sortedIndex = searchCost.searchBinary(idArray, target);\n        shuffledIdArray = idArray.clone();\n        Collections.shuffle(Arrays.asList(shuffledIdArray), new Random(1));\n        shuffledIndex = searchCost.searchBinary(shuffledIdArray, target);\n        System.out.printf(\"binary on sorted=%b, on shuffled=%b%n\", (sortedIndex >= 0),\n                (shuffledIndex >= 0));\n    }\n\n    // Linear search: compares every id from the first; returns its position or -1.\n    private int searchLinear(String[] idArray, String key) {\n        // one id per step, from the first to the last\n        for (int i = 0; i < idArray.length; i++) {\n            stepCount++;\n\n            // found: stop at once\n            if (idArray[i].equals(key)) {\n                return i;\n            }\n        }\n\n        return -1;\n    }\n\n    // Binary search: halves the part still to search each step; the array MUST be sorted.\n    private int searchBinary(String[] sortedIdArray, String key) {\n        int low = 0;\n        int high = sortedIdArray.length - 1;\n\n        // search while the part [low, high] still holds at least one id\n        while (low <= high) {\n            int middle = low + ((high - low) / 2);\n            int compareResult = sortedIdArray[middle].compareTo(key);\n\n            stepCount++;\n\n            // found: the middle id is the key\n            if (compareResult == 0) {\n                return middle;\n            }\n\n            // middle id smaller: the key can only be on the right, else only on the left\n            if (compareResult < 0) {\n                low = middle + 1;\n            } else {\n                high = middle - 1;\n            }\n        }\n\n        return -1;\n    }\n}",
+   "type": "code",
+   "title": "Three ways to find a record, compared",
+   "titleVi": "Ba cách tìm một bản ghi, đem so sánh",
+   "language": "java"
+  },
+  {
+   "code": "linear steps: 1000\nbinary steps: 10\nmap lookup:   1 step, result 999\nbinary on sorted=true, on shuffled=false",
+   "type": "code",
+   "title": "Real measured output",
+   "titleVi": "Kết quả đo thật",
+   "language": "text"
+  },
+  {
+   "html": "<table><thead><tr><th>Method</th><th>Cost</th><th>Needs</th><th>Right for</th></tr></thead><tbody><tr><td>linear</td><td>O(n)</td><td>nothing</td><td>partial match, small data, unsorted</td></tr><tr><td>binary</td><td>O(log n)</td><td>sorted, exact key</td><td>a large sorted array, exact id</td></tr><tr><td><code>HashMap</code></td><td>O(1)</td><td>a unique key</td><td>find by id, duplicate checks</td></tr></tbody></table>",
+   "type": "prose",
+   "htmlVi": "<table><thead><tr><th>Cách</th><th>Chi phí</th><th>Điều kiện</th><th>Phù hợp khi</th></tr></thead><tbody><tr><td>tuyến tính</td><td>O(n)</td><td>không cần gì</td><td>khớp một phần, dữ liệu nhỏ, chưa sắp</td></tr><tr><td>nhị phân</td><td>O(log n)</td><td>đã sắp, khoá chính xác</td><td>mảng lớn đã sắp, tìm đúng mã</td></tr><tr><td><code>HashMap</code></td><td>O(1)</td><td>khoá duy nhất</td><td>tìm theo mã, kiểm tra trùng</td></tr></tbody></table>"
+  },
+  {
+   "html": "<p>Sorting a list just so you can binary-search it costs more than the linear scan you were avoiding — unless you search many times. That trade-off is the answer to \"why did you not use binary search here\", and it is a question you should want to be asked.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Sắp xếp một danh sách chỉ để có thể tìm nhị phân còn tốn hơn cả phép duyệt tuyến tính mà bạn đang muốn né — trừ khi bạn tìm rất nhiều lần. Chính sự đánh đổi đó là câu trả lời cho \"sao chỗ này em không dùng tìm nhị phân\", và đó là câu bạn nên mong được hỏi.</p>"
+  },
+  {
+   "text": "Code review — the bugs a marker looks for",
+   "type": "part",
+   "number": "5",
+   "textVi": "Review code — những lỗi người chấm sẽ soi",
+   "subtitle": "Six mistakes that appear in almost every first attempt",
+   "subtitleVi": "Sáu lỗi xuất hiện ở gần như mọi bản làm lần đầu"
+  },
+  {
+   "html": "<table><thead><tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead><tbody><tr><td>last element never sorted</td><td>inner loop uses <code>&lt; length - 1 - i</code> but outer runs too few times</td><td>outer loop to <code>length - 1</code></td></tr><tr><td><code>ArrayIndexOutOfBounds</code> in the inner loop</td><td><code>a[j + 1]</code> with <code>j &lt; length</code></td><td>inner bound is <code>length - 1 - i</code></td></tr><tr><td>insertion sort loses an element</td><td>writing <code>a[j] = key</code> instead of <code>a[j + 1]</code></td><td>after the loop <code>j</code> is one past the slot</td></tr><tr><td>binary search never terminates</td><td><code>lo = mid</code> instead of <code>mid + 1</code></td><td>always move past <code>mid</code></td></tr><tr><td>binary search misses a present value</td><td>the array was not sorted</td><td>sort first, or use linear</td></tr><tr><td>recursion throws <code>StackOverflowError</code></td><td>the base case never becomes true</td><td>check the step really moves toward it</td></tr></tbody></table>",
+   "type": "prose",
+   "htmlVi": "<table><thead><tr><th>Triệu chứng</th><th>Nguyên nhân</th><th>Sửa</th></tr></thead><tbody><tr><td>phần tử cuối không bao giờ được sắp</td><td>vòng trong dùng <code>&lt; length - 1 - i</code> nhưng vòng ngoài chạy thiếu lượt</td><td>vòng ngoài phải tới <code>length - 1</code></td></tr><tr><td><code>ArrayIndexOutOfBounds</code> ở vòng trong</td><td><code>a[j + 1]</code> mà lại để <code>j &lt; length</code></td><td>cận vòng trong là <code>length - 1 - i</code></td></tr><tr><td>sắp xếp chèn làm mất một phần tử</td><td>ghi <code>a[j] = key</code> thay vì <code>a[j + 1]</code></td><td>sau vòng lặp, <code>j</code> đã lùi quá vị trí cần đặt một ô</td></tr><tr><td>tìm nhị phân lặp vô tận</td><td><code>lo = mid</code> thay vì <code>mid + 1</code></td><td>luôn phải nhảy qua <code>mid</code></td></tr><tr><td>tìm nhị phân bỏ sót giá trị có thật</td><td>mảng chưa được sắp</td><td>sắp trước, hoặc dùng tuyến tính</td></tr><tr><td>đệ quy ném <code>StackOverflowError</code></td><td>trường hợp cơ sở không bao giờ đúng</td><td>kiểm tra bước nhảy có thật sự tiến về phía nó không</td></tr></tbody></table>"
+  },
+  {
+   "code": "import java.util.Arrays;\n\n/**\n * The off-by-one bug in bubble sort, and proof that it is wrong: sortByBubbleBroken is the\n * DELIBERATE mistake, sortByBubble is the one to copy.\n */\npublic final class OffByOne {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private OffByOne() {\n    }\n\n    // WRONG, on purpose: the outer loop stops one pass too early.\n    private static void sortByBubbleBroken(int[] valueArray) {\n        // THE BUG: (length - 2) where it must be (length - 1)\n        for (int i = 0; i < (valueArray.length - 2); i++) {\n            // the last i values are already in place, so stop before them\n            for (int j = 0; j < (valueArray.length - 1 - i); j++) {\n                // wrong order: swap the two neighbours\n                if (valueArray[j] > valueArray[j + 1]) {\n                    int temp = valueArray[j];\n\n                    valueArray[j] = valueArray[j + 1];\n                    valueArray[j + 1] = temp;\n                }\n            }\n        }\n    }\n\n    // Correct bubble sort: length - 1 passes, each stopping before the sorted tail.\n    private static void sortByBubble(int[] valueArray) {\n        // pass i moves the biggest remaining value to position length - 1 - i\n        for (int i = 0; i < (valueArray.length - 1); i++) {\n            // the last i values are already in place, so stop before them\n            for (int j = 0; j < (valueArray.length - 1 - i); j++) {\n                // wrong order: swap the two neighbours\n                if (valueArray[j] > valueArray[j + 1]) {\n                    int temp = valueArray[j];\n\n                    valueArray[j] = valueArray[j + 1];\n                    valueArray[j + 1] = temp;\n                }\n            }\n        }\n    }\n\n    // Tells whether every value is not bigger than the one after it.\n    private static boolean isSorted(int[] valueArray) {\n        // one neighbour pair in the wrong order is enough to say no\n        for (int i = 1; i < valueArray.length; i++) {\n            // this pair is in the wrong order: stop at once\n            if (valueArray[i - 1] > valueArray[i]) {\n                return false;\n            }\n        }\n\n        return true;\n    }\n\n    // Runs both versions on reversed data, then the broken one on nearly sorted data.\n    public static void main(String[] args) {\n        int[] hardArray = {5, 4, 3, 2, 1};\n        int[] easyArray = {1, 2, 3, 5, 4};\n        int[] brokenArray = hardArray.clone();\n        int[] correctArray = hardArray.clone();\n\n        // fully reversed data: the broken version is caught\n        sortByBubbleBroken(brokenArray);\n        sortByBubble(correctArray);\n        System.out.printf(\"broken:  %s sorted=%b%n\", Arrays.toString(brokenArray),\n                isSorted(brokenArray));\n        System.out.printf(\"correct: %s sorted=%b%n\", Arrays.toString(correctArray),\n                isSorted(correctArray));\n\n        // nearly sorted data: the same bug gives the right answer and hides\n        sortByBubbleBroken(easyArray);\n        System.out.printf(\"broken on easy data: %s sorted=%b%n\", Arrays.toString(easyArray),\n                isSorted(easyArray));\n    }\n}",
+   "type": "code",
+   "title": "The off-by-one, and proof that it is wrong",
+   "titleVi": "Lỗi lệch một đơn vị, và bằng chứng nó sai",
+   "language": "java"
+  },
+  {
+   "code": "broken:  [2, 1, 3, 4, 5] sorted=false\ncorrect: [1, 2, 3, 4, 5] sorted=true\nbroken on easy data: [1, 2, 3, 4, 5] sorted=true",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p>The last line is why this bug survives testing: on data that is nearly sorted already, the broken version produces the right answer. It only fails on the reversed input a marker will inevitably try. <strong>Always test your sort on a fully reversed array.</strong></p>",
+   "type": "prose",
+   "htmlVi": "<p>Dòng cuối chính là lý do lỗi này sống sót qua lúc bạn tự test: với dữ liệu gần như đã sắp sẵn, bản sai vẫn cho kết quả đúng. Nó chỉ hỏng với mảng đảo ngược hoàn toàn — thứ mà người chấm thế nào cũng thử. <strong>Luôn test thuật toán sắp xếp bằng một mảng đảo ngược.</strong></p>"
+  },
+  {
+   "type": "practice",
+   "items": [
+    {
+     "url": "/code-lab/java-core/prime-number-analyzer-with-sieve-method",
+     "note": "An algorithm where the clever version really does beat the obvious one",
+     "label": "Exercise: sieve of Eratosthenes",
+     "noteVi": "Một thuật toán mà bản thông minh thật sự thắng bản hiển nhiên",
+     "labelVi": "Bài tập: sàng Eratosthenes"
+    },
+    {
+     "url": "/code-lab/java-core#module-251",
+     "note": "The structures these algorithms run on top of",
+     "label": "Collections and data structures",
+     "noteVi": "Các cấu trúc dữ liệu mà những thuật toán này chạy bên trên",
+     "labelVi": "Collections và cấu trúc dữ liệu"
+    }
+   ]
+  }
+ ]
+}

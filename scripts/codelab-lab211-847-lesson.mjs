@@ -1,4 +1,9 @@
 /**
+ * ⛔⛔ ĐỪNG CHẠY LẠI (22/09/2026): nội dung module LAB211 trên production đã sửa theo tờ checklist
+ * giấy của thầy; nguồn chuẩn nay là docs/codelab-authoring/lab211/bai-giang-theo-checklist/.
+ * Script này sinh bản CŨ (kiến trúc entity/bo/ui, View nhận tham số) — chạy --apply là đè mất bản đã sửa.
+ */
+/**
  * codelab-lab211-847-lesson.mjs — bài giảng NGẮN dẫn đường cho module 847
  * (54 bài tập). Phần dạy nằm ở 4 module phía trên; đây chỉ là bản đồ.
  *

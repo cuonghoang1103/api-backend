@@ -1,0 +1,495 @@
+{
+ "id": 855,
+ "name": "Java API Reference — the library, filtered to this course",
+ "blocks": [
+  {
+   "text": "How to use this reference",
+   "type": "part",
+   "number": "1",
+   "textVi": "Cách dùng phần tra cứu này",
+   "subtitle": "Every entry: what it does, a runnable example, the trap, and which assignments need it",
+   "subtitleVi": "Mỗi mục: nó làm gì, ví dụ chạy được, cái bẫy, và bài nào cần đến nó"
+  },
+  {
+   "html": "<p>This is the standard library, filtered down to what the LAB211 assignments actually use. Everything else in the JDK you can ignore for this course.</p><p>Each entry ends with the exact list of assignments that need it. Those lists were produced by scanning all 54 briefs, so \"needed by 51 of 54\" is a measurement, not an impression. Every code example on this page was compiled with <code>javac --release 8</code> (Java 8) and run; the printed output is what the program really produced.</p><p><strong>The code follows the LAB211 coding check sheet</strong>: names that say what they hold (<code>idList</code>, <code>salaryMap</code>, <code>columnArray</code>), a verb at the start of every method name, a comment on every method and block, <code>{}</code> on every <code>if</code>/<code>for</code>, one statement and one declaration per line, parentheses around each comparison beside <code>&amp;&amp;</code>/<code>||</code>, and a <code>final</code> class with a private constructor when it has only static methods — so the methods can be copied as they are. Each <code>main()</code> is only a demo harness: it prints literal text so the example stays one runnable file. In your submission that text goes into <code>Message.java</code>/<code>Constants.java</code> and results are printed by the View. A helper class whose comment says <em>in your project: utils/…</em> becomes a <code>public</code> class in its own file there.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Đây là thư viện chuẩn của Java, đã lọc xuống chỉ còn những gì các bài LAB211 thật sự dùng. Phần còn lại của JDK bạn có thể bỏ qua trong môn này.</p><p>Cuối mỗi mục là danh sách chính xác những bài cần đến nó. Danh sách này được quét từ cả 54 đề, nên \"51/54 bài cần\" là số đo, không phải cảm nhận. Mọi ví dụ code trên trang này đều đã được biên dịch bằng <code>javac --release 8</code> (Java 8) và chạy thật; kết quả in ra là thứ chương trình thực sự sinh ra.</p><p><strong>Code trên trang này theo tờ Coding check sheet của LAB211</strong>: tên nói rõ nó chứa gì (<code>idList</code>, <code>salaryMap</code>, <code>columnArray</code>), tên method mở đầu bằng động từ, mọi method và mọi khối đều có comment, mọi <code>if</code>/<code>for</code> đều có <code>{}</code>, mỗi dòng một lệnh và một khai báo, ngoặc quanh từng phép so sánh đứng cạnh <code>&amp;&amp;</code>/<code>||</code>, lớp chỉ có hàm static thì là <code>final</code> và có constructor private — nên các method chép được nguyên văn. Còn <code>main()</code> của mỗi ví dụ chỉ là phần chạy thử: nó in chữ viết thẳng trong code để ví dụ gọn trong một tệp chạy được. Trong bài nộp, chữ đó phải nằm ở <code>Message.java</code>/<code>Constants.java</code> và kết quả được in qua View. Lớp phụ nào có comment ghi <em>in your project: utils/…</em> thì trong bài của bạn là một lớp <code>public</code> ở tệp riêng trong package đó.</p>"
+  },
+  {
+   "text": "Reading from the keyboard — Scanner",
+   "type": "part",
+   "number": "2",
+   "textVi": "Đọc từ bàn phím — Scanner",
+   "subtitle": "The single most-used class in the whole track",
+   "subtitleVi": "Lớp được dùng nhiều nhất trong cả lộ trình"
+  },
+  {
+   "html": "<p><strong>Needed by 51 of the 54 assignments</strong> — <code>J1.L.P0013</code>, <code>J1.L.P0014</code>, <code>J1.L.P0015</code>, <code>J1.L.P0021</code>, <code>J1.L.P0022</code>, <code>J1.L.P0023</code>, <code>J1.L.P0025</code>, <code>J1.S.P0001</code>, <code>J1.S.P0002</code>, <code>J1.S.P0003</code> … and 41 more.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>51/54 bài cần đến</strong> — <code>J1.L.P0013</code>, <code>J1.L.P0014</code>, <code>J1.L.P0015</code>, <code>J1.L.P0021</code>, <code>J1.L.P0022</code>, <code>J1.L.P0023</code>, <code>J1.L.P0025</code>, <code>J1.S.P0001</code>, <code>J1.S.P0002</code>, <code>J1.S.P0003</code> … và 41 bài nữa.</p>"
+  },
+  {
+   "html": "<table><thead><tr><th>Method</th><th>Returns</th><th>Use it</th></tr></thead><tbody><tr><td><code>nextLine()</code></td><td>the whole line as <code>String</code></td><td>always — then convert</td></tr><tr><td><code>nextInt()</code></td><td>an <code>int</code></td><td>avoid: crashes on letters, leaves the newline</td></tr><tr><td><code>nextDouble()</code></td><td>a <code>double</code></td><td>same problem</td></tr><tr><td><code>hasNextLine()</code></td><td><code>boolean</code></td><td>reading a file line by line</td></tr></tbody></table>",
+   "type": "prose",
+   "htmlVi": "<table><thead><tr><th>Phương thức</th><th>Trả về</th><th>Dùng khi</th></tr></thead><tbody><tr><td><code>nextLine()</code></td><td>cả dòng, kiểu <code>String</code></td><td>luôn dùng cái này — rồi tự chuyển kiểu</td></tr><tr><td><code>nextInt()</code></td><td>một <code>int</code></td><td>nên tránh: gặp chữ là chết, còn để lại ký tự xuống dòng</td></tr><tr><td><code>nextDouble()</code></td><td>một <code>double</code></td><td>cùng vấn đề</td></tr><tr><td><code>hasNextLine()</code></td><td><code>boolean</code></td><td>khi đọc tệp theo từng dòng</td></tr></tbody></table>"
+  },
+  {
+   "code": "import java.util.Scanner;\n\n/**\n * MAIN: the only class that touches the Scanner. ONE Scanner, a local variable of main()\n * handed to the input methods - never a static field (the Guide forbids static variables in\n * Main). Validation only receives the String that was read. The prompts are left out so the\n * demo prints a single line.\n */\npublic final class Main {\n\n    // Private constructor: Main only has static methods (checklist 3.4).\n    private Main() {\n    }\n\n    // Starts the program: creates the one Scanner, then reads a name and an age with it.\n    public static void main(String[] args) {\n        // the real program writes new Scanner(System.in); fixed text keeps the demo repeatable\n        Scanner sc = new Scanner(\"Tran Binh\\n25\\n\");\n        String name = \"\";\n        int age = 0;\n\n        // both reads go through the same Scanner, one whole line at a time\n        name = inputName(sc);\n        age = inputAge(sc);\n        System.out.printf(\"%s is %d%n\", name, age);\n    }\n\n    // Reads the name: the whole line, trimmed.\n    private static String inputName(Scanner sc) {\n        return sc.nextLine().trim();\n    }\n\n    // Reads lines until Validation accepts one as an age; the error is printed here, in Main.\n    private static int inputAge(Scanner sc) {\n        String line = \"\";\n\n        // keep reading until the line is a valid age\n        while (true) {\n            line = sc.nextLine();\n\n            // Validation throws with a text from Message; Main prints it and reads again\n            try {\n                return Validation.getAge(line);\n            } catch (Exception e) {\n                // print why the line was refused; the loop then reads the next line\n                System.out.println(e.getMessage());\n            }\n        }\n    }\n}\n\n/**\n * UTILS (utils/Validation.java in your project): receives the String that Main read. No\n * Scanner, no print - a wrong line throws, and Main prints the message.\n */\nfinal class Validation {\n\n    // Private constructor: every method is called through the class name.\n    private Validation() {\n    }\n\n    // Converts the typed age; letters or an empty line throw Message.INVALID_AGE.\n    public static int getAge(String input) throws Exception {\n        int age = 0;\n\n        // parse the trimmed line - never nextInt(), which chokes on letters\n        try {\n            age = Integer.parseInt(input.trim());\n        } catch (NumberFormatException e) {\n            // not a whole number: the text comes from Message, not from a literal here\n            throw new Exception(Message.INVALID_AGE);\n        }\n\n        return age;\n    }\n}\n\n/**\n * MESSAGE (constants/Message.java in your project): every text the program shows.\n */\nfinal class Message {\n\n    // Shown when the age is not a whole number.\n    public static final String INVALID_AGE = \"Age must be a whole number.\";\n\n    // Private constructor: this class only holds constants.\n    private Message() {\n    }\n}",
+   "type": "code",
+   "title": "One Scanner for the whole program — a local variable of main()",
+   "titleVi": "Một Scanner cho cả chương trình — biến local của main()",
+   "language": "java"
+  },
+  {
+   "code": "Tran Binh is 25",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Trap.</strong> Never call <code>sc.close()</code> in a menu program. Closing a Scanner closes the underlying <code>System.in</code>, and every later read throws <code>NoSuchElementException</code>. Open one, keep it, let the JVM clean up at exit.</p><p><strong>Where it lives in LAB211.</strong> The Guide allows the Scanner only in <code>Main</code> and forbids static variables there, so it is a local variable of <code>main()</code>, passed as <code>sc</code> to Main's input methods. <code>Validation</code> receives the <code>String</code> that <code>sc.nextLine()</code> returned — it never reads the keyboard and never prints. When the line is wrong it throws an exception carrying a text from <code>Message</code>; Main prints <code>e.getMessage()</code> and asks again.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Bẫy.</strong> Đừng bao giờ gọi <code>sc.close()</code> trong chương trình có menu. Đóng Scanner là đóng luôn <code>System.in</code> bên dưới, và mọi lần đọc sau đó sẽ ném <code>NoSuchElementException</code>. Mở một cái, giữ nguyên, để JVM tự dọn khi thoát.</p><p><strong>Scanner nằm ở đâu trong LAB211.</strong> Guide chỉ cho dùng Scanner ở <code>Main</code> và cấm biến static ở đó, nên nó là biến local của <code>main()</code>, được truyền dưới tên <code>sc</code> vào các hàm nhập của Main. <code>Validation</code> nhận <code>String</code> mà <code>sc.nextLine()</code> trả về — nó không đọc bàn phím và không in. Dòng sai thì nó ném ngoại lệ mang câu chữ lấy từ <code>Message</code>; Main in <code>e.getMessage()</code> rồi hỏi lại.</p>"
+  },
+  {
+   "text": "Printing — printf and String.format",
+   "type": "part",
+   "number": "3",
+   "textVi": "In ra màn hình — printf và String.format",
+   "subtitle": "Making your screen match the picture in the brief",
+   "subtitleVi": "Làm màn hình của bạn khớp với ảnh trong đề"
+  },
+  {
+   "html": "<p><strong>Needed by 11 of the 54 assignments</strong> by name — <code>J1.L.P0022</code>, <code>J1.S.P0053</code>, <code>J1.S.P0054</code>, <code>J1.S.P0059</code>, <code>J1.S.P0064</code>, <code>J1.S.P0071</code>, <code>J1.S.P0072</code>, <code>J1.S.P0076</code>, <code>J1.S.P0078</code>, <code>J1.S.P0080</code> … and 1 more.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>11/54 bài cần đến</strong> nêu đích danh — <code>J1.L.P0022</code>, <code>J1.S.P0053</code>, <code>J1.S.P0054</code>, <code>J1.S.P0059</code>, <code>J1.S.P0064</code>, <code>J1.S.P0071</code>, <code>J1.S.P0072</code>, <code>J1.S.P0076</code>, <code>J1.S.P0078</code>, <code>J1.S.P0080</code> … và 1 bài nữa.</p>"
+  },
+  {
+   "html": "<table><thead><tr><th>Specifier</th><th>Means</th><th>Example → result</th></tr></thead><tbody><tr><td><code>%s</code></td><td>text</td><td><code>%s</code> → <code>Binh</code></td></tr><tr><td><code>%d</code></td><td>integer</td><td><code>%d</code> → <code>7</code></td></tr><tr><td><code>%.2f</code></td><td>2 decimals</td><td><code>%.2f</code> → <code>1234.50</code></td></tr><tr><td><code>%-15s</code></td><td>left-aligned, width 15</td><td>pads on the right</td></tr><tr><td><code>%10.2f</code></td><td>right-aligned, width 10</td><td>pads on the left</td></tr><tr><td><code>%n</code></td><td>newline</td><td>portable — prefer over <code>\\n</code></td></tr></tbody></table>",
+   "type": "prose",
+   "htmlVi": "<table><thead><tr><th>Ký hiệu</th><th>Nghĩa</th><th>Ví dụ → kết quả</th></tr></thead><tbody><tr><td><code>%s</code></td><td>văn bản</td><td><code>%s</code> → <code>Binh</code></td></tr><tr><td><code>%d</code></td><td>số nguyên</td><td><code>%d</code> → <code>7</code></td></tr><tr><td><code>%.2f</code></td><td>2 chữ số thập phân</td><td><code>%.2f</code> → <code>1234.50</code></td></tr><tr><td><code>%-15s</code></td><td>canh trái, rộng 15</td><td>đệm khoảng trắng bên phải</td></tr><tr><td><code>%10.2f</code></td><td>canh phải, rộng 10</td><td>đệm khoảng trắng bên trái</td></tr><tr><td><code>%n</code></td><td>xuống dòng</td><td>đa nền tảng — nên dùng thay <code>\\n</code></td></tr></tbody></table>"
+  },
+  {
+   "code": "/**\n * printf builds a table on the screen; String.format returns the same text as a String.\n */\npublic final class PrintRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private PrintRef() {\n    }\n\n    // Prints a two-row table with printf, then formats one more row into a String.\n    public static void main(String[] args) {\n        String[][] rowArray = {{\"D001\", \"Tran Binh\", \"1200\"}, {\"D002\", \"Le Hoa\", \"980.5\"}};\n        String line = \"\";\n\n        // the header uses the same widths as the rows, so the columns line up\n        System.out.printf(\"%-6s %-12s %10s%n\", \"CODE\", \"NAME\", \"SALARY\");\n\n        // one printf per row; %10.2f right-aligns the salary with two decimals\n        for (String[] columnArray : rowArray) {\n            System.out.printf(\"%-6s %-12s %10.2f%n\", columnArray[0], columnArray[1],\n                    Double.parseDouble(columnArray[2]));\n        }\n\n        // String.format does the same but hands you the text - use it in toString()\n        line = String.format(\"%-6s %-12s %10.2f\", \"D003\", \"An\", 500.0);\n        System.out.printf(\"[%s]%n\", line);\n    }\n}",
+   "type": "code",
+   "title": "printf builds the table; String.format returns it",
+   "titleVi": "printf in ra bảng; String.format trả về chuỗi",
+   "language": "java"
+  },
+  {
+   "code": "CODE   NAME             SALARY\nD001   Tran Binh       1200.00\nD002   Le Hoa           980.50\n[D003   An               500.00]",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "text": "String — the methods the briefs name",
+   "type": "part",
+   "number": "4",
+   "textVi": "String — những phương thức đề nhắc tới",
+   "subtitle": "Searching by part of a name, splitting a data line, cleaning input",
+   "subtitleVi": "Tìm theo một phần tên, tách dòng dữ liệu, làm sạch dữ liệu nhập"
+  },
+  {
+   "html": "<p><strong>Needed by 20 of the 54 assignments</strong> for partial-name search — <code>J1.L.P0013</code>, <code>J1.L.P0014</code>, <code>J1.L.P0015</code>, <code>J1.L.P0021</code>, <code>J1.S.P0002</code>, <code>J1.S.P0003</code>, <code>J1.S.P0005</code>, <code>J1.S.P0007</code>, <code>J1.S.P0054</code>, <code>J1.S.P0055</code> … and 10 more.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>20/54 bài cần đến</strong> cho chức năng tìm theo một phần tên — <code>J1.L.P0013</code>, <code>J1.L.P0014</code>, <code>J1.L.P0015</code>, <code>J1.L.P0021</code>, <code>J1.S.P0002</code>, <code>J1.S.P0003</code>, <code>J1.S.P0005</code>, <code>J1.S.P0007</code>, <code>J1.S.P0054</code>, <code>J1.S.P0055</code> … và 10 bài nữa.</p>"
+  },
+  {
+   "code": "/**\n * The String methods the LAB211 briefs need: trim, split, partial search, compare, match.\n */\npublic final class StringRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private StringRef() {\n    }\n\n    // Runs every String call once on one line of data and prints the result.\n    public static void main(String[] args) {\n        String rawLine = \"  D001,Tran Binh,Cardiology  \";\n        String line = rawLine.trim();\n        String[] columnArray = line.split(\",\");\n        String name = columnArray[1];\n        String keyword = \"BINH\";\n\n        // trim() removed the outer spaces; length() and isEmpty() measure what is left\n        System.out.printf(\"[%s]%n\", line);\n        System.out.println(line.length());\n        System.out.printf(\"%b %b%n\", line.isEmpty(), \"\".isEmpty());\n\n        // split(\",\") turned the data line into its columns\n        System.out.printf(\"%d | %s%n\", columnArray.length, name);\n\n        // case-insensitive partial search - the \"search by part of name\" rule\n        System.out.println(name.toLowerCase().contains(keyword.toLowerCase()));\n\n        // cut, find and replace inside the name: \"Tran\", 5, \"Tran_Binh\"\n        System.out.println(name.substring(0, 4));\n        System.out.println(name.indexOf(\"Binh\"));\n        System.out.println(name.replace(\" \", \"_\"));\n\n        // join puts the columns back together with a separator\n        System.out.println(String.join(\" | \", columnArray));\n\n        // equals is case-sensitive, equalsIgnoreCase is not; matches tests the WHOLE text\n        System.out.printf(\"%b %b%n\", \"abc\".equals(\"ABC\"), \"abc\".equalsIgnoreCase(\"ABC\"));\n        System.out.println(\"D001\".matches(\"D\\\\d{3}\"));\n        System.out.println(\"D1\".matches(\"D\\\\d{3}\"));\n    }\n}",
+   "type": "code",
+   "title": "Every String call this course needs",
+   "titleVi": "Mọi lời gọi String mà môn này cần",
+   "language": "java"
+  },
+  {
+   "code": "[D001,Tran Binh,Cardiology]\n25\nfalse true\n3 | Tran Binh\ntrue\nTran\n5\nTran_Binh\nD001 | Tran Binh | Cardiology\nfalse true\ntrue\nfalse",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Trap.</strong> <code>split(\",\")</code> on <code>\"a,,b\"</code> gives three parts with an empty middle; on <code>\"a,b,\"</code> it gives <strong>two</strong>, because trailing empties are dropped. If your file has an optional last column, check <code>columnArray.length</code> before touching <code>columnArray[3]</code> or you will meet <code>ArrayIndexOutOfBoundsException</code> on exactly one row of the marker's test data.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Bẫy.</strong> <code>split(\",\")</code> trên <code>\"a,,b\"</code> cho ba phần với phần giữa rỗng; nhưng trên <code>\"a,b,\"</code> lại chỉ cho <strong>hai</strong>, vì các phần rỗng ở cuối bị bỏ. Nếu tệp của bạn có cột cuối không bắt buộc, hãy kiểm tra <code>columnArray.length</code> trước khi chạm vào <code>columnArray[3]</code>, nếu không bạn sẽ gặp <code>ArrayIndexOutOfBoundsException</code> ở đúng một dòng trong dữ liệu thử của người chấm.</p>"
+  },
+  {
+   "code": "System.out.println(java.util.Arrays.toString(\"a,,b\".split(\",\")));\nSystem.out.println(\"a,,b\".split(\",\").length);\nSystem.out.println(java.util.Arrays.toString(\"a,b,\".split(\",\")));\nSystem.out.println(\"a,b,\".split(\",\").length);\n\n// the limit -1 keeps the empty parts at the end\nSystem.out.println(\"a,b,\".split(\",\", -1).length);",
+   "type": "code",
+   "title": "Proving the split trap",
+   "titleVi": "Chứng minh cái bẫy của split",
+   "language": "java"
+  },
+  {
+   "code": "[a, , b]\n3\n[a, b]\n2\n3",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "text": "Turning text into numbers safely",
+   "type": "part",
+   "number": "5",
+   "textVi": "Chuyển văn bản thành số một cách an toàn",
+   "subtitle": "Integer.parseInt, Double.parseDouble, and the exception that saves you",
+   "subtitleVi": "Integer.parseInt, Double.parseDouble, và cái ngoại lệ cứu bạn"
+  },
+  {
+   "html": "<p><strong>Needed by 5 of the 54 assignments</strong> explicitly (every brief that says “You must input digit”) — <code>J1.S.P0059</code>, <code>J1.S.P0063</code>, <code>J1.S.P0064</code>, <code>J1.S.P0074</code>, <code>J1.S.P0084</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>5/54 bài cần đến</strong> nêu rõ (mọi đề có câu “You must input digit”) — <code>J1.S.P0059</code>, <code>J1.S.P0063</code>, <code>J1.S.P0064</code>, <code>J1.S.P0074</code>, <code>J1.S.P0084</code>.</p>"
+  },
+  {
+   "code": "/**\n * Integer.parseInt and Double.parseDouble, and the guard around them. convertToInt has the\n * shape of a Validation method: it receives the String that Main read and never prints.\n */\npublic final class ParseRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private ParseRef() {\n    }\n\n    // Returns the int in the text, or null when it is not an int - the caller decides what\n    // to say.\n    public static Integer convertToInt(String input) {\n        // parseInt throws NumberFormatException on letters, \"4.2\" or an empty text\n        try {\n            return Integer.parseInt(input.trim());\n        } catch (NumberFormatException e) {\n            // not a whole number: no message here - Main prints one\n            return null;\n        }\n    }\n\n    // Converts a few texts and prints what comes back.\n    public static void main(String[] args) {\n        // a clean int, then the same int with spaces around it: trim() saves you\n        System.out.println(convertToInt(\"42\"));\n        System.out.println(convertToInt(\"  42  \"));\n\n        // not an int, letters, an empty text: all null\n        System.out.println(convertToInt(\"4.2\"));\n        System.out.println(convertToInt(\"abc\"));\n        System.out.println(convertToInt(\"\"));\n\n        // a decimal number, a number written in base 16, an int shown in base 2\n        System.out.println(Double.parseDouble(\"1234.5\"));\n        System.out.println(Integer.parseInt(\"FF\", 16));\n        System.out.println(Integer.toBinaryString(10));\n    }\n}",
+   "type": "code",
+   "title": "Parsing, and the guard around it",
+   "titleVi": "Chuyển kiểu, và lớp bảo vệ quanh nó",
+   "language": "java"
+  },
+  {
+   "code": "42\n42\nnull\nnull\nnull\n1234.5\n255\n1010",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "text": "Collections — List and Map",
+   "type": "part",
+   "number": "6",
+   "textVi": "Collections — List và Map",
+   "subtitle": "Where your records live while the program runs",
+   "subtitleVi": "Nơi các bản ghi của bạn nằm trong lúc chương trình chạy"
+  },
+  {
+   "html": "<p><strong>Needed by 26 of the 54 assignments</strong> — <code>J1.L.P0013</code>, <code>J1.L.P0014</code>, <code>J1.L.P0015</code>, <code>J1.L.P0021</code>, <code>J1.L.P0022</code>, <code>J1.L.P0023</code>, <code>J1.S.P0010</code>, <code>J1.S.P0050</code>, <code>J1.S.P0052</code>, <code>J1.S.P0054</code> … and 16 more.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>26/54 bài cần đến</strong> — <code>J1.L.P0013</code>, <code>J1.L.P0014</code>, <code>J1.L.P0015</code>, <code>J1.L.P0021</code>, <code>J1.L.P0022</code>, <code>J1.L.P0023</code>, <code>J1.S.P0010</code>, <code>J1.S.P0050</code>, <code>J1.S.P0052</code>, <code>J1.S.P0054</code> … và 16 bài nữa.</p>"
+  },
+  {
+   "code": "import java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.Collections;\nimport java.util.List;\n\n/**\n * The List operations a CRUD program needs: add, insert, get, contains, indexOf, set,\n * remove, and deleting safely while looping.\n */\npublic final class ListRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private ListRef() {\n    }\n\n    // Runs every List operation once and prints the list after it.\n    public static void main(String[] args) {\n        List<String> idList = new ArrayList<>();\n        List<Integer> numberList = new ArrayList<>(Arrays.asList(1, 2, 2, 3));\n        List<String> copyList = null;\n\n        // add at the end twice, then insert at position 1\n        idList.add(\"D001\");\n        idList.add(\"D002\");\n        idList.add(1, \"D003\");\n        System.out.printf(\"%s size=%d%n\", idList, idList.size());\n        System.out.printf(\"%s %b %d%n\", idList.get(0), idList.contains(\"D002\"),\n                idList.indexOf(\"D002\"));\n\n        // update position 0, then delete by value\n        idList.set(0, \"D009\");\n        idList.remove(\"D003\");\n        System.out.println(idList);\n\n        // iterate safely while deleting: go backwards, so no position is skipped\n        for (int i = numberList.size() - 1; i >= 0; i--) {\n            int value = numberList.get(i);\n\n            // remove(int) deletes by position, which is what this loop wants\n            if (value == 2) {\n                numberList.remove(i);\n            }\n        }\n\n        System.out.println(numberList);\n\n        // defensive copy: reversing the copy leaves idList as it was\n        copyList = new ArrayList<>(idList);\n        Collections.reverse(copyList);\n        System.out.println(copyList);\n    }\n}",
+   "type": "code",
+   "title": "List: the operations a CRUD program needs",
+   "titleVi": "List: các thao tác một chương trình CRUD cần",
+   "language": "java"
+  },
+  {
+   "code": "[D001, D003, D002] size=3\nD001 true 2\n[D009, D002]\n[1, 3]\n[D002, D009]",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Needed by 5 of the 54 assignments</strong> — the “check duplicate Id” rule — <code>J1.L.P0023</code>, <code>J1.S.P0055</code>, <code>J1.S.P0058</code>, <code>J1.S.P0065</code>, <code>J1.S.P0067</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>5/54 bài cần đến</strong> — dùng cho luật “check duplicate Id” — <code>J1.L.P0023</code>, <code>J1.S.P0055</code>, <code>J1.S.P0058</code>, <code>J1.S.P0065</code>, <code>J1.S.P0067</code>.</p>"
+  },
+  {
+   "code": "import java.util.LinkedHashMap;\nimport java.util.Map;\n\n/**\n * Map: find by id in one step. containsKey is the \"check duplicate Id\" rule of the briefs.\n */\npublic final class MapRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private MapRef() {\n    }\n\n    // Runs every Map operation once and prints the result.\n    public static void main(String[] args) {\n        Map<String, Double> salaryMap = new LinkedHashMap<>();\n\n        // LinkedHashMap keeps the order in which the keys were put\n        salaryMap.put(\"E001\", 1200.0);\n        salaryMap.put(\"E002\", 900.0);\n\n        // containsKey is the duplicate check; get of a missing key is null, NOT an error\n        System.out.println(salaryMap.containsKey(\"E001\"));\n        System.out.println(salaryMap.get(\"E999\"));\n        System.out.println(salaryMap.getOrDefault(\"E999\", 0.0));\n\n        // put with a key that is already there replaces the value: the size stays 2\n        salaryMap.put(\"E001\", 1500.0);\n        System.out.println(salaryMap.size());\n\n        // walk every entry, in insertion order\n        for (Map.Entry<String, Double> entry : salaryMap.entrySet()) {\n            System.out.printf(\"%s -> %.1f%n\", entry.getKey(), entry.getValue());\n        }\n\n        // delete by key, then list the keys that are left\n        salaryMap.remove(\"E002\");\n        System.out.println(salaryMap.keySet());\n    }\n}",
+   "type": "code",
+   "title": "Map: instant lookup by id",
+   "titleVi": "Map: tra cứu tức thì theo mã",
+   "language": "java"
+  },
+  {
+   "code": "true\nnull\n0.0\n2\nE001 -> 1500.0\nE002 -> 900.0\n[E001]",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p><code>HashMap</code> has no order at all; <code>LinkedHashMap</code> keeps insertion order and costs nothing extra. Use the second one whenever you will print the contents — otherwise your listing comes out in a different order on the marker's machine than on yours.</p>",
+   "type": "prose",
+   "htmlVi": "<p><code>HashMap</code> không có thứ tự gì cả; <code>LinkedHashMap</code> giữ đúng thứ tự thêm vào mà không tốn thêm gì. Hãy dùng cái thứ hai mỗi khi bạn định in nội dung ra — nếu không, danh sách của bạn sẽ hiện ra theo thứ tự khác trên máy người chấm so với trên máy bạn.</p>"
+  },
+  {
+   "text": "Sorting with the library",
+   "type": "part",
+   "number": "7",
+   "textVi": "Sắp xếp bằng thư viện",
+   "subtitle": "When the brief does NOT name an algorithm, use these",
+   "subtitleVi": "Khi đề KHÔNG chỉ định thuật toán, hãy dùng những cái này"
+  },
+  {
+   "html": "<p><strong>Needed by 6 of the 54 assignments</strong> — <code>J1.L.P0021</code>, <code>J1.S.P0056</code>, <code>J1.S.P0059</code>, <code>J1.S.P0063</code>, <code>J1.S.P0068</code>, <code>J1.S.P0085</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>6/54 bài cần đến</strong> — <code>J1.L.P0021</code>, <code>J1.S.P0056</code>, <code>J1.S.P0059</code>, <code>J1.S.P0063</code>, <code>J1.S.P0068</code>, <code>J1.S.P0085</code>.</p>"
+  },
+  {
+   "code": "import java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.Collections;\nimport java.util.Comparator;\nimport java.util.List;\nimport java.util.stream.Collectors;\n\n/**\n * Library sorting: Arrays.sort for primitives, Collections.sort and List.sort with a\n * Comparator for objects. In LAB211 the sort lives in the Service, never in the Controller.\n */\npublic final class SortRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private SortRef() {\n    }\n\n    // Sorts numbers, names and doctors, printing each result.\n    public static void main(String[] args) {\n        int[] numberArray = {5, 1, 12, -5};\n        List<String> nameList = new ArrayList<>(Arrays.asList(\"Le\", \"An\", \"Binh\"));\n        List<Doctor> doctorList = new ArrayList<>(Arrays.asList(\n                new Doctor(\"D2\", \"Hoa\", 900), new Doctor(\"D1\", \"An\", 1500),\n                new Doctor(\"D3\", \"Binh\", 900)));\n\n        // primitives: ascending only\n        Arrays.sort(numberArray);\n        System.out.println(Arrays.toString(numberArray));\n\n        // natural order, then the reverse of it\n        Collections.sort(nameList);\n        System.out.println(nameList);\n        nameList.sort(Comparator.reverseOrder());\n        System.out.println(nameList);\n\n        // salary ascending; equal salaries keep their order because the sort is stable\n        doctorList.sort(Comparator.comparingDouble(Doctor::getSalary));\n        System.out.println(getNameList(doctorList));\n\n        // salary descending, then name ascending when the salaries are equal\n        doctorList.sort(Comparator.comparingDouble(Doctor::getSalary).reversed()\n                .thenComparing(Doctor::getName));\n        System.out.println(getNameList(doctorList));\n    }\n\n    // Returns the names of the doctors, in the current order of the list.\n    private static List<String> getNameList(List<Doctor> doctorList) {\n        return doctorList.stream().map(Doctor::getName).collect(Collectors.toList());\n    }\n}\n\n/**\n * MODEL: a doctor - only fields and getters, no input, no print.\n */\nclass Doctor {\n\n    // Code of the doctor, for example D1.\n    private final String code;\n\n    // Full name.\n    private final String name;\n\n    // Monthly salary.\n    private final double salary;\n\n    // Creates a doctor with all three fields.\n    Doctor(String code, String name, double salary) {\n        this.code = code;\n        this.name = name;\n        this.salary = salary;\n    }\n\n    // Returns the code.\n    public String getCode() {\n        return code;\n    }\n\n    // Returns the name.\n    public String getName() {\n        return name;\n    }\n\n    // Returns the salary.\n    public double getSalary() {\n        return salary;\n    }\n}",
+   "type": "code",
+   "title": "Arrays.sort, Collections.sort, Comparator",
+   "titleVi": "Arrays.sort, Collections.sort, Comparator",
+   "language": "java"
+  },
+  {
+   "code": "[-5, 1, 5, 12]\n[An, Binh, Le]\n[Le, Binh, An]\n[Hoa, Binh, An]\n[An, Binh, Hoa]",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Read the brief first.</strong> Seven assignments name the algorithm — for those, <code>Collections.sort</code> is a zero. Everywhere else it is the right answer and shows you know the library.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Đọc đề trước đã.</strong> Bảy bài chỉ đích danh thuật toán — với những bài đó, dùng <code>Collections.sort</code> là không điểm. Còn ở mọi chỗ khác thì nó là câu trả lời đúng và cho thấy bạn nắm được thư viện.</p>"
+  },
+  {
+   "text": "Math — geometry and random data",
+   "type": "part",
+   "number": "8",
+   "textVi": "Math — hình học và sinh dữ liệu ngẫu nhiên",
+   "subtitle": "Areas, volumes, and the random arrays the sorting briefs ask for",
+   "subtitleVi": "Diện tích, thể tích, và mảng ngẫu nhiên mà các đề sắp xếp yêu cầu"
+  },
+  {
+   "html": "<p><strong>Needed by 8 of the 54 assignments</strong> with a randomly generated array — <code>J1.S.P0001</code>, <code>J1.S.P0002</code>, <code>J1.S.P0003</code>, <code>J1.S.P0004</code>, <code>J1.S.P0005</code>, <code>J1.S.P0006</code>, <code>J1.S.P0010</code>, <code>J1.S.P0081</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>8/54 bài cần đến</strong> có yêu cầu sinh mảng ngẫu nhiên — <code>J1.S.P0001</code>, <code>J1.S.P0002</code>, <code>J1.S.P0003</code>, <code>J1.S.P0004</code>, <code>J1.S.P0005</code>, <code>J1.S.P0006</code>, <code>J1.S.P0010</code>, <code>J1.S.P0081</code>.</p>"
+  },
+  {
+   "html": "<p><strong>Needed by 4 of the 54 assignments</strong> for geometry — <code>J1.S.P0050</code>, <code>J1.S.P0061</code>, <code>J1.S.P0067</code>, <code>J1.S.P0080</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>4/54 bài cần đến</strong> cho phần hình học — <code>J1.S.P0050</code>, <code>J1.S.P0061</code>, <code>J1.S.P0067</code>, <code>J1.S.P0080</code>.</p>"
+  },
+  {
+   "code": "import java.util.Arrays;\n\n/**\n * Math in the two shapes this course needs: random test data and geometry.\n */\npublic final class MathRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private MathRef() {\n    }\n\n    // Fills an array with random numbers, then prints the geometry formulas.\n    public static void main(String[] args) {\n        int[] valueArray = new int[8];\n        boolean allInRange = false;\n        double radius = 2.0;\n        double side = 3.0;\n\n        // 1. random test data - \"generate random integer in number range\": 0..99\n        for (int i = 0; i < valueArray.length; i++) {\n            valueArray[i] = (int) (Math.random() * 100);\n        }\n\n        // every value must be in [0, 100): one pair of parentheses per comparison\n        allInRange = Arrays.stream(valueArray).allMatch(value -> (value >= 0) && (value < 100));\n        System.out.printf(\"%d values, all in range: %b%n\", valueArray.length, allInRange);\n\n        // 2. geometry\n        System.out.printf(\"circle area      %.2f%n\", Math.PI * radius * radius);\n        System.out.printf(\"circle perimeter %.2f%n\", 2 * Math.PI * radius);\n        System.out.printf(\"sphere volume    %.2f%n\", (4.0 / 3.0) * Math.PI * Math.pow(radius, 3));\n        System.out.printf(\"cube surface     %.2f%n\", 6 * side * side);\n\n        // square root, absolute value, rounding to the nearest whole number\n        System.out.printf(\"%s %d %d%n\", Math.sqrt(16), Math.abs(-7), Math.round(2.567));\n    }\n}",
+   "type": "code",
+   "title": "Math in the two shapes this course needs",
+   "titleVi": "Math ở hai dạng môn này cần",
+   "language": "java"
+  },
+  {
+   "code": "8 values, all in range: true\ncircle area      12.57\ncircle perimeter 12.57\nsphere volume    33.51\ncube surface     54.00\n4.0 7 3",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p>Look at the first two numbers: a circle of radius 2 has the same area and perimeter to two decimals. That is a real coincidence at r=2, not a bug — but it is exactly the kind of thing that makes you doubt correct code at 1am, so it is worth having seen once.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Nhìn hai con số đầu: hình tròn bán kính 2 có diện tích và chu vi bằng nhau tới hai chữ số thập phân. Đó là trùng hợp thật ở r=2, không phải lỗi — nhưng đúng là kiểu chuyện làm bạn nghi ngờ code đang đúng lúc 1 giờ sáng, nên gặp trước một lần là đáng.</p>"
+  },
+  {
+   "text": "Dates",
+   "type": "part",
+   "number": "9",
+   "textVi": "Ngày tháng",
+   "subtitle": "Parsing, validating and formatting dd/MM/yyyy",
+   "subtitleVi": "Đọc, kiểm tra hợp lệ và in ngày dạng dd/MM/yyyy"
+  },
+  {
+   "html": "<p><strong>Needed by 7 of the 54 assignments</strong> — <code>J1.L.P0022</code>, <code>J1.S.P0056</code>, <code>J1.S.P0064</code>, <code>J1.S.P0071</code>, <code>J1.S.P0072</code>, <code>J1.S.P0073</code>, <code>J1.S.P0085</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>7/54 bài cần đến</strong> — <code>J1.L.P0022</code>, <code>J1.S.P0056</code>, <code>J1.S.P0064</code>, <code>J1.S.P0071</code>, <code>J1.S.P0072</code>, <code>J1.S.P0073</code>, <code>J1.S.P0085</code>.</p>"
+  },
+  {
+   "html": "<p><strong>Read this before you write a date check.</strong> By default <code>DateTimeFormatter</code> resolves dates in SMART mode, which quietly <em>clamps</em> an impossible day instead of refusing it: <code>31/02/2003</code> comes back as <code>2003-02-28</code>. Your validation passes and the stored date is not the one the user typed. To make it refuse, ask for STRICT mode — and STRICT requires the year pattern <code>uuuu</code> rather than <code>yyyy</code>, because <code>yyyy</code> means \"year of era\" and is ambiguous without an era.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Đọc phần này trước khi viết kiểm tra ngày.</strong> Mặc định <code>DateTimeFormatter</code> phân giải ngày ở chế độ SMART, tức là nó lặng lẽ <em>nắn</em> một ngày không tồn tại thay vì từ chối: <code>31/02/2003</code> trả về thành <code>2003-02-28</code>. Phần kiểm tra của bạn vẫn báo hợp lệ còn ngày được lưu thì không phải ngày người dùng gõ. Muốn nó từ chối thì phải bật chế độ STRICT — và STRICT đòi mẫu năm là <code>uuuu</code> chứ không phải <code>yyyy</code>, vì <code>yyyy</code> nghĩa là \"năm trong kỷ nguyên\" và sẽ nhập nhằng khi không nêu kỷ nguyên.</p>"
+  },
+  {
+   "code": "import java.time.LocalDate;\nimport java.time.Period;\nimport java.time.format.DateTimeFormatter;\nimport java.time.format.DateTimeParseException;\nimport java.time.format.ResolverStyle;\n\n/**\n * LocalDate and the two resolver modes: SMART (the default) clamps 31/02 to 28/02, STRICT\n * refuses it. parseDate is the method to copy into utils/Validation.\n */\npublic final class DateRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private DateRef() {\n    }\n\n    // Returns the date, or null when the text is not a real date - 31/02 included.\n    public static LocalDate parseDate(String input) {\n        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_PATTERN)\n                .withResolverStyle(ResolverStyle.STRICT);\n\n        // STRICT refuses an impossible day instead of moving it to the end of the month\n        try {\n            return LocalDate.parse(input.trim(), formatter);\n        } catch (DateTimeParseException e) {\n            // not a real date, or not in the pattern: no message here - Main prints one\n            return null;\n        }\n    }\n\n    // Parses a few dates both ways and prints what comes back.\n    public static void main(String[] args) {\n        DateTimeFormatter looseFormatter = DateTimeFormatter.ofPattern(\"dd/MM/yyyy\");\n        DateTimeFormatter printFormatter = DateTimeFormatter.ofPattern(Constants.DATE_PATTERN);\n        LocalDate birthDate = parseDate(\"03/11/2003\");\n\n        // a real date: toString(), the pattern of the briefs, and one field\n        System.out.printf(\"%s | %s | year %d%n\", birthDate, birthDate.format(printFormatter),\n                birthDate.getYear());\n\n        // SMART (the default) turns 31/02 into 28/02 without a word - CLAMPED!\n        System.out.println(LocalDate.parse(\"31/02/2003\", looseFormatter));\n\n        // STRICT refuses 31/02, accepts a real leap day, refuses the wrong pattern\n        System.out.println(parseDate(\"31/02/2003\"));\n        System.out.println(parseDate(\"29/02/2024\"));\n        System.out.println(parseDate(\"2003-11-03\"));\n\n        // compare two dates, then count the whole years between them\n        System.out.println(birthDate.isBefore(LocalDate.of(2010, 1, 1)));\n        System.out.printf(\"%d years old%n\",\n                Period.between(birthDate, LocalDate.of(2026, 7, 21)).getYears());\n    }\n}\n\n/**\n * CONSTANTS (constants/Constants.java in your project).\n */\nfinal class Constants {\n\n    // Day/month/year of the briefs; uuuu, because STRICT refuses yyyy without an era.\n    public static final String DATE_PATTERN = \"dd/MM/uuuu\";\n\n    // Private constructor: this class only holds constants.\n    private Constants() {\n    }\n}",
+   "type": "code",
+   "title": "LocalDate, and the two resolver modes",
+   "titleVi": "LocalDate, và hai chế độ phân giải",
+   "language": "java"
+  },
+  {
+   "code": "2003-11-03 | 03/11/2003 | year 2003\n2003-02-28\nnull\n2024-02-29\nnull\ntrue\n22 years old",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p>Line two is the warning: the default formatter turned an impossible date into a valid one without a word. Line three is the fix. Line four shows STRICT is not merely fussy — it accepts 29 February 2024 because 2024 really is a leap year, so you never write that rule yourself.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Dòng hai là lời cảnh báo: bộ định dạng mặc định đã biến một ngày không tồn tại thành một ngày hợp lệ mà không nói gì. Dòng ba là cách sửa. Dòng bốn cho thấy STRICT không phải khó tính vô cớ — nó vẫn nhận ngày 29/02/2024 vì 2024 đúng là năm nhuận, nên bạn không bao giờ phải tự viết luật đó.</p>"
+  },
+  {
+   "text": "Files",
+   "type": "part",
+   "number": "10",
+   "textVi": "Tệp tin",
+   "subtitle": "Text, CSV and the .dat archives of the Long assignments",
+   "subtitleVi": "Văn bản, CSV và các tệp .dat của bài Long"
+  },
+  {
+   "html": "<p><strong>Needed by 6 of the 54 assignments</strong> read a file — <code>J1.L.P0013</code>, <code>J1.L.P0025</code>, <code>J1.S.P0058</code>, <code>J1.S.P0059</code>, <code>J1.S.P0069</code>, <code>J1.S.P0078</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>6/54 bài cần đến</strong> có đọc tệp — <code>J1.L.P0013</code>, <code>J1.L.P0025</code>, <code>J1.S.P0058</code>, <code>J1.S.P0059</code>, <code>J1.S.P0069</code>, <code>J1.S.P0078</code>.</p>"
+  },
+  {
+   "html": "<p><strong>Needed by 7 of the 54 assignments</strong> write a file — <code>J1.L.P0013</code>, <code>J1.L.P0025</code>, <code>J1.S.P0058</code>, <code>J1.S.P0059</code>, <code>J1.S.P0069</code>, <code>J1.S.P0073</code>, <code>J1.S.P0078</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>7/54 bài cần đến</strong> có ghi tệp — <code>J1.L.P0013</code>, <code>J1.L.P0025</code>, <code>J1.S.P0058</code>, <code>J1.S.P0059</code>, <code>J1.S.P0069</code>, <code>J1.S.P0073</code>, <code>J1.S.P0078</code>.</p>"
+  },
+  {
+   "html": "<table><thead><tr><th>Class</th><th>Direction</th><th>Use it for</th></tr></thead><tbody><tr><td><code>BufferedReader</code> + <code>FileReader</code></td><td>in</td><td>text, line by line</td></tr><tr><td><code>PrintWriter</code> + <code>FileWriter</code></td><td>out</td><td>text, with <code>println</code></td></tr><tr><td><code>ObjectInputStream</code></td><td>in</td><td>a <code>.dat</code> of serialised objects</td></tr><tr><td><code>ObjectOutputStream</code></td><td>out</td><td>the same</td></tr><tr><td><code>File</code></td><td>—</td><td><code>exists()</code>, <code>delete()</code>, <code>length()</code></td></tr></tbody></table><p><strong>Where this goes in LAB211.</strong> Reading the data file is Main's job (check sheet 1.1): <code>Main</code> calls the static <code>FileUtils.readLines(Constants.DATA_FILE)</code>, puts the lines into the request DTO and calls the controller once; the repository splits each line into a record and keeps it. When the program saves, the repository hands its lines to <code>FileUtils.writeLines</code>. <code>FileUtils</code> is a <code>final</code> class with a private constructor, and it never prints.</p>",
+   "type": "prose",
+   "htmlVi": "<table><thead><tr><th>Lớp</th><th>Chiều</th><th>Dùng cho</th></tr></thead><tbody><tr><td><code>BufferedReader</code> + <code>FileReader</code></td><td>vào</td><td>văn bản, từng dòng</td></tr><tr><td><code>PrintWriter</code> + <code>FileWriter</code></td><td>ra</td><td>văn bản, dùng <code>println</code></td></tr><tr><td><code>ObjectInputStream</code></td><td>vào</td><td>tệp <code>.dat</code> chứa đối tượng đã tuần tự hoá</td></tr><tr><td><code>ObjectOutputStream</code></td><td>ra</td><td>như trên</td></tr><tr><td><code>File</code></td><td>—</td><td><code>exists()</code>, <code>delete()</code>, <code>length()</code></td></tr></tbody></table><p><strong>Đặt ở đâu trong LAB211.</strong> Đọc tệp dữ liệu là việc của Main (tờ checklist mục 1.1): <code>Main</code> gọi hàm static <code>FileUtils.readLines(Constants.DATA_FILE)</code>, đặt các dòng vào request DTO rồi gọi controller một lần; repository tách từng dòng thành bản ghi và giữ lại. Khi chương trình lưu, repository đưa các dòng của nó cho <code>FileUtils.writeLines</code>. <code>FileUtils</code> là lớp <code>final</code> có constructor private, và không bao giờ in.</p>"
+  },
+  {
+   "code": "import java.io.BufferedReader;\nimport java.io.File;\nimport java.io.FileReader;\nimport java.io.FileWriter;\nimport java.io.IOException;\nimport java.io.PrintWriter;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/**\n * Demo of the read/write pair. In LAB211, Main calls FileUtils.readLines at start-up and\n * passes the lines to the controller in the request DTO; splitting a line into a record is\n * the repository's job.\n */\npublic final class FileRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private FileRef() {\n    }\n\n    // Reads before the file exists, writes two lines, reads them back, deletes the file.\n    public static void main(String[] args) throws IOException {\n        String path = \"ref-demo.txt\";\n        File file = new File(path);\n        List<String> lineList = new ArrayList<>();\n        String[] columnArray = null;\n\n        // first run: no file yet gives an empty list, not a crash\n        System.out.printf(\"before any file: %d%n\", FileUtils.readLines(path).size());\n\n        // one record = one line \"code,name\"\n        lineList.add(String.join(\",\", \"D001\", \"Tran Binh\"));\n        lineList.add(String.join(\",\", \"D002\", \"Le Hoa\"));\n        FileUtils.writeLines(path, lineList);\n\n        // read the lines back and split each one into its columns\n        for (String line : FileUtils.readLines(path)) {\n            columnArray = line.split(\",\");\n            System.out.printf(\"%s %s%n\", columnArray[0], columnArray[1]);\n        }\n\n        // the file exists and is not empty; delete it and read again\n        System.out.println(file.length() > 0);\n        file.delete();\n        System.out.printf(\"after delete: %d%n\", FileUtils.readLines(path).size());\n    }\n}\n\n/**\n * UTILS (utils/FileUtils.java in your project): reads and writes a text file line by line.\n * Static methods only; it does not know what a line means and it never prints.\n */\nfinal class FileUtils {\n\n    // Private constructor: every method is called through the class name.\n    private FileUtils() {\n    }\n\n    // Reads every non-blank line; a file that does not exist yet gives an empty list.\n    public static List<String> readLines(String path) throws IOException {\n        List<String> lineList = new ArrayList<>();\n        File file = new File(path);\n        String line = \"\";\n\n        // first run: no file means no data yet, not an error\n        if (!file.exists()) {\n            return lineList;\n        }\n\n        // try-with-resources closes the file even when reading fails\n        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {\n            line = reader.readLine();\n\n            // readLine() returns null at the end of the file\n            while (line != null) {\n                // skip blank lines, such as an empty last line\n                if (!line.trim().isEmpty()) {\n                    lineList.add(line);\n                }\n\n                line = reader.readLine();\n            }\n        }\n\n        return lineList;\n    }\n\n    // Replaces the whole file with the given lines, one element per line.\n    public static void writeLines(String path, List<String> lineList) throws IOException {\n        // try-with-resources flushes and closes the file even when writing fails\n        try (PrintWriter writer = new PrintWriter(new FileWriter(path))) {\n            // one element of the list = one line of the file\n            for (String line : lineList) {\n                writer.println(line);\n            }\n        }\n    }\n}",
+   "type": "code",
+   "title": "FileUtils: the complete read/write pair, with the empty-first-run case",
+   "titleVi": "FileUtils: cặp đọc/ghi đầy đủ, có xử lý lần chạy đầu chưa có tệp",
+   "language": "java"
+  },
+  {
+   "code": "before any file: 0\nD001 Tran Binh\nD002 Le Hoa\ntrue\nafter delete: 0",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "text": "Exceptions and regular expressions",
+   "type": "part",
+   "number": "11",
+   "textVi": "Ngoại lệ và biểu thức chính quy",
+   "subtitle": "The two tools every validation rule is built from",
+   "subtitleVi": "Hai công cụ dựng nên mọi luật kiểm tra dữ liệu"
+  },
+  {
+   "html": "<p><strong>Needed by 16 of the 54 assignments</strong> — <code>J1.L.P0025</code>, <code>J1.S.P0051</code>, <code>J1.S.P0052</code>, <code>J1.S.P0055</code>, <code>J1.S.P0056</code>, <code>J1.S.P0057</code>, <code>J1.S.P0059</code>, <code>J1.S.P0063</code>, <code>J1.S.P0066</code>, <code>J1.S.P0071</code> … and 6 more.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>16/54 bài cần đến</strong> — <code>J1.L.P0025</code>, <code>J1.S.P0051</code>, <code>J1.S.P0052</code>, <code>J1.S.P0055</code>, <code>J1.S.P0056</code>, <code>J1.S.P0057</code>, <code>J1.S.P0059</code>, <code>J1.S.P0063</code>, <code>J1.S.P0066</code>, <code>J1.S.P0071</code> … và 6 bài nữa.</p>"
+  },
+  {
+   "html": "<p><strong>Needed by 5 of the 54 assignments</strong> state a format rule — <code>J1.S.P0064</code>, <code>J1.S.P0067</code>, <code>J1.S.P0070</code>, <code>J1.S.P0072</code>, <code>J1.S.P0076</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>5/54 bài cần đến</strong> có nêu luật về định dạng — <code>J1.S.P0064</code>, <code>J1.S.P0067</code>, <code>J1.S.P0070</code>, <code>J1.S.P0072</code>, <code>J1.S.P0076</code>.</p>"
+  },
+  {
+   "html": "<table><thead><tr><th>Exception</th><th>Thrown by</th><th>Catch it?</th></tr></thead><tbody><tr><td><code>NumberFormatException</code></td><td><code>parseInt</code></td><td>yes — this is normal input</td></tr><tr><td><code>DateTimeParseException</code></td><td><code>LocalDate.parse</code></td><td>yes</td></tr><tr><td><code>IOException</code></td><td>file reads and writes</td><td>yes</td></tr><tr><td><code>NullPointerException</code></td><td>your own bug</td><td>no — fix the cause</td></tr><tr><td><code>IndexOutOfBoundsException</code></td><td>your own bug</td><td>no — fix the bound</td></tr></tbody></table>",
+   "type": "prose",
+   "htmlVi": "<table><thead><tr><th>Ngoại lệ</th><th>Ném ra bởi</th><th>Có bắt không?</th></tr></thead><tbody><tr><td><code>NumberFormatException</code></td><td><code>parseInt</code></td><td>có — đây là dữ liệu nhập bình thường</td></tr><tr><td><code>DateTimeParseException</code></td><td><code>LocalDate.parse</code></td><td>có</td></tr><tr><td><code>IOException</code></td><td>đọc/ghi tệp</td><td>có</td></tr><tr><td><code>NullPointerException</code></td><td>lỗi của chính bạn</td><td>không — sửa nguyên nhân</td></tr><tr><td><code>IndexOutOfBoundsException</code></td><td>lỗi của chính bạn</td><td>không — sửa lại cận</td></tr></tbody></table>"
+  },
+  {
+   "code": "/**\n * Regex patterns you can defend. In a program each pattern is a constant in Constants.java,\n * and Validation receives the String that Main read.\n */\npublic final class RegexRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private RegexRef() {\n    }\n\n    // Tests each pattern on one text that matches and one that does not.\n    public static void main(String[] args) {\n        // id: one letter + exactly 3 digits\n        System.out.println(\"D001\".matches(\"D\\\\d{3}\"));\n        System.out.println(\"D01\".matches(\"D\\\\d{3}\"));\n\n        // Vietnamese phone number: 0 + 9 digits\n        System.out.println(\"0912345678\".matches(\"0\\\\d{9}\"));\n        System.out.println(\"912345678\".matches(\"0\\\\d{9}\"));\n\n        // letters and spaces only\n        System.out.println(\"Tran Binh\".matches(\"[A-Za-z ]+\"));\n        System.out.println(\"Tran B1nh\".matches(\"[A-Za-z ]+\"));\n\n        // e-mail: name@domain.tld\n        System.out.println(\"a@b.com\".matches(\"^[\\\\w.]+@[\\\\w]+\\\\.[a-z]{2,}$\"));\n        System.out.println(\"a@b\".matches(\"^[\\\\w.]+@[\\\\w]+\\\\.[a-z]{2,}$\"));\n\n        // a whole number, then a whole number that may start with a minus sign\n        System.out.printf(\"%b %b%n\", \"42\".matches(\"\\\\d+\"), \"-42\".matches(\"-?\\\\d+\"));\n    }\n}",
+   "type": "code",
+   "title": "Regex patterns you can defend",
+   "titleVi": "Các mẫu regex bạn bảo vệ được",
+   "language": "java"
+  },
+  {
+   "code": "true\nfalse\ntrue\nfalse\ntrue\nfalse\ntrue\nfalse\ntrue true",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p>In Java source each backslash is written twice: the pattern <code>\\d{3}</code> becomes the literal <code>\"\\\\d{3}\"</code>. Miss the second one and the compiler rejects it, which is the kindest possible failure.</p><p>In a program each pattern is a constant in <code>Constants.java</code> (for example <code>Constants.CODE_REGEX</code>), and <code>Validation</code> tests the String that Main read against it.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Trong mã nguồn Java, mỗi dấu gạch chéo ngược phải viết hai lần: mẫu <code>\\d{3}</code> trở thành chuỗi <code>\"\\\\d{3}\"</code>. Quên cái thứ hai thì trình biên dịch từ chối ngay, và đó là kiểu lỗi tử tế nhất có thể.</p><p>Trong chương trình, mỗi mẫu là một hằng trong <code>Constants.java</code> (ví dụ <code>Constants.CODE_REGEX</code>), và <code>Validation</code> đem String mà Main đọc được ra so với nó.</p>"
+  },
+  {
+   "text": "Class contracts — abstract, interface, Object methods",
+   "type": "part",
+   "number": "12",
+   "textVi": "Hợp đồng của lớp — abstract, interface, các hàm của Object",
+   "subtitle": "What the hierarchy briefs are actually checking",
+   "subtitleVi": "Thứ mà các đề về cây phân cấp thật sự kiểm tra"
+  },
+  {
+   "html": "<p><strong>Needed by 6 of the 54 assignments</strong> — <code>J1.L.P0013</code>, <code>J1.L.P0014</code>, <code>J1.L.P0015</code>, <code>J1.S.P0061</code>, <code>J1.S.P0080</code>, <code>J1.S.P0081</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>6/54 bài cần đến</strong> — <code>J1.L.P0013</code>, <code>J1.L.P0014</code>, <code>J1.L.P0015</code>, <code>J1.S.P0061</code>, <code>J1.S.P0080</code>, <code>J1.S.P0081</code>.</p>"
+  },
+  {
+   "html": "<p><strong>Needed by 5 of the 54 assignments</strong> — <code>J1.L.P0021</code>, <code>J1.S.P0068</code>, <code>J1.S.P0070</code>, <code>J1.S.P0071</code>, <code>J1.S.P0081</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>5/54 bài cần đến</strong> — <code>J1.L.P0021</code>, <code>J1.S.P0068</code>, <code>J1.S.P0070</code>, <code>J1.S.P0071</code>, <code>J1.S.P0081</code>.</p>"
+  },
+  {
+   "code": "import java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.HashSet;\nimport java.util.List;\nimport java.util.Set;\n\n/**\n * toString, equals and hashCode: what printing a list, contains() and a HashSet rely on.\n */\npublic final class ObjectRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private ObjectRef() {\n    }\n\n    // Shows each overridden method at work on a list and a set of fruits.\n    public static void main(String[] args) {\n        List<Fruit> fruitList = new ArrayList<>(Arrays.asList(new Fruit(\"F1\", \"Apple\"),\n                new Fruit(\"F2\", \"Mango\")));\n        Set<Fruit> fruitSet = new HashSet<>(fruitList);\n\n        // toString: printing the list prints every fruit\n        System.out.println(fruitList);\n\n        // equals: contains() finds F1 although the name is different\n        System.out.println(fruitList.contains(new Fruit(\"F1\", \"any\")));\n\n        // hashCode: the set built from the list holds both fruits\n        System.out.println(fruitSet.size());\n\n        // same id -> not added: the set still holds 2\n        fruitSet.add(new Fruit(\"F1\", \"Apple again\"));\n        System.out.println(fruitSet.size());\n    }\n}\n\n/**\n * MODEL: a fruit whose identity is its id - fields, constructor and Object methods only.\n */\nclass Fruit {\n\n    // Identity of the fruit, for example F1.\n    private final String id;\n\n    // Display name; two fruits with the same id are equal whatever their names.\n    private final String name;\n\n    // Creates a fruit.\n    Fruit(String id, String name) {\n        this.id = id;\n        this.name = name;\n    }\n\n    // Returns \"id:name\" - what printing a list shows.\n    @Override\n    public String toString() {\n        return String.format(Constants.FRUIT_FORMAT, id, name);\n    }\n\n    // Two fruits are equal when their ids are equal: the id is the identity.\n    @Override\n    public boolean equals(Object object) {\n        Fruit other = null;\n\n        // the very same object: equal without looking further\n        if (this == object) {\n            return true;\n        }\n\n        // null or not a Fruit: never equal\n        if (!(object instanceof Fruit)) {\n            return false;\n        }\n\n        other = (Fruit) object;\n        return id.equals(other.id);\n    }\n\n    // Same id, same hash: must agree with equals, or a HashSet looks in the wrong bucket.\n    @Override\n    public int hashCode() {\n        return id.hashCode();\n    }\n}\n\n/**\n * CONSTANTS (constants/Constants.java in your project).\n */\nfinal class Constants {\n\n    // How a fruit is shown: id, colon, name.\n    public static final String FRUIT_FORMAT = \"%s:%s\";\n\n    // Private constructor: this class only holds constants.\n    private Constants() {\n    }\n}",
+   "type": "code",
+   "title": "Object methods worth overriding",
+   "titleVi": "Các hàm của Object đáng ghi đè",
+   "language": "java"
+  },
+  {
+   "code": "[F1:Apple, F2:Mango]\ntrue\n2\n2",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p>The last line is the reason <code>hashCode</code> must be overridden with <code>equals</code>: the set refused the duplicate id. Override only <code>equals</code> and the set would have accepted it, because it looks in the wrong bucket first.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Dòng cuối chính là lý do phải ghi đè <code>hashCode</code> cùng với <code>equals</code>: tập hợp đã từ chối mã bị trùng. Nếu chỉ ghi đè <code>equals</code>, tập hợp sẽ nhận nó vào, vì nó tìm nhầm ngăn trước đã.</p>"
+  },
+  {
+   "text": "The rare ones — StringBuilder, MD5, zip",
+   "type": "part",
+   "number": "13",
+   "textVi": "Những thứ hiếm gặp — StringBuilder, MD5, zip",
+   "subtitle": "Needed by only a handful of assignments, but needed exactly",
+   "subtitleVi": "Chỉ vài bài cần, nhưng bài nào cần thì phải đúng"
+  },
+  {
+   "html": "<p><strong>Needed by 3 of the 54 assignments</strong> build text in a loop — <code>J1.S.P0005</code>, <code>J1.S.P0011</code>, <code>J1.S.P0067</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>3/54 bài cần đến</strong> có ghép chuỗi trong vòng lặp — <code>J1.S.P0005</code>, <code>J1.S.P0011</code>, <code>J1.S.P0067</code>.</p>"
+  },
+  {
+   "html": "<p><strong>Needed by 1 of the 54 assignments</strong> — <code>J1.S.P0072</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>1/54 bài cần đến</strong> — <code>J1.S.P0072</code>.</p>"
+  },
+  {
+   "html": "<p><strong>Needed by 3 of the 54 assignments</strong> — <code>J1.S.P0070</code>, <code>J1.S.P0071</code>, <code>J1.S.P0079</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>3/54 bài cần đến</strong> — <code>J1.S.P0070</code>, <code>J1.S.P0071</code>, <code>J1.S.P0079</code>.</p>"
+  },
+  {
+   "code": "import java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\n\n/**\n * StringBuilder, and MD5 the way LAB211 uses it: Main hashes the password with MD5Utils\n * before putting it into the request DTO; the repository only stores and compares hashes.\n */\npublic final class RareRef {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private RareRef() {\n    }\n\n    // Builds \"3-2-1\" in a loop with StringBuilder, then hashes \"123456\".\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        StringBuilder numberBuilder = new StringBuilder();\n        String forward = \"\";\n        String backward = \"\";\n\n        // append in a loop - never String += inside a loop\n        for (int i = 3; i >= 1; i--) {\n            numberBuilder.append(i).append((i > 1) ? \"-\" : \"\");\n        }\n\n        // take the text BEFORE reverse(): reverse() changes the builder itself\n        forward = numberBuilder.toString();\n        backward = numberBuilder.reverse().toString();\n        System.out.printf(\"%s | %s%n\", forward, backward);\n\n        // 32 hex characters, and the same input always gives the same digest\n        System.out.println(MD5Utils.hashMd5(\"123456\"));\n        System.out.println(MD5Utils.hashMd5(\"123456\").length());\n        System.out.println(MD5Utils.hashMd5(\"123456\").equals(MD5Utils.hashMd5(\"123456\")));\n    }\n}\n\n/**\n * UTILS (utils/MD5Utils.java in your project): the MD5 hex digest - what the login brief\n * means by \"MD5 encryption\".\n */\nfinal class MD5Utils {\n\n    // Private constructor: every method is called through the class name.\n    private MD5Utils() {\n    }\n\n    // Returns the MD5 digest of the text as 32 lower-case hex characters.\n    public static String hashMd5(String text) throws NoSuchAlgorithmException {\n        MessageDigest messageDigest = MessageDigest.getInstance(Constants.MD5_ALGORITHM);\n        byte[] digestArray = messageDigest.digest(text.getBytes(StandardCharsets.UTF_8));\n        StringBuilder hexBuilder = new StringBuilder();\n\n        // two hex digits per byte; %02x keeps the leading zero\n        for (byte oneByte : digestArray) {\n            hexBuilder.append(String.format(Constants.HEX_FORMAT, oneByte));\n        }\n\n        return hexBuilder.toString();\n    }\n}\n\n/**\n * CONSTANTS (constants/Constants.java in your project).\n */\nfinal class Constants {\n\n    // Name of the digest algorithm for MessageDigest.\n    public static final String MD5_ALGORITHM = \"MD5\";\n\n    // One byte as two lower-case hex digits.\n    public static final String HEX_FORMAT = \"%02x\";\n\n    // Private constructor: this class only holds constants.\n    private Constants() {\n    }\n}",
+   "type": "code",
+   "title": "StringBuilder and MD5",
+   "titleVi": "StringBuilder và MD5",
+   "language": "java"
+  },
+  {
+   "code": "3-2-1 | 1-2-3\ne10adc3949ba59abbe56e057f20f883e\n32\ntrue",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p>MD5 always produces 32 hex characters, and the same input always gives the same digest — which is exactly why a login can compare hashes without ever storing the password. It is also why MD5 is not considered secure any more; say that in a defence and you have answered the follow-up before it was asked.</p>",
+   "type": "prose",
+   "htmlVi": "<p>MD5 luôn cho ra 32 ký tự hex, và cùng một đầu vào luôn cho cùng một kết quả — đó chính là lý do chức năng đăng nhập có thể so sánh mã băm mà không bao giờ phải lưu mật khẩu. Đó cũng là lý do MD5 ngày nay không còn được coi là an toàn; nói câu đó lúc vấn đáp là bạn đã trả lời xong câu hỏi tiếp theo trước khi nó được hỏi.</p>"
+  },
+  {
+   "type": "practice",
+   "items": [
+    {
+     "url": "/code-lab/java-core#module-251",
+     "note": "Drill List, Map and Set until they are automatic",
+     "label": "Collections framework",
+     "noteVi": "Luyện List, Map và Set tới mức thành phản xạ",
+     "labelVi": "Collections framework"
+    },
+    {
+     "url": "/code-lab/java-core#module-252",
+     "note": "The file and exception APIs on this page, with graded exercises",
+     "label": "Exception handling, I/O and generics",
+     "noteVi": "Các API tệp và ngoại lệ trên trang này, kèm bài tập có chấm",
+     "labelVi": "Xử lý ngoại lệ, I/O và generic"
+    }
+   ]
+  }
+ ]
+}

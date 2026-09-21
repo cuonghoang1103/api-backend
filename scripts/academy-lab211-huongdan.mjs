@@ -6,6 +6,8 @@
  * Academy CẮT NHỎ thành từng bài học — mỗi bài 1–5 trang tài liệu — vì Academy
  * học theo buổi, còn Code Lab đọc một mạch.
  *
+ * ⚠️ (22/09/2026) --apply XOÁ chương rồi TẠO LẠI → bài mang id mới → MẤT tiến độ học của người dùng.
+ * Chỉ đổi nội dung thì cập nhật TẠI CHỖ theo slug (title/description/content), như lượt 22/09 đã làm.
  * Chạy lại được: xoá đúng chương do script này tạo (nhận theo slug tiền tố
  * `lab211-hd-`) rồi tạo lại, không đụng 10 chương gốc.
  *

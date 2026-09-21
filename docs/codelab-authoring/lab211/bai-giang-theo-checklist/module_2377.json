@@ -1,0 +1,424 @@
+{
+ "id": 2377,
+ "name": "Kiến trúc 8 package & bộ khung P0055",
+ "blocks": [
+  {
+   "text": "Luật chơi LAB211",
+   "type": "part",
+   "number": "1",
+   "subtitle": "Đọc mục này trước khi gõ dòng code đầu tiên"
+  },
+  {
+   "html": "<p>LAB211 không chấm bằng điểm số mà bằng <strong>LOC (Lines Of Code) tích luỹ</strong>.\n  Bạn cần <strong>≥ 750 LOC</strong> để qua môn. Mỗi bài làm xong, được giảng viên review đạt,\n  thì cộng đúng số LOC chuẩn của bài đó.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Ba điều ít người biết",
+   "type": "heading"
+  },
+  {
+   "html": "<ol>\n  <li><strong>LOC của kỳ trước KHÔNG mất.</strong> Syllabus ghi rõ: <em>\"If Students re-take the Lab\n  course, the previously accumulated LOC is remained\"</em>. Nhưng kèm theo đó là:\n  <em>\"students are not allowed to re-conduct previously completed assignments\"</em> —\n  <strong>bài đã pass thì không được làm lại</strong>. Vào hệ thống PTS xem mình đang có bao nhiêu LOC\n  trước khi chọn bài.</li>\n  <li><strong>Bài dài được tính LOC theo % hoàn thành.</strong> Với assignment kéo dài &gt; 5 slot:\n  làm được 70% thì nhận 70% × LOC chuẩn. Đây là lưới an toàn — bài 350 LOC làm dở vẫn có điểm.</li>\n  <li><strong>Vi phạm nội quy phòng lab → LOC về 0.</strong> Không phải trừ, mà là reset. Điện thoại,\n  đồng hồ thông minh, tài liệu — để hết lên phía trên lớp.</li>\n  </ol>",
+   "type": "prose"
+  },
+  {
+   "text": "Mức thưởng cuối kỳ",
+   "type": "heading"
+  },
+  {
+   "html": "<table>\n  <tr><th>LOC tích luỹ</th><th>Xếp loại</th></tr>\n  <tr><td>750 – 950</td><td>PASSED</td></tr>\n  <tr><td>951 – 1151</td><td>OOP-Blue Developer</td></tr>\n  <tr><td>1152 – 1352</td><td>OOP-Yellow Developer</td></tr>\n  <tr><td>≥ 1353</td><td>OOP-Red Developer</td></tr>\n  </table>",
+   "type": "prose"
+  },
+  {
+   "text": "Cộng LOC thêm — hai đường",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Slide nội quy ghi thẳng: <em>\"dùng được các tính chất như <strong>kế thừa, đa hình</strong> sẽ được\n  cộng LOC. <strong>Implement và hiểu SOLID</strong> được cộng LOC\"</em>.</p>\n  <p>Nghĩa là làm tử tế thì cần <em>ít bài hơn</em>. Đây là lý do phần OOP và SOLID phía dưới đáng học\n  thật chứ không phải học thuộc.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Bài nào nên chọn, bài nào tránh",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Giảng viên nói thẳng trong slide nội quy:</p>\n  <ul>\n  <li><strong>Buổi đầu tiên: bắt buộc làm <code>J1.S.P0055</code></strong> (Doctor management) <em>theo mẫu</em>,\n  được mở file Guide, <strong>không tính LOC</strong>. Đây là bài tập kiến trúc — đừng lo pass/fail,\n  hãy dùng nó để thuộc bộ khung.</li>\n  <li><strong>Tránh <code>J1.L.P0022</code> (Candidate)</strong> — <em>\"cần implement đầy đủ SOLID → rất khó,\n  không nên liều\"</em>.</li>\n  <li><strong>Tránh <code>J1.L.P0023</code> (Mua bán hoa quả)</strong> — <em>\"cần thiết kế được ERD… trong java\n  console sẽ rất phức tạp → không nên chọn\"</em>.</li>\n  <li><strong>Bài thuật toán (Fibonacci, sắp xếp…) CŨNG phải làm MVC</strong> — <em>\"không OOP/MVC →\n  không review\"</em>. Nghĩa là bài 21 LOC tốn <em>đúng bằng</em> bài 150 LOC về công dựng cấu trúc.\n  <strong>Chọn bài LOC cao là lời.</strong></li>\n  </ul>",
+   "type": "prose"
+  },
+  {
+   "text": "Quy tắc phòng lab",
+   "type": "heading"
+  },
+  {
+   "html": "<ul>\n  <li>Chỉ review tối đa <strong>3 bài / sinh viên / slot</strong>, và phải xin review\n  <strong>trước khi hết giờ 30 phút</strong>.</li>\n  <li>Trên hệ thống PTS chỉ chọn tối đa <strong>5 bài</strong> một lúc, xong bài nào mới chọn tiếp.</li>\n  <li><strong>DRAFT</strong> = lưu tạm, sửa lại được. <strong>SUBMIT</strong> = chốt, không sửa được nữa —\n  chỉ SUBMIT khi giảng viên đã đánh giá đạt.</li>\n  <li>Điểm danh <strong>một lần duy nhất</strong>, trong 10 phút đầu.</li>\n  </ul>",
+   "type": "prose"
+  },
+  {
+   "text": "Ba tiêu chí chấm (Grading Policy)",
+   "type": "heading"
+  },
+  {
+   "html": "<ol>\n  <li><strong>Program structure</strong> — đúng cấu trúc mô tả trong đề</li>\n  <li><strong>Coding convention</strong> — tên file, tên hàm, tên biến, comment, định dạng câu lệnh</li>\n  <li><strong>Meet the assignment requirements</strong> — chạy đúng yêu cầu</li>\n  </ol>\n  <p>Cả ba đều bắt buộc. Chạy đúng mà sai cấu trúc thì <em>không được review</em>.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Kiến trúc 9 package",
+   "type": "part",
+   "number": "2",
+   "subtitle": "Sai cấu trúc = không được review, dù code chạy đúng"
+  },
+  {
+   "html": "<p>Giảng viên gọi đây là <strong>\"MVC của JSP\"</strong>: cùng một mô hình với web Java, chỉ đổi lớp vỏ.\n  Trong web, View là trang JSP và Controller là Servlet. Trong bài console, View là class chỉ lo in ra\n  màn hình, còn Controller là class nhận lệnh rồi điều hướng. <strong>Cấu trúc y hệt nhau.</strong></p>",
+   "type": "prose"
+  },
+  {
+   "text": "Luồng dữ liệu — một chiều, không đi tắt",
+   "type": "heading"
+  },
+  {
+   "code": "flowchart LR\n  MAIN[\"main<br/>Main.java<br/><i>Scanner · validate · đọc file ở ĐÂY</i>\"] -->|\"RequestDTO, 1 lần mỗi case\"| CTRL[\"controller<br/>DoctorController<br/><i>không đụng Model</i>\"]\n  CTRL -->|\"RequestDTO\"| SRV[\"service<br/>DoctorServices<br/><i>(nếu có tính toán)</i>\"]\n  SRV -->|\"CRUD\"| REPO[\"repository<br/>DoctorRepository<br/><i>giữ dữ liệu · BẮT BUỘC</i>\"]\n  CTRL -.->|\"bài không có tính toán\"| REPO\n  REPO -->|\"tạo/đọc\"| MODEL[\"model<br/>Doctor.java\"]\n  CTRL -->|\"setResponseDTO + display()<br/>1 lần mỗi luồng\"| VIEW[\"view<br/>DoctorView<br/><i>in kết quả ở ĐÂY</i>\"]\n  UTIL[\"utils/Validation<br/><i>final · static method</i>\"] -.->|\"chỉ Main gọi\"| MAIN\n  CONST[\"constants<br/>Message · Constants\"] -.-> MAIN\n  CONST -.-> VIEW\n  MODEL -. \"KHÔNG BAO GIỜ\" .-x VIEW",
+   "type": "mermaid"
+  },
+  {
+   "html": "<p>Đường đứt nét gạch chéo giữa <code>model</code> và <code>view</code> là điều quan trọng nhất.\n  Tờ checklist 1.1 ghi rõ: <em>\"Model chỉ làm nhiệm vụ miêu tả thực thể, không làm việc với View\"</em>, và\n  Guide dặn: <em>\"Cần output gì thì thêm hàm toString() để trả lại repository -&gt; controller sẽ nhận kết\n  quả và truyền vào view\"</em>. Model muốn hiện ra màn hình thì viết <code>toString()</code>, trả về\n  Repository → Controller → View. Không có đường tắt.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Bảng: 9 package — mỗi package được làm gì, cấm làm gì",
+   "type": "heading"
+  },
+  {
+   "html": "<table>\n  <tr><th>Package</th><th>File</th><th>ĐƯỢC làm</th><th>CẤM</th></tr>\n  <tr><td><code>constants</code></td><td>Message.java<br/>Constants.java</td>\n      <td>Mọi câu chữ hiển thị (Message), mọi hằng số và định dạng (Constants) — <code>static final</code>, <code>UPPER_SNAKE_CASE</code></td>\n      <td>Hardcode câu chữ, số, định dạng ở bất kỳ class nào khác</td></tr>\n  <tr><td><code>dto</code></td><td>XxxRequestDTO<br/>XxxResponseDTO</td>\n      <td>Request: Main→Controller (có thể đi tiếp nguyên vẹn vào Services/Repository). Response: Controller→View</td>\n      <td>Chứa logic xử lý</td></tr>\n  <tr><td><code>main</code></td><td>Main.java</td>\n      <td>Work flow chính. <strong>Scanner, validate, đọc file, mã hoá CHỈ ở đây</strong>. Gói RequestDTO; mỗi <code>case</code> gọi Controller <strong>1 lần</strong>. <code>final</code> + private constructor</td>\n      <td><strong>static với BIẾN</strong> (hàm thì được). Gọi Model, gọi View</td></tr>\n  <tr><td><code>controller</code></td><td>XxxController.java</td>\n      <td>Điều hướng: nhận RequestDTO → gọi Service (bài không có tính toán thì gọi Repository, như bài mẫu P0055) → đưa ResponseDTO cho View. Import DTO, View, Service</td>\n      <td><strong>static</strong>. Nhập bàn phím. <code>System.out</code>. <strong>Import/nhận/trả Model</strong></td></tr>\n  <tr><td><code>model</code></td><td>Doctor.java</td>\n      <td>Thuộc tính + hàm của đối tượng, <code>toString()</code> trả chuỗi</td>\n      <td><strong>static</strong>. Scanner. <code>printf</code>. Validate. Gọi View</td></tr>\n  <tr><td><code>repository</code></td><td>XxxRepository.java</td>\n      <td><strong>BẮT BUỘC có.</strong> Giữ dữ liệu (danh sách) + CRUD đơn giản; được làm việc với Model</td>\n      <td>Nhập/xuất, gọi View, tính toán nghiệp vụ</td></tr>\n  <tr><td><code>service</code></td><td>XxxServices.java</td>\n      <td>Tính toán nghiệp vụ ngoài CRUD (tổng, chu vi, sắp xếp, report). Nằm GIỮA Controller và Repository, <strong>chỉ Controller gọi</strong>, được import Model</td>\n      <td>Nhập/xuất, gọi View</td></tr>\n  <tr><td><code>utils</code></td><td>Validation.java</td>\n      <td>Hàm dùng chung: validate, đọc/ghi file, mã hoá. <strong>static method</strong>, class <code>final</code> + private constructor</td>\n      <td>Giữ trạng thái. Cho phép <code>new</code></td></tr>\n  <tr><td><code>view</code></td><td>XxxView.java</td>\n      <td>Nhận dữ liệu <strong>qua THUỘC TÍNH</strong>: field ResponseDTO + setter, <code>display()</code> không tham số, render <strong>1 lần mỗi luồng</strong></td>\n      <td>Tính toán. Đọc bàn phím. Nhận dữ liệu qua tham số của hàm hiển thị</td></tr>\n  </table>",
+   "type": "prose"
+  },
+  {
+   "text": "Vì sao tối đa 2 tham số rời — từ 3 trở lên thì gói DTO",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Tờ checklist 1.1 ghi: Services/Repository nhận data từ controller <em>\"có thể thông qua param\n  nếu số param &lt; 3\"</em>. Tức là <strong>tối đa 2 tham số rời; từ 3 trở lên thì gói vào DTO</strong>. Con số\n  đó có lý do: nhiều tham số rời là dấu hiệu dữ liệu chưa được gói — thêm một trường là phải sửa chữ ký hàm ở\n  mọi tầng, và hoán vị nhầm hai tham số cùng kiểu vẫn biên dịch được.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "// Mỗi lần thêm một thuộc tính là phải sửa TẤT CẢ nơi gọi\npublic void addDoctor(String code, String name, String specialization, int availability) {\n    ...\n}",
+   "type": "code",
+   "title": "SAI — 4 tham số rời (tờ giấy chỉ cho số tham số < 3)",
+   "language": "java"
+  },
+  {
+   "code": "// Them thuoc tinh chi can sua trong DTO — chu ky ham dung yen\npublic void addDoctor(DoctorRequestDTO requestDTO) throws Exception {\n    ...\n}\n\n// To checklist 1.1: tham so roi van duoc khi so tham so < 3 (toi da 2)\npublic boolean isExistDoctor(String code) throws Exception {\n    ...\n}",
+   "type": "code",
+   "title": "ĐÚNG — gói vào DTO, truyền MỘT tham số",
+   "language": "java"
+  },
+  {
+   "html": "<p>Đó cũng chính là lý do giảng viên nhắc <strong>\"code model trước, rồi đến data\"</strong>:\n  có <code>Doctor</code> (model) và <code>DoctorRequestDTO</code> rồi thì chữ ký hàm mới gọn được.\n  Thứ tự gõ code đúng là: <strong>model → dto → repository → service → controller → view → main</strong>.</p>\n  <p>Bài P0055 không có nghiệp vụ tính toán nên — đúng như bài mẫu của thầy — Controller gọi thẳng\n  Repository (tờ giấy 1.1: <em>\"gửi/nhận data qua Services (Repository)\"</em>). Bài có tính toán (sắp xếp,\n  thống kê, tính tiền…) thì thêm <code>service</code> và Controller chỉ gọi Services — xem bài luyện 2.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Bốn luật vàng dễ quên nhất",
+   "type": "heading"
+  },
+  {
+   "html": "<ol>\n  <li><code>Scanner</code> <strong>chỉ xuất hiện trong Main.java</strong> — cùng với mọi việc validate, đọc\n  file, mã hoá (tờ checklist 1.1).</li>\n  <li><code>System.out</code> <strong>chỉ xuất hiện trong View và Main</strong> — Main chỉ in menu, câu nhắc\n  nhập và <code>e.getMessage()</code>; Controller/Service/Repository/Model tuyệt đối không in.</li>\n  <li>Mỗi work flow chính (mỗi <code>case</code> ở Main) <strong>chỉ gọi vào Controller đúng một lần</strong>.</li>\n  <li>View nhận dữ liệu <strong>qua thuộc tính</strong> (<code>setResponseDTO(...)</code>) và\n  <code>display()</code> <strong>không tham số</strong> — Controller render <strong>đúng 1 lần</strong> mỗi luồng.</li>\n  </ol>",
+   "type": "prose"
+  },
+  {
+   "text": "Đọc hiểu bộ khung — từng file một",
+   "type": "part",
+   "number": "3",
+   "subtitle": "Giải thích theo ĐÚNG thứ tự bạn sẽ gõ"
+  },
+  {
+   "html": "<p>Bộ khung <code>J1.S.P0055</code> đính kèm ở tab <strong>Starter code</strong> có 10 file.\n  Dưới đây giải thích từng file theo <strong>đúng thứ tự gõ</strong> — thầy bảo \"code model trước rồi\n  đến data\", và thứ tự đó không tuỳ tiện: <strong>mỗi file chỉ dùng những file đã viết trước nó</strong>,\n  nên gõ xuôi là không bao giờ phải quay lại sửa.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "1. model/Doctor.java — gõ đầu tiên",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Đây là bản mô tả MỘT bác sĩ. Không hơn.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "public class Doctor {\n\n    // private: ben ngoai KHONG cham thang duoc, chi di qua getter/setter\n    private String code;\n\n    // So ca truc; luat \">= 0\" kiem o utils/Validation, Main goi — KHONG kiem trong Model\n    private int availability;",
+   "type": "code",
+   "title": "Đóng gói — tính chất OOP số 1",
+   "language": "java"
+  },
+  {
+   "html": "<p><code>private</code> không phải để giấu bí mật, mà để <strong>dữ liệu chỉ đổi qua một cửa</strong>:\n  không class nào gán thẳng <code>doctor.availability = -5</code> được, muốn đổi phải gọi setter. Còn việc\n  <strong>kiểm tra</strong> thì không nằm trong setter: tờ checklist 1.1 ghi <em>\"Toàn bộ việc nhập dữ\n  liệu/Validate/đọc từ file/mã hóa thực hiện ở Main\"</em>, và Model <em>\"chỉ làm nhiệm vụ miêu tả thực thể\"</em>.\n  Mai thầy bảo \"số ca trực không quá 7\" — bạn sửa đúng một chỗ: hàm kiểm trong <code>utils/Validation</code>\n  (và hằng số trần trong <code>Constants</code>); Main vẫn gọi nó như cũ, Model không đổi.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "public Doctor(String code, String name, String specialization, int availability) {\n    this.code = code;    // trai: THUOC TINH cua doi tuong · phai: THAM SO truyen vao\n    this.name = name;\n}",
+   "type": "code",
+   "title": "this — giải quyết trùng tên",
+   "language": "java"
+  },
+  {
+   "html": "<p>Bỏ <code>this</code> đi là nó tự gán cho chính nó, field vẫn <code>null</code> — lỗi kinh điển\n  của người lâu không viết Java.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "@Override\npublic String toString() {\n    return String.format(Constants.ROW_FORMAT, code, name, specialization, availability);\n}",
+   "type": "code",
+   "title": "@Override toString() — Đa hình có sẵn trong bài",
+   "language": "java"
+  },
+  {
+   "html": "<p><code>@Override</code> nghĩa là <em>\"tôi đang ghi đè hàm của lớp cha\"</em>. Mọi class trong Java\n  đều ngầm kế thừa <code>Object</code>, mà <code>Object</code> có sẵn <code>toString()</code>. Bạn viết\n  đè lên — <strong>đó chính là Đa hình (Polymorphism)</strong>, có sẵn trong bài, không cần bịa thêm.</p>\n  <p>⚠️ Chú ý nó <strong><code>return</code> chứ không <code>println</code></strong>, vì model bị cấm in.\n  Nó trả về chuỗi, ai cần in thì tự in.</p>\n  <p><strong>Thầy hỏi \"chỉ cho thầy Encapsulation trong bài em\"</strong> → chỉ vào file này.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "2. dto/DoctorRequestDTO.java và DoctorResponseDTO.java",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Hai cái này trông <strong>giống hệt</strong> <code>Doctor</code>, và đó là chỗ ai cũng thắc mắc:\n  \"sao phải viết lại?\". Vì chúng có <strong>nhiệm vụ khác</strong>:</p>\n  <table>\n  <tr><th>Class</th><th>Nhiệm vụ</th></tr>\n  <tr><td><code>Doctor</code></td><td>Sống trong kho — là dữ liệu THẬT</td></tr>\n  <tr><td><code>RequestDTO</code></td><td>Cái HỘP chở dữ liệu từ Main vào Controller</td></tr>\n  <tr><td><code>ResponseDTO</code></td><td>Cái HỘP chở kết quả từ Controller ra View</td></tr>\n  </table>",
+   "type": "prose"
+  },
+  {
+   "code": "// Khong co DTO — 4 tham so, them truong la sua het moi noi goi\ncontroller.addDoctor(code, name, specialization, availability);\n\n// Co DTO — 1 tham so, them truong chi sua trong DTO\ncontroller.addDoctor(requestDTO);",
+   "type": "code",
+   "title": "Đây là lời giải cho luật \"param < 3\": từ 3 trở lên thì gói DTO",
+   "language": "java"
+  },
+  {
+   "html": "<p>Trong đời thật hai cái hộp không giống nhau: hộp <strong>gửi vào</strong> có thể chứa mật khẩu,\n  hộp <strong>hiện ra</strong> thì không được có. Bài này chúng giống nhau, nhưng vẫn tách để đúng\n  kiến trúc.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "3. repository/DoctorRepository.java — cái \"data\" thầy nói",
+   "type": "heading"
+  },
+  {
+   "code": "private Map<String, Doctor> doctorMap = new HashMap<>();",
+   "type": "code",
+   "title": "Kho dữ liệu",
+   "language": "java"
+  },
+  {
+   "html": "<p>Đọc là: <em>\"một bảng tra, khoá là <code>String</code> (mã bác sĩ), giá trị là\n  <code>Doctor</code>\"</em>.</p>\n  <p><strong>Vì sao <code>HashMap</code> chứ không <code>ArrayList</code></strong> — thầy chắc chắn hỏi:</p>\n  <ul>\n  <li>Thao tác chính của bài là <strong>tìm theo mã</strong>. <code>HashMap</code> tra theo khoá gần như\n  tức thì; <code>ArrayList</code> phải duyệt từ đầu tới cuối.</li>\n  <li>Khoá của <code>Map</code> là <strong>duy nhất</strong>, nên nó chặn trùng mã hộ luôn.</li>\n  </ul>",
+   "type": "prose"
+  },
+  {
+   "code": "// .values() lay GIA TRI, .keySet() lay KHOA\nfor (Doctor doctor : doctorMap.values()) {\n    ...\n}\n\n// private vi CHI dung trong chinh class nay; ten bat dau bang dong tu (muc 1.4)\nprivate boolean contains(String field, String text) {\n    return (field != null) && field.toLowerCase().contains(text);\n}",
+   "type": "code",
+   "title": "Vòng lặp for-each và hàm private dùng lại",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Thầy hỏi \"sao hàm này private mà hàm kia public?\"</strong> → <em>\"Vì ngoài class không ai\n  gọi <code>contains</code> — nó chỉ phục vụ <code>searchDoctor</code>. Để <code>public</code> là mở rộng hơn\n  mức cần thiết.\"</em> Để ý tên hàm bắt đầu bằng động từ (mục 1.4) và <code>(field != null)</code> có ngoặc\n  riêng (mục 3.3).</p>",
+   "type": "prose"
+  },
+  {
+   "text": "4. controller/DoctorController.java — người điều phối",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Controller <strong>không tự làm gì cả</strong>. Nó chỉ ra lệnh: nhận RequestDTO từ Main, hỏi\n  Repository (hoặc Services), gói kết quả vào ResponseDTO rồi giao cho View. Nó <strong>không import, không\n  nhận, không trả Model</strong> — Repository mới là nơi dựng <code>Doctor</code> từ DTO.</p>\n  <p>Câu <code>isExistDoctor(code)</code> dưới đây là một câu hỏi CRUD đơn giản gửi Repository (\"mã này có\n  chưa\"); Controller chỉ đọc câu trả lời rồi ném lỗi của đề. Nghiệp vụ tính toán thật (sắp xếp, thống kê,\n  tính tiền) thì không bao giờ nằm ở đây — nó thuộc Services.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "// Chuc nang 1: them bac si, roi View in \"Add doctor successfully.\" — MOT lan\npublic void addDoctor(DoctorRequestDTO requestDTO) throws Exception {\n    DoctorResponseDTO responseDTO = new DoctorResponseDTO();\n\n    // 1. Hoi Repository (CRUD don gian): ma nay co chua? Co roi thi nem loi cua de\n    if (doctorRepository.isExistDoctor(requestDTO.getCode())) {\n        throw new Exception(String.format(Message.DUPLICATE_CODE, requestDTO.getCode()));\n    }\n\n    // 2. Bao Repository luu — Repository tu dung Model tu DTO\n    doctorRepository.addDoctor(requestDTO);\n\n    // 3. Goi ket qua vao ResponseDTO, dua cho View qua THUOC TINH, render 1 lan\n    responseDTO.setMessage(Message.ADD_SUCCESS);\n    doctorView.setResponseDTO(responseDTO);\n    doctorView.display();\n}",
+   "type": "code",
+   "title": "Ba bước, ba vai",
+   "language": "java"
+  },
+  {
+   "html": "<p><code>throws Exception</code> = <em>\"hàm này có thể ném lỗi, ai gọi thì phải hứng\"</em>.\n  <code>throw new Exception(...)</code> = <em>\"ném ngay bây giờ\"</em>. Lỗi bay lên tận <code>Main</code>,\n  nơi có <code>try/catch</code> bắt và in <code>e.getMessage()</code> — đúng mẫu Main của thầy.</p>\n  <p>Đó là lý do <strong>mọi lỗi nghiệp vụ chỉ có MỘT chỗ <code>catch</code></strong> (trong vòng menu của\n  Main) thay vì rải <code>if (loi) System.out.println(...)</code> khắp nơi. Controller không gọi View để in\n  lỗi. (Các vòng nhập của Main như <code>inputChoice</code> có <code>catch</code> riêng chỉ để hỏi lại khi\n  Validation từ chối.)</p>\n  <p>Đây cũng là <strong>Trừu tượng hoá (Abstraction)</strong>: Main gọi <code>addDoctor(requestDTO)</code>\n  là xong, hoàn toàn không biết dữ liệu nằm trong <code>HashMap</code>.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "5. view/DoctorView.java — nhận dữ liệu qua thuộc tính, chỉ biết in",
+   "type": "heading"
+  },
+  {
+   "code": "package view;\n\nimport constants.Constants;\nimport constants.Message;\nimport dto.DoctorResponseDTO;\n\n/**\n * VIEW: the only place (with main) allowed to print results. It receives the data through\n * its attribute (the ResponseDTO, as in the Guide sample), never through the parameters of\n * display().\n *\n * @author HE176322\n */\npublic class DoctorView {\n\n    // The answer to print, handed over by the controller.\n    private DoctorResponseDTO responseDTO;\n\n    // Receives the answer the next display() call will print.\n    public void setResponseDTO(DoctorResponseDTO responseDTO) {\n        this.responseDTO = responseDTO;\n    }\n\n    // Prints what the controller set: the one-line result of add/update/delete, or the\n    // search result.\n    public void display() {\n        // add, update and delete answer with one line\n        if (responseDTO.getMessage() != null) {\n            System.out.println(responseDTO.getMessage());\n        }\n\n        // a search answers with its result\n        if (responseDTO.getDoctorMap() != null) {\n            displayResult();\n        }\n    }\n\n    // Prints the search result: a title, then either \"No doctor found.\" or a header and\n    // one line per doctor.\n    private void displayResult() {\n        System.out.println(Message.TITLE_RESULT);\n\n        // nobody matched the search text\n        if (responseDTO.getDoctorMap().isEmpty()) {\n            System.out.println(Message.NOT_FOUND);\n        } else {\n            // the header, with the same column widths as the rows\n            System.out.println(String.format(Constants.HEADER_FORMAT, Message.LABEL_CODE,\n                    Message.LABEL_NAME, Message.LABEL_SPECIALIZATION,\n                    Message.LABEL_AVAILABILITY));\n\n            // one line per doctor; Doctor.toString() already padded it\n            for (String row : responseDTO.getDoctorMap().values()) {\n                System.out.println(row);\n            }\n        }\n    }\n}",
+   "type": "code",
+   "title": "Bài mẫu 25/25: View giữ ResponseDTO làm thuộc tính, display() không tham số",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>View nhận dữ liệu qua THUỘC TÍNH</strong>: field <code>responseDTO</code> + setter\n  <code>setResponseDTO(...)</code>, rồi <code>display()</code> <strong>không tham số</strong> in theo những gì\n  đã được set. Đúng mẫu của thầy (<code>doctorView.setDoctorMap(result); doctorView.display();</code>) và đúng\n  tờ checklist 1.1: <em>\"Không nên truyền qua param mà phải nhận qua thuộc tính (Nên để ResponseDTO giống ví\n  dụ)\"</em>. Câu thành công đi trong field <code>message</code>, bảng kết quả đi trong field khác; mỗi luồng\n  Controller gọi <code>display()</code> <strong>đúng 1 lần</strong>.</p>\n  <p><code>%-10s</code> = <em>\"chuỗi, chiếm 10 ô, căn trái\"</em>. Dấu <code>-</code> là căn trái, bỏ đi\n  thành căn phải. Định dạng cột nằm ở <code>Constants.HEADER_FORMAT</code> / <code>ROW_FORMAT</code>, nhãn cột\n  nằm ở <code>Message</code> (mục 2.10, 2.11) — View không gõ thẳng chuỗi nào. Dùng <code>\\t</code> thì\n  <strong>vỡ ngay khi có tên dài</strong>.</p>\n  <p>View KHÔNG tính toán gì. Nó nhận <code>ResponseDTO</code> đã xong xuôi rồi in.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "6. utils/Validation.java — nơi static method là BẮT BUỘC",
+   "type": "heading"
+  },
+  {
+   "code": "package utils;\n\nimport constants.Message;\n\n/**\n * Tien ich dung chung: KHONG doi tuong, KHONG field, KHONG ban phim, KHONG in.\n */\npublic final class Validation {\n\n    // private constructor: khong ai new duoc — moi ham goi qua ten class\n    private Validation() {\n    }\n\n    // static: goi thang Validation.getText(...) tu Main, khong can doi tuong\n    public static String getText(String input) {\n        // dong null coi nhu dong rong\n        if (input == null) {\n            return \"\";\n        }\n\n        return input.trim();\n    }\n\n    // Doi lua chon menu sang so va kiem tra no nam trong [min, max]\n    public static int getChoice(String input, int min, int max) throws Exception {\n        int choice = 0;\n\n        // doi sang so truoc: nhap chu thi bao \"Please input number\"\n        try {\n            choice = Integer.parseInt(getText(input));\n        } catch (NumberFormatException e) {\n            // chu cai hoac dong rong: khong phai so\n            throw new Exception(Message.INVALID_NUMBER);\n        }\n\n        // roi moi kiem khoang; ngoac RIENG cho tung phep so sanh (muc 3.3, mau cua thay)\n        if ((choice < min) || (choice > max)) {\n            throw new Exception(String.format(Message.INVALID_RANGE, min, max));\n        }\n\n        return choice;\n    }\n}",
+   "type": "code",
+   "title": "Ba từ khoá, ba lý do",
+   "language": "java"
+  },
+  {
+   "html": "<ul>\n  <li><strong><code>final</code></strong> — class tiện ích không có gì để kế thừa.</li>\n  <li><strong><code>private</code> constructor</strong> — <code>new</code> ra cũng vô nghĩa, nó chẳng giữ gì\n  (tờ checklist 3.4: class chỉ có static method thì phải có private constructor và là final).</li>\n  <li><strong><code>static</code></strong> — gọi thẳng <code>Validation.getChoice(...)</code> qua tên class,\n  không cần đối tượng (mục 3.1).</li>\n  </ul>\n  <p><strong>static được ở đâu, cấm ở đâu</strong> (Guide + tờ checklist): <strong>static method</strong> ở\n  <code>utils</code> (bắt buộc) và ở <code>Main</code> (hàm thì được, <em>biến</em> thì cấm); <strong>hằng\n  <code>static final</code></strong> ở <code>Constants</code>/<code>Message</code>; <strong>cấm</strong> static\n  ở Model và Controller. View, Repository, Services cũng không cần static.</p>",
+   "type": "prose"
+  },
+  {
+   "html": "<p><strong>Ba câu thầy hỏi về <code>static</code>, trả lời bằng chính file này:</strong></p>\n  <p><em>\"Tại sao static?\"</em> — Hàm thuần: cùng đầu vào luôn ra cùng kết quả, không đọc/ghi thuộc tính\n  của đối tượng nào. Gọi từ rất nhiều nơi trong Main. Không static thì mỗi lần gọi phải tạo một đối\n  tượng rỗng.</p>\n  <p><em>\"Bỏ static thì sao?\"</em> — Không biên dịch được, vì gọi method của thể hiện qua tên class là\n  sai cú pháp.</p>\n  <p><em>\"Không dùng static thì sửa thế nào?\"</em> — Bỏ <code>private</code> ở constructor, trong Main\n  tạo <code>Validation validation = new Validation();</code>, đổi mọi lời gọi thành <code>validation.getChoice(...)</code>.\n  Chạy được, nhưng thừa một đối tượng vô nghĩa.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "7. constants/Message.java và Constants.java",
+   "type": "heading"
+  },
+  {
+   "code": "public static final String MENU = \"...\";",
+   "type": "code",
+   "title": "Hằng số",
+   "language": "java"
+  },
+  {
+   "html": "<p><code>static final</code> = <strong>hằng số</strong>: <code>static</code> để gọi\n  <code>Message.MENU</code> không cần <code>new</code>, <code>final</code> để không ai gán lại.\n  Tên viết <code>UPPER_SNAKE_CASE</code> — convention Sun, thầy chấm.</p>\n  <p>Vì sao gom hết câu chữ vào đây: sửa một câu chỉ phải sửa một chỗ, và <strong>không có chuỗi lạ nào\n  nằm rải rác</strong> trong Controller hay View. Thầy nhìn thấy\n  <code>System.out.println(\"Nhap ma bac si: \")</code> giữa Controller là trừ điểm ngay.</p>\n  <p><code>Constants</code> tách riêng vì nó chứa <strong>số</strong>, không phải câu chữ: giới hạn menu,\n  trần số ca trực, định dạng cột.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "8. main/Main.java — gõ cuối cùng",
+   "type": "heading"
+  },
+  {
+   "code": "Scanner sc = new Scanner(System.in);",
+   "type": "code",
+   "title": "Dòng này chỉ được xuất hiện ĐÚNG MỘT LẦN trong cả project",
+   "language": "java"
+  },
+  {
+   "code": "Scanner sc = new Scanner(System.in);\nDoctorController controller = new DoctorController();\nDoctorRequestDTO requestDTO = null;\nboolean running = true;\nint choice = 0;\n\n// hien menu sau moi chuc nang, toi khi chon Exit\nwhile (running) {\n    System.out.println(Message.MENU);\n    choice = inputChoice(sc);\n\n    // MOT cho bat moi loi nghiep vu cua chuc nang vua chon\n    try {\n        // moi case goi controller DUNG 1 lan\n        switch (choice) {\n            // chuc nang 1: Main nhap + validate, roi them\n            case Constants.MENU_ADD:\n                requestDTO = inputAdd(sc);\n                controller.addDoctor(requestDTO);\n                break;\n\n            // Exit: dung vong lap\n            case Constants.MENU_EXIT:\n                running = false;\n                break;\n\n            // khong toi duoc: inputChoice chi tra so trong menu\n            default:\n                break;\n        }\n    } catch (Exception e) {\n        // cau loi da nam trong Message, controller nem ra\n        System.out.println(e.getMessage());\n    }\n}",
+   "type": "code",
+   "title": "Vòng lặp menu: mỗi case gọi controller đúng 1 lần, một chỗ bắt lỗi",
+   "language": "java"
+  },
+  {
+   "html": "<p><code>while (running)</code> chạy tới khi chọn Exit: <code>case</code> Exit gán\n  <code>running = false</code>. <strong><code>break</code> chỉ nhảy ra khỏi <code>switch</code>, KHÔNG thoát\n  vòng lặp</strong> — nhầm hai cái này là chương trình không bao giờ tắt; đó là lý do cần cờ\n  <code>running</code>.</p>\n  <p><code>catch (Exception e)</code> đặt <strong>ngoài</strong> <code>switch</code> nên mọi lỗi từ mọi\n  chức năng đều rơi vào đây. Đó là lý do Controller chỉ cần <code>throw</code> rồi thôi.</p>\n  <p>Mỗi <code>case</code> chỉ làm hai việc: Main tự nhập + validate (hàm <code>inputAdd(sc)</code> trả về\n  RequestDTO), rồi gọi Controller <strong>đúng 1 lần</strong>. Biến <code>choice</code>, <code>requestDTO</code>\n  khai báo ở đầu hàm và có giá trị khởi tạo (mục 2.6, 3.7); số menu là hằng <code>Constants.MENU_ADD</code>,\n  không gõ số trần (mục 2.10).</p>\n  <p>Các hàm <code>private static DoctorRequestDTO inputAdd(Scanner sc)</code> — <code>static</code>\n  <strong>với hàm</strong> thì được; thầy chỉ cấm <code>static</code> <strong>với biến</strong> ở Main. Main chỉ\n  có hàm static nên khai <code>public final class Main</code> kèm constructor <code>private Main()</code>\n  (tờ checklist 3.4).</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Nhìn lại cả bộ",
+   "type": "heading"
+  },
+  {
+   "code": "flowchart LR\n  MAIN[\"Main<br/><i>Scanner · validate</i>\"] -->|\"RequestDTO, 1 lần\"| CTRL[Controller]\n  CTRL -->|\"có tính toán\"| SRV[Services]\n  SRV --> REPO[Repository]\n  CTRL -->|\"không có tính toán\"| REPO\n  REPO --> MODEL[Model]\n  CTRL -->|\"ResponseDTO, 1 lần\"| VIEW[\"View<br/><i>System.out</i>\"]\n  MAIN -.-> VAL[\"Validation<br/><i>static method</i>\"]\n  MODEL -. \"KHONG BAO GIO\" .-x VIEW",
+   "type": "mermaid"
+  },
+  {
+   "html": "<p>Mũi tên <strong>một chiều</strong>. Model và View không bao giờ nói chuyện với nhau — model muốn\n  hiện ra thì trả <code>toString()</code> ngược về, đi qua Repository → Controller → View.</p>\n  <p>Thuộc được sơ đồ này là bạn trả lời được hầu hết câu hỏi kiến trúc, vì mọi câu đều quy về\n  <em>\"tại sao thứ này không được gọi thẳng thứ kia\"</em>.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Ba lỗi trong bản mẫu của thầy — đã vá trong bộ khung",
+   "type": "heading"
+  },
+  {
+   "html": "<table>\n  <tr><th>Chỗ</th><th>Bản mẫu</th><th>Vấn đề</th></tr>\n  <tr><td><code>getString</code></td><td><code>input.equals(null)</code></td>\n      <td>Không bao giờ đúng; <code>input</code> là <code>null</code> thì ném NullPointerException</td></tr>\n  <tr><td><code>getChoice</code></td><td>một <code>catch (Exception)</code> bọc cả hai lỗi</td>\n      <td>Nhập 9 cho menu 1–6 báo nhầm \"không phải số\"</td></tr>\n  <tr><td><code>getPosititveInteger</code></td><td>sai chính tả, khai <code>float</code> mà parse <code>Integer</code></td>\n      <td>Convention bị chấm</td></tr>\n  </table>\n  <p>Bản mẫu còn <strong>thiếu</strong>: <code>case 3</code> (xoá) tạo DTO xong nhưng không gọi controller\n  — bấm xoá không xoá gì; và không có chức năng hiển thị toàn bộ. Bộ khung đã bổ sung cả hai.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Three drills — until the skeleton is in your fingers",
+   "type": "part",
+   "number": "4",
+   "textVi": "Ba bài luyện — làm để thuộc tay",
+   "subtitle": "Each one simulates a change your mentor will ask for on the spot",
+   "subtitleVi": "Mỗi bài mô phỏng một thay đổi thầy sẽ bảo làm ngay tại chỗ"
+  },
+  {
+   "html": "<p>Đọc hiểu bộ khung ở phần 3 là chưa đủ. Thầy sẽ <strong>đổi đề một chút ngay tại chỗ</strong> —\n\"giờ em thêm số điện thoại vào bác sĩ đi\", \"em sắp xếp theo tên xem\", \"bỏ <code>HashMap</code> đi thì sửa\nthế nào\". Lúc đó không có thời gian nghĩ từ đầu.</p>\n<p>Ba bài dưới đây là ba thay đổi hay bị yêu cầu nhất. <strong>Cách làm đúng: tự sửa trước, chạy được rồi\nmới đọc đáp án.</strong> Đọc đáp án trước thì tay không nhớ gì.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "javac -encoding UTF-8 -d build $(find src -name \"*.java\")\njava -cp build main.Main",
+   "type": "code",
+   "title": "Compile and run, in any of the three drills",
+   "titleVi": "Biên dịch và chạy, dùng chung cho cả ba bài",
+   "language": "bash"
+  },
+  {
+   "text": "Drill 1 — Add a phone field",
+   "type": "heading",
+   "textVi": "Bài luyện 1 — Thêm trường phone vào bác sĩ"
+  },
+  {
+   "html": "<p><strong>Đề:</strong> thêm số điện thoại vào bác sĩ. Nhập được, hiện được trong bảng, tìm được, và\nkiểm tra định dạng (10 chữ số, bắt đầu bằng 0).</p>\n<p><strong>Đáp án: sửa 9 file.</strong> Tôi từng ghi \"6 chỗ\" trong bản đầu — <em>sai</em>, làm thật ra 9.\nĐây đúng là lý do phải làm chứ không được đoán.</p>\n<table>\n  <tr><th>#</th><th>File</th><th>Sửa gì</th></tr>\n  <tr><td>1</td><td><code>model/Doctor.java</code></td><td>field <code>phone</code> · tham số constructor · getter/setter · thêm vào <code>toString()</code></td></tr>\n  <tr><td>2</td><td><code>dto/DoctorRequestDTO.java</code></td><td>field + getter/setter</td></tr>\n  <tr><td>3</td><td><code>dto/DoctorResponseDTO.java</code></td><td>field · tham số constructor · getter · <code>toString()</code></td></tr>\n  <tr><td>4</td><td><code>constants/Message.java</code></td><td><code>INPUT_PHONE</code> + <code>INVALID_PHONE</code></td></tr>\n  <tr><td>5</td><td><code>constants/Constants.java</code></td><td>thêm cột vào <code>ROW_FORMAT</code> + <code>PHONE_REGEX</code></td></tr>\n  <tr><td>6</td><td><code>utils/Validation.java</code></td><td>hàm <code>getPhone()</code></td></tr>\n  <tr><td>7</td><td><code>repository/DoctorRepository.java</code></td><td><code>addDoctor</code> · <code>updateDoctor</code> · <code>searchDoctor</code> (chép <code>phone</code> từ DTO sang Model và vào dòng kết quả)</td></tr>\n  <tr><td>8</td><td><code>view/DoctorView.java</code></td><td>thêm cột \"Phone\" vào header</td></tr>\n  <tr><td>9</td><td><code>main/Main.java</code></td><td>nhập phone ở <strong>cả hai</strong> chỗ: thêm và cập nhật</td></tr>\n</table>\n<h4>Điều quan trọng nhất của bài này</h4>\n<p><strong><code>controller/DoctorController.java</code> KHÔNG phải sửa một dòng nào.</strong></p>\n<p>Vì Controller chỉ nhận <code>DoctorRequestDTO</code> rồi chuyển tiếp — nó không quan tâm bên trong DTO có\nmấy trường. Đó <strong>chính là</strong> tiền lãi của luật \"không truyền dữ liệu qua lại\" ở slide 5, và là\ncâu trả lời sẵn khi thầy hỏi \"gói vào DTO để làm gì\".</p>",
+   "type": "prose"
+  },
+  {
+   "code": "// constants/Constants.java\npublic static final String PHONE_REGEX = \"^0\\\\d{9}$\";   // 10 chu so, bat dau bang 0\n\n// ⚠️ BAY: them mot cot thi phai NOI RONG ca dong dinh dang.\n// Ban goc:  \"%-10s%-20s%-20s%-12s\"\n// Them phone ma quen sua -> bang bi lech cot, nhin ra ngay la lam au.\npublic static final String ROW_FORMAT = \"%-10s%-18s%-18s%-14s%-12s\";\n//                                                      ^^^^^ cot Phone",
+   "type": "code",
+   "title": "The regex, and the trap in the column widths",
+   "titleVi": "Regex, và cái bẫy ở độ rộng cột",
+   "language": "java"
+  },
+  {
+   "html": "<p>⚠️ Cột <code>%-12s</code> vừa khít cho \"Availability\" nhưng <strong>không đủ</strong> cho một số điện\nthoại 10 chữ số cạnh nó — phải nới sang <code>%-14s</code>. Chi tiết vặt, nhưng bảng lệch cột là thứ thầy\nnhìn thấy đầu tiên.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Drill 2 — Add a sort menu with the Strategy pattern",
+   "type": "heading",
+   "textVi": "Bài luyện 2 — Thêm menu sắp xếp bằng Strategy"
+  },
+  {
+   "html": "<p><strong>Đề:</strong> thêm mục \"6. Sort and display\" với ba kiểu sắp xếp — theo tên A–Z, theo mã tăng\ndần, theo số ca trực nhiều trước.</p>\n<p>Đây là chỗ <strong>Strategy</strong> tự nhiên nhất trong cả bài, và là pattern dễ bảo vệ nhất trước thầy.\nSắp xếp là <strong>nghiệp vụ tính toán</strong> nên bài bắt đầu có <code>service</code> — tờ checklist 1.1:\n<em>\"Nếu có nghiệp vụ tính toán thì cần thêm Services và đảm bảo layer: Controller &lt;-&gt; Services &lt;-&gt;\nRepository &lt;-&gt; Model\"</em>.</p>\n<table>\n  <tr><th>Thêm mới (5 file)</th><th>Vai trong Strategy</th></tr>\n  <tr><td><code>service/ISortStrategy.java</code></td><td><strong>Strategy</strong> — hợp đồng chung (interface bắt đầu bằng <code>I</code>, mục 1.3)</td></tr>\n  <tr><td><code>service/NameSortStrategy.java</code></td><td>ConcreteStrategy (tên class là danh từ)</td></tr>\n  <tr><td><code>service/CodeSortStrategy.java</code></td><td>ConcreteStrategy</td></tr>\n  <tr><td><code>service/AvailabilitySortStrategy.java</code></td><td>ConcreteStrategy</td></tr>\n  <tr><td><code>service/DoctorServices.java</code></td><td><strong>Context</strong> — chọn chiến lược theo lựa chọn trong DTO, sắp xếp, trả <code>ResponseDTO</code> (không trả Model)</td></tr>\n</table>\n<table>\n  <tr><th>Sửa (8 file)</th><th>Sửa gì</th></tr>\n  <tr><td><code>repository/DoctorRepository.java</code></td><td>thêm <code>findAllDoctor()</code> trả <strong>bản sao</strong> danh sách</td></tr>\n  <tr><td><code>dto/DoctorRequestDTO.java</code></td><td>thêm field <code>sortType</code> + getter/setter</td></tr>\n  <tr><td><code>dto/DoctorResponseDTO.java</code></td><td>thêm field <code>rowList</code> (các dòng đã sắp) + getter/setter</td></tr>\n  <tr><td><code>view/DoctorView.java</code></td><td><code>display()</code> — vẫn <strong>không tham số</strong> — in thêm <code>rowList</code> khi nó được set</td></tr>\n  <tr><td><code>controller/DoctorController.java</code></td><td>giữ thêm <code>DoctorServices</code>, thêm <code>sortDoctor(requestDTO)</code>: gọi Services, <code>setResponseDTO</code> + <code>display()</code> đúng 1 lần</td></tr>\n  <tr><td><code>constants/Message.java</code></td><td>menu chính thêm mục 6, thêm câu nhắc chọn kiểu sắp xếp</td></tr>\n  <tr><td><code>constants/Constants.java</code></td><td><code>MENU_EXIT</code> (số lớn nhất của menu) 6 → 7, thêm <code>MENU_SORT</code>, <code>SORT_BY_NAME</code>/<code>SORT_BY_CODE</code>/<code>SORT_BY_AVAILABILITY</code></td></tr>\n  <tr><td><code>main/Main.java</code></td><td><code>case Constants.MENU_SORT</code>: Main hỏi kiểu sắp xếp (validate bằng <code>Validation.getChoice</code>), gói vào DTO, gọi <code>controller.sortDoctor(requestDTO)</code> <strong>đúng 1 lần</strong></td></tr>\n</table>\n<p>Controller tạo <code>DoctorRepository</code> một lần rồi đưa vào constructor của <code>DoctorServices</code>\n(như bài mẫu P0052), để CRUD và sắp xếp cùng nhìn một kho. Muốn đúng nguyên văn Guide\n(<em>\"Controller … chỉ import DTO, View, Service\"</em>) thì chuyển luôn bốn chức năng CRUD sang\n<code>DoctorServices</code> — Services gọi Repository, Controller bỏ hẳn <code>import repository</code>, và\nluật \"trùng mã\" cũng về Services.</p>\n<h4>Vì sao phải thêm <code>findAllDoctor()</code> — đây là bài học của bài này</h4>\n<p><code>doctorMap</code> là <strong><code>HashMap</code></strong>, mà <strong><code>HashMap</code> KHÔNG giữ\nthứ tự</strong>. Sắp xếp xong rồi nhét lại vào <code>Map</code> là <strong>mất sạch công sắp xếp</strong>.\nNên Services lấy một <code>ArrayList</code> bản sao từ Repository rồi mới sắp, và kết quả đi tới View trong field\n<code>rowList</code> của ResponseDTO — View vẫn chỉ có <strong>một</strong> <code>display()</code> không tham số.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "// ===== service/ISortStrategy.java — Strategy: hop dong chung =====\npackage service;\n\nimport java.util.ArrayList;\nimport model.Doctor;\n\n/**\n * STRATEGY: interface bat dau bang \"I\" (muc 1.3).\n */\npublic interface ISortStrategy {\n\n    // Sap xep danh sach bac si TAI CHO\n    void sort(ArrayList<Doctor> doctorList);\n}\n\n// ===== service/NameSortStrategy.java — ConcreteStrategy: ten class la DANH TU =====\npackage service;\n\nimport java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.Comparator;\nimport model.Doctor;\n\n/**\n * Ten A-Z, khong phan biet hoa thuong (muc 3.5).\n */\npublic class NameSortStrategy implements ISortStrategy {\n\n    // Sap theo ten, bo qua hoa/thuong\n    @Override\n    public void sort(ArrayList<Doctor> doctorList) {\n        Collections.sort(doctorList,\n                Comparator.comparing(Doctor::getName, String.CASE_INSENSITIVE_ORDER));\n    }\n}\n\n// ----- service/DoctorServices.java (trich) — Context: chon chien luoc theo DTO -----\n// Sap xep theo lua chon Main da goi trong DTO; tra ResponseDTO, KHONG tra Model\npublic DoctorResponseDTO sortDoctor(DoctorRequestDTO requestDTO) {\n    DoctorResponseDTO responseDTO = new DoctorResponseDTO();\n    ArrayList<Doctor> doctorList = doctorRepository.findAllDoctor();\n    ArrayList<String> rowList = new ArrayList<>();\n\n    // chien luoc ung voi lua chon (strategyMap dung trong constructor); sap tren BAN SAO\n    strategyMap.get(requestDTO.getSortType()).sort(doctorList);\n\n    // moi bac si mot dong toString(); View chi viec in\n    for (Doctor doctor : doctorList) {\n        rowList.add(doctor.toString());\n    }\n\n    responseDTO.setRowList(rowList);\n    return responseDTO;\n}",
+   "type": "code",
+   "title": "Strategy — the interface, one concrete strategy, and the context",
+   "titleVi": "Strategy — hợp đồng, một chiến lược cụ thể, và Context",
+   "language": "java"
+  },
+  {
+   "html": "<h4>⚠️ Dữ liệu thử phải làm BA thứ tự KHÁC NHAU</h4>\n<p>Lần đầu tôi viết bộ kiểm cho bài này, dữ liệu tình cờ làm cả ba kiểu sắp xếp ra <em>cùng một thứ tự</em>\n— bộ kiểm chạy xanh mà <strong>không chứng minh được gì cả</strong>. Phải chọn dữ liệu sao cho thứ tự theo\ntên ≠ thứ tự theo mã ≠ thứ tự theo số ca trực.</p>\n<p><strong>Trả lời thầy, đủ bốn ý GoF:</strong> <em>tên</em> Strategy → <em>vấn đề</em>: viết\n<code>if/else</code> trong Service thì mỗi lần thêm kiểu sắp xếp phải mở Service ra sửa →\n<em>lời giải</em>: interface + mỗi thuật toán một class, Service giữ tham chiếu tới interface →\n<em>hệ quả</em>: thêm kiểu mới chỉ là thêm một class, Service đứng yên. Đó là Open/Closed.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Drill 3 — Swap HashMap for ArrayList",
+   "type": "heading",
+   "textVi": "Bài luyện 3 — Đổi kho từ HashMap sang ArrayList"
+  },
+  {
+   "html": "<p><strong>Đề:</strong> đổi kho dữ liệu trong Repository từ <code>HashMap&lt;String, Doctor&gt;</code>\nsang <code>ArrayList&lt;Doctor&gt;</code>. <strong>Không thêm chức năng nào</strong> — chương trình chạy y\nhệt. Cái đổi là cấu trúc dữ liệu bên dưới.</p>\n<p>Mục đích: trả lời được câu thầy chắc chắn hỏi — <em>\"tại sao ở đây em dùng <code>HashMap</code> chứ không\nphải <code>ArrayList</code>?\"</em>. Đọc bảng so sánh thì hôm sau quên; tự tay viết cả hai thì nhớ.</p>\n<table>\n  <tr><th>File</th><th>Sửa gì</th></tr>\n  <tr><td><code>repository/DoctorRepository.java</code></td><td><strong>Viết lại gần hết</strong>: field <code>doctorList</code> (mục 1.5: tên kết thúc bằng <code>List</code>), tự viết tìm theo mã, tự chặn trùng mã. <strong>Giữ nguyên chữ ký mọi hàm public.</strong></td></tr>\n</table>\n<p><strong><code>controller/</code>, <code>service/</code>, <code>view/</code>, <code>dto/</code>, <code>model/</code>,\n<code>constants/</code>, <code>utils/</code>, <code>main/</code> — không sửa một chữ nào.</strong> Vì thứ ra khỏi\nRepository đã là DTO, chuỗi kết quả hoặc bản sao danh sách, không tầng nào khác biết dữ liệu nằm trong cái gì.\nĐổi cả kho dữ liệu mà chỉ đụng một file: đó là trừu tượng hoá, và là câu trả lời sẵn cho câu hỏi \"abstraction\nnằm ở đâu trong source em\".</p>\n<h4>Bốn chỗ phải tự bù khi bỏ <code>HashMap</code></h4>",
+   "type": "prose"
+  },
+  {
+   "code": "// HashMap: mot dong, Java lo phan con lai\nDoctor doctor = doctorMap.get(code);\n\n// ArrayList: phai TU VIET vong lap\nprivate Doctor findByCode(String code) {\n    // duyet tu dau toi khi gap dung ma\n    for (Doctor doctor : doctorList) {\n        // so chuoi bang .equals() chu KHONG phai == (muc 3.5)\n        if (doctor.getCode().equals(code)) {\n            return doctor;\n        }\n    }\n\n    return null;\n}\n\n// ⚠️ CHAN TRUNG MA:\n// HashMap chan MIEN PHI - put() cung mot khoa thi de len nhau.\n// ArrayList thi add() cai gi cung nhan. Quen isExistDoctor() -> kho co HAI bac si\n// cung ma \"D01\", va moi ham tim chi thay CAI DAU TIEN. Bug am tham, kho thay.",
+   "type": "code",
+   "title": "1 & 2 — finding by code, and blocking duplicates",
+   "titleVi": "1 & 2 — tìm theo mã, và chặn trùng mã",
+   "language": "java"
+  },
+  {
+   "code": "// ❌ SAI: xoa ngay trong vong lap for-each dang duyet chinh danh sach do\nfor (Doctor doctor : doctorList) {\n    // gap dung ma thi xoa -> ConcurrentModificationException luc CHAY\n    if (doctor.getCode().equals(code)) {\n        doctorList.remove(doctor);\n    }\n}\n\n// ✅ DUNG: tim ra TRUOC, ra khoi vong lap roi moi xoa\npublic boolean deleteDoctor(DoctorRequestDTO requestDTO) throws Exception {\n    Doctor doctor = findByCode(requestDTO.getCode());\n\n    // khong co ma nay: khong xoa gi\n    if (doctor == null) {\n        return false;\n    }\n\n    return doctorList.remove(doctor);\n}\n\n// ❌ SAI: tra ve CHINH kho du lieu\npublic ArrayList<Doctor> findAllDoctor() {\n    return doctorList;\n}\n\n// ✅ DUNG: tra ve BAN SAO\npublic ArrayList<Doctor> findAllDoctor() {\n    return new ArrayList<>(doctorList);\n}\n// Vi Collections.sort() sap xep TAI CHO. Tra ve chinh kho thi bam \"hien thi theo\n// ten\" MOT lan la thu tu nhap ban dau mat VINH VIEN.\n// Ban HashMap khong dinh loi nay: new ArrayList<>(map.values()) von da la ban sao.",
+   "type": "code",
+   "title": "3 & 4 — deleting, and the copy that is easy to forget",
+   "titleVi": "3 & 4 — xoá, và bản sao dễ quên nhất",
+   "language": "java"
+  },
+  {
+   "html": "<h4>Đổi lại được gì</h4>\n<p>Bản <code>ArrayList</code> <strong>giữ thứ tự nhập miễn phí</strong>, nên <code>findAllDoctor()</code> chỉ\ncần trả bản sao. Đổi lại, hai thứ <code>HashMap</code> làm sẵn — tra theo mã và chặn trùng mã — bạn phải tự\nviết, và quên là hỏng dữ liệu. Còn View, Controller, Services thì không biết gì về cuộc đổi này: View vẫn chỉ có\n<strong>một</strong> <code>display()</code> không tham số.</p>\n\n<h4>Bảng đối chiếu — học thuộc bảng này</h4>\n<table>\n  <tr><th></th><th><code>HashMap&lt;String, Doctor&gt;</code></th><th><code>ArrayList&lt;Doctor&gt;</code></th></tr>\n  <tr><td>Tìm theo mã</td><td><code>get(code)</code> — gần như <strong>tức thì</strong>, kho to nhỏ không đổi</td><td>Duyệt từ đầu — <strong>kho càng lớn càng chậm</strong></td></tr>\n  <tr><td>Chặn trùng mã</td><td><strong>Miễn phí</strong> (khoá duy nhất)</td><td><strong>Phải tự viết</strong>, quên là hỏng dữ liệu</td></tr>\n  <tr><td>Giữ thứ tự nhập</td><td>❌ Không</td><td>✅ Có</td></tr>\n  <tr><td>Sắp xếp</td><td>Phải đổ sang <code>ArrayList</code> trước</td><td>Sắp thẳng (nhớ lấy bản sao)</td></tr>\n  <tr><td>File phải sửa khi đổi kho</td><td colspan=\"2\">Chỉ <code>DoctorRepository</code> — nếu giữ nguyên chữ ký các hàm public</td></tr>\n</table>\n<p><strong>Chọn cái nào:</strong> thao tác chính là <em>tra theo mã</em> → <code>HashMap</code>. Thao tác\nchính là <em>duyệt / hiển thị / sắp xếp theo thứ tự</em> → <code>ArrayList</code>. Bài <code>P0055</code>\ntra theo mã ở <strong>bốn</strong> chức năng nên <code>HashMap</code> hợp hơn — nhưng phải trả giá bằng việc\nmất thứ tự.</p>\n\n<h4>Bộ kiểm — bốn thứ tự phải KHÁC NHAU</h4>\n<p>Dữ liệu thử phải làm <em>thứ tự nhập ≠ thứ tự mã ≠ thứ tự tên ≠ thứ tự số ca trực</em>. Trùng nhau thì\nphép kiểm không chứng minh được gì. (Lưu ý <code>MAX_AVAILABILITY = 7</code>, nhập 9 là bị chặn.)</p>\n<table>\n  <tr><th>Nhập vào</th><th>Tên</th><th>Số ca</th></tr>\n  <tr><td><code>D03</code></td><td>Tran Van Cuong</td><td>6</td></tr>\n  <tr><td><code>D01</code></td><td>Nguyen Van An</td><td>2</td></tr>\n  <tr><td><code>D04</code></td><td>Le Thi Dung</td><td>7</td></tr>\n  <tr><td><code>D02</code></td><td>Pham Van Binh</td><td>4</td></tr>\n</table>\n<table>\n  <tr><th>Chức năng</th><th>Thứ tự đúng</th></tr>\n  <tr><td>5. Display all</td><td><code>D03 · D01 · D04 · D02</code> (đúng thứ tự nhập)</td></tr>\n  <tr><td>6 → 1 Tên A–Z</td><td><code>D04 · D01 · D02 · D03</code></td></tr>\n  <tr><td>6 → 2 Mã tăng dần</td><td><code>D01 · D02 · D03 · D04</code></td></tr>\n  <tr><td>6 → 3 Số ca nhiều trước</td><td><code>D04 · D03 · D02 · D01</code></td></tr>\n  <tr><td><strong>5. Display all LẦN NỮA</strong></td><td><strong><code>D03 · D01 · D04 · D02</code></strong> ← quan trọng nhất</td></tr>\n</table>\n<p><strong>Bước cuối là phép kiểm có giá trị nhất cả bài.</strong> Nếu sau ba lần sắp xếp mà \"Display all\"\nra thứ tự khác thứ tự nhập, nghĩa là <code>findAllDoctor()</code> đang trả về chính kho chứ không phải bản\nsao.</p>\n<p>Đã thử phá để chắc bộ kiểm có răng: sửa thành <code>return doctorList;</code> thì bước cuối ra\n<code>D04 · D03 · D02 · D01</code>. Nó <strong>bắt được</strong> lỗi, không phải chỉ chạy cho vui.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Answering your mentor on data structures",
+   "type": "heading",
+   "textVi": "Trả lời thầy về cấu trúc dữ liệu"
+  },
+  {
+   "html": "<p><strong>\"Tại sao dùng <code>HashMap</code> chứ không phải <code>ArrayList</code>?\"</strong></p>\n<blockquote>\"Vì thao tác chính của bài là tra theo mã bác sĩ — sửa, xoá, kiểm tồn tại và chặn trùng đều tra\ntheo mã. <code>HashMap</code> tra theo khoá gần như tức thì dù kho có bao nhiêu phần tử, còn\n<code>ArrayList</code> phải duyệt từ đầu. Thêm nữa khoá của <code>HashMap</code> là duy nhất nên nó chặn\ntrùng mã luôn. Cái phải đánh đổi là <code>HashMap</code> không giữ thứ tự, nên muốn sắp xếp em phải đổ sang\n<code>ArrayList</code> trước — đó là lý do có hàm <code>findAllDoctor()</code>.\"</blockquote>\n\n<p><strong>\"Bỏ <code>HashMap</code> đi thì sửa source thế nào?\"</strong> — câu này thầy hay hỏi nối theo.</p>\n<blockquote>\"Em chỉ phải sửa <code>Repository</code>. <code>Controller</code>, <code>Services</code>,\n<code>View</code>, <code>Main</code>, <code>Model</code>, <code>DTO</code>, <code>Validation</code> không đổi dòng\nnào, vì chúng không biết dữ liệu nằm trong cái gì — thứ ra khỏi Repository chỉ là DTO, chuỗi kết quả và bản\nsao danh sách. Trong <code>Repository</code> em phải tự viết hàm tìm theo mã bằng vòng lặp, và tự kiểm trùng mã\n— hai thứ <code>HashMap</code> làm sẵn cho em.\"</blockquote>\n\n<p><strong>\"<code>List</code> với <code>ArrayList</code> khác nhau chỗ nào?\"</strong></p>\n<blockquote>\"<code>List</code> là <strong>interface</strong> — bản hợp đồng, nói có <code>add</code>,\n<code>get</code>, <code>size</code>, không nói làm thế nào. <code>ArrayList</code> là <strong>class cài\nđặt</strong> hợp đồng đó bằng mảng động: lấy theo chỉ số rất nhanh, chèn/xoá ở giữa thì chậm vì phải dời\nphần tử. <code>LinkedList</code> cài cùng hợp đồng bằng danh sách liên kết, ngược lại. Tương tự\n<code>Map</code> là hợp đồng, <code>HashMap</code> cài bằng bảng băm nên không giữ thứ tự,\n<code>LinkedHashMap</code> giữ thứ tự thêm vào, <code>TreeMap</code> sắp theo khoá.\"</blockquote>\n<p>⚠️ Nhắc lại: tờ checklist <strong>không</strong> quy định khai báo bằng <code>List</code> hay\n<code>ArrayList</code>, <code>Map</code> hay <code>HashMap</code> — mẫu View của thầy khai\n<code>Map&lt;String, DoctorResponseDTO&gt; doctorMap</code>. Cái nó chấm là <strong>tên</strong> (mục 1.5): biến\ntập hợp kết thúc bằng <code>List</code>, Set bằng <code>Set</code>, Map bằng <code>Map</code>, mảng bằng\n<code>Array</code>. Code AI hay đặt <code>ds</code>, <code>data</code>, <code>list</code> — sai đúng mục này.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "If you still have time",
+   "type": "heading",
+   "textVi": "Tự làm thêm nếu còn thời gian"
+  },
+  {
+   "html": "<ol>\n  <li><strong>Thử <code>LinkedHashMap</code></strong> — giữ được cả tốc độ tra khoá <em>lẫn</em> thứ tự\n  nhập. Đổi đúng một dòng khai báo trong Repository, chạy lại bộ kiểm ở trên. Trả lời được \"vậy sao không\n  dùng luôn nó?\" là điểm.</li>\n  <li><strong>Đo thật.</strong> Nhét 100.000 bác sĩ vào rồi tìm mã cuối cùng, đo bằng\n  <code>System.nanoTime()</code> ở cả hai bản. Con số tự đo thuyết phục hơn mọi lời giải thích — và rất ít\n  sinh viên làm.</li>\n  <li><strong>Thử phá <code>deleteDoctor</code></strong> — sửa thành xoá ngay trong vòng lặp for-each, chạy\n  chức năng xoá và đọc <code>ConcurrentModificationException</code> bằng chính mắt mình. Đọc được stack\n  trace cũng là một câu thầy hỏi.</li>\n</ol>",
+   "type": "prose"
+  }
+ ]
+}

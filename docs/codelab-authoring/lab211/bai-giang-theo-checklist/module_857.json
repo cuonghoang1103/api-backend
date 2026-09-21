@@ -1,0 +1,245 @@
+{
+ "id": 857,
+ "name": "Error Handbook — every message, its cause, its fix",
+ "blocks": [
+  {
+   "text": "How to read an error before you fix it",
+   "type": "part",
+   "number": "1",
+   "textVi": "Đọc lỗi trước khi sửa lỗi",
+   "subtitle": "Every message below came out of a real javac or java run",
+   "subtitleVi": "Mọi thông báo dưới đây đều lấy từ một lần chạy javac hoặc java thật"
+  },
+  {
+   "html": "<p>Java error messages are unusually good: they name the file, the line, the column with a caret, and often the exact symbol it could not find. Most of the time the message already contains the fix — the skill is reading all of it instead of only the first line.</p><p>Two families, and you must be able to tell them apart instantly:</p>",
+   "type": "prose",
+   "htmlVi": "<p>Thông báo lỗi của Java tốt một cách khác thường: nó nêu tên tệp, số dòng, dấu mũ chỉ đúng cột, và thường nêu luôn ký hiệu mà nó không tìm thấy. Phần lớn thời gian thông báo đã chứa sẵn cách sửa — kỹ năng ở đây là đọc hết nó chứ không chỉ đọc dòng đầu.</p><p>Có hai họ lỗi, và bạn phải phân biệt được ngay lập tức:</p>"
+  },
+  {
+   "html": "<table><thead><tr><th></th><th>Compile error</th><th>Runtime error</th></tr></thead><tbody><tr><td>When</td><td>before the program starts</td><td>while it is running</td></tr><tr><td>Looks like</td><td><code>Filename.java:12: error: …</code></td><td><code>Exception in thread \"main\" …</code></td></tr><tr><td>Means</td><td>the code is not valid Java</td><td>the code is valid but did something impossible</td></tr><tr><td>Marker sees</td><td>nothing — it will not run at all</td><td>a red stack trace during your demo</td></tr><tr><td>Cost</td><td>you cannot submit</td><td>you lose the validation marks</td></tr></tbody></table>",
+   "type": "prose",
+   "htmlVi": "<table><thead><tr><th></th><th>Lỗi biên dịch</th><th>Lỗi lúc chạy</th></tr></thead><tbody><tr><td>Xảy ra khi</td><td>trước khi chương trình chạy</td><td>trong lúc đang chạy</td></tr><tr><td>Trông như</td><td><code>TenTep.java:12: error: …</code></td><td><code>Exception in thread \"main\" …</code></td></tr><tr><td>Nghĩa là</td><td>code không phải Java hợp lệ</td><td>code hợp lệ nhưng làm một việc bất khả thi</td></tr><tr><td>Người chấm thấy</td><td>không thấy gì — chương trình không chạy nổi</td><td>stack trace đỏ ngay giữa buổi demo</td></tr><tr><td>Cái giá</td><td>bạn không nộp được bài</td><td>bạn mất điểm phần kiểm tra dữ liệu</td></tr></tbody></table>"
+  },
+  {
+   "text": "Compile errors",
+   "type": "part",
+   "number": "2",
+   "textVi": "Lỗi biên dịch",
+   "subtitle": "The nine javac refuses to build, with the message it really prints",
+   "subtitleVi": "Chín lỗi javac từ chối biên dịch, kèm thông báo nó thật sự in ra"
+  },
+  {
+   "html": "<p>Each block below shows the message <strong>exactly</strong> as <code>javac</code> printed it, then the cause and the fix. The code quoted inside a message is the <strong>deliberate mistake</strong> that produced it — an example of the error, never something to copy.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Mỗi khối dưới đây là thông báo <strong>y nguyên</strong> như <code>javac</code> đã in ra, rồi đến nguyên nhân và cách sửa. Đoạn code nằm trong thông báo là <strong>lỗi cố ý</strong> đã sinh ra nó — ví dụ về lỗi, không phải thứ để chép.</p>"
+  },
+  {
+   "text": "cannot find symbol — a class",
+   "type": "heading",
+   "textVi": "cannot find symbol — một lớp"
+  },
+  {
+   "code": "B.java:1: error: cannot find symbol\n        Scanner s = new Scanner(System.in);\n        ^\n  symbol:   class Scanner\n  location: class B",
+   "type": "code",
+   "title": "javac says",
+   "titleVi": "javac báo",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Cause.</strong> The class exists but you never imported it. <code>symbol: class Scanner</code> tells you which one.<br/><strong>Fix.</strong> Add <code>import java.util.Scanner;</code> at the top — or in NetBeans press <code>Ctrl+Shift+I</code> to add every missing import at once.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Nguyên nhân.</strong> Lớp đó có tồn tại nhưng bạn chưa import. Dòng <code>symbol: class Scanner</code> nói rõ là lớp nào.<br/><strong>Cách sửa.</strong> Thêm <code>import java.util.Scanner;</code> ở đầu tệp — hoặc trong NetBeans bấm <code>Ctrl+Shift+I</code> để thêm hết import còn thiếu một lượt.</p>"
+  },
+  {
+   "text": "cannot find symbol — a variable or method",
+   "type": "heading",
+   "textVi": "cannot find symbol — một biến hoặc phương thức"
+  },
+  {
+   "code": "H.java:1: error: cannot find symbol\n        String s=\"x\"; s.lenght();\n                       ^\n  symbol:   method lenght()\n  location: variable s of type String",
+   "type": "code",
+   "title": "javac says",
+   "titleVi": "javac báo",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Cause.</strong> A typo, or the name is out of scope. Here <code>lenght</code> should be <code>length</code>.<br/><strong>Fix.</strong> Read the <code>symbol:</code> line — it prints the name you actually typed. Compare it letter by letter with the one you meant.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Nguyên nhân.</strong> Gõ sai tên, hoặc cái tên đó nằm ngoài phạm vi. Ở đây <code>lenght</code> đáng ra là <code>length</code>.<br/><strong>Cách sửa.</strong> Đọc dòng <code>symbol:</code> — nó in ra đúng cái tên bạn đã gõ. So từng chữ với cái tên bạn định viết.</p>"
+  },
+  {
+   "text": "incompatible types",
+   "type": "heading",
+   "textVi": "incompatible types"
+  },
+  {
+   "code": "A.java:1: error: incompatible types: String cannot be converted to int\n        int x = \"5\";\n                ^\n\nJ.java:1: error: incompatible types: void cannot be converted to int\n        int x = f();      // where f() is declared void\n                 ^",
+   "type": "code",
+   "title": "javac says",
+   "titleVi": "javac báo",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Cause.</strong> You assigned a value of one type to a variable of another. The second form is the common one: calling a method that returns nothing and trying to keep the result.<br/><strong>Fix.</strong> For text to number use <code>Integer.parseInt(s)</code>. For the void case, change the method to <code>return</code> a value — or stop assigning it.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Nguyên nhân.</strong> Bạn gán giá trị kiểu này vào biến kiểu khác. Dạng thứ hai mới hay gặp: gọi một hàm không trả về gì rồi lại định giữ kết quả.<br/><strong>Cách sửa.</strong> Từ chữ sang số thì dùng <code>Integer.parseInt(s)</code>. Với trường hợp void, hãy sửa hàm để nó <code>return</code> một giá trị — hoặc thôi đừng gán nữa.</p>"
+  },
+  {
+   "text": "';' expected",
+   "type": "heading",
+   "textVi": "';' expected"
+  },
+  {
+   "code": "D.java:1: error: ';' expected\n        int n = 5 }\n                 ^",
+   "type": "code",
+   "title": "javac says",
+   "titleVi": "javac báo",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Cause.</strong> A missing semicolon, or an unbalanced brace earlier in the file. The caret points at where javac noticed, which is usually just AFTER the real mistake.<br/><strong>Fix.</strong> Look at the line above the one reported. In NetBeans <code>Alt+Shift+F</code> reformats the file — if the indentation suddenly goes wrong, your missing brace is right there.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Nguyên nhân.</strong> Thiếu dấu chấm phẩy, hoặc lệch dấu ngoặc nhọn ở đâu đó phía trên. Dấu mũ chỉ vào chỗ javac phát hiện ra, mà chỗ đó thường nằm NGAY SAU lỗi thật.<br/><strong>Cách sửa.</strong> Nhìn dòng ngay TRÊN dòng được báo. Trong NetBeans bấm <code>Alt+Shift+F</code> để định dạng lại — chỗ nào thụt lề đột nhiên sai thì dấu ngoặc thiếu nằm ở đó.</p>"
+  },
+  {
+   "text": "missing return statement",
+   "type": "heading",
+   "textVi": "missing return statement"
+  },
+  {
+   "code": "F.java:1: error: missing return statement\n        static int f(){ }\n                      ^",
+   "type": "code",
+   "title": "javac says",
+   "titleVi": "javac báo",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Cause.</strong> A method declared to return something has a path that returns nothing — often an <code>if</code> with no <code>else</code>.<br/><strong>Fix.</strong> Make sure every branch returns. The usual shape is: return inside the loop when found, and return <code>null</code> or <code>-1</code> after the loop.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Nguyên nhân.</strong> Một hàm khai báo có trả về nhưng lại tồn tại nhánh không trả về gì — thường là <code>if</code> mà không có <code>else</code>.<br/><strong>Cách sửa.</strong> Đảm bảo mọi nhánh đều trả về. Khuôn quen thuộc là: tìm thấy thì return ngay trong vòng lặp, và return <code>null</code> hoặc <code>-1</code> sau vòng lặp.</p>"
+  },
+  {
+   "text": "class X is public, should be declared in a file named X.java",
+   "type": "heading",
+   "textVi": "class X is public, should be declared in a file named X.java"
+  },
+  {
+   "code": "G.java:1: error: class Wrong is public, should be declared in a file named Wrong.java\n        public class Wrong { … }\n                     ^",
+   "type": "code",
+   "title": "javac says",
+   "titleVi": "javac báo",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Cause.</strong> A public class must live in a file of exactly the same name, including capitals.<br/><strong>Fix.</strong> Rename the file or the class. In NetBeans, right-click the class name → Refactor → Rename renames both together.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Nguyên nhân.</strong> Một lớp public bắt buộc phải nằm trong tệp trùng tên y hệt, kể cả chữ hoa chữ thường.<br/><strong>Cách sửa.</strong> Đổi tên tệp hoặc tên lớp. Trong NetBeans, chuột phải vào tên lớp → Refactor → Rename để đổi cả hai cùng lúc.</p>"
+  },
+  {
+   "text": "cannot assign a value to final variable length",
+   "type": "heading",
+   "textVi": "cannot assign a value to final variable length"
+  },
+  {
+   "code": "E.java:1: error: cannot assign a value to final variable length\n        if (a.length = 1) {}\n             ^\nE.java:1: error: incompatible types: int cannot be converted to boolean\n        if (a.length = 1) {}\n                     ^",
+   "type": "code",
+   "title": "javac says",
+   "titleVi": "javac báo",
+   "language": "text"
+  },
+  {
+   "html": "<p><strong>Cause.</strong> You wrote <code>=</code> (assign) where you meant <code>==</code> (compare). Java catches it here only because the target is final and the result is not a boolean — with a plain <code>int</code> variable this compiles and silently does the wrong thing.<br/><strong>Fix.</strong> Inside an <code>if</code>, <code>=</code> is almost always a bug. Read every condition once looking only for single equals signs.</p>",
+   "type": "prose",
+   "htmlVi": "<p><strong>Nguyên nhân.</strong> Bạn viết <code>=</code> (gán) ở chỗ đáng ra phải là <code>==</code> (so sánh). Java bắt được ở đây chỉ vì đích đến là final và kết quả không phải boolean — với một biến <code>int</code> thường thì nó biên dịch được và lặng lẽ làm sai.<br/><strong>Cách sửa.</strong> Bên trong <code>if</code>, dấu <code>=</code> gần như luôn là lỗi. Hãy đọc lại mọi điều kiện một lượt, chỉ để soi dấu bằng đơn.</p>"
+  },
+  {
+   "text": "Runtime errors",
+   "type": "part",
+   "number": "3",
+   "textVi": "Lỗi lúc chạy",
+   "subtitle": "The program compiled, then fell over — these are the six you will meet",
+   "subtitleVi": "Chương trình biên dịch xong rồi mới đổ — đây là sáu lỗi bạn sẽ gặp"
+  },
+  {
+   "html": "<p>These messages were produced by running a program that triggers each one, so they are the exact text you will see in the NetBeans output window.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Những thông báo này được sinh ra bằng cách chạy một chương trình cố tình kích hoạt từng lỗi, nên chúng đúng là dòng chữ bạn sẽ thấy trong cửa sổ output của NetBeans.</p>"
+  },
+  {
+   "code": "java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 3\njava.lang.NullPointerException: Cannot invoke \"String.length()\" because \"<local0>\" is null\njava.lang.NumberFormatException: For input string: \"abc\"\njava.lang.ArithmeticException: / by zero\njava.util.InputMismatchException\njava.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0",
+   "type": "code",
+   "title": "The six, as Java prints them",
+   "titleVi": "Sáu lỗi, đúng như Java in ra",
+   "language": "text"
+  },
+  {
+   "html": "<table><thead><tr><th>Exception</th><th>What it really means</th><th>The fix in this course</th></tr></thead><tbody><tr><td><code>ArrayIndexOutOfBounds: Index 5 … length 3</code></td><td>the index is past the end — read the two numbers, they tell you by how much</td><td>loop to <code>&lt; length</code>, never <code>&lt;=</code></td></tr><tr><td><code>NullPointerException: … because \"x\" is null</code></td><td>you used something that was never created; modern Java names it for you</td><td>a <code>findById</code> returned null and you did not check</td></tr><tr><td><code>NumberFormatException: For input string: \"abc\"</code></td><td>the user typed letters where a number was expected</td><td>this is EXPECTED input — catch it and re-prompt</td></tr><tr><td><code>ArithmeticException: / by zero</code></td><td>integer division by zero (doubles give Infinity instead)</td><td>guard the divisor: an empty list has size 0</td></tr><tr><td><code>InputMismatchException</code></td><td><code>nextInt()</code> met something that is not an int</td><td>stop using <code>nextInt()</code>; read lines and parse</td></tr><tr><td><code>IndexOutOfBoundsException: Index 0 … length 0</code></td><td>you read from an empty list</td><td>check <code>isEmpty()</code> before <code>get(0)</code></td></tr></tbody></table>",
+   "type": "prose",
+   "htmlVi": "<table><thead><tr><th>Ngoại lệ</th><th>Thật ra nghĩa là gì</th><th>Cách sửa trong môn này</th></tr></thead><tbody><tr><td><code>ArrayIndexOutOfBounds: Index 5 … length 3</code></td><td>chỉ số vượt quá cuối mảng — đọc hai con số là biết vượt bao nhiêu</td><td>lặp tới <code>&lt; length</code>, đừng bao giờ <code>&lt;=</code></td></tr><tr><td><code>NullPointerException: … because \"x\" is null</code></td><td>bạn dùng một thứ chưa từng được tạo; Java hiện đại nêu tên luôn cho bạn</td><td>một hàm <code>findById</code> trả về null mà bạn không kiểm tra</td></tr><tr><td><code>NumberFormatException: For input string: \"abc\"</code></td><td>người dùng gõ chữ vào chỗ cần số</td><td>đây là đầu vào ĐƯỢC DỰ ĐOÁN — hãy bắt nó và hỏi lại</td></tr><tr><td><code>ArithmeticException: / by zero</code></td><td>chia số nguyên cho 0 (còn double thì ra Infinity)</td><td>kiểm tra mẫu số: danh sách rỗng có size bằng 0</td></tr><tr><td><code>InputMismatchException</code></td><td><code>nextInt()</code> gặp thứ không phải số nguyên</td><td>thôi dùng <code>nextInt()</code>; hãy đọc theo dòng rồi parse</td></tr><tr><td><code>IndexOutOfBoundsException: Index 0 … length 0</code></td><td>bạn đọc từ một danh sách rỗng</td><td>kiểm tra <code>isEmpty()</code> trước khi <code>get(0)</code></td></tr></tbody></table>"
+  },
+  {
+   "text": "The error that only appears sometimes",
+   "type": "part",
+   "number": "4",
+   "textVi": "Lỗi chỉ thỉnh thoảng mới xuất hiện",
+   "subtitle": "ConcurrentModificationException, and why your test missed it",
+   "subtitleVi": "ConcurrentModificationException, và vì sao lúc bạn test lại không thấy"
+  },
+  {
+   "html": "<p>Deleting from a list while a for-each walks it is supposed to throw <code>ConcurrentModificationException</code>. Sometimes it does not — and the case where it stays silent is the one most students test with.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Xoá phần tử khỏi danh sách trong lúc for-each đang duyệt thì đáng ra phải ném <code>ConcurrentModificationException</code>. Có lúc nó không ném — và đúng trường hợp im lặng đó lại là trường hợp phần lớn sinh viên đem ra thử.</p>"
+  },
+  {
+   "code": "import java.util.ArrayList;\nimport java.util.ConcurrentModificationException;\nimport java.util.List;\n\n/**\n * A DELIBERATE BUG, do not copy: removing from a list inside a for-each over the same list.\n * Run on 2, 3 and 4 elements to show when ConcurrentModificationException appears.\n */\npublic final class CmeDemo {\n\n    // Private constructor: this class only has static methods (checklist 3.4).\n    private CmeDemo() {\n    }\n\n    // Runs the same buggy loop on lists of 2, 3 and 4 numbers.\n    public static void main(String[] args) {\n        int[] sizeArray = {2, 3, 4};\n\n        // one fresh list per size: 1, 2, ..., size\n        for (int size : sizeArray) {\n            List<Integer> numberList = new ArrayList<>();\n\n            // fill the list\n            for (int i = 1; i <= size; i++) {\n                numberList.add(i);\n            }\n\n            // THE BUG: remove() inside a for-each over the same list\n            try {\n                for (Integer number : numberList) {\n                    // equals, not ==, for an Integer; remove(Object) deletes the value 1\n                    if (number.equals(1)) {\n                        numberList.remove(number);\n                    }\n                }\n\n                System.out.printf(\"n=%d -> no error, left %s%n\", size, numberList);\n            } catch (ConcurrentModificationException e) {\n                // print the exception and go on with the next size\n                System.out.printf(\"n=%d -> %s%n\", size, e);\n            }\n        }\n    }\n}",
+   "type": "code",
+   "title": "Same bug, three list sizes (a deliberate bug — do not copy)",
+   "titleVi": "Cùng một lỗi, ba kích thước danh sách (lỗi cố ý — đừng chép)",
+   "language": "java"
+  },
+  {
+   "code": "n=2 -> no error, left [2]\nn=3 -> java.util.ConcurrentModificationException\nn=4 -> java.util.ConcurrentModificationException",
+   "type": "code",
+   "title": "Real output",
+   "titleVi": "Kết quả chạy thật",
+   "language": "text"
+  },
+  {
+   "html": "<p>With two elements the loop removes the first, the list shrinks to one, and the iterator's <code>hasNext()</code> decides it is finished before it ever notices the change. So the bug passes a two-item test and fails the moment the marker adds a third record.</p><p>This is the strongest argument in this whole handbook for testing with more data than you think you need.</p><p><strong>The fix.</strong> Never remove through the list inside a for-each over it. Loop over the positions from the end and call <code>remove(i)</code>, as in the List section of the Java API Reference, or call <code>remove()</code> on an explicit <code>Iterator</code>.</p>",
+   "type": "prose",
+   "htmlVi": "<p>Với hai phần tử, vòng lặp xoá phần tử đầu, danh sách còn một, và <code>hasNext()</code> của iterator kết luận là đã duyệt xong trước cả khi kịp phát hiện có thay đổi. Thế là lỗi vượt qua bài test hai phần tử, rồi hỏng ngay khi người chấm thêm bản ghi thứ ba.</p><p>Đây là lập luận mạnh nhất trong cả cuốn sổ tay này cho việc test với nhiều dữ liệu hơn mức bạn nghĩ là cần.</p><p><strong>Cách sửa.</strong> Đừng bao giờ xoá qua chính danh sách trong lúc for-each đang duyệt nó. Hãy duyệt theo vị trí từ cuối về và gọi <code>remove(i)</code>, như mục List trong phần Java API Reference, hoặc gọi <code>remove()</code> trên một <code>Iterator</code> tường minh.</p>"
+  },
+  {
+   "text": "A procedure that always works",
+   "type": "part",
+   "number": "5",
+   "textVi": "Quy trình lúc nào cũng dùng được",
+   "subtitle": "What to do in the first sixty seconds after an error appears",
+   "subtitleVi": "Làm gì trong sáu mươi giây đầu sau khi lỗi hiện ra"
+  },
+  {
+   "html": "<ol><li><strong>Read the whole message, not the first line.</strong> The <code>symbol:</code> and <code>because \"x\" is null</code> parts usually name the fix.</li><li><strong>Go to the FIRST <code>at</code> line that mentions your own package.</strong> Anything with <code>java.</code> or <code>jdk.</code> is the library reporting your mistake, not making one.</li><li><strong>Open that line and read the one above it too.</strong> For syntax errors the real mistake is usually earlier than the caret.</li><li><strong>Put a breakpoint on that line and run in debug.</strong> Look at the Variables window: in most cases a parameter is already wrong when it arrives, and the bug is in the caller.</li><li><strong>Fix one thing, then recompile.</strong> Fixing three things at once means you no longer know which one mattered.</li><li><strong>If it still fails, delete <code>build/</code> and rebuild.</strong> A stale class file can keep an error alive after you have fixed it.</li></ol>",
+   "type": "prose",
+   "htmlVi": "<ol><li><strong>Đọc hết thông báo, đừng chỉ đọc dòng đầu.</strong> Phần <code>symbol:</code> và phần <code>because \"x\" is null</code> thường đã nêu luôn cách sửa.</li><li><strong>Nhảy tới dòng <code>at</code> ĐẦU TIÊN có nhắc tới package của bạn.</strong> Mọi dòng có <code>java.</code> hay <code>jdk.</code> là thư viện đang báo lỗi của bạn, không phải nó sai.</li><li><strong>Mở dòng đó và đọc luôn dòng ngay trên.</strong> Với lỗi cú pháp, lỗi thật thường nằm trước vị trí dấu mũ.</li><li><strong>Đặt breakpoint vào dòng đó rồi chạy debug.</strong> Nhìn cửa sổ Variables: phần lớn trường hợp tham số đã sai ngay khi vừa truyền vào, và lỗi thật nằm ở nơi gọi.</li><li><strong>Sửa một thứ rồi biên dịch lại.</strong> Sửa ba thứ cùng lúc thì bạn không còn biết thứ nào mới là nguyên nhân.</li><li><strong>Nếu vẫn hỏng, xoá <code>build/</code> rồi build lại.</strong> Một tệp .class cũ còn sót có thể giữ lỗi sống dai sau khi bạn đã sửa xong.</li></ol>"
+  },
+  {
+   "type": "practice",
+   "items": [
+    {
+     "url": "/code-lab/java-core#module-246",
+     "note": "Compiling and running from scratch — where most of these errors come from",
+     "label": "Java fundamentals and environment",
+     "noteVi": "Biên dịch và chạy từ đầu — nơi phần lớn các lỗi này sinh ra",
+     "labelVi": "Nền tảng Java và môi trường"
+    },
+    {
+     "url": "/code-lab/java-core#module-252",
+     "note": "Turning the runtime errors above into handled cases",
+     "label": "Exception handling, I/O and generics",
+     "noteVi": "Biến các lỗi lúc chạy ở trên thành những tình huống đã xử lý",
+     "labelVi": "Xử lý ngoại lệ, I/O và generic"
+    }
+   ]
+  }
+ ]
+}

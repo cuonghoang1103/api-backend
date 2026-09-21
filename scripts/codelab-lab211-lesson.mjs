@@ -1,4 +1,9 @@
 /**
+ * ⛔⛔ ĐỪNG CHẠY LẠI (22/09/2026): nội dung module LAB211 trên production đã sửa theo tờ checklist
+ * giấy của thầy; nguồn chuẩn nay là docs/codelab-authoring/lab211/bai-giang-theo-checklist/.
+ * Script này sinh bản CŨ (kiến trúc entity/bo/ui, View nhận tham số) — chạy --apply là đè mất bản đã sửa.
+ */
+/**
  * codelab-lab211-lesson.mjs — viết bài giảng cho module `lab211-assignments`
  * (track LAB211) vào CodeModule.lessonBlocks.
  *

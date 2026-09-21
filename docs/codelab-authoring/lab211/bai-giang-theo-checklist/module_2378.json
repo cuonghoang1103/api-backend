@@ -1,0 +1,641 @@
+{
+ "id": 2378,
+ "name": "OOP · SOLID · Design Pattern — phần thầy hỏi khi review",
+ "blocks": [
+  {
+   "text": "4 tính chất OOP — soi thẳng vào bài P0055",
+   "type": "part",
+   "number": "1",
+   "subtitle": "Thầy hỏi: \"liệt kê 4 tính chất, rồi chỉ ra trong source của em\""
+  },
+  {
+   "html": "<p>Đây là câu hỏi review gần như chắc chắn có. Học thuộc định nghĩa thôi thì trượt —\n  phải <strong>chỉ đúng dòng code</strong> trong bài của mình.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "1. Encapsulation — Đóng gói",
+   "type": "heading"
+  },
+  {
+   "html": "<p><em>Gói dữ liệu và hành vi vào một class, che dữ liệu bên trong, chỉ mở ra qua getter/setter.</em></p>",
+   "type": "prose"
+  },
+  {
+   "code": "public class Doctor {\n\n    // Đóng gói: thuộc tính private, bên ngoài KHÔNG chạm thẳng được\n    private String code;\n\n    // Số ca trực của bác sĩ\n    private int availability;\n\n    // Chỉ mở ra qua getter public: trả về mã\n    public String getCode() {\n        return code;\n    }\n\n    // Trả về số ca trực\n    public int getAvailability() {\n        return availability;\n    }\n\n    // Đổi số ca trực — chỉ gán; Main đã validate trước khi dữ liệu tới đây\n    public void setAvailability(int availability) {\n        this.availability = availability;\n    }\n}",
+   "type": "code",
+   "title": "model/Doctor.java — chỉ ra chỗ này",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Trả lời thầy:</strong> \"Em để field <code>private</code> nên không class nào sửa thẳng được\n  <code>availability</code>. Muốn đọc/ghi phải qua <code>getAvailability()</code>/<code>setAvailability()</code>.\n  Còn luật 'không được âm' thì em kiểm ở <code>utils/Validation</code>, Main gọi trước khi gói DTO — tờ\n  checklist 1.1 bắt toàn bộ validate ở Main; Model chỉ mô tả thực thể nên setter chỉ gán.\"</p>",
+   "type": "prose"
+  },
+  {
+   "text": "2. Abstraction — Trừu tượng hoá",
+   "type": "heading"
+  },
+  {
+   "html": "<p><em>Chỉ phơi ra <strong>cái gì làm được</strong>, giấu <strong>làm thế nào</strong>.</em></p>",
+   "type": "prose"
+  },
+  {
+   "code": "// Main chỉ biết \"thêm bác sĩ\": KHÔNG biết dữ liệu nằm trong HashMap, cũng không biết\n// Repository dựng Model thế nào\npublic void addDoctor(DoctorRequestDTO requestDTO) throws Exception {\n    DoctorResponseDTO responseDTO = new DoctorResponseDTO();\n\n    // đề bài: mã bác sĩ không được trùng\n    if (doctorRepository.isExistDoctor(requestDTO.getCode())) {\n        throw new Exception(String.format(Message.DUPLICATE_CODE, requestDTO.getCode()));\n    }\n\n    // lưu, rồi đưa kết quả cho View qua thuộc tính — render 1 lần\n    doctorRepository.addDoctor(requestDTO);\n    responseDTO.setMessage(Message.ADD_SUCCESS);\n    doctorView.setResponseDTO(responseDTO);\n    doctorView.display();\n}",
+   "type": "code",
+   "title": "controller/DoctorController.java",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Trả lời thầy:</strong> \"Main gọi <code>controller.addDoctor(requestDTO)</code> là xong. Nó không biết\n  em lưu bằng <code>HashMap</code> hay <code>ArrayList</code> hay file. Mai em đổi sang lưu file thì Main\n  không phải sửa một dòng nào.\"</p>",
+   "type": "prose"
+  },
+  {
+   "text": "3. Inheritance — Kế thừa",
+   "type": "heading"
+  },
+  {
+   "html": "<p><em>Class con dùng lại thuộc tính và hành vi của class cha.</em> Bài <code>P0055</code> mẫu\n  <strong>chưa có</strong> kế thừa — mà slide nội quy ghi <em>\"dùng được kế thừa, đa hình sẽ được cộng LOC\"</em>.\n  Đây là chỗ kiếm điểm.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "// ===== model/Person.java — phần chung của mọi con người trong hệ thống =====\npackage model;\n\n/**\n * MODEL cha: phần chung của bác sĩ, y tá...\n */\npublic abstract class Person {\n\n    // protected: class con dùng được, class khác package thì không\n    protected String code;\n\n    // Họ tên\n    protected String name;\n\n    // Tạo phần chung; class con gọi qua super(...)\n    public Person(String code, String name) {\n        this.code = code;\n        this.name = name;\n    }\n\n    // Trả về mã\n    public String getCode() {\n        return code;\n    }\n\n    // Trả về họ tên\n    public String getName() {\n        return name;\n    }\n\n    // Bắt buộc class con tự mô tả vai trò của mình\n    public abstract String describeRole();\n}\n\n// ===== model/Doctor.java — kế thừa phần chung, thêm phần riêng =====\npackage model;\n\nimport constants.Message;\n\n/**\n * MODEL con: một bác sĩ LÀ MỘT người.\n */\npublic class Doctor extends Person {\n\n    // Chuyên khoa\n    private String specialization;\n\n    // Số ca trực\n    private int availability;\n\n    // Phần chung giao cho constructor cha, phần riêng tự gán\n    public Doctor(String code, String name, String specialization, int availability) {\n        super(code, name);\n        this.specialization = specialization;\n        this.availability = availability;\n    }\n\n    // Trả về số ca trực\n    public int getAvailability() {\n        return availability;\n    }\n\n    // Bản mô tả riêng của bác sĩ; câu chữ nằm ở Message (mục 2.11)\n    @Override\n    public String describeRole() {\n        return String.format(Message.DOCTOR_ROLE, specialization);\n    }\n}\n\n// ===== model/Nurse.java — class con thứ hai, cùng gốc Person =====\npackage model;\n\nimport constants.Message;\n\n/**\n * MODEL con: một y tá cũng LÀ MỘT người.\n */\npublic class Nurse extends Person {\n\n    // Khoa làm việc\n    private String department;\n\n    // Phần chung giao cho constructor cha, phần riêng tự gán\n    public Nurse(String code, String name, String department) {\n        super(code, name);\n        this.department = department;\n    }\n\n    // Bản mô tả riêng của y tá\n    @Override\n    public String describeRole() {\n        return String.format(Message.NURSE_ROLE, department);\n    }\n}\n\n// ----- constants/Message.java (thêm hai câu) -----\n// Mô tả vai trò bác sĩ; %s là chuyên khoa\npublic static final String DOCTOR_ROLE = \"Bac si chuyen khoa %s\";\n\n// Mô tả vai trò y tá; %s là khoa\npublic static final String NURSE_ROLE = \"Y ta khoa %s\";",
+   "type": "code",
+   "title": "Thêm kế thừa một cách TỰ NHIÊN (không gượng ép)",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Cảnh báo:</strong> chỉ thêm kế thừa khi bài <em>thật sự</em> có hai loại đối tượng chung gốc\n  (Doctor + Nurse, Student + Teacher). Bịa ra một class cha cho <em>một</em> class con là gượng ép,\n  thầy hỏi \"tại sao\" là bí ngay.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "4. Polymorphism — Đa hình",
+   "type": "heading"
+  },
+  {
+   "html": "<p><em>Cùng một lời gọi, nhiều cách chạy khác nhau tuỳ đối tượng thật.</em></p>",
+   "type": "prose"
+  },
+  {
+   "code": "// ----- service/StaffServices.java (trích) — duyệt theo kiểu CHA, chạy bản của lớp CON -----\n// Liệt kê vai trò của mọi nhân sự; KHÔNG println ở đây — kết quả về Controller rồi sang View\npublic StaffResponseDTO getRoleList() {\n    StaffResponseDTO responseDTO = new StaffResponseDTO();\n    ArrayList<String> roleList = new ArrayList<>();\n\n    // Java tự chọn đúng bản describeRole() của Doctor hay Nurse lúc CHẠY, không phải lúc biên dịch\n    for (Person person : staffRepository.findAllPerson()) {\n        roleList.add(person.describeRole());\n    }\n\n    responseDTO.setRoleList(roleList);\n    return responseDTO;\n}",
+   "type": "code",
+   "title": "Đa hình qua ghi đè (overriding) — kết quả đi về View, không println",
+   "language": "java"
+  },
+  {
+   "html": "<p>Còn một dạng đa hình nữa <strong>đã có sẵn</strong> trong bài mẫu, ít bạn để ý:\n  <code>toString()</code> của <code>Doctor</code> là <strong>override</strong> phương thức của\n  <code>Object</code>. Khi Repository gọi <code>doctor.toString()</code> để dựng dòng kết quả (bài mẫu P0055:\n  <code>foundMap.put(doctor.getCode(), doctor.toString())</code>), Java gọi bản của bạn chứ không gọi bản mặc\n  định. Chuỗi đó đi Repository → Controller → View rồi mới được in. Đó là đa hình — chỉ ra chỗ này cũng được\n  tính.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "// Ghi đè Object.toString(): TRẢ VỀ một dòng bảng; định dạng cột nằm ở Constants (mục 2.10)\n@Override\npublic String toString() {\n    return String.format(Constants.ROW_FORMAT, code, name, specialization, availability);\n}",
+   "type": "code",
+   "title": "model/Doctor.java — đa hình có sẵn trong bài mẫu",
+   "language": "java"
+  },
+  {
+   "text": "Bảng tra nhanh khi thầy hỏi",
+   "type": "heading"
+  },
+  {
+   "html": "<table>\n  <tr><th>Tính chất</th><th>Chỉ vào đâu trong bài</th><th>Một câu trả lời</th></tr>\n  <tr><td>Encapsulation</td><td><code>Doctor</code>: field private + getter/setter</td>\n      <td>\"Che dữ liệu, chỉ đổi qua setter; validate ở Main\"</td></tr>\n  <tr><td>Abstraction</td><td><code>Controller</code>, <code>Repository</code></td>\n      <td>\"Main không biết dữ liệu lưu bằng gì\"</td></tr>\n  <tr><td>Inheritance</td><td><code>Doctor extends Person</code></td>\n      <td>\"Dùng lại phần chung, không chép code\"</td></tr>\n  <tr><td>Polymorphism</td><td><code>@Override toString()</code>, <code>describeRole()</code></td>\n      <td>\"Cùng lời gọi, chạy đúng bản của từng loại\"</td></tr>\n  </table>",
+   "type": "prose"
+  },
+  {
+   "text": "Access modifier & static",
+   "type": "part",
+   "number": "2",
+   "subtitle": "Hai chỗ giảng viên reject nhiều nhất"
+  },
+  {
+   "text": "Bảng phạm vi — học thuộc bảng này",
+   "type": "heading"
+  },
+  {
+   "html": "<table>\n  <tr><th>Từ khoá</th><th>Cùng class</th><th>Cùng package</th><th>Class con khác package</th><th>Mọi nơi</th></tr>\n  <tr><td><code>private</code></td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>\n  <tr><td><em>(default)</em></td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>\n  <tr><td><code>protected</code></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>\n  <tr><td><code>public</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>\n  </table>",
+   "type": "prose"
+  },
+  {
+   "text": "Dùng cái nào trong bài LAB211",
+   "type": "heading"
+  },
+  {
+   "html": "<ul>\n  <li><strong>Field của model/DTO → luôn <code>private</code>.</strong> Không có ngoại lệ.</li>\n  <li><strong>Getter/setter, method gọi từ package khác → <code>public</code>.</strong></li>\n  <li><strong>Hàm phụ chỉ dùng trong chính class đó → <code>private</code>.</strong> Ví dụ\n  <code>private void checkDatabase()</code> trong <code>DoctorRepository</code> của bài mẫu — để\n  <code>public</code> là thừa, và thầy sẽ hỏi \"ai gọi hàm này từ ngoài?\".</li>\n  <li><strong><code>protected</code> chỉ khi có kế thừa thật</strong> — field của class cha cho class con dùng.</li>\n  <li><strong>Field của Controller</strong> (<code>doctorRepository</code>, <code>doctorView</code>) →\n  <code>private</code>, gán trong constructor.</li>\n  <li><strong>Field của View</strong> (<code>responseDTO</code>) → <code>private</code>, nhận qua setter\n  <code>setResponseDTO(...)</code> — View nhận dữ liệu qua thuộc tính (tờ checklist 1.1).</li>\n  </ul>",
+   "type": "prose"
+  },
+  {
+   "html": "<p><strong>Câu thầy hỏi:</strong> <em>\"Tại sao chỗ này em để private / public?\"</em><br/>\n  <strong>Trả lời:</strong> \"Em để <code>private</code> vì ngoài class này không ai cần chạm tới nó.\n  Cái gì cần lộ ra thì em mở bằng method <code>public</code>, để sau này sửa bên trong không ảnh hưởng\n  nơi khác. Mở rộng hơn mức cần thiết là tự tạo ra chỗ để người khác phá vỡ đóng gói.\"</p>",
+   "type": "prose"
+  },
+  {
+   "text": "static — được ở đâu, cấm ở đâu",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Giảng viên ghi trong file Guide:</p>\n  <ul>\n  <li><code>utils/Validation.java</code> → <strong>\"chỗ này phải dùng static method\"</strong>,\n  class để <code>final</code>, constructor để <code>private</code></li>\n  <li><code>main/Main.java</code> → <strong>\"cấm dùng static với biến, có thể dùng với hàm\"</strong></li>\n  <li><code>controller</code> → <strong>\"không static\"</strong></li>\n  <li><code>model</code> → <strong>\"không được dùng static\"</strong></li>\n  <li><code>constants</code> → hằng số và message khai <strong><code>static final</code></strong> (tờ checklist\n  2.10, 2.11)</li>\n  </ul>\n  <p>Tóm lại: <strong>static method</strong> ở <code>utils</code> (bắt buộc) và ở <code>Main</code>; <strong>hằng\n  <code>static final</code></strong> ở <code>Constants</code>/<code>Message</code>; <strong>cấm</strong> ở Model,\n  Controller và biến của Main. View, Repository, Services không cần static — Singleton (phần 4) là ngoại lệ phải\n  hỏi thầy trước.</p>",
+   "type": "prose"
+  },
+  {
+   "code": "package utils;\n\nimport constants.Message;\n\n// final: không ai extend được class tiện ích này\npublic final class Validation {\n\n    // private constructor: không ai new Validation() được — vì new ra cũng vô nghĩa (mục 3.4)\n    private Validation() {\n    }\n\n    // static: hàm thuần, kết quả chỉ phụ thuộc tham số vào, không phụ thuộc đối tượng nào\n    public static String getString(String input) throws Exception {\n        // LƯU Ý: bản mẫu của thầy viết input.equals(null) — câu đó gây\n        // NullPointerException khi input là null. Phải so sánh bằng ==.\n        if ((input == null) || input.trim().isEmpty()) {\n            throw new Exception(Message.EMPTY_INPUT);\n        }\n\n        return input.trim();\n    }\n\n    // Kiểm tra lựa chọn menu nằm trong khoảng [min, max]\n    public static int getChoice(String input, int min, int max) throws Exception {\n        int choice = 0;\n\n        // Tách riêng lỗi \"không phải số\" và lỗi \"ngoài khoảng\" — nếu bắt chung\n        // một catch thì nhập 9 cho menu 1-5 sẽ báo nhầm là \"không phải số\"\n        try {\n            choice = Integer.parseInt(input);\n        } catch (NumberFormatException e) {\n            // chữ cái hoặc dòng rỗng: không phải số\n            throw new Exception(Message.INVALID_NUMBER);\n        }\n\n        // ngoặc RIÊNG cho từng phép so sánh — đúng mẫu của thầy (mục 3.3)\n        if ((choice < min) || (choice > max)) {\n            throw new Exception(String.format(Message.INVALID_RANGE, min, max));\n        }\n\n        return choice;\n    }\n\n    // Kiểm tra số nguyên dương\n    public static int getPositiveInteger(String input) throws Exception {\n        int number = 0;\n\n        // chuyển chuỗi sang số; chữ cái thì báo \"không phải số\"\n        try {\n            number = Integer.parseInt(input);\n        } catch (NumberFormatException e) {\n            // chữ cái hoặc dòng rỗng: không phải số\n            throw new Exception(Message.INVALID_NUMBER);\n        }\n\n        // 0 và số âm bị từ chối\n        if (number <= 0) {\n            throw new Exception(Message.POSITIVE_NUMBER);\n        }\n\n        return number;\n    }\n}",
+   "type": "code",
+   "title": "utils/Validation.java — mẫu chuẩn của static",
+   "language": "java"
+  },
+  {
+   "text": "Ba câu về static thầy sẽ hỏi — và câu trả lời",
+   "type": "heading"
+  },
+  {
+   "html": "<p><strong>1. \"Tại sao dùng static ở đây?\"</strong><br/>\n  \"Vì <code>getString</code> là hàm thuần: cho cùng chuỗi vào thì luôn ra cùng kết quả, không đọc/ghi\n  thuộc tính nào của đối tượng. Nó được gọi từ rất nhiều nơi trong Main. Nếu không static thì mỗi lần\n  gọi phải <code>new Validation()</code> — tạo ra một đối tượng rỗng, không giữ gì cả, chỉ tốn bộ nhớ.\"</p>\n\n  <p><strong>2. \"Bỏ static đi thì sao?\"</strong><br/>\n  \"Code sẽ không biên dịch được ở mọi chỗ đang gọi <code>Validation.getString(...)</code>, vì gọi method\n  của thể hiện qua tên class là không hợp lệ.\"</p>\n\n  <p><strong>3. \"Nếu không dùng static thì sửa source thế nào cho chạy?\"</strong><br/>\n  \"Em phải bỏ <code>private</code> ở constructor, rồi trong Main tạo\n  <code>Validation validation = new Validation();</code> và đổi mọi lời gọi thành\n  <code>validation.getString(...)</code>. Chạy được, nhưng thừa một đối tượng vô nghĩa — nên static\n  mới là lựa chọn đúng ở đây.\"</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Vì sao Model và Controller CẤM static",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Vì <code>static</code> nghĩa là <strong>cả chương trình dùng chung một bản duy nhất</strong>.\n  Nếu <code>Doctor</code> có <code>private static String name;</code> thì tạo 100 bác sĩ nhưng chỉ có\n  <strong>một</strong> cái tên — bác sĩ sau ghi đè bác sĩ trước. Lúc đó hết hướng đối tượng.</p>\n  <p>Tương tự với Controller: mỗi Controller giữ Repository và View của riêng nó. Để static là\n  mọi Controller dùng chung một kho dữ liệu — đúng cái mà kiến trúc phân tầng đang cố tránh.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Kiểu trả về — câu hỏi thứ ba của thầy",
+   "type": "heading"
+  },
+  {
+   "html": "<p><em>\"Tại sao method này trả về <code>void</code>, method kia trả về <code>String</code>?\"</em></p>\n  <ul>\n  <li><code>void</code> — hàm <strong>làm một việc</strong>, không có kết quả cần trả:\n  <code>addDoctor()</code>, <code>display()</code>. Lỗi thì ném exception, không trả mã lỗi.</li>\n  <li><code>boolean</code> — hàm <strong>hỏi một câu có/không</strong>: <code>isExistDoctor()</code>,\n  <code>isEmpty()</code>. Đặt tên bắt đầu bằng <code>is</code>/<code>has</code>.</li>\n  <li><code>String</code> — hàm <strong>tạo ra chuỗi để nơi khác dùng</strong>: <code>toString()</code>.\n  Chú ý: <code>toString()</code> <em>trả về</em> chuỗi chứ <strong>không in</strong> — vì Model cấm in.</li>\n  <li><code>Map</code>/<code>ArrayList</code> — hàm <strong>trả về tập kết quả</strong>:\n  <code>searchDoctor()</code>.</li>\n  </ul>",
+   "type": "prose"
+  },
+  {
+   "text": "5 nguyên lý SOLID",
+   "type": "part",
+   "number": "3",
+   "subtitle": "Slide của thầy viết bằng C# — dưới đây đã dịch sang Java"
+  },
+  {
+   "html": "<p>Slide <code>SOLID-Principles.pptx</code> dùng ví dụ C# (<code>public string Name { get; set; }</code>,\n  <code>Console.WriteLine</code>). Bạn không chép thẳng được. Dưới đây là <strong>bản Java, đặt trong\n  chính ngữ cảnh quản lý bác sĩ</strong> để nói lúc review là khớp với source của mình.</p>\n  <p>Nhớ: slide nội quy ghi <em>\"Implement và hiểu SOLID được cộng LOC\"</em>. Đây là tiền.</p>",
+   "type": "prose"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/sol-03.png",
+   "type": "image",
+   "caption": "Năm nguyên lý SOLID — slide 3 bộ SOLID-Principles của thầy."
+  },
+  {
+   "text": "S — Single Responsibility: một class, một lý do để thay đổi",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Đây là nguyên lý <strong>bạn ĐÃ tuân thủ</strong> nếu làm đúng kiến trúc 9 package — và là điều\n  slide của thầy nhấn mạnh nhất: <em>\"Model đáp ứng nguyên tắc Single Responsibility\"</em>.</p>",
+   "type": "prose"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/sol-05.png",
+   "type": "image",
+   "caption": "SRP — slide 5: một class ôm bốn trách nhiệm thì có bốn lý do để phải sửa nó."
+  },
+  {
+   "code": "// ❌ Vi phạm: một class ôm hết bốn việc — bốn lý do để phải sửa nó\npublic class DoctorManager {\n\n    // nghiệp vụ\n    public void addDoctor() {\n    }\n\n    // lưu trữ\n    public void saveFile() {\n    }\n\n    // hiển thị\n    public void printList() {\n    }\n\n    // kiểm tra dữ liệu\n    public boolean checkName() {\n        return true;\n    }\n}\n// Đổi cách hiển thị → sửa class này. Đổi cách lưu → cũng sửa class này. Bốn lý do để thay đổi.\n\n// ✅ Đúng SRP — mỗi trách nhiệm một class, đúng như cấu trúc thầy yêu cầu\n// model/Doctor.java            → chỉ giữ dữ liệu một bác sĩ\n// repository/DoctorRepository  → chỉ giữ dữ liệu + CRUD\n// service/DoctorServices       → chỉ nghiệp vụ tính toán (khi bài có)\n// view/DoctorView              → chỉ hiển thị (nhận ResponseDTO qua thuộc tính)\n// utils/Validation             → chỉ kiểm tra dữ liệu (Main gọi)\n// controller/DoctorController  → chỉ điều hướng\n// main/Main                    → chỉ nhập + validate + gọi controller",
+   "type": "code",
+   "title": "SRP — chính là lý do có 9 package",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Trả lời thầy:</strong> \"Em tách theo SRP: <code>Doctor</code> chỉ có một lý do để đổi là\n  khi thông tin bác sĩ đổi. <code>DoctorView</code> chỉ đổi khi cách hiển thị đổi. Hai thứ đó độc lập\n  nên em không để chung.\"</p>",
+   "type": "prose"
+  },
+  {
+   "text": "O — Open/Closed: mở để mở rộng, đóng để sửa đổi",
+   "type": "heading"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/sol-09.png",
+   "type": "image",
+   "caption": "OCP — slide 9: mở rộng bằng cách THÊM lớp mới, không mở lớp cũ ra sửa."
+  },
+  {
+   "code": "// ❌ Vi phạm OCP: thêm kiểu tìm mới là phải mở hàm này ra sửa\nif (requestDTO.getSearchType() == Constants.SEARCH_BY_NAME) {\n    // tìm theo tên ...\n} else if (requestDTO.getSearchType() == Constants.SEARCH_BY_SPECIALIZATION) {\n    // tìm theo chuyên khoa ...\n}\n// thêm \"tìm theo mã\" → lại sửa vào đây\n\n// ===== ✅ service/ISearchCriteria.java — hợp đồng chung =====\npackage service;\n\nimport model.Doctor;\n\n/**\n * Tiêu chí tìm kiếm: interface bắt đầu bằng \"I\" (mục 1.3).\n */\npublic interface ISearchCriteria {\n\n    // Trả lời: bác sĩ này có khớp từ khoá không\n    boolean isMatched(Doctor doctor, String keyword);\n}\n\n// ===== ✅ service/NameSearchCriteria.java — mỗi kiểu tìm một class =====\npackage service;\n\nimport model.Doctor;\n\n/**\n * Tìm theo tên, không phân biệt hoa thường (mục 3.5).\n */\npublic class NameSearchCriteria implements ISearchCriteria {\n\n    // Khớp khi tên chứa từ khoá, bỏ qua hoa/thường\n    @Override\n    public boolean isMatched(Doctor doctor, String keyword) {\n        return doctor.getName().toLowerCase().contains(keyword.toLowerCase());\n    }\n}\n\n// ===== ✅ service/SpecializationSearchCriteria.java =====\npackage service;\n\nimport model.Doctor;\n\n/**\n * Tìm theo chuyên khoa, không phân biệt hoa thường.\n */\npublic class SpecializationSearchCriteria implements ISearchCriteria {\n\n    // Khớp khi chuyên khoa chứa từ khoá, bỏ qua hoa/thường\n    @Override\n    public boolean isMatched(Doctor doctor, String keyword) {\n        return doctor.getSpecialization().toLowerCase().contains(keyword.toLowerCase());\n    }\n}\n\n// ===== ✅ service/DoctorServices.java — bản cho OCP (chỉ phần tìm kiếm) =====\npackage service;\n\nimport constants.Constants;\nimport dto.DoctorRequestDTO;\nimport dto.DoctorResponseDTO;\nimport java.util.HashMap;\nimport java.util.LinkedHashMap;\nimport model.Doctor;\nimport repository.DoctorRepository;\n\n/**\n * SERVICE: chỉ Controller gọi; trả ResponseDTO, không trả Model.\n */\npublic class DoctorServices {\n\n    // Kho dữ liệu (Services -> Repository -> Model)\n    private DoctorRepository doctorRepository;\n\n    // Kiểu tìm Main đã gói trong DTO -> tiêu chí tương ứng\n    private HashMap<Integer, ISearchCriteria> criteriaMap;\n\n    // Tạo service cùng kho; thêm kiểu tìm mới = thêm MỘT class + MỘT dòng put\n    public DoctorServices() {\n        doctorRepository = new DoctorRepository();\n        criteriaMap = new HashMap<>();\n        criteriaMap.put(Constants.SEARCH_BY_NAME, new NameSearchCriteria());\n        criteriaMap.put(Constants.SEARCH_BY_SPECIALIZATION, new SpecializationSearchCriteria());\n    }\n\n    // Tìm theo tiêu chí trong DTO; hàm này KHÔNG BAO GIỜ phải sửa khi thêm kiểu tìm\n    public DoctorResponseDTO searchDoctor(DoctorRequestDTO requestDTO) throws Exception {\n        DoctorResponseDTO responseDTO = new DoctorResponseDTO();\n        LinkedHashMap<String, String> foundMap = new LinkedHashMap<>();\n        ISearchCriteria criteria = criteriaMap.get(requestDTO.getSearchType());\n\n        // duyệt toàn bộ bác sĩ, giữ lại những ai khớp tiêu chí\n        for (Doctor doctor : doctorRepository.findAllDoctor()) {\n            // khớp thì lấy dòng toString() của bác sĩ đó\n            if (criteria.isMatched(doctor, requestDTO.getSearchText())) {\n                foundMap.put(doctor.getCode(), doctor.toString());\n            }\n        }\n\n        responseDTO.setDoctorMap(foundMap);\n        return responseDTO;\n    }\n}\n// DoctorRepository chỉ thêm một hàm CRUD: findAllDoctor() trả BẢN SAO danh sách (xem Strategy).",
+   "type": "code",
+   "title": "OCP — thêm cách tìm kiếm mới mà KHÔNG sửa code cũ",
+   "language": "java"
+  },
+  {
+   "text": "L — Liskov Substitution: class con phải thay được class cha",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Ví dụ kinh điển trong cả slide lẫn sách của thầy: <code>Square extends Rectangle</code> (hình vuông kế thừa hình chữ nhật).</p>",
+   "type": "prose"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/sol-13.png",
+   "type": "image",
+   "caption": "LSP — slide 13: class con phải thay được class cha mà chương trình vẫn chạy đúng."
+  },
+  {
+   "code": "// ===== ❌ model/Rectangle.java — class cha =====\npackage model;\n\n/**\n * ❌ Hình chữ nhật: rộng và cao đặt RIÊNG được — đó là lời hứa của class này.\n */\npublic class Rectangle {\n\n    // Chiều rộng\n    protected double width;\n\n    // Chiều cao\n    protected double height;\n\n    // Đặt chiều rộng\n    public void setWidth(double width) {\n        this.width = width;\n    }\n\n    // Đặt chiều cao\n    public void setHeight(double height) {\n        this.height = height;\n    }\n\n    // Diện tích = rộng x cao\n    public double calculateArea() {\n        return width * height;\n    }\n}\n\n// ===== ❌ model/Square.java — hình vuông buộc rộng = cao, nên PHÁ lời hứa của cha =====\npackage model;\n\n/**\n * ❌ Vi phạm LSP: đặt rộng thì cao cũng đổi theo.\n */\npublic class Square extends Rectangle {\n\n    // Đặt rộng: cao cũng đổi theo\n    @Override\n    public void setWidth(double width) {\n        this.width = width;\n        this.height = width;\n    }\n\n    // Đặt cao: rộng cũng đổi theo\n    @Override\n    public void setHeight(double height) {\n        this.width = height;\n        this.height = height;\n    }\n}\n\n// ----- Đoạn code ĐÚNG với Rectangle nhưng SAI với Square -----\nrectangle.setWidth(5);\nrectangle.setHeight(10);\n// Mong đợi 50. Truyền vào một Square thì ra 100 → chương trình sai mà không báo lỗi.\n\n// ===== ✅ model/IShape.java — dùng chung hợp đồng thay vì extends =====\npackage model;\n\n/**\n * ✅ Hợp đồng chung của mọi hình; interface bắt đầu bằng \"I\".\n */\npublic interface IShape {\n\n    // Diện tích của hình\n    double calculateArea();\n}\n\n// ===== ✅ model/RectangleShape.java =====\npackage model;\n\n/**\n * ✅ Hình chữ nhật: tự giữ lời hứa của chính nó.\n */\npublic class RectangleShape implements IShape {\n\n    // Chiều rộng\n    private double width;\n\n    // Chiều cao\n    private double height;\n\n    // Tạo hình chữ nhật\n    public RectangleShape(double width, double height) {\n        this.width = width;\n        this.height = height;\n    }\n\n    // Diện tích = rộng x cao\n    @Override\n    public double calculateArea() {\n        return width * height;\n    }\n}\n\n// ===== ✅ model/SquareShape.java =====\npackage model;\n\n/**\n * ✅ Hình vuông: không kế thừa hình chữ nhật, nên không có lời hứa nào để phá.\n */\npublic class SquareShape implements IShape {\n\n    // Độ dài cạnh\n    private double side;\n\n    // Tạo hình vuông\n    public SquareShape(double side) {\n        this.side = side;\n    }\n\n    // Diện tích = cạnh x cạnh\n    @Override\n    public double calculateArea() {\n        return side * side;\n    }\n}",
+   "type": "code",
+   "title": "LSP — vì sao Hình vuông KHÔNG nên kế thừa Hình chữ nhật",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Quy tắc rút ra:</strong> \"là một\" trong đời thực (hình vuông <em>là</em> hình chữ nhật)\n  <strong>không</strong> đủ để dùng <code>extends</code>. Chỉ kế thừa khi class con <em>giữ nguyên\n  được mọi lời hứa</em> của class cha.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "I — Interface Segregation: đừng ép ai cài method họ không dùng",
+   "type": "heading"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/sol-17.png",
+   "type": "image",
+   "caption": "ISP — slide 17: đừng ép client cài những method nó không dùng."
+  },
+  {
+   "code": "// ===== ❌ repository/IDoctorStore.java — mọi kho đều bị ép có cả bốn hàm =====\npackage repository;\n\nimport dto.DoctorRequestDTO;\nimport java.util.ArrayList;\n\n/**\n * ❌ Interface \"to\": kho trong bộ nhớ cũng bị ép cài phần tệp.\n */\npublic interface IDoctorStore {\n\n    // Thêm bác sĩ\n    boolean addDoctor(DoctorRequestDTO requestDTO) throws Exception;\n\n    // Xoá bác sĩ\n    boolean deleteDoctor(DoctorRequestDTO requestDTO) throws Exception;\n\n    // Nạp dữ liệu từ các dòng Main đã đọc bằng FileUtils\n    void loadData(ArrayList<String> lineList) throws Exception;\n\n    // Ghi dữ liệu xuống tệp (qua FileUtils)\n    void saveData() throws Exception;\n}\n// Bài P0055 lưu trong bộ nhớ, không đụng tệp → vẫn phải cài loadData/saveData rỗng\n\n// ===== ✅ repository/IDoctorRepository.java — phần mọi kho đều cần =====\npackage repository;\n\nimport dto.DoctorRequestDTO;\n\n/**\n * ✅ Interface nhỏ: chỉ CRUD.\n */\npublic interface IDoctorRepository {\n\n    // Có bác sĩ mang mã này chưa (1 tham số rời: hợp lệ vì < 3)\n    boolean isExistDoctor(String code) throws Exception;\n\n    // Thêm bác sĩ từ dữ liệu Main đã gói\n    boolean addDoctor(DoctorRequestDTO requestDTO) throws Exception;\n\n    // Xoá bác sĩ theo mã trong DTO\n    boolean deleteDoctor(DoctorRequestDTO requestDTO) throws Exception;\n}\n\n// ===== ✅ repository/IFileRepository.java — chỉ kho có tệp mới cần =====\npackage repository;\n\nimport java.util.ArrayList;\n\n/**\n * ✅ Interface nhỏ: chỉ phần tệp.\n */\npublic interface IFileRepository {\n\n    // Nạp dữ liệu từ các dòng Main đã đọc bằng FileUtils (tờ giấy: đọc file ở Main)\n    void loadData(ArrayList<String> lineList) throws Exception;\n\n    // Ghi dữ liệu xuống tệp qua FileUtils\n    void saveData() throws Exception;\n}\n\n// ----- Bài P0055: chỉ cần phần CRUD -----\npublic class DoctorRepository implements IDoctorRepository { ... }\n\n// ----- Bài P0057 (có user.dat): cài thêm phần tệp -----\npublic class UserRepository implements IUserRepository, IFileRepository { ... }",
+   "type": "code",
+   "title": "ISP — tách interface to thành interface nhỏ",
+   "language": "java"
+  },
+  {
+   "text": "D — Dependency Inversion: phụ thuộc vào hợp đồng, không vào class cụ thể",
+   "type": "heading"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/sol-21.png",
+   "type": "image",
+   "caption": "DIP — slide 21: cả module cấp cao lẫn cấp thấp đều phụ thuộc vào abstraction."
+  },
+  {
+   "code": "// ❌ Vi phạm DIP: Services gắn CHẶT vào một loại kho cụ thể\nprivate DoctorRepository doctorRepository = new DoctorRepository();\n// Muốn đổi sang lưu tệp → phải đi sửa mọi chỗ dùng kiểu DoctorRepository\n\n// ===== ✅ service/DoctorServices.java — khai theo HỢP ĐỒNG =====\npackage service;\n\nimport constants.Message;\nimport dto.DoctorRequestDTO;\nimport dto.DoctorResponseDTO;\nimport repository.DoctorRepository;\nimport repository.IDoctorRepository;\n\n/**\n * SERVICE: chỉ Controller gọi; phần thân chỉ biết IDoctorRepository.\n */\npublic class DoctorServices {\n\n    // Kiểu của field là INTERFACE (IDoctorRepository ở phần ISP), không phải class cụ thể\n    private IDoctorRepository doctorRepository;\n\n    // Chỗ DUY NHẤT biết cài đặt cụ thể: đổi sang kho tệp = sửa MỘT dòng này\n    public DoctorServices() {\n        doctorRepository = new DoctorRepository();\n    }\n\n    // Thêm bác sĩ: chỉ dùng những gì hợp đồng hứa\n    public DoctorResponseDTO addDoctor(DoctorRequestDTO requestDTO) throws Exception {\n        DoctorResponseDTO responseDTO = new DoctorResponseDTO();\n\n        // đề bài: mã không được trùng\n        if (doctorRepository.isExistDoctor(requestDTO.getCode())) {\n            throw new Exception(String.format(Message.DUPLICATE_CODE, requestDTO.getCode()));\n        }\n\n        // lưu rồi trả câu kết quả cho Controller\n        doctorRepository.addDoctor(requestDTO);\n        responseDTO.setMessage(Message.ADD_SUCCESS);\n        return responseDTO;\n    }\n}\n\n// ----- repository/DoctorRepository.java — chỉ thêm \"implements\" -----\npublic class DoctorRepository implements IDoctorRepository {\n\n// ----- controller/DoctorController.java — chỉ biết Services, KHÔNG import repository -----\n// Tạo controller cùng service và view của nó\npublic DoctorController() {\n    doctorServices = new DoctorServices();\n    doctorView = new DoctorView();\n}\n\n// ----- main/Main.java — Main chỉ làm việc với Controller, DTO, Utils -----\nDoctorController controller = new DoctorController();",
+   "type": "code",
+   "title": "DIP — Services khai theo interface, Main chỉ new Controller",
+   "language": "java"
+  },
+  {
+   "type": "prose",
+   "html": "<p><strong>Vì sao chỗ tạo nằm trong Services mà không ở Main?</strong> Guide ghi Main <em>\"không gọi đến model\n  và view, chỉ làm việc với DTO, validator, controller\"</em>, còn Controller <em>\"chỉ import DTO, View,\n  Service\"</em>. Nên trong kiến trúc của thầy, Main chỉ <code>new DoctorController()</code>, Controller chỉ tạo\n  Services, và Services là nơi duy nhất biết class kho cụ thể. Phần còn lại của Services chỉ nói chuyện với\n  <code>IDoctorRepository</code> — đổi kho là sửa một dòng, không đụng hàm nghiệp vụ nào.</p>"
+  },
+  {
+   "text": "Nên implement mấy nguyên lý?",
+   "type": "heading"
+  },
+  {
+   "html": "<p><strong>Đừng nhồi cả 5 vào một bài nhỏ.</strong> Thầy nói bài Candidate <em>\"cần implement đầy đủ\n  SOLID → rất khó, không nên liều\"</em> — nghĩa là đủ 5 là việc lớn.</p>\n  <p>Chiến thuật hợp lý cho bài thường:</p>\n  <ul>\n  <li><strong>SRP</strong> — miễn phí, bạn đã có nó nhờ kiến trúc 9 package. Luôn nói được.</li>\n  <li><strong>DIP</strong> — rẻ nhất để thêm: một interface cho Repository, field trong Services khai theo interface. ~15 LOC.</li>\n  <li><strong>OCP</strong> — thêm khi bài có \"nhiều kiểu\" gì đó (nhiều cách tìm, nhiều cách sắp xếp).</li>\n  <li><strong>LSP, ISP</strong> — chỉ khi bài thật sự có kế thừa / nhiều loại kho. Đừng bịa.</li>\n  </ul>",
+   "type": "prose"
+  },
+  {
+   "text": "DESIGN PATTERN — phần quan trọng nhất",
+   "type": "part",
+   "number": "4",
+   "subtitle": "Thầy nói: hiểu và áp dụng thành thạo phần này thì pass sớm"
+  },
+  {
+   "html": "<p>Bộ slide <code>Design Pattern.pptx</code> có <strong>89 trang, đủ 23 pattern GoF</strong>.\n  Đừng hoảng — đó là <em>từ điển tra cứu</em>. Còn <strong>sách <code>OOP_Java_Guide.docx</code> của thầy\n  chỉ chọn 5 cái</strong>: Builder (mục 3.2), Singleton, Factory Method, Observer, Strategy (mục 7.1–7.4).</p>\n  <p><strong>Năm cái đó là phạm vi bạn phải thành thạo.</strong> Nhẹ hơn bạn tưởng rất nhiều.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Design Pattern là gì — và KHÔNG phải là gì",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Định nghĩa trong slide: <em>\"a general repeatable solution to a commonly occurring problem in\n  software design\"</em> — một lời giải <strong>lặp lại được</strong> cho một <strong>vấn đề lặp lại</strong>.</p>\n  <p>Nó <strong>không phải</strong> đoạn code copy-paste. Nó là <em>cách sắp xếp các class</em>. Cùng một\n  pattern, mười người viết ra mười đoạn code khác nhau.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Bốn thành phần của một pattern (GoF)",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Slide 6 nêu bốn phần — và đây <strong>chính là bốn câu thầy sẽ hỏi</strong>:</p>\n  <table>\n  <tr><th>Thành phần</th><th>Câu hỏi tương ứng</th></tr>\n  <tr><td><strong>Name</strong> — tên</td><td>\"Em dùng pattern gì?\"</td></tr>\n  <tr><td><strong>Problem</strong> — dùng khi nào</td><td>\"Nó giải quyết vấn đề gì trong bài của em?\"</td></tr>\n  <tr><td><strong>Solution</strong> — các class và quan hệ</td><td>\"Chỉ cho thầy class nào đóng vai gì\"</td></tr>\n  <tr><td><strong>Consequences</strong> — được gì, mất gì</td><td>\"Không dùng nó thì sao?\"</td></tr>\n  </table>\n  <p>Học pattern mà chỉ nhớ <em>Name</em> và <em>Solution</em> là học vẹt. <strong>Problem và Consequences\n  mới là chỗ phân biệt người hiểu với người chép.</strong></p>",
+   "type": "prose"
+  },
+  {
+   "text": "Ba nhóm pattern",
+   "type": "heading"
+  },
+  {
+   "code": "flowchart TD\n  DP[\"23 Design Pattern GoF\"] --> CR[\"CREATIONAL<br/>Tạo đối tượng<br/><i>Singleton · Factory Method<br/>Builder · Abstract Factory · Prototype</i>\"]\n  DP --> ST[\"STRUCTURAL<br/>Ghép đối tượng lại<br/><i>Adapter · Decorator · Facade<br/>Composite · Proxy · Bridge · Flyweight</i>\"]\n  DP --> BE[\"BEHAVIORAL<br/>Chia trách nhiệm, phân phối hành vi<br/><i>Strategy · Observer · Iterator · Command<br/>State · Template Method · …</i>\"]\n  CR --> L1[\"LAB211 dùng:<br/>Singleton, Factory Method, Builder\"]\n  BE --> L2[\"LAB211 dùng:<br/>Strategy, Observer\"]",
+   "type": "mermaid"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-08.png",
+   "type": "image",
+   "caption": "Ba nhóm pattern — slide 8 bộ Design Pattern của thầy."
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-13.png",
+   "type": "image",
+   "caption": "Bản đồ quan hệ giữa 23 pattern — slide 13. Mũi tên cho thấy pattern nào thường đi cùng pattern nào."
+  },
+  {
+   "html": "<p><strong>Mẹo nhớ:</strong> Creational = <em>\"đẻ ra đối tượng thế nào\"</em>.\n  Structural = <em>\"lắp các đối tượng vào nhau ra sao\"</em>.\n  Behavioral = <em>\"ai làm việc gì, nói chuyện với nhau kiểu gì\"</em>.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "① SINGLETON — đảm bảo chỉ có MỘT thể hiện duy nhất",
+   "type": "heading"
+  },
+  {
+   "html": "<p><strong>Problem:</strong> Có những thứ trong hệ thống chỉ được phép tồn tại một bản.\n  Slide lấy ví dụ: máy in thì nhiều, nhưng <em>hàng đợi in</em> chỉ một. Trong LAB211:\n  <strong>kho dữ liệu</strong> chỉ nên có một — nếu Controller A tạo một <code>DoctorRepository</code> và\n  Controller B tạo một cái khác, hai bên sẽ thấy hai danh sách bác sĩ khác nhau.</p>",
+   "type": "prose"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-26.png",
+   "type": "image",
+   "caption": "Singleton — slide 26: bài toán gốc. Nhiều máy in nhưng chỉ MỘT hàng đợi in."
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-27.png",
+   "type": "image",
+   "caption": "Singleton — slide 27: lời giải. Instance() la cua duy nhat, uniqueInstance la ban duy nhat."
+  },
+  {
+   "code": "classDiagram\n  class DoctorRepository {\n    -static DoctorRepository instance\n    -LinkedHashMap~String, Doctor~ doctorMap\n    -DoctorRepository()\n    +static getInstance() DoctorRepository\n    +addDoctor(requestDTO) boolean\n  }\n  note for DoctorRepository \"Constructor private → bên ngoài không new được<br/>getInstance() là cửa DUY NHẤT\"",
+   "type": "mermaid"
+  },
+  {
+   "code": "// ===== repository/DoctorRepository.java — Singleton =====\npackage repository;\n\nimport dto.DoctorRequestDTO;\nimport java.util.LinkedHashMap;\nimport model.Doctor;\n\n/**\n * REPOSITORY dạng Singleton: cả chương trình chỉ có MỘT kho.\n */\npublic class DoctorRepository {\n\n    // Bản duy nhất của kho. static vì nó thuộc về CLASS, không thuộc đối tượng nào\n    private static DoctorRepository instance = null;\n\n    // Dữ liệu thật — vẫn private, không ai chạm thẳng\n    private LinkedHashMap<String, Doctor> doctorMap;\n\n    // private constructor: chặn mọi lời gọi \"new DoctorRepository()\" từ bên ngoài\n    private DoctorRepository() {\n        doctorMap = new LinkedHashMap<>();\n    }\n\n    // Cửa duy nhất để lấy kho: lần đầu thì tạo, các lần sau trả lại đúng bản đó\n    public static DoctorRepository getInstance() {\n        // chưa có kho nào: tạo bản đầu tiên\n        if (instance == null) {\n            instance = new DoctorRepository();\n        }\n\n        return instance;\n    }\n\n    // Thêm bác sĩ dựng từ DTO — Repository nhận DTO, không bắt ai khác cầm Model\n    public boolean addDoctor(DoctorRequestDTO requestDTO) {\n        Doctor doctor = new Doctor(requestDTO.getCode(), requestDTO.getName(),\n                requestDTO.getSpecialization(), requestDTO.getAvailability());\n\n        // mã là khoá; true = đã thêm\n        doctorMap.put(doctor.getCode(), doctor);\n        return true;\n    }\n}\n\n// ----- service/DoctorServices.java (trích) — Services lấy kho; Controller không import repository -----\n// Tạo service: lấy đúng bản kho duy nhất, không new\npublic DoctorServices() {\n    doctorRepository = DoctorRepository.getInstance();\n}",
+   "type": "code",
+   "title": "Singleton trong bài P0055 — kho dữ liệu dùng chung",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Consequences — được gì:</strong> mọi nơi chắc chắn dùng chung một kho; không sợ dữ liệu\n  phân mảnh; tiết kiệm bộ nhớ.<br/>\n  <strong>Mất gì:</strong> đây là <em>biến toàn cục trá hình</em> — khó test (không thay được bằng kho giả),\n  và nó vi phạm <strong>DIP</strong> vì Services gọi thẳng <code>DoctorRepository.getInstance()</code> thay vì\n  làm việc qua một interface.</p>\n  <p>⚠️ <strong>Với kiến trúc của thầy:</strong> Singleton buộc có field <code>static</code> và method\n  <code>static</code> ngay trong Repository. Guide chỉ cho static method ở <code>utils</code> (bắt buộc) và hàm\n  của <code>Main</code>; Model và Controller cấm static; Repository không nằm trong chỗ được phép.\n  <strong>Hỏi thầy trước khi nộp bài có Singleton.</strong> Cách không cần static mà vẫn \"một kho duy nhất\":\n  Main chỉ <code>new</code> <strong>một</strong> Controller, Controller tạo Services một lần, Services tạo\n  Repository một lần trong constructor — cả chương trình tự nhiên chỉ có một kho.</p>",
+   "type": "prose"
+  },
+  {
+   "html": "<p><strong>⚠️ Bẫy khi thầy vặn:</strong> \"Singleton có phải lúc nào cũng tốt không?\"\n  Trả lời trung thực: <em>\"Không ạ. Nó tiện nhưng làm class phụ thuộc cứng vào nhau, và phải dùng static trong\n  Repository. Trong bài này kho dữ liệu chỉ có một và chương trình chạy một luồng, nên 'một kho' em đạt được bằng\n  cách Services tạo Repository đúng một lần; nếu cần thay kho để kiểm thử thì em khai field theo interface (DIP)\n  thay vì Singleton.\"</em> — Trả lời được câu này là bạn nằm trong nhóm hiểu thật.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "② FACTORY METHOD — để nơi khác quyết định tạo ra loại nào",
+   "type": "heading"
+  },
+  {
+   "html": "<p><strong>Problem (slide 29):</strong> <em>\"Define an interface for creating an object, but let\n  subclasses decide which class to instantiate.\"</em> — Bạn biết <em>lúc nào</em> cần tạo đối tượng,\n  nhưng <em>không biết trước loại cụ thể</em>.</p>\n  <p>Trong LAB211: khi bài có <strong>nhiều loại đối tượng cùng gốc</strong> (Doctor / Nurse,\n  Student chính quy / Student liên thông, Xe máy / Ô tô trong bài Car showroom) và người dùng chọn loại\n  ở menu.</p>",
+   "type": "prose"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-29.png",
+   "type": "image",
+   "caption": "Factory Method — slide 29: framework biết LÚC NÀO cần tạo tài liệu, nhưng không biết tạo LOẠI nào."
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-30.png",
+   "type": "image",
+   "caption": "Factory Method — slide 30: Creator khai báo factory method, ConcreteCreator quyết định trả về ConcreteProduct nào."
+  },
+  {
+   "code": "classDiagram\n  class Person { <<abstract>> +describeRole() String }\n  class Doctor\n  class Nurse\n  class PersonFactory { +createPerson(requestDTO) Person }\n  class StaffServices { -PersonFactory personFactory +addPerson(requestDTO) StaffResponseDTO }\n  Person <|-- Doctor\n  Person <|-- Nurse\n  StaffServices --> PersonFactory : dùng\n  PersonFactory ..> Doctor : tạo\n  PersonFactory ..> Nurse : tạo",
+   "type": "mermaid"
+  },
+  {
+   "code": "// ===== service/PersonFactory.java — như ShapeFactory của bài mẫu P0080 =====\npackage service;\n\nimport constants.Constants;\nimport constants.Message;\nimport dto.StaffRequestDTO;\nimport model.Doctor;\nimport model.Nurse;\nimport model.Person;\n\n/**\n * FACTORY: nơi DUY NHẤT biết \"loại nào thì new class nào\". Không static.\n */\npublic class PersonFactory {\n\n    // Dựng đúng lớp con theo loại Main đã gói trong DTO\n    public Person createPerson(StaffRequestDTO requestDTO) throws Exception {\n        // mỗi loại nhân sự một nhánh; thêm Technician chỉ sửa ở đây\n        switch (requestDTO.getStaffType()) {\n            // bác sĩ: có chuyên khoa và số ca trực\n            case Constants.STAFF_DOCTOR:\n                return new Doctor(requestDTO.getCode(), requestDTO.getName(),\n                        requestDTO.getSpecialization(), requestDTO.getAvailability());\n\n            // y tá: có khoa làm việc\n            case Constants.STAFF_NURSE:\n                return new Nurse(requestDTO.getCode(), requestDTO.getName(),\n                        requestDTO.getDepartment());\n\n            // loại chưa ai dạy factory cách tạo\n            default:\n                throw new Exception(Message.INVALID_STAFF_TYPE);\n        }\n    }\n}\n\n// ----- service/StaffServices.java (trích) — chỉ Controller gọi, trả ResponseDTO -----\n// Thêm nhân sự: factory dựng Model, repository cất, Controller chỉ nhận câu kết quả\npublic StaffResponseDTO addPerson(StaffRequestDTO requestDTO) throws Exception {\n    StaffResponseDTO responseDTO = new StaffResponseDTO();\n\n    // Services -> Factory -> Model, rồi Services -> Repository\n    staffRepository.addPerson(personFactory.createPerson(requestDTO));\n    responseDTO.setMessage(Message.ADD_SUCCESS);\n    return responseDTO;\n}",
+   "type": "code",
+   "title": "Factory Method — gom việc \"new\" vào MỘT chỗ, trong service",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Vì sao gom <code>new</code> vào Factory, và vì sao Factory nằm trong <code>service</code>?</strong>\n  Controller không được làm việc với Model (tờ checklist 1.1), nên việc dựng <code>Doctor</code>/<code>Nurse</code>\n  chỉ được xảy ra ở Services/Repository. Nếu <code>new Doctor(...)</code>, <code>new Nurse(...)</code> rải rác\n  trong nhiều hàm, thêm loại thứ ba là phải đi tìm <em>mọi chỗ</em> có <code>new</code>. Gom vào\n  <code>PersonFactory</code> thì chỉ sửa một file — đó chính là <strong>OCP</strong>. Controller chỉ chuyển\n  <code>StaffRequestDTO</code> đi và nhận <code>StaffResponseDTO</code> về; Main hỏi loại nhân sự (đã validate),\n  gói vào DTO, gọi controller đúng 1 lần.</p>\n  <p><strong>Consequences:</strong> được — thêm loại mới không đụng code cũ, Controller không cần biết\n  class con nào tồn tại. Mất — thêm một class nữa, và nếu bài chỉ có <em>một</em> loại đối tượng thì\n  Factory là thừa, thầy sẽ hỏi \"tại sao cần?\" mà bạn không có câu trả lời.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "③ BUILDER — dựng đối tượng nhiều thuộc tính mà không rối",
+   "type": "heading"
+  },
+  {
+   "html": "<p><strong>Problem (slide 22):</strong> <em>\"Separate the construction of a complex object from its\n  representation\"</em>. Khi một đối tượng có nhiều thuộc tính, constructor dài ngoằng trở nên không đọc nổi.</p>",
+   "type": "prose"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-22.png",
+   "type": "image",
+   "caption": "Builder — slide 22: tách việc DỰNG một đối tượng phức tạp khỏi cách nó được biểu diễn."
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-24.png",
+   "type": "image",
+   "caption": "Builder — slide 24: Director điều khiển quá trình, ConcreteBuilder lắp từng phần, Product là thành phẩm."
+  },
+  {
+   "code": "// ❌ Nhìn vào lời gọi này, ai biết số 5 là gì? true là gì? 3 là gì?\nDoctor doctor = new Doctor(\"D01\", \"An\", \"Tim mach\", 5, true, \"Ca sang\", 3);\n\n// Và nếu chỉ muốn đặt code + name thì phải viết constructor thứ hai, thứ ba…\n// → \"constructor telescoping\", càng thêm thuộc tính càng nổ",
+   "type": "code",
+   "title": "Vấn đề Builder giải",
+   "language": "java"
+  },
+  {
+   "code": "// ===== model/DoctorBuilder.java — class RIÊNG, không lồng static trong Doctor =====\npackage model;\n\n/**\n * BUILDER: lắp một Doctor từng phần. KHÔNG static, KHÔNG kiểm tra dữ liệu (validate ở Main),\n * KHÔNG in.\n */\npublic class DoctorBuilder {\n\n    // Thành phẩm đang lắp dở\n    private Doctor doctor;\n\n    // Bắt đầu với một bác sĩ rỗng (Doctor có constructor rỗng + setter như bài mẫu)\n    public DoctorBuilder() {\n        doctor = new Doctor();\n    }\n\n    // Đặt mã; trả về chính builder để nối tiếp lời gọi\n    public DoctorBuilder setCode(String code) {\n        doctor.setCode(code);\n        return this;\n    }\n\n    // Đặt họ tên\n    public DoctorBuilder setName(String name) {\n        doctor.setName(name);\n        return this;\n    }\n\n    // Đặt chuyên khoa\n    public DoctorBuilder setSpecialization(String specialization) {\n        doctor.setSpecialization(specialization);\n        return this;\n    }\n\n    // Đặt số ca trực\n    public DoctorBuilder setAvailability(int availability) {\n        doctor.setAvailability(availability);\n        return this;\n    }\n\n    // Giao thành phẩm\n    public Doctor build() {\n        return doctor;\n    }\n}\n\n// ----- repository/DoctorRepository.java (trích) — nơi dựng Model từ DTO -----\n// Thêm bác sĩ: đọc như một câu, không phải đếm vị trí tham số\npublic boolean addDoctor(DoctorRequestDTO requestDTO) throws Exception {\n    Doctor doctor = new DoctorBuilder()\n            .setCode(requestDTO.getCode())\n            .setName(requestDTO.getName())\n            .setSpecialization(requestDTO.getSpecialization())\n            .setAvailability(requestDTO.getAvailability())\n            .build();\n\n    // mã là khoá; true = đã thêm\n    doctorMap.put(doctor.getCode(), doctor);\n    return true;\n}",
+   "type": "code",
+   "title": "Builder — class riêng, không static, không validate",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Consequences:</strong> được — lời gọi tự mô tả, đặt thuộc tính theo thứ tự nào cũng được,\n  bỏ qua thuộc tính không bắt buộc.<br/>\n  Mất — nhiều code hơn hẳn. <strong>Bài dưới 4 thuộc tính thì Builder là gượng ép</strong>, đừng dùng.</p>\n  <p>⚠️ Ba điều giữ Builder khỏi phá kiến trúc: nó là <strong>class riêng</strong> (không phải\n  <code>static class</code> lồng trong Model — Guide: Model <em>\"không được dùng static\"</em>);\n  <code>build()</code> <strong>không validate</strong> (validate ở Main, tờ checklist 1.1); và nó được gọi ở\n  <strong>Repository</strong> — nơi dựng Model từ DTO — chứ không ở Controller hay Main.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "④ STRATEGY — đổi thuật toán lúc chạy",
+   "type": "heading"
+  },
+  {
+   "html": "<p><strong>Problem (slide 80):</strong> <em>\"Define a family of algorithms, encapsulate each one, and\n  make them interchangeable.\"</em> Khi cùng một việc có <strong>nhiều cách làm</strong> và người dùng\n  chọn cách ở menu.</p>\n  <p>Đây là pattern <strong>hợp với LAB211 nhất</strong>: gần như bài quản lý nào cũng có chức năng\n  \"sắp xếp theo …\" với vài lựa chọn.</p>",
+   "type": "prose"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-80.png",
+   "type": "image",
+   "caption": "Strategy — slide 80: thuật toán bị nhúng cứng vào class dùng nó, muốn đổi là phải sửa chính nó."
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-81.png",
+   "type": "image",
+   "caption": "Strategy — slide 81: mỗi thuật toán tách thành một class riêng, Context chỉ giữ tham chiếu tới interface."
+  },
+  {
+   "code": "classDiagram\n  class ISortStrategy { <<interface>> +sort(doctorList) }\n  class NameSortStrategy\n  class SpecializationSortStrategy\n  class AvailabilitySortStrategy\n  class DoctorServices { -HashMap strategyMap +sortDoctor(requestDTO) DoctorResponseDTO }\n  ISortStrategy <|.. NameSortStrategy\n  ISortStrategy <|.. SpecializationSortStrategy\n  ISortStrategy <|.. AvailabilitySortStrategy\n  DoctorServices o-- ISortStrategy : dùng",
+   "type": "mermaid"
+  },
+  {
+   "code": "// ===== service/ISortStrategy.java — hợp đồng chung =====\npackage service;\n\nimport java.util.ArrayList;\nimport model.Doctor;\n\n/**\n * STRATEGY: \"biết cách sắp xếp một danh sách bác sĩ\". Interface bắt đầu bằng \"I\" (mục 1.3).\n */\npublic interface ISortStrategy {\n\n    // Sắp xếp danh sách tại chỗ\n    void sort(ArrayList<Doctor> doctorList);\n}\n\n// ===== service/NameSortStrategy.java — mỗi cách sắp xếp = một class, tên là DANH TỪ =====\npackage service;\n\nimport java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.Comparator;\nimport model.Doctor;\n\n/**\n * Tên A-Z, không phân biệt hoa thường (mục 3.5).\n */\npublic class NameSortStrategy implements ISortStrategy {\n\n    // Sắp theo tên, bỏ qua hoa/thường\n    @Override\n    public void sort(ArrayList<Doctor> doctorList) {\n        Collections.sort(doctorList,\n                Comparator.comparing(Doctor::getName, String.CASE_INSENSITIVE_ORDER));\n    }\n}\n\n// ===== service/AvailabilitySortStrategy.java =====\npackage service;\n\nimport java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.Comparator;\nimport model.Doctor;\n\n/**\n * Nhiều ca trực lên trước.\n */\npublic class AvailabilitySortStrategy implements ISortStrategy {\n\n    // Sắp theo số ca trực, giảm dần\n    @Override\n    public void sort(ArrayList<Doctor> doctorList) {\n        Collections.sort(doctorList,\n                Comparator.comparingInt(Doctor::getAvailability).reversed());\n    }\n}",
+   "type": "code",
+   "title": "Strategy — thay if/else dài bằng các class rời",
+   "language": "java"
+  },
+  {
+   "code": "// ===== service/DoctorServices.java — Context: chỉ Controller gọi =====\npackage service;\n\nimport constants.Constants;\nimport dto.DoctorRequestDTO;\nimport dto.DoctorResponseDTO;\nimport java.util.ArrayList;\nimport java.util.HashMap;\nimport model.Doctor;\nimport repository.DoctorRepository;\n\n/**\n * SERVICE và Context của Strategy: trả ResponseDTO, không trả Model.\n */\npublic class DoctorServices {\n\n    // Kho dữ liệu (Services -> Repository -> Model)\n    private DoctorRepository doctorRepository;\n\n    // Kiểu sắp xếp Main đã gói trong DTO -> chiến lược tương ứng\n    private HashMap<Integer, ISortStrategy> strategyMap;\n\n    // Tạo service cùng kho và các chiến lược; thêm kiểu mới = thêm MỘT dòng put\n    public DoctorServices() {\n        doctorRepository = new DoctorRepository();\n        strategyMap = new HashMap<>();\n        strategyMap.put(Constants.SORT_BY_NAME, new NameSortStrategy());\n        strategyMap.put(Constants.SORT_BY_AVAILABILITY, new AvailabilitySortStrategy());\n    }\n\n    // Sắp xếp theo lựa chọn trong DTO rồi trả các dòng kết quả cho Controller\n    public DoctorResponseDTO sortDoctor(DoctorRequestDTO requestDTO) {\n        DoctorResponseDTO responseDTO = new DoctorResponseDTO();\n        ArrayList<Doctor> doctorList = doctorRepository.findAllDoctor();\n        ArrayList<String> rowList = new ArrayList<>();\n\n        // chiến lược ứng với lựa chọn; sắp trên BẢN SAO nên kho giữ nguyên thứ tự nhập\n        strategyMap.get(requestDTO.getSortType()).sort(doctorList);\n\n        // mỗi bác sĩ một dòng toString(); View chỉ việc in\n        for (Doctor doctor : doctorList) {\n            rowList.add(doctor.toString());\n        }\n\n        responseDTO.setRowList(rowList);\n        return responseDTO;\n    }\n}\n\n// ----- repository/DoctorRepository.java (thêm một hàm CRUD) -----\n// Đọc: trả BẢN SAO danh sách để Services sắp xếp mà kho không đổi thứ tự\npublic ArrayList<Doctor> findAllDoctor() {\n    return new ArrayList<>(doctorMap.values());\n}\n\n// ----- controller/DoctorController.java — chỉ điều hướng, cầm DTO -----\n// Chức năng sắp xếp: Services làm, View in — đúng 1 lần\npublic void sortDoctor(DoctorRequestDTO requestDTO) throws Exception {\n    DoctorResponseDTO responseDTO = doctorServices.sortDoctor(requestDTO);\n\n    // đưa kết quả cho View qua thuộc tính rồi render — 1 lần cho cả luồng\n    doctorView.setResponseDTO(responseDTO);\n    doctorView.display();\n}\n\n// ----- view/DoctorView.java — thêm một nhánh trong display(), vẫn KHÔNG tham số -----\n// danh sách đã sắp xếp: mỗi bác sĩ một dòng\nif (responseDTO.getRowList() != null) {\n    // in từng dòng theo đúng thứ tự Services đã sắp\n    for (String row : responseDTO.getRowList()) {\n        System.out.println(row);\n    }\n}\n\n// ----- main/Main.java — Main gói lựa chọn vào DTO, gọi controller ĐÚNG 1 lần -----\n// chức năng sắp xếp: hỏi kiểu sắp xếp (đã validate), rồi gọi controller\ncase Constants.MENU_SORT:\n    requestDTO = inputSort(sc);\n    controller.sortDoctor(requestDTO);\n    break;",
+   "type": "code",
+   "title": "Nơi dùng — Services giữ chiến lược, Controller cầm DTO, Main gọi 1 lần",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Đây là ví dụ đẹp nhất để trả lời \"pattern giải quyết vấn đề gì\":</strong>\n  <em>\"Nếu viết if/else trong Service thì mỗi lần thêm kiểu sắp xếp em phải mở Service ra sửa — vi phạm\n  OCP. Với Strategy, thêm kiểu mới chỉ là thêm một class implement interface, Service đứng yên.\"</em></p>",
+   "type": "prose"
+  },
+  {
+   "text": "⑤ OBSERVER — một chỗ đổi, nhiều chỗ tự biết",
+   "type": "heading"
+  },
+  {
+   "html": "<p><strong>Problem (slide 64):</strong> <em>\"Define a one-to-many dependency between objects so that\n  when one object changes state, all its dependents are notified and updated automatically.\"</em></p>\n  <p>Trong LAB211 nó ít tự nhiên hơn 4 cái trên, vì bài console thường chỉ có một View.\n  Nhưng có <strong>một chỗ dùng rất hợp lý</strong>: ghi lịch sử / thống kê mỗi khi dữ liệu đổi — và observer <strong>không in</strong>: kết quả nằm trong bộ nhớ, ai cần xem thì đi Controller → View.</p>",
+   "type": "prose"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-66.png",
+   "type": "image",
+   "caption": "Observer — slide 66: Subject giữ danh sách Observer; gọi Notify() thì mọi Observer tự Update()."
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/dp-67.png",
+   "type": "image",
+   "caption": "Observer — slide 67: sơ đồ tuần tự. Subject KHÔNG biết có bao nhiêu observer đang nghe."
+  },
+  {
+   "code": "sequenceDiagram\n  participant C as Controller\n  participant S as DoctorServices<br/>(Subject)\n  participant R as DoctorRepository\n  participant H as HistoryObserver\n  participant N as CountObserver\n  C->>S: addDoctor(requestDTO)\n  S->>R: addDoctor(requestDTO)\n  S->>H: update(ACTION_ADD, code)\n  S->>N: update(ACTION_ADD, code)\n  S-->>C: DoctorResponseDTO (message)\n  Note over H,N: Services KHÔNG biết<br/>có bao nhiêu observer · observer KHÔNG in",
+   "type": "mermaid"
+  },
+  {
+   "code": "// ===== service/IDoctorObserver.java — hợp đồng cho bên \"muốn được báo\" =====\npackage service;\n\n/**\n * OBSERVER: interface bắt đầu bằng \"I\" (mục 1.3).\n */\npublic interface IDoctorObserver {\n\n    // Được gọi sau mỗi thao tác; action là hằng trong Constants, code là mã bác sĩ\n    void update(String action, String code);\n}\n\n// ===== service/HistoryObserver.java — một bên nghe: ghi lại lịch sử thao tác =====\npackage service;\n\nimport constants.Constants;\nimport java.util.ArrayList;\n\n/**\n * Ghi lịch sử vào bộ nhớ. KHÔNG in — ai cần xem thì hỏi qua Services, kết quả đi Controller -> View.\n */\npublic class HistoryObserver implements IDoctorObserver {\n\n    // Mỗi thao tác một dòng, theo thứ tự xảy ra (mục 1.5: tên kết thúc bằng List)\n    private ArrayList<String> historyList;\n\n    // Bắt đầu với lịch sử rỗng\n    public HistoryObserver() {\n        historyList = new ArrayList<>();\n    }\n\n    // Ghi thêm một dòng \"ADD: D01\"; định dạng nằm ở Constants (mục 2.10)\n    @Override\n    public void update(String action, String code) {\n        historyList.add(String.format(Constants.HISTORY_FORMAT, action, code));\n    }\n\n    // Trả BẢN SAO lịch sử để Services đưa vào ResponseDTO\n    public ArrayList<String> getHistoryList() {\n        return new ArrayList<>(historyList);\n    }\n}",
+   "type": "code",
+   "title": "Observer — bên nghe ghi lịch sử, KHÔNG in",
+   "language": "java"
+  },
+  {
+   "code": "// ===== service/DoctorServices.java — Subject: bên phát tin =====\npackage service;\n\nimport constants.Constants;\nimport constants.Message;\nimport dto.DoctorRequestDTO;\nimport dto.DoctorResponseDTO;\nimport java.util.ArrayList;\nimport repository.DoctorRepository;\n\n/**\n * SERVICE và Subject của Observer: chỉ Controller gọi; trả ResponseDTO.\n */\npublic class DoctorServices {\n\n    // Kho dữ liệu (Services -> Repository -> Model)\n    private DoctorRepository doctorRepository;\n\n    // Những bên đang lắng nghe (mục 1.5: tên kết thúc bằng List)\n    private ArrayList<IDoctorObserver> observerList;\n\n    // Bên ghi lịch sử — giữ riêng để trả lời chức năng \"xem lịch sử\"\n    private HistoryObserver historyObserver;\n\n    // Tạo service, kho, và đăng ký các bên nghe\n    public DoctorServices() {\n        doctorRepository = new DoctorRepository();\n        observerList = new ArrayList<>();\n        historyObserver = new HistoryObserver();\n        addObserver(historyObserver);\n    }\n\n    // Đăng ký nhận tin\n    public void addObserver(IDoctorObserver observer) {\n        observerList.add(observer);\n    }\n\n    // Báo cho TẤT CẢ bên đang nghe\n    private void notifyObserver(String action, String code) {\n        // mỗi bên nghe tự quyết làm gì với tin này\n        for (IDoctorObserver observer : observerList) {\n            observer.update(action, code);\n        }\n    }\n\n    // Thêm bác sĩ; thêm xong thì báo tin — Services không biết ai đang nghe\n    public DoctorResponseDTO addDoctor(DoctorRequestDTO requestDTO) throws Exception {\n        DoctorResponseDTO responseDTO = new DoctorResponseDTO();\n\n        // đề bài: mã không được trùng\n        if (doctorRepository.isExistDoctor(requestDTO.getCode())) {\n            throw new Exception(String.format(Message.DUPLICATE_CODE, requestDTO.getCode()));\n        }\n\n        // cất vào kho, báo tin, rồi trả câu kết quả cho Controller\n        doctorRepository.addDoctor(requestDTO);\n        notifyObserver(Constants.ACTION_ADD, requestDTO.getCode());\n        responseDTO.setMessage(Message.ADD_SUCCESS);\n        return responseDTO;\n    }\n\n    // Chức năng \"xem lịch sử\": dữ liệu về Controller rồi sang View, render 1 lần\n    public DoctorResponseDTO getHistory() {\n        DoctorResponseDTO responseDTO = new DoctorResponseDTO();\n\n        // lịch sử do bên nghe giữ, Services chỉ chuyển vào ResponseDTO\n        responseDTO.setRowList(historyObserver.getHistoryList());\n        return responseDTO;\n    }\n}",
+   "type": "code",
+   "title": "Subject — Services phát tin; lịch sử đi Controller → View",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Consequences:</strong> được — thêm một việc cần làm khi dữ liệu đổi (ghi lịch sử, đếm số lượng,\n  cảnh báo) chỉ là thêm một class observer và một dòng <code>addObserver</code>; <code>addDoctor</code> không\n  đổi.<br/>\n  Mất — luồng chạy khó theo dõi khi debug, vì lời gọi \"đi đâu\" không nhìn thấy trực tiếp trong code.</p>\n  <p>⚠️ Observer <strong>không in</strong> (Guide: <em>\"Không được gọi print ngoài view và main\"</em>): nó giữ\n  kết quả trong bộ nhớ (hoặc ghi tệp qua <code>utils</code>); muốn xem thì người dùng chọn chức năng \"xem lịch\n  sử\", Controller gọi <code>getHistory()</code> rồi đưa ResponseDTO cho View — đúng 1 lần.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "SOLID và Design Pattern liên quan thế nào",
+   "type": "heading"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/sol-25.png",
+   "type": "image",
+   "caption": "SOLID và Design Pattern — slide 25: nguyên lý là kim chỉ nam, pattern là lời giải cụ thể."
+  },
+  {
+   "html": "<p>Slide 25 của bộ SOLID nói rõ: <strong>\"SOLID Principles are NOT Design Patterns\"</strong>.\n  SOLID là <em>nguyên tắc</em> — kim chỉ nam. Pattern là <em>lời giải cụ thể</em>. Nhiều pattern sinh ra\n  chính là để hiện thực hoá một nguyên lý SOLID:</p>\n  <table>\n  <tr><th>Pattern</th><th>Hiện thực nguyên lý</th><th>Vì sao</th></tr>\n  <tr><td><strong>Strategy</strong></td><td>OCP</td><td>Thêm thuật toán mới = thêm class, không sửa class cũ</td></tr>\n  <tr><td><strong>Factory Method</strong></td><td>OCP + DIP</td><td>Nơi gọi không cần biết class cụ thể nào được tạo</td></tr>\n  <tr><td><strong>Observer</strong></td><td>OCP + SRP</td><td>Mỗi observer một trách nhiệm; thêm observer không sửa subject</td></tr>\n  <tr><td><strong>Builder</strong></td><td>SRP</td><td>Tách việc \"dựng đối tượng\" khỏi bản thân đối tượng</td></tr>\n  <tr><td><strong>Dependency Injection</strong></td><td>DIP</td><td>Chính là cách phổ biến nhất để đạt DIP</td></tr>\n  </table>\n  <p><strong>Câu trả lời ăn điểm:</strong> <em>\"Em dùng Strategy ở đây không phải vì nó là pattern,\n  mà vì em cần tuân thủ OCP: menu sắp xếp còn thêm lựa chọn nữa, em không muốn mỗi lần thêm là phải\n  mở Service ra sửa.\"</em></p>",
+   "type": "prose"
+  },
+  {
+   "text": "⚠️ Anti-pattern — nhét pattern bừa còn tệ hơn không dùng",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Slide 7 cảnh báo thẳng: <em>\"Patterns can be overused and abused → Anti-Patterns\"</em>.</p>\n  <p>Thầy hỏi <strong>\"tại sao dùng\"</strong> chứ không hỏi <strong>\"có dùng không\"</strong>. Nhét Builder vào\n  class 2 thuộc tính, hay Factory cho một loại đối tượng duy nhất, là tự đưa cổ vào thòng lọng.</p>\n  <p><strong>Kiểm tra trước khi thêm một pattern — trả lời được cả ba câu này thì hãy dùng:</strong></p>\n  <ol>\n  <li>Vấn đề cụ thể trong <em>bài này</em> mà nó giải là gì?</li>\n  <li>Nếu KHÔNG dùng thì code sẽ xấu ở chỗ nào?</li>\n  <li>Nó khiến bài dài thêm bao nhiêu, có đáng không?</li>\n  </ol>",
+   "type": "prose"
+  },
+  {
+   "text": "Nên dùng pattern nào cho bài nào",
+   "type": "heading"
+  },
+  {
+   "html": "<table>\n  <tr><th>Bài</th><th>Pattern tự nhiên nhất</th><th>Lý do</th></tr>\n  <tr><td><code>P0055</code> Doctor, <code>P0054</code> Contact, <code>P0056</code> Worker</td>\n      <td>Strategy (sắp xếp) + DIP (interface kho)</td><td>CRUD + menu sắp xếp</td></tr>\n  <tr><td><code>P0057</code> User (có <code>user.dat</code>)</td>\n      <td>Strategy + DIP (tách kho bộ nhớ / kho tệp theo ISP)</td><td>Có đọc/ghi file → tách interface kho</td></tr>\n  <tr><td><code>P0066</code> Car showroom</td>\n      <td>Factory Method</td><td>Nhiều loại xe cùng gốc</td></tr>\n  <tr><td><code>P0073</code> Handy Expense</td>\n      <td>Strategy (cách tính) + Observer (cảnh báo vượt hạn mức)</td><td>Có nghiệp vụ tính toán</td></tr>\n  <tr><td><code>P0071</code> Task management</td>\n      <td>Strategy + Observer + Builder</td><td>Task nhiều thuộc tính, có đổi trạng thái</td></tr>\n  <tr><td><code>J1.L.P0021</code> Manage Students</td>\n      <td>Đủ cả 5</td><td>Bài dài, đủ chỗ để trình bày</td></tr>\n  </table>\n  <p><strong>Lời khuyên:</strong> bài đầu chỉ làm <strong>Strategy</strong> (+ DIP) cho chắc tay — cả hai nằm\n  trong service/repository, không cần static. Singleton cần static trong Repository: hỏi thầy trước.\n  Hiểu sâu 2 cái còn hơn kể tên 5 cái.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Quan hệ giữa class & Coding Convention",
+   "type": "part",
+   "number": "5",
+   "subtitle": "Chapter 7 – Static Modeling và Java Code Conventions (Sun 1997)"
+  },
+  {
+   "text": "Sáu loại quan hệ giữa class",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Slide <code>Chapter_7 - Static Modeling</code> liệt kê sáu loại. Đây là thứ dùng để\n  <strong>thiết kế model TRƯỚC khi gõ code</strong> — đúng cái thầy nhắc \"code model trước\".</p>\n  <table>\n  <tr><th>Quan hệ</th><th>Nghĩa</th><th>Trong Java</th><th>Ví dụ ở bài</th></tr>\n  <tr><td><strong>Association</strong></td><td>\"biết đến nhau\"</td><td>Một class giữ tham chiếu class kia</td>\n      <td><code>Controller</code> giữ <code>Repository</code></td></tr>\n  <tr><td><strong>Inheritance</strong></td><td>\"là một\"</td><td><code>extends</code></td>\n      <td><code>Doctor extends Person</code></td></tr>\n  <tr><td><strong>Realization</strong></td><td>\"cam kết làm được\"</td><td><code>implements</code></td>\n      <td><code>NameSortStrategy implements ISortStrategy</code></td></tr>\n  <tr><td><strong>Dependency</strong></td><td>\"dùng tạm một lúc\"</td><td>Xuất hiện ở tham số / biến cục bộ</td>\n      <td><code>addDoctor(DoctorRequestDTO requestDTO)</code></td></tr>\n  <tr><td><strong>Aggregation</strong></td><td>\"có, nhưng rời nhau được\"</td><td>Tham chiếu, sống độc lập</td>\n      <td>Khoa <em>có</em> Bác sĩ — xoá khoa, bác sĩ vẫn còn</td></tr>\n  <tr><td><strong>Composition</strong></td><td>\"có, và chết cùng nhau\"</td><td>Tạo bên trong, không sống rời</td>\n      <td>Hoá đơn <em>có</em> dòng hoá đơn — xoá hoá đơn thì dòng cũng mất</td></tr>\n  </table>",
+   "type": "prose"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/ch7-05.png",
+   "type": "image",
+   "caption": "Sáu loại quan hệ giữa các class — Chapter 7, slide 5."
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/ch7-18.png",
+   "type": "image",
+   "caption": "Composition và Aggregation — Chapter 7, slide 18. Hình thoi ĐẶC = composition (chết cùng nhau), hình thoi RỖNG = aggregation (rời được)."
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/ch7-19.png",
+   "type": "image",
+   "caption": "Ví dụ phân cấp composition/aggregation — Chapter 7, slide 19."
+  },
+  {
+   "code": "classDiagram\n  class Khoa\n  class Doctor\n  class HoaDon\n  class DongHoaDon\n  Khoa o-- Doctor : Aggregation (rời được)\n  HoaDon *-- DongHoaDon : Composition (chết cùng)",
+   "type": "mermaid"
+  },
+  {
+   "html": "<p><strong>Cách phân biệt Aggregation với Composition:</strong> hỏi <em>\"xoá cái chứa thì cái bị chứa\n  còn sống không?\"</em> Còn sống → Aggregation. Chết theo → Composition.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Multiplicity — số lượng hai đầu quan hệ",
+   "type": "heading"
+  },
+  {
+   "url": "https://media.cuongthai.com/code-lab/lab211/slide/ch7-07.png",
+   "type": "image",
+   "caption": "Năm dạng multiplicity — Chapter 7, slide 7."
+  },
+  {
+   "html": "<p>Slide 7–8 nêu năm dạng: <strong>một–một</strong>, <strong>một–nhiều</strong>,\n  <strong>nhiều–nhiều</strong>, <strong>số cụ thể</strong>, <strong>tuỳ chọn (0..1)</strong>.</p>\n  <p>Nó quyết định kiểu dữ liệu bạn khai trong model:</p>\n  <ul>\n  <li>một–một → một tham chiếu: <code>private Khoa khoa;</code></li>\n  <li>một–nhiều → tập hợp: <code>private ArrayList&lt;Doctor&gt; doctorList;</code> (mục 1.5: tên kết thúc bằng <code>List</code>)</li>\n  <li>tuỳ chọn → tham chiếu có thể <code>null</code>, phải kiểm tra trước khi dùng</li>\n  </ul>",
+   "type": "prose"
+  },
+  {
+   "text": "Java Code Conventions — luật Alt + Shift + F",
+   "type": "heading"
+  },
+  {
+   "html": "<p>File <code>Java_codeconventions.pdf</code> là bản Sun Microsystems 1997. Slide review ghi:\n  <em>\"Đúng coding convention, không đảm bảo convention sẽ không review tiếp\"</em>. Tờ Coding check sheet của\n  thầy (bài cuối) là bản chấm thật — bảng dưới gom phần đặt tên:</p>\n  <table>\n  <tr><th>Thành phần</th><th>Quy tắc</th><th>Đúng</th><th>Sai</th></tr>\n  <tr><td>Class</td><td>PascalCase, bắt đầu bằng <strong>danh từ</strong> (mục 1.3)</td>\n      <td><code>DoctorRepository</code>, <code>NameSortStrategy</code></td><td><code>doctor_repo</code>, <code>SortByName</code></td></tr>\n  <tr><td>Interface</td><td>Bắt đầu bằng <strong><code>I</code></strong> (mục 1.3)</td>\n      <td><code>IDoctorRepository</code>, <code>ISortStrategy</code></td><td><code>DoctorRepo</code>, <code>SortStrategy</code></td></tr>\n  <tr><td>Class exception</td><td>Kết thúc bằng <strong><code>Exception</code></strong> (mục 1.3)</td>\n      <td><code>DoctorNotFoundException</code></td><td><code>ExceptionDoctor</code></td></tr>\n  <tr><td>Method</td><td>camelCase, bắt đầu bằng <strong>động từ</strong> (mục 1.4)</td>\n      <td><code>calcSummaryFee()</code>, <code>checkValidAge()</code></td><td><code>CalcFee()</code>, <code>toResponse()</code></td></tr>\n  <tr><td>Biến / field</td><td>camelCase, danh từ có nghĩa (mục 1.5)</td>\n      <td><code>doctorCode</code>, <code>totalAmount</code></td><td><code>a</code>, <code>x1</code></td></tr>\n  <tr><td>Biến tập hợp / mảng</td><td>Collection → <code>…List</code>, Set → <code>…Set</code>, Map → <code>…Map</code>, mảng → <code>…Array</code> (mục 1.5)</td>\n      <td><code>doctorList</code>, <code>codeSet</code>, <code>doctorMap</code>, <code>partArray</code></td><td><code>danhSach</code>, <code>kho</code>, <code>parts</code></td></tr>\n  <tr><td>Mã định danh</td><td>Viết <code>Id</code>, không viết <code>ID</code> (mục 1.5)</td>\n      <td><code>doctorId</code>, <code>getDoctorId()</code></td><td><code>doctorID</code></td></tr>\n  <tr><td>Hằng số</td><td>UPPER_SNAKE_CASE, <code>static final</code>, trong Constants/Message (mục 2.10, 2.11)</td>\n      <td><code>MAX_RETRY</code>, <code>INPUT_CODE</code></td><td><code>maxRetry</code></td></tr>\n  <tr><td>Package</td><td>toàn chữ thường, nói ý nghĩa chung (mục 1.2)</td>\n      <td><code>controller</code>, <code>utils</code></td><td><code>Controller</code></td></tr>\n  <tr><td>Project</td><td colspan=\"3\"><code>RollNo_ExcerciseNo_ExcerciseDescription</code> — ví dụ\n      <code>HE176322_J1S0055_DoctorManagement</code></td></tr>\n  </table>\n  <p>Thụt lề 4 dấu cách; <strong>một dòng (không tính comment) không quá 100 ký tự</strong> (mục 2.3) — dài hơn\n  thì ngắt <em>sau</em> toán tử logic (<code>&amp;&amp;</code>, <code>||</code>), ngắt <em>trước</em> toán hạng\n  (<code>+ - *</code>), hạn chế ngắt giữa biểu thức trong <code>()</code>; mỗi dòng khai báo một biến. Trong\n  NetBeans nhấn <strong>Alt + Shift + F</strong> là tự chuẩn hoá phần lớn — nhưng không tự thêm dòng trống\n  (2.8), không dời khai báo lên đầu block (2.6), không thêm ngoặc cho từng phép so sánh (3.3).</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Comment — thiếu là KHÔNG được review",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Slide ghi: <em>\"Có đủ comment source ít nhất cho <strong>function</strong> và\n  <strong>block/rẽ nhánh</strong>. Không có comment → không review\"</em>. Tờ checklist 1.6 còn chặt hơn:\n  <em>\"Mỗi method đều phải có comment miêu tả ý nghĩa của method — Mỗi block source đều phải có comment giải\n  thích block đó làm gì\"</em>.</p>\n  <p>Không cần dài. Một dòng <code>//</code> nói <strong>hàm này làm gì</strong> — cho <em>mọi</em> method, kể\n  cả <code>private</code>, getter/setter — và <strong>khối này để làm gì</strong> là đủ. Trước mỗi comment đứng\n  sau một dòng code có <strong>1 dòng trống</strong> (mục 2.8).</p>",
+   "type": "prose"
+  },
+  {
+   "code": "// Function 4: Search doctor\npublic void searchDoctor(DoctorRequestDTO requestDTO) throws Exception {\n    Map<String, DoctorResponseDTO> resultMap = null;\n\n    // Kiem tra database co du lieu truoc khi search\n    if (doctorRepository.isEmpty()) {\n        throw new Exception(Message.DATABASE_EMPTY);\n    }\n\n    // Tim theo tu khoa trong DTO; khong thay ket qua thi bao loi\n    resultMap = doctorRepository.searchDoctor(requestDTO);\n    if ((resultMap == null) || resultMap.isEmpty()) {\n        throw new Exception(Message.NO_DOCTOR_AVAILABLE);\n    }\n\n    // Truyen du lieu sang view qua thuoc tinh, render 1 lan\n    doctorView.setDoctorMap(resultMap);\n    doctorView.display();\n}",
+   "type": "code",
+   "title": "Mức comment thầy muốn — bài mẫu, đã sửa theo tờ checklist (DTO, khai báo đầu hàm, ngoặc)",
+   "language": "java"
+  },
+  {
+   "html": "<p><strong>Chú ý:</strong> comment nói <em>ý định</em>, không nhại lại code.\n  <code>// tăng i lên 1</code> cho dòng <code>i++</code> là vô giá trị.\n  <code>// duyệt qua tất cả bác sĩ để tìm từ khoá</code> mới là thứ thầy muốn.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "12 câu hỏi review & đáp án mẫu",
+   "type": "part",
+   "number": "6",
+   "subtitle": "Ôn trước khi giơ tay xin review"
+  },
+  {
+   "html": "<p>Danh sách này lấy nguyên văn từ slide 10 (<em>\"Khi review, cần đảm bảo và trả lời được\"</em>).\n  Trả lời bằng cách <strong>chỉ vào dòng code của mình</strong>, không nói lý thuyết suông.</p>",
+   "type": "prose"
+  },
+  {
+   "html": "<p><strong>1. Liệt kê 4 tính chất OOP, chỉ ra trong source em cái nào ở đâu?</strong><br/>\n  → Encapsulation: field <code>private</code> + getter/setter trong <code>Doctor</code>.\n  Abstraction: <code>Controller</code> giấu chuyện dữ liệu nằm trong <code>HashMap</code>.\n  Inheritance: <code>Doctor extends Person</code>. Polymorphism: <code>@Override toString()</code>.</p>\n\n  <p><strong>2. <code>public</code>, <code>private</code>, <code>protected</code>, <code>default</code> khác nhau\n  thế nào?</strong><br/>\n  → <code>private</code>: chỉ trong class. <code>default</code>: thêm cùng package.\n  <code>protected</code>: thêm class con khác package. <code>public</code>: mọi nơi.</p>\n\n  <p><strong>3. Tại sao field này em để <code>private</code>?</strong><br/>\n  → Vì ngoài class không ai cần chạm thẳng; dữ liệu chỉ đổi qua setter. Còn kiểm tra dữ liệu thì nằm ở <code>utils/Validation</code>, Main gọi — tờ checklist bắt validate ở Main, Model chỉ mô tả thực thể.</p>\n\n  <p><strong>4. Tại sao <code>Validation</code> dùng <code>static</code>?</strong><br/>\n  → Hàm thuần, không phụ thuộc trạng thái đối tượng, gọi từ nhiều nơi. Không static thì phải\n  <code>new Validation()</code> — tạo đối tượng rỗng vô nghĩa.</p>\n\n  <p><strong>5. Bỏ <code>static</code> đi thì sao?</strong><br/>\n  → Không biên dịch được ở mọi chỗ gọi <code>Validation.getString(...)</code>.</p>\n\n  <p><strong>6. Không dùng <code>static</code> thì sửa source thế nào cho chạy?</strong><br/>\n  → Bỏ <code>private</code> ở constructor, tạo <code>Validation v = new Validation();</code> trong Main,\n  đổi mọi lời gọi thành <code>v.getString(...)</code>.</p>\n\n  <p><strong>7. Tại sao method này trả về <code>void</code>, method kia trả về <code>String</code>?</strong><br/>\n  → <code>void</code> khi hàm chỉ làm việc, lỗi thì ném exception. <code>String</code> khi cần trả chuỗi\n  cho nơi khác dùng — như <code>toString()</code>, vì Model cấm in.</p>\n\n  <p><strong>8. Tại sao dùng <code>ArrayList</code> mà không phải <code>List</code>? (hoặc ngược lại)</strong><br/>\n  → <code>List</code> là <strong>giao diện</strong> — bản hợp đồng nói \"có <code>add</code>, <code>get</code>,\n  <code>size</code>\". <code>ArrayList</code> là <strong>bản cài đặt</strong> bằng mảng động: lấy theo chỉ số\n  rất nhanh, chèn/xoá giữa thì chậm vì phải dịch phần tử. <code>LinkedList</code> cài cùng hợp đồng bằng\n  danh sách liên kết, ngược lại. Tương tự <code>Map</code> là hợp đồng, <code>HashMap</code> cài bằng băm nên\n  <strong>không giữ thứ tự</strong>, <code>LinkedHashMap</code> giữ thứ tự thêm vào, <code>TreeMap</code> sắp\n  theo khoá. Tờ checklist không quy định khai báo kiểu nào — nó chấm <strong>tên</strong>: <code>doctorList</code>, <code>doctorMap</code> (mục 1.5).</p>\n\n  <p><strong>9. Tại sao ở đây em dùng <code>HashMap</code> chứ không phải <code>ArrayList</code>?</strong><br/>\n  → Vì tìm theo mã bác sĩ là thao tác chính. <code>HashMap</code> tra theo khoá gần như tức thì,\n  còn <code>ArrayList</code> phải duyệt từ đầu. Và khoá là duy nhất nên chặn trùng mã luôn.</p>\n\n  <p><strong>10. Em dùng Design Pattern gì, nó giải quyết vấn đề gì?</strong><br/>\n  → Nêu <strong>tên</strong> → <strong>vấn đề trong bài này</strong> → <strong>class nào đóng vai gì</strong>\n  → <strong>không dùng thì code xấu ra sao</strong>. Đủ bốn ý là đạt.</p>\n\n  <p><strong>11. Em implement nguyên lý SOLID nào?</strong><br/>\n  → SRP luôn có sẵn nhờ cấu trúc 9 package. Nói thêm một nguyên lý bạn <em>thật sự</em> làm\n  (thường là DIP hoặc OCP), và chỉ đúng chỗ.</p>\n\n  <p><strong>12. Debug cho thầy xem.</strong><br/>\n  → Đặt breakpoint bằng <strong>Ctrl + F8</strong>, chạy <strong>Ctrl + F5</strong>,\n  bước qua <strong>F8</strong>, bước vào trong <strong>F7</strong>. Tập trước ở nhà:\n  đặt breakpoint tại <code>addDoctor</code> và xem <code>requestDTO</code> mang giá trị gì.</p>",
+   "type": "prose"
+  },
+  {
+   "text": "Tờ Coding check sheet 25 mục — tự soát trước khi xin review",
+   "type": "heading"
+  },
+  {
+   "html": "<p>Thầy review code bằng đúng <strong>tờ \"Coding check sheet\"</strong> này — <strong>25 mục</strong>,\nchép theo tờ giấy. Sai một mục là bị trả về. Tờ giấy này là chuẩn cao nhất: chỗ nào bài giảng nói khác,\ntheo tờ giấy.</p>\n<h4>Cách điền — 3 lượt cho mỗi bài</h4>\n<ul>\n  <li>Đầu tờ ghi <strong>Mã - Tên SV</strong>. Tờ có 5 cột <em>Date</em>, mỗi cột dành cho <strong>một\n  bài</strong>: ghi ngày bắt đầu làm, bên dưới ghi mã bài (vd <code>P0061</code>).</li>\n  <li>Mỗi cột chia <strong>3 ô con = 3 lượt</strong> tự check / yêu cầu review cho bài đó.</li>\n  <li>Code xong, tự review source theo từng mục; mục nào đã OK thì điền <strong>\"O\"</strong> vào ô của lượt\n  đang làm.</li>\n  <li><strong>Khi tất cả các mục trên cột đó đã là \"O\"</strong> mới giơ tay yêu cầu thầy review.</li>\n  <li>Thầy trả về → sửa → soát lại <em>cả 25 mục</em> ở ô của lượt kế tiếp (sửa chỗ này hay làm hỏng chỗ\n  khác), điền \"O\" lại từ đầu.</li>\n</ul>\n<h4>1. Common</h4>\n<ol>\n  <li><strong>1.1 — Đúng MVC chưa?</strong>\n    <ul>\n      <li>☐ <strong>Main</strong> chỉ làm việc với Controller, DTO, Utils. Toàn bộ việc nhập dữ liệu /\n      validate / đọc từ file / mã hoá thực hiện ở Main. (Main được in menu, câu nhắc nhập và lỗi\n      <code>e.getMessage()</code>; <em>kết quả</em> thì qua View.) Mỗi <code>case</code> gọi controller\n      <strong>1 lần</strong>.</li>\n      <li>☐ <strong>Controller</strong> nhận input từ Main qua DTO, gửi/nhận data qua Services (Repository),\n      <strong>không làm việc với Model</strong>, chỉ gửi kết quả cần hiển thị sang View. Không print.</li>\n      <li>☐ <strong>Repository</strong> chỉ chứa data và CRUD đơn giản; có nghiệp vụ tính toán thì thêm\n      Services: Controller ↔ Services ↔ Repository ↔ Model. <strong>Bắt buộc phải có repository.</strong></li>\n      <li>☐ Hiển thị gì cũng gọi qua <strong>View</strong>; rendering chỉ <strong>1 lần cho 1 luồng</strong>\n      (mỗi <code>case</code> của switch ở Main là 1 luồng).</li>\n      <li>☐ <strong>Services/Repository</strong> nhận data từ Controller (qua tham số nếu số tham số\n      &lt; 3, tức tối đa 2 — nhiều hơn thì gói DTO), xử lý rồi trả kết quả về Controller; được làm việc với\n      Model; không print.</li>\n      <li>☐ <strong>Model</strong> chỉ mô tả thực thể, không làm việc với View, không print.</li>\n      <li>☐ <strong>View</strong> chỉ nhận thông tin từ Controller, <strong>qua thuộc tính</strong> (field\n      ResponseDTO + setter, <code>display()</code> không tham số), không qua tham số.</li>\n    </ul></li>\n  <li>☐ <strong>1.2</strong> — Package viết chữ thường, thể hiện ý nghĩa chung của package.</li>\n  <li>☐ <strong>1.3</strong> — Class bắt đầu bằng chữ hoa, tên bắt đầu bằng <strong>danh từ</strong>, thể\n  hiện mục đích; đảm bảo S trong SOLID; class exception kết thúc bằng <code>Exception</code>; interface bắt\n  đầu bằng <code>I</code>.</li>\n  <li>☐ <strong>1.4</strong> — Method bắt đầu bằng chữ thường, tên bắt đầu bằng <strong>động từ</strong>,\n  thể hiện mục đích; đảm bảo SRP.</li>\n  <li>☐ <strong>1.5</strong> — Biến bắt đầu bằng chữ thường, có ý nghĩa; kiểu collection kết thúc bằng\n  <code>List</code>, kiểu Set bằng <code>Set</code>, kiểu Map bằng <code>Map</code>, mảng bằng\n  <code>Array</code>; viết <code>Id</code>, không viết <code>ID</code>.</li>\n  <li>☐ <strong>1.6</strong> — Comment ngắn gọn, rõ ràng (Javadoc nếu cần). <strong>Mỗi method</strong> đều\n  có comment ý nghĩa; <strong>mỗi block source</strong> đều có comment giải thích block đó làm gì.</li>\n</ol>\n<h4>2. Coding Convention (format bằng Alt+Shift+F trong NetBeans)</h4>\n<ol>\n  <li>☐ <strong>2.1</strong> — <code>{</code> nằm cuối dòng, <code>}</code> nằm đầu dòng.</li>\n  <li>☐ <strong>2.2</strong> — Block chỉ 1 dòng code cũng đặt trong <code>{}</code>.</li>\n  <li>☐ <strong>2.3</strong> — 1 dòng (không tính comment) không dài quá <strong>100 ký tự</strong>; dài hơn\n  thì ngắt sau toán tử logic, hạn chế ngắt giữa biểu thức trong <code>()</code>, ngắt trước toán hạng\n  (<code>+ - *</code>…).</li>\n  <li>☐ <strong>2.4</strong> — Mỗi khai báo biến trên 1 dòng.</li>\n  <li>☐ <strong>2.5</strong> — Khai báo mảng thống nhất một kiểu: <code>Type[] anArray;</code></li>\n  <li>☐ <strong>2.6</strong> — Biến khai báo tập trung ở <strong>đầu mỗi block</strong> code.</li>\n  <li>☐ <strong>2.7</strong> — Mỗi statement nằm trên 1 dòng.</li>\n  <li>☐ <strong>2.8</strong> — Có 1 dòng trống: giữa các method, giữa vùng khai báo biến và phần còn lại,\n  trước block comment, trước line comment, giữa các block code xử lý logic.</li>\n  <li>☐ <strong>2.9</strong> — Có 1 dấu cách: trước <code>(</code> (<code>if (</code>, <code>for (</code>),\n  sau <code>,</code>, trước và sau các phép tính (<code>=</code>, <code>+</code>, <code>-</code>,\n  <code>*</code>, <code>;</code> trong for…).</li>\n  <li>☐ <strong>2.10</strong> — Mọi hằng số ở class riêng <code>Constants.java</code>: chữ hoa, phân cách\n  bằng <code>_</code>, khai báo <code>static final</code>.</li>\n  <li>☐ <strong>2.11</strong> — Mọi message ở class riêng <code>Message.java</code>: chữ hoa, phân cách\n  bằng <code>_</code>, khai báo <code>static final</code>.</li>\n</ol>\n<h4>3. Performance</h4>\n<ol>\n  <li>☐ <strong>3.1</strong> — Dùng tên class để truy cập biến, method static\n  (<code>Validation.getChoice(...)</code>).</li>\n  <li>☐ <strong>3.2</strong> — Không khai báo biến local trùng tên với biến ở tầng cao hơn.</li>\n  <li>☐ <strong>3.3</strong> — Dùng <code>()</code> làm tường minh thứ tự phép tính:\n  <code>if ((a == b) &amp;&amp; (c == d))</code>.</li>\n  <li>☐ <strong>3.4</strong> — Class chỉ có static method thì có <code>private</code> constructor và khai báo\n  <code>final</code>.</li>\n  <li>☐ <strong>3.5</strong> — So sánh giá trị object (String…) bằng <code>equals</code>, không dùng\n  <code>==</code>; so sánh text thì chú ý hoa/thường.</li>\n  <li>☐ <strong>3.6</strong> — Không có biến khai báo mà không dùng.</li>\n  <li>☐ <strong>3.7</strong> — Biến khai báo khi bắt đầu xử lý và <strong>được khởi tạo</strong>\n  (<code>int choice = 0;</code>).</li>\n  <li>☐ <strong>3.8</strong> — Cộng chuỗi dùng <code>StringBuilder</code> (hoặc\n  <code>String.format</code>), không <code>String += String</code>.</li>\n</ol>\n<p><strong>Ngoài tờ giấy, slide 10 còn bốn cửa chặn:</strong> đã bấm Alt+Shift+F · đã chạy hết happy case\nvà hiện đủ message lỗi · đặt được breakpoint và debug tại chỗ · trả lời được 12 câu review.</p>",
+   "type": "prose"
+  },
+  {
+   "html": "<p><em>Bài giảng soạn từ đúng bộ tài liệu Fall 2026 của giảng viên: Huong-dan-hoc-LAB211.pptx ·\n  Guide.xlsx (kiến trúc + code mẫu J1.S.P0055) · OOP_Java_Guide.docx · SOLID-Principles.pptx ·\n  Design Pattern.pptx · Chapter 7 – Static Modeling · Java Code Conventions (Sun 1997) ·\n  Lab Grading Policy.</em></p>",
+   "type": "prose"
+  }
+ ]
+}

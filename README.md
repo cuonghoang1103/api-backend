@@ -25,7 +25,7 @@ it running.
 | **Data** | PostgreSQL + Prisma — **319 tables**, 150 applied migrations, pgvector |
 | **Web** | Next.js (App Router) · React · Tailwind |
 | **Desktop** | Electron — macOS, Windows and Linux builds with auto-update ([130+ releases](https://github.com/cuonghoang1103/cuongthai-desktop/releases)) |
-| **iOS** | SwiftUI, shipped to TestFlight (source in a private repo) |
+| **iOS** | SwiftUI for iPhone and iPad, shipped to TestFlight — [cuongthai-ios](https://github.com/cuonghoang1103/cuongthai-ios) |
 | **Infra** | Docker · GHCR · nginx · Cloudflare R2 · self-hosted VPS |
 | **AI** | Multi-provider LLM gateway — per-feature model routing, per-user token quotas, daily spend limits · a self-hosted Qwen model on a home GPU behind a priority queue |
 

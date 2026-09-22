@@ -53,5 +53,12 @@ export default {
     'cr-12-2-cat-dung-co-ban': { yt: 'Zv9u0aLkfK0', credit: 'Matt Loui — CapCut Beginner Tutorial (2026) - Beginner to Pro' },
     'cr-12-3-chu-phu-de-hieu-ung': { yt: 't5yFQJy9ZLM', credit: 'Creative Suite Tutorials — Learn 90% about Captions Under 10 minutes | CapCut Captions Masterclass' },
     'cr-12-4-xuat-quy-trinh-capcut': { yt: 'Ex1R3rsdlms', credit: 'Content Creators — Edit PRO Youtube Videos in Capcut | In Depth Tutorial' },
+
+    /* ── Chương 13 — Dựng chuyên nghiệp với DaVinci Resolve ── */
+    'cr-13-0-slides': { yt: 'gjxiH2Tm4JE', credit: 'Casey Faris — Making Videos in Resolve 21 - Full Course for Beginners' },
+    'cr-13-1-lam-quen-resolve': { yt: 'aCTJ7MjpAOw', credit: 'Ben Claremont — DaVinci Resolve 21 Beginners Tutorial: Edit Like A Pro For FREE!' },
+    'cr-13-2-cong-cu-trang-edit': { yt: 'UJ3oZqmZ0tc', credit: 'Quanta  — DaVinci Resolve 18.5 | Timeline Edit & Trim Tools for Beginners [Roll, Ripple, Slip, and Slide]' },
+    'cr-13-3-da-may-dong-bo': { yt: 'WgzUvtRgeCM', credit: 'DaVinci Dojo — How to Edit with Multiple Camera Angles in DaVinci Resolve 20 | Multicam Editing' },
+    'cr-13-4-resolve-ipad-linux': { yt: 'h6gBFvbNZgE', credit: 'Justin Brown - Primal Video — DaVinci Resolve iPad Tutorial - How To Edit Video On iPad!' },
   },
 };

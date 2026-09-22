@@ -11,6 +11,7 @@
  * Video YT từng bài: content/course-videos/content-creator.mjs (seed riêng, deploy tự chạy).
  */
 import s00 from './content-creator/s00-gioi-thieu.mjs';
+import s01 from './content-creator/s01-nen-tang-khan-gia.mjs';
 import s03 from './content-creator/s03-kich-ban-ke-chuyen.mjs';
 import s04 from './content-creator/s04-phan-canh.mjs';
 import s06 from './content-creator/s06-cai-dat-thiet-bi.mjs';
@@ -41,6 +42,7 @@ export default {
   },
   sections: [
     s00,
+    s01,
     s03,
     s04,
     s06,

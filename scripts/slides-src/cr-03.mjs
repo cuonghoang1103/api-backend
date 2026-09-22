@@ -23,7 +23,7 @@ export const slides = S([
       { t: 'Mở bằng hook', c: 'grn', pts: [[0, 100], [3, 92], [10, 84], [20, 79], [40, 74], [60, 71]], fill: true },
     ],
     notes: [{ x: 10, y: 58, t: 'đợt rời đi lớn nhất nằm ở đây', c: 'red', dy: 28 }],
-  }) + note('Đường MINH HOẠ hình dạng thường gặp, không phải số đo của một kênh cụ thể. Chương 23 dạy đọc đồ thị giữ chân thật của bạn.') },
+  }) + note('Đường MINH HOẠ hình dạng thường gặp, không phải số đo của một kênh cụ thể. Chương 26 dạy đọc đồ thị giữ chân thật của bạn.') },
 
   { t: 'Một hook có ba lớp — cùng lúc', body: two(
     phone({ w: 220, size: 'MCU', label: 'Giây 0–3 trên điện thoại' }),

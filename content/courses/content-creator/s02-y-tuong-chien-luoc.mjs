@@ -210,7 +210,7 @@ ${slide('cr-02', 6, 'Chấm điểm trước khi quay')}
 <h3>Packaging comes before filming, not after</h3>
 ${slide('cr-02', 7, 'Đóng gói TRƯỚC khi quay')}
 <p><strong>Packaging</strong> (đóng gói) means writing the title and sketching the thumbnail before you shoot a single frame — the opposite of the common order, where the title gets bolted on afterward because something has to go in the box. Filming first and packaging later produces exactly what you would expect: a vague title like "Learning Next.js, part 3" that promises nothing, because nothing was promised when the plan was made.</p>
-<p>The test is simple and a little uncomfortable: if you cannot write a title that would make <em>you</em> click, on a normal day, scrolling past it — do not film yet. That is not a failure, it is useful information: the idea needs one more pass of refining (back to Đã gọt in the Idea Bank) before it earns a shoot day. Chapter 22 goes deep on writing titles and designing thumbnails; this lesson only asks you to attempt the title early enough that it can steer the shoot, not just describe it afterward.</p>
+<p>The test is simple and a little uncomfortable: if you cannot write a title that would make <em>you</em> click, on a normal day, scrolling past it — do not film yet. That is not a failure, it is useful information: the idea needs one more pass of refining (back to Đã gọt in the Idea Bank) before it earns a shoot day. Chapter 25 goes deep on writing titles and designing thumbnails; this lesson only asks you to attempt the title early enough that it can steer the shoot, not just describe it afterward.</p>
 
 <h3>Test cheap before you build big</h3>
 ${slide('cr-02', 8, 'Thử rẻ trước, làm lớn sau')}
@@ -261,7 +261,7 @@ ${slide('cr-02', 6, 'Chấm điểm trước khi quay')}
 <h3>Đóng gói đến TRƯỚC khi quay, không phải sau</h3>
 ${slide('cr-02', 7, 'Đóng gói TRƯỚC khi quay')}
 <p><strong>Đóng gói</strong> (packaging) nghĩa là viết tiêu đề và phác thumbnail trước khi bạn quay dù chỉ một khung hình — ngược với thứ tự thường gặp, nơi tiêu đề bị gắn vào sau cùng vì phải có gì đó điền vào ô đó. Quay trước rồi mới đóng gói sau cho ra đúng thứ bạn đoán được: một tiêu đề mơ hồ kiểu "Học Next.js phần 3" không hứa hẹn gì cả, vì chẳng có lời hứa nào được đặt ra lúc lên kế hoạch.</p>
-<p>Phép thử rất đơn giản và hơi khó chịu một chút: nếu bạn không viết nổi một tiêu đề khiến <em>chính bạn</em> muốn bấm vào, vào một ngày bình thường, đang lướt ngang qua nó — thì đừng quay vội. Đó không phải thất bại, mà là thông tin hữu ích: ý tưởng cần thêm một lượt gọt giũa (quay lại trạng thái Đã gọt trong Kho ý tưởng) trước khi nó xứng đáng một ngày quay. Chương 22 sẽ đi sâu vào viết tiêu đề và thiết kế thumbnail; bài này chỉ yêu cầu bạn thử viết tiêu đề đủ sớm để nó dẫn dắt buổi quay, chứ không chỉ mô tả lại nó sau khi đã quay xong.</p>
+<p>Phép thử rất đơn giản và hơi khó chịu một chút: nếu bạn không viết nổi một tiêu đề khiến <em>chính bạn</em> muốn bấm vào, vào một ngày bình thường, đang lướt ngang qua nó — thì đừng quay vội. Đó không phải thất bại, mà là thông tin hữu ích: ý tưởng cần thêm một lượt gọt giũa (quay lại trạng thái Đã gọt trong Kho ý tưởng) trước khi nó xứng đáng một ngày quay. Chương 25 sẽ đi sâu vào viết tiêu đề và thiết kế thumbnail; bài này chỉ yêu cầu bạn thử viết tiêu đề đủ sớm để nó dẫn dắt buổi quay, chứ không chỉ mô tả lại nó sau khi đã quay xong.</p>
 
 <h3>Thử rẻ trước khi làm lớn</h3>
 ${slide('cr-02', 8, 'Thử rẻ trước, làm lớn sau')}

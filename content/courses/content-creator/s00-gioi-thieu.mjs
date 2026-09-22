@@ -16,7 +16,7 @@ const SLIDES = [
   [7, 'Mua gì trước — thứ tự của người làm nghề'],
   [8, 'Quy trình sản xuất: 10 bước'],
   [9, 'Bạn đang ở đâu trong quy trình'],
-  [10, 'Lộ trình 25 phần — 5 giai đoạn'],
+  [10, 'Lộ trình 28 phần — 5 giai đoạn'],
   [11, 'Mỗi chương học thế nào'],
   [12, 'Công cụ đi cùng khoá: /creator'],
   [13, 'Ba luồng video trong mỗi bài học'],
@@ -33,7 +33,7 @@ export default {
       slug: 'cr-00-0-slides',
       type: 'DOCUMENT',
       isFreePreview: true,
-      description: 'Bức tranh toàn cảnh của khoá: lịch sử video trực tuyến, đồ nghề của bạn, quy trình 10 bước và lộ trình 25 phần — trong 14 slide.',
+      description: 'Bức tranh toàn cảnh của khoá: lịch sử video trực tuyến, đồ nghề của bạn, quy trình 10 bước và lộ trình 28 phần — trong 14 slide.',
       content: `
 <div class="ml-en"><h2>📑 Section 0 in 14 slides</h2>
 <p>Every chapter of this course opens with a slide deck like this one. Each slide is built around a picture — a timeline, a diagram, a comparison — so you can see the shape of the chapter before you read a single paragraph.</p>
@@ -98,7 +98,7 @@ ${slide('cr-00', 4, 'Vì sao video xây được thương hiệu cá nhân')}
 <div class="lz-layer"><span class="lz-k">Compounding</span><span class="lz-t">One video, years of views</span><span class="lz-d">A good tutorial is found through search long after you publish it. The work you do today keeps working while you sleep.</span></div>
 <div class="lz-layer"><span class="lz-k">Leverage</span><span class="lz-t">Explain once, help thousands</span><span class="lz-d">Instead of answering the same question in fifty messages, you answer it once, well, and send the link.</span></div>
 <div class="lz-layer"><span class="lz-k">Learning</span><span class="lz-t">Teaching forces understanding</span><span class="lz-d">To explain something on camera you have to understand it end to end. Every tutorial you make sharpens your own skills.</span></div>
-<div class="lz-layer"><span class="lz-k">Traffic</span><span class="lz-t">A door back to your website</span><span class="lz-d">Each video can point to a course, an article or the Pro plan on cuongthai.com. Chapter 23 builds that funnel properly.</span></div>
+<div class="lz-layer"><span class="lz-k">Traffic</span><span class="lz-t">A door back to your website</span><span class="lz-d">Each video can point to a course, an article or the Pro plan on cuongthai.com. Chapter 26 builds that funnel properly.</span></div>
 </div>
 
 <div class="callout warn"><p><strong>Honest expectations:</strong> growth is slow at the start, and the first ten videos are mostly practice. Channels that last are built on <em>consistency</em> — one decent video every week for a year beats one great video followed by silence. The course is designed so that each chapter ends with something you can publish, so the practice happens in public from the start.</p></div>
@@ -178,7 +178,7 @@ ${slide('cr-00', 4, 'Vì sao video xây được thương hiệu cá nhân')}
 <div class="lz-layer"><span class="lz-k">Tích luỹ</span><span class="lz-t">Một video, nhiều năm lượt xem</span><span class="lz-d">Một video hướng dẫn tốt vẫn được tìm thấy qua tìm kiếm rất lâu sau khi đăng. Công sức hôm nay tiếp tục làm việc cả khi bạn ngủ.</span></div>
 <div class="lz-layer"><span class="lz-k">Đòn bẩy</span><span class="lz-t">Giải thích một lần, giúp hàng nghìn người</span><span class="lz-d">Thay vì trả lời cùng một câu hỏi trong năm mươi tin nhắn, bạn trả lời một lần, thật kỹ, rồi gửi đường link.</span></div>
 <div class="lz-layer"><span class="lz-k">Học sâu hơn</span><span class="lz-t">Dạy lại buộc bạn phải hiểu</span><span class="lz-d">Muốn giải thích trước ống kính, bạn phải hiểu từ đầu tới cuối. Mỗi video hướng dẫn bạn làm lại mài sắc thêm kỹ năng của chính bạn.</span></div>
-<div class="lz-layer"><span class="lz-k">Lượt truy cập</span><span class="lz-t">Một cánh cửa về website</span><span class="lz-d">Mỗi video có thể dẫn tới một khoá học, một bài viết hay gói Pro trên cuongthai.com. Chương 23 dựng cái phễu đó cho bài bản.</span></div>
+<div class="lz-layer"><span class="lz-k">Lượt truy cập</span><span class="lz-t">Một cánh cửa về website</span><span class="lz-d">Mỗi video có thể dẫn tới một khoá học, một bài viết hay gói Pro trên cuongthai.com. Chương 26 dựng cái phễu đó cho bài bản.</span></div>
 </div>
 
 <div class="callout warn"><p><strong>Kỳ vọng thật lòng:</strong> lúc đầu kênh lớn chậm, và mười video đầu chủ yếu là để luyện tay. Những kênh sống lâu được xây bằng <em>sự đều đặn</em> — mỗi tuần một video tạm ổn trong suốt một năm thắng một video xuất sắc rồi im lặng. Khoá được thiết kế để chương nào cũng kết thúc bằng một thứ đăng được, nên bạn luyện tập công khai ngay từ đầu.</p></div>
@@ -251,7 +251,7 @@ ${slide('cr-00', 6, 'Đồ nghề bạn đang có')}
   <tr><td>Talking head at your desk</td><td>iPhone on a tripod (A-cam)</td><td>Pocket 3 from the side (B-cam), iPad as teleprompter</td></tr>
   <tr><td>Walking vlog, outdoors</td><td>Pocket 3</td><td>iPhone for 5× detail shots</td></tr>
   <tr><td>B-roll of hands on the keyboard</td><td>iPhone 5× or Pocket 3</td><td>—</td></tr>
-  <tr><td>Screen-recorded coding tutorial</td><td>Mac screen recording</td><td>iPhone as webcam via Continuity Camera (Chapter 19)</td></tr>
+  <tr><td>Screen-recorded coding tutorial</td><td>Mac screen recording</td><td>iPhone as webcam via Continuity Camera (Chapter 22)</td></tr>
   <tr><td>Thumbnail photo</td><td>iPhone 48 MP</td><td>iPad to preview at phone size</td></tr>
   <tr><td>Planning, storyboard, script</td><td>iPad + Pencil</td><td><code>/creator</code> on any device</td></tr>
 </table>
@@ -333,7 +333,7 @@ ${slide('cr-00', 6, 'Đồ nghề bạn đang có')}
   <tr><td>Nói chuyện trước máy tại bàn</td><td>iPhone trên chân máy (A-cam)</td><td>Pocket 3 đặt bên cạnh (B-cam), iPad làm teleprompter</td></tr>
   <tr><td>Vlog vừa đi vừa quay, ngoài trời</td><td>Pocket 3</td><td>iPhone quay cận chi tiết bằng ống 5×</td></tr>
   <tr><td>B-roll tay gõ phím</td><td>iPhone 5× hoặc Pocket 3</td><td>—</td></tr>
-  <tr><td>Bài hướng dẫn code quay màn hình</td><td>Quay màn hình trên Mac</td><td>iPhone làm webcam qua Continuity Camera (Chương 19)</td></tr>
+  <tr><td>Bài hướng dẫn code quay màn hình</td><td>Quay màn hình trên Mac</td><td>iPhone làm webcam qua Continuity Camera (Chương 22)</td></tr>
   <tr><td>Ảnh thumbnail</td><td>iPhone 48 MP</td><td>iPad để xem thử ở cỡ điện thoại</td></tr>
   <tr><td>Lên kế hoạch, storyboard, kịch bản</td><td>iPad + Pencil</td><td><code>/creator</code> trên máy nào cũng được</td></tr>
 </table>
@@ -421,9 +421,9 @@ ${slide('cr-00', 8, 'Quy trình sản xuất: 10 bước')}
 <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Ingest</span><span class="lz-d">Footage copied into a standard folder, renamed, backed up twice. <em>Chapter 11.</em></span></div>
 <div class="lz-step"><span class="lz-k">6</span><span class="lz-t">Edit</span><span class="lz-d">From rough cut to a locked story ("picture lock"). <em>Chapters 12–14.</em></span></div>
 <div class="lz-step"><span class="lz-k">7</span><span class="lz-t">Colour &amp; sound</span><span class="lz-d">Matching shots, clean voice at the right loudness, captions. <em>Chapters 15–16.</em></span></div>
-<div class="lz-step"><span class="lz-k">8</span><span class="lz-t">Export</span><span class="lz-d">A file in the right size, frame rate and codec for each platform. <em>Chapter 21.</em></span></div>
-<div class="lz-step"><span class="lz-k">9</span><span class="lz-t">Publish</span><span class="lz-d">Title, thumbnail, description, chapters, captions, schedule. <em>Chapters 21–22.</em></span></div>
-<div class="lz-step"><span class="lz-k">10</span><span class="lz-t">Measure &amp; learn</span><span class="lz-d">Three numbers and one lesson for the next video. <em>Chapter 23.</em></span></div>
+<div class="lz-step"><span class="lz-k">8</span><span class="lz-t">Export</span><span class="lz-d">A file in the right size, frame rate and codec for each platform. <em>Chapter 24.</em></span></div>
+<div class="lz-step"><span class="lz-k">9</span><span class="lz-t">Publish</span><span class="lz-d">Title, thumbnail, description, chapters, captions, schedule. <em>Chapters 24–25.</em></span></div>
+<div class="lz-step"><span class="lz-k">10</span><span class="lz-t">Measure &amp; learn</span><span class="lz-d">Three numbers and one lesson for the next video. <em>Chapter 26.</em></span></div>
 </div>
 <pre><code class="language-mermaid">flowchart TB
   A["1 · Idea"] --> B["2 · Script"] --> C["3 · Shot list"]
@@ -509,9 +509,9 @@ ${slide('cr-00', 8, 'Quy trình sản xuất: 10 bước')}
 <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Nhập liệu</span><span class="lz-d">Cảnh quay được chép vào thư mục chuẩn, đặt lại tên, sao lưu hai nơi. <em>Chương 11.</em></span></div>
 <div class="lz-step"><span class="lz-k">6</span><span class="lz-t">Dựng</span><span class="lz-d">Từ bản dựng thô tới câu chuyện đã chốt ("picture lock"). <em>Chương 12–14.</em></span></div>
 <div class="lz-step"><span class="lz-k">7</span><span class="lz-t">Màu &amp; âm</span><span class="lz-d">Khớp màu giữa các cảnh, giọng sạch và đúng độ lớn, phụ đề. <em>Chương 15–16.</em></span></div>
-<div class="lz-step"><span class="lz-k">8</span><span class="lz-t">Xuất file</span><span class="lz-d">File đúng kích thước, tốc độ khung hình và codec cho từng nền tảng. <em>Chương 21.</em></span></div>
-<div class="lz-step"><span class="lz-k">9</span><span class="lz-t">Đăng</span><span class="lz-d">Tiêu đề, thumbnail, mô tả, chương (chapters), phụ đề, hẹn giờ. <em>Chương 21–22.</em></span></div>
-<div class="lz-step"><span class="lz-k">10</span><span class="lz-t">Đo &amp; học</span><span class="lz-d">Ba con số và một bài học cho video sau. <em>Chương 23.</em></span></div>
+<div class="lz-step"><span class="lz-k">8</span><span class="lz-t">Xuất file</span><span class="lz-d">File đúng kích thước, tốc độ khung hình và codec cho từng nền tảng. <em>Chương 24.</em></span></div>
+<div class="lz-step"><span class="lz-k">9</span><span class="lz-t">Đăng</span><span class="lz-d">Tiêu đề, thumbnail, mô tả, chương (chapters), phụ đề, hẹn giờ. <em>Chương 24–25.</em></span></div>
+<div class="lz-step"><span class="lz-k">10</span><span class="lz-t">Đo &amp; học</span><span class="lz-d">Ba con số và một bài học cho video sau. <em>Chương 26.</em></span></div>
 </div>
 <pre><code class="language-mermaid">flowchart TB
   A["1 · Ý tưởng"] --> B["2 · Kịch bản"] --> C["3 · Phân cảnh"]
@@ -579,7 +579,7 @@ ${slide('cr-00', 9, 'Bạn đang ở đâu trong quy trình')}
 
     /* ─────────────────── 0.4 lộ trình & cách học ─────────────────── */
     {
-      title: '0.4 — The 25-part roadmap, and how to learn by making|||0.4 — Lộ trình 25 phần, và cách học bằng cách làm',
+      title: '0.4 — The 28-part roadmap, and how to learn by making|||0.4 — Lộ trình 28 phần, và cách học bằng cách làm',
       slug: 'cr-00-4-lo-trinh-cach-hoc',
       type: 'VIDEO',
       isFreePreview: true,
@@ -591,21 +591,21 @@ ${slide('cr-00', 9, 'Bạn đang ở đâu trong quy trình')}
 <p class="lead">This course is long on purpose: it follows the real workflow from the first idea to reading your analytics. But you do not have to finish it before publishing anything. This lesson shows the map, three shortcuts depending on what you want to post first, and the learning habits that turn chapters into actual videos.</p>
 
 <h3>The map</h3>
-${slide('cr-00', 10, 'Lộ trình 25 phần — 5 giai đoạn')}
+${slide('cr-00', 10, 'Lộ trình 28 phần — 5 giai đoạn')}
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-k">Phase 1</span><span class="lz-t">Pre-production · Ch 1–4</span><span class="lz-d">Platforms and audience, ideas and strategy, scripts and storytelling, <strong>shot lists and storyboards</strong> (the chapter that ends the 30-minute-take habit).</span></div>
 <div class="lz-layer"><span class="lz-k">Phase 2</span><span class="lz-t">Shooting · Ch 5–10</span><span class="lz-d">How cameras work, setting up your Pocket 3 / iPhone / iPad / Mac, composition, light, sound, and shooting alone like a pro.</span></div>
-<div class="lz-layer"><span class="lz-k">Phase 3</span><span class="lz-t">Post-production · Ch 11–16</span><span class="lz-d">Managing footage and backups, <strong>CapCut</strong>, <strong>DaVinci Resolve</strong>, the craft of editing, colour grading, sound mixing, graphics and subtitles.</span></div>
-<div class="lz-layer"><span class="lz-k">Phase 4</span><span class="lz-t">Formats · Ch 17–20</span><span class="lz-d">Short vertical video, vlogs, teaching videos and screen recordings, and bilingual Vietnamese–English videos.</span></div>
-<div class="lz-layer"><span class="lz-k">Phase 5</span><span class="lz-t">Growth · Ch 21–24</span><span class="lz-d">Exporting and publishing, titles and thumbnails, analytics and monetisation, and a 30-day channel-launch project.</span></div>
+<div class="lz-layer"><span class="lz-k">Phase 3</span><span class="lz-t">Post-production · Ch 11–19</span><span class="lz-d">Managing footage and backups, <strong>CapCut</strong>, <strong>DaVinci Resolve</strong>, the craft of editing, colour grading, sound mixing, graphics and subtitles — then professional effects: transitions, keyframes and speed, masks, tracking and VFX, motion graphics and 3D.</span></div>
+<div class="lz-layer"><span class="lz-k">Phase 4</span><span class="lz-t">Formats · Ch 20–23</span><span class="lz-d">Short vertical video, vlogs, teaching videos and screen recordings, and bilingual Vietnamese–English videos.</span></div>
+<div class="lz-layer"><span class="lz-k">Phase 5</span><span class="lz-t">Growth · Ch 24–27</span><span class="lz-d">Exporting and publishing, titles and thumbnails, analytics and monetisation, and a 30-day channel-launch project.</span></div>
 </div>
 
 <h3>Three shortcuts — if you want to publish this week</h3>
 <table>
   <tr><th>Your first goal</th><th>Read in this order</th><th>Then go back to</th></tr>
-  <tr><td>A short vertical video (TikTok / Reels / Shorts)</td><td>Ch 4 → Ch 6 → Ch 12 → Ch 17</td><td>Ch 3 (hooks), Ch 9 (sound)</td></tr>
-  <tr><td>A YouTube coding tutorial</td><td>Ch 3 → Ch 4 → Ch 9 → Ch 13 → Ch 19</td><td>Ch 8 (light), Ch 22 (thumbnail)</td></tr>
-  <tr><td>A vlog</td><td>Ch 4 → Ch 6 → Ch 7 → Ch 18</td><td>Ch 14 (editing craft), Ch 15 (colour)</td></tr>
+  <tr><td>A short vertical video (TikTok / Reels / Shorts)</td><td>Ch 4 → Ch 6 → Ch 12 → Ch 20</td><td>Ch 3 (hooks), Ch 9 (sound)</td></tr>
+  <tr><td>A YouTube coding tutorial</td><td>Ch 3 → Ch 4 → Ch 9 → Ch 13 → Ch 22</td><td>Ch 8 (light), Ch 25 (thumbnail)</td></tr>
+  <tr><td>A vlog</td><td>Ch 4 → Ch 6 → Ch 7 → Ch 21</td><td>Ch 14 (editing craft), Ch 15 (colour)</td></tr>
 </table>
 <p>Shortcuts are for momentum, not for skipping forever. The chapters you jump over are exactly where your next improvement will come from.</p>
 
@@ -629,7 +629,7 @@ ${slide('cr-00', 12, 'Công cụ đi cùng khoá: /creator')}
   <div class="kv"><span class="k">/creator/projects</span><span class="v">Scripts with nine ready-made templates (lecture, tutorial, story vlog, one-idea short…), saved versions, and a built-in teleprompter.</span></div>
 </div>
 ${slide('cr-00', 13, 'Ba luồng video trong mỗi bài học')}
-<p>Each lesson on cuongthai.com has three video tracks: <strong>VI</strong> and <strong>EN</strong> (recorded by you) and <strong>YT</strong> (a hand-picked video from an experienced creator, shown until your own recordings exist). By the end of this course you will be able to fill the VI and EN tracks of your other courses yourself — Chapter 19 shows exactly how.</p>
+<p>Each lesson on cuongthai.com has three video tracks: <strong>VI</strong> and <strong>EN</strong> (recorded by you) and <strong>YT</strong> (a hand-picked video from an experienced creator, shown until your own recordings exist). By the end of this course you will be able to fill the VI and EN tracks of your other courses yourself — Chapter 22 shows exactly how.</p>
 <div class="callout ok"><p><strong>Most of the best video tutorials are in English.</strong> On YouTube (web) click the ⚙️ <em>Settings</em> gear → <em>Subtitles/CC</em> → <em>Auto-translate</em> → <em>Vietnamese</em>; in the app, open the ⋯ menu → <em>Captions</em>. Add <em>Playback speed 0.75</em> when a presenter talks fast. Auto-translated captions are imperfect, but combined with the Vietnamese lesson above the video they are more than enough — and you pick up the English terms along the way.</p></div>
 
 <h3>Going deeper: reading that will not go out of date</h3>
@@ -666,14 +666,14 @@ ${slide('cr-00', 13, 'Ba luồng video trong mỗi bài học')}
 <h3>🗂 Terms in this lesson</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Workflow</span><span class="v">The fixed sequence of steps you repeat for every video.</span></div>
-  <div class="kv"><span class="k">Capstone</span><span class="v">A final project that uses everything from the course (Chapter 24).</span></div>
+  <div class="kv"><span class="k">Capstone</span><span class="v">A final project that uses everything from the course (Chapter 27).</span></div>
   <div class="kv"><span class="k">Feedback loop</span><span class="v">Make → publish → measure → adjust → make again.</span></div>
   <div class="kv"><span class="k">Consistency</span><span class="v">Publishing on a steady rhythm. The strongest predictor of a channel lasting.</span></div>
 </div>
 
 <h3>📌 Summary</h3>
 <ul>
-  <li>Five phases: pre-production, shooting, post-production, formats, growth — 24 chapters after this section.</li>
+  <li>Five phases: pre-production, shooting, post-production, formats, growth — 27 chapters after this section.</li>
   <li>Use a shortcut to publish early, then return to the chapters you skipped.</li>
   <li>Learn in a loop: slides → lesson → video → practice → check → publish → log.</li>
   <li>Your <code>/creator</code> studio holds ideas, calendar, pipeline, scripts and the teleprompter.</li>
@@ -681,25 +681,25 @@ ${slide('cr-00', 13, 'Ba luồng video trong mỗi bài học')}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.4</span>
-<h2>25 phần, 5 giai đoạn — và một cách học kết thúc bằng video, không phải bằng ghi chép</h2>
+<h2>28 phần, 5 giai đoạn — và một cách học kết thúc bằng video, không phải bằng ghi chép</h2>
 <p class="lead">Khoá này dài có chủ đích: nó đi theo đúng quy trình thật, từ ý tưởng đầu tiên tới lúc đọc số liệu kênh. Nhưng bạn không phải học xong mới được đăng video. Bài này cho bạn tấm bản đồ, ba đường tắt tuỳ bạn muốn đăng gì trước, và những thói quen học biến từng chương thành video thật.</p>
 
 <h3>Tấm bản đồ</h3>
-${slide('cr-00', 10, 'Lộ trình 25 phần — 5 giai đoạn')}
+${slide('cr-00', 10, 'Lộ trình 28 phần — 5 giai đoạn')}
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-k">Giai đoạn 1</span><span class="lz-t">Tiền kỳ · Ch 1–4</span><span class="lz-d">Nền tảng và khán giả, ý tưởng và chiến lược, kịch bản và kể chuyện, <strong>shot list và storyboard</strong> (chương chấm dứt thói quen quay một lèo 30 phút).</span></div>
 <div class="lz-layer"><span class="lz-k">Giai đoạn 2</span><span class="lz-t">Quay · Ch 5–10</span><span class="lz-d">Máy quay hoạt động thế nào, cài đặt Pocket 3 / iPhone / iPad / Mac, bố cục, ánh sáng, âm thanh, và tự quay một mình như dân chuyên.</span></div>
-<div class="lz-layer"><span class="lz-k">Giai đoạn 3</span><span class="lz-t">Hậu kỳ · Ch 11–16</span><span class="lz-d">Quản lý cảnh quay và sao lưu, <strong>CapCut</strong>, <strong>DaVinci Resolve</strong>, nghệ thuật cắt dựng, chỉnh màu, mix âm thanh, chữ đồ hoạ và phụ đề.</span></div>
-<div class="lz-layer"><span class="lz-k">Giai đoạn 4</span><span class="lz-t">Theo định dạng · Ch 17–20</span><span class="lz-d">Video ngắn dọc, vlog, video bài giảng và quay màn hình, video song ngữ Việt–Anh.</span></div>
-<div class="lz-layer"><span class="lz-k">Giai đoạn 5</span><span class="lz-t">Phát triển · Ch 21–24</span><span class="lz-d">Xuất file và đăng, tiêu đề và thumbnail, số liệu và kiếm tiền, và dự án 30 ngày ra mắt kênh.</span></div>
+<div class="lz-layer"><span class="lz-k">Giai đoạn 3</span><span class="lz-t">Hậu kỳ · Ch 11–19</span><span class="lz-d">Quản lý cảnh quay và sao lưu, <strong>CapCut</strong>, <strong>DaVinci Resolve</strong>, nghệ thuật cắt dựng, chỉnh màu, mix âm thanh, chữ đồ hoạ và phụ đề — rồi hiệu ứng chuyên nghiệp: chuyển cảnh, keyframe và tốc độ, mask, tracking và VFX, motion graphics và 3D.</span></div>
+<div class="lz-layer"><span class="lz-k">Giai đoạn 4</span><span class="lz-t">Theo định dạng · Ch 20–23</span><span class="lz-d">Video ngắn dọc, vlog, video bài giảng và quay màn hình, video song ngữ Việt–Anh.</span></div>
+<div class="lz-layer"><span class="lz-k">Giai đoạn 5</span><span class="lz-t">Phát triển · Ch 24–27</span><span class="lz-d">Xuất file và đăng, tiêu đề và thumbnail, số liệu và kiếm tiền, và dự án 30 ngày ra mắt kênh.</span></div>
 </div>
 
 <h3>Ba đường tắt — nếu bạn muốn đăng ngay tuần này</h3>
 <table>
   <tr><th>Mục tiêu đầu tiên</th><th>Đọc theo thứ tự</th><th>Rồi quay lại</th></tr>
-  <tr><td>Một video ngắn dọc (TikTok / Reels / Shorts)</td><td>Ch 4 → Ch 6 → Ch 12 → Ch 17</td><td>Ch 3 (hook), Ch 9 (âm thanh)</td></tr>
-  <tr><td>Một video hướng dẫn code trên YouTube</td><td>Ch 3 → Ch 4 → Ch 9 → Ch 13 → Ch 19</td><td>Ch 8 (ánh sáng), Ch 22 (thumbnail)</td></tr>
-  <tr><td>Một vlog</td><td>Ch 4 → Ch 6 → Ch 7 → Ch 18</td><td>Ch 14 (nghệ thuật dựng), Ch 15 (màu)</td></tr>
+  <tr><td>Một video ngắn dọc (TikTok / Reels / Shorts)</td><td>Ch 4 → Ch 6 → Ch 12 → Ch 20</td><td>Ch 3 (hook), Ch 9 (âm thanh)</td></tr>
+  <tr><td>Một video hướng dẫn code trên YouTube</td><td>Ch 3 → Ch 4 → Ch 9 → Ch 13 → Ch 22</td><td>Ch 8 (ánh sáng), Ch 25 (thumbnail)</td></tr>
+  <tr><td>Một vlog</td><td>Ch 4 → Ch 6 → Ch 7 → Ch 21</td><td>Ch 14 (nghệ thuật dựng), Ch 15 (màu)</td></tr>
 </table>
 <p>Đường tắt là để có đà, không phải để bỏ qua mãi mãi. Những chương bạn nhảy qua chính là nơi lần tiến bộ tiếp theo của bạn nằm đó.</p>
 
@@ -723,7 +723,7 @@ ${slide('cr-00', 12, 'Công cụ đi cùng khoá: /creator')}
   <div class="kv"><span class="k">/creator/projects</span><span class="v">Kịch bản với chín mẫu dựng sẵn (bài giảng, hướng dẫn công cụ, vlog kể chuyện, video ngắn một ý…), lưu phiên bản, và teleprompter có sẵn.</span></div>
 </div>
 ${slide('cr-00', 13, 'Ba luồng video trong mỗi bài học')}
-<p>Mỗi bài học trên cuongthai.com có ba luồng video: <strong>VI</strong> và <strong>EN</strong> (do bạn tự quay) và <strong>YT</strong> (một video chọn lọc từ người làm nghề, hiện ra cho tới khi bạn có bản quay của mình). Học xong khoá này, bạn sẽ tự lấp được luồng VI và EN cho các khoá khác của mình — Chương 19 chỉ đúng cách làm.</p>
+<p>Mỗi bài học trên cuongthai.com có ba luồng video: <strong>VI</strong> và <strong>EN</strong> (do bạn tự quay) và <strong>YT</strong> (một video chọn lọc từ người làm nghề, hiện ra cho tới khi bạn có bản quay của mình). Học xong khoá này, bạn sẽ tự lấp được luồng VI và EN cho các khoá khác của mình — Chương 22 chỉ đúng cách làm.</p>
 <div class="callout ok"><p><strong>Phần lớn video hướng dẫn hay nhất là tiếng Anh.</strong> Trên YouTube bản web, bấm bánh răng ⚙️ <em>Cài đặt</em> → <em>Phụ đề</em> → <em>Tự động dịch</em> → <em>Tiếng Việt</em>; trong ứng dụng, mở menu ⋯ → <em>Phụ đề</em>. Thêm <em>Tốc độ phát 0.75</em> khi người nói nhanh. Phụ đề tự dịch chưa hoàn hảo, nhưng đi cùng bài học tiếng Việt ngay trên video thì thừa đủ — và bạn học được luôn thuật ngữ tiếng Anh.</p></div>
 
 <h3>Học sâu hơn: những tài liệu không lỗi thời</h3>
@@ -760,14 +760,14 @@ ${slide('cr-00', 13, 'Ba luồng video trong mỗi bài học')}
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Workflow</span><span class="v">Quy trình làm việc — chuỗi bước cố định lặp lại cho mọi video.</span></div>
-  <div class="kv"><span class="k">Capstone</span><span class="v">Dự án cuối khoá dùng mọi thứ đã học (Chương 24).</span></div>
+  <div class="kv"><span class="k">Capstone</span><span class="v">Dự án cuối khoá dùng mọi thứ đã học (Chương 27).</span></div>
   <div class="kv"><span class="k">Feedback loop</span><span class="v">Vòng phản hồi: làm → đăng → đo → chỉnh → làm lại.</span></div>
   <div class="kv"><span class="k">Consistency</span><span class="v">Sự đều đặn — đăng theo một nhịp ổn định. Yếu tố mạnh nhất quyết định kênh có sống lâu không.</span></div>
 </div>
 
 <h3>📌 Tóm tắt</h3>
 <ul>
-  <li>Năm giai đoạn: tiền kỳ, quay, hậu kỳ, định dạng, phát triển — 24 chương sau phần mở đầu này.</li>
+  <li>Năm giai đoạn: tiền kỳ, quay, hậu kỳ, định dạng, phát triển — 27 chương sau phần mở đầu này.</li>
   <li>Dùng đường tắt để đăng sớm, rồi quay lại những chương đã bỏ qua.</li>
   <li>Học theo vòng: slide → bài đọc → video → thực hành → kiểm tra → đăng → ghi nhật ký.</li>
   <li>Xưởng <code>/creator</code> của bạn giữ ý tưởng, lịch, tiến độ, kịch bản và teleprompter.</li>
@@ -861,10 +861,10 @@ ${slide('cr-00', 13, 'Ba luồng video trong mỗi bài học')}
           },
           {
             question: 'You want to publish your first short vertical video this week. Which reading order does the course suggest?|||Bạn muốn đăng video ngắn dọc đầu tiên ngay tuần này. Khoá gợi ý đọc theo thứ tự nào?',
-            options: ['Ch 4 → Ch 6 → Ch 12 → Ch 17|||Ch 4 → Ch 6 → Ch 12 → Ch 17', 'Ch 1 → Ch 2 → Ch 3 → Ch 4|||Ch 1 → Ch 2 → Ch 3 → Ch 4', 'Ch 13 → Ch 15 → Ch 16|||Ch 13 → Ch 15 → Ch 16', 'Ch 22 → Ch 23|||Ch 22 → Ch 23'],
+            options: ['Ch 4 → Ch 6 → Ch 12 → Ch 20|||Ch 4 → Ch 6 → Ch 12 → Ch 20', 'Ch 1 → Ch 2 → Ch 3 → Ch 4|||Ch 1 → Ch 2 → Ch 3 → Ch 4', 'Ch 13 → Ch 15 → Ch 16|||Ch 13 → Ch 15 → Ch 16', 'Ch 25 → Ch 26|||Ch 25 → Ch 26'],
             correctIndex: 0,
             points: 1,
-            explanation: 'Shot list (Ch 4), set up the gear (Ch 6), edit in CapCut (Ch 12), then the short-form chapter (Ch 17). Afterwards go back to hooks (Ch 3) and sound (Ch 9).|||Phân cảnh (Ch 4), cài đặt máy (Ch 6), dựng bằng CapCut (Ch 12), rồi chương video ngắn (Ch 17). Sau đó quay lại hook (Ch 3) và âm thanh (Ch 9).',
+            explanation: 'Shot list (Ch 4), set up the gear (Ch 6), edit in CapCut (Ch 12), then the short-form chapter (Ch 20). Afterwards go back to hooks (Ch 3) and sound (Ch 9).|||Phân cảnh (Ch 4), cài đặt máy (Ch 6), dựng bằng CapCut (Ch 12), rồi chương video ngắn (Ch 20). Sau đó quay lại hook (Ch 3) và âm thanh (Ch 9).',
           },
           {
             question: 'Which job suits your Linux machine with the RTX 3060 best?|||Việc nào hợp nhất với máy Linux có RTX 3060 của bạn?',

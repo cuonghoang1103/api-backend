@@ -35,14 +35,14 @@ const lichSu = (() => {
 })();
 
 export const slides = S([
-  cover({ t: 'Mục 0 — Bắt đầu hành trình creator', sub: 'Vì sao làm video · Đồ nghề bạn đang có · Quy trình sản xuất · Lộ trình 25 phần', chap: 'MỤC 0' }),
+  cover({ t: 'Mục 0 — Bắt đầu hành trình creator', sub: 'Vì sao làm video · Đồ nghề bạn đang có · Quy trình sản xuất · Lộ trình 28 phần', chap: 'MỤC 0' }),
 
   { t: 'Bản đồ Mục 0', body: mindmap('Hành trình creator', 'bắt đầu từ đây', [
     { t: '🎬 Creator là gì', d: 'Người tạo nội dung đều đặn cho một nhóm khán giả', c: 'red' },
     { t: '📜 Lịch sử video trực tuyến', d: 'YouTube 2005 → video dọc 2016–2024', c: 'ora' },
     { t: '🎒 Đồ nghề của bạn', d: 'Pocket 3 · iPhone · iPad · Mac · Linux', c: 'amb' },
     { t: '🔁 Quy trình sản xuất', d: '10 bước — và bước bạn đang bỏ qua', c: 'tea' },
-    { t: '🗺 Lộ trình 25 phần', d: '5 giai đoạn: tiền kỳ → phát triển kênh', c: 'blu' },
+    { t: '🗺 Lộ trình 28 phần', d: '5 giai đoạn: tiền kỳ → phát triển kênh', c: 'blu' },
     { t: '🧠 Cách học', d: 'Làm → xem lại → sửa, mỗi chương một sản phẩm', c: 'vio' },
   ]) },
 
@@ -92,13 +92,13 @@ export const slides = S([
     yes: { t: 'Cách của người làm nghề', items: ['Viết ý + dàn ý 20 phút trước khi quay', 'Liệt kê shot cần quay (shot list)', 'Quay từng clip 10–60 giây, biết clip nào để làm gì', 'Dựng nhanh vì mọi clip đều có chỗ đứng'] },
   }) + note('Con số 29 GB: Pocket 3 ghi tối đa 130 Mbps ⇒ 130 × 60 ÷ 8 ≈ 975 MB/phút. Chương 4 dạy cách quay theo cảnh.') },
 
-  { t: 'Lộ trình 25 phần — 5 giai đoạn', body: table(['Giai đoạn', 'Chương', 'Học xong bạn làm được'], [
+  { t: 'Lộ trình 28 phần — 5 giai đoạn', body: table(['Giai đoạn', 'Chương', 'Học xong bạn làm được'], [
     ['!0 · Bắt đầu', 'Mục 0', 'Biết mình cần gì, học theo thứ tự nào'],
     ['1 · Tiền kỳ', 'Ch1–4', 'Chọn ngách, ra ý tưởng, viết kịch bản, lập shot list'],
     ['2 · Quay', 'Ch5–10', 'Cài máy đúng, bố cục, ánh sáng, thu âm sạch, quay một mình'],
-    ['3 · Hậu kỳ', 'Ch11–16', 'Quản lý file, dựng CapCut & DaVinci, màu, âm, phụ đề'],
-    ['4 · Định dạng', 'Ch17–20', 'Video ngắn, vlog, bài giảng, video song ngữ Việt–Anh'],
-    ['5 · Phát triển', 'Ch21–24', 'Xuất & đăng, thumbnail, số liệu, kiếm tiền, dự án 30 ngày'],
+    ['3 · Hậu kỳ', 'Ch11–19', 'Quản lý file, dựng CapCut & DaVinci, màu, âm, phụ đề, hiệu ứng, VFX & 3D'],
+    ['4 · Định dạng', 'Ch20–23', 'Video ngắn, vlog, bài giảng, video song ngữ Việt–Anh'],
+    ['5 · Phát triển', 'Ch24–27', 'Xuất & đăng, thumbnail, số liệu, kiếm tiền, dự án 30 ngày'],
   ]) },
 
   { t: 'Mỗi chương học thế nào', body: steps([
@@ -118,8 +118,8 @@ export const slides = S([
   ] }) },
 
   { t: 'Ba luồng video trong mỗi bài học', body: cards([
-    { ic: '🇻🇳', t: 'VI — bạn tự quay', d: 'Bài giảng tiếng Việt của chính bạn. Chương 19 dạy quay và đưa lên.', c: 'red' },
-    { ic: '🇬🇧', t: 'EN — bạn tự quay', d: 'Bản tiếng Anh cho khán giả quốc tế. Chương 20 dạy làm video song ngữ.', c: 'blu' },
+    { ic: '🇻🇳', t: 'VI — bạn tự quay', d: 'Bài giảng tiếng Việt của chính bạn. Chương 22 dạy quay và đưa lên.', c: 'red' },
+    { ic: '🇬🇧', t: 'EN — bạn tự quay', d: 'Bản tiếng Anh cho khán giả quốc tế. Chương 23 dạy làm video song ngữ.', c: 'blu' },
     { ic: '▶️', t: 'YT — video chọn lọc', d: 'Video chuyên sâu của người làm nghề, chọn đúng chủ đề từng bài. Mặc định khi bạn chưa quay.', c: 'amb' },
   ], 3) + box('tip', 'Học xong khoá này, chính bạn sẽ lấp luồng VI và EN cho các khoá khác trên cuongthai.com.') },
 
@@ -128,5 +128,5 @@ export const slides = S([
     ['Quay <b>một clip 60 giây</b> tự giới thiệu bằng iPhone — không cắt, không làm lại', 'Để máy tự động hết. Đây là "ảnh chụp trước khi học".'],
     ['Xem lại, ghi <b>3 điều</b> bạn muốn sửa nhất', 'Tiếng? Ánh sáng? Nói vấp? Không biết nhìn đâu?'],
     ['Tạo <b>dự án đầu tiên</b> trong /creator/projects', 'Tên: "Video trước khi học". Dán 3 điều vừa ghi vào phần mô tả.'],
-  ]) + box('good', '<b>Đạt khi:</b> có clip 60 giây + 3 điều cần sửa được ghi lại. Chương 24 bạn sẽ quay lại đúng clip này để so.') },
+  ]) + box('good', '<b>Đạt khi:</b> có clip 60 giây + 3 điều cần sửa được ghi lại. Chương 27 bạn sẽ quay lại đúng clip này để so.') },
 ]);

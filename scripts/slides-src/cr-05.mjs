@@ -195,7 +195,7 @@ export const slides = S([
         ['HLG (10-bit)', '+Tạm ổn trên màn hình hỗ trợ HDR', 'Rộng hơn Normal', 'Muốn HDR mà không chỉnh màu sâu'],
         ['Log — D-Log M / Apple Log (10-bit)', '-Xám, bệt màu — PHẢI chỉnh màu', 'Rộng nhất', 'Chỉ khi CHẮC CHẮN sẽ chỉnh màu (Chương 15)'],
       ],
-    ) + box('warn', 'YouTube tự chuyển HDR (PQ/HLG) sang SDR cho người xem không có màn hình HDR — nhưng chính YouTube ghi họ vẫn đang "cải thiện" bước tự chuyển này. Quay Dolby Vision trên iPhone rồi ghép với clip SDR của Pocket 3 mà không kiểm lại là mất công bằng màu — Chương 6 chỉ đúng công tắc, Chương 21 dạy xuất file đúng chuẩn khi đăng.'),
+    ) + box('warn', 'YouTube tự chuyển HDR (PQ/HLG) sang SDR cho người xem không có màn hình HDR — nhưng chính YouTube ghi họ vẫn đang "cải thiện" bước tự chuyển này. Quay Dolby Vision trên iPhone rồi ghép với clip SDR của Pocket 3 mà không kiểm lại là mất công bằng màu — Chương 6 chỉ đúng công tắc, Chương 24 dạy xuất file đúng chuẩn khi đăng.'),
   },
 
   /* 16 — bảng tra nhanh */

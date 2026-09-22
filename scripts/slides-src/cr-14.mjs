@@ -179,7 +179,7 @@ export const slides = S([
         { t: 'Sau khi thêm ngắt mẫu', c: 'grn', pts: [[0, 100], [5, 72], [15, 66], [30, 60], [45, 54], [60, 50]] },
       ],
       x: [0, 60, 'giây'], y: [0, 100, '% người xem còn ở lại'], xt: 6, yt: 4,
-    }) + note('Số liệu MINH HOẠ — chỉ để thấy HÌNH DẠNG đường cong đổi ra sao khi thêm ngắt mẫu (B-roll, punch-in, đồ hoạ, SFX) mỗi vài giây, không phải số liệu thật của một video cụ thể. Đồ thị giữ chân THẬT nằm trong YouTube Studio/TikTok Studio — Chương 23 dạy đọc nó.'),
+    }) + note('Số liệu MINH HOẠ — chỉ để thấy HÌNH DẠNG đường cong đổi ra sao khi thêm ngắt mẫu (B-roll, punch-in, đồ hoạ, SFX) mỗi vài giây, không phải số liệu thật của một video cụ thể. Đồ thị giữ chân THẬT nằm trong YouTube Studio/TikTok Studio — Chương 26 dạy đọc nó.'),
   },
 
   /* 14 — timeline nhạc + SFX + ducking */

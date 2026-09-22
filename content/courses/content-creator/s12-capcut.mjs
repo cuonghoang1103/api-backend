@@ -252,7 +252,7 @@ ${slide('cr-12', 6, 'Jump cut bằng sóng âm: im lặng, "ờ", câu hỏng')}
 <p>Select a clip → Properties panel ④ → <strong>Speed</strong> (or ⌘R) for a flat multiplier, or the <strong>Curve</strong> tool for a custom speed ramp with multiple points (useful synced to a music beat — CapCut can mark beats with ⌘J on a selected music clip). <strong>Reverse</strong> plays a clip backward. <strong>Freeze</strong> holds one frame for a chosen duration — handy for a comedic beat or to hold on a whiteboard drawing a second longer.</p>
 
 <h3>Crop and reframe: turning 16:9 into 9:16</h3>
-<p>If you shot landscape and need vertical (or the reverse), select the clip → <strong>Crop</strong> to reposition/resize by hand, or use <strong>Auto reframe</strong> — CapCut's own description is that it changes the aspect ratio automatically while trying to keep "the main object in the video... always included in the frame." It is genuinely good for a single subject standing still; for a webcam-and-slides recording (Chapter 19 material) it will guess wrong and you should crop by hand instead.</p>
+<p>If you shot landscape and need vertical (or the reverse), select the clip → <strong>Crop</strong> to reposition/resize by hand, or use <strong>Auto reframe</strong> — CapCut's own description is that it changes the aspect ratio automatically while trying to keep "the main object in the video... always included in the frame." It is genuinely good for a single subject standing still; for a webcam-and-slides recording (Chapter 22 material) it will guess wrong and you should crop by hand instead.</p>
 
 <h3>Keyframe zoom: the punch-in that adds energy for free</h3>
 ${slide('cr-12', 7, 'Keyframe — zoom punch-in giữa 2 điểm')}
@@ -328,7 +328,7 @@ ${slide('cr-12', 6, 'Jump cut bằng sóng âm: im lặng, "ờ", câu hỏng')}
 <p>Chọn clip → bảng thuộc tính ④ → <strong>Speed</strong> (hoặc ⌘R) cho tốc độ nhân đều, hoặc công cụ <strong>Curve</strong> cho đường tốc độ tuỳ chỉnh nhiều điểm (hữu ích khi khớp theo beat nhạc — CapCut đánh dấu beat bằng ⌘J trên clip nhạc đang chọn). <strong>Reverse</strong> phát clip ngược. <strong>Freeze</strong> giữ một khung hình trong khoảng thời gian tuỳ chọn — hữu ích cho một nhịp hài hước hoặc giữ lâu hơn một giây trên hình vẽ trên bảng trắng.</p>
 
 <h3>Crop và reframe: biến 16:9 thành 9:16</h3>
-<p>Quay ngang mà cần dọc (hoặc ngược lại), chọn clip → <strong>Crop</strong> để tự định vị/chỉnh cỡ bằng tay, hoặc dùng <strong>Auto reframe</strong> — mô tả chính thức của CapCut là nó tự đổi tỉ lệ khung hình trong khi cố giữ "vật thể chính trong video... luôn nằm trong khung hình." Hiệu quả thật sự khi chủ thể đứng yên một mình; với cảnh quay webcam + slide (nội dung Chương 19) nó sẽ đoán sai và bạn nên tự crop bằng tay.</p>
+<p>Quay ngang mà cần dọc (hoặc ngược lại), chọn clip → <strong>Crop</strong> để tự định vị/chỉnh cỡ bằng tay, hoặc dùng <strong>Auto reframe</strong> — mô tả chính thức của CapCut là nó tự đổi tỉ lệ khung hình trong khi cố giữ "vật thể chính trong video... luôn nằm trong khung hình." Hiệu quả thật sự khi chủ thể đứng yên một mình; với cảnh quay webcam + slide (nội dung Chương 22) nó sẽ đoán sai và bạn nên tự crop bằng tay.</p>
 
 <h3>Keyframe zoom: cú punch-in thêm năng lượng miễn phí</h3>
 ${slide('cr-12', 7, 'Keyframe — zoom punch-in giữa 2 điểm')}

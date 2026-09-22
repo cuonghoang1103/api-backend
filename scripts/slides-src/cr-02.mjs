@@ -76,7 +76,7 @@ export const slides = S([
   { t: 'Đóng gói TRƯỚC khi quay', body: vs({
     no: { t: 'Quay xong mới nghĩ tiêu đề', items: ['Video không có lời hứa rõ ràng', 'Thumbnail chụp vội từ một khung hình', 'Tiêu đề chung chung: "Học Next.js phần 3"', 'Không ai biết bấm vào để được gì'] },
     yes: { t: 'Viết tiêu đề + phác thumbnail trước', items: ['Lời hứa quyết định nên quay gì', 'Chụp ảnh thumbnail ngay buổi quay', '"Deploy Next.js lên VPS trong 20 phút"', 'Không đóng gói nổi = ý tưởng chưa đủ rõ'] },
-  }) + box('info', 'Nếu bạn không viết được một tiêu đề khiến chính mình muốn bấm, <b>đừng quay vội</b> — gọt ý tưởng thêm. Chương 22 dạy đóng gói chi tiết.') },
+  }) + box('info', 'Nếu bạn không viết được một tiêu đề khiến chính mình muốn bấm, <b>đừng quay vội</b> — gọt ý tưởng thêm. Chương 25 dạy đóng gói chi tiết.') },
 
   { t: 'Thử rẻ trước, làm lớn sau', body: flow([
     { e: '📱', t: 'Video ngắn 45 giây', d: 'thử một ý trong một buổi tối', c: 'red' },

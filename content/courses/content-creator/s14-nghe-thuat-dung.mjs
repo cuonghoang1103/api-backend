@@ -375,7 +375,7 @@ ${slide('cr-14', 12, 'Không phải khoảng dừng nào cũng nên cắt')}
 ${slide('cr-14', 13, 'Đọc đồ thị giữ chân')}
 
 <h3>Reading a retention graph to know what to fix</h3>
-<p>YouTube Studio and TikTok Studio plot the percentage of viewers still watching at every second (Chapter 23 teaches reading this metric in depth, on your channel's REAL numbers). Here, just understand the SHAPE: a drop in the first few seconds is normal (some viewers always leave the instant they see this is not what they were looking for); but a SUDDEN, extra drop at one specific stretch — not the opening — is a clear signal that stretch is losing viewers: maybe the pacing is too slow (not enough pattern interrupts), maybe a meaningless pause runs too long, maybe an explanation drags on. Conversely, a stretch of the line that stays nearly FLAT (little viewer loss) is a sign that section is doing something right — study it to repeat the formula in your next video.</p>
+<p>YouTube Studio and TikTok Studio plot the percentage of viewers still watching at every second (Chapter 26 teaches reading this metric in depth, on your channel's REAL numbers). Here, just understand the SHAPE: a drop in the first few seconds is normal (some viewers always leave the instant they see this is not what they were looking for); but a SUDDEN, extra drop at one specific stretch — not the opening — is a clear signal that stretch is losing viewers: maybe the pacing is too slow (not enough pattern interrupts), maybe a meaningless pause runs too long, maybe an explanation drags on. Conversely, a stretch of the line that stays nearly FLAT (little viewer loss) is a sign that section is doing something right — study it to repeat the formula in your next video.</p>
 <p class="note-ct"><strong>The numbers on slide 13 are ILLUSTRATIVE ONLY</strong> — meant to show how the curve's shape changes once pattern interrupts are added, not the real data of any specific video. Your channel's REAL curve lives in YouTube Studio (Analytics → Content → pick a video → Audience retention).</p>
 
 <div class="pitfall co-tieu-de"><p><strong>Trap — over-editing.</strong> Cutting every 1–2 seconds for the entire video, a punch-in on every sentence, an SFX on every cut: it sounds like "keeping attention," but it actually exhausts the viewer and destroys their ability to follow the IDEA (especially damaging for coding tutorials, where viewers need time to READ the screen). A pattern interrupt works because it CONTRASTS with everything around it — use it constantly and it becomes the new "everything around it," and stops interrupting anything.</p></div>
@@ -403,7 +403,7 @@ ${slide('cr-14', 13, 'Đọc đồ thị giữ chân')}
 <li>Short shots = urgency; long shots = time to absorb — choose by CONTENT, not one fixed speed for the whole video.</li>
 <li>Not every pause should be cut — keep deliberate ones, cut only the meaningless ones.</li>
 <li>Pattern interrupts every few seconds hold attention, but only work because they CONTRAST — overuse kills the effect.</li>
-<li>The first 30 seconds need a denser rhythm; read the real retention graph (Ch.23) to find which stretch is losing viewers.</li>
+<li>The first 30 seconds need a denser rhythm; read the real retention graph (Ch.26) to find which stretch is losing viewers.</li>
 </ul>
 <div class="link-card"><a href="https://support.google.com/youtube/answer/9314486" target="_blank" rel="noopener">YouTube Help — Reading the audience retention report</a></div>
 </div>
@@ -430,7 +430,7 @@ ${slide('cr-14', 12, 'Không phải khoảng dừng nào cũng nên cắt')}
 ${slide('cr-14', 13, 'Đọc đồ thị giữ chân')}
 
 <h3>Đọc đồ thị giữ chân để biết sửa nhịp ở đâu</h3>
-<p>YouTube Studio và TikTok Studio vẽ ra đường cong % người xem còn ở lại theo từng giây (Chương 23 dạy đọc sâu chỉ số này trên số liệu THẬT của kênh bạn). Ở đây, chỉ cần hiểu HÌNH DẠNG: một cú dốc ở vài giây đầu là bình thường (một phần khán giả luôn rời đi ngay khi thấy đây không phải nội dung họ tìm); nhưng một cú DỐC THÊM đột ngột ở một đoạn cụ thể — không phải đầu video — là dấu hiệu RÕ RÀNG rằng đoạn đó đang mất khán giả: có thể nhịp quá chậm (thiếu ngắt mẫu), có thể một khoảng dừng vô nghĩa quá dài, có thể một đoạn giải thích quá lê thê. Ngược lại, một đoạn đường gần NẰM NGANG (ít mất khán giả) là dấu hiệu đoạn đó đang làm đúng — học lại chính đoạn đó để lặp lại công thức trong video sau.</p>
+<p>YouTube Studio và TikTok Studio vẽ ra đường cong % người xem còn ở lại theo từng giây (Chương 26 dạy đọc sâu chỉ số này trên số liệu THẬT của kênh bạn). Ở đây, chỉ cần hiểu HÌNH DẠNG: một cú dốc ở vài giây đầu là bình thường (một phần khán giả luôn rời đi ngay khi thấy đây không phải nội dung họ tìm); nhưng một cú DỐC THÊM đột ngột ở một đoạn cụ thể — không phải đầu video — là dấu hiệu RÕ RÀNG rằng đoạn đó đang mất khán giả: có thể nhịp quá chậm (thiếu ngắt mẫu), có thể một khoảng dừng vô nghĩa quá dài, có thể một đoạn giải thích quá lê thê. Ngược lại, một đoạn đường gần NẰM NGANG (ít mất khán giả) là dấu hiệu đoạn đó đang làm đúng — học lại chính đoạn đó để lặp lại công thức trong video sau.</p>
 <p class="note-ct"><strong>Số liệu trên slide 13 chỉ là MINH HOẠ</strong> để thấy hình dạng đường cong thay đổi ra sao khi thêm ngắt mẫu — không phải số liệu thật của một video cụ thể nào. Đường cong THẬT của kênh bạn nằm trong YouTube Studio (Analytics → Nội dung → chọn video → Mức độ giữ chân người xem).</p>
 
 <div class="pitfall co-tieu-de"><p><strong>Bẫy — dựng quá tay.</strong> Cắt mỗi 1–2 giây suốt cả video, punch-in trên từng câu, SFX ở mọi lần cắt: nghe có vẻ "giữ chân" nhưng thật ra làm khán giả kiệt sức và mất khả năng theo dõi Ý (đặc biệt tai hại với video dạy code, nơi người xem cần thời gian ĐỌC màn hình). Ngắt mẫu có tác dụng vì nó TƯƠNG PHẢN với phần còn lại — dùng liên tục thì bản thân nó trở thành "phần còn lại", hết tác dụng ngắt.</p></div>
@@ -458,7 +458,7 @@ ${slide('cr-14', 13, 'Đọc đồ thị giữ chân')}
 <li>Shot ngắn = gấp gáp; shot dài = thời gian để thấm — chọn theo NỘI DUNG, không phải một tốc độ cố định cho cả video.</li>
 <li>Không phải khoảng dừng nào cũng nên cắt — giữ khoảng dừng có chủ đích, chỉ cắt khoảng vô nghĩa.</li>
 <li>Ngắt mẫu mỗi vài giây giữ sự chú ý, nhưng chỉ có tác dụng khi nó TƯƠNG PHẢN — lạm dụng thì mất tác dụng.</li>
-<li>30 giây đầu cần nhịp dày hơn; đọc đồ thị giữ chân thật (Ch.23) để biết đoạn nào đang mất khán giả.</li>
+<li>30 giây đầu cần nhịp dày hơn; đọc đồ thị giữ chân thật (Ch.26) để biết đoạn nào đang mất khán giả.</li>
 </ul>
 <div class="link-card"><a href="https://support.google.com/youtube/answer/9314486" target="_blank" rel="noopener">YouTube Help — Đọc báo cáo mức độ giữ chân người xem (Audience retention)</a></div>
 </div>

@@ -87,7 +87,7 @@ ${slide('cr-04', 3, '"Một lèo 30 phút" đấu với "25 clip ngắn"')}
 <ul>
 <li><strong>Livestreams</strong> — there is no "edit" to shoot for in real time, but note timestamps of strong moments as you go (on a second device or with a co-host) so you can clip highlights afterward without re-watching the whole stream.</li>
 <li><strong>Long interviews</strong> — you cannot storyboard someone else's answers, but you can still write a question list (your shot list, just made of questions instead of shots) and jot the timestamp next to any answer that lands.</li>
-<li><strong>Screen-recorded lectures</strong> — Chapter 19 covers this in depth, but the short version: split by topic into separate files or chaptered sections instead of one continuous 40-minute recording, so a mistake in minute 30 does not force you to re-record minutes 1–29.</li>
+<li><strong>Screen-recorded lectures</strong> — Chapter 22 covers this in depth, but the short version: split by topic into separate files or chaptered sections instead of one continuous 40-minute recording, so a mistake in minute 30 does not force you to re-record minutes 1–29.</li>
 </ul>
 <p>The common thread: long recording is fine when you plant markers as you go. What breaks you is long recording with <em>no</em> markers and no plan — which is exactly the one-long-take habit this lesson is here to end.</p>
 
@@ -156,7 +156,7 @@ ${slide('cr-04', 3, '"Một lèo 30 phút" đấu với "25 clip ngắn"')}
 <ul>
 <li><strong>Livestream</strong> — không có "bản dựng" nào để quay hướng tới trong thời gian thực, nhưng vẫn nên ghi lại mốc thời gian của khoảnh khắc hay khi nó xảy ra (bằng máy thứ hai hoặc nhờ người đồng hành) để sau này cắt highlight mà không phải xem lại cả buổi.</li>
 <li><strong>Phỏng vấn dài</strong> — bạn không viết kịch bản được câu trả lời của người khác, nhưng vẫn viết được danh sách câu hỏi (chính là shot list của bạn, chỉ gồm câu hỏi thay vì cú máy), và ghi mốc thời gian ngay khi có câu trả lời đắt giá.</li>
-<li><strong>Quay màn hình bài giảng</strong> — Chương 19 nói kỹ hơn, nhưng gọn lại: chia theo chủ đề thành nhiều file hoặc nhiều đoạn có mốc rõ ràng, thay vì một bản ghi liền 40 phút — để lỗi ở phút 30 không bắt bạn quay lại từ phút 1.</li>
+<li><strong>Quay màn hình bài giảng</strong> — Chương 22 nói kỹ hơn, nhưng gọn lại: chia theo chủ đề thành nhiều file hoặc nhiều đoạn có mốc rõ ràng, thay vì một bản ghi liền 40 phút — để lỗi ở phút 30 không bắt bạn quay lại từ phút 1.</li>
 </ul>
 <p>Điểm chung: quay dài không sao cả khi bạn cắm mốc dọc đường. Thứ làm hỏng bạn là quay dài KHÔNG mốc và không kế hoạch — đúng thói quen bài này đang chữa.</p>
 
@@ -387,7 +387,7 @@ ${slide('cr-04', 9, 'Shot list thật — Vlog "Một ngày code ở FPTU"')}
 <p>Add the durations up: about 78 seconds of planned footage — with pauses and the voice-over it becomes a vlog of roughly 90 seconds. A 5-minute vlog built the same way needs roughly 70–80 shots (300 seconds ÷ about 4 seconds per shot). Either way it is a fraction of a 30-minute undirected take, and every clip already knows its job.</p>
 
 <h3>Full example 2 — 60-second short: "3 mistakes new Git users make" (vertical 9:16)</h3>
-<p>Eight shots for a vertical short (Chapter 17 covers shooting and posting shorts in depth) — notice how much tighter the pacing is: almost every shot is under 8 seconds, because short-form video has no time to spare.</p>
+<p>Eight shots for a vertical short (Chapter 20 covers shooting and posting shorts in depth) — notice how much tighter the pacing is: almost every shot is under 8 seconds, because short-form video has no time to spare.</p>
 <table>
 <tr><th>#</th><th>Beat</th><th>Size</th><th>Description</th><th>Camera</th><th>Sec</th></tr>
 <tr><td>1</td><td>Hook (0–3s)</td><td>MCU</td><td>Straight to camera: "3 Git mistakes that cost you a whole coding session"</td><td>Pocket 3, vertical</td><td>3</td></tr>
@@ -479,7 +479,7 @@ ${slide('cr-04', 9, 'Shot list thật — Vlog "Một ngày code ở FPTU"')}
 <p>Cộng hết thời lượng lại: khoảng 78 giây hình đã lên kế hoạch — thêm nhịp nghỉ và lời dẫn thì thành một vlog chừng 90 giây. Một vlog 5 phút làm theo đúng cách này cần khoảng 70–80 shot (300 giây ÷ khoảng 4 giây mỗi shot). Dù dài hay ngắn, nó vẫn chỉ là một phần nhỏ so với một lèo 30 phút không định hướng, và clip nào cũng đã biết việc của mình.</p>
 
 <h3>Ví dụ đầy đủ 2 — Video ngắn 60 giây: "3 lỗi khi mới học Git" (dọc 9:16)</h3>
-<p>Tám shot cho một video ngắn dọc (Chương 17 nói kỹ việc quay và đăng video ngắn) — để ý nhịp độ dồn hơn hẳn: gần như mọi shot đều dưới 8 giây, vì video ngắn không có thời gian để lãng phí.</p>
+<p>Tám shot cho một video ngắn dọc (Chương 20 nói kỹ việc quay và đăng video ngắn) — để ý nhịp độ dồn hơn hẳn: gần như mọi shot đều dưới 8 giây, vì video ngắn không có thời gian để lãng phí.</p>
 <table>
 <tr><th>#</th><th>Nhịp</th><th>Cỡ</th><th>Mô tả</th><th>Máy</th><th>Giây</th></tr>
 <tr><td>1</td><td>Hook (0–3s)</td><td>MCU</td><td>Nhìn thẳng máy: "3 lỗi Git khiến bạn mất cả buổi code"</td><td>Pocket 3, dọc</td><td>3</td></tr>

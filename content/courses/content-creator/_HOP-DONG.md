@@ -1,7 +1,7 @@
 # Hợp đồng soạn bài — khoá "Content Creator: Quay, Dựng & Đăng Video"
 
 > Đọc HẾT file này trước khi viết một dòng nào. Mọi chương của khoá được nhiều
-> phiên/agent soạn song song; file này là thứ giữ cho 25 phần trông như do MỘT
+> phiên/agent soạn song song; file này là thứ giữ cho 28 phần trông như do MỘT
 > người viết. Chỗ nào file này không nói, bắt chước `s00-gioi-thieu.mjs` (bài mẫu
 > do người điều phối viết) và bộ slide `scripts/slides-src/cr-00.mjs`.
 
@@ -248,17 +248,21 @@ Bạn làm MỘT MÌNH, không có agent anh em nào; đừng gửi tin nhắn p
 - **Ch15 Chỉnh màu** `s15-chinh-mau.mjs`: `cr-15-1-mau-la-gi` (correction vs grading, Rec.709, Log, màn hình tham chiếu) · `cr-15-2-doc-scopes` (waveform, parade, vectorscope, đường màu da) · `cr-15-3-log-lut` (D-Log M & Apple Log → Rec.709, LUT chính hãng, CST) · `cr-15-4-node-tao-look` (cây node, khớp màu Pocket 3 ↔ iPhone, look nhất quán, màu trong CapCut)
 - **Ch16 Âm thanh hậu kỳ, chữ, đồ hoạ & phụ đề** `s16-am-thanh-chu-phu-de.mjs`: `cr-16-1-mix-am-thanh` (LUFS, −14 LUFS, chuỗi xử lý giọng, ducking) · `cr-16-2-chu-do-hoa` (chữ cho video, lower third, callout, font có đủ dấu tiếng Việt) · `cr-16-3-phu-de` (SRT, phụ đề cứng/mềm, kiểu chữ, song ngữ) · `cr-16-4-whisper-linux` (Whisper/faster-whisper trên GPU máy Linux → SRT tiếng Việt/Anh)
 
+- **Ch17 Chuyển cảnh, keyframe & tốc độ** `s17-chuyen-canh-keyframe.mjs`: `cr-17-1-chuyen-canh-chuyen-nghiep` (các loại chuyển cảnh + quay để chuyển cảnh) · `cr-17-2-keyframe-easing` · `cr-17-3-toc-do-thoi-gian` (slow motion đúng, speed ramp, optical flow, timelapse) · `cr-17-4-he-thong-hieu-ung` (adjustment clip, thư viện hiệu ứng, preset/template, render cache)
+- **Ch18 Mask, tracking & VFX thực tế** `s18-mask-tracking-vfx.mjs`: `cr-18-1-mask-rotoscope` · `cr-18-2-tracking-on-dinh` (tracker, làm mờ mặt/biển số, ổn định hình) · `cr-18-3-phong-xanh-tach-nen` · `cr-18-4-vfx-thuc-te` (nhân bản chính mình, thay màn hình, thay trời, xoá vật thể)
+- **Ch19 Motion graphics, Fusion & 3D** `s19-motion-fusion-3d.mjs`: `cr-19-1-motion-graphics` · `cr-19-2-fusion-resolve` · `cr-19-3-3d-trong-fusion` · `cr-19-4-blender-cho-creator` (logo/chữ 3D, camera tracking, render trên máy Linux)
+
 **GIAI ĐOẠN 4 — THEO ĐỊNH DẠNG**
-- **Ch17 Video ngắn dọc** `s17-video-ngan.mjs`: `cr-17-1-giai-phau-video-ngan` · `cr-17-2-quay-video-ngan` · `cr-17-3-dung-video-ngan` · `cr-17-4-dang-phan-phoi-video-ngan`
-- **Ch18 Vlog** `s18-vlog.mjs`: `cr-18-1-vlog-la-ke-chuyen` · `cr-18-2-quay-vlog-pocket-3` · `cr-18-3-dung-vlog` · `cr-18-4-vlog-hoc-tap-thuong-hieu`
-- **Ch19 Video bài giảng & quay màn hình** `s19-bai-giang.mjs`: `cr-19-1-thiet-ke-bai-giang` (mục tiêu học, nguyên lý đa phương tiện của Mayer, chia đoạn) · `cr-19-2-quay-man-hinh` (OBS, quay màn hình macOS, cỡ chữ VS Code, iPhone làm webcam, Presenter Overlay) · `cr-19-3-ipad-bang-trang` · `cr-19-4-dung-dua-len-khoa-hoc` (dựng bài giảng, chapter, đưa lên 3 luồng VI/EN/YT của cuongthai.com)
-- **Ch20 Video song ngữ Việt – Anh** `s20-song-ngu.mjs`: `cr-20-1-chien-luoc-song-ngu` · `cr-20-2-kich-ban-tieng-anh` (viết đơn giản, luyện phát âm, teleprompter) · `cr-20-3-phu-de-long-tieng` (dịch phụ đề, tiêu đề đa ngôn ngữ, âm thanh đa ngôn ngữ của YouTube, lồng tiếng AI — đồng ý & chất lượng) · `cr-20-4-quy-trinh-hai-phien-ban`
+- **Ch20 Video ngắn dọc** `s20-video-ngan.mjs`: `cr-20-1-giai-phau-video-ngan` · `cr-20-2-quay-video-ngan` · `cr-20-3-dung-video-ngan` · `cr-20-4-dang-phan-phoi-video-ngan`
+- **Ch21 Vlog** `s21-vlog.mjs`: `cr-21-1-vlog-la-ke-chuyen` · `cr-21-2-quay-vlog-pocket-3` · `cr-21-3-dung-vlog` · `cr-21-4-vlog-hoc-tap-thuong-hieu`
+- **Ch22 Video bài giảng & quay màn hình** `s22-bai-giang.mjs`: `cr-22-1-thiet-ke-bai-giang` (mục tiêu học, nguyên lý đa phương tiện của Mayer, chia đoạn) · `cr-22-2-quay-man-hinh` (OBS, quay màn hình macOS, cỡ chữ VS Code, iPhone làm webcam, Presenter Overlay) · `cr-22-3-ipad-bang-trang` · `cr-22-4-dung-dua-len-khoa-hoc` (dựng bài giảng, chapter, đưa lên 3 luồng VI/EN/YT của cuongthai.com)
+- **Ch23 Video song ngữ Việt – Anh** `s23-song-ngu.mjs`: `cr-23-1-chien-luoc-song-ngu` · `cr-23-2-kich-ban-tieng-anh` (viết đơn giản, luyện phát âm, teleprompter) · `cr-23-3-phu-de-long-tieng` (dịch phụ đề, tiêu đề đa ngôn ngữ, âm thanh đa ngôn ngữ của YouTube, lồng tiếng AI — đồng ý & chất lượng) · `cr-23-4-quy-trinh-hai-phien-ban`
 
 **GIAI ĐOẠN 5 — XUẤT BẢN & PHÁT TRIỂN**
-- **Ch21 Xuất file & đăng tải** `s21-xuat-dang.mjs`: `cr-21-1-xuat-file-chuan` · `cr-21-2-dang-youtube-seo` · `cr-21-3-dang-tiktok-facebook-instagram` · `cr-21-4-ban-quyen-luat-choi`
-- **Ch22 Thumbnail & tiêu đề** `s22-thumbnail-tieu-de.mjs`: `cr-22-1-packaging` · `cr-22-2-viet-tieu-de` · `cr-22-3-thiet-ke-thumbnail` · `cr-22-4-thu-nghiem-cai-tien`
-- **Ch23 Số liệu, tăng trưởng & kiếm tiền** `s23-tang-truong.mjs`: `cr-23-1-doc-analytics` · `cr-23-2-vong-lap-cai-tien` · `cr-23-3-cong-dong` · `cr-23-4-kiem-tien-pheu-website`
-- **Ch24 Dự án cuối khoá: 30 ngày ra mắt kênh** `s24-du-an-cuoi-khoa.mjs`: `cr-24-1-ke-hoach-30-ngay` · `cr-24-2-du-an-video-dai` · `cr-24-3-du-an-video-ngan-vlog` · `cr-24-4-tu-danh-gia-buoc-tiep`
+- **Ch24 Xuất file & đăng tải** `s24-xuat-dang.mjs`: `cr-24-1-xuat-file-chuan` · `cr-24-2-dang-youtube-seo` · `cr-24-3-dang-tiktok-facebook-instagram` · `cr-24-4-ban-quyen-luat-choi`
+- **Ch25 Thumbnail & tiêu đề** `s25-thumbnail-tieu-de.mjs`: `cr-25-1-packaging` · `cr-25-2-viet-tieu-de` · `cr-25-3-thiet-ke-thumbnail` · `cr-25-4-thu-nghiem-cai-tien`
+- **Ch26 Số liệu, tăng trưởng & kiếm tiền** `s26-tang-truong.mjs`: `cr-26-1-doc-analytics` · `cr-26-2-vong-lap-cai-tien` · `cr-26-3-cong-dong` · `cr-26-4-kiem-tien-pheu-website`
+- **Ch27 Dự án cuối khoá: 30 ngày ra mắt kênh** `s27-du-an-cuoi-khoa.mjs`: `cr-27-1-ke-hoach-30-ngay` · `cr-27-2-du-an-video-dai` · `cr-27-3-du-an-video-ngan-vlog` · `cr-27-4-tu-danh-gia-buoc-tiep`
 
 Mỗi chương còn `cr-NN-0-slides` và `cr-NN-5-quiz`. Tiêu đề section: `'Chapter N — English|||Chương N — Tiếng Việt'`.
 

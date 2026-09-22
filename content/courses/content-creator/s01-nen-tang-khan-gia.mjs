@@ -77,7 +77,7 @@ ${slide('cr-01', 4, 'Định dạng & độ dài')}
   <tr><td>Instagram Reels</td><td>9:16</td><td>Up to 3 minutes</td><td>Announced January 2025 by Adam Mosseri, head of Instagram</td></tr>
 </table>
 <p class="note-ct"><strong>These numbers move.</strong> Limits and features change every year. Treat the table as the state in September 2026 and check the platform's own help page before planning a series around a limit.</p>
-<p>Two practical consequences: <strong>vertical 9:16 is the language of three of the four platforms</strong>, so learn to shoot vertically (Chapter 17), and <strong>verify your YouTube account early</strong> — a coding tutorial longer than 15 minutes cannot be uploaded without it.</p>
+<p>Two practical consequences: <strong>vertical 9:16 is the language of three of the four platforms</strong>, so learn to shoot vertically (Chapter 20), and <strong>verify your YouTube account early</strong> — a coding tutorial longer than 15 minutes cannot be uploaded without it.</p>
 
 <h3>Where Vietnamese viewers are</h3>
 ${slide('cr-01', 5, 'Người Việt đang ở đâu')}
@@ -92,7 +92,7 @@ ${slide('cr-01', 5, 'Người Việt đang ở đâu')}
 <div class="lz-layer"><span class="lz-k">Home</span><span class="lz-t">cuongthai.com</span><span class="lz-d">The only place you own. Courses, articles, Pro. Every other platform points here (Lesson 1.4).</span></div>
 </div>
 
-<div class="pitfall co-tieu-de"><p><strong>Trap — the same file everywhere.</strong> Posting a 16:9 YouTube video unchanged into a 9:16 feed gives a tiny strip in the middle of a phone screen, and re-uploading a TikTok with its watermark to other platforms looks careless. Adapt the format for each destination — Chapter 17 and Chapter 21 show how.</p></div>
+<div class="pitfall co-tieu-de"><p><strong>Trap — the same file everywhere.</strong> Posting a 16:9 YouTube video unchanged into a 9:16 feed gives a tiny strip in the middle of a phone screen, and re-uploading a TikTok with its watermark to other platforms looks careless. Adapt the format for each destination — Chapter 20 and Chapter 24 show how.</p></div>
 <div class="pitfall co-tieu-de"><p><strong>Trap — starting on four platforms at once.</strong> Four accounts to feed means four half-finished efforts. Start with two: YouTube (long videos and Shorts) plus either TikTok or Facebook. Add the others when publishing feels routine.</p></div>
 
 <h3>🎬 Practice (20 minutes)</h3>
@@ -147,7 +147,7 @@ ${slide('cr-01', 4, 'Định dạng & độ dài')}
   <tr><td>Instagram Reels</td><td>9:16</td><td>Tới 3 phút</td><td>Adam Mosseri, người đứng đầu Instagram, công bố 1/2025</td></tr>
 </table>
 <p class="note-ct"><strong>Những con số này hay đổi.</strong> Giới hạn và tính năng thay đổi hằng năm. Coi bảng là tình trạng tháng 9/2026, và kiểm trang trợ giúp của chính nền tảng trước khi xây cả một series quanh một giới hạn nào đó.</p>
-<p>Hai hệ quả thực tế: <strong>khung dọc 9:16 là ngôn ngữ của ba trên bốn nền tảng</strong>, nên hãy học quay dọc (Chương 17); và <strong>xác minh tài khoản YouTube sớm</strong> — video dạy code dài hơn 15 phút sẽ không tải lên được nếu chưa xác minh.</p>
+<p>Hai hệ quả thực tế: <strong>khung dọc 9:16 là ngôn ngữ của ba trên bốn nền tảng</strong>, nên hãy học quay dọc (Chương 20); và <strong>xác minh tài khoản YouTube sớm</strong> — video dạy code dài hơn 15 phút sẽ không tải lên được nếu chưa xác minh.</p>
 
 <h3>Người xem Việt Nam đang ở đâu</h3>
 ${slide('cr-01', 5, 'Người Việt đang ở đâu')}
@@ -162,7 +162,7 @@ ${slide('cr-01', 5, 'Người Việt đang ở đâu')}
 <div class="lz-layer"><span class="lz-k">Nhà</span><span class="lz-t">cuongthai.com</span><span class="lz-d">Nơi duy nhất thuộc về bạn. Khoá học, bài viết, gói Pro. Mọi nền tảng khác trỏ về đây (Bài 1.4).</span></div>
 </div>
 
-<div class="pitfall co-tieu-de"><p><strong>Bẫy — cùng một file cho mọi nơi.</strong> Đăng nguyên video YouTube 16:9 vào luồng 9:16 thì thành một dải nhỏ giữa màn hình điện thoại, còn đăng lại clip TikTok kèm watermark sang nền tảng khác trông cẩu thả. Hãy chỉnh định dạng theo từng nơi đến — Chương 17 và Chương 21 chỉ cách.</p></div>
+<div class="pitfall co-tieu-de"><p><strong>Bẫy — cùng một file cho mọi nơi.</strong> Đăng nguyên video YouTube 16:9 vào luồng 9:16 thì thành một dải nhỏ giữa màn hình điện thoại, còn đăng lại clip TikTok kèm watermark sang nền tảng khác trông cẩu thả. Hãy chỉnh định dạng theo từng nơi đến — Chương 20 và Chương 24 chỉ cách.</p></div>
 <div class="pitfall co-tieu-de"><p><strong>Bẫy — bắt đầu cùng lúc bốn nền tảng.</strong> Bốn tài khoản phải nuôi là bốn nỗ lực dang dở. Hãy bắt đầu với hai: YouTube (video dài và Shorts) cộng TikTok hoặc Facebook. Thêm các nơi khác khi việc đăng đã thành nếp.</p></div>
 
 <h3>🎬 Thực hành (20 phút)</h3>
@@ -218,7 +218,7 @@ ${slide('cr-01', 6, 'YouTube đề xuất video dựa vào gì')}
   <div class="kv"><span class="k">Likes and dislikes</span><span class="v">Direct signals of whether the viewer enjoyed it.</span></div>
 </div>
 <p>Put together, the logic is a loop. Your video is shown (an <strong>impression</strong> — lượt hiển thị), some people click (<strong>click-through rate, CTR</strong> — tỉ lệ nhấp), they watch for a while (<strong>watch time</strong> and <strong>retention</strong>), and they signal whether they were satisfied. Good answers at each step lead to the video being shown to more people who look like them. The system follows viewers' behaviour; it does not have opinions about you.</p>
-<p class="note-ct"><strong>Why this matters for the rest of the course:</strong> the title and thumbnail win the click (Chapter 22), the hook and editing earn the watch time (Chapters 3 and 14), and keeping the promise earns satisfaction. Every chapter of this course pushes one of these levers.</p>
+<p class="note-ct"><strong>Why this matters for the rest of the course:</strong> the title and thumbnail win the click (Chapter 25), the hook and editing earn the watch time (Chapters 3 and 14), and keeping the promise earns satisfaction. Every chapter of this course pushes one of these levers.</p>
 
 <h3>What TikTok says about its For You feed</h3>
 ${slide('cr-01', 7, 'TikTok "Dành cho bạn" dựa vào gì')}
@@ -236,7 +236,7 @@ ${slide('cr-01', 8, 'Lời đồn và điều nền tảng thật sự nói')}
   <tr><th>Myth</th><th>What the sources say</th></tr>
   <tr><td>"Small channels never get recommended."</td><td>TikTok states follower count is not a direct factor. On YouTube, recommendations follow viewer satisfaction, which a small channel can earn.</td></tr>
   <tr><td>"The more hashtags, the better."</td><td>YouTube's hashtag policy: if a video has more than 60 hashtags, YouTube ignores <em>all</em> hashtags on that video. A few relevant ones are enough.</td></tr>
-  <tr><td>"The algorithm hates my channel."</td><td>The system predicts what each viewer will value. When views drop, look at your own numbers — click-through, retention, satisfaction — before blaming the system (Chapter 23).</td></tr>
+  <tr><td>"The algorithm hates my channel."</td><td>The system predicts what each viewer will value. When views drop, look at your own numbers — click-through, retention, satisfaction — before blaming the system (Chapter 26).</td></tr>
   <tr><td>"Just post more and you will grow."</td><td>Volume helps only when viewers value the videos. Weak videos generate weak signals; consistency of <em>good</em> videos is what compounds.</td></tr>
 </table>
 
@@ -294,7 +294,7 @@ ${slide('cr-01', 6, 'YouTube đề xuất video dựa vào gì')}
   <div class="kv"><span class="k">Like và dislike</span><span class="v">Tín hiệu trực tiếp cho biết người xem có thích hay không.</span></div>
 </div>
 <p>Ghép lại, logic là một vòng lặp. Video của bạn được hiển thị (<strong>impression</strong> — lượt hiển thị), một số người bấm vào (<strong>click-through rate, CTR</strong> — tỉ lệ nhấp), họ xem một lúc (<strong>thời lượng xem</strong> và <strong>tỉ lệ giữ chân</strong>), và họ phát tín hiệu có hài lòng hay không. Trả lời tốt ở mỗi bước thì video được hiển thị cho nhiều người giống họ hơn. Hệ thống chạy theo hành vi người xem; nó không có ý kiến gì về bạn.</p>
-<p class="note-ct"><strong>Vì sao điều này quan trọng với phần còn lại của khoá:</strong> tiêu đề và thumbnail thắng cú bấm (Chương 22), hook và cách dựng giành thời lượng xem (Chương 3 và 14), còn giữ đúng lời hứa giành sự hài lòng. Chương nào của khoá cũng đẩy một trong các cần gạt này.</p>
+<p class="note-ct"><strong>Vì sao điều này quan trọng với phần còn lại của khoá:</strong> tiêu đề và thumbnail thắng cú bấm (Chương 25), hook và cách dựng giành thời lượng xem (Chương 3 và 14), còn giữ đúng lời hứa giành sự hài lòng. Chương nào của khoá cũng đẩy một trong các cần gạt này.</p>
 
 <h3>TikTok nói gì về luồng Dành cho bạn</h3>
 ${slide('cr-01', 7, 'TikTok "Dành cho bạn" dựa vào gì')}
@@ -312,7 +312,7 @@ ${slide('cr-01', 8, 'Lời đồn và điều nền tảng thật sự nói')}
   <tr><th>Lời đồn</th><th>Nguồn nói gì</th></tr>
   <tr><td>"Kênh nhỏ không bao giờ lên đề xuất."</td><td>TikTok khẳng định số follower không phải yếu tố trực tiếp. Trên YouTube, đề xuất bám theo sự hài lòng của người xem — thứ mà kênh nhỏ vẫn giành được.</td></tr>
   <tr><td>"Càng nhiều hashtag càng tốt."</td><td>Chính sách hashtag của YouTube: video có hơn 60 hashtag thì YouTube bỏ qua <em>tất cả</em> hashtag của video đó. Vài hashtag đúng chủ đề là đủ.</td></tr>
-  <tr><td>"Thuật toán ghét kênh mình."</td><td>Hệ thống dự đoán điều mỗi người xem sẽ thấy đáng. Khi lượt xem giảm, hãy nhìn số liệu của chính bạn — tỉ lệ nhấp, tỉ lệ giữ chân, mức hài lòng — trước khi đổ lỗi cho hệ thống (Chương 23).</td></tr>
+  <tr><td>"Thuật toán ghét kênh mình."</td><td>Hệ thống dự đoán điều mỗi người xem sẽ thấy đáng. Khi lượt xem giảm, hãy nhìn số liệu của chính bạn — tỉ lệ nhấp, tỉ lệ giữ chân, mức hài lòng — trước khi đổ lỗi cho hệ thống (Chương 26).</td></tr>
   <tr><td>"Cứ đăng thật nhiều là lên."</td><td>Số lượng chỉ giúp khi người xem thấy video có giá trị. Video yếu tạo tín hiệu yếu; chính sự đều đặn của những video <em>tốt</em> mới tích luỹ.</td></tr>
 </table>
 
@@ -408,7 +408,7 @@ ${slide('cr-01', 10, 'Viết cho MỘT người cụ thể')}
 <p>When you record, you are talking to Minh — not to "everyone". That single choice makes your delivery warmer and your explanations clearer.</p>
 
 <h3>Vietnamese, English — or both?</h3>
-<p>Your Vietnamese audience is large and underserved for in-depth, project-based programming content. Your English audience is global and more competitive. A practical path is to build in Vietnamese first, where your advantage is biggest, and add English versions of your strongest videos later. Chapter 20 covers the strategy and workflow in detail.</p>
+<p>Your Vietnamese audience is large and underserved for in-depth, project-based programming content. Your English audience is global and more competitive. A practical path is to build in Vietnamese first, where your advantage is biggest, and add English versions of your strongest videos later. Chapter 23 covers the strategy and workflow in detail.</p>
 
 <div class="pitfall co-tieu-de"><p><strong>Trap — a niche so wide it says nothing.</strong> "Technology", "lifestyle", "education". Nobody can tell what they will get, so nobody has a reason to follow.</p></div>
 <div class="pitfall co-tieu-de"><p><strong>Trap — choosing a niche only because it is trending.</strong> Trends give you a burst of views and a channel you do not want to keep making. The third circle — "can I keep doing this?" — is the one beginners skip, and the one that decides whether you are still posting in a year.</p></div>
@@ -481,7 +481,7 @@ ${slide('cr-01', 10, 'Viết cho MỘT người cụ thể')}
 <p>Khi quay, bạn đang nói với Minh — không phải với "mọi người". Chỉ một lựa chọn đó làm giọng bạn ấm hơn và lời giải thích rõ hơn.</p>
 
 <h3>Tiếng Việt, tiếng Anh — hay cả hai?</h3>
-<p>Khán giả Việt của bạn rất lớn và còn thiếu nội dung lập trình sâu, dựa trên dự án thật. Khán giả tiếng Anh thì toàn cầu và cạnh tranh hơn. Một con đường thực tế là xây bằng tiếng Việt trước, nơi lợi thế của bạn lớn nhất, rồi thêm bản tiếng Anh cho những video mạnh nhất sau. Chương 20 nói chi tiết chiến lược và quy trình.</p>
+<p>Khán giả Việt của bạn rất lớn và còn thiếu nội dung lập trình sâu, dựa trên dự án thật. Khán giả tiếng Anh thì toàn cầu và cạnh tranh hơn. Một con đường thực tế là xây bằng tiếng Việt trước, nơi lợi thế của bạn lớn nhất, rồi thêm bản tiếng Anh cho những video mạnh nhất sau. Chương 23 nói chi tiết chiến lược và quy trình.</p>
 
 <div class="pitfall co-tieu-de"><p><strong>Bẫy — ngách rộng tới mức chẳng nói gì.</strong> "Công nghệ", "phong cách sống", "giáo dục". Không ai đoán được mình sẽ nhận gì, nên không ai có lý do để theo dõi.</p></div>
 <div class="pitfall co-tieu-de"><p><strong>Bẫy — chọn ngách chỉ vì đang thịnh hành.</strong> Trào lưu cho bạn một đợt lượt xem và một kênh bạn không muốn làm tiếp. Vòng tròn thứ ba — "mình có làm được lâu không?" — là vòng người mới hay bỏ qua, và cũng là vòng quyết định một năm nữa bạn còn đăng hay không.</p></div>
@@ -557,7 +557,7 @@ ${slide('cr-01', 13, 'Website là trung tâm — mọi kênh dẫn về')}
 <div class="lz-layer"><span class="lz-k">Spokes</span><span class="lz-t">TikTok · Reels · Shorts</span><span class="lz-d">Strangers discover you. Link in bio.</span></div>
 <div class="lz-layer"><span class="lz-k">Spokes</span><span class="lz-t">YouTube long videos</span><span class="lz-d">Viewers come to trust you. Links in the description and pinned comment to the matching course or article.</span></div>
 <div class="lz-layer"><span class="lz-k">Spokes</span><span class="lz-t">Facebook · LinkedIn</span><span class="lz-d">Community and professional contacts. Share each new lesson or article.</span></div>
-<div class="lz-layer"><span class="lz-k">Hub</span><span class="lz-t">cuongthai.com</span><span class="lz-d">Courses, articles, the Pro plan — where a viewer becomes a learner. Chapter 23 builds the full funnel, and Chapter 21 shows how to track which platform sends visitors.</span></div>
+<div class="lz-layer"><span class="lz-k">Hub</span><span class="lz-t">cuongthai.com</span><span class="lz-d">Courses, articles, the Pro plan — where a viewer becomes a learner. Chapter 26 builds the full funnel, and Chapter 24 shows how to track which platform sends visitors.</span></div>
 </div>
 
 <div class="pitfall co-tieu-de"><p><strong>Trap — a different name on every platform.</strong> "cuong.dev" here, "CuongHoang_03" there, a nickname somewhere else. A viewer who likes you on TikTok cannot find you on YouTube, and the connection is lost.</p></div>
@@ -623,7 +623,7 @@ ${slide('cr-01', 13, 'Website là trung tâm — mọi kênh dẫn về')}
 <div class="lz-layer"><span class="lz-k">Nan hoa</span><span class="lz-t">TikTok · Reels · Shorts</span><span class="lz-d">Người lạ khám phá ra bạn. Link trong bio.</span></div>
 <div class="lz-layer"><span class="lz-k">Nan hoa</span><span class="lz-t">Video dài YouTube</span><span class="lz-d">Người xem bắt đầu tin bạn. Link ở phần mô tả và bình luận ghim, trỏ tới khoá học hoặc bài viết tương ứng.</span></div>
 <div class="lz-layer"><span class="lz-k">Nan hoa</span><span class="lz-t">Facebook · LinkedIn</span><span class="lz-d">Cộng đồng và quan hệ nghề nghiệp. Chia sẻ mỗi bài học, bài viết mới.</span></div>
-<div class="lz-layer"><span class="lz-k">Trung tâm</span><span class="lz-t">cuongthai.com</span><span class="lz-d">Khoá học, bài viết, gói Pro — nơi người xem trở thành người học. Chương 23 dựng trọn phễu, và Chương 21 chỉ cách đo nền tảng nào gửi người tới.</span></div>
+<div class="lz-layer"><span class="lz-k">Trung tâm</span><span class="lz-t">cuongthai.com</span><span class="lz-d">Khoá học, bài viết, gói Pro — nơi người xem trở thành người học. Chương 26 dựng trọn phễu, và Chương 24 chỉ cách đo nền tảng nào gửi người tới.</span></div>
 </div>
 
 <div class="pitfall co-tieu-de"><p><strong>Bẫy — mỗi nền tảng một cái tên.</strong> Chỗ này "cuong.dev", chỗ kia "CuongHoang_03", nơi khác một biệt danh. Người xem thích bạn trên TikTok không tìm được bạn trên YouTube, và mối nối bị đứt.</p></div>

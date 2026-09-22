@@ -62,7 +62,7 @@ ${gallery('cr-03', SLIDES)}
 <h3>Why the opening carries so much weight</h3>
 <p>On TikTok, Reels and Shorts, your video starts playing in a feed where the next video is one swipe away. On YouTube the viewer already clicked, but they are checking whether the video will give them what the title promised — and the back button is just as close. Either way, the first seconds are a test you pass or fail before you have said anything important.</p>
 ${slide('cr-03', 3, 'Người xem quyết định rất sớm')}
-<p>YouTube Studio shows this directly as the <strong>audience retention</strong> graph (tỉ lệ giữ chân khán giả): the percentage of viewers still watching at each moment. Almost every video loses people fastest at the very beginning — that early slope is called the <strong>intro drop</strong>. A good hook does not remove the drop; it makes it shallower. The curve on the slide is an illustration of the typical shape, not measured data; Chapter 23 teaches you to read your own graphs.</p>
+<p>YouTube Studio shows this directly as the <strong>audience retention</strong> graph (tỉ lệ giữ chân khán giả): the percentage of viewers still watching at each moment. Almost every video loses people fastest at the very beginning — that early slope is called the <strong>intro drop</strong>. A good hook does not remove the drop; it makes it shallower. The curve on the slide is an illustration of the typical shape, not measured data; Chapter 26 teaches you to read your own graphs.</p>
 <p class="note-ct"><strong>What "hook" means:</strong> the opening moment designed to make a viewer want to see what happens next. In fishing, the hook is what keeps the fish from swimming away. Same job here.</p>
 
 <h3>A hook has three layers, and they fire together</h3>
@@ -149,7 +149,7 @@ ${slide('cr-03', 6, 'Mở đầu dở và mở đầu tốt')}
 <h3>Vì sao phần mở đầu nặng ký đến vậy</h3>
 <p>Trên TikTok, Reels và Shorts, video của bạn bắt đầu phát giữa một luồng mà video kế tiếp chỉ cách một cú vuốt. Trên YouTube người xem đã bấm vào, nhưng họ đang kiểm xem video có đưa đúng thứ tiêu đề hứa không — và nút quay lại cũng gần y như vậy. Dù ở đâu, vài giây đầu là một bài kiểm tra bạn đỗ hay trượt trước khi kịp nói điều gì quan trọng.</p>
 ${slide('cr-03', 3, 'Người xem quyết định rất sớm')}
-<p>YouTube Studio cho thấy điều này rất rõ qua biểu đồ <strong>audience retention</strong> (tỉ lệ giữ chân khán giả): phần trăm người xem còn ở lại tại từng thời điểm. Gần như video nào cũng mất người nhanh nhất ở đoạn mở đầu — đoạn dốc đó gọi là <strong>intro drop</strong> (cú rơi đầu video). Hook tốt không xoá được cú rơi, nó làm cú rơi thoải hơn. Đường cong trên slide là hình MINH HOẠ dạng thường gặp, không phải số đo; Chương 23 dạy bạn đọc biểu đồ thật của chính mình.</p>
+<p>YouTube Studio cho thấy điều này rất rõ qua biểu đồ <strong>audience retention</strong> (tỉ lệ giữ chân khán giả): phần trăm người xem còn ở lại tại từng thời điểm. Gần như video nào cũng mất người nhanh nhất ở đoạn mở đầu — đoạn dốc đó gọi là <strong>intro drop</strong> (cú rơi đầu video). Hook tốt không xoá được cú rơi, nó làm cú rơi thoải hơn. Đường cong trên slide là hình MINH HOẠ dạng thường gặp, không phải số đo; Chương 26 dạy bạn đọc biểu đồ thật của chính mình.</p>
 <p class="note-ct"><strong>"Hook" nghĩa là gì:</strong> khoảnh khắc mở đầu được thiết kế để người xem muốn biết chuyện gì xảy ra tiếp. Trong câu cá, lưỡi câu (hook) là thứ giữ con cá không bơi đi. Ở đây cũng đúng việc đó.</p>
 
 <h3>Một hook có ba lớp, và chúng nổ cùng lúc</h3>
@@ -455,7 +455,7 @@ ${slide('cr-03', 12, 'Số chữ ↔ thời lượng')}
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Read it aloud at recording pace</span><span class="lz-d">The energy you use on camera, not the mumble you use when checking.</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Time it</span><span class="lz-d">Words ÷ minutes = your words per minute.</span></div>
 </div>
-<p>Example: 150 words took 70 seconds → 150 ÷ (70/60) ≈ 129 words per minute. A 60-second short then needs about 129 spoken words, not 150 — cut the difference in the script, not in the edit. Vietnamese and English differ a lot here, so measure each language separately if you record both (Chapter 20).</p>
+<p>Example: 150 words took 70 seconds → 150 ÷ (70/60) ≈ 129 words per minute. A 60-second short then needs about 129 spoken words, not 150 — cut the difference in the script, not in the edit. Vietnamese and English differ a lot here, so measure each language separately if you record both (Chapter 23).</p>
 
 <h3>One call to action</h3>
 <p>A <strong>CTA</strong> (call to action — lời kêu gọi hành động) is the one thing you ask the viewer to do next: subscribe, watch the next video, visit cuongthai.com, answer a question in the comments. Ask for <em>one</em>. Three requests in a row become noise and people follow none of them.</p>
@@ -549,7 +549,7 @@ ${slide('cr-03', 12, 'Số chữ ↔ thời lượng')}
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Đọc to ở nhịp quay thật</span><span class="lz-d">Bằng năng lượng lúc đứng trước máy, không phải kiểu lẩm bẩm khi soát bài.</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Bấm giờ</span><span class="lz-d">Số từ ÷ số phút = tốc độ của bạn (từ/phút).</span></div>
 </div>
-<p>Ví dụ: 150 từ đọc hết 70 giây → 150 ÷ (70/60) ≈ 129 từ/phút. Vậy video ngắn 60 giây cần khoảng 129 từ lời nói chứ không phải 150 — hãy cắt phần chênh ngay trong kịch bản, đừng để tới lúc dựng. Tiếng Việt và tiếng Anh chênh nhau khá nhiều ở chỗ này, nên nếu quay cả hai thì đo riêng từng ngôn ngữ (Chương 20).</p>
+<p>Ví dụ: 150 từ đọc hết 70 giây → 150 ÷ (70/60) ≈ 129 từ/phút. Vậy video ngắn 60 giây cần khoảng 129 từ lời nói chứ không phải 150 — hãy cắt phần chênh ngay trong kịch bản, đừng để tới lúc dựng. Tiếng Việt và tiếng Anh chênh nhau khá nhiều ở chỗ này, nên nếu quay cả hai thì đo riêng từng ngôn ngữ (Chương 23).</p>
 
 <h3>Một lời kêu gọi duy nhất</h3>
 <p><strong>CTA</strong> (call to action — lời kêu gọi hành động) là MỘT việc bạn mời người xem làm tiếp: đăng ký, xem video tiếp theo, vào cuongthai.com, trả lời một câu hỏi trong bình luận. Hãy xin <em>một</em> thứ. Ba lời xin liên tiếp thành tiếng ồn, và người ta chẳng làm theo cái nào.</p>

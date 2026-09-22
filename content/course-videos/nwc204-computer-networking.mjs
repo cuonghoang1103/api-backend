@@ -89,6 +89,10 @@ export default {
     "nwc204-11-1-cau-truc-dia-chi-ipv6": { yt: "ZNuXyOXae5U", credit: "Jeremy's IT Lab — Free CCNA | IPv6 Part 1 | Day 31 | CCNA 200-301 Complete Course" },
     "nwc204-11-2-cau-hinh-va-chia-subnet-ipv6": { yt: "BdsIahtrWIA", credit: "Jeremy's IT Lab — Free CCNA | Configuring IPv6 (Part 1) | Day 31 Lab | CCNA 200-301 Complete Course" },
 
+    /* ── Chương 13 — Tầng giao vận (buổi 41–42) ─────────────────────────── */
+    "nwc204-13-1-tang-giao-van-va-so-hieu-cong": { yt: "LIEACBqlntY", credit: "Jeremy's IT Lab — Free CCNA | TCP & UDP | Day 30 | CCNA 200-301 Complete Course" },
+    "nwc204-13-2-bat-tay-tin-cay-va-doc-may-chu-that": { yt: "JFch3ctY6nE", credit: "Practical Networking — TCP - 12 simple ideas to explain the Transmission Control Protocol" },
+
     /* ── Chương 12 — ICMP (buổi 37–40) ──────────────────────────────────── */
     "nwc204-12-1-thong-diep-icmp": { yt: "zesTvBZCESk", credit: "Jeremy's IT Lab — CCNP ENCOR // Internet Control Message Protocol (ICMP) // ENCOR 350-401 Complete Course" },
     "nwc204-12-2-ping-traceroute-va-lab-2-3": { yt: "vJV-GBZ6PeM", credit: "PowerCert Animated Videos — PING and TRACERT (traceroute) networking commands" },

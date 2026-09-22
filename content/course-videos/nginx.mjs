@@ -46,8 +46,8 @@ export default {
     /* ── Chương 3 — Reverse proxy: cái gì thật sự tới ứng dụng ── */
     'nginx-3-1-proxy-pass': { yt: 'KZOaO_s5LXI', credit: 'Davids Videos — nginx - managing reverse proxy using proxy_pass' },        // nginx - managing reverse proxy using proxy_pass
     'nginx-3-2-header-len-upstream': { yt: '4p1Zc8F29Lk', credit: 'Juriy Bura — Client IP in NGINX reverse proxy' },// Client IP in NGINX reverse proxy
-    'nginx-3-3-dem-va-luong-chay': { yt: 'QbmOyr0HwnM', credit: 'Hussein Nasser — Nginx backend upstream timeouts Explained' },  // Nginx backend upstream timeouts Explained
-    'nginx-3-4-timeout': { yt: 'BQY1l0rgDSQ', credit: 'Hussein Nasser — 6 NginX FrontEnd Timeouts Explained in Details' },            // 6 NginX FrontEnd Timeouts Explained in Details
+    'nginx-3-3-dem-va-luong-chay': { yt: '4HlNv1qpZFY', credit: 'Hussein Nasser — Server-Sent Events Crash Course' },  // thay 22/09/2026: video cũ CHỈ DÀNH CHO HỘI VIÊN kênh — người xem thường không xem được
+    'nginx-3-4-timeout': { yt: '2GAQVXGT_Zw', credit: 'Hussein Nasser — Frontend and Backends Timeouts' },  // thay 22/09/2026: video cũ CHỈ DÀNH CHO HỘI VIÊN kênh — người xem thường không xem được
     'nginx-3-5-websocket': { yt: 'zutCD7HMgwA', credit: 'Juriy Bura — Proxying WebSockets with NGINX' },          // Proxying WebSockets with NGINX
 
     /* ── Chương 4 — Tệp tĩnh: từ URI tới byte ── */

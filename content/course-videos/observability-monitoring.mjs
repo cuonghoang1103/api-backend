@@ -54,7 +54,7 @@ export default {
     /* ── Chương 3 — Nối một yêu cầu thành một sợi ── */
     'obs-3-1-id-di-den-hu-vo': { yt: 'OaHXz3iiw1U', credit: 'CodeSpace — How To Use CorrelationId in Node Js Microservices' },  // How To Use CorrelationId in Node Js Microservices
     'obs-3-2-asynclocalstorage': { yt: 'ukefzxZ_G9U', credit: 'This Dot Media — Async Context Tracking in Node with Async Local Storage API ft. James Snell | JS Drops' },// Async Context Tracking in Node with Async Local Storage API ft. James Snell | JS Drops
-    'obs-3-3-qua-ranh-gioi': { yt: 'ySXZ60R_2_M', credit: 'Concept && Coding - by Shrayansh — Distributed Logging (Part-4) | End-to-End Distributed Logging with MDC + Correlation ID + Trace ID' },    // Distributed Logging (Part-4) | End-to-End Distributed Logging with MDC + Correlation ID + Trace ID
+    'obs-3-3-qua-ranh-gioi': { yt: 'gviWKCXwyvY', credit: 'Lightstep is now ServiceNow Cloud Observability  — Context Propagation makes OpenTelemetry awesome' },  // thay 22/09/2026: video cũ CHỈ DÀNH CHO HỘI VIÊN kênh — người xem thường không xem được
     'obs-3-4-trace-context': { yt: 'lnfKAexAC_E', credit: 'DevOps Hint — OpenTelemetry Context Propagation Explained | Trace ID, Span ID, Baggage & W3C Headers|Observability' },    // OpenTelemetry Context Propagation Explained | Trace ID, Span ID, Baggage & W3C Headers
     'obs-3-5-mot-su-co-ke-hai-lan': { yt: 'yumiqUFbneE', credit: 'CodeLucky — Distributed Tracing Explained: Request Tracking Across Microservices with Trace IDs & Spans' }, // Distributed Tracing Explained: Request Tracking Across Microservices with Trace IDs & Spans
 

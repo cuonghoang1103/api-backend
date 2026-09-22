@@ -54,7 +54,7 @@ export default {
     'lnx-4-1-mo-hinh-quyen': { yt: 'Z3_4RmYTO7s', credit: 'NextGenstar26 — Linux File Permissions Explained | chmod, chown, umask, SUID, SGID, Sticky Bit' },              // Linux File Permissions Explained | chmod, chown, umask, SUID, SGID, Sticky Bit
     'lnx-4-2-chmod-chown-umask': { yt: 'o_2aXxEqtao', credit: 'WhiteboardDoodles — Linux File Permissions: chmod, umask & ACLs Explained | Linux Basics' },          // Linux File Permissions: chmod, umask & ACLs Explained | Linux Basics
     'lnx-4-3-bit-dac-biet': { yt: 'mYfXqUWXmEA', credit: 'NixEducation — Special Linux File permissions and their Use (setuid, setgid, sticky bit)' },               // Special Linux File permissions and their Use (setuid, setgid, sticky bit)
-    'lnx-4-4-nguoi-dung-nhom-sudo': { yt: 'PjkqVZgdO9s', credit: 'DevOps Made Easy — Linux Essentials: User Management Mastery | useradd | usermod | userdel | groupadd | visudo | passwd' },       // Linux Essentials: User Management Mastery | useradd | usermod | userdel | groupadd | visudo | passwd
+    'lnx-4-4-nguoi-dung-nhom-sudo': { yt: 'jwnvKOjmtEA', credit: 'NetworkChuck — sudo = POWER!! (managing users in Linux) // Linux for Hackers // EP4' },  // thay 22/09/2026: video cũ CHỈ DÀNH CHO HỘI VIÊN kênh — người xem thường không xem được
     'lnx-4-5-chan-doan-permission-denied': { yt: '4U7PxdAwvM8', credit: 'OneByteAtATime — Linux Permissions - POSIX, chmod, chown, chgrp' },// Linux Permissions - POSIX, chmod, chown, chgrp
 
     /* ── Chương 5 — Tiến trình, job & tín hiệu ── */

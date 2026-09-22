@@ -196,6 +196,8 @@ export const slides = S([
 - Không backtick trần → `&#96;`. `${` trong mã mẫu → `\${`. Gạch chéo ngược → `\\`.
 - Trong `<pre><code>`: `<` → `&lt;`, `>` → `&gt;`, `&` → `&amp;`.
 - Khối `.out` mở `<div class="out">` đóng `</div>` (đừng đóng `</code></pre>`).
+- Phím tắt/nút bấm viết trong `<code>` — bộ lọc HTML của site (`sanitizeHtml`) **gỡ thẻ `<kbd>`** (giữ chữ, mất định dạng).
+- Trong chuỗi JS nháy đơn (title, quiz…): KHÔNG viết `\\'` (hai gạch + nháy là lỗi cú pháp); dùng dấu `’` hoặc chuỗi nháy kép.
 - `.pitfall`/`.callout`: viết `<p>` bên trong ngay từ đầu. `link-card` đóng đúng MỘT `</div>`.
 - Kiểm: `node scripts/course-content-check.mjs ./content/courses/content-creator/sNN-*.mjs` → phải ✅ 0 lỗi.
   Và `node -e "import('./content/courses/content-creator/sNN-….mjs').then(m=>{for(const l of m.default.lessons){if(typeof l.content!=='string')throw l.slug; if(l.title.length>180)throw l.slug+' title dài'}; console.log('ok')})"`

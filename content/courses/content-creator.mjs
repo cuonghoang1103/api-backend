@@ -15,6 +15,7 @@ import s03 from './content-creator/s03-kich-ban-ke-chuyen.mjs';
 import s04 from './content-creator/s04-phan-canh.mjs';
 import s06 from './content-creator/s06-cai-dat-thiet-bi.mjs';
 import s12 from './content-creator/s12-capcut.mjs';
+import s13 from './content-creator/s13-davinci-resolve.mjs';
 
 export default {
   category: { slug: 'content-creation', name: 'Sáng tạo nội dung', icon: 'Video', sortOrder: 5 },
@@ -44,5 +45,6 @@ export default {
     s04,
     s06,
     s12,
+    s13,
   ],
 };

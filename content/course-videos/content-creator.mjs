@@ -26,6 +26,13 @@ export default {
     'cr-00-3-quy-trinh-san-xuat': { yt: 'U6I1tMgjW-I', credit: 'StudioBinder — The Pre-Production Process in Film Explained [Stages of Filmmaking, Ep 2]' },
     'cr-00-4-lo-trinh-cach-hoc': { yt: '954L0eVIdaE', credit: 'Gavin Herman — How I Would Learn Video Editing (If I Could Start Over)' },
 
+    /* ── Chương 3 — Kịch bản & kể chuyện ── */
+    'cr-03-0-slides': { yt: '7I50PECz7SU', credit: 'Kallaway — How To Write A Killer Script That Keeps Viewers Hooked' },
+    'cr-03-1-hook': { yt: 'TOHQXdCAo5k', credit: 'Aprilynne Alter — how to make a killer youtube intro (to blow up your channel)' },
+    'cr-03-2-cau-truc-cau-chuyen': { yt: 't5Z-Q1bg1tU', credit: 'Kallaway — How To Become A Master Storyteller' },
+    'cr-03-3-viet-kich-ban': { yt: '8s0i1LutAc4', credit: 'Think Media — How to Write a Script for a YouTube Video (Made Easy!)' },
+    'cr-03-4-len-hinh-tu-nhien': { yt: 'Y11SX2oHmw8', credit: 'Ali Abdaal — How to Be Confident on Camera (5 Tips)' },
+
     /* ── Chương 4 — Phân cảnh: shot list & storyboard ── */
     'cr-04-0-slides': { yt: 'OSQTq1E6NHU', credit: 'Gaku Lange — How To PLAN & ORGANIZE Your Videos + FREE Filmmaking Template' },
     'cr-04-1-bay-quay-mot-leo': { yt: 't2P9Z_UPTdU', credit: 'Matthew Encina — How to Film Yourself – Planning: Idea, Script, and Shot List' },

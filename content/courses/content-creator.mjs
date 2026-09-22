@@ -28,6 +28,7 @@ import s14 from './content-creator/s14-nghe-thuat-dung.mjs';
 import s15 from './content-creator/s15-chinh-mau.mjs';
 import s16 from './content-creator/s16-am-thanh-chu-phu-de.mjs';
 import s17 from './content-creator/s17-chuyen-canh-keyframe.mjs';
+import s18 from './content-creator/s18-mask-tracking-vfx.mjs';
 
 export default {
   category: { slug: 'content-creation', name: 'Sáng tạo nội dung', icon: 'Video', sortOrder: 5 },
@@ -69,5 +70,6 @@ export default {
     s15,
     s16,
     s17,
+    s18,
   ],
 };

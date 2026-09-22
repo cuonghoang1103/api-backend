@@ -144,5 +144,12 @@ export default {
     'cr-17-2-keyframe-easing': { yt: '_gZFWFCYZUg', credit: 'Jason Yadlovski — DaVinci Resolve for Beginners - Easier KEYFRAMES & Animations in DaVinci Resolve 20' },
     'cr-17-3-toc-do-thoi-gian': { yt: 'c4YOJQwFopw', credit: 'DanVinci — The NEW Way to Speed Ramp Davinci Resolve Tutorial' },
     'cr-17-4-he-thong-hieu-ung': { yt: 'yKG58QEgrsY', credit: 'Creative Video Tips — I Wasted HOURS Editing UNTIL I Used these 5 Adjustment Clip Tips in DaVinci Resolve' },
+
+    /* ── Chương 18 — Mask, tracking & VFX thực tế ── */
+    'cr-18-0-slides': { yt: '6MVm85mY1S8', credit: 'Casey Faris — How to CLONE YOURSELF in DaVinci Resolve - Beginner VFX Tutorial' },
+    'cr-18-1-mask-rotoscope': { yt: 'BqsKAV9aZss', credit: 'Evan Schneider — DaVinci Resolve Power Windows - The Secret to Crafting Dynamic Scenes' },
+    'cr-18-2-tracking-on-dinh': { yt: 'JEzzmaFWbnY', credit: 'Christian Eggbauer — DaVinci Resolve 19 - The FASTEST Way to Blur a Moving Face or Object FREE Version' },
+    'cr-18-3-phong-xanh-tach-nen': { yt: '-jeqx-xoiA8', credit: 'Steven Washer (Visible Authority) — How to get a flawless greenscreen shoot in a tiny room' },
+    'cr-18-4-vfx-thuc-te': { yt: 'FvzlVK1IaU0', credit: 'Team 2 Films — Screen Replacement with FUSION Planar Tracker - Davinci Resolve 18.5 TUTORIAL' },
   },
 };

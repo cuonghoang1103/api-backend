@@ -50,6 +50,9 @@ describe('⭐ khối "Hỏi AI" phải ăn theo chủ đề của app', () => {
   const TEP = [
     path.join(WEB, 'components/academy/CourseTutor.tsx'),
     path.join(WEB, 'components/academy/ChapterQuiz.tsx'),
+    // Khung hỏi CuongMini từng câu (22/09/2026) — vẽ BÊN TRONG `ChapterQuiz`,
+    // nên app cũng hiện nó và nó cũng phải chỉ gọi biến đã có cầu nối.
+    path.join(WEB, 'components/academy/HoiAICauLuyen.tsx'),
   ];
 
   it('cầu nối biến khai trên GỐC trang bài, không chỉ trên phần nội dung', () => {

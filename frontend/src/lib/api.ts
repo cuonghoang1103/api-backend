@@ -1612,6 +1612,10 @@ export const examApi = {
     api.delete(`/exams/comments/${commentId}`),
   aiAsk: (attemptId: number, body: { questionId: number; mode: string; question?: string; history?: { role: string; content: string }[]; provider?: 'opus' | 'sol' }) =>
     api.post<{ data: { answer: string; cached: boolean } }>(`/exams/attempts/${attemptId}/ai/ask`, body, { timeout: 180000 }),
+  // CuongMini khi LUYỆN CHƯƠNG ở Academy — không cần lượt thi (xem
+  // `ChapterQuiz` + `HoiAICauLuyen`). Đường lùi khi SSE hỏng.
+  practiceAiAsk: (questionId: number, body: { mode: string; question?: string; history?: { role: string; content: string }[] }) =>
+    api.post<{ data: { answer: string; cached: boolean } }>(`/exams/practice/questions/${questionId}/ai/ask`, body, { timeout: 240000 }),
   myAttempts: (examId?: number) =>
     api.get(`/exams/attempts/mine`, { params: examId ? { examId } : {} }),
   getAttempt: (attemptId: number) => api.get(`/exams/attempts/${attemptId}`),

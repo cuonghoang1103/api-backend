@@ -12,6 +12,7 @@ import {
 import { coursesApi, certificatesApi } from '@/lib/api';
 import { CourseTutor } from '@/components/academy/CourseTutor';
 import { CourseRoadmapPanel } from '@/components/academy/CourseRoadmap';
+import { KhoiLuyenChuong } from '@/components/academy/ChapterQuiz';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -494,6 +495,8 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const currentIndex = currentLesson ? flatLessons.findIndex(f => f.lesson.id === currentLesson.id) : -1;
   const prevLesson = currentIndex > 0 ? flatLessons[currentIndex - 1]?.lesson : null;
   const nextLesson = currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1]?.lesson : null;
+  /** Chương chứa bài đang mở — khối "Quiz & thực hành chương" ở đầu trang quiz cần nó. */
+  const chuongCuaBai = currentIndex >= 0 ? flatLessons[currentIndex] : null;
 
   // Resume the current lesson's video from the last saved position —
   // but only if the lesson isn't already completed (a finished lesson
@@ -888,6 +891,22 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     </div>
                   </div>
                 </div>
+              )}
+
+              {/* QUIZ & THỰC HÀNH CỦA CHƯƠNG — đầu trang quiz (22/09/2026).
+                  Người dùng: quiz chuyên sâu từ Phòng Thi trước nằm trong "Lộ
+                  trình học" (gập sẵn), dưới cả bài quiz 52 câu, nên "nhiều user
+                  không biết có bài quiz chuyên sâu này". Giờ nó đứng ĐẦU trang,
+                  bấm một cái là vào thi. Khối trong Lộ trình học vẫn giữ nguyên.
+                  Chương chưa có câu nào thì khối tự ẩn. */}
+              {currentLesson.lessonType === 'QUIZ' && chuongCuaBai && (
+                <KhoiLuyenChuong
+                  key={chuongCuaBai.sectionId}
+                  courseId={course.id}
+                  courseCode={course.courseCode ?? undefined}
+                  sectionId={chuongCuaBai.sectionId}
+                  sectionTitle={chuongCuaBai.sectionTitle}
+                />
               )}
 
               {/* QUIZ lesson — timer + MCQ, auto-graded, replayable. */}

@@ -21,21 +21,39 @@
  * dịu, còn phần khung ngoài vẫn giữ nhận diện cũ.
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { BookMarked, BookOpen, Crown, ImagePlus, Languages, Loader2, MessageCirclePlus, RefreshCw, Send, Sparkles, Trash2, User, X } from 'lucide-react';
+import { BookMarked, BookOpen, Crown, FileQuestion, ImagePlus, Languages, Loader2, MessageCirclePlus, RefreshCw, Send, Sparkles, Trash2, User, X } from 'lucide-react';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import { GOI_Y_GIA_SU, useGiaSuBai } from '@/components/academy/useGiaSuBai';
 import { useFaqGiaSu } from '@/components/academy/useFaqGiaSu';
 import ChonSlide from '@/components/academy/ChonSlide';
+import HoiAICauLuyen from '@/components/academy/HoiAICauLuyen';
 import { cauHoiSlide, khoaCacheSlide, type Slide } from '@/components/academy/docSlide';
 import type { BaiDangHoc } from '@/store/giaSuBaiStore';
+import { useHoiCauLuyenStore } from '@/store/hoiCauLuyenStore';
 import { useAuthStore } from '@/store/authStore';
 import { usePro } from '@/hooks/usePro';
 
 export default function GiaSuTrongRobot({ bai, rong }: { bai: BaiDangHoc; rong: boolean }) {
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
   const { isPro } = usePro();
+
+  /*
+   * ── ĐANG LUYỆN QUIZ CHƯƠNG ⇒ robot mở đúng câu đang làm ──
+   * Người dùng 22/09/2026: "khi vào quiz sẽ có icon AI kia ấn vào sẽ hiện all
+   * câu hỏi tự chọn … ấn vào câu đó và để AI hướng dẫn làm câu nó".
+   *
+   * `ChapterQuiz` công bố phiên luyện vào `hoiCauLuyenStore`; có phiên thì
+   * robot hiện hai thẻ — "Câu đang luyện" (mặc định, vì đó là việc người học
+   * đang làm) và "Bài học" (gia sư bài như cũ). Cùng kho hội thoại với nút
+   * robot trên từng câu, nên hỏi ở đâu cũng là một mạch.
+   */
+  const phien = useHoiCauLuyenStore((s) => s.phien);
+  const [the, datThe] = useState<'cau' | 'bai'>('cau');
+  // Mỗi lần MỞ một phiên mới thì về thẻ câu — người học vừa bấm "Vào thi".
+  useEffect(() => { if (phien?.khoa) datThe('cau'); }, [phien?.khoa]);
+  const cauPhien = phien ? phien.dsCau[phien.idx] : undefined;
   const {
     turns, question, setQuestion, asking, hoi, hoiTiengAnh, hoiLaiMoi, nhoLaiCauCu,
     anhDan, themAnh, boAnh, danVao,
@@ -55,8 +73,45 @@ export default function GiaSuTrongRobot({ bai, rong }: { bai: BaiDangHoc; rong: 
 
   const ten = bai.lessonTitle || bai.courseTitle || 'bài đang học';
 
+  /* Thanh hai thẻ — chỉ khi có phiên luyện. Không có phiên thì robot y hệt cũ. */
+  const thanhThe = phien && cauPhien ? (
+    <div className="flex gap-1 border-b border-[#22d3ee]/10 bg-[#0d1117] px-3 py-1.5" role="tablist" aria-label="Robot đang hỏi về">
+      {([['cau', `Câu đang luyện · ${cauPhien.soThuTu}/${phien.dsCau.length}`, FileQuestion], ['bai', 'Bài học', BookOpen]] as const).map(([ma, nhan, Icon]) => (
+        <button
+          key={ma}
+          type="button"
+          role="tab"
+          aria-selected={the === ma}
+          onClick={() => datThe(ma)}
+          className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11.5px] font-semibold transition-colors ${
+            the === ma ? 'bg-[#22d3ee]/15 text-[#22d3ee]' : 'text-[#64748b] hover:bg-[#22d3ee]/10 hover:text-[#94a3b8]'}`}
+        >
+          <Icon className="h-3.5 w-3.5" /> {nhan}
+        </button>
+      ))}
+    </div>
+  ) : null;
+
+  if (phien && cauPhien && the === 'cau') {
+    return (
+      <>
+        {thanhThe}
+        <HoiAICauLuyen
+          robot
+          cau={cauPhien}
+          dsCau={phien.dsCau}
+          idx={phien.idx}
+          onChonCau={phien.chonCau}
+          tieuDe={phien.tieuDe}
+        />
+      </>
+    );
+  }
+
   if (!isAuthed) {
     return (
+      <>
+      {thanhThe}
       <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
         <BookOpen className="h-8 w-8 text-[#22d3ee]/60" />
         <p className="text-sm text-[#94a3b8]">Đăng nhập để hỏi gia sư riêng cho bài này.</p>
@@ -64,11 +119,14 @@ export default function GiaSuTrongRobot({ bai, rong }: { bai: BaiDangHoc; rong: 
           Đăng nhập
         </Link>
       </div>
+      </>
     );
   }
 
   if (!isPro) {
     return (
+      <>
+      {thanhThe}
       <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
         <Crown className="h-8 w-8 text-amber-400" />
         <p className="text-sm text-[#94a3b8]">Gia sư riêng từng bài là tính năng Pro.</p>
@@ -77,11 +135,13 @@ export default function GiaSuTrongRobot({ bai, rong }: { bai: BaiDangHoc; rong: 
           Nâng cấp Pro
         </Link>
       </div>
+      </>
     );
   }
 
   return (
     <>
+      {thanhThe}
       {/* Thanh ngữ cảnh — người học phải thấy NGAY là robot đang nói về bài nào.
           Thiếu nó thì hỏi "chỗ này khó quá" mà không biết "chỗ này" là bài nào,
           và câu trả lời đúng cũng trông như trả lời nhầm. */}

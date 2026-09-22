@@ -19,7 +19,7 @@ import {
   gradeCode, gradeWrite, gradeSpeaking, extractCodeFromZip,
   transcribeExamAudio, generateSpeakingQuestions, type PeGradeResult,
 } from '../services/exam.grading.service.js';
-import { askExamTutor, askExamTutorStream, revealAnswer, getRelatedLesson, type TutorMode, type TutorProvider } from '../services/examTutor.service.js';
+import { askExamTutor, askExamTutorStream, revealAnswer, getRelatedLesson, docTutorMode, type TutorProvider } from '../services/examTutor.service.js';
 import { isProEffective, laAdmin } from '../services/pro.service.js';
 import { listComments, createComment, updateComment, deleteComment } from '../services/examComment.service.js';
 
@@ -101,6 +101,35 @@ router.get('/practice/section-counts/:courseId', async (req, res: Response<ApiRe
   } catch (e) { next(e); }
 });
 
+// Khử trùng câu hỏi theo đề bài chuẩn hoá — nhiều đề thật lặp lại cùng một câu.
+// Dùng chung cho ba route luyện chương bên dưới: đếm và phục vụ phải khử trùng
+// Y HỆT nhau, không thì khối đầu trang hứa "210 câu" mà bấm vào chỉ có 164.
+const normPrompt = (s: string | null) => String(s || '').replace(/\s+/g, ' ').trim().toLowerCase().slice(0, 300);
+
+// Tóm tắt MỘT chương cho khối "Quiz & thực hành chương" ở đầu trang quiz:
+// số câu trắc nghiệm (MCQ) và số bài thực hành (WRITE/CODE) SAU khi khử trùng —
+// đúng con số người học sẽ nhận khi bấm vào. `section-counts` ở trên đếm thô
+// (gộp cả PE lẫn câu trùng) nên không dùng được cho nhãn "Làm tất cả N câu".
+// Không cần đăng nhập: chỉ là hai con số, không lộ đề.
+router.get('/practice/by-section/:sectionId(\\d+)/summary', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const sectionId = Number(req.params.sectionId);
+    const qs = await prisma.examQuestion.findMany({
+      where: { sectionId },
+      select: { kind: true, prompt: true },
+    });
+    const mcq = new Set<string>();
+    const pe = new Set<string>();
+    for (const q of qs) {
+      const k = normPrompt(q.prompt);
+      if (!k) continue;
+      (q.kind === 'MCQ' ? mcq : pe).add(k);
+    }
+    res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=300');
+    res.json({ success: true, data: { mcq: mcq.size, pe: pe.size } });
+  } catch (e) { next(e); }
+});
+
 // Bài THỰC HÀNH của MỘT chương: các câu KHÔNG phải trắc nghiệm (WRITE/CODE) của
 // đề PE thật đã được gán về chương này. Bộ phân loại (exam-classify-chapters.mjs)
 // vốn KHÔNG lọc theo kind nên câu PE đã có sectionId sẵn — trước đây chỉ thiếu
@@ -127,11 +156,10 @@ router.get('/practice/by-section/:sectionId/practical', authenticate, async (req
     });
 
     // Khử trùng theo đề bài chuẩn hoá — nhiều đề PE dùng lại cùng một câu.
-    const norm = (s: string | null) => String(s || '').replace(/\s+/g, ' ').trim().toLowerCase().slice(0, 300);
     const seen = new Set<string>();
     const data = [] as Array<Record<string, unknown>>;
     for (const q of qs) {
-      const k = norm(q.prompt);
+      const k = normPrompt(q.prompt);
       if (!k || seen.has(k)) continue;
       seen.add(k);
       data.push({
@@ -169,14 +197,13 @@ router.get('/practice/by-section/:sectionId', authenticate, async (req, res: Res
     });
 
     // Khử trùng: gộp câu giống nhau (prompt chuẩn hoá) lặp qua nhiều đề.
-    const norm = (s: string | null) => String(s || '').replace(/\s+/g, ' ').trim().toLowerCase().slice(0, 300);
     const seen = new Set<string>();
     let data: Array<{
       id: number; points: number; prompt: string; imageUrl: string | null;
       options: unknown; correctIndexes: number[]; explanation: string | null; examKind: string | null;
     }> = [];
     for (const q of qs) {
-      const k = norm(q.prompt);
+      const k = normPrompt(q.prompt);
       if (!k || seen.has(k)) continue;
       seen.add(k);
       data.push({
@@ -259,7 +286,7 @@ router.post('/attempts/:attemptId/ai/ask', authenticate, async (req, res: Respon
       userId: req.userId!,
       attemptId: Number(req.params.attemptId),
       questionId: Number(req.body?.questionId),
-      mode: (req.body?.mode || 'free_qa') as TutorMode,
+      mode: docTutorMode(req.body?.mode),
       question: typeof req.body?.question === 'string' ? req.body.question : undefined,
       history: Array.isArray(req.body?.history) ? req.body.history : [],
       provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,
@@ -288,7 +315,61 @@ router.post('/attempts/:attemptId/ai/ask-stream', authenticate, async (req, res)
         userId: req.userId!,
         attemptId: Number(req.params.attemptId),
         questionId: Number(req.body?.questionId),
-        mode: (req.body?.mode || 'free_qa') as TutorMode,
+        mode: docTutorMode(req.body?.mode),
+        question: typeof req.body?.question === 'string' ? req.body.question : undefined,
+        history: Array.isArray(req.body?.history) ? req.body.history : [],
+        provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,
+      },
+      (delta) => send({ type: 'delta', text: delta }),
+    );
+    send({ type: 'done', answer: out.answer, cached: out.cached });
+  } catch (e) {
+    send({ type: 'error', error: (e as Error)?.message || 'CuongMini chưa trả lời được. Thử lại nhé.' });
+  } finally {
+    clearInterval(keepalive);
+    if (!res.writableEnded) res.end();
+  }
+});
+
+// ── CuongMini khi LUYỆN CHƯƠNG (Academy) ────────────────────────────────
+// Đề luyện cuối chương (`ChapterQuiz`) không mở lượt thi nào — câu hỏi đến
+// thẳng từ /practice/by-section. Hai route dưới là bản "không cần attempt"
+// của hai route ở trên: cùng service, cùng cache (bình luận CuongMini theo
+// câu), chỉ khác chỗ nạp ngữ cảnh — xem loadPracticeContext(). Hỏi AI thật
+// vẫn cần Pro, y như Phòng thi.
+router.post('/practice/questions/:questionId(\\d+)/ai/ask', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await requireProForAi(req.userId);
+    const out = await askExamTutor({
+      userId: req.userId!,
+      questionId: Number(req.params.questionId),
+      mode: docTutorMode(req.body?.mode),
+      question: typeof req.body?.question === 'string' ? req.body.question : undefined,
+      history: Array.isArray(req.body?.history) ? req.body.history : [],
+      provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,
+    });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.post('/practice/questions/:questionId(\\d+)/ai/ask-stream', authenticate, async (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+  res.flushHeaders?.();
+
+  const send = (obj: unknown): void => { if (!res.writableEnded) res.write(`data: ${JSON.stringify(obj)}\n\n`); };
+  const keepalive = setInterval(() => { if (!res.writableEnded) res.write(': ka\n\n'); }, 15_000);
+  req.on('close', () => clearInterval(keepalive));
+
+  try {
+    await requireProForAi(req.userId);
+    const out = await askExamTutorStream(
+      {
+        userId: req.userId!,
+        questionId: Number(req.params.questionId),
+        mode: docTutorMode(req.body?.mode),
         question: typeof req.body?.question === 'string' ? req.body.question : undefined,
         history: Array.isArray(req.body?.history) ? req.body.history : [],
         provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,

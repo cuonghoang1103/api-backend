@@ -137,6 +137,11 @@ const MODE_LABEL: Record<string, string> = {
   similar_example: 'Cho ví dụ tương tự để luyện thêm',
   common_mistakes: 'Lỗi hay gặp khi làm câu này?',
   summary_rule: 'Tóm tắt công thức/quy tắc liên quan',
+  // Thêm 22/09/2026 cho luyện chương ở Academy (chấm từng câu ngay, nên có lúc
+  // học viên hỏi khi CHƯA trả lời). Nhãn này cũng là KHOÁ CACHE — đổi chữ là
+  // mọi câu trả lời cũ của mode đó thành mồ côi.
+  translate: 'Dịch đề sang tiếng Việt',
+  hint: 'Gợi ý (chưa lộ đáp án)',
 };
 
 export function buildAskedLabel(mode: string, question: string | undefined): string {

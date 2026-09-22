@@ -13,6 +13,14 @@
  * Không lưu hội thoại — giống course_tutor, frontend gửi kèm `history`.
  * "Hiện đáp án" KHÔNG gọi AI — tra thẳng correctIndexes/explanation đã có sẵn
  * trên ExamQuestion, rẻ và không cần đợi.
+ *
+ * HAI LỐI VÀO, MỘT GIA SƯ (22/09/2026):
+ *   • Phòng thi — có `attemptId`, ngữ cảnh nạp qua lượt thi (loadAiAssistedContext).
+ *   • Luyện chương ở Academy (`ChapterQuiz`) — KHÔNG có attempt: câu hỏi được
+ *     phục vụ thẳng từ /exams/practice/by-section, nên ngữ cảnh nạp theo
+ *     questionId (loadPracticeContext). Cùng cache (bình luận CuongMini theo
+ *     câu), nên ai đã hỏi một chip ở Phòng thi thì người luyện chương nhận
+ *     ngay câu trả lời đó, và ngược lại.
  */
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
@@ -28,12 +36,33 @@ export interface TutorMessage { role: 'user' | 'assistant'; content: string }
 export type TutorMode =
   | 'how_to_solve' | 'how_to_remember' | 'knowledge'
   | 'why_others_wrong' | 'similar_example' | 'common_mistakes' | 'summary_rule'
+  | 'translate' | 'hint'
   | 'free_qa';
 export type TutorProvider = 'opus' | 'sol';
 
+/** Mọi mode hợp lệ — route dùng để lọc `req.body.mode` trước khi tin nó. */
+export const TUTOR_MODES: readonly TutorMode[] = [
+  'how_to_solve', 'how_to_remember', 'knowledge',
+  'why_others_wrong', 'similar_example', 'common_mistakes', 'summary_rule',
+  'translate', 'hint', 'free_qa',
+];
+
+/**
+ * Đọc mode từ body một cách an toàn.
+ *
+ * ⚠️ Không ép kiểu mù (`as TutorMode`): một mode lạ lọt vào thì
+ * `MODE_INSTRUCTION[mode]` là `undefined`, lượt cuối gửi cho model thành
+ * RỖNG, và lỗi chỉ hiện ra ở cổng LLM dưới dạng một câu khó hiểu.
+ */
+export function docTutorMode(x: unknown): TutorMode {
+  return (TUTOR_MODES as readonly string[]).includes(String(x)) ? (x as TutorMode) : 'free_qa';
+}
+
 export interface ExamTutorAskOpts {
   userId: number;
-  attemptId: number;
+  /** Có ⇒ hỏi trong một lượt thi (Phòng thi). Không có ⇒ đang LUYỆN CHƯƠNG ở
+   *  Academy, ngữ cảnh nạp theo `questionId` — xem loadPracticeContext(). */
+  attemptId?: number;
   questionId: number;
   mode: TutorMode;
   /** Bắt buộc khi mode === 'free_qa'. */
@@ -96,6 +125,24 @@ async function loadAiAssistedContext(attemptId: number, questionId: number, user
   const question = attempt.exam.questions.find((q) => q.id === questionId);
   if (!question) throw new AppError('Không tìm thấy câu hỏi.', 404);
   return { attempt, question, courseLabel: attempt.exam.course?.courseCode || attempt.exam.title };
+}
+
+/**
+ * Câu hỏi khi LUYỆN CHƯƠNG — không có lượt thi nào đứng sau.
+ *
+ * Chỉ nhận câu ĐÃ GÁN CHƯƠNG (`sectionId`): đó đúng là tập câu mà
+ * `/exams/practice/by-section` đã trả nguyên đề + đáp án + giải thích cho mọi
+ * tài khoản đăng nhập. Câu chưa gán chương thì chỉ hỏi được qua lượt thi, như
+ * trước — lối này không mở rộng thêm thứ gì người học chưa thấy được.
+ */
+export async function loadPracticeContext(questionId: number) {
+  if (!Number.isInteger(questionId) || questionId <= 0) throw new AppError('Không tìm thấy câu hỏi.', 404);
+  const question = await prisma.examQuestion.findUnique({
+    where: { id: questionId },
+    include: { exam: { select: { title: true, course: { select: { courseCode: true } } } } },
+  });
+  if (!question || question.sectionId == null) throw new AppError('Không tìm thấy câu hỏi.', 404);
+  return { question, courseLabel: question.exam.course?.courseCode || question.exam.title };
 }
 
 /** "Hiện đáp án" — KHÔNG gọi AI, tra thẳng dữ liệu đã có. Mở cho mọi tài
@@ -179,6 +226,11 @@ const MODE_INSTRUCTION: Record<TutorMode, string> = {
   similar_example: 'Học viên hỏi "Cho ví dụ tương tự để luyện thêm" — tự nghĩ ra 1-2 câu hỏi TƯƠNG TỰ (cùng dạng, cùng kiến thức nhưng số liệu/tình huống khác), kèm đáp án + giải thích ngắn, để học viên tự luyện.',
   common_mistakes: 'Học viên hỏi "Lỗi hay gặp khi làm câu này?" — nêu những NHẦM LẪN/BẪY phổ biến học viên hay mắc với dạng câu này (kể cả nếu chưa chắc lỗi cụ thể của học viên này, hãy nói lỗi PHỔ BIẾN của dạng câu tương tự) và cách tránh.',
   summary_rule: 'Học viên hỏi "Tóm tắt công thức/quy tắc liên quan" — liệt kê ngắn gọn công thức/quy tắc/cú pháp cốt lõi cần nhớ để làm được dạng câu này, dạng gạch đầu dòng dễ ôn lại.',
+  // Hai mode dưới dành cho lúc học viên CÓ THỂ CHƯA trả lời (luyện chương chấm
+  // từng câu ngay) — nên cả hai đều cấm nói đáp án. Và câu trả lời được cache
+  // dùng chung cho mọi người, nên lộ đáp án ở đây là lộ cho tất cả.
+  translate: 'Học viên chưa vững tiếng Anh và bấm "Dịch đề sang tiếng Việt". Dịch TRỌN đề và TỪNG phương án (giữ nhãn A, B, C…) sang tiếng Việt tự nhiên, giữ thuật ngữ chuyên ngành tiếng Anh trong ngoặc. Sau đó thêm mục **Từ khoá cần biết**: 3–6 thuật ngữ tiếng Anh quan trọng nhất trong đề, mỗi từ kèm nghĩa tiếng Việt và một câu giải thích ngắn. TUYỆT ĐỐI KHÔNG nói phương án nào đúng và không gợi ý đáp án — học viên có thể chưa làm câu này. Trình bày gọn, không giảng thêm ngoài phần dịch và từ khoá.',
+  hint: 'Học viên bấm "Gợi ý (chưa lộ đáp án)" — họ CHƯA trả lời và muốn tự làm. Đưa 2–3 gợi ý dẫn dắt, xếp từ nhẹ tới rõ hơn: câu hỏi đang kiểm tra khái niệm gì, từ khoá nào trong đề là mấu chốt, cách loại trừ phương án. TUYỆT ĐỐI KHÔNG nêu chữ cái của đáp án đúng, không nhắc lại nguyên văn nội dung đáp án đúng, không kết luận phương án nào đúng hay sai. Ngắn gọn (dưới 150 từ), kết thúc bằng lời mời học viên tự chọn.',
   free_qa: 'Học viên hỏi tự do về câu này — trả lời đúng trọng tâm câu hỏi của họ.',
 };
 
@@ -187,7 +239,20 @@ type TutorQuestion = {
   language: string | null; starterCode: string | null; sampleSolution: string | null; expectedOutput: string | null; rubric: unknown;
 };
 
-function buildQuestionBlock(q: TutorQuestion): string {
+/**
+ * `luyen` = đang luyện chương ở Academy. Khi đó KHÔNG ghi số câu: số thứ tự
+ * trong đề gốc (`sortOrder`) khác hẳn số câu người học đang thấy (bộ 10 câu
+ * ngẫu nhiên đánh số lại từ 1), và gia sư mà nói "câu 37" trong khi màn hình
+ * ghi "Câu 3" thì người học tưởng nó trả lời nhầm câu.
+ */
+function buildQuestionBlock(q: TutorQuestion, luyen = false): string {
+  /* Nhãn đầu khối: "CÂU ĐANG THI (câu 5, dạng CODE):" ở Phòng thi, "CÂU HỌC
+     VIÊN ĐANG LUYỆN (dạng CODE):" khi luyện chương. `chiTiet` là phần trong
+     ngoặc, bỏ trống thì không in ngoặc. */
+  const nhan = (chiTiet: string[]) => {
+    const phan = luyen ? chiTiet : [`câu ${q.sortOrder + 1}`, ...chiTiet];
+    return `${luyen ? 'CÂU HỌC VIÊN ĐANG LUYỆN' : 'CÂU ĐANG THI'}${phan.length ? ` (${phan.join(', ')})` : ''}:`;
+  };
   if (q.kind !== 'MCQ') {
     // CODE/WRITE/SPEAK — không có correctIndexes, ngữ cảnh dựa trên lời giải
     // mẫu + tiêu chí chấm (author đã viết sẵn, đáng tin như MCQ dùng
@@ -196,7 +261,7 @@ function buildQuestionBlock(q: TutorQuestion): string {
       ? (q.rubric as Array<{ criterion?: string; maxScore?: number }>)
         .map((r) => `  - ${plain(r?.criterion, 200)} (${r?.maxScore ?? '?'} điểm)`).join('\n')
       : '';
-    const parts = [`CÂU ĐANG THI (câu ${q.sortOrder + 1}, dạng ${q.kind}${q.language ? `, ngôn ngữ ${q.language}` : ''}):`, plain(q.prompt, 3000)];
+    const parts = [nhan([`dạng ${q.kind}`, ...(q.language ? [`ngôn ngữ ${q.language}`] : [])]), plain(q.prompt, 3000)];
     if (q.starterCode) parts.push(`Starter code:\n${plain(q.starterCode, 1500)}`);
     if (q.expectedOutput) parts.push(`Output mong đợi:\n${plain(q.expectedOutput, 800)}`);
     if (rubricList) parts.push(`Tiêu chí chấm:\n${rubricList}`);
@@ -209,19 +274,36 @@ function buildQuestionBlock(q: TutorQuestion): string {
     : '';
   const correct = (q.correctIndexes || []).map((i) => String.fromCharCode(65 + i)).join(', ') || '?';
   const expl = q.explanation ? `\nGiải thích có sẵn: ${plain(q.explanation, 1000)}` : '';
-  return `CÂU ĐANG THI (câu ${q.sortOrder + 1}):\n${plain(q.prompt, 2000)}\n${opts}\nĐáp án đúng: ${correct}${expl}`;
+  return `${nhan([])}\n${plain(q.prompt, 2000)}\n${opts}\nĐáp án đúng: ${correct}${expl}`;
 }
 
-const TUTOR_SYSTEM = `You are CuongMini, an AI study companion embedded in an FPT University Exam
-Room's untimed STUDY/PRACTICE room ("Start Exam with CuongMini") — there is no clock, no score
-pressure, this is purely for learning. The student asked about ONE specific question — you already
+/** Câu mở đầu system prompt — nói đúng CHỖ người học đang đứng. */
+const NOI_DANG_HOC = {
+  thi: `an FPT University Exam Room's untimed STUDY/PRACTICE room ("Start Exam with CuongMini") — there
+is no clock, no score pressure, this is purely for learning.`,
+  luyen: `the end-of-chapter PRACTICE QUIZ of an Academy course on an FPT University study site. The
+questions are REAL FE/PE/PT exam questions assigned to this chapter; each answer is graded instantly
+and there is no clock — this is purely for learning.`,
+} as const;
+
+const tutorSystem = (luyen: boolean) => `You are CuongMini, an AI study companion embedded in
+${luyen ? NOI_DANG_HOC.luyen : NOI_DANG_HOC.thi} The student asked about ONE specific question — you already
 know its full text and, depending on the question type, either its options/correct answer/explanation
 (multiple-choice) or its starter code/sample solution/grading rubric (coding/writing question), given
 below. Teach thoroughly so they
 UNDERSTAND and remember — do not artificially shorten your answer; give the full explanation,
-worked steps, and any useful context or examples that help mastery. Answer entirely in Vietnamese
-(keep technical terms/code in English). Formatting: short paragraphs, **bold** key terms, fenced
-code blocks with a language when quoting code, inline $…$ / display $$…$$ LaTeX for math.`;
+worked steps, and any useful context or examples that help mastery. When the instruction for this turn
+asks for a short answer (a hint, a translation) or forbids revealing the answer, that instruction wins.
+Answer entirely in Vietnamese (keep technical terms/code in English). Formatting: short paragraphs,
+**bold** key terms, fenced code blocks with a language when quoting code, inline $…$ / display $$…$$
+LaTeX for math.`;
+
+/** Ngữ cảnh câu hỏi theo lối vào: lượt thi (Phòng thi) hay luyện chương (Academy). */
+async function napNguCanh(opts: ExamTutorAskOpts) {
+  return opts.attemptId != null
+    ? loadAiAssistedContext(opts.attemptId, opts.questionId, opts.userId)
+    : loadPracticeContext(opts.questionId);
+}
 
 async function buildTutorCall(opts: ExamTutorAskOpts): Promise<{ system: string; messages: TutorMessage[] }> {
   if (opts.mode === 'free_qa') {
@@ -229,8 +311,9 @@ async function buildTutorCall(opts: ExamTutorAskOpts): Promise<{ system: string;
     if (!q) throw new AppError('Hãy nhập câu hỏi.', 400);
     if (q.length > MAX_QUESTION) throw new AppError('Câu hỏi dài quá.', 400);
   }
-  const { question, courseLabel } = await loadAiAssistedContext(opts.attemptId, opts.questionId, opts.userId);
-  const questionBlock = buildQuestionBlock(question);
+  const luyen = opts.attemptId == null;
+  const { question, courseLabel } = await napNguCanh(opts);
+  const questionBlock = buildQuestionBlock(question, luyen);
   const userTurn = opts.mode === 'free_qa' ? (opts.question || '').trim() : MODE_INSTRUCTION[opts.mode];
 
   const messages: TutorMessage[] = [
@@ -239,7 +322,7 @@ async function buildTutorCall(opts: ExamTutorAskOpts): Promise<{ system: string;
     ...(opts.history || []).slice(-MAX_HISTORY),
     { role: 'user', content: userTurn },
   ];
-  return { system: TUTOR_SYSTEM, messages };
+  return { system: tutorSystem(luyen), messages };
 }
 
 export class DeadlineError extends Error {}
@@ -331,8 +414,21 @@ async function callTutor(system: string, messages: TutorMessage[], userId: numbe
   }
 }
 
+/**
+ * Luyện chương: kiểm câu hỏi TRƯỚC khi tra cache.
+ *
+ * Ở lối Phòng thi, cache được tra trước rồi mới nạp lượt thi. Lối luyện chương
+ * không có lượt thi nào để chặn, nên phải tự chặn ở đây — không thì một
+ * questionId bất kỳ (kể cả câu chưa gán chương) cũng trả được câu trả lời đã
+ * cache của nó.
+ */
+async function chanCauLuyen(opts: ExamTutorAskOpts): Promise<void> {
+  if (opts.attemptId == null) await loadPracticeContext(opts.questionId);
+}
+
 export async function askExamTutorStream(opts: ExamTutorAskOpts, onToken: (delta: string) => void): Promise<{ answer: string; cached: boolean }> {
   await assertPro(opts.userId);
+  await chanCauLuyen(opts);
   // "Tiết kiệm" — câu hỏi này (chip cố định hoặc y hệt chữ tự do) đã có
   // CuongMini trả lời rồi thì trả lại NGAY, khỏi gọi AI + khỏi đăng trùng
   // bình luận. Cache HIT: không có delta nào, route gửi thẳng khung 'done'.
@@ -351,6 +447,7 @@ export async function askExamTutorStream(opts: ExamTutorAskOpts, onToken: (delta
 
 export async function askExamTutor(opts: ExamTutorAskOpts): Promise<{ answer: string; cached: boolean }> {
   await assertPro(opts.userId);
+  await chanCauLuyen(opts);
   const cached = await findCachedAiAnswer(opts.questionId, buildAskedLabel(opts.mode, opts.question));
   if (cached) return { answer: cached, cached: true };
 

@@ -1,4 +1,4 @@
-# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 22/09/2026 (xong Ch.5 → Ch.12, ĐÃ DEPLOY)
+# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 22/09/2026 (xong Ch.5 → Ch.15, Ch.16 đang soạn)
 
 > **Đọc file này + `_KHUNG-CHUA-DAY-DU.md` trước khi làm tiếp Academy.**
 > Ghi đủ để phiên sau làm tiếp mà không hỏi lại gì.
@@ -7,7 +7,8 @@
 
 ## 0. 🔴 PHIÊN SAU BẮT ĐẦU TỪ ĐÂY (chốt 22/09/2026, sau khi deploy xong)
 
-**Không còn gì treo. Đã push, production đang chạy `f86d8b74`.**
+**Production đang chạy `f86d8b74` (= hết Ch.12). Ch.13/14/15 + 44 video ĐÃ COMMIT
+nhưng CHƯA PUSH, CHƯA DEPLOY.** Xem `git log --oneline origin/main..HEAD`.
 
 > ⚠️ Cây làm việc CÒN 7 file chưa commit của VIỆC KHÁC (firmware/mini-me-robot/**,
 > scripts/lab211-*, scripts/codelab-*, scripts/_gen-img.mjs, scratchpad/). **Cố ý
@@ -23,52 +24,29 @@
 4. `content/academy/_syllabus-flm/NWC204.json` — dữ liệu gốc, đọc bằng script
    chứ đừng đọc bằng mắt (61 dòng buổi + 52 câu hỏi kiến tạo)
 
-### Làm tiếp: **Chương 13 — Tầng giao vận + SỐ HIỆU CỔNG (buổi 41–42, Cisco Module 14)** ⭐
+### Làm tiếp: **Chương 16 — Build a Small Network (buổi 54–55, Cisco Module 17)** — CHƯƠNG CUỐI
 
-⭐ **Người dùng đặt hàng đích danh chương này** — xem mục 0 của
-`_HOP-DONG-NWC204.md`: "để hiểu toàn bộ mạng để có thể ssh, deploy, **cổng mạng
-trường học**, và all liên quan đến **cổng mạng**". Đây là chương nói về số hiệu
-cổng, nên nó là chương có giá trị thực dụng cao nhất của cả môn với người học.
+Ch.13, Ch.14, Ch.15 **ĐÃ XONG và đã commit** (xem mục 2). Còn đúng Ch.16 là hết môn.
 
-**Dàn bài đã trích nguyên văn từ `_syllabus-flm/NWC204.json`:**
-
-| Buổi | Topic | LO | ITU | Tài liệu |
-|---|---|---|---|---|
-| 41 | 13. Transport Layer · 13.1 Transportation of Data · 13.2 TCP Overview · 13.3 UDP Overview | CLO1, CLO4, CLO9 | T | Module 14 |
-| 42 | **13.4 Port Numbers** ⭐ · 13.5 TCP Communication Process · 13.6 Reliability and Flow Control · 13.7 UDP Communication · 13.8 Integrate AI Tools (Self Learning) | CLO1, CLO4, CLO9 | T | Module 14 |
-
-⇒ Cấu trúc gợi ý: **2 bài + quiz**, giống Ch.11 và Ch.12 —
-13.1 (buổi 41: vì sao cần tầng giao vận, TCP so với UDP) ·
-13.2 (buổi 42: số hiệu cổng, bắt tay ba bước, cửa sổ trượt, UDP).
-
-**⚠️ Câu hỏi kiến tạo — lần này KHỚP ĐÚNG chương, khác hẳn Ch.10–12:**
-
-| Buổi | Câu | Nội dung | Khớp không |
+| Buổi | Topic | LO | Tài liệu |
 |---|---|---|---|
-| 43 | `CQ15.1` | "What characteristics are there in the Transport Layer?" | ✅ đúng Ch.13 |
-| 44 | `CQ15.2` | "Compare between TCP and UDP? Which protocol do you like to implement?" | ✅ đúng Ch.13 |
-| 45 | `CQ15.3` | "How does TCP session establishment and termination processes facilitate reliable communication?" | ✅ đúng Ch.13 |
+| 53 | `Review Modules 8-15` | CLO5-CLO10 | — |
+| 54 | `16. Build a Small Network` · `16.1 Devices in a Small Network` · `16.2 Small Network Applications and Protocols` · `16.3 Scale to Larger Networks` | CLO8, CLO9 | Module 17 |
+| 55 | `16.4 Verify Connectivity` · `16.5 Host and IOS Commands` · `16.6 Troubleshooting Methodologies` · `16.7 Troubleshooting Scenarios` · `16.8 Integrate AI Tools` | CLO8, CLO9 | Module 17 |
+| 58, 59, 60 | `Review` | ⚠️ buổi 60 ghi **CLO1-CLO11** dù môn chỉ có **10 CLO** | Textbook, slides |
 
-⚠️ Nhưng vẫn **lệch buổi**: buổi 43–45 là các buổi ĐỒ ÁN, còn buổi 41–42 (nơi
-dạy Ch.13) thì mang `CQ14.2` và `CQ14.3` vốn hỏi về **ICMP của Ch.12**:
-- buổi 41 → `CQ14.2` "How to test network connectivity using ICMP?" → mục 12.2
-- buổi 42 → `CQ14.3` "Which other tools can we use to test network connectivity?
-  How does it works(Do lab 7)?" → mục 12.2, và **"Do lab 7" không tồn tại** trong
-  kế hoạch 60 buổi (môn chỉ có Lab 1.x và 2.x). Nêu ra, đừng đoán nó là lab nào.
+**⚠️ Câu hỏi kiến tạo — độ trôi vẫn đảo chiều như Ch.13:**
 
-⇒ Ở Ch.13 thì trỏ ngược về bài 12.2 cho CQ14.2/14.3, rồi trả lời CQ15.1/15.2/15.3
-tại chỗ — đúng lối đã làm từ Ch.7.
+| Buổi | Câu | Thật ra thuộc |
+|---|---|---|
+| 54 | `CQ18.3` tường lửa | **Ch.15**, đã trả lời ở bài 15.2 |
+| 55 | `CQ19.1` DoS | **Ch.15** |
+| 57 (đồ án) | `CQ19.2` tô-pô vật lý/luận lý khi mở rộng | ✅ **đúng Ch.16**, mục 16.3 |
+| 58 | `CQ20.1` dự phòng khi router ra ISP hỏng | ✅ **đúng Ch.16**, mục 16.3 |
+| 59 | `CQ20.2` QoS giảm độ trễ cho luồng thời gian thực | ✅ **đúng Ch.16**, mục 16.2 |
 
-★ **Gợi ý phần bổ sung cho Ch.13** (chưa làm, người dùng cần cho việc thật):
-`ss -tlnp` đọc cổng đang nghe trên VPS · vì sao `docker run -p 3000:3000` khác
-`EXPOSE` · cổng đặc quyền <1024 và vì sao container chạy non-root không bind 80
-được · `ss -s` đếm kết nối TIME_WAIT · vì sao nginx cần `proxy_read_timeout` ·
-mạng trường chỉ mở 80/443/587/993 (đã ghi ở CLAUDE.md, mục "Vào VPS khi mạng
-chặn cổng 22") — đây là ví dụ THẬT của việc lọc theo số hiệu cổng.
-
-**Sau Ch.13 thì theo thứ tự:** Ch.14 Application (45–46) · Ch.15 Security
-(49–50) · Ch.16 Build a Small Network (53–55, 58–60) · Đồ án (43–44, 47–48,
-51–52, 56–57).
+**Sau Ch.16 là HẾT MÔN.** Chỉ còn 8 buổi đồ án (43–44, 47–48, 51–52, 56–57) —
+người dùng chưa yêu cầu soạn phần đó.
 
 ### Quy trình đã chạy trơn cho Ch.5 → Ch.12, cứ lặp lại y hệt
 
@@ -145,7 +123,7 @@ riêng. Muốn đếm câu hỏi thì đi qua `lesson.details.quizData.questions
 
 ## 2. CÒN NỢ — làm tiếp từ đây
 
-### ✅ Chương 5 → 12 XONG và ĐÃ DEPLOY (Ch.5–9: 21/09 · Ch.10–12: 22/09, chốt `f86d8b74`)
+### ✅ Chương 5 → 15 XONG (Ch.5–12 ĐÃ DEPLOY `f86d8b74` · Ch.13–15 mới COMMIT, CHƯA deploy)
 
 | Chương | Buổi | Bài | Slide | Nguồn |
 |---|---|---|---|---|
@@ -157,6 +135,9 @@ riêng. Muốn đếm câu hỏi thì đi qua `lesson.details.quizData.questions
 | **Ch.10 Địa chỉ IPv4** ⭐ | **30–34** | **3 + quiz** | **36 → `nwc204-ch10/`** | `nwc204-ch10.mjs` · `ch10.mjs` |
 | **Ch.11 Địa chỉ IPv6** | **35–36** | **2 + quiz** | **27 → `nwc204-ch11/`** | `nwc204-ch11.mjs` · `ch11.mjs` |
 | **Ch.12 ICMP + Lab 2.3** | **37–40** | **2 + quiz** | **23 → `nwc204-ch12/`** | `nwc204-ch12.mjs` · `ch12.mjs` |
+| **Ch.13 Tầng giao vận** ⭐ | **41–42** | **2 + quiz** | **22 → `nwc204-ch13/`** | `e2877548` |
+| **Ch.14 Tầng ứng dụng** | **45–46** | **2 + quiz** | **26 → `nwc204-ch14/`** | `96d0e1ba` |
+| **Ch.15 An ninh mạng** | **49–50** | **2 + quiz** | **26 → `nwc204-ch15/`** | `e2877548` |
 
 Sáu commit của Ch.5–9 đã lên `origin/main`: `1f6aba5e` `8170093b` `26b62adb`
 `39fed066` `e2ed4300` `17306442`. Ch.10 là **`af3f87b1`**, Ch.11 là
@@ -447,6 +428,29 @@ như bị cắt — bộ đo KHÔNG bắt, vì nó chỉ đo chiều CAO của `
 VLSM chỉ chiếm 4/256 = 14px — giữ tỉ lệ THẬT (đó là cả ý nghĩa của hình) rồi
 kéo một cái **ngoặc dẫn xuống dưới** và ghi nhãn ở chỗ rộng.
 
+### Ch.13–15 (22/09) — hai lỗi mới, KHÔNG phải lỗi hình học
+
+Công thức 0,602 giờ đã vào hợp đồng giao cho agent, và **cả ba deck đều 0 lỗi
+tràn/cắt**. Nhưng xuất hiện hai lớp lỗi khác:
+
+1. ⛔ **Slide Ch.14 in ĐỊA CHỈ IP CÔNG KHAI THẬT của VPS** lên trang học công
+   khai. Agent soạn bài đo bằng IP thật rồi để nguyên, dù đã tự báo là "đã che
+   danh". Tôi bắt được **nhờ MỞ ẢNH RA NHÌN sau khi render** — bộ đo không bao
+   giờ thấy loại lỗi này. Đã thay 33 chỗ bằng `198.51.100.208` (TEST-NET-2,
+   RFC 5737) rồi render lại.
+   ⇒ **Luật mới: mọi bài/slide chỉ dùng dải tài liệu `198.51.100.x` /
+   `203.0.113.x` / `2001:db8::/32`. Không bao giờ in IP thật của hạ tầng.**
+   Đã đưa vào hợp đồng giao agent.
+2. ⛔ **Bộ SO BYTE của chính tôi báo sai.** Cờ `-m 10` của curl **cắt ngang lượt
+   tải** — HTTP 200 mà chỉ về 32768/46188 byte ⇒ báo lệch 22/22 trong khi upload
+   hoàn toàn đúng. Suýt render lại cả deck vô ích.
+   ⇒ **Dùng HEAD đọc `content-length`, đừng tải cả file:**
+   ```bash
+   curl -sI -m 15 "<url>" | awk -F': ' 'tolower($1)=="content-length"{gsub(/\r/,"");print $2}'
+   ```
+   Cùng bài học với [[feedback_verify_the_checker_before_the_content]] — lần này
+   bộ kiểm sai chứ không phải nội dung sai.
+
 ### Ch.11 và Ch.12 (22/09) — công thức 0,602 ĐÃ CHỨNG MINH GIÁ TRỊ
 
 Dùng công thức thay vì mắt, và mỗi deck chỉ còn **một** lỗi thay vì ba–sáu:
@@ -605,6 +609,37 @@ Script có hai chốt đáng tin mà phiên sau nên biết:
   của việc khác — **cố ý để nguyên**, không phải của NWC204.
 
 ---
+
+## 4b. 🎬 VIDEO YOUTUBE — 44 link, ĐÃ GẮN (22/09/2026)
+
+Bản đồ: `content/course-videos/nwc204-computer-networking.mjs`. Seed bằng
+`course-video-seed.mjs`, **chạy tự động trong deploy** — không có bước tay nào.
+Hạ tầng này đã chạy thật cho môn Academy khác (CSI106 có 33/46 bài).
+
+**Xương sống là Jeremy's IT Lab** (bộ CCNA 200-301 miễn phí, tiếng Anh rõ, CÓ
+Packet Tracer): 19/44 bài. Còn lại Practical Networking, Neso Academy,
+NetworkChuck, David Bombal, Kevin Wallace (CCIE), PowerCert, Sunny Classroom.
+Các bài **Lab** dùng video quay ĐÚNG số hiệu lab mà syllabus ghi: `2.9.1`,
+`4.6.6`, `10.4.4`, `11.10.1`.
+
+⛔ **MỤC 0 (7 bài) CỐ Ý ĐỂ TRỐNG** — hồ sơ môn, cách tính điểm, CLO, giáo trình,
+kế hoạch 60 buổi, nhiệm vụ SV, câu hỏi kiến tạo. Nội dung hành chính riêng của
+FPTU; không video nào nói đúng về nó. **Bỏ trống tốt hơn nhét sai.**
+
+⚠️ **KHÔNG BAO GIỜ để model đoán ID YouTube.** 27% link model sinh ra là 404, và
+ảnh xám "video không còn" **vẫn trả HTTP 200** nên kiểm bằng mã trạng thái là vô
+dụng. Quy trình đã dùng, cho 0 ID chết:
+1. `curl 'youtube.com/results?search_query=…'` → bóc `videoId` từ `ytInitialData`
+   (chuỗi do CHÍNH YouTube trả về, không phải chuỗi model đoán)
+2. nghiệm thu từng ID bằng oEmbed — nó trả **400/404 thật** khi video chết
+3. `credit` chép ĐÚNG `author_name — title` mà oEmbed in ra
+Công cụ tìm nằm ở scratchpad `yt-tim.mjs` (có thử lại, giãn nhịp 900ms, và
+`--da-xong` để chạy tiếp khi đứt giữa chừng — YouTube chặn tốc độ sau ~10 truy vấn).
+
+**Năm phép kiểm trước khi tin bản đồ** (đều sạch): ID dùng cho hai bài trong cùng
+môn 0 · credit đúng dạng "Kênh — Tiêu đề" 44/44 · ID đúng 11 ký tự 44/44 · slug
+mồ côi 0 và **đối chiếu thẳng DB production khớp 38/38** · `verify-youtube-videos.mjs`
+ra **44 link · 0 chết · 0 lệch nguồn**.
 
 ## 5. BỘ KIỂM ĐÃ LƯU LẠI (cứu từ /tmp trước khi khởi động lại máy)
 

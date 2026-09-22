@@ -71,12 +71,12 @@ video, chuẩn như CEA201/CSI106) cho 5 môn user tự chọn, theo thứ tự 
 
    | Đã xong | Còn nợ |
    |---|---|
-   | Mục 0 (7 bài, bảng đủ 60 buổi đối chiếu từng ký tự với FLM) | **Ch.13 Tầng giao vận + SỐ HIỆU CỔNG (41–42)** ⭐ LÀM TIẾP TỪ ĐÂY |
-   | Ch.1 Networking Today (buổi 1–2) · 18 slide | Ch.14 Tầng ứng dụng (45–46) |
+   | Mục 0 (7 bài, bảng đủ 60 buổi đối chiếu từng ký tự với FLM) | **Ch.16 Dựng mạng nhỏ (54–55)** — CHƯƠNG CUỐI, LÀM TIẾP TỪ ĐÂY |
+   | Ch.1 Networking Today (buổi 1–2) · 18 slide | Đồ án (43–44, 47–48, 51–52, 56–57) — chưa ai yêu cầu |
    | Ch.2 Cấu hình switch & thiết bị đầu cuối (3–6) · 26 slide | |
-   | Ch.3 Giao thức & mô hình phân tầng (7–10) · 23 slide | Ch.15 An ninh mạng (49–50) |
-   | Ch.4 Tầng vật lý (11–14) · 23 slide | Ch.16 Dựng mạng nhỏ (53–55, 58–60) |
-   | **Ch.4B Hệ đếm — chương BÙ**, trường không xếp buổi · 18 slide | Đồ án (43–44, 47–48, 51–52, 56–57) |
+   | Ch.3 Giao thức & mô hình phân tầng (7–10) · 23 slide | |
+   | Ch.4 Tầng vật lý (11–14) · 23 slide | |
+   | **Ch.4B Hệ đếm — chương BÙ**, trường không xếp buổi · 18 slide | |
    | **Ch.5 Tầng liên kết dữ liệu (15–16) · 27 slide** ✅ | |
    | **Ch.6 Chuyển mạch Ethernet (17–20) · 26 slide** ✅ | |
    | **Ch.7 Tầng mạng (21–23) · 31 slide** ✅ 21/09 | |
@@ -85,6 +85,10 @@ video, chuẩn như CEA201/CSI106) cho 5 môn user tự chọn, theo thứ tự 
    | **Ch.10 Địa chỉ IPv4 + subnet + VLSM + Midterm (30–34) · 36 slide** ✅ 22/09 | |
    | **Ch.11 Địa chỉ IPv6 (35–36) · 27 slide** ✅ 22/09 | |
    | **Ch.12 ICMP + Lab 2.3 (37–40) · 23 slide** ✅ 22/09 | |
+   | **Ch.13 Tầng giao vận + SỐ HIỆU CỔNG (41–42) · 22 slide** ✅ 22/09 ⭐ | |
+   | **Ch.14 Tầng ứng dụng (45–46) · 26 slide** ✅ 22/09 | |
+   | **Ch.15 An ninh mạng (49–50) · 26 slide** ✅ 22/09 | |
+   | 🎬 **44 video YouTube tiếng Anh đã gắn** (Mục 0 cố ý trống) ✅ 22/09 | |
 
    **→ Làm tiếp: Ch.13 Tầng giao vận + SỐ HIỆU CỔNG (buổi 41–42, Module 14).** ⭐
    Người dùng đặt hàng đích danh chương này. Dàn bài, bảng câu hỏi kiến tạo (lần

@@ -60,22 +60,32 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
     loadTranslations(resolved).then(() => setIsLoaded(true));
 
+    // KHÔNG so với `locale` ở đây. Effect này chạy MỘT lần nên `locale` trong
+    // closure là giá trị của lần render đầu — luôn là 'en'. Bản cũ viết
+    // `if (valid !== locale)` nên bấm EN trên LanguageSwitcher không bao giờ
+    // lọt qua: nút đổi chữ, trang đứng yên, phải F5 (/about lộ rõ nhất vì cả
+    // trang chạy bằng t()). React tự bỏ qua setState trùng giá trị, nên cứ
+    // đặt thẳng là đủ.
     const handleChange = () => {
       const updated = document.cookie
         .split('; ')
         .find(row => row.startsWith('locale='))
         ?.split('=')[1] as Locale;
       const valid = (updated && (updated === 'vi' || updated === 'en')) ? updated : 'en';
-      if (valid !== locale) {
-        setLocaleState(valid);
-        loadTranslations(valid);
-      }
+      setLocaleState(valid);
+      loadTranslations(valid);
     };
 
     window.addEventListener('locale-changed', handleChange);
     return () => window.removeEventListener('locale-changed', handleChange);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // <html lang> do layout gốc viết cứng "vi" — cho nó đi theo ngôn ngữ đang
+  // hiển thị để trình đọc màn hình và :lang() đọc đúng.
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);

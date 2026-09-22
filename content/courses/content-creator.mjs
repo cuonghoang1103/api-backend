@@ -32,6 +32,7 @@ import s18 from './content-creator/s18-mask-tracking-vfx.mjs';
 import s19 from './content-creator/s19-motion-fusion-3d.mjs';
 import s20 from './content-creator/s20-video-ngan.mjs';
 import s21 from './content-creator/s21-vlog.mjs';
+import s22 from './content-creator/s22-bai-giang.mjs';
 
 export default {
   category: { slug: 'content-creation', name: 'Sáng tạo nội dung', icon: 'Video', sortOrder: 5 },
@@ -77,5 +78,6 @@ export default {
     s19,
     s20,
     s21,
+    s22,
   ],
 };

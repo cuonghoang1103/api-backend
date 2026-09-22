@@ -172,5 +172,12 @@ export default {
     'cr-21-2-quay-vlog-pocket-3': { yt: 'ikQaAfx3i6U', credit: 'Brandon Li — 10 Tips & Tricks for the DJI Osmo Pocket 3 - Best Settings' },
     'cr-21-3-dung-vlog': { yt: 'dhpazqW_OaU', credit: 'Tim Runia — The ONLY 5 Editing Secrets You Need to Tell Any Story' },
     'cr-21-4-vlog-hoc-tap-thuong-hieu': { yt: 'O96u9YjqC8U', credit: 'Alexander Mayhue | Study With Me — How To Start A Successful STUDY WITH ME Channel in 2026!' },
+
+    /* ── Chương 22 — Video bài giảng & quay màn hình ── */
+    'cr-22-0-slides': { yt: 'ArBS88h1r2Q', credit: 'Gillian Perkins — The EASIEST Way to Film & Edit Online Course Videos' },
+    'cr-22-1-thiet-ke-bai-giang': { yt: 'd9WpfWriY7A', credit: "Devlin Peck — Mayer's Principles of Multimedia Learning" },
+    'cr-22-2-quay-man-hinh': { yt: 'PRa3xWeNV3g', credit: "Easy Tech Steps — OBS Studio on Mac: The Complete Beginner's Guide to Screen Recording (2026)" },
+    'cr-22-3-ipad-bang-trang': { yt: '3Vq8ej2yjhQ', credit: 'Dr. Jacob Goodin — Create Engaging Lecture Videos from an iPad or Tablet | Teach Through Video Series' },
+    'cr-22-4-dung-dua-len-khoa-hoc': { yt: 'PN7c5BkyQw4', credit: 'Greg Edits Video — Editing Screen Recordings in DaVinci Resolve? Do THIS' },
   },
 };

@@ -74,7 +74,13 @@ for (const [url, x] of imgs) {
   const local = path.join(RENDER, x.deck, `${x.n}.webp`);
   if (!fs.existsSync(local)) { err(`ảnh ${x.deck}/${x.n} không có trong ${RENDER}`); continue; }
   if (CDN) {
-    const r = await fetch('https://media.cuongthai.com/' + url);
+    // Có trần thời gian + thử lại: 22/09/2026 một lượt CDN không trả lời làm bộ kiểm treo 5 phút.
+    let r = null;
+    for (let lan = 1; lan <= 3 && !r; lan++) {
+      try { r = await fetch('https://media.cuongthai.com/' + url, { method: 'HEAD', signal: AbortSignal.timeout(15000) }); }
+      catch (e) { if (lan === 3) { err(`CDN ${x.deck}/${x.n} không trả lời sau 3 lần (${e.name})`); } }
+    }
+    if (!r) continue;
     const len = Number(r.headers.get('content-length'));
     const size = fs.statSync(local).size;
     if (r.status !== 200) err(`CDN ${x.deck}/${x.n} HTTP ${r.status}`);

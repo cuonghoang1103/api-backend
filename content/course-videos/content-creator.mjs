@@ -123,5 +123,12 @@ export default {
     'cr-14-2-kieu-cat-chuyen-canh': { yt: 'OAH0MoAv2CI', credit: 'RocketJump Film School — Cuts & Transitions 101' },
     'cr-14-3-nhip-giu-chan': { yt: 'sLgHqZSe2o0', credit: 'Learn By Leo — How to edit SO good your viewers get addicted to your videos' },
     'cr-14-4-nhac-thiet-ke-am-thanh': { yt: '8LV1bqf8ZVo', credit: 'Artlist — How To SOUND DESIGN | Step by step tutorial' },
+
+    /* ── Chương 15 — Chỉnh màu ── */
+    'cr-15-0-slides': { yt: 'QB_GKc6LqIM', credit: 'Ben Claremont — DaVinci Resolve Colour Grading Tutorial (Start to Finish for Beginners)' },
+    'cr-15-1-mau-la-gi': { yt: 'RWpG5_gAvCI', credit: 'Waqas Qazi — What is Rec.709? Things You Must Know!!' },
+    'cr-15-2-doc-scopes': { yt: 'IwqucXqb2zY', credit: 'Darren Mostyn — How to use resolve SCOPES - In-depth with a Pro Colourist' },
+    'cr-15-3-log-lut': { yt: 'pZxOR1kCDeE', credit: 'Graham Hunt — CST vs LUT: Why One Is Clearly Better for Most' },
+    'cr-15-4-node-tao-look': { yt: 'jBq8refj7cc', credit: "Runhaar — The ONLY NODE STRUCTURE you'll ever need!" },
   },
 };

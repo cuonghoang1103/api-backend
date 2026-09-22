@@ -79,7 +79,7 @@ export default function ExpensesPage() {
         <Card className="mb-4">
           <div className="grid gap-3 sm:grid-cols-2">
             <Field label="Danh mục"><select value={filterCat} onChange={(e) => setFilterCat(e.target.value ? Number(e.target.value) : '')} className={inputCls}><option value="">Tất cả</option>{categories.map((c) => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}</select></Field>
-            <Field label="Tìm mô tả"><input value={search} onChange={(e) => setSearch(e.target.value)} className={inputCls} placeholder="Từ khoá…" /></Field>
+            <Field label="Tìm mô tả"><input value={search} onChange={(e) => setSearch(e.target.value)} className={inputCls} placeholder="Keyword…" /></Field>
           </div>
         </Card>
       )}
@@ -193,7 +193,7 @@ function CategoryRow({ cat, categories, onChanged }: { cat: ExpenseCategory; cat
     <div className="flex items-center gap-2 px-3 py-2">
       <span className="text-lg">{cat.icon}</span>
       <span className="min-w-0 flex-1 truncate text-sm text-text-primary">{cat.name}</span>
-      <input inputMode="numeric" value={budget} onChange={(e) => setBudget(e.target.value.replace(/[^\d]/g, ''))} onBlur={saveBudget} placeholder="Ngân sách" className={cn(inputCls, 'w-28 text-right')} />
+      <input inputMode="numeric" value={budget} onChange={(e) => setBudget(e.target.value.replace(/[^\d]/g, ''))} onBlur={saveBudget} placeholder="Budget" className={cn(inputCls, 'w-28 text-right')} />
       <button onClick={del} className="rounded-lg p-1 text-text-muted hover:text-neon-red"><Trash2 size={15} /></button>
     </div>
   );

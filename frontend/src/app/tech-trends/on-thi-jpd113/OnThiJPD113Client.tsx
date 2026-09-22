@@ -1683,7 +1683,7 @@ function NameSection() {
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Gõ tên bạn (không cần dấu): cuong, linh, nguyen…"
+          placeholder="Type your name (no diacritics needed): cuong, linh, nguyen…"
           className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-neon-cyan/50 transition-colors"
         />
       </div>

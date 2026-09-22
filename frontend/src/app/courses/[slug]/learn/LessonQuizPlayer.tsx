@@ -206,7 +206,7 @@ export default function LessonQuizPlayer({
                         onChange={(e) => setEssayAnswers((a) => ({ ...a, [q.id]: e.target.value }))}
                         disabled={submitted}
                         rows={4}
-                        placeholder="Nhập câu trả lời của bạn…"
+                        placeholder="Type your answer…"
                         className="w-full px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-y disabled:opacity-70"
                       />
                       {submitted && q.sampleAnswer?.trim() && (

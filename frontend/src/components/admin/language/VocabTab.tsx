@@ -320,7 +320,7 @@ export default function VocabTab({ languageId, code }: TabProps) {
             </div>
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
-              <input value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Tìm từ…" className={`${inputCls} pl-9`} />
+              <input value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Search words…" className={`${inputCls} pl-9`} />
             </div>
             <div className="rounded-2xl border border-darkborder bg-darkcard overflow-hidden">
               {loadingWords ? (
@@ -377,7 +377,7 @@ export default function VocabTab({ languageId, code }: TabProps) {
       >
         {catEditor && (
           <div className="grid grid-cols-[1fr_100px] gap-3">
-            <label className={labelCls}>Tên *<input value={catEditor.name} onChange={(e) => setCatEditor({ ...catEditor, name: e.target.value })} placeholder="Vd: Gia đình" className={`mt-1 ${inputCls}`} autoFocus /></label>
+            <label className={labelCls}>Tên *<input value={catEditor.name} onChange={(e) => setCatEditor({ ...catEditor, name: e.target.value })} placeholder="e.g. Family" className={`mt-1 ${inputCls}`} autoFocus /></label>
             <label className={labelCls}>Icon<input value={catEditor.icon} onChange={(e) => setCatEditor({ ...catEditor, icon: e.target.value })} placeholder="👨‍👩‍👧" className={`mt-1 ${inputCls}`} /></label>
           </div>
         )}
@@ -411,8 +411,8 @@ export default function VocabTab({ languageId, code }: TabProps) {
               <div className="mt-1 space-y-2">
                 {wordEditor.pronunciations.map((p, i) => (
                   <div key={i} className="flex items-center gap-2">
-                    <input value={p.type} onChange={(e) => setPron(i, { type: e.target.value })} placeholder="loại (romaji, IPA…)" className={`${inputCls} w-40`} />
-                    <input value={p.value} onChange={(e) => setPron(i, { value: e.target.value })} placeholder="giá trị" className={inputCls} />
+                    <input value={p.type} onChange={(e) => setPron(i, { type: e.target.value })} placeholder="type (romaji, IPA…)" className={`${inputCls} w-40`} />
+                    <input value={p.value} onChange={(e) => setPron(i, { value: e.target.value })} placeholder="value" className={inputCls} />
                     <button type="button" onClick={() => setWordEditor({ ...wordEditor, pronunciations: wordEditor.pronunciations.filter((_, j) => j !== i) })} className="rounded p-1.5 text-text-muted hover:bg-red-500/10 hover:text-red-400"><X className="h-4 w-4" /></button>
                   </div>
                 ))}

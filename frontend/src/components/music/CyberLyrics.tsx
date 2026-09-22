@@ -238,7 +238,7 @@ export default function CyberLyrics({ open, onClose, trackId, trackTitle, trackA
                   <textarea
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
-                    placeholder={'[00:12.00] Dòng đầu tiên\n[00:18.50] Dòng thứ hai'}
+                    placeholder={'[00:12.00] First line\n[00:18.50] Second line'}
                     spellCheck={false}
                     className="w-full h-[50vh] rounded-xl bg-black/40 border border-white/10 p-4 font-mono outline-none"
                     style={{ color: C.text, fontSize: 16, lineHeight: 1.7 }}

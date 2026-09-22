@@ -104,7 +104,7 @@ function SemesterModal({
             <input
               value={form.name}
               onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-              placeholder="Kỳ 1"
+              placeholder="Term 1"
               className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
             />
           </div>
@@ -143,7 +143,7 @@ function SemesterModal({
               value={form.description}
               onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
               rows={3}
-              placeholder="Mô tả học kỳ (tuỳ chọn)"
+              placeholder="Term description (optional)"
               className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
             />
           </div>
@@ -166,7 +166,7 @@ function SemesterModal({
             onClick={handleSave}
             disabled={saving || !!codeConflict}
             title={codeConflict ? 'Vui lòng chọn mã học kỳ khác' : undefined}
-            className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 rounded-xl bg-[var(--a-accent)] text-white disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {saving ? 'Đang lưu...' : 'Lưu'}
           </button>
@@ -1040,15 +1040,15 @@ export default function AdminAcademyPage() {
                   <Send className="w-4 h-4" /> Xuất bản
                 </button>
               )}
-              <button onClick={saveCourse} disabled={savingCourse} className="px-4 py-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white flex items-center gap-2 disabled:opacity-60">
+              <button onClick={saveCourse} disabled={savingCourse} className="px-4 py-2 rounded-xl bg-[var(--a-accent)] text-white flex items-center gap-2 disabled:opacity-60">
                 <Save className="w-4 h-4" /> {savingCourse ? 'Đang lưu...' : 'Lưu'}
               </button>
             </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <input value={courseForm.title} onChange={(e) => setCourseForm((prev) => ({ ...prev, title: e.target.value }))} placeholder="Tên môn học" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
-            <input value={courseForm.courseCode} onChange={(e) => setCourseForm((prev) => ({ ...prev, courseCode: e.target.value }))} placeholder="Mã môn (PRO192)" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+            <input value={courseForm.title} onChange={(e) => setCourseForm((prev) => ({ ...prev, title: e.target.value }))} placeholder="Course name" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+            <input value={courseForm.courseCode} onChange={(e) => setCourseForm((prev) => ({ ...prev, courseCode: e.target.value }))} placeholder="Course code (PRO192)" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
             <select value={courseForm.semesterId || ''} onChange={(e) => setCourseForm((prev) => ({ ...prev, semesterId: Number(e.target.value) || undefined }))} className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary">
               <option value="">Chọn kỳ học</option>
               {semesters.map((semester) => <option key={semester.id} value={semester.id}>{semester.name}</option>)}
@@ -1109,8 +1109,8 @@ export default function AdminAcademyPage() {
             </div>
           </div>
 
-          <textarea value={courseForm.shortDescription} onChange={(e) => setCourseForm((prev) => ({ ...prev, shortDescription: e.target.value }))} rows={3} placeholder="Mô tả ngắn" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
-          <textarea value={courseForm.description} onChange={(e) => setCourseForm((prev) => ({ ...prev, description: e.target.value }))} rows={4} placeholder="Mô tả chi tiết" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+          <textarea value={courseForm.shortDescription} onChange={(e) => setCourseForm((prev) => ({ ...prev, shortDescription: e.target.value }))} rows={3} placeholder="Short description" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+          <textarea value={courseForm.description} onChange={(e) => setCourseForm((prev) => ({ ...prev, description: e.target.value }))} rows={4} placeholder="Full description" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
 
           <div className="grid gap-4 lg:grid-cols-2">
             <div className="space-y-3">
@@ -1119,8 +1119,8 @@ export default function AdminAcademyPage() {
             </div>
             <div className="grid gap-4 content-start">
               <input value={courseForm.previewVideoUrl} onChange={(e) => setCourseForm((prev) => ({ ...prev, previewVideoUrl: e.target.value }))} placeholder="Preview video URL" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
-              <input value={courseForm.requirements} onChange={(e) => setCourseForm((prev) => ({ ...prev, requirements: e.target.value }))} placeholder="Yêu cầu đầu vào" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
-              <input value={courseForm.whatYouLearn} onChange={(e) => setCourseForm((prev) => ({ ...prev, whatYouLearn: e.target.value }))} placeholder="Bạn sẽ học được gì" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+              <input value={courseForm.requirements} onChange={(e) => setCourseForm((prev) => ({ ...prev, requirements: e.target.value }))} placeholder="Prerequisites" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+              <input value={courseForm.whatYouLearn} onChange={(e) => setCourseForm((prev) => ({ ...prev, whatYouLearn: e.target.value }))} placeholder="What you’ll learn" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
             </div>
           </div>
         </div>
@@ -1138,12 +1138,12 @@ export default function AdminAcademyPage() {
 
           {/* Note guiding students on how to use the attached materials. */}
           <div className="mb-3">
-            <label className="block text-sm font-medium text-text-primary mb-1.5">📝 Ghi chú cho mục Tài liệu (hướng dẫn học viên)</label>
+            <label className="block text-sm font-medium text-text-primary mb-1.5">Ghi chú cho mục Tài liệu (hướng dẫn học viên)</label>
             <textarea
               value={courseForm.documentsNote}
               onChange={(e) => setCourseForm((prev) => ({ ...prev, documentsNote: e.target.value }))}
               rows={2}
-              placeholder="VD: Tải tài liệu về, giải nén rồi mở file hướng dẫn.pdf trước khi xem video…"
+              placeholder="e.g. Download the materials, unzip them and open guide.pdf before watching…"
               className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted"
             />
           </div>
@@ -1154,7 +1154,7 @@ export default function AdminAcademyPage() {
             <LessonDocumentsManager courseId={courseForm.id} />
           ) : (
             <p className="text-sm text-text-muted border border-dashed border-darkborder rounded-xl px-4 py-3">
-              📁 Lưu khoá học trước để thêm <b>Tài liệu chung của khoá</b> (hiển thị ở đầu, ngang với chương).
+              Lưu khoá học trước để thêm <b>Tài liệu chung của khoá</b> (hiển thị ở đầu, ngang với chương).
             </p>
           )}
 
@@ -1190,12 +1190,12 @@ export default function AdminAcademyPage() {
                   {expanded && (
                     <div className="border-t border-darkborder p-4 space-y-5">
                       <div className="grid gap-3 md:grid-cols-[1fr_120px]">
-                        <input value={section.title} onChange={(e) => updateSection(sectionIndex, { title: e.target.value })} placeholder="Tên chương" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+                        <input value={section.title} onChange={(e) => updateSection(sectionIndex, { title: e.target.value })} placeholder="Section title" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
                         <label className="flex items-center gap-2 px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-sm text-text-secondary">
                           <input type="checkbox" checked={section.isLocked} onChange={(e) => updateSection(sectionIndex, { isLocked: e.target.checked })} /> Khóa
                         </label>
                       </div>
-                      <textarea value={section.description} onChange={(e) => updateSection(sectionIndex, { description: e.target.value })} rows={2} placeholder="Mô tả chương" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+                      <textarea value={section.description} onChange={(e) => updateSection(sectionIndex, { description: e.target.value })} rows={2} placeholder="Section description" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
 
                       <div className="space-y-4">
                         {section.lessons.map((lesson, lessonIndex) => (
@@ -1216,18 +1216,18 @@ export default function AdminAcademyPage() {
                             </div>
 
                             <div className="grid gap-3 md:grid-cols-2">
-                              <input value={lesson.title} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { title: e.target.value })} placeholder="Tiêu đề bài học" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
-                              <input value={lesson.slug} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { slug: e.target.value })} placeholder="Slug bài học" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+                              <input value={lesson.title} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { title: e.target.value })} placeholder="Lesson title" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+                              <input value={lesson.slug} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { slug: e.target.value })} placeholder="Lesson slug" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
                             </div>
 
                             <div className="grid gap-3 md:grid-cols-2">
                               <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-sm text-text-secondary">
                                 <span className="text-text-muted text-xs shrink-0">Loại:</span>
                                 <select value={lesson.lessonType} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { lessonType: e.target.value })} className="bg-transparent text-text-primary outline-none w-full">
-                                  <option value="VIDEO">🎬 Video</option>
-                                  <option value="QUIZ">📝 Quizz (trắc nghiệm)</option>
-                                  <option value="EXERCISE">📄 Bài tập (PDF)</option>
-                                  <option value="SOLUTION">✅ Đáp án (PDF)</option>
+                                  <option value="VIDEO">Video</option>
+                                  <option value="QUIZ">Quizz (trắc nghiệm)</option>
+                                  <option value="EXERCISE">Bài tập (PDF)</option>
+                                  <option value="SOLUTION">Đáp án (PDF)</option>
                                   <option value="TEXT">Text</option>
                                   <option value="PROJECT">Project</option>
                                 </select>
@@ -1247,7 +1247,7 @@ export default function AdminAcademyPage() {
                               </div>
                             </div>
 
-                            <textarea value={lesson.description} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { description: e.target.value })} rows={2} placeholder="Mô tả bài học" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+                            <textarea value={lesson.description} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { description: e.target.value })} rows={2} placeholder="Lesson description" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
 
                             {lesson.lessonType === 'VIDEO' && (
                               <>
@@ -1259,7 +1259,7 @@ export default function AdminAcademyPage() {
                                       <option value="DIRECT">Direct video</option>
                                     </select>
                                   </label>
-                                  <input value={lesson.videoUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoUrl: e.target.value })} placeholder={lesson.videoPlatform === 'DIRECT' ? 'Link .mp4 ngoài — hoặc tải video lên R2 bên dưới' : 'Video URL / YouTube URL'} className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary lg:col-span-2" />
+                                  <input value={lesson.videoUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoUrl: e.target.value })} placeholder={lesson.videoPlatform === 'DIRECT' ? 'External .mp4 link — or upload to R2 below' : 'Video URL / YouTube URL'} className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary lg:col-span-2" />
                                 </div>
 
                                 {lesson.videoPlatform === 'DIRECT' && (
@@ -1277,7 +1277,7 @@ export default function AdminAcademyPage() {
 
                                 <div className="grid gap-3 md:grid-cols-2">
                                   <input value={lesson.sourceCodeUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { sourceCodeUrl: e.target.value })} placeholder="GitHub / source code URL" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
-                                  <input type="number" value={lesson.videoDurationSeconds} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoDurationSeconds: Number(e.target.value) })} placeholder="Thời lượng video (giây)" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+                                  <input type="number" value={lesson.videoDurationSeconds} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoDurationSeconds: Number(e.target.value) })} placeholder="Video duration (seconds)" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
                                 </div>
                               </>
                             )}
@@ -1295,7 +1295,7 @@ export default function AdminAcademyPage() {
                             {(lesson.lessonType === 'EXERCISE' || lesson.lessonType === 'SOLUTION') && (
                               <div className="rounded-xl border border-dashed border-neon-violet/40 bg-neon-violet/5 p-3 space-y-3">
                                 <p className="text-xs text-text-secondary">
-                                  📄 Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} — học viên xem ngay trong trang học (lật trang, phóng to, tải về, copy chữ/code).
+                                  Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} — học viên xem ngay trong trang học (lật trang, phóng to, tải về, copy chữ/code).
                                 </p>
                                 {lesson.id ? (
                                   <LessonDocumentsManager
@@ -1303,14 +1303,14 @@ export default function AdminAcademyPage() {
                                     initialDocuments={lesson.documents || []}
                                   />
                                 ) : (
-                                  <p className="text-xs text-amber-400">⚠️ Bấm nút <b>Lưu</b> (cuối trang) để lưu bài học trước, rồi ô tải PDF sẽ hiện ra ngay đây.</p>
+                                  <p className="text-xs text-amber-400">Bấm nút <b>Lưu</b> (cuối trang) để lưu bài học trước, rồi ô tải PDF sẽ hiện ra ngay đây.</p>
                                 )}
                               </div>
                             )}
 
                             <div>
                               <p className="mb-2 flex items-center gap-2 text-sm font-medium text-text-primary"><FileText className="w-4 h-4 text-neon-violet" /> Ghi chú giảng dạy</p>
-                              <RichTextEditor value={lesson.teachingNotes} onChange={(value) => updateLesson(sectionIndex, lessonIndex, { teachingNotes: value, content: value })} placeholder="Nội dung note giảng dạy, markdown được hỗ trợ..." />
+                              <RichTextEditor value={lesson.teachingNotes} onChange={(value) => updateLesson(sectionIndex, lessonIndex, { teachingNotes: value, content: value })} placeholder="Teaching notes (Markdown supported)..." />
                             </div>
 
                             {/* Tài liệu đính kèm — admin upload file (zip,
@@ -1352,12 +1352,12 @@ export default function AdminAcademyPage() {
                                       )}
                                     </div>
                                   </div>
-                                  <input value={assignment.title} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { assignments: lesson.assignments.map((item, idx) => idx === assignmentIndex ? { ...item, title: e.target.value } : item) })} placeholder="Tiêu đề bài tập" className="w-full px-4 py-3 rounded-xl bg-[#0b0b12] border border-darkborder text-text-primary" />
-                                  <textarea value={assignment.instructions || ''} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { assignments: lesson.assignments.map((item, idx) => idx === assignmentIndex ? { ...item, instructions: e.target.value } : item) })} rows={3} placeholder="Yêu cầu bài tập" className="w-full px-4 py-3 rounded-xl bg-[#0b0b12] border border-darkborder text-text-primary" />
+                                  <input value={assignment.title} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { assignments: lesson.assignments.map((item, idx) => idx === assignmentIndex ? { ...item, title: e.target.value } : item) })} placeholder="Assignment title" className="w-full px-4 py-3 rounded-xl bg-[#0b0b12] border border-darkborder text-text-primary" />
+                                  <textarea value={assignment.instructions || ''} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { assignments: lesson.assignments.map((item, idx) => idx === assignmentIndex ? { ...item, instructions: e.target.value } : item) })} rows={3} placeholder="Assignment requirements" className="w-full px-4 py-3 rounded-xl bg-[#0b0b12] border border-darkborder text-text-primary" />
                                   <div className="grid gap-3 grid-cols-2">
                                     <input type="datetime-local" value={assignment.deadline ? assignment.deadline.slice(0, 16) : ''} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { assignments: lesson.assignments.map((item, idx) => idx === assignmentIndex ? { ...item, deadline: e.target.value ? new Date(e.target.value).toISOString().slice(0, 19) : '' } : item) })} className="w-full px-4 py-3 rounded-xl bg-[#0b0b12] border border-darkborder text-text-primary" />
                                     <div className="flex items-center gap-2">
-                                      <input type="number" min={0} step={0.5} value={assignment.maxScore ?? 10} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { assignments: lesson.assignments.map((item, idx) => idx === assignmentIndex ? { ...item, maxScore: parseFloat(e.target.value) || 10 } : item) })} placeholder="Điểm" className="flex-1 px-4 py-3 rounded-xl bg-[#0b0b12] border border-darkborder text-text-primary" />
+                                      <input type="number" min={0} step={0.5} value={assignment.maxScore ?? 10} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { assignments: lesson.assignments.map((item, idx) => idx === assignmentIndex ? { ...item, maxScore: parseFloat(e.target.value) || 10 } : item) })} placeholder="Points" className="flex-1 px-4 py-3 rounded-xl bg-[#0b0b12] border border-darkborder text-text-primary" />
                                       <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-[#0b0b12] border border-darkborder">
                                         <span className={`text-xs font-medium ${assignment.isPublished ? 'text-emerald-400' : 'text-text-muted'}`}>Pub</span>
                                         <button
@@ -1471,7 +1471,7 @@ export default function AdminAcademyPage() {
                         value={sub.feedback || ''}
                         onChange={(e) => setGradingSubmissions((prev) => prev.map((s) => s.id === sub.id ? { ...s, feedback: e.target.value } : s))}
                         rows={3}
-                        placeholder="Nhận xét cho sinh viên..."
+                        placeholder="Feedback for the student..."
                         className="w-full px-3 py-2 rounded-lg bg-[#0b0b12] border border-darkborder text-text-primary text-sm"
                       />
                     </div>
@@ -1491,7 +1491,7 @@ export default function AdminAcademyPage() {
                         }
                       }}
                       disabled={savingGrade}
-                      className="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium disabled:opacity-60 flex items-center justify-center gap-2"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--a-accent)] text-white text-sm font-medium disabled:opacity-60 flex items-center justify-center gap-2"
                     >
                       <Save className="w-4 h-4" /> {savingGrade ? 'Đang lưu...' : 'Lưu điểm'}
                     </button>

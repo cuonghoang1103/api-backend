@@ -80,7 +80,7 @@ const PROVIDER_CONFIG: Record<string, { label: string; style: string; icon: stri
   credentials: {
     label: 'Credentials',
     style: 'bg-violet-500/10 text-violet-400 border border-violet-500/20 shadow-[0_0_8px_rgba(139,92,246,0.15)]',
-    icon: '🔑',
+    icon: '',
   },
 };
 
@@ -246,7 +246,7 @@ function EditUserModal({
               type="text"
               value={form.displayName}
               onChange={(e) => setForm((p) => ({ ...p, displayName: e.target.value }))}
-              placeholder="Nhập tên hiển thị…"
+              placeholder="Display name…"
               className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
             />
           </div>
@@ -301,7 +301,7 @@ function EditUserModal({
 
             {form.emailVerified && !user.emailVerified && (
               <p className="text-xs text-yellow-400/80 mt-1.5 pl-1">
-                ⚠ Sau khi lưu, tài khoản sẽ không thể xóa cho đến khi hủy xác minh trở lại.
+                Sau khi lưu, tài khoản sẽ không thể xóa cho đến khi hủy xác minh trở lại.
               </p>
             )}
           </div>
@@ -691,9 +691,9 @@ export default function AdminUsersPage() {
                   : 'text-text-muted hover:text-text-primary'
               }`}
             >
-              {opt.value === 'google'   ? '🔴 Google'   :
-               opt.value === 'github'   ? '🐙 GitHub'    :
-               opt.value === 'facebook' ? '📘 Facebook' :
+              {opt.value === 'google'   ? 'Google'   :
+               opt.value === 'github'   ? 'GitHub'    :
+               opt.value === 'facebook' ? 'Facebook' :
                opt.label}
             </button>
           ))}
@@ -703,7 +703,7 @@ export default function AdminUsersPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
-            placeholder="Tìm user..."
+            placeholder="Search users..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}
             className="w-full pl-10 pr-4 py-2 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
@@ -758,7 +758,7 @@ export default function AdminUsersPage() {
                       {/* User info */}
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-white text-sm font-medium flex-shrink-0 overflow-hidden">
+                          <div className="w-9 h-9 rounded-full bg-white/[0.08] flex items-center justify-center text-white text-sm font-medium flex-shrink-0 overflow-hidden">
                             {user.avatarUrl ? (
                               <img src={user.avatarUrl} alt="" className="w-full h-full object-cover" />
                             ) : (

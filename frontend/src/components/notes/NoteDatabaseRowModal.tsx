@@ -187,7 +187,7 @@ export default function NoteDatabaseRowModal({
                       value={draft[property.id] ?? ''}
                       onChange={(event) => { setDirty(true); setDraft((current) => ({ ...current, [property.id]: event.target.value })); }}
                       list={property.config?.options ? `modal-opts-${property.id}` : undefined}
-                      placeholder={property.type === 'MULTI_SELECT' ? 'Ngăn cách bằng dấu phẩy' : undefined}
+                      placeholder={property.type === 'MULTI_SELECT' ? 'Comma-separated' : undefined}
                       className="min-h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 disabled:opacity-60 dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
                     />
                     {optionNames(property).length > 0 && (

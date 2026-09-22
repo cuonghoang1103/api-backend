@@ -479,7 +479,7 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           disabled={disabled}
-          placeholder={disabled ? 'Đang kết nối...' : 'Nhập tin nhắn...'}
+          placeholder={disabled ? 'Connecting...' : 'Type a message...'}
           className="min-h-[36px] max-h-[120px] flex-1 resize-none border-0 bg-transparent px-1.5 py-2 text-sm text-text-primary placeholder:text-text-muted/70 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           style={{ letterSpacing: '-0.003em', scrollbarWidth: 'thin' }}
         />

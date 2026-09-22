@@ -373,7 +373,7 @@ function CharDrill() {
                   autoCapitalize="off"
                   autoCorrect="off"
                   spellCheck={false}
-                  placeholder="gõ cách đọc rồi Enter"
+                  placeholder="type the reading, then Enter"
                   className={`w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border text-center text-lg text-white placeholder:text-slate-600 focus:outline-none transition-colors ${
                     feedback === 'right'
                       ? 'border-neon-green'

@@ -150,7 +150,7 @@ export default function WritingView({ d }: { d: StageBundle }) {
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               rows={10}
-              placeholder="Viết bài của bạn ở đây rồi mới mở bài mẫu để so…"
+              placeholder="Write your essay here, then open the model answer to compare…"
               className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 outline-none focus:border-emerald-400/50 leading-relaxed resize-y"
             />
             <p className="text-xs text-slate-500 mt-2 leading-relaxed">

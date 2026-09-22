@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { academyCodesApi, adminCoursesApi } from '@/lib/api';
 import { toast } from 'sonner';
+import { Metric } from '@/components/admin/ui';
 
 interface CourseCode {
   id: number;
@@ -166,7 +167,7 @@ export default function AdminCodeAcademyPage() {
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity text-sm"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white font-semibold rounded-xl hover:opacity-90 transition-opacity text-sm"
         >
           <Plus className="w-4 h-4" />
           Tao ma moi
@@ -174,18 +175,13 @@ export default function AdminCodeAcademyPage() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 border-y border-[var(--a-border)] [&>*]:border-[var(--a-border)] [&>*:not(:first-child)]:border-l [&>*:not(:first-child)]:pl-4">
         {[
-          { label: 'Tong ma code', value: codes.length, color: 'from-neon-indigo to-neon-violet' },
-          { label: 'Dang hoat dong', value: codes.filter(c => c.isActive && c.usedCount < c.maxUses && (!c.expiresAt || new Date(c.expiresAt).getTime() > Date.now())).length, color: 'from-green-500 to-emerald-500' },
-          { label: 'Da su dung', value: codes.reduce((s, c) => s + c.usedCount, 0), color: 'from-orange-500 to-amber-500' },
+          { label: 'Tổng mã code', value: codes.length },
+          { label: 'Đang hoạt động', value: codes.filter(c => c.isActive && c.usedCount < c.maxUses && (!c.expiresAt || new Date(c.expiresAt).getTime() > Date.now())).length },
+          { label: 'Đã sử dụng', value: codes.reduce((s, c) => s + c.usedCount, 0) },
         ].map(stat => (
-          <div key={stat.label} className={`bg-darkcard border border-darkborder rounded-2xl p-5 bg-gradient-to-br ${stat.color} bg-darkcard border-darkborder`}
-            style={{ borderImage: 'none', borderWidth: '1px', borderStyle: 'solid' }}
-          >
-            <p className="text-3xl font-bold text-white">{stat.value}</p>
-            <p className="text-sm text-white/70 mt-1">{stat.label}</p>
-          </div>
+          <Metric key={stat.label} label={stat.label} value={stat.value} />
         ))}
       </div>
 
@@ -237,7 +233,7 @@ export default function AdminCodeAcademyPage() {
                     <div className="inline-flex items-center gap-2">
                       <div className="w-20 h-1.5 bg-darkbg rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-neon-indigo to-neon-violet rounded-full transition-all"
+                          className="h-full bg-[var(--a-accent)] rounded-full transition-all"
                           style={{ width: `${c.maxUses > 0 ? Math.min(100, (c.usedCount / c.maxUses) * 100) : 0}%` }}
                         />
                       </div>
@@ -374,7 +370,7 @@ export default function AdminCodeAcademyPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity text-sm disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white font-semibold rounded-xl hover:opacity-90 transition-opacity text-sm disabled:opacity-50"
               >
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                 {editingId ? 'Cap nhat' : 'Tao ma code'}

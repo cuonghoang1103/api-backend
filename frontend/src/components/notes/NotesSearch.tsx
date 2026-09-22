@@ -77,7 +77,7 @@ export default function NotesSearch({ open, onClose, subjects, onJump }: Props) 
                 ref={inputRef}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="Tìm trong tất cả ghi chú…"
+                placeholder="Search all notes…"
                 className="min-w-0 flex-1 bg-transparent text-base text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none"
               />
               {loading && <Loader2 className="h-4 w-4 animate-spin text-slate-500 dark:text-slate-500" />}

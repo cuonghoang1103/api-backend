@@ -323,7 +323,7 @@ export default function KanjiNumberPanel() {
                     // chữ là để CHỐT kana, không phải để nộp bài.
                     if (e.key === 'Enter' && !e.nativeEvent.isComposing) setShown(true);
                   }}
-                  placeholder="gõ thử cách đọc (không bắt buộc) — Enter để so"
+                  placeholder="try typing the reading (optional) — Enter to check"
                   className="mt-3 w-full max-w-sm mx-auto block px-3 py-2 rounded-lg bg-white/[0.04] border border-white/10 text-sm text-white text-center placeholder:text-slate-600 focus:outline-none focus:border-neon-violet/50"
                 />
               )}

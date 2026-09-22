@@ -115,7 +115,7 @@ export default function GameCategoriesPage() {
           </h1>
           <p className="text-xs text-text-muted mt-0.5">Màu dùng cho badge trên thẻ game ở /games.</p>
         </div>
-        <button onClick={() => setCreating((v) => !v)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95">
+        <button onClick={() => setCreating((v) => !v)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--a-accent)] text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95">
           <Plus className="w-4 h-4" /> Thêm
         </button>
       </div>
@@ -183,7 +183,7 @@ function Row({ draft, setDraft }: { draft: Draft; setDraft: (d: Draft) => void }
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
       <input value={draft.name} onChange={(e) => set('name', e.target.value)} placeholder="Name (EN)" className={inp} aria-label="Tên tiếng Anh" />
-      <input value={draft.nameVi} onChange={(e) => set('nameVi', e.target.value)} placeholder="Tên (VI)" className={inp} aria-label="Tên tiếng Việt" />
+      <input value={draft.nameVi} onChange={(e) => set('nameVi', e.target.value)} placeholder="Name (VI)" className={inp} aria-label="Tên tiếng Việt" />
       <input value={draft.icon} onChange={(e) => set('icon', e.target.value)} placeholder="icon key (brain)" className={inp} aria-label="Icon key" />
       <div className="flex gap-1">
         <input type="color" value={draft.color || '#A78BFA'} onChange={(e) => set('color', e.target.value)} className="w-10 h-full rounded-lg bg-darkbg border border-darkborder cursor-pointer" aria-label="Màu" />

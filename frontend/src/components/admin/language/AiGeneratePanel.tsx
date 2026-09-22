@@ -126,7 +126,7 @@ export default function AiGeneratePanel({
     <Modal
       open={open}
       onClose={() => { reset(); onClose(); }}
-      title={`✨ AI tạo ${SECTION_LABEL[section] ?? 'nội dung'}`}
+      title={`AI tạo ${SECTION_LABEL[section] ?? 'nội dung'}`}
       maxWidth="max-w-2xl"
       footer={
         proposals.length > 0 ? (
@@ -175,7 +175,7 @@ export default function AiGeneratePanel({
       {section !== 'reading' && (
         <div>
           <label className={labelCls}>Chủ đề (tùy chọn)</label>
-          <input className={inputCls} value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="vd: gia đình, công việc, du lịch…" />
+          <input className={inputCls} value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="e.g. family, work, travel…" />
         </div>
       )}
       {section === 'reading' && (

@@ -1,99 +1,54 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import ChuongAdmin from '@/components/admin/ChuongAdmin';
-import Link from 'next/link';
+/**
+ * Khung /admin — một công cụ, không phải một trang web (23/09/2026).
+ *
+ * Toàn màn hình (Navbar của site ẩn ở /admin — xem Navbar.tsx), sidebar gọn
+ * bên trái, nội dung nằm trong MỘT khung viền mảnh. ⌘K nhảy tới bất kỳ trang
+ * nào; `[` ẩn/hiện sidebar. Bảng màu + lớp phủ cho các trang cũ: admin.css.
+ *
+ * Framer Motion bị đặt reducedMotion="always" cho cả nhánh /admin: các trang
+ * cũ trượt/phóng từng thẻ khi vào trang — chuyển động không mang thông tin.
+ * Mờ-hiện (opacity) vẫn chạy, nên không có gì "giật".
+ */
+import './admin.css';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import {
-  Bell, LayoutDashboard, FileText, Users, UserX, Code2, Sparkles,
-  LogOut, Menu, X, ChevronRight, Shield,
-  MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
- CreditCard, Github, Search, TrendingUp, AlertTriangle, Gamepad2,
- FlaskConical, KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown, MonitorPlay, Radio, Activity, Server, Mic } from 'lucide-react';
+import { MotionConfig } from 'framer-motion';
+import { Menu, PanelLeft, Search } from 'lucide-react';
+import ChuongAdmin from '@/components/admin/ChuongAdmin';
+import AdminSidebar from '@/components/admin/shell/AdminSidebar';
+import CommandPalette from '@/components/admin/shell/CommandPalette';
+import { ADMIN_NAV, activeHref } from '@/components/admin/shell/nav';
 
-const adminNav = [
- { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'Thông báo & việc chờ', href: '/admin/thong-bao', icon: Bell },
- // Content Studio — distinct amber entry in the admin
- // sidebar. Sits at the top of the nav (right below
- // Dashboard) so the creator workflow is the first thing
- // the user sees when they open the admin panel.
- { label: 'Content Studio', href: '/creator', icon: Clapperboard, accent: 'studio' as const },
- { label: 'Trang chủ — Promo Videos', href: '/admin/landing', icon: MonitorPlay },
- { label: 'FPT Academy LMS', href: '/admin/academy', icon: GraduationCap },
- { label: 'Quản lý Mã Code', href: '/admin/code-academy', icon: KeyRound },
- { label: 'Quản lý Mã Pro', href: '/admin/pro-codes', icon: Crown },
- { label: 'Quan ly Bai Giang', href: '/admin/lessons', icon: BookOpen },
-  { label: 'Quan ly Nhac', href: '/admin/music', icon: Music },
-  { label: 'Music Post (Post nền)', href: '/admin/music-posts', icon: Music },
- { label: 'Quản lý Khoá học', href: '/admin/courses', icon: BookOpen },
- { label: 'Danh mục Khoá học', href: '/admin/course-categories', icon: Sparkles },
- { label: 'Quản lý Shop', href: '/admin/shop', icon: ShoppingBag },
- // Doanh thu + đối soát chuyển khoản + duyệt đổi key + cấu hình ngân hàng.
- // Thiếu mục này thì trang chỉ vào được bằng cách gõ URL tay (13/09/2026).
- { label: 'Thương mại & Doanh thu', href: '/admin/commerce', icon: TrendingUp },
- { label: 'Quản lý Mã giảm giá', href: '/admin/discounts', icon: Tag },
- { label: 'Quản lý Đơn hàng', href: '/admin/orders', icon: Receipt },
- { label: 'Đơn hàng khoá học (VNPay)', href: '/admin/course-orders', icon: CreditCard },
- { label: 'Duyệt đánh giá', href: '/admin/reviews', icon: Star },
- { label: 'Cấp mã cho User', href: '/admin/user-codes', icon: Ticket },
- { label: 'Hoc vien khoa hoc', href: '/admin/course-enrollments', icon: UsersRound },
- { label: 'Quản lý Posts', href: '/admin/posts', icon: FileText },
- { label: 'Danh mục Video', href: '/admin/video-categories', icon: Clapperboard },
- { label: 'GitHub Repo Hub', href: '/admin/repos', icon: Github },
- { label: 'EXP Hub — Snippets', href: '/admin/exp-hub', icon: Code2 },
- { label: 'Code Lab — Bài tập & Lộ trình', href: '/admin/code-lab', icon: FlaskConical },
- { label: 'My Language', href: '/admin/language', icon: Languages },
- { label: 'Thống kê Ngôn ngữ', href: '/admin/language-analytics', icon: BarChart3 },
- { label: 'Interview Simulator', href: '/admin/interview', icon: Briefcase },
- { label: 'CV Builder', href: '/admin/cv', icon: FileText },
- { label: 'Quản lý Users', href: '/admin/users', icon: Users },
- { label: 'Quản lý Skills', href: '/admin/skills', icon: Code2 },
- { label: 'Quản lý Projects', href: '/admin/projects', icon: Sparkles },
- { label: 'AI Knowledge Base', href: '/admin/ai-knowledge', icon: Database },
- { label: 'Hạ tầng — VPS & GPU', href: '/admin/ha-tang', icon: Server },
- { label: 'Xưởng giọng — thu để train', href: '/admin/xuong-giong', icon: Mic },
- { label: 'Lượt truy cập', href: '/admin/analytics', icon: Activity },
- { label: 'AI Chat Analytics', href: '/admin/ai-analytics', icon: MessageSquare },
- { label: 'Quản lý Nhãn dán', href: '/admin/stickers', icon: Sticker },
- { label: 'Báo cáo vi phạm', href: '/admin/reports', icon: AlertTriangle },
- { label: 'Yêu cầu xoá tài khoản', href: '/admin/deletion-requests', icon: UserX },
- { label: 'Embed Queue', href: '/admin/embed-jobs', icon: Zap },
- { label: 'SEO Tools', href: '/admin/seo', icon: Search },
- { label: 'Tech Trends', href: '/admin/tech-trends', icon: TrendingUp },
- { label: 'Voice (Vlog/Reaction)', href: '/admin/voice', icon: Radio },
- { label: 'Games', href: '/admin/games', icon: Gamepad2 },
- { label: 'System Stats', href: '/admin/stats', icon: BarChart3 },
-];
+const KHOA_SIDEBAR = 'admin.sidebar.hidden';
+
+/** Đang gõ trong ô nhập thì phím tắt một chữ không được ăn mất ký tự. */
+function dangGo(t: EventTarget | null): boolean {
+  const el = t as HTMLElement | null;
+  if (!el) return false;
+  return el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName);
+}
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
+  const [sidebarHidden, setSidebarHidden] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [cmdOpen, setCmdOpen] = useState(false);
+  const [inbox, setInbox] = useState(0);
 
-  // Server-side admin verification using admin-check endpoint.
-  // Validates the backend_token cookie against the backend and returns
-  // user data (fullName, email) on success, redirects on failure.
-  //
-  // IMPORTANT: this runs ONCE on mount, not on every navigation. The
-  // admin layout persists across all /admin/* child navigations (Next.js
-  // app-router keeps the layout mounted), so re-checking on every
-  // pathname change was both wasteful AND fragile — a single flaky
-  // response from /api/auth/admin-check on a click would bounce the user
-  // to /login, making the admin panel feel like it "kicks you out" the
-  // moment you touch any menu item. One check per admin session is enough.
+  // Kiểm quyền admin MỘT lần khi vào /admin, không kiểm lại mỗi lần đổi trang:
+  // layout sống suốt các lần điều hướng con, và một phản hồi chập chờn giữa
+  // chừng từng đá người dùng ra /login ngay khi bấm menu.
   const pathnameRef = useRef(pathname);
   pathnameRef.current = pathname;
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch('/api/auth/admin-check', {
-          credentials: 'include',
-        });
-
+        const res = await fetch('/api/auth/admin-check', { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           const user = data.data;
@@ -105,190 +60,131 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           return;
         }
       } catch {}
-
-      // Not admin or not logged in → redirect to login (preserve where
-      // they were headed via the ref so we don't depend on pathname).
       router.push('/login?redirect=' + encodeURIComponent(pathnameRef.current));
     };
-
     checkAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
-  const handleLogout = async () => {
+  useEffect(() => {
+    try { setSidebarHidden(window.localStorage.getItem(KHOA_SIDEBAR) === '1'); } catch { /* mặc định hiện */ }
+  }, []);
+
+  const toggleSidebar = useCallback(() => {
+    setSidebarHidden((h) => {
+      try { window.localStorage.setItem(KHOA_SIDEBAR, h ? '0' : '1'); } catch { /* chỉ là tiện nghi */ }
+      return !h;
+    });
+  }, []);
+
+  const handleLogout = useCallback(async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     } catch {}
     router.push('/login');
-  };
+  }, [router]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setCmdOpen((o) => !o);
+        return;
+      }
+      if (e.key === '[' && !e.metaKey && !e.ctrlKey && !e.altKey && !dangGo(e.target)) {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [toggleSidebar]);
+
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
+
+  // Breadcrumb: nhóm / trang (theo nav.ts, không đoán từ URL).
+  const cur = activeHref(pathname);
+  const group = ADMIN_NAV.find((g) => g.items.some((i) => i.href === cur));
+  const item = group?.items.find((i) => i.href === cur);
 
   if (!authChecked) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-darkbg pt-16">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-2 border-neon-violet border-t-transparent rounded-full animate-spin" />
-          <p className="text-text-muted text-sm">Loading admin...</p>
+      <div className="admin-root flex h-dvh items-center justify-center">
+        <div className="flex items-center gap-2.5 text-[13px] text-[var(--a-text-3)]">
+          <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-[var(--a-text-3)] border-t-transparent" />
+          Checking access…
         </div>
       </div>
     );
   }
 
+  const sidebarProps = {
+    user: currentUser,
+    inboxCount: inbox,
+    onOpenCommand: () => setCmdOpen(true),
+    onLogout: handleLogout,
+  };
+
   return (
-    <div className="flex h-dvh bg-darkbg pt-16">
-      {/* Desktop Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} flex-shrink-0 border-r border-darkborder bg-darkcard flex flex-col transition-all duration-300 hidden md:flex`}>
-        <div className="p-4 border-b border-darkborder flex items-center justify-between">
-          <div className={`flex items-center gap-3 overflow-hidden ${!sidebarOpen && 'justify-center w-full'}`}>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center flex-shrink-0">
-              <Shield className="w-5 h-5 text-white" />
-            </div>
-            {sidebarOpen && (
-              <div className="min-w-0">
-                <h1 className="font-heading font-bold text-text-primary text-sm truncate">Admin Panel</h1>
-                <p className="text-xs text-text-muted truncate">{currentUser?.email}</p>
-              </div>
-            )}
-          </div>
-        </div>
-
- <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
- {adminNav.map((item) => {
- // Studio entry uses an amber accent class set; every
- // other entry uses the default violet. `isActive` is
- // also broader for studio so visiting /creator/* keeps
- // the sidebar item highlighted.
- const isStudio = item.accent === 'studio';
- const isActive = isStudio
- ? pathname === item.href || pathname?.startsWith('/creator')
- : pathname === item.href;
- const activeBg = isStudio ? 'bg-studio-500/15 text-studio-300' : 'bg-neon-violet/15 text-neon-violet';
- const activeIcon = isStudio ? 'text-studio-400' : 'text-neon-violet';
- const activeChevron = isStudio ? 'text-studio-500/50' : 'text-neon-violet/50';
- return (
- <Link
- key={item.href}
- href={item.href}
- className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${
- isActive
- ? activeBg
- : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
- } ${!sidebarOpen && 'justify-center'}`}
- title={!sidebarOpen ? item.label : undefined}
- >
- <item.icon className={`w-5 h-5 flex-shrink-0 ${isActive ? activeIcon : 'text-text-muted group-hover:text-text-secondary'}`} />
- {sidebarOpen && <span className="truncate">{item.label}</span>}
- {isActive && sidebarOpen && (
- <ChevronRight className={`w-4 h-4 ml-auto ${activeChevron}`} />
- )}
- </Link>
- );
- })}
- </nav>
-
-        <div className="p-3 border-t border-darkborder space-y-1">
-          <Link
-            href="/"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-white/5 transition-all ${!sidebarOpen && 'justify-center'}`}
-          >
-            <LayoutDashboard className="w-5 h-5 flex-shrink-0 text-text-muted" />
-            {sidebarOpen && <span>← Về trang chủ</span>}
-          </Link>
-          <button
-            onClick={handleLogout}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition-all ${!sidebarOpen && 'justify-center'}`}
-          >
-            <LogOut className="w-5 h-5 flex-shrink-0" />
-            {sidebarOpen && <span>Đăng xuất</span>}
-          </button>
-        </div>
-      </aside>
-
-      {/* Mobile sidebar overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute left-0 top-0 bottom-0 w-64 bg-darkcard border-r border-darkborder flex flex-col">
-            <div className="p-4 border-b border-darkborder flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h1 className="font-heading font-bold text-text-primary text-sm">Admin Panel</h1>
-                  <p className="text-xs text-text-muted">{currentUser?.name}</p>
-                </div>
-              </div>
-              <button onClick={() => setMobileOpen(false)} className="p-1 hover:bg-white/5 rounded-lg">
-                <X className="w-5 h-5 text-text-muted" />
-              </button>
-            </div>
- <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
- {adminNav.map((item) => {
- const isStudio = item.accent === 'studio';
- const isActive = isStudio
- ? pathname === item.href || pathname?.startsWith('/creator')
- : pathname === item.href;
- const activeBg = isStudio ? 'bg-studio-500/15 text-studio-300' : 'bg-neon-violet/15 text-neon-violet';
- return (
- <Link
- key={item.href}
- href={item.href}
- onClick={() => setMobileOpen(false)}
- className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
- isActive
- ? activeBg
- : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
- }`}
- >
- <item.icon className="w-5 h-5" />
- <span>{item.label}</span>
- </Link>
-                );
-              })}
-            </nav>
-            <div className="p-3 border-t border-darkborder">
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition-all"
-              >
-                <LogOut className="w-5 h-5" />
-                Đăng xuất
-              </button>
-            </div>
+    <MotionConfig reducedMotion="always">
+      <div className="admin-root flex h-dvh overflow-hidden">
+        {/* Sidebar — desktop */}
+        {!sidebarHidden && (
+          <aside className="hidden w-[232px] shrink-0 md:block">
+            <AdminSidebar {...sidebarProps} onCollapse={toggleSidebar} />
           </aside>
-        </div>
-      )}
+        )}
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 px-6 border-b border-darkborder flex items-center justify-between bg-darkcard/50 backdrop-blur-sm">
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="p-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-text-primary transition-colors md:hidden"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
-              <Shield className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <h1 className="font-heading font-bold text-text-primary text-sm">Admin Dashboard</h1>
-              <p className="text-xs text-text-muted hidden sm:block">
-                Chào, {currentUser?.name}!
-              </p>
-            </div>
+        {/* Sidebar — mobile (ngăn kéo) */}
+        {mobileOpen && (
+          <div className="fixed inset-0 z-[70] md:hidden">
+            <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} aria-hidden />
+            <aside className="a-pop absolute inset-y-0 left-0 w-[264px] border-r border-[var(--a-border)] bg-[var(--a-bg)]">
+              <AdminSidebar {...sidebarProps} onNavigate={() => setMobileOpen(false)} />
+            </aside>
           </div>
-          {/* Hộp thư admin — xem components/admin/ChuongAdmin.tsx để biết vì
-              sao nó nằm ở LAYOUT chứ không ở một trang: việc cần xử lý phải
-              thấy được từ bất cứ đâu trong /admin, không phải đi mò. */}
-          <ChuongAdmin />
-        </header>
+        )}
 
-        <main className="flex-1 overflow-y-auto p-6">
-          {children}
-        </main>
+        {/* Khung nội dung */}
+        <div
+          className={`flex min-w-0 flex-1 flex-col overflow-hidden bg-[var(--a-panel)] md:my-2 md:mr-2 md:rounded-[8px] md:border md:border-[var(--a-border)] ${
+            sidebarHidden ? 'md:ml-2' : ''
+          }`}
+        >
+          <header className="flex h-11 shrink-0 items-center gap-2 border-b border-[var(--a-border)] px-3 md:px-4">
+            <button onClick={() => setMobileOpen(true)} className="a-icon-btn md:hidden" aria-label="Open menu">
+              <Menu className="h-4 w-4" strokeWidth={1.75} />
+            </button>
+            {sidebarHidden && (
+              <button onClick={toggleSidebar} className="a-icon-btn hidden md:inline-flex" title="Show sidebar  [" aria-label="Show sidebar">
+                <PanelLeft className="h-[15px] w-[15px]" strokeWidth={1.75} />
+              </button>
+            )}
+            <nav className="flex min-w-0 items-center gap-1.5 text-[13px]" aria-label="Breadcrumb">
+              <span className="text-[var(--a-text-3)]">{group?.label ?? 'Admin'}</span>
+              <span className="text-[var(--a-text-3)]">/</span>
+              <span className="truncate font-medium text-[var(--a-text)]">{item?.label ?? 'Dashboard'}</span>
+            </nav>
+            <div className="ml-auto flex items-center gap-1">
+              <button onClick={() => setCmdOpen(true)} className="a-icon-btn md:hidden" aria-label="Search">
+                <Search className="h-4 w-4" strokeWidth={1.75} />
+              </button>
+              <ChuongAdmin onDem={(d) => setInbox(d.canXuLy)} />
+            </div>
+          </header>
+
+          <main className="min-h-0 flex-1 overflow-y-auto px-4 py-5 md:px-6">
+            {children}
+          </main>
+        </div>
+
+        <CommandPalette
+          open={cmdOpen}
+          onClose={() => setCmdOpen(false)}
+          onToggleSidebar={toggleSidebar}
+          onLogout={handleLogout}
+        />
       </div>
-    </div>
+    </MotionConfig>
   );
 }

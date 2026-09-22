@@ -118,15 +118,15 @@ export default function MyCodesPage() {
         <div className="rounded-2xl border border-darkborder bg-darkcard p-5 mb-8">
           <p className="text-sm font-medium text-text-primary mb-3 flex items-center gap-2"><Plus className="w-4 h-4" /> Thêm mã thủ công</p>
           <div className="grid gap-3 sm:grid-cols-2">
-            <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Tên mã (VD: Mã giảm 10%)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
-            <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Mã (VD: CERT10-12)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 font-mono" />
+            <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Code name (e.g. 10% off)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+            <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Code (e.g. CERT10-12)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 font-mono" />
             <select value={codeType} onChange={(e) => setCodeType(e.target.value as typeof codeType)} className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary focus:outline-none focus:border-neon-violet/50">
               <option value="COURSE">Mã vào học</option>
               <option value="DISCOUNT">Mã giảm giá</option>
               <option value="OTHER">Khác</option>
             </select>
             <input type="date" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary focus:outline-none focus:border-neon-violet/50" title="Hạn dùng (tuỳ chọn)" />
-            <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Ghi chú (tuỳ chọn)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 sm:col-span-2" />
+            <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note (optional)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 sm:col-span-2" />
           </div>
           <button onClick={add} disabled={saving} className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium hover:opacity-90 disabled:opacity-50">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />} Lưu mã

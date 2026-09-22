@@ -81,7 +81,7 @@ export default function CurrencyPage() {
                   <input type="number" min={0} step="any" placeholder="vd: 26500" value={rateInput} onChange={(e) => setRateInput(e.target.value)} className={inputCls + ' w-36'} />
                 </Field>
                 <Field label="Ghi chú (tuỳ chọn)">
-                  <input type="text" placeholder="vd: tỷ giá VCB" value={noteInput} onChange={(e) => setNoteInput(e.target.value)} className={inputCls + ' w-44'} />
+                  <input type="text" placeholder="e.g. VCB exchange rate" value={noteInput} onChange={(e) => setNoteInput(e.target.value)} className={inputCls + ' w-44'} />
                 </Field>
                 <Button onClick={submit} disabled={saving}>{saving ? 'Đang lưu…' : 'Cập nhật'}</Button>
               </div>

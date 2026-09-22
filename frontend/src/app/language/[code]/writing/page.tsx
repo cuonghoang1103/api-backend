@@ -218,14 +218,14 @@ export default function WritingPage() {
         <input
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Đề bài (tùy chọn) — vd: Giới thiệu bản thân"
+          placeholder="Prompt (optional) — e.g. Introduce yourself"
           className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60"
         />
         <textarea
           ref={textRef}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Viết bài của bạn ở đây…"
+          placeholder="Write your essay here…"
           rows={7}
           className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60"
         />

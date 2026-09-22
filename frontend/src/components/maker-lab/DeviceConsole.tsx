@@ -534,7 +534,7 @@ export function DeviceConsole({
                 // Vietnamese/Japanese typist would lose their input.
                 if (e.key === 'Enter' && !e.nativeEvent.isComposing) void handleCreate();
               }}
-              placeholder="Tên robot mới…"
+              placeholder="New robot name…"
               className="w-40 rounded-lg border px-3 py-2 text-sm outline-none"
               style={{
                 borderColor: 'var(--border-color)',
@@ -1003,7 +1003,7 @@ export function DeviceConsole({
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.nativeEvent.isComposing) void handleChat();
                   }}
-                  placeholder="Nói gì đó với robot…"
+                  placeholder="Say something to the robot…"
                   className="flex-1 rounded-lg border px-3 py-2 text-sm outline-none"
                   style={{
                     borderColor: 'var(--border-color)',
@@ -1075,7 +1075,7 @@ export function DeviceConsole({
               <input
                 value={wifiSsid}
                 onChange={(e) => setWifiSsid(e.target.value)}
-                placeholder="Tên WiFi"
+                placeholder="Wi-Fi name"
                 maxLength={32}
                 className="rounded-lg border px-3 py-2 text-sm"
                 style={{
@@ -1087,7 +1087,7 @@ export function DeviceConsole({
               <input
                 value={wifiPass}
                 onChange={(e) => setWifiPass(e.target.value)}
-                placeholder="Mật khẩu"
+                placeholder="Password"
                 type="password"
                 maxLength={63}
                 autoComplete="off"

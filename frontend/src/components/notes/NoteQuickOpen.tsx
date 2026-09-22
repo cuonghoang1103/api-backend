@@ -145,7 +145,7 @@ export default function NoteQuickOpen({ onOpen }: { onOpen: (noteId: number) => 
                 if (item) choose(item.id, item.title);
               }
             }}
-            placeholder="Tìm ghi chú…"
+            placeholder="Search notes…"
             aria-label="Từ khoá"
             className="min-h-11 flex-1 bg-transparent text-sm text-slate-900 focus-visible:outline-none dark:text-slate-100"
           />

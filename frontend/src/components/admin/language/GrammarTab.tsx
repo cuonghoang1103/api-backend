@@ -198,9 +198,9 @@ export default function GrammarTab({ languageId, code }: TabProps) {
                 {editor.examples.map((ex, i) => (
                   <div key={i} className="flex items-start gap-2 rounded-lg border border-darkborder p-2">
                     <div className="grid flex-1 gap-1.5">
-                      <input value={ex.sentence} onChange={(e) => setExample(i, { sentence: e.target.value })} placeholder="Câu ví dụ" className={inputCls} />
-                      <input value={ex.pronunciation ?? ''} onChange={(e) => setExample(i, { pronunciation: e.target.value })} placeholder="Phiên âm" className={inputCls} />
-                      <input value={ex.meaningVi ?? ''} onChange={(e) => setExample(i, { meaningVi: e.target.value })} placeholder="Nghĩa (VI)" className={inputCls} />
+                      <input value={ex.sentence} onChange={(e) => setExample(i, { sentence: e.target.value })} placeholder="Example sentence" className={inputCls} />
+                      <input value={ex.pronunciation ?? ''} onChange={(e) => setExample(i, { pronunciation: e.target.value })} placeholder="Transcription" className={inputCls} />
+                      <input value={ex.meaningVi ?? ''} onChange={(e) => setExample(i, { meaningVi: e.target.value })} placeholder="Meaning (VI)" className={inputCls} />
                     </div>
                     <button type="button" onClick={() => setEditor({ ...editor, examples: editor.examples.filter((_, j) => j !== i) })} className="rounded p-1.5 text-text-muted hover:bg-red-500/10 hover:text-red-400"><X className="h-4 w-4" /></button>
                   </div>

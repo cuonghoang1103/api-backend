@@ -175,7 +175,7 @@ export default function ImageUpload({
           <div className="flex-1 min-w-0">
             <p className="text-sm text-text-primary mb-1">Uploading...</p>
             <div className="h-1.5 bg-darkborder rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-neon-indigo to-neon-violet rounded-full animate-pulse w-2/3" />
+              <div className="h-full bg-[var(--a-accent)] rounded-full animate-pulse w-2/3" />
             </div>
           </div>
           <Loader2 className="w-6 h-6 animate-spin text-neon-violet shrink-0" />

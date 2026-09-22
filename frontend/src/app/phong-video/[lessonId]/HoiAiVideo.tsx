@@ -233,7 +233,7 @@ export default function HoiAiVideo({ giaSu, giay, onTua, coPhuDe = true }: {
           <input
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder={coPhuDe ? `Hỏi về video… (đang ở ${moc(giay)})` : 'Hỏi về bài học…'}
+            placeholder={coPhuDe ? `Ask about the video… (at ${moc(giay)})` : 'Ask about the lesson…'}
             className="min-w-0 flex-1 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-text-primary outline-none placeholder:text-text-muted focus:border-neon-violet/50"
           />
           <button type="submit" disabled={asking || !question.trim()}

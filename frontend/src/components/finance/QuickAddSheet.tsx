@@ -109,7 +109,7 @@ export function QuickAddSheet({ open, onClose, onSuccess }: { open: boolean; onC
         </div>
       </div>
 
-      <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Ghi chú (tuỳ chọn)" className={cn(inputCls, 'mb-4')} />
+      <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note (optional)" className={cn(inputCls, 'mb-4')} />
 
       <Button type="button" onClick={submit} disabled={saving} className="w-full" variant={tab === 'EXPENSE' ? 'primary' : 'primary'}>
         {saving ? 'Đang lưu…' : 'Lưu'}

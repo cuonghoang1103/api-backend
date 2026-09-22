@@ -153,7 +153,7 @@ export default function LessonVideoTracks({
                     : t.key === 'EN' ? { videoUrlEn: e.target.value }
                       : { videoUrlYt: e.target.value },
                 )}
-                placeholder={t.key === 'YT' ? 'https://youtu.be/…' : platformOf(t.key) === 'DIRECT' ? 'Link .mp4 ngoài — hoặc tải lên bên dưới' : 'YouTube URL'}
+                placeholder={t.key === 'YT' ? 'https://youtu.be/…' : platformOf(t.key) === 'DIRECT' ? 'External .mp4 link — or upload below' : 'YouTube URL'}
                 className="px-3 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 lg:col-span-2"
               />
               {t.key === 'YT' && (
@@ -173,7 +173,7 @@ export default function LessonVideoTracks({
               <input
                 value={value.videoYtCredit}
                 onChange={(e) => onChange({ videoYtCredit: e.target.value })}
-                placeholder="Nguồn hiển thị dưới video — vd: Fireship — React in 100 Seconds"
+                placeholder="Credit shown under the video — e.g. Fireship — React in 100 Seconds"
                 className="w-full px-3 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
               />
             )}

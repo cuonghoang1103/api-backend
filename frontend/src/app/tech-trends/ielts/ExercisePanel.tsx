@@ -188,10 +188,10 @@ export default function ExercisePanel({
                       onChange={(e) => setInput(i, e.target.value)}
                       onKeyDown={(e) => { if (e.key === 'Enter') check(i, ex); }}
                       placeholder={
-                        ex.kind === 'translate' ? 'Viết câu tiếng Anh…'
-                          : ex.kind === 'order' ? 'Viết lại thành câu hoàn chỉnh…'
-                            : ex.kind === 'fix' ? 'Viết lại câu đã sửa…'
-                              : 'Điền vào đây…'
+                        ex.kind === 'translate' ? 'Write the English sentence…'
+                          : ex.kind === 'order' ? 'Rewrite as a complete sentence…'
+                            : ex.kind === 'fix' ? 'Write the corrected sentence…'
+                              : 'Fill in here…'
                       }
                       className="flex-1 min-w-0 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-600 outline-none focus:border-emerald-400/50"
                     />

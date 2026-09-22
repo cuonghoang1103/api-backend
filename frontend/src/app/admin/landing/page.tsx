@@ -165,14 +165,14 @@ export default function AdminLandingPage() {
       <div className="mb-8 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
         <h2 className="mb-4 flex items-center gap-2 font-semibold text-[var(--text-primary)]"><Plus className="h-4 w-4" /> Thêm promo</h2>
         <div className="grid gap-3 sm:grid-cols-2">
-          <input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="Tiêu đề *" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
-          <input value={draft.tagline} onChange={(e) => setDraft({ ...draft, tagline: e.target.value })} placeholder="Mô tả ngắn" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
-          <input value={draft.href} onChange={(e) => setDraft({ ...draft, href: e.target.value })} placeholder="Link khi bấm (vd /interview)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+          <input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="Title *" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+          <input value={draft.tagline} onChange={(e) => setDraft({ ...draft, tagline: e.target.value })} placeholder="Short description" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+          <input value={draft.href} onChange={(e) => setDraft({ ...draft, href: e.target.value })} placeholder="Click-through link (e.g. /interview)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
           <label className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
             Màu nhấn <input type="color" value={draft.accent} onChange={(e) => setDraft({ ...draft, accent: e.target.value })} className="h-8 w-14 rounded" />
           </label>
-          <input value={draft.videoUrl} onChange={(e) => setDraft({ ...draft, videoUrl: e.target.value })} placeholder="URL video * (tự điền khi tải, hoặc dán vào đây)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
-          <input value={draft.posterUrl} onChange={(e) => setDraft({ ...draft, posterUrl: e.target.value })} placeholder="URL ảnh poster (tùy chọn)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+          <input value={draft.videoUrl} onChange={(e) => setDraft({ ...draft, videoUrl: e.target.value })} placeholder="Video URL * (filled on upload, or paste here)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+          <input value={draft.posterUrl} onChange={(e) => setDraft({ ...draft, posterUrl: e.target.value })} placeholder="Poster image URL (optional)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -218,14 +218,14 @@ export default function AdminLandingPage() {
               {editId === p.id && (
                 <div className="mt-3 border-t border-[var(--border-color)] pt-3">
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <input value={edit.title} onChange={(e) => setEdit({ ...edit, title: e.target.value })} placeholder="Tiêu đề *" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
-                    <input value={edit.tagline} onChange={(e) => setEdit({ ...edit, tagline: e.target.value })} placeholder="Mô tả ngắn" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
-                    <input value={edit.href} onChange={(e) => setEdit({ ...edit, href: e.target.value })} placeholder="Link khi bấm (vd /interview)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+                    <input value={edit.title} onChange={(e) => setEdit({ ...edit, title: e.target.value })} placeholder="Title *" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+                    <input value={edit.tagline} onChange={(e) => setEdit({ ...edit, tagline: e.target.value })} placeholder="Short description" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+                    <input value={edit.href} onChange={(e) => setEdit({ ...edit, href: e.target.value })} placeholder="Click-through link (e.g. /interview)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
                     <label className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                       Màu nhấn <input type="color" value={edit.accent} onChange={(e) => setEdit({ ...edit, accent: e.target.value })} className="h-8 w-14 rounded" />
                     </label>
                     <input value={edit.videoUrl} onChange={(e) => setEdit({ ...edit, videoUrl: e.target.value })} placeholder="URL video *" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
-                    <input value={edit.posterUrl} onChange={(e) => setEdit({ ...edit, posterUrl: e.target.value })} placeholder="URL ảnh poster (tùy chọn)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+                    <input value={edit.posterUrl} onChange={(e) => setEdit({ ...edit, posterUrl: e.target.value })} placeholder="Poster image URL (optional)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
                   </div>
 
                   <div className="mt-3 flex flex-wrap items-center gap-3">

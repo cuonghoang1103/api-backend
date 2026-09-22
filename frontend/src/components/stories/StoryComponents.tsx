@@ -476,7 +476,7 @@ export function CreateStoryModal({ open, onClose }: CreateStoryModalProps) {
             <textarea
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              placeholder="Viết gì đó..."
+              placeholder="Write something..."
               className="w-full h-32 rounded-xl bg-darkbg border border-darkborder p-3 text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:border-neon-violet/50"
               style={{ background: backgroundColor, color: '#fff' }}
             />

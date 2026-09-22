@@ -309,7 +309,7 @@ export default function TechTrendsClient() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Tìm theo tiêu đề, thẻ hoặc từ khoá..."
+              placeholder="Search by title, tag or keyword..."
               className="w-full pl-11 pr-4 py-3.5 bg-darkcard/80 backdrop-blur-sm
                 border border-darkborder rounded-2xl text-sm text-text-primary
                 placeholder:text-text-muted

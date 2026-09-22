@@ -222,7 +222,7 @@ export default function MarkdownEditor({
  onChange={(e) => onChange(e.target.value)}
  onPaste={onPaste}
  onDrop={onDrop}
- placeholder={placeholder ?? 'Viết nội dung case study bằng Markdown...'}
+ placeholder={placeholder ?? 'Write the case study in Markdown...'}
  disabled={disabled}
  spellCheck={false}
  className="w-full bg-transparent px-4 py-3 text-sm text-text-primary font-mono leading-relaxed resize-none focus:outline-none placeholder:text-text-muted disabled:opacity-60"

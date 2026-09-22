@@ -149,7 +149,7 @@ function SearchTab({ onOpen }: { onOpen: (no: number) => void }) {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Tìm trong toàn khoá — gõ không dấu cũng được: null, join, index, transaction…"
+          placeholder="Search the whole course — diacritics optional: null, join, index, transaction…"
           className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-10 text-sm text-white placeholder:text-slate-600 focus:border-violet-400/50 focus:outline-none"
         />
         {q && (

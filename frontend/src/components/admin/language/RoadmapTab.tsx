@@ -227,7 +227,7 @@ export default function RoadmapTab({ languageId, code }: { languageId: number; c
         </div>
         <div>
           <label className={labelCls}>Tên nhóm chặng (stageLabel) *</label>
-          <input className={inputCls} value={form.stageLabel} onChange={(e) => setForm({ ...form, stageLabel: e.target.value })} placeholder="vd: N5 / IELTS nền (B2)" />
+          <input className={inputCls} value={form.stageLabel} onChange={(e) => setForm({ ...form, stageLabel: e.target.value })} placeholder="e.g. N5 / IELTS foundation (B2)" />
         </div>
         <div>
           <label className={labelCls}>Tiêu đề chặng *</label>

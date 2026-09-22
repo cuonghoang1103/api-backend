@@ -360,7 +360,7 @@ export function TroGiang({ roomId, item }: { roomId: number; item: LabRoomItem }
         <textarea
           value={hoi} onChange={(e) => setHoi(e.target.value)} rows={2} maxLength={4000}
           onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); void gui(hoi); } }}
-          placeholder="Hỏi trợ giảng… (Ctrl/⌘ + Enter để gửi)"
+          placeholder="Ask the TA… (Ctrl/⌘ + Enter to send)"
           className="min-h-[44px] flex-1 resize-y rounded-xl border px-3 py-2 text-sm"
           style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }}
         />

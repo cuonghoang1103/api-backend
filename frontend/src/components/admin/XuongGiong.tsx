@@ -660,7 +660,7 @@ export function XuongGiong() {
           {/* Thanh mốc: 15 phút là ngưỡng bắt đầu ăn thua, 30 là chỗ tốt */}
           <div className="relative h-2 overflow-hidden rounded-full bg-white/10">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all"
+              className="h-full rounded-full bg-[var(--a-green)] transition-all"
               style={{ width: `${Math.min(100, (tienDo.tongPhut / tienDo.mocTotPhut) * 100)}%` }}
             />
             <div
@@ -743,7 +743,7 @@ export function XuongGiong() {
                     bat ? 'bg-red-500/20 text-red-300' : 'bg-emerald-500/20 text-emerald-300'
                   }`}
                 >
-                  {ten}: {bat ? 'CÒN BẬT ⚠' : 'đã tắt'}
+                  {ten}: {bat ? 'CÒN BẬT' : 'đã tắt'}
                 </span>
               );
             })}
@@ -1091,7 +1091,7 @@ export function XuongGiong() {
             </span>
             {!dangSoat && (
               <span className={dangNgo.length ? 'text-sm text-amber-300' : 'text-sm text-emerald-400'}>
-                {dangNgo.length ? `${dangNgo.length} đoạn nên nghe lại` : 'Không có đoạn nào đáng ngờ ✓'}
+                {dangNgo.length ? `${dangNgo.length} đoạn nên nghe lại` : 'Không có đoạn nào đáng ngờ'}
               </span>
             )}
           </div>
@@ -1205,8 +1205,8 @@ export function XuongGiong() {
                 onBlur={() => (mienBanPhim.current = false)}
                 rows={5}
                 placeholder={
-                  'Mỗi dòng một câu — dán cả chục câu một lúc cũng được.\n' +
-                  'Muốn ghi nghĩa phổ thông thì thêm dấu || rồi viết nghĩa.\n\n' +
+                  'One sentence per line — paste dozens at once if you like.\n' +
+                  'To add the standard meaning, append || and write it.\n\n' +
                   'Đi mô rứa? || Đi đâu vậy?\n' +
                   'Nỏ biết mô, để tui hỏi lại đã. || Không biết đâu, để tôi hỏi lại đã.\n' +
                   'Mần chi mà lâu rứa hè?'
@@ -1254,7 +1254,7 @@ export function XuongGiong() {
                 onChange={(e) => setTenMucMoi(e.target.value)}
                 onFocus={() => (mienBanPhim.current = true)}
                 onBlur={() => (mienBanPhim.current = false)}
-                placeholder="Tên mục — ví dụ: Giọng Nghệ Tĩnh, Nói với mẹ, Chửi yêu…"
+                placeholder="Section name — e.g. Nghe Tinh accent, Talking to mom, Playful teasing…"
                 className="mb-2 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[var(--text-primary)]"
               />
               <textarea
@@ -1263,7 +1263,7 @@ export function XuongGiong() {
                 onFocus={() => (mienBanPhim.current = true)}
                 onBlur={() => (mienBanPhim.current = false)}
                 rows={2}
-                placeholder="Lời dặn cách đọc — hiện to lúc thu để bạn khỏi quên. Ví dụ: nói nhanh, giọng cao, kiểu đang trêu."
+                placeholder="Delivery cue — shown large while recording so you don’t forget. E.g. fast, high-pitched, teasing."
                 className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[var(--text-primary)]"
               />
               <button

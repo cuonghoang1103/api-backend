@@ -93,7 +93,7 @@ export function ProjectNotebook({ data }: { data: NotebookData | null }) {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Tìm theo triệu chứng, tên lệnh, từ khoá…"
+          placeholder="Search by symptom, command or keyword…"
           className="flex-1 bg-transparent text-sm outline-none"
           style={{ color: 'var(--text-primary)' }}
         />

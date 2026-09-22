@@ -1,0 +1,253 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   /admin — giao diện kiểu CÔNG CỤ (tham chiếu: Linear), 23/09/2026.
+
+   Người dùng: "Không card mọi thứ. Không shadow khắp nơi. Border cực nhẹ.
+   Sidebar gọn. Information density cao. Typography rất quan trọng. Ít
+   animation nhưng animation nào cũng có mục đích. Không emoji. Không phải
+   component nào cũng rounded-2xl. Không phải cái gì cũng cần gradient."
+
+   File này có HAI phần:
+
+   1. TOKEN — bảng màu, chữ, bo góc của admin. Khung mới (sidebar, topbar,
+      ⌘K, dashboard) viết thẳng bằng các biến --a-*.
+
+   2. LỚP PHỦ cho ~50 trang cũ (25 nghìn dòng) vốn viết bằng bg-darkcard /
+      border-darkborder / neon-violet / rounded-2xl. Viết lại tay từng trang
+      là việc nhiều tuần; lớp phủ này đưa chúng về cùng một ngôn ngữ ngay,
+      và chỉ có hiệu lực BÊN TRONG .admin-root — phần còn lại của site
+      không bị đụng. Trang nào được viết lại bằng token thì tự nhiên không
+      còn dùng các lớp cũ, lớp phủ không làm gì với nó.
+
+   Gỡ bỏ toàn bộ: xoá dòng `import './admin.css'` trong admin/layout.tsx.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.admin-root {
+  --a-bg: #0a0a0b;               /* nền cửa sổ + sidebar */
+  --a-panel: #101012;            /* khung nội dung */
+  --a-raised: #161619;           /* ô nhập, menu nổi, ⌘K */
+  --a-hover: rgba(255, 255, 255, 0.045);
+  --a-active: rgba(255, 255, 255, 0.075);
+  --a-border: rgba(255, 255, 255, 0.07);
+  --a-border-strong: rgba(255, 255, 255, 0.12);
+  --a-text: #e6e6e9;
+  --a-text-2: #a0a0a8;
+  --a-text-3: #6c6c74;
+  --a-accent: #6470db;           /* một màu nhấn duy nhất, dùng dè sẻn */
+  --a-accent-hover: #7580e6;
+  --a-accent-text: #a3aaf2;      /* chữ màu nhấn trên nền tối */
+  --a-accent-soft: rgba(100, 112, 219, 0.14);
+  --a-accent-border: rgba(100, 112, 219, 0.45);
+  --a-green: #4cb782;
+  --a-yellow: #d9b44a;
+  --a-orange: #e8875a;
+  --a-red: #e5645f;
+  --a-blue: #4ea7fc;
+  --a-radius: 6px;
+  --a-radius-lg: 8px;
+
+  /* Biến giao diện chung của site — trong admin trỏ về bảng màu admin, để
+     mọi thứ đang viết bằng var(--text-primary)/var(--border-color) theo. */
+  --text-primary: var(--a-text);
+  --text-secondary: var(--a-text-2);
+  --text-muted: var(--a-text-3);
+  --border-color: var(--a-border);
+  --border-light: var(--a-border);
+  --border-light-hover: var(--a-border-strong);
+  --bg-primary: var(--a-panel);
+  --bg-card: var(--a-panel);
+  --bg-surface: var(--a-raised);
+  --bg-surface-hover: var(--a-hover);
+  --bg-surface-active: var(--a-active);
+  --bg-overlay: var(--a-raised);
+  --bg-glass: var(--a-raised);
+
+  background: var(--a-bg);
+  color: var(--a-text);
+  font-family: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: 'cv11', 'ss03';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Số trong bảng/chỉ số thẳng cột với nhau. */
+.admin-root .tabular,
+.admin-root table td,
+.admin-root table th { font-variant-numeric: tabular-nums; }
+
+.admin-root ::selection { background: rgba(100, 112, 219, 0.35); }
+
+/* Thanh cuộn mảnh, không giành chỗ của nội dung. */
+.admin-root * { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.12) transparent; }
+.admin-root *::-webkit-scrollbar { width: 8px; height: 8px; }
+.admin-root *::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
+.admin-root *::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.18); }
+.admin-root *::-webkit-scrollbar-track { background: transparent; }
+
+/* Focus rõ nhưng mảnh — bàn phím là cách dùng chính của một công cụ. */
+.admin-root :focus-visible { outline: 2px solid var(--a-accent-border); outline-offset: 1px; }
+.admin-root input:focus-visible,
+.admin-root textarea:focus-visible,
+.admin-root select:focus-visible { outline: none; }
+
+/* ═════════════════════════ LỚP PHỦ CHO TRANG CŨ ═════════════════════════ */
+
+/* Mặt nền: thẻ (bg-darkcard) chìm vào khung — chỉ còn viền mảnh phân vùng.
+   Ô nhập (bg-darkbg) lõm xuống một nấc. Các lớp này ở globals.css tự khai lại
+   bảng chữ tối ("đảo tối"), nên phải khai lại lần nữa ở đây, nếu không chữ
+   bên trong sẽ quay về màu cũ. */
+.admin-root .bg-darkcard,
+.admin-root .bg-darkbg,
+.admin-root .bg-darksurface,
+.admin-root .dark-surface {
+  --text-primary: var(--a-text);
+  --text-secondary: var(--a-text-2);
+  --text-muted: var(--a-text-3);
+  --border-color: var(--a-border);
+  --bg-primary: var(--a-panel);
+  --bg-card: var(--a-panel);
+  --bg-surface: var(--a-raised);
+}
+.admin-root .bg-darkcard { background-color: var(--a-panel); }
+.admin-root .bg-darkbg { background-color: var(--a-bg); }
+.admin-root .bg-darksurface { background-color: var(--a-raised); }
+.admin-root [class^="bg-darkcard/"],
+.admin-root [class*=" bg-darkcard/"] { background-color: var(--a-panel); }
+.admin-root [class^="bg-darkbg/"],
+.admin-root [class*=" bg-darkbg/"] { background-color: var(--a-bg); }
+
+/* Viền: cực nhẹ. */
+.admin-root .border-darkborder,
+.admin-root [class*="border-darkborder/"],
+.admin-root .divide-darkborder > * + * { border-color: var(--a-border); }
+.admin-root [class^="border-white/"],
+.admin-root [class*=" border-white/"] { border-color: var(--a-border); }
+
+/* Bo góc: 2xl/3xl → 8px, xl → 7px, lg → 6px. Nút tròn (rounded-full) giữ nguyên. */
+.admin-root .rounded-3xl,
+.admin-root .rounded-2xl { border-radius: var(--a-radius-lg); }
+.admin-root .rounded-xl { border-radius: 7px; }
+.admin-root .rounded-lg { border-radius: var(--a-radius); }
+.admin-root .rounded-t-2xl { border-top-left-radius: var(--a-radius-lg); border-top-right-radius: var(--a-radius-lg); }
+.admin-root .rounded-b-2xl { border-bottom-left-radius: var(--a-radius-lg); border-bottom-right-radius: var(--a-radius-lg); }
+
+/* Bóng: bỏ hết ở mặt phẳng. Chỉ thứ NỔI (menu, hộp thoại — absolute/fixed)
+   mới có bóng, vì ở đó bóng có nghĩa: nó nói "cái này nằm trên". */
+.admin-root [class*="shadow"] { --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; }
+.admin-root .absolute[class*="shadow"],
+.admin-root .fixed[class*="shadow"] {
+  --tw-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35), 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+}
+
+/* Kính mờ: chỉ lớp phủ toàn màn hình (fixed) còn dùng. */
+.admin-root [class*="backdrop-blur"]:not(.fixed) { -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* Chữ: một họ chữ (Inter). Poppins của trang ngoài không vào đây. */
+.admin-root .font-heading { font-family: inherit; letter-spacing: -0.011em; }
+.admin-root .font-bold { font-weight: 600; }
+.admin-root .font-extrabold,
+.admin-root .font-black { font-weight: 650; }
+.admin-root main h1 { font-size: 17px; line-height: 24px; font-weight: 600; letter-spacing: -0.012em; }
+.admin-root main h1.text-2xl,
+.admin-root main h1.text-3xl { font-size: 17px; line-height: 24px; }
+.admin-root main h2.text-xl,
+.admin-root main h2.text-2xl { font-size: 15px; line-height: 22px; }
+.admin-root main h2.text-lg,
+.admin-root main h3.text-lg { font-size: 14px; line-height: 20px; }
+
+/* Màu nhấn: tím neon → một sắc chàm dịu. `[class^=…]`/`[class*=" …"]` bắt
+   đúng lớp đứng một mình, không bắt nhầm biến thể hover:/focus:. */
+.admin-root .text-neon-violet,
+.admin-root .text-neon-indigo,
+.admin-root .text-neon-purple { color: var(--a-accent-text); }
+.admin-root .bg-neon-violet,
+.admin-root .bg-neon-indigo { background-color: var(--a-accent); }
+.admin-root [class^="bg-neon-violet/"],
+.admin-root [class*=" bg-neon-violet/"],
+.admin-root [class^="bg-neon-indigo/"],
+.admin-root [class*=" bg-neon-indigo/"] { background-color: var(--a-accent-soft); }
+.admin-root [class*="hover:bg-neon-violet/"]:hover,
+.admin-root [class*="hover:bg-neon-indigo/"]:hover { background-color: rgba(100, 112, 219, 0.2); }
+.admin-root [class^="border-neon-violet"],
+.admin-root [class*=" border-neon-violet"],
+.admin-root [class^="border-neon-indigo"],
+.admin-root [class*=" border-neon-indigo"] { border-color: var(--a-accent-border); }
+.admin-root [class*="focus:border-neon-violet"]:focus,
+.admin-root [class*="focus:border-neon-indigo"]:focus,
+.admin-root [class*="focus-within:border-neon-violet"]:focus-within { border-color: var(--a-accent-border); }
+.admin-root [class*="focus:ring-neon-violet"]:focus { --tw-ring-color: rgba(100, 112, 219, 0.35); }
+.admin-root [class*="hover:text-neon-violet"]:hover { color: var(--a-accent-text); }
+.admin-root [class*="hover:border-neon-violet"]:hover { border-color: var(--a-accent-border); }
+
+/* Ô nhập: cùng một dáng ở mọi trang. */
+.admin-root main input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+.admin-root main textarea,
+.admin-root main select {
+  border-color: var(--a-border-strong);
+  font-size: 13px;
+}
+.admin-root main input::placeholder,
+.admin-root main textarea::placeholder { color: var(--a-text-3); }
+
+/* Chuyển động trang trí: phóng to khi rê/bấm, nhấc thẻ lên — không mang
+   thông tin nào, bỏ. (Framer Motion được tắt tương tự ở layout.) */
+.admin-root [class*="hover:scale-"]:hover,
+.admin-root [class*="active:scale-"]:active,
+.admin-root .group:hover [class*="group-hover:scale-"] { --tw-scale-x: 1; --tw-scale-y: 1; }
+.admin-root [class*="hover:-translate-y"]:hover { --tw-translate-y: 0; }
+
+/* ═════════════════════════ THÀNH PHẦN CỦA KHUNG ═════════════════════════ */
+
+.admin-root .a-kbd {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 4px;
+  border: 1px solid var(--a-border-strong); border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  font: 500 10.5px/1 var(--font-inter), Inter, system-ui, sans-serif;
+  color: var(--a-text-3);
+}
+
+/* Lớp nổi hiện ra: đủ để mắt thấy nó nằm TRÊN trang, không hơn. */
+@keyframes a-pop-in { from { opacity: 0; transform: scale(0.985) translateY(-4px); } to { opacity: 1; transform: none; } }
+.admin-root .a-pop { animation: a-pop-in 120ms cubic-bezier(0.2, 0, 0, 1); }
+@media (prefers-reduced-motion: reduce) { .admin-root .a-pop { animation: none; } }
+
+/* Hàng trong sidebar */
+.admin-root .a-nav-item {
+  display: flex; align-items: center; gap: 9px;
+  height: 28px; padding: 0 8px; border-radius: 6px;
+  font-size: 13px; line-height: 1; color: var(--a-text-2);
+  white-space: nowrap;
+}
+.admin-root .a-nav-item:hover { background: var(--a-hover); color: var(--a-text); }
+.admin-root .a-nav-item[aria-current="page"] { background: var(--a-active); color: var(--a-text); }
+.admin-root .a-nav-item svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--a-text-3); }
+.admin-root .a-nav-item:hover svg,
+.admin-root .a-nav-item[aria-current="page"] svg { color: var(--a-text-2); }
+
+/* Nút phẳng dùng chung */
+.admin-root .a-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 10px; border-radius: 6px;
+  font-size: 12.5px; font-weight: 500; color: var(--a-text-2);
+  border: 1px solid var(--a-border-strong); background: rgba(255, 255, 255, 0.02);
+}
+.admin-root .a-btn:hover { color: var(--a-text); background: var(--a-hover); }
+.admin-root .a-btn-primary { color: #fff; background: var(--a-accent); border-color: transparent; }
+.admin-root .a-btn-primary:hover { color: #fff; background: var(--a-accent-hover); }
+.admin-root .a-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 6px; color: var(--a-text-3);
+}
+.admin-root .a-icon-btn:hover { background: var(--a-hover); color: var(--a-text); }
+
+/* Bảng của trang cũ: tiêu đề cột CHỮ HOA giãn rộng là dấu hiệu của mẫu dựng
+   sẵn — về chữ thường, nhỏ, mờ; hàng ngăn bằng đường kẻ mảnh. */
+.admin-root main thead th {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--a-text-3);
+}
+.admin-root main tbody tr { border-color: var(--a-border); }
+.admin-root main tbody tr:hover { background-color: var(--a-hover); }

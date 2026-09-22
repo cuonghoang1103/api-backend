@@ -71,7 +71,7 @@ export default function TechArticleEditor({
         heading: { levels: [1, 2, 3] },
       }),
       Placeholder.configure({
-        placeholder: 'Bắt đầu viết bài… Ấn "/" hoặc dùng thanh công cụ bên trên.',
+        placeholder: 'Start writing… Press "/" or use the toolbar above.',
       }),
       Image.configure({
         inline: false,

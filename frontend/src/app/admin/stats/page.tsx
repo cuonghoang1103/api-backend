@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
+import { Metric } from '@/components/admin/ui';
 import {
   Users, FileText, MessageSquare, Database, Server, Cpu, HardDrive,
   Activity, Clock, Eye, Cloud, Gauge, Boxes,
@@ -137,33 +138,15 @@ export default function AdminStatsPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 border-y border-[var(--a-border)] lg:grid-cols-4 [&>*]:border-[var(--a-border)] lg:[&>*:not(:first-child)]:border-l">
         {statCards.map((card, i) => (
-          <div key={i} className="bg-darkcard border border-darkborder rounded-2xl p-5">
-            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center mb-4`}>
-              <card.icon className="w-6 h-6 text-white" />
-            </div>
-            <p className="text-3xl font-heading font-bold text-text-primary">{card.value.toLocaleString('vi-VN')}</p>
-            <p className="text-sm text-text-muted mt-1">{card.label}</p>
-          </div>
+          <Metric key={i} label={card.label} value={card.value.toLocaleString('vi-VN')} />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-darkcard border border-darkborder rounded-2xl p-5">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-neon-yellow to-neon-amber flex items-center justify-center mb-4">
-            <Eye className="w-6 h-6 text-white" />
-          </div>
-          <p className="text-3xl font-heading font-bold text-text-primary">{(stats?.totalViews || 0).toLocaleString('vi-VN')}</p>
-          <p className="text-sm text-text-muted mt-1">Tổng Views</p>
-        </div>
-        <div className="bg-darkcard border border-darkborder rounded-2xl p-5">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-neon-purple to-neon-violet flex items-center justify-center mb-4">
-            <Database className="w-6 h-6 text-white" />
-          </div>
-          <p className="text-3xl font-heading font-bold text-text-primary">{stats?.totalSkills || 0}</p>
-          <p className="text-sm text-text-muted mt-1">Tổng Skills</p>
-        </div>
+      <div className="grid grid-cols-2 border-y border-[var(--a-border)] lg:grid-cols-2 [&>*]:border-[var(--a-border)] lg:[&>*:not(:first-child)]:border-l">
+        <Metric label="Tổng Views" value={(stats?.totalViews || 0).toLocaleString('vi-VN')} />
+        <Metric label="Tổng Skills" value={stats?.totalSkills || 0} />
       </div>
 
       {/* VPS host resources */}

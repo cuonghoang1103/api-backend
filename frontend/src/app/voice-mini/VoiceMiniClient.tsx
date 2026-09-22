@@ -221,7 +221,7 @@ export default function VoiceMiniClient() {
         value={text}
         onChange={(e) => setText(e.target.value)}
         rows={10}
-        placeholder="Dán hoặc gõ nội dung cần đọc…"
+        placeholder="Paste or type the text to read aloud…"
         className="w-full rounded-xl border p-3 text-sm leading-relaxed"
         style={{
           borderColor: quaDai ? '#ef4444' : 'var(--border-color)',
@@ -372,7 +372,7 @@ export default function VoiceMiniClient() {
               <input
                 value={tenGiong}
                 onChange={(e) => setTenGiong(e.target.value)}
-                placeholder="Ví dụ: Cường"
+                placeholder="e.g. Cuong"
                 maxLength={60}
                 className="w-full rounded-lg border p-2.5 text-sm"
                 style={{

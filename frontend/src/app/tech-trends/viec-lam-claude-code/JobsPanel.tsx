@@ -84,7 +84,7 @@ export default function JobsPanel() {
             type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="tìm công ty, vị trí, nơi làm…"
+            placeholder="search company, role, location…"
             aria-label="Tìm trong danh sách việc"
             className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-9 pr-9 text-sm text-slate-100 outline-none transition-colors placeholder:text-slate-500 focus:border-emerald-500/40"
           />

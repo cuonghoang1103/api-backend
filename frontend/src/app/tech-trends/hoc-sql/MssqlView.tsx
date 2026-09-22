@@ -67,7 +67,7 @@ export default function MssqlView() {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Tra nhanh — gõ không dấu cũng được: phan trang, kieu tien, noi chuoi…"
+            placeholder="Quick lookup — diacritics optional: phan trang, kieu tien, noi chuoi…"
             className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-10 text-sm text-white placeholder:text-slate-600 focus:border-violet-400/50 focus:outline-none"
           />
           {q && (

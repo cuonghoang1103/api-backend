@@ -31,6 +31,8 @@ import NewsBulletinPanel from '@/components/tech-trends/NewsBulletinPanel';
 const CATEGORIES: Category[] = ['TechNews', 'FixBug', 'Experience', 'Interviews', 'DeepDive'];
 
 const CATEGORY_STYLES: Record<Category, { bg: string; text: string; border: string; emoji: string }> = {
+  // `emoji` chỉ còn là ẢNH BÌA DỰ PHÒNG cho bài chưa đặt coverEmoji (dữ liệu
+  // hiển thị ra trang ngoài), không dùng làm trang trí cho nhãn trong admin.
   TechNews:   { bg: 'bg-neon-emerald/10',  text: 'text-neon-emerald',  border: 'border-neon-emerald/20',  emoji: '📰' },
   FixBug:     { bg: 'bg-neon-red/10',       text: 'text-neon-red',       border: 'border-neon-red/20',       emoji: '🐛' },
   Experience: { bg: 'bg-neon-cyan/10',      text: 'text-neon-cyan',      border: 'border-neon-cyan/20',      emoji: '💼' },
@@ -330,7 +332,7 @@ export default function AdminTechTrendsPage() {
         <button
           onClick={openCreate}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
-            bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-semibold
+            bg-[var(--a-accent)] text-white text-sm font-semibold
             shadow-neon hover:opacity-90 active:scale-95 transition-all"
         >
           <Plus className="w-4 h-4" />
@@ -467,7 +469,7 @@ export default function AdminTechTrendsPage() {
                         CATEGORY_STYLES[a.category].text,
                         CATEGORY_STYLES[a.category].border,
                       ].join(' ')}>
-                        {CATEGORY_STYLES[a.category].emoji} #{a.category}
+                        #{a.category}
                       </span>
                     </td>
                     <td className="px-4 py-3">
@@ -780,7 +782,7 @@ function ArticleFormModal({
               >
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c}>
-                    {CATEGORY_STYLES[c].emoji} #{c}
+                    #{c}
                   </option>
                 ))}
               </select>
@@ -938,7 +940,7 @@ function ArticleFormModal({
             <button
               onClick={onSave}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95 disabled:opacity-50 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--a-accent)] text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95 disabled:opacity-50 transition-all"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {saving ? 'Saving…' : editing ? 'Save changes' : 'Create article'}

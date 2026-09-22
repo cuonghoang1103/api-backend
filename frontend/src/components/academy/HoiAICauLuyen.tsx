@@ -303,7 +303,7 @@ export default function HoiAICauLuyen({ cau, dsCau, idx, onChonCau, onDong, robo
           if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); gui(); }
         }}
         rows={robot ? 2 : 1}
-        placeholder={`Hỏi thêm về câu ${cau.soThuTu}… (VD: vì sao không chọn C?)`}
+        placeholder={`Ask more about question ${cau.soThuTu}… (e.g. why not C?)`}
         className="min-w-0 flex-1 resize-none rounded-xl border px-3 py-2 text-[13px] outline-none"
         style={{ borderColor: m.vien, background: m.nenNhap, color: m.chu }}
       />

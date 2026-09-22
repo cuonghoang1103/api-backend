@@ -255,7 +255,7 @@ function TabDoanhThu({ data, dangTai }: { data: CommerceDashboard | null; dangTa
             <span className="text-sm text-text-muted mb-1.5">hoàn tất</span>
           </div>
           <div className="h-2.5 rounded-full bg-darkbg overflow-hidden mb-5">
-            <div className="h-full bg-gradient-to-r from-neon-indigo to-neon-violet" style={{ width: `${thanhToan.tiLeHoanTat}%` }} />
+            <div className="h-full bg-[var(--a-accent)]" style={{ width: `${thanhToan.tiLeHoanTat}%` }} />
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm">
             {[
@@ -753,7 +753,7 @@ function TabKeyOpenCode() {
             )}
 
             <button onClick={duyet} disabled={!duyetDuoc || dangLam === moDuyet.id}
-              className="mt-4 w-full py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              className="mt-4 w-full py-3 rounded-xl bg-[var(--a-accent)] text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
               {dangLam === moDuyet.id
                 ? <><Loader2 className="w-4 h-4 animate-spin" /> Đang cấp…</>
                 : danTay ? 'Cấp key đã dán' : `Tạo key ${quota}$ và cấp`}
@@ -871,7 +871,7 @@ function TabCaiDat() {
             value={ch.bankAccountNo ?? ''}
             onChange={(e) => dat('bankAccountNo', e.target.value.replace(/\D/g, '') || null)}
             inputMode="numeric"
-            placeholder="Chỉ chữ số"
+            placeholder="Digits only"
             className="w-full bg-darkbg border border-darkborder rounded-xl px-4 py-2.5 text-text-primary font-mono focus:border-neon-violet outline-none"
           />
         </div>
@@ -904,7 +904,7 @@ function TabCaiDat() {
             rows={3}
             value={ch.note ?? ''}
             onChange={(e) => dat('note', e.target.value || null)}
-            placeholder="VD: Đơn được duyệt trong giờ hành chính, tối đa 2 tiếng."
+            placeholder="e.g. Orders are approved during business hours, within 2 hours."
             className="w-full bg-darkbg border border-darkborder rounded-xl px-4 py-2.5 text-text-primary text-sm resize-none focus:border-neon-violet outline-none"
           />
         </div>
@@ -912,7 +912,7 @@ function TabCaiDat() {
         <button
           onClick={luu}
           disabled={dangLuu}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold disabled:opacity-60 flex items-center justify-center gap-2"
+          className="w-full py-3 rounded-xl bg-[var(--a-accent)] text-white font-semibold disabled:opacity-60 flex items-center justify-center gap-2"
         >
           {dangLuu ? <><Loader2 className="w-4 h-4 animate-spin" /> Đang lưu…</> : 'Lưu cấu hình'}
         </button>

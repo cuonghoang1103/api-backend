@@ -456,7 +456,7 @@ function ReportForm({
           value={reason}
           onChange={(e) => onReasonChange(e.target.value)}
           maxLength={200}
-          placeholder="Mô tả vấn đề..."
+          placeholder="Describe the issue..."
           className="w-full resize-none rounded-lg border border-white/[0.06] bg-white/[0.03] p-2 text-[12px] text-text-primary placeholder:text-text-muted focus:border-cyan-500/40 focus:outline-none"
           rows={3}
         />

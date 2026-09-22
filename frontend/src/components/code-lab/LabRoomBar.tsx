@@ -163,7 +163,7 @@ export function LabRoomBar({
         {!themVaoPhong && (
           <input
             value={name} onChange={(e) => setName(e.target.value)} maxLength={200}
-            placeholder={`Tên phòng (mặc định: Phòng ${trackName})`}
+            placeholder={`Room name (default: ${trackName} room)`}
             className="min-w-0 flex-1 rounded-lg border px-3 py-1.5 text-xs"
             style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }}
           />

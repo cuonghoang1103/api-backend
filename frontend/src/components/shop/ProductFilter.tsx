@@ -92,7 +92,7 @@ export default function ProductFilter({
               inputMode="search"
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Tìm gói, key, tính năng…"
+              placeholder="Search plans, keys, features…"
               // text-base trên điện thoại: iOS Safari tự PHÓNG TO trang khi ô
               // nhập có cỡ chữ < 16px, rồi không thu lại.
               className="w-full pl-10 pr-9 py-2.5 rounded-xl text-base sm:text-sm text-text-primary placeholder:text-text-muted

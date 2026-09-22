@@ -286,7 +286,7 @@ function ListView({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Tìm theo chữ Nhật, kana hoặc nghĩa tiếng Việt…"
+            placeholder="Search by Japanese, kana or Vietnamese meaning…"
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-neon-violet/50 transition-colors"
           />
         </div>
@@ -777,7 +777,7 @@ function WriteView({
           spellCheck={false}
           disabled={!!result}
           placeholder={
-            dir === 'jp2vi' ? 'Gõ nghĩa tiếng Việt rồi Enter…' : 'Gõ kana / kanji rồi Enter…'
+            dir === 'jp2vi' ? 'Type the Vietnamese meaning, then Enter…' : 'Type kana / kanji, then Enter…'
           }
           className={`w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border text-center text-lg text-white placeholder:text-slate-600 focus:outline-none transition-colors ${
             result === 'right'

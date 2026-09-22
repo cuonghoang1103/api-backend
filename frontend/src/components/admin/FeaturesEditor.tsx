@@ -158,7 +158,7 @@ function SortableFeature({
  type="text"
  value={feature.title}
  onChange={(e) => onUpdate({ title: e.target.value })}
- placeholder="Tên tính năng"
+ placeholder="Feature name"
  className="flex-1 px-3 py-1.5 bg-darkcard border border-darkborder rounded-lg text-sm"
  />
  <select
@@ -174,7 +174,7 @@ function SortableFeature({
  <textarea
  value={feature.description ?? ''}
  onChange={(e) => onUpdate({ description: e.target.value })}
- placeholder="Mô tả ngắn (optional)..."
+ placeholder="Short description (optional)..."
  rows={1}
  className="w-full px-3 py-1.5 bg-darkcard border border-darkborder rounded-lg text-xs resize-none"
  />

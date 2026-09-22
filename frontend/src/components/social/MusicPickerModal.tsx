@@ -323,7 +323,7 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
                   autoFocus
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Tìm theo tên bài hát hoặc nghệ sĩ..."
+                  placeholder="Search by song or artist..."
                   className="w-full rounded-lg border border-darkborder bg-darkbg/60 py-2 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
                 />
               </div>

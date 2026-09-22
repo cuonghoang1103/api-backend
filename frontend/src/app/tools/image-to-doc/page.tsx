@@ -451,7 +451,7 @@ export default function ImageToDocPage() {
                   <input
                     value={tieuDe}
                     onChange={(e) => setTieuDe(e.target.value)}
-                    placeholder="Tiêu đề tài liệu (đặt tên file)"
+                    placeholder="Document title (used as file name)"
                     className="flex-1 min-w-[200px] rounded-lg px-3 py-2 text-sm"
                     style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
                   />

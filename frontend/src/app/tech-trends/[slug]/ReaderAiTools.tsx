@@ -165,7 +165,7 @@ export default function ReaderAiTools({ articleId, hasCodeBlock }: { articleId: 
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') runAsk(); }}
-            placeholder="vd: Cách xử lý letterbox video trong feed?"
+            placeholder="e.g. How do I handle letterboxed video in a feed?"
             className="flex-1 min-w-0 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 focus:ring-2 focus:ring-neon-violet/15 transition-all"
           />
           <button onClick={runAsk} disabled={busy === 'ask'} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-xs font-semibold shadow-neon hover:opacity-90 active:scale-95 disabled:opacity-50 transition-all shrink-0">

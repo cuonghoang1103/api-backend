@@ -199,7 +199,7 @@ function HopThoaiDoiKey({
           onChange={(e) => setLyDo(e.target.value)}
           rows={4}
           maxLength={2000}
-          placeholder="VD: Đăng nhập báo sai mật khẩu, đã thử 3 lần, ảnh chụp lỗi gửi qua chat hỗ trợ…"
+          placeholder="e.g. Login says wrong password, tried 3 times, screenshot sent via support chat…"
           className="w-full bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted/60 focus:border-neon-violet outline-none resize-none"
         />
         <div className="flex items-center justify-between mt-1.5 mb-4">

@@ -382,7 +382,7 @@ function FormViec({
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Tập thể dục"
+              placeholder="Workout"
               autoFocus
               className="w-full rounded-lg border px-3 py-2 text-sm outline-none"
               style={o()}
@@ -472,7 +472,7 @@ function FormViec({
               value={huongDan}
               onChange={(e) => setHuongDan(e.target.value)}
               rows={3}
-              placeholder="Chống đẩy 20 cái rồi plank một phút."
+              placeholder="20 push-ups, then a one-minute plank."
               className="w-full resize-y rounded-lg border px-3 py-2 text-sm outline-none"
               style={o()}
             />

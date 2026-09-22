@@ -156,7 +156,7 @@ export default function CommandPalette() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Tìm skill, agent, command, MCP…"
+            placeholder="Search skills, agents, commands, MCP…"
             className="flex-1 bg-transparent text-[14px] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
           />
           <kbd className="rounded border border-[var(--border-color)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--text-muted)]">

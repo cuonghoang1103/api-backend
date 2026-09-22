@@ -122,7 +122,7 @@ export default function AdminStickersPage() {
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-neon-indigo to-neon-violet">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--a-border)] bg-white/[0.03]">
           <StickerIcon className="h-5 w-5 text-white" />
         </div>
         <div>
@@ -141,7 +141,7 @@ export default function AdminStickersPage() {
                 value={newPackName}
                 onChange={(e) => setNewPackName(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') createPack(); }}
-                placeholder="Tên pack…"
+                placeholder="Pack name…"
                 className="flex-1 rounded-lg border border-darkborder bg-white/[0.03] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/40"
               />
               <button

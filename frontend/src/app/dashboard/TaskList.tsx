@@ -329,7 +329,7 @@ export default function TaskList({
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
-            placeholder={`Task mới${activityFilter ? ` (${ACTIVITY_META[activityFilter].label})` : ''}...`}
+            placeholder={`New task${activityFilter ? ` (${ACTIVITY_META[activityFilter].label})` : ''}...`}
             className="flex-1 bg-white/[0.05] border border-white/10 rounded-2xl px-5 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none transition-all duration-200 focus:border-violet-500/50 focus:bg-violet-500/[0.05]"
           />
           <button

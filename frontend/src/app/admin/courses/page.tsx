@@ -573,7 +573,7 @@ export default function AdminCoursesPage() {
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
         >
           <Plus className="w-4 h-4" />
           Tạo khoá học
@@ -586,7 +586,7 @@ export default function AdminCoursesPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted z-10" />
           <input
             type="text"
-            placeholder="Tìm theo mã môn hoặc tên khoá học..."
+            placeholder="Search by course code or name..."
             value={searchInput}
             onChange={e => { setSearchInput(e.target.value); setShowSuggestions(true); setActiveSuggestion(-1); }}
             onFocus={() => setShowSuggestions(true)}
@@ -789,7 +789,7 @@ export default function AdminCoursesPage() {
                   <label className="block text-sm font-medium text-text-primary mb-1.5">Tiêu đề *</label>
                   <input value={courseForm.title}
                     onChange={e => setCourseForm(p => ({ ...p, title: e.target.value }))}
-                    placeholder="Tên khoá học"
+                    placeholder="Course name"
                     className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                   />
                 </div>
@@ -811,7 +811,7 @@ export default function AdminCoursesPage() {
                   <label className="block text-sm font-medium text-text-primary mb-1.5">Mô tả ngắn</label>
                   <input value={courseForm.shortDescription}
                     onChange={e => setCourseForm(p => ({ ...p, shortDescription: e.target.value }))}
-                    placeholder="Mô tả ngắn gọn (hiển thị trên card)"
+                    placeholder="Short description (shown on the card)"
                     className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                   />
                 </div>
@@ -969,7 +969,7 @@ export default function AdminCoursesPage() {
                   <label className="block text-sm font-medium text-text-primary mb-1.5">Mô tả đầy đủ</label>
                   <textarea value={courseForm.description}
                     onChange={e => setCourseForm(p => ({ ...p, description: e.target.value }))}
-                    placeholder="Mô tả chi tiết khoá học (hỗ trợ HTML)"
+                    placeholder="Full course description (HTML supported)"
                     rows={4}
                     className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-y"
                   />
@@ -1030,12 +1030,12 @@ export default function AdminCoursesPage() {
 
                 {/* Course-level documents note + shared materials */}
                 <div>
-                  <label className="block text-xs font-medium text-text-secondary mb-1.5">📝 Ghi chú cho mục Tài liệu (hướng dẫn học viên)</label>
+                  <label className="block text-xs font-medium text-text-secondary mb-1.5">Ghi chú cho mục Tài liệu (hướng dẫn học viên)</label>
                   <textarea
                     value={courseForm.documentsNote}
                     onChange={e => setCourseForm(prev => ({ ...prev, documentsNote: e.target.value }))}
                     rows={2}
-                    placeholder="VD: Tải tài liệu về, giải nén rồi mở file hướng dẫn.pdf trước khi xem video…"
+                    placeholder="e.g. Download the materials, unzip them and open guide.pdf before watching…"
                     className="w-full px-3 py-2.5 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                   />
                 </div>
@@ -1043,7 +1043,7 @@ export default function AdminCoursesPage() {
                   <LessonDocumentsManager courseId={editingId} />
                 ) : (
                   <p className="text-sm text-text-muted border border-dashed border-darkborder rounded-xl px-4 py-3">
-                    📁 Lưu khoá học trước để thêm <b>Tài liệu chung của khoá</b> (hiển thị ở đầu, ngang với chương).
+                    Lưu khoá học trước để thêm <b>Tài liệu chung của khoá</b> (hiển thị ở đầu, ngang với chương).
                   </p>
                 )}
 
@@ -1086,14 +1086,14 @@ export default function AdminCoursesPage() {
                       <div className="border-t border-darkborder p-4 space-y-5">
                         <div className="grid gap-3 md:grid-cols-[1fr_120px]">
                           <input value={section.title} onChange={e => updateSection(sIdx, { title: e.target.value })}
-                            placeholder="Tên chương (VD: Chương 1 - Giới thiệu)"
+                            placeholder="Section title (e.g. Chapter 1 - Introduction)"
                             className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
                           <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-secondary">
                             <input type="checkbox" checked={section.isLocked} onChange={e => updateSection(sIdx, { isLocked: e.target.checked })} className="accent-neon-violet" /> Khoá
                           </label>
                         </div>
                         <textarea value={section.description} onChange={e => updateSection(sIdx, { description: e.target.value })} rows={2}
-                          placeholder="Mô tả chương" className="w-full px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                          placeholder="Section description" className="w-full px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
 
                         <div className="space-y-4">
                           {section.lessons.map((lesson, lIdx) => (
@@ -1109,18 +1109,18 @@ export default function AdminCoursesPage() {
                               </div>
 
                               <div className="grid gap-3 md:grid-cols-2">
-                                <input value={lesson.title} onChange={e => updateLesson(sIdx, lIdx, { title: e.target.value })} placeholder="Tiêu đề bài học" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
-                                <input value={lesson.slug} onChange={e => updateLesson(sIdx, lIdx, { slug: e.target.value })} placeholder="Slug bài học (tự tạo nếu bỏ trống)" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                                <input value={lesson.title} onChange={e => updateLesson(sIdx, lIdx, { title: e.target.value })} placeholder="Lesson title" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                                <input value={lesson.slug} onChange={e => updateLesson(sIdx, lIdx, { slug: e.target.value })} placeholder="Lesson slug (auto-generated if empty)" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
                               </div>
 
                               <div className="grid gap-3 md:grid-cols-2">
                                 <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-secondary">
                                   <span className="text-text-muted text-xs shrink-0">Loại:</span>
                                   <select value={lesson.lessonType} onChange={e => updateLesson(sIdx, lIdx, { lessonType: e.target.value })} className="bg-transparent text-text-primary outline-none w-full cursor-pointer">
-                                    <option value="VIDEO">🎬 Video</option>
-                                    <option value="QUIZ">📝 Quizz (trắc nghiệm)</option>
-                                    <option value="EXERCISE">📄 Bài tập (PDF)</option>
-                                    <option value="SOLUTION">✅ Đáp án (PDF)</option>
+                                    <option value="VIDEO">Video</option>
+                                    <option value="QUIZ">Quizz (trắc nghiệm)</option>
+                                    <option value="EXERCISE">Bài tập (PDF)</option>
+                                    <option value="SOLUTION">Đáp án (PDF)</option>
                                     <option value="TEXT">Text</option>
                                     <option value="PROJECT">Project</option>
                                   </select>
@@ -1139,7 +1139,7 @@ export default function AdminCoursesPage() {
                               </div>
 
                               <textarea value={lesson.description} onChange={e => updateLesson(sIdx, lIdx, { description: e.target.value })} rows={2}
-                                placeholder="Mô tả bài học" className="w-full px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                                placeholder="Lesson description" className="w-full px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
 
                               {lesson.lessonType === 'VIDEO' && (
                                 <>
@@ -1159,7 +1159,7 @@ export default function AdminCoursesPage() {
 
                                   <div className="grid gap-3 md:grid-cols-2">
                                     <input value={lesson.sourceCodeUrl} onChange={e => updateLesson(sIdx, lIdx, { sourceCodeUrl: e.target.value })} placeholder="GitHub / source code URL" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
-                                    <input type="number" value={lesson.videoDurationSeconds} onChange={e => updateLesson(sIdx, lIdx, { videoDurationSeconds: Number(e.target.value) })} placeholder="Thời lượng video (giây)" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                                    <input type="number" value={lesson.videoDurationSeconds} onChange={e => updateLesson(sIdx, lIdx, { videoDurationSeconds: Number(e.target.value) })} placeholder="Video duration (seconds)" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
                                   </div>
                                 </>
                               )}
@@ -1171,19 +1171,19 @@ export default function AdminCoursesPage() {
                               {(lesson.lessonType === 'EXERCISE' || lesson.lessonType === 'SOLUTION') && (
                                 <div className="rounded-lg border border-dashed border-neon-violet/40 bg-neon-violet/5 p-3 space-y-3">
                                   <p className="text-xs text-text-secondary">
-                                    📄 Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} — học viên xem ngay trong trang học.
+                                    Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} — học viên xem ngay trong trang học.
                                   </p>
                                   {lesson.id ? (
                                     <LessonDocumentsManager lessonId={lesson.id} initialDocuments={lesson.documents || []} />
                                   ) : (
-                                    <p className="text-xs text-amber-400">⚠️ Bấm <b>Lưu</b> (cuối trang) để lưu bài học trước, rồi ô tải PDF sẽ hiện ra đây.</p>
+                                    <p className="text-xs text-amber-400">Bấm <b>Lưu</b> (cuối trang) để lưu bài học trước, rồi ô tải PDF sẽ hiện ra đây.</p>
                                   )}
                                 </div>
                               )}
 
                               <div>
                                 <p className="mb-2 flex items-center gap-2 text-sm font-medium text-text-primary"><FileText className="w-4 h-4 text-neon-violet" /> Ghi chú giảng dạy</p>
-                                <RichTextEditor value={lesson.teachingNotes} onChange={value => updateLesson(sIdx, lIdx, { teachingNotes: value, content: value })} placeholder="Nội dung bài giảng, markdown được hỗ trợ..." />
+                                <RichTextEditor value={lesson.teachingNotes} onChange={value => updateLesson(sIdx, lIdx, { teachingNotes: value, content: value })} placeholder="Lesson content (Markdown supported)..." />
                               </div>
 
                               {lesson.id && lesson.lessonType !== 'EXERCISE' && lesson.lessonType !== 'SOLUTION' && (
@@ -1214,7 +1214,7 @@ export default function AdminCoursesPage() {
                 Hủy
               </button>
               <button onClick={handleSave} disabled={saving}
-                className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50">
+                className="flex items-center gap-2 px-5 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50">
                 {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                 {saving ? 'Đang lưu...' : editingId ? 'Cập nhật' : 'Tạo khoá học'}
               </button>

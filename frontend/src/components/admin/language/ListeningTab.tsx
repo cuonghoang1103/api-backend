@@ -205,8 +205,8 @@ export default function ListeningTab({ languageId, code }: TabProps) {
                 {editor.questions.map((q, i) => (
                   <div key={i} className="flex items-start gap-2 rounded-lg border border-darkborder p-2">
                     <div className="grid flex-1 gap-1.5">
-                      <input value={q.question} onChange={(e) => setQ(i, { question: e.target.value })} placeholder="Câu hỏi" className={inputCls} />
-                      <input value={q.answer} onChange={(e) => setQ(i, { answer: e.target.value })} placeholder="Đáp án" className={inputCls} />
+                      <input value={q.question} onChange={(e) => setQ(i, { question: e.target.value })} placeholder="Question" className={inputCls} />
+                      <input value={q.answer} onChange={(e) => setQ(i, { answer: e.target.value })} placeholder="Answer" className={inputCls} />
                     </div>
                     <button type="button" onClick={() => setEditor({ ...editor, questions: editor.questions.filter((_, j) => j !== i) })} className="rounded p-1.5 text-text-muted hover:bg-red-500/10 hover:text-red-400"><X className="h-4 w-4" /></button>
                   </div>

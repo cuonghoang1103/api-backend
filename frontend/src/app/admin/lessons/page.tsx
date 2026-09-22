@@ -205,7 +205,7 @@ export default function AdminLessonsPage() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Tìm bài giảng..."
+              placeholder="Search lessons..."
               className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary text-sm"
             />
           </div>
@@ -296,7 +296,7 @@ export default function AdminLessonsPage() {
                   <button
                     onClick={saveLesson}
                     disabled={saving}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white flex items-center gap-2 disabled:opacity-60"
+                    className="px-5 py-2.5 rounded-xl bg-[var(--a-accent)] text-white flex items-center gap-2 disabled:opacity-60"
                   >
                     <Save className="w-4 h-4" /> {saving ? 'Đang lưu...' : 'Lưu'}
                   </button>
@@ -347,7 +347,7 @@ export default function AdminLessonsPage() {
                     <input
                       value={form.videoUrl}
                       onChange={(e) => setForm((p) => ({ ...p, videoUrl: e.target.value }))}
-                      placeholder={form.videoPlatform === 'DIRECT' ? 'Link .mp4 bên ngoài — hoặc tải video lên R2 bên dưới' : 'YouTube URL hoặc video embed URL'}
+                      placeholder={form.videoPlatform === 'DIRECT' ? 'External .mp4 link — or upload to R2 below' : 'YouTube or embed URL'}
                       className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
                     />
                   </div>
@@ -378,7 +378,7 @@ export default function AdminLessonsPage() {
               <input
                 value={form.sourceCodeUrl}
                 onChange={(e) => setForm((p) => ({ ...p, sourceCodeUrl: e.target.value }))}
-                placeholder="GitHub repository URL hoặc source code URL"
+                placeholder="GitHub repository or source code URL"
                 className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
               />
             </div>
@@ -391,7 +391,7 @@ export default function AdminLessonsPage() {
               <RichTextEditor
                 value={form.teachingNotes}
                 onChange={(value) => setForm((p) => ({ ...p, teachingNotes: value }))}
-                placeholder="Nội dung bài giảng. Có thể paste từ VSCode/Word/Google Docs — định dạng được giữ nguyên..."
+                placeholder="Lesson content. Paste from VS Code, Word or Google Docs — formatting is preserved..."
               />
             </div>
 

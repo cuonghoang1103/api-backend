@@ -102,7 +102,7 @@ export default function SearchView({
           type="search"
           value={query}
           onChange={(e) => onQuery(e.target.value)}
-          placeholder="Tra bằng tiếng Anh hoặc tiếng Việt — ví dụ: deadline, xin lỗi, hôm nay…"
+          placeholder="Search in English or Vietnamese — e.g. deadline, xin lỗi, hôm nay…"
           className="w-full rounded-xl border border-white/10 bg-white/[0.04] pl-10 pr-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-violet-400/50 transition-colors"
         />
       </div>

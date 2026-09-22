@@ -175,7 +175,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  onChange={(e) => update('concept', e.target.value)}
  rows={5}
  className="mt-1 w-full px-3 py-2 rounded-lg bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-studio-500/50 focus:ring-2 focus:ring-studio-500/20 resize-y"
- placeholder="30 ngày, 1 production tool, 0 framework AI hype. Tôi sẽ ghi lại từng commit, từng bug, từng decision..."
+ placeholder="30 days, 1 production tool, 0 AI-framework hype. I’ll log every commit, every bug, every decision..."
  />
  </label>
  </section>

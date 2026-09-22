@@ -161,14 +161,14 @@ export default function AiAssistPanel({
               <input
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                placeholder="Chủ đề bài viết, vd: 'Tại sao React key quan trọng'"
+                placeholder="Article topic, e.g. 'Why React keys matter'"
                 className={aiInput}
               />
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
-                placeholder="Ghi chú / dàn ý / dữ kiện (tuỳ chọn) — AI sẽ dựa vào đây"
+                placeholder="Notes / outline / facts (optional) — the AI builds on these"
                 className={aiInput + ' resize-y'}
               />
               <div className="flex items-center justify-between">
@@ -182,14 +182,14 @@ export default function AiAssistPanel({
                 value={errorText}
                 onChange={(e) => setErrorText(e.target.value)}
                 rows={4}
-                placeholder="Dán error message / stack trace ở đây"
+                placeholder="Paste the error message / stack trace here"
                 className={aiInput + ' font-mono text-xs resize-y'}
               />
               <textarea
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
                 rows={2}
-                placeholder="Bối cảnh (tuỳ chọn): stack công nghệ, bạn đã thử gì..."
+                placeholder="Context (optional): tech stack, what you’ve tried..."
                 className={aiInput + ' resize-y'}
               />
               <div className="flex items-center justify-end">
@@ -216,7 +216,7 @@ export default function AiAssistPanel({
               <input
                 value={instruction}
                 onChange={(e) => setInstruction(e.target.value)}
-                placeholder="Hướng dẫn viết lại, vd: 'ngắn gọn hơn', 'thêm ví dụ'"
+                placeholder="Rewrite instructions, e.g. 'more concise', 'add examples'"
                 className={aiInput + ' flex-1 min-w-[180px]'}
               />
               <button

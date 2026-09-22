@@ -127,10 +127,10 @@ export default function AdminSkillsPage() {
   };
 
   const proficiencyColor = (val: number) => {
-    if (val >= 80) return 'from-emerald-400 to-emerald-500';
-    if (val >= 60) return 'from-blue-400 to-blue-500';
-    if (val >= 40) return 'from-yellow-400 to-yellow-500';
-    return 'from-orange-400 to-orange-500';
+    if (val >= 80) return 'bg-[var(--a-green)]';
+    if (val >= 60) return 'bg-[var(--a-blue)]';
+    if (val >= 40) return 'bg-[var(--a-yellow)]';
+    return 'bg-[var(--a-orange)]';
   };
 
   return (
@@ -142,7 +142,7 @@ export default function AdminSkillsPage() {
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
         >
           <Plus className="w-4 h-4" />
           Thêm kỹ năng
@@ -209,7 +209,7 @@ export default function AdminSkillsPage() {
                 </div>
                 <div className="h-2 bg-darkbg rounded-full overflow-hidden">
                   <div
-                    className={`h-full bg-gradient-to-r ${proficiencyColor(skill.proficiency)} rounded-full transition-all`}
+                    className={`h-full ${proficiencyColor(skill.proficiency)} rounded-full transition-all`}
                     style={{ width: `${skill.proficiency}%` }}
                   />
                 </div>
@@ -298,7 +298,7 @@ export default function AdminSkillsPage() {
                 <textarea
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  placeholder="Mô tả ngắn về kỹ năng..."
+                  placeholder="Short skill description..."
                   rows={3}
                   className="w-full px-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors resize-none"
                 />
@@ -322,7 +322,7 @@ export default function AdminSkillsPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="px-5 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {saving ? 'Đang lưu...' : editingSkill ? 'Cập nhật' : 'Tạo mới'}
               </button>

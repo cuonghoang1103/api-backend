@@ -479,7 +479,7 @@ export default function LlmKeyPage() {
                       onChange={(e) => setLyDo(e.target.value)}
                       rows={3}
                       maxLength={2000}
-                      placeholder="VD: dùng OpenCode để refactor dự án Next.js cá nhân trên máy Mac, khoảng 2-3 giờ mỗi tối."
+                      placeholder="e.g. Using OpenCode to refactor a personal Next.js project on a Mac, about 2–3 hours each evening."
                       className="w-full bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted/60 focus:border-neon-violet outline-none resize-none"
                     />
                     <div className="flex items-center justify-between mt-1.5 mb-4">

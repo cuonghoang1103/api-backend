@@ -123,7 +123,7 @@ export default function BlockedUsersModal({ open, onClose }: Props) {
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Tìm trong danh sách chặn..."
+                    placeholder="Search blocked users..."
                     className="flex-1 bg-transparent text-[12px] text-text-primary placeholder:text-text-muted focus:outline-none"
                   />
                 </div>

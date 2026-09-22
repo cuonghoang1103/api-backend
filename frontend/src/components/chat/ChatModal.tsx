@@ -835,7 +835,7 @@ finished: true,
                 onPaste={nhanDan}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
-                placeholder="enter command... (dán ảnh được)"
+                placeholder="enter command... (paste images)"
                 rows={1}
                 className={`
                   w-full pl-7 pr-12 py-2.5 bg-[#0a0a0f] rounded-xl text-xs text-[#f8fafc]

@@ -154,7 +154,7 @@ export default function CvImportPage() {
               <p className="mt-1 text-xs text-[var(--text-secondary)]">GitHub của bạn chính là bằng chứng. Máy chấm điểm repo theo độ "thật" — bỏ qua fork/tutorial/repo rỗng.</p>
               <div className="mt-3 flex gap-2">
                 <input value={ghUsername} onChange={(e) => setGhUsername(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && ghSync()}
-                  placeholder="username GitHub của bạn" className={inputCls} />
+                  placeholder="Your GitHub username" className={inputCls} />
                 <button onClick={ghSync} disabled={ghBusy} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[var(--accent-color)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
                   {ghBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />} Quét repo
                 </button>
@@ -193,7 +193,7 @@ export default function CvImportPage() {
                 className={`${inputCls} mt-3 min-h-[280px] resize-y font-mono text-xs`}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder="Dán toàn bộ text CV của bạn vào đây (Ctrl/Cmd+V). Máy nhận diện các mục Kinh nghiệm, Dự án, Học vấn, Kỹ năng, Ngoại ngữ…"
+                placeholder="Paste your whole CV text here (Ctrl/Cmd+V). Experience, Projects, Education, Skills and Languages are detected automatically…"
               />
               <div className="mt-3 flex items-center justify-between">
                 <span className="text-xs text-[var(--text-secondary)]">{text.length} ký tự</span>
@@ -276,10 +276,10 @@ export default function CvImportPage() {
                   </label>
                 </div>
                 <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <input className={inputCls} value={draft.contact.fullName ?? ''} onChange={(e) => patchContact('fullName', e.target.value)} placeholder="Họ tên" />
-                  <input className={inputCls} value={draft.contact.headline ?? ''} onChange={(e) => patchContact('headline', e.target.value)} placeholder="Chức danh" />
+                  <input className={inputCls} value={draft.contact.fullName ?? ''} onChange={(e) => patchContact('fullName', e.target.value)} placeholder="Full name" />
+                  <input className={inputCls} value={draft.contact.headline ?? ''} onChange={(e) => patchContact('headline', e.target.value)} placeholder="Job title" />
                   <input className={inputCls} value={draft.contact.email ?? ''} onChange={(e) => patchContact('email', e.target.value)} placeholder="Email" />
-                  <input className={inputCls} value={draft.contact.phone ?? ''} onChange={(e) => patchContact('phone', e.target.value)} placeholder="SĐT" />
+                  <input className={inputCls} value={draft.contact.phone ?? ''} onChange={(e) => patchContact('phone', e.target.value)} placeholder="Phone" />
                 </div>
                 {(draft.contact.links.github || draft.contact.links.linkedin || draft.contact.links.website) && (
                   <div className="mt-2 flex flex-wrap gap-2 text-xs text-[var(--text-secondary)]">

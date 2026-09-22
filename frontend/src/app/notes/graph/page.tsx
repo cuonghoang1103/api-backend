@@ -177,7 +177,7 @@ export default function NotesGraphPage() {
             id="graph-search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Tìm trang…"
+            placeholder="Search pages…"
             className="min-h-10 w-56 rounded-lg border border-slate-300 bg-white pl-8 pr-3 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
           />
         </div>

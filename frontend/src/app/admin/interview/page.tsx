@@ -255,7 +255,7 @@ function Flagged() {
   };
 
   if (loading) return <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>;
-  if (!items.length) return <div className="rounded-xl border border-white/10 p-6 text-slate-400">Không có câu nào cần rà soát. 🎉</div>;
+  if (!items.length) return <div className="rounded-xl border border-white/10 p-6 text-slate-400">Không có câu nào cần rà soát.</div>;
 
   return (
     <div className="space-y-3">
@@ -334,14 +334,14 @@ function CreateForm({ topics, onDone }: { topics: FlatTopic[]; onDone: () => voi
       </div>
       <div>
         <label className="text-xs text-slate-400 mb-1 block">Nội dung câu hỏi (markdown — dán ảnh trực tiếp, ```lang cho code tô màu)</label>
-        <MarkdownEditor value={body} onChange={setBody} placeholder="Nội dung câu hỏi. Dán ảnh để upload; dùng ```js ... ``` cho khối code." />
+        <MarkdownEditor value={body} onChange={setBody} placeholder="Question body. Paste images to upload; use ```js ... ``` for code blocks." />
       </div>
       <div>
         <label className="text-xs text-slate-400 mb-1 block">Đáp án mẫu (mức mong đợi)</label>
-        <MarkdownEditor value={referenceAnswer} onChange={setReferenceAnswer} placeholder="Đáp án mẫu — markdown + code + ảnh." />
+        <MarkdownEditor value={referenceAnswer} onChange={setReferenceAnswer} placeholder="Model answer — Markdown, code and images." />
       </div>
       <textarea value={rubric} onChange={(e) => setRubric(e.target.value)} rows={4} placeholder="Rubric JSON" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm font-mono" />
-      <input value={mustMention} onChange={(e) => setMustMention(e.target.value)} placeholder="Khái niệm bắt buộc (phẩy ngăn cách): event loop, microtask, …" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+      <input value={mustMention} onChange={(e) => setMustMention(e.target.value)} placeholder="Required concepts (comma-separated): event loop, microtask, …" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
       <div className="flex justify-end gap-2">
         <button onClick={onDone} className="px-3 py-1.5 rounded-lg text-sm text-slate-300 hover:bg-white/10">Huỷ</button>
         <button onClick={save} disabled={saving} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 text-sm disabled:opacity-50">
@@ -419,7 +419,7 @@ function Knowledge({ tax, topics, topicName }: { tax: TaxonomyResponse | null; t
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Tìm tài liệu…"
+              placeholder="Search documents…"
               className="bg-white/5 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-sm w-56"
             />
           </div>
@@ -608,7 +608,7 @@ function KnowledgeEditor({ doc, tracks, topics, onCancel, onSaved }: {
         <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải nội dung…</div>
       ) : (
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-4">
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Tiêu đề tài liệu" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Document title" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
 
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3">
             <div>
@@ -671,11 +671,11 @@ function KnowledgeEditor({ doc, tracks, topics, onCancel, onSaved }: {
             </div>
           </div>
 
-          <input value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} placeholder="URL nguồn (tuỳ chọn)" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+          <input value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} placeholder="Source URL (optional)" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
 
           <div>
             <label className="text-xs text-slate-400 mb-1 block">Nội dung (markdown — dán ảnh trực tiếp, ```lang cho code; heading ## dùng để chia khối)</label>
-            <MarkdownEditor value={content} onChange={setContent} placeholder="Viết tài liệu tri thức. Dùng heading (##, ###) để AI chia khối gọn gàng." />
+            <MarkdownEditor value={content} onChange={setContent} placeholder="Write the knowledge doc. Use headings (##, ###) so the AI chunks it cleanly." />
           </div>
 
           <div className="flex justify-end gap-2">

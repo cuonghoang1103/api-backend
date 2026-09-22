@@ -324,7 +324,7 @@ export default function AdminReposPage() {
               resetForm();
               setShowForm(true);
             }}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet px-4 py-2 text-sm font-medium text-white shadow-lg transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-xl bg-[var(--a-accent)] px-4 py-2 text-sm font-medium text-white shadow-lg transition-opacity hover:opacity-90"
           >
             <Plus className="h-4 w-4" />
             Them repo moi
@@ -333,7 +333,7 @@ export default function AdminReposPage() {
       </header>
 
       {/* ─── Pull starred ────────────────────────────────── */}
-      <section className="mb-6 rounded-2xl border border-neon-violet/20 bg-gradient-to-br from-neon-violet/[0.04] to-neon-indigo/[0.04] p-4">
+      <section className="mb-6 rounded-2xl border border-neon-violet/20 p-4">
         <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-text-primary">
           <Download className="h-4 w-4 text-neon-violet" />
           Auto-draft tu GitHub Stars
@@ -746,7 +746,7 @@ function FormModal(props: FormModalProps) {
             type="button"
             onClick={props.onSubmit}
             disabled={props.saving}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet px-4 py-2 text-sm font-medium text-white shadow-lg transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-[var(--a-accent)] px-4 py-2 text-sm font-medium text-white shadow-lg transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {props.saving && <RefreshCw className="h-3.5 w-3.5 animate-spin" />}
             {isEdit ? 'Luu thay doi' : 'Them repo'}

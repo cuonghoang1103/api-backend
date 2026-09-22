@@ -530,7 +530,7 @@ export default function AdminMusicPage() {
           </button>
           <button
             onClick={() => openCreate()}
-            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
+            className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
           >
             <Plus className="w-4 h-4" />
             Them Track
@@ -611,7 +611,7 @@ export default function AdminMusicPage() {
                 setYouTubeImportSuccess('');
               }}
               onKeyDown={(e) => e.key === 'Enter' && void handleYouTubeUrlImport()}
-              placeholder="Dán link YouTube: https://www.youtube.com/watch?v=..."
+              placeholder="Paste a YouTube link: https://www.youtube.com/watch?v=..."
               className="flex-1 px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-red-500/50"
             />
             <button
@@ -882,7 +882,7 @@ export default function AdminMusicPage() {
                           : 'border-darkborder bg-darkbg text-text-muted hover:border-neon-violet/30'
                       }`}
                     >
-                      {c === 'REMIX' ? '🎛️ Remix' : '🎵 Thường'}
+                      {c === 'REMIX' ? 'Remix' : 'Thường'}
                     </button>
                   ))}
                 </div>
@@ -957,7 +957,7 @@ export default function AdminMusicPage() {
                 <button
                   type="submit"
                   disabled={saving || (!editingId && !audioFile)}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[var(--a-accent)] text-white font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
                   {(saving || uploading) && <Loader2 className="w-4 h-4 animate-spin" />}
                   {saving

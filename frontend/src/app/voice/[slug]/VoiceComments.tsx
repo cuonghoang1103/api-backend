@@ -84,7 +84,7 @@ export default function VoiceComments({ postId }: { postId: number }) {
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             rows={2}
-            placeholder="Viết bình luận…"
+            placeholder="Write a comment…"
             className="flex-1 px-3 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 focus:ring-2 focus:ring-neon-violet/15 resize-y transition-all"
           />
           <button
@@ -229,7 +229,7 @@ function CommentItem({
               onChange={(e) => setReplyText(e.target.value)}
               // isComposing: nhường Enter cho bộ gõ CJK đang chốt chữ
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) onReply(replyText, comment.id, () => { setReplyText(''); setReplying(false); }); }}
-              placeholder={`Trả lời ${name(comment.author)}…`}
+              placeholder={`Reply to ${name(comment.author)}…`}
               className="flex-1 min-w-0 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
             />
             <button

@@ -165,7 +165,7 @@ export default function RoadmapDetail({ slug }: { slug: string }) {
               <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 opacity-50" style={{ color: 'var(--text-secondary, #888)' }} />
               <input
                 value={tim} onChange={(e) => setTim(e.target.value)}
-                placeholder={`Tìm trong ${total} bước…`}
+                placeholder={`Search ${total} steps…`}
                 className="w-full rounded-xl border py-2.5 pl-9 pr-9 text-sm outline-none transition focus:shadow-lg"
                 style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))', background: 'var(--bg-secondary, rgba(127,127,127,0.05))', color: 'var(--text-primary)' }}
               />

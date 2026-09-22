@@ -176,7 +176,7 @@ export default function TranslatePage() {
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder={direction === 'to' ? 'Nhập tiếng Việt cần dịch…' : `Nhập ${target.toLowerCase()} cần dịch…`}
+            placeholder={direction === 'to' ? 'Enter Vietnamese text to translate…' : `Enter text to translate…`}
             rows={6}
             className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 pr-11 text-sm text-text-primary outline-none focus:border-neon-blue/60"
           />

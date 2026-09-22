@@ -354,7 +354,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
               onPaste={handlePaste}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
-              placeholder={isVision ? 'Nhắn cho CuongMini… (đính kèm ảnh, PDF, Word)' : 'Nhắn cho CuongMini…'}
+              placeholder={isVision ? 'Message CuongMini… (attach images, PDF, Word)' : 'Message CuongMini…'}
               disabled={isDisabled}
               rows={1}
               className="w-full resize-none bg-transparent px-4 pt-2.5 pb-0.5 text-base sm:text-[15px] leading-6 text-[color:var(--studio-text)] placeholder:text-[color:var(--studio-text-faint)] focus:outline-none disabled:opacity-50"
@@ -446,7 +446,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
             onPaste={handlePaste}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            placeholder={isVision ? 'enter command... (đính kèm ảnh, PDF, Word)' : 'enter command...'}
+            placeholder={isVision ? 'enter command... (attach images, PDF, Word)' : 'enter command...'}
             disabled={isDisabled}
             rows={1}
             className={`w-full pl-9 sm:pl-[170px] ${isVision ? 'pr-24' : 'pr-14'} py-3 bg-transparent text-[#f8fafc] placeholder:text-[#64748b]/40 font-mono text-base sm:text-sm focus:outline-none resize-none transition-all disabled:opacity-50`}

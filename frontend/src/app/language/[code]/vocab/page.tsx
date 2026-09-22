@@ -541,7 +541,7 @@ function VocabInner() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Tìm từ vựng…"
+              placeholder="Search vocabulary…"
               className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] py-2.5 pl-9 pr-9 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none focus:ring-2 focus:ring-neon-violet/20"
             />
             {search && (
@@ -1390,7 +1390,7 @@ function CollectionSheet({
               if (e.nativeEvent.isComposing) return;
               if (e.key === 'Enter') void create();
             }}
-            placeholder="Tên bộ sưu tập mới… (vd: Từ khó, Ôn thi N5)"
+            placeholder="New collection name… (e.g. Hard words, N5 review)"
             maxLength={120}
             className="min-w-0 flex-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
           />

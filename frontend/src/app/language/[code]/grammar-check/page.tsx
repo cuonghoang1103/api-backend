@@ -103,7 +103,7 @@ export default function GrammarCheckPage() {
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Dán văn bản cần kiểm tra…"
+          placeholder="Paste text to check…"
           rows={7}
           className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-pink/60"
         />

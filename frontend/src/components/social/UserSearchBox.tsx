@@ -231,7 +231,7 @@ export default function UserSearchBox() {
             onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
             onFocus={() => setOpen(true)}
             onKeyDown={(e) => { if (e.key === 'Enter') goToResults(); if (e.key === 'Escape') setOpen(false); }}
-            placeholder="Tìm bạn bè, người dùng…"
+            placeholder="Search friends and people…"
             className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted/70"
           />
           {query && (
@@ -272,7 +272,7 @@ export default function UserSearchBox() {
                 value={query}
                 onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
                 onKeyDown={(e) => { if (e.key === 'Enter') goToResults(); if (e.key === 'Escape') { setExpanded(false); setOpen(false); } }}
-                placeholder="Tìm bạn bè, người dùng…"
+                placeholder="Search friends and people…"
                 className="w-full bg-transparent text-base text-text-primary outline-none placeholder:text-text-muted/70"
               />
               <button type="button" onClick={() => { setExpanded(false); setOpen(false); setQuery(''); }} className="text-text-muted hover:text-text-primary">

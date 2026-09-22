@@ -178,7 +178,7 @@ function SortableMilestone({
  type="text"
  value={milestone.title}
  onChange={(e) => onUpdate({ title: e.target.value })}
- placeholder="Tiêu đề"
+ placeholder="Title"
  className="col-span-2 sm:col-span-2 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm"
  />
  <input
@@ -191,7 +191,7 @@ function SortableMilestone({
  <textarea
  value={milestone.description ?? ''}
  onChange={(e) => onUpdate({ description: e.target.value })}
- placeholder="Mô tả ngắn..."
+ placeholder="Short description..."
  rows={2}
  className="w-full px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-xs resize-none"
  />
@@ -199,7 +199,7 @@ function SortableMilestone({
  type="url"
  value={milestone.imageUrl ?? ''}
  onChange={(e) => onUpdate({ imageUrl: e.target.value })}
- placeholder="URL ảnh minh hoạ (optional)"
+ placeholder="Image URL (optional)"
  className="w-full px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-xs"
  />
  {/*
@@ -318,7 +318,7 @@ function CodeBlockEditor({
  setLocalCode(v);
  onUpdate({ codeBlock: v });
  }}
- placeholder="Dán code để hiển thị syntax-highlighted trên trang case study..."
+ placeholder="Paste code to show syntax-highlighted on the case study page..."
  rows={6}
  className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded text-xs font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:border-neon-violet/50 transition-colors"
  />

@@ -856,20 +856,20 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
               </div>
               <div className="p-5 space-y-4 overflow-y-auto flex-1">
                 {editingSection === 'overview' && (<>
-                  <EditField label="Tiểu sử" value={editForm.bio || ''} onChange={(v) => setEditForm((p) => ({ ...p, bio: v }))} type="textarea" placeholder="Viết vài dòng về bạn..." />
+                  <EditField label="Tiểu sử" value={editForm.bio || ''} onChange={(v) => setEditForm((p) => ({ ...p, bio: v }))} type="textarea" placeholder="Write a few lines about yourself..." />
                   <EditField label="Website" value={editForm.websiteUrl || ''} onChange={(v) => setEditForm((p) => ({ ...p, websiteUrl: v }))} type="url" placeholder="https://yourwebsite.com" />
                   <EditField label="Tình trạng mối quan hệ" value={editForm.relationshipStatus || ''} onChange={(v) => setEditForm((p) => ({ ...p, relationshipStatus: v }))} type="select" options={[{ value: '', label: 'Chọn...' }, { value: 'Độc thân', label: 'Độc thân' }, { value: 'Đang hẹn hò', label: 'Đang hẹn hò' }, { value: 'Đã kết hôn', label: 'Đã kết hôn' }, { value: 'Phức tạp', label: 'Phức tạp' }]} />
                 </>)}
                 {editingSection === 'work' && (<>
-                  <EditField label="Nghề nghiệp" value={editForm.work || ''} onChange={(v) => setEditForm((p) => ({ ...p, work: v }))} type="text" placeholder="Ví dụ: Lập trình viên" />
-                  <EditField label="Nơi làm việc" value={editForm.workplace || ''} onChange={(v) => setEditForm((p) => ({ ...p, workplace: v }))} type="text" placeholder="Tên công ty" />
-                  <EditField label="Vị trí công việc" value={editForm.jobTitle || ''} onChange={(v) => setEditForm((p) => ({ ...p, jobTitle: v }))} type="text" placeholder="Chức danh" />
-                  <EditField label="Trường học" value={editForm.school || ''} onChange={(v) => setEditForm((p) => ({ ...p, school: v }))} type="text" placeholder="Tên trường" />
-                  <EditField label="Đại học" value={editForm.college || ''} onChange={(v) => setEditForm((p) => ({ ...p, college: v }))} type="text" placeholder="Tên trường đại học" />
+                  <EditField label="Nghề nghiệp" value={editForm.work || ''} onChange={(v) => setEditForm((p) => ({ ...p, work: v }))} type="text" placeholder="e.g. Software developer" />
+                  <EditField label="Nơi làm việc" value={editForm.workplace || ''} onChange={(v) => setEditForm((p) => ({ ...p, workplace: v }))} type="text" placeholder="Company name" />
+                  <EditField label="Vị trí công việc" value={editForm.jobTitle || ''} onChange={(v) => setEditForm((p) => ({ ...p, jobTitle: v }))} type="text" placeholder="Job title" />
+                  <EditField label="Trường học" value={editForm.school || ''} onChange={(v) => setEditForm((p) => ({ ...p, school: v }))} type="text" placeholder="School name" />
+                  <EditField label="Đại học" value={editForm.college || ''} onChange={(v) => setEditForm((p) => ({ ...p, college: v }))} type="text" placeholder="University name" />
                 </>)}
                 {editingSection === 'places' && (<>
-                  <EditField label="Thành phố hiện tại" value={editForm.location || ''} onChange={(v) => setEditForm((p) => ({ ...p, location: v }))} type="text" placeholder="TP. Hồ Chí Minh" />
-                  <EditField label="Quê quán" value={editForm.hometown || ''} onChange={(v) => setEditForm((p) => ({ ...p, hometown: v }))} type="text" placeholder="Hà Nội" />
+                  <EditField label="Thành phố hiện tại" value={editForm.location || ''} onChange={(v) => setEditForm((p) => ({ ...p, location: v }))} type="text" placeholder="Ho Chi Minh City" />
+                  <EditField label="Quê quán" value={editForm.hometown || ''} onChange={(v) => setEditForm((p) => ({ ...p, hometown: v }))} type="text" placeholder="Hanoi" />
                 </>)}
                 {editingSection === 'contact' && (<>
                   <EditField label="Số điện thoại" value={editForm.phone || ''} onChange={(v) => setEditForm((p) => ({ ...p, phone: v }))} type="tel" placeholder="0123456789" />
@@ -878,9 +878,9 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                   <EditField label="Website" value={editForm.websiteUrl || ''} onChange={(v) => setEditForm((p) => ({ ...p, websiteUrl: v }))} type="url" placeholder="https://yourwebsite.com" />
                 </>)}
                 {editingSection === 'details' && (<>
-                  <EditField label="Giới thiệu" value={editForm.bio || ''} onChange={(v) => setEditForm((p) => ({ ...p, bio: v }))} type="textarea" placeholder="Viết vài dòng về bạn..." />
-                  <EditField label="Sở thích" value={editForm.hobbies || ''} onChange={(v) => setEditForm((p) => ({ ...p, hobbies: v }))} type="textarea" placeholder="Sở thích của bạn..." />
-                  <EditField label="Ngôn ngữ (phân cách bằng dấu phẩy)" value={editForm.languages || ''} onChange={(v) => setEditForm((p) => ({ ...p, languages: v }))} type="text" placeholder="Tiếng Việt, English" />
+                  <EditField label="Giới thiệu" value={editForm.bio || ''} onChange={(v) => setEditForm((p) => ({ ...p, bio: v }))} type="textarea" placeholder="Write a few lines about yourself..." />
+                  <EditField label="Sở thích" value={editForm.hobbies || ''} onChange={(v) => setEditForm((p) => ({ ...p, hobbies: v }))} type="textarea" placeholder="Your interests..." />
+                  <EditField label="Ngôn ngữ (phân cách bằng dấu phẩy)" value={editForm.languages || ''} onChange={(v) => setEditForm((p) => ({ ...p, languages: v }))} type="text" placeholder="Vietnamese, English" />
                 </>)}
               </div>
               <div className="flex gap-3 p-4 border-t border-darkborder bg-darkcard/50">

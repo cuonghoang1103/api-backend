@@ -242,7 +242,7 @@ export default function AcademyPage() {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Tìm môn học theo mã (VD: CEA203, PRO192)…"
+            placeholder="Search courses by code (e.g. CEA203, PRO192)…"
             className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-darkcard border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
           />
           {query && (

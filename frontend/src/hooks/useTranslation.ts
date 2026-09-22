@@ -73,10 +73,10 @@ export function useTranslation() {
     const handleLocaleChange = () => {
       const newMatch = document.cookie.match(/locale=(\w+)/);
       const newLocale = (newMatch && (newMatch[1] === 'vi' || newMatch[1] === 'en') ? newMatch[1] : 'en') as Locale;
-      if (newLocale !== locale) {
-        setLocaleState(newLocale);
-        loadTranslations(newLocale);
-      }
+      // Không so với `locale` — closure của effect chạy một lần luôn giữ 'en'
+      // (cùng lỗi đã sửa trong LocaleContext.tsx).
+      setLocaleState(newLocale);
+      loadTranslations(newLocale);
     };
 
     window.addEventListener('locale-changed', handleLocaleChange);

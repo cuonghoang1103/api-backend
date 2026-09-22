@@ -141,7 +141,7 @@ export default function NoteResourcePanel({ parent, attachments, links, onChange
           <input
             value={linkUrl}
             onChange={(e) => setLinkUrl(e.target.value)}
-            placeholder="Dán URL (YouTube tự nhúng được)"
+            placeholder="Paste a URL (YouTube embeds automatically)"
             className="w-full rounded-md bg-slate-100 dark:bg-slate-800/60 px-2 py-1.5 text-[13px] text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-teal-500/40"
           />
           <div className="flex gap-1.5">
@@ -151,7 +151,7 @@ export default function NoteResourcePanel({ parent, attachments, links, onChange
               // isComposing: Enter đang là phím chốt chữ của bộ gõ CJK,
               // gửi link lúc đó thì nhãn bị cắt giữa chừng
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) void submitLink(); }}
-              placeholder="Nhãn (tuỳ chọn)"
+              placeholder="Label (optional)"
               className="min-w-0 flex-1 rounded-md bg-slate-100 dark:bg-slate-800/60 px-2 py-1.5 text-[13px] text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-teal-500/40"
             />
             <button onClick={submitLink} disabled={adding || !linkUrl.trim()} className="flex shrink-0 items-center gap-1 rounded-md bg-teal-100 dark:bg-teal-500/15 px-3 text-[12px] text-teal-700 dark:text-teal-200 hover:bg-teal-500/25 disabled:opacity-40 min-h-[36px]">

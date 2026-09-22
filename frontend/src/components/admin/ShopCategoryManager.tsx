@@ -114,13 +114,13 @@ export default function ShopCategoryManager({ onChange }: { onChange?: () => voi
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-                placeholder="Tên danh mục mới (VD: Cursor AI, Tài khoản, Sách)…"
+                placeholder="New category name (e.g. Cursor AI, Accounts, Books)…"
                 className="flex-1 px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
               />
               <button
                 onClick={handleCreate}
                 disabled={creating || !newName.trim()}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-40"
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-40"
               >
                 {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                 Thêm
@@ -130,7 +130,7 @@ export default function ShopCategoryManager({ onChange }: { onChange?: () => voi
               value={newDesc}
               onChange={(e) => setNewDesc(e.target.value)}
               rows={2}
-              placeholder="Mô tả danh mục (tùy chọn) — hiện khi khách chọn danh mục này ở Shop…"
+              placeholder="Category description (optional) — shown when a customer picks this category in the Shop…"
               className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none"
             />
           </div>
@@ -168,7 +168,7 @@ export default function ShopCategoryManager({ onChange }: { onChange?: () => voi
                         value={editDesc}
                         onChange={(e) => setEditDesc(e.target.value)}
                         rows={2}
-                        placeholder="Mô tả danh mục…"
+                        placeholder="Category description…"
                         className="w-full px-3 py-1.5 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none resize-none"
                       />
                     </div>

@@ -97,7 +97,7 @@ export default function CvBuilderPage() {
         <Link href="/cv" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"><ArrowLeft className="h-4 w-4" /> CV Builder</Link>
         <div className="mt-3 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_460px]">
         <div>
-        <input value={name} onChange={(e) => setName(e.target.value)} aria-label="Tên bản CV" className="w-full bg-transparent text-2xl font-semibold tracking-tight outline-none" placeholder="Tên bản CV (Backend @ KMS)" />
+        <input value={name} onChange={(e) => setName(e.target.value)} aria-label="Tên bản CV" className="w-full bg-transparent text-2xl font-semibold tracking-tight outline-none" placeholder="CV name (Backend @ KMS)" />
         <p className="mt-1 text-sm text-[var(--text-secondary)]">Bản CV riêng cho một công việc — chọn nội dung đưa vào, mẫu, thị trường, ngôn ngữ. Bản xem trước cập nhật trực tiếp bên phải.</p>
 
         {/* Settings */}

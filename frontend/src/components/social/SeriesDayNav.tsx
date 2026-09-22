@@ -158,7 +158,7 @@ export default function SeriesDayNav({ slug, icon = '☕' }: Props) {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
             inputMode="text"
-            placeholder="Nhảy tới ngày… (vd. 7) hoặc tìm tên bài (vd. mảng)"
+            placeholder="Jump to day… (e.g. 7) or search a lesson (e.g. mảng)"
             aria-label="Nhảy tới một ngày trong loạt bài"
             className="min-w-0 flex-1 bg-transparent text-[13px] outline-none"
             style={{ color: 'var(--text-primary)' }}

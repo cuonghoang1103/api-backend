@@ -320,7 +320,7 @@ export default function AccountDataPage() {
                   maxLength={500}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  placeholder="VD: Tôi không dùng dịch vụ nữa…"
+                  placeholder="e.g. I no longer use the service…"
                 />
               </label>
 

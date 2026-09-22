@@ -304,14 +304,14 @@ export default function AdminSeoPage() {
           <button
             onClick={handleCustomSubmit}
             disabled={submitting || !customUrl.trim()}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             Submit
           </button>
         </div>
         <p className="text-xs text-text-muted mt-2">
-          ⚠️ Chỉ submit URL thuộc domain <code className="text-text-secondary">cuongthai.com</code>.
+          Chỉ submit URL thuộc domain <code className="text-text-secondary">cuongthai.com</code>.
           URL ngoài domain sẽ bị route từ chối với lý do bảo mật.
         </p>
       </div>
@@ -330,7 +330,7 @@ export default function AdminSeoPage() {
                 type="text"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                placeholder="Lọc URL..."
+                placeholder="Filter URLs..."
                 className="pl-9 pr-3 py-1.5 bg-darkbg border border-darkborder rounded-lg text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 w-40"
               />
             </div>
@@ -426,10 +426,10 @@ export default function AdminSeoPage() {
       {/* Help footer */}
       <div className="text-xs text-text-muted space-y-1">
         <p>
-          💡 Mẹo: Throttle 60s/URL được route enforce. Nếu submit 1 URL 2 lần trong 60s, lần 2 sẽ trả 429.
+          Mẹo: Throttle 60s/URL được route enforce. Nếu submit 1 URL 2 lần trong 60s, lần 2 sẽ trả 429.
         </p>
         <p>
-          💡 Auto-ping trong deploy-vps.sh tự động chạy sau mỗi deploy. Submit thủ công ở đây chỉ cần thiết
+          Auto-ping trong deploy-vps.sh tự động chạy sau mỗi deploy. Submit thủ công ở đây chỉ cần thiết
           khi URL đã tồn tại trong sitemap nhưng nội dung đã thay đổi đáng kể, hoặc cần index gấp.
         </p>
       </div>
@@ -439,12 +439,11 @@ export default function AdminSeoPage() {
 
 function StatCard({ label, value, icon: Icon, color }: { label: string; value: number; icon: React.ElementType; color: string }) {
   return (
-    <div className="bg-darkcard border border-darkborder rounded-2xl p-4">
-      <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${color} flex items-center justify-center mb-2`}>
-        <Icon className="w-4 h-4 text-white" />
-      </div>
-      <p className="text-2xl font-heading font-bold text-text-primary">{value}</p>
-      <p className="text-xs text-text-muted mt-0.5">{label}</p>
+    <div className="rounded-[8px] border border-[var(--a-border)] px-3.5 py-3" data-color={color}>
+      <p className="flex items-center gap-1.5 text-[12px] text-[var(--a-text-3)]">
+        <Icon className="h-3.5 w-3.5" strokeWidth={1.75} /> {label}
+      </p>
+      <p className="mt-1 text-[20px] font-semibold leading-7 tabular-nums text-[var(--a-text)]">{value}</p>
     </div>
   );
 }

@@ -395,7 +395,7 @@ export default function GiaSuTrongRobot({ bai, rong }: { bai: BaiDangHoc; rong: 
             }}
             onPaste={danVao}
             rows={rong ? 2 : 1}
-            placeholder="Hỏi về bài này — dán ảnh chụp màn hình cũng được…"
+            placeholder="Ask about this lesson — screenshots welcome…"
             className="min-w-0 flex-1 resize-none rounded-xl border border-[#22d3ee]/15 bg-[#0a0a0f] px-3 py-2
               text-[13px] text-[#e2e8f0] outline-none placeholder:text-[#475569] focus:border-[#22d3ee]/40"
           />

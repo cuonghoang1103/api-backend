@@ -809,7 +809,7 @@ function TheaterComments({
         <input
           value={draft}
           onChange={(e) => onDraftChange(e.target.value)}
-          placeholder="Viết bình luận…"
+          placeholder="Write a comment…"
           className="flex-1 rounded-full bg-white/5 px-3 py-1.5 text-sm text-white placeholder-white/40 outline-none focus:bg-white/10"
         />
         <button

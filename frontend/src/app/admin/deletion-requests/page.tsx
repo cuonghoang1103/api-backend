@@ -276,7 +276,7 @@ export default function AdminDeletionRequestsPage() {
                           maxLength={500}
                           value={note}
                           onChange={(e) => setNote(e.target.value)}
-                          placeholder="VD: Tài khoản còn đơn hàng đang xử lý…"
+                          placeholder="e.g. Account still has orders in progress…"
                           className="w-full rounded-lg border px-3 py-2 text-sm outline-none"
                           style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
                         />

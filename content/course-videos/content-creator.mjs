@@ -152,11 +152,25 @@ export default {
     'cr-18-3-phong-xanh-tach-nen': { yt: '-jeqx-xoiA8', credit: 'Steven Washer (Visible Authority) — How to get a flawless greenscreen shoot in a tiny room' },
     'cr-18-4-vfx-thuc-te': { yt: 'FvzlVK1IaU0', credit: 'Team 2 Films — Screen Replacement with FUSION Planar Tracker - Davinci Resolve 18.5 TUTORIAL' },
 
+    /* ── Chương 19 — Motion graphics, Fusion & 3D ── */
+    'cr-19-0-slides': { yt: 'HH0VBOyht0E', credit: 'Ben Marriott — Essential Motion Graphics for Youtube' },
+    'cr-19-1-motion-graphics': { yt: 'GguDb5uc40Y', credit: 'Joey Edits — Essential Motion Graphics in CapCut PC (Beginner’s Guide)' },
+    'cr-19-2-fusion-resolve': { yt: 'PoinMs_YceQ', credit: 'Casey Faris — Fusion Nodes Explained With Toast - DaVinci Resolve Fusion Guide for Beginners (2024)' },
+    'cr-19-3-3d-trong-fusion': { yt: 'rx591Kh3IpU', credit: 'Casey Faris — Simple 3D Text Title in Fusion - DaVinci Resolve Fusion Tutorials for Beginners' },
+    'cr-19-4-blender-cho-creator': { yt: 'fnLV3878HN4', credit: 'Brandon 3D — 3D Text in Blender: Everything You Need to Know!' },
+
     /* ── Chương 20 — Video ngắn dọc ── */
     'cr-20-0-slides': { yt: 'h4gIxvwB5mI', credit: 'Katie Steckly — My Updated Short Form Growth Strategy for 2026' },
     'cr-20-1-giai-phau-video-ngan': { yt: 'LmXpbP7dD48', credit: 'Kallaway — How to Create Irresistible Hooks (and blow up your content)' },
     'cr-20-2-quay-video-ngan': { yt: 'f3Zu_w9uk3A', credit: 'Adorama — How to Shoot Great Vertical Videos | Filmmaking with Aidin Robbins' },
     'cr-20-3-dung-video-ngan': { yt: 'l9JlsmzQs7Y', credit: 'Patrik Key — How To Make VIRAL Captions in CapCut (Step by Step)' },
     'cr-20-4-dang-phan-phoi-video-ngan': { yt: 'a-yeaMDQN8w', credit: 'Money Guy — The RIGHT Way to Upload Shorts in 2026 (For Fast Growth)' },
+
+    /* ── Chương 21 — Vlog ── */
+    'cr-21-0-slides': { yt: 'Q980C74SdYQ', credit: 'CaseyNeistat — HOW TO VLOG LIKE CASEY NEISTAT by CASEY NEISTAT' },
+    'cr-21-1-vlog-la-ke-chuyen': { yt: 'KdsWzPMCv7w', credit: 'Jeven Dovey — How To Vlog and Be a Better Storyteller' },
+    'cr-21-2-quay-vlog-pocket-3': { yt: 'ikQaAfx3i6U', credit: 'Brandon Li — 10 Tips & Tricks for the DJI Osmo Pocket 3 - Best Settings' },
+    'cr-21-3-dung-vlog': { yt: 'dhpazqW_OaU', credit: 'Tim Runia — The ONLY 5 Editing Secrets You Need to Tell Any Story' },
+    'cr-21-4-vlog-hoc-tap-thuong-hieu': { yt: 'O96u9YjqC8U', credit: 'Alexander Mayhue | Study With Me — How To Start A Successful STUDY WITH ME Channel in 2026!' },
   },
 };

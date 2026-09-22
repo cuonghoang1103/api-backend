@@ -193,5 +193,26 @@ export default {
     'cr-24-2-dang-youtube-seo': { yt: '5SkEuxyAu7I', credit: 'Adam Ivy — How to Upload Videos on YouTube in 2026 (The Right Way)' },
     'cr-24-3-dang-tiktok-facebook-instagram': { yt: 'oSjCahkH5Nc', credit: 'Katie Steckly — I posted the same video to Reels, TikTok and Shorts. Here’s what happened.' },
     'cr-24-4-ban-quyen-luat-choi': { yt: 'HxmTXkFx44w', credit: 'The Music Business Made Easy — The Difference Between Youtube Copyright Strikes and Content ID Claims' },
+
+    /* ── Chương 25 — Thumbnail & tiêu đề ── */
+    'cr-25-0-slides': { yt: 'A0079AhtlVU', credit: 'Think Media — How a Pro YouTuber Actually Makes Thumbnails' },
+    'cr-25-1-packaging': { yt: 'jZCupmAOMAE', credit: 'Kallaway — Why The Smartest Creators I Know Focus on Packaging, Not Content' },
+    'cr-25-2-viet-tieu-de': { yt: 'CWcalhl86DE', credit: "Dan the creator — YouTube Titles Have Changed, Here's What Works in 2026" },
+    'cr-25-3-thiet-ke-thumbnail': { yt: 'KE4zqD0ONDI', credit: 'Aprilynne Alter — give me 9 minutes, I’ll make your thumbnails 81% better' },
+    'cr-25-4-thu-nghiem-cai-tien': { yt: 'jKRiib3Xzoo', credit: 'YouTube Creators — A/B testing on YouTube' },
+
+    /* ── Chương 26 — Số liệu, tăng trưởng & kiếm tiền ── */
+    'cr-26-0-slides': { yt: 'IHDJkJpYC90', credit: "Nate Black — My Beginner's Guide to YouTube Analytics (everything you need in 12 minutes)" },
+    'cr-26-1-doc-analytics': { yt: '2g6hbhclpKo', credit: 'Rob the Maritimer — YouTube Analytics Explained — 2026 Beginner’s Guide (What Really Matters)' },
+    'cr-26-2-vong-lap-cai-tien': { yt: 'AeZf01wNNks', credit: 'Viewstats — How To Use Outliers To Go Viral' },
+    'cr-26-3-cong-dong': { yt: 'Abm2YVA8O5E', credit: 'Justin Brown - Primal Video — YouTube Community Tab & Posts - The COMPLETE Guide!' },
+    'cr-26-4-kiem-tien-pheu-website': { yt: 'LTcUBmtPbo0', credit: 'Jade Beason — The Ultimate Guide to Earning an Income on YouTube | YouTube Partner Program 2026' },
+
+    /* ── Chương 27 — Dự án cuối khoá: 30 ngày ra mắt kênh ── */
+    'cr-27-0-slides': { yt: 'n5upxXteYuY', credit: 'Aprilynne Alter — The EXACT System to Blow Up on YouTube in 90 Days' },
+    'cr-27-1-ke-hoach-30-ngay': { yt: '_O2EsdfxIcU', credit: 'Katie Steckly — My Weekly Routine for Productivity as a Content Creator 2025' },
+    'cr-27-2-du-an-video-dai': { yt: 'XtfOGijCZXw', credit: 'vidIQ — How to Make Your First YouTube Video in 2026 - Complete Beginner Guide' },
+    'cr-27-3-du-an-video-ngan-vlog': { yt: '-FiehoOtVOo', credit: 'kelechi mgbemena — How I Batch Film 4 Videos in 1 Day (Step-by-Step Behind the Scenes!)' },
+    'cr-27-4-tu-danh-gia-buoc-tiep': { yt: 'LQRuaP2VFfA', credit: 'Ali Abdaal — 9 Things I Wish I Knew When I Started YouTube' },
   },
 };

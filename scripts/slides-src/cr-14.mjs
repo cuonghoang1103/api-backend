@@ -93,25 +93,24 @@ export const slides = S([
   /* 6 — hard cut vs jump cut */
   {
     t: 'Hard cut và jump cut — khác nhau ở việc mắt có bị "lừa" không',
-    body: two(
-      timeline({ len: 18, tracks: [{ id: 'V1', clips: [{ s: 0, e: 9, t: 'MS — bạn nói', c: 'blu' }, { s: 9, e: 18, t: 'CU — tay gõ phím (B-roll)', c: 'amb' }] }] }) + cap('Hard cut — đổi cỡ cảnh rõ ràng, người xem thấy "đúng là cảnh mới"'),
-      timeline({ len: 18, tracks: [{ id: 'V1', clips: [{ s: 0, e: 9, t: 'MS — câu 1', c: 'blu' }, { s: 9, e: 18, t: 'MS — câu 3 (bỏ câu 2)', c: 'blu' }] }] }) + cap('Jump cut — cùng cỡ cảnh, cùng góc — bạn "nhảy" vị trí nhẹ'),
-    ) + box('info', 'Jump cut không phải lỗi — Ch.12 đã dạy dùng Q/W để tạo nó. Vấn đề của chương này là PHÁN ĐOÁN: dùng liên tục được cho video ngắn tiết tấu nhanh, nhưng lạm dụng trong phỏng vấn trang trọng thì gây khó chịu — lúc đó nên chêm cutaway hoặc B-roll để đổi nhịp.'),
+    body:
+      timeline({ len: 18, tracks: [{ id: 'V1', clips: [{ s: 0, e: 9, t: 'MS — bạn nói', c: 'blu' }, { s: 9, e: 18, t: 'CU — tay gõ phím (B-roll)', c: 'amb' }] }] }) + cap('Hard cut — đổi cỡ cảnh rõ ràng, người xem thấy "đúng là cảnh mới"') +
+      timeline({ len: 18, tracks: [{ id: 'V1', clips: [{ s: 0, e: 9, t: 'MS — câu 1', c: 'blu' }, { s: 9, e: 18, t: 'MS — câu 3 (bỏ câu 2)', c: 'blu' }] }] }) + cap('Jump cut — cùng cỡ cảnh, cùng góc — bạn "nhảy" vị trí nhẹ') +
+      box('info', 'Jump cut không phải lỗi — Ch.12 đã dạy dùng Q/W để tạo nó. Vấn đề của chương này là PHÁN ĐOÁN: dùng liên tục được cho video ngắn tiết tấu nhanh, nhưng lạm dụng trong phỏng vấn trang trọng thì gây khó chịu — lúc đó nên chêm cutaway hoặc B-roll để đổi nhịp.'),
   },
 
   /* 7 — J-cut vs L-cut, khung cảnh phỏng vấn */
   {
     t: 'J-cut và L-cut — cùng kỹ thuật, khác chủ đích cảm xúc',
-    body: two(
+    body:
       timeline({ len: 20, step: 4, tracks: [
         { id: 'V1', clips: [{ s: 0, e: 10, t: 'Bạn hỏi (hình)', c: 'blu' }, { s: 10, e: 20, t: 'Bạn học trả lời (hình)', c: 'amb' }] },
         { id: 'A1', a: true, clips: [{ s: 0, e: 7, t: 'Bạn hỏi (tiếng)', c: 'blu' }, { s: 7, e: 20, t: 'Bạn học trả lời (tiếng)', c: 'amb' }] },
-      ], braces: [{ s: 7, e: 10, t: 'nghe giọng bạn học trước 3s — tạo sự chờ đợi', c: 'amb' }] }) + cap('J-cut — kéo người xem TỚI câu trả lời bằng tai trước'),
+      ], braces: [{ s: 7, e: 10, t: 'nghe giọng bạn học trước 3s — tạo sự chờ đợi', c: 'amb' }] }) + cap('J-cut — kéo người xem TỚI câu trả lời bằng tai trước') +
       timeline({ len: 20, step: 4, tracks: [
         { id: 'V1', clips: [{ s: 0, e: 10, t: 'Bạn hỏi (hình)', c: 'blu' }, { s: 10, e: 20, t: 'Phản ứng bạn học (hình)', c: 'grn' }] },
         { id: 'A1', a: true, clips: [{ s: 0, e: 13, t: 'Bạn hỏi (tiếng)', c: 'blu' }, { s: 13, e: 20, t: 'Bạn học trả lời (tiếng)', c: 'grn' }] },
       ], braces: [{ s: 10, e: 13, t: 'còn nghe câu hỏi khi đã thấy phản ứng — cảm xúc ở lại 3s', c: 'grn' }] }) + cap('L-cut — giữ cảm xúc của câu vừa nói thêm một nhịp'),
-    ),
   },
 
   /* 8 — cutaway timeline */
@@ -141,7 +140,7 @@ export const slides = S([
   /* 10 — Kuleshov */
   {
     t: 'Hiệu ứng Kuleshov — cùng một khuôn mặt, ba cách hiểu',
-    body: kuleshovDemo() + box('warn', 'Ba cột trên dùng ĐÚNG MỘT cảnh phản ứng (khuôn mặt không đổi) — chỉ cảnh SAU nó thay đổi. Khán giả tự gán cảm xúc cho khuôn mặt dựa vào cảnh vừa xem, dù khuôn mặt chẳng hề đổi biểu cảm. Nguồn & lịch sử thật của thí nghiệm (Lev Kuleshov, thập niên 1920) — xem bài học.'),
+    body: kuleshovDemo() + box('warn', 'Ba cột dùng ĐÚNG MỘT cảnh phản ứng — chỉ cảnh SAU nó đổi. Khán giả tự gán cảm xúc cho khuôn mặt theo cảnh vừa xem. Lịch sử thật của thí nghiệm (Lev Kuleshov, thập niên 1920) — xem bài học.'),
   },
 
   /* 11 — bars Rule of Six */

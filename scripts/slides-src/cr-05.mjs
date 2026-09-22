@@ -89,7 +89,7 @@ export const slides = S([
         'Màn trập là BỘI SỐ của nhịp nhấp nháy 100 lần/giây',
         'Hết sọc — đây là lý do khoá này mặc định 25/50fps',
       ] },
-    }) + box('info', 'Mỹ/Nhật dùng điện 60Hz nên máy quay mặc định 30/60fps — công thức bạn thấy trên YouTube quốc tế thường SAI cho phòng học ở Việt Nam.'),
+    }) + box('info', 'Mỹ và nhiều nước dùng điện 60Hz nên máy bán ở đó mặc định 30/60fps — công thức bạn thấy trên YouTube quốc tế thường SAI cho phòng học ở Việt Nam.'),
   },
 
   /* 6 — tam giác phơi sáng */
@@ -102,7 +102,7 @@ export const slides = S([
   {
     t: 'Khẩu độ (f-number) & độ sâu trường ảnh',
     body: dof([
-      { t: 'f/1.8 (Pocket 3 · iPhone ống chính) — nền mờ, nổi chủ thể', blur: 7 },
+      { t: 'f/1.8–2.0 (iPhone · Pocket 3) — nền mờ, nổi chủ thể', blur: 7 },
       { t: 'f/8 (máy chỉnh được khẩu) — nền nét, dễ rối mắt', blur: 0 },
     ]),
   },

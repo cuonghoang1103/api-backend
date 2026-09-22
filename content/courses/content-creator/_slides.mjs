@@ -22,7 +22,8 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/CR';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'cr-05': 'v2' }. */
-const VER = {};
+// v2 (22/09/2026): cr-05 sửa Nhật 50/60Hz + khẩu Pocket 3; cr-14 slide 6–7 dòng thời gian xếp chồng, slide 10 hết đè chân trang
+const VER = { 'cr-05': 'v2', 'cr-14': 'v2' };
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

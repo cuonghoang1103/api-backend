@@ -47,6 +47,13 @@ export default {
     'cr-04-3-shot-list': { yt: 'IhXMpBk3GDA', credit: 'StudioBinder — How to Make a Shot List for Film: A Step-by-Step Guide' },
     'cr-04-4-storyboard-ngay-quay': { yt: 'NPrkxj2MyZI', credit: 'The Media Insider — How to draw A-grade storyboards (even if you can\'t draw!) | Media studies tutorial' },
 
+    /* ── Chương 5 — Máy quay hoạt động thế nào ── */
+    'cr-05-0-slides': { yt: 'HTUjJoMNWqo', credit: "Tomorrows Filmmakers — Master Your Camera in 20 Minutes | Tomorrow's Filmmakers" },
+    'cr-05-1-do-phan-giai-fps': { yt: 'e6HZPmSlS5c', credit: 'Potato Jet — What Frame Rate Should You Be Filming In?' },
+    'cr-05-2-phoi-sang': { yt: 'SsIEcGbwgN0', credit: 'StudioBinder — What is Shutter Speed — Camera Shutter and the Exposure Triangle Explained [Ep. 3]' },
+    'cr-05-3-can-bang-trang-lay-net': { yt: 'APLq7aPlDhk', credit: "StudioBinder — Color Temperature Explained — The Cinematographer's Guide to White Balance & Color Temp Fundamentals" },
+    'cr-05-4-codec-bitrate-log': { yt: '-4NXxY4maYc', credit: 'ExplainingComputers — Explaining Digital Video: Formats, Codecs & Containers' },
+
     /* ── Chương 6 — Cài đặt đồ nghề của bạn ── */
     'cr-06-0-slides': { yt: '47-cCQ1qY04', credit: 'The Drone Creative — DJI OSMO POCKET 3 | 20 SETTINGS You SHOULD CHANGE IMMEDIATELY!' },
     'cr-06-1-pocket-3': { yt: 'Mhub0XyAF7Y', credit: 'Hallease — New Osmo Pocket 3? Must-Have Settings for Beginners and Vloggers (Get Cinematic Footage!)' },
@@ -67,5 +74,12 @@ export default {
     'cr-13-2-cong-cu-trang-edit': { yt: 'UJ3oZqmZ0tc', credit: 'Quanta  — DaVinci Resolve 18.5 | Timeline Edit & Trim Tools for Beginners [Roll, Ripple, Slip, and Slide]' },
     'cr-13-3-da-may-dong-bo': { yt: 'WgzUvtRgeCM', credit: 'DaVinci Dojo — How to Edit with Multiple Camera Angles in DaVinci Resolve 20 | Multicam Editing' },
     'cr-13-4-resolve-ipad-linux': { yt: 'h6gBFvbNZgE', credit: 'Justin Brown - Primal Video — DaVinci Resolve iPad Tutorial - How To Edit Video On iPad!' },
+
+    /* ── Chương 14 — Nghệ thuật cắt dựng ── */
+    'cr-14-0-slides': { yt: 'FVR8zz8ci2k', credit: 'StudioBinder — 6 Ways to Edit Any Scene — Essential Film & Video Editing Techniques Explained [Shot List Ep. 10]' },
+    'cr-14-1-quy-trinh-dung': { yt: 'qKPHNWEV5_o', credit: 'StudioBinder — Post-Production Explained — Each Step of the Post-Production Process [Stages of Filmmaking, Ep 4]' },
+    'cr-14-2-kieu-cat-chuyen-canh': { yt: 'OAH0MoAv2CI', credit: 'RocketJump Film School — Cuts & Transitions 101' },
+    'cr-14-3-nhip-giu-chan': { yt: 'sLgHqZSe2o0', credit: 'Learn By Leo — How to edit SO good your viewers get addicted to your videos' },
+    'cr-14-4-nhac-thiet-ke-am-thanh': { yt: '8LV1bqf8ZVo', credit: 'Artlist — How To SOUND DESIGN | Step by step tutorial' },
   },
 };

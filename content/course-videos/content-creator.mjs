@@ -68,6 +68,13 @@ export default {
     'cr-06-3-ipad-mac-linux': { yt: 'C51uC1ItUdU', credit: 'Andy To — M5 iPad Pro: The Complete Creator (Edited on iPad)' },
     'cr-06-4-the-nho-pin-dung-luong': { yt: 'g5PkExucy4I', credit: 'Kingston Technology — SD and microSD Card Specification Labels Explained – DIY in 5 Ep 141' },
 
+    /* ── Chương 8 — Ánh sáng ── */
+    'cr-08-0-slides': { yt: '6HgKy2gNimQ', credit: 'Think Media — YouTube Lighting Tutorial: Complete Beginners Guide to Video Lighting' },
+    'cr-08-1-ban-chat-anh-sang': { yt: 'r2nD_knsNrc', credit: 'StudioBinder — Ultimate Guide to Cinematic Lighting — Types of Light & Gear Explained [Shot List Ep. 12]' },
+    'cr-08-2-anh-sang-tu-nhien': { yt: 'qtAKAL9MrWE', credit: 'Vuhlandes — EASY cinematic natural lighting filmmaking tips' },
+    'cr-08-3-ba-diem-kieu-sang-mat': { yt: 'N9mPQBZe06s', credit: 'StudioBinder — Ultimate Guide to Cinematic Lighting Pt. 2 — How to Light Subjects and Locations' },
+    'cr-08-4-goc-quay-tai-nha': { yt: 'jXoPcFsb1ro', credit: 'Josh Winiarski — Transform Your Bedroom Into A YouTube Studio ($5 - $250)' },
+
     /* ── Chương 12 — Dựng nhanh với CapCut ── */
     'cr-12-0-slides': { yt: 'EMDrgqepVhM', credit: 'Metics Media — CapCut Tutorial for Beginners 2026' },
     'cr-12-1-giao-dien-capcut': { yt: 'j5_471mO14c', credit: 'Metics Media — CapCut Tutorial for Beginners (2026) – Full Video Editing Guide' },

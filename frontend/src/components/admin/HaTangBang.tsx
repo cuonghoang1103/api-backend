@@ -401,7 +401,7 @@ export function HaTangBang() {
       const m =
         (e as { response?: { data?: { message?: string } } })?.response?.data?.message ??
         (e instanceof Error ? e.message : 'Lỗi');
-      setKetQua(`⚠️ ${m}`);
+      setKetQua(`Lỗi: ${m}`);
     } finally {
       setDangChay(false);
     }

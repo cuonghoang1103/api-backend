@@ -743,7 +743,7 @@ export function XuongGiong() {
                     bat ? 'bg-red-500/20 text-red-300' : 'bg-emerald-500/20 text-emerald-300'
                   }`}
                 >
-                  {ten}: {bat ? 'CÒN BẬT ⚠' : 'đã tắt'}
+                  {ten}: {bat ? 'CÒN BẬT' : 'đã tắt'}
                 </span>
               );
             })}
@@ -1091,7 +1091,7 @@ export function XuongGiong() {
             </span>
             {!dangSoat && (
               <span className={dangNgo.length ? 'text-sm text-amber-300' : 'text-sm text-emerald-400'}>
-                {dangNgo.length ? `${dangNgo.length} đoạn nên nghe lại` : 'Không có đoạn nào đáng ngờ ✓'}
+                {dangNgo.length ? `${dangNgo.length} đoạn nên nghe lại` : 'Không có đoạn nào đáng ngờ'}
               </span>
             )}
           </div>

@@ -126,7 +126,7 @@ export default function AiGeneratePanel({
     <Modal
       open={open}
       onClose={() => { reset(); onClose(); }}
-      title={`✨ AI tạo ${SECTION_LABEL[section] ?? 'nội dung'}`}
+      title={`AI tạo ${SECTION_LABEL[section] ?? 'nội dung'}`}
       maxWidth="max-w-2xl"
       footer={
         proposals.length > 0 ? (

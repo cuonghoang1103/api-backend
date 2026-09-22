@@ -512,11 +512,11 @@ function AdminOrdersContent() {
                               className="px-3 py-2 bg-darkcard border border-amber-500/30 rounded-xl text-sm text-amber-300 focus:outline-none focus:border-amber-500/60 cursor-pointer disabled:opacity-50"
                               title="Trạng thái giao hàng"
                             >
-                              <option value="PENDING">🕒 Chờ xác nhận</option>
-                              <option value="PROCESSING">📦 Đang chuẩn bị</option>
-                              <option value="SHIPPED">🚚 Đang giao</option>
-                              <option value="DELIVERED">✅ Đã giao</option>
-                              <option value="COMPLETED">🎉 Hoàn thành</option>
+                              <option value="PENDING">Chờ xác nhận</option>
+                              <option value="PROCESSING">Đang chuẩn bị</option>
+                              <option value="SHIPPED">Đang giao</option>
+                              <option value="DELIVERED">Đã giao</option>
+                              <option value="COMPLETED">Hoàn thành</option>
                             </select>
                             <div className="flex items-center gap-1">
                               <input

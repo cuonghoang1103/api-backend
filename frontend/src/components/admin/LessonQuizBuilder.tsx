@@ -80,7 +80,7 @@ export default function LessonQuizBuilder({
     <div className="rounded-xl border border-neon-violet/30 bg-neon-violet/[0.04] p-4 space-y-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <p className="text-sm font-semibold text-text-primary">📝 Bài Quizz (trắc nghiệm + tự luận)</p>
+          <p className="text-sm font-semibold text-text-primary">Bài Quizz (trắc nghiệm + tự luận)</p>
           <p className="text-xs text-text-muted mt-0.5">{quiz.questions.length} câu · {totalPoints} điểm · trắc nghiệm tự chấm, tự luận tự đối chiếu</p>
         </div>
         <label className="flex items-center gap-2 text-sm text-text-secondary">

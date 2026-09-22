@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { Download, FileText, Link2, Loader2, Trash2, Upload } from 'lucide-react';
+import { Download, FileArchive, FileImage, FileSpreadsheet, FileText, FileVideo, Link2, Loader2, Presentation, Trash2, Upload } from 'lucide-react';
 import { coursesApi } from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -30,18 +30,15 @@ function isLinkDoc(doc: DocumentItem): boolean {
   return doc.fileType === 'link';
 }
 
-// Map a filename to a human-friendly icon.
+// Biểu tượng theo đuôi file (nét mảnh, không emoji — emoji mỗi máy vẽ một kiểu).
 function pickFileIcon(name: string) {
   const ext = name.split('.').pop()?.toLowerCase() || '';
-  if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return '📦';
-  if (['pdf'].includes(ext)) return '📕';
-  if (['doc', 'docx'].includes(ext)) return '📘';
-  if (['xls', 'xlsx', 'csv'].includes(ext)) return '📗';
-  if (['ppt', 'pptx'].includes(ext)) return '📙';
-  if (['txt', 'md'].includes(ext)) return '📄';
-  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext)) return '🖼️';
-  if (['mp4', 'mov', 'webm', 'mkv'].includes(ext)) return '🎬';
-  return '📄';
+  if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return FileArchive;
+  if (['xls', 'xlsx', 'csv'].includes(ext)) return FileSpreadsheet;
+  if (['ppt', 'pptx'].includes(ext)) return Presentation;
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext)) return FileImage;
+  if (['mp4', 'mov', 'webm', 'mkv'].includes(ext)) return FileVideo;
+  return FileText;
 }
 
 function formatBytes(bytes: number): string {
@@ -243,8 +240,8 @@ export default function LessonDocumentsManager({ lessonId, courseId, initialDocu
                 key={doc.id}
                 className="flex items-center gap-3 p-3 bg-darkbg rounded-xl border border-darkborder/40 hover:border-darkborder/80 transition-colors"
               >
-                <div className="w-10 h-10 rounded-lg bg-neon-indigo/10 flex items-center justify-center text-lg shrink-0">
-                  {link ? '🔗' : pickFileIcon(doc.title)}
+                <div className="w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center shrink-0">
+                  {(() => { const I = link ? Link2 : pickFileIcon(doc.title); return <I className="w-4 h-4 text-text-muted" strokeWidth={1.75} />; })()}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-text-primary truncate">{doc.title}</p>

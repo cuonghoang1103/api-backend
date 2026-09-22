@@ -882,7 +882,7 @@ export default function AdminMusicPage() {
                           : 'border-darkborder bg-darkbg text-text-muted hover:border-neon-violet/30'
                       }`}
                     >
-                      {c === 'REMIX' ? '🎛️ Remix' : '🎵 Thường'}
+                      {c === 'REMIX' ? 'Remix' : 'Thường'}
                     </button>
                   ))}
                 </div>

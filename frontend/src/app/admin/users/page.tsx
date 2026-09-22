@@ -80,7 +80,7 @@ const PROVIDER_CONFIG: Record<string, { label: string; style: string; icon: stri
   credentials: {
     label: 'Credentials',
     style: 'bg-violet-500/10 text-violet-400 border border-violet-500/20 shadow-[0_0_8px_rgba(139,92,246,0.15)]',
-    icon: '🔑',
+    icon: '',
   },
 };
 
@@ -301,7 +301,7 @@ function EditUserModal({
 
             {form.emailVerified && !user.emailVerified && (
               <p className="text-xs text-yellow-400/80 mt-1.5 pl-1">
-                ⚠ Sau khi lưu, tài khoản sẽ không thể xóa cho đến khi hủy xác minh trở lại.
+                Sau khi lưu, tài khoản sẽ không thể xóa cho đến khi hủy xác minh trở lại.
               </p>
             )}
           </div>
@@ -691,9 +691,9 @@ export default function AdminUsersPage() {
                   : 'text-text-muted hover:text-text-primary'
               }`}
             >
-              {opt.value === 'google'   ? '🔴 Google'   :
-               opt.value === 'github'   ? '🐙 GitHub'    :
-               opt.value === 'facebook' ? '📘 Facebook' :
+              {opt.value === 'google'   ? 'Google'   :
+               opt.value === 'github'   ? 'GitHub'    :
+               opt.value === 'facebook' ? 'Facebook' :
                opt.label}
             </button>
           ))}

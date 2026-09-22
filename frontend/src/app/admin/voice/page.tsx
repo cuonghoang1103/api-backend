@@ -15,19 +15,21 @@ import { toast } from 'sonner';
 import {
   Plus, Search, Pencil, Trash2, X, Save, Sparkles, Upload, Loader2,
   Eye, EyeOff, Radio, Youtube, Video, Mic, Star, Pin, ListVideo, Clock,
+  BookOpen, Clapperboard, Code2, MessageCircle,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import {
   adminVoiceApi, fileApi,
   type AdminVoicePost, type VoiceSeries, type VoiceType, type VoiceMediaKind,
   type VoiceStatus, type VoiceChapter, type VoiceUpsertPayload,
 } from '@/lib/api';
 
-const TYPES: { value: VoiceType; label: string; emoji: string }[] = [
-  { value: 'VLOG', label: 'Vlog', emoji: '🎬' },
-  { value: 'REACTION', label: 'Reaction', emoji: '😮' },
-  { value: 'CODE_EXP', label: 'Kinh nghiệm code', emoji: '💻' },
-  { value: 'PODCAST', label: 'Podcast', emoji: '🎙️' },
-  { value: 'TUTORIAL', label: 'Tutorial', emoji: '📚' },
+const TYPES: { value: VoiceType; label: string; Icon: LucideIcon }[] = [
+  { value: 'VLOG', label: 'Vlog', Icon: Clapperboard },
+  { value: 'REACTION', label: 'Reaction', Icon: MessageCircle },
+  { value: 'CODE_EXP', label: 'Kinh nghiệm code', Icon: Code2 },
+  { value: 'PODCAST', label: 'Podcast', Icon: Mic },
+  { value: 'TUTORIAL', label: 'Tutorial', Icon: BookOpen },
 ];
 
 const MEDIA: { value: VoiceMediaKind; label: string; icon: typeof Youtube }[] = [
@@ -206,12 +208,12 @@ export default function AdminVoicePage() {
             const t = TYPES.find((x) => x.value === p.type);
             return (
               <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/10 hover:border-neon-violet/30 transition-colors">
-                <span className="text-lg shrink-0">{t?.emoji ?? '🎥'}</span>
+                {(() => { const I = t?.Icon ?? Video; return <I className="w-4 h-4 shrink-0 text-text-muted" strokeWidth={1.75} />; })()}
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-white truncate">{p.title}</p>
                   <p className="text-xs text-gray-500 truncate">
                     {t?.label} · {p.mediaKind} · {p.viewCount} views · {p.likeCount} likes
-                    {p.isFeatured ? ' · ⭐' : ''}{p.isPinned ? ' · 📌' : ''}
+                    {p.isFeatured ? ' · Nổi bật' : ''}{p.isPinned ? ' · Ghim' : ''}
                   </p>
                 </div>
                 <span className={['text-[11px] px-2 py-0.5 rounded-full shrink-0', p.status === 'PUBLISHED' ? 'bg-neon-emerald/15 text-neon-emerald' : 'bg-white/10 text-gray-400'].join(' ')}>
@@ -411,7 +413,7 @@ function Editor({
               {TYPES.map((t) => (
                 <button key={t.value} onClick={() => set('type', t.value)}
                   className={['px-3 py-1.5 rounded-lg text-sm border', form.type === t.value ? 'bg-neon-violet/20 text-neon-violet border-neon-violet/40' : 'bg-white/5 text-gray-300 border-white/10 hover:border-white/20'].join(' ')}>
-                  {t.emoji} {t.label}
+                  {t.label}
                 </button>
               ))}
             </div>

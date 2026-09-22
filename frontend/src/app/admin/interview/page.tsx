@@ -255,7 +255,7 @@ function Flagged() {
   };
 
   if (loading) return <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>;
-  if (!items.length) return <div className="rounded-xl border border-white/10 p-6 text-slate-400">Không có câu nào cần rà soát. 🎉</div>;
+  if (!items.length) return <div className="rounded-xl border border-white/10 p-6 text-slate-400">Không có câu nào cần rà soát.</div>;
 
   return (
     <div className="space-y-3">

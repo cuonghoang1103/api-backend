@@ -1078,8 +1078,8 @@ export default function AdminShopPage() {
                 <label className="block text-xs font-medium text-text-muted mb-1.5">Loại sản phẩm</label>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { v: 'DIGITAL', label: '💻 Hàng số / công nghệ', desc: 'Giao ngay: file / tài khoản-mã / hướng dẫn' },
-                    { v: 'PHYSICAL', label: '📦 Hàng vật lý', desc: 'Cần giao vận + tồn kho' },
+                    { v: 'DIGITAL', label: 'Hàng số / công nghệ', desc: 'Giao ngay: file / tài khoản-mã / hướng dẫn' },
+                    { v: 'PHYSICAL', label: 'Hàng vật lý', desc: 'Cần giao vận + tồn kho' },
                   ].map((opt) => (
                     <button
                       type="button"
@@ -1200,7 +1200,7 @@ export default function AdminShopPage() {
                     <ProductKeyManager productId={Number(editingId)} />
                   ) : (
                     <p className="text-[11px] text-text-muted/70 rounded-xl border border-dashed border-darkborder p-3">
-                      💡 Lưu sản phẩm trước, rồi mở lại để thêm <strong>kho tài khoản/key riêng cho từng khách</strong> (mỗi người mua nhận 1 key khác nhau, không trùng).
+                      Lưu sản phẩm trước, rồi mở lại để thêm <strong>kho tài khoản/key riêng cho từng khách</strong> (mỗi người mua nhận 1 key khác nhau, không trùng).
                     </p>
                   )}
                 </>

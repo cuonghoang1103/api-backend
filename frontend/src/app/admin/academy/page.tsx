@@ -1138,7 +1138,7 @@ export default function AdminAcademyPage() {
 
           {/* Note guiding students on how to use the attached materials. */}
           <div className="mb-3">
-            <label className="block text-sm font-medium text-text-primary mb-1.5">📝 Ghi chú cho mục Tài liệu (hướng dẫn học viên)</label>
+            <label className="block text-sm font-medium text-text-primary mb-1.5">Ghi chú cho mục Tài liệu (hướng dẫn học viên)</label>
             <textarea
               value={courseForm.documentsNote}
               onChange={(e) => setCourseForm((prev) => ({ ...prev, documentsNote: e.target.value }))}
@@ -1154,7 +1154,7 @@ export default function AdminAcademyPage() {
             <LessonDocumentsManager courseId={courseForm.id} />
           ) : (
             <p className="text-sm text-text-muted border border-dashed border-darkborder rounded-xl px-4 py-3">
-              📁 Lưu khoá học trước để thêm <b>Tài liệu chung của khoá</b> (hiển thị ở đầu, ngang với chương).
+              Lưu khoá học trước để thêm <b>Tài liệu chung của khoá</b> (hiển thị ở đầu, ngang với chương).
             </p>
           )}
 
@@ -1224,10 +1224,10 @@ export default function AdminAcademyPage() {
                               <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-sm text-text-secondary">
                                 <span className="text-text-muted text-xs shrink-0">Loại:</span>
                                 <select value={lesson.lessonType} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { lessonType: e.target.value })} className="bg-transparent text-text-primary outline-none w-full">
-                                  <option value="VIDEO">🎬 Video</option>
-                                  <option value="QUIZ">📝 Quizz (trắc nghiệm)</option>
-                                  <option value="EXERCISE">📄 Bài tập (PDF)</option>
-                                  <option value="SOLUTION">✅ Đáp án (PDF)</option>
+                                  <option value="VIDEO">Video</option>
+                                  <option value="QUIZ">Quizz (trắc nghiệm)</option>
+                                  <option value="EXERCISE">Bài tập (PDF)</option>
+                                  <option value="SOLUTION">Đáp án (PDF)</option>
                                   <option value="TEXT">Text</option>
                                   <option value="PROJECT">Project</option>
                                 </select>
@@ -1295,7 +1295,7 @@ export default function AdminAcademyPage() {
                             {(lesson.lessonType === 'EXERCISE' || lesson.lessonType === 'SOLUTION') && (
                               <div className="rounded-xl border border-dashed border-neon-violet/40 bg-neon-violet/5 p-3 space-y-3">
                                 <p className="text-xs text-text-secondary">
-                                  📄 Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} — học viên xem ngay trong trang học (lật trang, phóng to, tải về, copy chữ/code).
+                                  Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} — học viên xem ngay trong trang học (lật trang, phóng to, tải về, copy chữ/code).
                                 </p>
                                 {lesson.id ? (
                                   <LessonDocumentsManager
@@ -1303,7 +1303,7 @@ export default function AdminAcademyPage() {
                                     initialDocuments={lesson.documents || []}
                                   />
                                 ) : (
-                                  <p className="text-xs text-amber-400">⚠️ Bấm nút <b>Lưu</b> (cuối trang) để lưu bài học trước, rồi ô tải PDF sẽ hiện ra ngay đây.</p>
+                                  <p className="text-xs text-amber-400">Bấm nút <b>Lưu</b> (cuối trang) để lưu bài học trước, rồi ô tải PDF sẽ hiện ra ngay đây.</p>
                                 )}
                               </div>
                             )}

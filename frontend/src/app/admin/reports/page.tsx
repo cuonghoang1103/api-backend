@@ -166,7 +166,7 @@ export default function AdminReportsPage() {
   });
 
   return (
-    <div className="">
+    <div>
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">

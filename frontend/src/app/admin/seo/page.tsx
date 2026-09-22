@@ -311,7 +311,7 @@ export default function AdminSeoPage() {
           </button>
         </div>
         <p className="text-xs text-text-muted mt-2">
-          ⚠️ Chỉ submit URL thuộc domain <code className="text-text-secondary">cuongthai.com</code>.
+          Chỉ submit URL thuộc domain <code className="text-text-secondary">cuongthai.com</code>.
           URL ngoài domain sẽ bị route từ chối với lý do bảo mật.
         </p>
       </div>
@@ -426,10 +426,10 @@ export default function AdminSeoPage() {
       {/* Help footer */}
       <div className="text-xs text-text-muted space-y-1">
         <p>
-          💡 Mẹo: Throttle 60s/URL được route enforce. Nếu submit 1 URL 2 lần trong 60s, lần 2 sẽ trả 429.
+          Mẹo: Throttle 60s/URL được route enforce. Nếu submit 1 URL 2 lần trong 60s, lần 2 sẽ trả 429.
         </p>
         <p>
-          💡 Auto-ping trong deploy-vps.sh tự động chạy sau mỗi deploy. Submit thủ công ở đây chỉ cần thiết
+          Auto-ping trong deploy-vps.sh tự động chạy sau mỗi deploy. Submit thủ công ở đây chỉ cần thiết
           khi URL đã tồn tại trong sitemap nhưng nội dung đã thay đổi đáng kể, hoặc cần index gấp.
         </p>
       </div>

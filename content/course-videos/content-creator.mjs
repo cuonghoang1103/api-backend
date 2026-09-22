@@ -96,6 +96,13 @@ export default {
     'cr-10-3-tu-quay-mot-minh': { yt: 'r0dD24TX3Yc', credit: 'Jake Frew — How to Film Yourself 2.0 | Advanced tips for making videos alone' },
     'cr-10-4-ngay-quay-checklist': { yt: 'WYrn-Ccamqc', credit: 'In Depth Cine — How Cinematographers Prepare For A Shoot' },
 
+    /* ── Chương 11 — Quy trình hậu kỳ & dữ liệu ── */
+    'cr-11-0-slides': { yt: 'eb6vUVgQbgc', credit: 'Hallease — From Chaotic to Organized: Simple Folder Structure For New Content Creators' },
+    'cr-11-1-nhap-lieu-dat-ten': { yt: 'Dj51kSjMe74', credit: 'Alexander Behne — How to Organize Your Video Assets | Folder Structure for Video Editors' },
+    'cr-11-2-sao-luu-3-2-1': { yt: 'ji0SQzpOlBw', credit: 'The Beautiful Mess – Paul Dittus — How To Make A 3-2-1 Backup System' },
+    'cr-11-3-chon-phan-mem-dung': { yt: 'mjYy5AL38rw', credit: 'Think Media — Best Video Editing Software in 2026 (Beginner to Pro)' },
+    'cr-11-4-proxy-codec-linux': { yt: '7wSQBoLcBrA', credit: 'Matt WhoisMatt Johnson — How to use Proxy Files to Edit SUPER FAST in DaVinci Resolve!' },
+
     /* ── Chương 12 — Dựng nhanh với CapCut ── */
     'cr-12-0-slides': { yt: 'EMDrgqepVhM', credit: 'Metics Media — CapCut Tutorial for Beginners 2026' },
     'cr-12-1-giao-dien-capcut': { yt: 'j5_471mO14c', credit: 'Metics Media — CapCut Tutorial for Beginners (2026) – Full Video Editing Guide' },

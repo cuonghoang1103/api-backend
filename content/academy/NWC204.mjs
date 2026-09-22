@@ -9,7 +9,7 @@
  * thư mục con không bị hiểu nhầm là một môn riêng.
  *
  * ⚠️ Slide do CHÚNG TA tự thiết kế (FLM không đăng slide nào cho môn này;
- * bộ CCNA gốc là tài liệu bản quyền Cisco trên netacad). 276 ảnh ở
+ * bộ CCNA gốc là tài liệu bản quyền Cisco trên netacad). 303 ảnh ở
  * images/academy/NWC204/v1/ — sửa slide phải render sang prefix MỚI (v2…)
  * vì Cloudflare giữ cache bytes của key đã ghi đè.
  *
@@ -17,7 +17,7 @@
  * Đã đo trên production 20/09/2026: 9 bài cũ, 0 dòng lesson_progress ⇒
  * không mất tiến độ của ai.
  *
- * Hiện phủ buổi 1–34 + chương bù hệ đếm. Buổi 35–60 còn nợ, xem
+ * Hiện phủ buổi 1–36 + chương bù hệ đếm. Buổi 37–60 còn nợ, xem
  * content/academy/_KHUNG-CHUA-DAY-DU.md
  */
 import muc0 from './nwc204/muc0.mjs';
@@ -32,6 +32,7 @@ import ch07 from './nwc204/ch07.mjs';
 import ch08 from './nwc204/ch08.mjs';
 import ch09 from './nwc204/ch09.mjs';
 import ch10 from './nwc204/ch10.mjs';
+import ch11 from './nwc204/ch11.mjs';
 
 export default {
   semester: {"code":"KY2","name":"Kỳ 2","ordinal":2},
@@ -50,5 +51,5 @@ export default {
     "requirements": "Kiến thức máy tính cơ bản. Nên thực hành trên Cisco Packet Tracer (miễn phí) để cấu hình router/switch.",
     "pruneSections": true
   },
-  sections: [...muc0, ...ch01, ...ch02, ...ch03, ...ch04, ...ch04b, ...ch05, ...ch06, ...ch07, ...ch08, ...ch09, ...ch10],
+  sections: [...muc0, ...ch01, ...ch02, ...ch03, ...ch04, ...ch04b, ...ch05, ...ch06, ...ch07, ...ch08, ...ch09, ...ch10, ...ch11],
 };

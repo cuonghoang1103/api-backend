@@ -12,6 +12,7 @@
  */
 import s00 from './content-creator/s00-gioi-thieu.mjs';
 import s01 from './content-creator/s01-nen-tang-khan-gia.mjs';
+import s02 from './content-creator/s02-y-tuong-chien-luoc.mjs';
 import s03 from './content-creator/s03-kich-ban-ke-chuyen.mjs';
 import s04 from './content-creator/s04-phan-canh.mjs';
 import s05 from './content-creator/s05-may-quay.mjs';
@@ -44,6 +45,7 @@ export default {
   sections: [
     s00,
     s01,
+    s02,
     s03,
     s04,
     s05,

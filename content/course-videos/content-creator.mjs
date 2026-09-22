@@ -33,6 +33,13 @@ export default {
     'cr-01-3-chon-ngach-khan-gia': { yt: 'ZGN_bxJXnmM', credit: 'Aprilynne Alter — How to Select Your YouTube Niche | How You Can Use Your Niche to Grow on YouTube' },
     'cr-01-4-thuong-hieu-ca-nhan': { yt: '71oNb0HPf5E', credit: 'Vanessa Lau — Don\'t build a social media account. Build a personal brand instead.' },
 
+    /* ── Chương 2 — Ý tưởng & chiến lược nội dung ── */
+    'cr-02-0-slides': { yt: 'Ab7RArMfCuQ', credit: 'Think Media — If I Started YouTube from Scratch in 2026, I’d Do THIS' },
+    'cr-02-1-nguon-y-tuong': { yt: 'fDIjmwgHNuE', credit: 'Learn By Leo — How to get the video ideas the algorithm is looking for' },
+    'cr-02-2-tham-dinh-y-tuong': { yt: 'ubFTkoJkNX4', credit: 'YouTube Creators — Titles & Thumbnails' },
+    'cr-02-3-tru-cot-lich-dang': { yt: 'rl9ZtPKEdRg', credit: 'Jade Beason — 1 month of content in 1 hour | Updated guide to content batching & planning + free content calendar!' },
+    'cr-02-4-tai-su-dung-noi-dung': { yt: 'ko3HWNu7CUM', credit: 'Vanessa Lau — How To Edit YouTube Videos AND Repurpose to Short Form Clips For Beginners (STEP-BY-STEP)' },
+
     /* ── Chương 3 — Kịch bản & kể chuyện ── */
     'cr-03-0-slides': { yt: '7I50PECz7SU', credit: 'Kallaway — How To Write A Killer Script That Keeps Viewers Hooked' },
     'cr-03-1-hook': { yt: 'TOHQXdCAo5k', credit: 'Aprilynne Alter — how to make a killer youtube intro (to blow up your channel)' },

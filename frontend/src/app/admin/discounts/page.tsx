@@ -195,7 +195,7 @@ export default function AdminDiscountsPage() {
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
         >
           <Plus className="w-4 h-4" />
           {t('admin.discounts.createNew')}
@@ -520,7 +520,7 @@ export default function AdminDiscountsPage() {
               <button
                 onClick={handleSubmit}
                 disabled={saving}
-                className="flex-1 py-3 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-60"
+                className="flex-1 py-3 bg-[var(--a-accent)] text-white font-semibold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                 {editingCode ? t('admin.discounts.saveChanges') : t('admin.discounts.createCodeButton')}

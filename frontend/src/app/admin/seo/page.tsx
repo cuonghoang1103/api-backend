@@ -304,7 +304,7 @@ export default function AdminSeoPage() {
           <button
             onClick={handleCustomSubmit}
             disabled={submitting || !customUrl.trim()}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             Submit
@@ -439,12 +439,11 @@ export default function AdminSeoPage() {
 
 function StatCard({ label, value, icon: Icon, color }: { label: string; value: number; icon: React.ElementType; color: string }) {
   return (
-    <div className="bg-darkcard border border-darkborder rounded-2xl p-4">
-      <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${color} flex items-center justify-center mb-2`}>
-        <Icon className="w-4 h-4 text-white" />
-      </div>
-      <p className="text-2xl font-heading font-bold text-text-primary">{value}</p>
-      <p className="text-xs text-text-muted mt-0.5">{label}</p>
+    <div className="rounded-[8px] border border-[var(--a-border)] px-3.5 py-3" data-color={color}>
+      <p className="flex items-center gap-1.5 text-[12px] text-[var(--a-text-3)]">
+        <Icon className="h-3.5 w-3.5" strokeWidth={1.75} /> {label}
+      </p>
+      <p className="mt-1 text-[20px] font-semibold leading-7 tabular-nums text-[var(--a-text)]">{value}</p>
     </div>
   );
 }

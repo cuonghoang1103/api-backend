@@ -20,6 +20,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Bell, Check, CheckCheck, Loader2, ExternalLink } from 'lucide-react';
+import { BIEU_TUONG_TIN } from './bieuTuongTin';
 
 interface TinAdmin {
   id: number;
@@ -34,11 +35,6 @@ interface TinAdmin {
   nguoi: { id: number; username: string | null; fullName: string | null } | null;
 }
 
-const BIEU_TUONG: Record<string, string> = {
-  XIN_KEY: '🔑', DON_MOI: '📦', DA_THANH_TOAN: '💰', CHUYEN_KHOAN_CHO_DUYET: '🏦',
-  DOI_KEY: '🛠️', BAO_CAO: '🚩', XOA_TAI_KHOAN: '🗑️', NAP_DIEM: '🪙', MUA_PRO: '👑', KHAC: '🔔',
-};
-
 /** "2 phút" / "3 giờ" / "5 ngày" — đọc nhanh hơn một mốc ngày giờ đầy đủ. */
 function truoc(iso: string): string {
   const giay = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 1000));
@@ -48,9 +44,14 @@ function truoc(iso: string): string {
   return `${Math.floor(giay / 86400)} ngày`;
 }
 
-export default function ChuongAdmin() {
+export default function ChuongAdmin({ onDem }: { onDem?: (d: { chuaDoc: number; canXuLy: number }) => void } = {}) {
   const [mo, setMo] = useState(false);
   const [dem, setDem] = useState({ chuaDoc: 0, canXuLy: 0 });
+  // Báo số việc chờ lên khung (sidebar hiện nó cạnh mục Inbox) — một nguồn
+  // đếm duy nhất, không để hai chỗ tự hỏi server rồi lệch nhau.
+  const onDemRef = useRef(onDem);
+  onDemRef.current = onDem;
+  useEffect(() => { onDemRef.current?.(dem); }, [dem]);
   const [tin, setTin] = useState<TinAdmin[]>([]);
   const [dangTai, setDangTai] = useState(false);
   const hop = useRef<HTMLDivElement>(null);
@@ -131,91 +132,85 @@ export default function ChuongAdmin() {
     <div className="relative" ref={hop}>
       <button
         onClick={() => { setMo((v) => !v); if (!mo) napTin(); }}
-        aria-label={`Thông báo admin${dem.canXuLy > 0 ? ` — ${dem.canXuLy} việc đang chờ` : ''}`}
-        className="relative p-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-text-primary transition-colors"
+        aria-label={`Admin inbox${dem.canXuLy > 0 ? ` — ${dem.canXuLy} pending` : ''}`}
+        title="Inbox"
+        className="a-icon-btn relative"
       >
-        <Bell className="w-5 h-5" />
+        <Bell className="h-4 w-4" strokeWidth={1.75} />
         {dem.canXuLy > 0 ? (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+          <span className="absolute -right-0.5 -top-0.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-[var(--a-red)] px-1 text-[9.5px] font-semibold tabular-nums text-white">
             {dem.canXuLy > 99 ? '99+' : dem.canXuLy}
           </span>
         ) : dem.chuaDoc > 0 ? (
-          <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-neon-violet" />
+          <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-[var(--a-accent)]" />
         ) : null}
       </button>
 
       {mo && (
-        <div className="absolute right-0 mt-2 w-[min(92vw,420px)] rounded-2xl border border-darkborder bg-darkcard shadow-2xl z-50 overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-darkborder">
+        <div
+          className="a-pop absolute right-0 z-50 mt-1.5 w-[min(92vw,400px)] overflow-hidden rounded-[8px] border border-[var(--a-border-strong)] bg-[var(--a-raised)]"
+          style={{ boxShadow: '0 0 0 1px rgba(0,0,0,.35), 0 16px 40px -12px rgba(0,0,0,.65)' }}
+        >
+          <div className="flex items-center justify-between gap-3 border-b border-[var(--a-border)] px-3.5 py-2.5">
             <div className="min-w-0">
-              <p className="font-semibold text-text-primary text-sm">Thông báo admin</p>
-              <p className="text-xs text-text-muted">
+              <p className="text-[13px] font-medium text-[var(--a-text)]">Inbox</p>
+              <p className="text-[11.5px] text-[var(--a-text-3)]">
                 {dem.canXuLy > 0 ? `${dem.canXuLy} việc đang chờ bạn` : 'Không còn việc nào đang chờ'}
               </p>
             </div>
             {dem.chuaDoc > 0 && (
-              <button onClick={docHet} className="text-xs text-text-muted hover:text-neon-violet flex items-center gap-1 shrink-0">
-                <CheckCheck className="w-3.5 h-3.5" /> Đọc hết
+              <button onClick={docHet} className="a-btn !h-6 !px-2 !text-[11.5px]">
+                <CheckCheck className="h-3.5 w-3.5" /> Đọc hết
               </button>
             )}
           </div>
 
           <div className="max-h-[60vh] overflow-y-auto">
             {dangTai && tin.length === 0 ? (
-              <div className="py-10 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-neon-violet" /></div>
+              <div className="flex justify-center py-10"><Loader2 className="h-4 w-4 animate-spin text-[var(--a-text-3)]" /></div>
             ) : tin.length === 0 ? (
-              <p className="py-10 text-center text-sm text-text-muted">Chưa có thông báo nào.</p>
+              <p className="py-10 text-center text-[13px] text-[var(--a-text-3)]">Chưa có thông báo nào.</p>
             ) : (
-              tin.map((t) => (
-                <div
-                  key={t.id}
-                  className={`px-4 py-3 border-b border-darkborder/60 last:border-0 ${t.daDoc ? '' : 'bg-neon-violet/[0.05]'}`}
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg leading-none mt-0.5 shrink-0">{BIEU_TUONG[t.loai] ?? '🔔'}</span>
+              tin.map((t) => {
+                const Icon = BIEU_TUONG_TIN[t.loai] ?? BIEU_TUONG_TIN.KHAC;
+                const cho = t.mucDo === 'can_xu_ly' && !t.daXuLy;
+                return (
+                  <div key={t.id} className="flex gap-2.5 border-b border-[var(--a-border)] px-3.5 py-2.5 last:border-0">
+                    <span className="relative mt-[1px] shrink-0">
+                      <Icon className="h-4 w-4 text-[var(--a-text-3)]" strokeWidth={1.75} />
+                      {!t.daDoc && <span className="absolute -left-2 top-1.5 h-1.5 w-1.5 rounded-full bg-[var(--a-accent)]" />}
+                    </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm text-text-primary font-medium break-words">{t.tieuDe}</p>
+                      <p className="break-words text-[13px] leading-snug text-[var(--a-text)]">{t.tieuDe}</p>
                       {t.noiDung && (
-                        <p className="text-xs text-text-muted mt-0.5 whitespace-pre-line break-words">{t.noiDung}</p>
+                        <p className="mt-0.5 whitespace-pre-line break-words text-[12px] leading-snug text-[var(--a-text-3)]">{t.noiDung}</p>
                       )}
-                      <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                        <span className="text-[11px] text-text-muted">{truoc(t.createdAt)}</span>
-                        {t.nguoi?.username && (
-                          <span className="text-[11px] text-text-muted">· {t.nguoi.fullName || t.nguoi.username}</span>
-                        )}
-                        {t.mucDo === 'can_xu_ly' && !t.daXuLy && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-red-500/15 text-red-300 font-semibold">
-                            cần xử lý
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-3 mt-2">
+                      <div className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11.5px] text-[var(--a-text-3)]">
+                        <span className="tabular-nums">{truoc(t.createdAt)}</span>
+                        {t.nguoi?.username && <span>{t.nguoi.fullName || t.nguoi.username}</span>}
+                        {cho && <span className="font-medium text-[var(--a-orange)]">Cần xử lý</span>}
                         {t.duongDan && (
-                          <Link
-                            href={t.duongDan}
-                            onClick={() => setMo(false)}
-                            className="text-xs text-neon-violet hover:underline inline-flex items-center gap-1"
-                          >
-                            Mở <ExternalLink className="w-3 h-3" />
+                          <Link href={t.duongDan} onClick={() => setMo(false)} className="inline-flex items-center gap-1 text-[var(--a-accent-text)] hover:underline">
+                            Mở <ExternalLink className="h-3 w-3" />
                           </Link>
                         )}
-                        {t.mucDo === 'can_xu_ly' && !t.daXuLy && (
-                          <button onClick={() => xong(t.id)} className="text-xs text-text-muted hover:text-emerald-400 inline-flex items-center gap-1">
-                            <Check className="w-3 h-3" /> Đánh dấu xong
+                        {cho && (
+                          <button onClick={() => xong(t.id)} className="inline-flex items-center gap-1 hover:text-[var(--a-green)]">
+                            <Check className="h-3 w-3" /> Xong
                           </button>
                         )}
                       </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
           <Link
             href="/admin/thong-bao"
             onClick={() => setMo(false)}
-            className="block px-4 py-2.5 text-center text-xs text-text-muted hover:text-text-primary border-t border-darkborder"
+            className="block border-t border-[var(--a-border)] px-3.5 py-2 text-center text-[12px] text-[var(--a-text-3)] hover:bg-[var(--a-hover)] hover:text-[var(--a-text)]"
           >
             Xem tất cả
           </Link>

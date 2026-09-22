@@ -296,7 +296,7 @@ export default function AdminLessonsPage() {
                   <button
                     onClick={saveLesson}
                     disabled={saving}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white flex items-center gap-2 disabled:opacity-60"
+                    className="px-5 py-2.5 rounded-xl bg-[var(--a-accent)] text-white flex items-center gap-2 disabled:opacity-60"
                   >
                     <Save className="w-4 h-4" /> {saving ? 'Đang lưu...' : 'Lưu'}
                   </button>

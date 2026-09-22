@@ -573,7 +573,7 @@ export default function AdminCoursesPage() {
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
         >
           <Plus className="w-4 h-4" />
           Tạo khoá học
@@ -1214,7 +1214,7 @@ export default function AdminCoursesPage() {
                 Hủy
               </button>
               <button onClick={handleSave} disabled={saving}
-                className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50">
+                className="flex items-center gap-2 px-5 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50">
                 {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                 {saving ? 'Đang lưu...' : editingId ? 'Cập nhật' : 'Tạo khoá học'}
               </button>

@@ -330,7 +330,7 @@ export default function AdminTechTrendsPage() {
         <button
           onClick={openCreate}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
-            bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-semibold
+            bg-[var(--a-accent)] text-white text-sm font-semibold
             shadow-neon hover:opacity-90 active:scale-95 transition-all"
         >
           <Plus className="w-4 h-4" />
@@ -938,7 +938,7 @@ function ArticleFormModal({
             <button
               onClick={onSave}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95 disabled:opacity-50 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--a-accent)] text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95 disabled:opacity-50 transition-all"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {saving ? 'Saving…' : editing ? 'Save changes' : 'Create article'}

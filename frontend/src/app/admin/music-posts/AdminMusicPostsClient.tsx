@@ -101,7 +101,7 @@ export default function AdminMusicPostsClient() {
         <button
           type="button"
           onClick={() => { setEditing(null); setShowForm(true); }}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-neon-violet to-neon-pink px-4 py-2 text-sm font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-xl bg-[var(--a-accent)] px-4 py-2 text-sm font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
         >
           <Plus className="h-4 w-4" /> Them nhac
         </button>
@@ -179,7 +179,7 @@ export default function AdminMusicPostsClient() {
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={song.coverImage} alt="" className="h-7 w-7 shrink-0 rounded object-cover" />
                         ) : (
-                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-gradient-to-br from-neon-violet/40 to-neon-pink/40">
+                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-white/[0.06]">
                             <Music className="h-3.5 w-3.5 text-white" />
                           </div>
                         )}

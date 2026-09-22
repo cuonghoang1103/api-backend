@@ -122,7 +122,7 @@ export default function AdminStickersPage() {
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-neon-indigo to-neon-violet">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--a-border)] bg-white/[0.03]">
           <StickerIcon className="h-5 w-5 text-white" />
         </div>
         <div>

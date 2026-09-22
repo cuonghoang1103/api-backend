@@ -723,7 +723,7 @@ export default function AdminShopPage() {
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
         >
           <Plus className="w-4 h-4" />
           {t('admin.shop.addProduct')}
@@ -1421,7 +1421,7 @@ export default function AdminShopPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="flex items-center gap-2 px-5 py-2.5 bg-[var(--a-accent)] text-white font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                 {editingId ? t('admin.shop.update') : t('admin.shop.createProduct')}

@@ -758,7 +758,7 @@ export default function AdminUsersPage() {
                       {/* User info */}
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-white text-sm font-medium flex-shrink-0 overflow-hidden">
+                          <div className="w-9 h-9 rounded-full bg-white/[0.08] flex items-center justify-center text-white text-sm font-medium flex-shrink-0 overflow-hidden">
                             {user.avatarUrl ? (
                               <img src={user.avatarUrl} alt="" className="w-full h-full object-cover" />
                             ) : (

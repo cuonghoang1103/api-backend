@@ -166,7 +166,7 @@ export default function AdminReportsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#05050f] via-[#08081a] to-[#03030c] px-4 py-8">
+    <div className="">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
@@ -400,7 +400,7 @@ function ReportCard({
           ) : (
             <div
               className="flex h-9 w-9 items-center justify-center rounded-full text-[12px] font-bold text-white"
-              style={{ background: 'linear-gradient(135deg, #06B6D4, #6366F1)' }}
+              style={{ background: 'rgba(255,255,255,0.08)' }}
             >
               {(report.reporter?.displayName ?? '?').charAt(0).toUpperCase()}
             </div>

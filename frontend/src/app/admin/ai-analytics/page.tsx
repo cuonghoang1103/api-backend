@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
+import { Metric } from '@/components/admin/ui';
 import GenerationStats from '@/components/admin/GenerationStats';
 import FeatureUsers from '@/components/admin/FeatureUsers';
 import {
@@ -148,19 +149,9 @@ export default function AdminAIAnalyticsPage() {
         <p className="text-text-secondary mt-1">Thống kê chatbot AI</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 border-y border-[var(--a-border)] lg:grid-cols-4 [&>*]:border-[var(--a-border)] lg:[&>*:not(:first-child)]:border-l">
         {statCards.map((card, i) => (
-          <div key={i} className="bg-darkcard border border-darkborder rounded-2xl p-5">
-            <div className="flex items-start justify-between">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center`}>
-                <card.icon className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            <div className="mt-4">
-              <p className="text-3xl font-heading font-bold text-text-primary">{card.value}</p>
-              <p className="text-sm text-text-muted mt-1">{card.label}</p>
-            </div>
-          </div>
+          <Metric key={i} label={card.label} value={card.value} />
         ))}
       </div>
 
@@ -180,7 +171,7 @@ export default function AdminAIAnalyticsPage() {
                 </div>
                 <div className="h-2 bg-darkbg rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full"
+                    className="h-full bg-[var(--a-green)] rounded-full"
                     style={{ width: `${(feedback.positiveCount || 0) / Math.max(feedback.totalFeedbacks || 1, 1) * 100}%` }}
                   />
                 </div>
@@ -197,7 +188,7 @@ export default function AdminAIAnalyticsPage() {
                 </div>
                 <div className="h-2 bg-darkbg rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-red-400 to-red-500 rounded-full"
+                    className="h-full bg-[var(--a-red)] rounded-full"
                     style={{ width: `${(feedback.negativeCount || 0) / Math.max(feedback.totalFeedbacks || 1, 1) * 100}%` }}
                   />
                 </div>

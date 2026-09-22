@@ -301,7 +301,7 @@ export default function AdminPostsPage() {
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
         >
           <Plus className="w-4 h-4" />
           Viết bài mới
@@ -717,7 +717,7 @@ export default function AdminPostsPage() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-2"
+                  className="px-5 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-2"
                 >
                   {saving ? 'Đang lưu...' : editingPost ? 'Cập nhật' : 'Đăng bài'}
                 </button>

@@ -166,7 +166,7 @@ function SemesterModal({
             onClick={handleSave}
             disabled={saving || !!codeConflict}
             title={codeConflict ? 'Vui lòng chọn mã học kỳ khác' : undefined}
-            className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 rounded-xl bg-[var(--a-accent)] text-white disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {saving ? 'Đang lưu...' : 'Lưu'}
           </button>
@@ -1040,7 +1040,7 @@ export default function AdminAcademyPage() {
                   <Send className="w-4 h-4" /> Xuất bản
                 </button>
               )}
-              <button onClick={saveCourse} disabled={savingCourse} className="px-4 py-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white flex items-center gap-2 disabled:opacity-60">
+              <button onClick={saveCourse} disabled={savingCourse} className="px-4 py-2 rounded-xl bg-[var(--a-accent)] text-white flex items-center gap-2 disabled:opacity-60">
                 <Save className="w-4 h-4" /> {savingCourse ? 'Đang lưu...' : 'Lưu'}
               </button>
             </div>
@@ -1491,7 +1491,7 @@ export default function AdminAcademyPage() {
                         }
                       }}
                       disabled={savingGrade}
-                      className="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium disabled:opacity-60 flex items-center justify-center gap-2"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--a-accent)] text-white text-sm font-medium disabled:opacity-60 flex items-center justify-center gap-2"
                     >
                       <Save className="w-4 h-4" /> {savingGrade ? 'Đang lưu...' : 'Lưu điểm'}
                     </button>

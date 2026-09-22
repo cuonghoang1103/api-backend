@@ -120,7 +120,7 @@ export default function ShopCategoryManager({ onChange }: { onChange?: () => voi
               <button
                 onClick={handleCreate}
                 disabled={creating || !newName.trim()}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-40"
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-40"
               >
                 {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                 Thêm

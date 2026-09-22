@@ -122,7 +122,7 @@ export default function AdminUserCodesPage() {
           <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Code (e.g. TET20)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary font-mono" />
           <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note (optional)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary sm:col-span-2" />
         </div>
-        <button onClick={grant} disabled={sending || !selected} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium hover:opacity-90 disabled:opacity-50">
+        <button onClick={grant} disabled={sending || !selected} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--a-accent)] text-white text-sm font-medium hover:opacity-90 disabled:opacity-50">
           {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} Cấp mã
         </button>
       </div>

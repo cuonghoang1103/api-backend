@@ -173,7 +173,7 @@ export default function AdminVoicePage() {
           <button onClick={() => setSeriesOpen(true)} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 text-gray-200 border border-white/10 hover:bg-white/10 text-sm font-medium">
             <ListVideo className="w-4 h-4" /> Series
           </button>
-          <button onClick={openNew} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-semibold shadow-neon hover:opacity-90">
+          <button onClick={openNew} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[var(--a-accent)] text-white text-sm font-semibold shadow-neon hover:opacity-90">
             <Plus className="w-4 h-4" /> Tạo mới
           </button>
         </div>
@@ -551,7 +551,7 @@ function Editor({
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Lưu nháp
             </button>
             <button onClick={() => save(true)} disabled={saving}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-semibold shadow-neon hover:opacity-90 disabled:opacity-50">
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[var(--a-accent)] text-white text-sm font-semibold shadow-neon hover:opacity-90 disabled:opacity-50">
               <Eye className="w-4 h-4" /> Lưu & Đăng
             </button>
           </div>

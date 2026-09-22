@@ -175,7 +175,7 @@ export default function AdminProjectsPage() {
  <button
  onClick={handleCreate}
  disabled={creating}
- className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
+ className="flex items-center gap-2 px-4 py-2.5 bg-[var(--a-accent)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
  >
  {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
  Thêm dự án
@@ -219,7 +219,7 @@ export default function AdminProjectsPage() {
  className="bg-darkcard border border-darkborder rounded-2xl overflow-hidden hover:border-neon-violet/30 transition-all group"
  >
  {/* Thumbnail */}
- <div className="h-32 bg-gradient-to-br from-neon-indigo/10 via-neon-violet/10 to-neon-fuchsia/10 flex items-center justify-center relative overflow-hidden">
+ <div className="h-32 bg-white/[0.03] flex items-center justify-center relative overflow-hidden">
  {project.thumbnailUrl ? (
  <img src={project.thumbnailUrl} alt={project.title} className="w-full h-full object-cover" />
  ) : (

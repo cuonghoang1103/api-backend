@@ -152,7 +152,7 @@ export default function AdminGamesPage() {
           <Link href="/admin/games/categories" className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-darkborder text-sm text-text-secondary hover:text-text-primary hover:border-neon-violet/30 transition-all">
             <Tags className="w-4 h-4" /> Chuyên mục
           </Link>
-          <Link href="/admin/games/new" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95 transition-all">
+          <Link href="/admin/games/new" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--a-accent)] text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95 transition-all">
             <Plus className="w-4 h-4" /> Game mới
           </Link>
         </div>

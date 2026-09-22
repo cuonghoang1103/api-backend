@@ -234,7 +234,7 @@ export default function AIKnowledgePage() {
           </button>
           <button
             onClick={() => setShowUpload(true)}
-            className="px-4 py-2 bg-gradient-to-r from-neon-indigo to-neon-violet text-white rounded-xl text-sm font-medium flex items-center gap-2 hover:opacity-90 transition-opacity"
+            className="px-4 py-2 bg-[var(--a-accent)] text-white rounded-xl text-sm font-medium flex items-center gap-2 hover:opacity-90 transition-opacity"
           >
             <Upload className="w-4 h-4" />
             Upload Document
@@ -377,7 +377,7 @@ export default function AIKnowledgePage() {
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="px-4 py-2 bg-gradient-to-r from-neon-indigo to-neon-violet text-white rounded-xl text-sm font-medium disabled:opacity-50"
+                  className="px-4 py-2 bg-[var(--a-accent)] text-white rounded-xl text-sm font-medium disabled:opacity-50"
                 >
                   {uploading ? 'Đang upload...' : 'Upload'}
                 </button>
@@ -454,7 +454,7 @@ export default function AIKnowledgePage() {
                 <button
                   type="submit"
                   disabled={uploading || selectedFiles.length === 0}
-                  className="px-4 py-2 bg-gradient-to-r from-neon-indigo to-neon-violet text-white rounded-xl text-sm font-medium disabled:opacity-50"
+                  className="px-4 py-2 bg-[var(--a-accent)] text-white rounded-xl text-sm font-medium disabled:opacity-50"
                 >
                   {uploading ? `Đang upload ${selectedFiles.length} files...` : `Upload ${selectedFiles.length} file(s)`}
                 </button>

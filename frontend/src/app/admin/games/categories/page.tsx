@@ -115,7 +115,7 @@ export default function GameCategoriesPage() {
           </h1>
           <p className="text-xs text-text-muted mt-0.5">Màu dùng cho badge trên thẻ game ở /games.</p>
         </div>
-        <button onClick={() => setCreating((v) => !v)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95">
+        <button onClick={() => setCreating((v) => !v)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--a-accent)] text-white text-sm font-semibold shadow-neon hover:opacity-90 active:scale-95">
           <Plus className="w-4 h-4" /> Thêm
         </button>
       </div>

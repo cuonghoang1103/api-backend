@@ -427,7 +427,7 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  type="button"
  onClick={() => void publish()}
  disabled={saveStatus === 'saving'}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-gradient-to-r from-neon-indigo to-neon-violet text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+ className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-[var(--a-accent)] text-white hover:opacity-90 transition-opacity disabled:opacity-50"
  >
  {project.isPublished ? 'Lưu + Xuất bản lại' : 'Lưu + Xuất bản'}
  </button>
@@ -944,7 +944,7 @@ function SaveableSection<T extends { id: number }>({
  type="button"
  onClick={onSave}
  disabled={!dirty || saving}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-gradient-to-r from-neon-indigo to-neon-violet text-white hover:opacity-90 transition-opacity disabled:opacity-40"
+ className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-[var(--a-accent)] text-white hover:opacity-90 transition-opacity disabled:opacity-40"
  >
  {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
  Lưu danh sách

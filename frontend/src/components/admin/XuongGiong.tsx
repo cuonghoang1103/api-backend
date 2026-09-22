@@ -660,7 +660,7 @@ export function XuongGiong() {
           {/* Thanh mốc: 15 phút là ngưỡng bắt đầu ăn thua, 30 là chỗ tốt */}
           <div className="relative h-2 overflow-hidden rounded-full bg-white/10">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all"
+              className="h-full rounded-full bg-[var(--a-green)] transition-all"
               style={{ width: `${Math.min(100, (tienDo.tongPhut / tienDo.mocTotPhut) * 100)}%` }}
             />
             <div

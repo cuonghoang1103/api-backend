@@ -259,7 +259,9 @@ export default function Navbar() {
     dung mot iframe lap kin man hinh. Thanh dieu huong ve de len giua video —
     do that 09/09/2026. Cung ly do nhu `/creator`. */
  const isStudioPage = (pathname?.startsWith('/creator') ?? false)
-   || (pathname?.startsWith('/nhung-video') ?? false);
+   || (pathname?.startsWith('/nhung-video') ?? false)
+   // /admin là một công cụ toàn màn hình có sidebar + topbar riêng (23/09/2026).
+   || (pathname?.startsWith('/admin') ?? false);
   if (isAuthPage || isStudioPage || pathname === '/') return null;
 
   const contactItems = [

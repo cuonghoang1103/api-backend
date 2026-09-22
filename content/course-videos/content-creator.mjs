@@ -39,5 +39,12 @@ export default {
     'cr-06-2-iphone-16-pro-max': { yt: 'PBOhLnie2iw', credit: 'Tyler Stalman — All the iPhone Video Setting You Need to Know' },
     'cr-06-3-ipad-mac-linux': { yt: 'C51uC1ItUdU', credit: 'Andy To — M5 iPad Pro: The Complete Creator (Edited on iPad)' },
     'cr-06-4-the-nho-pin-dung-luong': { yt: 'g5PkExucy4I', credit: 'Kingston Technology — SD and microSD Card Specification Labels Explained – DIY in 5 Ep 141' },
+
+    /* ── Chương 12 — Dựng nhanh với CapCut ── */
+    'cr-12-0-slides': { yt: 'EMDrgqepVhM', credit: 'Metics Media — CapCut Tutorial for Beginners 2026' },
+    'cr-12-1-giao-dien-capcut': { yt: 'j5_471mO14c', credit: 'Metics Media — CapCut Tutorial for Beginners (2026) – Full Video Editing Guide' },
+    'cr-12-2-cat-dung-co-ban': { yt: 'Zv9u0aLkfK0', credit: 'Matt Loui — CapCut Beginner Tutorial (2026) - Beginner to Pro' },
+    'cr-12-3-chu-phu-de-hieu-ung': { yt: 't5yFQJy9ZLM', credit: 'Creative Suite Tutorials — Learn 90% about Captions Under 10 minutes | CapCut Captions Masterclass' },
+    'cr-12-4-xuat-quy-trinh-capcut': { yt: 'Ex1R3rsdlms', credit: 'Content Creators — Edit PRO Youtube Videos in Capcut | In Depth Tutorial' },
   },
 };

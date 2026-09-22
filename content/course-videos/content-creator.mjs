@@ -89,6 +89,13 @@ export default {
     'cr-09-3-muc-thu-phong-thu': { yt: 'o9raLGyUwyc', credit: 'Deity Microphones — Room Tone Hacks | Simple Tips To Ensure Usable Audio' },
     'cr-09-4-thu-hai-he-thong-dong-bo': { yt: 'E9FjPDbg-Cs', credit: 'Andrew Farmer — How to Sync Audio and Video in DaVinci Resolve (Fast & Easy Tutorial)' },
 
+    /* ── Chương 10 — Quay một mình như dân chuyên ── */
+    'cr-10-0-slides': { yt: 'z7yo-oNr9I0', credit: 'Katie Steckly — The Ultimate Guide to Filming Yourself for YouTube' },
+    'cr-10-1-talking-head': { yt: 'VYZB75B1Qk8', credit: 'Tom Buck — How To Film Videos with Two Cameras' },
+    'cr-10-2-b-roll': { yt: 'emWwOd-LJY4', credit: 'Epic Light Media — B-ROLL (Beginner VS Pro)' },
+    'cr-10-3-tu-quay-mot-minh': { yt: 'r0dD24TX3Yc', credit: 'Jake Frew — How to Film Yourself 2.0 | Advanced tips for making videos alone' },
+    'cr-10-4-ngay-quay-checklist': { yt: 'WYrn-Ccamqc', credit: 'In Depth Cine — How Cinematographers Prepare For A Shoot' },
+
     /* ── Chương 12 — Dựng nhanh với CapCut ── */
     'cr-12-0-slides': { yt: 'EMDrgqepVhM', credit: 'Metics Media — CapCut Tutorial for Beginners 2026' },
     'cr-12-1-giao-dien-capcut': { yt: 'j5_471mO14c', credit: 'Metics Media — CapCut Tutorial for Beginners (2026) – Full Video Editing Guide' },

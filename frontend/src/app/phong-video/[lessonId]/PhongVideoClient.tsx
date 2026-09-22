@@ -38,6 +38,19 @@ const TAB: { ma: Tab; nhan: string; Icon: typeof Captions }[] = [
   { ma: 'ai', nhan: 'Hỏi AI', Icon: MessageCircle },
 ];
 
+/** Chỗ trống của tab Phụ đề / Mục video khi video chưa có phụ đề. */
+function ChuaCoPhuDe({ viec }: { viec: string }) {
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-2 p-6 text-center">
+      <Captions className="h-6 w-6 text-text-muted" />
+      <p className="text-sm text-text-secondary">Video này chưa có phụ đề nên chưa có {viec}.</p>
+      <p className="text-xs leading-relaxed text-text-muted">
+        Phụ đề đang được bổ sung dần. Trong lúc chờ, tab <b>Hỏi AI</b> vẫn giảng theo nội dung bài học.
+      </p>
+    </div>
+  );
+}
+
 export default function PhongVideoClient({ lessonId, ve }: {
   lessonId: number;
   /** Đường về ĐÃ ĐƯỢC LỌC ở máy chủ — xem `duongVe()` trong `page.tsx`. */
@@ -45,7 +58,7 @@ export default function PhongVideoClient({ lessonId, ve }: {
 }) {
   const router = useRouter();
 
-  const [pd, datPd] = useState<PhuDeBai | null>(null);
+  const [pd, datPd] = useState<(PhuDeBai & { coPhuDe: boolean }) | null>(null);
   const [loi, datLoi] = useState<string | null>(null);
   const [giay, datGiay] = useState(0);
   const [tab, datTab] = useState<Tab>('ai');
@@ -77,9 +90,11 @@ export default function PhongVideoClient({ lessonId, ve }: {
 
   useEffect(() => {
     let huy = false;
-    videoHocApi.phuDe(lessonId)
+    /* `phongHoc`, không phải `phuDe`: bài chưa có phụ đề vẫn mở được phòng
+       (video + gia sư đọc nội dung bài) — xem `phongHoc()` ở máy chủ. */
+    videoHocApi.phongHoc(lessonId)
       .then((r) => { if (!huy) datPd(r.data.data); })
-      .catch(() => { if (!huy) datLoi('Bài này chưa có phụ đề nên chưa mở phòng học được.'); });
+      .catch(() => { if (!huy) datLoi('Bài này không có video YouTube nên chưa mở phòng học được.'); });
     return () => { huy = true; };
   }, [lessonId]);
 
@@ -112,7 +127,10 @@ export default function PhongVideoClient({ lessonId, ve }: {
     );
   }
 
-  const coDich = !!pd.dichVi && pd.dichVi.length === pd.cues.length;
+  /* Chưa có phụ đề: phòng vẫn chạy, nhưng tab Phụ đề và Mục video (mục lục
+     được bóc từ câu tóm tắt DỰA TRÊN phụ đề) chưa có gì để hiện. */
+  const coPhuDe = pd.coPhuDe !== false && pd.cues.length > 0;
+  const coDich = coPhuDe && !!pd.dichVi && pd.dichVi.length === pd.cues.length;
 
   /*
    * ⚠️ `pt-16`: thanh điều hướng chung (`Navbar`) là `fixed top-0 h-16`, nằm
@@ -141,6 +159,12 @@ export default function PhongVideoClient({ lessonId, ve }: {
             <p className="truncate text-xs text-text-muted">{pd.tieuDeVi}</p>
           )}
         </div>
+        {!coPhuDe && (
+          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 px-3 py-1.5 text-xs text-text-muted"
+            title="Phụ đề của video này đang được bổ sung">
+            <Captions size={14} /> Chưa có phụ đề
+          </span>
+        )}
         {coDich && (
           <button onClick={() => datHienDich((v) => !v)}
             title={hienDich ? 'Ẩn bản dịch tiếng Việt' : 'Hiện bản dịch tiếng Việt'}
@@ -187,14 +211,20 @@ export default function PhongVideoClient({ lessonId, ve }: {
           */}
           <div className="min-h-0 flex-1">
             <div className={`h-full ${tab === 'phude' ? '' : 'hidden'}`}>
-              <BangPhuDe cues={pd.cues} dichVi={pd.dichVi} giay={giay} hienDich={hienDich} onTua={tua} />
+              {coPhuDe
+                ? <BangPhuDe cues={pd.cues} dichVi={pd.dichVi} giay={giay} hienDich={hienDich} onTua={tua} />
+                : <ChuaCoPhuDe viec="phụ đề để bấm tua" />}
             </div>
             <div className={`h-full ${tab === 'muc' ? '' : 'hidden'}`}>
-              {/* Chỉ dựng khi ĐÃ mở lần đầu — nó tự hỏi gia sư lúc gắn vào cây. */}
-              {daMo.has('muc') && <MucVideo giaSu={giaSu} giay={giay} onTua={tua} />}
+              {/* Chỉ dựng khi ĐÃ mở lần đầu — nó tự hỏi gia sư lúc gắn vào cây.
+                  Chưa có phụ đề thì KHÔNG dựng: nó sẽ tự gọi model đòi mục lục
+                  có mốc thời gian mà model không có gì để chia. */}
+              {!coPhuDe
+                ? <ChuaCoPhuDe viec="mục lục theo mốc thời gian" />
+                : daMo.has('muc') && <MucVideo giaSu={giaSu} giay={giay} onTua={tua} />}
             </div>
             <div className={`h-full ${tab === 'ai' ? '' : 'hidden'}`}>
-              <HoiAiVideo giaSu={giaSu} giay={giay} onTua={tua} />
+              <HoiAiVideo giaSu={giaSu} giay={giay} onTua={tua} coPhuDe={coPhuDe} />
             </div>
           </div>
         </aside>

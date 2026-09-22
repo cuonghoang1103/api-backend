@@ -9,10 +9,13 @@
  * hiện ra … Nếu user ấn có thì chuyển vào phòng đầy đủ chức năng … Còn nếu
  * user ấn không thì sẽ giữ nguyên học video ở tab academy môn học hiện tại."*
  *
- * ⚠️ CHỈ MỜI KHI BÀI CÓ PHỤ ĐỀ. Đo 20/09/2026: 963 bài có phụ đề trên ~11.800
- * bài đã xuất bản. Mời ở bài không có phụ đề là mời vào một phòng mà gia sư
- * không đọc được gì — tệ hơn hẳn việc không mời. `coPhuDe()` là một phép đếm,
- * không kéo về cả mảng câu.
+ * MỜI Ở MỌI BÀI CÓ VIDEO YOUTUBE (đổi 22/09/2026). Bản đầu chỉ mời khi bài có
+ * phụ đề — nhưng đo production thì 2.138 bài có video mà mới 963 bài có phụ đề,
+ * nên người học thấy lời mời ở bài đầu khoá rồi biến mất ở mọi bài sau và
+ * tưởng là lỗi. Giờ bài chưa có phụ đề vẫn được mời, với lời NÓI THẬT rằng gia
+ * sư chỉ đọc được nội dung bài (máy chủ đổi lời dặn tương ứng — xem
+ * `THEM_PHONG_VIDEO_KHONG_PHU_DE`). `coPhuDe()` là một phép đếm, không kéo về
+ * cả mảng câu.
  *
  * ⚠️ BẤM "KHÔNG" KHÔNG ĐƯỢC LÀM MẤT LỐI VÀO. Bỏ hẳn nút đi thì tính năng nằm
  * ở chỗ không ai tới được nữa, tức là bằng không có — đúng cái bẫy đã mắc hai
@@ -52,7 +55,10 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe }: {
   duongDanVe: string;
 }) {
   const router = useRouter();
-  const [co, datCo] = useState(false);
+  /** Mở được phòng không (có phụ đề hoặc có video YouTube). */
+  const [moDuoc, datMoDuoc] = useState(false);
+  /** Có phụ đề không — đổi lời mời cho thật, không đổi việc có mời hay không. */
+  const [coPd, datCoPd] = useState(false);
   const [hien, datHien] = useState(false);
 
   useEffect(() => {
@@ -62,12 +68,17 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe }: {
        trả về của promise — React không bao giờ thấy nó, nên đổi bài nhanh
        tay là hộp mời của bài CŨ bung ra trên bài MỚI. */
     let hen: number | undefined;
-    datCo(false);
+    datMoDuoc(false);
+    datCoPd(false);
     datHien(false);
     videoHocApi.coPhuDe(lessonId)
       .then((r) => {
-        if (huy || !r.data.data.co) return;
-        datCo(true);
+        const kq = r.data.data;
+        /* Máy chủ cũ chưa có `moDuoc` thì chỉ mời khi có phụ đề, như trước. */
+        const mo = kq.moDuoc ?? kq.co;
+        if (huy || !mo) return;
+        datMoDuoc(true);
+        datCoPd(kq.co);
         /* Hoãn một nhịp: bung ra ngay lúc bài vừa mở thì nó chồng lên đúng
            giây người học đang tìm nút Play. */
         if (!daTuChoi(lessonId)) {
@@ -81,7 +92,7 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe }: {
     };
   }, [lessonId]);
 
-  if (!co) return null;
+  if (!moDuoc) return null;
 
   const vao = () => {
     router.push(`/phong-video/${lessonId}?ve=${encodeURIComponent(duongDanVe)}`);
@@ -94,6 +105,7 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe }: {
         className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-neon-violet/40 px-3 py-1.5 text-xs font-medium text-neon-violet transition-colors hover:bg-neon-violet/10"
       >
         <Sparkles size={13} /> Học video cùng AI
+        {!coPd && <span className="font-normal opacity-70">· chưa có phụ đề</span>}
       </button>
     );
   }
@@ -117,11 +129,19 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe }: {
           <p className="pr-6 font-semibold text-text-primary">
             Bạn có muốn vào phòng học video cùng AI không?
           </p>
-          <p className="mt-1 text-sm leading-relaxed text-text-secondary">
-            Trong phòng: phụ đề song ngữ bấm được để tua, mục lục chia theo mốc thời gian,
-            và gia sư AI <strong className="text-text-primary">đã đọc phụ đề video này</strong> —
-            hỏi về đúng đoạn đang xem, có sơ đồ và công thức.
-          </p>
+          {coPd ? (
+            <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              Trong phòng: phụ đề song ngữ bấm được để tua, mục lục chia theo mốc thời gian,
+              và gia sư AI <strong className="text-text-primary">đã đọc phụ đề video này</strong> —
+              hỏi về đúng đoạn đang xem, có sơ đồ và công thức.
+            </p>
+          ) : (
+            <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              Video này <strong className="text-text-primary">chưa có phụ đề</strong> (đang được bổ sung).
+              Trong phòng vẫn có video và gia sư AI trả lời theo nội dung bài học —
+              giải thích, vẽ sơ đồ, đố bạn — chỉ là chưa nghe được lời trong video.
+            </p>
+          )}
           <div className="mt-3 flex flex-wrap gap-2">
             <button onClick={vao}
               className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"

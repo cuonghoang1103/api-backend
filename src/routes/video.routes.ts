@@ -102,6 +102,13 @@ router.get('/co-phu-de/:lessonId(\\d+)', param('lessonId').isInt(), validate,
     try { ok(res, await svc.coPhuDe(Number(req.params.lessonId))); } catch (e) { next(e); }
   });
 
+// Mở phòng học video: có phụ đề thì trả đủ, chưa có thì trả video + `coPhuDe:false`.
+// Tách khỏi `/phu-de` (app iOS coi 404 ở đó là "chưa có phụ đề") — xem `phongHoc()`.
+router.get('/phong/:lessonId(\\d+)', param('lessonId').isInt(), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await svc.phongHoc(Number(req.params.lessonId))); } catch (e) { next(e); }
+  });
+
 router.get('/phu-de/:lessonId(\\d+)', param('lessonId').isInt(), validate,
   async (req, res: Response<ApiResponse>, next) => {
     try { ok(res, await svc.phuDe(Number(req.params.lessonId))); } catch (e) { next(e); }

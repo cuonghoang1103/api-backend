@@ -5702,11 +5702,21 @@ export const videoHocApi = {
    * Trang học gọi mỗi lần đổi bài để quyết có mời vào phòng học cùng AI.
    */
   coPhuDe(lessonId: number) {
-    return api.get<{ data: { co: boolean; videoId: string | null; soCau: number; coDich: boolean } }>(
+    return api.get<{ data: {
+      co: boolean; videoId: string | null; soCau: number; coDich: boolean;
+      /** Mở được phòng học không — có phụ đề HOẶC có video YouTube. Trường mới:
+       *  máy chủ cũ chưa có thì coi như bằng `co`. */
+      moDuoc?: boolean;
+    } }>(
       `/video-hoc/co-phu-de/${lessonId}`,
     );
   },
   phuDe(lessonId: number) {
     return api.get<{ data: PhuDeBai }>(`/video-hoc/phu-de/${lessonId}`);
+  },
+  /** Mở phòng học: có phụ đề thì đủ như `phuDe`, chưa có thì `cues` rỗng và
+   *  `coPhuDe: false` — phòng vẫn chạy với video + gia sư đọc nội dung bài. */
+  phongHoc(lessonId: number) {
+    return api.get<{ data: PhuDeBai & { coPhuDe: boolean } }>(`/video-hoc/phong/${lessonId}`);
   },
 };

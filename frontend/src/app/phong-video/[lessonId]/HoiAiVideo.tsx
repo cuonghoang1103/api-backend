@@ -47,11 +47,34 @@ const CHIP: { key?: string; nhan: string; q: string }[] = [
   { key: 'video_kiemtra', nhan: 'Kiểm tra tôi', q: 'Đặt 5 câu hỏi kiểm tra xem tôi đã hiểu video chưa (kèm đáp án ở cuối).' },
 ];
 
-export default function HoiAiVideo({ giaSu, giay, onTua }: {
+/**
+ * Chip khi video CHƯA CÓ phụ đề: hỏi về BÀI HỌC, không hỏi về lời trong video.
+ *
+ * ⚠️ `key` RIÊNG (hậu tố `_kpd`). Cache chip dùng chung cho mọi người theo
+ * (bài, key) — dùng lại key cũ thì câu trả lời soạn từ nội dung bài sẽ nằm
+ * trong cache, và khi phụ đề về, người sau bấm "Tóm tắt video" vẫn nhận bản
+ * cũ không có mốc thời gian nào.
+ *
+ * Không có "Giải thích đoạn này": không có phụ đề thì không biết đoạn này
+ * là đoạn nào.
+ */
+const CHIP_KHONG_PHU_DE: { key?: string; nhan: string; q: string }[] = [
+  { key: 'bai_tomtat_kpd', nhan: 'Tóm tắt bài học', q: 'Tóm tắt nội dung bài học này.' },
+  { key: 'video_thuatngu_kpd', nhan: 'Thuật ngữ', q: 'Liệt kê các thuật ngữ chuyên môn của bài học này, kèm nghĩa tiếng Việt và giải thích ngắn.' },
+  { key: 'video_sodo_kpd', nhan: 'Vẽ sơ đồ', q: 'Vẽ sơ đồ mermaid tóm tắt kiến thức chính của bài học này.' },
+  { key: 'video_tuvung_kpd', nhan: 'Từ vựng tiếng Anh', q: 'Chọn 15 từ/cụm từ tiếng Anh đáng học trong chủ đề của bài này, kèm phiên âm, nghĩa và câu ví dụ.' },
+  { key: 'video_vidu_kpd', nhan: 'Ví dụ thực tế', q: 'Cho ví dụ thực tế dễ hình dung cho kiến thức trong bài học này.' },
+  { key: 'video_kiemtra_kpd', nhan: 'Kiểm tra tôi', q: 'Đặt 5 câu hỏi kiểm tra xem tôi đã hiểu bài này chưa (kèm đáp án ở cuối).' },
+];
+
+export default function HoiAiVideo({ giaSu, giay, onTua, coPhuDe = true }: {
   giaSu: GiaSu;
   giay: number;
   onTua: (giay: number) => void;
+  /** `false` ⇒ video chưa có phụ đề: gia sư chỉ đọc nội dung bài. */
+  coPhuDe?: boolean;
 }) {
+  const dsChip = coPhuDe ? CHIP : CHIP_KHONG_PHU_DE;
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
   const { isPro } = usePro();
 
@@ -95,7 +118,7 @@ export default function HoiAiVideo({ giaSu, giay, onTua }: {
 
   const tieuDeChip = useMemo(() => (
     <div className="flex flex-wrap gap-1.5">
-      {CHIP.map((c) => (
+      {dsChip.map((c) => (
         <button
           key={c.nhan}
           type="button"
@@ -108,7 +131,7 @@ export default function HoiAiVideo({ giaSu, giay, onTua }: {
         </button>
       ))}
     </div>
-  ), [asking, hoi, giay]);
+  ), [asking, hoi, giay, dsChip]);
 
   if (!isAuthed) {
     return (
@@ -123,8 +146,8 @@ export default function HoiAiVideo({ giaSu, giay, onTua }: {
     return (
       <div className="p-4">
         <p className="mb-3 text-sm text-text-secondary">
-          Phòng học video cùng AI là tính năng Pro — gia sư đọc được phụ đề của video
-          và giảng lại đúng đoạn bạn đang xem.
+          Phòng học video cùng AI là tính năng Pro — gia sư giảng lại bài, và với video
+          đã có phụ đề thì giảng đúng đoạn bạn đang xem.
         </p>
         <Link href="/pro" className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold"
           style={{ background: 'linear-gradient(90deg,#f59e0b,#f97316)', color: '#fff' }}>
@@ -140,7 +163,9 @@ export default function HoiAiVideo({ giaSu, giay, onTua }: {
         {chuaHoi && (
           <div className="mb-3">
             <p className="mb-2 text-sm text-text-secondary">
-              Gia sư đã đọc phụ đề của video này. Hỏi bất cứ điều gì — hoặc bắt đầu bằng một gợi ý:
+              {coPhuDe
+                ? 'Gia sư đã đọc phụ đề của video này. Hỏi bất cứ điều gì — hoặc bắt đầu bằng một gợi ý:'
+                : 'Video này chưa có phụ đề nên gia sư chưa nghe được lời trong video, nhưng đã đọc nội dung bài học. Hỏi bất cứ điều gì — hoặc bắt đầu bằng một gợi ý:'}
             </p>
             {tieuDeChip}
           </div>
@@ -208,7 +233,7 @@ export default function HoiAiVideo({ giaSu, giay, onTua }: {
           <input
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder={`Hỏi về video… (đang ở ${moc(giay)})`}
+            placeholder={coPhuDe ? `Hỏi về video… (đang ở ${moc(giay)})` : 'Hỏi về bài học…'}
             className="min-w-0 flex-1 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-text-primary outline-none placeholder:text-text-muted focus:border-neon-violet/50"
           />
           <button type="submit" disabled={asking || !question.trim()}

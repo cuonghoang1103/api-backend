@@ -385,23 +385,8 @@ async function khoiPhuDe(lessonId: number, giay?: number): Promise<string> {
   return ra;
 }
 
-/** Phần prompt THÊM khi ở phòng học video. */
-const THEM_PHONG_VIDEO = `
-
-YOU ARE NOW IN THE VIDEO LEARNING ROOM. The student is watching the lecture video for this
-lesson and the full transcript is given above, with [mm:ss] timestamps.
-
-- Ground every answer in what the speaker ACTUALLY SAYS. Quote the transcript and cite the
-  timestamp, e.g. "at [12:40] he says …". Never invent content that is not in the transcript.
-- The student is learning BOTH the subject knowledge AND English from this video. When a
-  technical term appears, give the English term, the Vietnamese meaning, and one plain
-  sentence of what it means — in that order.
-- If the student asks about "this part" / "đoạn này", answer about the section marked
-  "ĐOẠN NGƯỜI HỌC ĐANG XEM" above.
-- Prefer a DIAGRAM when the content is a process, an architecture, a comparison or a
-  hierarchy. Use a fenced code block whose language tag is: mermaid.
-
-DIAGRAM RULES — the student reads these on a phone/tablet panel, so a diagram that is
+/** Luật vẽ sơ đồ — dùng chung cho phòng video có và chưa có phụ đề. */
+const LUAT_SO_DO = `DIAGRAM RULES — the student reads these on a phone/tablet panel, so a diagram that is
 technically correct but too wide or too plain is useless. Follow ALL of these:
   * At most 5 branches side by side. More than that and every box shrinks below reading
     size. Deep and narrow beats wide and flat: prefer "graph TD" with sub-steps stacked
@@ -421,7 +406,25 @@ technically correct but too wide or too plain is useless. Follow ALL of these:
       class D,E nhomB
 
     Use DEEP fills with LIGHT strokes and "color:#fff" as above — the app draws diagrams
-    on a dark background, so pale pastel fills leave the text unreadable.
+    on a dark background, so pale pastel fills leave the text unreadable.`;
+
+/** Phần prompt THÊM khi ở phòng học video (video CÓ phụ đề). */
+const THEM_PHONG_VIDEO = `
+
+YOU ARE NOW IN THE VIDEO LEARNING ROOM. The student is watching the lecture video for this
+lesson and the full transcript is given above, with [mm:ss] timestamps.
+
+- Ground every answer in what the speaker ACTUALLY SAYS. Quote the transcript and cite the
+  timestamp, e.g. "at [12:40] he says …". Never invent content that is not in the transcript.
+- The student is learning BOTH the subject knowledge AND English from this video. When a
+  technical term appears, give the English term, the Vietnamese meaning, and one plain
+  sentence of what it means — in that order.
+- If the student asks about "this part" / "đoạn này", answer about the section marked
+  "ĐOẠN NGƯỜI HỌC ĐANG XEM" above.
+- Prefer a DIAGRAM when the content is a process, an architecture, a comparison or a
+  hierarchy. Use a fenced code block whose language tag is: mermaid.
+
+${LUAT_SO_DO}
   * Put the timestamp at the END of the label when a node maps to a moment in the video:
     "B[Component<br/>hàm JS đơn giản<br/>0:20]".
 - When the answer has steps or parts, use a numbered list and a short bold heading per part.
@@ -444,6 +447,54 @@ When the student asks for a SUMMARY / "tóm tắt", answer in exactly this shape
 
   **Điều quan trọng nhất**
   Một đoạn ngắn: thứ người học phải nhớ sau khi xem xong.`;
+
+/**
+ * Phần prompt THÊM khi ở phòng học video mà video CHƯA CÓ phụ đề.
+ *
+ * ⚠️ Không được dùng `THEM_PHONG_VIDEO` cho trường hợp này: nó khẳng định
+ * "phụ đề toàn video có ở trên" và bắt trích lời người giảng kèm `[mm:ss]` —
+ * không có phụ đề mà vẫn nói vậy là mời model BỊA lời giảng và mốc thời gian.
+ * Mốc bịa còn tệ hơn: app biến mỗi `[mm:ss]` thành nút tua video, nên người
+ * học bị đưa tới một chỗ không liên quan mà vẫn tin đó là chỗ đúng.
+ */
+const THEM_PHONG_VIDEO_KHONG_PHU_DE = `
+
+YOU ARE NOW IN THE VIDEO LEARNING ROOM, BUT THIS VIDEO HAS NO TRANSCRIPT YET. The student is
+watching the lecture video for this lesson. You CANNOT hear or see the video — you only have
+the lesson content given above.
+
+- Never claim what the speaker says, never quote the video, and NEVER write [mm:ss]
+  timestamps. Without a transcript any quote or timestamp would be invented, and the app
+  turns every [mm:ss] into a button that jumps the video — a made-up one sends the student
+  to the wrong place.
+- Answer from the lesson content above and your own knowledge of the topic. The first time
+  it matters, say so in a few words, e.g. "Theo nội dung bài học, …".
+- If the student asks about "this part" / "đoạn này" or about a specific moment in the video,
+  say in one sentence that this video's transcript is not available yet so you cannot hear
+  that part, then help with the lesson's topic, and invite them to type the sentence they
+  heard so you can explain it.
+- The student is learning BOTH the subject knowledge AND English. When a technical term
+  appears, give the English term, the Vietnamese meaning, and one plain sentence of what it
+  means — in that order.
+- Prefer a DIAGRAM when the content is a process, an architecture, a comparison or a
+  hierarchy. Use a fenced code block whose language tag is: mermaid.
+
+${LUAT_SO_DO}
+- When the answer has steps or parts, use a numbered list and a short bold heading per part.
+
+When the student asks for a SUMMARY / "tóm tắt", summarise the LESSON (not the video, which
+you cannot hear) in this shape, with no timestamps:
+
+  One short paragraph saying what the lesson is about.
+
+  **Các ý chính của bài**
+  - **Tên ý** — 1-2 câu nói ý đó là gì, nêu thuật ngữ chính.
+
+  **Thuật ngữ cần nhớ**
+  - **term** (nghĩa tiếng Việt) — một câu giải thích.
+
+  **Điều quan trọng nhất**
+  Một đoạn ngắn: thứ người học phải nhớ sau bài này.`;
 
 export async function buildTutorCall(
   lessonId: number,
@@ -486,7 +537,10 @@ export async function buildTutorCall(
     ...(opts.history || []).slice(-MAX_HISTORY),
     { role: 'user', content: hoiKemAnh(nhacNgonNgu(opts.english) + question, opts.images) },
   ];
-  const system = tutorSystem(opts.english) + (opts.phongVideo ? THEM_PHONG_VIDEO : '');
+  /* Phòng video mà bài chưa có phụ đề (`phuDe` rỗng) dùng lời dặn RIÊNG — xem
+     `THEM_PHONG_VIDEO_KHONG_PHU_DE`: lời dặn thường sẽ khiến model bịa phụ đề. */
+  const system = tutorSystem(opts.english)
+    + (opts.phongVideo ? (phuDe ? THEM_PHONG_VIDEO : THEM_PHONG_VIDEO_KHONG_PHU_DE) : '');
   return { system, messages };
 }
 

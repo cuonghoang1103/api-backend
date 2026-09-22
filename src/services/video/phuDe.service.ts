@@ -244,10 +244,13 @@ export async function videoCuaKhoa(courseId: number) {
  * đổi bài là kéo về vài trăm KB chỉ để hỏi một câu đúng/sai.
  */
 export async function coPhuDe(lessonId: number) {
-  const d = await prisma.lessonTranscript.findUnique({
-    where: { lessonId },
-    select: { videoId: true, soCau: true, dichVi: true },
-  });
+  const [d, bai] = await Promise.all([
+    prisma.lessonTranscript.findUnique({
+      where: { lessonId },
+      select: { videoId: true, soCau: true, dichVi: true },
+    }),
+    prisma.lesson.findUnique({ where: { id: lessonId }, select: { videoUrl: true } }),
+  ]);
   return {
     co: !!d,
     videoId: d?.videoId ?? null,
@@ -255,6 +258,56 @@ export async function coPhuDe(lessonId: number) {
     /* Có bản dịch tiếng Việt chưa — phòng học hiện được cột song ngữ hay
        không phụ thuộc chỗ này, và người học nên biết TRƯỚC khi bước vào. */
     coDich: Array.isArray(d?.dichVi) && (d!.dichVi as string[]).length > 0,
+    /* Mở được phòng học không. Phòng phát bằng trình phát YouTube, nên cần
+       có phụ đề HOẶC ít nhất một link YouTube — xem `phongHoc()`. Trường mới,
+       thêm vào chứ không đổi nghĩa trường cũ: app iOS đang đọc `co`/`videoId`. */
+    moDuoc: !!d || !!idYouTube(bai?.videoUrl),
+  };
+}
+
+/** Mã 11 ký tự của video YouTube trong một link, hoặc `null`. */
+function idYouTube(url: string | null | undefined): string | null {
+  const s = String(url ?? '').trim();
+  if (!s) return null;
+  const m = s.match(/(?:youtube\.com\/watch\?[^#]*\bv=|youtu\.be\/|youtube\.com\/(?:embed|shorts|live)\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+/**
+ * Dữ liệu để MỞ PHÒNG HỌC VIDEO — có phụ đề thì đủ như `phuDe()`, chưa có
+ * thì vẫn mở được với video + gia sư đọc NỘI DUNG BÀI (`coPhuDe: false`).
+ *
+ * Người dùng 22/09/2026: banner mời chỉ hiện ở bài đầu khoá. Đo production:
+ * 2.138 bài có video mà mới 963 bài có phụ đề — phòng đóng cửa với hơn một
+ * nửa số video. Phụ đề đang được thu tiếp; trong lúc chờ, phòng vẫn phải vào
+ * được.
+ *
+ * ⚠️ TÁCH RIÊNG khỏi `phuDe()`, đừng sửa nó trả mảng rỗng: app iOS gọi
+ * `/phu-de` và coi 404 là "chưa có phụ đề". Đổi hợp đồng đó là làm app hiện
+ * một phòng trống mà không ai kiểm.
+ *
+ * Chỉ nhận video YouTube: phòng phát bằng trình phát YouTube, và link video
+ * tự lưu trên R2 không được lộ ra qua đường này.
+ */
+export async function phongHoc(lessonId: number) {
+  const d = await prisma.lessonTranscript.findUnique({ where: { lessonId }, select: { lessonId: true } });
+  if (d) return { ...(await phuDe(lessonId)), coPhuDe: true };
+
+  const bai = await prisma.lesson.findUnique({ where: { id: lessonId }, select: { title: true, videoUrl: true } });
+  const videoId = idYouTube(bai?.videoUrl);
+  if (!bai || !videoId) throw new NotFoundError('Bài này không có video YouTube để mở phòng học');
+  const tach = tachTieuDe(bai.title);
+  return {
+    lessonId,
+    videoId,
+    tieuDe: tach.en,
+    tieuDeVi: tach.vi,
+    lang: 'en',
+    soCau: 0,
+    soTu: 0,
+    cues: [] as CauPhuDe[],
+    dichVi: null,
+    coPhuDe: false,
   };
 }
 

@@ -146,7 +146,7 @@ function InvestmentForm({ investment, defaultType, wallets, onClose, onSaved }: 
   return (
     <Sheet open onClose={onClose} title={isEdit ? 'Cập nhật' : type === 'SELF' ? 'Đầu tư bản thân' : 'Thêm tài sản'}>
       <div className="space-y-3">
-        <Field label="Tên"><input value={name} onChange={(e) => setName(e.target.value)} className={inputCls} placeholder={type === 'SELF' ? 'Khóa Unity, Sách…' : 'Vàng SJC, cổ phiếu…'} /></Field>
+        <Field label="Tên"><input value={name} onChange={(e) => setName(e.target.value)} className={inputCls} placeholder={type === 'SELF' ? 'Unity course, books…' : 'SJC gold, stocks…'} /></Field>
         {!isEdit && (
           <div className="grid grid-cols-2 gap-3">
             <Field label="Số tiền"><input inputMode="numeric" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>
@@ -154,8 +154,8 @@ function InvestmentForm({ investment, defaultType, wallets, onClose, onSaved }: 
           </div>
         )}
         {!isEdit && <Field label="Trừ từ ví (tuỳ chọn)"><select value={walletId} onChange={(e) => setWalletId(e.target.value ? Number(e.target.value) : '')} className={inputCls}><option value="">— Không trừ ví —</option>{wallets.map((w) => <option key={w.id} value={w.id}>{w.icon} {w.name}</option>)}</select></Field>}
-        {type === 'SELF' && <Field label="Kỳ vọng nhận được"><textarea value={expectedOutcome} onChange={(e) => setExpectedOutcome(e.target.value)} className={cn(inputCls, 'min-h-[60px]')} placeholder="Kỹ năng / kết quả mong đợi" /></Field>}
-        {type === 'ASSET' && <Field label="Giá trị hiện tại (₫)"><input inputMode="numeric" value={currentValue} onChange={(e) => setCurrentValue(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} placeholder="Cập nhật thủ công" /></Field>}
+        {type === 'SELF' && <Field label="Kỳ vọng nhận được"><textarea value={expectedOutcome} onChange={(e) => setExpectedOutcome(e.target.value)} className={cn(inputCls, 'min-h-[60px]')} placeholder="Skill / expected outcome" /></Field>}
+        {type === 'ASSET' && <Field label="Giá trị hiện tại (₫)"><input inputMode="numeric" value={currentValue} onChange={(e) => setCurrentValue(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} placeholder="Manual update" /></Field>}
         <Button onClick={save} disabled={saving} className="w-full">{saving ? 'Đang lưu…' : 'Lưu'}</Button>
       </div>
     </Sheet>
@@ -193,7 +193,7 @@ function CompleteSheet({ inv, onClose, onDone }: { inv: Investment; onClose: () 
   return (
     <Sheet open onClose={onClose} title={`Hoàn thành: ${inv.name}`}>
       <div className="space-y-3">
-        <Field label="Kết quả nhận được"><textarea value={note} onChange={(e) => setNote(e.target.value)} className={cn(inputCls, 'min-h-[80px]')} placeholder="Bạn đã học/đạt được gì?" /></Field>
+        <Field label="Kết quả nhận được"><textarea value={note} onChange={(e) => setNote(e.target.value)} className={cn(inputCls, 'min-h-[80px]')} placeholder="What did you learn or achieve?" /></Field>
         <Button onClick={go} disabled={saving} className="w-full">{saving ? 'Đang lưu…' : 'Hoàn thành'}</Button>
       </div>
     </Sheet>

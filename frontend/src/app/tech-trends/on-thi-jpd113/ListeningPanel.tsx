@@ -466,7 +466,7 @@ export default function ListeningPanel({ profile }: { profile: Record<string, st
                   else answerTyped();
                 }}
                 disabled={revealed}
-                placeholder="Gõ lại những gì bạn nghe được…"
+                placeholder="Type what you heard…"
                 autoComplete="off"
                 autoCapitalize="off"
                 spellCheck={false}

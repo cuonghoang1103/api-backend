@@ -298,7 +298,7 @@ export default function AdminSkillsPage() {
                 <textarea
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  placeholder="Mô tả ngắn về kỹ năng..."
+                  placeholder="Short skill description..."
                   rows={3}
                   className="w-full px-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors resize-none"
                 />

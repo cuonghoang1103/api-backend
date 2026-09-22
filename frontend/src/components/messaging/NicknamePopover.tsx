@@ -119,7 +119,7 @@ export default function NicknamePopover({
                 if (e.key === 'Escape') setOpen(false);
               }}
               maxLength={100}
-              placeholder="Nhập biệt danh..."
+              placeholder="Nickname..."
               className="w-full rounded-md border border-white/10 bg-white/[0.04] px-2 py-1.5 text-[12px] text-text-primary placeholder:text-text-muted focus:border-cyan-500/40 focus:outline-none"
               autoFocus
             />

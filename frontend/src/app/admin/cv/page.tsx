@@ -238,7 +238,7 @@ export default function AdminCvPage() {
                 value={publicCv.userId ?? ''}
                 onChange={(e) => setPublicCv({ ...publicCv, userId: e.target.value ? Number(e.target.value) : null })}
                 className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-slate-100"
-                placeholder="ví dụ 1"
+                placeholder="e.g. 1"
               />
             </label>
             <label className="text-xs text-slate-400">

@@ -461,7 +461,7 @@ export default function CheckoutPage() {
                         type="text"
                         value={province}
                         onChange={(e) => setProvince(e.target.value)}
-                        placeholder="VD: Hà Nội, TP. Hồ Chí Minh…"
+                        placeholder="e.g. Hanoi, Ho Chi Minh City…"
                         className="w-full px-4 py-3 bg-darkbg border border-darkborder rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
                       />
                       <p className="text-[11px] text-text-muted mt-1.5">

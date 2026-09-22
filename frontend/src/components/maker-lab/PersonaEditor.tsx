@@ -773,7 +773,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
           <input
             value={viTri}
             onChange={(e) => setViTri(e.target.value)}
-            placeholder="Hà Nội, Việt Nam"
+            placeholder="Hanoi, Vietnam"
             className="mt-2 w-full rounded-lg border px-3 py-2 text-sm outline-none"
             style={{
               borderColor: 'var(--border-color)',
@@ -892,7 +892,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
           <input
             value={tenMoi}
             onChange={(e) => setTenMoi(e.target.value)}
-            placeholder="Tên bộ mới, ví dụ: Nghiêm túc"
+            placeholder="New set name, e.g. Serious"
             className="w-56 rounded-lg border px-3 py-2 text-sm outline-none"
             style={{
               borderColor: 'var(--border-color)',
@@ -1025,7 +1025,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
             <input
               value={voiceId}
               onChange={(e) => setVoiceId(e.target.value)}
-              placeholder="ví dụ 21m00Tcm4TlvDq8ikWAM"
+              placeholder="e.g. 21m00Tcm4TlvDq8ikWAM"
               className="mt-1.5 w-full rounded-lg border px-3 py-2 font-mono text-sm"
               style={{
                 borderColor: 'var(--border-color)',
@@ -1152,7 +1152,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
                       n[i] = { ...n[i], user: e.target.value };
                       setSamples(n);
                     }}
-                    placeholder="Người ta nói gì…"
+                    placeholder="What they say…"
                     className="w-full rounded-lg border px-3 py-2 text-sm"
                     style={{
                       borderColor: 'var(--border-color)',
@@ -1167,7 +1167,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
                       n[i] = { ...n[i], bot: e.target.value };
                       setSamples(n);
                     }}
-                    placeholder="Robot đáp lại…"
+                    placeholder="The robot replies…"
                     className="w-full rounded-lg border px-3 py-2 text-sm"
                     style={{
                       borderColor: 'var(--border-color)',

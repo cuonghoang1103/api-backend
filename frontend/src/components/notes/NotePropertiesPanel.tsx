@@ -157,7 +157,7 @@ export default function NotePropertiesPanel({ note, tree, onSave, onDuplicate }:
                 }
               }}
               onBlur={() => { if (tagDraft.trim()) void addTag(); }}
-              placeholder="Thêm thẻ rồi Enter"
+              placeholder="Add a tag, then Enter"
               aria-label="Thêm thẻ"
               className="min-w-0 flex-1 bg-transparent text-base text-slate-800 outline-none placeholder:text-slate-400 sm:text-[13px] dark:text-slate-200 dark:placeholder:text-slate-600"
             />

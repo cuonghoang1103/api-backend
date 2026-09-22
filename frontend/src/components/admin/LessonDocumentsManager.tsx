@@ -168,14 +168,14 @@ export default function LessonDocumentsManager({ lessonId, courseId, initialDocu
           type="text"
           value={linkTitle}
           onChange={(e) => setLinkTitle(e.target.value)}
-          placeholder="Tên tài liệu (vd: Slide + Source)"
+          placeholder="Document name (e.g. Slides + Source)"
           className="sm:w-56 px-3 py-2 rounded-xl bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
         />
         <input
           type="url"
           value={linkUrl}
           onChange={(e) => setLinkUrl(e.target.value)}
-          placeholder="Dán link Google Drive / URL…"
+          placeholder="Paste a Google Drive link / URL…"
           className="flex-1 px-3 py-2 rounded-xl bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
         />
         <button

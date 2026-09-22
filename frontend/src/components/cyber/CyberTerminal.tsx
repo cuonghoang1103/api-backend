@@ -373,7 +373,7 @@ export default function CyberTerminal() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Nhập lệnh hoặc câu hỏi..."
+            placeholder="Enter a command or question..."
             className="flex-1 bg-transparent outline-none font-mono text-sm"
             style={{
               color: C.green,

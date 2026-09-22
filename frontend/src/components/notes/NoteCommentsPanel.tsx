@@ -181,7 +181,7 @@ export default function NoteCommentsPanel({ noteId, noteTitle, focusCommentId, o
                 onChange={(event) => { setDraft(event.target.value); if (!event.target.value) setMentions(new Set()); }}
                 rows={3}
                 maxLength={4000}
-                placeholder="Viết bình luận… gõ @ để nhắc thành viên"
+                placeholder="Write a comment… type @ to mention someone"
                 className="w-full resize-none rounded-xl border border-slate-300 bg-white p-3 pr-12 text-base text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:border-white/[0.1] dark:bg-black/20 dark:text-slate-100"
               />
               <MentionAutocomplete textareaRef={textareaRef} value={draft} onChange={setDraft} onPick={addMention} offsetY={4} />

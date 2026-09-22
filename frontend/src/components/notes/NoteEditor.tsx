@@ -298,7 +298,7 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
         // ProseMirror history plugin as well would create two competing stacks.
         history: collaboration ? false : {},
       }),
-      Placeholder.configure({ placeholder: 'Bắt đầu viết… (dán ảnh trực tiếp như Notion, hoặc gõ "/" để chèn khối)' }),
+      Placeholder.configure({ placeholder: 'Start writing… (paste images like in Notion, or type "/" to insert a block)' }),
       Image.configure({ inline: false, allowBase64: false, HTMLAttributes: { class: 'note-img', loading: 'lazy' } }),
       NoteCodeBlock,
       NoteCallout,
@@ -599,7 +599,7 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
           collaboration?.document.getMap('metadata').set('title', value);
           queueSave({ title: value });
         }}
-        placeholder="Tiêu đề ghi chú"
+        placeholder="Note title"
         // text-base (16px) avoids iOS focus auto-zoom on mobile.
         className="w-full bg-transparent text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none"
       />

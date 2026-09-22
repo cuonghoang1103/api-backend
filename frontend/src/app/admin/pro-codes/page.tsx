@@ -82,8 +82,8 @@ export default function AdminProCodesPage() {
       <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 mb-6">
         <div className="text-sm font-semibold mb-3 flex items-center gap-2"><Plus className="w-4 h-4 text-amber-300" /> Tạo mã Pro mới</div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Tên gợi nhớ (tuỳ chọn)" className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
-          <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="Mã (bỏ trống = tự sinh)" className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm font-mono" />
+          <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Label (optional)" className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+          <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="Code (empty = auto-generate)" className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm font-mono" />
           <select value={durIdx} onChange={(e) => setDurIdx(Number(e.target.value))} className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
             {DURATIONS.map((d, i) => <option key={i} value={i}>{d.label}</option>)}
           </select>
@@ -93,7 +93,7 @@ export default function AdminProCodesPage() {
           </div>
         </div>
         <div className="flex items-center gap-3 mt-3">
-          <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Ghi chú (tuỳ chọn)" className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+          <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note (optional)" className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
           <button onClick={create} disabled={creating} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-violet-500 text-white text-sm disabled:opacity-50">
             {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />} Tạo mã
           </button>
@@ -237,7 +237,7 @@ function GrantPro({ onDone }: { onDone: () => void }) {
       ) : (
         <div className="relative mb-3">
           <Search className="w-4 h-4 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Tìm user…" className="w-full bg-white/5 border border-white/10 rounded-lg pl-8 pr-3 py-2 text-sm" />
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search users…" className="w-full bg-white/5 border border-white/10 rounded-lg pl-8 pr-3 py-2 text-sm" />
           {results.length > 0 && (
             <div className="absolute z-10 mt-1 w-full rounded-lg border border-white/10 bg-[#0d1424] max-h-48 overflow-y-auto">
               {results.map((u) => (

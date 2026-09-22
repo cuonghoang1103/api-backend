@@ -36,7 +36,7 @@ export default function NoteContentEditor({ value, onChange, minHeight = 320 }: 
     extensions: [
       StarterKit.configure({ heading: { levels: [2, 3] } }),
       Image.configure({ inline: false, allowBase64: false }),
-      Placeholder.configure({ placeholder: 'Viết ghi chú… (dán ảnh trực tiếp được)' }),
+      Placeholder.configure({ placeholder: 'Write a note… (paste images directly)' }),
     ],
     content: value,
     editorProps: {

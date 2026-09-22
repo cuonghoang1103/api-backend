@@ -262,7 +262,7 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
         autoCorrect="off"
         autoCapitalize="off"
         rows={3}
-        placeholder="Bấm vào đây rồi gõ theo đoạn văn phía trên…"
+        placeholder="Click here and type the passage above…"
         className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 outline-none focus:border-sky-400/50 font-mono leading-relaxed resize-none"
       />
 

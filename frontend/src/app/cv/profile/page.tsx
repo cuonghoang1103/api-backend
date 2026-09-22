@@ -230,11 +230,11 @@ function ContactSection({ profile, onSaved }: { profile: CvProfile; onSaved: () 
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Field label="Họ và tên"><input className={inputCls} value={f.fullName} onChange={set('fullName')} placeholder="Nguyễn Văn A" /></Field>
+        <Field label="Họ và tên"><input className={inputCls} value={f.fullName} onChange={set('fullName')} placeholder="Nguyen Van A" /></Field>
         <Field label="Chức danh"><input className={inputCls} value={f.headline} onChange={set('headline')} placeholder="Backend Engineer" /></Field>
         <Field label="Email"><input className={inputCls} value={f.email} onChange={set('email')} placeholder="you@email.com" /></Field>
         <Field label="Số điện thoại"><input className={inputCls} value={f.phone} onChange={set('phone')} placeholder="+84…" /></Field>
-        <Field label="Địa điểm"><input className={inputCls} value={f.location} onChange={set('location')} placeholder="TP. Hồ Chí Minh" /></Field>
+        <Field label="Địa điểm"><input className={inputCls} value={f.location} onChange={set('location')} placeholder="Ho Chi Minh City" /></Field>
         <Field label="Ngày sinh (chỉ CV thị trường VN)"><input type="date" className={inputCls} value={f.dateOfBirth} onChange={set('dateOfBirth')} /></Field>
         <Field label="GitHub"><input className={inputCls} value={f.github} onChange={set('github')} placeholder="https://github.com/…" /></Field>
         <Field label="LinkedIn"><input className={inputCls} value={f.linkedin} onChange={set('linkedin')} placeholder="https://linkedin.com/in/…" /></Field>
@@ -245,7 +245,7 @@ function ContactSection({ profile, onSaved }: { profile: CvProfile; onSaved: () 
       <div className="mt-4">
         <Field label="Tóm tắt (professional summary)">
           <textarea className={`${inputCls} min-h-[90px] resize-y`} value={f.summary} onChange={set('summary')}
-            placeholder="2–3 câu: bạn là ai, mạnh về gì, tìm vai trò nào. Không sáo rỗng." />
+            placeholder="2–3 sentences: who you are, your strengths, the role you want. No fluff." />
         </Field>
       </div>
 
@@ -609,13 +609,13 @@ function Bullets({ item, onChanged }: { item: CvItem; onChanged: () => Promise<v
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') add(); }}
-          placeholder="Thêm dòng thành tích — mở đầu bằng động từ mạnh (built, migrated, reduced…)"
+          placeholder="Add an achievement — start with a strong verb (built, migrated, reduced…)"
         />
         <input
           className={`${inputCls} text-xs`}
           value={facts}
           onChange={(e) => setFacts(e.target.value)}
-          placeholder="(tuỳ chọn) Sự thật gốc / số liệu bạn nhớ — dùng làm neo khi AI viết lại sau này"
+          placeholder="(optional) Raw facts / numbers you remember — anchors for future AI rewrites"
         />
         <button className={btnGhost} onClick={add} disabled={busy}>
           {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />} Thêm dòng
@@ -662,11 +662,11 @@ function SkillsSection({ profile, onChanged }: { profile: CvProfile; onChanged: 
         </div>
       )}
       <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto_1fr_auto]">
-        <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && add()} placeholder="Tên kỹ năng (Node.js)" />
+        <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && add()} placeholder="Skill (Node.js)" />
         <select className={inputCls} value={category} onChange={(e) => setCategory(e.target.value as CvSkillCategory)}>
           {SKILL_CATS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
         </select>
-        <input className={inputCls} value={prof} onChange={(e) => setProf(e.target.value)} placeholder="Mức độ (tuỳ chọn)" />
+        <input className={inputCls} value={prof} onChange={(e) => setProf(e.target.value)} placeholder="Level (optional)" />
         <button className={btnPrimary} onClick={add} disabled={busy}><Plus className="h-4 w-4" /> Thêm</button>
       </div>
     </Card>
@@ -700,8 +700,8 @@ function CertsSection({ profile, onChanged }: { profile: CvProfile; onChanged: (
         </ul>
       )}
       <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto]">
-        <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && add()} placeholder="Tên chứng chỉ (AWS SAA)" />
-        <input className={inputCls} value={issuer} onChange={(e) => setIssuer(e.target.value)} placeholder="Tổ chức cấp (Amazon)" />
+        <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && add()} placeholder="Certificate (AWS SAA)" />
+        <input className={inputCls} value={issuer} onChange={(e) => setIssuer(e.target.value)} placeholder="Issuer (Amazon)" />
         <button className={btnPrimary} onClick={add} disabled={busy}><Plus className="h-4 w-4" /> Thêm</button>
       </div>
     </Card>
@@ -747,11 +747,11 @@ function LangsSection({ profile, onChanged }: { profile: CvProfile; onChanged: (
         </ul>
       )}
       <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-4">
-        <input className={inputCls} value={language} onChange={(e) => setLanguage(e.target.value)} placeholder="Ngôn ngữ (English)" />
-        <input className={inputCls} value={proficiency} onChange={(e) => setProficiency(e.target.value)} placeholder="Mức (Professional)" />
-        <input className={inputCls} value={certName} onChange={(e) => setCertName(e.target.value)} placeholder="Chứng chỉ (IELTS)" />
+        <input className={inputCls} value={language} onChange={(e) => setLanguage(e.target.value)} placeholder="Language (English)" />
+        <input className={inputCls} value={proficiency} onChange={(e) => setProficiency(e.target.value)} placeholder="Level (Professional)" />
+        <input className={inputCls} value={certName} onChange={(e) => setCertName(e.target.value)} placeholder="Certificate (IELTS)" />
         <div className="flex gap-2">
-          <input className={inputCls} value={certScore} onChange={(e) => setCertScore(e.target.value)} placeholder="Điểm (7.5)" />
+          <input className={inputCls} value={certScore} onChange={(e) => setCertScore(e.target.value)} placeholder="Score (7.5)" />
           <button className={btnPrimary} onClick={add} disabled={busy}><Plus className="h-4 w-4" /></button>
         </div>
       </div>

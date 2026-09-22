@@ -262,7 +262,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, no
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void ask(question); } }}
                 rows={2}
-                placeholder={inQuiz ? 'VD: câu 3 mình chưa hiểu vì sao đáp án là B…' : 'Hỏi bất cứ điều gì về bài này — dán ảnh chụp màn hình, code hay bài làm của bạn nhờ chữa…'}
+                placeholder={inQuiz ? 'e.g. I don’t get why question 3’s answer is B…' : 'Ask anything about this lesson — paste a screenshot, code or your work for feedback…'}
                 className="min-w-[min(100%,220px)] flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none"
                 style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }}
               />

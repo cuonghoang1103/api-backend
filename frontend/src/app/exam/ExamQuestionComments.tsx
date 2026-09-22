@@ -79,7 +79,7 @@ export default function ExamQuestionComments({ questionId }: { questionId: numbe
           {isAuthed ? (
             <div className="mb-5 flex gap-2">
               <textarea value={draft} onChange={(e) => setDraft(e.target.value)} rows={2}
-                placeholder="Viết bình luận, hỏi hoặc chia sẻ cách hiểu của bạn về câu này…"
+                placeholder="Comment, ask, or share how you read this question…"
                 className="flex-1 resize-y rounded-lg border px-3 py-2 text-sm outline-none"
                 style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }} />
               <button onClick={() => post(draft, null, () => setDraft(''))} disabled={posting || !draft.trim()}
@@ -256,7 +256,7 @@ function CommentItem({ comment, myId, isAuthed, onChanged, onReply, posting }: {
           <div className="mt-2 flex gap-2">
             <input value={replyText} onChange={(e) => setReplyText(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) onReply(replyText, comment.id, () => { setReplyText(''); setReplying(false); }); }}
-              placeholder={`Trả lời ${comment.isAi ? 'CuongMini' : name(comment.author)}…`}
+              placeholder={`Reply to ${comment.isAi ? 'CuongMini' : name(comment.author)}…`}
               className="min-w-0 flex-1 rounded-lg border px-3 py-2 text-sm outline-none"
               style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }} />
             <button onClick={() => onReply(replyText, comment.id, () => { setReplyText(''); setReplying(false); })}

@@ -132,7 +132,7 @@ export default function SearchPage() {
  type="search"
  value={input}
  onChange={(e) => setInput(e.target.value)}
- placeholder="Nhập từ khoá: callout, portfolio, postgres…"
+ placeholder="Keywords: callout, portfolio, postgres…"
  className="flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 outline-none transition focus:border-violet-500 focus:bg-white/10"
  autoFocus
  />

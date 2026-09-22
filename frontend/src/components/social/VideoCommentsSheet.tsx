@@ -134,7 +134,7 @@ export default function VideoCommentsSheet({
             <input
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="Viết bình luận…"
+              placeholder="Write a comment…"
               // text-base (16px) avoids iOS focus zoom.
               className="flex-1 rounded-full bg-white/5 px-4 py-2 text-base text-white placeholder-white/40 outline-none focus:bg-white/10"
             />

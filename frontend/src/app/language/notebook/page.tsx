@@ -497,8 +497,8 @@ function EntryEditor({ value, onChange, onSave, onClose }: {
           <button onClick={onClose} className="rounded-full p-1.5 text-text-muted hover:bg-[var(--bg-surface)]"><X size={18} /></button>
         </div>
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
-          <input value={value.title} onChange={(e) => onChange({ ...value, title: e.target.value })} placeholder="Tiêu đề" className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60" />
-          <textarea value={value.body} onChange={(e) => onChange({ ...value, body: e.target.value })} placeholder="Nội dung (hỗ trợ Markdown)…" rows={10} className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60" />
+          <input value={value.title} onChange={(e) => onChange({ ...value, title: e.target.value })} placeholder="Title" className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60" />
+          <textarea value={value.body} onChange={(e) => onChange({ ...value, body: e.target.value })} placeholder="Content (Markdown supported)…" rows={10} className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60" />
         </div>
         <div className="flex justify-end gap-2 border-t border-[var(--border-color)] px-4 py-3">
           <button onClick={onClose} className="rounded-full bg-[var(--bg-surface)] px-4 py-2 text-sm text-text-secondary ring-1 ring-[var(--border-color)]">Hủy</button>

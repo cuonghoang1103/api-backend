@@ -197,7 +197,7 @@ export function DebtForm({ initial, onSaved, onCancel }: { initial?: Debt; onSav
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Bên cho vay"><input value={form.lenderName} onChange={(e) => set('lenderName', e.target.value)} className={inputCls} placeholder="App X / Ngân hàng Y" /></Field>
+        <Field label="Bên cho vay"><input value={form.lenderName} onChange={(e) => set('lenderName', e.target.value)} className={inputCls} placeholder="App X / Bank Y" /></Field>
         <Field label="Loại"><select value={form.lenderType} onChange={(e) => set('lenderType', e.target.value)} className={inputCls}>{LENDER_TYPES.map((t) => <option key={t} value={t}>{LENDER_TYPE_LABELS[t]}</option>)}</select></Field>
       </div>
       <div className="grid grid-cols-2 gap-3">

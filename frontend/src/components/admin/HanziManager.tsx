@@ -182,7 +182,7 @@ export default function HanziManager({ code }: { code: string }) {
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-0 flex-1">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Tìm chữ hoặc nghĩa…" className={`${IN} pl-9`} />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search characters or meanings…" className={`${IN} pl-9`} />
         </div>
         <button type="button" onClick={() => setDraft(empty())} className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-neon-orange px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90">
           <Plus size={16} /> Thêm chữ
@@ -250,7 +250,7 @@ export default function HanziManager({ code }: { code: string }) {
               )}
 
               <Field label="Nghĩa tiếng Việt *"><input value={draft.meaningVi} onChange={(e) => setDraft({ ...draft, meaningVi: e.target.value })} placeholder="Hán, sông Hán" className={IN} /></Field>
-              <Field label="Cách nhớ"><textarea value={draft.mnemonic} onChange={(e) => setDraft({ ...draft, mnemonic: e.target.value })} rows={3} placeholder="Câu chuyện giúp nhớ mặt chữ…" className={IN} /></Field>
+              <Field label="Cách nhớ"><textarea value={draft.mnemonic} onChange={(e) => setDraft({ ...draft, mnemonic: e.target.value })} rows={3} placeholder="Mnemonic story for the character…" className={IN} /></Field>
               <Field label="Chiết tự"><input value={draft.breakdown} onChange={(e) => setDraft({ ...draft, breakdown: e.target.value })} placeholder="氵(nước) + 難(khó)" className={IN} /></Field>
 
               {/* Images */}
@@ -276,7 +276,7 @@ export default function HanziManager({ code }: { code: string }) {
                         <input
                           value={im.caption}
                           onChange={(e) => setDraft({ ...draft, images: draft.images.map((x, j) => (j === i ? { ...x, caption: e.target.value } : x)) })}
-                          placeholder="chú thích"
+                          placeholder="note"
                           className="mt-1 w-full rounded bg-transparent px-1 text-[11px] text-text-secondary outline-none"
                         />
                         <button type="button" onClick={() => setDraft({ ...draft, images: draft.images.filter((_, j) => j !== i) })} className="mt-0.5 w-full text-[11px] text-red-400 hover:underline">Xoá ảnh</button>

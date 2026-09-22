@@ -94,7 +94,7 @@ function RecurringFormSheet({ categories, wallets, onClose, onSaved }: { categor
         <div className="grid grid-cols-2 gap-1 rounded-xl bg-[var(--border-color)] p-1">
           {['EXPENSE', 'INCOME'].map((k) => <button key={k} onClick={() => setKind(k)} className={cn('rounded-lg py-2 text-sm font-medium', kind === k ? 'bg-neon-violet text-white' : 'text-text-secondary')}>{k === 'EXPENSE' ? 'Chi' : 'Thu'}</button>)}
         </div>
-        <Field label="Mô tả"><input value={description} onChange={(e) => setDescription(e.target.value)} className={inputCls} placeholder="Tiền nhà, Netflix…" /></Field>
+        <Field label="Mô tả"><input value={description} onChange={(e) => setDescription(e.target.value)} className={inputCls} placeholder="Rent, Netflix…" /></Field>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Số tiền"><input inputMode="numeric" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>
           <Field label="Tần suất"><select value={frequency} onChange={(e) => setFrequency(e.target.value)} className={inputCls}>{Object.keys(FREQ).map((f) => <option key={f} value={f}>{FREQ[f]}</option>)}</select></Field>

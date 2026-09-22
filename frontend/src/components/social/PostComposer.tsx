@@ -596,7 +596,7 @@ export function PostComposer() {
                 onChange={handleContentChange}
                 onPaste={handlePaste}
                 onFocus={() => setIsExpanded(true)}
-                placeholder="Bạn đang nghĩ gì thế?"
+                placeholder="What’s on your mind?"
                 rows={1}
                 className="w-full resize-none bg-transparent text-sm outline-none placeholder:text-sm"
                 style={{ color: 'var(--text-primary)' }}
@@ -1371,7 +1371,7 @@ function PollEditor({ poll, onChange, onClose }: PollEditorProps) {
       <input
         value={local.question}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Câu hỏi khảo sát..."
+        placeholder="Poll question..."
         className="w-full rounded-lg bg-theme-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted border border-theme-light focus:border-neon-violet/50 focus:outline-none"
         maxLength={500}
       />
@@ -1383,7 +1383,7 @@ function PollEditor({ poll, onChange, onClose }: PollEditorProps) {
             <input
               value={opt}
               onChange={(e) => setOpt(i, e.target.value)}
-              placeholder={`Lựa chọn ${i + 1}`}
+              placeholder={`Option ${i + 1}`}
               className="flex-1 rounded-lg bg-theme-surface px-3 py-1.5 text-xs text-text-primary placeholder:text-text-muted border border-theme-light focus:border-neon-violet/50 focus:outline-none"
               maxLength={255}
             />

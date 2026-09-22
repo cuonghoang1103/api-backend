@@ -151,7 +151,7 @@ export default function TrainingPanel({ projectId, accent }: Props) {
                       value={val}
                       onChange={(e) => setDrafts({ ...drafts, [q.q]: e.target.value })}
                       rows={2}
-                      placeholder="Trả lời như bạn đang nói với bạn bè…"
+                      placeholder="Answer as if talking to a friend…"
                       className="mt-3 w-full rounded-lg border p-2.5 text-sm"
                       style={{
                         borderColor: 'var(--border-color)',

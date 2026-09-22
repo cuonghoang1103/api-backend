@@ -165,7 +165,7 @@ function SortableResource({
  type="text"
  value={resource.title}
  onChange={(e) => onUpdate({ title: e.target.value })}
- placeholder="Tiêu đề"
+ placeholder="Title"
  className="flex-1 min-w-[200px] px-3 py-1.5 bg-darkcard border border-darkborder rounded-lg text-sm"
  />
  <select
@@ -188,7 +188,7 @@ function SortableResource({
  <textarea
  value={resource.description ?? ''}
  onChange={(e) => onUpdate({ description: e.target.value })}
- placeholder="Mô tả (optional)..."
+ placeholder="Description (optional)..."
  rows={1}
  className="w-full px-3 py-1.5 bg-darkcard border border-darkborder rounded-lg text-xs resize-none"
  />

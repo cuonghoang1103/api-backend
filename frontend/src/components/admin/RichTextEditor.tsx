@@ -419,7 +419,7 @@ export default function RichTextEditor({ value, onChange, placeholder, minHeight
         suppressContentEditableWarning
         onInput={handleInput}
         onPaste={handlePaste}
-        data-placeholder={placeholder ?? 'Viết nội dung ở đây... Có thể paste từ VSCode/Google Docs/Word — định dạng được giữ nguyên.'}
+        data-placeholder={placeholder ?? 'Write here... Paste from VS Code, Google Docs or Word — formatting is preserved.'}
         className="rich-content px-4 py-3 text-sm text-text-primary outline-none overflow-y-auto"
         style={{
           minHeight,

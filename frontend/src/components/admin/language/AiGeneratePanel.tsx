@@ -175,7 +175,7 @@ export default function AiGeneratePanel({
       {section !== 'reading' && (
         <div>
           <label className={labelCls}>Chủ đề (tùy chọn)</label>
-          <input className={inputCls} value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="vd: gia đình, công việc, du lịch…" />
+          <input className={inputCls} value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="e.g. family, work, travel…" />
         </div>
       )}
       {section === 'reading' && (

@@ -166,7 +166,7 @@ export default function VoiceHubClient() {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Tìm video, chủ đề, tag…"
+              placeholder="Search videos, topics, tags…"
               className="w-full pl-9 pr-3 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 focus:ring-2 focus:ring-neon-violet/15 transition-all"
             />
           </div>

@@ -58,7 +58,7 @@ export default function NoteDatabaseToolbar({ properties, config, onChange, show
           <input
             value={config.search}
             onChange={(event) => patch({ search: event.target.value })}
-            placeholder="Tìm trong bảng…"
+            placeholder="Search this table…"
             aria-label="Tìm trong bảng"
             className="w-40 rounded border border-slate-300 bg-white py-1 pl-7 pr-2 text-[12px] text-slate-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-teal-500 dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
           />

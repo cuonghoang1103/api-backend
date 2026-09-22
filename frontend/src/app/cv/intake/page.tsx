@@ -132,7 +132,7 @@ export default function CvIntakePage() {
                 <select value={newKind} onChange={(e) => setNewKind(e.target.value as CvItemKind)} className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1.5 text-sm">
                   {KINDS.map((k) => <option key={k.v} value={k.v}>{k.l}</option>)}
                 </select>
-                <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="…hoặc tạo mục mới (tên dự án / vai trò)"
+                <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="…or create a new entry (project / role)"
                   className="flex-1 rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-1.5 text-sm" />
                 <button onClick={createItem} disabled={creating} className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-sm hover:bg-[var(--bg-primary)]">
                   {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />} Tạo
@@ -177,7 +177,7 @@ export default function CvIntakePage() {
             <div className="mt-3 flex items-end gap-2">
               <textarea value={input} onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }}
-                placeholder="Trả lời / kể tiếp… (Enter để gửi)"
+                placeholder="Reply or keep going… (Enter to send)"
                 className="min-h-[46px] max-h-40 flex-1 resize-y rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm" />
               <button onClick={send} disabled={busy || !input.trim()}
                 aria-label="Gửi tin nhắn" className="inline-flex h-[46px] items-center gap-1.5 rounded-lg bg-[var(--accent-color)] px-4 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">

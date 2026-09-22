@@ -314,7 +314,7 @@ export default function AdminPostsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
-            placeholder="Tìm kiếm bài viết..."
+            placeholder="Search posts..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
@@ -510,7 +510,7 @@ export default function AdminPostsPage() {
                       type="text"
                       value={form.title}
                       onChange={(e) => setForm({ ...form, title: e.target.value })}
-                      placeholder="Nhập tiêu đề bài viết..."
+                      placeholder="Post title..."
                       className="w-full px-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
                     />
                   </div>
@@ -522,7 +522,7 @@ export default function AdminPostsPage() {
                       type="text"
                       value={form.excerpt}
                       onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-                      placeholder="Mô tả ngắn cho bài viết (hiển thị ở danh sách)..."
+                      placeholder="Short summary (shown in lists)..."
                       className="w-full px-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
                     />
                   </div>
@@ -544,7 +544,7 @@ export default function AdminPostsPage() {
                     <textarea
                       value={form.content}
                       onChange={(e) => setForm({ ...form, content: e.target.value })}
-                      placeholder="Nội dung bài viết (hỗ trợ Markdown)..."
+                      placeholder="Post content (Markdown supported)..."
                       rows={14}
                       className="w-full px-4 py-3 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors resize-none font-mono"
                     />
@@ -585,7 +585,7 @@ export default function AdminPostsPage() {
                         type="url"
                         value={form.sourceUrl}
                         onChange={(e) => setForm({ ...form, sourceUrl: e.target.value })}
-                        placeholder="https://github.com/... hoặc link tài liệu"
+                        placeholder="https://github.com/... or a docs link"
                         className="w-full px-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
                       />
                     </div>
@@ -646,7 +646,7 @@ export default function AdminPostsPage() {
                           type="url"
                           value={form.thumbnailUrl}
                           onChange={(e) => setForm({ ...form, thumbnailUrl: e.target.value })}
-                          placeholder="Hoặc dán URL ảnh..."
+                          placeholder="Or paste an image URL..."
                           className="w-full px-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
                         />
                       )}

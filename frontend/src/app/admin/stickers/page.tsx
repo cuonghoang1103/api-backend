@@ -141,7 +141,7 @@ export default function AdminStickersPage() {
                 value={newPackName}
                 onChange={(e) => setNewPackName(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') createPack(); }}
-                placeholder="Tên pack…"
+                placeholder="Pack name…"
                 className="flex-1 rounded-lg border border-darkborder bg-white/[0.03] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/40"
               />
               <button

@@ -331,7 +331,7 @@ function CollectionsSection() {
               if (e.key === 'Enter') { e.preventDefault(); void createCollection(); }
             }}
             maxLength={80}
-            placeholder="+ Tạo bộ sưu tập mới"
+            placeholder="+ New collection"
             className="flex-1 rounded-lg border border-theme-light bg-theme-surface px-2.5 py-1.5 text-xs text-text-primary outline-none placeholder:text-text-muted/60 transition-colors focus:border-amber-400/40"
           />
           {newName.trim() && (

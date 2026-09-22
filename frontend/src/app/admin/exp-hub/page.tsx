@@ -604,7 +604,7 @@ function SnippetsTab({
                 <input value={editor.title} onChange={e => setEditor({ ...editor, title: e.target.value })} className={inpCls} placeholder="VD: JWT Authentication Middleware" />
               </label>
               <label className="sm:col-span-2 text-xs text-slate-400">Mô tả
-                <input value={editor.description} onChange={e => setEditor({ ...editor, description: e.target.value })} className={inpCls} placeholder="Mô tả ngắn gọn" />
+                <input value={editor.description} onChange={e => setEditor({ ...editor, description: e.target.value })} className={inpCls} placeholder="Short description" />
               </label>
               <label className="text-xs text-slate-400">Thư mục
                 <select value={editor.categoryId ?? ''} onChange={e => setEditor({ ...editor, categoryId: e.target.value ? Number(e.target.value) : null })} className={inpCls}>
@@ -693,7 +693,7 @@ function SnippetsTab({
                       value={blk.code}
                       language={blk.language}
                       onChange={(code) => setEditor(prev => { if (!prev) return prev; const cb = [...prev.codeBlocks]; cb[idx] = { ...cb[idx], code }; return { ...prev, codeBlocks: cb }; })}
-                      placeholder="Paste code của bạn vào đây..."
+                      placeholder="Paste your code here..."
                       height={220}
                     />
                   </div>
@@ -907,7 +907,7 @@ function CategoriesTab({
     <div className="max-w-3xl space-y-4">
       {/* Create row */}
       <div className="flex flex-wrap items-center gap-2">
-        <input value={newName} onChange={e => setNewName(e.target.value)} onKeyDown={e => e.key === 'Enter' && create()} placeholder="Tên thư mục mới" className={`${inpCls} !mt-0 w-56`} />
+        <input value={newName} onChange={e => setNewName(e.target.value)} onKeyDown={e => e.key === 'Enter' && create()} placeholder="New folder name" className={`${inpCls} !mt-0 w-56`} />
         <select value={newParent} onChange={e => setNewParent(e.target.value ? Number(e.target.value) : '')} className={selCls}>
           <option value="">Gốc (không có cha)</option>
           {catOptions.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
@@ -937,7 +937,7 @@ function CategoriesTab({
               </select>
             </label>
             <label className="block text-xs text-slate-400">Mô tả ngắn <span className="text-slate-500">(giới thiệu công nghệ — hiện ở đầu trang)</span>
-              <textarea value={editing.description} onChange={e => setEditing({ ...editing, description: e.target.value })} className={inpCls} rows={2} placeholder="VD: Runtime JavaScript phía server." />
+              <textarea value={editing.description} onChange={e => setEditing({ ...editing, description: e.target.value })} className={inpCls} rows={2} placeholder="e.g. Server-side JavaScript runtime." />
             </label>
             <div className="grid grid-cols-2 gap-2">
               <label className="block text-xs text-slate-400">Icon <span className="text-slate-500">(Lucide/URL)</span>
@@ -1040,7 +1040,7 @@ function TagsTab({ tags, onChanged }: { tags: SnippetTag[]; onChanged: () => voi
   return (
     <div className="max-w-2xl space-y-4">
       <div className="flex items-center gap-2">
-        <input value={newName} onChange={e => setNewName(e.target.value)} onKeyDown={e => e.key === 'Enter' && create()} placeholder="Tên tag mới" className={`${inpCls} !mt-0 w-56`} />
+        <input value={newName} onChange={e => setNewName(e.target.value)} onKeyDown={e => e.key === 'Enter' && create()} placeholder="New tag name" className={`${inpCls} !mt-0 w-56`} />
         <button onClick={create} disabled={busy || !newName.trim()} className="flex items-center gap-2 rounded-lg bg-teal-500/20 px-3 py-2 text-sm text-teal-300 border border-teal-500/40 hover:bg-teal-500/30 disabled:opacity-50">
           <Plus className="h-4 w-4" /> Tạo
         </button>

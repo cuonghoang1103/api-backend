@@ -236,17 +236,17 @@ function BlockCard({
 
 function BlockFields({ block, onChange }: { block: DocBlock; onChange: (b: DocBlock) => void }) {
   if (block.type === 'heading') {
-    return <input value={block.text} onChange={(e) => onChange({ ...block, text: e.target.value })} placeholder="Tiêu đề mục (VD: Installation)" className={inp} />;
+    return <input value={block.text} onChange={(e) => onChange({ ...block, text: e.target.value })} placeholder="Section title (e.g. Installation)" className={inp} />;
   }
   if (block.type === 'prose') {
-    return <textarea value={block.html} onChange={(e) => onChange({ ...block, html: e.target.value })} rows={4} placeholder="<p>Đoạn văn… dùng <ul><li><strong><code><a href>…</p>" className={mono} spellCheck={false} />;
+    return <textarea value={block.html} onChange={(e) => onChange({ ...block, html: e.target.value })} rows={4} placeholder="<p>Paragraph… use <ul><li><strong><code><a href>…</p>" className={mono} spellCheck={false} />;
   }
   if (block.type === 'code') {
     return (
       <div className="space-y-1.5">
         <div className="flex gap-1.5">
-          <input value={block.title ?? ''} onChange={(e) => onChange({ ...block, title: e.target.value })} placeholder="Tiêu đề (VD: macOS (Homebrew))" className={`${inp} flex-1`} />
-          <input value={block.language} onChange={(e) => onChange({ ...block, language: e.target.value })} placeholder="ngôn ngữ (bash, ts…)" className={`${inp} w-40`} />
+          <input value={block.title ?? ''} onChange={(e) => onChange({ ...block, title: e.target.value })} placeholder="Title (e.g. macOS (Homebrew))" className={`${inp} flex-1`} />
+          <input value={block.language} onChange={(e) => onChange({ ...block, language: e.target.value })} placeholder="language (bash, ts…)" className={`${inp} w-40`} />
         </div>
         <textarea value={block.code} onChange={(e) => onChange({ ...block, code: e.target.value })} rows={5} placeholder="npm install ..." className={mono} spellCheck={false} />
       </div>
@@ -261,9 +261,9 @@ function BlockFields({ block, onChange }: { block: DocBlock; onChange: (b: DocBl
   if (block.type === 'part') {
     return (
       <div className="space-y-1.5">
-        <input value={block.number || ''} onChange={(e) => onChange({ ...block, number: e.target.value })} placeholder="Số phần, ví dụ 3" className={inp} />
-        <input value={block.text} onChange={(e) => onChange({ ...block, text: e.target.value })} placeholder="Tên phần" className={inp} />
-        <input value={block.subtitle || ''} onChange={(e) => onChange({ ...block, subtitle: e.target.value })} placeholder="Mô tả ngắn (tuỳ chọn)" className={inp} />
+        <input value={block.number || ''} onChange={(e) => onChange({ ...block, number: e.target.value })} placeholder="Number of parts, e.g. 3" className={inp} />
+        <input value={block.text} onChange={(e) => onChange({ ...block, text: e.target.value })} placeholder="Part title" className={inp} />
+        <input value={block.subtitle || ''} onChange={(e) => onChange({ ...block, subtitle: e.target.value })} placeholder="Short description (optional)" className={inp} />
       </div>
     );
   }
@@ -288,13 +288,13 @@ function ImageFields({ block, onChange }: { block: Extract<DocBlock, { type: 'im
   return (
     <div className="space-y-1.5">
       <div className="flex gap-1.5">
-        <input value={block.url} onChange={(e) => onChange({ ...block, url: e.target.value })} placeholder="URL ảnh (https://… hoặc tải lên)" className={`${inp} flex-1`} />
+        <input value={block.url} onChange={(e) => onChange({ ...block, url: e.target.value })} placeholder="Image URL (https://… or upload)" className={`${inp} flex-1`} />
         <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading} className={chip}>
           {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />} Tải lên
         </button>
         <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); e.target.value = ''; }} />
       </div>
-      <input value={block.caption ?? ''} onChange={(e) => onChange({ ...block, caption: e.target.value })} placeholder="Chú thích (tuỳ chọn)" className={inp} />
+      <input value={block.caption ?? ''} onChange={(e) => onChange({ ...block, caption: e.target.value })} placeholder="Caption (optional)" className={inp} />
       {block.url && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={block.url} alt="" className="max-h-40 rounded-lg border border-white/10" />
@@ -311,9 +311,9 @@ function LinksFields({ block, onChange }: { block: Extract<DocBlock, { type: 'li
     <div className="space-y-1.5">
       {block.items.map((it, i) => (
         <div key={i} className="flex gap-1.5">
-          <input value={it.label} onChange={(e) => setItem(i, { ...it, label: e.target.value })} placeholder="Nhãn (VD: Trang chủ)" className={`${inp} w-40`} />
+          <input value={it.label} onChange={(e) => setItem(i, { ...it, label: e.target.value })} placeholder="Label (e.g. Homepage)" className={`${inp} w-40`} />
           <input value={it.url} onChange={(e) => setItem(i, { ...it, url: e.target.value })} placeholder="https://…" className={`${inp} flex-1`} />
-          <input value={it.note ?? ''} onChange={(e) => setItem(i, { ...it, note: e.target.value })} placeholder="ghi chú" className={`${inp} w-32`} />
+          <input value={it.note ?? ''} onChange={(e) => setItem(i, { ...it, note: e.target.value })} placeholder="note" className={`${inp} w-32`} />
           <button onClick={() => removeItem(i)} className="rounded p-1 text-rose-300 hover:bg-rose-500/20"><X className="h-3.5 w-3.5" /></button>
         </div>
       ))}

@@ -210,7 +210,7 @@ function AdjustSheet({ wallet, onClose, onDone }: { wallet: Wallet; onClose: () 
       <div className="space-y-3">
         <div className="text-sm text-text-muted">Số dư hiện tại: <b className="text-text-primary">{formatMoney(wallet.balance, wallet.currency)}</b></div>
         <Field label="Số dư mới"><input inputMode="numeric" value={target} onChange={(e) => setTarget(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>
-        <Field label="Lý do (ghi vào lịch sử)"><input value={reason} onChange={(e) => setReason(e.target.value)} className={inputCls} placeholder="VD: kiểm kê tiền mặt" /></Field>
+        <Field label="Lý do (ghi vào lịch sử)"><input value={reason} onChange={(e) => setReason(e.target.value)} className={inputCls} placeholder="e.g. cash count" /></Field>
         <Button onClick={go} disabled={saving} className="w-full">{saving ? 'Đang lưu…' : 'Cập nhật số dư'}</Button>
       </div>
     </Sheet>

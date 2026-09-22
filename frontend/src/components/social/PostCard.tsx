@@ -1488,7 +1488,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                       <input
                         ref={commentInputRef}
                         type="text"
-                        placeholder="Write a comment... (gõ @ để tag)"
+                        placeholder="Write a comment... (type @ to tag)"
                         value={commentText}
                         onChange={(e) => {
                           const next = e.target.value;
@@ -3412,7 +3412,7 @@ function CommentItem({
                   }
                 }}
                 autoFocus
-                placeholder={`Trả lời ${display}... (gõ @ để tag)`}
+                placeholder={`Reply to ${display}... (type @ to tag)`}
                 className="flex-1 rounded-xl px-3 py-1.5 text-sm text-text-primary placeholder-text-muted outline-none"
                 style={{
                   background: 'var(--bg-surface)',

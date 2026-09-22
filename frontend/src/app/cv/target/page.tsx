@@ -116,10 +116,10 @@ export default function CvTargetPage() {
         {/* Form */}
         <section className="mt-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <input className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Chức danh (Senior Backend Engineer)" />
-            <input className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Công ty (tuỳ chọn)" />
+            <input className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Job title (Senior Backend Engineer)" />
+            <input className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" />
           </div>
-          <textarea className="mt-2 min-h-[160px] w-full resize-y rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm" value={jd} onChange={(e) => setJd(e.target.value)} placeholder="Dán toàn bộ mô tả công việc (JD) vào đây…" />
+          <textarea className="mt-2 min-h-[160px] w-full resize-y rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm" value={jd} onChange={(e) => setJd(e.target.value)} placeholder="Paste the full job description (JD) here…" />
           <button onClick={analyze} disabled={busy} className="mt-3 inline-flex items-center gap-2 rounded-lg bg-[var(--accent-color)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Target className="h-4 w-4" />} Phân tích độ hợp
           </button>

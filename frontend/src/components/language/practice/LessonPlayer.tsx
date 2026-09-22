@@ -556,7 +556,7 @@ function ExerciseView({
           disabled={locked}
           onChange={(e) => setTyped(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') onEnter(); }}
-          placeholder="Gõ từ bạn nghe được…"
+          placeholder="Type the word you heard…"
           className={`mt-6 w-full max-w-sm rounded-xl border bg-[var(--bg-surface)] px-4 py-3 text-center text-lg text-text-primary outline-none transition ${
             locked ? (correctAns ? 'border-neon-green/50' : 'border-neon-orange/50') : 'border-[var(--border-color)] focus:border-neon-violet/60'
           }`}

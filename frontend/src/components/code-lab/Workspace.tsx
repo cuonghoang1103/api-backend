@@ -264,7 +264,7 @@ export function Workspace({ files, onChange, exerciseId, trackSlug, language, pr
             <>
               <div className="mb-1 truncate font-mono text-[11px]" style={{ color: 'var(--text-secondary)' }}>{current.name}</div>
               <CodeEditor value={current.code} language={current.language || language} onChange={setCode} height={320}
-                placeholder={flavor.javaStyle ? 'Viết code Java của bạn…' : 'Viết lời giải của bạn…'} />
+                placeholder={flavor.javaStyle ? 'Write your Java code…' : 'Write your solution…'} />
             </>
           ) : (
             <p className="p-4 text-sm" style={{ color: 'var(--text-secondary)' }}>

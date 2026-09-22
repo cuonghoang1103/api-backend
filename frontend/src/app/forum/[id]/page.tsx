@@ -345,7 +345,7 @@ function EditModal({
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Tiêu đề"
+            placeholder="Title"
             className="w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none"
             style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
           />
@@ -353,7 +353,7 @@ function EditModal({
             value={body}
             onChange={(e) => setBody(e.target.value)}
             rows={6}
-            placeholder="Nội dung"
+            placeholder="Content"
             className="w-full resize-y rounded-xl border px-3.5 py-2.5 text-sm outline-none"
             style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
           />

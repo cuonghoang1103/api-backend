@@ -698,8 +698,8 @@ function ChatWindow({
               }}
               placeholder={
                 w.threadId
-                  ? `Nhắn ${w.peer?.displayName ?? w.peer?.username ?? ''}…`
-                  : 'Đang kết nối…'
+                  ? `Message ${w.peer?.displayName ?? w.peer?.username ?? ''}…`
+                  : 'Connecting…'
               }
               // text-base (16px) prevents iOS Safari from auto-zooming
               // the input on focus, which would shift the dock off-screen.

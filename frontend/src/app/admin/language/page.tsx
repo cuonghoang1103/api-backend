@@ -227,7 +227,7 @@ export default function AdminLanguagePage() {
           <>
             <label className={labelCls}>
               Tên (tiếng Việt) *
-              <input value={editor.name} onChange={(e) => setEditor({ ...editor, name: e.target.value })} placeholder="Vd: Tiếng Nhật" className={`mt-1 ${inputCls}`} autoFocus />
+              <input value={editor.name} onChange={(e) => setEditor({ ...editor, name: e.target.value })} placeholder="e.g. Japanese" className={`mt-1 ${inputCls}`} autoFocus />
             </label>
             <label className={labelCls}>
               Tên (tiếng Anh)

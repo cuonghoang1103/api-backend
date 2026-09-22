@@ -452,7 +452,7 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  onChange={(e) => setForm({ ...form, description: e.target.value })}
  rows={2}
  className={`${inputCls} resize-none`}
- placeholder="Mô tả 1-2 câu xuất hiện trên listing card."
+ placeholder="1–2 sentence summary shown on the listing card."
  />
  </Field>
  <Field label="Trạng thái">
@@ -497,7 +497,7 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  value={form.duration}
  onChange={(e) => setForm({ ...form, duration: e.target.value })}
  className={inputCls}
- placeholder="VD: 2 tháng"
+ placeholder="e.g. 2 months"
  />
  </Field>
  <Field label="Ngày bắt đầu">
@@ -597,7 +597,7 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  <MarkdownEditor
  value={form.bodyMdx}
  onChange={(v) => setForm({ ...form, bodyMdx: v })}
- placeholder="Viết case study chi tiết tại đây…"
+ placeholder="Write the full case study here…"
  />
  <details className="mt-3">
  <summary className="text-xs text-text-muted cursor-pointer hover:text-text-primary">
@@ -608,7 +608,7 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  onChange={(e) => setForm({ ...form, content: e.target.value })}
  rows={3}
  className={`${inputCls} mt-2 font-mono text-xs resize-none`}
- placeholder="(Tuỳ chọn) Nội dung cũ, fallback nếu bodyMdx trống."
+ placeholder="(Optional) Legacy content, used if bodyMdx is empty."
  />
  </details>
  </Section>

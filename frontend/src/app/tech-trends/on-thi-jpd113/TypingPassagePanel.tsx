@@ -406,7 +406,7 @@ export default function TypingPassagePanel() {
               autoCapitalize="off"
               autoCorrect="off"
               spellCheck={false}
-              placeholder="Bấm vào đây rồi gõ romaji…"
+              placeholder="Click here and type romaji…"
               className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/15 text-center text-lg text-white placeholder:text-slate-600 focus:outline-none focus:border-neon-violet/60 transition-colors"
             />
             {buffer && (

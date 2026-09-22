@@ -246,7 +246,7 @@ function EditUserModal({
               type="text"
               value={form.displayName}
               onChange={(e) => setForm((p) => ({ ...p, displayName: e.target.value }))}
-              placeholder="Nhập tên hiển thị…"
+              placeholder="Display name…"
               className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
             />
           </div>
@@ -703,7 +703,7 @@ export default function AdminUsersPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
-            placeholder="Tìm user..."
+            placeholder="Search users..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}
             className="w-full pl-10 pr-4 py-2 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"

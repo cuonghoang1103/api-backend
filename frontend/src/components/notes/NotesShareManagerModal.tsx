@@ -265,7 +265,7 @@ export default function NotesShareManagerModal({
                       type="text"
                       value={searchQuery}
                       onChange={e => { setSearchQuery(e.target.value); setSelectedUser(null); }}
-                      placeholder="Tìm người dùng..."
+                      placeholder="Search users..."
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-darkborder bg-darkbg/60 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
                     />
                     {/* Search results */}

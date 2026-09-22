@@ -281,7 +281,7 @@ export default function ReadingView({ d }: { d: StageBundle }) {
                         value={given}
                         disabled={graded}
                         onChange={(e) => setAnswers((a) => ({ ...a, [i]: e.target.value }))}
-                        placeholder="Gõ từ lấy từ bài đọc…"
+                        placeholder="Type a word from the passage…"
                         className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-600 outline-none focus:border-sky-400/50 disabled:text-slate-400"
                       />
                     )}

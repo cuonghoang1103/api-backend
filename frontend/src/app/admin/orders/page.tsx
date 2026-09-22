@@ -523,7 +523,7 @@ function AdminOrdersContent() {
                                 type="text"
                                 value={trackingDraft[order.id] ?? raw.trackingNumber ?? ''}
                                 onChange={(e) => setTrackingDraft((p) => ({ ...p, [order.id]: e.target.value }))}
-                                placeholder="Mã vận đơn"
+                                placeholder="Tracking number"
                                 className="px-3 py-2 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 w-32"
                               />
                               <button

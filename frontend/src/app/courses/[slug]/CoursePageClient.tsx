@@ -930,7 +930,7 @@ export default function CourseDetailPage() {
                     value={reviewContent}
                     onChange={(e) => setReviewContent(e.target.value)}
                     rows={3}
-                    placeholder="Chia sẻ cảm nhận của bạn về khoá học (không bắt buộc)…"
+                    placeholder="Share your thoughts on the course (optional)…"
                     className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none mb-3"
                   />
                   <button

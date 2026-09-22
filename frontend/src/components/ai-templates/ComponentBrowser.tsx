@@ -216,7 +216,7 @@ export default function ComponentBrowser({
               ref={searchRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={`Tìm trong ${items.length.toLocaleString('vi-VN')} ${meta.label}…`}
+              placeholder={`Search ${items.length.toLocaleString('en-US')} ${meta.label}…`}
               aria-label="Tìm component"
               className="h-9 w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] pl-9 pr-8 text-[13px] text-[var(--text-primary)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)]"
             />

@@ -201,7 +201,7 @@ export function ChangePasswordModal({ open, onClose }: ChangePasswordModalProps)
                       {...register('currentPassword')}
                       type={showCurrent ? 'text' : 'password'}
                       autoComplete="current-password"
-                      placeholder="Nhập mật khẩu hiện tại"
+                      placeholder="Current password"
                       className={`w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/[0.04] border text-text-primary
                         placeholder:text-text-muted text-sm outline-none transition-colors
                         focus:border-neon-violet/50 ${
@@ -233,7 +233,7 @@ export function ChangePasswordModal({ open, onClose }: ChangePasswordModalProps)
                       {...register('newPassword')}
                       type={showNew ? 'text' : 'password'}
                       autoComplete="new-password"
-                      placeholder="Nhập mật khẩu mới"
+                      placeholder="New password"
                       className={`w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/[0.04] border text-text-primary
                         placeholder:text-text-muted text-sm outline-none transition-colors
                         focus:border-neon-violet/50 ${
@@ -283,7 +283,7 @@ export function ChangePasswordModal({ open, onClose }: ChangePasswordModalProps)
                       {...register('confirmPassword')}
                       type={showConfirm ? 'text' : 'password'}
                       autoComplete="new-password"
-                      placeholder="Nhập lại mật khẩu mới"
+                      placeholder="Confirm new password"
                       className={`w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/[0.04] border text-text-primary
                         placeholder:text-text-muted text-sm outline-none transition-colors
                         focus:border-neon-violet/50 ${

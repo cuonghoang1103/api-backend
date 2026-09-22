@@ -218,7 +218,7 @@ export default function ThreadList() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Tìm kiếm cuộc trò chuyện…"
+            placeholder="Search conversations…"
             className="w-full rounded-full border border-transparent bg-white/[0.06] py-1.5 pl-8 pr-7 text-[12px] text-text-primary placeholder:text-text-muted focus:border-cyan-500/40 focus:bg-white/[0.08] focus:outline-none"
           />
           {query && (

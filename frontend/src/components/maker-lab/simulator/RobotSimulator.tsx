@@ -486,7 +486,7 @@ export function RobotSimulator({ deviceId }: { deviceId: number }) {
                   // chữ là chọn từ, không phải gửi.
                   if (e.key === 'Enter' && !e.nativeEvent.isComposing) guiChu();
                 }}
-                placeholder="Nói gì đó với robot…"
+                placeholder="Say something to the robot…"
                 disabled={!daNoi}
                 className="min-w-0 flex-1 rounded-lg border px-3 py-2 text-sm"
                 style={{

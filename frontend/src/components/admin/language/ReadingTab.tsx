@@ -364,7 +364,7 @@ function QuestionsBuilder({ value, onChange }: { value: ReadingQuestion[]; onCha
             </div>
           </div>
 
-          <input value={q.prompt} onChange={(e) => patchAt(i, { prompt: e.target.value })} placeholder="Nội dung câu hỏi" className={inputCls} />
+          <input value={q.prompt} onChange={(e) => patchAt(i, { prompt: e.target.value })} placeholder="Question text" className={inputCls} />
 
           {q.kind === 'mc' ? (
             <div className="space-y-1.5">
@@ -381,7 +381,7 @@ function QuestionsBuilder({ value, onChange }: { value: ReadingQuestion[]; onCha
                   <input
                     value={opt}
                     onChange={(e) => patchAt(i, { options: q.options.map((o, k) => (k === oi ? e.target.value : o)) })}
-                    placeholder={`Đáp án ${oi + 1}`}
+                    placeholder={`Option ${oi + 1}`}
                     className={`flex-1 ${inputCls}`}
                   />
                   <button
@@ -403,10 +403,10 @@ function QuestionsBuilder({ value, onChange }: { value: ReadingQuestion[]; onCha
               <p className="text-[11px] text-text-muted">Chọn nút tròn ở đáp án đúng.</p>
             </div>
           ) : (
-            <textarea value={q.sampleAnswer} onChange={(e) => patchAt(i, { sampleAnswer: e.target.value })} placeholder="Đáp án mẫu (hiện cho người học tự đối chiếu)" rows={3} className={inputCls} />
+            <textarea value={q.sampleAnswer} onChange={(e) => patchAt(i, { sampleAnswer: e.target.value })} placeholder="Model answer (shown so learners can self-check)" rows={3} className={inputCls} />
           )}
 
-          <input value={q.explanation ?? ''} onChange={(e) => patchAt(i, { explanation: e.target.value })} placeholder="Giải thích (tùy chọn)" className={inputCls} />
+          <input value={q.explanation ?? ''} onChange={(e) => patchAt(i, { explanation: e.target.value })} placeholder="Explanation (optional)" className={inputCls} />
         </div>
       ))}
 

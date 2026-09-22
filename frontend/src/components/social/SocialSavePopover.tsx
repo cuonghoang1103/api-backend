@@ -326,7 +326,7 @@ export default function SocialSavePopover({
                     }
                   }}
                   maxLength={50}
-                  placeholder="Gaming, Tài liệu, ..."
+                  placeholder="Gaming, Docs, ..."
                   disabled={busy}
                   className="flex-1 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-text-primary outline-none placeholder:text-text-muted/60 transition-colors focus:border-amber-400/50"
                 />

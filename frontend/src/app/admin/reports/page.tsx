@@ -247,7 +247,7 @@ export default function AdminReportsPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Tìm theo tên người báo cáo, lý do..."
+            placeholder="Search by reporter or reason..."
             className="flex-1 bg-transparent text-[12px] text-text-primary placeholder:text-text-muted focus:outline-none"
           />
           {search && (
@@ -545,7 +545,7 @@ function ReportCard({
                     value={resolveNote}
                     onChange={(e) => onResolveNoteChange(e.target.value)}
                     maxLength={500}
-                    placeholder="Mô tả hành động đã thực hiện..."
+                    placeholder="Describe the action taken..."
                     className="w-full resize-none rounded-lg border border-white/[0.06] bg-white/[0.03] p-2 text-[12px] text-text-primary placeholder:text-text-muted focus:border-amber-500/40 focus:outline-none"
                     rows={2}
                   />

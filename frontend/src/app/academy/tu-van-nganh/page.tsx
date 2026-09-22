@@ -341,7 +341,7 @@ function DiscussionSection({ facultyId, majorId }: { facultyId: string; majorId:
             </div>
           )}
           <textarea value={text} onChange={(e) => setText(e.target.value)} rows={2}
-            placeholder={isAuthenticated ? 'Viết bình luận, đánh giá hoặc góp ý…' : 'Đăng nhập để tham gia thảo luận…'}
+            placeholder={isAuthenticated ? 'Write a comment, review or suggestion…' : 'Sign in to join the discussion…'}
             className="w-full resize-none rounded-xl bg-darkbg border border-darkborder px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
           {image && (
             <div className="relative inline-block mt-2">
@@ -613,7 +613,7 @@ export default function AcademyAdvisorPage() {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(input); } }}
                   rows={1}
-                  placeholder="Hỏi CuongMini… (VD: mình giỏi toán nên chọn ngành nào?)"
+                  placeholder="Ask CuongMini… (e.g. I’m good at math — which major fits me?)"
                   className="flex-1 resize-none max-h-32 rounded-xl bg-darkbg border border-darkborder px-3.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                 />
                 <button type="submit" disabled={busy || !input.trim()}

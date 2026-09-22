@@ -146,7 +146,7 @@ export function FirmwareUpload({
       <input
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        placeholder="Sửa gì trong bản này…"
+        placeholder="What changed in this build…"
         maxLength={200}
         className="w-full rounded-lg border p-2 text-sm"
         style={{

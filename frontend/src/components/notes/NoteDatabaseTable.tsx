@@ -946,7 +946,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                 value={columnName}
                 onChange={(event) => setColumnName(event.target.value)}
                 onKeyDown={(event) => { if (event.key === 'Enter') { event.preventDefault(); addColumn(); } if (event.key === 'Escape') setAddingColumn(false); }}
-                placeholder="Tên cột"
+                placeholder="Column name"
                 className="min-h-9 w-32 rounded border border-slate-300 px-2 text-xs dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
               />
               <label htmlFor="new-col-type" className="sr-only">Kiểu cột</label>
@@ -979,7 +979,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                   aria-label="Biểu thức"
                   value={formulaExpr}
                   onChange={(e) => setFormulaExpr(e.target.value)}
-                  placeholder='if(prop("Trạng thái") == "Xong", "✅", "⏳")'
+                  placeholder='if(prop("Status") == "Done", "✅", "⏳")'
                   className="min-h-9 w-72 rounded border border-slate-300 px-2 font-mono text-[11px] dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
                 />
               )}
@@ -1010,7 +1010,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                       aria-label="Id cột bên bảng đích"
                       value={rollupTargetId ?? ''}
                       onChange={(e) => setRollupTargetId(e.target.value === '' ? null : Number(e.target.value))}
-                      placeholder="id cột đích"
+                      placeholder="target column id"
                       inputMode="numeric"
                       className="min-h-9 w-24 rounded border border-slate-300 px-2 text-xs dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
                     />

@@ -485,7 +485,7 @@ function ComposeModal({
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Ví dụ: Bảo trì hệ thống ngày 10/07"
+              placeholder="e.g. System maintenance on 10/07"
               className="w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none"
               style={{
                 background: 'var(--bg-surface)',
@@ -503,7 +503,7 @@ function ComposeModal({
               value={body}
               onChange={(e) => setBody(e.target.value)}
               rows={6}
-              placeholder="Nội dung thông báo... (xuống dòng được giữ nguyên, link tự nhận diện)"
+              placeholder="Announcement text... (line breaks kept, links auto-detected)"
               className="w-full resize-y rounded-xl border px-3.5 py-2.5 text-sm outline-none"
               style={{
                 background: 'var(--bg-surface)',

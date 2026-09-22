@@ -322,7 +322,7 @@ export default function WalletPage() {
                       inputMode="numeric"
                       value={soTienTuNhap ? Number(soTienTuNhap.replace(/\D/g, '') || 0).toLocaleString('vi-VN') : ''}
                       onChange={(e) => { setSoTienTuNhap(e.target.value); setSoTien(0); }}
-                      placeholder={`Từ ${dongVN(gioiHan.minVnd)}`}
+                      placeholder={`Min ${dongVN(gioiHan.minVnd)}`}
                       className="w-full bg-darkbg border border-darkborder rounded-xl px-4 py-3 pr-12 text-text-primary tabular-nums focus:border-neon-violet outline-none"
                     />
                     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted text-sm">đ</span>

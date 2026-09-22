@@ -438,7 +438,7 @@ function OpenBlock({
       <textarea
         value={value}
         onChange={(e) => onWrite(e.target.value)}
-        placeholder="Viết câu trả lời của bạn…"
+        placeholder="Write your answer…"
         rows={3}
         className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60"
       />

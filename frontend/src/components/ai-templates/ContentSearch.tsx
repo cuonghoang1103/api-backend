@@ -175,7 +175,7 @@ export default function ContentSearch({
           if (e.key === 'Escape') { setOpen(false); setQuery(''); }
           else if (e.key === 'Enter') { e.preventDefault(); step(e.shiftKey ? -1 : 1); }
         }}
-        placeholder="Tìm trong nội dung…"
+        placeholder="Search content…"
         aria-label="Tìm trong nội dung tệp nguồn"
         className="w-36 bg-transparent text-[12px] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] sm:w-44"
       />

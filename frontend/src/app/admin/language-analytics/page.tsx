@@ -92,7 +92,7 @@ export default function LanguageAnalyticsPage() {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') void load(keyword); }}
-          placeholder="Tìm theo tên / email… (Enter)"
+          placeholder="Search by name / email… (Enter)"
           className="w-full rounded-lg border border-darkborder bg-darkcard px-3 py-2 pl-9 text-sm text-text-primary outline-none focus:border-neon-violet/50"
         />
       </div>

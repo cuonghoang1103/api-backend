@@ -23,7 +23,7 @@ export default function CommentComposer({
   parentId,
   autoFocus = false,
   onSubmitted,
-  placeholder = 'Viết bình luận… (gõ @ để tag)',
+  placeholder = 'Write a comment… (type @ to tag)',
 }: {
   postId: number;
   parentId?: number;

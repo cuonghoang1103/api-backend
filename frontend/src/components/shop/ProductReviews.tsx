@@ -96,7 +96,7 @@ export default function ProductReviews({ productId, productSlug }: { productId: 
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             rows={3}
-            placeholder="Chia sẻ cảm nhận của bạn về sản phẩm…"
+            placeholder="Share your thoughts on this product…"
             className="w-full px-4 py-3 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none mb-3"
           />
           <div className="flex items-center gap-3">

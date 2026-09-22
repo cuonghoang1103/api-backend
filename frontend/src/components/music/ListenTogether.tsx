@@ -228,7 +228,7 @@ export default function ListenTogether({ onOpen }: { onOpen?: () => void } = {})
                       value={code}
                       onChange={(e) => setCode(e.target.value.toUpperCase())}
                       onKeyDown={(e) => e.key === 'Enter' && handleJoin()}
-                      placeholder="MÃ PHÒNG"
+                      placeholder="ROOM CODE"
                       maxLength={6}
                       spellCheck={false}
                       className="flex-1 rounded-xl bg-black/40 border border-white/10 px-4 outline-none font-mono tracking-[0.3em] text-center"

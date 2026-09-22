@@ -230,7 +230,7 @@ export default function AdminCategoriesPage() {
                 <textarea
                   value={form.description}
                   onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-                  placeholder="Mô tả danh mục..."
+                  placeholder="Category description..."
                   rows={2}
                   className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-y"
                 />

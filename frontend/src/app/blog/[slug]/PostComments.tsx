@@ -68,14 +68,14 @@ export default function PostComments({
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Tên của bạn (không bắt buộc)"
+          placeholder="Your name (optional)"
           className="mb-3 w-full rounded-xl border border-darkborder bg-white/[0.04] px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none focus:ring-2 focus:ring-neon-violet/20"
         />
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           rows={3}
-          placeholder="Góp ý, hỏi thêm, hoặc báo lỗi trong bài…"
+          placeholder="Feedback, questions or a mistake you spotted…"
           className="w-full resize-y rounded-xl border border-darkborder bg-white/[0.04] px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none focus:ring-2 focus:ring-neon-violet/20"
         />
         {error && <p className="mt-2 text-xs text-red-400">{error}</p>}

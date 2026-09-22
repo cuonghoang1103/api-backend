@@ -122,7 +122,7 @@ export default function LessonQuizBuilder({
                     value={q.question}
                     onChange={(e) => updateQuestion(idx, { question: e.target.value })}
                     rows={2}
-                    placeholder="Nội dung câu hỏi…"
+                    placeholder="Question text…"
                     className="w-full px-3 py-2 rounded-lg bg-[#0b0b12] border border-darkborder text-text-primary text-sm mb-2"
                   />
 
@@ -155,7 +155,7 @@ export default function LessonQuizBuilder({
                         value={q.sampleAnswer || ''}
                         onChange={(e) => updateQuestion(idx, { sampleAnswer: e.target.value })}
                         rows={3}
-                        placeholder="Đáp án mẫu / gợi ý chấm…"
+                        placeholder="Model answer / grading hints…"
                         className="w-full px-3 py-2 rounded-lg bg-[#0b0b12] border border-darkborder text-text-primary text-sm"
                       />
                     </div>
@@ -174,7 +174,7 @@ export default function LessonQuizBuilder({
                             <input
                               value={opt}
                               onChange={(e) => updateQuestion(idx, { options: q.options.map((o, i) => (i === oi ? e.target.value : o)) })}
-                              placeholder={`Đáp án ${String.fromCharCode(65 + oi)}`}
+                              placeholder={`Option ${String.fromCharCode(65 + oi)}`}
                               className={`flex-1 px-3 py-1.5 rounded-lg bg-[#0b0b12] border text-sm text-text-primary ${correct.has(oi) ? 'border-green-500/50' : 'border-darkborder'}`}
                             />
                             {q.options.length > 2 && (
@@ -208,7 +208,7 @@ export default function LessonQuizBuilder({
                       value={q.explanation || ''}
                       onChange={(e) => updateQuestion(idx, { explanation: e.target.value })}
                       rows={2}
-                      placeholder="VD: Vòng lặp dùng i <= arr.length nên vượt chỉ số cuối → ArrayIndexOutOfBoundsException…"
+                      placeholder="e.g. The loop uses i <= arr.length, so it runs past the last index → ArrayIndexOutOfBoundsException…"
                       className="w-full px-3 py-2 rounded-lg bg-[#0b0b12] border border-darkborder text-text-secondary text-sm"
                     />
                   </div>

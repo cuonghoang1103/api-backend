@@ -187,7 +187,7 @@ export default function AdminProjectsPage() {
  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
  <input
  type="text"
- placeholder="Tìm kiếm dự án..."
+ placeholder="Search projects..."
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  className="w-full pl-10 pr-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"

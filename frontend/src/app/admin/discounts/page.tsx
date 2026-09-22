@@ -430,7 +430,7 @@ export default function AdminDiscountsPage() {
                   type="text"
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  placeholder="VD: Giảm 20% cho đơn hàng mới"
+                  placeholder="e.g. 20% off new orders"
                   className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
                 />
               </div>
@@ -492,7 +492,7 @@ export default function AdminDiscountsPage() {
                     type="number"
                     value={form.maxDiscountAmount}
                     onChange={(e) => setForm({ ...form, maxDiscountAmount: e.target.value })}
-                    placeholder="VD: 100000 (không giới hạn nếu bỏ trống)"
+                    placeholder="e.g. 100000 (unlimited if empty)"
                     min="0"
                     className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
                   />

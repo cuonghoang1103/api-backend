@@ -871,7 +871,7 @@ function TabCaiDat() {
             value={ch.bankAccountNo ?? ''}
             onChange={(e) => dat('bankAccountNo', e.target.value.replace(/\D/g, '') || null)}
             inputMode="numeric"
-            placeholder="Chỉ chữ số"
+            placeholder="Digits only"
             className="w-full bg-darkbg border border-darkborder rounded-xl px-4 py-2.5 text-text-primary font-mono focus:border-neon-violet outline-none"
           />
         </div>
@@ -904,7 +904,7 @@ function TabCaiDat() {
             rows={3}
             value={ch.note ?? ''}
             onChange={(e) => dat('note', e.target.value || null)}
-            placeholder="VD: Đơn được duyệt trong giờ hành chính, tối đa 2 tiếng."
+            placeholder="e.g. Orders are approved during business hours, within 2 hours."
             className="w-full bg-darkbg border border-darkborder rounded-xl px-4 py-2.5 text-text-primary text-sm resize-none focus:border-neon-violet outline-none"
           />
         </div>

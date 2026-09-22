@@ -330,7 +330,7 @@ export default function AdminSeoPage() {
                 type="text"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                placeholder="Lọc URL..."
+                placeholder="Filter URLs..."
                 className="pl-9 pr-3 py-1.5 bg-darkbg border border-darkborder rounded-lg text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 w-40"
               />
             </div>

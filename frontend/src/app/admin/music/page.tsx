@@ -611,7 +611,7 @@ export default function AdminMusicPage() {
                 setYouTubeImportSuccess('');
               }}
               onKeyDown={(e) => e.key === 'Enter' && void handleYouTubeUrlImport()}
-              placeholder="Dán link YouTube: https://www.youtube.com/watch?v=..."
+              placeholder="Paste a YouTube link: https://www.youtube.com/watch?v=..."
               className="flex-1 px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-red-500/50"
             />
             <button

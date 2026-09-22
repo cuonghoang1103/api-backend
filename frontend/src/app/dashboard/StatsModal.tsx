@@ -353,7 +353,7 @@ export default function StatsModal({
                   </div>
                   <input
                     ref={(el) => { if (el) planInputsRef.current[i] = el; }}
-                    placeholder={`Task ${i + 1} cho ngày mai...`}
+                    placeholder={`Task ${i + 1} for tomorrow...`}
                     className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 focus:bg-cyan-500/[0.04] transition-all duration-200"
                   />
                 </div>

@@ -188,7 +188,7 @@ function ProductKeyManager({ productId }: { productId: number }) {
         value={bulk}
         onChange={(e) => setBulk(e.target.value)}
         rows={4}
-        placeholder={`Mỗi dòng 1 key/tài khoản, dán nhiều dòng để thêm hàng loạt:\nuser1@mail.com|matkhau1\nKEY-AAAA-1111\nKEY-BBBB-2222`}
+        placeholder={`One key/account per line — paste many lines to bulk-add:\nuser1@mail.com|password1\nKEY-AAAA-1111\nKEY-BBBB-2222`}
         className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none font-mono"
       />
       <button
@@ -331,14 +331,14 @@ function SpecsEditor({
               type="text"
               value={spec.label}
               onChange={(e) => updateSpec(i, 'label', e.target.value)}
-              placeholder="Tên thông số (VD: Warranty Period)"
+              placeholder="Spec name (e.g. Warranty Period)"
               className="flex-1 px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
             />
             <input
               type="text"
               value={spec.value}
               onChange={(e) => updateSpec(i, 'value', e.target.value)}
-              placeholder="Giá trị (VD: 12 months)"
+              placeholder="Value (e.g. 12 months)"
               className="flex-1 px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
             />
             <button
@@ -1062,7 +1062,7 @@ export default function AdminShopPage() {
                     type="number"
                     value={productForm.originalPrice || ''}
                     onChange={(e) => setProductForm((f) => ({ ...f, originalPrice: Number(e.target.value) || 0 }))}
-                    placeholder="Để trống = không giảm giá"
+                    placeholder="Empty = no discount"
                     className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                   />
                   {productForm.originalPrice > 0 && productForm.price > 0 && productForm.originalPrice > productForm.price && (
@@ -1189,7 +1189,7 @@ export default function AdminShopPage() {
                       value={productForm.digitalContent}
                       onChange={(e) => setProductForm((f) => ({ ...f, digitalContent: e.target.value }))}
                       rows={3}
-                      placeholder={`VD:\nTài khoản: user@example.com\nMật khẩu: ******\nMã kích hoạt: XXXX-XXXX-XXXX`}
+                      placeholder={`e.g.\nAccount: user@example.com\nPassword: ******\nActivation code: XXXX-XXXX-XXXX`}
                       className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none font-mono"
                     />
                     <p className="text-[10px] text-text-muted mt-1">Chỉ khách đã mua (đơn đã thanh toán) mới xem được. Để trống nếu chỉ giao file.</p>
@@ -1302,7 +1302,7 @@ export default function AdminShopPage() {
                   onChange={(e) => setProductForm((f) => ({ ...f, guidance: e.target.value }))}
                   onPaste={onGuidancePaste}
                   rows={6}
-                  placeholder={`## Hướng dẫn cài đặt\n\n1. Giải nén file ZIP\n2. Xem video hướng dẫn [tại đây](https://...)\n\nDán ảnh trực tiếp vào đây để chèn ảnh minh hoạ.\n\n## Bảo hành\n- Hoàn tiền trong 7 ngày`}
+                  placeholder={`## Installation\n\n1. Unzip the ZIP file\n2. Watch the setup video [here](https://...)\n\nPaste images here to insert screenshots.\n\n## Warranty\n- Refund within 7 days`}
                   className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none font-mono"
                 />
                 <p className="text-[10px] text-text-muted mt-1">

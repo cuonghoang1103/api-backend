@@ -165,7 +165,7 @@ export default function RolePlayPage() {
             <input
               value={custom}
               onChange={(e) => setCustom(e.target.value)}
-              placeholder="…hoặc tự nhập tình huống"
+              placeholder="…or describe your own scenario"
               className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60"
             />
             <button
@@ -255,7 +255,7 @@ export default function RolePlayPage() {
                 // Hội thoại bằng tiếng Nhật: Enter khi bộ gõ đang dựng chữ là
                 // phím chốt chữ, gửi lúc đó thì câu trả lời đứt giữa chừng
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submitMsg(); } }}
-                placeholder="Nhập câu trả lời…"
+                placeholder="Type your reply…"
                 rows={1}
                 className="max-h-32 min-h-[40px] flex-1 resize-none rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-neon-violet/60"
               />

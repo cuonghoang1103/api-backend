@@ -288,7 +288,7 @@ export function ForgotPasswordForm() {
                     type="password"
                     value={newPassword}
                     onChange={(e) => { setNewPassword(e.target.value); setError(''); }}
-                    placeholder="Ít nhất 12 ký tự"
+                    placeholder="At least 12 characters"
                     className="w-full pl-12 pr-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                   />
                 </div>
@@ -301,7 +301,7 @@ export function ForgotPasswordForm() {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Nhập lại mật khẩu"
+                    placeholder="Confirm password"
                     className="w-full pl-12 pr-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                   />
                 </div>

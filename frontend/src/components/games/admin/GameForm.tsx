@@ -253,13 +253,13 @@ export default function GameForm({ categories, game }: Props) {
             ) : (
               <div className="space-y-3">
                 <Field label="Tiêu đề (VI)">
-                  <input {...register('titleVi')} className={inp} placeholder="Rắn săn mồi" />
+                  <input {...register('titleVi')} className={inp} placeholder="Snake" />
                 </Field>
                 <Field label="Mô tả ngắn (VI)">
-                  <textarea {...register('descriptionVi')} rows={2} className={inp + ' resize-y'} placeholder="Một dòng hiển thị trên thẻ game." />
+                  <textarea {...register('descriptionVi')} rows={2} className={inp + ' resize-y'} placeholder="One line shown on the game card." />
                 </Field>
                 <Field label="Hướng dẫn chơi (VI)">
-                  <textarea {...register('controlsVi')} rows={2} className={inp + ' resize-y'} placeholder="Dùng phím mũi tên…" />
+                  <textarea {...register('controlsVi')} rows={2} className={inp + ' resize-y'} placeholder="Use the arrow keys…" />
                 </Field>
               </div>
             )}
@@ -267,7 +267,7 @@ export default function GameForm({ categories, game }: Props) {
 
           <Card title="Mô tả dài">
             <Field label="Long description" error={errors.longDescription?.message}>
-              <textarea {...register('longDescription')} rows={5} className={inp + ' resize-y'} placeholder="Hiển thị trên trang chi tiết game. Hỗ trợ xuống dòng." />
+              <textarea {...register('longDescription')} rows={5} className={inp + ' resize-y'} placeholder="Shown on the game detail page. Line breaks supported." />
             </Field>
           </Card>
 

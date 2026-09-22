@@ -276,7 +276,7 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
                     value={given}
                     disabled={graded}
                     onChange={(e) => setAnswers((a) => ({ ...a, [i]: e.target.value }))}
-                    placeholder="Nghe rồi gõ vào đây…"
+                    placeholder="Listen, then type here…"
                     className="mt-2 w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-600 outline-none focus:border-sky-400/50 disabled:text-slate-400"
                   />
                   {graded && (

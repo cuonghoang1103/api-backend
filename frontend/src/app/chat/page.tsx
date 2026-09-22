@@ -1088,7 +1088,7 @@ export default function ChatPage() {
                       if (e.key === 'Enter') { e.preventDefault(); void taoThuMuc(); }
                       if (e.key === 'Escape') { setCreatingFolder(false); setNewFolderName(''); }
                     }}
-                    placeholder="Tên thư mục…"
+                    placeholder="Folder name…"
                     maxLength={80}
                     className="flex-1 min-w-0 px-2 py-1 rounded-lg text-[12px] bg-white/[0.06]
                                border border-white/10 text-text-primary

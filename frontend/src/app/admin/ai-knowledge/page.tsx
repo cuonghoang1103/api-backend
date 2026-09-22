@@ -344,7 +344,7 @@ export default function AIKnowledgePage() {
                 {documentType === 'custom' && (
                   <input
                     type="text"
-                    placeholder="Nhập document type tuỳ chỉnh"
+                    placeholder="Custom document type"
                     onChange={(e) => setDocumentType(e.target.value)}
                     className="w-full mt-2 px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-text-primary text-sm"
                   />
@@ -358,7 +358,7 @@ export default function AIKnowledgePage() {
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   rows={12}
-                  placeholder="Dán nội dung cần AI biết vào đây. Có thể dài tới vài nghìn ký tự, hệ thống sẽ tự động chia chunks."
+                  placeholder="Paste what the AI should know. Up to a few thousand characters — it is chunked automatically."
                   className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-text-primary placeholder-text-muted/50 focus:outline-none focus:border-neon-violet text-sm font-mono"
                   required
                 />
@@ -436,7 +436,7 @@ export default function AIKnowledgePage() {
                   type="text"
                   value={fileIdPrefix}
                   onChange={(e) => setFileIdPrefix(e.target.value)}
-                  placeholder="vd: blog-2026 (sẽ tạo ID: blog-2026-tên-file)"
+                  placeholder="e.g. blog-2026 (creates ID: blog-2026-file-name)"
                   className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-text-primary placeholder-text-muted/50 focus:outline-none focus:border-neon-violet text-sm"
                 />
                 <p className="text-xs text-text-muted mt-1">
@@ -473,7 +473,7 @@ export default function AIKnowledgePage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Tìm kiếm trong nội dung chunks..."
+            placeholder="Search chunk content..."
             className="w-full pl-10 pr-3 py-2 bg-darkcard border border-darkborder rounded-xl text-text-primary placeholder-text-muted/50 focus:outline-none focus:border-neon-violet text-sm"
           />
         </div>

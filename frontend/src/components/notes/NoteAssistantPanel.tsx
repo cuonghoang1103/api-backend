@@ -118,7 +118,7 @@ export default function NoteAssistantPanel({
             if ((e.nativeEvent as unknown as { isComposing?: boolean }).isComposing) return;
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void gui(); }
           }}
-          placeholder="Hỏi gì về ghi chú của bạn…"
+          placeholder="Ask about your notes…"
           className="flex-1 resize-none rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-violet-500"
         />
         <button

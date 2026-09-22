@@ -84,7 +84,7 @@ export default function AdminUserCodesPage() {
           ) : (
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Gõ username hoặc tên user…" className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Type a username or name…" className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
               {query.trim() && (
                 <div className="absolute z-20 mt-1 w-full rounded-xl border border-darkborder bg-darkcard shadow-xl max-h-64 overflow-y-auto">
                   {searching ? (
@@ -118,9 +118,9 @@ export default function AdminUserCodesPage() {
             </select>
           </div>
           <input type="date" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary mt-auto" title="Hạn dùng (tuỳ chọn)" />
-          <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Tên mã (VD: Giảm 20% Tết)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
-          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Mã (VD: TET20)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary font-mono" />
-          <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Ghi chú (tuỳ chọn)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary sm:col-span-2" />
+          <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Code name (e.g. Tet 20% off)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Code (e.g. TET20)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary font-mono" />
+          <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note (optional)" className="px-4 py-2.5 rounded-xl bg-darkbg border border-darkborder text-text-primary sm:col-span-2" />
         </div>
         <button onClick={grant} disabled={sending || !selected} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium hover:opacity-90 disabled:opacity-50">
           {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} Cấp mã

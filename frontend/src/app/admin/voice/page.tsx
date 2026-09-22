@@ -183,7 +183,7 @@ export default function AdminVoicePage() {
       <div className="flex flex-wrap items-center gap-3 mb-5">
         <div className="relative flex-1 min-w-[200px] max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Tìm theo tiêu đề…"
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by title…"
             className="w-full pl-9 pr-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-neon-violet/50" />
         </div>
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as VoiceStatus | '')}
@@ -395,7 +395,7 @@ function Editor({
           <div>
             <label className="text-xs font-semibold text-gray-400">Tiêu đề *</label>
             <div className="flex gap-2 mt-1">
-              <input value={form.title} onChange={(e) => set('title', e.target.value)} placeholder="VD: Kinh nghiệm phỏng vấn backend đầu tiên"
+              <input value={form.title} onChange={(e) => set('title', e.target.value)} placeholder="e.g. My first backend interview"
                 className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-neon-violet/50" />
               <button onClick={runAi} disabled={aiBusy} title="AI gợi ý mô tả/tags/chapters"
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-neon-violet/15 text-neon-violet text-sm font-semibold border border-neon-violet/30 hover:bg-neon-violet/25 disabled:opacity-50 shrink-0">
@@ -437,7 +437,7 @@ function Editor({
           {form.mediaKind === 'YOUTUBE' ? (
             <div>
               <label className="text-xs font-semibold text-gray-400">Link YouTube *</label>
-              <input value={form.youtubeInput} onChange={(e) => set('youtubeInput', e.target.value)} placeholder="https://youtu.be/… hoặc ID"
+              <input value={form.youtubeInput} onChange={(e) => set('youtubeInput', e.target.value)} placeholder="https://youtu.be/… or video ID"
                 className="w-full mt-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-neon-violet/50" />
             </div>
           ) : (
@@ -452,7 +452,7 @@ function Editor({
                 <input
                   value={form.mediaKind === 'R2_VIDEO' ? form.videoUrl : form.audioUrl}
                   onChange={(e) => set(form.mediaKind === 'R2_VIDEO' ? 'videoUrl' : 'audioUrl', e.target.value)}
-                  placeholder="hoặc dán URL"
+                  placeholder="or paste a URL"
                   className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-neon-violet/50" />
               </div>
             </div>
@@ -477,14 +477,14 @@ function Editor({
           {/* Summary */}
           <div>
             <label className="text-xs font-semibold text-gray-400">Tóm tắt ngắn</label>
-            <textarea value={form.summary} onChange={(e) => set('summary', e.target.value)} rows={2} placeholder="1-2 câu mô tả nổi bật"
+            <textarea value={form.summary} onChange={(e) => set('summary', e.target.value)} rows={2} placeholder="1–2 sentence highlight"
               className="w-full mt-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-neon-violet/50 resize-y" />
           </div>
 
           {/* Description (markdown) */}
           <div>
             <label className="text-xs font-semibold text-gray-400">Mô tả chi tiết (Markdown)</label>
-            <textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={6} placeholder="Show-notes, link, timestamps mô tả…"
+            <textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={6} placeholder="Show notes, links, timestamps…"
               className="w-full mt-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-neon-violet/50 resize-y font-mono" />
           </div>
 
@@ -499,7 +499,7 @@ function Editor({
                 <div key={i} className="flex items-center gap-2">
                   <input value={secToMMSS(c.t)} onChange={(e) => updateChapter(i, { t: mmssToSec(e.target.value) })} placeholder="mm:ss"
                     className="w-20 px-2 py-1.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white font-mono focus:outline-none focus:border-neon-violet/50" />
-                  <input value={c.label} onChange={(e) => updateChapter(i, { label: e.target.value })} placeholder="Tên phần"
+                  <input value={c.label} onChange={(e) => updateChapter(i, { label: e.target.value })} placeholder="Part title"
                     className="flex-1 px-2 py-1.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-neon-violet/50" />
                   <button onClick={() => removeChapter(i)} className="p-1.5 rounded-lg text-gray-500 hover:text-neon-red"><X className="w-4 h-4" /></button>
                 </div>
@@ -603,7 +603,7 @@ function SeriesManager({ series, onClose, onChanged }: { series: VoiceSeries[]; 
           <button onClick={onClose} className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10"><X className="w-5 h-5" /></button>
         </div>
         <div className="flex gap-2 mb-4">
-          <input value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') add(); }} placeholder="Tên series mới"
+          <input value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') add(); }} placeholder="New series name"
             className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-neon-violet/50" />
           <button onClick={add} disabled={busy || !title.trim()} className="px-3 py-2 rounded-lg bg-neon-violet/20 text-neon-violet text-sm font-semibold hover:bg-neon-violet/30 disabled:opacity-50">
             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}

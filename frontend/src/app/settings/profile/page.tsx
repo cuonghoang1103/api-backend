@@ -189,7 +189,7 @@ export default function ProfileSettingsPage() {
               value={form.displayName}
               maxLength={100}
               onChange={(e) => set('displayName', e.target.value)}
-              placeholder="VD: Cường Hoàng"
+              placeholder="e.g. Cuong Hoang"
             />
           </Field>
 
@@ -198,7 +198,7 @@ export default function ProfileSettingsPage() {
               value={form.fullName}
               maxLength={100}
               onChange={(e) => set('fullName', e.target.value)}
-              placeholder="VD: Hoàng Nghĩa Cường"
+              placeholder="e.g. Hoang Nghia Cuong"
             />
           </Field>
 
@@ -255,7 +255,7 @@ export default function ProfileSettingsPage() {
               rows={4}
               value={form.bio}
               onChange={(e) => set('bio', e.target.value)}
-              placeholder="Vài dòng giới thiệu về bạn…"
+              placeholder="A few lines about you…"
             />
           </Field>
         </div>

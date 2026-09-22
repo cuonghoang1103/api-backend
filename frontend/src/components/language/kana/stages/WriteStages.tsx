@@ -101,7 +101,7 @@ export function WriteAnswerStage({ target, onResult, onNext, reduced }: StagePro
       <TypedAnswer
         answerKey={normalizeRomaji(target.romaji)}
         solution={target.romaji}
-        placeholder="Ví dụ: ka"
+        placeholder="e.g. ka"
         onResult={onResult}
         onNext={onNext}
         reduced={reduced}
@@ -125,7 +125,7 @@ function WordStage({ word, onResult, onNext, reduced, hint }: StageProps & { hin
       <TypedAnswer
         answerKey={normalizeRomaji(expectedRomaji(word))}
         solution={solution}
-        placeholder="Gõ romaji (có thể cách chữ)"
+        placeholder="Type romaji (spaces allowed)"
         onResult={onResult}
         onNext={onNext}
         reduced={reduced}
@@ -183,7 +183,7 @@ export function ListenStage({ target, onResult, onNext, reduced }: StageProps) {
       <TypedAnswer
         answerKey={normalizeRomaji(target.romaji)}
         solution={target.romaji}
-        placeholder="Gõ romaji"
+        placeholder="Type romaji"
         onResult={onResult}
         onNext={onNext}
         reduced={reduced}

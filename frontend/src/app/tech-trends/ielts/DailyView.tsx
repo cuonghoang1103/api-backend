@@ -313,7 +313,7 @@ export default function DailyView() {
                       value={given}
                       onChange={(e) => setAnswers((a) => ({ ...a, [i]: e.target.value }))}
                       onKeyDown={(e) => { if (e.key === 'Enter') check(i); }}
-                      placeholder="Gõ câu trả lời rồi bấm Enter…"
+                      placeholder="Type your answer and press Enter…"
                       className="flex-1 min-w-0 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-600 outline-none focus:border-amber-400/50"
                     />
                     <button

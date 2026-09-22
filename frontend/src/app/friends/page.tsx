@@ -147,7 +147,7 @@ function FriendsPageInner() {
             <input
               value={query}
               onChange={(e) => { setQuery(e.target.value); syncUrl(e.target.value); }}
-              placeholder="Tìm theo tên hoặc @username…"
+              placeholder="Search by name or @username…"
               className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted/70"
             />
             {query && (

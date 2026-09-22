@@ -89,6 +89,10 @@ export default {
     "nwc204-11-1-cau-truc-dia-chi-ipv6": { yt: "ZNuXyOXae5U", credit: "Jeremy's IT Lab — Free CCNA | IPv6 Part 1 | Day 31 | CCNA 200-301 Complete Course" },
     "nwc204-11-2-cau-hinh-va-chia-subnet-ipv6": { yt: "BdsIahtrWIA", credit: "Jeremy's IT Lab — Free CCNA | Configuring IPv6 (Part 1) | Day 31 Lab | CCNA 200-301 Complete Course" },
 
+    /* ── Chương 16 — Dựng mạng nhỏ (buổi 54–55) ─────────────────────────── */
+    "nwc204-16-1-thiet-bi-giao-thuc-va-mo-rong-mang-nho": { yt: "lPFmQAkahxM", credit: "NetITGeeks — CCNA Module 17: Build a Small Network - Introduction to Networks (ITN)" },
+    "nwc204-16-2-kiem-chung-ra-lenh-va-go-loi-mang-nho": { yt: "1i3XdhC2ZAs", credit: "CBT Nuggets — Steps for Network Troubleshooting" },
+
     /* ── Chương 14 — Tầng ứng dụng (buổi 45–46) ─────────────────────────── */
     "nwc204-14-1-tang-ung-dung-va-ngang-hang": { yt: "t-ai8JzhHuY", credit: "Jeremy's IT Lab — Free CCNA | OSI Model & TCP/IP Suite | Day 3 | CCNA 200-301 Complete Course" },
     "nwc204-14-2-web-email-dns-dhcp-chia-se-tep": { yt: "mpQZVYPuDGU", credit: "PowerCert Animated Videos — How a DNS Server (Domain Name System) works." },

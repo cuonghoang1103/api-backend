@@ -93,7 +93,7 @@ export default function PhongVideoClient({ lessonId, ve }: {
 
   if (loi) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-6 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-6 pt-16 text-center">
         <p className="text-text-secondary">{loi}</p>
         <button onClick={() => router.push(ve)}
           className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-white"
@@ -106,7 +106,7 @@ export default function PhongVideoClient({ lessonId, ve }: {
 
   if (!pd) {
     return (
-      <div className="flex min-h-screen items-center justify-center gap-2 text-text-secondary">
+      <div className="flex min-h-screen items-center justify-center gap-2 pt-16 text-text-secondary">
         <Loader2 className="h-5 w-5 animate-spin" /> Đang mở phòng học…
       </div>
     );
@@ -114,8 +114,21 @@ export default function PhongVideoClient({ lessonId, ve }: {
 
   const coDich = !!pd.dichVi && pd.dichVi.length === pd.cues.length;
 
+  /*
+   * ⚠️ `pt-16`: thanh điều hướng chung (`Navbar`) là `fixed top-0 h-16`, nằm
+   * ĐÈ lên trang chứ không đẩy trang xuống. Thiếu khoảng này thì nút "Quay lại
+   * bài học" và tên bài chui xuống dưới nó — thấy lờ mờ mà bấm không được
+   * (người dùng báo trên iPad 22/09/2026). Trang `learn` cũng chừa đúng như vậy.
+   * Chỉ chừa 4rem: `.app-main` đã tự cộng phần tai thỏ khi chạy dạng PWA
+   * (xem `--app-nav-h` trong globals.css), cộng thêm ở đây là tính hai lần.
+   *
+   * Màn rộng (lg+) khoá đúng chiều cao KHUNG NHÌN THẬT: `100dvh`, không phải
+   * `100vh` — trên Safari iPad `100vh` tính cả phần thanh công cụ che mất, nên
+   * ô "Hỏi AI" ở đáy bảng bị đẩy ra ngoài màn hình. Trừ phần tai thỏ vì
+   * `.app-main` đã đệm nó ở trên. Bảng bên phải tự cuộn bên trong.
+   */
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--bg-main,#0f0f13)]">
+    <div className="flex min-h-screen flex-col bg-[var(--bg-main,#0f0f13)] pt-16 lg:h-[calc(100dvh_-_env(safe-area-inset-top,0px))] lg:min-h-0 lg:overflow-hidden">
       {/* ── Thanh trên ── */}
       <header className="flex items-center gap-3 border-b border-white/10 px-3 py-2">
         <button onClick={() => router.push(ve)}

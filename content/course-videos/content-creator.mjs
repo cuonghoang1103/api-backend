@@ -130,5 +130,12 @@ export default {
     'cr-15-2-doc-scopes': { yt: 'IwqucXqb2zY', credit: 'Darren Mostyn — How to use resolve SCOPES - In-depth with a Pro Colourist' },
     'cr-15-3-log-lut': { yt: 'pZxOR1kCDeE', credit: 'Graham Hunt — CST vs LUT: Why One Is Clearly Better for Most' },
     'cr-15-4-node-tao-look': { yt: 'jBq8refj7cc', credit: "Runhaar — The ONLY NODE STRUCTURE you'll ever need!" },
+
+    /* ── Chương 16 — Âm thanh hậu kỳ, chữ, đồ hoạ & phụ đề ── */
+    'cr-16-0-slides': { yt: 'LXTwhlf3Qas', credit: 'Greg Edits Video — Get PERFECT Audio in Davinci Resolve (Start to Finish)' },
+    'cr-16-1-mix-am-thanh': { yt: 'lHNhxGojFRU', credit: 'Curtis Judd — Understanding How to Loudness Normalize Your Audio for Video' },
+    'cr-16-2-chu-do-hoa': { yt: 'WmuO8AkWS5A', credit: 'Wampus — The Ultimate Text Animation Guide for DaVinci Resolve' },
+    'cr-16-3-phu-de': { yt: 'BV4ab2l0Re4', credit: 'Jennifer Marie — How to Add Subtitles to YouTube Videos for FREE (+ Closed Captions)' },
+    'cr-16-4-whisper-linux': { yt: 'dg_TWk8Zfjk', credit: "Teacher's Tech — How to Use OpenAI's Whisper for Perfect Transcriptions (Speech to Text)" },
   },
 };

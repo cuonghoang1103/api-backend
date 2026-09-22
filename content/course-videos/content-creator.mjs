@@ -75,6 +75,13 @@ export default {
     'cr-08-3-ba-diem-kieu-sang-mat': { yt: 'N9mPQBZe06s', credit: 'StudioBinder — Ultimate Guide to Cinematic Lighting Pt. 2 — How to Light Subjects and Locations' },
     'cr-08-4-goc-quay-tai-nha': { yt: 'jXoPcFsb1ro', credit: 'Josh Winiarski — Transform Your Bedroom Into A YouTube Studio ($5 - $250)' },
 
+    /* ── Chương 9 — Thu âm khi quay ── */
+    'cr-09-0-slides': { yt: 'gULyPx-F_Xs', credit: 'Spencer Fackrell — What I Wish I Knew as a Beginner Filmmaker | Basics of Audio for Video' },
+    'cr-09-1-am-thanh-quan-trong': { yt: '4YRp-FIsNDA', credit: 'Julian Krause — The TRUTH about 32 BIT FLOAT for audio recording– Really useful or marketing hype?' },
+    'cr-09-2-micro-cach-dat': { yt: 'wdjkgRq3jqY', credit: 'Mark Bone — how to mic someone like a pro' },
+    'cr-09-3-muc-thu-phong-thu': { yt: 'o9raLGyUwyc', credit: 'Deity Microphones — Room Tone Hacks | Simple Tips To Ensure Usable Audio' },
+    'cr-09-4-thu-hai-he-thong-dong-bo': { yt: 'E9FjPDbg-Cs', credit: 'Andrew Farmer — How to Sync Audio and Video in DaVinci Resolve (Fast & Easy Tutorial)' },
+
     /* ── Chương 12 — Dựng nhanh với CapCut ── */
     'cr-12-0-slides': { yt: 'EMDrgqepVhM', credit: 'Metics Media — CapCut Tutorial for Beginners 2026' },
     'cr-12-1-giao-dien-capcut': { yt: 'j5_471mO14c', credit: 'Metics Media — CapCut Tutorial for Beginners (2026) – Full Video Editing Guide' },

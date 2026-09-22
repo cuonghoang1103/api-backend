@@ -18,6 +18,7 @@ import s04 from './content-creator/s04-phan-canh.mjs';
 import s05 from './content-creator/s05-may-quay.mjs';
 import s06 from './content-creator/s06-cai-dat-thiet-bi.mjs';
 import s08 from './content-creator/s08-anh-sang.mjs';
+import s09 from './content-creator/s09-am-thanh.mjs';
 import s12 from './content-creator/s12-capcut.mjs';
 import s13 from './content-creator/s13-davinci-resolve.mjs';
 import s14 from './content-creator/s14-nghe-thuat-dung.mjs';
@@ -52,6 +53,7 @@ export default {
     s05,
     s06,
     s08,
+    s09,
     s12,
     s13,
     s14,

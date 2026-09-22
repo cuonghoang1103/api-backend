@@ -179,5 +179,19 @@ export default {
     'cr-22-2-quay-man-hinh': { yt: 'PRa3xWeNV3g', credit: "Easy Tech Steps — OBS Studio on Mac: The Complete Beginner's Guide to Screen Recording (2026)" },
     'cr-22-3-ipad-bang-trang': { yt: '3Vq8ej2yjhQ', credit: 'Dr. Jacob Goodin — Create Engaging Lecture Videos from an iPad or Tablet | Teach Through Video Series' },
     'cr-22-4-dung-dua-len-khoa-hoc': { yt: 'PN7c5BkyQw4', credit: 'Greg Edits Video — Editing Screen Recordings in DaVinci Resolve? Do THIS' },
+
+    /* ── Chương 23 — Video song ngữ Việt – Anh ── */
+    'cr-23-0-slides': { yt: 'zv3xWvVp1uQ', credit: 'TransPerfect Digital — Pros and cons of three multilingual YouTube channel models | Need-to-know' },
+    'cr-23-1-chien-luoc-song-ngu': { yt: 'GZKQzZZGv9I', credit: "Russell Stannard (TTVideos) — Mastering YouTube's New Multi-Language Audio Settings" },
+    'cr-23-2-kich-ban-tieng-anh': { yt: 'tjaLn7URdlA', credit: "BBC Learning English — 👄 What is 'shadowing'? Pronunciation Shadowing Tutorial" },
+    'cr-23-3-phu-de-long-tieng': { yt: '74ijsBhbxSQ', credit: 'World of Wayne — How to add Multiple Language Closed Caption Subtitles to Your YouTube Video' },
+    'cr-23-4-quy-trinh-hai-phien-ban': { yt: 'koAEjP14IOk', credit: 'Louisa Dubickas — WHY I MAKE VIDEOS IN 2 LANGUAGES (ENGLISH & SPANISH) | BILINGUAL CHANNEL' },
+
+    /* ── Chương 24 — Xuất file & đăng tải ── */
+    'cr-24-0-slides': { yt: 'CYNzZTO4Ctk', credit: 'Dan the creator — 14 things you MUST do after uploading a YouTube video' },
+    'cr-24-1-xuat-file-chuan': { yt: '4LDoIuV9bD8', credit: 'Shot by Reality — BEST DaVinci Resolve 21 Export Settings for YouTube - I Tested Them ALL' },
+    'cr-24-2-dang-youtube-seo': { yt: '5SkEuxyAu7I', credit: 'Adam Ivy — How to Upload Videos on YouTube in 2026 (The Right Way)' },
+    'cr-24-3-dang-tiktok-facebook-instagram': { yt: 'oSjCahkH5Nc', credit: 'Katie Steckly — I posted the same video to Reels, TikTok and Shorts. Here’s what happened.' },
+    'cr-24-4-ban-quyen-luat-choi': { yt: 'HxmTXkFx44w', credit: 'The Music Business Made Easy — The Difference Between Youtube Copyright Strikes and Content ID Claims' },
   },
 };

@@ -30,6 +30,18 @@ const TEP_V2 = 'content/phu-de/phu-de-v2.jsonl.gz';
 /// 1.030 bài), nên tệp này có thể chưa tồn tại hoặc mới có một phần. Thiếu
 /// thì bỏ qua, KHÔNG làm hỏng seed: phụ đề tiếng Anh vẫn dùng được trọn vẹn.
 const TEP_DICH = 'content/phu-de/dich-vi.jsonl.gz';
+/// Bản BỔ SUNG — bài có video nhưng nằm NGOÀI bộ 963 gốc (các khoá thêm sau
+/// 18/08, bài "Slide by slide"…). Cùng khuôn với `TEP` (đầu ra của
+/// `lam-sach-vtt.py` trên máy nhà), chỉ chứa bài chưa có trong `TEP`.
+///
+/// ⚠️ TỆP RIÊNG, không trộn vào `TEP`: phiên chấm câu/dịch (`TEP_V2`,
+/// `TEP_DICH`) sẽ "thay hẳn TEP bằng v2 khi đủ 963 bài" — trộn vào đây thì
+/// lần thay đó xoá mất hơn nghìn bài bổ sung khỏi repo mà không ai để ý.
+/// Nạp TRƯỚC `TEP_V2` để khi các bài này được chấm câu thì bản v2 thắng.
+///
+/// Người dùng 22/09/2026: lời mời vào phòng học video chỉ hiện ở bài đầu
+/// khoá — đo ra 2.138 bài có video mà mới 963 bài có phụ đề.
+const TEP_BO_SUNG = 'content/phu-de/phu-de-bo-sung.jsonl.gz';
 const apDung = process.argv.includes('--apply');
 
 /** Lấy mã video từ mọi dạng link YouTube đang có trong `lessons.video_url`. */
@@ -126,10 +138,12 @@ async function main() {
   // thay hẳn `TEP` bằng nó và đổi cờ này về lượt duy nhất còn lại.
   const coV2 = existsSync(TEP_V2);
   const nBase = await nap(TEP, !coV2);
+  const nBoSung = await nap(TEP_BO_SUNG, !coV2);
   const nV2 = await nap(TEP_V2, true);
 
   console.log(` phụ đề: đọc ${doc} · ${apDung ? 'ghi' : 'sẽ ghi'} ${ghi}` +
-    ` · bản chấm câu mới ${nV2}/${nBase + nV2}` +
+    ` · bổ sung ${nBoSung}` +
+    ` · bản chấm câu mới ${nV2}/${nBase + nBoSung + nV2}` +
     ` · bài không còn ${khongCoBai} · không rút được mã video ${khongCoMa} · hỏng ${boQua}` +
     ` · kèm bản dịch ${coDich}`);
 

@@ -68,6 +68,13 @@ export default {
     'cr-06-3-ipad-mac-linux': { yt: 'C51uC1ItUdU', credit: 'Andy To — M5 iPad Pro: The Complete Creator (Edited on iPad)' },
     'cr-06-4-the-nho-pin-dung-luong': { yt: 'g5PkExucy4I', credit: 'Kingston Technology — SD and microSD Card Specification Labels Explained – DIY in 5 Ep 141' },
 
+    /* ── Chương 7 — Bố cục & ngôn ngữ hình ảnh ── */
+    'cr-07-0-slides': { yt: 'qQNiqzuXjoM', credit: 'StudioBinder — Camera Framing: Shot Composition & Cinematography Techniques Explained [The Shot List, Ep 2]' },
+    'cr-07-1-co-canh': { yt: 'AyML8xuKfoc', credit: 'StudioBinder — Ultimate Guide to Camera Shots: Every Shot Size Explained [The Shot List, Ep 1]' },
+    'cr-07-2-goc-may-tieu-cu': { yt: 'wLfZL9PZI9k', credit: 'StudioBinder — Ultimate Guide to Camera Angles: Every Camera Shot Explained [Shot List, Ep. 3]' },
+    'cr-07-3-bo-cuc': { yt: 'hUmZldt0DTg', credit: 'StudioBinder — Ultimate Guide to Film Composition & Framing — Key Elements Explained [Shot List Ep. 11]' },
+    'cr-07-4-chuyen-dong-may-lien-tuc': { yt: 'IiyBo-qLDeM', credit: 'StudioBinder — Ultimate Guide to Camera Movement — Every Camera Movement Technique Explained [The Shot List Ep6]' },
+
     /* ── Chương 8 — Ánh sáng ── */
     'cr-08-0-slides': { yt: '6HgKy2gNimQ', credit: 'Think Media — YouTube Lighting Tutorial: Complete Beginners Guide to Video Lighting' },
     'cr-08-1-ban-chat-anh-sang': { yt: 'r2nD_knsNrc', credit: 'StudioBinder — Ultimate Guide to Cinematic Lighting — Types of Light & Gear Explained [Shot List Ep. 12]' },

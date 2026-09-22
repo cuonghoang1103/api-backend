@@ -11,6 +11,7 @@
  * Video YT từng bài: content/course-videos/content-creator.mjs (seed riêng, deploy tự chạy).
  */
 import s00 from './content-creator/s00-gioi-thieu.mjs';
+import s04 from './content-creator/s04-phan-canh.mjs';
 
 export default {
   category: { slug: 'content-creation', name: 'Sáng tạo nội dung', icon: 'Video', sortOrder: 5 },
@@ -36,5 +37,6 @@ export default {
   },
   sections: [
     s00,
+    s04,
   ],
 };

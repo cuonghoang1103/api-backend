@@ -1,13 +1,17 @@
-# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 21/09/2026 (xong Ch.5 → Ch.9, ĐÃ DEPLOY)
+# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 22/09/2026 (xong Ch.5 → Ch.10, ĐÃ DEPLOY)
 
 > **Đọc file này + `_KHUNG-CHUA-DAY-DU.md` trước khi làm tiếp Academy.**
 > Ghi đủ để phiên sau làm tiếp mà không hỏi lại gì.
 
 ---
 
-## 0. 🔴 PHIÊN SAU BẮT ĐẦU TỪ ĐÂY (chốt 21/09/2026, sau khi deploy xong)
+## 0. 🔴 PHIÊN SAU BẮT ĐẦU TỪ ĐÂY (chốt 22/09/2026, sau khi deploy xong)
 
-**Không còn gì treo. Cây sạch, đã push, production đang chạy `17306442`.**
+**Không còn gì treo. Đã push, production đang chạy `af3f87b1`.**
+
+> ⚠️ Cây làm việc CÒN 7 file chưa commit của VIỆC KHÁC (firmware/mini-me-robot/**,
+> scripts/lab211-*, scripts/codelab-*, scripts/_gen-img.mjs, scratchpad/). **Cố ý
+> để nguyên** — không phải của NWC204, và chúng KHÔNG lên production.
 
 ### 📖 ĐỌC ĐÚNG 4 FILE NÀY TRƯỚC KHI GÕ BẤT CỨ THỨ GÌ
 
@@ -19,54 +23,56 @@
 4. `content/academy/_syllabus-flm/NWC204.json` — dữ liệu gốc, đọc bằng script
    chứ đừng đọc bằng mắt (61 dòng buổi + 52 câu hỏi kiến tạo)
 
-### Làm tiếp: **Chương 10 — IPv4 Addressing (buổi 30–34, Cisco Module 11)** ⭐
+### Làm tiếp: **Chương 11 — IPv6 Addressing (buổi 35–36, Cisco Module 12)**
 
-Đây là **chương NẶNG NHẤT của cả môn** và là chỗ **bắt buộc phải nối vào chương
-bù hệ đếm** (`ch04b`, nhị phân/hex/AND theo bit) — trường KHÔNG xếp buổi nào cho
-Module 5 của Cisco, mà buổi 30–34 thì không làm được nếu không đọc được nhị phân.
+Hai buổi, nhẹ hơn Ch.10 nhiều. Phần khó đã xong ở Ch.10: ý niệm tiền tố, phần
+mạng và phần host chuyển sang nguyên vẹn. Thứ đổi là **kích cỡ (128 bit)** và
+**cách ký hiệu hex** — chỗ mà chương bù `ch04b` (hệ thập lục phân) được dùng tới.
 
 **Dàn bài đã trích nguyên văn từ `_syllabus-flm/NWC204.json`:**
 
 | Buổi | Topic | LO | ITU | Tài liệu |
 |---|---|---|---|---|
-| 30 | 10.1 IPv4 Address Structure · 10.2 IPv4 Unicast, Broadcast, and Multicast · 10.3 Types of IPv4 Addresses · 10.4 Network Segmentation | CLO5, CLO9 | T | Module 11 |
-| 31 | 10.5 Subnet an IPv4 · 10.6 Subnet a /16 and /8 Prefix · 10.7 Subnet to Meet Requirements · **10.8 Variable Length Subnet Masking** · 10.9 Structured Design · 10.10 Integrate AI Tools (Self Learning) | CLO5, CLO9 | T | Module 11 |
-| 32 | **Lab 2.2** (Dialogue-based Assessment & Self Learning) — Calculate IPv4 Subnets · Design and Implement a VLSM Addressing Scheme · Use AI Tools for Calculating IPv4 Subnets | CLO5, CLO9 | U | 11.6.6 + 11.10.2 Lab Manual |
-| 33 | Lab 2.2 (continue) | CLO5, CLO9 | U | như trên |
-| 34 | **Midterm Progress Test** | CLO1 – CLO9 | — | — |
+| 35 | 11.1 IPv6 Addressing · 11.2 IPv4 Issues · **11.3 IPv6 Addressing** · 11.4 IPv6 Address Types | CLO5, CLO9 | T | Module 12 |
+| 36 | 11.5 GUA and LLA Static Configuration · 11.6 Dynamic Addressing for IPv6 GUAs · 11.7 Dynamic Addressing for IPv6 LLAs · 11.8 IPv6 Multicast Addresses · 11.9 Subnet an IPv6 Network · 11.10 Integrate AI Tools (Self Learning) | CLO5, CLO9 | T | Module 12 |
 
-⇒ Cấu trúc gợi ý: **3 bài + quiz**, giống Ch.7 và Ch.9 —
-10.1 (buổi 30) · 10.2 (buổi 31, phần subnet + VLSM) · 10.3 (buổi 32–33, Lab 2.2).
+⚠️ **Buổi 35 ghi `11.1 IPv6 Addressing` rồi lại `11.3 IPv6 Addressing`** — cùng
+một tiêu đề hai lần. Đã nêu chỗ vênh này ở cuối bài 10.3; nêu lại trong Ch.11,
+**đừng tự sửa bảng gốc**.
 
-**⚠️ Câu hỏi kiến tạo của chương này — TRÔI DẠT NẶNG, đã trích để khỏi đoán:**
+⇒ Cấu trúc gợi ý: **2 bài + quiz** (chỉ hai buổi), hoặc 3 bài nếu tách phần
+cấu hình. 11.1 (buổi 35, cấu trúc + vì sao bỏ IPv4 + các loại địa chỉ) ·
+11.2 (buổi 36, GUA/LLA tĩnh và động, SLAAC/DHCPv6, multicast, chia subnet IPv6).
+
+**⚠️ Câu hỏi kiến tạo — VẪN TRÔI DẠT, đã trích để khỏi đoán:**
 
 | Buổi | Câu | Nội dung | Thật ra thuộc |
 |---|---|---|---|
-| **30** | **(BỎ TRỐNG)** | — | — |
-| 31 | `CQ11.1` | **"Progress Test 2"** — KHÔNG phải câu hỏi | môn chỉ có MỘT Midterm, ở buổi 34 |
-| 32 | `CQ11.2` | unicast / broadcast / multicast | mục **10.2**, tức buổi 30 |
-| 33 | `CQ11.3` | mấy loại địa chỉ IPv4, dùng thế nào | mục **10.3**, tức buổi 30 |
-| 34 | `CQ12.1` | cấu trúc một địa chỉ IPv4 | mục **10.1**, tức buổi 30 |
+| 35 | `CQ12.2` | "tính địa chỉ **IPv4** tối ưu cho công ty nhiều phòng ban" | **VLSM của Ch.10** — đã trả lời đủ ở bài 10.2 |
+| **36** | **(BỎ TRỐNG)** | — | — |
+| 37 | `CQ13.1` | "What happens do we use IPv4 in nowadays?" | Ch.11 (11.2 IPv4 Issues) |
+| 38 | `CQ13.2` | so sánh các loại địa chỉ mạng IPv6 | Ch.11 (11.4) |
+| 39 | `CQ13.3` | cấu hình địa chỉ IPv6 trên thiết bị Cisco | Ch.11 (11.5) |
 
-Tức là **cả bốn câu đều lệch**, và ba câu cuối đều hỏi về nội dung của buổi 30
-trong khi được gán cho buổi 32–34 (vốn là Lab 2.2 và Midterm).
-**Nêu trong bài, đừng tự sửa bảng gốc** — đúng như đã làm ở Ch.7/8/9.
+⇒ Cả **ba câu của Ch.12 (buổi 37–39) thật ra là nội dung Ch.11**. Độ trôi ~một
+chương vẫn giữ nguyên. Ở Ch.11 thì trỏ ngược về bài 10.2 cho CQ12.2, và ở Ch.12
+thì trỏ ngược về Ch.11 cho CQ13.1/13.2/13.3 — đúng lối đã làm từ Ch.7.
 
-⚠️ **Mọi phép tính subnet trong bài PHẢI kiểm lại bằng `python3`** trước khi
-commit (hợp đồng môn, mục 9). Chương này đầy số; sai một con là hỏng cả bài.
-Dùng `ipaddress` của Python cho nhanh và khỏi tự tính sai:
+⚠️ **Mọi phép tính địa chỉ trong bài PHẢI kiểm lại bằng `python3`** trước khi
+commit (hợp đồng môn, mục 9). `ipaddress` làm IPv6 y như IPv4:
 ```python
 import ipaddress
-n = ipaddress.ip_network('192.168.4.0/26')
-print(n.network_address, n.broadcast_address, n.num_addresses - 2)
+n = ipaddress.ip_network('2001:db8:acad::/48')
+print(n.network_address, n.num_addresses, list(n.subnets(new_prefix=64))[:3])
+print(ipaddress.ip_address('2001:0db8:0000:0000:0000:0000:0000:0001').compressed)
 ```
 
-**Sau Ch.10 thì theo thứ tự:** Ch.11 IPv6 (buổi 35–36) · Ch.12 ICMP + Lab 2.3
-(37–40) · **Ch.13 Transport Layer — SỐ HIỆU CỔNG (41–42)** ⭐ người dùng cần cho
-công việc · Ch.14 Application (45–46) · Ch.15 Security (49–50) · Ch.16 Build a
-Small Network (53–55, 58–60) · Đồ án (43–44, 47–48, 51–52, 56–57).
+**Sau Ch.11 thì theo thứ tự:** Ch.12 ICMP + Lab 2.3 (37–40) · **Ch.13 Transport
+Layer — SỐ HIỆU CỔNG (41–42)** ⭐ người dùng cần cho công việc · Ch.14
+Application (45–46) · Ch.15 Security (49–50) · Ch.16 Build a Small Network
+(53–55, 58–60) · Đồ án (43–44, 47–48, 51–52, 56–57).
 
-### Quy trình đã chạy trơn cho Ch.5 → Ch.9, cứ lặp lại y hệt
+### Quy trình đã chạy trơn cho Ch.5 → Ch.10, cứ lặp lại y hệt
 
 viết deck → `_kiem-tran-slide.mjs` → render → **mở 4–5 ảnh ra NHÌN** → upload →
 **so byte với CDN** → viết bài → `node --check` → rà soát riêng cho môn →
@@ -104,21 +110,24 @@ phải tự soạn và đánh dấu rõ. Xem `_mon-flm-chua-co-syllabus.md`.
 
 ### NWC204 — môn ưu tiên số 1 của người dùng
 
-**11 mục · 48 bài · 240 ảnh slide**, phủ **buổi 1–29 / 60** (21/09/2026).
+**12 mục · 52 bài · 276 ảnh slide**, phủ **buổi 1–34 / 60** (22/09/2026).
 
-**Đã ĐO TRÊN DB PRODUCTION sau khi deploy `17306442`**, không đọc log:
-- `11 mục · 48 bài · 0 bài rỗng`
-- 240 ảnh slide được tham chiếu, chia đúng theo deck:
+**Đã ĐO TRÊN DB PRODUCTION sau khi deploy `af3f87b1`**, không đọc log:
+- `12 mục · 52 bài · 0 bài rỗng` (script đếm báo 11 "bài rỗng" — đó là 11 bài
+  QUIZ, nội dung của chúng nằm ở `lesson_details.quiz_data`, KHÔNG phải lỗi)
+- 276 ảnh slide được tham chiếu, chia đúng theo deck:
   `ch01` 18 · `ch02` 26 · `ch03` 23 · `ch04` 23 · `ch04b` 18 · `ch05` 27 ·
-  `ch06` 26 · `ch07` 31 · `ch08` 22 · `ch09` 26
-- 79 ảnh mới (`ch07`+`ch08`+`ch09`) **đều trả HTTP 200** trên CDN, và đã **so
-  byte** với file trên đĩa lúc upload: lệch 0/31, 0/22, 0/26
-- 3 quiz mới đều có **12 câu, 12 câu có giải thích, 900 giây** trong
-  `lesson_details.quiz_data`
+  `ch06` 26 · `ch07` 31 · `ch08` 22 · `ch09` 26 · **`ch10` 36**
+- 36 ảnh mới (`ch10`) **đều trả HTTP 200** trên CDN, và đã **so byte** với file
+  trên đĩa lúc upload: **khớp 36/36, lệch 0**
+- `lesson_details.quiz_data`: **11 bộ · 122 câu** (Ch.10 thêm 12 câu, 900 giây,
+  mỗi câu có giải thích song ngữ)
+- `lesson_progress` = **0 dòng** ⇒ chưa ai học, không có tiến độ nào để mất
 
-Kiểm trên spec trước khi commit: 48 bài, 0 bài rỗng, **224/224 khối code có nhãn
-`language-`**, **32/32 sơ đồ mermaid đúng dạng**, 0 thực thể thô trong `title`,
-0 slug trùng, title dài nhất **196/255** ký tự, shortDescription 392/500.
+Kiểm trên spec trước khi commit: 52 bài, 0 bài rỗng, **272/272 khối code có nhãn
+`language-`**, **38/38 sơ đồ mermaid đúng dạng**, 0 thực thể thô trong `title`,
+0 slug trùng, title dài nhất **196/255** ký tự, shortDescription 392/500,
+dry-run seed sạch.
 
 ⚠️ **Quiz nằm ở `lesson_details.quiz_data` (JSON)**, KHÔNG có bảng `Quiz`
 riêng. Muốn đếm câu hỏi thì đi qua `lesson.details.quizData.questions`.
@@ -137,7 +146,7 @@ riêng. Muốn đếm câu hỏi thì đi qua `lesson.details.quizData.questions
 
 ## 2. CÒN NỢ — làm tiếp từ đây
 
-### ✅ Chương 5 → 9 XONG và ĐÃ DEPLOY 21/09/2026 (commit `17306442`)
+### ✅ Chương 5 → 10 XONG và ĐÃ DEPLOY (Ch.5–9: 21/09 `17306442` · Ch.10: 22/09 `af3f87b1`)
 
 | Chương | Buổi | Bài | Slide | Nguồn |
 |---|---|---|---|---|
@@ -146,9 +155,10 @@ riêng. Muốn đếm câu hỏi thì đi qua `lesson.details.quizData.questions
 | Ch.7 Tầng mạng | 21–23 | 3 + quiz | 31 → `nwc204-ch07/` | `nwc204-ch07.mjs` · `ch07.mjs` |
 | Ch.8 Phân giải địa chỉ | 24–25 | 2 + quiz | 22 → `nwc204-ch08/` | `nwc204-ch08.mjs` · `ch08.mjs` |
 | Ch.9 Cấu hình router cơ bản | 26–29 | 3 + quiz | 26 → `nwc204-ch09/` | `nwc204-ch09.mjs` · `ch09.mjs` |
+| **Ch.10 Địa chỉ IPv4** ⭐ | **30–34** | **3 + quiz** | **36 → `nwc204-ch10/`** | `nwc204-ch10.mjs` · `ch10.mjs` |
 
-Sáu commit đã lên `origin/main`: `1f6aba5e` `8170093b` `26b62adb` `39fed066`
-`e2ed4300` `17306442`.
+Sáu commit của Ch.5–9 đã lên `origin/main`: `1f6aba5e` `8170093b` `26b62adb`
+`39fed066` `e2ed4300` `17306442`. Ch.10 là **`af3f87b1`** (22/09/2026).
 
 **Phần ★ đã thêm ở Ch.7/8/9** (ngoài giáo trình, để dùng được cho việc thật):
 - Ch.7 — lỗ đen MTU + cách chứng minh bằng `ping -M do`, cờ DF và MSS clamping,
@@ -159,6 +169,16 @@ Sáu commit đã lên `origin/main`: `1f6aba5e` `8170093b` `26b62adb` `39fed066`
 - Ch.9 — ba lệnh Linux `ip addr`/`ip link`/`ip route` là CÙNG ba ý của IOS, siết
   SSH trên VPS (bẫy thứ tự drop-in `01-`, nghiệm thu bằng `sshd -T`), "chạy được"
   khác "sống qua khởi động lại", dựng lại Lab 2.1 bằng network namespace.
+- **Ch.10** — đọc BA mạng IPv4 trên một máy chủ thật (`eth0` công cộng /24,
+  `docker0` 172.17.0.0/16, `br-*` compose 172.18.0.0/16) bằng `ip -br addr` và
+  `ip route`; `ip_forward=1` nghĩa là VPS CHÍNH LÀ router; CIDR là đơn vị của
+  luật `ufw` và `allow/deny` của nginx (lệch một bit = gấp đôi số máy được vào,
+  **không có cảnh báo nào**); ba kiểu đụng dải trông y như lỗi phần mềm
+  (VPN↔Docker cùng 172.18/16 · site-to-site cùng 192.168.1.0/24 · CGNAT
+  100.64/10 không port-forward được); 169.254.169.254 là metadata của máy ảo;
+  Tailscale dùng 100.x; `/31` (RFC 3021) và `/32`.
+  ⚠️ **Địa chỉ công cộng thật của VPS đã ĐƯỢC THAY bằng 198.51.100.208/24
+  (TEST-NET-2)** trong slide và bài — đừng đăng IP thật lên trang công khai.
 
 ### 📌 Bất thường của bảng gốc FLM — ĐÃ NÊU TRONG BÀI, KHÔNG TỰ SỬA
 
@@ -176,19 +196,24 @@ khoảng MỘT CHƯƠNG**. Bản đồ đầy đủ cho phần đã làm:
 | 26 | CQ9.2 | Ch.8 (Neighbor Discovery) | 9.1 — trỏ về 8.2 |
 | 27 | CQ9.3 | Ch.8 (ARP vs IP) | 9.2 — trỏ về 8.1/8.2 |
 | 28–29 | CQ10.1, CQ10.2 | **khớp đúng** (Lab 2.1) | 9.3 |
+| **30** | **(BỎ TRỐNG)** | — | 10.1 — nêu rõ, tự soạn 2 câu ★ |
+| 31 | CQ11.1 | **"Progress Test 2"** — không phải câu hỏi | 10.2 — trích nguyên văn, nêu rõ |
+| 32 | CQ11.2 | Ch.10 mục **10.2** (buổi 30) | 10.3 — trả lời đầy đủ, trỏ về 10.1 |
+| 33 | CQ11.3 | Ch.10 mục **10.3** (buổi 30) | 10.3 — trả lời đầy đủ, trỏ về 10.1 |
+| 34 | CQ12.1 | Ch.10 mục **10.1** (buổi 30) | 10.3 — nêu, đáp án ở 10.1 |
 
 Thêm một chỗ nữa: **buổi 27 liệt kê `9.2` rồi NHẢY THẲNG sang `9.4`** — không có
 mục `9.3` ở đâu trong bảng đã công bố. Đã nói thẳng trong bài 9.2.
 
 Các buổi còn trống câu hỏi kiến tạo: **6, 9, 15, 16, 22, 30, 36, 56** — buổi 30
-sẽ gặp ngay ở chương kế tiếp.
+đã xử ở Ch.10 (nêu rõ là bảng bỏ trống, rồi tự soạn 2 câu ★). **Buổi 36 gặp ngay
+ở Ch.11.**
 
-### NWC204 buổi 30–60 (7 chương + đồ án) — CÒN LẠI
+### NWC204 buổi 35–60 (6 chương + đồ án) — CÒN LẠI
 
 | Chương | Buổi | Nội dung |
 |---|---|---|
-| **Ch.10** | **30–34** | **IPv4 Addressing + chia subnet + VLSM + Midterm** ⭐ nặng nhất, nối vào chương bù `ch04b` |
-| Ch.11 | 35–36 | IPv6 Addressing (Module 12) |
+| **Ch.11** | **35–36** | **IPv6 Addressing (Module 12)** — làm tiếp từ đây |
 | Ch.12 | 37–40 | ICMP + Lab 2.3 (Module 13) |
 | **Ch.13** | **41–42** | **Transport Layer — SỐ HIỆU CỔNG** ⭐ người dùng cần cho công việc |
 | Ch.14 | 45–46 | Application Layer (Module 15) |
@@ -358,6 +383,40 @@ là vừa khít và dễ đọc hơn hẳn.
 ⭐ **Vẫn phải mở ít nhất 4–5 ảnh mỗi deck ra NHÌN.** Bộ đo cho bạn sự tự tin sai
 nếu tin nó một mình — xem [[feedback_verify_the_checker_before_the_content]].
 
+### Ch.10 (22/09) — ĐÚNG BÀI HỌC ĐÓ LẶP LẠI, ba lỗi nữa
+
+`_kiem-tran-slide.mjs` lại báo **"✓ không slide nào tràn"** cho cả 36 slide, và
+mở ảnh ra vẫn thấy **ba lỗi**, cả ba đều nằm trong SVG:
+
+| Lỗi | Slide | Vì sao bộ đo không thấy |
+|---|---|---|
+| Nhãn `AND` chạm vào `255.255.255.192` ở cột bên trái | ch10 #7 | hai `<text>` cạnh nhau, không tràn khung |
+| **Khung đỏ đánh dấu đặt LỆCH** sang vùng trống bên phải | ch10 #7 | `<rect>` không phải chữ, tràn hay không cũng không ai đo |
+| Chữ trong hộp màu **bị CẮT ở mép** (`6 host bits = 62 hosts` trong hộp 172px) | ch10 #17 | chữ dài hơn `<rect>` nhưng vẫn trong viewBox |
+| Hai nhãn `/30` **đè lên nhau** (hộp chỉ rộng 14px) | ch10 #22 | nằm trong khung, chỉ xấu |
+
+**Số đo THẬT của bề rộng chữ đơn cách** (đo lại trên ảnh đã render, không đoán):
+**0,602 × font-size** mỗi ký tự. Với `viewBox` rộng 900 và chữ bắt đầu ở `x="4"`:
+
+| font-size | px/ký tự | tối đa 1 dòng |
+|---|---|---|
+| 15 | 9,03 | **99 ký tự** |
+| 14 | 8,43 | **106 ký tự** |
+| 13 | 7,83 | **114 ký tự** |
+| 11 | 6,62 | **135 ký tự** |
+
+⚠️ **Dùng đúng con số đó để đặt `<rect>` đánh dấu.** Muốn khoanh 8 ký tự cuối
+của một chuỗi 35 ký tự bắt đầu ở `x=320`, font 15: ký tự thứ 27 nằm ở
+`320 + 27 × 9,03 = 564`, bề rộng `8 × 9,03 = 72`. Đặt bằng mắt là lệch.
+
+⚠️ **Chữ trong một `<rect>` màu phải NGẮN HƠN cái rect.** Kiểm:
+`số ký tự × 0,602 × font-size < bề rộng rect`. Vượt là chữ lòi ra hoặc trông
+như bị cắt — bộ đo KHÔNG bắt, vì nó chỉ đo chiều CAO của `.slide`.
+
+⚠️ **Khối tỉ lệ quá nhỏ thì ĐỪNG nhét chữ vào trong.** Hai khối `/30` trong dải
+VLSM chỉ chiếm 4/256 = 14px — giữ tỉ lệ THẬT (đó là cả ý nghĩa của hình) rồi
+kéo một cái **ngoặc dẫn xuống dưới** và ghi nhãn ở chỗ rộng.
+
 ---
 
 ## 4. MỌI LỖI ĐÃ GẶP TRONG PHIÊN NÀY
@@ -391,6 +450,23 @@ nếu tin nó một mình — xem [[feedback_verify_the_checker_before_the_conte
 
 - **Suýt đi vá 61 slug vô ích**: bắt agent gắn lại slug cũ rồi mới nghĩ ra là phải
   ĐO trước. Đếm trên DB: **0 dòng `lesson_progress` trên cả 9 môn** ⇒ không mất gì.
+
+### 4.2b Lỗi tự gây ra 22/09 (Ch.10) — `lesson.content` PHẢI là String
+
+Viết `content: [ bi(...), walk(...), ... ]` rồi **quên `.join('\n')`** ở cuối.
+Hậu quả:
+- `node --check` XANH · `import()` XANH · file nạp được bình thường.
+- `academy-ra-soat.mjs` **đổ ngay** với `TypeError: t.trim is not a function`,
+  và nó đổ ở dòng 52 nên **không rà được môn nào cả** — nhìn tưởng bộ rà hỏng.
+- Nếu bộ rà không chạy thì chỗ này lọt tới lúc seed.
+
+⇒ Mọi khối `content: [...]` trong `nwc204/*.mjs` đều kết thúc bằng
+**`].join('\n'),`**. Kiểm nhanh trước khi commit:
+```bash
+node -e "import('./content/academy/nwc204/chNN.mjs').then(m=>m.default[0].lessons.forEach(l=>console.log(l.slug, typeof l.content)))"
+```
+Phải in ra `string` cho bài DOCUMENT, `undefined` cho bài QUIZ.
+Cùng một bài học với [[feedback_seeder_lesson_content_phai_la_string]].
 
 ### 4.3 Báo động giả — đọc ngữ cảnh trước khi sửa
 

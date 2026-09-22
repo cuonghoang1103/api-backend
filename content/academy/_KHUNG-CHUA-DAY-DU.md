@@ -71,9 +71,9 @@ video, chuẩn như CEA201/CSI106) cho 5 môn user tự chọn, theo thứ tự 
 
    | Đã xong | Còn nợ |
    |---|---|
-   | Mục 0 (7 bài, bảng đủ 60 buổi đối chiếu từng ký tự với FLM) | **Ch.10 Địa chỉ IPv4 + chia subnet + VLSM (30–34)** ⭐ nặng nhất, LÀM TIẾP TỪ ĐÂY |
-   | Ch.1 Networking Today (buổi 1–2) · 18 slide | Ch.11 IPv6 (35–36) |
-   | Ch.2 Cấu hình switch & thiết bị đầu cuối (3–6) · 26 slide | Ch.12 ICMP + Lab 2.3 (37–40) |
+   | Mục 0 (7 bài, bảng đủ 60 buổi đối chiếu từng ký tự với FLM) | **Ch.11 IPv6 Addressing (35–36)** — LÀM TIẾP TỪ ĐÂY |
+   | Ch.1 Networking Today (buổi 1–2) · 18 slide | Ch.12 ICMP + Lab 2.3 (37–40) |
+   | Ch.2 Cấu hình switch & thiết bị đầu cuối (3–6) · 26 slide | |
    | Ch.3 Giao thức & mô hình phân tầng (7–10) · 23 slide | **Ch.13 Tầng giao vận + SỐ HIỆU CỔNG (41–42)** ⭐ user cần cho công việc |
    | Ch.4 Tầng vật lý (11–14) · 23 slide | Ch.14 Tầng ứng dụng (45–46) |
    | **Ch.4B Hệ đếm — chương BÙ**, trường không xếp buổi · 18 slide | Ch.15 An ninh mạng (49–50) |
@@ -82,19 +82,29 @@ video, chuẩn như CEA201/CSI106) cho 5 môn user tự chọn, theo thứ tự 
    | **Ch.7 Tầng mạng (21–23) · 31 slide** ✅ 21/09 | |
    | **Ch.8 Phân giải địa chỉ (24–25) · 22 slide** ✅ 21/09 | |
    | **Ch.9 Cấu hình router cơ bản + Lab 2.1 (26–29) · 26 slide** ✅ 21/09 | |
+   | **Ch.10 Địa chỉ IPv4 + subnet + VLSM + Midterm (30–34) · 36 slide** ✅ 22/09 | |
 
-   Tổng đang có, **đo trên DB production sau deploy `17306442`**:
-   **11 mục / 48 bài / 240 ảnh slide** trên `images/academy/NWC204/v1/`,
-   0 bài rỗng, 224/224 khối code có nhãn `language-`, 32/32 mermaid đúng dạng.
+   **→ Làm tiếp: Ch.11 IPv6 Addressing (buổi 35–36, Module 12).** Dàn bài, bảng
+   câu hỏi kiến tạo và chỗ vênh của bảng gốc đã trích sẵn ở **mục 0** của
+   `_BAN-GIAO-NWC204.md` — đọc file đó trước khi gõ gì.
+
+   Tổng đang có, **đo trên DB production sau deploy `af3f87b1`**:
+   **12 mục / 52 bài / 276 ảnh slide** trên `images/academy/NWC204/v1/`,
+   0 bài rỗng, 272/272 khối code có nhãn `language-`, 38/38 mermaid đúng dạng,
+   `lesson_details.quiz_data` 11 bộ / 122 câu, `lesson_progress` 0 dòng.
    Slide **do ta tự thiết kế** (FLM không đăng slide nào cho môn này; bộ CCNA
    gốc là bản quyền Cisco trên netacad) — toàn tiếng Anh, thiên sơ đồ/bảng
    theo yêu cầu của user.
    Từ Ch.5 trở đi, phần cuongthai.com bổ sung ngoài giáo trình Cisco được đánh
    dấu **★** ngay trong bài (user yêu cầu 21/09) — MTU/802.1Q, `ip route get`,
-   `ip rule`, bảng láng giềng, giả mạo ARP, siết SSH trên VPS, network namespace.
+   `ip rule`, bảng láng giềng, giả mạo ARP, siết SSH trên VPS, network namespace,
+   và ở Ch.10 là đọc ba mạng IPv4 của chính VPS (`ip -br addr`), CIDR trong luật
+   `ufw`/nginx, ba kiểu đụng dải (VPN↔Docker, site-to-site, CGNAT).
 
    ⚠️ **Bảng câu hỏi kiến tạo của FLM trôi dạt ~1 chương từ buổi 19 trở đi**, và
-   buổi 27 nhảy qua mục `9.3`. Bản đồ đầy đủ buổi-nào-lệch nằm ở mục 2 của
+   buổi 27 nhảy qua mục `9.3`. Ở Ch.10 thì **cả 4 câu đều lệch** (buổi 30 bỏ
+   trống; CQ11.1 nội dung là "Progress Test 2"; CQ11.2/11.3/12.1 đều hỏi nội
+   dung buổi 30). Buổi 36 của Ch.11 cũng bỏ trống. Bản đồ đầy đủ buổi-nào-lệch nằm ở mục 2 của
    `_BAN-GIAO-NWC204.md`. **Nêu trong bài, đừng tự sửa bảng gốc.**
 
    ⚠️ Sửa slide phải render sang prefix MỚI (v2…), Cloudflare giữ cache bytes.

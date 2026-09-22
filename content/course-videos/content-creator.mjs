@@ -151,5 +151,12 @@ export default {
     'cr-18-2-tracking-on-dinh': { yt: 'JEzzmaFWbnY', credit: 'Christian Eggbauer — DaVinci Resolve 19 - The FASTEST Way to Blur a Moving Face or Object FREE Version' },
     'cr-18-3-phong-xanh-tach-nen': { yt: '-jeqx-xoiA8', credit: 'Steven Washer (Visible Authority) — How to get a flawless greenscreen shoot in a tiny room' },
     'cr-18-4-vfx-thuc-te': { yt: 'FvzlVK1IaU0', credit: 'Team 2 Films — Screen Replacement with FUSION Planar Tracker - Davinci Resolve 18.5 TUTORIAL' },
+
+    /* ── Chương 20 — Video ngắn dọc ── */
+    'cr-20-0-slides': { yt: 'h4gIxvwB5mI', credit: 'Katie Steckly — My Updated Short Form Growth Strategy for 2026' },
+    'cr-20-1-giai-phau-video-ngan': { yt: 'LmXpbP7dD48', credit: 'Kallaway — How to Create Irresistible Hooks (and blow up your content)' },
+    'cr-20-2-quay-video-ngan': { yt: 'f3Zu_w9uk3A', credit: 'Adorama — How to Shoot Great Vertical Videos | Filmmaking with Aidin Robbins' },
+    'cr-20-3-dung-video-ngan': { yt: 'l9JlsmzQs7Y', credit: 'Patrik Key — How To Make VIRAL Captions in CapCut (Step by Step)' },
+    'cr-20-4-dang-phan-phoi-video-ngan': { yt: 'a-yeaMDQN8w', credit: 'Money Guy — The RIGHT Way to Upload Shorts in 2026 (For Fast Growth)' },
   },
 };

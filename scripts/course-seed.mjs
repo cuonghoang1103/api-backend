@@ -206,9 +206,16 @@ if (course) {
       const lslug = l.slug || slugify(l.title);
       const quizData = l.quiz ? {
         timeLimitSeconds: l.quiz.timeLimitSeconds ?? 600,
+        // Carry every field LessonQuizPlayer renders (explanation after submit,
+        // multi-answer, code snippet) — same passthrough the Academy seeder got
+        // on 12/09/2026. Optional keys only when present, so the quizData of
+        // every existing course stays byte-identical.
         questions: (l.quiz.questions || []).map((q, i) => ({
           id: q.id ?? `q${i + 1}`, question: q.question,
           options: q.options, correctIndex: q.correctIndex, points: q.points ?? 1,
+          ...(Array.isArray(q.correctIndexes) ? { correctIndexes: q.correctIndexes } : {}),
+          ...(q.code ? { code: q.code, ...(q.codeLang ? { codeLang: q.codeLang } : {}) } : {}),
+          ...(q.explanation ? { explanation: q.explanation } : {}),
         })),
       } : undefined;
       // ── The MAIN video frame ────────────────────────────────────────

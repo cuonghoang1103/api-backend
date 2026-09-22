@@ -71,27 +71,30 @@ video, chuẩn như CEA201/CSI106) cho 5 môn user tự chọn, theo thứ tự 
 
    | Đã xong | Còn nợ |
    |---|---|
-   | Mục 0 (7 bài, bảng đủ 60 buổi đối chiếu từng ký tự với FLM) | **Ch.11 IPv6 Addressing (35–36)** — LÀM TIẾP TỪ ĐÂY |
-   | Ch.1 Networking Today (buổi 1–2) · 18 slide | Ch.12 ICMP + Lab 2.3 (37–40) |
+   | Mục 0 (7 bài, bảng đủ 60 buổi đối chiếu từng ký tự với FLM) | **Ch.13 Tầng giao vận + SỐ HIỆU CỔNG (41–42)** ⭐ LÀM TIẾP TỪ ĐÂY |
+   | Ch.1 Networking Today (buổi 1–2) · 18 slide | Ch.14 Tầng ứng dụng (45–46) |
    | Ch.2 Cấu hình switch & thiết bị đầu cuối (3–6) · 26 slide | |
-   | Ch.3 Giao thức & mô hình phân tầng (7–10) · 23 slide | **Ch.13 Tầng giao vận + SỐ HIỆU CỔNG (41–42)** ⭐ user cần cho công việc |
-   | Ch.4 Tầng vật lý (11–14) · 23 slide | Ch.14 Tầng ứng dụng (45–46) |
-   | **Ch.4B Hệ đếm — chương BÙ**, trường không xếp buổi · 18 slide | Ch.15 An ninh mạng (49–50) |
-   | **Ch.5 Tầng liên kết dữ liệu (15–16) · 27 slide** ✅ | Ch.16 Dựng mạng nhỏ (53–55, 58–60) |
-   | **Ch.6 Chuyển mạch Ethernet (17–20) · 26 slide** ✅ | Đồ án (43–44, 47–48, 51–52, 56–57) |
+   | Ch.3 Giao thức & mô hình phân tầng (7–10) · 23 slide | Ch.15 An ninh mạng (49–50) |
+   | Ch.4 Tầng vật lý (11–14) · 23 slide | Ch.16 Dựng mạng nhỏ (53–55, 58–60) |
+   | **Ch.4B Hệ đếm — chương BÙ**, trường không xếp buổi · 18 slide | Đồ án (43–44, 47–48, 51–52, 56–57) |
+   | **Ch.5 Tầng liên kết dữ liệu (15–16) · 27 slide** ✅ | |
+   | **Ch.6 Chuyển mạch Ethernet (17–20) · 26 slide** ✅ | |
    | **Ch.7 Tầng mạng (21–23) · 31 slide** ✅ 21/09 | |
    | **Ch.8 Phân giải địa chỉ (24–25) · 22 slide** ✅ 21/09 | |
    | **Ch.9 Cấu hình router cơ bản + Lab 2.1 (26–29) · 26 slide** ✅ 21/09 | |
    | **Ch.10 Địa chỉ IPv4 + subnet + VLSM + Midterm (30–34) · 36 slide** ✅ 22/09 | |
+   | **Ch.11 Địa chỉ IPv6 (35–36) · 27 slide** ✅ 22/09 | |
+   | **Ch.12 ICMP + Lab 2.3 (37–40) · 23 slide** ✅ 22/09 | |
 
-   **→ Làm tiếp: Ch.11 IPv6 Addressing (buổi 35–36, Module 12).** Dàn bài, bảng
-   câu hỏi kiến tạo và chỗ vênh của bảng gốc đã trích sẵn ở **mục 0** của
+   **→ Làm tiếp: Ch.13 Tầng giao vận + SỐ HIỆU CỔNG (buổi 41–42, Module 14).** ⭐
+   Người dùng đặt hàng đích danh chương này. Dàn bài, bảng câu hỏi kiến tạo (lần
+   này độ trôi ĐẢO CHIỀU) và gợi ý phần ★ đã trích sẵn ở **mục 0** của
    `_BAN-GIAO-NWC204.md` — đọc file đó trước khi gõ gì.
 
-   Tổng đang có, **đo trên DB production sau deploy `af3f87b1`**:
-   **12 mục / 52 bài / 276 ảnh slide** trên `images/academy/NWC204/v1/`,
-   0 bài rỗng, 272/272 khối code có nhãn `language-`, 38/38 mermaid đúng dạng,
-   `lesson_details.quiz_data` 11 bộ / 122 câu, `lesson_progress` 0 dòng.
+   Tổng đang có, **đo trên DB production sau deploy `f86d8b74`**:
+   **14 mục / 58 bài / 326 ảnh slide** trên `images/academy/NWC204/v1/`,
+   0 bài rỗng, 326/326 khối code có nhãn `language-`, 46/46 mermaid đúng dạng,
+   `lesson_details.quiz_data` 13 bộ / 146 câu, `lesson_progress` 0 dòng.
    Slide **do ta tự thiết kế** (FLM không đăng slide nào cho môn này; bộ CCNA
    gốc là bản quyền Cisco trên netacad) — toàn tiếng Anh, thiên sơ đồ/bảng
    theo yêu cầu của user.
@@ -99,7 +102,10 @@ video, chuẩn như CEA201/CSI106) cho 5 môn user tự chọn, theo thứ tự 
    dấu **★** ngay trong bài (user yêu cầu 21/09) — MTU/802.1Q, `ip route get`,
    `ip rule`, bảng láng giềng, giả mạo ARP, siết SSH trên VPS, network namespace,
    và ở Ch.10 là đọc ba mạng IPv4 của chính VPS (`ip -br addr`), CIDR trong luật
-   `ufw`/nginx, ba kiểu đụng dải (VPN↔Docker, site-to-site, CGNAT).
+   `ufw`/nginx, ba kiểu đụng dải (VPN↔Docker, site-to-site, CGNAT); ở Ch.11 là
+   13 địa chỉ `fe80::` có sẵn, EUI-64 kiểm ngược từ MAC thật của router, bẫy
+   `::1` so với `127.0.0.1`; ở Ch.12 là ping im lặng, TTL đếm chặng, `asymm`,
+   và hố đen path MTU.
 
    ⚠️ **Bảng câu hỏi kiến tạo của FLM trôi dạt ~1 chương từ buổi 19 trở đi**, và
    buổi 27 nhảy qua mục `9.3`. Ở Ch.10 thì **cả 4 câu đều lệch** (buổi 30 bỏ

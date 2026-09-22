@@ -1,4 +1,4 @@
-# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 22/09/2026 (xong Ch.5 → Ch.10, ĐÃ DEPLOY)
+# 📋 BÀN GIAO — phiên 20/09/2026, cập nhật 22/09/2026 (xong Ch.5 → Ch.12, ĐÃ DEPLOY)
 
 > **Đọc file này + `_KHUNG-CHUA-DAY-DU.md` trước khi làm tiếp Academy.**
 > Ghi đủ để phiên sau làm tiếp mà không hỏi lại gì.
@@ -7,7 +7,7 @@
 
 ## 0. 🔴 PHIÊN SAU BẮT ĐẦU TỪ ĐÂY (chốt 22/09/2026, sau khi deploy xong)
 
-**Không còn gì treo. Đã push, production đang chạy `af3f87b1`.**
+**Không còn gì treo. Đã push, production đang chạy `f86d8b74`.**
 
 > ⚠️ Cây làm việc CÒN 7 file chưa commit của VIỆC KHÁC (firmware/mini-me-robot/**,
 > scripts/lab211-*, scripts/codelab-*, scripts/_gen-img.mjs, scratchpad/). **Cố ý
@@ -23,56 +23,54 @@
 4. `content/academy/_syllabus-flm/NWC204.json` — dữ liệu gốc, đọc bằng script
    chứ đừng đọc bằng mắt (61 dòng buổi + 52 câu hỏi kiến tạo)
 
-### Làm tiếp: **Chương 11 — IPv6 Addressing (buổi 35–36, Cisco Module 12)**
+### Làm tiếp: **Chương 13 — Tầng giao vận + SỐ HIỆU CỔNG (buổi 41–42, Cisco Module 14)** ⭐
 
-Hai buổi, nhẹ hơn Ch.10 nhiều. Phần khó đã xong ở Ch.10: ý niệm tiền tố, phần
-mạng và phần host chuyển sang nguyên vẹn. Thứ đổi là **kích cỡ (128 bit)** và
-**cách ký hiệu hex** — chỗ mà chương bù `ch04b` (hệ thập lục phân) được dùng tới.
+⭐ **Người dùng đặt hàng đích danh chương này** — xem mục 0 của
+`_HOP-DONG-NWC204.md`: "để hiểu toàn bộ mạng để có thể ssh, deploy, **cổng mạng
+trường học**, và all liên quan đến **cổng mạng**". Đây là chương nói về số hiệu
+cổng, nên nó là chương có giá trị thực dụng cao nhất của cả môn với người học.
 
 **Dàn bài đã trích nguyên văn từ `_syllabus-flm/NWC204.json`:**
 
 | Buổi | Topic | LO | ITU | Tài liệu |
 |---|---|---|---|---|
-| 35 | 11.1 IPv6 Addressing · 11.2 IPv4 Issues · **11.3 IPv6 Addressing** · 11.4 IPv6 Address Types | CLO5, CLO9 | T | Module 12 |
-| 36 | 11.5 GUA and LLA Static Configuration · 11.6 Dynamic Addressing for IPv6 GUAs · 11.7 Dynamic Addressing for IPv6 LLAs · 11.8 IPv6 Multicast Addresses · 11.9 Subnet an IPv6 Network · 11.10 Integrate AI Tools (Self Learning) | CLO5, CLO9 | T | Module 12 |
+| 41 | 13. Transport Layer · 13.1 Transportation of Data · 13.2 TCP Overview · 13.3 UDP Overview | CLO1, CLO4, CLO9 | T | Module 14 |
+| 42 | **13.4 Port Numbers** ⭐ · 13.5 TCP Communication Process · 13.6 Reliability and Flow Control · 13.7 UDP Communication · 13.8 Integrate AI Tools (Self Learning) | CLO1, CLO4, CLO9 | T | Module 14 |
 
-⚠️ **Buổi 35 ghi `11.1 IPv6 Addressing` rồi lại `11.3 IPv6 Addressing`** — cùng
-một tiêu đề hai lần. Đã nêu chỗ vênh này ở cuối bài 10.3; nêu lại trong Ch.11,
-**đừng tự sửa bảng gốc**.
+⇒ Cấu trúc gợi ý: **2 bài + quiz**, giống Ch.11 và Ch.12 —
+13.1 (buổi 41: vì sao cần tầng giao vận, TCP so với UDP) ·
+13.2 (buổi 42: số hiệu cổng, bắt tay ba bước, cửa sổ trượt, UDP).
 
-⇒ Cấu trúc gợi ý: **2 bài + quiz** (chỉ hai buổi), hoặc 3 bài nếu tách phần
-cấu hình. 11.1 (buổi 35, cấu trúc + vì sao bỏ IPv4 + các loại địa chỉ) ·
-11.2 (buổi 36, GUA/LLA tĩnh và động, SLAAC/DHCPv6, multicast, chia subnet IPv6).
+**⚠️ Câu hỏi kiến tạo — lần này KHỚP ĐÚNG chương, khác hẳn Ch.10–12:**
 
-**⚠️ Câu hỏi kiến tạo — VẪN TRÔI DẠT, đã trích để khỏi đoán:**
-
-| Buổi | Câu | Nội dung | Thật ra thuộc |
+| Buổi | Câu | Nội dung | Khớp không |
 |---|---|---|---|
-| 35 | `CQ12.2` | "tính địa chỉ **IPv4** tối ưu cho công ty nhiều phòng ban" | **VLSM của Ch.10** — đã trả lời đủ ở bài 10.2 |
-| **36** | **(BỎ TRỐNG)** | — | — |
-| 37 | `CQ13.1` | "What happens do we use IPv4 in nowadays?" | Ch.11 (11.2 IPv4 Issues) |
-| 38 | `CQ13.2` | so sánh các loại địa chỉ mạng IPv6 | Ch.11 (11.4) |
-| 39 | `CQ13.3` | cấu hình địa chỉ IPv6 trên thiết bị Cisco | Ch.11 (11.5) |
+| 43 | `CQ15.1` | "What characteristics are there in the Transport Layer?" | ✅ đúng Ch.13 |
+| 44 | `CQ15.2` | "Compare between TCP and UDP? Which protocol do you like to implement?" | ✅ đúng Ch.13 |
+| 45 | `CQ15.3` | "How does TCP session establishment and termination processes facilitate reliable communication?" | ✅ đúng Ch.13 |
 
-⇒ Cả **ba câu của Ch.12 (buổi 37–39) thật ra là nội dung Ch.11**. Độ trôi ~một
-chương vẫn giữ nguyên. Ở Ch.11 thì trỏ ngược về bài 10.2 cho CQ12.2, và ở Ch.12
-thì trỏ ngược về Ch.11 cho CQ13.1/13.2/13.3 — đúng lối đã làm từ Ch.7.
+⚠️ Nhưng vẫn **lệch buổi**: buổi 43–45 là các buổi ĐỒ ÁN, còn buổi 41–42 (nơi
+dạy Ch.13) thì mang `CQ14.2` và `CQ14.3` vốn hỏi về **ICMP của Ch.12**:
+- buổi 41 → `CQ14.2` "How to test network connectivity using ICMP?" → mục 12.2
+- buổi 42 → `CQ14.3` "Which other tools can we use to test network connectivity?
+  How does it works(Do lab 7)?" → mục 12.2, và **"Do lab 7" không tồn tại** trong
+  kế hoạch 60 buổi (môn chỉ có Lab 1.x và 2.x). Nêu ra, đừng đoán nó là lab nào.
 
-⚠️ **Mọi phép tính địa chỉ trong bài PHẢI kiểm lại bằng `python3`** trước khi
-commit (hợp đồng môn, mục 9). `ipaddress` làm IPv6 y như IPv4:
-```python
-import ipaddress
-n = ipaddress.ip_network('2001:db8:acad::/48')
-print(n.network_address, n.num_addresses, list(n.subnets(new_prefix=64))[:3])
-print(ipaddress.ip_address('2001:0db8:0000:0000:0000:0000:0000:0001').compressed)
-```
+⇒ Ở Ch.13 thì trỏ ngược về bài 12.2 cho CQ14.2/14.3, rồi trả lời CQ15.1/15.2/15.3
+tại chỗ — đúng lối đã làm từ Ch.7.
 
-**Sau Ch.11 thì theo thứ tự:** Ch.12 ICMP + Lab 2.3 (37–40) · **Ch.13 Transport
-Layer — SỐ HIỆU CỔNG (41–42)** ⭐ người dùng cần cho công việc · Ch.14
-Application (45–46) · Ch.15 Security (49–50) · Ch.16 Build a Small Network
-(53–55, 58–60) · Đồ án (43–44, 47–48, 51–52, 56–57).
+★ **Gợi ý phần bổ sung cho Ch.13** (chưa làm, người dùng cần cho việc thật):
+`ss -tlnp` đọc cổng đang nghe trên VPS · vì sao `docker run -p 3000:3000` khác
+`EXPOSE` · cổng đặc quyền <1024 và vì sao container chạy non-root không bind 80
+được · `ss -s` đếm kết nối TIME_WAIT · vì sao nginx cần `proxy_read_timeout` ·
+mạng trường chỉ mở 80/443/587/993 (đã ghi ở CLAUDE.md, mục "Vào VPS khi mạng
+chặn cổng 22") — đây là ví dụ THẬT của việc lọc theo số hiệu cổng.
 
-### Quy trình đã chạy trơn cho Ch.5 → Ch.10, cứ lặp lại y hệt
+**Sau Ch.13 thì theo thứ tự:** Ch.14 Application (45–46) · Ch.15 Security
+(49–50) · Ch.16 Build a Small Network (53–55, 58–60) · Đồ án (43–44, 47–48,
+51–52, 56–57).
+
+### Quy trình đã chạy trơn cho Ch.5 → Ch.12, cứ lặp lại y hệt
 
 viết deck → `_kiem-tran-slide.mjs` → render → **mở 4–5 ảnh ra NHÌN** → upload →
 **so byte với CDN** → viết bài → `node --check` → rà soát riêng cho môn →
@@ -110,22 +108,23 @@ phải tự soạn và đánh dấu rõ. Xem `_mon-flm-chua-co-syllabus.md`.
 
 ### NWC204 — môn ưu tiên số 1 của người dùng
 
-**12 mục · 52 bài · 276 ảnh slide**, phủ **buổi 1–34 / 60** (22/09/2026).
+**14 mục · 58 bài · 326 ảnh slide**, phủ **buổi 1–40 / 60** (22/09/2026).
 
-**Đã ĐO TRÊN DB PRODUCTION sau khi deploy `af3f87b1`**, không đọc log:
-- `12 mục · 52 bài · 0 bài rỗng` (script đếm báo 11 "bài rỗng" — đó là 11 bài
+**Đã ĐO TRÊN DB PRODUCTION sau khi deploy `f86d8b74`**, không đọc log:
+- `14 mục · 58 bài · 0 bài rỗng` (script đếm báo 13 "bài rỗng" — đó là 13 bài
   QUIZ, nội dung của chúng nằm ở `lesson_details.quiz_data`, KHÔNG phải lỗi)
-- 276 ảnh slide được tham chiếu, chia đúng theo deck:
+- 326 ảnh slide được tham chiếu, chia đúng theo deck:
   `ch01` 18 · `ch02` 26 · `ch03` 23 · `ch04` 23 · `ch04b` 18 · `ch05` 27 ·
-  `ch06` 26 · `ch07` 31 · `ch08` 22 · `ch09` 26 · **`ch10` 36**
-- 36 ảnh mới (`ch10`) **đều trả HTTP 200** trên CDN, và đã **so byte** với file
-  trên đĩa lúc upload: **khớp 36/36, lệch 0**
-- `lesson_details.quiz_data`: **11 bộ · 122 câu** (Ch.10 thêm 12 câu, 900 giây,
-  mỗi câu có giải thích song ngữ)
+  `ch06` 26 · `ch07` 31 · `ch08` 22 · `ch09` 26 · `ch10` 36 · **`ch11` 27** ·
+  **`ch12` 23**
+- 50 ảnh mới (`ch11`+`ch12`) **đều trả HTTP 200** trên CDN, và đã **so byte** với
+  file trên đĩa lúc upload: **khớp 27/27 và 23/23, lệch 0**
+- `lesson_details.quiz_data`: **13 bộ · 146 câu** (Ch.10, Ch.11, Ch.12 mỗi chương
+  thêm 12 câu, 900 giây, mỗi câu có giải thích song ngữ)
 - `lesson_progress` = **0 dòng** ⇒ chưa ai học, không có tiến độ nào để mất
 
-Kiểm trên spec trước khi commit: 52 bài, 0 bài rỗng, **272/272 khối code có nhãn
-`language-`**, **38/38 sơ đồ mermaid đúng dạng**, 0 thực thể thô trong `title`,
+Kiểm trên spec trước khi commit: 58 bài, 0 bài rỗng, **326/326 khối code có nhãn
+`language-`**, **46/46 sơ đồ mermaid đúng dạng**, 0 thực thể thô trong `title`,
 0 slug trùng, title dài nhất **196/255** ký tự, shortDescription 392/500,
 dry-run seed sạch.
 
@@ -146,7 +145,7 @@ riêng. Muốn đếm câu hỏi thì đi qua `lesson.details.quizData.questions
 
 ## 2. CÒN NỢ — làm tiếp từ đây
 
-### ✅ Chương 5 → 10 XONG và ĐÃ DEPLOY (Ch.5–9: 21/09 `17306442` · Ch.10: 22/09 `af3f87b1`)
+### ✅ Chương 5 → 12 XONG và ĐÃ DEPLOY (Ch.5–9: 21/09 · Ch.10–12: 22/09, chốt `f86d8b74`)
 
 | Chương | Buổi | Bài | Slide | Nguồn |
 |---|---|---|---|---|
@@ -156,9 +155,12 @@ riêng. Muốn đếm câu hỏi thì đi qua `lesson.details.quizData.questions
 | Ch.8 Phân giải địa chỉ | 24–25 | 2 + quiz | 22 → `nwc204-ch08/` | `nwc204-ch08.mjs` · `ch08.mjs` |
 | Ch.9 Cấu hình router cơ bản | 26–29 | 3 + quiz | 26 → `nwc204-ch09/` | `nwc204-ch09.mjs` · `ch09.mjs` |
 | **Ch.10 Địa chỉ IPv4** ⭐ | **30–34** | **3 + quiz** | **36 → `nwc204-ch10/`** | `nwc204-ch10.mjs` · `ch10.mjs` |
+| **Ch.11 Địa chỉ IPv6** | **35–36** | **2 + quiz** | **27 → `nwc204-ch11/`** | `nwc204-ch11.mjs` · `ch11.mjs` |
+| **Ch.12 ICMP + Lab 2.3** | **37–40** | **2 + quiz** | **23 → `nwc204-ch12/`** | `nwc204-ch12.mjs` · `ch12.mjs` |
 
 Sáu commit của Ch.5–9 đã lên `origin/main`: `1f6aba5e` `8170093b` `26b62adb`
-`39fed066` `e2ed4300` `17306442`. Ch.10 là **`af3f87b1`** (22/09/2026).
+`39fed066` `e2ed4300` `17306442`. Ch.10 là **`af3f87b1`**, Ch.11 là
+**`f087483e`**, Ch.12 là **`f86d8b74`** (tất cả 22/09/2026).
 
 **Phần ★ đã thêm ở Ch.7/8/9** (ngoài giáo trình, để dùng được cho việc thật):
 - Ch.7 — lỗ đen MTU + cách chứng minh bằng `ping -M do`, cờ DF và MSS clamping,
@@ -179,6 +181,24 @@ Sáu commit của Ch.5–9 đã lên `origin/main`: `1f6aba5e` `8170093b` `26b62
   Tailscale dùng 100.x; `/31` (RFC 3021) và `/32`.
   ⚠️ **Địa chỉ công cộng thật của VPS đã ĐƯỢC THAY bằng 198.51.100.208/24
   (TEST-NET-2)** trong slide và bài — đừng đăng IP thật lên trang công khai.
+- **Ch.11** — 13 địa chỉ `fe80::` có sẵn trên VPS mà KHÔNG ai cấu hình, và 0 địa
+  chỉ toàn cục (nhà cung cấp chỉ cấp IPv4); **EUI-64 kiểm NGƯỢC từ MAC thật của
+  router thượng nguồn**: `96:3d:fa:00:04:e9` → `fe80::943d:faff:fe00:4e9`, khớp
+  từng byte với `ip -6 neigh`; nginx đã `listen [::]:80/443` sẵn;
+  `net.ipv6.conf.all.forwarding = 0` (ngược với IPv4); **bẫy `::1` so với
+  `127.0.0.1`** (dịch vụ gắn 127.0.0.1, `localhost` phân giải `::1` trước ⇒
+  `curl 127.0.0.1` được mà `curl localhost` bị từ chối; chứng minh bằng
+  `curl -4` so `curl -6`); và `%eth0` bắt buộc khi ping link-local.
+- **Ch.12** — ping tới địa chỉ TRỐNG trong chính subnet của mình → **IM LẶNG**,
+  100% mất gói, KHÔNG có "host unreachable" (⇒ hỏng im lặng mới là thường, và
+  im lặng gần như không mang thông tin); **TTL đếm ra số chặng** (1.1.1.1
+  ttl=55 → 9 chặng; 8.8.8.8 ttl=118 → 10 chặng); `tracepath` thật có hop 1
+  **"no reply"** mà hop 2–10 vẫn đáp, kèm nhãn **`asymm`** ⇒ đường đi ≠ đường
+  về; **path MTU**: `-M do -s 1472` (=1500) lọt, `-s 1473` trả nguyên văn
+  `ping: local error: message too long, mtu=1500`; **hố đen PMTU** khi ICMP bị
+  chặn (bắt tay xong, trang nhỏ chạy, gói trả lời lớn treo vĩnh viễn);
+  `ping6 ff02::1%eth0` chỉ CHÍNH MÁY đó đáp (0,055 ms); exit code 0/1 dùng được
+  trong script.
 
 ### 📌 Bất thường của bảng gốc FLM — ĐÃ NÊU TRONG BÀI, KHÔNG TỰ SỬA
 
@@ -201,21 +221,31 @@ khoảng MỘT CHƯƠNG**. Bản đồ đầy đủ cho phần đã làm:
 | 32 | CQ11.2 | Ch.10 mục **10.2** (buổi 30) | 10.3 — trả lời đầy đủ, trỏ về 10.1 |
 | 33 | CQ11.3 | Ch.10 mục **10.3** (buổi 30) | 10.3 — trả lời đầy đủ, trỏ về 10.1 |
 | 34 | CQ12.1 | Ch.10 mục **10.1** (buổi 30) | 10.3 — nêu, đáp án ở 10.1 |
+| 35 | CQ12.2 | **Ch.10** — tính địa chỉ IPv4 tối ưu = VLSM, mục 10.8 | 11.1 — trỏ về 10.2, tự soạn 2 câu ★ |
+| **36** | **(BỎ TRỐNG)** | — | 11.2 — nêu rõ, tự soạn 2 câu ★ |
+| 37 | CQ13.1 | **Ch.11** mục 11.2 (IPv4 Issues) | 12.1 — trỏ về 11.1 |
+| 38 | CQ13.2 | **Ch.11** mục 11.4 (các loại địa chỉ IPv6) | 12.2 — trỏ về 11.1 |
+| 39 | CQ13.3 | **Ch.11** mục 11.5 (cấu hình IPv6 trên Cisco) | 12.2 — trỏ về 11.2 |
+| 40 | CQ14.1 | **khớp đúng** (ICMP là gì) — nhưng rơi vào buổi Lab 2.3 | 12.2 — trả lời đầy đủ |
+| 41 | CQ14.2 | **Ch.12** mục 12.2 (kiểm kết nối bằng ICMP) | → sẽ trỏ về 12.2 ở Ch.13 |
+| 42 | CQ14.3 | **Ch.12** mục 12.2; **"Do lab 7" KHÔNG TỒN TẠI** trong 60 buổi | → nêu ở Ch.13, đừng đoán lab nào |
 
 Thêm một chỗ nữa: **buổi 27 liệt kê `9.2` rồi NHẢY THẲNG sang `9.4`** — không có
 mục `9.3` ở đâu trong bảng đã công bố. Đã nói thẳng trong bài 9.2.
 
 Các buổi còn trống câu hỏi kiến tạo: **6, 9, 15, 16, 22, 30, 36, 56** — buổi 30
-đã xử ở Ch.10 (nêu rõ là bảng bỏ trống, rồi tự soạn 2 câu ★). **Buổi 36 gặp ngay
-ở Ch.11.**
+xử ở Ch.10 và buổi 36 xử ở Ch.11, cả hai đều nêu rõ là bảng bỏ trống rồi tự soạn
+2 câu ★. **Còn lại buổi 56.**
 
-### NWC204 buổi 35–60 (6 chương + đồ án) — CÒN LẠI
+⭐ **Ở Ch.13 thì độ trôi ĐẢO CHIỀU:** `CQ15.1/15.2/15.3` (buổi 43–45) khớp ĐÚNG
+nội dung Ch.13, nhưng buổi 43–45 lại là các buổi ĐỒ ÁN, còn buổi 41–42 nơi dạy
+Ch.13 thì mang `CQ14.2/14.3` của Ch.12. Nêu cả hai chiều.
+
+### NWC204 buổi 41–60 (4 chương + đồ án) — CÒN LẠI
 
 | Chương | Buổi | Nội dung |
 |---|---|---|
-| **Ch.11** | **35–36** | **IPv6 Addressing (Module 12)** — làm tiếp từ đây |
-| Ch.12 | 37–40 | ICMP + Lab 2.3 (Module 13) |
-| **Ch.13** | **41–42** | **Transport Layer — SỐ HIỆU CỔNG** ⭐ người dùng cần cho công việc |
+| **Ch.13** | **41–42** | **Transport Layer + SỐ HIỆU CỔNG (Module 14)** ⭐ LÀM TIẾP TỪ ĐÂY — người dùng cần cho công việc |
 | Ch.14 | 45–46 | Application Layer (Module 15) |
 | Ch.15 | 49–50 | Network Security Fundamentals (Module 16) |
 | Ch.16 | 53–55, 58–60 | Build a Small Network + Review (Module 17) |
@@ -416,6 +446,24 @@ như bị cắt — bộ đo KHÔNG bắt, vì nó chỉ đo chiều CAO của `
 ⚠️ **Khối tỉ lệ quá nhỏ thì ĐỪNG nhét chữ vào trong.** Hai khối `/30` trong dải
 VLSM chỉ chiếm 4/256 = 14px — giữ tỉ lệ THẬT (đó là cả ý nghĩa của hình) rồi
 kéo một cái **ngoặc dẫn xuống dưới** và ghi nhãn ở chỗ rộng.
+
+### Ch.11 và Ch.12 (22/09) — công thức 0,602 ĐÃ CHỨNG MINH GIÁ TRỊ
+
+Dùng công thức thay vì mắt, và mỗi deck chỉ còn **một** lỗi thay vì ba–sáu:
+
+| Deck | Lỗi bộ đo KHÔNG thấy | Cách vá |
+|---|---|---|
+| ch11 #6 | `<rect>` đánh dấu đặt lệch sang chỗ trống | tính `x = 24 + 16×9,03 = 168`, `width = 5×9,03 = 45` |
+| ch11 #6 | chú thích vừa thêm lại ĐÈ đuôi địa chỉ | địa chỉ 25 ký tự kết thúc ở x=250 ⇒ dời chú thích sang x=290 |
+| ch12 #15 | chú thích "sender retries at 1400" đè hộp `server` | hộp ở x=760, chữ 33 ký tự font 11 = 218px ⇒ dời xuống **hàng khác** (y=116) |
+
+**Quy trình đã chốt, cứ lặp lại:** trước khi đặt bất kỳ `<rect>` hay nhãn nào,
+chạy một dòng `python3` tính `x` và `width` từ vị trí ký tự và `0,602 × font-size`.
+Mất 5 giây, và nó thay hẳn vòng lặp render–nhìn–đoán–render lại.
+
+⚠️ **Vẫn phải MỞ ẢNH RA NHÌN.** Công thức bắt được chuyện *lệch*, nhưng lỗi ở
+ch11 #6 lần hai — chú thích mới đè lên chữ cũ — chỉ mắt mới thấy, vì về mặt số
+thì cả hai đều nằm trong viewBox.
 
 ---
 

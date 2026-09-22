@@ -32,5 +32,12 @@ export default {
     'cr-04-2-canh-shot-take': { yt: '2N4hEbcX2N8', credit: 'Jeven Dovey — Use This Formula To NEVER MISS A SHOT!' },
     'cr-04-3-shot-list': { yt: 'IhXMpBk3GDA', credit: 'StudioBinder — How to Make a Shot List for Film: A Step-by-Step Guide' },
     'cr-04-4-storyboard-ngay-quay': { yt: 'NPrkxj2MyZI', credit: 'The Media Insider — How to draw A-grade storyboards (even if you can\'t draw!) | Media studies tutorial' },
+
+    /* ── Chương 6 — Cài đặt đồ nghề của bạn ── */
+    'cr-06-0-slides': { yt: '47-cCQ1qY04', credit: 'The Drone Creative — DJI OSMO POCKET 3 | 20 SETTINGS You SHOULD CHANGE IMMEDIATELY!' },
+    'cr-06-1-pocket-3': { yt: 'Mhub0XyAF7Y', credit: 'Hallease — New Osmo Pocket 3? Must-Have Settings for Beginners and Vloggers (Get Cinematic Footage!)' },
+    'cr-06-2-iphone-16-pro-max': { yt: 'PBOhLnie2iw', credit: 'Tyler Stalman — All the iPhone Video Setting You Need to Know' },
+    'cr-06-3-ipad-mac-linux': { yt: 'C51uC1ItUdU', credit: 'Andy To — M5 iPad Pro: The Complete Creator (Edited on iPad)' },
+    'cr-06-4-the-nho-pin-dung-luong': { yt: 'g5PkExucy4I', credit: 'Kingston Technology — SD and microSD Card Specification Labels Explained – DIY in 5 Ep 141' },
   },
 };

@@ -103,7 +103,7 @@ body{background:var(--bg)}
 /* bước */
 .c-steps{display:flex;flex-direction:column;gap:10px}
 .c-steps .s{display:flex;gap:14px;align-items:flex-start;background:#141a24;border:1px solid #232c3c;border-radius:12px;padding:10px 14px}
-.c-steps .n{flex:0 0 36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+.c-steps .n{flex:0 0 36px;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
  font-weight:800;font-size:18px;color:#0b0e14;background:var(--ac,var(--amb))}
 .c-steps .s>div{font-size:20px;line-height:1.4;padding-top:3px}
 .c-steps .s>div small{display:block;font-size:16px;color:var(--mu);margin-top:2px}

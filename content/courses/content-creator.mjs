@@ -27,6 +27,7 @@ import s13 from './content-creator/s13-davinci-resolve.mjs';
 import s14 from './content-creator/s14-nghe-thuat-dung.mjs';
 import s15 from './content-creator/s15-chinh-mau.mjs';
 import s16 from './content-creator/s16-am-thanh-chu-phu-de.mjs';
+import s17 from './content-creator/s17-chuyen-canh-keyframe.mjs';
 
 export default {
   category: { slug: 'content-creation', name: 'Sáng tạo nội dung', icon: 'Video', sortOrder: 5 },
@@ -67,5 +68,6 @@ export default {
     s14,
     s15,
     s16,
+    s17,
   ],
 };

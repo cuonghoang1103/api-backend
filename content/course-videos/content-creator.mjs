@@ -137,5 +137,12 @@ export default {
     'cr-16-2-chu-do-hoa': { yt: 'WmuO8AkWS5A', credit: 'Wampus — The Ultimate Text Animation Guide for DaVinci Resolve' },
     'cr-16-3-phu-de': { yt: 'BV4ab2l0Re4', credit: 'Jennifer Marie — How to Add Subtitles to YouTube Videos for FREE (+ Closed Captions)' },
     'cr-16-4-whisper-linux': { yt: 'dg_TWk8Zfjk', credit: "Teacher's Tech — How to Use OpenAI's Whisper for Perfect Transcriptions (Speech to Text)" },
+
+    /* ── Chương 17 — Chuyển cảnh, keyframe & tốc độ ── */
+    'cr-17-0-slides': { yt: 'TKXBAaQB03U', credit: 'StudioBinder — Ultimate Guide to Scene Transitions – Every Editing Transition Explained [The Shot List, Ep 9]' },
+    'cr-17-1-chuyen-canh-chuyen-nghiep': { yt: 'F8Qx3XKvvpw', credit: 'Herman Huang — 5 MUST-KNOW In-Camera Transitions for Eye-Catching Videos' },
+    'cr-17-2-keyframe-easing': { yt: '_gZFWFCYZUg', credit: 'Jason Yadlovski — DaVinci Resolve for Beginners - Easier KEYFRAMES & Animations in DaVinci Resolve 20' },
+    'cr-17-3-toc-do-thoi-gian': { yt: 'c4YOJQwFopw', credit: 'DanVinci — The NEW Way to Speed Ramp Davinci Resolve Tutorial' },
+    'cr-17-4-he-thong-hieu-ung': { yt: 'yKG58QEgrsY', credit: 'Creative Video Tips — I Wasted HOURS Editing UNTIL I Used these 5 Adjustment Clip Tips in DaVinci Resolve' },
   },
 };

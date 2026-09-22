@@ -42,6 +42,16 @@ export function errorHandler(
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal Server Error';
 
+  // body-parser ném lỗi có `type`, không có `code`. Để nguyên thì client nhận
+  // "request entity too large" tiếng Anh, và app iOS chỉ còn in được con số
+  // "Máy chủ trả lỗi 413" — người dùng không đoán nổi là do tệp gửi kèm to.
+  const loai = (err as { type?: string }).type;
+  if (loai === 'entity.too.large') {
+    statusCode = 413;
+    message = 'Ảnh hoặc tệp gửi kèm quá lớn. Hãy bớt tệp, hoặc gửi tệp nhỏ hơn.';
+    (err as { code?: string }).code = 'PAYLOAD_TOO_LARGE';
+  }
+
   // Map well-known Prisma errors (code `Pxxxx`) to a proper 4xx with a
   // safe message, so an uncaught Prisma error surfaces as e.g. 409/404
   // instead of a raw 500 that leaks table/column/query internals.

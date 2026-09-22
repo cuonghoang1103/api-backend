@@ -96,7 +96,8 @@ const musicLikesRoutes = (await import(path.join(__dirname, 'routes', 'music-lik
 const musicPlayCountsRoutes = (await import(path.join(__dirname, 'routes', 'music-play-counts.routes.js'))).default;
 // Cyber-music Phase 2b: synced karaoke lyrics (per-track, idempotent upsert).
 const musicLyricsRoutes = (await import(path.join(__dirname, 'routes', 'music-lyrics.routes.js'))).default;
-const aiRoutes = (await import(path.join(__dirname, 'routes', 'ai.routes.js'))).default;
+const aiRoutesModule = await import(path.join(__dirname, 'routes', 'ai.routes.js'));
+const aiRoutes = aiRoutesModule.default;
 // Agent lập trình của app desktop — giao thức gọi tool nhiều lượt, khác hẳn
 // /ai/chat nên ở router riêng.
 const agentRoutes = (await import(path.join(__dirname, 'routes', 'agent.routes.js'))).default;
@@ -316,6 +317,11 @@ const corsOptions: cors.CorsOptions = {
 app.use(cors(corsOptions));
 
 // ─── 4. Body Parsers ───────────────────────────────────────
+// Chat AI nhận ảnh + tệp dạng base64 NGAY TRONG thân JSON, nên nó cần trần
+// riêng, SUY RA từ hạn mức đính kèm — xem `CHAT_BODY_LIMIT_BYTES` trong
+// `ai.routes.ts`. PHẢI đứng TRƯỚC bộ 10mb dưới đây: bộ nào chạy trước thì
+// bộ đó quyết, và bộ 10mb đã từng trả 413 cho hai PDF bài giảng.
+app.use('/api/v1/ai/chat', aiRoutesModule.chatBodyParser);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser(config.cookieSecret));

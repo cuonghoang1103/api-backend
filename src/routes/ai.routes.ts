@@ -18,12 +18,14 @@
  * ============================================================
  */
 
-import { Router, type Response } from 'express';
+import express, { Router, type Response, type Request, type NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { config } from '../config/env.js';
 import multer from 'multer';
 
 import { prisma } from '../config/database.js';
 import { aiService, DEFAULT_CHAT_MODEL_ID, type ChatModelMeta } from '../services/ai.service.js';
-import { optionalAuth, authenticate, requireAdmin } from '../middleware/auth.js';
+import { optionalAuth, authenticate, requireAdmin, extractToken } from '../middleware/auth.js';
 import { quotaMiddleware } from '../services/quota.service.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
@@ -95,7 +97,53 @@ function parseChatImages(raw: unknown): ParsedImage[] {
 
 // ─── Document limits (Pro/Max chat) ──────────────────────
 const MAX_CHAT_DOCS = 3;
-const MAX_DOC_BYTES = 6 * 1024 * 1024; // 6MB decoded per file (stays under the 10mb body cap)
+const MAX_DOC_BYTES = 6 * 1024 * 1024; // 6MB decoded per file
+
+/**
+ * ⛔ TRẦN THÂN CỦA /ai/chat — SUY RA từ các hạn mức ở trên, KHÔNG gõ tay.
+ *
+ * Trước 22/09/2026 thân JSON của mọi route dùng chung `express.json({ limit:
+ * '10mb' })` ở `index.ts`, trong khi chính file này cho phép 4 ảnh × 4MB +
+ * 3 tệp × 6MB = 34MB — dạng base64 là ~45MB, GẤP 4,6 LẦN trần. Chú thích
+ * cũ ở dòng trên ghi "6MB mỗi tệp, nằm dưới trần 10mb": đúng với MỘT tệp,
+ * sai ngay khi gửi hai. Hai con số đặt ở hai file, không ai đối chiếu.
+ *
+ * Người dùng thấy gì: gửi hai PDF bài giảng từ iPhone/iPad → "Máy chủ trả
+ * lỗi 413", không một lời nào nói là do tệp to. Đo thật trên production:
+ * thân 6MB → 200, thân 10MB → 413 `request entity too large`, và nginx
+ * KHÔNG phải thủ phạm (nó cho 500m).
+ *
+ * base64 phình đúng 4/3; cộng thêm 2MB cho câu hỏi, lịch sử và vỏ JSON.
+ */
+export const CHAT_BODY_LIMIT_BYTES =
+  Math.ceil(((MAX_CHAT_IMAGES * MAX_IMAGE_BYTES + MAX_CHAT_DOCS * MAX_DOC_BYTES) * 4) / 3)
+  + 2 * 1024 * 1024;
+
+const chatJsonParser = express.json({ limit: CHAT_BODY_LIMIT_BYTES });
+
+/**
+ * Bộ đọc JSON cỡ lớn cho `/api/v1/ai/chat*`, gắn TRƯỚC bộ đọc 10mb toàn cục
+ * (xem `index.ts`). body-parser tự bỏ qua khi `req._body` đã đặt, nên bộ
+ * toàn cục phía sau không đọc lại lần hai.
+ *
+ * ⚠️ CHỈ cho người có token HỢP LỆ. `/ai/chat` dùng `optionalAuth` — khách
+ * vãng lai cũng gọi được — mà thân JSON bị đọc TRỌN vào bộ nhớ TRƯỚC khi bất
+ * kỳ bước kiểm quyền nào chạy. Mở 50MB cho khách là mở một cửa làm đầy RAM
+ * không cần tài khoản. Khách vẫn giữ trần 10mb như trước.
+ *
+ * `extractToken` đọc được cả header `Cookie` thô nên chạy được ở đây, trước
+ * `cookie-parser` — web dùng cookie httpOnly, app dùng header Bearer.
+ */
+export function chatBodyParser(req: Request, res: import('express').Response, next: NextFunction): void {
+  const token = extractToken(req);
+  if (!token) { next(); return; }
+  try {
+    jwt.verify(token, config.jwtSecret);
+  } catch {
+    next(); return;
+  }
+  chatJsonParser(req, res, next);
+}
 
 /**
  * Kiểu file đọc được. PDF + Word (.docx) đi qua bộ rút chữ của CV Builder

@@ -17,6 +17,7 @@
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/SWT301.mjs --apply
  */
 import { bi } from './_slides.mjs';
+import L6 from './lab25-sample.mjs';
 
 const GH = 'https://github.com/cuonghoang1103/Library-Management-System';
 const DUAN = '/projects/library-management-system';
@@ -520,7 +521,12 @@ REFERENCES</code></pre>
 <li>☐ Work-assignment table filled in and signed off by the team</li>
 <li>☐ The repository is clean — no build output, no stray files committed</li>
 </ul>
-<p class="meo">🧠 Write the conclusion last, and make it say something. "We found 12 defects, 9 of which were invisible to the tool and required reading the specification" is a real finding. "We learned a lot about testing" is not.</p>`,
+<p class="meo">🧠 Write the conclusion last, and make it say something. "We found 12 defects, 9 of which were invisible to the tool and required reading the specification" is a real finding. "We learned a lot about testing" is not.</p>
+<a class="link-card exphub" href="/courses/software-testing/learn?lessonSlug=swt301-lab25-slide-bai-mau">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">See it done — Lab 2.5.6: the finished sample deck</span><span class="lc-sub">Everything on this page applied to the Library Management System: 5 members × 3 defects, every defect with its four items and the proof after the fix. Download the .pptx.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>`,
 
 `<span class="eyebrow">Lab 2.5 · Bài 5 · Sản phẩm nộp</span>
 <h2>Bố cục đầy đủ</h2>
@@ -585,7 +591,12 @@ TÀI LIỆU THAM KHẢO</code></pre>
 <li>☐ Bảng phân công đã điền và cả nhóm đã xác nhận</li>
 <li>☐ Kho mã sạch — không commit thư mục build, không có file rác</li>
 </ul>
-<p class="meo">🧠 Viết phần kết luận sau cùng, và phải nói được điều gì đó. "Chúng tôi tìm được 12 defect, trong đó 9 cái công cụ không thấy mà phải đọc đặc tả mới ra" là một phát hiện thật. "Chúng em học được nhiều điều về kiểm thử" thì không.</p>`),
+<p class="meo">🧠 Viết phần kết luận sau cùng, và phải nói được điều gì đó. "Chúng tôi tìm được 12 defect, trong đó 9 cái công cụ không thấy mà phải đọc đặc tả mới ra" là một phát hiện thật. "Chúng em học được nhiều điều về kiểm thử" thì không.</p>
+<a class="link-card exphub" href="/courses/software-testing/learn?lessonSlug=swt301-lab25-slide-bai-mau">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">Xem bài làm hoàn chỉnh — Lab 2.5.6: bộ slide mẫu</span><span class="lc-sub">Mọi điều trong trang này áp vào Library Management System: 5 thành viên × 3 defect, mỗi defect đủ bốn mục và bằng chứng sau khi sửa. Tải được file .pptx.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>`),
   ].join('\n'),
 };
 
@@ -636,6 +647,6 @@ const QUIZ = {
 
 export default {
   title: 'Lab 2.5 — Project + Tool: find defects and write the report|||Lab 2.5 — Project + Tool: tìm defect và viết báo cáo',
-  description: 'Bài Lab cuối Chương 2, bắc cầu sang kiểm thử tĩnh: chọn một project thật và một công cụ, mỗi sinh viên tìm 3 defect, sửa và viết báo cáo theo form của giảng viên. Kèm project mẫu Library Management System (Spring Boot 3.4 + React 18, 112 test JUnit) có link tải trên GitHub, hướng dẫn dựng SonarQube bằng Docker, một defect có thật đi trọn vòng từ triệu chứng tới bản sửa đã kiểm chứng, và mẫu báo cáo đầy đủ kèm checklist nộp bài.',
-  lessons: [L1, L2, L3, L4, L5, QUIZ],
+  description: 'Bài Lab cuối Chương 2, bắc cầu sang kiểm thử tĩnh: chọn một project thật và một công cụ, mỗi sinh viên tìm 3 defect, sửa và viết báo cáo theo form của giảng viên. Kèm project mẫu Library Management System (Spring Boot 3.4 + React 18, 112 test JUnit) có link tải trên GitHub, hướng dẫn dựng SonarQube bằng Docker, một defect có thật đi trọn vòng từ triệu chứng tới bản sửa đã kiểm chứng, mẫu báo cáo đầy đủ kèm checklist nộp bài, và bộ slide mẫu hoàn chỉnh (tiếng Anh, tải được .pptx) cho 5 thành viên × 3 defect.',
+  lessons: [L1, L2, L3, L4, L5, L6, QUIZ],
 };

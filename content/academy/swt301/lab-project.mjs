@@ -397,7 +397,7 @@ Entering -5 produces a negative fine                     →  FAILURE  (at RUN T
 </tbody>
 </table></div></div>
 <p class="y-chinh">🎯 Look at how little the tool contributed: one line — "<code>mvn test</code> reported an error". Everything else — reading the stack trace, knowing Hibernate's flush order, judging the severity, choosing the fix — is human work. That is the part being graded.</p>
-<div class="meo">🧠 <strong>Where to hunt in this project.</strong> Three leads that are already visible: three tests carry <code>@Disabled("Security config issue")</code> in <code>LoanControllerIntegrationTest</code> — somebody switched them off instead of fixing what they found; the README and <code>TEST_PLAN.md</code> claim Spring Boot 3.2.0 and Java 17 while <code>pom.xml</code> says 3.4.0 and Java 21; and coverage sits at 57% against a stated target of 70%.</div>`,
+<div class="meo">🧠 <strong>Where to hunt in this project.</strong> Three leads that are already visible: three tests carry <code>@Disabled("Security config issue")</code> in <code>LoanControllerIntegrationTest</code> — somebody switched them off instead of fixing what they found; <code>backend/TEST_PLAN.md</code> still claims Spring Boot 3.2.0 and Java 17 while <code>pom.xml</code> says 3.4.0 and Java 21 (the README was corrected on 21/09/2026); and coverage sits at 57% against a stated target of 70%.</div>`,
 
 `<span class="eyebrow">Lab 2.5 · Bài 4 · Từ triệu chứng tới nguyên nhân gốc</span>
 <h2>Ba chữ không được nhầm</h2>
@@ -445,7 +445,7 @@ Nhập -5 thì ra tiền phạt âm                   →  FAILURE  (lúc CHẠY
 </tbody>
 </table></div></div>
 <p class="y-chinh">🎯 Hãy để ý công cụ đóng góp ít đến mức nào: đúng một dòng — "<code>mvn test</code> báo lỗi". Tất cả phần còn lại — đọc stack trace, biết thứ tự flush của Hibernate, cân nhắc mức severity, chọn cách sửa — đều là việc của con người. Đó mới là phần được chấm.</p>
-<div class="meo">🧠 <strong>Nên đào ở đâu trong project này.</strong> Ba manh mối đã lộ sẵn: ba test mang <code>@Disabled("Security config issue")</code> trong <code>LoanControllerIntegrationTest</code> — ai đó đã tắt chúng đi thay vì sửa thứ họ tìm ra; README và <code>TEST_PLAN.md</code> ghi Spring Boot 3.2.0 và Java 17 trong khi <code>pom.xml</code> nói 3.4.0 và Java 21; và coverage đang ở 57% so với mục tiêu 70% do chính project đặt ra.</div>`),
+<div class="meo">🧠 <strong>Nên đào ở đâu trong project này.</strong> Ba manh mối đã lộ sẵn: ba test mang <code>@Disabled("Security config issue")</code> trong <code>LoanControllerIntegrationTest</code> — ai đó đã tắt chúng đi thay vì sửa thứ họ tìm ra; <code>backend/TEST_PLAN.md</code> vẫn ghi Spring Boot 3.2.0 và Java 17 trong khi <code>pom.xml</code> nói 3.4.0 và Java 21 (README đã được sửa ngày 21/09/2026); và coverage đang ở 57% so với mục tiêu 70% do chính project đặt ra.</div>`),
   ].join('\n'),
 };
 

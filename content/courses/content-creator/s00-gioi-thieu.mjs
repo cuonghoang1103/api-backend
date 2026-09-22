@@ -269,7 +269,7 @@ ${slide('cr-00', 6, 'Đồ nghề bạn đang có')}
 
 <h3>🎬 Practice (20 minutes)</h3>
 <div class="callout ok"><ol>
-<li>On the iPhone, open <strong>Settings → Camera → Record Video</strong>, turn on <strong>Show PAL Formats</strong> and choose <strong>4K at 25 fps</strong>. (Menu names can shift slightly between iOS versions.)</li>
+<li>On the iPhone, open <strong>Settings → Camera → Record Video</strong> and choose <strong>4K (PAL)</strong> at <strong>25 fps</strong>. PAL is the 25/50 fps family used in Vietnam. (On older iOS versions you first had to turn on a "Show PAL Formats" switch in the same screen.)</li>
 <li>On the Pocket 3, set video to <strong>4K, 25 fps</strong>.</li>
 <li>Record a 10-second clip on each device and copy both to the Mac.</li>
 <li>Check what the files really contain. In Terminal, for each file:</li>
@@ -351,7 +351,7 @@ ${slide('cr-00', 6, 'Đồ nghề bạn đang có')}
 
 <h3>🎬 Thực hành (20 phút)</h3>
 <div class="callout ok"><ol>
-<li>Trên iPhone, mở <strong>Cài đặt → Camera → Quay video</strong> (Settings → Camera → Record Video), bật <strong>Hiện định dạng PAL</strong> (Show PAL Formats) rồi chọn <strong>4K ở 25 fps</strong>. (Tên mục có thể khác chút theo phiên bản iOS.)</li>
+<li>Trên iPhone, mở <strong>Cài đặt → Camera → Quay video</strong> (Settings → Camera → Record Video) và chọn <strong>4K (PAL)</strong> ở <strong>25 fps</strong>. PAL là họ định dạng 25/50 fps mà Việt Nam dùng. (Trên các bản iOS cũ, phải bật công tắc "Hiện định dạng PAL" ở cùng màn hình trước.)</li>
 <li>Trên Pocket 3, đặt video <strong>4K, 25 fps</strong>.</li>
 <li>Quay một clip 10 giây trên mỗi máy và chép cả hai vào Mac.</li>
 <li>Kiểm xem file thật sự chứa gì. Trong Terminal, với từng file:</li>

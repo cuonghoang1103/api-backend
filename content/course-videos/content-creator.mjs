@@ -26,6 +26,13 @@ export default {
     'cr-00-3-quy-trinh-san-xuat': { yt: 'U6I1tMgjW-I', credit: 'StudioBinder — The Pre-Production Process in Film Explained [Stages of Filmmaking, Ep 2]' },
     'cr-00-4-lo-trinh-cach-hoc': { yt: '954L0eVIdaE', credit: 'Gavin Herman — How I Would Learn Video Editing (If I Could Start Over)' },
 
+    /* ── Chương 1 — Nền tảng & khán giả ── */
+    'cr-01-0-slides': { yt: 'rHLjxrbXmmY', credit: 'Creator Insider — YouTube Algorithm 2026 - What Creators Need to Know' },
+    'cr-01-1-bon-nen-tang': { yt: 'qpTy422YaWQ', credit: 'Nathan — Which Platform Should You Start On in 2025? (TikTok vs YouTube vs Instagram)' },
+    'cr-01-2-thuat-toan-de-xuat': { yt: 'dhYIb72L1hU', credit: 'Creator Insider — The YouTube Algorithms in 2025 — Explained!' },
+    'cr-01-3-chon-ngach-khan-gia': { yt: 'ZGN_bxJXnmM', credit: 'Aprilynne Alter — How to Select Your YouTube Niche | How You Can Use Your Niche to Grow on YouTube' },
+    'cr-01-4-thuong-hieu-ca-nhan': { yt: '71oNb0HPf5E', credit: 'Vanessa Lau — Don\'t build a social media account. Build a personal brand instead.' },
+
     /* ── Chương 3 — Kịch bản & kể chuyện ── */
     'cr-03-0-slides': { yt: '7I50PECz7SU', credit: 'Kallaway — How To Write A Killer Script That Keeps Viewers Hooked' },
     'cr-03-1-hook': { yt: 'TOHQXdCAo5k', credit: 'Aprilynne Alter — how to make a killer youtube intro (to blow up your channel)' },

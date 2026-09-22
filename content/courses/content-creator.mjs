@@ -14,9 +14,11 @@ import s00 from './content-creator/s00-gioi-thieu.mjs';
 import s01 from './content-creator/s01-nen-tang-khan-gia.mjs';
 import s03 from './content-creator/s03-kich-ban-ke-chuyen.mjs';
 import s04 from './content-creator/s04-phan-canh.mjs';
+import s05 from './content-creator/s05-may-quay.mjs';
 import s06 from './content-creator/s06-cai-dat-thiet-bi.mjs';
 import s12 from './content-creator/s12-capcut.mjs';
 import s13 from './content-creator/s13-davinci-resolve.mjs';
+import s14 from './content-creator/s14-nghe-thuat-dung.mjs';
 
 export default {
   category: { slug: 'content-creation', name: 'Sáng tạo nội dung', icon: 'Video', sortOrder: 5 },
@@ -25,10 +27,9 @@ export default {
     title: 'Content Creator: Quay, Dựng & Đăng Video',
     level: 'BEGINNER',
     language: 'Vietnamese',
-    // ⚠️ DRAFT CÓ CHỦ Ý cho tới khi đủ 25 phần + video YT: nếu phiên khác lỡ
-    // deploy giữa chừng, khoá vẫn ẩn khỏi danh sách /courses (route '/' lọc
-    // isPublished). Đổi sang 'PUBLISHED' ở lượt deploy chính thức.
-    status: 'DRAFT',
+    // Công khai từ 22/09/2026 theo yêu cầu người dùng ("deploy trước phần đã xong") —
+    // khoá đang được soạn dần, các chương còn lại thêm vào sau.
+    status: 'PUBLISHED',
     isFeatured: true,
     // Thứ tự trong CSDL bám thứ tự FILE — không có cờ này, bài mới thêm vào
     // giữa chương bị đẩy xuống cuối (đo thật 19/09/2026 ở web-foundations).
@@ -45,8 +46,10 @@ export default {
     s01,
     s03,
     s04,
+    s05,
     s06,
     s12,
     s13,
+    s14,
   ],
 };

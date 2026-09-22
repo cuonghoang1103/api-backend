@@ -1,8 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useReduceAnimations } from '@/hooks/useIsTouch';
-import { ShoppingCart, Flame, Sparkles, Package, Check, Eye, Star } from 'lucide-react';
+import { ShoppingCart, Flame, Sparkles, Package, Check, ArrowRight, Star } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import SmartImage from '@/components/ui/SmartImage';
@@ -45,8 +43,7 @@ function featureLines(desc: string | undefined): string[] {
     .slice(0, SO_DONG_TINH_NANG);
 }
 
-export default function ProductCard({ product, index = 0 }: ProductCardProps) {
-  const reduce = useReduceAnimations();
+export default function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const addShopItem = useCartStore((s) => s.addShopItem);
 
@@ -68,14 +65,23 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
     if (!outOfStock) { addShopItem(product); router.push('/checkout'); }
   };
 
+  const saved = product.originalPrice && product.originalPrice > product.price
+    ? product.originalPrice - product.price
+    : 0;
+  const sold = product.soldCount ?? 0;
+
+  // ⚠️ THẺ KHÔNG TỰ CHẠY HIỆU ỨNG VÀO NỮA (22/09/2026).
+  // Trước đây thẻ là `motion.div` với `initial={reduce ? false : {opacity:0}}`
+  // và `animate={reduce ? undefined : {opacity:1}}`. `useReduceAnimations()`
+  // trả `false` ở lần render đầu rồi mới lật `true` trong effect trên máy CẢM
+  // ỨNG ⇒ thẻ mount ở opacity 0, hiệu ứng vừa bắt đầu thì `animate` bị rút
+  // thành `undefined` ⇒ framer DỪNG giữa chừng. Trên iPad/điện thoại: thẻ đầu
+  // mờ căm ở ~20%, ba thẻ sau (còn đang chờ `delay`) kẹt ở 0 — "4 sản phẩm"
+  // mà chỉ thấy một cái bóng. Desktop không dính vì chuột ⇒ `reduce` không đổi.
+  // Hiệu ứng vào do lưới ở `app/shop/page.tsx` lo; hover làm bằng CSS và chỉ
+  // bật trên thiết bị có chuột (`[@media(hover:hover)]`).
   return (
-    <motion.div
-      initial={reduce ? false : { opacity: 0, y: 18 }}
-      animate={reduce ? undefined : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.3) }}
-      whileHover={reduce ? undefined : { y: -6 }}
-      className="group relative h-full"
-    >
+    <div className="group relative h-full transition-transform duration-300 [@media(hover:hover)]:hover:-translate-y-1.5">
       <Link
         href={href}
         className="relative flex h-full flex-col overflow-hidden rounded-2xl border transition-all"
@@ -86,14 +92,14 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
         }}
       >
         {/* hover glow ring */}
-        <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 [@media(hover:hover)]:group-hover:opacity-100"
           style={{ boxShadow: '0 0 0 1px rgba(168,85,247,0.45), 0 18px 50px rgba(124,58,237,0.28)' }} />
 
         {/* ── Media ── */}
         <div className="relative">
           <div className="relative aspect-[4/3] overflow-hidden" style={{ background: 'radial-gradient(120% 120% at 50% 0%, rgba(99,102,241,0.18), rgba(10,8,20,0.9))' }}>
             {product.thumbnail ? (
-              <SmartImage src={product.thumbnail} alt={product.name} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <SmartImage src={product.thumbnail} alt={product.name} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 [@media(hover:hover)]:group-hover:scale-105" />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center"><Package className="h-10 w-10 text-white/25" /></div>
             )}
@@ -161,27 +167,38 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
           {/* Price — `mt-auto` đẩy cả khối giá + nút xuống ĐÁY thẻ, nên mọi
               thẻ trong cùng một hàng có nút thẳng hàng nhau bất kể mô tả dài
               ngắn thế nào. */}
-          <div className="mt-auto flex items-end gap-2 pt-4">
-            <span className="text-xl font-heading font-bold text-neon-violet">{formatPrice(product.price)}</span>
-            {product.originalPrice && product.originalPrice > product.price && (
-              <span className="mb-0.5 text-xs text-text-muted line-through">{formatPrice(product.originalPrice)}</span>
-            )}
+          <div className="mt-auto pt-4">
+            <div className="flex items-end gap-2">
+              <span className="text-xl font-heading font-bold text-text-primary tabular-nums">{formatPrice(product.price)}</span>
+              {saved > 0 && (
+                <span className="mb-0.5 text-xs text-text-muted line-through tabular-nums">{formatPrice(product.originalPrice!)}</span>
+              )}
+            </div>
+            <div className="mt-1 flex min-h-[1rem] items-center gap-2 text-[11px] text-text-muted">
+              {saved > 0 && <span className="font-medium text-emerald-400">Tiết kiệm {formatPrice(saved)}</span>}
+              {saved > 0 && sold > 0 && <span aria-hidden>·</span>}
+              {sold > 0 && <span>Đã bán {sold}</span>}
+            </div>
           </div>
 
-          {/* Actions */}
+          {/* Actions — nút chính là "Xem chi tiết" (cả thẻ là một liên kết),
+              nút giỏ bên phải là lối tắt MUA NGAY cho người đã biết mình cần gì. */}
           <div className="mt-3 flex gap-2">
             <span
-              className="flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-white transition-all group-hover:opacity-90"
-              style={{ background: 'linear-gradient(135deg,#6366f1,#a855f7)', boxShadow: '0 6px 18px rgba(124,58,237,0.35)' }}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-semibold text-white transition-opacity group-hover:opacity-90"
+              style={{ background: 'linear-gradient(135deg,#6366f1,#a855f7)', boxShadow: '0 6px 18px rgba(124,58,237,0.3)' }}
             >
-              <Eye className="h-4 w-4" /> Xem sản phẩm
+              Xem chi tiết
+              <ArrowRight className="h-4 w-4 transition-transform [@media(hover:hover)]:group-hover:translate-x-0.5" />
             </span>
             <button
+              type="button"
               onClick={buyNow}
               disabled={outOfStock}
+              aria-label={outOfStock ? 'Hết hàng' : `Mua ngay ${product.name}`}
               title={outOfStock ? 'Hết hàng' : 'Mua ngay'}
-              className="flex items-center justify-center rounded-xl border px-3 transition-colors hover:bg-white/5 disabled:opacity-40"
-              style={{ borderColor: 'rgba(168,85,247,0.3)', color: '#a855f7' }}
+              className="flex min-w-[44px] items-center justify-center rounded-xl border px-3 transition-colors hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+              style={{ borderColor: 'rgba(168,85,247,0.3)', color: '#c084fc' }}
             >
               <ShoppingCart className="h-4 w-4" />
             </button>
@@ -189,6 +206,6 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
           {outOfStock && <p className="mt-2 text-center text-[11px] font-medium text-red-400">Tạm hết hàng</p>}
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }

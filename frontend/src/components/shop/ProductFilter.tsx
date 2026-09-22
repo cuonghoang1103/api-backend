@@ -1,8 +1,6 @@
 'use client';
 
-import { Search, SlidersHorizontal, X } from 'lucide-react';
-import { useState } from 'react';
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
+import { Search, X, ChevronDown } from 'lucide-react';
 import type { PriceRange, SortOption } from '@/types';
 import { CATEGORIES, PRICE_RANGES, SORT_OPTIONS } from '@/data/products';
 
@@ -20,11 +18,17 @@ interface ProductFilterProps {
   totalResults: number;
   /** Dynamic (admin-managed) categories. Falls back to the static list. */
   categories?: CategoryOption[];
+  /**
+   * Các khoảng giá CÓ ÍT NHẤT MỘT sản phẩm. Khoảng rỗng không thành nút — cùng
+   * lý do với danh mục rỗng ở `app/shop/page.tsx`: nút dẫn tới trang trắng
+   * trông như web hỏng. Còn ≤ 1 khoảng thì bỏ hẳn hàng lọc giá (lọc một
+   * khoảng duy nhất không lọc được gì).
+   */
+  availablePriceRanges?: PriceRange[];
 }
 
-const NEON = '#a855f7';
-const NEON_CYAN = '#22d3ee';
-const NEON_INDIGO = '#818cf8';
+/** Sắp xếp mặc định — phải khớp `useState` trong `app/shop/page.tsx`. */
+export const DEFAULT_SORT: SortOption = 'featured';
 
 export default function ProductFilter({
   search,
@@ -37,98 +41,85 @@ export default function ProductFilter({
   onSortChange,
   totalResults,
   categories,
+  availablePriceRanges,
 }: ProductFilterProps) {
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const categoryOptions: CategoryOption[] = categories && categories.length > 0
     ? categories
     : (CATEGORIES as unknown as CategoryOption[]);
 
+  const priceOptions = PRICE_RANGES.filter(
+    (r) => r.value === 'all' || !availablePriceRanges || availablePriceRanges.includes(r.value),
+  );
+  const showPrice = priceOptions.length > 2 || priceRange !== 'all';
+  const showCategories = categoryOptions.length > 2 || category !== 'all';
+
+  // ⚠️ Trước 22/09/2026 bộ đếm so `sort !== 'newest'` trong khi mặc định của
+  // trang là 'featured' ⇒ vừa mở trang đã hiện "Clear all (1)" dù người dùng
+  // chưa chọn gì.
   const activeFiltersCount = [
     category !== 'all',
     priceRange !== 'all',
-    sort !== 'newest',
+    sort !== DEFAULT_SORT,
+    search.trim() !== '',
   ].filter(Boolean).length;
 
   const clearAll = () => {
     onCategoryChange('all');
     onPriceRangeChange('all');
-    onSortChange('newest');
+    onSortChange(DEFAULT_SORT);
     onSearchChange('');
   };
 
   return (
-    <div className="space-y-4">
-      {/* Glassmorphic filter bar */}
-      <motion.div
-        layout
-        className="rounded-2xl p-1"
+    <div className="space-y-3">
+      <div
+        className="rounded-2xl p-2 sm:p-2.5 space-y-2.5"
         style={{
-          background: 'rgba(13,11,23,0.7)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(168,85,247,0.12)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+          background: 'rgba(13,11,23,0.72)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          border: '1px solid rgba(168,85,247,0.14)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.28)',
         }}
       >
-        <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+        <div className="flex gap-2 items-stretch">
           {/* Search */}
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'rgba(148,163,184,0.6)' }} />
+          <label className="relative flex-1 min-w-0">
+            <span className="sr-only">Tìm sản phẩm</span>
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
             <input
-              type="text"
+              type="search"
+              inputMode="search"
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search assets..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none transition-colors"
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.06)',
-              }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(168,85,247,0.4)'; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; }}
+              placeholder="Tìm gói, key, tính năng…"
+              // text-base trên điện thoại: iOS Safari tự PHÓNG TO trang khi ô
+              // nhập có cỡ chữ < 16px, rồi không thu lại.
+              className="w-full pl-10 pr-9 py-2.5 rounded-xl text-base sm:text-sm text-text-primary placeholder:text-text-muted
+                         bg-white/[0.04] border border-white/[0.07] focus:outline-none focus:border-neon-violet/50
+                         focus:bg-white/[0.06] transition-colors [&::-webkit-search-cancel-button]:hidden"
             />
             {search && (
               <button
+                type="button"
                 onClick={() => onSearchChange('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
+                aria-label="Xoá từ khoá"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-text-muted hover:text-text-primary"
               >
                 <X className="w-4 h-4" />
               </button>
             )}
-          </div>
+          </label>
 
-          {/* Mobile filter toggle */}
-          <button
-            onClick={() => setShowMobileFilters(!showMobileFilters)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors sm:hidden"
-            style={{
-              background: 'rgba(168,85,247,0.1)',
-              border: '1px solid rgba(168,85,247,0.2)',
-              color: NEON,
-            }}
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            Filters
-            {activeFiltersCount > 0 && (
-              <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold" style={{ background: NEON, color: '#fff' }}>
-                {activeFiltersCount}
-              </span>
-            )}
-          </button>
-
-          {/* Sort — Desktop */}
-          <div className="hidden sm:block">
+          {/* Sort */}
+          <label className="relative shrink-0">
+            <span className="sr-only">Sắp xếp</span>
             <select
               value={sort}
               onChange={(e) => onSortChange(e.target.value as SortOption)}
-              className="px-4 py-2.5 rounded-xl text-sm cursor-pointer focus:outline-none transition-colors appearance-none pr-8"
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.06)',
-                color: 'rgba(148,163,184,0.9)',
-              }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(129,140,248,0.4)'; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; }}
+              className="h-full appearance-none rounded-xl pl-3.5 pr-9 py-2.5 text-base sm:text-sm cursor-pointer
+                         text-text-secondary bg-white/[0.04] border border-white/[0.07]
+                         focus:outline-none focus:border-neon-indigo/50 transition-colors max-w-[9.5rem] sm:max-w-none"
             >
               {SORT_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value} style={{ background: '#1a1625', color: '#f8fafc' }}>
@@ -136,76 +127,56 @@ export default function ProductFilter({
                 </option>
               ))}
             </select>
-          </div>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+          </label>
         </div>
 
-        {/* Category + Price tabs — always visible on desktop, collapsible on mobile */}
-        <LayoutGroup>
-          <div className="hidden sm:flex gap-2 items-center flex-wrap mt-1 px-1 pb-1">
-            <FilterChips category={category} onCategoryChange={onCategoryChange} options={categoryOptions} />
-            <div className="w-px h-4 mx-1" style={{ background: 'rgba(255,255,255,0.08)' }} />
-            <PriceChips priceRange={priceRange} onPriceRangeChange={onPriceRangeChange} />
-          </div>
-
-          {/* Mobile filter panel */}
-          <AnimatePresence>
-            {showMobileFilters && (
-              <motion.div
-                layout
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="sm:hidden overflow-hidden px-1 pb-2"
+        {(showCategories || showPrice) && (
+          // Một hàng cuộn ngang trên điện thoại (không gói thành panel ẩn: chỉ
+          // có vài nút, giấu sau nút "Bộ lọc" là bắt người dùng bấm thêm một
+          // lần cho không), xuống dòng bình thường từ sm trở lên.
+          <div className="-mx-1 px-1 flex gap-1.5 items-center overflow-x-auto sm:flex-wrap sm:overflow-visible
+                          [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {showCategories && categoryOptions.map((c) => (
+              <Chip
+                key={`c-${c.value}`}
+                active={category === c.value}
+                tone="violet"
+                onClick={() => onCategoryChange(c.value)}
               >
-                <div className="flex flex-col gap-3 p-3 rounded-xl mt-1" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-text-muted mb-2 font-semibold">Category</p>
-                    <FilterChips category={category} onCategoryChange={onCategoryChange} options={categoryOptions} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-text-muted mb-2 font-semibold">Price</p>
-                    <PriceChips priceRange={priceRange} onPriceRangeChange={onPriceRangeChange} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-text-muted mb-2 font-semibold">Sort</p>
-                    <select
-                      value={sort}
-                      onChange={(e) => onSortChange(e.target.value as SortOption)}
-                      className="w-full px-4 py-2.5 rounded-xl text-sm cursor-pointer focus:outline-none transition-colors appearance-none pr-8"
-                      style={{
-                        background: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.06)',
-                        color: 'rgba(148,163,184,0.9)',
-                      }}
-                    >
-                      {SORT_OPTIONS.map((opt) => (
-                        <option key={opt.value} value={opt.value} style={{ background: '#1a1625', color: '#f8fafc' }}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </motion.div>
+                {c.label}
+              </Chip>
+            ))}
+            {showCategories && showPrice && (
+              <span aria-hidden className="shrink-0 w-px h-4 mx-1 bg-white/10" />
             )}
-          </AnimatePresence>
-        </LayoutGroup>
-      </motion.div>
+            {showPrice && priceOptions.map((r) => (
+              <Chip
+                key={`p-${r.value}`}
+                active={priceRange === r.value}
+                tone="cyan"
+                onClick={() => onPriceRangeChange(r.value)}
+              >
+                {r.label}
+              </Chip>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Results count */}
-      <div className="flex items-center justify-between px-1">
-        <p className="text-sm" style={{ color: 'rgba(148,163,184,0.7)' }}>
-          <span className="font-bold text-text-primary">{totalResults}</span>{' '}
-          {totalResults === 1 ? 'asset found' : 'assets found'}
+      <div className="flex items-center justify-between px-1 min-h-[1.5rem]">
+        <p className="text-sm text-text-muted" aria-live="polite">
+          <span className="font-semibold text-text-primary tabular-nums">{totalResults}</span> sản phẩm
         </p>
         {activeFiltersCount > 0 && (
           <button
+            type="button"
             onClick={clearAll}
-            className="text-sm transition-colors"
-            style={{ color: NEON }}
+            className="inline-flex items-center gap-1 text-sm text-neon-violet hover:opacity-80 transition-opacity"
           >
-            Clear all ({activeFiltersCount})
+            <X className="w-3.5 h-3.5" />
+            Xoá bộ lọc ({activeFiltersCount})
           </button>
         )}
       </div>
@@ -213,56 +184,29 @@ export default function ProductFilter({
   );
 }
 
-function FilterChips({ category, onCategoryChange, options }: { category: string; onCategoryChange: (v: string) => void; options: CategoryOption[] }) {
+function Chip({
+  active,
+  tone,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  tone: 'violet' | 'cyan';
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  const on = tone === 'violet'
+    ? 'bg-neon-violet/15 border-neon-violet/45 text-violet-300'
+    : 'bg-cyan-400/10 border-cyan-400/40 text-cyan-300';
   return (
-    <div className="flex gap-1.5 flex-wrap max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:pb-1">
-      {options.map((cat) => {
-        const active = category === cat.value;
-        return (
-          <motion.button
-            key={cat.value}
-            layout
-            onClick={() => onCategoryChange(cat.value)}
-            className="relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer max-sm:shrink-0 max-sm:whitespace-nowrap"
-            style={{
-              background: active ? `${NEON}20` : 'transparent',
-              border: `1px solid ${active ? `${NEON}50` : 'rgba(255,255,255,0.06)'}`,
-              color: active ? NEON : 'rgba(148,163,184,0.7)',
-            }}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-          >
-            {cat.label}
-          </motion.button>
-        );
-      })}
-    </div>
-  );
-}
-
-function PriceChips({ priceRange, onPriceRangeChange }: { priceRange: string; onPriceRangeChange: (v: any) => void }) {
-  return (
-    <div className="flex gap-1.5 flex-wrap max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:pb-1">
-      {PRICE_RANGES.map((range) => {
-        const active = priceRange === range.value;
-        return (
-          <motion.button
-            key={range.value}
-            layout
-            onClick={() => onPriceRangeChange(range.value as any)}
-            className="relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer max-sm:shrink-0 max-sm:whitespace-nowrap"
-            style={{
-              background: active ? `${NEON_CYAN}15` : 'transparent',
-              border: `1px solid ${active ? `${NEON_CYAN}40` : 'rgba(255,255,255,0.06)'}`,
-              color: active ? NEON_CYAN : 'rgba(148,163,184,0.7)',
-            }}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-          >
-            {range.label}
-          </motion.button>
-        );
-      })}
-    </div>
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-lg text-[13px] font-medium border transition-colors
+        ${active ? on : 'border-white/[0.07] text-text-secondary hover:text-text-primary hover:border-white/15'}`}
+    >
+      {children}
+    </button>
   );
 }

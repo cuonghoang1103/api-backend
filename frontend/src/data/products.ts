@@ -585,10 +585,10 @@ export const CATEGORIES = [
 ] as const;
 
 export const PRICE_RANGES = [
-  { value: 'all', label: 'All Prices' },
-  { value: 'under200', label: 'Under 200k' },
+  { value: 'all', label: 'Mọi mức giá' },
+  { value: 'under200', label: 'Dưới 200k' },
   { value: '200to500', label: '200k — 500k' },
-  { value: 'above500', label: 'Above 500k' },
+  { value: 'above500', label: 'Trên 500k' },
 ] as const;
 
 export const SORT_OPTIONS = [

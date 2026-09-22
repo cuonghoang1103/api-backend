@@ -1,14 +1,15 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Shield, Clock, ShoppingBag, Gauge, Wallet, Plus, ArrowRight, PackageCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Zap, Shield, Clock, ShoppingBag, Gauge, Wallet, Plus, ArrowRight, PackageCheck, QrCode, KeyRound, MousePointerClick, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { walletApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import ProductCard from '@/components/shop/ProductCard';
 import { Skeleton } from '@/components/ui/Skeleton';
-import ProductFilter from '@/components/shop/ProductFilter';
+import ProductFilter, { DEFAULT_SORT } from '@/components/shop/ProductFilter';
+import { MOCK_PRODUCTS } from '@/data/products';
 import CartDrawer from '@/components/shop/CartDrawer';
 import ShopBackground from '@/components/shop/ShopBackground';
 import DigitalShopTermsGate from '@/components/shop/DigitalShopTermsGate';
@@ -23,7 +24,7 @@ export default function ShopPage() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<string>('all');
   const [priceRange, setPriceRange] = useState<PriceRange>('all');
-  const [sort, setSort] = useState<SortOption>('featured');
+  const [sort, setSort] = useState<SortOption>(DEFAULT_SORT);
   const [mounted, setMounted] = useState(false);
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
   const [soDu, setSoDu] = useState<number | null>(null);
@@ -63,6 +64,20 @@ export default function ShopPage() {
     ],
     [categories],
   );
+
+  // Khoảng giá nào thật sự có hàng — xem `availablePriceRanges` ở ProductFilter.
+  const availablePriceRanges = useMemo<PriceRange[]>(() => {
+    const out: PriceRange[] = [];
+    if (products.some((p) => p.price < 200000)) out.push('under200');
+    if (products.some((p) => p.price >= 200000 && p.price <= 500000)) out.push('200to500');
+    if (products.some((p) => p.price > 500000)) out.push('above500');
+    return out;
+  }, [products]);
+
+  // Lần ĐẦU vào gian hàng, store còn giữ MOCK_PRODUCTS (hàng mẫu không có
+  // thật) cho tới khi API trả về — hiện khung chờ thay vì bày hàng giả ra.
+  // Lần sau store đã có hàng thật từ localStorage, hiện luôn rồi làm mới ngầm.
+  const choHangThat = !isLoaded && products === MOCK_PRODUCTS;
 
   const filtered = useMemo(() => {
     let result = [...products];
@@ -151,6 +166,11 @@ export default function ShopPage() {
 
   return (
     <div className="min-h-screen pt-20">
+      <style>{`
+        @keyframes shopTheVao { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        .shop-the-vao { animation: shopTheVao .4s cubic-bezier(.2,.7,.2,1) both; }
+        @media (prefers-reduced-motion: reduce) { .shop-the-vao { animation: none; } }
+      `}</style>
       <DigitalShopTermsGate />
       <ShopBackground />
 
@@ -228,7 +248,7 @@ export default function ShopPage() {
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
               <Link
-                href="/shop/check-usage"
+                href="/kiem-tra-key"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold
                            text-white bg-gradient-to-r from-neon-indigo to-neon-violet
                            hover:opacity-90 transition-opacity"
@@ -265,6 +285,7 @@ export default function ShopPage() {
             onSortChange={setSort}
             totalResults={filtered.length}
             categories={categoryOptions}
+            availablePriceRanges={availablePriceRanges}
           />
         </div>
 
@@ -281,7 +302,21 @@ export default function ShopPage() {
         })()}
 
         {/* Grid */}
-        {filtered.length === 0 ? (
+        {choHangThat ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6" role="status" aria-busy="true" aria-label="Đang tải sản phẩm">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="rounded-2xl overflow-hidden border border-darkborder bg-darkcard/40">
+                <Skeleton className="aspect-[4/3] w-full" />
+                <div className="p-4 space-y-3">
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-3 w-full" />
+                  <Skeleton className="h-3 w-5/6" />
+                  <Skeleton className="h-9 w-full" rounded="rounded-xl" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="text-center py-20">
             <div className="w-20 h-20 rounded-full bg-darkcard flex items-center justify-center mx-auto mb-4">
               <ShoppingBag className="w-10 h-10 text-text-muted/30" />
@@ -292,31 +327,106 @@ export default function ShopPage() {
             <p className="text-text-muted">{t('shop.page.adjustFilters')}</p>
           </div>
         ) : (
-          /* Uniform product grid (admin manual order) */
-          <motion.div
-            layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-          >
-            <AnimatePresence mode="popLayout">
-              {filtered.map((product, i) => (
-                <motion.div
-                  key={product.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
-                >
-                  <ProductCard product={product} index={i} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          /* ⚠️ Lưới KHÔNG dùng framer `layout` / `AnimatePresence mode="popLayout"`
+             nữa (22/09/2026). Hiệu ứng vào là keyframe CSS thuần: không phụ
+             thuộc JS nên không thể "kẹt giữa chừng" như bản cũ trên iPad /
+             điện thoại (xem chú thích đầu ProductCard). `both` giữ trạng thái
+             cuối sau khi chạy xong; reduced-motion thì bỏ hẳn. */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+            {filtered.map((product, i) => (
+              <div
+                key={product.id}
+                className="shop-the-vao"
+                style={{ animationDelay: `${Math.min(i * 50, 300)}ms` }}
+              >
+                <ProductCard product={product} index={i} />
+              </div>
+            ))}
+          </div>
         )}
+
+        <CachMua />
+        <HoiDap />
       </div>
 
       {/* Cart Drawer */}
       <CartDrawer />
     </div>
+  );
+}
+
+/* ─── Cách mua ─────────────────────────────────────────────────────────────
+   Ba bước, đúng với luồng thật ở /checkout (PayOS · Ví điểm · Chuyển khoản).
+   Người mua key lần đầu hay hỏi đúng một câu: "trả tiền xong thì key ở đâu?"
+   — khối này trả lời trước khi họ phải hỏi. */
+function CachMua() {
+  const buoc = [
+    { icon: MousePointerClick, ten: 'Chọn gói', mo: 'Xem chi tiết từng gói — hạn mức, model dùng được, thời hạn.' },
+    { icon: QrCode, ten: 'Thanh toán', mo: 'Quét QR qua PayOS, trả bằng Ví điểm, hoặc chuyển khoản ngân hàng.' },
+    { icon: KeyRound, ten: 'Nhận key', mo: 'Key hiện ngay trong “Đơn đã mua”. Chuyển khoản thì có key sau khi đối soát.' },
+  ];
+  return (
+    <section className="mt-20" aria-labelledby="cach-mua">
+      <h2 id="cach-mua" className="text-2xl md:text-3xl font-heading font-bold text-text-primary text-center">
+        Mua trong ba bước
+      </h2>
+      <ol className="mt-8 grid gap-4 md:grid-cols-3">
+        {buoc.map(({ icon: Icon, ten, mo }, i) => (
+          <li key={ten} className="relative rounded-2xl border border-white/[0.07] bg-darkcard/60 p-5">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-neon-violet/10 border border-neon-violet/25">
+                <Icon className="h-5 w-5 text-neon-violet" />
+              </span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-muted">Bước {i + 1}</span>
+            </div>
+            <p className="mt-4 font-heading font-semibold text-text-primary">{ten}</p>
+            <p className="mt-1 text-sm leading-relaxed text-text-secondary">{mo}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+/* ─── Hỏi đáp ──────────────────────────────────────────────────────────────
+   `<details>` thuần: mở/đóng không cần JS, đọc được bằng trình đọc màn hình,
+   và không có hiệu ứng nào để kẹt. Chỉ ghi điều ĐÚNG với hệ thống hiện tại —
+   chính sách đổi/hoàn lấy nguyên ý từ DigitalShopTermsGate. */
+function HoiDap() {
+  const cau = [
+    {
+      hoi: 'Trả tiền xong bao lâu thì có key?',
+      dap: 'PayOS và Ví điểm: ngay lập tức, key nằm trong mục “Đơn đã mua”. Chuyển khoản ngân hàng: sau khi đơn được đối soát.',
+    },
+    {
+      hoi: 'Key có dùng chung với người khác không?',
+      dap: 'Không. Mỗi đơn là một key riêng, không trùng, không chia sẻ.',
+    },
+    {
+      hoi: 'Làm sao biết key còn bao nhiêu hạn mức?',
+      dap: 'Vào “Kiểm tra key đã mua” ở đầu trang, dán key vào là thấy hạn mức còn lại của chu kỳ hiện tại.',
+    },
+    {
+      hoi: 'Key lỗi thì sao?',
+      dap: 'Gửi yêu cầu ngay trong trang đơn hàng. Lỗi từ phía gian hàng trong thời gian bảo hành sẽ được đổi key mới. Hàng số đã giao thì không hoàn tiền, trừ khi lỗi do chúng tôi.',
+    },
+  ];
+  return (
+    <section className="mt-16 mx-auto max-w-3xl" aria-labelledby="hoi-dap">
+      <h2 id="hoi-dap" className="text-2xl md:text-3xl font-heading font-bold text-text-primary text-center">
+        Câu hỏi thường gặp
+      </h2>
+      <div className="mt-8 divide-y divide-white/[0.07] rounded-2xl border border-white/[0.07] bg-darkcard/60">
+        {cau.map(({ hoi, dap }) => (
+          <details key={hoi} className="group px-5 [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-medium text-text-primary">
+              {hoi}
+              <ChevronDown className="h-4 w-4 shrink-0 text-text-muted transition-transform group-open:rotate-180" />
+            </summary>
+            <p className="pb-4 -mt-1 text-sm leading-relaxed text-text-secondary">{dap}</p>
+          </details>
+        ))}
+      </div>
+    </section>
   );
 }

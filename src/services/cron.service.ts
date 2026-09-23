@@ -100,6 +100,18 @@ export function startCronJobs(): void {
   }, { timezone: 'UTC' });
 
   // ─── Hourly health check ───
+  // CT Work: số liệu burndown — ghi đè số của "hôm nay" (giờ VN) cho mọi sprint
+  // đang chạy, mỗi giờ. Lỡ vài giờ cũng không mất điểm của ngày.
+  cron.schedule('5 * * * *', async () => {
+    try {
+      const { snapshotActiveSprints } = await import('./work/sprints.service.js');
+      const n = await snapshotActiveSprints();
+      if (n) logger.info('[work] sprint snapshots', { sprints: n });
+    } catch (err) {
+      logger.warn('[work] sprint snapshot failed', { error: (err as Error).message });
+    }
+  });
+
   cron.schedule('0 * * * *', async () => {
     const redisOk = await pingQuotaRedis();
     if (!redisOk) {

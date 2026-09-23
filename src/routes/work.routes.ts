@@ -22,6 +22,8 @@ import {
 import * as issues from '../services/work/issues.service.js';
 import { registerWorkNotifications } from '../services/work/notify.js';
 import * as projects from '../services/work/projects.service.js';
+import * as reports from '../services/work/reports.service.js';
+import * as sprints from '../services/work/sprints.service.js';
 import * as workspaces from '../services/work/workspaces.service.js';
 
 registerWorkNotifications();
@@ -397,6 +399,88 @@ router.get('/projects/:pid/attachments/:aid/url', asyncHandler(async (req, res) 
 router.delete('/projects/:pid/attachments/:aid', asyncHandler(async (req, res) => {
   await issues.deleteAttachment(callerId(req), idParam(req, 'pid'), idParam(req, 'aid'));
   ok(res, { deleted: true });
+}));
+
+// ═══ Sprint & backlog (đợt 2) ══════════════════════════════════════
+
+const dateTime = z.string().refine((v) => !Number.isNaN(Date.parse(v)), 'Invalid date').transform((v) => new Date(v));
+
+router.get('/projects/:pid/sprints', asyncHandler(async (req, res) => {
+  ok(res, await sprints.listSprints(callerId(req), idParam(req, 'pid'), req.query.includeClosed === 'true'));
+}));
+
+router.post('/projects/:pid/sprints', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ name: z.string().max(100).optional(), goal: z.string().max(5000).nullable().optional() }), req.body ?? {});
+  ok(res, await sprints.createSprint(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+
+router.patch('/projects/:pid/sprints/:sid', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(100).optional(),
+    goal: z.string().max(5000).nullable().optional(),
+    startAt: dateTime.nullable().optional(),
+    endAt: dateTime.nullable().optional(),
+  }), req.body);
+  ok(res, await sprints.updateSprint(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), body));
+}));
+
+router.delete('/projects/:pid/sprints/:sid', asyncHandler(async (req, res) => {
+  await sprints.deleteSprint(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'));
+  ok(res, { deleted: true });
+}));
+
+router.post('/projects/:pid/sprints/:sid/start', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().max(100).optional(),
+    goal: z.string().max(5000).nullable().optional(),
+    startAt: dateTime,
+    endAt: dateTime,
+  }), req.body);
+  ok(res, await sprints.startSprint(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), body));
+}));
+
+router.post('/projects/:pid/sprints/:sid/complete', asyncHandler(async (req, res) => {
+  const { moveTo } = parse(z.object({ moveTo: z.union([z.literal('backlog'), z.literal('new'), id]) }), req.body);
+  ok(res, await sprints.completeSprint(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), moveTo));
+}));
+
+router.get('/projects/:pid/backlog', asyncHandler(async (req, res) => {
+  ok(res, await sprints.getBacklog(callerId(req), idParam(req, 'pid')));
+}));
+
+router.post('/projects/:pid/issues/bulk', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    numbers: z.array(id).min(1).max(200),
+    patch: z.object({
+      sprintId: id.nullable().optional(),
+      assigneeId: id.nullable().optional(),
+      priority: z.number().int().min(PRIORITY_MIN).max(PRIORITY_MAX).optional(),
+      statusId: id.optional(),
+      parentId: id.nullable().optional(),
+      addLabelIds: z.array(id).max(30).optional(),
+      delete: z.literal(true).optional(),
+    }).refine((p) => Object.keys(p).length > 0, 'Nothing to change'),
+  }), req.body);
+  ok(res, await sprints.bulkUpdate(callerId(req), idParam(req, 'pid'), body.numbers, body.patch));
+}));
+
+// ═══ Báo cáo ════════════════════════════════════════════════════════
+
+router.get('/projects/:pid/reports/burndown', asyncHandler(async (req, res) => {
+  ok(res, await reports.burndown(callerId(req), idParam(req, 'pid'), parse(id, req.query.sprintId)));
+}));
+router.get('/projects/:pid/reports/velocity', asyncHandler(async (req, res) => {
+  ok(res, await reports.velocity(callerId(req), idParam(req, 'pid')));
+}));
+router.get('/projects/:pid/reports/sprint', asyncHandler(async (req, res) => {
+  ok(res, await reports.sprintReport(callerId(req), idParam(req, 'pid'), parse(id, req.query.sprintId)));
+}));
+router.get('/projects/:pid/reports/epics', asyncHandler(async (req, res) => {
+  ok(res, await reports.epicReport(callerId(req), idParam(req, 'pid')));
+}));
+router.get('/projects/:pid/reports/contributions', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ from: dateTime.optional(), to: dateTime.optional(), sprintId: id.optional() }), req.query);
+  ok(res, await reports.contributions(callerId(req), idParam(req, 'pid'), q));
 }));
 
 export default router;

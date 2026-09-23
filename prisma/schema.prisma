@@ -382,6 +382,20 @@ model User {
   videoTuThem       VideoNguoiDung[]        @relation("VideoNguoiDungChuSoHuu")
   videoYeuThich     VideoYeuThich[]         @relation("VideoYeuThichChuSoHuu")
 
+  // ─── CT Work — quản lý dự án kiểu Jira (23/09/2026) ─────────────
+  // Xem mục "CT WORK" cuối file và docs/work-hub-plan.md.
+  workSpacesOwned        WorkSpace[]         @relation("WorkSpaceOwner")
+  workMemberships        WorkMember[]        @relation("WorkMemberUser")
+  workInvitesSent        WorkInvite[]        @relation("WorkInviteSender")
+  workProjectMemberships WorkProjectMember[] @relation("WorkProjectMemberUser")
+  workProjectsLed        WorkProject[]       @relation("WorkProjectLead")
+  workIssuesAssigned     WorkIssue[]         @relation("WorkIssueAssignee")
+  workIssuesReported     WorkIssue[]         @relation("WorkIssueReporter")
+  workComments           WorkComment[]       @relation("WorkCommentAuthor")
+  workAttachments        WorkAttachment[]    @relation("WorkAttachmentUploader")
+  workHistory            WorkHistory[]       @relation("WorkHistoryActor")
+  workWatching           WorkWatcher[]       @relation("WorkWatcherUser")
+
   @@index([email], name: "idx_users_email")
   @@map("users")
 }
@@ -9577,4 +9591,450 @@ model IeltsProgress {
   @@unique([userId, stage, kind, muc], name: "uk_ielts_tien_do", map: "uk_ielts_tien_do")
   @@index([userId, stage], name: "idx_ielts_tien_do_user_stage")
   @@map("ielts_progress")
+}
+
+// ============================================================
+// CT WORK — quản lý dự án kiểu Jira (23/09/2026)
+// ============================================================
+// Kế hoạch tổng: docs/work-hub-plan.md. Mọi bảng mang tiền tố `work_`.
+//
+// Vai trò, trạng thái, loại thẻ… đều là CHUỖI chứ không enum — cùng lý do
+// như DashboardTask: thêm một giá trị mới không phải viết migration. Danh
+// sách giá trị hợp lệ sống ở src/services/work/constants.ts, và mọi chỗ ghi
+// đều kiểm bằng zod trước khi chạm DB.
+//
+// Quyền KHÔNG suy ra ở đây. Nó được tính ở đúng một chỗ:
+// src/services/work/permissions.ts.
+
+/// Không gian làm việc: một nhóm, một lớp, một công ty. Chứa nhiều dự án.
+model WorkSpace {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(100)
+  slug        String    @unique(map: "uk_work_space_slug") @db.VarChar(60)
+  description String?   @db.Text
+  ownerId     Int       @map("owner_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  /// Xoá mềm. Dữ liệu dự án của người khác nằm trong này — xoá cứng
+  /// bằng một cú bấm nhầm là mất cả kỳ đồ án của cả nhóm.
+  deletedAt   DateTime? @map("deleted_at")
+
+  owner    User          @relation("WorkSpaceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members  WorkMember[]
+  invites  WorkInvite[]
+  projects WorkProject[]
+
+  @@index([ownerId], name: "idx_work_space_owner")
+  @@map("work_spaces")
+}
+
+/// Thành viên cấp không gian. role: OWNER | ADMIN | MEMBER | GUEST.
+/// GUEST (giảng viên, khách hàng) chỉ thấy dự án mà mình được thêm tên.
+model WorkMember {
+  id          Int      @id @default(autoincrement())
+  workspaceId Int      @map("workspace_id")
+  userId      Int      @map("user_id")
+  role        String   @default("MEMBER") @db.VarChar(16)
+  joinedAt    DateTime @default(now()) @map("joined_at")
+
+  workspace WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation("WorkMemberUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId], name: "uk_work_member", map: "uk_work_member")
+  @@index([userId], name: "idx_work_member_user")
+  @@map("work_members")
+}
+
+/// Lời mời qua email hoặc link. Chỉ lưu BĂM của token — token thật chỉ
+/// nằm trong link gửi đi, lộ bảng này cũng không dùng được link.
+model WorkInvite {
+  id          Int       @id @default(autoincrement())
+  workspaceId Int       @map("workspace_id")
+  /// Có thì người nhận vào thẳng dự án này với `projectRole`.
+  projectId   Int?      @map("project_id")
+  /// Null = link mời ai cũng dùng được (tới khi hết lượt/hết hạn).
+  email       String?   @db.VarChar(100)
+  role        String    @default("MEMBER") @db.VarChar(16)
+  projectRole String?   @map("project_role") @db.VarChar(16)
+  tokenHash   String    @unique(map: "uk_work_invite_token") @map("token_hash") @db.VarChar(128)
+  invitedById Int       @map("invited_by_id")
+  maxUses     Int       @default(1) @map("max_uses")
+  usedCount   Int       @default(0) @map("used_count")
+  expiresAt   DateTime  @map("expires_at")
+  revokedAt   DateTime? @map("revoked_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  workspace WorkSpace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  project   WorkProject? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  invitedBy User         @relation("WorkInviteSender", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId], name: "idx_work_invite_space")
+  @@map("work_invites")
+}
+
+/// Một dự án. `key` là tiền tố mã thẻ (SWP → SWP-12), duy nhất trong không gian.
+model WorkProject {
+  id           Int       @id @default(autoincrement())
+  workspaceId  Int       @map("workspace_id")
+  key          String    @db.VarChar(10)
+  name         String    @db.VarChar(120)
+  description  String?   @db.Text
+  /// SCRUM | KANBAN | TESTING
+  type         String    @default("SCRUM") @db.VarChar(16)
+  /// Mẫu đã dùng lúc tạo (BLANK | SWR302 | SWT301 | SWP391 | FREELANCE | COMPANY).
+  /// Chỉ để hiển thị — cấu hình thật đã được chép vào các bảng con.
+  template     String    @default("BLANK") @db.VarChar(32)
+  /// WORKSPACE: thành viên không gian vào được (quyền MEMBER).
+  /// PRIVATE: chỉ người có tên trong work_project_members.
+  visibility   String    @default("WORKSPACE") @db.VarChar(16)
+  /// Bộ đếm cấp số thẻ. Tăng bằng UPDATE … RETURNING trong transaction nên
+  /// hai người tạo thẻ cùng lúc không bao giờ trùng số.
+  issueCounter Int       @default(0) @map("issue_counter")
+  leadId       Int?      @map("lead_id")
+  /// Cấu hình nhỏ không đáng một cột: đơn vị ước lượng, Definition of Done…
+  settings     Json      @default("{}")
+  archivedAt   DateTime? @map("archived_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  workspace  WorkSpace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lead       User?               @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
+  members    WorkProjectMember[]
+  invites    WorkInvite[]
+  workflows  WorkWorkflow[]
+  issueTypes WorkIssueType[]
+  issues     WorkIssue[]
+  labels     WorkLabel[]
+  components WorkComponent[]
+  sprints    WorkSprint[]
+
+  @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
+  @@map("work_projects")
+}
+
+/// Vai trò trong một dự án: ADMIN | MEMBER | VIEWER | TEACHER | CLIENT.
+model WorkProjectMember {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  userId    Int      @map("user_id")
+  role      String   @default("MEMBER") @db.VarChar(16)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User        @relation("WorkProjectMemberUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId], name: "uk_work_project_member", map: "uk_work_project_member")
+  @@index([userId], name: "idx_work_project_member_user")
+  @@map("work_project_members")
+}
+
+/// Quy trình: tập trạng thái + luồng chuyển. Mỗi dự án có một quy trình
+/// mặc định; loại thẻ có thể trỏ sang quy trình riêng (vd Bug có Retest).
+model WorkWorkflow {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  name      String   @db.VarChar(80)
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project     WorkProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  statuses    WorkStatus[]
+  transitions WorkTransition[]
+  issueTypes  WorkIssueType[]
+
+  @@index([projectId], name: "idx_work_workflow_project")
+  @@map("work_workflows")
+}
+
+/// Một trạng thái. category (TODO | IN_PROGRESS | DONE) là thứ báo cáo
+/// đọc — burndown không quan tâm cột tên "Retest" hay "QA", chỉ hỏi nó
+/// đã xong chưa.
+model WorkStatus {
+  id         Int    @id @default(autoincrement())
+  workflowId Int    @map("workflow_id")
+  name       String @db.VarChar(60)
+  category   String @db.VarChar(16)
+  color      String @default("#64748b") @db.VarChar(16)
+  position   Int    @default(0)
+  /// Giới hạn số thẻ cùng lúc trong cột (WIP). Null = không giới hạn.
+  wipLimit   Int?   @map("wip_limit")
+
+  workflow        WorkWorkflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  issues          WorkIssue[]
+  transitionsFrom WorkTransition[] @relation("WorkTransitionFrom")
+  transitionsTo   WorkTransition[] @relation("WorkTransitionTo")
+
+  @@index([workflowId, position], name: "idx_work_status_workflow")
+  @@map("work_statuses")
+}
+
+/// Luồng chuyển được phép. Quy trình KHÔNG có dòng nào = chuyển tự do giữa
+/// mọi trạng thái (mặc định của Kanban). fromStatusId null = từ bất kỳ đâu.
+model WorkTransition {
+  id           Int     @id @default(autoincrement())
+  workflowId   Int     @map("workflow_id")
+  fromStatusId Int?    @map("from_status_id")
+  toStatusId   Int     @map("to_status_id")
+  name         String? @db.VarChar(60)
+  /// Điều kiện (vai trò được chuyển, trường bắt buộc…). Đọc ở permissions.ts.
+  rules        Json    @default("{}")
+
+  workflow   WorkWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  fromStatus WorkStatus?  @relation("WorkTransitionFrom", fields: [fromStatusId], references: [id], onDelete: Cascade)
+  toStatus   WorkStatus   @relation("WorkTransitionTo", fields: [toStatusId], references: [id], onDelete: Cascade)
+
+  @@index([workflowId], name: "idx_work_transition_workflow")
+  @@map("work_transitions")
+}
+
+/// Loại thẻ theo dự án. `key`: EPIC | STORY | TASK | BUG | SUBTASK | TEST | REQUIREMENT.
+/// `level` là tầng phân cấp: 1 = epic, 0 = việc thường, -1 = việc con.
+/// Cha của một thẻ luôn có level cao hơn đúng 1 bậc (kiểm ở service).
+model WorkIssueType {
+  id         Int     @id @default(autoincrement())
+  projectId  Int     @map("project_id")
+  key        String  @db.VarChar(16)
+  name       String  @db.VarChar(40)
+  icon       String  @default("task") @db.VarChar(24)
+  color      String  @default("#3b82f6") @db.VarChar(16)
+  level      Int     @default(0)
+  workflowId Int?    @map("workflow_id")
+  position   Int     @default(0)
+  archived   Boolean @default(false)
+
+  project  WorkProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  workflow WorkWorkflow? @relation(fields: [workflowId], references: [id], onDelete: SetNull)
+  issues   WorkIssue[]
+
+  @@unique([projectId, key], name: "uk_work_issue_type", map: "uk_work_issue_type")
+  @@map("work_issue_types")
+}
+
+/// Thẻ việc. Mọi thay đổi PHẢI đi qua applyIssueChange() trong
+/// src/services/work/issueChange.ts để lịch sử, socket, thông báo và luật
+/// tự động không bao giờ lệch nhau.
+model WorkIssue {
+  id                   Int       @id @default(autoincrement())
+  projectId            Int       @map("project_id")
+  number               Int
+  typeId               Int       @map("type_id")
+  statusId             Int       @map("status_id")
+  parentId             Int?      @map("parent_id")
+  sprintId             Int?      @map("sprint_id")
+  title                String    @db.VarChar(255)
+  /// JSON của TipTap — cùng định dạng với Ghi chú để dùng lại trình soạn thảo.
+  descriptionJson      Json?     @map("description_json")
+  /// Bản chữ trơn của mô tả: cho tìm kiếm, cho AI, cho xem trước.
+  descriptionText      String?   @map("description_text") @db.Text
+  /// 1 = Cao nhất · 2 = Cao · 3 = Vừa · 4 = Thấp · 5 = Thấp nhất (thứ tự của Jira).
+  priority             Int       @default(3)
+  assigneeId           Int?      @map("assignee_id")
+  reporterId           Int?      @map("reporter_id")
+  storyPoints          Float?    @map("story_points")
+  originalEstimateMin  Int?      @map("original_estimate_min")
+  remainingEstimateMin Int?      @map("remaining_estimate_min")
+  timeSpentMin         Int       @default(0) @map("time_spent_min")
+  startDate            DateTime? @map("start_date") @db.Date
+  dueDate              DateTime? @map("due_date") @db.Date
+  /// Thứ tự trên board/backlog — khoá phân số gồm [0-9a-z] (xem rank.ts).
+  /// Chỉ dùng chữ thường và số để thứ tự của collation DB trùng thứ tự byte.
+  rank                 String    @db.VarChar(64)
+  resolution           String?   @db.VarChar(32)
+  resolvedAt           DateTime? @map("resolved_at")
+  /// Tăng mỗi lần sửa. Client gửi kèm số nó đang cầm; lệch = có người vừa
+  /// sửa trước ⇒ trả 409 thay vì đè mất thay đổi của họ.
+  version              Int       @default(0)
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  deletedAt            DateTime? @map("deleted_at")
+
+  project     WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type        WorkIssueType        @relation(fields: [typeId], references: [id], onDelete: Restrict)
+  status      WorkStatus           @relation(fields: [statusId], references: [id], onDelete: Restrict)
+  parent      WorkIssue?           @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
+  children    WorkIssue[]          @relation("WorkIssueParent")
+  sprint      WorkSprint?          @relation(fields: [sprintId], references: [id], onDelete: SetNull)
+  assignee    User?                @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  reporter    User?                @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
+  linksOut    WorkIssueLink[]      @relation("WorkIssueLinkFrom")
+  linksIn     WorkIssueLink[]      @relation("WorkIssueLinkTo")
+  labels      WorkIssueLabel[]
+  components  WorkIssueComponent[]
+  comments    WorkComment[]
+  attachments WorkAttachment[]
+  history     WorkHistory[]
+  watchers    WorkWatcher[]
+
+  @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
+  @@index([projectId, statusId, rank], name: "idx_work_issue_board")
+  @@index([projectId, sprintId], name: "idx_work_issue_sprint")
+  @@index([assigneeId], name: "idx_work_issue_assignee")
+  @@index([parentId], name: "idx_work_issue_parent")
+  @@map("work_issues")
+}
+
+/// Liên kết giữa hai thẻ: BLOCKS | RELATES | DUPLICATES | CLONES | TESTS.
+/// Lưu MỘT chiều (from → to); chiều ngược ("bị chặn bởi") suy ra khi đọc.
+model WorkIssueLink {
+  id          Int      @id @default(autoincrement())
+  fromIssueId Int      @map("from_issue_id")
+  toIssueId   Int      @map("to_issue_id")
+  type        String   @db.VarChar(16)
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  fromIssue WorkIssue @relation("WorkIssueLinkFrom", fields: [fromIssueId], references: [id], onDelete: Cascade)
+  toIssue   WorkIssue @relation("WorkIssueLinkTo", fields: [toIssueId], references: [id], onDelete: Cascade)
+
+  @@unique([fromIssueId, toIssueId, type], name: "uk_work_issue_link", map: "uk_work_issue_link")
+  @@index([toIssueId], name: "idx_work_issue_link_to")
+  @@map("work_issue_links")
+}
+
+model WorkLabel {
+  id        Int    @id @default(autoincrement())
+  projectId Int    @map("project_id")
+  name      String @db.VarChar(50)
+  color     String @default("#64748b") @db.VarChar(16)
+
+  project WorkProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issues  WorkIssueLabel[]
+
+  @@unique([projectId, name], name: "uk_work_label", map: "uk_work_label")
+  @@map("work_labels")
+}
+
+model WorkIssueLabel {
+  issueId Int @map("issue_id")
+  labelId Int @map("label_id")
+
+  issue WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  label WorkLabel @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@id([issueId, labelId])
+  @@index([labelId], name: "idx_work_issue_label_label")
+  @@map("work_issue_labels")
+}
+
+/// Thành phần của sản phẩm (Frontend, API, Thanh toán…) — lọc và chia việc.
+model WorkComponent {
+  id          Int     @id @default(autoincrement())
+  projectId   Int     @map("project_id")
+  name        String  @db.VarChar(60)
+  description String? @db.Text
+  leadId      Int?    @map("lead_id")
+
+  project WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issues  WorkIssueComponent[]
+
+  @@unique([projectId, name], name: "uk_work_component", map: "uk_work_component")
+  @@map("work_components")
+}
+
+model WorkIssueComponent {
+  issueId     Int @map("issue_id")
+  componentId Int @map("component_id")
+
+  issue     WorkIssue     @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  component WorkComponent @relation(fields: [componentId], references: [id], onDelete: Cascade)
+
+  @@id([issueId, componentId])
+  @@index([componentId], name: "idx_work_issue_component_component")
+  @@map("work_issue_components")
+}
+
+/// Bình luận. authorId null + isAi = true là lời của trợ lý AI.
+model WorkComment {
+  id        Int       @id @default(autoincrement())
+  issueId   Int       @map("issue_id")
+  authorId  Int?      @map("author_id")
+  isAi      Boolean   @default(false) @map("is_ai")
+  bodyJson  Json      @map("body_json")
+  bodyText  String    @map("body_text") @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+  editedAt  DateTime? @map("edited_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  issue  WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  author User?     @relation("WorkCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([issueId, createdAt], name: "idx_work_comment_issue")
+  @@map("work_comments")
+}
+
+model WorkAttachment {
+  id         Int      @id @default(autoincrement())
+  issueId    Int      @map("issue_id")
+  uploaderId Int?     @map("uploader_id")
+  r2Key      String   @map("r2_key") @db.VarChar(500)
+  fileName   String   @map("file_name") @db.VarChar(255)
+  mime       String   @db.VarChar(100)
+  size       Int
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  issue    WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  uploader User?     @relation("WorkAttachmentUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
+
+  @@index([issueId], name: "idx_work_attachment_issue")
+  @@map("work_attachments")
+}
+
+/// Lịch sử từng trường. actorKind: USER | AI | AUTOMATION | SYSTEM — để
+/// trang đóng góp thành viên không tính công của AI cho người bấm.
+model WorkHistory {
+  id        Int      @id @default(autoincrement())
+  issueId   Int      @map("issue_id")
+  actorId   Int?     @map("actor_id")
+  actorKind String   @default("USER") @map("actor_kind") @db.VarChar(16)
+  field     String   @db.VarChar(40)
+  fromValue String?  @map("from_value") @db.Text
+  toValue   String?  @map("to_value") @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  issue WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  actor User?     @relation("WorkHistoryActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([issueId, createdAt], name: "idx_work_history_issue")
+  @@index([actorId, createdAt], name: "idx_work_history_actor")
+  @@map("work_history")
+}
+
+model WorkWatcher {
+  issueId   Int      @map("issue_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  issue WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  user  User      @relation("WorkWatcherUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([issueId, userId])
+  @@index([userId], name: "idx_work_watcher_user")
+  @@map("work_watchers")
+}
+
+/// Sprint. state: PLANNED | ACTIVE | CLOSED. Mỗi dự án tối đa một ACTIVE —
+/// chốt ở service bằng cách khoá dòng dự án (FOR UPDATE) trước khi bắt đầu.
+/// KHÔNG dùng chỉ mục duy nhất một phần: Prisma không khai được nó, và
+/// `migrate diff` sẽ báo lệch mãi mãi.
+model WorkSprint {
+  id              Int       @id @default(autoincrement())
+  projectId       Int       @map("project_id")
+  name            String    @db.VarChar(100)
+  goal            String?   @db.Text
+  state           String    @default("PLANNED") @db.VarChar(16)
+  startAt         DateTime? @map("start_at")
+  endAt           DateTime? @map("end_at")
+  completedAt     DateTime? @map("completed_at")
+  /// Chốt lúc bấm Bắt đầu / Kết thúc — nuôi biểu đồ velocity.
+  committedPoints Float?    @map("committed_points")
+  completedPoints Float?    @map("completed_points")
+  position        Int       @default(0)
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issues  WorkIssue[]
+
+  @@index([projectId, state], name: "idx_work_sprint_project")
+  @@map("work_sprints")
 }

@@ -24,9 +24,11 @@ import { registerWorkNotifications } from '../services/work/notify.js';
 import * as projects from '../services/work/projects.service.js';
 import * as reports from '../services/work/reports.service.js';
 import * as sprints from '../services/work/sprints.service.js';
+import * as tests from '../services/work/tests.service.js';
 import * as workspaces from '../services/work/workspaces.service.js';
 
 registerWorkNotifications();
+tests.registerTestingHooks();
 
 const router = Router();
 
@@ -481,6 +483,122 @@ router.get('/projects/:pid/reports/epics', asyncHandler(async (req, res) => {
 router.get('/projects/:pid/reports/contributions', asyncHandler(async (req, res) => {
   const q = parse(z.object({ from: dateTime.optional(), to: dateTime.optional(), sprintId: id.optional() }), req.query);
   ok(res, await reports.contributions(callerId(req), idParam(req, 'pid'), q));
+}));
+
+// ═══ Kiểm thử (đợt 3) ═══════════════════════════════════════════════
+
+const stepBody = z.object({ action: z.string().max(5000), data: z.string().max(5000).nullable().optional(), expected: z.string().max(5000).nullable().optional() });
+const testBody = z.object({
+  title: z.string().min(1).max(255).optional(),
+  preconditions: z.string().max(10000).nullable().optional(),
+  kind: z.enum(['MANUAL', 'GHERKIN']).optional(),
+  gherkin: z.string().max(50000).nullable().optional(),
+  steps: z.array(stepBody).max(100).optional(),
+  requirementKeys: z.array(z.string().max(20)).max(50).optional(),
+  priority: z.number().int().min(PRIORITY_MIN).max(PRIORITY_MAX).optional(),
+  labelIds: z.array(id).max(30).optional(),
+  assigneeId: id.nullable().optional(),
+});
+
+router.post('/projects/:pid/tests/enable', asyncHandler(async (req, res) => {
+  ok(res, await tests.enableTesting(callerId(req), idParam(req, 'pid')));
+}));
+router.get('/projects/:pid/tests', asyncHandler(async (req, res) => {
+  ok(res, await tests.listTests(callerId(req), idParam(req, 'pid'), typeof req.query.q === 'string' ? req.query.q : undefined));
+}));
+router.post('/projects/:pid/tests', asyncHandler(async (req, res) => {
+  const body = parse(testBody.required({ title: true }), req.body);
+  ok(res, await tests.createTest(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.post('/projects/:pid/tests/import', asyncHandler(async (req, res) => {
+  const { rows } = parse(z.object({ rows: z.array(testBody.extend({ title: z.string().max(255) })).min(1).max(500) }), req.body);
+  ok(res, await tests.importTests(callerId(req), idParam(req, 'pid'), rows), 201);
+}));
+router.get('/projects/:pid/tests/:num', asyncHandler(async (req, res) => {
+  ok(res, await tests.getTest(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.put('/projects/:pid/tests/:num', asyncHandler(async (req, res) => {
+  ok(res, await tests.updateTest(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), parse(testBody, req.body)));
+}));
+
+router.get('/projects/:pid/test-plans', asyncHandler(async (req, res) => {
+  ok(res, await tests.listPlans(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/test-plans', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ name: z.string().min(1).max(120), description: z.string().max(5000).nullable().optional(), numbers: z.array(id).max(1000).optional() }), req.body);
+  ok(res, await tests.createPlan(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.patch('/projects/:pid/test-plans/:planId', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(120).optional(), description: z.string().max(5000).nullable().optional(), archived: z.boolean().optional(),
+    addNumbers: z.array(id).max(1000).optional(), removeNumbers: z.array(id).max(1000).optional(),
+  }), req.body);
+  await tests.updatePlan(callerId(req), idParam(req, 'pid'), idParam(req, 'planId'), body);
+  ok(res, { updated: true });
+}));
+router.delete('/projects/:pid/test-plans/:planId', asyncHandler(async (req, res) => {
+  await tests.deletePlan(callerId(req), idParam(req, 'pid'), idParam(req, 'planId'));
+  ok(res, { deleted: true });
+}));
+
+router.get('/projects/:pid/test-cycles', asyncHandler(async (req, res) => {
+  ok(res, await tests.listCycles(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/test-cycles', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(120), environment: z.string().max(120).nullable().optional(), build: z.string().max(80).nullable().optional(),
+    planId: id.nullable().optional(), numbers: z.array(id).max(1000).optional(),
+  }), req.body);
+  ok(res, await tests.createCycle(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.get('/projects/:pid/test-cycles/:cycleId', asyncHandler(async (req, res) => {
+  ok(res, await tests.getCycle(callerId(req), idParam(req, 'pid'), idParam(req, 'cycleId')));
+}));
+router.patch('/projects/:pid/test-cycles/:cycleId', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(120).optional(), environment: z.string().max(120).nullable().optional(), build: z.string().max(80).nullable().optional(),
+    state: z.enum(tests.CYCLE_STATES).optional(), addNumbers: z.array(id).max(1000).optional(), removeRunIds: z.array(id).max(1000).optional(),
+  }), req.body);
+  await tests.updateCycle(callerId(req), idParam(req, 'pid'), idParam(req, 'cycleId'), body);
+  ok(res, { updated: true });
+}));
+router.delete('/projects/:pid/test-cycles/:cycleId', asyncHandler(async (req, res) => {
+  await tests.deleteCycle(callerId(req), idParam(req, 'pid'), idParam(req, 'cycleId'));
+  ok(res, { deleted: true });
+}));
+
+router.get('/projects/:pid/test-runs/:runId', asyncHandler(async (req, res) => {
+  ok(res, await tests.getRun(callerId(req), idParam(req, 'pid'), idParam(req, 'runId')));
+}));
+router.patch('/projects/:pid/test-runs/:runId', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    status: z.enum(tests.RUN_STATUSES).optional(), comment: z.string().max(10000).nullable().optional(),
+    assigneeId: id.nullable().optional(), reset: z.boolean().optional(),
+  }), req.body);
+  ok(res, await tests.updateRun(callerId(req), idParam(req, 'pid'), idParam(req, 'runId'), body));
+}));
+router.patch('/projects/:pid/test-runs/:runId/steps/:stepId', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ status: z.enum(tests.STEP_STATUSES).optional(), actual: z.string().max(10000).nullable().optional() }), req.body);
+  ok(res, await tests.updateStepResult(callerId(req), idParam(req, 'pid'), idParam(req, 'runId'), idParam(req, 'stepId'), body));
+}));
+router.post('/projects/:pid/test-runs/:runId/defects', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    title: z.string().max(255).optional(), stepResultId: id.nullable().optional(),
+    priority: z.number().int().min(PRIORITY_MIN).max(PRIORITY_MAX).optional(), assigneeId: id.nullable().optional(),
+  }), req.body ?? {});
+  ok(res, await tests.createDefect(callerId(req), idParam(req, 'pid'), idParam(req, 'runId'), body), 201);
+}));
+router.put('/projects/:pid/test-runs/:runId/defects/:num', asyncHandler(async (req, res) => {
+  await tests.linkDefect(callerId(req), idParam(req, 'pid'), idParam(req, 'runId'), idParam(req, 'num'));
+  ok(res, { linked: true });
+}));
+router.delete('/projects/:pid/test-runs/:runId/defects/:num', asyncHandler(async (req, res) => {
+  await tests.unlinkDefect(callerId(req), idParam(req, 'pid'), idParam(req, 'runId'), idParam(req, 'num'));
+  ok(res, { unlinked: true });
+}));
+
+router.get('/projects/:pid/reports/traceability', asyncHandler(async (req, res) => {
+  ok(res, await tests.traceability(callerId(req), idParam(req, 'pid')));
 }));
 
 export default router;

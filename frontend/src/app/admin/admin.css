@@ -22,31 +22,60 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 .admin-root {
-  --a-bg: #0a0a0b;               /* nền cửa sổ + sidebar */
-  --a-panel: #101012;            /* khung nội dung */
-  --a-raised: #161619;           /* ô nhập, menu nổi, ⌘K */
-  --a-hover: rgba(255, 255, 255, 0.045);
-  --a-active: rgba(255, 255, 255, 0.075);
-  --a-border: rgba(255, 255, 255, 0.07);
-  --a-border-strong: rgba(255, 255, 255, 0.12);
-  --a-text: #e6e6e9;
-  --a-text-2: #a0a0a8;
-  --a-text-3: #6c6c74;
-  --a-accent: #6470db;           /* một màu nhấn duy nhất, dùng dè sẻn */
-  --a-accent-hover: #7580e6;
-  --a-accent-text: #a3aaf2;      /* chữ màu nhấn trên nền tối */
-  --a-accent-soft: rgba(100, 112, 219, 0.14);
-  --a-accent-border: rgba(100, 112, 219, 0.45);
-  --a-green: #4cb782;
-  --a-yellow: #d9b44a;
-  --a-orange: #e8875a;
-  --a-red: #e5645f;
-  --a-blue: #4ea7fc;
-  --a-radius: 6px;
-  --a-radius-lg: 8px;
+  /* ── Mặt nền theo lối iOS dark ───────────────────────────────────────
+     Người dùng chê hai bản trước: bản 1 đen tuyền, bản 2 "góc tô chuyển
+     động xấu". Bản này lấy cách xếp nền của iOS: nền ứng dụng tối nhất,
+     rồi các mặt NỔI DẦN lên (secondary/tertiary system background), ngả
+     xanh rất nhẹ để hợp màu nhấn chàm của site. */
+  --a-bg: #0d0f14;               /* nền ứng dụng */
+  --a-panel: #16181f;            /* khung nội dung */
+  --a-raised: #1e212a;           /* thẻ, ô nhập, menu */
+  --a-raised-2: #272b36;         /* hàng chọn, chip, nền phân đoạn */
+  --a-hover: rgba(255, 255, 255, 0.06);
+  --a-active: rgba(255, 255, 255, 0.1);
+  --a-border: rgba(255, 255, 255, 0.1);
+  --a-border-strong: rgba(255, 255, 255, 0.17);
+  --a-text: #f2f3f7;
+  --a-text-2: #adb3c2;
+  --a-text-3: #7b8292;
 
-  /* Biến giao diện chung của site — trong admin trỏ về bảng màu admin, để
-     mọi thứ đang viết bằng var(--text-primary)/var(--border-color) theo. */
+  /* Màu nhấn */
+  --a-accent: #6c6af3;
+  --a-accent-hover: #807ef7;
+  --a-accent-text: #aeacfb;
+  --a-accent-soft: rgba(108, 106, 243, 0.18);
+  --a-accent-border: rgba(108, 106, 243, 0.55);
+
+  /* Trạng thái — hệ màu iOS (bản dark) */
+  --a-green: #30d158;
+  --a-yellow: #ffd60a;
+  --a-orange: #ff9f0a;
+  --a-red: #ff453a;
+  --a-blue: #0a84ff;
+
+  /* ── Màu biểu đồ ─────────────────────────────────────────────────
+     GIỮ bộ đã kiểm, KHÔNG dùng system color của iOS ở đây: chạy
+     scripts/validate_palette.js (bộ kỹ năng dataviz) trên đúng nền này,
+     bộ iOS TRƯỢT dải sáng và chỉ đạt ΔE 7,1 giữa xanh lá và cam (ngưỡng
+     8) — người mù màu deutan sẽ không tách được hai chuỗi. Bộ dưới đây
+     PASS cả 5 phép kiểm. Màu iOS ở trên chỉ dùng cho giao diện, nơi
+     luôn có chữ đi kèm nên màu không phải gánh một mình. */
+  --c-1: #3987e5;   /* xanh dương — lượt xem */
+  --c-2: #d95926;   /* cam */
+  --c-3: #199e70;   /* lục lam — doanh thu */
+  --c-4: #c98500;   /* vàng */
+  --c-5: #d55181;   /* hồng sen */
+  --c-6: #9085e9;   /* tím — AI */
+  --c-grid: rgba(255, 255, 255, 0.08);
+
+  /* Hue của từng nhóm trong sidebar (ô biểu tượng bo tròn kiểu iOS) */
+  --n-learning: #0a84ff;
+  --n-commerce: #30d158;
+  --n-content: #bf5af2;
+  --n-people: #ff9f0a;
+  --n-system: #64d2ff;
+
+  /* Biến giao diện chung của site — trong admin trỏ về bảng màu admin */
   --text-primary: var(--a-text);
   --text-secondary: var(--a-text-2);
   --text-muted: var(--a-text-3);
@@ -54,17 +83,25 @@
   --border-light: var(--a-border);
   --border-light-hover: var(--a-border-strong);
   --bg-primary: var(--a-panel);
-  --bg-card: var(--a-panel);
-  --bg-surface: var(--a-raised);
+  --bg-card: var(--a-raised);
+  --bg-surface: var(--a-raised-2);
   --bg-surface-hover: var(--a-hover);
   --bg-surface-active: var(--a-active);
   --bg-overlay: var(--a-raised);
   --bg-glass: var(--a-raised);
 
+  /* Bo góc kiểu iOS: điều khiển 10, thẻ 14, tấm nổi 18 */
+  --a-radius: 10px;
+  --a-radius-lg: 14px;
+  --a-radius-xl: 18px;
+  /* Nhịp chuyển động của iOS — chậm dần rất mượt ở cuối */
+  --a-ease: cubic-bezier(0.32, 0.72, 0, 1);
+
   background: var(--a-bg);
   color: var(--a-text);
-  font-family: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-inter), Inter, -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
   font-feature-settings: 'cv11', 'ss03';
+  letter-spacing: -0.006em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -74,7 +111,7 @@
 .admin-root table td,
 .admin-root table th { font-variant-numeric: tabular-nums; }
 
-.admin-root ::selection { background: rgba(100, 112, 219, 0.35); }
+.admin-root ::selection { background: rgba(110, 123, 242, 0.38); }
 
 /* Thanh cuộn mảnh, không giành chỗ của nội dung. */
 .admin-root * { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.12) transparent; }
@@ -109,7 +146,7 @@
 }
 .admin-root .bg-darkcard { background-color: var(--a-panel); }
 .admin-root .bg-darkbg { background-color: var(--a-bg); }
-.admin-root .bg-darksurface { background-color: var(--a-raised); }
+.admin-root .bg-darksurface { background-color: var(--a-raised-2); }
 .admin-root [class^="bg-darkcard/"],
 .admin-root [class*=" bg-darkcard/"] { background-color: var(--a-panel); }
 .admin-root [class^="bg-darkbg/"],
@@ -123,12 +160,15 @@
 .admin-root [class*=" border-white/"] { border-color: var(--a-border); }
 
 /* Bo góc: 2xl/3xl → 8px, xl → 7px, lg → 6px. Nút tròn (rounded-full) giữ nguyên. */
-.admin-root .rounded-3xl,
+.admin-root .rounded-3xl { border-radius: var(--a-radius-xl); }
 .admin-root .rounded-2xl { border-radius: var(--a-radius-lg); }
-.admin-root .rounded-xl { border-radius: 7px; }
+.admin-root .rounded-xl { border-radius: 12px; }
 .admin-root .rounded-lg { border-radius: var(--a-radius); }
+.admin-root .rounded-md { border-radius: 8px; }
 .admin-root .rounded-t-2xl { border-top-left-radius: var(--a-radius-lg); border-top-right-radius: var(--a-radius-lg); }
 .admin-root .rounded-b-2xl { border-bottom-left-radius: var(--a-radius-lg); border-bottom-right-radius: var(--a-radius-lg); }
+/* Thẻ của trang cũ nổi lên một nấc như "card" của iOS, viền hairline */
+.admin-root main .bg-darkcard { background-color: var(--a-raised); }
 
 /* Bóng: bỏ hết ở mặt phẳng. Chỉ thứ NỔI (menu, hộp thoại — absolute/fixed)
    mới có bóng, vì ở đó bóng có nghĩa: nó nói "cái này nằm trên". */
@@ -139,7 +179,7 @@
 }
 
 /* Kính mờ: chỉ lớp phủ toàn màn hình (fixed) còn dùng. */
-.admin-root [class*="backdrop-blur"]:not(.fixed) { -webkit-backdrop-filter: none; backdrop-filter: none; }
+.admin-root [class*="backdrop-blur"]:not(.fixed):not(.a-topbar) { -webkit-backdrop-filter: none; backdrop-filter: none; }
 
 /* Chữ: một họ chữ (Inter). Poppins của trang ngoài không vào đây. */
 .admin-root .font-heading { font-family: inherit; letter-spacing: -0.011em; }
@@ -166,7 +206,7 @@
 .admin-root [class^="bg-neon-indigo/"],
 .admin-root [class*=" bg-neon-indigo/"] { background-color: var(--a-accent-soft); }
 .admin-root [class*="hover:bg-neon-violet/"]:hover,
-.admin-root [class*="hover:bg-neon-indigo/"]:hover { background-color: rgba(100, 112, 219, 0.2); }
+.admin-root [class*="hover:bg-neon-indigo/"]:hover { background-color: rgba(110, 123, 242, 0.24); }
 .admin-root [class^="border-neon-violet"],
 .admin-root [class*=" border-neon-violet"],
 .admin-root [class^="border-neon-indigo"],
@@ -174,7 +214,7 @@
 .admin-root [class*="focus:border-neon-violet"]:focus,
 .admin-root [class*="focus:border-neon-indigo"]:focus,
 .admin-root [class*="focus-within:border-neon-violet"]:focus-within { border-color: var(--a-accent-border); }
-.admin-root [class*="focus:ring-neon-violet"]:focus { --tw-ring-color: rgba(100, 112, 219, 0.35); }
+.admin-root [class*="focus:ring-neon-violet"]:focus { --tw-ring-color: rgba(110, 123, 242, 0.4); }
 .admin-root [class*="hover:text-neon-violet"]:hover { color: var(--a-accent-text); }
 .admin-root [class*="hover:border-neon-violet"]:hover { border-color: var(--a-accent-border); }
 
@@ -199,55 +239,127 @@
 
 .admin-root .a-kbd {
   display: inline-flex; align-items: center; justify-content: center;
-  min-width: 18px; height: 18px; padding: 0 4px;
-  border: 1px solid var(--a-border-strong); border-radius: 4px;
-  background: rgba(255, 255, 255, 0.03);
-  font: 500 10.5px/1 var(--font-inter), Inter, system-ui, sans-serif;
+  min-width: 19px; height: 19px; padding: 0 5px;
+  border: 1px solid var(--a-border-strong); border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  font: 500 11px/1 var(--font-inter), Inter, system-ui, sans-serif;
   color: var(--a-text-3);
 }
 
-/* Lớp nổi hiện ra: đủ để mắt thấy nó nằm TRÊN trang, không hơn. */
-@keyframes a-pop-in { from { opacity: 0; transform: scale(0.985) translateY(-4px); } to { opacity: 1; transform: none; } }
-.admin-root .a-pop { animation: a-pop-in 120ms cubic-bezier(0.2, 0, 0, 1); }
+/* Lớp nổi hiện ra: mờ → rõ + nhích lên, theo nhịp chậm dần của iOS. */
+@keyframes a-pop-in { from { opacity: 0; transform: scale(0.97) translateY(-6px); } to { opacity: 1; transform: none; } }
+.admin-root .a-pop { animation: a-pop-in 220ms var(--a-ease); }
 @media (prefers-reduced-motion: reduce) { .admin-root .a-pop { animation: none; } }
 
-/* Hàng trong sidebar */
+/* ── Hàng trong sidebar: ô biểu tượng bo tròn kiểu iOS ──────────────
+   Mỗi nhóm việc một màu (--n-hue). Mục thường: ô nền màu nhạt + nét
+   biểu tượng màu; mục ĐANG MỞ: ô nền đặc + nét trắng, giống hàng được
+   chọn trong Cài đặt của iOS. Bấm vào thì cả hàng thu lại 0,97 rồi bật
+   về — phản hồi chạm, không phải trang trí. */
 .admin-root .a-nav-item {
-  display: flex; align-items: center; gap: 9px;
-  height: 28px; padding: 0 8px; border-radius: 6px;
-  font-size: 13px; line-height: 1; color: var(--a-text-2);
+  position: relative;
+  display: flex; align-items: center; gap: 10px;
+  height: 34px; padding: 0 10px; border-radius: 10px;
+  font-size: 13.5px; line-height: 1; color: var(--a-text-2);
   white-space: nowrap;
+  transition: background-color 160ms var(--a-ease), color 160ms var(--a-ease), transform 160ms var(--a-ease);
 }
 .admin-root .a-nav-item:hover { background: var(--a-hover); color: var(--a-text); }
-.admin-root .a-nav-item[aria-current="page"] { background: var(--a-active); color: var(--a-text); }
-.admin-root .a-nav-item svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--a-text-3); }
-.admin-root .a-nav-item:hover svg,
-.admin-root .a-nav-item[aria-current="page"] svg { color: var(--a-text-2); }
+.admin-root .a-nav-item:active { transform: scale(0.972); }
+.admin-root .a-nav-item[aria-current="page"] {
+  background: var(--a-raised-2);
+  color: var(--a-text);
+  font-weight: 550;
+}
+.admin-root .a-tile {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; flex-shrink: 0;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--n-hue, var(--a-text-3)) 22%, transparent);
+  transition: background-color 160ms var(--a-ease);
+}
+.admin-root .a-tile svg { width: 14px; height: 14px; color: var(--n-hue, var(--a-text-2)); }
+.admin-root .a-nav-item[aria-current="page"] .a-tile { background: var(--n-hue, var(--a-accent)); }
+.admin-root .a-nav-item[aria-current="page"] .a-tile svg { color: #fff; }
 
-/* Nút phẳng dùng chung */
+/* Nút phẳng dùng chung — cao 32px cho dễ bấm, bo 10px, có phản hồi chạm */
 .admin-root .a-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  height: 28px; padding: 0 10px; border-radius: 6px;
-  font-size: 12.5px; font-weight: 500; color: var(--a-text-2);
-  border: 1px solid var(--a-border-strong); background: rgba(255, 255, 255, 0.02);
+  height: 32px; padding: 0 12px; border-radius: 10px;
+  font-size: 13px; font-weight: 500; color: var(--a-text-2);
+  border: 1px solid var(--a-border-strong); background: rgba(255, 255, 255, 0.03);
+  transition: background-color 160ms var(--a-ease), color 160ms var(--a-ease), transform 160ms var(--a-ease);
 }
 .admin-root .a-btn:hover { color: var(--a-text); background: var(--a-hover); }
+.admin-root .a-btn:active { transform: scale(0.97); }
 .admin-root .a-btn-primary { color: #fff; background: var(--a-accent); border-color: transparent; }
 .admin-root .a-btn-primary:hover { color: #fff; background: var(--a-accent-hover); }
 .admin-root .a-icon-btn {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px; border-radius: 6px; color: var(--a-text-3);
+  width: 32px; height: 32px; border-radius: 10px; color: var(--a-text-3);
+  transition: background-color 160ms var(--a-ease), color 160ms var(--a-ease), transform 160ms var(--a-ease);
 }
 .admin-root .a-icon-btn:hover { background: var(--a-hover); color: var(--a-text); }
+.admin-root .a-icon-btn:active { transform: scale(0.94); }
 
-/* Bảng của trang cũ: tiêu đề cột CHỮ HOA giãn rộng là dấu hiệu của mẫu dựng
-   sẵn — về chữ thường, nhỏ, mờ; hàng ngăn bằng đường kẻ mảnh. */
-.admin-root main thead th {
-  text-transform: none;
-  letter-spacing: 0;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--a-text-3);
+/* Thanh trên trong mờ như navigation bar của iOS: nội dung cuộn phía dưới
+   thấy mờ mờ qua nó. Đây là chỗ DUY NHẤT trong admin còn dùng kính mờ —
+   ở đây nó có nghĩa (báo rằng còn nội dung bên dưới), không phải trang trí. */
+.admin-root .a-topbar {
+  background: color-mix(in srgb, var(--a-panel) 78%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
-.admin-root main tbody tr { border-color: var(--a-border); }
-.admin-root main tbody tr:hover { background-color: var(--a-hover); }
+@supports not (backdrop-filter: blur(1px)) {
+  .admin-root .a-topbar { background: var(--a-panel); }
+}
+
+/* ── Điều khiển phân đoạn (segmented control) kiểu iOS ──────────────
+   Dùng cho VI/EN trên thanh trên và các bộ lọc: rãnh nền lõm, mảnh
+   trượt nổi lên trên, chữ đậm hơn ở phần đang chọn. */
+.admin-root .a-seg {
+  display: inline-flex; align-items: center; gap: 2px;
+  padding: 2px; border-radius: 9px;
+  background: var(--a-raised-2);
+}
+.admin-root .a-seg-item {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 24px; min-width: 34px; padding: 0 9px; border-radius: 7px;
+  font-size: 12px; font-weight: 500; color: var(--a-text-3);
+  transition: background-color 180ms var(--a-ease), color 180ms var(--a-ease), box-shadow 180ms var(--a-ease);
+}
+.admin-root .a-seg-item:hover { color: var(--a-text-2); }
+.admin-root .a-seg-item[aria-pressed="true"] {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--a-text);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Chiều sâu cho các trang cũ ────────────────────────────────────────
+   Một vệt sáng rất nhẹ ở mép trên mỗi vùng (2% trắng, tắt dần trong 120px)
+   thay cho bóng đổ: mắt vẫn đọc được "đây là một mặt phẳng riêng" mà không
+   quay lại kiểu thẻ nổi. */
+.admin-root main .bg-darkcard {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0) 120px);
+}
+
+/* Hàng bảng/danh sách: nền rê chuột ngả về màu nhấn thay vì trắng đục */
+.admin-root main tbody tr:hover,
+.admin-root main .divide-darkborder > *:hover {
+  background-color: rgba(110, 123, 242, 0.06);
+}
+
+/* Ô nhập lõm xuống một nấc so với khung, viền sáng lên khi focus */
+.admin-root main input:focus,
+.admin-root main textarea:focus,
+.admin-root main select:focus {
+  border-color: var(--a-accent-border);
+  box-shadow: 0 0 0 3px rgba(110, 123, 242, 0.12);
+}
+
+/* Thanh tiến trình của trang cũ (h-1/h-1.5/h-2 + rounded-full) giữ màu thật
+   của nó; lớp phủ gradient ở trên KHÔNG được chạm vào chúng. */
+.admin-root main .rounded-full.h-1,
+.admin-root main .rounded-full.h-1\.5,
+.admin-root main .rounded-full.h-2 { background-image: none; }

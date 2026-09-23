@@ -20,6 +20,7 @@ import ChuongAdmin from '@/components/admin/ChuongAdmin';
 import AdminSidebar from '@/components/admin/shell/AdminSidebar';
 import CommandPalette from '@/components/admin/shell/CommandPalette';
 import { ADMIN_NAV, activeHref } from '@/components/admin/shell/nav';
+import { useAdminT } from '@/components/admin/i18n';
 
 const KHOA_SIDEBAR = 'admin.sidebar.hidden';
 
@@ -39,6 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
   const [inbox, setInbox] = useState(0);
+  const { t, vi, setLocale } = useAdminT();
 
   // Kiểm quyền admin MỘT lần khi vào /admin, không kiểm lại mỗi lần đổi trang:
   // layout sống suốt các lần điều hướng con, và một phản hồi chập chờn giữa
@@ -112,7 +114,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="admin-root flex h-dvh items-center justify-center">
         <div className="flex items-center gap-2.5 text-[13px] text-[var(--a-text-3)]">
           <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-[var(--a-text-3)] border-t-transparent" />
-          Checking access…
+          {t('checkingAccess')}
         </div>
       </div>
     );
@@ -147,27 +149,45 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Khung nội dung */}
         <div
-          className={`flex min-w-0 flex-1 flex-col overflow-hidden bg-[var(--a-panel)] md:my-2 md:mr-2 md:rounded-[8px] md:border md:border-[var(--a-border)] ${
+          className={`flex min-w-0 flex-1 flex-col overflow-hidden bg-[var(--a-panel)] md:my-2 md:mr-2 md:rounded-[14px] md:border md:border-[var(--a-border)] ${
             sidebarHidden ? 'md:ml-2' : ''
           }`}
         >
-          <header className="flex h-11 shrink-0 items-center gap-2 border-b border-[var(--a-border)] px-3 md:px-4">
-            <button onClick={() => setMobileOpen(true)} className="a-icon-btn md:hidden" aria-label="Open menu">
-              <Menu className="h-4 w-4" strokeWidth={1.75} />
+          <header className="a-topbar flex h-12 shrink-0 items-center gap-2 border-b border-[var(--a-border)] px-3 md:px-4">
+            <button onClick={() => setMobileOpen(true)} className="a-icon-btn md:hidden" aria-label={t('openMenu')}>
+              <Menu className="h-[18px] w-[18px]" strokeWidth={2} />
             </button>
             {sidebarHidden && (
-              <button onClick={toggleSidebar} className="a-icon-btn hidden md:inline-flex" title="Show sidebar  [" aria-label="Show sidebar">
-                <PanelLeft className="h-[15px] w-[15px]" strokeWidth={1.75} />
+              <button onClick={toggleSidebar} className="a-icon-btn hidden md:inline-flex" title={`${t('showSidebar')}  [`} aria-label={t('showSidebar')}>
+                <PanelLeft className="h-4 w-4" strokeWidth={2} />
               </button>
             )}
-            <nav className="flex min-w-0 items-center gap-1.5 text-[13px]" aria-label="Breadcrumb">
-              <span className="text-[var(--a-text-3)]">{group?.label ?? 'Admin'}</span>
+            <nav className="flex min-w-0 items-center gap-1.5 text-[13.5px]" aria-label="Breadcrumb">
+              <span className="text-[var(--a-text-3)]">
+                {(vi ? group?.viLabel ?? group?.label : group?.label) ?? t('admin')}
+              </span>
               <span className="text-[var(--a-text-3)]">/</span>
-              <span className="truncate font-medium text-[var(--a-text)]">{item?.label ?? 'Dashboard'}</span>
+              <span className="truncate font-semibold text-[var(--a-text)]">
+                {(vi ? item?.vi ?? item?.label : item?.label) ?? t('overview')}
+              </span>
             </nav>
-            <div className="ml-auto flex items-center gap-1">
-              <button onClick={() => setCmdOpen(true)} className="a-icon-btn md:hidden" aria-label="Search">
-                <Search className="h-4 w-4" strokeWidth={1.75} />
+            <div className="ml-auto flex items-center gap-2">
+              {/* Đổi ngôn ngữ ngay trong admin — cùng cookie `locale` với
+                  trang ngoài, nên đổi ở đây thì cả site đổi theo. */}
+              <div className="a-seg" role="group" aria-label={t('language')}>
+                {(['vi', 'en'] as const).map((ma) => (
+                  <button
+                    key={ma}
+                    onClick={() => setLocale(ma)}
+                    aria-pressed={vi === (ma === 'vi')}
+                    className="a-seg-item"
+                  >
+                    {ma.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+              <button onClick={() => setCmdOpen(true)} className="a-icon-btn md:hidden" aria-label={t('search')}>
+                <Search className="h-[18px] w-[18px]" strokeWidth={2} />
               </button>
               <ChuongAdmin onDem={(d) => setInbox(d.canXuLy)} />
             </div>

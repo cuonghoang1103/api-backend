@@ -28,22 +28,31 @@ export function PageHeader({
   );
 }
 
-/** Vùng có tiêu đề nhỏ + đường kẻ — thay cho "card". */
+/** Vùng có tiêu đề nhỏ + đường kẻ — thay cho "card".
+ *  `icon` + `tone`: một biểu tượng nhỏ mang màu của mảng việc. Màu nằm ở
+ *  BIỂU TƯỢNG chứ không ở chữ, nên trang có màu mà không thành cầu vồng. */
 export function Section({
   title,
   action,
+  icon: Icon,
+  tone,
   children,
   className = '',
 }: {
   title: ReactNode;
   action?: ReactNode;
+  icon?: LucideIcon;
+  tone?: string;
   children: ReactNode;
   className?: string;
 }) {
   return (
     <section className={className}>
       <div className="flex h-8 items-center justify-between border-b border-[var(--a-border)]">
-        <h2 className="text-[12.5px] font-medium text-[var(--a-text-2)]">{title}</h2>
+        <h2 className="flex items-center gap-1.5 text-[12.5px] font-medium text-[var(--a-text-2)]">
+          {Icon && <Icon className="h-3.5 w-3.5" strokeWidth={2} style={tone ? { color: tone } : undefined} />}
+          {title}
+        </h2>
         {action}
       </div>
       {children}
@@ -106,13 +115,28 @@ export function Status({ tone, children }: { tone: Tone; children: ReactNode }) 
   );
 }
 
-/** Một chỉ số trong dải chỉ số (không phải thẻ). */
-export function Metric({ label, value, hint }: { label: string; value: ReactNode; hint?: ReactNode }) {
+/** Một chỉ số trong dải chỉ số (không phải thẻ).
+ *  `tone` vẽ một chấm màu cạnh nhãn — đủ để mắt nhóm các chỉ số cùng mảng,
+ *  không tô màu con số (số vẫn phải là thứ dễ đọc nhất). */
+export function Metric({
+  label, value, hint, tone, up,
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+  tone?: string;
+  /** true/false: chú thích là mức tăng/giảm → tô màu trạng thái. */
+  up?: boolean;
+}) {
+  const hintColor = up === undefined ? 'var(--a-text-3)' : up ? 'var(--a-green)' : 'var(--a-red)';
   return (
-    <div className="min-w-0 py-3 pr-4 lg:pl-4 lg:first:pl-0">
-      <p className="truncate text-[12px] text-[var(--a-text-3)]">{label}</p>
+    <div className="min-w-0 py-3 pr-4 xl:pl-4 xl:first:pl-0">
+      <p className="flex items-center gap-1.5 text-[12px] leading-4 text-[var(--a-text-3)]">
+        {tone && <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: tone }} />}
+        {label}
+      </p>
       <p className="mt-1 text-[20px] font-semibold leading-7 tracking-[-0.01em] tabular-nums text-[var(--a-text)]">{value}</p>
-      {hint && <p className="mt-0.5 truncate text-[11.5px] text-[var(--a-text-3)]">{hint}</p>}
+      {hint && <p className="mt-0.5 truncate text-[11.5px]" style={{ color: hintColor }}>{hint}</p>}
     </div>
   );
 }

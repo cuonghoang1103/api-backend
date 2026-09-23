@@ -6,6 +6,7 @@ import { saveUserCode } from './savedCodes.routes.js';
 import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason } from '../services/interview/llm/index.js';
 import { ADVISOR_SPECS, ADVISOR_SUGGESTED_QUESTIONS, MARKET_REPORTS, type AdvisorSpec } from '../data/academyAdvisor.js';
 import type { ApiResponse } from '../types/index.js';
+import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 
 const router = Router();
 
@@ -607,6 +608,29 @@ router.post('/advisor', authenticate, async (req: any, res: Response<ApiResponse
   }
 });
 
+/* ── Báo cáo một câu trả lời của CuongMini ───────────────────────────────────
+ * Câu trả lời tư vấn KHÔNG được lưu (không có id), nên `/ai/feedback` — vốn cần
+ * `messageId` — không dùng được. Gửi kèm chính câu hỏi + câu trả lời để admin
+ * đọc được ngay. Apple 4.7 bắt buộc: chỗ nào AI trả lời thì phải báo cáo được. */
+router.post('/advisor/report-answer', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const answer = String(req.body?.answer || '').trim().slice(0, 1500);
+    if (!answer) throw new AppError('Thiếu câu trả lời cần báo cáo.', 400);
+    const question = String(req.body?.question || '').trim().slice(0, 500);
+    const reason = String(req.body?.reason || '').trim().slice(0, 300);
+    const facultyId = String(req.body?.facultyId || '').trim().slice(0, 64);
+    await baoAdmin({
+      loai: 'BAO_CAO', mucDo: 'can_xu_ly',
+      tieuDe: `Báo cáo câu trả lời AI ở Phòng tư vấn${facultyId ? ` (${facultyId})` : ''}`,
+      noiDung: [reason && `Lý do: ${reason}`, question && `Hỏi: ${question}`, `Đáp: ${answer}`].filter(Boolean).join('\n'),
+      userId: req.userId ?? null,
+    });
+    res.json({ success: true, data: { reported: true } });
+  } catch (error) {
+    next(error);
+  }
+});
+
 /* ── FAQ: câu hỏi thường gặp (công khai) ─────────────────────────────────── */
 router.get('/advisor/faq', async (req, res: Response<ApiResponse>, next) => {
   try {
@@ -753,6 +777,13 @@ router.post('/advisor/comments/:id/report', authenticate, async (req: any, res: 
     if (updated.reportsCount >= ADV_REPORT_HIDE_THRESHOLD) {
       await prisma.advisorComment.update({ where: { id: commentId }, data: { isHidden: true } });
     }
+    // Báo admin — trước đây báo cáo chỉ nằm im trong bảng, không ai biết để xử lý.
+    void baoAdmin({
+      loai: 'BAO_CAO', mucDo: 'can_xu_ly',
+      tieuDe: 'Báo cáo bình luận ở Phòng tư vấn ngành hẹp',
+      noiDung: `Bình luận #${commentId} · ${updated.reportsCount} lượt báo cáo${reason ? ` · Lý do: ${reason}` : ''}`,
+      userId: req.userId ?? null, entityId: commentId,
+    });
     res.json({ success: true, data: { reported: true } });
   } catch (error) {
     next(error);

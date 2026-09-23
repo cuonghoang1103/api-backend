@@ -49,7 +49,11 @@ WORKDIR /app
 # (≈6GB free during a build — jobs are I/O-light), so 4096 is safe headroom.
 # The static-generation OOM (exit 137) is separately controlled by limiting the
 # worker COUNT to 1 via `experimental.cpus` in next.config.js.
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+# 2026-09-24: 4096 hết heap (exit 134) sau khi thêm CT Work (/work, 19 trang) —
+# đo thật trên máy nhà. Nâng 6144: deploy-nha.sh build ở máy nhà 31GB nên dư.
+# Đường lùi deploy.sh build trên VPS (~6GB trống) sẽ sát trần — nếu nó chết
+# exit 137 thì đó là chỗ đầu tiên cần nhìn.
+ENV NODE_OPTIONS="--max-old-space-size=6144"
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Copy cached node_modules from deps stage

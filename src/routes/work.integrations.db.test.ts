@@ -78,7 +78,7 @@ describe('CT Work đợt 7 — HTTP + DB', { skip: !RUN }, () => {
     return { id: u.id, token, email, username: u.username };
   }
   async function raw(method: string, path: string, headers: Record<string, string> = {}, body?: string | Buffer) {
-    const res = await fetch(`${base}/api/v1/work${path}`, { method, headers, body });
+    const res = await fetch(`${base}/api/v1/work${path}`, { method, headers, body: Buffer.isBuffer(body) ? new Uint8Array(body) : body });
     return res;
   }
   async function call(u: U | { token: string } | null, method: string, path: string, body?: unknown) {

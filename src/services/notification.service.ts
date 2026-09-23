@@ -184,6 +184,12 @@ function chuThongBao(type: string, ten: string, payload: unknown): string {
     case 'NOTE_MENTION': return `${ten} đã nhắc đến bạn trong một ghi chú`;
     case 'HUB_SHARE': return `${ten} đã chia sẻ một thư mục tài liệu với bạn`;
     case 'ADMIN_ANNOUNCEMENT': return String(p.title ?? 'Thông báo mới từ Admin');
+    // CT Work nói tiếng Anh (quyết định 23/09/2026) — đẩy cũng vậy.
+    case 'WORK_INVITE': return `${ten} added you to ${String(p.workspaceName ?? 'a CT Work workspace')}`;
+    case 'WORK_ASSIGN': return `${ten} assigned you ${String(p.issueKey ?? 'an issue')}: ${String(p.title ?? '')}`.trim();
+    case 'WORK_COMMENT': return `${ten} commented on ${String(p.issueKey ?? 'an issue')}: ${String(p.excerpt ?? p.title ?? '')}`.trim();
+    case 'WORK_MENTION': return `${ten} mentioned you in ${String(p.issueKey ?? 'an issue')}: ${String(p.excerpt ?? '')}`.trim();
+    case 'WORK_ALERT': return `${String(p.issueKey ?? 'CT Work')}: ${String(p.message ?? 'needs your attention')}`;
     case 'NEW_POST':
     default: return `${ten} đã đăng bài viết mới`;
   }
@@ -229,6 +235,10 @@ async function dayRaNgoaiApp(row: {
         kieu: row.type,
         thongBaoId: row.id,
         entityId: row.entityId ?? 0,
+        // CT Work: đường dẫn /work/... để app mở đúng thẻ khi chạm vào.
+        ...(row.type.startsWith('WORK_') && typeof (row.payload as { url?: unknown } | null)?.url === 'string'
+          ? { duongDan: (row.payload as { url: string }).url, maThe: String((row.payload as { issueKey?: unknown }).issueKey ?? '') }
+          : {}),
       },
     });
   } catch (err) {

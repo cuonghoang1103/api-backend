@@ -395,6 +395,8 @@ model User {
   workAttachments        WorkAttachment[]    @relation("WorkAttachmentUploader")
   workHistory            WorkHistory[]       @relation("WorkHistoryActor")
   workWatching           WorkWatcher[]       @relation("WorkWatcherUser")
+  workTestRunsAssigned   WorkTestRun[]       @relation("WorkTestRunAssignee")
+  workTestRunsExecuted   WorkTestRun[]       @relation("WorkTestRunExecutor")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -9708,6 +9710,8 @@ model WorkProject {
   labels     WorkLabel[]
   components WorkComponent[]
   sprints    WorkSprint[]
+  testPlans  WorkTestPlan[]
+  testCycles WorkTestCycle[]
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -9869,6 +9873,8 @@ model WorkIssue {
   attachments WorkAttachment[]
   history     WorkHistory[]
   watchers    WorkWatcher[]
+  testCase    WorkTestCase?
+  defectOf    WorkTestRunDefect[]
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -10066,4 +10072,152 @@ model WorkSprintSnapshot {
 
   @@unique([sprintId, day], name: "uk_work_sprint_snapshot", map: "uk_work_sprint_snapshot")
   @@map("work_sprint_snapshots")
+}
+
+// ─── CT Work — quản lý kiểm thử (đợt 3, thay plugin Xray) ─────────────
+// Test case LÀ một thẻ loại TEST (có bình luận, người phụ trách, liên kết…);
+// bảng này chỉ giữ phần riêng của test: điều kiện trước, các bước, Gherkin.
+
+/// Phần "kiểm thử" của một thẻ loại TEST. kind: MANUAL (các bước) | GHERKIN.
+model WorkTestCase {
+  id            Int      @id @default(autoincrement())
+  issueId       Int      @unique(map: "uk_work_test_case_issue") @map("issue_id")
+  kind          String   @default("MANUAL") @db.VarChar(16)
+  preconditions String?  @db.Text
+  gherkin       String?  @db.Text
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  issue WorkIssue          @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  steps WorkTestStep[]
+  plans WorkTestPlanCase[]
+  runs  WorkTestRun[]
+
+  @@map("work_test_cases")
+}
+
+model WorkTestStep {
+  id         Int     @id @default(autoincrement())
+  testCaseId Int     @map("test_case_id")
+  position   Int
+  action     String  @db.Text
+  data       String? @db.Text
+  expected   String? @db.Text
+
+  testCase WorkTestCase @relation(fields: [testCaseId], references: [id], onDelete: Cascade)
+
+  @@index([testCaseId, position], name: "idx_work_test_step_case")
+  @@map("work_test_steps")
+}
+
+/// Kế hoạch kiểm thử: một tập test case (vd "Regression v1.0", "Lab 3 — Login").
+model WorkTestPlan {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  name        String    @db.VarChar(120)
+  description String?   @db.Text
+  createdById Int?      @map("created_by_id")
+  archivedAt  DateTime? @map("archived_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  project WorkProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  cases   WorkTestPlanCase[]
+  cycles  WorkTestCycle[]
+
+  @@index([projectId], name: "idx_work_test_plan_project")
+  @@map("work_test_plans")
+}
+
+model WorkTestPlanCase {
+  planId     Int @map("plan_id")
+  testCaseId Int @map("test_case_id")
+
+  plan     WorkTestPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  testCase WorkTestCase @relation(fields: [testCaseId], references: [id], onDelete: Cascade)
+
+  @@id([planId, testCaseId])
+  @@map("work_test_plan_cases")
+}
+
+/// Một đợt chạy test (vd "Sprint 3 — Chrome", "UAT with client").
+/// state: PLANNED | IN_PROGRESS | DONE.
+model WorkTestCycle {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  planId      Int?      @map("plan_id")
+  name        String    @db.VarChar(120)
+  environment String?   @db.VarChar(120)
+  build       String?   @db.VarChar(80)
+  state       String    @default("PLANNED") @db.VarChar(16)
+  startAt     DateTime? @map("start_at")
+  endAt       DateTime? @map("end_at")
+  createdById Int?      @map("created_by_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  project WorkProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  plan    WorkTestPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
+  runs    WorkTestRun[]
+
+  @@index([projectId], name: "idx_work_test_cycle_project")
+  @@map("work_test_cycles")
+}
+
+/// Một lần chạy một test case trong một cycle.
+/// status: TODO | IN_PROGRESS | PASS | FAIL | BLOCKED | SKIP | RETEST.
+/// RETEST = bug gây ra lỗi vừa được chuyển sang Retest ⇒ cần chạy lại.
+model WorkTestRun {
+  id           Int       @id @default(autoincrement())
+  cycleId      Int       @map("cycle_id")
+  testCaseId   Int       @map("test_case_id")
+  status       String    @default("TODO") @db.VarChar(16)
+  assigneeId   Int?      @map("assignee_id")
+  executedById Int?      @map("executed_by_id")
+  executedAt   DateTime? @map("executed_at")
+  comment      String?   @db.Text
+  /// Chụp lại Gherkin lúc tạo lần chạy (test sửa về sau không đổi lần chạy cũ).
+  gherkin      String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  cycle      WorkTestCycle        @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  testCase   WorkTestCase         @relation(fields: [testCaseId], references: [id], onDelete: Cascade)
+  assignee   User?                @relation("WorkTestRunAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  executedBy User?                @relation("WorkTestRunExecutor", fields: [executedById], references: [id], onDelete: SetNull)
+  steps      WorkTestStepResult[]
+  defects    WorkTestRunDefect[]
+
+  @@unique([cycleId, testCaseId], name: "uk_work_test_run", map: "uk_work_test_run")
+  @@index([testCaseId], name: "idx_work_test_run_case")
+  @@map("work_test_runs")
+}
+
+/// Kết quả từng bước — CHỤP LẠI nội dung bước lúc tạo lần chạy, để sửa/xoá
+/// bước của test case về sau không làm sai lịch sử lần chạy đã xong.
+model WorkTestStepResult {
+  id       Int     @id @default(autoincrement())
+  runId    Int     @map("run_id")
+  position Int
+  action   String  @db.Text
+  data     String? @db.Text
+  expected String? @db.Text
+  status   String  @default("TODO") @db.VarChar(16)
+  actual   String? @db.Text
+
+  run WorkTestRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, position], name: "idx_work_step_result_run")
+  @@map("work_test_step_results")
+}
+
+/// Bug tìm ra khi chạy test (một lần chạy có thể có nhiều bug và ngược lại).
+model WorkTestRunDefect {
+  runId     Int      @map("run_id")
+  issueId   Int      @map("issue_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  run   WorkTestRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  issue WorkIssue   @relation(fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@id([runId, issueId])
+  @@index([issueId], name: "idx_work_run_defect_issue")
+  @@map("work_test_run_defects")
 }

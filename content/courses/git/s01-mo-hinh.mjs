@@ -6,12 +6,43 @@
  * Output CHẠY THẬT git 2.43. LUẬT: backtick → &#96;; ${ → \${; < > trong code → &lt; &gt;;
  * & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg> (sanitizeHtml xoá sạch).
  */
+import { gallery, slide } from './_slides.mjs';
+
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
 
 export default {
   title: 'Chapter 1 — The model: snapshots, not diffs|||Chương 1 — Mô hình: ảnh chụp, không phải bản khác biệt',
   description: 'Mô hình tinh thần mà cả khoá dựng lên trên đó: ba cây mà mọi lệnh Git đụng vào, một commit thật sự chứa gì (và vì sao nó có mã băm), vòng lặp add/commit hằng ngày, cách viết lời nhắn commit mà sáu tháng sau vẫn đọc được, và .gitignore.',
   lessons: [
+    /* ─────────────────────────── 1.0 ─────────────────────────── */
+    {
+      title: '1.0 — Chapter 1 slides: the mental model in pictures|||1.0 — Slide Chương 1: mô hình Git bằng hình',
+      slug: 'git-1-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Bộ 16 slide của Chương 1: ba cái cây, commit là tấm ảnh, mã băm, vòng lặp add–commit, lời nhắn commit, .gitignore — xem trước khi học hoặc dùng để ôn.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 1 · Slides</span>
+<h2>The whole chapter in 16 slides</h2>
+<p class="lead">Skim these before the lessons to get the shape of the model, then come back after the quiz as a revision sheet. Every diagram here reappears inside the lesson that explains it.</p>
+<p>The slides are in Vietnamese; the diagrams (three trees, commit graph, diff) read the same in any language. The last two slides are a cheat sheet and a 30-minute practice session for the whole chapter.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 1 · Slide</span>
+<h2>Cả chương trong 16 slide</h2>
+<p class="lead">Lướt qua bộ này trước khi vào bài để nắm hình dạng của mô hình, rồi quay lại sau bài kiểm tra như một tờ ôn tập. Mỗi hình ở đây đều xuất hiện lại bên trong bài giảng giải thích nó.</p>
+<p>Hai slide cuối là bảng tra nhanh và một buổi thực hành 30 phút cho cả chương — làm xong buổi đó là bạn đã nắm chắc Chương 1.</p>
+</div>
+${gallery('git-01', [
+  [1, 'Bìa'], [2, 'Bản đồ chương'], [3, 'Ba cái cây'], [4, 'git status là bản đồ ba cây'],
+  [5, 'Commit là một tấm ảnh trọn dự án'], [6, 'Đổi một byte là đổi cả tên'], [7, 'Lịch sử là chuỗi con trỏ cha'],
+  [8, 'Các cách gọi tên commit'], [9, 'Vòng lặp hằng ngày'], [10, 'Đọc một diff'], [11, 'git add -p'],
+  [12, 'Lời nhắn commit tốt'], [13, 'Conventional Commits'], [14, '.gitignore'], [15, 'Bảng tra nhanh'], [16, 'Thực hành chương 1'],
+])}
+`,
+    },
+
     /* ─────────────────────────── 1.1 ─────────────────────────── */
     {
       title: '1.1 — The three trees: working directory, index, HEAD|||1.1 — Ba cái cây: thư mục làm việc, index, HEAD',
@@ -32,6 +63,7 @@ export default {
 </div>
 
 <h3>The cycle, in one picture</h3>
+${slide('git-01', 3, 'Ba cái cây và lệnh chuyển giữa chúng')}
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">edit</div><div class="lz-t">Working directory</div><div class="lz-d">You change a file in your editor. Git knows nothing yet.</div></div>
   <div class="lz-step"><div class="lz-k">git add</div><div class="lz-t">Index</div><div class="lz-d">You choose which changes belong in the next commit. Content is copied into the index.</div></div>
@@ -44,6 +76,7 @@ export default {
 <div class="callout ok">The staging area is what makes <code>git add -p</code> possible: staging <em>part</em> of a file, hunk by hunk. You will meet it in 1.3, and it is the moment most people stop resenting the index.</div>
 
 <h3>Reading git status as a map</h3>
+${slide('git-01', 4, 'git status là tấm bản đồ ba cây')}
 <p>Make three different kinds of change in the playground repo from 0.4 and look at the result:</p>
 <pre><code>cd ~/git-lab
 <span class="tok-keyword">echo</span> <span class="tok-string">"staged change"</span> &gt;&gt; a.txt   &amp;&amp; git add a.txt   <span class="tok-comment"># edited AND staged</span>
@@ -92,6 +125,23 @@ Untracked files:
   <div class="kv"><span class="k">A_ · ?? · D_</span><span class="v">Added (newly tracked) · untracked · deleted.</span></div>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Create a playground: <code>mkdir thu-git &amp;&amp; cd thu-git &amp;&amp; git init</code>, then one file <code>a.txt</code> containing <code>a</code>, and commit it.</li><li>Change the file to <code>a2</code> and <code>git add a.txt</code>. Change it again to <code>a3</code> — do NOT add.</li><li>Before running anything, <strong>write down</strong> what <code>git status -s</code> will print. Then run it.</li><li>Run <code>git diff --staged</code> and <code>git diff</code>. Say out loud which two trees each one compares.</li></ol>
+<pre><code class="language-bash">git status -s
+MM a.txt          <span class="tok-comment"># left M = staged (a2), right M = still in working dir (a3)</span></code></pre>
+<p><strong>Done when:</strong> you predicted <code>MM a.txt</code> before seeing it, and can explain why <code>git diff --staged</code> shows <code>a2</code> while <code>git diff</code> shows <code>a3</code>.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Working directory</span><span class="v">The real files on disk that you edit.</span></div>
+  <div class="kv"><span class="k">Index / staging area</span><span class="v">The draft of your next commit. <code>git add</code> copies a file here.</span></div>
+  <div class="kv"><span class="k">HEAD</span><span class="v">A pointer to the commit you are standing on — the last snapshot.</span></div>
+  <div class="kv"><span class="k">Tracked / untracked</span><span class="v">Tracked = Git already has it in the index or HEAD. Untracked = <code>??</code>, Git has never seen it.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Every file can exist in three versions at once: working dir, index, HEAD.</li><li><code>git add</code> moves working dir → index; <code>git commit</code> moves index → HEAD.</li><li><code>git status -s</code>: left column = index vs HEAD, right column = working dir vs index.</li><li>Before committing, read <code>git diff --staged</code> — that is exactly what will be recorded.</li></ul>
+
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 2.2 — Recording Changes to the Repository</span><span class="lc-sub">The lifecycle diagram of tracked / untracked / staged, in the official book.</span></span>
@@ -117,6 +167,7 @@ Untracked files:
 </div>
 
 <h3>Vòng tuần hoàn, trong một bức tranh</h3>
+${slide('git-01', 3, 'Ba cái cây và lệnh chuyển giữa chúng')}
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">sửa</div><div class="lz-t">Thư mục làm việc</div><div class="lz-d">Bạn sửa một file trong trình soạn thảo. Git chưa biết gì.</div></div>
   <div class="lz-step"><div class="lz-k">git add</div><div class="lz-t">Index</div><div class="lz-d">Bạn chọn thay đổi nào thuộc về commit kế tiếp. Nội dung được chép vào index.</div></div>
@@ -129,6 +180,7 @@ Untracked files:
 <div class="callout ok">Vùng staging chính là thứ làm cho <code>git add -p</code> khả thi: đưa <em>một phần</em> của file vào staging, theo từng đoạn. Bạn sẽ gặp nó ở bài 1.3, và đó là lúc đa số người hết bực mình với index.</div>
 
 <h3>Đọc git status như một tấm bản đồ</h3>
+${slide('git-01', 4, 'git status là tấm bản đồ ba cây')}
 <p>Tạo ba loại thay đổi khác nhau trong kho nháp từ bài 0.4 rồi nhìn kết quả:</p>
 <pre><code>cd ~/git-lab
 <span class="tok-keyword">echo</span> <span class="tok-string">"staged change"</span> &gt;&gt; a.txt   &amp;&amp; git add a.txt   <span class="tok-comment"># đã sửa VÀ đã staging</span>
@@ -177,6 +229,23 @@ Untracked files:
   <div class="kv"><span class="k">A_ · ?? · D_</span><span class="v">Mới thêm vào theo dõi · chưa theo dõi · đã xoá.</span></div>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Tạo sân tập: <code>mkdir thu-git &amp;&amp; cd thu-git &amp;&amp; git init</code>, tạo file <code>a.txt</code> chứa <code>a</code>, rồi commit.</li><li>Sửa file thành <code>a2</code> và <code>git add a.txt</code>. Sửa tiếp thành <code>a3</code> — KHÔNG add.</li><li>Trước khi gõ, <strong>viết ra giấy</strong> bạn đoán <code>git status -s</code> sẽ in gì. Rồi mới chạy.</li><li>Chạy <code>git diff --staged</code> và <code>git diff</code>. Nói to ra mỗi lệnh đang so hai cây nào.</li></ol>
+<pre><code class="language-bash">git status -s
+MM a.txt          <span class="tok-comment"># M trái = đã staging (a2), M phải = vẫn ở thư mục làm việc (a3)</span></code></pre>
+<p><strong>Đạt khi:</strong> bạn đoán đúng <code>MM a.txt</code> trước khi nhìn, và giải thích được vì sao <code>git diff --staged</code> hiện <code>a2</code> còn <code>git diff</code> hiện <code>a3</code>.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Working directory</span><span class="v">Thư mục làm việc — file thật trên đĩa mà bạn đang sửa.</span></div>
+  <div class="kv"><span class="k">Index / staging area</span><span class="v">Vùng chờ — bản nháp của commit kế tiếp. <code>git add</code> chép file vào đây.</span></div>
+  <div class="kv"><span class="k">HEAD</span><span class="v">Con trỏ tới commit bạn đang đứng — tấm ảnh chụp gần nhất.</span></div>
+  <div class="kv"><span class="k">Tracked / untracked</span><span class="v">Được theo dõi = Git đã có file trong index hoặc HEAD. Chưa theo dõi = <code>??</code>, Git chưa từng thấy.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mỗi file có thể tồn tại ba phiên bản cùng lúc: thư mục làm việc, index, HEAD.</li><li><code>git add</code> chuyển thư mục làm việc → index; <code>git commit</code> chuyển index → HEAD.</li><li><code>git status -s</code>: cột trái = index so với HEAD, cột phải = thư mục làm việc so với index.</li><li>Trước khi commit, đọc <code>git diff --staged</code> — đó chính xác là thứ sẽ được ghi lại.</li></ul>
+
 <a class="link-card" href="https://git-scm.com/book/vi/v2/C%C4%83n-B%E1%BA%A3n-Git-Ghi-Nh%E1%BA%ADn-Thay-%C4%90%E1%BB%95i-V%C3%A0o-Kho-Ch%E1%BB%A9a" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 2.2 (tiếng Việt) — Ghi nhận thay đổi vào kho chứa</span><span class="lc-sub">Sơ đồ vòng đời tracked / untracked / staged trong sách chính thức.</span></span>
@@ -205,6 +274,7 @@ Untracked files:
 <p class="lead">Almost everyone's first mental model of Git is wrong in the same way: they picture a commit as a list of changes — "line 12 changed, line 40 deleted". It is not. <strong>A commit stores the complete state of every tracked file at that moment.</strong> Git shows you differences because differences are useful to read, but it computes them on demand from two full snapshots.</p>
 
 <h3>What is inside one commit</h3>
+${slide('git-01', 5, 'Một commit là một tấm ảnh trọn dự án')}
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">tree</span><span class="lz-v">A pointer to the full directory listing at that moment — every file and folder, with the content of each.</span></div>
   <div class="lz-layer"><span class="lz-k">parent</span><span class="lz-v">The commit that came before. Zero parents for the very first commit; two for a merge commit.</span></div>
@@ -226,6 +296,7 @@ commit number 10</div>
 <div class="callout ok">This is why <code>git checkout</code> of a ten-year-old commit is instant, while a system that stores diffs would have to replay ten years of patches. Snapshots trade a little disk for a lot of speed — and thanks to content addressing plus compression, they often use <em>less</em> disk than the diff-based systems they replaced.</div>
 
 <h3>Where the hash comes from</h3>
+${slide('git-01', 6, 'Đổi một byte là đổi cả tên')}
 <p>Every object in Git — file content, directory listing, commit — is stored under the SHA-1 hash of its own bytes. Anything you can name in Git, you name by content:</p>
 <pre><code><span class="tok-comment"># The hash of a piece of content, computed the way Git computes it:</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"hello"</span> | git hash-object --stdin</code></pre>
@@ -237,6 +308,7 @@ commit number 10</div>
 </div>
 
 <h3>The chain — and why rewriting history renames everything</h3>
+${slide('git-01', 7, 'Lịch sử là chuỗi con trỏ cha')}
 <div class="lz-map">
   <div class="lz-stage">A commit names its parent by hash, so the chain is welded</div>
   <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">8f3c1a2 — "first commit"</div><div class="lz-nsub">parent: none. The root of the project.</div></div></div>
@@ -247,6 +319,7 @@ commit number 10</div>
 <div class="callout warn">That single fact explains all of Chapter 8. When you amend, squash or rebase, you are not editing commits — you are <em>creating new ones</em> and abandoning the old. Locally that is harmless. Once other people have the old hashes, their history and yours have silently diverged, which is why rewriting shared history needs a conversation first.</div>
 
 <h3>Naming commits without typing 40 characters</h3>
+${slide('git-01', 8, 'Các cách gọi tên commit')}
 <pre><code>git show 1a2b3c4          <span class="tok-comment"># a unique prefix is enough — usually 7 characters</span>
 git show HEAD             <span class="tok-comment"># where you are now</span>
 git show HEAD~1           <span class="tok-comment"># one commit back (parent)</span>
@@ -260,6 +333,24 @@ git show HEAD^2           <span class="tok-comment"># the SECOND parent — only
 
 <h3>SHA-1, and the collision question</h3>
 <p>Git historically used SHA-1, which is broken for adversarial use — a researcher can construct two different files with the same hash. Git 2.13+ ships collision detection that rejects the known attack patterns, and Git has an in-progress migration to SHA-256. For everyday work the practical answer is: accidental collisions do not happen, and deliberate ones are detected. Do not build a security control on top of a bare commit hash; do rely on hashes to identify content.</p>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>In your <code>thu-git</code> repo run <code>git cat-file -p HEAD</code>. Find the <code>tree</code> line and the <code>parent</code> line (the very first commit has no parent).</li><li>Copy the tree hash and run <code>git cat-file -p &lt;tree-hash&gt;</code> — you get one line per file, each pointing at a <code>blob</code>.</li><li>Run <code>git cat-file -p &lt;blob-hash&gt;</code> on the <code>a.txt</code> blob. You are now reading file content straight out of the object database.</li><li>Amend the last commit message with <code>git commit --amend -m "…"</code> and compare <code>git log --oneline</code> before/after: the hash changes even though no file changed.</li></ol>
+<pre><code class="language-bash">git cat-file -p HEAD^{tree}
+100644 blob 4c49bd78f1d08f2bc09fa0bd8191ed38b7dce5e3	.gitignore
+100644 blob c1827f07e114c20547dc6a7296588870a4b5b62c	a.txt</code></pre>
+<p><strong>Done when:</strong> you can follow HEAD → commit → tree → blob by hand, and explain why editing only the message produced a new hash.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Snapshot</span><span class="v">A full picture of every tracked file at one moment — not a list of changes.</span></div>
+  <div class="kv"><span class="k">Hash (SHA-1)</span><span class="v">A 40-hex-character fingerprint computed from the content. Same content ⇒ same hash.</span></div>
+  <div class="kv"><span class="k">Blob / tree</span><span class="v">Blob = the content of one file. Tree = one directory listing pointing to blobs and sub-trees.</span></div>
+  <div class="kv"><span class="k">Parent</span><span class="v">The commit this one was created on top of. Merge commits have two.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A commit = tree (snapshot) + parent(s) + author/committer + message.</li><li>Unchanged files are not copied again — the new tree points at the same blob.</li><li>The hash is computed from all of that, so changing any byte (even the message) renames the commit.</li><li>Rewriting one old commit renames every descendant — the root cause of “don’t rewrite pushed history”.</li></ul>
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
@@ -280,6 +371,7 @@ git show HEAD^2           <span class="tok-comment"># the SECOND parent — only
 <p class="lead">Mô hình đầu tiên trong đầu gần như ai cũng sai theo cùng một kiểu: họ hình dung commit là một danh sách thay đổi — "dòng 12 đổi, dòng 40 xoá". Không phải vậy. <strong>Một commit lưu trạng thái ĐẦY ĐỦ của mọi file được theo dõi tại thời điểm đó.</strong> Git cho bạn xem phần khác biệt vì phần khác biệt dễ đọc, nhưng nó tính ra khi cần từ hai ảnh chụp đầy đủ.</p>
 
 <h3>Bên trong một commit có gì</h3>
+${slide('git-01', 5, 'Một commit là một tấm ảnh trọn dự án')}
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">tree</span><span class="lz-v">Con trỏ tới danh sách thư mục đầy đủ tại thời điểm đó — mọi file và thư mục, kèm nội dung từng cái.</span></div>
   <div class="lz-layer"><span class="lz-k">parent</span><span class="lz-v">Commit đứng trước. Không có cha với commit đầu tiên; hai cha với một commit hợp nhất.</span></div>
@@ -301,6 +393,7 @@ commit number 10</div>
 <div class="callout ok">Vì thế <code>git checkout</code> một commit mười năm tuổi chạy tức thì, trong khi một hệ lưu bản khác biệt sẽ phải phát lại mười năm bản vá. Ảnh chụp đổi một chút đĩa lấy rất nhiều tốc độ — và nhờ định danh theo nội dung cộng nén, chúng thường tốn <em>ít</em> đĩa hơn chính các hệ dựa-trên-diff mà chúng thay thế.</div>
 
 <h3>Mã băm đến từ đâu</h3>
+${slide('git-01', 6, 'Đổi một byte là đổi cả tên')}
 <p>Mọi đối tượng trong Git — nội dung file, danh sách thư mục, commit — đều được lưu dưới mã băm SHA-1 của chính các byte của nó. Bất cứ thứ gì bạn gọi tên được trong Git, bạn gọi tên nó bằng nội dung:</p>
 <pre><code><span class="tok-comment"># Mã băm của một mẩu nội dung, tính đúng cách Git tính:</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"hello"</span> | git hash-object --stdin</code></pre>
@@ -312,6 +405,7 @@ commit number 10</div>
 </div>
 
 <h3>Sợi xích — và vì sao viết lại lịch sử đổi tên mọi thứ</h3>
+${slide('git-01', 7, 'Lịch sử là chuỗi con trỏ cha')}
 <div class="lz-map">
   <div class="lz-stage">Một commit gọi tên cha bằng mã băm, nên sợi xích được hàn chặt</div>
   <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">8f3c1a2 — "first commit"</div><div class="lz-nsub">cha: không có. Gốc của dự án.</div></div></div>
@@ -322,6 +416,7 @@ commit number 10</div>
 <div class="callout warn">Chỉ một sự thật đó giải thích cả Chương 8. Khi bạn amend, gộp hay rebase, bạn không sửa các commit — bạn <em>tạo ra những cái mới</em> và bỏ rơi cái cũ. Ở cục bộ thì vô hại. Khi người khác đã có mã băm cũ, lịch sử của họ và của bạn âm thầm phân ly — vì thế viết lại lịch sử đã chia sẻ cần một cuộc trò chuyện trước.</div>
 
 <h3>Gọi tên commit mà không phải gõ 40 ký tự</h3>
+${slide('git-01', 8, 'Các cách gọi tên commit')}
 <pre><code>git show 1a2b3c4          <span class="tok-comment"># một tiền tố duy nhất là đủ — thường 7 ký tự</span>
 git show HEAD             <span class="tok-comment"># chỗ bạn đang đứng</span>
 git show HEAD~1           <span class="tok-comment"># lùi một commit (cha)</span>
@@ -335,6 +430,24 @@ git show HEAD^2           <span class="tok-comment"># cha THỨ HAI — chỉ c�
 
 <h3>SHA-1, và câu hỏi về đụng độ</h3>
 <p>Về lịch sử Git dùng SHA-1, thuật toán đã bị phá với mục đích tấn công — người ta dựng được hai file khác nhau có cùng mã băm. Git 2.13 trở lên kèm cơ chế phát hiện đụng độ, từ chối các mẫu tấn công đã biết, và Git đang trong quá trình chuyển sang SHA-256. Với việc hằng ngày, câu trả lời thực dụng là: đụng độ ngẫu nhiên không xảy ra, còn đụng độ cố ý thì bị phát hiện. Đừng xây một cơ chế bảo mật dựa trên một mã băm commit trần; nhưng cứ yên tâm dùng mã băm để định danh nội dung.</p>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Trong kho <code>thu-git</code>, chạy <code>git cat-file -p HEAD</code>. Tìm dòng <code>tree</code> và dòng <code>parent</code> (commit đầu tiên thì không có parent).</li><li>Chép mã băm của tree rồi chạy <code>git cat-file -p &lt;mã-tree&gt;</code> — mỗi file một dòng, mỗi dòng trỏ tới một <code>blob</code>.</li><li>Chạy <code>git cat-file -p &lt;mã-blob&gt;</code> với blob của <code>a.txt</code>. Bạn đang đọc nội dung file thẳng từ kho đối tượng.</li><li>Sửa lời nhắn commit cuối bằng <code>git commit --amend -m "…"</code> rồi so <code>git log --oneline</code> trước/sau: mã băm đổi dù không file nào đổi.</li></ol>
+<pre><code class="language-bash">git cat-file -p HEAD^{tree}
+100644 blob 4c49bd78f1d08f2bc09fa0bd8191ed38b7dce5e3	.gitignore
+100644 blob c1827f07e114c20547dc6a7296588870a4b5b62c	a.txt</code></pre>
+<p><strong>Đạt khi:</strong> bạn tự lần được HEAD → commit → tree → blob bằng tay, và giải thích được vì sao chỉ sửa lời nhắn mà ra mã băm mới.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Snapshot</span><span class="v">Ảnh chụp — toàn bộ file được theo dõi tại một thời điểm, không phải danh sách thay đổi.</span></div>
+  <div class="kv"><span class="k">Hash (SHA-1)</span><span class="v">Mã băm — dấu vân tay 40 ký tự hex tính từ nội dung. Nội dung giống ⇒ mã giống.</span></div>
+  <div class="kv"><span class="k">Blob / tree</span><span class="v">Blob = nội dung một file. Tree = danh sách một thư mục, trỏ tới các blob và tree con.</span></div>
+  <div class="kv"><span class="k">Parent</span><span class="v">Commit cha — commit mà commit này được tạo lên trên. Commit merge có hai cha.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một commit = tree (ảnh chụp) + cha + tác giả/người commit + lời nhắn.</li><li>File không đổi thì không chép lại — tree mới trỏ vào đúng blob cũ.</li><li>Mã băm tính từ tất cả những thứ đó, nên đổi bất kỳ byte nào (kể cả lời nhắn) là đổi tên commit.</li><li>Viết lại một commit cũ đổi tên mọi commit con cháu — gốc rễ của luật “đừng viết lại lịch sử đã push”.</li></ul>
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
@@ -368,6 +481,7 @@ git add &lt;paths&gt;       <span class="tok-comment"># choose what belongs in t
 git commit -m <span class="tok-string">"…"</span>     <span class="tok-comment"># seal it, with an explanation</span></code></pre>
 
 <h3>The three faces of git diff</h3>
+${slide('git-01', 9, 'Vòng lặp hằng ngày và ba kiểu git diff')}
 <p>This trips up nearly everyone, and it is the direct consequence of the three trees from 1.1. <code>git diff</code> compares two of the three, and <em>which two</em> depends on the flag:</p>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">git diff</span><span class="lz-v">index ↔ working directory. "What have I changed that is <strong>not yet staged</strong>?"</span></div>
@@ -377,6 +491,7 @@ git commit -m <span class="tok-string">"…"</span>     <span class="tok-comment
 <div class="callout ok">Make <code>git diff --staged</code> the last thing you run before every commit. It is the only view that shows what you are actually about to record — and it catches the classic mistake from 1.1 (staged an old version, kept editing) plus the worse one: a stray <code>console.log</code> or a hard-coded password riding along.</div>
 
 <h3>Reading a diff</h3>
+${slide('git-01', 10, 'Đọc một diff trong 10 giây')}
 <pre><code>git diff</code></pre>
 <div class="out">diff --git a/src/auth.js b/src/auth.js
 index 7c4a1b2..9e8f3d1 100644
@@ -411,6 +526,7 @@ git add -A                   <span class="tok-comment"># everything, including d
 <div class="callout warn"><code>git add .</code> is a habit worth breaking. It sweeps in whatever happens to be lying around — a <code>.env</code> you were testing with, a 40 MB debug log, a scratch file. Naming the paths you mean takes three extra seconds and is the cheapest security control in this course. When you do use it, follow it with <code>git diff --staged --stat</code> and actually read the list.</div>
 
 <h3>git add -p: the feature that justifies the staging area</h3>
+${slide('git-01', 11, 'add -p: một file, hai commit gọn')}
 <p>When one file contains two unrelated changes, stage them separately. <code>-p</code> (patch) walks you through hunk by hunk:</p>
 <pre><code>git add -p src/auth.js</code></pre>
 <div class="out">@@ -12,7 +12,7 @@ function login(email, password) {
@@ -440,6 +556,20 @@ git restore src/auth.js            <span class="tok-comment"># working dir ← i
 <div class="callout danger">Those two lines differ by one flag and one is destructive. <code>git restore --staged</code> only rewinds the index — completely safe. <code>git restore</code> without the flag overwrites the file on disk, and uncommitted content is the one thing Git genuinely cannot bring back. Read the flag twice.</div>
 <p>Modern Git splits these deliberately: <code>git switch</code> for branches, <code>git restore</code> for file content. The old <code>git checkout</code> did both jobs, which is exactly why it confused everybody for fifteen years.</p>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>In <code>thu-git</code>, create <code>form.js</code> with 10 lines and commit it.</li><li>Make TWO unrelated edits: fix a “bug” near the top (line 2) and rename a variable near the bottom (line 9). Add a <code>console.log("debug")</code> in the middle.</li><li>Run <code>git add -p form.js</code>. Answer <code>y</code> for the bug fix, <code>n</code> for the rest, then commit <code>fix: …</code>. If Git shows two changes in one hunk, press <code>s</code> to split it.</li><li>Repeat for the rename (<code>refactor: …</code>). Finally <code>git restore form.js</code> to throw away the debug line.</li></ol><p><strong>Done when:</strong> <code>git log --oneline</code> shows two separate commits, <code>git show HEAD~1</code> contains ONLY the bug fix, and <code>git status</code> is clean.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hunk</span><span class="v">A block of consecutive changed lines in a diff, starting with <code>@@ -a,b +c,d @@</code>.</span></div>
+  <div class="kv"><span class="k">Stage / unstage</span><span class="v">Put a change into / take it out of the index (<code>git add</code> / <code>git restore --staged</code>).</span></div>
+  <div class="kv"><span class="k">Atomic commit</span><span class="v">A commit that does exactly one thing, so it can be reviewed or reverted alone.</span></div>
+  <div class="kv"><span class="k">Patch mode (<code>-p</code>)</span><span class="v">Interactive mode that asks you hunk by hunk: y, n, s (split), e (edit).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The loop: edit → <code>status</code> → <code>diff</code> → <code>add -p</code> → <code>diff --staged</code> → <code>commit</code>.</li><li><code>git diff</code> = not yet staged; <code>git diff --staged</code> = about to be committed; <code>git diff HEAD</code> = both.</li><li><code>git add -p</code> lets one messy file become several clean commits.</li><li><code>git restore --staged</code> unstages safely; plain <code>git restore</code> discards edits for good.</li></ul>
+
 <a class="link-card" href="https://git-scm.com/docs/git-add#Documentation/git-add.txt---patch" target="_blank" rel="noopener">
   <span class="lc-ico">✂️</span>
   <span class="lc-body"><span class="lc-title">git add --patch — the interactive mode reference</span><span class="lc-sub">Every key in the hunk prompt, including the ones nobody remembers.</span></span>
@@ -463,6 +593,7 @@ git add &lt;đường dẫn&gt;   <span class="tok-comment"># chọn thứ thu�
 git commit -m <span class="tok-string">"…"</span>     <span class="tok-comment"># niêm phong lại, kèm lời giải thích</span></code></pre>
 
 <h3>Ba khuôn mặt của git diff</h3>
+${slide('git-01', 9, 'Vòng lặp hằng ngày và ba kiểu git diff')}
 <p>Chỗ này làm gần như ai cũng vấp, và nó là hệ quả trực tiếp của ba cái cây ở bài 1.1. <code>git diff</code> so hai trong ba cây, và <em>hai cái nào</em> phụ thuộc vào cờ:</p>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">git diff</span><span class="lz-v">index ↔ thư mục làm việc. "Tôi đã đổi gì mà <strong>chưa đưa vào staging</strong>?"</span></div>
@@ -472,6 +603,7 @@ git commit -m <span class="tok-string">"…"</span>     <span class="tok-comment
 <div class="callout ok">Hãy để <code>git diff --staged</code> là việc cuối cùng bạn chạy trước mỗi commit. Nó là góc nhìn duy nhất cho thấy thứ bạn thật sự sắp ghi lại — và nó bắt được lỗi kinh điển ở bài 1.1 (staging bản cũ rồi sửa tiếp) cộng thêm lỗi tệ hơn: một <code>console.log</code> lạc hay một mật khẩu viết cứng đi ké.</div>
 
 <h3>Đọc một diff</h3>
+${slide('git-01', 10, 'Đọc một diff trong 10 giây')}
 <pre><code>git diff</code></pre>
 <div class="out">diff --git a/src/auth.js b/src/auth.js
 index 7c4a1b2..9e8f3d1 100644
@@ -506,6 +638,7 @@ git add -A                   <span class="tok-comment"># mọi thứ, kể cả 
 <div class="callout warn"><code>git add .</code> là một thói quen đáng bỏ. Nó vơ luôn bất cứ thứ gì tình cờ đang nằm đó — một <code>.env</code> bạn đang thử, một file log gỡ lỗi 40 MB, một file nháp. Gõ đúng đường dẫn bạn muốn tốn thêm ba giây và là biện pháp bảo mật rẻ nhất trong khoá này. Khi buộc phải dùng nó, hãy chạy tiếp <code>git diff --staged --stat</code> và thật sự đọc danh sách.</div>
 
 <h3>git add -p: tính năng biện minh cho sự tồn tại của vùng staging</h3>
+${slide('git-01', 11, 'add -p: một file, hai commit gọn')}
 <p>Khi một file chứa hai thay đổi không liên quan, hãy đưa chúng vào staging riêng. <code>-p</code> (patch) dắt bạn đi qua từng đoạn:</p>
 <pre><code>git add -p src/auth.js</code></pre>
 <div class="out">@@ -12,7 +12,7 @@ function login(email, password) {
@@ -535,6 +668,20 @@ git restore src/auth.js            <span class="tok-comment"># thư mục làm v
 <div class="callout danger">Hai dòng đó khác nhau một cái cờ và một trong hai có tính phá huỷ. <code>git restore --staged</code> chỉ tua lại index — hoàn toàn an toàn. <code>git restore</code> không có cờ thì ghi đè file trên đĩa, mà nội dung chưa commit là thứ duy nhất Git thật sự không mang về được. Hãy đọc cái cờ hai lần.</div>
 <p>Git đời mới tách hai việc này có chủ ý: <code>git switch</code> cho nhánh, <code>git restore</code> cho nội dung file. <code>git checkout</code> cũ làm cả hai việc, và đó chính là lý do nó làm mọi người rối suốt mười lăm năm.</p>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Trong <code>thu-git</code>, tạo <code>form.js</code> khoảng 10 dòng và commit.</li><li>Sửa HAI chỗ không liên quan: “sửa lỗi” ở gần đầu (dòng 2) và đổi tên một biến ở gần cuối (dòng 9). Thêm một dòng <code>console.log("debug")</code> ở giữa.</li><li>Chạy <code>git add -p form.js</code>. Trả lời <code>y</code> cho phần sửa lỗi, <code>n</code> cho phần còn lại, rồi commit <code>fix: …</code>. Nếu Git gộp hai thay đổi vào một khúc, nhấn <code>s</code> để chẻ.</li><li>Làm lại với phần đổi tên (<code>refactor: …</code>). Cuối cùng <code>git restore form.js</code> để vứt dòng debug.</li></ol><p><strong>Đạt khi:</strong> <code>git log --oneline</code> có hai commit riêng, <code>git show HEAD~1</code> CHỈ chứa phần sửa lỗi, và <code>git status</code> sạch.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hunk</span><span class="v">Khúc — một cụm dòng thay đổi liền nhau trong diff, mở đầu bằng <code>@@ -a,b +c,d @@</code>.</span></div>
+  <div class="kv"><span class="k">Stage / unstage</span><span class="v">Đưa một thay đổi vào / gỡ ra khỏi index (<code>git add</code> / <code>git restore --staged</code>).</span></div>
+  <div class="kv"><span class="k">Atomic commit</span><span class="v">Commit nguyên tử — làm đúng MỘT việc, nên review hay revert riêng được.</span></div>
+  <div class="kv"><span class="k">Patch mode (<code>-p</code>)</span><span class="v">Chế độ tương tác hỏi từng khúc: y (lấy), n (bỏ), s (chẻ nhỏ), e (sửa tay).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Vòng lặp: sửa → <code>status</code> → <code>diff</code> → <code>add -p</code> → <code>diff --staged</code> → <code>commit</code>.</li><li><code>git diff</code> = chưa staging; <code>git diff --staged</code> = sắp commit; <code>git diff HEAD</code> = cả hai.</li><li><code>git add -p</code> biến một file lộn xộn thành nhiều commit sạch.</li><li><code>git restore --staged</code> gỡ khỏi staging an toàn; <code>git restore</code> trần thì vứt thay đổi vĩnh viễn.</li></ul>
+
 <a class="link-card" href="https://git-scm.com/docs/git-add#Documentation/git-add.txt---patch" target="_blank" rel="noopener">
   <span class="lc-ico">✂️</span>
   <span class="lc-body"><span class="lc-title">git add --patch — tài liệu chế độ tương tác</span><span class="lc-sub">Mọi phím trong lời nhắc từng đoạn, kể cả những phím không ai nhớ.</span></span>
@@ -563,6 +710,7 @@ git restore src/auth.js            <span class="tok-comment"># thư mục làm v
 <p class="lead">Git generates the snapshot, the hash, the timestamp and the parent link. The message is the one thing that requires judgement — and the one thing that decides whether your history is an asset or noise. In two years nobody will read your code comments as often as they read <code>git log</code> while trying to work out why a line exists.</p>
 
 <h3>The shape of a good message</h3>
+${slide('git-01', 12, 'Giải phẫu một lời nhắn commit tốt')}
 <pre><code>fix: reject expired refresh tokens on /auth/refresh
 
 A token whose exp had passed was still accepted because we called
@@ -604,6 +752,7 @@ Closes #412</code></pre>
 </ul>
 
 <h3>Conventional Commits — structure a machine can read</h3>
+${slide('git-01', 13, 'Conventional Commits')}
 <p>A widely used convention that turns the subject line into parseable data:</p>
 <pre><code>&lt;type&gt;(&lt;optional scope&gt;): &lt;subject&gt;
 
@@ -641,6 +790,24 @@ git config --global commit.template ~/.gitmessage.txt</code></pre>
 7b3e9d1 refactor(api): extract pagination into a helper</div>
 <p>That is a history you can read at a glance a year later. Compare it to the alternative — <code>update</code>, <code>fix</code>, <code>fix again</code>, <code>asdf</code>, <code>final fix</code> — which is the same amount of work to type and worth nothing.</p>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Run <code>git log --oneline -15</code> on any real project you have (or cuongthai.com). Mark every message that would be useless in a year (“update”, “fix”, “wip”).</li><li>Rewrite three of them on paper in the form <code>type(scope): imperative summary</code> + a body that explains WHY.</li><li>Set a real editor once: <code>git config --global core.editor "code --wait"</code>. Then make a commit with plain <code>git commit</code> (no <code>-m</code>) and write a title, blank line, and body.</li><li>Check it with <code>git log -1</code> — the body must appear under the title.</li></ol>
+<pre><code class="language-bash">git config --global core.editor "code --wait"
+git commit            <span class="tok-comment"># VS Code opens; save + close the tab to finish</span></code></pre>
+<p><strong>Done when:</strong> your new commit has a title ≤ 72 characters in imperative mood, a blank line, and a body that answers “why?”.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Subject line</span><span class="v">The first line of the message — the only part most tools show.</span></div>
+  <div class="kv"><span class="k">Imperative mood</span><span class="v">Command form: “add”, “fix”, “remove” — as if ordering the code.</span></div>
+  <div class="kv"><span class="k">Body</span><span class="v">Free text after one blank line: the reason and context for the change.</span></div>
+  <div class="kv"><span class="k">Conventional Commits</span><span class="v">A convention <code>type(scope)!: summary</code> that tools can parse to build changelogs and version numbers.</span></div>
+  <div class="kv"><span class="k">Trailer</span><span class="v">A <code>Key: value</code> line at the end, e.g. <code>Closes #42</code>, <code>Co-authored-by:</code>.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The diff already says WHAT changed — the message must say WHY.</li><li>Title ≤ ~50–72 chars, imperative, no trailing period; then a blank line; then the body.</li><li>Conventional Commits (<code>feat</code>, <code>fix</code>, <code>refactor</code>…) make history machine-readable.</li><li><code>Closes #42</code> in a commit/PR closes the issue automatically on merge.</li></ul>
+
 <a class="link-card" href="https://www.conventionalcommits.org/en/v1.0.0/" target="_blank" rel="noopener">
   <span class="lc-ico">📐</span>
   <span class="lc-body"><span class="lc-title">Conventional Commits 1.0.0 — the specification</span><span class="lc-sub">Short, complete, and the basis of most automated changelog tooling.</span></span>
@@ -660,6 +827,7 @@ git config --global commit.template ~/.gitmessage.txt</code></pre>
 <p class="lead">Git sinh ra ảnh chụp, mã băm, dấu thời gian và liên kết tới cha. Lời nhắn là thứ duy nhất đòi hỏi phán đoán — và là thứ duy nhất quyết định lịch sử của bạn là tài sản hay tiếng ồn. Hai năm nữa sẽ không ai đọc chú thích trong mã của bạn nhiều bằng đọc <code>git log</code> khi cố hiểu vì sao một dòng tồn tại.</p>
 
 <h3>Hình dạng của một lời nhắn tốt</h3>
+${slide('git-01', 12, 'Giải phẫu một lời nhắn commit tốt')}
 <pre><code>fix: từ chối refresh token đã hết hạn ở /auth/refresh
 
 Một token đã quá exp vẫn được chấp nhận vì ta gọi jwt.verify với
@@ -700,6 +868,7 @@ Closes #412</code></pre>
 </ul>
 
 <h3>Conventional Commits — cấu trúc mà máy đọc được</h3>
+${slide('git-01', 13, 'Conventional Commits')}
 <p>Một quy ước được dùng rộng rãi, biến dòng tiêu đề thành dữ liệu phân tích được:</p>
 <pre><code>&lt;loại&gt;(&lt;phạm vi tuỳ chọn&gt;): &lt;tiêu đề&gt;
 
@@ -737,6 +906,24 @@ git config --global commit.template ~/.gitmessage.txt</code></pre>
 7b3e9d1 refactor(api): tach phan trang ra mot helper</div>
 <p>Đó là một lịch sử mà một năm sau bạn liếc là đọc được. So với phương án kia — <code>update</code>, <code>fix</code>, <code>fix again</code>, <code>asdf</code>, <code>final fix</code> — vốn tốn đúng bằng ấy công gõ mà chẳng đáng gì.</p>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Chạy <code>git log --oneline -15</code> trên một dự án thật bạn có (hoặc cuongthai.com). Đánh dấu mọi lời nhắn sẽ vô dụng sau một năm (“update”, “fix”, “wip”).</li><li>Viết lại ba trong số đó ra giấy theo dạng <code>type(phạm vi): tóm tắt thể mệnh lệnh</code> + phần thân giải thích VÌ SAO.</li><li>Đặt editor thật một lần: <code>git config --global core.editor "code --wait"</code>. Rồi commit bằng <code>git commit</code> trần (không <code>-m</code>), viết tiêu đề, một dòng trống, và phần thân.</li><li>Kiểm bằng <code>git log -1</code> — phần thân phải hiện dưới tiêu đề.</li></ol>
+<pre><code class="language-bash">git config --global core.editor "code --wait"
+git commit            <span class="tok-comment"># VS Code mở ra; lưu + đóng tab là xong</span></code></pre>
+<p><strong>Đạt khi:</strong> commit mới có tiêu đề ≤ 72 ký tự ở thể mệnh lệnh, một dòng trống, và phần thân trả lời “vì sao?”.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Subject line</span><span class="v">Dòng tiêu đề — dòng đầu của lời nhắn, phần duy nhất đa số công cụ hiển thị.</span></div>
+  <div class="kv"><span class="k">Imperative mood</span><span class="v">Thể mệnh lệnh: “thêm”, “sửa”, “bỏ” — như đang ra lệnh cho mã.</span></div>
+  <div class="kv"><span class="k">Body</span><span class="v">Phần thân — văn bản sau một dòng trống: lý do và bối cảnh của thay đổi.</span></div>
+  <div class="kv"><span class="k">Conventional Commits</span><span class="v">Quy ước <code>type(scope)!: tóm tắt</code> mà công cụ đọc được để sinh changelog và số phiên bản.</span></div>
+  <div class="kv"><span class="k">Trailer</span><span class="v">Dòng <code>Khoá: giá trị</code> ở cuối, vd <code>Closes #42</code>, <code>Co-authored-by:</code>.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Diff đã nói CÁI GÌ thay đổi — lời nhắn phải nói VÌ SAO.</li><li>Tiêu đề ≤ ~50–72 ký tự, thể mệnh lệnh, không chấm cuối; rồi một dòng trống; rồi phần thân.</li><li>Conventional Commits (<code>feat</code>, <code>fix</code>, <code>refactor</code>…) làm lịch sử đọc được bằng máy.</li><li><code>Closes #42</code> trong commit/PR tự đóng issue khi merge.</li></ul>
+
 <a class="link-card" href="https://www.conventionalcommits.org/vi/v1.0.0/" target="_blank" rel="noopener">
   <span class="lc-ico">📐</span>
   <span class="lc-body"><span class="lc-title">Conventional Commits 1.0.0 — bản đặc tả (có tiếng Việt)</span><span class="lc-sub">Ngắn, đủ, và là nền của hầu hết công cụ tự sinh changelog.</span></span>
@@ -765,6 +952,7 @@ git config --global commit.template ~/.gitmessage.txt</code></pre>
 <p class="lead">A repository should contain <em>sources</em> — the things a human wrote and from which everything else can be rebuilt. Everything else is noise at best and a security incident at worst. <code>.gitignore</code> is how you draw that line, and it is worth drawing before the first commit rather than after.</p>
 
 <h3>The four categories that never belong in Git</h3>
+${slide('git-01', 14, 'Bốn nhóm không bao giờ commit')}
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">Secrets</span><span class="lz-v"><code>.env</code>, private keys, tokens, service-account JSON. The serious one — see the box below. Committing a secret means rotating it, not deleting it.</span></div>
   <div class="lz-layer"><span class="lz-k">Dependencies</span><span class="lz-v"><code>node_modules/</code>, <code>vendor/</code>, <code>.venv/</code>. Rebuildable from a lockfile, and enormous. Commit the <strong>lockfile</strong>; never the folder.</span></div>
@@ -859,6 +1047,26 @@ Thumbs.db
 !.vscode/extensions.json</code></pre>
 <div class="callout ok">Note the last two lines and the <code>!.env.example</code>. Committing an <code>.env.example</code> with every key present but every value blank is one of the highest-value habits in this lesson: it documents what the project needs to run, and a new developer copies it to <code>.env</code> and fills it in. Ignoring the whole <code>.vscode/</code> except <code>extensions.json</code> does the same for recommended extensions.</div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>In <code>thu-git</code>, create <code>.env</code> containing <code>SECRET=1</code>, then make the classic mistake: <code>git add .env &amp;&amp; git commit -m "oops"</code>.</li><li>Add <code>.env</code> to <code>.gitignore</code> and run <code>git status -s</code>. Notice .env is NOT ignored — it is already tracked.</li><li>Fix it properly: <code>git rm --cached .env</code>, commit together with <code>.gitignore</code>.</li><li>Verify: <code>ls -a</code> still shows .env on disk, <code>git status</code> is clean, and <code>git check-ignore -v .env</code> names the rule.</li></ol>
+<pre><code class="language-bash">git rm --cached .env
+rm '.env'
+git check-ignore -v .env
+.gitignore:1:.env	.env</code></pre>
+<p><strong>Done when:</strong> .env is on disk but no longer tracked, and <code>git check-ignore -v .env</code> prints the rule below. (It is still inside the “oops” commit — Chapter 8 removes it from history.)</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">.gitignore</span><span class="v">A file listing patterns of paths Git should NOT start tracking.</span></div>
+  <div class="kv"><span class="k">Untracked vs ignored</span><span class="v">Untracked = shown as <code>??</code>. Ignored = hidden from <code>git status</code> entirely.</span></div>
+  <div class="kv"><span class="k"><code>git rm --cached</code></span><span class="v">Stop tracking a file but keep it on disk.</span></div>
+  <div class="kv"><span class="k">Negation <code>!</code></span><span class="v">Re-include something an earlier rule excluded, e.g. <code>!.env.example</code>.</span></div>
+  <div class="kv"><span class="k"><code>.git/info/exclude</code></span><span class="v">A private ignore list for this clone only — never shared.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Four groups never belong in Git: secrets, downloadable deps, build output, machine/editor junk.</li><li>.gitignore only affects files that are NOT tracked yet.</li><li>Already committed? <code>git rm --cached</code> + .gitignore + commit.</li><li>A leaked key is compromised: rotate it FIRST, clean history second.</li></ul>
+
 <a class="link-card" href="https://github.com/github/gitignore" target="_blank" rel="noopener">
   <span class="lc-ico">📋</span>
   <span class="lc-body"><span class="lc-title">github/gitignore — official templates per language</span><span class="lc-sub">Node, Python, Java, Unity, Go… Start from the template for your stack instead of inventing one.</span></span>
@@ -878,6 +1086,7 @@ Thumbs.db
 <p class="lead">Một kho mã nên chứa <em>mã nguồn</em> — những thứ do con người viết và từ đó dựng lại được mọi thứ khác. Phần còn lại nhẹ thì là tiếng ồn, nặng thì là một sự cố bảo mật. <code>.gitignore</code> là cách bạn vạch ranh giới đó, và nên vạch trước commit đầu tiên thay vì sau.</p>
 
 <h3>Bốn nhóm không bao giờ thuộc về Git</h3>
+${slide('git-01', 14, 'Bốn nhóm không bao giờ commit')}
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">Bí mật</span><span class="lz-v"><code>.env</code>, khoá riêng tư, token, JSON tài khoản dịch vụ. Nhóm nghiêm trọng — xem hộp bên dưới. Commit một bí mật nghĩa là phải XOAY khoá, không phải xoá dòng.</span></div>
   <div class="lz-layer"><span class="lz-k">Thư viện phụ thuộc</span><span class="lz-v"><code>node_modules/</code>, <code>vendor/</code>, <code>.venv/</code>. Dựng lại được từ lockfile, và khổng lồ. Hãy commit <strong>lockfile</strong>; đừng bao giờ commit thư mục.</span></div>
@@ -972,6 +1181,26 @@ Thumbs.db
 !.vscode/extensions.json</code></pre>
 <div class="callout ok">Để ý hai dòng cuối và dòng <code>!.env.example</code>. Commit một <code>.env.example</code> có đủ mọi khoá nhưng để trống mọi giá trị là một trong những thói quen giá trị nhất bài này: nó ghi lại dự án cần gì để chạy, và người mới chỉ việc chép sang <code>.env</code> rồi điền. Ignore cả <code>.vscode/</code> trừ <code>extensions.json</code> làm đúng việc đó cho danh sách tiện ích khuyến nghị.</div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Trong <code>thu-git</code>, tạo <code>.env</code> chứa <code>SECRET=1</code>, rồi mắc lỗi kinh điển: <code>git add .env &amp;&amp; git commit -m "oops"</code>.</li><li>Thêm <code>.env</code> vào <code>.gitignore</code> rồi chạy <code>git status -s</code>. Để ý .env KHÔNG bị bỏ qua — vì nó đã được theo dõi.</li><li>Sửa đúng cách: <code>git rm --cached .env</code>, commit cùng với <code>.gitignore</code>.</li><li>Kiểm: <code>ls -a</code> vẫn thấy .env trên đĩa, <code>git status</code> sạch, và <code>git check-ignore -v .env</code> chỉ ra đúng luật.</li></ol>
+<pre><code class="language-bash">git rm --cached .env
+rm '.env'
+git check-ignore -v .env
+.gitignore:1:.env	.env</code></pre>
+<p><strong>Đạt khi:</strong> .env nằm trên đĩa nhưng không còn được theo dõi, và <code>git check-ignore -v .env</code> in ra như dưới. (Nó vẫn nằm trong commit “oops” — Chương 8 gỡ nó khỏi lịch sử.)</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">.gitignore</span><span class="v">File liệt kê mẫu đường dẫn mà Git KHÔNG được bắt đầu theo dõi.</span></div>
+  <div class="kv"><span class="k">Untracked vs ignored</span><span class="v">Chưa theo dõi = hiện <code>??</code>. Bị bỏ qua (ignored) = ẩn hẳn khỏi <code>git status</code>.</span></div>
+  <div class="kv"><span class="k"><code>git rm --cached</code></span><span class="v">Ngừng theo dõi một file nhưng giữ nguyên nó trên đĩa.</span></div>
+  <div class="kv"><span class="k">Phủ định <code>!</code></span><span class="v">Lấy lại thứ mà luật trước đã loại, vd <code>!.env.example</code>.</span></div>
+  <div class="kv"><span class="k"><code>.git/info/exclude</code></span><span class="v">Danh sách bỏ qua riêng cho bản clone này — không chia sẻ với ai.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Bốn nhóm không bao giờ thuộc về Git: bí mật, thư viện tải về được, thứ build ra, rác của máy/editor.</li><li>.gitignore chỉ tác dụng với file CHƯA được theo dõi.</li><li>Lỡ commit rồi? <code>git rm --cached</code> + .gitignore + commit.</li><li>Khoá đã lộ là coi như mất: đổi khoá TRƯỚC, dọn lịch sử SAU.</li></ul>
+
 <a class="link-card" href="https://github.com/github/gitignore" target="_blank" rel="noopener">
   <span class="lc-ico">📋</span>
   <span class="lc-body"><span class="lc-title">github/gitignore — mẫu chính thức theo từng ngôn ngữ</span><span class="lc-sub">Node, Python, Java, Unity, Go… Bắt đầu từ mẫu của stack bạn thay vì tự nghĩ ra.</span></span>
@@ -996,108 +1225,136 @@ Thumbs.db
       description: 'Tám câu về ba cái cây, commit là ảnh chụp, mã băm và commit cha, ba dạng của git diff, và luật ignore chỉ tác dụng với file chưa theo dõi.',
       content: `
 <div class="ml-en">
-<span class="eyebrow">Chapter 1 · Quiz</span>
+<span class="eyebrow">Chapter 1 · Check</span>
 <h2>Check what stuck</h2>
-<p class="lead">Eight questions on the model. Answer from memory; they follow the lesson order.</p>
-<div class="callout ok">Aim for 7/8. The two that matter most in real work: which trees <code>git diff --staged</code> compares (1.3), and why <code>.gitignore</code> does nothing for a file that is already tracked (1.5).</div>
+<p class="lead">Ten situations from real work — each one is decided by the model you just learned. Read the explanation after submitting, especially for the ones you got right by guessing.</p>
+<h3>Self-check before you start</h3>
+<ul>
+<li>I can name the three trees and say which tree <code>git add</code>, <code>git commit</code> and <code>git restore --staged</code> change.</li>
+<li>I can read <code>git status -s</code> column by column (<code>MM</code>, <code>A </code>, <code>??</code>).</li>
+<li>I know why amending a message changes the commit hash.</li>
+<li>I can split one file into two commits with <code>git add -p</code>.</li>
+<li>I know why adding an already-committed <code>.env</code> to .gitignore does nothing, and what to run instead.</li>
+</ul>
+${slide('git-01', 15, 'Bảng tra nhanh Chương 1')}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Kiểm tra</span>
 <h2>Xem thử đọng lại được gì</h2>
-<p class="lead">Tám câu về mô hình. Trả lời bằng trí nhớ; các câu theo thứ tự bài.</p>
-<div class="callout ok">Hãy nhắm 7/8. Hai câu quan trọng nhất trong việc thật: <code>git diff --staged</code> so hai cây nào (1.3), và vì sao <code>.gitignore</code> vô tác dụng với file đã được theo dõi (1.5).</div>
+<p class="lead">Mười tình huống từ việc thật — câu nào cũng được quyết định bởi mô hình bạn vừa học. Đọc phần giải thích sau khi nộp, nhất là những câu bạn đúng nhờ đoán.</p>
+<h3>Tự kiểm trước khi làm</h3>
+<ul>
+<li>Tôi kể được ba cái cây và nói được <code>git add</code>, <code>git commit</code>, <code>git restore --staged</code> đổi cây nào.</li>
+<li>Tôi đọc được <code>git status -s</code> theo từng cột (<code>MM</code>, <code>A </code>, <code>??</code>).</li>
+<li>Tôi biết vì sao sửa lời nhắn thì mã băm commit đổi.</li>
+<li>Tôi tách được một file thành hai commit bằng <code>git add -p</code>.</li>
+<li>Tôi biết vì sao thêm <code>.env</code> đã commit vào .gitignore là vô tác dụng, và phải chạy gì thay vào.</li>
+</ul>
+${slide('git-01', 15, 'Bảng tra nhanh Chương 1')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 900,
         questions: [
           {
-            question: 'git status shows the same file under both "Changes to be committed" and "Changes not staged for commit". What does that mean?|||git status hiện cùng một file ở cả "Changes to be committed" lẫn "Changes not staged for commit". Điều đó nghĩa là gì?',
+            question: 'You run git add app.js, keep editing app.js, then git commit. What ends up in the commit?|||Bạn chạy git add app.js, sửa tiếp app.js, rồi git commit. Commit chứa phiên bản nào?',
             options: [
-              'The repository is corrupted|||Kho mã bị hỏng',
-              'You staged the file, then edited it again — the index and the working directory now hold different versions|||Bạn đã staging file đó rồi sửa tiếp — index và thư mục làm việc giờ mang hai phiên bản khác nhau',
-              'The file has a merge conflict|||File đó đang có xung đột hợp nhất',
-              'Git is showing it twice by mistake|||Git hiện nhầm hai lần',
+              'The latest version on disk, because commit always reads the working directory|||Bản mới nhất trên đĩa, vì commit luôn đọc thư mục làm việc',
+              'Nothing — Git refuses to commit a file that changed after being staged|||Không gì cả — Git từ chối commit file đã đổi sau khi staging',
+              'The version you staged; the later edits stay only in the working directory|||Bản bạn đã staging; phần sửa sau vẫn chỉ nằm ở thư mục làm việc',
+              'Both versions, as two separate commits|||Cả hai phiên bản, thành hai commit riêng',
             ],
-            correctIndex: 1,
-            points: 1,
+            correctIndex: 2, points: 1,
+            explanation: 'EN: git commit snapshots the INDEX, not the working directory. The later edits show up afterwards as " M app.js". The tempting answer "latest version" is exactly the bug the lesson warns about — read git diff --staged before committing.|||VI: git commit chụp INDEX, không chụp thư mục làm việc. Phần sửa sau sẽ hiện ra dưới dạng " M app.js". Phương án “bản mới nhất” nghe hợp lý nhưng chính là lỗi bài 1.1 cảnh báo — đọc git diff --staged trước khi commit.',
           },
           {
-            question: 'What does a commit object actually store?|||Một đối tượng commit thật sự lưu cái gì?',
+            question: 'git status -s prints "MM form.js". What is true?|||git status -s in "MM form.js". Điều nào đúng?',
             options: [
-              'The list of lines that changed since the previous commit|||Danh sách các dòng đã đổi so với commit trước',
-              'A pointer to a full snapshot (tree), its parent commit(s), author/committer and the message|||Con trỏ tới một ảnh chụp đầy đủ (tree), (các) commit cha, tác giả/người commit và lời nhắn',
-              'A compressed copy of only the files you ran git add on|||Bản nén chỉ gồm những file bạn đã chạy git add',
-              'The diff plus a timestamp|||Bản diff cộng dấu thời gian',
+              'Some changes of form.js are staged and there are further unstaged changes on top|||form.js có một phần thay đổi đã staging và còn thay đổi khác chưa staging',
+              'form.js has a merge conflict|||form.js đang có xung đột hợp nhất',
+              'form.js was modified in two different commits|||form.js bị sửa trong hai commit khác nhau',
+              'form.js is untracked|||form.js chưa được theo dõi',
             ],
-            correctIndex: 1,
-            points: 1,
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Left column = index vs HEAD, right column = working dir vs index. M in both means the index differs from HEAD AND the file on disk differs from the index. A conflict shows as UU, untracked as ??.|||VI: Cột trái = index so với HEAD, cột phải = thư mục làm việc so với index. Cả hai là M nghĩa là index khác HEAD VÀ file trên đĩa khác index. Xung đột hiện là UU, chưa theo dõi hiện là ??.',
           },
           {
-            question: 'Why does changing the message of an old commit also change the hash of every commit after it?|||Vì sao sửa lời nhắn của một commit cũ lại làm đổi mã băm của MỌI commit sau nó?',
-            options: [
-              'Git renumbers commits sequentially|||Git đánh lại số thứ tự các commit',
-              'Because each commit hash is computed over its content INCLUDING its parent hash, so the chain re-hashes|||Vì mã băm mỗi commit được tính trên nội dung của nó BAO GỒM mã băm của cha, nên cả sợi xích phải băm lại',
-              'It does not — only that one commit changes|||Không có chuyện đó — chỉ commit đó đổi thôi',
-              'Because Git stores diffs, and every later diff must be recomputed|||Vì Git lưu bản khác biệt, nên mọi diff sau đó phải tính lại',
-            ],
-            correctIndex: 1,
-            points: 1,
+            question: 'You want to see exactly what the NEXT commit will contain. Which command?|||Bạn muốn xem chính xác commit KẾ TIẾP sẽ chứa gì. Lệnh nào?',
+            options: ['git diff', 'git diff HEAD', 'git log -p', 'git diff --staged'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: --staged (same as --cached) compares index with HEAD — that is the next commit. Plain git diff shows what is NOT staged; git diff HEAD mixes staged and unstaged, so it over-reports.|||VI: --staged (giống --cached) so index với HEAD — chính là commit kế tiếp. git diff trần cho thấy phần CHƯA staging; git diff HEAD gộp cả hai nên báo thừa.',
           },
           {
-            question: 'Which command shows exactly what your NEXT commit will contain?|||Lệnh nào cho thấy chính xác commit KẾ TIẾP của bạn sẽ chứa những gì?',
+            question: 'You only fix a typo in the last commit message with git commit --amend. The hash changes from 583d925 to something else. Why?|||Bạn chỉ sửa lỗi chính tả trong lời nhắn commit cuối bằng git commit --amend. Mã băm đổi từ 583d925 sang mã khác. Vì sao?',
             options: [
-              'git diff',
-              'git diff HEAD',
-              'git diff --staged',
-              'git status',
+              'Git adds a random salt to every commit|||Git thêm một chuỗi ngẫu nhiên vào mỗi commit',
+              'The message is part of the content that is hashed, so different content ⇒ different hash|||Lời nhắn là một phần nội dung được băm, nội dung khác ⇒ mã băm khác',
+              'Amend re-uploads all the files|||Amend tải lại toàn bộ file',
+              'The hash only encodes the time of the commit|||Mã băm chỉ mã hoá thời điểm commit',
             ],
-            correctIndex: 2,
-            points: 1,
+            correctIndex: 1, points: 1,
+            explanation: 'EN: A commit hash is computed from tree + parents + author/committer + message. Change any byte and you get a new object with a new name. It is not random: the same content always gives the same hash.|||VI: Mã băm commit tính từ tree + cha + tác giả/người commit + lời nhắn. Đổi bất kỳ byte nào là ra đối tượng mới với tên mới. Nó không ngẫu nhiên: cùng nội dung luôn cho cùng mã băm.',
           },
           {
-            question: 'You created a new file, then ran git commit -am "add feature". Is the new file in the commit?|||Bạn tạo một file mới, rồi chạy git commit -am "add feature". File mới có nằm trong commit không?',
+            question: 'A teammate rewrote commit B in the chain A–B–C–D (already pushed). Why does everyone else now see C and D as "different commits"?|||Một bạn cùng nhóm viết lại commit B trong chuỗi A–B–C–D (đã push). Vì sao mọi người thấy C và D thành “commit khác”?',
             options: [
-              'Yes — -a stages everything|||Có — -a đưa mọi thứ vào staging',
-              'No — -a only stages modifications to files Git already tracks, and a new file is untracked|||Không — -a chỉ staging sửa đổi của các file Git đã theo dõi, mà file mới thì chưa được theo dõi',
-              'Only if the file is smaller than 1 MB|||Chỉ khi file nhỏ hơn 1 MB',
-              'Yes, but only its name, not its content|||Có, nhưng chỉ tên file chứ không có nội dung',
+              'Because C and D contain B’s hash as their parent, so their own content — and hashes — change too|||Vì C và D chứa mã băm của B làm cha, nên nội dung — và mã băm — của chúng cũng đổi theo',
+              'Because GitHub renames commits on every push|||Vì GitHub đổi tên commit mỗi lần push',
+              'Because their files changed|||Vì file của chúng bị đổi',
+              'They do not change — only B changes|||Chúng không đổi — chỉ B đổi',
             ],
-            correctIndex: 1,
-            points: 1,
+            correctIndex: 0, points: 1,
+            explanation: 'EN: The parent hash is inside each commit. New B ⇒ C must point to a new parent ⇒ new C ⇒ new D. The files in C and D can be byte-identical; they are still new commits. This is the root of "never rewrite shared history".|||VI: Mã băm của cha nằm bên trong mỗi commit. B mới ⇒ C phải trỏ tới cha mới ⇒ C mới ⇒ D mới. File trong C và D có thể y hệt; chúng vẫn là commit mới. Đây là gốc của luật “đừng viết lại lịch sử đã chia sẻ”.',
           },
           {
-            question: 'HEAD~2 and HEAD^2 — what is the difference?|||HEAD~2 và HEAD^2 — khác nhau chỗ nào?',
+            question: 'You changed 1 line in a 5,000-file project and committed. Roughly how much NEW data did Git store?|||Bạn sửa 1 dòng trong dự án 5.000 file rồi commit. Git lưu thêm khoảng bao nhiêu dữ liệu MỚI?',
             options: [
-              'They are two spellings of the same thing|||Chúng là hai cách viết của cùng một thứ',
-              '~2 goes back two commits following the first parent; ^2 selects the SECOND parent, which only exists on a merge commit|||~2 lùi hai commit theo cha thứ nhất; ^2 chọn cha THỨ HAI, thứ chỉ tồn tại trên commit hợp nhất',
-              '~2 is for branches, ^2 is for tags|||~2 dùng cho nhánh, ^2 dùng cho tag',
-              '^2 goes back two commits; ~2 goes forward two|||^2 lùi hai commit; ~2 tiến hai commit',
+              'A full copy of all 5,000 files|||Một bản sao đầy đủ của cả 5.000 file',
+              'Only a text diff of that one line|||Chỉ một bản diff văn bản của đúng dòng đó',
+              'Nothing until you push|||Không gì cho tới khi push',
+              'One new blob for that file, new trees along its path, and one commit object|||Một blob mới cho file đó, các tree mới trên đường dẫn của nó, và một đối tượng commit',
             ],
-            correctIndex: 1,
-            points: 1,
+            correctIndex: 3, points: 1,
+            explanation: 'EN: A commit is a full snapshot conceptually, but unchanged files reuse their existing blobs. Only the changed file’s blob, the trees on its path, and the commit are new. (Packfiles later store deltas too — Chapter 9.) It is not "only a diff": Git’s model is snapshots.|||VI: Về mặt khái niệm commit là ảnh chụp trọn vẹn, nhưng file không đổi dùng lại blob cũ. Chỉ blob của file bị sửa, các tree trên đường dẫn và commit là mới. (Packfile về sau còn nén delta — Chương 9.) Không phải “chỉ lưu diff”: mô hình của Git là ảnh chụp.',
           },
           {
-            question: 'You committed .env by mistake. You add ".env" to .gitignore. What happens?|||Bạn lỡ commit .env. Bạn thêm ".env" vào .gitignore. Chuyện gì xảy ra?',
+            question: 'One file contains a bug fix, a variable rename, and a debug console.log. Best way to commit?|||Một file chứa phần sửa lỗi, phần đổi tên biến, và một dòng console.log debug. Cách commit tốt nhất?',
             options: [
-              'The file is removed from history and the secret is safe|||File bị gỡ khỏi lịch sử và bí mật được an toàn',
-              'Nothing changes — .gitignore only affects UNTRACKED files; you need git rm --cached, and the secret is still in the old commit so it must be rotated|||Không gì thay đổi — .gitignore chỉ tác dụng với file CHƯA theo dõi; bạn cần git rm --cached, và bí mật vẫn nằm trong commit cũ nên phải xoay khoá',
-              'Git deletes .env from your disk automatically|||Git tự xoá .env khỏi đĩa của bạn',
-              'The next commit will exclude it and the previous commit is rewritten|||Commit kế tiếp sẽ loại nó ra và commit trước được viết lại',
+              'git add . then one commit "fix bug + rename + log"|||git add . rồi một commit "fix bug + rename + log"',
+              'git add -p: stage the fix → commit, stage the rename → commit, leave the log unstaged and restore it|||git add -p: staging phần sửa lỗi → commit, staging phần đổi tên → commit, để dòng log ngoài rồi restore',
+              'Copy the file, undo half the changes by hand, commit, then paste back|||Chép file ra, xoá tay một nửa thay đổi, commit, rồi dán lại',
+              'Commit everything, then fix the message later|||Commit hết rồi sửa lời nhắn sau',
             ],
-            correctIndex: 1,
-            points: 1,
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Patch mode stages hunk by hunk (y/n/s/e), giving atomic commits that can be reviewed and reverted on their own; the debug line never enters history. Copying files by hand works but is exactly what the index exists to avoid.|||VI: Chế độ patch staging từng khúc (y/n/s/e), cho ra commit nguyên tử review và revert riêng được; dòng debug không bao giờ vào lịch sử. Chép file bằng tay cũng được nhưng chính là việc mà index sinh ra để tránh.',
           },
           {
-            question: 'In .gitignore, "build/" is ignored. Does "!build/keep.txt" un-ignore that one file?|||Trong .gitignore, "build/" bị ignore. Dòng "!build/keep.txt" có bỏ-ignore được đúng file đó không?',
+            question: 'Which commit subject follows the conventions taught in 1.4?|||Tiêu đề commit nào theo đúng quy ước bài 1.4?',
             options: [
-              'Yes, negation always wins|||Có, phủ định luôn thắng',
-              'No — Git never descends into an ignored directory, so you must ignore build/* instead and then negate|||Không — Git không bao giờ đi xuống một thư mục đã ignore, nên phải ignore build/* rồi mới phủ định',
-              'Yes, but only if the file is already tracked|||Có, nhưng chỉ khi file đó đã được theo dõi',
-              'Only in the global ignore file|||Chỉ trong file ignore toàn cục',
+              'Updated some stuff.|||Updated some stuff.',
+              'fixed the login bug that john found yesterday when testing on safari and chrome browsers|||fixed the login bug that john found yesterday when testing on safari and chrome browsers',
+              'fix(auth): reject login when email is unverified|||fix(auth): chặn đăng nhập khi email chưa xác minh',
+              'WIP|||WIP',
             ],
-            correctIndex: 1,
-            points: 1,
+            correctIndex: 2, points: 1,
+            explanation: 'EN: type(scope): imperative summary, short, no trailing period. The long one is past tense and far over 72 characters — the "why" belongs in the body. "Updated some stuff." and "WIP" say nothing a year later.|||VI: type(phạm vi): tóm tắt thể mệnh lệnh, ngắn, không chấm cuối. Câu dài dùng thì quá khứ và vượt xa 72 ký tự — phần “vì sao” thuộc về thân. "Updated some stuff." và "WIP" sau một năm chẳng nói được gì.',
+          },
+          {
+            question: 'You committed .env last week. Today you add ".env" to .gitignore, but git status still shows " M .env" after editing it. Why, and what fixes it?|||Tuần trước bạn đã commit .env. Hôm nay bạn thêm ".env" vào .gitignore, nhưng sửa .env xong git status vẫn hiện " M .env". Vì sao, và sửa thế nào?',
+            options: [
+              '.gitignore needs a restart of the terminal|||Phải khởi động lại terminal để .gitignore có hiệu lực',
+              'The pattern must be written "/.env*"|||Phải viết mẫu thành "/.env*"',
+              'Delete the .gitignore and create it again|||Xoá .gitignore rồi tạo lại',
+              '.gitignore only affects untracked files; run git rm --cached .env and commit|||.gitignore chỉ tác dụng với file chưa theo dõi; chạy git rm --cached .env rồi commit',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Once a file is tracked, ignore rules no longer apply to it. git rm --cached removes it from the index (keeps it on disk) and the next commit stops tracking it. The secret is still in old commits — rotate the key and clean history (Chapter 8).|||VI: Một khi file đã được theo dõi, luật ignore không còn áp cho nó. git rm --cached gỡ nó khỏi index (giữ trên đĩa) và commit kế tiếp ngừng theo dõi nó. Bí mật vẫn nằm trong commit cũ — đổi khoá và dọn lịch sử (Chương 8).',
+          },
+          {
+            question: 'You staged the wrong file and want it OUT of the next commit, without losing your edits. Which command?|||Bạn lỡ staging nhầm file và muốn gỡ nó RA khỏi commit kế tiếp mà không mất phần đã sửa. Lệnh nào?',
+            options: ['git restore --staged config.js', 'git restore config.js', 'git rm config.js', 'git reset --hard'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: --staged copies HEAD’s version back into the index only; your working file is untouched. Plain git restore overwrites the working file (edits lost), git rm deletes it, and reset --hard wipes every uncommitted change.|||VI: --staged chép bản của HEAD trở lại index thôi; file đang sửa không bị đụng. git restore trần ghi đè file đang sửa (mất công), git rm xoá file, còn reset --hard xoá sạch mọi thay đổi chưa commit.',
           },
         ],
       },

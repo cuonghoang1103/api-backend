@@ -1,50 +1,40 @@
 'use client';
 
-/** Tab Workflow: sửa trạng thái (thứ tự, tên, nhóm, màu, WIP), luồng chuyển, tạo quy trình mới. */
+/**
+ * Tab Workflow: chọn quy trình → xem dạng Sơ đồ (kiểu Jira, mặc định trên màn
+ * ≥ md) hoặc Danh sách (sửa trạng thái + ma trận luồng chuyển). Hai dạng dùng
+ * chung một bản nháp luồng chuyển nên đổi qua lại không mất phần đang sửa.
+ */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, List, Network, Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, workError, type ProjectConfig, type StatusCategory, type WorkStatus, type WorkWorkflow } from '@/lib/work-api';
 import { Dialog, Field, IssueTypeIcon, Spinner } from '../ui';
-import { Section, Select } from './shared';
+import { ConfirmDialog, Section, Select } from './shared';
 import { ColorPicker } from './ProjectLabels';
 import { useProjectInvalidate } from './useProjectInvalidate';
+import { AddStatusForm, CATEGORIES, CATEGORY_LABEL, DeleteStatusDialog, WipInput, useStatusUpdate } from '../workflow/statusParts';
+import { useTransitionDraft, type TransitionDraft } from '../workflow/useTransitionDraft';
+import WorkflowDiagram from '../workflow/WorkflowDiagram';
 
-export const CATEGORY_LABEL: Record<StatusCategory, string> = { TODO: 'To do', IN_PROGRESS: 'In progress', DONE: 'Done' };
-const CATEGORIES: StatusCategory[] = ['TODO', 'IN_PROGRESS', 'DONE'];
-const DEFAULT_COLOR: Record<StatusCategory, string> = { TODO: '#64748b', IN_PROGRESS: '#2563eb', DONE: '#16a34a' };
+export { CATEGORY_LABEL, WipInput };
 
 const sortStatuses = (wf: WorkWorkflow) => [...wf.statuses].sort((a, b) => a.position - b.position);
 
-/** Ô số WIP: rỗng = không giới hạn; lưu khi rời ô. */
-export function WipInput({ value, onCommit, disabled, label }: { value: number | null; onCommit: (v: number | null) => void; disabled?: boolean; label: string }) {
-  const [text, setText] = useState(value == null ? '' : String(value));
-  useEffect(() => setText(value == null ? '' : String(value)), [value]);
-  const commit = () => {
-    const t = text.trim();
-    const n = t ? Math.floor(Number(t)) : null;
-    if (n !== null && (!Number.isFinite(n) || n < 1)) { setText(value == null ? '' : String(value)); return; }
-    if (n !== value) onCommit(n);
-  };
-  return (
-    <input
-      type="number"
-      min={1}
-      inputMode="numeric"
-      className="w-input !h-7 !w-[88px] shrink-0 !px-2 text-[12px] disabled:opacity-60"
-      placeholder="No limit"
-      title="WIP limit (leave empty for no limit)"
-      aria-label={label}
-      value={text}
-      disabled={disabled}
-      onChange={(e) => setText(e.target.value)}
-      onBlur={commit}
-      onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
-    />
-  );
+/** Màn hẹp hơn md (768px) — điện thoại: sơ đồ chỉ xem. */
+function useIsNarrow() {
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const on = () => setNarrow(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return narrow;
 }
 
 // ─── Một dòng trạng thái ─────────────────────────────────────────
@@ -57,12 +47,7 @@ function StatusRow({
 }) {
   const [name, setName] = useState(status.name);
   useEffect(() => setName(status.name), [status.name]);
-
-  const update = useMutation({
-    mutationFn: (body: { name?: string; category?: StatusCategory; color?: string; wipLimit?: number | null }) => workApi.updateStatus(pid, status.id, body),
-    onSuccess: () => onChanged(),
-    onError: (err) => { toast.error(workError(err, 'Could not update the status')); setName(status.name); },
-  });
+  const update = useStatusUpdate(pid, status.id, onChanged, () => setName(status.name));
 
   const commitName = () => {
     const n = name.trim();
@@ -125,109 +110,29 @@ function StatusRow({
   );
 }
 
-// ─── Hộp xoá trạng thái ──────────────────────────────────────────
-
-function DeleteStatusDialog({ status, statuses, pid, onClose, onDone }: { status: WorkStatus | null; statuses: WorkStatus[]; pid: number; onClose: () => void; onDone: () => void }) {
-  const others = statuses.filter((s) => s.id !== status?.id);
-  const [moveTo, setMoveTo] = useState<number | ''>('');
-  useEffect(() => {
-    if (!status) return;
-    // Mặc định chuyển sang trạng thái cùng nhóm, không có thì trạng thái đầu tiên.
-    const same = others.find((s) => s.category === status.category) ?? others[0];
-    setMoveTo(same?.id ?? '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status?.id]);
-
-  const del = useMutation({
-    mutationFn: () => workApi.deleteStatus(pid, status!.id, moveTo || undefined),
-    onSuccess: () => { toast.success(`Status “${status?.name}” deleted`); onDone(); onClose(); },
-    onError: (err) => toast.error(workError(err, 'Could not delete the status')),
-  });
-
-  return (
-    <Dialog
-      open={!!status}
-      onClose={onClose}
-      title="Delete status?"
-      width={440}
-      footer={
-        <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
-          <button type="button" className="w-btn w-btn-danger-solid" disabled={!moveTo || del.isPending} onClick={() => del.mutate()}>
-            {del.isPending && <Spinner size={12} />}
-            Delete status
-          </button>
-        </>
-      }
-    >
-      <p className="mb-4 text-[13px] leading-relaxed text-[var(--w-text-2)]">
-        The status <span className="font-medium text-[var(--w-text)]">{status?.name}</span> will be removed from this workflow, along with any transitions that use it.
-        Issues currently in it will be moved to the status you choose.
-      </p>
-      <Field label="Move issues to">
-        <Select value={moveTo} onChange={(e) => setMoveTo(e.target.value ? Number(e.target.value) : '')}>
-          {others.map((s) => <option key={s.id} value={s.id}>{s.name} ({CATEGORY_LABEL[s.category]})</option>)}
-        </Select>
-      </Field>
-    </Dialog>
-  );
-}
-
 // ─── Ma trận luồng chuyển ────────────────────────────────────────
 
-const pairKey = (from: number | null, to: number) => `${from ?? 'any'}:${to}`;
-
-function TransitionsEditor({ wf, statuses, pid, canEdit, onSaved }: { wf: WorkWorkflow; statuses: WorkStatus[]; pid: number; canEdit: boolean; onSaved: () => void }) {
-  const initialMode: 'free' | 'restricted' = wf.transitions.length ? 'restricted' : 'free';
-  // Khoá theo chữ ký nội dung, không theo tham chiếu mảng — tải lại cấu hình không xoá bản nháp.
-  const sig = wf.transitions.map((t) => pairKey(t.fromStatusId, t.toStatusId)).sort().join(',');
-  const initialSet = useMemo(() => new Set(sig ? sig.split(',') : []), [sig]);
-  const [mode, setMode] = useState(initialMode);
-  const [pairs, setPairs] = useState<Set<string>>(initialSet);
-  // Dữ liệu máy chủ đổi (sau khi lưu / phiên khác sửa) ⇒ nạp lại bản nháp.
-  useEffect(() => { setMode(initialMode); setPairs(new Set(initialSet)); }, [initialMode, initialSet]);
-
-  const dirty = mode !== initialMode || (mode === 'restricted' && (pairs.size !== initialSet.size || [...pairs].some((k) => !initialSet.has(k))));
-
-  const save = useMutation({
-    mutationFn: () => {
-      if (mode === 'free') return workApi.setTransitions(pid, wf.id, { mode: 'free' });
-      const transitions = [...pairs].map((k) => {
-        const [f, t] = k.split(':');
-        return { from: f === 'any' ? null : Number(f), to: Number(t) };
-      });
-      return workApi.setTransitions(pid, wf.id, { mode: 'restricted', transitions });
-    },
-    onSuccess: () => { toast.success('Transitions saved'); onSaved(); },
-    onError: (err) => toast.error(workError(err, 'Could not save the transitions')),
-  });
-
-  const toggle = (from: number | null, to: number) => {
-    const k = pairKey(from, to);
-    setPairs((prev) => {
-      const next = new Set(prev);
-      if (next.has(k)) next.delete(k); else next.add(k);
-      return next;
-    });
-  };
+function TransitionsEditor({ wf, statuses, canEdit, draft }: { wf: WorkWorkflow; statuses: WorkStatus[]; canEdit: boolean; draft: TransitionDraft }) {
+  const { mode, pairs } = draft;
 
   const switchMode = (m: 'free' | 'restricted') => {
-    setMode(m);
+    draft.setMode(m);
     // Chuyển sang giới hạn lần đầu: khởi đầu bằng "từ bất kỳ" → mọi trạng thái (tương đương tự do).
-    if (m === 'restricted' && !pairs.size) setPairs(new Set(statuses.map((s) => pairKey(null, s.id))));
+    if (m === 'restricted' && !pairs.size) draft.setPairs(new Set(statuses.map((s) => `any:${s.id}`)));
   };
 
   const rows: Array<{ id: number | null; name: string }> = [{ id: null, name: 'From any status' }, ...statuses.map((s) => ({ id: s.id, name: s.name }))];
+  const has = (from: number | null, to: number) => pairs.has(`${from ?? 'any'}:${to}`);
 
   return (
     <div className="mt-4">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <h4 className="text-[12px] font-semibold uppercase tracking-[0.04em] text-[var(--w-text-3)]">Transitions</h4>
-        {canEdit && dirty && (
+        {canEdit && draft.dirty && (
           <div className="flex items-center gap-2">
-            <button type="button" className="w-btn w-btn-sm" onClick={() => { setMode(initialMode); setPairs(new Set(initialSet)); }}>Discard</button>
-            <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={save.isPending || (mode === 'restricted' && !pairs.size)} onClick={() => save.mutate()}>
-              {save.isPending && <Spinner size={12} />}
+            <button type="button" className="w-btn w-btn-sm" onClick={draft.discard}>Discard</button>
+            <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={draft.saving || draft.invalid} onClick={draft.save}>
+              {draft.saving && <Spinner size={12} />}
               Save transitions
             </button>
           </div>
@@ -271,9 +176,9 @@ function TransitionsEditor({ wf, statuses, pid, canEdit, onSaved }: { wf: WorkWo
                             <input
                               type="checkbox"
                               className="accent-[var(--w-accent)]"
-                              checked={pairs.has(pairKey(r.id, s.id))}
+                              checked={has(r.id, s.id)}
                               disabled={!canEdit}
-                              onChange={() => toggle(r.id, s.id)}
+                              onChange={() => draft.toggle(r.id, s.id)}
                               aria-label={`${r.id === null ? 'Any status' : r.name} to ${s.name}`}
                             />
                           )}
@@ -294,25 +199,26 @@ function TransitionsEditor({ wf, statuses, pid, canEdit, onSaved }: { wf: WorkWo
   );
 }
 
-// ─── Một quy trình ───────────────────────────────────────────────
+// ─── Một quy trình (sơ đồ hoặc danh sách) ────────────────────────
 
-function WorkflowCard({ wf, config, canEdit, invalidate }: { wf: WorkWorkflow; config: ProjectConfig; canEdit: boolean; invalidate: () => void }) {
+function WorkflowPanel({
+  wf, config, canEdit, narrow, view, invalidate, onDirtyChange,
+}: {
+  wf: WorkWorkflow; config: ProjectConfig; canEdit: boolean; narrow: boolean; view: 'diagram' | 'list';
+  invalidate: () => void; onDirtyChange: (dirty: boolean) => void;
+}) {
   const statuses = sortStatuses(wf);
   // Loại thẻ đi theo quy trình này (loại không gán quy trình ⇒ quy trình mặc định).
   const types = config.issueTypes.filter((t) => (t.workflowId ? t.workflowId === wf.id : wf.isDefault));
   const [deleting, setDeleting] = useState<WorkStatus | null>(null);
-  const [newName, setNewName] = useState('');
-  const [newCat, setNewCat] = useState<StatusCategory>('IN_PROGRESS');
+  const draft = useTransitionDraft(wf, config.id, invalidate);
+  useEffect(() => { onDirtyChange(draft.dirty); }, [draft.dirty, onDirtyChange]);
+  useEffect(() => () => onDirtyChange(false), [onDirtyChange]);
 
   const reorder = useMutation({
     mutationFn: (ids: number[]) => workApi.reorderStatuses(config.id, wf.id, ids),
     onSuccess: () => invalidate(),
     onError: (err) => toast.error(workError(err, 'Could not reorder the statuses')),
-  });
-  const add = useMutation({
-    mutationFn: () => workApi.addStatus(config.id, wf.id, { name: newName.trim(), category: newCat, color: DEFAULT_COLOR[newCat] }),
-    onSuccess: (s) => { toast.success(`Status “${s.name}” added`); setNewName(''); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not add the status')),
   });
 
   const move = (i: number, dir: -1 | 1) => {
@@ -324,13 +230,16 @@ function WorkflowCard({ wf, config, canEdit, invalidate }: { wf: WorkWorkflow; c
   };
 
   return (
-    <div className="border-b border-[var(--w-border)] py-6 first:pt-0 last:border-b-0">
+    <div>
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <h3 className="text-[13px] font-semibold">{wf.name}</h3>
         {wf.isDefault && <span className="rounded-[4px] border border-[var(--w-border-strong)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-2)]">Default</span>}
+        <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-2)]">
+          {statuses.length} statuses · {draft.initialMode === 'free' ? 'free' : `${draft.initialPairs.size} transitions`}
+        </span>
         {reorder.isPending && <Spinner size={12} />}
         <span className="flex flex-wrap items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
-          {types.length ? 'Used by' : 'Not used by any issue type'}
+          {types.length ? `Used by ${types.length} issue type${types.length === 1 ? '' : 's'}:` : 'Not used by any issue type'}
           {types.map((t) => (
             <span key={t.id} className="inline-flex items-center gap-1 text-[var(--w-text-2)]">
               <IssueTypeIcon type={t} size={12} />
@@ -340,40 +249,38 @@ function WorkflowCard({ wf, config, canEdit, invalidate }: { wf: WorkWorkflow; c
         </span>
       </div>
 
-      <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
-        {statuses.map((s, i) => (
-          <StatusRow
-            key={s.id}
-            status={s}
-            index={i}
-            count={statuses.length}
-            pid={config.id}
-            canEdit={canEdit}
-            busy={reorder.isPending}
-            onMove={(dir) => move(i, dir)}
-            onDelete={() => setDeleting(s)}
-            onChanged={invalidate}
-          />
-        ))}
-        {canEdit && (
-          <form
-            className="flex flex-wrap items-center gap-2 border-t border-dashed border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 sm:flex-nowrap"
-            onSubmit={(e) => { e.preventDefault(); if (newName.trim() && !add.isPending) add.mutate(); }}
-          >
-            <input className="w-input !h-7 min-w-0 flex-1 text-[13px]" placeholder="New status name" value={newName} maxLength={60} onChange={(e) => setNewName(e.target.value)} aria-label="New status name" />
-            <Select className="!h-7 !w-[118px] text-[12px]" value={newCat} onChange={(e) => setNewCat(e.target.value as StatusCategory)} aria-label="New status category">
-              {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}
-            </Select>
-            <button type="submit" className="w-btn w-btn-sm shrink-0" disabled={!newName.trim() || add.isPending}>
-              {add.isPending ? <Spinner size={12} /> : <Plus size={13} />}
-              Add status
-            </button>
-          </form>
-        )}
-      </div>
-      <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Statuses appear on the board in this order. Every workflow needs at least one “To do” and one “Done” status.</p>
-
-      <TransitionsEditor wf={wf} statuses={statuses} pid={config.id} canEdit={canEdit} onSaved={invalidate} />
+      {view === 'diagram' ? (
+        <WorkflowDiagram
+          wf={wf}
+          config={config}
+          draft={draft}
+          canEdit={canEdit && !narrow}
+          invalidate={invalidate}
+          onDeleteStatus={setDeleting}
+        />
+      ) : (
+        <>
+          <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
+            {statuses.map((s, i) => (
+              <StatusRow
+                key={s.id}
+                status={s}
+                index={i}
+                count={statuses.length}
+                pid={config.id}
+                canEdit={canEdit}
+                busy={reorder.isPending}
+                onMove={(dir) => move(i, dir)}
+                onDelete={() => setDeleting(s)}
+                onChanged={invalidate}
+              />
+            ))}
+            {canEdit && <AddStatusForm pid={config.id} wfId={wf.id} onAdded={() => invalidate()} />}
+          </div>
+          <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Statuses appear on the board in this order. Every workflow needs at least one “To do” and one “Done” status.</p>
+          <TransitionsEditor wf={wf} statuses={statuses} canEdit={canEdit} draft={draft} />
+        </>
+      )}
 
       <DeleteStatusDialog status={deleting} statuses={statuses} pid={config.id} onClose={() => setDeleting(null)} onDone={invalidate} />
     </div>
@@ -382,7 +289,7 @@ function WorkflowCard({ wf, config, canEdit, invalidate }: { wf: WorkWorkflow; c
 
 // ─── Hộp tạo quy trình ───────────────────────────────────────────
 
-function NewWorkflowDialog({ open, onClose, config, onCreated }: { open: boolean; onClose: () => void; config: ProjectConfig; onCreated: () => void }) {
+function NewWorkflowDialog({ open, onClose, config, onCreated }: { open: boolean; onClose: () => void; config: ProjectConfig; onCreated: (id: number) => void }) {
   const [name, setName] = useState('');
   const [copyFrom, setCopyFrom] = useState<number | ''>('');
   useEffect(() => {
@@ -393,9 +300,9 @@ function NewWorkflowDialog({ open, onClose, config, onCreated }: { open: boolean
 
   const create = useMutation({
     mutationFn: () => workApi.createWorkflow(config.id, { name: name.trim(), copyFrom: copyFrom || null }),
-    onSuccess: () => {
+    onSuccess: (wf) => {
       toast.success(`Workflow “${name.trim()}” created`, { description: 'Assign it to an issue type in the Issue types tab.' });
-      onCreated();
+      onCreated(wf.id);
       onClose();
     },
     onError: (err) => toast.error(workError(err, 'Could not create the workflow')),
@@ -425,16 +332,43 @@ function NewWorkflowDialog({ open, onClose, config, onCreated }: { open: boolean
   );
 }
 
+// ─── Trang ───────────────────────────────────────────────────────
+
+const VIEW_KEY = 'ctwork.workflowView';
+
 export default function ProjectWorkflow({ config, slug }: { config: ProjectConfig; slug: string }) {
   const invalidate = useProjectInvalidate(config.id, slug);
   const canEdit = config.permissions.settings;
+  const narrow = useIsNarrow();
   const [creating, setCreating] = useState(false);
   const workflows = [...config.workflows].sort((a, b) => Number(b.isDefault) - Number(a.isDefault) || a.id - b.id);
+
+  const [activeId, setActiveId] = useState<number | null>(workflows[0]?.id ?? null);
+  const active = workflows.find((w) => w.id === activeId) ?? workflows[0];
+
+  // Dạng xem: người dùng chọn thì nhớ (theo trình duyệt); chưa chọn thì theo màn hình.
+  const [picked, setPicked] = useState<'diagram' | 'list' | null>(null);
+  useEffect(() => {
+    try { const v = localStorage.getItem(VIEW_KEY); if (v === 'diagram' || v === 'list') setPicked(v); } catch { /* bộ nhớ bị chặn */ }
+  }, []);
+  const view: 'diagram' | 'list' = narrow ? (picked === 'diagram' ? 'diagram' : 'list') : (picked ?? 'diagram');
+  const pickView = (v: 'diagram' | 'list') => {
+    setPicked(v);
+    try { localStorage.setItem(VIEW_KEY, v); } catch { /* bộ nhớ bị chặn */ }
+  };
+
+  // Đổi quy trình khi đang có luồng chuyển chưa lưu ⇒ hỏi trước.
+  const [dirty, setDirty] = useState(false);
+  const [pendingSwitch, setPendingSwitch] = useState<number | null>(null);
+  const switchTo = (id: number) => {
+    if (id === active?.id) return;
+    if (dirty) setPendingSwitch(id); else setActiveId(id);
+  };
 
   return (
     <Section
       title="Workflows"
-      description="The statuses an issue moves through, in board order, and which moves between them are allowed. Assign workflows to issue types in the Issue types tab."
+      description="The statuses an issue moves through and which moves between them are allowed. Assign workflows to issue types in the Issue types tab."
       action={canEdit ? (
         <button type="button" className="w-btn" onClick={() => setCreating(true)} aria-label="New workflow">
           <Plus size={14} />
@@ -442,9 +376,81 @@ export default function ProjectWorkflow({ config, slug }: { config: ProjectConfi
         </button>
       ) : undefined}
     >
-      {workflows.map((wf) => <WorkflowCard key={wf.id} wf={wf} config={config} canEdit={canEdit} invalidate={invalidate} />)}
+      {workflows.length > 0 && active && (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+          {workflows.length > 1 ? (
+            <div role="tablist" aria-label="Workflows" className="-mx-1 flex max-w-full gap-1 overflow-x-auto px-1">
+              {workflows.map((w) => {
+                const on = w.id === active.id;
+                return (
+                  <button
+                    key={w.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={on}
+                    onClick={() => switchTo(w.id)}
+                    className={cn(
+                      'flex h-8 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-[6px] border px-2.5 text-[13px] transition-colors',
+                      on
+                        ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] font-medium text-[var(--w-text)]'
+                        : 'border-[var(--w-border)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]',
+                    )}
+                  >
+                    {w.name}
+                    {w.isDefault && <span className="text-[11px] text-[var(--w-text-3)]">Default</span>}
+                  </button>
+                );
+              })}
+            </div>
+          ) : <span />}
+          <div role="group" aria-label="View" className="flex shrink-0 rounded-[7px] border border-[var(--w-border-strong)] p-0.5">
+            {([['diagram', 'Diagram', Network], ['list', 'List', List]] as const).map(([k, label, Icon]) => (
+              <button
+                key={k}
+                type="button"
+                aria-pressed={view === k}
+                onClick={() => pickView(k)}
+                className={cn(
+                  'flex h-[26px] items-center gap-1.5 rounded-[5px] px-2.5 text-[12px] font-medium transition-colors',
+                  view === k ? 'bg-[var(--w-active)] text-[var(--w-text)]' : 'text-[var(--w-text-2)] hover:text-[var(--w-text)]',
+                )}
+              >
+                <Icon size={13} />
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      {narrow && canEdit && (
+        <p className="mb-3 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12px] text-[var(--w-text-2)]">
+          Open on a larger screen to edit the diagram. {view === 'diagram' ? 'Here you can view it — drag to pan, use + / − to zoom.' : 'You can still edit statuses and transitions in this list.'}
+        </p>
+      )}
+
+      {active && (
+        <WorkflowPanel
+          key={active.id}
+          wf={active}
+          config={config}
+          canEdit={canEdit}
+          narrow={narrow}
+          view={view}
+          invalidate={invalidate}
+          onDirtyChange={setDirty}
+        />
+      )}
       {!workflows.length && <p className="text-[13px] text-[var(--w-text-3)]">This project has no workflow.</p>}
-      <NewWorkflowDialog open={creating} onClose={() => setCreating(false)} config={config} onCreated={invalidate} />
+
+      <NewWorkflowDialog open={creating} onClose={() => setCreating(false)} config={config} onCreated={(id) => { invalidate(); if (!dirty) setActiveId(id); }} />
+      <ConfirmDialog
+        open={pendingSwitch !== null}
+        onClose={() => setPendingSwitch(null)}
+        onConfirm={() => { setActiveId(pendingSwitch); setPendingSwitch(null); }}
+        title="Discard unsaved transitions?"
+        confirmLabel="Discard and switch"
+        body="You have transition changes in this workflow that are not saved yet. Switching to another workflow will discard them."
+      />
     </Section>
   );
 }

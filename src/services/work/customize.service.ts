@@ -393,3 +393,107 @@ export async function setCustomValues(userId: number, projectId: number, number:
 }
 
 export { STATUS_CATEGORIES };
+
+// ─── Bố cục sơ đồ quy trình (24/09) ──────────────────────────────
+
+/**
+ * Lưu toạ độ nút của sơ đồ quy trình vào settings.workflowLayout[wfId].
+ * Chỉ giữ trạng thái thuộc quy trình; không cần migration (JSON trong settings).
+ * `positions = null` ⇒ xoá bố cục (về tự sắp xếp).
+ */
+export async function setWorkflowLayout(
+  userId: number,
+  projectId: number,
+  workflowId: number,
+  positions: Record<string, { x: number; y: number }> | null,
+) {
+  await requireProject(userId, projectId, 'project.settings');
+  await findWorkflow(projectId, workflowId);
+  const ids = new Set((await prisma.workStatus.findMany({ where: { workflowId }, select: { id: true } })).map((s) => String(s.id)));
+  const clean: Record<string, { x: number; y: number }> = {};
+  for (const [k, p] of Object.entries(positions ?? {})) {
+    if (!ids.has(k)) continue;
+    // Kẹp toạ độ để một giá trị hỏng không đẩy nút ra xa vô tận.
+    const clamp = (v: number) => Math.round(Math.max(-20000, Math.min(20000, v)));
+    clean[k] = { x: clamp(p.x), y: clamp(p.y) };
+  }
+  const cur = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
+  const settings = { ...((cur.settings as Record<string, unknown>) ?? {}) };
+  const layout = { ...((settings.workflowLayout as Record<string, unknown>) ?? {}) };
+  if (positions === null || !Object.keys(clean).length) delete layout[String(workflowId)];
+  else layout[String(workflowId)] = clean;
+  settings.workflowLayout = layout;
+  await prisma.workProject.update({ where: { id: projectId }, data: { settings: settings as Prisma.InputJsonValue } });
+  touch(projectId, userId);
+  return { workflowId, positions: layout[String(workflowId)] ?? null };
+}
+
+// ─── Mẫu mô tả theo loại thẻ (24/09) ─────────────────────────────
+// Lưu ở settings.issueTemplates[typeKey]. Ghi bằng jsonb_set NGUYÊN TỬ ngay
+// trong SQL: đọc-trộn-ghi cả settings thì hai admin sửa hai mẫu cùng lúc
+// (hoặc một người kéo sơ đồ quy trình) sẽ đè mất thay đổi của nhau.
+
+/** Trần kích thước một mẫu (JSON). Mẫu là khung sườn, không phải tài liệu. */
+export const MAX_TEMPLATE_BYTES = 20_000;
+
+/** Node/mark mà RichEditor có bật — thứ khác thì trình soạn không vẽ được. */
+const TEMPLATE_NODES = new Set([
+  'doc', 'paragraph', 'text', 'heading', 'bulletList', 'orderedList', 'listItem', 'taskList', 'taskItem',
+  'blockquote', 'codeBlock', 'horizontalRule', 'hardBreak', 'mention',
+]);
+const TEMPLATE_MARKS = new Set(['bold', 'italic', 'strike', 'code', 'link']);
+
+function assertTemplateDoc(doc: unknown) {
+  if (JSON.stringify(doc).length > MAX_TEMPLATE_BYTES) {
+    throw new BadRequestError(`Template is too large (max ${Math.round(MAX_TEMPLATE_BYTES / 1000)} KB)`, 'WORK_TEMPLATE_TOO_LARGE');
+  }
+  const walk = (n: unknown, depth: number) => {
+    if (depth > 12) throw new BadRequestError('Template is nested too deeply', 'WORK_TEMPLATE_INVALID');
+    const node = n as { type?: unknown; content?: unknown; marks?: unknown };
+    if (!node || typeof node !== 'object' || typeof node.type !== 'string' || !TEMPLATE_NODES.has(node.type)) {
+      throw new BadRequestError('Template contains unsupported content', 'WORK_TEMPLATE_INVALID');
+    }
+    if (node.marks !== undefined) {
+      if (!Array.isArray(node.marks) || node.marks.some((m) => !TEMPLATE_MARKS.has((m as { type?: string })?.type ?? ''))) {
+        throw new BadRequestError('Template contains unsupported formatting', 'WORK_TEMPLATE_INVALID');
+      }
+    }
+    if (node.content !== undefined) {
+      if (!Array.isArray(node.content)) throw new BadRequestError('Template is malformed', 'WORK_TEMPLATE_INVALID');
+      for (const c of node.content) walk(c, depth + 1);
+    }
+  };
+  walk(doc, 0);
+  if ((doc as { type?: string }).type !== 'doc') throw new BadRequestError('Template must be a document', 'WORK_TEMPLATE_INVALID');
+}
+
+/**
+ * Đặt mẫu mô tả cho một loại thẻ (ADMIN). `doc = null` ⇒ về mẫu mặc định.
+ * Tài liệu rỗng ⇒ lưu rỗng = loại này KHÔNG có mẫu (tắt mẫu mặc định).
+ */
+export async function setIssueTemplate(userId: number, projectId: number, typeKey: string, doc: Prisma.InputJsonValue | null) {
+  await requireProject(userId, projectId, 'project.settings');
+  const type = await prisma.workIssueType.findFirst({ where: { projectId, key: typeKey }, select: { id: true } });
+  if (!type) throw new NotFoundError('Issue type not found');
+  if (doc === null) {
+    await prisma.$executeRaw`
+      UPDATE work_projects
+         SET settings = COALESCE(settings, '{}'::jsonb) #- ARRAY['issueTemplates', ${typeKey}::text],
+             updated_at = ${new Date()}
+       WHERE id = ${projectId}`;
+  } else {
+    assertTemplateDoc(doc);
+    const json = JSON.stringify(doc);
+    await prisma.$executeRaw`
+      UPDATE work_projects
+         SET settings = jsonb_set(
+               COALESCE(settings, '{}'::jsonb),
+               '{issueTemplates}',
+               (CASE WHEN jsonb_typeof(settings->'issueTemplates') = 'object' THEN settings->'issueTemplates' ELSE '{}'::jsonb END)
+                 || jsonb_build_object(${typeKey}::text, ${json}::jsonb)
+             ),
+             updated_at = ${new Date()}
+       WHERE id = ${projectId}`;
+  }
+  touch(projectId, userId);
+}

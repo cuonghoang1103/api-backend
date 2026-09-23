@@ -142,6 +142,7 @@ describe('khopTuyenWeb', () => {
     const cap: [string, string, Record<string, string>][] = [
       ['/work', '/work', {}],
       ['/work/developer', '/work/developer', {}],
+      ['/work/search', '/work/search', {}],
       ['/work/invite/abc123', '/work/invite/:token', { token: 'abc123' }],
       ['/work/share/tok-9', '/work/share/:token', { token: 'tok-9' }],
       ['/work/acme/settings', '/work/:ws/settings', { ws: 'acme' }],
@@ -221,8 +222,8 @@ describe('khopTuyenWeb', () => {
        `/tech-trends` (8 tuyến) được dùng lại từ web. 73 → 75 ngày 15/09/2026:
        hai trang tư vấn của Học viện (`/academy/tu-van-nganh`,
        `/academy/so-do-mon-hoc`) — app trước đó không có chúng. 75 → 94 ngày
-       23/09/2026: cây CT Work (`/work`, 19 trang). */
-    expect(thay.size).toBe(94);
+       23/09/2026: cây CT Work (`/work`, 19 trang). 24/09: `/work/search` ⇒ 95. */
+    expect(thay.size).toBe(95);
   });
 });
 

@@ -29,6 +29,7 @@ import * as ai from '../services/work/ai.service.js';
 import { myWork } from '../services/work/myWork.service.js';
 import * as custom from '../services/work/customize.service.js';
 import * as searchSvc from '../services/work/search.service.js';
+import * as globalSearch from '../services/work/globalSearch.service.js';
 import * as workspaces from '../services/work/workspaces.service.js';
 import * as planning from '../services/work/planning.service.js';
 import * as automation from '../services/work/automation.service.js';
@@ -1149,6 +1150,57 @@ router.post('/projects/:pid/sample-data', asyncHandler(async (req, res) => {
 }));
 router.delete('/projects/:pid/sample-data', asyncHandler(async (req, res) => {
   ok(res, await onboarding.removeSampleData(callerId(req), idParam(req, 'pid')));
+}));
+
+// ═══ Bố cục sơ đồ quy trình (24/09) — toạ độ nút, chỉ ADMIN (kiểm trong service) ═══
+
+router.put('/projects/:pid/workflows/:wfId/layout', asyncHandler(async (req, res) => {
+  const pos = z.object({ x: z.number().finite(), y: z.number().finite() });
+  const { positions } = parse(z.object({ positions: z.record(z.string().regex(/^\d+$/), pos).nullable() }), req.body);
+  if (positions && Object.keys(positions).length > 200) throw new BadRequestError('Too many statuses', 'WORK_BAD_LAYOUT');
+  ok(res, await custom.setWorkflowLayout(callerId(req), idParam(req, 'pid'), idParam(req, 'wfId'), positions));
+}));
+
+// ═══ Cảm xúc bình luận + mẫu mô tả theo loại thẻ (24/09) ═══════════
+// Khối riêng. Quyền kiểm trong service: cảm xúc cần comment.create (VIEWER
+// không bấm được), đọc mẫu cần project.view, sửa mẫu cần project.settings.
+
+router.put('/projects/:pid/issues/:num/comments/:cid/reactions/:emoji', asyncHandler(async (req, res) => {
+  const { active } = parse(z.object({ active: z.boolean().optional() }), req.body ?? {});
+  ok(res, await issues.toggleReaction(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'cid'), String(req.params.emoji ?? ''), active));
+}));
+
+router.get('/projects/:pid/issue-templates', asyncHandler(async (req, res) => {
+  ok(res, await issues.listIssueTemplates(callerId(req), idParam(req, 'pid')));
+}));
+router.put('/projects/:pid/issue-templates/:typeKey', asyncHandler(async (req, res) => {
+  const typeKey = parse(z.string().regex(/^[A-Z0-9_]{1,16}$/, 'Invalid issue type key'), req.params.typeKey);
+  // Trần thô ở đây chỉ chặn body khổng lồ; trần thật (20 KB) + kiểm node nằm trong service.
+  const { doc } = parse(z.object({
+    doc: z.object({ type: z.literal('doc') }).passthrough()
+      .refine((v) => JSON.stringify(v).length <= 200_000, 'Template is too large')
+      .transform((v) => v as Prisma.InputJsonValue)
+      .nullable(),
+  }), req.body);
+  await custom.setIssueTemplate(callerId(req), idParam(req, 'pid'), typeKey, doc);
+  const all = await issues.listIssueTemplates(callerId(req), idParam(req, 'pid'));
+  ok(res, all.find((t) => t.typeKey === typeKey) ?? null);
+}));
+
+// ═══ Tìm thẻ mọi dự án (/work/search + ⌘K) ═══════════════════════════
+// Khối riêng (24/09): quyền lọc trong globalSearch.service (chỉ dự án xem được).
+
+router.get('/search/facets', asyncHandler(async (req, res) => {
+  ok(res, await globalSearch.searchFacets(callerId(req)));
+}));
+router.get('/search', asyncHandler(async (req, res) => {
+  const q = parse(z.object({
+    jql: z.string().max(4000).default(''),
+    q: z.string().max(200).default(''),
+    limit: z.coerce.number().int().min(1).max(globalSearch.MAX_LIMIT).optional(),
+    offset: z.coerce.number().int().min(0).max(globalSearch.MAX_DEPTH - 1).optional(),
+  }), req.query);
+  ok(res, await globalSearch.globalSearch(callerId(req), q));
 }));
 
 export default router;

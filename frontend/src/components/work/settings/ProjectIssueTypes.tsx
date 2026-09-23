@@ -1,16 +1,18 @@
 'use client';
 
-/** Tab Issue types: đổi tên/màu, gán quy trình, lưu trữ, thêm loại thẻ mới. */
+/** Tab Issue types: đổi tên/màu, gán quy trình, mẫu mô tả, lưu trữ, thêm loại thẻ mới. */
 
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Archive, Plus } from 'lucide-react';
-import { workApi, workError, type ProjectConfig, type WorkIssueType } from '@/lib/work-api';
+import { Archive, FileText, Plus } from 'lucide-react';
+import { workApi, workError, type IssueTemplate, type ProjectConfig, type WorkIssueType } from '@/lib/work-api';
 import { IssueTypeIcon, Spinner } from '../ui';
 import { ConfirmDialog, Section, Select } from './shared';
 import { ColorPicker, LABEL_COLORS } from './ProjectLabels';
 import { useProjectInvalidate } from './useProjectInvalidate';
+import TemplateEditorDialog, { TemplateBadge } from '../templates/TemplateEditorDialog';
+import { useIssueTemplates } from '../templates/useIssueTemplates';
 
 const LEVELS: Array<{ value: 0 | -1 | 1; label: string; help: string }> = [
   { value: 1, label: 'Epic level', help: 'Groups standard issues' },
@@ -19,7 +21,11 @@ const LEVELS: Array<{ value: 0 | -1 | 1; label: string; help: string }> = [
 ];
 const levelLabel = (l: number) => LEVELS.find((x) => x.value === l)?.label ?? 'Standard';
 
-function TypeRow({ type, config, canEdit, onChanged, onArchive }: { type: WorkIssueType; config: ProjectConfig; canEdit: boolean; onChanged: () => void; onArchive: () => void }) {
+function TypeRow({ type, config, canEdit, onChanged, onArchive, template, onTemplate }: {
+  type: WorkIssueType; config: ProjectConfig; canEdit: boolean; onChanged: () => void; onArchive: () => void;
+  /** undefined = đang tải / loại không dùng mẫu (Test). */
+  template?: IssueTemplate; onTemplate: () => void;
+}) {
   const [name, setName] = useState(type.name);
   useEffect(() => setName(type.name), [type.name]);
   const def = config.workflows.find((w) => w.isDefault) ?? config.workflows[0];
@@ -74,6 +80,19 @@ function TypeRow({ type, config, canEdit, onChanged, onArchive }: { type: WorkIs
           <option value="">{def ? `${def.name} (default)` : 'Default workflow'}</option>
           {config.workflows.filter((w) => w.id !== def?.id || type.workflowId === w.id).map((w) => <option key={w.id} value={w.id}>{w.name}</option>)}
         </Select>
+        {template && (
+          <button
+            type="button"
+            className="w-btn w-btn-ghost w-btn-sm gap-1.5"
+            onClick={onTemplate}
+            title={canEdit ? 'Edit the description template' : 'View the description template'}
+            aria-label={`Description template for ${type.name}`}
+          >
+            <FileText size={13} />
+            <span className="hidden md:inline">Template</span>
+            <TemplateBadge t={template} />
+          </button>
+        )}
         {canEdit && (
           <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onArchive} aria-label={`Archive ${type.name}`} title="Archive issue type">
             <Archive size={13} />
@@ -91,6 +110,11 @@ export default function ProjectIssueTypes({ config, slug }: { config: ProjectCon
   const [newLevel, setNewLevel] = useState<0 | -1 | 1>(0);
   const [newColor, setNewColor] = useState(LABEL_COLORS[5]);
   const [archiving, setArchiving] = useState<WorkIssueType | null>(null);
+  const templates = useIssueTemplates(config.id);
+  const [editingTemplate, setEditingTemplate] = useState<string | null>(null);
+  // Test do trình soạn test case lo — không có mẫu mô tả.
+  const templateOf = (t: WorkIssueType) => (t.key === 'TEST' ? undefined : templates.data?.find((x) => x.typeId === t.id));
+  const openTemplate = editingTemplate ? templates.data?.find((x) => x.typeKey === editingTemplate) ?? null : null;
 
   const create = useMutation({
     mutationFn: () => workApi.addIssueType(config.id, { name: newName.trim(), level: newLevel, color: newColor }),
@@ -129,12 +153,28 @@ export default function ProjectIssueTypes({ config, slug }: { config: ProjectCon
         )}
         <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
           {types.map((t) => (
-            <TypeRow key={t.id} type={t} config={config} canEdit={canEdit} onChanged={invalidate} onArchive={() => setArchiving(t)} />
+            <TypeRow
+              key={t.id}
+              type={t}
+              config={config}
+              canEdit={canEdit}
+              onChanged={invalidate}
+              onArchive={() => setArchiving(t)}
+              template={templateOf(t)}
+              onTemplate={() => setEditingTemplate(t.key)}
+            />
           ))}
           {!types.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">No issue types.</div>}
         </div>
-        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Epic-level types group standard issues; subtasks live under a standard issue.</p>
+        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Epic-level types group standard issues; subtasks live under a standard issue. A description template pre-fills new issues of that type.</p>
       </div>
+      <TemplateEditorDialog
+        open={!!openTemplate}
+        onClose={() => setEditingTemplate(null)}
+        config={config}
+        template={openTemplate}
+        canEdit={canEdit}
+      />
       <ConfirmDialog
         open={!!archiving}
         onClose={() => setArchiving(null)}

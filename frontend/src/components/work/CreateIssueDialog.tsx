@@ -11,7 +11,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Sparkles } from 'lucide-react';
+import { FileText, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
 import { isAiQuotaError, workApi, workError, type ProjectConfig, type TiptapDoc } from '@/lib/work-api';
@@ -22,6 +22,7 @@ import {
 } from './fields';
 import RichEditor, { isDocEmpty } from './RichEditor';
 import { Dialog } from './ui';
+import { useIssueTemplates } from './templates/useIssueTemplates';
 
 /** Chữ trơn của một tài liệu TipTap (đoạn cách nhau bằng xuống dòng). */
 function docText(doc: TiptapDoc | null): string {
@@ -75,6 +76,30 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState<TiptapDoc | null>(null);
   const [descKey, setDescKey] = useState(0);
+  // Mẫu mô tả: chỉ tự điền/đổi khi người dùng CHƯA sửa mô tả (descDirty).
+  const [descDirty, setDescDirty] = useState(false);
+  const [appliedTemplate, setAppliedTemplate] = useState<{ typeId: number; name: string } | null>(null);
+  /** Loại vừa bấm "Clear" — không tự điền lại cho loại đó (đổi loại thì điền mẫu của loại mới). */
+  const [clearedFor, setClearedFor] = useState<number | null>(null);
+  const [resetTick, setResetTick] = useState(0);
+  const dirtyRef = useRef(descDirty);
+  dirtyRef.current = descDirty;
+  const appliedRef = useRef(appliedTemplate);
+  appliedRef.current = appliedTemplate;
+  /** Chữ của mẫu vừa điền — trình soạn thảo tự chuẩn hoá lúc nạp và bắn onChange,
+   *  nên "đã sửa" phải so NỘI DUNG với mẫu, không tin vào sự kiện onChange. */
+  const appliedTextRef = useRef<string | null>(null);
+  /** Về trạng thái "mô tả trống, chưa sửa" — đặt cả ref để effect điền mẫu chạy ngay trong cùng lượt. */
+  const resetDescription = () => {
+    setDesc(null);
+    setDescKey((k) => k + 1);
+    setDescDirty(false);
+    setAppliedTemplate(null);
+    setClearedFor(null);
+    dirtyRef.current = false;
+    appliedRef.current = null;
+    setResetTick((t) => t + 1);
+  };
   const [assigneeId, setAssigneeId] = useState<number | null>(null);
   const [priority, setPriority] = useState(3);
   const [labelIds, setLabelIds] = useState<number[]>([]);
@@ -102,7 +127,8 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
 
   /** "Draft with AI": biến ý tưởng (tiêu đề + mô tả đang gõ) thành một story đầy đủ. */
   const draftWithAi = async () => {
-    const idea = [title.trim(), docText(desc)].filter(Boolean).join('\n').trim();
+    // Mẫu chưa sửa chỉ là khung sườn — không gửi cho AI như thể là ý tưởng.
+    const idea = [title.trim(), appliedTemplate && !descDirty ? '' : docText(desc)].filter(Boolean).join('\n').trim();
     if (!idea) { toast.error('Type a short idea first'); return; }
     setDrafting(true);
     try {
@@ -117,6 +143,8 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
       }
       setDesc({ type: 'doc', content });
       setDescKey((k) => k + 1);
+      setDescDirty(true);
+      setAppliedTemplate(null);
       if (a.priority) setPriority(a.priority);
       if (a.storyPoints !== undefined && a.storyPoints !== null) setStoryPoints(a.storyPoints);
       const story = config.issueTypes.find((t) => t.key === (a.issueType || 'STORY').toUpperCase());
@@ -138,8 +166,7 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
     if (!open) return;
     setTypeId(defaultType ?? 0);
     setTitle('');
-    setDesc(null);
-    setDescKey((k) => k + 1);
+    resetDescription();
     setAssigneeId(null);
     setPriority(3);
     setLabelIds([]);
@@ -162,6 +189,42 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
     return () => { alive = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, defaults?.parentId, defaults?.parent?.id, config.id]);
+
+  // ─── Mẫu mô tả theo loại thẻ ───
+  const templates = useIssueTemplates(config.id, open);
+  const templateOfType = templates.data?.find((t) => t.typeId === typeId && t.doc) ?? null;
+  useEffect(() => {
+    if (!open || !templates.data || dirtyRef.current) return;
+    const t = templates.data.find((x) => x.typeId === typeId && x.doc);
+    if (t?.doc && clearedFor !== typeId) {
+      if (appliedRef.current?.typeId === typeId) return; // đã điền đúng mẫu này rồi
+      setDesc(t.doc);
+      appliedTextRef.current = docText(t.doc);
+      setAppliedTemplate({ typeId, name: t.name });
+    } else if (appliedRef.current) {
+      // Loại mới không có mẫu ⇒ gỡ mẫu cũ (người dùng chưa sửa gì nên không mất chữ).
+      setDesc(null);
+      setAppliedTemplate(null);
+    } else return;
+    setDescKey((k) => k + 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- trạng thái "đã sửa/đã điền" đọc qua ref
+  }, [open, typeId, templates.data, clearedFor, resetTick]);
+
+  const clearTemplate = () => {
+    setDesc(null);
+    setAppliedTemplate(null);
+    setDescDirty(false);
+    setClearedFor(typeId);
+    setDescKey((k) => k + 1);
+  };
+  const applyTemplateNow = () => {
+    if (!templateOfType?.doc) return;
+    setDesc(templateOfType.doc);
+    setAppliedTemplate({ typeId, name: templateOfType.name });
+    setDescDirty(false);
+    setClearedFor(null);
+    setDescKey((k) => k + 1);
+  };
 
   const create = useMutation({
     mutationFn: () => workApi.createIssue(config.id, {
@@ -188,9 +251,8 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
       });
       if (another) {
         setTitle('');
-        setDesc(null);
         setStoryPoints(null);
-        setDescKey((k) => k + 1);
+        resetDescription(); // điền lại mẫu cho thẻ kế tiếp
         titleRef.current?.focus();
       } else {
         onClose();
@@ -269,10 +331,34 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
             ))}
           </div>
         )}
+        {appliedTemplate ? (
+          <div className="mb-1.5 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]" aria-live="polite">
+            <FileText size={12} aria-hidden />
+            <span>Template: <span className="font-medium text-[var(--w-text-2)]">{appliedTemplate.name}</span></span>
+            <span aria-hidden>·</span>
+            <button type="button" className="rounded-[3px] font-medium text-[var(--w-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)]" onClick={clearTemplate}>
+              Clear
+            </button>
+          </div>
+        ) : templateOfType && isDocEmpty(desc) ? (
+          <div className="mb-1.5 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
+            <FileText size={12} aria-hidden />
+            <button type="button" className="rounded-[3px] font-medium text-[var(--w-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)]" onClick={applyTemplateNow}>
+              Use the {templateOfType.name} template
+            </button>
+          </div>
+        ) : null}
         <RichEditor
           key={descKey}
           value={desc}
-          onChange={(d) => setDesc(d)}
+          onChange={(d, empty) => {
+            setDesc(d);
+            // Xoá sạch tay = coi như chưa sửa ⇒ đổi loại lại được điền mẫu.
+            // Nội dung vẫn y như mẫu (chỉ bị editor chuẩn hoá) ⇒ cũng chưa sửa.
+            const sameAsTemplate = !!appliedTemplate && appliedTextRef.current !== null && docText(d) === appliedTextRef.current;
+            setDescDirty(!empty && !sameAsTemplate);
+            if (empty && appliedTemplate) { setAppliedTemplate(null); setClearedFor(typeId); }
+          }}
           members={config.members}
           minHeight={120}
           placeholder={type?.key === 'BUG'

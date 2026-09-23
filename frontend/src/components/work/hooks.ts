@@ -24,6 +24,8 @@ export const wk = {
   issues: (pid: number) => ['work', 'issues', pid] as const,
   issue: (pid: number, num?: number) => (num === undefined ? (['work', 'issue', pid] as const) : (['work', 'issue', pid, num] as const)),
   comments: (pid: number, num: number) => ['work', 'comments', pid, num] as const,
+  /** Mẫu mô tả theo loại thẻ nằm dưới wk.project ⇒ project.updated (admin sửa mẫu) làm tươi. */
+  issueTemplates: (pid: number) => ['work', 'project', pid, 'issue-templates'] as const,
   history: (pid: number, num: number) => ['work', 'history', pid, num] as const,
   backlog: (pid: number) => ['work', 'backlog', pid] as const,
   sprints: (pid: number) => ['work', 'sprints', pid] as const,

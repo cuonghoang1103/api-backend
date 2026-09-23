@@ -9,6 +9,7 @@
 import type { ProjectConfig } from '@/lib/work-api';
 
 export const JQL_FIELDS: Array<{ name: string; hint: string }> = [
+  { name: 'project', hint: 'Project key' },
   { name: 'status', hint: 'Status name' },
   { name: 'statusCategory', hint: 'To Do · In Progress · Done' },
   { name: 'assignee', hint: 'Username, currentUser(), EMPTY' },
@@ -98,12 +99,16 @@ function tokenize(src: string): Tok[] {
 
 const up = (s: string) => s.toUpperCase();
 
-function valuesFor(field: string, cfg: ProjectConfig): Suggestion[] {
+/** Cấu hình cho gợi ý: tìm toàn cục thêm danh sách mã dự án. */
+export type JqlSuggestConfig = ProjectConfig & { projectKeys?: string[] };
+
+function valuesFor(field: string, cfg: JqlSuggestConfig): Suggestion[] {
   const f = field.toLowerCase();
   const uniq = (xs: string[]) => [...new Set(xs)];
   const lit = (xs: string[], hint?: string) => xs.map((x) => ({ label: x, insert: quote(x), hint }));
   const fn = (xs: string[]) => xs.map((x) => ({ label: x, insert: x, hint: 'function' }));
   switch (f) {
+    case 'project': return lit(uniq(cfg.projectKeys ?? (cfg.key ? [cfg.key] : [])), 'Project');
     case 'status': return lit(uniq(cfg.workflows.flatMap((w) => w.statuses.map((s) => s.name))));
     case 'statuscategory': case 'category': return lit(['To Do', 'In Progress', 'Done']);
     case 'type': case 'issuetype': return lit(cfg.issueTypes.map((t) => t.name));
@@ -129,7 +134,7 @@ function valuesFor(field: string, cfg: ProjectConfig): Suggestion[] {
  * Gợi ý cho vị trí con trỏ. `from` = chỗ bắt đầu từ đang gõ (thay thế
  * đoạn [from, caret) bằng `insert`).
  */
-export function suggest(text: string, caret: number, cfg: ProjectConfig): { from: number; items: Suggestion[] } {
+export function suggest(text: string, caret: number, cfg: JqlSuggestConfig): { from: number; items: Suggestion[] } {
   const pre = text.slice(0, caret);
   // Đang trong chuỗi nháy thì không gợi ý.
   if (((pre.match(/"/g) ?? []).length % 2) === 1) return { from: caret, items: [] };

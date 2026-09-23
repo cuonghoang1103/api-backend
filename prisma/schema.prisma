@@ -384,26 +384,27 @@ model User {
 
   // ─── CT Work — quản lý dự án kiểu Jira (23/09/2026) ─────────────
   // Xem mục "CT WORK" cuối file và docs/work-hub-plan.md.
-  workSpacesOwned        WorkSpace[]         @relation("WorkSpaceOwner")
-  workMemberships        WorkMember[]        @relation("WorkMemberUser")
-  workInvitesSent        WorkInvite[]        @relation("WorkInviteSender")
-  workProjectMemberships WorkProjectMember[] @relation("WorkProjectMemberUser")
-  workProjectsLed        WorkProject[]       @relation("WorkProjectLead")
-  workIssuesAssigned     WorkIssue[]         @relation("WorkIssueAssignee")
-  workIssuesReported     WorkIssue[]         @relation("WorkIssueReporter")
-  workComments           WorkComment[]       @relation("WorkCommentAuthor")
-  workAttachments        WorkAttachment[]    @relation("WorkAttachmentUploader")
-  workHistory            WorkHistory[]       @relation("WorkHistoryActor")
-  workWatching           WorkWatcher[]       @relation("WorkWatcherUser")
-  workTestRunsAssigned   WorkTestRun[]       @relation("WorkTestRunAssignee")
-  workTestRunsExecuted   WorkTestRun[]       @relation("WorkTestRunExecutor")
-  workSavedFilters       WorkSavedFilter[]   @relation("WorkSavedFilterOwner")
-  workDashboards         WorkDashboard[]     @relation("WorkDashboardOwner")
-  workTimeOff            WorkTimeOff[]       @relation("WorkTimeOffUser")
-  workWorklogs           WorkWorklog[]       @relation("WorkWorklogUser")
-  workNotifySetting      WorkNotifySetting?  @relation("WorkNotifySettingUser")
-  workEmailQueue         WorkEmailQueue[]    @relation("WorkEmailQueueUser")
-  workApiTokens          WorkApiToken[]      @relation("WorkApiTokenUser")
+  workSpacesOwned        WorkSpace[]           @relation("WorkSpaceOwner")
+  workMemberships        WorkMember[]          @relation("WorkMemberUser")
+  workInvitesSent        WorkInvite[]          @relation("WorkInviteSender")
+  workProjectMemberships WorkProjectMember[]   @relation("WorkProjectMemberUser")
+  workProjectsLed        WorkProject[]         @relation("WorkProjectLead")
+  workIssuesAssigned     WorkIssue[]           @relation("WorkIssueAssignee")
+  workIssuesReported     WorkIssue[]           @relation("WorkIssueReporter")
+  workComments           WorkComment[]         @relation("WorkCommentAuthor")
+  workCommentReactions   WorkCommentReaction[] @relation("WorkCommentReactionUser")
+  workAttachments        WorkAttachment[]      @relation("WorkAttachmentUploader")
+  workHistory            WorkHistory[]         @relation("WorkHistoryActor")
+  workWatching           WorkWatcher[]         @relation("WorkWatcherUser")
+  workTestRunsAssigned   WorkTestRun[]         @relation("WorkTestRunAssignee")
+  workTestRunsExecuted   WorkTestRun[]         @relation("WorkTestRunExecutor")
+  workSavedFilters       WorkSavedFilter[]     @relation("WorkSavedFilterOwner")
+  workDashboards         WorkDashboard[]       @relation("WorkDashboardOwner")
+  workTimeOff            WorkTimeOff[]         @relation("WorkTimeOffUser")
+  workWorklogs           WorkWorklog[]         @relation("WorkWorklogUser")
+  workNotifySetting      WorkNotifySetting?    @relation("WorkNotifySettingUser")
+  workEmailQueue         WorkEmailQueue[]      @relation("WorkEmailQueueUser")
+  workApiTokens          WorkApiToken[]        @relation("WorkApiTokenUser")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -9991,11 +9992,29 @@ model WorkComment {
   editedAt  DateTime? @map("edited_at")
   deletedAt DateTime? @map("deleted_at")
 
-  issue  WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
-  author User?     @relation("WorkCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  issue     WorkIssue             @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  author    User?                 @relation("WorkCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  reactions WorkCommentReaction[]
 
   @@index([issueId, createdAt], name: "idx_work_comment_issue")
   @@map("work_comments")
+}
+
+/// Cảm xúc trên bình luận (👍 🎉 …) — bật/tắt, mỗi người một lần cho mỗi emoji.
+/// Không sinh thông báo (chống spam). Danh sách emoji hợp lệ do server kiểm.
+model WorkCommentReaction {
+  id        Int      @id @default(autoincrement())
+  commentId Int      @map("comment_id")
+  userId    Int      @map("user_id")
+  emoji     String   @db.VarChar(16)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment WorkComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User        @relation("WorkCommentReactionUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId, emoji], name: "uk_work_comment_reaction", map: "uk_work_comment_reaction")
+  @@index([userId], name: "idx_work_comment_reaction_user")
+  @@map("work_comment_reactions")
 }
 
 model WorkAttachment {

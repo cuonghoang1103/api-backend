@@ -166,3 +166,95 @@ export async function seedProjectConfig(
 
   await tx.workProject.update({ where: { id: projectId }, data: { settings: spec.settings as Prisma.InputJsonValue } });
 }
+
+// ─── Mẫu mô tả theo loại thẻ (24/09/2026) ────────────────────────
+// KHÔNG chép vào settings lúc tạo dự án: dự án chưa tự đặt mẫu thì luôn nhận
+// bản mặc định mới nhất ở đây (dự án cũ cũng có ngay). Tự đặt rồi thì lưu ở
+// settings.issueTemplates[typeKey]. Chỉ dùng node mà RichEditor có bật:
+// heading 1–3, list thường/đánh số, taskList/taskItem, blockquote, codeBlock.
+
+type TNode = Record<string, unknown>;
+const txt = (text: string, bold = false): TNode => (bold ? { type: 'text', text, marks: [{ type: 'bold' }] } : { type: 'text', text });
+const para = (...parts: Array<string | TNode>): TNode =>
+  parts.length ? { type: 'paragraph', content: parts.map((x) => (typeof x === 'string' ? txt(x) : x)) } : { type: 'paragraph' };
+const h3 = (text: string): TNode => ({ type: 'heading', attrs: { level: 3 }, content: [txt(text)] });
+const li = (p: TNode = para()): TNode => ({ type: 'listItem', content: [p] });
+const ul = (...items: TNode[]): TNode => ({ type: 'bulletList', content: items.map((p) => li(p)) });
+const ol = (count: number): TNode => ({ type: 'orderedList', attrs: { start: 1 }, content: Array.from({ length: count }, () => li()) });
+const tasks = (...items: TNode[]): TNode => ({
+  type: 'taskList', content: items.map((p) => ({ type: 'taskItem', attrs: { checked: false }, content: [p] })),
+});
+const labelled = (label: string) => para(txt(`${label}: `, true));
+
+export interface IssueTemplateDoc { type: 'doc'; content: TNode[] }
+
+/** Tên hiển thị của mẫu mặc định ("Template: Bug report"). */
+export const DEFAULT_TEMPLATE_NAMES: Partial<Record<IssueTypeKey, string>> = {
+  BUG: 'Bug report',
+  STORY: 'User story',
+  TASK: 'Task',
+  EPIC: 'Epic brief',
+  REQUIREMENT: 'Requirement',
+};
+
+/**
+ * Mẫu mặc định của một loại thẻ; null = loại này không có mẫu (Test do trình
+ * soạn test case lo, Sub-task quá nhỏ). `dod` = Definition of Done của dự án.
+ */
+export function defaultIssueTemplate(typeKey: string, dod: string[] = DEFAULT_DOD): IssueTemplateDoc | null {
+  switch (typeKey) {
+    case 'BUG':
+      return {
+        type: 'doc',
+        content: [
+          h3('Summary'), para(),
+          h3('Steps to reproduce'), ol(3),
+          h3('Expected result'), para(),
+          h3('Actual result'), para(),
+          h3('Environment'), ul(labelled('Browser'), labelled('OS / device'), labelled('Build / version')),
+          h3('Evidence'), para('Screenshots, logs or a screen recording.'),
+        ],
+      };
+    case 'STORY':
+      return {
+        type: 'doc',
+        content: [
+          para(txt('As a', true), ' <type of user>, ', txt('I want', true), ' <goal> ', txt('so that', true), ' <benefit>.'),
+          h3('Acceptance criteria'), tasks(para('Given <context>, when <action>, then <outcome>'), para(), para()),
+          h3('Notes / Design'), para(),
+        ],
+      };
+    case 'TASK':
+      return {
+        type: 'doc',
+        content: [
+          h3('Goal'), para(),
+          h3('Checklist'), tasks(para(), para(), para()),
+          h3('Definition of done'), tasks(...(dod.length ? dod : DEFAULT_DOD).slice(0, 12).map((d) => para(d))),
+        ],
+      };
+    case 'EPIC':
+      return {
+        type: 'doc',
+        content: [
+          h3('Goal'), para(),
+          h3('Scope'), ul(para(), para()),
+          h3('Out of scope'), ul(para()),
+          h3('Success metrics'), ul(para()),
+        ],
+      };
+    case 'REQUIREMENT':
+      return {
+        type: 'doc',
+        content: [
+          ul(labelled('ID'), labelled('Source / stakeholder')),
+          h3('Description'), para('The system shall …'),
+          h3('Rationale'), para(),
+          h3('Priority (MoSCoW)'), para('Must / Should / Could / Won’t'),
+          h3('Acceptance criteria'), tasks(para(), para()),
+        ],
+      };
+    default:
+      return null;
+  }
+}

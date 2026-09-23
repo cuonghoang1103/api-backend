@@ -13,9 +13,11 @@ import {
 } from '../../config/r2.js';
 import { getStorageProvider } from '../../storage/StorageProvider.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
-import { PUBLIC_USER } from './common.js';
-import type { LinkType } from './constants.js';
-import { emitWorkEvent, type WorkActor } from './events.js';
+import { displayName, PUBLIC_USER } from './common.js';
+import type { IssueTypeKey, LinkType } from './constants.js';
+import { emitWorkEvent, projectRoom, type WorkActor } from './events.js';
+import { getIO } from '../../socket/messaging.socket.js';
+import { DEFAULT_TEMPLATE_NAMES, defaultIssueTemplate, type IssueTemplateDoc } from './templates.js';
 import { applyIssueChange, createIssue, moveIssue, type IssuePatch, type MoveInput } from './issueChange.js';
 import { canDeleteIssue, canModifyComment, requireProject, type ProjectAccess } from './permissions.js';
 import { tiptapToText } from './tiptapText.js';
@@ -443,7 +445,10 @@ const COMMENT_SELECT = {
 export async function listComments(userId: number, projectId: number, number: number) {
   await requireProject(userId, projectId, 'project.view');
   const { id } = await findIssue(projectId, number);
-  return prisma.workComment.findMany({ where: { issueId: id, deletedAt: null }, orderBy: { createdAt: 'asc' }, take: 500, select: COMMENT_SELECT });
+  const comments = await prisma.workComment.findMany({ where: { issueId: id, deletedAt: null }, orderBy: { createdAt: 'asc' }, take: 500, select: COMMENT_SELECT });
+  // Một lượt đọc cảm xúc cho MỌI bình luận của thẻ (không N+1).
+  const byComment = await reactionSummaries(comments.map((c) => c.id), userId);
+  return comments.map((c) => ({ ...c, reactions: byComment.get(c.id) ?? [] }));
 }
 
 export async function addComment(userId: number, projectId: number, number: number, bodyJson: Prisma.InputJsonValue, via: Via = 'USER') {
@@ -486,6 +491,141 @@ export async function deleteComment(userId: number, projectId: number, number: n
   if (!canModifyComment(access.role, userId, c.authorId)) throw new ForbiddenError('You cannot delete this comment');
   await prisma.workComment.update({ where: { id: commentId }, data: { deletedAt: new Date() } });
   emitWorkEvent({ type: 'issue.updated', projectId, issueId: id, actor: userActor(userId), changes: [] });
+}
+
+// ─── Cảm xúc trên bình luận ──────────────────────────────────────
+// Bật/tắt kiểu GitHub. KHÔNG sinh thông báo và KHÔNG đi qua emitWorkEvent
+// (không đánh thức luật tự động/notify) — chỉ báo socket riêng để màn hình
+// người khác tải lại bình luận.
+
+/** Thứ tự cố định (chip không nhảy chỗ khi số đổi) — giống GitHub. */
+export const REACTION_EMOJIS = ['👍', '👎', '😄', '🎉', '😕', '❤️', '🚀', '👀'] as const;
+export type ReactionEmoji = (typeof REACTION_EMOJIS)[number];
+
+/** Tên kiểu GitHub API cũng nhận được (+1, heart…) — tiện cho token API. */
+const REACTION_ALIASES: Record<string, ReactionEmoji> = {
+  '+1': '👍', thumbs_up: '👍', '-1': '👎', thumbs_down: '👎', laugh: '😄', hooray: '🎉', tada: '🎉',
+  confused: '😕', heart: '❤️', '❤': '❤️', rocket: '🚀', eyes: '👀',
+};
+
+/** Chuẩn hoá emoji từ URL; không hợp lệ ⇒ null. */
+export function normalizeReaction(raw: string): ReactionEmoji | null {
+  const v = raw.trim();
+  if ((REACTION_EMOJIS as readonly string[]).includes(v)) return v as ReactionEmoji;
+  return REACTION_ALIASES[v.toLowerCase()] ?? null;
+}
+
+const MAX_REACTION_USERS = 10;
+
+export interface ReactionSummary {
+  emoji: ReactionEmoji;
+  count: number;
+  mine: boolean;
+  users: Array<{ id: number; name: string }>;
+}
+
+async function reactionSummaries(commentIds: number[], viewerId: number): Promise<Map<number, ReactionSummary[]>> {
+  const out = new Map<number, ReactionSummary[]>();
+  if (!commentIds.length) return out;
+  const rows = await prisma.workCommentReaction.findMany({
+    where: { commentId: { in: commentIds } },
+    orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+    select: { commentId: true, emoji: true, userId: true, user: { select: PUBLIC_USER } },
+  });
+  const acc = new Map<number, Map<string, ReactionSummary>>();
+  for (const r of rows) {
+    if (!(REACTION_EMOJIS as readonly string[]).includes(r.emoji)) continue;
+    let m = acc.get(r.commentId);
+    if (!m) acc.set(r.commentId, (m = new Map()));
+    let e = m.get(r.emoji);
+    if (!e) m.set(r.emoji, (e = { emoji: r.emoji as ReactionEmoji, count: 0, mine: false, users: [] }));
+    e.count++;
+    if (r.userId === viewerId) e.mine = true;
+    if (e.users.length < MAX_REACTION_USERS) e.users.push({ id: r.user.id, name: displayName(r.user) });
+  }
+  for (const [cid, m] of acc) {
+    out.set(cid, REACTION_EMOJIS.map((x) => m.get(x)).filter((x): x is ReactionSummary => !!x));
+  }
+  return out;
+}
+
+/**
+ * Bật/tắt một cảm xúc. `active` bỏ trống = đảo trạng thái; true/false = đặt
+ * thẳng (idempotent — bấm đúp hay mạng gửi lại không làm lệch).
+ */
+export async function toggleReaction(
+  userId: number, projectId: number, number: number, commentId: number, rawEmoji: string, active?: boolean,
+) {
+  const emoji = normalizeReaction(rawEmoji);
+  if (!emoji) throw new BadRequestError(`Unsupported reaction. Use one of ${REACTION_EMOJIS.join(' ')}`, 'WORK_BAD_REACTION');
+  await requireProject(userId, projectId, 'comment.create');
+  const { id } = await findIssue(projectId, number);
+  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null }, select: { id: true } });
+  if (!c) throw new NotFoundError('Comment not found');
+
+  const where = { commentId, userId, emoji };
+  let reacted: boolean;
+  if (active === false) {
+    await prisma.workCommentReaction.deleteMany({ where });
+    reacted = false;
+  } else if (active === true) {
+    await prisma.workCommentReaction.createMany({ data: [where], skipDuplicates: true });
+    reacted = true;
+  } else {
+    const removed = await prisma.workCommentReaction.deleteMany({ where });
+    if (removed.count) reacted = false;
+    else {
+      await prisma.workCommentReaction.createMany({ data: [where], skipDuplicates: true });
+      reacted = true;
+    }
+  }
+
+  const reactions = (await reactionSummaries([commentId], userId)).get(commentId) ?? [];
+  getIO()?.to(projectRoom(projectId)).emit('work:comment-reaction', { projectId, issueId: id, number, commentId, userId });
+  return { commentId, emoji, reacted, reactions };
+}
+
+// ─── Mẫu mô tả theo loại thẻ ─────────────────────────────────────
+
+export interface EffectiveIssueTemplate {
+  typeId: number;
+  typeKey: string;
+  typeName: string;
+  /** Tên mẫu để hiện "Template: Bug report". */
+  name: string;
+  /** null = loại này không có mẫu (hoặc admin đã xoá trắng). */
+  doc: IssueTemplateDoc | null;
+  /** true = đang dùng mẫu mặc định của CT Work (chưa tự đặt). */
+  isDefault: boolean;
+  hasDefault: boolean;
+}
+
+/** Mẫu mô tả đang hiệu lực cho mọi loại thẻ của dự án — ai xem được dự án là đọc được. */
+export async function listIssueTemplates(userId: number, projectId: number): Promise<EffectiveIssueTemplate[]> {
+  await requireProject(userId, projectId, 'project.view');
+  const [project, types] = await Promise.all([
+    prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } }),
+    prisma.workIssueType.findMany({ where: { projectId, archived: false }, orderBy: { position: 'asc' }, select: { id: true, key: true, name: true } }),
+  ]);
+  const settings = (project.settings ?? {}) as Record<string, unknown>;
+  const custom = (settings.issueTemplates && typeof settings.issueTemplates === 'object' ? settings.issueTemplates : {}) as Record<string, unknown>;
+  const dod = Array.isArray(settings.definitionOfDone) ? settings.definitionOfDone.filter((x): x is string => typeof x === 'string' && !!x.trim()) : undefined;
+  return types.map((t) => {
+    const def = defaultIssueTemplate(t.key, dod);
+    const own = custom[t.key];
+    const hasOwn = !!own && typeof own === 'object' && (own as { type?: unknown }).type === 'doc';
+    const doc = hasOwn ? (own as IssueTemplateDoc) : def;
+    const empty = !doc || !Array.isArray(doc.content) || !doc.content.length;
+    return {
+      typeId: t.id,
+      typeKey: t.key,
+      typeName: t.name,
+      name: DEFAULT_TEMPLATE_NAMES[t.key as IssueTypeKey] ?? t.name,
+      doc: empty ? null : doc,
+      isDefault: !hasOwn,
+      hasDefault: !!def,
+    };
+  });
 }
 
 // ─── Đính kèm ────────────────────────────────────────────────────

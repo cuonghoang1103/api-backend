@@ -64,6 +64,8 @@ export interface WorkspaceDetail {
 export interface WorkStatus { id: number; name: string; category: StatusCategory; color: string; position: number; wipLimit: number | null }
 export interface WorkTransition { id: number; fromStatusId: number | null; toStatusId: number; name: string | null }
 export interface WorkWorkflow { id: number; name: string; isDefault: boolean; statuses: WorkStatus[]; transitions: WorkTransition[] }
+/** Bố cục sơ đồ: statusId → toạ độ (lưu trong project.settings.workflowLayout[wfId]). */
+export type WorkflowLayout = Record<string, { x: number; y: number }>;
 export interface WorkIssueType { id: number; key: IssueTypeKey | (string & {}); name: string; icon: string; color: string; level: number; workflowId: number | null }
 export interface WorkLabel { id: number; name: string; color: string }
 export interface WorkComponent { id: number; name: string; description: string | null; leadId: number | null }
@@ -172,6 +174,36 @@ export interface WorkComment {
   createdAt: string;
   editedAt: string | null;
   author: WorkUser | null;
+  /** Cảm xúc (👍 🎉 …) — thứ tự cố định theo REACTION_EMOJIS. */
+  reactions?: CommentReaction[];
+}
+
+/** Bộ cảm xúc cho bình luận — server kiểm đúng danh sách này. */
+export const REACTION_EMOJIS = ['👍', '👎', '😄', '🎉', '😕', '❤️', '🚀', '👀'] as const;
+export type ReactionEmoji = (typeof REACTION_EMOJIS)[number];
+export const REACTION_LABELS: Record<ReactionEmoji, string> = {
+  '👍': 'Thumbs up', '👎': 'Thumbs down', '😄': 'Laugh', '🎉': 'Hooray', '😕': 'Confused', '❤️': 'Heart', '🚀': 'Rocket', '👀': 'Eyes',
+};
+
+export interface CommentReaction {
+  emoji: ReactionEmoji;
+  count: number;
+  mine: boolean;
+  /** Tối đa 10 người đầu tiên (cho tooltip). */
+  users: Array<{ id: number; name: string }>;
+}
+
+/** Mẫu mô tả đang hiệu lực của một loại thẻ. */
+export interface IssueTemplate {
+  typeId: number;
+  typeKey: string;
+  typeName: string;
+  name: string;
+  /** null = loại này không có mẫu. */
+  doc: TiptapDoc | null;
+  /** true = mẫu mặc định của CT Work (dự án chưa tự đặt). */
+  isDefault: boolean;
+  hasDefault: boolean;
 }
 
 export interface HistoryEntry {
@@ -650,6 +682,15 @@ export const workApi = {
   deleteComment: (pid: number, num: number, cid: number) => d(api.delete(`${B}/projects/${pid}/issues/${num}/comments/${cid}`)),
   reportComment: (pid: number, num: number, cid: number, body: { reason: CommentReportReason; details?: string | null }) =>
     d<{ reported: boolean; duplicate: boolean }>(api.post(`${B}/projects/${pid}/issues/${num}/comments/${cid}/report`, body)),
+  /** Bật/tắt cảm xúc; `active` = đặt thẳng trạng thái (idempotent). */
+  reactToComment: (pid: number, num: number, cid: number, emoji: ReactionEmoji, active?: boolean) =>
+    d<{ commentId: number; emoji: ReactionEmoji; reacted: boolean; reactions: CommentReaction[] }>(
+      api.put(`${B}/projects/${pid}/issues/${num}/comments/${cid}/reactions/${encodeURIComponent(emoji)}`, active === undefined ? {} : { active }),
+    ),
+  issueTemplates: (pid: number) => d<IssueTemplate[]>(api.get(`${B}/projects/${pid}/issue-templates`)),
+  /** doc = null ⇒ về mẫu mặc định; tài liệu rỗng ⇒ tắt mẫu cho loại này. */
+  setIssueTemplate: (pid: number, typeKey: string, doc: TiptapDoc | null) =>
+    d<IssueTemplate | null>(api.put(`${B}/projects/${pid}/issue-templates/${encodeURIComponent(typeKey)}`, { doc })),
   attachmentUrl: (pid: number, aid: number, inline = false) =>
     d<{ url: string }>(api.get(`${B}/projects/${pid}/attachments/${aid}/url${inline ? '?inline=1' : ''}`)).then((r) => r.url),
   deleteAttachment: (pid: number, aid: number) => d(api.delete(`${B}/projects/${pid}/attachments/${aid}`)),
@@ -744,6 +785,9 @@ export const workApi = {
   reorderStatuses: (pid: number, wfId: number, statusIds: number[]) => d(api.put(`${B}/projects/${pid}/workflows/${wfId}/order`, { statusIds })),
   setTransitions: (pid: number, wfId: number, body: { mode: 'free' | 'restricted'; transitions?: Array<{ from: number | null; to: number }> }) =>
     d(api.put(`${B}/projects/${pid}/workflows/${wfId}/transitions`, body)),
+  /** Toạ độ nút sơ đồ quy trình (settings.workflowLayout[wfId]); null = về tự sắp xếp. */
+  setWorkflowLayout: (pid: number, wfId: number, positions: WorkflowLayout | null) =>
+    d<{ workflowId: number; positions: WorkflowLayout | null }>(api.put(`${B}/projects/${pid}/workflows/${wfId}/layout`, { positions })),
   updateStatus: (pid: number, statusId: number, body: { name?: string; category?: StatusCategory; color?: string; wipLimit?: number | null }) =>
     d(api.patch(`${B}/projects/${pid}/statuses/${statusId}`, body)),
   deleteStatus: (pid: number, statusId: number, moveTo?: number) => d(api.delete(`${B}/projects/${pid}/statuses/${statusId}${moveTo ? `?moveTo=${moveTo}` : ''}`)),
@@ -905,3 +949,60 @@ export function workError(err: unknown, fallback = 'Something went wrong'): stri
 export function workErrorStatus(err: unknown): number | undefined {
   return (err as { response?: { status?: number } })?.response?.status;
 }
+
+// ─── Tìm thẻ mọi dự án (/work/search + ⌘K) — backend: services/work/globalSearch.service.ts ───
+
+export interface GlobalIssueHit {
+  id: number;
+  /** "SHOP-12" */
+  key: string;
+  number: number;
+  title: string;
+  priority: number;
+  storyPoints: number | null;
+  dueDate: string | null;
+  resolvedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  status: { id: number; name: string; category: StatusCategory; color: string };
+  type: { id: number; key: string; name: string; icon: string; color: string };
+  assignee: WorkUser | null;
+  project: { id: number; key: string; name: string; archived: boolean };
+  workspace: { slug: string; name: string };
+  /** /work/<slug>/<KEY>/issue/<n> */
+  url: string;
+  /** Chỉ có khi tìm bằng q: khớp ở đâu. */
+  match?: 'key' | 'title' | 'description';
+}
+
+export interface GlobalSearchResult {
+  items: GlobalIssueHit[];
+  total: number;
+  offset: number;
+  limit: number;
+  hasMore: boolean;
+  projectsSearched: number;
+  /** Quá 200 dự án ⇒ chỉ quét 200 dự án cập nhật gần nhất. */
+  truncated: boolean;
+  /** true = xếp theo độ khớp của q (không có ORDER BY). */
+  ranked: boolean;
+}
+
+export interface GlobalSearchFacets {
+  projects: Array<{ id: number; key: string; name: string; archived: boolean; workspace: { slug: string; name: string } }>;
+  statuses: Array<{ name: string; category: StatusCategory; color: string; projectCount: number }>;
+  types: Array<{ key: string; name: string; icon: string; color: string; projectCount: number }>;
+  assignees: WorkUser[];
+}
+
+export const workSearchKeys = {
+  all: ['work', 'global-search'] as const,
+  results: (jql: string, q: string) => ['work', 'global-search', 'results', jql, q] as const,
+  facets: ['work', 'global-search', 'facets'] as const,
+};
+
+export const workSearchApi = {
+  search: (opts: { jql?: string; q?: string; limit?: number; offset?: number }) =>
+    d<GlobalSearchResult>(api.get(`${B}/search${params({ jql: opts.jql || undefined, q: opts.q || undefined, limit: opts.limit, offset: opts.offset || undefined })}`)),
+  facets: () => d<GlobalSearchFacets>(api.get(`${B}/search/facets`)),
+};

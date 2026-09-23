@@ -10,7 +10,7 @@ import { CircleHelp, CornerDownLeft, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ProjectConfig } from '@/lib/work-api';
 import { Popover, useToggle } from '../ui';
-import { JQL_EXAMPLES, JQL_FIELDS, JQL_FUNCTIONS, JQL_OPERATORS, suggest, type Suggestion } from './jql';
+import { JQL_EXAMPLES, JQL_FIELDS, JQL_FUNCTIONS, JQL_OPERATORS, suggest, type JqlSuggestConfig, type Suggestion } from './jql';
 
 export interface JqlInputHandle { focus: () => void }
 
@@ -18,7 +18,7 @@ export const JqlInput = forwardRef<JqlInputHandle, {
   value: string;
   onChange: (v: string) => void;
   onRun: (v: string) => void;
-  config: ProjectConfig;
+  config: JqlSuggestConfig;
   error?: { message: string; position: number } | null;
   /** Câu truy vấn đã chạy (để biết lỗi đang nói về câu nào). */
   ranQuery?: string;

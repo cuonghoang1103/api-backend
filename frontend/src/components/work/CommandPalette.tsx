@@ -12,11 +12,11 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
 import { useQuery } from '@tanstack/react-query';
-import { BookOpen, CircleHelp, Columns3, CornerDownLeft, FolderKanban, LayoutGrid, List, Plus, Search, Settings, Users } from 'lucide-react';
-import { workApi } from '@/lib/work-api';
+import { ArrowRight, BookOpen, CircleHelp, Columns3, CornerDownLeft, FolderKanban, LayoutGrid, List, Plus, Search, Settings, TextSearch, Users } from 'lucide-react';
+import { workApi, workSearchApi, workSearchKeys, type StatusCategory } from '@/lib/work-api';
 import { openCreateIssue, wk } from './hooks';
 import { useWorkPath } from './WorkSidebar';
-import { IssueTypeIcon, Spinner, StatusBadge, WorkPortal } from './ui';
+import { CATEGORY_DOT, IssueTypeIcon, Spinner, WorkPortal } from './ui';
 import { searchHelp } from './help/content';
 import { openContextualHelp, openHelp } from './help/store';
 import { readHelpLang } from './help/HelpPanel';
@@ -25,6 +25,18 @@ const ITEM =
   'flex h-9 cursor-pointer items-center gap-2.5 rounded-[6px] px-2.5 text-[13px] text-[var(--w-text-2)] data-[selected=true]:bg-[var(--w-hover)] data-[selected=true]:text-[var(--w-text)]';
 const GROUP =
   '[&_[cmdk-group-heading]]:px-2.5 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-[var(--w-text-3)]';
+
+/** Chấm trạng thái (màu theo nhóm) + tên khi đủ chỗ. */
+function StatusDot({ status }: { status: { name: string; category: StatusCategory } | undefined }) {
+  if (!status) return null;
+  return (
+    <span className="flex shrink-0 items-center gap-1.5 text-[11.5px] text-[var(--w-text-3)]" title={status.name}>
+      <span aria-hidden="true" className="h-[7px] w-[7px] rounded-full" style={{ background: CATEGORY_DOT[status.category] }} />
+      <span className="max-w-[96px] truncate max-sm:hidden">{status.name}</span>
+      <span className="sr-only sm:hidden">{status.name}</span>
+    </span>
+  );
+}
 
 const matches = (text: string, q: string) => !q || text.toLowerCase().includes(q.toLowerCase());
 
@@ -95,6 +107,15 @@ function Palette({ onClose }: { onClose: () => void }) {
     staleTime: 10_000,
   });
 
+  // Mọi dự án (từ 2 ký tự): cùng endpoint với trang /work/search, xếp theo độ khớp.
+  const global = useQuery({
+    queryKey: [...workSearchKeys.all, 'palette', debounced],
+    queryFn: () => workSearchApi.search({ q: debounced, limit: 10 }),
+    enabled: debounced.length >= 2,
+    staleTime: 10_000,
+    placeholderData: (prev) => prev,
+  });
+
   const workspace = useQuery({
     queryKey: wk.workspace(slug ?? ''),
     queryFn: () => workApi.workspaceBySlug(slug!),
@@ -136,6 +157,7 @@ function Palette({ onClose }: { onClose: () => void }) {
       list.push({ id: 'issues', label: 'Go to issues', icon: <List size={15} />, run: () => go(`${base}/list`) });
       list.push({ id: 'project-settings', label: 'Project settings', icon: <Settings size={15} />, run: () => go(`${base}/settings`) });
     }
+    list.push({ id: 'search', label: 'Search all issues', icon: <TextSearch size={15} />, keywords: 'find filter jql query advanced', run: () => go('/work/search') });
     if (slug) {
       list.push({ id: 'projects', label: 'All projects', icon: <LayoutGrid size={15} />, run: () => go(`/work/${slug}`) });
       list.push({ id: 'ws-settings', label: 'Workspace settings', icon: <Users size={15} />, run: () => go(`/work/${slug}/settings`) });
@@ -159,11 +181,19 @@ function Palette({ onClose }: { onClose: () => void }) {
   const projects = (workspace.data?.projects ?? []).filter((p) => !p.archivedAt && matches(`${p.key} ${p.name}`, q)).slice(0, 8);
   const wsList = (workspaces.data ?? []).filter((w) => matches(w.name, q)).slice(0, 6);
   const issueItems = pid && debounced ? issues.data?.items ?? [] : [];
+  // Kết quả mọi dự án, bỏ những thẻ đã hiện trong nhóm dự án hiện tại.
+  const globalItems = debounced.length >= 2 ? global.data?.items ?? [] : [];
+  // Gõ đúng một khoá (QA-7) ⇒ dòng đầu tiên là "mở thẳng thẻ đó".
+  const keyHit = /^[A-Za-z][A-Za-z0-9]*-\d+$/.test(q) ? globalItems.find((i) => i.match === 'key' && i.key.toUpperCase() === q.toUpperCase()) : undefined;
+  const localItems = issueItems.filter((i) => i.id !== keyHit?.id);
+  const localIds = new Set(issueItems.map((i) => i.id));
+  const otherGlobal = globalItems.filter((i) => !localIds.has(i.id) && i.id !== keyHit?.id);
+  const showSearchAll = q.length >= 2;
   // Bài hướng dẫn khớp chữ đang gõ (tìm cục bộ, không gọi máy chủ).
   const helpLang = useMemo(() => readHelpLang(), []);
   const helpItems = q.length >= 2 ? searchHelp(q).slice(0, 4) : [];
-  const searching = !!pid && q.length > 0 && (q !== debounced || issues.isFetching);
-  const nothing = !actions.length && !projects.length && !wsList.length && !issueItems.length && !helpItems.length;
+  const searching = (q.length > 0 && q !== debounced) || (!!pid && issues.isFetching) || (debounced.length >= 2 && global.isFetching);
+  const nothing = !actions.length && !projects.length && !wsList.length && !issueItems.length && !globalItems.length && !helpItems.length && !showSearchAll;
 
   return (
     <WorkPortal>
@@ -183,7 +213,7 @@ function Palette({ onClose }: { onClose: () => void }) {
                 autoFocus
                 value={search}
                 onValueChange={setSearch}
-                placeholder={inProject ? `Search ${key} issues, projects, actions…` : 'Search projects, workspaces, actions…'}
+                placeholder={inProject ? `Search ${key} and all issues, projects, actions…` : 'Search issues, projects, actions…'}
                 className="h-12 min-w-0 flex-1 bg-transparent text-[14px] outline-none placeholder:text-[var(--w-text-3)]"
               />
               {searching && <Spinner size={14} />}
@@ -193,13 +223,25 @@ function Palette({ onClose }: { onClose: () => void }) {
             <Command.List className="max-h-[min(420px,55vh)] overflow-y-auto overscroll-contain p-1.5">
               {nothing && !searching && (
                 <div className="py-8 text-center text-[13px] text-[var(--w-text-3)]">
-                  {issues.isError ? 'Search failed. Try again.' : 'No results'}
+                  {issues.isError || global.isError ? 'Search failed. Try again.' : 'No results'}
                 </div>
               )}
 
-              {issueItems.length > 0 && (
+              {keyHit && (
+                <Command.Group heading="Jump to" className={GROUP}>
+                  <Command.Item key={`key-${keyHit.id}`} value={`key-${keyHit.id}`} onSelect={() => go(keyHit.url)} className={ITEM}>
+                    <IssueTypeIcon type={keyHit.type} size={13} />
+                    <span className="shrink-0 font-mono text-[12px] font-semibold text-[var(--w-accent-text)]">{keyHit.key}</span>
+                    <span className="min-w-0 flex-1 truncate text-[var(--w-text)]">{keyHit.title}</span>
+                    <span className="hidden max-w-[120px] shrink-0 truncate text-[11.5px] text-[var(--w-text-3)] sm:inline">{keyHit.project.name}</span>
+                    <ArrowRight size={13} className="shrink-0 text-[var(--w-text-3)]" />
+                  </Command.Item>
+                </Command.Group>
+              )}
+
+              {(localItems.length > 0 || otherGlobal.length > 0 || showSearchAll) && (
                 <Command.Group heading="Issues" className={GROUP}>
-                  {issueItems.map((it) => {
+                  {localItems.map((it) => {
                     const type = config?.issueTypes.find((t) => t.id === it.typeId);
                     return (
                       <Command.Item
@@ -210,11 +252,41 @@ function Palette({ onClose }: { onClose: () => void }) {
                       >
                         <IssueTypeIcon type={type} size={13} />
                         <span className="w-[64px] shrink-0 truncate font-mono text-[11.5px] text-[var(--w-text-3)]">{`${key}-${it.number}`}</span>
-                        <span className="min-w-0 flex-1 truncate text-[var(--w-text)]">{it.title}</span>
-                        <StatusBadge status={statusOf(it.statusId)} className="hidden shrink-0 sm:inline-flex" />
+                        <span className="flex min-w-0 flex-1 items-baseline gap-1.5">
+                          <span className="min-w-0 truncate text-[var(--w-text)]">{it.title}</span>
+                          {config && <span className="shrink-0 truncate text-[11.5px] text-[var(--w-text-3)] max-sm:hidden">· {config.name}</span>}
+                        </span>
+                        <StatusDot status={statusOf(it.statusId)} />
                       </Command.Item>
                     );
                   })}
+                  {otherGlobal.map((it) => (
+                    <Command.Item key={`g-${it.id}`} value={`g-${it.id}`} onSelect={() => go(it.url)} className={ITEM}>
+                      <IssueTypeIcon type={it.type} size={13} />
+                      <span className="w-[64px] shrink-0 truncate font-mono text-[11.5px] text-[var(--w-text-3)]">{it.key}</span>
+                      <span className="flex min-w-0 flex-1 items-baseline gap-1.5">
+                        <span className="min-w-0 truncate text-[var(--w-text)]">{it.title}</span>
+                        <span className="shrink-0 truncate text-[11.5px] text-[var(--w-text-3)] max-sm:hidden">· {it.project.name}</span>
+                      </span>
+                      <StatusDot status={it.status} />
+                    </Command.Item>
+                  ))}
+                  {showSearchAll && (
+                    <Command.Item
+                      key="search-all"
+                      value="search-all"
+                      onSelect={() => go(`/work/search?${new URLSearchParams({ q })}`)}
+                      className={ITEM}
+                    >
+                      <TextSearch size={15} className="shrink-0 text-[var(--w-text-3)]" />
+                      <span className="min-w-0 flex-1 truncate">
+                        Search all issues for <span className="font-medium text-[var(--w-text)]">“{q}”</span>
+                      </span>
+                      {global.data && debounced === q && (
+                        <span className="shrink-0 text-[11.5px] tabular-nums text-[var(--w-text-3)]">{global.data.total.toLocaleString('en-US')}</span>
+                      )}
+                    </Command.Item>
+                  )}
                 </Command.Group>
               )}
 

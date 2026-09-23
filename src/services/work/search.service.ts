@@ -13,7 +13,8 @@ import { projectMembers } from './projects.service.js';
 import { estimateOf, estimationOf, vnDay } from './sprints.service.js';
 
 async function jqlContext(projectId: number, userId: number, key: string): Promise<JqlContext> {
-  const [statuses, types, labels, components, members, sprints, customFields] = await Promise.all([
+  const [project, statuses, types, labels, components, members, sprints, customFields] = await Promise.all([
+    prisma.workProject.findUnique({ where: { id: projectId }, select: { name: true } }),
     prisma.workStatus.findMany({ where: { workflow: { projectId } }, select: { id: true, name: true, category: true } }),
     prisma.workIssueType.findMany({ where: { projectId }, select: { id: true, key: true, name: true } }),
     prisma.workLabel.findMany({ where: { projectId }, select: { id: true, name: true } }),
@@ -23,11 +24,16 @@ async function jqlContext(projectId: number, userId: number, key: string): Promi
     prisma.workCustomField.findMany({ where: { projectId }, select: { id: true, name: true, kind: true, options: true } }),
   ]);
   return {
-    projectKey: key, userId, statuses, types, labels, components,
+    projectKey: key, projectName: project?.name, userId, statuses, types, labels, components,
     members: members.map((m) => ({ id: m.id, username: m.username })),
     sprints,
     customFields: customFields.map((f) => ({ ...f, options: (f.options as Array<{ id: string; label: string }>) ?? [] })),
   };
+}
+
+/** JqlError ⇒ 400 WORK_JQL_ERROR (data.position, data.suggestion) — một khuôn cho mọi chỗ. */
+export function jqlHttpError(err: JqlError): AppError {
+  return new AppError(err.message, 400, 'WORK_JQL_ERROR', { position: err.pos, ...(err.suggestion ? { suggestion: err.suggestion } : {}) });
 }
 
 /** Dịch JQL ⇒ where của Prisma; lỗi cú pháp/tên thành 400 kèm vị trí. */
@@ -38,7 +44,7 @@ export async function compileFor(userId: number, projectId: number, query: strin
     const compiled = compileJql(parseJql(query.slice(0, 4000)), ctx);
     return { access, ...compiled };
   } catch (err) {
-    if (err instanceof JqlError) throw new AppError(err.message, 400, 'WORK_JQL_ERROR', { position: err.pos, ...(err.suggestion ? { suggestion: err.suggestion } : {}) });
+    if (err instanceof JqlError) throw jqlHttpError(err);
     throw err;
   }
 }
@@ -64,7 +70,7 @@ export async function compileForSystem(projectId: number, query: string, actorUs
   try {
     return compileJql(parseJql(query.slice(0, 4000)), await jqlContext(projectId, actorUserId ?? 0, p.key));
   } catch (err) {
-    if (err instanceof JqlError) throw new AppError(err.message, 400, 'WORK_JQL_ERROR', { position: err.pos, ...(err.suggestion ? { suggestion: err.suggestion } : {}) });
+    if (err instanceof JqlError) throw jqlHttpError(err);
     throw err;
   }
 }

@@ -68,7 +68,7 @@ export function suggest(input: string, candidates: string[]): string | undefined
 }
 
 /** Giá trị có dấu cách/ký tự lạ thì trả kèm dấu nháy để thay thẳng vào truy vấn. */
-const quoteIfNeeded = (v: string) => (/^[\p{L}\p{N}_\-.:/+@]+(\(\))?$/u.test(v) ? v : `"${v.replace(/"/g, '\\"')}"`);
+export const quoteIfNeeded = (v: string) => (/^[\p{L}\p{N}_\-.:/+@]+(\(\))?$/u.test(v) ? v : `"${v.replace(/"/g, '\\"')}"`);
 const didYouMean = (msg: string, hit: string | undefined) => (hit ? `${msg}. Did you mean ${quoteIfNeeded(hit)}?` : msg);
 
 const OPS = ['!~', '!=', '>=', '<=', '=', '>', '<', '~'];
@@ -284,7 +284,27 @@ export interface JqlContext {
   sprints: Array<{ id: number; name: string; state: string }>;
   customFields: Array<{ id: number; name: string; kind: string; options: Array<{ id: string; label: string }> }>;
   now?: Date;
+  /** Tên dự án — `project = "Tên dự án"` cũng khớp. */
+  projectName?: string;
+  /**
+   * Chế độ NHIỀU dự án: mọi khoá/tên dự án người gọi thấy được. Có mảng này
+   * thì `project = X` mà X không nằm trong đó ⇒ lỗi kèm "did you mean".
+   * Không có (chế độ một dự án) ⇒ `project = OTHER` chỉ khớp rỗng.
+   */
+  knownProjects?: string[];
+  /**
+   * Chế độ NHIỀU dự án: tên (trạng thái, loại, nhãn, người, sprint, trường…)
+   * không có trong dự án NÀY thì khớp rỗng thay vì ném lỗi, và báo lại qua
+   * đây — nơi gọi chỉ báo lỗi khi tên đó vắng mặt ở MỌI dự án.
+   */
+  onMissing?: (m: JqlMiss) => void;
 }
+
+/** Một tên không tra được trong dự án đang dịch (xem JqlContext.onMissing). */
+export interface JqlMiss { pos: number; message: string; value: string; candidates: string[] }
+
+/** Điều kiện không khớp thẻ nào (Prisma dịch `in: []` thành FALSE). */
+const NONE: Prisma.WorkIssueWhereInput = { id: { in: [] } };
 
 const PRIORITY_NAMES: Record<string, number> = { highest: 1, high: 2, medium: 3, low: 4, lowest: 5 };
 
@@ -308,11 +328,36 @@ const FIELD_ALIASES: Record<string, string> = {
   due: 'due', duedate: 'due',
   resolved: 'resolved', resolutiondate: 'resolved',
   watcher: 'watcher', watchers: 'watcher',
+  project: 'project',
 };
+
+/** Tên trường người dùng gõ ⇒ tên chuẩn (hoặc undefined nếu không phải trường có sẵn). */
+export const normalizeField = (name: string): string | undefined => FIELD_ALIASES[name.trim().toLowerCase()];
+
+/** Trường sắp xếp được (ORDER BY) — chung cho một dự án và nhiều dự án. */
+export const ORDERABLE_FIELDS = ['key', 'rank', 'priority', 'created', 'updated', 'due', 'resolved', 'points', 'summary', 'status', 'assignee', 'project'] as const;
+
+/**
+ * Phạm vi dự án đọc được từ các mệnh đề `project` ở TẦNG NGOÀI CÙNG (nối bằng
+ * AND). Dùng để bớt dự án phải quét và để biết dự án lưu trữ có được gọi tên
+ * rõ không. OR/NOT thì không suy ra được gì ⇒ include = null (mọi dự án).
+ */
+export function projectScope(q: JqlQuery): { include: string[] | null; exclude: string[] } {
+  const clauses = !q.where ? [] : q.where.kind === 'clause' ? [q.where] : q.where.kind === 'and' ? q.where.children : [];
+  let include: string[] | null = null;
+  const exclude: string[] = [];
+  for (const c of clauses) {
+    if (c.kind !== 'clause' || normalizeField(c.field) !== 'project') continue;
+    const vals = c.values.filter((v) => v.kind === 'literal').map((v) => (v as { value: string }).value.toLowerCase());
+    if (c.op === '=' || c.op === 'in') include = include === null ? vals : include.filter((x) => vals.includes(x));
+    else if (c.op === '!=' || c.op === 'not in') exclude.push(...vals);
+  }
+  return { include, exclude };
+}
 
 export const JQL_FIELDS = [
   'key', 'summary', 'description', 'text', 'status', 'statusCategory', 'type', 'priority', 'assignee', 'reporter',
-  'labels', 'component', 'sprint', 'parent', 'points', 'created', 'updated', 'due', 'resolved', 'watcher',
+  'labels', 'component', 'sprint', 'parent', 'points', 'created', 'updated', 'due', 'resolved', 'watcher', 'project',
 ];
 export const JQL_FUNCTIONS = ['currentUser()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
 
@@ -329,6 +374,12 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
     const hit = v.kind === 'literal' ? suggest(v.value, candidates) : undefined;
     return fail(didYouMean(msg, hit), at(v, pos), hit);
   };
+  // Chế độ nhiều dự án: ghi lại tên vắng mặt rồi cho khớp rỗng (true = đã ghi).
+  const soft = (msg: string, v: JqlValue, pos: number, candidates: string[]): boolean => {
+    if (!ctx.onMissing) return false;
+    ctx.onMissing({ pos: at(v, pos), message: msg, value: v.kind === 'literal' ? v.value : v.name, candidates });
+    return true;
+  };
 
   const userIds = (vals: JqlValue[], pos: number): Array<number | null> => vals.map((v) => {
     if (v.kind === 'fn') return v.name === 'currentuser' ? ctx.userId : fail(`Unknown function ${v.name}()`, at(v, pos), suggest(v.name, ['currentUser']) && 'currentUser()');
@@ -337,6 +388,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
     if (u) return u.id;
     // "me"/"myself" = currentUser() — sau khi đã thử tên thật (lỡ có người tên "me").
     if (!v.quoted && ['me', 'myself'].includes(lc(v.value))) return ctx.userId;
+    if (soft(`No member "${v.value}"`, v, pos, ctx.members.map((m) => m.username))) return -1; // không ai có id -1
     return miss(`No member "${v.value}"`, v, pos, ctx.members.map((m) => m.username));
   });
 
@@ -344,15 +396,20 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
     vals.flatMap((v) => {
       const s = lc(lit(v, pos));
       const hits = list.filter((x) => lc(x.name) === s || (extra?.(x) ?? []).some((e) => lc(e) === s));
-      return hits.length ? hits.map((h) => h.id) : miss(`No ${what} "${lit(v, pos)}"`, v, pos, list.map((x) => x.name));
+      if (hits.length) return hits.map((h) => h.id);
+      if (soft(`No ${what} "${lit(v, pos)}"`, v, pos, list.map((x) => x.name))) return [];
+      return miss(`No ${what} "${lit(v, pos)}"`, v, pos, list.map((x) => x.name));
     });
 
-  const issueNumber = (v: JqlValue, pos: number) => {
+  /** Số thẻ; null = khoá của dự án KHÁC (chỉ ở chế độ nhiều dự án) ⇒ không khớp ở đây. */
+  const issueNumber = (v: JqlValue, pos: number): number | null => {
     const s = lit(v, pos);
     const m = /^(?:([A-Za-z][A-Za-z0-9]*)-)?(\d+)$/.exec(s);
+    if (m && m[1] && upper(m[1]) !== upper(ctx.projectKey) && soft(`"${s}" is not an issue key in any project you can see`, v, pos, ctx.knownProjects ?? [])) return null;
     if (!m || (m[1] && upper(m[1]) !== upper(ctx.projectKey))) fail(`"${s}" is not an issue key of ${ctx.projectKey}`, at(v, pos));
     return Number(m![2]);
   };
+  const numbers = (vals: JqlValue[], pos: number) => vals.map((v) => issueNumber(v, pos)).filter((n): n is number => n !== null);
 
   const cmp = (op: Operator, v: number | Date): Prisma.IntFilter | Prisma.FloatFilter | Prisma.DateTimeFilter | number | Date => {
     switch (op) {
@@ -382,6 +439,8 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
     if (!field) {
       const cf = ctx.customFields.find((f) => lc(f.name) === raw || `cf[${f.id}]` === raw);
       if (!cf) {
+        // Nhiều dự án: có thể là trường tuỳ chỉnh của dự án khác.
+        if (soft(`Unknown field "${c.field}"`, { kind: 'literal', value: c.field, quoted: false, pos }, pos, [...JQL_FIELDS, ...ctx.customFields.map((f) => f.name)])) return NONE;
         const hit = suggest(c.field, [...JQL_FIELDS, ...Object.keys(FIELD_ALIASES).filter((k) => !k.includes(' ')), ...ctx.customFields.map((f) => f.name)]);
         return fail(didYouMean(`Unknown field "${c.field}"`, hit), pos, hit);
       }
@@ -396,6 +455,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
       }
       if (cf.kind === 'SELECT' || cf.kind === 'MULTISELECT') {
         const optIds = texts.map((t, i) => cf.options.find((o) => lc(o.label) === lc(t))?.id
+          ?? (soft(`"${t}" is not an option of ${cf.name}`, values[i], pos, cf.options.map((o) => o.label)) ? '\u0000none' : undefined)
           ?? miss(`"${t}" is not an option of ${cf.name}`, values[i], pos, cf.options.map((o) => o.label)));
         const matches: W = cf.kind === 'SELECT'
           ? { customValues: { some: { fieldId: cf.id, OR: optIds.map((id) => ({ value: { equals: id } })) } } }
@@ -412,8 +472,11 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
 
     switch (field) {
       case 'key': {
-        if (['>', '>=', '<', '<='].includes(op)) return { number: cmp(op, issueNumber(values[0], pos)) as Prisma.IntFilter };
-        const nums = values.map((v) => issueNumber(v, pos));
+        if (['>', '>=', '<', '<='].includes(op)) {
+          const n = issueNumber(values[0], pos);
+          return n === null ? NONE : { number: cmp(op, n) as Prisma.IntFilter };
+        }
+        const nums = numbers(values, pos);
         return inOrNot(op, pos) ? { number: { notIn: nums } } : { number: { in: nums } };
       }
       case 'summary':
@@ -496,7 +559,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
       case 'parent': {
         if (empty) return { parentId: null };
         if (notEmpty) return { parentId: { not: null } };
-        const nums = values.map((v) => issueNumber(v, pos));
+        const nums = numbers(values, pos);
         const m: W = { parent: { number: { in: nums } } };
         return inOrNot(op, pos) ? { NOT: m } : m;
       }
@@ -527,6 +590,18 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
           return { [col]: { gte: d, lt: end } };
         }
         return { [col]: cmp(op, d) };
+      }
+      case 'project': {
+        // Một lần dịch = một dự án ⇒ mệnh đề này hoặc khớp hết, hoặc không khớp gì.
+        if (empty) return NONE;
+        if (notEmpty) return {};
+        const mine = [ctx.projectKey, ctx.projectName ?? ''].filter(Boolean).map(lc);
+        const hits = values.map((v) => {
+          const s = lc(lit(v, pos));
+          if (ctx.knownProjects && !ctx.knownProjects.some((k) => lc(k) === s)) miss(`No project "${lit(v, pos)}"`, v, pos, ctx.knownProjects);
+          return mine.includes(s);
+        });
+        return hits.some(Boolean) !== inOrNot(op, pos) ? {} : NONE;
       }
       case 'watcher': {
         const ids = userIds(values, pos).filter((x): x is number => x !== null);
@@ -559,6 +634,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
     summary: (dir) => ({ title: dir }),
     status: (dir) => ({ statusId: dir }),
     assignee: (dir) => ({ assignee: { username: dir } }),
+    project: (dir) => ({ projectId: dir }),
   };
   const orderBy = q.orderBy.map((o, i) => {
     const f = FIELD_ALIASES[lc(o.field)] ?? lc(o.field);

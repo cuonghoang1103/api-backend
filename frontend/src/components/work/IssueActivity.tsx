@@ -11,13 +11,14 @@ import { Bot, Flag, Pencil, Trash2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import {
-  userName, workApi, workError, type CommentReportReason, type HistoryEntry, type ProjectConfig, type TiptapDoc, type WorkComment,
+  userName, workApi, workError, type CommentReportReason, type HistoryEntry, type ProjectConfig, type ReactionEmoji, type TiptapDoc, type WorkComment,
 } from '@/lib/work-api';
 import { wk, type Lookups } from './hooks';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import { Dialog, PRIORITIES, relativeTime, Spinner, UserAvatar, formatDate } from './ui';
 import { ConfirmDialog } from './settings/shared';
 import { WorklogList } from './TimeTracking';
+import { ReactionBar, ReactionPickerButton, useCommentReactionsRealtime, useToggleReaction } from './comments/CommentReactions';
 
 function CommentComposer({ config, pid, num }: { config: ProjectConfig; pid: number; num: number }) {
   const qc = useQueryClient();
@@ -124,6 +125,12 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
   const [draft, setDraft] = useState<TiptapDoc>(c.bodyJson);
   const mine = !!c.author && c.author.id === meId;
   const canDelete = (mine && config.permissions.comment) || config.role === 'ADMIN';
+  // Cảm xúc: ai bình luận được thì bấm được (VIEWER chỉ xem chip).
+  const canReact = config.permissions.comment;
+  const reactions = c.reactions ?? [];
+  const meMember = meId ? config.members.find((m) => m.id === meId) : undefined;
+  const react = useToggleReaction(pid, num, meId ? { id: meId, name: meMember ? userName(meMember) : 'You' } : null);
+  const toggleReaction = (emoji: ReactionEmoji, active: boolean) => react.mutate({ cid: c.id, emoji, active });
 
   const refresh = () => qc.invalidateQueries({ queryKey: wk.comments(pid, num) });
   const save = useMutation({
@@ -149,8 +156,14 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
           <span className="font-semibold text-[var(--w-text)]">{c.isAi ? 'CT Work AI' : userName(c.author)}</span>
           <span className="text-[var(--w-text-3)]" title={new Date(c.createdAt).toLocaleString('en-US')}>{relativeTime(c.createdAt)}</span>
           {c.editedAt && <span className="text-[var(--w-text-3)]">(edited)</span>}
+          {!editing && canReact && (
+            // Nút cảm xúc hiện sẵn trên màn hình cảm ứng (không có hover).
+            <span className="ml-auto flex opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
+              <ReactionPickerButton reactions={reactions} onPick={(e) => toggleReaction(e, !reactions.some((r) => r.emoji === e && r.mine))} />
+            </span>
+          )}
           {!editing && (
-            <span className="ml-auto flex gap-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+            <span className={cn('flex gap-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100', !canReact && 'ml-auto')}>
               {!mine && (
                 <button type="button" title="Report comment" aria-label="Report comment" onClick={() => setReporting(true)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Flag size={12} /></button>
               )}
@@ -172,7 +185,10 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
             </div>
           </>
         ) : (
-          <RichView value={c.bodyJson} />
+          <>
+            <RichView value={c.bodyJson} />
+            <ReactionBar reactions={reactions} meId={meId} canReact={canReact} onToggle={toggleReaction} />
+          </>
         )}
       </div>
       <ReportCommentDialog open={reporting} onClose={() => setReporting(false)} pid={pid} num={num} cid={c.id} />
@@ -264,6 +280,7 @@ const ACTIVITY_TABS = [
 export default function IssueActivity({ pid, num, config, lk }: { pid: number; num: number; config: ProjectConfig; lk: Lookups }) {
   const [tab, setTab] = useState<(typeof ACTIVITY_TABS)[number]['id']>('comments');
   const comments = useQuery({ queryKey: wk.comments(pid, num), queryFn: () => workApi.comments(pid, num) });
+  useCommentReactionsRealtime(pid, num);
   return (
     <section>
       <div className="mb-4 flex items-center gap-1 border-b border-[var(--w-border)]">

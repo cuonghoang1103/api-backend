@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { compileJql, JqlError, parseJql, resolveDate, type JqlContext } from './jql.js';
+import { compileJql, JqlError, parseJql, projectScope, resolveDate, type JqlContext, type JqlMiss } from './jql.js';
 
 const ctx: JqlContext = {
   projectKey: 'SWP',
@@ -140,5 +140,67 @@ describe('JQL — thân thiện (23/09)', () => {
   it('không gợi ý bừa khi quá xa', () => {
     assert.equal(err('status = Shipped').suggestion, undefined);
     assert.equal(err('colour = red').suggestion, undefined);
+  });
+});
+
+describe('JQL — trường project', () => {
+  const NONE = { id: { in: [] } };
+  const cx = { ...ctx, projectName: 'Shop App' };
+  const pw = (q: string, c: JqlContext = cx) => compileJql(parseJql(q), c).where;
+
+  it('một dự án: project = CHÍNH NÓ khớp hết, dự án khác khớp rỗng (không lỗi)', () => {
+    assert.deepEqual(pw('project = SWP'), {});
+    assert.deepEqual(pw('project = swp'), {});
+    assert.deepEqual(pw('project = "Shop App"'), {});
+    assert.deepEqual(pw('project = OTHER'), NONE);
+    assert.deepEqual(pw('project != OTHER'), {});
+    assert.deepEqual(pw('project != SWP'), NONE);
+    assert.deepEqual(pw('project IN (QA, SWP)'), {});
+    assert.deepEqual(pw('project NOT IN (QA, SWP)'), NONE);
+    assert.deepEqual(pw('project IS EMPTY'), NONE);
+    assert.deepEqual(pw('project IS NOT EMPTY'), {});
+  });
+  it('project kết hợp với điều kiện khác', () => {
+    assert.deepEqual(pw('project = SWP AND status = Done'), { AND: [{}, { statusId: { in: [3] } }] });
+  });
+  it('nhiều dự án: project không tồn tại ở đâu ⇒ lỗi + did you mean, trỏ vào giá trị', () => {
+    const c = { ...cx, knownProjects: ['SWP', 'Shop App', 'QA', 'Quality'] };
+    assert.deepEqual(pw('project = QA', c), NONE);
+    const q = 'status = Done AND project = SPW';
+    assert.throws(() => pw(q, c), (e: unknown) => e instanceof JqlError && e.pos === q.indexOf('SPW') && e.suggestion === 'SWP' && /No project "SPW"/.test(e.message));
+  });
+  it('nhiều dự án: tên vắng mặt khớp rỗng và được báo lại (không ném lỗi)', () => {
+    const misses: JqlMiss[] = [];
+    const c: JqlContext = { ...cx, knownProjects: ['SWP', 'QA'], onMissing: (m) => misses.push(m) };
+    assert.deepEqual(pw('status = Shipped', c), { statusId: { in: [] } });
+    assert.deepEqual(pw('status != Shipped', c), { statusId: { notIn: [] } });
+    assert.deepEqual(pw('assignee = ghost', c), { OR: [{ assigneeId: { in: [-1] } }] });
+    assert.deepEqual(pw('Colour = red', c), NONE);
+    assert.deepEqual(pw('Browser = Firefox', c), { customValues: { some: { fieldId: 50, OR: [{ value: { equals: '\u0000none' } }] } } });
+    assert.deepEqual(misses.map((m) => [m.value, m.pos]), [['Shipped', 9], ['Shipped', 10], ['ghost', 11], ['Colour', 0], ['Firefox', 10]]);
+    assert.ok(misses[0].candidates.includes('Done'));
+    // Lỗi không phụ thuộc dự án (ưu tiên sai, ngày sai) vẫn ném như cũ.
+    assert.throws(() => pw('priority = Hihg', c), JqlError);
+  });
+  it('nhiều dự án: khoá thẻ của dự án khác khớp rỗng; cùng dự án vẫn chạy', () => {
+    const misses: JqlMiss[] = [];
+    const c: JqlContext = { ...cx, knownProjects: ['SWP', 'QA'], onMissing: (m) => misses.push(m) };
+    assert.deepEqual(pw('key = QA-7', c), { number: { in: [] } });
+    assert.deepEqual(pw('key IN (QA-7, SWP-3)', c), { number: { in: [3] } });
+    assert.deepEqual(pw('key > QA-7', c), NONE);
+    assert.deepEqual(pw('key = 12', c), { number: { in: [12] } });
+    assert.equal(misses.length, 3);
+    // Một dự án (không onMissing): khoá lạ vẫn là lỗi như trước.
+    assert.throws(() => pw('key = QA-7'), /not an issue key of SWP/);
+  });
+  it('ORDER BY project', () => {
+    assert.deepEqual(compileJql(parseJql('ORDER BY project DESC'), cx).orderBy[0], { projectId: 'desc' });
+  });
+  it('projectScope: chỉ đọc mệnh đề project ở tầng AND ngoài cùng', () => {
+    assert.deepEqual(projectScope(parseJql('project = SHOP AND status = Done')), { include: ['shop'], exclude: [] });
+    assert.deepEqual(projectScope(parseJql('project IN (SHOP, QA) AND project != QA')), { include: ['shop', 'qa'], exclude: ['qa'] });
+    assert.deepEqual(projectScope(parseJql('project = SHOP AND project = QA')), { include: [], exclude: [] });
+    assert.deepEqual(projectScope(parseJql('project = SHOP OR status = Done')), { include: null, exclude: [] });
+    assert.deepEqual(projectScope(parseJql('ORDER BY created')), { include: null, exclude: [] });
   });
 });

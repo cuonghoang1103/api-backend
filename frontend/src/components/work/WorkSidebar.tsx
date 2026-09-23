@@ -12,7 +12,7 @@ import { useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft, CalendarRange, CircleHelp, KeyRound, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, Inbox, LayoutDashboard,
-  List, ListOrdered, Plus, Settings, Users, LayoutGrid, Check,
+  List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi } from '@/lib/work-api';
@@ -23,7 +23,7 @@ import { WorkspaceMark } from './settings/shared';
 import { openHelp } from './help/store';
 import WorkInbox from './shell/WorkInbox';
 
-const NOT_SLUG = new Set(['invite', 'share', 'developer']);
+const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search']);
 
 export function useWorkPath() {
   const pathname = usePathname() ?? '';
@@ -144,6 +144,8 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
         {/* "My work" luôn tới được, kể cả khi đang trong một dự án. */}
         <div className="mt-1 space-y-0.5">
           <NavItem href="/work?tab=my-work" icon={Inbox} label="My work" active={onMyWork} />
+          {/* Tìm thẻ mọi dự án. Không gán phím "/" toàn cục: list/board đã dùng nó — ⌘K là đủ. */}
+          <NavItem href="/work/search" icon={Search} label="Search" active={pathname.startsWith('/work/search')} />
           {!slug && <NavItem href="/work?tab=workspaces" icon={LayoutGrid} label="Workspaces" active={onWorkspaces} />}
         </div>
 

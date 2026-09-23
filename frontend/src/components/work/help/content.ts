@@ -471,6 +471,20 @@ export const HELP_ARTICLES: HelpArticle[] = [
         'Deleting an issue (**"More actions" → Delete**) moves it and its sub-tasks to the project **Trash**, where an admin can restore it.',
         'Xoá issue (**"More actions" → Delete**) sẽ chuyển nó và sub-task vào **Trash** của dự án, admin khôi phục được.',
       ),
+      h('Description templates', 'Mẫu mô tả sẵn'),
+      p(
+        'When you create a **Bug, Story, Task, Epic or Requirement**, the description is pre-filled with a template (e.g. Bug: **Steps to reproduce · Expected result · Actual result · Environment · Evidence**; Story: **"As a … I want … so that …"** + an acceptance-criteria checklist). A hint **"Template: … · Clear"** sits above the editor — **Clear** empties it. Switching the type swaps the template only if you have not typed anything yet.',
+        'Khi tạo **Bug, Story, Task, Epic hoặc Requirement**, phần mô tả được điền sẵn một mẫu (vd Bug: **Steps to reproduce · Expected result · Actual result · Environment · Evidence**; Story: **"As a … I want … so that …"** + checklist tiêu chí chấp nhận). Dòng **"Template: … · Clear"** nằm trên ô soạn — bấm **Clear** để xoá. Đổi loại issue thì mẫu đổi theo, miễn là bạn chưa gõ gì.',
+      ),
+      tip(
+        'Project admins can edit each template in **Project settings → Issue types → Template** (Save / Reset to default). Leaving a template empty turns it off for that type.',
+        'Admin dự án sửa từng mẫu ở **Project settings → Issue types → Template** (Save / Reset to default). Để mẫu trống là tắt mẫu cho loại đó.',
+      ),
+      h('Reactions on comments', 'Thả cảm xúc vào bình luận'),
+      p(
+        'Hover a comment (on phones it is always visible) and click the smiley to react with 👍 👎 😄 🎉 😕 ❤️ 🚀 👀. Click a reaction chip again to remove yours; hover a chip to see who reacted. Reactions never send notifications. Viewers can see reactions but cannot add them.',
+        'Rê chuột vào bình luận (trên điện thoại nút luôn hiện) rồi bấm mặt cười để thả 👍 👎 😄 🎉 😕 ❤️ 🚀 👀. Bấm lại vào chip cảm xúc để gỡ của mình; rê vào chip để xem ai đã thả. Cảm xúc không gửi thông báo. Người chỉ xem (Viewer) thấy được nhưng không thả được.',
+      ),
     ],
     related: ['board', 'issues-list-jql', 'time-capacity', 'ai', 'workflow'],
   },
@@ -632,6 +646,22 @@ export const HELP_ARTICLES: HelpArticle[] = [
           ['Fields', ['Custom fields (Text, Number, Date, Select list, Multi-select, User, URL, Checkbox).', 'Trường tuỳ chỉnh (Text, Number, Date, Select list, Multi-select, User, URL, Checkbox).']],
           ['Danger zone', ['Archive (hide from the sidebar) or delete the project.', 'Lưu trữ (ẩn khỏi sidebar) hoặc xoá dự án.']],
         ],
+      ),
+      h('Workflow diagram', 'Sơ đồ workflow'),
+      p(
+        'The **Workflow** tab opens in **Diagram** view on a computer (**List** view is the classic list + checkbox grid). Each status is a box coloured by category; arrows are the allowed moves. An **ANY** badge means the status can be entered from any status.',
+        'Tab **Workflow** mở ở chế độ **Diagram** trên máy tính (**List** là dạng danh sách + bảng tích cũ). Mỗi trạng thái là một ô tô màu theo category; mũi tên là các bước chuyển được phép. Nhãn **ANY** nghĩa là vào được trạng thái đó từ bất kỳ đâu.',
+      ),
+      steps(
+        ['Hover a status and drag from one of its side handles to another status to add a transition (drop on empty space to cancel).', 'Rê chuột vào một trạng thái, kéo từ chấm tròn ở cạnh sang trạng thái khác để thêm luồng chuyển (thả ra chỗ trống để huỷ).'],
+        ['Click an arrow to select it — tick **"Allow moving back"** or press **Delete** to remove it.', 'Bấm vào mũi tên để chọn — tích **"Allow moving back"** hoặc bấm **Delete** để xoá.'],
+        ['Click a status to edit its name, category, colour, WIP limit or delete it (it asks where to move the issues).', 'Bấm vào trạng thái để sửa tên, category, màu, giới hạn WIP hoặc xoá (sẽ hỏi chuyển issue đi đâu).'],
+        ['Press **Save** in the bar at the bottom. Box positions save by themselves; **Auto-arrange** lays everything out again.', 'Bấm **Save** ở thanh dưới cùng. Vị trí các ô tự lưu; **Auto-arrange** để xếp lại tự động.'],
+      ),
+      list(
+        ['A **free** workflow shows a banner — drawing the first arrow switches it to restricted (you are asked first). **"Start from a linear flow"** creates To do → … → Done for you; **"Make free again"** removes all rules.', 'Workflow **tự do** có dải thông báo — vẽ mũi tên đầu tiên sẽ chuyển sang chế độ giới hạn (có hỏi trước). **"Start from a linear flow"** tạo sẵn To do → … → Done; **"Make free again"** bỏ hết luật.'],
+        ['Yellow warnings: **Unreachable** (no arrow leads in) and **Dead end** (can never reach Done). They do not block saving.', 'Cảnh báo vàng: **Unreachable** (không mũi tên nào dẫn vào) và **Dead end** (không bao giờ tới được Done). Không chặn việc lưu.'],
+        ['Zoom with ⌘/Ctrl + scroll or the − / + / Fit buttons; **Download PNG/SVG** to paste the diagram into your SWR302 report.', 'Phóng to/thu nhỏ bằng ⌘/Ctrl + cuộn hoặc nút − / + / Fit; **Download PNG/SVG** để dán sơ đồ vào báo cáo SWR302.'],
       ),
     ],
     related: ['board', 'templates', 'faq', 'issues'],
@@ -796,6 +826,50 @@ export const HELP_ARTICLES: HelpArticle[] = [
       ),
     ],
     related: ['filters-dashboards', 'import-export', 'automation'],
+  },
+
+  {
+    id: 'global-search',
+    category: 'track',
+    title: { en: 'Search across all projects', vi: 'Tìm kiếm qua mọi dự án' },
+    summary: {
+      en: 'Find any issue in every project you can see — by words, by key, or with JQL and the new `project` field.',
+      vi: 'Tìm bất kỳ issue nào trong mọi dự án bạn xem được — theo từ khoá, theo mã, hoặc bằng JQL với trường `project` mới.',
+    },
+    keywords: ['search', 'find', 'all projects', 'cross project', 'global', 'jql', 'project', 'command palette', 'cmd k', 'tim kiem', 'moi du an', 'tat ca'],
+    pages: [page('global', '/work/search', 'Search', 'Tìm kiếm')],
+    blocks: [
+      h('Quick search (⌘K)', 'Tìm nhanh (⌘K)'),
+      list(
+        ['Press **⌘K** (Ctrl+K on Windows) anywhere in CT Work and type at least 2 characters. Issues from **all** your projects appear; the current project is listed first.', 'Bấm **⌘K** (Windows: Ctrl+K) ở bất kỳ đâu trong CT Work và gõ từ 2 ký tự. Issue của **mọi** dự án hiện ra; dự án đang mở được xếp trước.'],
+        ['Type an exact key such as **QA-7** — a **"Jump to"** row takes you straight there.', 'Gõ đúng mã như **QA-7** — dòng **"Jump to"** đưa bạn tới thẳng thẻ đó.'],
+        ['**"Search all issues for …"** opens the full Search page with your words.', '**"Search all issues for …"** mở trang Search đầy đủ với từ bạn vừa gõ.'],
+      ),
+      h('The Search page', 'Trang Search'),
+      p(
+        'Open **Search** in the sidebar (under **My work**). **Basic** mode has filters for **Project, Type, Status category, Assignee** (including **Me** and **Unassigned**) plus a text box. **JQL** mode accepts any query across projects. Click a column header to sort, **Group by project** to see results per project, **J/K** + **Enter** to open an issue. The address bar keeps your search, so you can bookmark or share it.',
+        'Mở **Search** ở sidebar (dưới **My work**). Chế độ **Basic** có bộ lọc **Project, Type, Status category, Assignee** (có **Me** và **Unassigned**) và ô chữ. Chế độ **JQL** nhận mọi truy vấn qua nhiều dự án. Bấm tiêu đề cột để sắp xếp, **Group by project** để xem theo từng dự án, **J/K** + **Enter** để mở issue. Thanh địa chỉ giữ nguyên truy vấn nên bạn lưu bookmark hoặc gửi cho người khác được.',
+      ),
+      h('JQL across projects', 'JQL qua nhiều dự án'),
+      table(
+        [['Query', 'Truy vấn'], ['Finds', 'Tìm được']],
+        [
+          ['project = SHOP', ['Only issues of project SHOP', 'Chỉ issue của dự án SHOP']],
+          ['project IN (SHOP, QA) AND type = Bug', ['Bugs in two projects', 'Bug của hai dự án']],
+          ['assignee = me AND statusCategory != Done ORDER BY priority', ['Your open work everywhere, most important first', 'Việc đang mở của bạn ở mọi nơi, quan trọng nhất trước']],
+          ['due < now() AND statusCategory != Done ORDER BY due', ['Everything overdue in all projects', 'Mọi việc quá hạn ở tất cả dự án']],
+        ],
+      ),
+      tip(
+        'Status, type and label names are looked up in each project separately — a status that exists only in one project simply matches nothing elsewhere. You only get an error (with a "did you mean") when the name exists in none of your projects.',
+        'Tên trạng thái, loại và nhãn được tra riêng trong từng dự án — trạng thái chỉ có ở một dự án thì các dự án khác đơn giản là không khớp. Chỉ báo lỗi (kèm gợi ý "did you mean") khi tên đó không có trong dự án nào của bạn.',
+      ),
+      warn(
+        'You only ever see issues from projects you can open. Archived projects are skipped unless you name them (**project = KEY**). If two workspaces use the same key, **project = KEY** matches both.',
+        'Bạn chỉ thấy issue của dự án bạn được mở. Dự án đã lưu trữ bị bỏ qua trừ khi bạn ghi tên (**project = KEY**). Nếu hai không gian dùng cùng một mã, **project = KEY** khớp cả hai.',
+      ),
+    ],
+    related: ['issues-list-jql', 'filters-dashboards', 'shortcuts'],
   },
 
   {
@@ -1679,6 +1753,7 @@ export function helpArticleForPath(pathname: string, search = ''): string {
   if (parts[1] === 'developer') return 'api-tokens';
   if (parts[1] === 'invite') return 'workspaces';
   if (parts[1] === 'share') return 'public-links';
+  if (parts[1] === 'search') return 'global-search';
   if (parts.length === 2) return 'templates';
   if (parts[2] === 'settings') return tab === 'audit' || tab === 'trash' ? 'trash-audit' : 'workspaces';
   const view = parts[3] ?? 'board';

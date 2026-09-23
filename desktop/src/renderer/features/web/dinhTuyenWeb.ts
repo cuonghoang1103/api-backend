@@ -228,12 +228,12 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/profile/:id/v2', nap: () => import('@/app/profile/[id]/v2/page') },
 
   /* ── CT Work (kiểu Jira) — 23/09/2026 ──
-     Đối chiếu bằng `find frontend/src/app/work -name page.tsx` ⇒ 19 trang.
+     Đối chiếu bằng `find frontend/src/app/work -name page.tsx` ⇒ 20 trang.
      Khung chung (`app/work/layout.tsx`: thanh bên, bảng lệnh ⌘K, AI, `#work-portal`,
      `work.css`) do `CtWorkPage` dựng — xem tệp đó.
 
      ⚠️ TĨNH TRƯỚC ĐỘNG, BA chỗ: `/work/invite/:token`, `/work/share/:token` cùng
-     hình dạng với `/work/:ws/:key`, còn `/work/developer` cùng hình dạng với
+     hình dạng với `/work/:ws/:key`, còn `/work/developer` và `/work/search` cùng hình dạng với
      `/work/:ws`. Đảo thứ tự là "developer" bị đọc thành slug không gian làm việc
      và trang hiện "workspace not found" — hỏng CÂM.
      Tương tự `/work/:ws/settings` phải đứng trước `/work/:ws/:key` (không thì
@@ -241,6 +241,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
      đoạn nên không đụng `/work/:ws/:key/tests/:num` (5 đoạn). */
   { mau: '/work', nap: () => import('@/app/work/page') },
   { mau: '/work/developer', nap: () => import('@/app/work/developer/page') },
+  /* Tìm thẻ mọi dự án (24/09) — tĩnh, phải đứng TRƯỚC `/work/:ws`. */
+  { mau: '/work/search', nap: () => import('@/app/work/search/page') },
   { mau: '/work/invite/:token', nap: () => import('@/app/work/invite/[token]/page') },
   { mau: '/work/share/:token', nap: () => import('@/app/work/share/[token]/page') },
   { mau: '/work/:ws', nap: () => import('@/app/work/[ws]/page') },

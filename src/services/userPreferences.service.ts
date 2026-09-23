@@ -62,6 +62,11 @@ export const NOTIFY_TYPES = [
   'NOTE_MENTION',
   'HUB_SHARE',
   'ADMIN_ANNOUNCEMENT',
+  // CT Work (23/09/2026) — thiếu ở đây thì tắt tiếng trong cài đặt không lưu được lên server.
+  'WORK_INVITE',
+  'WORK_ASSIGN',
+  'WORK_COMMENT',
+  'WORK_MENTION',
 ] as const;
 export type NotifyType = (typeof NOTIFY_TYPES)[number];
 

@@ -70,7 +70,10 @@ export default function FloatingAIAssistant() {
  const hidden = Boolean(
    !nguoiDungBat
    || pathname?.startsWith('/creator') || pathname?.startsWith('/admin')
-   || pathname?.startsWith('/nhung-video') || hiddenOnMobile,
+   || pathname?.startsWith('/nhung-video')
+   // CT Work có trợ lý AI riêng trong dự án (đợt 4); robot nổi đè lên board.
+   || pathname === '/work' || pathname?.startsWith('/work/')
+   || hiddenOnMobile,
  );
 
  const { isStreaming, robotEmotion } = useChatStore();

@@ -2616,7 +2616,8 @@ export type PrefSoundKind =
 export type PrefNotifyType =
   | 'NEW_POST' | 'NEW_REACTION' | 'NEW_COMMENT' | 'NEW_REPLY' | 'NEW_MENTION'
   | 'NEW_MESSAGE' | 'FRIEND_REQUEST' | 'FRIEND_ACCEPT' | 'NEW_FOLLOW'
-  | 'NOTE_SHARE' | 'NOTE_COMMENT' | 'NOTE_REPLY' | 'NOTE_MENTION' | 'HUB_SHARE' | 'ADMIN_ANNOUNCEMENT';
+  | 'NOTE_SHARE' | 'NOTE_COMMENT' | 'NOTE_REPLY' | 'NOTE_MENTION' | 'HUB_SHARE' | 'ADMIN_ANNOUNCEMENT'
+  | 'WORK_INVITE' | 'WORK_ASSIGN' | 'WORK_COMMENT' | 'WORK_MENTION';
 
 export interface ServerPreferences {
   sound: {

@@ -30,6 +30,31 @@ import { cn } from '@/lib/utils';
 
 /* ─── Presentation helpers ───────────────────────────────────────── */
 
+/* ─── CT Work (/work) notifications — English, like the rest of CT Work ─── */
+
+const WORK_TYPES: NotificationType[] = ['WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION'];
+const isWorkType = (t: NotificationType) => WORK_TYPES.includes(t);
+
+function describeWork(n: SocialNotification): string {
+  const name = n.sender?.displayName || n.sender?.fullName || n.sender?.username || 'Someone';
+  const p = n.payload ?? {};
+  const str = (v: unknown) => (typeof v === 'string' ? v : '');
+  const key = str(p.issueKey) || 'an issue';
+  const title = str(p.title);
+  switch (n.type) {
+    case 'WORK_INVITE': return `${name} added you to ${str(p.workspaceName) || 'a workspace'}`;
+    case 'WORK_ASSIGN': return `${name} assigned you ${key}${title ? `: ${title}` : ''}`;
+    case 'WORK_COMMENT': return `${name} commented on ${key}${title ? `: ${title}` : ''}`;
+    default: return `${name} mentioned you in ${key}`;
+  }
+}
+
+/** payload.url is an app path; only follow it inside /work (no open redirect). */
+function workUrl(n: SocialNotification): string {
+  const url = n.payload?.url;
+  return typeof url === 'string' && url.startsWith('/work/') ? url : '/work';
+}
+
 function describeNotification(n: SocialNotification): string {
   const name = n.sender?.displayName || n.sender?.fullName || n.sender?.username || 'Ai đó';
   switch (n.type) {
@@ -55,6 +80,10 @@ function describeNotification(n: SocialNotification): string {
     case 'NOTE_REPLY': return `${name} đã trả lời thảo luận trong ghi chú`;
     case 'NOTE_MENTION': return `${name} đã nhắc đến bạn trong một ghi chú`;
     case 'HUB_SHARE': return `${name} đã chia sẻ một thư mục tài liệu với bạn`;
+    case 'WORK_INVITE':
+    case 'WORK_ASSIGN':
+    case 'WORK_COMMENT':
+    case 'WORK_MENTION': return describeWork(n);
     case 'ADMIN_ANNOUNCEMENT': {
       const title = (n.payload?.title as string) || 'Thông báo mới';
       return `Thông báo mới từ Admin: ${title}`;
@@ -79,6 +108,10 @@ function typeIcon(t: NotificationType) {
     case 'NOTE_REPLY': return CornerDownRight;
     case 'NOTE_MENTION': return AtSign;
     case 'HUB_SHARE': return Share2;
+    case 'WORK_INVITE': return UserPlus;
+    case 'WORK_ASSIGN': return UserCheck;
+    case 'WORK_COMMENT': return MessageCircle;
+    case 'WORK_MENTION': return AtSign;
     case 'ADMIN_ANNOUNCEMENT': return Crown;
     case 'NEW_POST': return Send;
     default: return Bell;
@@ -100,6 +133,10 @@ function typeColor(t: NotificationType): string {
     case 'NOTE_REPLY': return '#22d3ee';
     case 'NOTE_MENTION': return '#8b5cf6';
     case 'HUB_SHARE': return '#f59e0b';
+    case 'WORK_INVITE':
+    case 'WORK_ASSIGN':
+    case 'WORK_COMMENT':
+    case 'WORK_MENTION': return '#5e6ad2';
     case 'ADMIN_ANNOUNCEMENT': return '#fbbf24';
     default: return '#8a8d91';
   }
@@ -127,6 +164,7 @@ function targetUrl(n: SocialNotification): string {
     return `/notes?${params.toString()}`;
   }
   if (n.type === 'HUB_SHARE') return '/hub';
+  if (isWorkType(n.type)) return workUrl(n);
   if (n.type === 'ADMIN_ANNOUNCEMENT') return n.entityId ? `/forum/${n.entityId}` : '/forum';
   if (n.entityId) {
     const params = new URLSearchParams();
@@ -179,6 +217,7 @@ const FILTERS: Array<{ key: string; label: string; types: NotificationType[] | n
   { key: 'people', label: 'Bạn bè', types: ['FRIEND_REQUEST', 'FRIEND_ACCEPT', 'NEW_FOLLOW'] as NotificationType[] },
   { key: 'messages', label: 'Tin nhắn', types: ['NEW_MESSAGE'] as NotificationType[] },
   { key: 'shares', label: 'Chia sẻ', types: ['NOTE_SHARE', 'NOTE_COMMENT', 'NOTE_REPLY', 'NOTE_MENTION', 'HUB_SHARE'] as NotificationType[] },
+  { key: 'work', label: 'CT Work', types: ['WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION'] as NotificationType[] },
   { key: 'admin', label: 'Từ Admin', types: ['ADMIN_ANNOUNCEMENT'] as NotificationType[] },
 ];
 

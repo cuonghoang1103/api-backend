@@ -231,6 +231,12 @@ export type NotificationType =
   | 'NOTE_REPLY'
   | 'NOTE_MENTION'
   | 'HUB_SHARE'    // Hub folder/file/link was shared with you
+  // CT Work (/work, added 2026-09-23). payload.url is an app path under /work;
+  // WORK_INVITE → { workspaceName, url }, others → { issueKey, title, url, excerpt? }.
+  | 'WORK_INVITE'
+  | 'WORK_ASSIGN'
+  | 'WORK_COMMENT'
+  | 'WORK_MENTION'
   // Admin announcement (added 2026-07-09, made a real server-side type on
   // 2026-08-08). entityId = the announcement id, payload.title = its
   // title. Deep-links to /forum/:id.

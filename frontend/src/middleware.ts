@@ -73,6 +73,11 @@ export async function middleware(request: NextRequest) {
  if (pathname.startsWith('/phong-video')) {
  return handleLearnRoute(request, pathname);
  }
+ // CT Work — cần đăng nhập, TRỪ trang lời mời: người chưa có tài khoản phải
+ // xem được "ai mời mình vào đâu" trước khi đăng ký (trang đó tự mời đăng nhập).
+ if ((pathname === '/work' || pathname.startsWith('/work/')) && !pathname.startsWith('/work/invite/')) {
+ return handleLearnRoute(request, pathname);
+ }
  return NextResponse.next();
 }
 
@@ -170,6 +175,7 @@ export const config = {
  matcher: [
    '/admin/:path*', '/admin', '/creator/:path*', '/creator', '/learn/:path*',
    '/phong-video/:path*',
+   '/work', '/work/:path*',
    // Commerce routes — intercepted so they redirect home while disabled.
    '/shop/:path*', '/shop', '/cart', '/checkout', '/my-orders',
    '/huong-dan-mua-hang', '/chinh-sach-thanh-toan', '/chinh-sach-giao-hang', '/chinh-sach-doi-tra',

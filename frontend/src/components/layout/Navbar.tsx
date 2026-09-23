@@ -261,7 +261,9 @@ export default function Navbar() {
  const isStudioPage = (pathname?.startsWith('/creator') ?? false)
    || (pathname?.startsWith('/nhung-video') ?? false)
    // /admin là một công cụ toàn màn hình có sidebar + topbar riêng (23/09/2026).
-   || (pathname?.startsWith('/admin') ?? false);
+   || (pathname?.startsWith('/admin') ?? false)
+   // /work (CT Work) là công cụ quản lý dự án toàn màn hình, sidebar riêng (23/09/2026).
+   || (pathname === '/work' || (pathname?.startsWith('/work/') ?? false));
   if (isAuthPage || isStudioPage || pathname === '/') return null;
 
   const contactItems = [

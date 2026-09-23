@@ -228,6 +228,8 @@ export default function NavigationDock() {
   const hideTriggerButton =
     pathname?.startsWith('/exp-hub') ||
     pathname?.startsWith('/admin') ||
+    // CT Work có sidebar riêng; nút mở dock đè lên nút chuyển không gian.
+    pathname === '/work' || pathname?.startsWith('/work/') ||
     pathname?.startsWith('/messages');
 
   const [isOpen, setIsOpen] = useState(false);

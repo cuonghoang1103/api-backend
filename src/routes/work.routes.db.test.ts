@@ -244,13 +244,17 @@ describe('CT Work API (HTTP + DB thật)', { skip: !RUN }, () => {
     assert.equal((await call(member, 'POST', `/projects/${pid}/issues/${bugNum}/links`, { type: 'BLOCKS', targetKey: 'SWP-9999' })).status, 404);
   });
 
-  it('board: Scrum chưa có sprint chạy thì trống; có thì trả thẻ của sprint', async () => {
-    const empty = await call(member, 'GET', `/projects/${pid}/board`);
-    assert.equal(empty.data.sprint, null);
+  it('board: Scrum chưa có sprint chạy thì hiện mọi thẻ mở (fallback); có thì chỉ thẻ của sprint', async () => {
+    const fb = await call(member, 'GET', `/projects/${pid}/board`);
+    assert.equal(fb.data.sprint, null);
+    assert.equal(fb.data.fallback, true);
+    assert.ok(fb.data.issues.some((i: any) => i.number === storyNum));
+    assert.ok(fb.data.issues.every((i: any) => cfg.issueTypes.find((t: any) => t.id === i.typeId).key !== 'EPIC'), 'không vẽ epic');
     const sp = await prisma.workSprint.create({ data: { projectId: pid, name: 'Sprint 1', state: 'ACTIVE', startAt: new Date() } });
     await call(owner, 'PATCH', `/projects/${pid}/issues/${storyNum}`, { sprintId: sp.id });
     const b = await call(member, 'GET', `/projects/${pid}/board`);
     assert.equal(b.data.sprint.name, 'Sprint 1');
+    assert.equal(b.data.fallback, false);
     assert.deepEqual(b.data.issues.map((i: any) => i.number), [storyNum]);
   });
 

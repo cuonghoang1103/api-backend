@@ -249,16 +249,26 @@ thêm một route GET không cần tham số vào smoke-test của `deploy.sh`.
   Thêm khoá ngoại mới vào `work_issues` thì cũng phải cho nó DEFERRABLE.
 
 ### Đợt 1 — Lõi: dự án, thẻ, board
-- [ ] 1.1 Workspace + dự án + mời thành viên (email/link) + vai trò · L
-- [ ] 1.2 CRUD thẻ, loại thẻ, cha-con, liên kết, nhãn, component · L
-- [ ] 1.3 Trang chi tiết thẻ: TipTap, @nhắc, bình luận, đính kèm, lịch sử, watcher · L
-- [ ] 1.4 Board Kanban kéo thả, WIP, swimlane, lọc nhanh, cập nhật thời gian thực · L
-- [ ] 1.5 Dạng danh sách (bảng, sửa tại chỗ, chọn nhiều để sửa hàng loạt) · M
-- [ ] 1.6 Thông báo trong web cho giao việc/@nhắc/bình luận · M
-- [ ] 1.7 Mẫu dự án Trống + SWP391 · S
-- [ ] 1.8 Phím tắt (`c` tạo thẻ, `/` tìm, `j/k` di chuyển) + ⌘K · S
+- [x] 1.1 Workspace + dự án + mời thành viên (email/link) + vai trò · L
+- [x] 1.2 CRUD thẻ, loại thẻ, cha-con, liên kết, nhãn, component · L
+- [x] 1.3 Trang chi tiết thẻ: TipTap, @nhắc, bình luận, đính kèm, lịch sử, watcher · L
+- [x] 1.4 Board Kanban kéo thả, WIP, lọc nhanh, cập nhật thời gian thực · L — ⚠️ **swimlane CHƯA làm**, dời sang 5.5 (cấu hình board)
+- [x] 1.5 Dạng danh sách (bảng, lọc lưu trên URL, phím j/k) · M — ⚠️ **sửa tại chỗ + sửa hàng loạt CHƯA làm**, dời sang 2.1
+- [x] 1.6 Thông báo trong web cho giao việc/@nhắc/bình luận · M
+- [x] 1.7 Mẫu dự án Trống + SWP391 · S
+- [x] 1.8 Phím tắt (`c` tạo thẻ, `/` tìm, `j/k` di chuyển) + ⌘K · S
 - **Nghiệm thu:** hai trình duyệt, hai tài khoản: kéo thẻ bên này, bên kia thấy trong 1 giây;
   Viewer bấm sửa thì API trả 403 (không chỉ ẩn nút).
+- ✅ **Đã nghiệm thu 23/09/2026:** 16 test API qua HTTP + DB thật (quyền 6 vai trò, mời, @nhắc,
+  thông báo, liên kết, xoá, đính kèm từ chối khoá lạ); Playwright chạy thật 14 bước trên bản build
+  production (tạo không gian → dự án SWP391 → thẻ bằng phím `c` → thêm nhanh → kéo sang In Progress
+  (API xác nhận) → ngăn kéo → bình luận @nhắc (người được nhắc nhận WORK_MENTION) → đổi ưu tiên →
+  lịch sử → danh sách → trang thẻ → mời → cài đặt → ⌘K → nền sáng → điện thoại 390px không cuộn ngang).
+- ⚠️ Thời gian thực 2 trình duyệt CHƯA thử trên giao diện: local không có proxy websocket
+  (`socket.ts` nối vào origin của Next). Đã thử bằng script Node ở đợt 0 (socket nhận `issue.created`).
+  Thử lại trên production sau khi deploy.
+- Board Scrum khi chưa có sprint chạy ⇒ hiện mọi thẻ mở + dải thông báo (`fallback`), để đợt 1 dùng
+  được trước khi có Backlog/Sprint ở đợt 2.
 
 ### Đợt 2 — Scrum
 - [ ] 2.1 Backlog: xếp hạng kéo thả, nhóm theo epic, ước lượng point · M

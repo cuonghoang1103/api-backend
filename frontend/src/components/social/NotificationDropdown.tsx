@@ -52,6 +52,31 @@ interface NotificationDropdownProps {
   onClose: () => void;
 }
 
+/* ─── CT Work (/work) notifications — English, like the rest of CT Work ─── */
+
+const WORK_TYPES: NotificationType[] = ['WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION'];
+const isWorkType = (t: NotificationType) => WORK_TYPES.includes(t);
+
+function describeWork(n: SocialNotification): string {
+  const name = n.sender?.displayName || n.sender?.fullName || n.sender?.username || 'Someone';
+  const p = n.payload ?? {};
+  const str = (v: unknown) => (typeof v === 'string' ? v : '');
+  const key = str(p.issueKey) || 'an issue';
+  const title = str(p.title);
+  switch (n.type) {
+    case 'WORK_INVITE': return `${name} added you to ${str(p.workspaceName) || 'a workspace'}`;
+    case 'WORK_ASSIGN': return `${name} assigned you ${key}${title ? `: ${title}` : ''}`;
+    case 'WORK_COMMENT': return `${name} commented on ${key}${title ? `: ${title}` : ''}`;
+    default: return `${name} mentioned you in ${key}`;
+  }
+}
+
+/** payload.url is an app path; only follow it inside /work (no open redirect). */
+function workUrl(n: SocialNotification): string {
+  const url = n.payload?.url;
+  return typeof url === 'string' && url.startsWith('/work/') ? url : '/work';
+}
+
 /** Render a human-friendly sentence for each notification type.
  *  The "actor" + "target" structure keeps us from duplicating
  *  the JSX template per type. */
@@ -92,6 +117,11 @@ function describeNotification(n: SocialNotification): string {
       return `${name} đã nhắc đến bạn trong một ghi chú`;
     case 'HUB_SHARE':
       return `${name} đã chia sẻ một thư mục tài liệu với bạn`;
+    case 'WORK_INVITE':
+    case 'WORK_ASSIGN':
+    case 'WORK_COMMENT':
+    case 'WORK_MENTION':
+      return describeWork(n);
     case 'ADMIN_ANNOUNCEMENT': {
       const title = (n.payload?.title as string) || 'Thông báo mới';
       return `Thông báo mới từ Admin: ${title}`;
@@ -117,6 +147,10 @@ function typeIcon(t: NotificationType) {
     case 'NOTE_REPLY': return MessageCircle;
     case 'NOTE_MENTION': return AtSign;
     case 'HUB_SHARE': return Share2;
+    case 'WORK_INVITE': return UserPlus;
+    case 'WORK_ASSIGN': return UserCheck;
+    case 'WORK_COMMENT': return MessageCircle;
+    case 'WORK_MENTION': return AtSign;
     default: return Bell;
   }
 }
@@ -136,6 +170,10 @@ function typeIconColor(t: NotificationType): string {
     case 'NOTE_REPLY': return '#22d3ee';
     case 'NOTE_MENTION': return '#8b5cf6';
     case 'HUB_SHARE': return '#f59e0b'; // amber
+    case 'WORK_INVITE':
+    case 'WORK_ASSIGN':
+    case 'WORK_COMMENT':
+    case 'WORK_MENTION': return '#5e6ad2'; // CT Work accent
     default: return '#94a3b8';
   }
 }
@@ -189,6 +227,8 @@ function targetUrl(n: SocialNotification): string {
     return `/notes?${params.toString()}`;
   }
   if (n.type === 'HUB_SHARE') return '/hub';
+  // CT Work: payload.url is the app path to open (issue or workspace).
+  if (isWorkType(n.type)) return workUrl(n);
   // Admin announcement: entityId is the announcement id → /forum/:id
   if (n.type === 'ADMIN_ANNOUNCEMENT') {
     return n.entityId ? `/forum/${n.entityId}` : '/forum';

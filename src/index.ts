@@ -881,7 +881,11 @@ async function startServer(): Promise<void> {
     setupGracefulShutdown();
 
     // Start cron jobs (Mục #6: auto-train + cleanup)
-    try {
+    // CRON_DISABLED=1: chạy thêm một backend phụ (worktree, cổng khác) để thử
+    // mà không nhân đôi việc định kỳ của backend chính đang chạy cùng DB.
+    if (process.env.CRON_DISABLED === '1') {
+      logger.warn('Cron jobs disabled (CRON_DISABLED=1)');
+    } else try {
       const { startCronJobs } = await import(path.join(__dirname, 'services', 'cron.service.js'));
       startCronJobs();
     } catch (cronErr) {

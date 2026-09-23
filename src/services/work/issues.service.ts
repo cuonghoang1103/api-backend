@@ -28,15 +28,17 @@ export const CARD_SELECT = {
   priority: true, assigneeId: true, reporterId: true, storyPoints: true, dueDate: true, rank: true, version: true,
   resolvedAt: true, createdAt: true, updatedAt: true,
   labels: { select: { labelId: true } },
+  parent: { select: { number: true } },
   _count: { select: { children: { where: { deletedAt: null } }, comments: { where: { deletedAt: null } }, attachments: true } },
 } satisfies Prisma.WorkIssueSelect;
 
 type CardRow = Prisma.WorkIssueGetPayload<{ select: typeof CARD_SELECT }>;
 
 export function toCard(r: CardRow) {
-  const { labels, _count, ...rest } = r;
+  const { labels, _count, parent, ...rest } = r;
   return {
     ...rest,
+    parentNumber: parent?.number ?? null,
     labelIds: labels.map((l) => l.labelId),
     subtaskCount: _count.children,
     commentCount: _count.comments,
@@ -98,6 +100,8 @@ export async function listIssues(userId: number, projectId: number, f: IssueFilt
       ],
     });
   }
+  // Tổng số khớp bộ lọc (không tính con trỏ trang) — cho dòng "42 issues".
+  const total = await prisma.workIssue.count({ where: { AND: and } });
   if (f.cursor) and.push({ rank: { gt: f.cursor } });
   const limit = Math.min(Math.max(f.limit ?? 200, 1), 1000);
   const rows = await prisma.workIssue.findMany({
@@ -109,30 +113,37 @@ export async function listIssues(userId: number, projectId: number, f: IssueFilt
   });
   const hasMore = rows.length > limit;
   const items = rows.slice(0, limit).map(toCard);
-  return { items, nextCursor: hasMore ? items[items.length - 1].rank : null };
+  return { items, total, nextCursor: hasMore ? items[items.length - 1].rank : null };
 }
 
 /**
  * Board: Scrum lấy sprint đang chạy (hoặc sprint chỉ định); Kanban lấy mọi
  * thẻ chưa xong + thẻ xong trong 14 ngày gần nhất (cột Done không phình vô hạn).
+ * Scrum mà CHƯA có sprint nào chạy ⇒ lùi về cách của Kanban và trả
+ * `fallback: true` — board trống trơn cho tới khi biết lập sprint thì dự án
+ * mới tạo trông như hỏng.
  */
 export async function getBoard(userId: number, projectId: number, sprintId?: number) {
   await requireProject(userId, projectId, 'project.view');
   const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { type: true } });
   const where: Prisma.WorkIssueWhereInput = { projectId, deletedAt: null, type: { level: { not: 1 } } };
+  const recentOrOpen: Prisma.WorkIssueWhereInput[] = [{ resolvedAt: null }, { resolvedAt: { gte: new Date(Date.now() - 14 * 86_400_000) } }];
   let sprint = null;
-  if (project.type === 'KANBAN') {
-    where.OR = [{ resolvedAt: null }, { resolvedAt: { gte: new Date(Date.now() - 14 * 86_400_000) } }];
-  } else {
+  let fallback = false;
+  if (project.type !== 'KANBAN') {
     sprint = await prisma.workSprint.findFirst({
       where: sprintId ? { id: sprintId, projectId } : { projectId, state: 'ACTIVE' },
       select: { id: true, name: true, goal: true, state: true, startAt: true, endAt: true },
     });
-    if (!sprint) return { mode: project.type, sprint: null, issues: [] };
-    where.sprintId = sprint.id;
+    if (sprintId && !sprint) throw new NotFoundError('Sprint not found');
+  }
+  if (sprint) where.sprintId = sprint.id;
+  else {
+    where.OR = recentOrOpen;
+    fallback = project.type !== 'KANBAN';
   }
   const rows = await prisma.workIssue.findMany({ where, orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: 2000, select: CARD_SELECT });
-  return { mode: project.type, sprint, issues: rows.map(toCard) };
+  return { mode: project.type, sprint, fallback, issues: rows.map(toCard) };
 }
 
 export async function getIssueDetail(userId: number, projectId: number, number: number) {

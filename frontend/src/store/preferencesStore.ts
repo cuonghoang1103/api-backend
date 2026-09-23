@@ -37,6 +37,7 @@ export const ALL_NOTIFY_TYPES: NotifyType[] = [
   'NEW_REACTION', 'NEW_COMMENT', 'NEW_REPLY', 'NEW_MENTION', 'NEW_MESSAGE',
   'FRIEND_REQUEST', 'FRIEND_ACCEPT', 'NEW_FOLLOW',
   'NOTE_SHARE', 'NOTE_COMMENT', 'NOTE_REPLY', 'NOTE_MENTION', 'HUB_SHARE', 'NEW_POST', 'ADMIN_ANNOUNCEMENT',
+  'WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION',
 ];
 
 export interface NotifyTypeMeta {
@@ -61,6 +62,11 @@ export const NOTIFY_TYPE_META: Record<NotifyType, NotifyTypeMeta> = {
   HUB_SHARE: { label: 'Chia sẻ tài liệu', description: 'Ai đó chia sẻ thư mục tài liệu với bạn', icon: 'Share2' },
   NEW_POST: { label: 'Bài viết mới', description: 'Người bạn theo dõi đăng bài mới', icon: 'Send' },
   ADMIN_ANNOUNCEMENT: { label: 'Thông báo từ Admin', description: 'Admin đăng thông báo mới ở diễn đàn', icon: 'Crown' },
+  // CT Work (/work) — icon names must exist in ICON_MAP of app/settings/notifications/page.tsx.
+  WORK_INVITE: { label: 'CT Work: added to a workspace', description: 'Someone added you to a CT Work workspace', icon: 'UserPlus' },
+  WORK_ASSIGN: { label: 'CT Work: issue assigned', description: 'An issue was assigned to you', icon: 'UserCheck' },
+  WORK_COMMENT: { label: 'CT Work: new comment', description: 'Someone commented on an issue you follow', icon: 'MessageCircle' },
+  WORK_MENTION: { label: 'CT Work: mentioned', description: 'Someone @mentioned you in an issue', icon: 'AtSign' },
 };
 
 export interface SoundKindMeta {

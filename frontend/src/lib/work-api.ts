@@ -369,6 +369,7 @@ export interface TestRunDetail {
   testCase: { preconditions: string | null; kind: 'MANUAL' | 'GHERKIN'; issue: { number: number; title: string; priority: number } };
   steps: Array<{ id: number; position: number; action: string; data: string | null; expected: string | null; status: StepStatus; actual: string | null }>;
   defects: IssueRef[];
+  evidence: RunEvidence[];
 }
 export type Coverage = 'NOT_COVERED' | 'NOT_RUN' | 'FAILING' | 'BLOCKED' | 'PASSING';
 export interface TraceabilityData {
@@ -468,6 +469,17 @@ export interface RuleLog {
   status: RuleLogStatus; message: string; durationMs: number; createdAt: string;
 }
 export type EmailMode = 'INSTANT' | 'DIGEST' | 'OFF';
+// ─── Bù đợt 3–4: bằng chứng test, báo cáo cycle, AI kế hoạch sprint / retro / bản tin ───
+export interface RunEvidence { id: number; fileName: string; mime: string; size: number; createdAt: string; uploader: WorkUser | null }
+export interface SprintPlan {
+  sprint: { id: number; name: string }; unit: EstimationUnit; velocity: number | null;
+  history: Array<{ name: string; committedPoints: number | null; completedPoints: number | null }>;
+  target: number; alreadyPlanned: number; selected: Array<{ number: number; title: string; points: number }>;
+  plannedTotal: number; warnings: string[]; rationale: string | null;
+}
+export interface RetroResult { summary: string; actions: AiAction[]; facts: string; quota: AiQuota }
+export interface DailyBrief { text: string; at: string; by: number }
+
 export interface NotifySettings { emailMode: EmailMode; quietStart: number | null; quietEnd: number | null }
 
 // ─── Tích hợp, quản trị, chia sẻ (đợt 7) ───────────────────────
@@ -808,6 +820,35 @@ export const workApi = {
   shareIssue: (token: string, num: number) => d<ShareIssueDetail>(api.get(`${B}/share/${encodeURIComponent(token)}/issues/${num}`)),
   shareReports: (token: string) => d<ShareReports>(api.get(`${B}/share/${encodeURIComponent(token)}/reports`)),
   shareTests: (token: string) => d<ShareTestCycle[]>(api.get(`${B}/share/${encodeURIComponent(token)}/tests`)),
+
+  // Bù đợt 3–4
+  exportTestCycle: async (pid: number, cycleId: number, format: 'xlsx' | 'pdf' | 'csv') => {
+    const res = await api.get(`${B}/projects/${pid}/test-cycles/${cycleId}/export?format=${format}`, { responseType: 'blob', timeout: 120_000 });
+    const name = /filename="([^"]+)"/.exec(String(res.headers['content-disposition'] ?? ''))?.[1] ?? `test-cycle.${format}`;
+    return { blob: res.data as Blob, fileName: name };
+  },
+  /** Tải ảnh/tệp bằng chứng cho một lần chạy test (file thuộc thẻ test case). */
+  async uploadRunEvidence(pid: number, testNumber: number, runId: number, file: File, onProgress?: (pct: number) => void): Promise<IssueAttachment> {
+    const pre = await d<{ uploadUrl: string; key: string; headers: Record<string, string> }>(
+      api.post(`${B}/projects/${pid}/issues/${testNumber}/attachments/presign`, { fileName: file.name, contentType: file.type || 'application/octet-stream', size: file.size }),
+    );
+    await new Promise<void>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', pre.uploadUrl);
+      Object.entries(pre.headers).forEach(([k, v]) => xhr.setRequestHeader(k, v));
+      xhr.upload.onprogress = (e) => e.lengthComputable && onProgress?.(Math.round((e.loaded / e.total) * 100));
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`Upload failed (${xhr.status})`)));
+      xhr.onerror = () => reject(new Error('Upload failed. Check your connection.'));
+      xhr.send(file);
+    });
+    return d<IssueAttachment>(api.post(`${B}/projects/${pid}/issues/${testNumber}/attachments/complete`, { key: pre.key, fileName: file.name, runId }));
+  },
+  aiPlanSprint: (pid: number, body: { sprintId: number; explain?: boolean; language?: 'en' | 'vi' }) =>
+    d<SprintPlan>(api.post(`${B}/projects/${pid}/ai/plan-sprint`, body, { timeout: 120_000 })),
+  aiRetro: (pid: number, body: { sprintId: number; notes?: string | null; language?: 'en' | 'vi' }) =>
+    d<RetroResult>(api.post(`${B}/projects/${pid}/ai/retro`, body, { timeout: 120_000 })),
+  aiDailyBrief: (pid: number, body: { language?: 'en' | 'vi' } = {}) =>
+    d<DailyBrief & { facts: string; quota: AiQuota }>(api.post(`${B}/projects/${pid}/ai/daily-brief`, body, { timeout: 120_000 })),
 
   /** Tải file thẳng lên R2: xin URL ký sẵn → PUT → báo hoàn tất. */
   async uploadAttachment(pid: number, num: number, file: File, onProgress?: (pct: number) => void): Promise<IssueAttachment> {

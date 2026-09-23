@@ -1,12 +1,18 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
-import { workApi, workError, type ProjectConfig, type SprintReportItem } from '@/lib/work-api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { Sparkles } from 'lucide-react';
+import { isAiQuotaError, workApi, workError, type ProjectConfig, type SprintReportItem } from '@/lib/work-api';
 import { wk, type Lookups } from '@/components/work/hooks';
 import { EmptyState, formatDate, Spinner } from '@/components/work/ui';
-import { num, SectionTitle, SprintSelect, unitLabel, useAllSprints, useReportableSprints } from './shared';
+import { ActionGroup, type ActionItem } from '@/components/work/ai/ActionCard';
+import AiMarkdown from '@/components/work/ai/AiMarkdown';
+import UpgradeDialog from '@/components/work/ai/UpgradeDialog';
+import { cn } from '@/lib/utils';
+import { Card, num, SectionTitle, SprintSelect, unitLabel, useAllSprints, useReportableSprints } from './shared';
 
 export default function SprintReportTab({ pid, config, lk }: { pid: number; config: ProjectConfig; lk: Lookups }) {
   const sprintsQ = useAllSprints(pid);
@@ -101,8 +107,115 @@ export default function SprintReportTab({ pid, config, lk }: { pid: number; conf
           {section('Not completed', r.incomplete.map((i) => i.number), 'Everything in this sprint was completed.', r.incomplete)}
           {section('Added after sprint start', r.added, 'No issues were added after the sprint started.')}
           {section('Removed from sprint', r.removed, 'No issues were removed from the sprint.')}
+          {sprintId !== null && <RetroCard key={sprintId} pid={pid} config={config} sprintId={sprintId} />}
         </>
       ) : null}
     </div>
+  );
+}
+
+// ─── Retrospective (AI) ──────────────────────────────────────────
+
+type Lang = 'en' | 'vi';
+const LANGS: Array<{ id: Lang; label: string }> = [
+  { id: 'en', label: 'English' },
+  { id: 'vi', label: 'Tiếng Việt' },
+];
+
+/**
+ * Số liệu sprint do mã tính + ghi chú nhóm ⇒ AI viết retro. Action item là
+ * ĐỀ XUẤT (ActionGroup) — chỉ thành task khi người dùng bấm Apply.
+ */
+function RetroCard({ pid, config, sprintId }: { pid: number; config: ProjectConfig; sprintId: number }) {
+  const canUse = config.permissions.useAi;
+  const [notes, setNotes] = useState('');
+  const [language, setLanguage] = useState<Lang>('en');
+  const [summary, setSummary] = useState<string | null>(null);
+  const [items, setItems] = useState<ActionItem[]>([]);
+  const [upgrade, setUpgrade] = useState(false);
+
+  const gen = useMutation({
+    mutationFn: () => workApi.aiRetro(pid, { sprintId, notes: notes.trim() || null, language }),
+    onSuccess: (r) => {
+      setSummary(r.summary);
+      setItems(r.actions.map((action, i) => ({ id: `retro-${Date.now()}-${i}`, action, status: 'pending' })));
+    },
+    onError: (err) => {
+      if (isAiQuotaError(err)) setUpgrade(true);
+      else toast.error(workError(err, 'Could not generate the retrospective'));
+    },
+  });
+  const onUpdate = useCallback((id: string, patch: Partial<ActionItem>) => {
+    setItems((list) => list.map((it) => (it.id === id ? { ...it, ...patch } : it)));
+  }, []);
+
+  return (
+    <Card className="p-0">
+      <div className="flex flex-wrap items-center gap-2 px-4 pb-2 pt-3">
+        <Sparkles size={14} className="text-[var(--w-accent-text)]" />
+        <h3 className="text-[13px] font-semibold">Retrospective (AI)</h3>
+        <span className="text-[12px] text-[var(--w-text-3)]">What went well, what didn&apos;t, and action items</span>
+      </div>
+      <div className="space-y-3 border-t border-[var(--w-border)] px-4 py-3">
+        <div>
+          <label htmlFor={`retro-notes-${sprintId}`} className="w-label">Team notes (optional)</label>
+          <textarea
+            id={`retro-notes-${sprintId}`}
+            className="w-input text-[13px]"
+            rows={4}
+            maxLength={20_000}
+            value={notes}
+            disabled={!canUse}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Paste sticky notes or comments from the retro meeting — one per line works well."
+          />
+        </div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <div className="min-w-0">
+            <div className="w-label">Language</div>
+            <div role="radiogroup" aria-label="Language" className="inline-flex max-w-full rounded-[var(--w-radius)] border border-[var(--w-border-strong)] bg-[var(--w-sunken)] p-0.5">
+              {LANGS.map((o) => (
+                <button
+                  key={o.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={language === o.id}
+                  onClick={() => setLanguage(o.id)}
+                  className={cn(
+                    'whitespace-nowrap rounded-[5px] px-2.5 py-1 text-[12px] font-medium transition-colors',
+                    language === o.id ? 'bg-[var(--w-panel)] text-[var(--w-text)] shadow-[0_1px_2px_rgba(0,0,0,0.12)]' : 'text-[var(--w-text-2)] hover:text-[var(--w-text)]',
+                  )}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <button type="button" className="w-btn w-btn-primary w-full sm:ml-auto sm:w-auto" disabled={!canUse || gen.isPending} onClick={() => gen.mutate()}>
+            {gen.isPending ? <Spinner size={14} /> : <Sparkles size={14} />}
+            {gen.isPending ? 'Writing…' : summary ? 'Regenerate retro' : 'Generate retro'}
+          </button>
+        </div>
+        <p className="text-[12px] leading-relaxed text-[var(--w-text-3)]">
+          Sprint numbers come from your project data; AI only writes the text. Action items are suggestions — nothing is created until you apply them. Uses 1 AI request.
+        </p>
+        {!canUse && (
+          <p className="text-[12px] text-[var(--w-orange)]">You don&apos;t have permission to use AI in this project. Ask a project admin to enable it for your role.</p>
+        )}
+      </div>
+
+      {summary && (
+        <div className={cn('border-t border-[var(--w-border)] px-4 py-4', gen.isPending && 'opacity-60')}>
+          <AiMarkdown text={summary} />
+          {items.length > 0 && (
+            <div className="mt-4">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]">Proposed action items</div>
+              <ActionGroup config={config} items={items} onUpdate={onUpdate} />
+            </div>
+          )}
+        </div>
+      )}
+      <UpgradeDialog open={upgrade} onClose={() => setUpgrade(false)} />
+    </Card>
   );
 }

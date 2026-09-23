@@ -12,16 +12,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  AlertTriangle, Bug, ChevronDown, ChevronUp, CheckCheck, Link2, RotateCcw, X,
+  AlertTriangle, Bug, ChevronDown, ChevronUp, CheckCheck, FileText, ImagePlus, Link2, RotateCcw, X,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import {
-  userName, workApi, workError, type ProjectConfig, type RunStatus, type StepStatus, type TestRunDetail,
+  userName, workApi, workError, type ProjectConfig, type RunEvidence, type RunStatus, type StepStatus, type TestRunDetail,
 } from '@/lib/work-api';
 import { useLookups, wk } from '../hooks';
 import { AssigneePicker, PriorityPicker } from '../fields';
-import { Dialog, Field, isTyping, PriorityIcon, Spinner, StatusBadge, WorkPortal } from '../ui';
+import { Dialog, Field, formatBytes, isTyping, PriorityIcon, relativeTime, Spinner, StatusBadge, WorkPortal } from '../ui';
 import { Select } from '../settings/shared';
 import { formatDateTime, RUN_META, RunStatusPill, STEP_META } from './runStatus';
 
@@ -61,6 +61,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
   const canExecute = config.permissions.transition;
   const canEdit = config.permissions.editIssues;
   const canCreateBug = config.permissions.createIssues;
+  const canAttach = config.permissions.attach;
 
   // ─── Hàng đợi ghi tuần tự ───────────────────────────────────────
   const chain = useRef<Promise<unknown>>(Promise.resolve());
@@ -218,6 +219,38 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
     qc.invalidateQueries({ queryKey: runKey });
   };
 
+  // ─── Bằng chứng (ảnh chụp / tệp) ────────────────────────────────
+  const [uploads, setUploads] = useState<Array<{ id: string; name: string; pct: number }>>([]);
+  const uploadEvidence = useCallback(async (files: File[]) => {
+    if (!data || !canAttach) return;
+    const testNumber = data.testCase.issue.number;
+    for (const raw of files) {
+      if (raw.size > 25 * 1024 * 1024) { toast.error(`${raw.name || 'File'} is larger than 25 MB`); continue; }
+      const file = namedFile(raw);
+      const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      setUploads((u) => [...u, { id, name: file.name, pct: 0 }]);
+      try {
+        await workApi.uploadRunEvidence(pid, testNumber, data.id, file, (pct) => setUploads((u) => u.map((x) => (x.id === id ? { ...x, pct } : x))));
+      } catch (err) {
+        // Thông điệp server (vd chưa cấu hình R2) hiện nguyên văn.
+        toast.error(workError(err, `Could not upload ${file.name}`));
+      } finally {
+        setUploads((u) => u.filter((x) => x.id !== id));
+        await qc.invalidateQueries({ queryKey: runKey });
+        qc.invalidateQueries({ queryKey: wk.issue(pid, testNumber) });
+      }
+    }
+  }, [data, canAttach, pid, qc, runKey]);
+
+  /** Dán ảnh (⌘/Ctrl+V) khi tiêu điểm nằm trong ngăn kéo. Chữ thường thì để trình duyệt xử lý. */
+  const onPaste = (e: React.ClipboardEvent) => {
+    if (!canAttach || !data) return;
+    const files = Array.from(e.clipboardData?.files ?? []);
+    if (!files.length) return;
+    e.preventDefault();
+    void uploadEvidence(files);
+  };
+
   // ─── Giao diện ──────────────────────────────────────────────────
   const status = data?.status;
   const testKey = data ? lk.issueKey(data.testCase.issue.number) : '';
@@ -229,6 +262,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
       <div
         role="complementary"
         aria-label="Test execution"
+        onPaste={onPaste}
         className="fixed inset-y-0 right-0 z-[61] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)] sm:w-[min(780px,94vw)]"
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
       >
@@ -385,6 +419,16 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
                 />
               </section>
 
+              {/* Bằng chứng */}
+              <EvidenceSection
+                pid={pid}
+                evidence={data.evidence}
+                uploads={uploads}
+                canAttach={canAttach}
+                testKey={testKey}
+                onFiles={(f) => void uploadEvidence(f)}
+              />
+
               {/* Bug */}
               <section className="mt-6">
                 <div className="mb-2 flex items-center gap-2">
@@ -439,6 +483,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
           pid={pid}
           run={data}
           failedStep={failedStep}
+          testKey={testKey}
           onClose={() => setBugOpen(false)}
           onCreated={(num) => {
             setBugOpen(false);
@@ -595,8 +640,8 @@ function AutoText({ value, onSave, disabled, placeholder, rows, inputRef, onEsca
 
 // ─── Tạo bug từ lần chạy ─────────────────────────────────────────
 
-function CreateBugDialog({ config, pid, run, failedStep, onClose, onCreated }: {
-  config: ProjectConfig; pid: number; run: TestRunDetail; failedStep: Step | undefined;
+function CreateBugDialog({ config, pid, run, failedStep, testKey, onClose, onCreated }: {
+  config: ProjectConfig; pid: number; run: TestRunDetail; failedStep: Step | undefined; testKey: string;
   onClose: () => void; onCreated: (num: number) => void;
 }) {
   const [title, setTitle] = useState(
@@ -644,9 +689,171 @@ function CreateBugDialog({ config, pid, run, failedStep, onClose, onCreated }: {
           {failedStep ? ` (up to step ${failedStep.position + 1})` : ''}, expected and actual result
           {run.cycle.environment || run.cycle.build ? ', and the environment' : ''}. The bug is linked to this run and to the test.
         </div>
+        {run.evidence.length > 0 && (
+          <div className="mt-2 flex items-start gap-2 rounded-[6px] border border-[var(--w-border)] px-3 py-2 text-[12px] leading-relaxed text-[var(--w-text-2)]">
+            <ImagePlus size={13} className="mt-0.5 shrink-0 text-[var(--w-text-3)]" />
+            <span>
+              {run.evidence.length} evidence file{run.evidence.length === 1 ? '' : 's'} from this run stay{run.evidence.length === 1 ? 's' : ''} attached to the test case{' '}
+              <span className="font-medium text-[var(--w-text)]">{testKey}</span>. Developers can open them from the bug through its link to the test.
+            </span>
+          </div>
+        )}
         <button type="submit" hidden />
       </form>
     </Dialog>
   );
 }
 
+
+// ─── Bằng chứng ──────────────────────────────────────────────────
+
+/** Ảnh dán từ clipboard thường tên "image.png" ⇒ đặt tên theo thời điểm cho dễ phân biệt. */
+function namedFile(f: File): File {
+  if (f.name && !/^image\.(png|jpe?g|gif|webp)$/i.test(f.name)) return f;
+  const ext = (f.type.split('/')[1] || 'png').replace('jpeg', 'jpg');
+  const d = new Date();
+  const p = (n: number) => String(n).padStart(2, '0');
+  const stamp = `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
+  return new File([f], `screenshot-${stamp}.${ext}`, { type: f.type || 'image/png' });
+}
+
+function EvidenceSection({ pid, evidence, uploads, canAttach, testKey, onFiles }: {
+  pid: number; evidence: RunEvidence[]; uploads: Array<{ id: string; name: string; pct: number }>;
+  canAttach: boolean; testKey: string; onFiles: (files: File[]) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [drag, setDrag] = useState(false);
+  const [preview, setPreview] = useState<RunEvidence | null>(null);
+  const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
+
+  return (
+    <section
+      className={cn('mt-6 rounded-[8px] transition-colors', drag && 'bg-[var(--w-accent-soft)] outline-dashed outline-1 outline-offset-4 outline-[var(--w-accent-border)]')}
+      onDragOver={(e) => { if (canAttach && e.dataTransfer.types.includes('Files')) { e.preventDefault(); setDrag(true); } }}
+      onDragLeave={() => setDrag(false)}
+      onDrop={(e) => { e.preventDefault(); setDrag(false); if (canAttach && e.dataTransfer.files.length) onFiles(Array.from(e.dataTransfer.files)); }}
+    >
+      <div className="mb-2 flex items-center gap-2">
+        <h3 className="text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
+          Evidence {evidence.length > 0 && <span className="tabular normal-case">({evidence.length})</span>}
+        </h3>
+        {canAttach && (
+          <>
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => inputRef.current?.click()}><ImagePlus size={13} /> Add evidence</button>
+            <input ref={inputRef} type="file" multiple hidden accept="image/*,video/*,.pdf,.txt,.log,.har,.json,.zip" onChange={(e) => { if (e.target.files?.length) onFiles(Array.from(e.target.files)); e.target.value = ''; }} />
+          </>
+        )}
+      </div>
+
+      {evidence.length > 0 || uploads.length > 0 ? (
+        <div className="flex flex-wrap gap-2">
+          {evidence.map((ev) => <EvidenceItem key={ev.id} pid={pid} ev={ev} onPreview={() => setPreview(ev)} />)}
+          {uploads.map((u) => (
+            <div key={u.id} className="flex h-[118px] w-[132px] flex-col items-center justify-center gap-1.5 rounded-[6px] border border-dashed border-[var(--w-border-strong)] px-2 text-center">
+              <Spinner />
+              <div className="w-full truncate text-[11px] text-[var(--w-text-2)]" title={u.name}>{u.name}</div>
+              <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--w-sunken)]">
+                <div className="h-full rounded-full bg-[var(--w-accent)] transition-[width]" style={{ width: `${u.pct}%` }} />
+              </div>
+              <div className="text-[11px] tabular text-[var(--w-text-3)]">{u.pct}%</div>
+            </div>
+          ))}
+        </div>
+      ) : canAttach ? (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="flex w-full flex-col items-center gap-1 rounded-[8px] border border-dashed border-[var(--w-border-strong)] px-4 py-4 text-center text-[12px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)]"
+        >
+          <span className="text-[13px] text-[var(--w-text-2)]">Drop screenshots or files here, or click to browse</span>
+          <span>
+            You can also paste a screenshot with <span className="w-kbd">{isMac ? '⌘' : 'Ctrl'}</span><span className="w-kbd">V</span>. Max 25 MB each.
+          </span>
+        </button>
+      ) : (
+        <p className="text-[13px] text-[var(--w-text-3)]">No evidence attached to this run.</p>
+      )}
+      {(evidence.length > 0 || uploads.length > 0) && (
+        <p className="mt-1.5 text-[11px] text-[var(--w-text-3)]">Files are stored on the test case {testKey}.{canAttach ? ` Drop or paste (${isMac ? '⌘' : 'Ctrl'}+V) to add more.` : ''}</p>
+      )}
+
+      {preview && <EvidenceLightbox pid={pid} ev={preview} onClose={() => setPreview(null)} />}
+    </section>
+  );
+}
+
+/** URL ký sẵn dạng inline — dùng chung khoá cache với phần đính kèm của thẻ (IssueDetail). */
+function useInlineUrl(pid: number, id: number, enabled: boolean) {
+  return useQuery({
+    queryKey: ['work', 'att', pid, id],
+    queryFn: () => workApi.attachmentUrl(pid, id, true),
+    enabled,
+    staleTime: 8 * 60_000, // URL ký sẵn sống 10 phút
+  });
+}
+
+function EvidenceItem({ pid, ev, onPreview }: { pid: number; ev: RunEvidence; onPreview: () => void }) {
+  const isImage = ev.mime.startsWith('image/');
+  const thumb = useInlineUrl(pid, ev.id, isImage);
+  const open = async () => {
+    if (isImage) { onPreview(); return; }
+    try {
+      window.open(await workApi.attachmentUrl(pid, ev.id, true), '_blank', 'noopener');
+    } catch (err) {
+      toast.error(workError(err, 'Could not open the file'));
+    }
+  };
+  return (
+    <button
+      type="button"
+      onClick={open}
+      title={`${ev.fileName}${ev.uploader ? ` · added by ${userName(ev.uploader)}` : ''}`}
+      className="w-[132px] overflow-hidden rounded-[6px] border border-[var(--w-border)] text-left hover:border-[var(--w-accent-border)]"
+    >
+      <span className="flex h-[80px] w-full items-center justify-center bg-[var(--w-sunken)]">
+        {isImage && thumb.data ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={thumb.data} alt={ev.fileName} className="h-full w-full object-cover" />
+        ) : isImage && thumb.isLoading ? (
+          <Spinner />
+        ) : (
+          <FileText size={24} className="text-[var(--w-text-3)]" />
+        )}
+      </span>
+      <span className="block px-2 py-1.5">
+        <span className="block truncate text-[12px] font-medium">{ev.fileName}</span>
+        <span className="block text-[11px] text-[var(--w-text-3)]">{formatBytes(ev.size)} · {relativeTime(ev.createdAt)}</span>
+      </span>
+    </button>
+  );
+}
+
+function EvidenceLightbox({ pid, ev, onClose }: { pid: number; ev: RunEvidence; onClose: () => void }) {
+  const url = useInlineUrl(pid, ev.id, true);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { e.preventDefault(); onClose(); } };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+  return (
+    <WorkPortal>
+      <div role="dialog" aria-modal="true" aria-label={ev.fileName} className="fixed inset-0 z-[70] flex flex-col bg-black/80" onMouseDown={onClose}>
+        <div className="flex h-12 shrink-0 items-center gap-2 px-4 text-[13px] text-white" onMouseDown={(e) => e.stopPropagation()}>
+          <span className="min-w-0 flex-1 truncate">{ev.fileName}</span>
+          {url.data && <a href={url.data} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-sm">Open original</a>}
+          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={onClose} aria-label="Close preview"><X size={14} /></button>
+        </div>
+        <div className="flex min-h-0 flex-1 items-center justify-center p-4">
+          {url.data ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={url.data} alt={ev.fileName} className="max-h-full max-w-full rounded-[4px] object-contain" onMouseDown={(e) => e.stopPropagation()} />
+          ) : url.error ? (
+            <span className="text-[13px] text-white">{workError(url.error, 'Could not load the image')}</span>
+          ) : (
+            <Spinner size={20} />
+          )}
+        </div>
+      </div>
+    </WorkPortal>
+  );
+}

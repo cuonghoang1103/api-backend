@@ -1,18 +1,22 @@
 'use client';
 
 /**
- * Hộp thoại sprint: bắt đầu, kết thúc, sửa. Dùng ở Backlog và trên Board.
+ * Hộp thoại sprint: bắt đầu, kết thúc, sửa, lập kế hoạch theo velocity.
+ * Dùng ở Backlog và trên Board.
  */
 
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { CheckCircle2, CircleDashed } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, CircleDashed, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import {
-  workApi, workError, type EstimationUnit, type SprintFull,
+  isAiQuotaError, workApi, workError, type EstimationUnit, type SprintFull,
 } from '@/lib/work-api';
 import { wk } from './hooks';
-import { Dialog, Field } from './ui';
+import { Dialog, Field, Spinner } from './ui';
+import AiMarkdown from './ai/AiMarkdown';
+import UpgradeDialog from './ai/UpgradeDialog';
 
 const DURATIONS = [
   { weeks: 1, label: '1 week' },
@@ -231,6 +235,210 @@ export function EditSprintDialog({ open, onClose, pid, sprint }: { open: boolean
       {!datesOk && <p className="-mt-2 mb-3 text-[12px] text-[var(--w-red)]">The end date must be after the start date.</p>}
       <Field label="Sprint goal"><textarea className="w-input" rows={2} value={goal} onChange={(e) => setGoal(e.target.value)} /></Field>
     </Dialog>
+  );
+}
+
+// ─── Lập kế hoạch sprint theo velocity ───────────────────────────
+
+/**
+ * Danh sách đề xuất do MÃ tính (không tốn lượt AI). "Explain this plan" mới
+ * gọi AI (tốn 1 lượt) và chỉ lấy phần lời giải thích — danh sách người dùng
+ * đã bỏ chọn giữ nguyên. Áp dụng bằng bulkUpdate { sprintId } như Backlog.
+ */
+export function PlanSprintDialog({ open, onClose, pid, sprint, issueKey }: {
+  open: boolean; onClose: () => void; pid: number; sprint: SprintFull; issueKey: (n: number) => string;
+}) {
+  const qc = useQueryClient();
+  const plan = useQuery({
+    queryKey: wk.aiPlan(pid, sprint.id),
+    queryFn: () => workApi.aiPlanSprint(pid, { sprintId: sprint.id }),
+    enabled: open,
+    gcTime: 0,
+    refetchOnWindowFocus: false,
+  });
+  const p = plan.data;
+  const [checked, setChecked] = useState<Set<number>>(new Set());
+  const [rationale, setRationale] = useState<string | null>(null);
+  const [upgrade, setUpgrade] = useState(false);
+
+  // Kế hoạch mới về ⇒ chọn sẵn tất cả.
+  useEffect(() => {
+    if (p) setChecked(new Set(p.selected.map((i) => i.number)));
+  }, [p]);
+  useEffect(() => { if (open) setRationale(null); }, [open, sprint.id]);
+
+  const explain = useMutation({
+    mutationFn: () => workApi.aiPlanSprint(pid, { sprintId: sprint.id, explain: true }),
+    onSuccess: (r) => setRationale(r.rationale ?? 'No explanation was returned.'),
+    onError: (err) => {
+      if (isAiQuotaError(err)) setUpgrade(true);
+      else toast.error(workError(err, 'Could not explain this plan'));
+    },
+  });
+
+  const picked = p ? p.selected.filter((i) => checked.has(i.number)) : [];
+  const apply = useMutation({
+    mutationFn: () => workApi.bulkUpdate(pid, picked.map((i) => i.number), { sprintId: sprint.id }),
+    onSuccess: (r) => {
+      if (r.updated.length) toast.success(`${r.updated.length} ${r.updated.length === 1 ? 'issue' : 'issues'} added to ${sprint.name}`);
+      if (r.failed.length) toast.error(`${r.failed.length} could not be moved: ${r.failed.slice(0, 3).map((f) => `${issueKey(f.number)} (${f.error})`).join(', ')}`);
+      invalidateAll(qc, pid);
+      onClose();
+    },
+    onError: (err) => toast.error(workError(err, 'Could not add the issues to the sprint')),
+  });
+
+  const u = p ? unitLabel(p.unit) : 'pts';
+  const r1 = (n: number) => Math.round(n * 10) / 10;
+  const pickedPts = r1(picked.reduce((s, i) => s + i.points, 0));
+  const total = p ? r1(p.alreadyPlanned + pickedPts) : 0;
+  const scale = p ? Math.max(p.target, total, 1) : 1;
+  const over = !!p && total > p.target;
+  const allOn = !!p && p.selected.length > 0 && picked.length === p.selected.length;
+
+  return (
+    <>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        width={600}
+        title={<span className="inline-flex items-center gap-2"><Sparkles size={16} className="text-[var(--w-accent-text)]" />Plan {sprint.name}</span>}
+        footer={(
+          <>
+            <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>Cancel</button>
+            <button type="button" className="w-btn w-btn-primary" disabled={!picked.length || apply.isPending} onClick={() => apply.mutate()}>
+              {apply.isPending && <Spinner size={12} />} Add {picked.length || ''} {picked.length === 1 ? 'issue' : 'issues'} to sprint
+            </button>
+          </>
+        )}
+      >
+        {plan.isLoading ? (
+          <div className="flex items-center justify-center gap-2 py-12 text-[13px] text-[var(--w-text-2)]"><Spinner size={16} /> Calculating velocity…</div>
+        ) : plan.error || !p ? (
+          <div className="py-8 text-center">
+            <div className="text-[14px] font-semibold">Could not build a plan</div>
+            <p className="mt-1 text-[13px] text-[var(--w-text-2)]">{workError(plan.error)}</p>
+            <button type="button" className="w-btn mt-3" onClick={() => plan.refetch()}>Try again</button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-[13px] leading-relaxed text-[var(--w-text-2)]">
+              Proposed from your backlog order and the team&apos;s recent velocity. The numbers are calculated from project data — no AI request is used.
+            </p>
+
+            {/* Velocity */}
+            <div className="grid grid-cols-3 gap-2">
+              <PlanStat label="Velocity" value={p.velocity === null ? '—' : `${r1(p.velocity)} ${u}`} hint={p.history.length ? `Avg of last ${p.history.length}` : 'No history yet'} />
+              <PlanStat label="Target" value={`${r1(p.target)} ${u}`} hint={p.velocity === null ? 'Default capacity' : 'Based on velocity'} />
+              <PlanStat label="Already planned" value={`${r1(p.alreadyPlanned)} ${u}`} hint="Open work in sprint" />
+            </div>
+            {p.history.length > 0 && (
+              <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
+                <div className="grid grid-cols-[minmax(0,1fr)_84px_84px] gap-2 bg-[var(--w-sunken)] px-3 py-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
+                  <span>Recent sprint</span><span className="text-right">Committed</span><span className="text-right">Completed</span>
+                </div>
+                {p.history.map((h, i) => (
+                  <div key={i} className="grid grid-cols-[minmax(0,1fr)_84px_84px] gap-2 border-t border-[var(--w-border)] px-3 py-1.5 text-[12.5px]">
+                    <span className="truncate">{h.name}</span>
+                    <span className="text-right tabular text-[var(--w-text-2)]">{h.committedPoints ?? '—'}</span>
+                    <span className="text-right font-medium tabular">{h.completedPoints ?? '—'}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Tổng so với mục tiêu */}
+            <div>
+              <div className="mb-1 flex items-center justify-between text-[12px]">
+                <span className="text-[var(--w-text-2)]">Planned total</span>
+                <span className={cn('font-semibold tabular', over ? 'text-[var(--w-red)]' : 'text-[var(--w-text)]')}>{total} / {r1(p.target)} {u}</span>
+              </div>
+              <div className="relative h-2.5 overflow-hidden rounded-full bg-[var(--w-sunken)]" role="img" aria-label={`${total} of ${r1(p.target)} ${u} planned`}>
+                <div className="absolute inset-y-0 left-0 bg-[var(--w-text-3)] opacity-50" style={{ width: `${(p.alreadyPlanned / scale) * 100}%` }} />
+                <div className="absolute inset-y-0" style={{ left: `${(p.alreadyPlanned / scale) * 100}%`, width: `${(pickedPts / scale) * 100}%`, background: over ? 'var(--w-red)' : 'var(--w-accent)' }} />
+                {total > p.target && <div className="absolute inset-y-0 w-px bg-[var(--w-text)]" style={{ left: `${(p.target / scale) * 100}%` }} />}
+              </div>
+              <div className="mt-1 flex flex-wrap gap-x-3 text-[11px] text-[var(--w-text-3)]">
+                <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-[2px] bg-[var(--w-text-3)] opacity-50" /> Already in sprint {r1(p.alreadyPlanned)}</span>
+                <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-[2px] bg-[var(--w-accent)]" /> Selected {pickedPts}</span>
+              </div>
+            </div>
+
+            {/* Đề xuất */}
+            <div>
+              <div className="mb-1.5 flex items-center gap-2">
+                <h3 className="text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Proposed issues <span className="tabular normal-case">({p.selected.length})</span></h3>
+                {p.selected.length > 1 && (
+                  <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setChecked(allOn ? new Set() : new Set(p.selected.map((i) => i.number)))}>
+                    {allOn ? 'Clear all' : 'Select all'}
+                  </button>
+                )}
+              </div>
+              {p.selected.length ? (
+                <div className="max-h-[260px] overflow-y-auto rounded-[8px] border border-[var(--w-border)]">
+                  {p.selected.map((i) => {
+                    const on = checked.has(i.number);
+                    return (
+                      <label key={i.number} className="flex cursor-pointer items-center gap-2.5 border-b border-[var(--w-border)] px-3 py-2 text-[13px] last:border-b-0 hover:bg-[var(--w-hover)]">
+                        <input
+                          type="checkbox"
+                          checked={on}
+                          onChange={() => setChecked((c) => { const n = new Set(c); if (n.has(i.number)) n.delete(i.number); else n.add(i.number); return n; })}
+                          className="shrink-0 accent-[var(--w-accent)]"
+                        />
+                        <span className="w-[64px] shrink-0 font-mono text-[11px] text-[var(--w-text-3)]">{issueKey(i.number)}</span>
+                        <span className={cn('min-w-0 flex-1 truncate', !on && 'text-[var(--w-text-3)]')}>{i.title}</span>
+                        <span className="inline-flex h-5 min-w-[26px] shrink-0 items-center justify-center rounded-full bg-[var(--w-sunken)] px-1.5 text-[11px] font-medium tabular text-[var(--w-text-2)]">{i.points}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="rounded-[8px] border border-dashed border-[var(--w-border-strong)] px-3 py-4 text-center text-[12.5px] text-[var(--w-text-2)]">
+                  Nothing else fits. The sprint is already at capacity, or the backlog has no estimated issues.
+                </div>
+              )}
+            </div>
+
+            {p.warnings.length > 0 && (
+              <ul className="space-y-1.5 rounded-[8px] border border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_8%,transparent)] px-3 py-2.5">
+                {p.warnings.map((w, i) => (
+                  <li key={i} className="flex items-start gap-2 text-[12.5px] leading-relaxed">
+                    <AlertTriangle size={13} className="mt-0.5 shrink-0 text-[var(--w-orange)]" />
+                    <span className="min-w-0 break-words">{w}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {/* Giải thích bằng AI (tuỳ chọn) */}
+            <div className="rounded-[8px] border border-[var(--w-border)]">
+              <div className="flex flex-wrap items-center gap-2 px-3 py-2">
+                <span className="min-w-0 flex-1 text-[12.5px] text-[var(--w-text-2)]">
+                  {rationale ? 'AI coach notes' : 'Get a short explanation of the risks and what to clarify before starting. Uses 1 AI request.'}
+                </span>
+                <button type="button" className="w-btn w-btn-sm" disabled={explain.isPending} onClick={() => explain.mutate()}>
+                  {explain.isPending ? <Spinner size={12} /> : <Sparkles size={13} />}
+                  {explain.isPending ? 'Explaining…' : rationale ? 'Explain again' : 'Explain this plan'}
+                </button>
+              </div>
+              {rationale && <AiMarkdown text={rationale} className="border-t border-[var(--w-border)] px-3 py-3" />}
+            </div>
+          </div>
+        )}
+      </Dialog>
+      <UpgradeDialog open={upgrade} onClose={() => setUpgrade(false)} />
+    </>
+  );
+}
+
+function PlanStat({ label, value, hint }: { label: string; value: string; hint: string }) {
+  return (
+    <div className="min-w-0 rounded-[8px] border border-[var(--w-border)] px-3 py-2">
+      <div className="truncate text-[11px] text-[var(--w-text-3)]">{label}</div>
+      <div className="truncate text-[16px] font-semibold tabular">{value}</div>
+      <div className="truncate text-[11px] text-[var(--w-text-3)]">{hint}</div>
+    </div>
   );
 }
 

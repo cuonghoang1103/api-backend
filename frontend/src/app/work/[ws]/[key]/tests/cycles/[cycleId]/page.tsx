@@ -9,7 +9,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import Link from 'next/link';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Download, MessageSquare, MoreHorizontal, Plus, Trash2, X } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Download, FileSpreadsheet, FileText, MessageSquare, MoreHorizontal, Plus, Sheet, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import {
@@ -21,10 +21,11 @@ import { AssigneePicker } from '@/components/work/fields';
 import { useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import { Dialog, EmptyState, isTyping, Popover, PriorityIcon, Spinner, useToggle } from '@/components/work/ui';
 import { ConfirmDialog } from '@/components/work/settings/shared';
+import { blobError, saveBlob } from '@/components/work/search/ExportMenu';
 import RunPanel from '@/components/work/tests/RunPanel';
 import TestPicker from '@/components/work/tests/TestPicker';
 import {
-  CYCLE_STATE_META, downloadCsv, formatDateTime, RUN_META, RUN_ORDER, RunStatusPill, safeFileName, StatusBar,
+  CYCLE_STATE_META, formatDateTime, RUN_META, RUN_ORDER, RunStatusPill, StatusBar,
 } from '@/components/work/tests/runStatus';
 
 type Filter = RunStatus | 'ALL' | 'NOT_RUN';
@@ -104,20 +105,6 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
     qc.invalidateQueries({ queryKey: cycleKey });
   };
 
-  const exportCsv = () => {
-    if (!data) return;
-    downloadCsv(
-      `${safeFileName(`${config.key}-${data.name}`)}.csv`,
-      ['Test key', 'Title', 'Priority', 'Status', 'Assignee', 'Executed by', 'Executed at', 'Defects', 'Comment'],
-      data.runs.map((r) => [
-        lk.issueKey(r.test.number), r.test.title, r.test.priority, RUN_META[r.status].label,
-        r.assigneeId ? userName(lk.members.get(r.assigneeId)) : '',
-        r.executedBy ? userName(r.executedBy) : '', r.executedAt ? new Date(r.executedAt).toISOString() : '',
-        r.defects.map((d) => lk.issueKey(d.number)).join(' '), r.comment ?? '',
-      ]),
-    );
-  };
-
   // Phím tắt trang: j/k chọn dòng, Enter mở.
   const [cursor, setCursor] = useState(-1);
   useEffect(() => setCursor((c) => Math.min(c, runs.length - 1)), [runs.length]);
@@ -185,7 +172,8 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
             <div className="flex flex-wrap items-center gap-2">
               <StateControl value={data.state} disabled={!canEdit} onChange={(state) => patchCycle({ state }).then((ok) => ok && toast.success(`Cycle marked ${CYCLE_STATE_META[state].label.toLowerCase()}`))} />
               {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setAddOpen(true)}><Plus size={13} /> Add tests</button>}
-              <MoreMenu onExport={exportCsv} onDelete={canEdit ? () => setDeleteOpen(true) : undefined} />
+              <ExportReportMenu pid={pid} cycleId={cycleId} />
+              {canEdit && <MoreMenu onDelete={() => setDeleteOpen(true)} />}
             </div>
           </div>
 
@@ -408,7 +396,56 @@ function StateControl({ value, onChange, disabled }: { value: CycleState; onChan
   );
 }
 
-function MoreMenu({ onExport, onDelete }: { onExport: () => void; onDelete?: () => void }) {
+type ReportFormat = 'xlsx' | 'pdf' | 'csv';
+const REPORT_FORMATS: Array<{ key: ReportFormat; label: string; hint: string; Icon: typeof FileText }> = [
+  { key: 'xlsx', label: 'Excel (.xlsx)', hint: 'Summary sheet plus every run', Icon: FileSpreadsheet },
+  { key: 'pdf', label: 'PDF', hint: 'Printable report to share or attach', Icon: FileText },
+  { key: 'csv', label: 'CSV', hint: 'Raw results for spreadsheets and scripts', Icon: Sheet },
+];
+
+/** Báo cáo cycle tạo ở server (tổng quan + từng lần chạy); tải bằng object URL. */
+function ExportReportMenu({ pid, cycleId }: { pid: number; cycleId: number }) {
+  const t = useToggle();
+  const ref = useRef<HTMLButtonElement>(null);
+  const [busy, setBusy] = useState<ReportFormat | null>(null);
+  const run = async (format: ReportFormat) => {
+    t.close();
+    setBusy(format);
+    try {
+      const { blob, fileName } = await workApi.exportTestCycle(pid, cycleId, format);
+      saveBlob(blob, fileName);
+    } catch (err) {
+      toast.error(await blobError(err, 'Could not export the report'));
+    } finally {
+      setBusy(null);
+    }
+  };
+  return (
+    <>
+      <button ref={ref} type="button" className="w-btn w-btn-sm gap-1" onClick={t.toggle} disabled={!!busy} aria-haspopup="menu" aria-expanded={t.on}>
+        {busy ? <Spinner size={12} /> : <Download size={13} />}
+        <span className="max-sm:!hidden">{busy ? 'Exporting…' : 'Export report'}</span>
+        <ChevronDown size={12} className="opacity-60" />
+      </button>
+      <Popover open={t.on} onClose={t.close} anchorRef={ref} width={260} align="end">
+        <div className="p-1" role="menu">
+          <div className="px-2 pb-1 pt-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Export cycle report</div>
+          {REPORT_FORMATS.map(({ key, label, hint, Icon }) => (
+            <button key={key} type="button" role="menuitem" onClick={() => void run(key)} className="flex w-full items-start gap-2 rounded-[5px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]">
+              <Icon size={14} className="mt-0.5 shrink-0 text-[var(--w-text-3)]" />
+              <span className="min-w-0">
+                <span className="block text-[13px]">{label}</span>
+                <span className="block text-[11.5px] text-[var(--w-text-3)]">{hint}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </Popover>
+    </>
+  );
+}
+
+function MoreMenu({ onDelete }: { onDelete: () => void }) {
   const t = useToggle();
   const ref = useRef<HTMLButtonElement>(null);
   return (
@@ -416,14 +453,9 @@ function MoreMenu({ onExport, onDelete }: { onExport: () => void; onDelete?: () 
       <button ref={ref} type="button" className="w-btn w-btn-sm w-btn-icon" onClick={t.toggle} aria-label="More actions"><MoreHorizontal size={14} /></button>
       <Popover open={t.on} onClose={t.close} anchorRef={ref} width={180} align="end">
         <div className="p-1">
-          <button type="button" className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]" onClick={() => { t.close(); onExport(); }}>
-            <Download size={13} /> Export CSV
+          <button type="button" className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[var(--w-red)] hover:bg-[var(--w-hover)]" onClick={() => { t.close(); onDelete(); }}>
+            <Trash2 size={13} /> Delete cycle
           </button>
-          {onDelete && (
-            <button type="button" className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[var(--w-red)] hover:bg-[var(--w-hover)]" onClick={() => { t.close(); onDelete(); }}>
-              <Trash2 size={13} /> Delete cycle
-            </button>
-          )}
         </div>
       </Popover>
     </>

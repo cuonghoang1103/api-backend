@@ -20,7 +20,7 @@ const FORMATS: Array<{ key: Format; label: string; hint: string; Icon: typeof Fi
 ];
 
 /** Lỗi của responseType 'blob' là một Blob — đọc JSON bên trong để lấy thông điệp. */
-async function blobError(err: unknown): Promise<string> {
+export async function blobError(err: unknown, fallback = 'Could not export the issues'): Promise<string> {
   const data = (err as { response?: { data?: unknown } })?.response?.data;
   if (data instanceof Blob) {
     try {
@@ -28,7 +28,19 @@ async function blobError(err: unknown): Promise<string> {
       if (j.error || j.message) return (j.error || j.message)!;
     } catch { /* không phải JSON */ }
   }
-  return workError(err, 'Could not export the issues');
+  return workError(err, fallback);
+}
+
+/** Lưu Blob thành file: object URL + thẻ <a download> tạm. */
+export function saveBlob(blob: Blob, fileName: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export default function ExportMenu({ pid, getJql }: { pid: number; getJql: () => string }) {
@@ -41,14 +53,7 @@ export default function ExportMenu({ pid, getJql }: { pid: number; getJql: () =>
     setBusy(format);
     try {
       const { blob, fileName } = await workApi.exportIssues(pid, format, getJql());
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      saveBlob(blob, fileName);
     } catch (err) {
       toast.error(await blobError(err));
     } finally {

@@ -60,6 +60,8 @@ export const wk = {
   github: (pid: number) => ['work', 'project', pid, 'github'] as const,
   /** Nhật ký quản trị theo KHÔNG GIAN. */
   audit: (wsId: number) => ['work', 'audit', wsId] as const,
+  /** Đề xuất kế hoạch sprint — NGOÀI wk.backlog để sự kiện realtime không xoá lựa chọn đang dở. */
+  aiPlan: (pid: number, sprintId: number) => ['work', 'ai-plan', pid, sprintId] as const,
 };
 
 /** /work/<slug>/<KEY> ⇒ cấu hình dự án. */

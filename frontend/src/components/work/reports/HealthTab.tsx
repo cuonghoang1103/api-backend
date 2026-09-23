@@ -3,20 +3,26 @@
 /**
  * Tab "Health" — sức khoẻ dự án tính bằng MÃ ở backend (không tốn lượt AI):
  * trễ hạn, sắp tới hạn, kẹt lâu, gấp mà chưa ai nhận, tải từng người, rủi ro sprint.
+ * Trên cùng là bản tin hằng ngày (AI) lưu ở settings.dailyBrief — cả nhóm đọc chung.
  */
 
-import type { ReactNode } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { AlertTriangle, CheckCircle2, Clock, Hourglass, UserX } from 'lucide-react';
-import { workApi, workError, type InsightIssue, type InsightsData } from '@/lib/work-api';
+import { useState, type ReactNode } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { AlertTriangle, CheckCircle2, Clock, Hourglass, RefreshCw, Sparkles, UserX } from 'lucide-react';
+import {
+  isAiQuotaError, userName, workApi, workError, type DailyBrief, type InsightIssue, type InsightsData, type ProjectConfig,
+} from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
-import { EmptyState, formatDate, Spinner } from '@/components/work/ui';
+import { EmptyState, formatDate, relativeTime, Spinner } from '@/components/work/ui';
+import AiMarkdown from '@/components/work/ai/AiMarkdown';
+import UpgradeDialog from '@/components/work/ai/UpgradeDialog';
 import { cn } from '@/lib/utils';
 import { Card, num, SectionTitle, StatCell, unitLabel } from './shared';
 
 type Row = InsightIssue & { idleDays?: number };
 
-export default function HealthTab({ pid, onOpenIssue }: { pid: number; onOpenIssue: (num: number) => void }) {
+export default function HealthTab({ pid, config, onOpenIssue }: { pid: number; config: ProjectConfig; onOpenIssue: (num: number) => void }) {
   const q = useQuery({ queryKey: [...wk.reports(pid), 'insights'], queryFn: () => workApi.insights(pid), staleTime: 30_000 });
 
   if (q.isLoading) return <div className="flex justify-center py-16"><Spinner size={20} /></div>;
@@ -28,6 +34,7 @@ export default function HealthTab({ pid, onOpenIssue }: { pid: number; onOpenIss
 
   return (
     <div className="space-y-4">
+      <BriefCard pid={pid} config={config} />
       <Verdict d={d} />
 
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
@@ -184,6 +191,66 @@ function Workload({ d, unit }: { d: InsightsData; unit: string }) {
           )}
         </>
       )}
+    </Card>
+  );
+}
+
+// ─── Bản tin hôm nay (AI) ────────────────────────────────────────
+
+function readBrief(settings: Record<string, unknown>): DailyBrief | null {
+  const b = settings?.dailyBrief as Partial<DailyBrief> | undefined;
+  return b && typeof b.text === 'string' && typeof b.at === 'string' ? { text: b.text, at: b.at, by: Number(b.by) } : null;
+}
+
+function BriefCard({ pid, config }: { pid: number; config: ProjectConfig }) {
+  const qc = useQueryClient();
+  const canUse = config.permissions.useAi;
+  const brief = readBrief(config.settings);
+  const author = brief ? config.members.find((m) => m.id === brief.by) : undefined;
+  const [upgrade, setUpgrade] = useState(false);
+
+  const gen = useMutation({
+    mutationFn: () => workApi.aiDailyBrief(pid),
+    onSuccess: (r) => {
+      // Vá ngay để không nháy bản cũ, rồi tải lại cấu hình dự án cho chắc.
+      qc.setQueryData<ProjectConfig>(wk.project(pid), (old) => (old ? { ...old, settings: { ...old.settings, dailyBrief: { text: r.text, at: r.at, by: r.by } } } : old));
+      qc.invalidateQueries({ queryKey: wk.project(pid), exact: true });
+      toast.success('Brief updated for the whole team');
+    },
+    onError: (err) => {
+      if (isAiQuotaError(err)) setUpgrade(true);
+      else toast.error(workError(err, 'Could not generate the brief'));
+    },
+  });
+
+  return (
+    <Card className="p-0">
+      <div className="flex flex-wrap items-center gap-2 px-4 pb-2 pt-3">
+        <Sparkles size={14} className="text-[var(--w-accent-text)]" />
+        <h3 className="text-[13px] font-semibold">Today&apos;s brief</h3>
+        {brief && (
+          <span className="min-w-0 truncate text-[12px] text-[var(--w-text-3)]" title={new Date(brief.at).toLocaleString('en-US')}>
+            Generated {relativeTime(brief.at)}{author ? ` by ${userName(author)}` : ''}
+          </span>
+        )}
+        {canUse && (
+          <button type="button" className="w-btn w-btn-sm ml-auto" disabled={gen.isPending} onClick={() => gen.mutate()}>
+            {gen.isPending ? <Spinner size={12} /> : brief ? <RefreshCw size={12} /> : <Sparkles size={13} />}
+            {gen.isPending ? 'Writing…' : brief ? 'Refresh' : 'Generate brief'}
+          </button>
+        )}
+      </div>
+      <div className={cn('border-t border-[var(--w-border)] px-4 py-3', gen.isPending && 'opacity-60')}>
+        {brief ? (
+          <AiMarkdown text={brief.text} />
+        ) : (
+          <p className="text-[13px] leading-relaxed text-[var(--w-text-2)]">
+            A 3–6 bullet stand-up summary of risks and overdue work. An admin can also turn on an automatic brief at 08:00.
+            {canUse ? ' Generating one uses 1 AI request and shares it with everyone on the project.' : ''}
+          </p>
+        )}
+      </div>
+      <UpgradeDialog open={upgrade} onClose={() => setUpgrade(false)} />
     </Card>
   );
 }

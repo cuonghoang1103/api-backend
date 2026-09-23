@@ -19,7 +19,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  ChevronDown, ChevronRight, MoreHorizontal, Pencil, Play, Plus, Trash2, UserRound, X, Flag, ArrowRightLeft, CheckCircle2,
+  ChevronDown, ChevronRight, MoreHorizontal, Pencil, Play, Plus, Trash2, UserRound, X, Flag, ArrowRightLeft, CheckCircle2, Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -27,7 +27,7 @@ import {
   type SprintFull,
 } from '@/lib/work-api';
 import { wk, type Lookups } from './hooks';
-import { CompleteSprintDialog, EditSprintDialog, sprintRange, StartSprintDialog, unitLabel } from './SprintDialogs';
+import { CompleteSprintDialog, EditSprintDialog, PlanSprintDialog, sprintRange, StartSprintDialog, unitLabel } from './SprintDialogs';
 import { ConfirmDialog } from './settings/shared';
 import {
   IssueTypeIcon, PickerList, Popover, PRIORITIES, PriorityIcon, StatusBadge, UserAvatar, useToggle,
@@ -281,7 +281,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
   const lastClicked = useRef<number | null>(null);
   const [activeId, setActiveId] = useState<number | null>(null);
   const [optimistic, setOptimistic] = useState<Map<number, { sprintId: number | null; order?: number[] }>>(new Map());
-  const [dialog, setDialog] = useState<{ kind: 'start' | 'complete' | 'edit' | 'delete'; sprint: SprintFull } | null>(null);
+  const [dialog, setDialog] = useState<{ kind: 'start' | 'complete' | 'edit' | 'delete' | 'plan'; sprint: SprintFull } | null>(null);
   const [bulkDelete, setBulkDelete] = useState(false);
   const orderRef = useRef<Map<Container, number[]> | null>(null);
 
@@ -504,6 +504,16 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
                   {canPlan && s.state === 'PLANNED' && (
                     <button
                       type="button"
+                      className="w-btn w-btn-ghost w-btn-sm"
+                      title="Propose issues for this sprint from your velocity"
+                      onClick={() => setDialog({ kind: 'plan', sprint: s })}
+                    >
+                      <Sparkles size={12} /> <span className="max-sm:!hidden">Plan with AI</span>
+                    </button>
+                  )}
+                  {canPlan && s.state === 'PLANNED' && (
+                    <button
+                      type="button"
                       className="w-btn w-btn-sm"
                       disabled={!!active}
                       title={active ? `${active.name} is still running` : 'Start this sprint'}
@@ -624,6 +634,9 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
       )}
       {dialog?.kind === 'complete' && (
         <CompleteSprintDialog open onClose={() => setDialog(null)} pid={pid} sprint={dialog.sprint} plannedSprints={planned} />
+      )}
+      {dialog?.kind === 'plan' && (
+        <PlanSprintDialog open onClose={() => setDialog(null)} pid={pid} sprint={dialog.sprint} issueKey={lk.issueKey} />
       )}
       {dialog?.kind === 'edit' && <EditSprintDialog open onClose={() => setDialog(null)} pid={pid} sprint={dialog.sprint} />}
       {dialog?.kind === 'delete' && (

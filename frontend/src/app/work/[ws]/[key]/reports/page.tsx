@@ -92,7 +92,7 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         <div className="mx-auto w-full max-w-[1100px] px-4 py-5">
-          {tab === 'health' && <HealthTab pid={pid} onOpenIssue={setIssue} />}
+          {tab === 'health' && <HealthTab pid={pid} config={config} onOpenIssue={setIssue} />}
           {tab === 'weekly' && <WeeklyReportTab pid={pid} config={config} />}
           {tab === 'burndown' && <BurndownTab pid={pid} />}
           {tab === 'velocity' && <VelocityTab pid={pid} />}

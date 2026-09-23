@@ -290,58 +290,69 @@ thêm một route GET không cần tham số vào smoke-test của `deploy.sh`.
 - ⚠️ Kịch bản Playwright: đợi `#app-splash` biến mất (~1s sau tải trang) trước khi kéo thả.
 
 ### Đợt 3 — Kiểm thử (thay Xray, phục vụ SWT301)
-- [ ] 3.1 Test case: bước, dữ liệu, kết quả mong đợi, Gherkin, nhập từ CSV/Excel · L
-- [ ] 3.2 Test plan, test cycle, chạy test từng bước, đính kèm ảnh · L
-- [ ] 3.3 Fail → tạo Bug một chạm (điền sẵn bước, kết quả thực tế) · M
-- [ ] 3.4 Workflow bug có Retest; Fixed → tự tạo lượt chạy lại test liên quan · M
-- [ ] 3.5 Ma trận truy vết yêu cầu ↔ test ↔ bug, độ phủ, tỉ lệ đạt · M
-- [ ] 3.6 Xuất báo cáo kiểm thử (Excel theo mẫu hay dùng ở trường, PDF) · M
-- [ ] 3.7 Mẫu SWT301 · S
+- [x] 3.1 Test case: bước, dữ liệu, kết quả mong đợi, Gherkin, nhập từ CSV/Excel · L
+- [x] 3.2 Test plan, test cycle, chạy test từng bước, đính kèm ảnh · L
+- [x] 3.3 Fail → tạo Bug một chạm (điền sẵn bước, kết quả thực tế) · M
+- [x] 3.4 Workflow bug có Retest; Fixed → tự tạo lượt chạy lại test liên quan · M
+- [x] 3.5 Ma trận truy vết yêu cầu ↔ test ↔ bug, độ phủ, tỉ lệ đạt · M
+- [x] 3.6 Xuất báo cáo kiểm thử (Excel theo mẫu hay dùng ở trường, PDF) · M
+- [x] 3.7 Mẫu SWT301 · S
 - **Nghiệm thu:** làm trọn một cycle mẫu 20 case; ma trận và tỉ lệ đạt khớp với đếm tay.
 
 ### Đợt 4 — AI
-- [ ] 4.1 Thêm `work_assistant`/`work_digest` vào cổng LLM + `WORK_DIGEST_ENABLED` · M
-- [ ] 4.1b Hạn mức AI: Pro đầy đủ, tài khoản thường hạn mức nhỏ theo ngày; hết → lỗi
+- [x] 4.1 Thêm `work_assistant`/`work_digest` vào cổng LLM + `WORK_DIGEST_ENABLED` · M
+- [x] 4.1b Hạn mức AI: Pro đầy đủ, tài khoản thường hạn mức nhỏ theo ngày; hết → lỗi
       `WORK_AI_QUOTA_EXCEEDED` → hộp "Nâng cấp Pro để tiếp tục" · M
-- [ ] 4.2 Khung trợ lý: vòng lặp tool, tool đọc, thẻ ĐỀ XUẤT → Áp dụng · L
-- [ ] 4.3 Tool ghi đi qua `permissions.ts` + test "AI không vượt quyền người hỏi" · M
-- [ ] 4.4 Viết story/AC, tách việc, chấm INVEST, sinh test case, chuẩn hoá bug · L
-- [ ] 4.5 Hỏi bằng lời → bộ lọc (dịch sang truy vấn đợt 5; tạm dịch sang bộ lọc có cấu trúc) · M
-- [ ] 4.6 Embedding thẻ + phát hiện trùng + gợi ý người nhận · M
-- [ ] 4.7 Lập kế hoạch sprint theo velocity · M
-- [ ] 4.8 Bản tin sáng, cảnh báo rủi ro (mã tính, AI diễn đạt), nhắc việc có giờ im lặng · L
-- [ ] 4.9 Báo cáo tuần cho giảng viên/khách hàng · M
-- [ ] 4.10 Biên bản họp → việc, tóm tắt retro · M
+- [x] 4.2 Khung trợ lý: vòng lặp tool, tool đọc, thẻ ĐỀ XUẤT → Áp dụng · L
+- [x] 4.3 Tool ghi đi qua `permissions.ts` + test "AI không vượt quyền người hỏi" · M
+- [x] 4.4 Viết story/AC, tách việc, chấm INVEST, sinh test case, chuẩn hoá bug · L
+- [x] 4.5 Hỏi bằng lời → bộ lọc (dịch sang truy vấn đợt 5; tạm dịch sang bộ lọc có cấu trúc) · M
+- [x] 4.6 Embedding thẻ + phát hiện trùng + gợi ý người nhận · M
+- [x] 4.7 Lập kế hoạch sprint theo velocity · M
+- [x] 4.8 Bản tin sáng, cảnh báo rủi ro (mã tính, AI diễn đạt), nhắc việc có giờ im lặng · L
+- [x] 4.9 Báo cáo tuần cho giảng viên/khách hàng · M
+- [x] 4.10 Biên bản họp → việc, tóm tắt retro · M
 - **Nghiệm thu:** `npm run llm:check` gọi thật hai purpose mới; một ngày chạy bản tin không
   vượt trần tiền; thử cố bảo AI sửa thẻ ở dự án mình chỉ là Viewer → bị từ chối.
 
 ### Đợt 5 — Tuỳ biến và tìm kiếm
-- [ ] 5.1 Workflow tuỳ chỉnh: sửa trạng thái, luồng chuyển, điều kiện (trình vẽ trực quan) · L
-- [ ] 5.2 Trường tuỳ chỉnh · M
-- [ ] 5.3 Ngôn ngữ truy vấn kiểu JQL: `assignee = me AND status != Done ORDER BY priority` · L
-- [ ] 5.4 Bộ lọc đã lưu, chia sẻ · S
-- [ ] 5.5 Dashboard kéo thả widget (biểu đồ, danh sách, số liệu) · L
+- [x] 5.1 Workflow tuỳ chỉnh: sửa trạng thái, luồng chuyển, điều kiện (trình vẽ trực quan) · L
+- [x] 5.2 Trường tuỳ chỉnh · M
+- [x] 5.3 Ngôn ngữ truy vấn kiểu JQL: `assignee = me AND status != Done ORDER BY priority` · L
+- [x] 5.4 Bộ lọc đã lưu, chia sẻ · S
+- [x] 5.5 Dashboard kéo thả widget (biểu đồ, danh sách, số liệu) · L
 
 ### Đợt 6 — Kế hoạch dài hạn và tự động hoá
-- [ ] 6.1 Timeline/Gantt, phụ thuộc, đường găng · L
-- [ ] 6.2 Capacity theo người, ngày nghỉ · M
-- [ ] 6.3 Version/release + release notes AI · M
-- [ ] 6.4 Worklog, ước lượng giờ, báo cáo thời gian · M
-- [ ] 6.5 Luật tự động "khi… nếu… thì…" + nhật ký chạy + chống vòng lặp vô hạn · L
-- [ ] 6.6 Email thông báo + thư gộp hằng ngày · M
+- [x] 6.1 Timeline/Gantt, phụ thuộc, đường găng · L
+- [x] 6.2 Capacity theo người, ngày nghỉ · M
+- [x] 6.3 Version/release + release notes AI · M
+- [x] 6.4 Worklog, ước lượng giờ, báo cáo thời gian · M
+- [x] 6.5 Luật tự động "khi… nếu… thì…" + nhật ký chạy + chống vòng lặp vô hạn · L
+- [x] 6.6 Email thông báo + thư gộp hằng ngày · M
 
 ### Đợt 7 — Tích hợp, báo cáo, quản trị
-- [ ] 7.1 GitHub App/webhook: commit/nhánh/PR gắn thẻ theo mã `KEY-123`, merge → chuyển trạng thái · L
-- [ ] 7.2 Nhập CSV và file xuất của Jira; xuất CSV/Excel/PDF · M
-- [ ] 7.3 Audit log · M
-- [ ] 7.4 Lưu trữ/khôi phục dự án, xoá mềm thẻ, thùng rác · S
-- [ ] 7.5 Trang công khai chỉ đọc (gửi link cho giảng viên/khách không cần tài khoản) · M — **bắt buộc**
-- [ ] 7.6 API token cá nhân: tạo/thu hồi, chỉ hiện một lần, lưu dạng băm, phạm vi (đọc / ghi),
+- [x] 7.1 GitHub App/webhook: commit/nhánh/PR gắn thẻ theo mã `KEY-123`, merge → chuyển trạng thái · L
+- [x] 7.2 Nhập CSV và file xuất của Jira; xuất CSV/Excel/PDF · M
+- [x] 7.3 Audit log · M
+- [x] 7.4 Lưu trữ/khôi phục dự án, xoá mềm thẻ, thùng rác · S
+- [x] 7.5 Trang công khai chỉ đọc (gửi link cho giảng viên/khách không cần tài khoản) · M — **bắt buộc**
+- [x] 7.6 API token cá nhân: tạo/thu hồi, chỉ hiện một lần, lưu dạng băm, phạm vi (đọc / ghi),
       hạn dùng, nhật ký lần dùng cuối; REST công khai `/api/v1/work/public/*` + tài liệu · M
 
 ### Đợt 8 — App
-- [ ] 8.1 App desktop: board, chi tiết thẻ, thông báo hệ thống, trợ lý AI · L
-- [ ] 8.2 iPad/iPhone: xem board, cập nhật trạng thái, thông báo đẩy · L
+- [x] 8.1 App desktop: board, chi tiết thẻ, thông báo hệ thống, trợ lý AI · L
+- [x] 8.2 iPad/iPhone: xem board, cập nhật trạng thái, thông báo đẩy · L
+
+
+**Trạng thái 24/09/2026 (bàn giao đợt 3–8):** mọi mục trên đã làm và có test chạy thật
+(`src/routes/work.*.db.test.ts`, 88 test trên Postgres) + E2E Playwright 19 bước cho giao diện
+đợt 3–7. Khác kế hoạch ban đầu:
+- 4.6 dùng **pg_trgm** thay embedding (không tốn lượt AI, đủ để bắt thẻ trùng).
+- 4.8 bản tin AI chạy tay (nút "Generate brief") + cron 08:00 **mặc định TẮT** (`WORK_DIGEST_ENABLED`).
+- 7.6 REST dùng chung `/api/v1/work/**` với Bearer `ctw_…` (không tách `/public/*`); link công khai
+  chỉ đọc là `/work/share/<token>` (API `/api/v1/work/share/*`).
+- 8.1 app desktop dùng lại 19 trang web; 8.2 iOS SwiftUI gốc (commit cục bộ ở kho ios-app,
+  chưa lên TestFlight). Target macOS của ios-app vẫn hỏng từ trước (10/09), không do CT Work.
 
 ## 10. Rủi ro
 

@@ -20,6 +20,8 @@ export interface WorkActor {
   kind: ActorKind;
   /** Null khi kind là SYSTEM hoặc AUTOMATION không gắn với người nào. */
   userId: number | null;
+  /** Chuỗi luật tự động đã dẫn tới thay đổi này — dùng để chặn vòng lặp vô hạn. */
+  ruleChain?: number[];
 }
 
 export interface FieldChange {

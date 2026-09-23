@@ -30,9 +30,13 @@ import { myWork } from '../services/work/myWork.service.js';
 import * as custom from '../services/work/customize.service.js';
 import * as searchSvc from '../services/work/search.service.js';
 import * as workspaces from '../services/work/workspaces.service.js';
+import * as planning from '../services/work/planning.service.js';
+import * as automation from '../services/work/automation.service.js';
+import { EMAIL_MODES, getNotifySettings, setNotifySettings } from '../services/work/notify.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
+automation.registerAutomation();
 
 const router = Router();
 
@@ -313,6 +317,7 @@ const issueFields = {
   dueDate: dateOnly,
   parentId: id.nullable(),
   sprintId: id.nullable(),
+  fixVersionId: id.nullable(),
   statusId: id,
   labelIds: z.array(id).max(30),
   componentIds: z.array(id).max(30),
@@ -782,6 +787,135 @@ router.post('/projects/:pid/dashboards', asyncHandler(async (req, res) => {
 router.delete('/projects/:pid/dashboards/:dashId', asyncHandler(async (req, res) => {
   await searchSvc.deleteDashboard(callerId(req), idParam(req, 'pid'), idParam(req, 'dashId'));
   ok(res, { deleted: true });
+}));
+
+// ═══ Kế hoạch dài hạn & tự động hoá (đợt 6) ══════════════════════════
+
+const ymd = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD');
+
+router.get('/projects/:pid/versions', asyncHandler(async (req, res) => {
+  ok(res, await planning.listVersions(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/versions', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ name: z.string().min(1).max(60), description: z.string().max(5000).nullable().optional(), startDate: ymd.nullable().optional(), releaseDate: ymd.nullable().optional() }), req.body);
+  ok(res, await planning.createVersion(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.get('/projects/:pid/versions/:versionId', asyncHandler(async (req, res) => {
+  ok(res, await planning.versionDetail(callerId(req), idParam(req, 'pid'), idParam(req, 'versionId')));
+}));
+router.patch('/projects/:pid/versions/:versionId', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(60).optional(), description: z.string().max(5000).nullable().optional(),
+    startDate: ymd.nullable().optional(), releaseDate: ymd.nullable().optional(),
+    status: z.enum(['UNRELEASED', 'ARCHIVED']).optional(), releaseNotes: z.string().max(50_000).nullable().optional(),
+  }), req.body);
+  ok(res, await planning.updateVersion(callerId(req), idParam(req, 'pid'), idParam(req, 'versionId'), body));
+}));
+router.post('/projects/:pid/versions/:versionId/release', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ moveUnresolvedTo: id.nullable(), releaseDate: ymd.nullable().optional() }), req.body);
+  ok(res, await planning.releaseVersion(callerId(req), idParam(req, 'pid'), idParam(req, 'versionId'), body));
+}));
+router.delete('/projects/:pid/versions/:versionId', asyncHandler(async (req, res) => {
+  await planning.deleteVersion(callerId(req), idParam(req, 'pid'), idParam(req, 'versionId'));
+  ok(res, { deleted: true });
+}));
+router.post('/projects/:pid/versions/:versionId/ai-notes', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ audience: z.enum(['users', 'team']).default('users'), language: z.enum(['en', 'vi']).optional() }), req.body ?? {});
+  ok(res, await ai.releaseNotes(callerId(req), idParam(req, 'pid'), idParam(req, 'versionId'), body));
+}));
+
+router.get('/projects/:pid/timeline', asyncHandler(async (req, res) => {
+  ok(res, await planning.timeline(callerId(req), idParam(req, 'pid')));
+}));
+router.put('/projects/:pid/issues/:num/schedule', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ startDate: ymd.nullable(), dueDate: ymd.nullable(), version: z.number().int().min(0).optional() }), req.body);
+  ok(res, await planning.scheduleIssue(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
+}));
+
+router.get('/projects/:pid/capacity', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ sprintId: id.optional(), from: ymd.optional(), to: ymd.optional() }), req.query);
+  ok(res, await planning.capacity(callerId(req), idParam(req, 'pid'), q));
+}));
+router.put('/projects/:pid/capacity/:userId', asyncHandler(async (req, res) => {
+  const { hoursPerDay } = parse(z.object({ hoursPerDay: z.number().min(0).max(24).nullable() }), req.body);
+  await planning.setCapacity(callerId(req), idParam(req, 'pid'), idParam(req, 'userId'), hoursPerDay);
+  ok(res, { updated: true });
+}));
+router.get('/workspaces/:wsId/time-off', asyncHandler(async (req, res) => {
+  ok(res, await planning.listTimeOff(callerId(req), idParam(req, 'wsId')));
+}));
+router.post('/workspaces/:wsId/time-off', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ userId: id.optional(), startDate: ymd, endDate: ymd, note: z.string().max(200).nullable().optional() }), req.body);
+  ok(res, await planning.addTimeOff(callerId(req), idParam(req, 'wsId'), body), 201);
+}));
+router.delete('/workspaces/:wsId/time-off/:offId', asyncHandler(async (req, res) => {
+  await planning.deleteTimeOff(callerId(req), idParam(req, 'wsId'), idParam(req, 'offId'));
+  ok(res, { deleted: true });
+}));
+
+router.get('/projects/:pid/issues/:num/worklogs', asyncHandler(async (req, res) => {
+  ok(res, await planning.listWorklogs(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.post('/projects/:pid/issues/:num/worklogs', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    minutes: z.number().int().min(1).max(1440), startedAt: z.string().datetime({ offset: true }).optional(), note: z.string().max(1000).nullable().optional(),
+    remaining: z.union([z.enum(['auto', 'keep']), z.number().int().min(0).max(100_000)]).optional(),
+  }), req.body);
+  ok(res, await planning.addWorklog(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body), 201);
+}));
+router.delete('/projects/:pid/issues/:num/worklogs/:logId', asyncHandler(async (req, res) => {
+  await planning.deleteWorklog(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'logId'));
+  ok(res, { deleted: true });
+}));
+router.get('/projects/:pid/reports/time', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ from: ymd, to: ymd, userId: id.optional() }), req.query);
+  ok(res, await planning.timeReport(callerId(req), idParam(req, 'pid'), q));
+}));
+
+const ruleAction = z.object({
+  kind: z.enum(automation.ACTION_KINDS), statusId: id.optional(),
+  assignee: z.union([id, z.literal('reporter'), z.null()]).optional(), priority: z.number().int().min(1).max(5).optional(),
+  labelId: id.optional(), text: z.string().max(2000).optional(), title: z.string().max(255).optional(),
+  to: z.array(z.union([z.enum(['assignee', 'reporter', 'watchers']), id])).max(20).optional(),
+});
+const ruleConfig = z.object({
+  toStatusIds: z.array(id).max(50).optional(), fromStatusIds: z.array(id).max(50).optional(),
+  fields: z.array(z.string().max(40)).max(20).optional(), jql: z.string().max(4000).optional(),
+  conditions: z.array(z.object({ jql: z.string().min(1).max(4000) })).max(10).optional(),
+  actions: z.array(ruleAction).min(1).max(10),
+});
+router.get('/projects/:pid/automation', asyncHandler(async (req, res) => {
+  ok(res, await automation.listRules(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/automation', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ id: id.optional(), name: z.string().min(1).max(100), enabled: z.boolean().optional(), trigger: z.enum(automation.TRIGGERS), config: ruleConfig }), req.body);
+  ok(res, await automation.saveRule(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.patch('/projects/:pid/automation/:ruleId', asyncHandler(async (req, res) => {
+  const { enabled } = parse(z.object({ enabled: z.boolean() }), req.body);
+  await automation.setRuleEnabled(callerId(req), idParam(req, 'pid'), idParam(req, 'ruleId'), enabled);
+  ok(res, { updated: true });
+}));
+router.delete('/projects/:pid/automation/:ruleId', asyncHandler(async (req, res) => {
+  await automation.deleteRule(callerId(req), idParam(req, 'pid'), idParam(req, 'ruleId'));
+  ok(res, { deleted: true });
+}));
+router.get('/projects/:pid/automation-logs', asyncHandler(async (req, res) => {
+  const ruleId = req.query.ruleId ? parse(id, req.query.ruleId) : undefined;
+  ok(res, await automation.ruleLogs(callerId(req), idParam(req, 'pid'), ruleId));
+}));
+router.post('/projects/:pid/automation/:ruleId/test', asyncHandler(async (req, res) => {
+  const { number } = parse(z.object({ number: id }), req.body);
+  ok(res, await automation.testRule(callerId(req), idParam(req, 'pid'), idParam(req, 'ruleId'), number));
+}));
+
+router.get('/me/notify-settings', asyncHandler(async (req, res) => {
+  ok(res, await getNotifySettings(callerId(req)));
+}));
+router.put('/me/notify-settings', asyncHandler(async (req, res) => {
+  const hour = z.number().int().min(0).max(23).nullable();
+  const body = parse(z.object({ emailMode: z.enum(EMAIL_MODES).optional(), quietStart: hour.optional(), quietEnd: hour.optional() }), req.body);
+  ok(res, await setNotifySettings(callerId(req), body));
 }));
 
 export default router;

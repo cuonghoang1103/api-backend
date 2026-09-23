@@ -37,6 +37,7 @@ export interface IssuePatch {
   dueDate?: Date | null;
   parentId?: number | null;
   sprintId?: number | null;
+  fixVersionId?: number | null;
   statusId?: number;
 }
 
@@ -90,6 +91,12 @@ async function assertParent(tx: Tx, projectId: number, parentId: number, childLe
     );
   }
   return parent;
+}
+
+async function assertVersion(tx: Tx, projectId: number, versionId: number) {
+  const v = await tx.workVersion.findFirst({ where: { id: versionId, projectId }, select: { status: true } });
+  if (!v) throw new BadRequestError('Version not found in this project', 'WORK_BAD_VERSION');
+  if (v.status === 'ARCHIVED') throw new BadRequestError('This version is archived', 'WORK_VERSION_ARCHIVED');
 }
 
 async function assertSprint(tx: Tx, projectId: number, sprintId: number) {
@@ -175,6 +182,7 @@ export async function createIssue(input: CreateIssueInput, actor: WorkActor) {
     if (sprintId && type.level !== -1) await assertSprint(tx, input.projectId, sprintId);
     // Epic không nằm trong sprint.
     if (type.level === 1) sprintId = null;
+    if (input.fixVersionId) await assertVersion(tx, input.projectId, input.fixVersionId);
 
     const last = await tx.workIssue.findFirst({
       where: { projectId: input.projectId },
@@ -191,6 +199,7 @@ export async function createIssue(input: CreateIssueInput, actor: WorkActor) {
         statusId,
         parentId: input.parentId ?? null,
         sprintId,
+        fixVersionId: input.fixVersionId ?? null,
         title: title.slice(0, 255),
         ...descriptionFields(input.descriptionJson),
         priority: input.priority ?? PRIORITY_DEFAULT,
@@ -294,6 +303,12 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
       if (patch.sprintId !== null) await assertSprint(tx, before.projectId, patch.sprintId);
       track('sprintId', before.sprintId, patch.sprintId);
       data.sprintId = patch.sprintId;
+    }
+
+    if (patch.fixVersionId !== undefined && patch.fixVersionId !== before.fixVersionId) {
+      if (patch.fixVersionId !== null) await assertVersion(tx, before.projectId, patch.fixVersionId);
+      track('fixVersionId', before.fixVersionId, patch.fixVersionId);
+      data.fixVersionId = patch.fixVersionId;
     }
 
     if (patch.statusId !== undefined && patch.statusId !== before.statusId) {

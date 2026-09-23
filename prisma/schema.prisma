@@ -399,6 +399,11 @@ model User {
   workTestRunsExecuted   WorkTestRun[]       @relation("WorkTestRunExecutor")
   workSavedFilters       WorkSavedFilter[]   @relation("WorkSavedFilterOwner")
   workDashboards         WorkDashboard[]     @relation("WorkDashboardOwner")
+  workTimeOff            WorkTimeOff[]       @relation("WorkTimeOffUser")
+  workWorklogs           WorkWorklog[]       @relation("WorkWorklogUser")
+  workNotifySetting      WorkNotifySetting?  @relation("WorkNotifySettingUser")
+  workEmailQueue         WorkEmailQueue[]    @relation("WorkEmailQueueUser")
+  workApiTokens          WorkApiToken[]      @relation("WorkApiTokenUser")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -9623,10 +9628,12 @@ model WorkSpace {
   /// bằng một cú bấm nhầm là mất cả kỳ đồ án của cả nhóm.
   deletedAt   DateTime? @map("deleted_at")
 
-  owner    User          @relation("WorkSpaceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  owner    User           @relation("WorkSpaceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   members  WorkMember[]
   invites  WorkInvite[]
   projects WorkProject[]
+  timeOff  WorkTimeOff[]
+  audit    WorkAuditLog[]
 
   @@index([ownerId], name: "idx_work_space_owner")
   @@map("work_spaces")
@@ -9702,8 +9709,8 @@ model WorkProject {
   updatedAt    DateTime  @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
 
-  workspace    WorkSpace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  lead         User?               @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
+  workspace    WorkSpace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lead         User?                 @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
   members      WorkProjectMember[]
   invites      WorkInvite[]
   workflows    WorkWorkflow[]
@@ -9717,6 +9724,11 @@ model WorkProject {
   customFields WorkCustomField[]
   savedFilters WorkSavedFilter[]
   dashboards   WorkDashboard[]
+  versions     WorkVersion[]
+  automations  WorkAutomationRule[]
+  github       WorkGithubConnection?
+  devActivity  WorkDevActivity[]
+  publicLinks  WorkPublicLink[]
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -9724,11 +9736,13 @@ model WorkProject {
 
 /// Vai trò trong một dự án: ADMIN | MEMBER | VIEWER | TEACHER | CLIENT.
 model WorkProjectMember {
-  id        Int      @id @default(autoincrement())
-  projectId Int      @map("project_id")
-  userId    Int      @map("user_id")
-  role      String   @default("MEMBER") @db.VarChar(16)
-  createdAt DateTime @default(now()) @map("created_at")
+  id            Int      @id @default(autoincrement())
+  projectId     Int      @map("project_id")
+  userId        Int      @map("user_id")
+  role          String   @default("MEMBER") @db.VarChar(16)
+  /// Số giờ làm được mỗi ngày cho dự án này (capacity). Null = chưa khai.
+  capacityHours Float?   @map("capacity_hours")
+  createdAt     DateTime @default(now()) @map("created_at")
 
   project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
   user    User        @relation("WorkProjectMemberUser", fields: [userId], references: [id], onDelete: Cascade)
@@ -9831,6 +9845,7 @@ model WorkIssue {
   statusId             Int       @map("status_id")
   parentId             Int?      @map("parent_id")
   sprintId             Int?      @map("sprint_id")
+  fixVersionId         Int?      @map("fix_version_id")
   title                String    @db.VarChar(255)
   /// JSON của TipTap — cùng định dạng với Ghi chú để dùng lại trình soạn thảo.
   descriptionJson      Json?     @map("description_json")
@@ -9868,6 +9883,7 @@ model WorkIssue {
   parent       WorkIssue?           @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
   children     WorkIssue[]          @relation("WorkIssueParent")
   sprint       WorkSprint?          @relation(fields: [sprintId], references: [id], onDelete: SetNull)
+  fixVersion   WorkVersion?         @relation(fields: [fixVersionId], references: [id], onDelete: SetNull)
   assignee     User?                @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
   reporter     User?                @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
   linksOut     WorkIssueLink[]      @relation("WorkIssueLinkFrom")
@@ -9881,12 +9897,15 @@ model WorkIssue {
   testCase     WorkTestCase?
   defectOf     WorkTestRunDefect[]
   customValues WorkCustomValue[]
+  worklogs     WorkWorklog[]
+  devActivity  WorkDevActivity[]
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
   @@index([projectId, sprintId], name: "idx_work_issue_sprint")
   @@index([assigneeId], name: "idx_work_issue_assignee")
   @@index([parentId], name: "idx_work_issue_parent")
+  @@index([fixVersionId], name: "idx_work_issue_fix_version")
   @@map("work_issues")
 }
 
@@ -10301,4 +10320,238 @@ model WorkDashboard {
 
   @@index([projectId], name: "idx_work_dashboard_project")
   @@map("work_dashboards")
+}
+
+// ═══ CT Work đợt 6 — kế hoạch dài hạn, tự động hoá, email ═══════════
+
+/// Ngày nghỉ của một người trong không gian — capacity trừ đi những ngày này.
+model WorkTimeOff {
+  id          Int      @id @default(autoincrement())
+  workspaceId Int      @map("workspace_id")
+  userId      Int      @map("user_id")
+  startDate   DateTime @map("start_date") @db.Date
+  endDate     DateTime @map("end_date") @db.Date
+  note        String?  @db.VarChar(200)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  workspace WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation("WorkTimeOffUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, userId], name: "idx_work_time_off_user")
+  @@map("work_time_off")
+}
+
+/// Phiên bản / đợt phát hành. status: UNRELEASED | RELEASED | ARCHIVED.
+model WorkVersion {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  name         String    @db.VarChar(60)
+  description  String?   @db.Text
+  startDate    DateTime? @map("start_date") @db.Date
+  releaseDate  DateTime? @map("release_date") @db.Date
+  status       String    @default("UNRELEASED") @db.VarChar(16)
+  releasedAt   DateTime? @map("released_at")
+  releaseNotes String?   @map("release_notes") @db.Text
+  position     Int       @default(0)
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issues  WorkIssue[]
+
+  @@unique([projectId, name], name: "uk_work_version", map: "uk_work_version")
+  @@map("work_versions")
+}
+
+/// Một lần ghi giờ làm. Tổng minutes = work_issues.time_spent_min (giữ khớp trong transaction).
+model WorkWorklog {
+  id        Int      @id @default(autoincrement())
+  issueId   Int      @map("issue_id")
+  userId    Int      @map("user_id")
+  minutes   Int
+  startedAt DateTime @map("started_at")
+  note      String?  @db.VarChar(1000)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  issue WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  user  User      @relation("WorkWorklogUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([issueId], name: "idx_work_worklog_issue")
+  @@index([userId, startedAt], name: "idx_work_worklog_user")
+  @@map("work_worklogs")
+}
+
+/// Luật "khi… nếu… thì…". config = { trigger: {...}, conditions: [...], actions: [...] }.
+/// createdById không có FK: người tạo rời dự án thì luật vẫn chạy (dưới tên AUTOMATION).
+model WorkAutomationRule {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  name        String    @db.VarChar(100)
+  enabled     Boolean   @default(true)
+  trigger     String    @db.VarChar(32)
+  config      Json      @default("{}")
+  createdById Int?      @map("created_by_id")
+  runCount    Int       @default(0) @map("run_count")
+  lastRunAt   DateTime? @map("last_run_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  logs    WorkAutomationLog[]
+
+  @@index([projectId, trigger], name: "idx_work_automation_trigger")
+  @@map("work_automation_rules")
+}
+
+/// Nhật ký chạy luật. status: SUCCESS | NO_MATCH | FAILED | LOOP_BLOCKED | THROTTLED.
+/// issueId không có FK: thẻ bị xoá thì nhật ký vẫn còn để đọc.
+model WorkAutomationLog {
+  id         Int      @id @default(autoincrement())
+  ruleId     Int      @map("rule_id")
+  issueId    Int?     @map("issue_id")
+  status     String   @db.VarChar(16)
+  message    String   @db.Text
+  durationMs Int      @default(0) @map("duration_ms")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  rule WorkAutomationRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId, createdAt], name: "idx_work_automation_log_rule")
+  @@map("work_automation_logs")
+}
+
+/// Cài đặt email CT Work của một người. emailMode: INSTANT | DIGEST | OFF.
+/// Giờ im lặng tính theo giờ VN; thư rơi vào giờ im lặng dồn sang thư gộp.
+model WorkNotifySetting {
+  userId       Int       @id @map("user_id")
+  emailMode    String    @default("INSTANT") @map("email_mode") @db.VarChar(12)
+  quietStart   Int?      @map("quiet_start")
+  quietEnd     Int?      @map("quiet_end")
+  lastDigestAt DateTime? @map("last_digest_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  user User @relation("WorkNotifySettingUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("work_notify_settings")
+}
+
+/// Hàng đợi thư gộp: mỗi dòng là một mục sẽ vào thư gộp kế tiếp.
+model WorkEmailQueue {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  kind      String    @db.VarChar(32)
+  subject   String    @db.VarChar(255)
+  url       String?   @db.VarChar(500)
+  createdAt DateTime  @default(now()) @map("created_at")
+  sentAt    DateTime? @map("sent_at")
+
+  user User @relation("WorkEmailQueueUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, sentAt], name: "idx_work_email_queue_user")
+  @@map("work_email_queue")
+}
+
+// ═══ CT Work đợt 7 — tích hợp, quản trị, chia sẻ ════════════════════
+
+/// Kết nối GitHub của một dự án qua webhook. secret dùng để kiểm chữ ký
+/// HMAC nên phải giữ nguyên văn (không băm được).
+model WorkGithubConnection {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @unique(map: "uk_work_github_project") @map("project_id")
+  repoFullName String?   @map("repo_full_name") @db.VarChar(200)
+  secret       String    @db.VarChar(100)
+  /// { prOpenedStatusId?, prMergedStatusId? }
+  config       Json      @default("{}")
+  lastEventAt  DateTime? @map("last_event_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("work_github_connections")
+}
+
+/// Commit / nhánh / PR gắn vào thẻ theo mã KEY-123. kind: COMMIT | BRANCH | PR.
+model WorkDevActivity {
+  id         Int      @id @default(autoincrement())
+  projectId  Int      @map("project_id")
+  issueId    Int      @map("issue_id")
+  kind       String   @db.VarChar(12)
+  externalId String   @map("external_id") @db.VarChar(200)
+  title      String   @db.VarChar(500)
+  url        String   @db.VarChar(500)
+  state      String?  @db.VarChar(16)
+  author     String?  @db.VarChar(100)
+  repo       String?  @db.VarChar(200)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issue   WorkIssue   @relation(fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@unique([issueId, kind, externalId], name: "uk_work_dev_activity", map: "uk_work_dev_activity")
+  @@index([projectId], name: "idx_work_dev_activity_project")
+  @@map("work_dev_activity")
+}
+
+/// Nhật ký quản trị: ai đổi quyền, xoá gì, tạo token… actorId không FK —
+/// nhật ký phải sống lâu hơn tài khoản.
+model WorkAuditLog {
+  id          Int      @id @default(autoincrement())
+  workspaceId Int      @map("workspace_id")
+  projectId   Int?     @map("project_id")
+  actorId     Int?     @map("actor_id")
+  actorName   String?  @map("actor_name") @db.VarChar(100)
+  action      String   @db.VarChar(48)
+  targetType  String?  @map("target_type") @db.VarChar(24)
+  targetId    Int?     @map("target_id")
+  summary     String   @db.VarChar(500)
+  detail      Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  workspace WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdAt], name: "idx_work_audit_ws")
+  @@index([projectId, createdAt], name: "idx_work_audit_project")
+  @@map("work_audit_logs")
+}
+
+/// Link công khai chỉ đọc cho giảng viên/khách. Token giữ nguyên văn để chủ
+/// dự án copy lại được; thu hồi = revokedAt. options: { board, backlog, reports, tests }.
+model WorkPublicLink {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  token        String    @unique(map: "uk_work_public_link_token") @db.VarChar(64)
+  label        String?   @db.VarChar(100)
+  options      Json      @default("{}")
+  createdById  Int?      @map("created_by_id")
+  expiresAt    DateTime? @map("expires_at")
+  revokedAt    DateTime? @map("revoked_at")
+  lastViewedAt DateTime? @map("last_viewed_at")
+  viewCount    Int       @default(0) @map("view_count")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], name: "idx_work_public_link_project")
+  @@map("work_public_links")
+}
+
+/// API token cá nhân (giống Jira). Chỉ lưu sha256 — token nguyên văn hiện
+/// đúng một lần lúc tạo. scopes: ["read"] | ["read","write"].
+model WorkApiToken {
+  id         Int       @id @default(autoincrement())
+  userId     Int       @map("user_id")
+  name       String    @db.VarChar(100)
+  tokenHash  String    @unique(map: "uk_work_api_token_hash") @map("token_hash") @db.VarChar(64)
+  prefix     String    @db.VarChar(16)
+  scopes     Json      @default("[\"read\"]")
+  expiresAt  DateTime? @map("expires_at")
+  lastUsedAt DateTime? @map("last_used_at")
+  lastUsedIp String?   @map("last_used_ip") @db.VarChar(64)
+  revokedAt  DateTime? @map("revoked_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  user User @relation("WorkApiTokenUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], name: "idx_work_api_token_user")
+  @@map("work_api_tokens")
 }

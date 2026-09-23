@@ -37,7 +37,7 @@ export const ALL_NOTIFY_TYPES: NotifyType[] = [
   'NEW_REACTION', 'NEW_COMMENT', 'NEW_REPLY', 'NEW_MENTION', 'NEW_MESSAGE',
   'FRIEND_REQUEST', 'FRIEND_ACCEPT', 'NEW_FOLLOW',
   'NOTE_SHARE', 'NOTE_COMMENT', 'NOTE_REPLY', 'NOTE_MENTION', 'HUB_SHARE', 'NEW_POST', 'ADMIN_ANNOUNCEMENT',
-  'WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION',
+  'WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION', 'WORK_ALERT',
 ];
 
 export interface NotifyTypeMeta {
@@ -67,6 +67,7 @@ export const NOTIFY_TYPE_META: Record<NotifyType, NotifyTypeMeta> = {
   WORK_ASSIGN: { label: 'CT Work: issue assigned', description: 'An issue was assigned to you', icon: 'UserCheck' },
   WORK_COMMENT: { label: 'CT Work: new comment', description: 'Someone commented on an issue you follow', icon: 'MessageCircle' },
   WORK_MENTION: { label: 'CT Work: mentioned', description: 'Someone @mentioned you in an issue', icon: 'AtSign' },
+  WORK_ALERT: { label: 'CT Work: alerts', description: 'Automation rules and due-date reminders', icon: 'Bell' },
 };
 
 export interface SoundKindMeta {

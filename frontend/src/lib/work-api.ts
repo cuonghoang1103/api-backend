@@ -121,6 +121,7 @@ export interface IssueCard {
   /** Số của thẻ cha (để hiện mã cha mà không cần tải thẻ cha). */
   parentNumber: number | null;
   sprintId: number | null;
+  fixVersionId: number | null;
   priority: number;
   assigneeId: number | null;
   reporterId: number | null;
@@ -201,6 +202,7 @@ export interface IssuePatch {
   dueDate?: string | null;
   parentId?: number | null;
   sprintId?: number | null;
+  fixVersionId?: number | null;
   statusId?: number;
   labelIds?: number[];
   componentIds?: number[];
@@ -423,6 +425,51 @@ export interface DashboardWidget {
 export interface WorkDashboard { id: number; name: string; shared: boolean; ownerId: number; widgets: DashboardWidget[]; updatedAt: string }
 export interface SearchResult { total: number; items: IssueCard[]; offset: number; limit: number }
 
+// ─── Kế hoạch dài hạn & tự động hoá (đợt 6) ───────────────────
+export type VersionStatus = 'UNRELEASED' | 'RELEASED' | 'ARCHIVED';
+export interface WorkVersion {
+  id: number; name: string; description: string | null; startDate: string | null; releaseDate: string | null; status: VersionStatus;
+  releasedAt: string | null; releaseNotes: string | null; position: number; createdAt: string;
+}
+export interface VersionSummary extends WorkVersion { total: number; done: number; overdue: boolean }
+export interface TimelineItem {
+  id: number; number: number; title: string; typeId: number; statusId: number; parentId: number | null; assigneeId: number | null;
+  sprintId: number | null; fixVersionId: number | null; level: number; start: string | null; due: string | null; done: boolean; progress: number;
+}
+export interface TimelineData {
+  items: TimelineItem[]; dependencies: Array<{ from: number; to: number }>; criticalPath: number[]; criticalDays: number; conflicts: Array<{ from: number; to: number }>;
+}
+export interface CapacityRow {
+  user: Pick<WorkUser, 'id' | 'username' | 'fullName' | 'displayName' | 'avatarUrl'>;
+  hoursPerDay: number | null; workingDays: number; timeOff: Array<{ id: number; start: string; end: string; note: string | null }>;
+  capacityHours: number | null; issues: number; loadHours: number; loadPoints: number; utilization: number | null;
+}
+export interface CapacityData { from: string; to: string; unit: EstimationUnit; sprintId: number | null; members: CapacityRow[] }
+export interface TimeOffEntry { id: number; userId: number; startDate: string; endDate: string; note: string | null; user: WorkUser }
+export interface Worklog { id: number; minutes: number; startedAt: string; note: string | null; createdAt: string; userId: number; user: WorkUser }
+export interface TimeReport {
+  from: string; to: string; totalMin: number;
+  people: Array<{ user: WorkUser; name: string; totalMin: number; byDay: Record<string, number>; issues: Array<{ number: number; title: string; minutes: number }> }>;
+}
+export type RuleTrigger = 'issue.created' | 'issue.transitioned' | 'issue.assigned' | 'field.changed' | 'comment.added' | 'scheduled.daily';
+export type RuleActionKind = 'transition' | 'assign' | 'set_priority' | 'add_label' | 'comment' | 'move_to_active_sprint' | 'notify' | 'create_subtask';
+export interface RuleAction {
+  kind: RuleActionKind; statusId?: number; assignee?: number | 'reporter' | null; priority?: number; labelId?: number; text?: string;
+  to?: Array<'assignee' | 'reporter' | 'watchers' | number>; title?: string;
+}
+export interface RuleConfig { toStatusIds?: number[]; fromStatusIds?: number[]; fields?: string[]; jql?: string; conditions?: Array<{ jql: string }>; actions: RuleAction[] }
+export interface AutomationRule {
+  id: number; name: string; enabled: boolean; trigger: RuleTrigger; config: RuleConfig; createdById: number | null; runCount: number;
+  lastRunAt: string | null; createdAt: string; updatedAt: string; recentProblems: number;
+}
+export type RuleLogStatus = 'SUCCESS' | 'NO_MATCH' | 'FAILED' | 'LOOP_BLOCKED' | 'THROTTLED';
+export interface RuleLog {
+  id: number; ruleId: number; ruleName: string; issueId: number | null; issue: { number: number; title: string } | null;
+  status: RuleLogStatus; message: string; durationMs: number; createdAt: string;
+}
+export type EmailMode = 'INSTANT' | 'DIGEST' | 'OFF';
+export interface NotifySettings { emailMode: EmailMode; quietStart: number | null; quietEnd: number | null }
+
 /** Lỗi hết lượt AI miễn phí (402) — giao diện hiện hộp "Upgrade to Pro". */
 export function isAiQuotaError(err: unknown): boolean {
   const e = err as { response?: { status?: number; data?: { code?: string } } };
@@ -434,6 +481,14 @@ export function isAiQuotaError(err: unknown): boolean {
 const B = '/work';
 type Env<T> = { data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
+
+/** Object phẳng ⇒ "?a=1&b=2" (bỏ giá trị undefined). */
+function params(q: Record<string, string | number | undefined>): string {
+  const p = new URLSearchParams();
+  for (const [k, v] of Object.entries(q)) if (v !== undefined && v !== '') p.set(k, String(v));
+  const s = p.toString();
+  return s ? `?${s}` : '';
+}
 
 function qs(q: IssueQuery): string {
   const p = new URLSearchParams();
@@ -628,6 +683,43 @@ export const workApi = {
   dashboards: (pid: number) => d<WorkDashboard[]>(api.get(`${B}/projects/${pid}/dashboards`)),
   saveDashboard: (pid: number, body: { id?: number; name: string; shared?: boolean; widgets: DashboardWidget[] }) => d<WorkDashboard>(api.post(`${B}/projects/${pid}/dashboards`, body)),
   deleteDashboard: (pid: number, dashId: number) => d(api.delete(`${B}/projects/${pid}/dashboards/${dashId}`)),
+
+  // Kế hoạch dài hạn & tự động hoá
+  versions: (pid: number) => d<VersionSummary[]>(api.get(`${B}/projects/${pid}/versions`)),
+  version: (pid: number, versionId: number) => d<{ version: WorkVersion; issues: IssueCard[] }>(api.get(`${B}/projects/${pid}/versions/${versionId}`)),
+  createVersion: (pid: number, body: { name: string; description?: string | null; startDate?: string | null; releaseDate?: string | null }) =>
+    d<WorkVersion>(api.post(`${B}/projects/${pid}/versions`, body)),
+  updateVersion: (pid: number, versionId: number, body: { name?: string; description?: string | null; startDate?: string | null; releaseDate?: string | null; status?: 'UNRELEASED' | 'ARCHIVED'; releaseNotes?: string | null }) =>
+    d<WorkVersion>(api.patch(`${B}/projects/${pid}/versions/${versionId}`, body)),
+  releaseVersion: (pid: number, versionId: number, body: { moveUnresolvedTo: number | null; releaseDate?: string | null }) =>
+    d<{ version: WorkVersion; moved: number }>(api.post(`${B}/projects/${pid}/versions/${versionId}/release`, body)),
+  deleteVersion: (pid: number, versionId: number) => d(api.delete(`${B}/projects/${pid}/versions/${versionId}`)),
+  aiReleaseNotes: (pid: number, versionId: number, body: { audience: 'users' | 'team'; language?: 'en' | 'vi' }) =>
+    d<{ notes: string; quota: AiQuota }>(api.post(`${B}/projects/${pid}/versions/${versionId}/ai-notes`, body, { timeout: 120_000 })),
+  timeline: (pid: number) => d<TimelineData>(api.get(`${B}/projects/${pid}/timeline`)),
+  scheduleIssue: (pid: number, num: number, body: { startDate: string | null; dueDate: string | null; version?: number }) =>
+    d<{ number: number; version: number }>(api.put(`${B}/projects/${pid}/issues/${num}/schedule`, body)),
+  capacity: (pid: number, q: { sprintId?: number; from?: string; to?: string } = {}) =>
+    d<CapacityData>(api.get(`${B}/projects/${pid}/capacity${params(q)}`)),
+  setCapacity: (pid: number, userId: number, hoursPerDay: number | null) => d(api.put(`${B}/projects/${pid}/capacity/${userId}`, { hoursPerDay })),
+  timeOff: (wsId: number) => d<TimeOffEntry[]>(api.get(`${B}/workspaces/${wsId}/time-off`)),
+  addTimeOff: (wsId: number, body: { userId?: number; startDate: string; endDate: string; note?: string | null }) => d(api.post(`${B}/workspaces/${wsId}/time-off`, body)),
+  deleteTimeOff: (wsId: number, id: number) => d(api.delete(`${B}/workspaces/${wsId}/time-off/${id}`)),
+  worklogs: (pid: number, num: number) => d<Worklog[]>(api.get(`${B}/projects/${pid}/issues/${num}/worklogs`)),
+  addWorklog: (pid: number, num: number, body: { minutes: number; startedAt?: string; note?: string | null; remaining?: 'auto' | 'keep' | number }) =>
+    d<Worklog>(api.post(`${B}/projects/${pid}/issues/${num}/worklogs`, body)),
+  deleteWorklog: (pid: number, num: number, logId: number) => d(api.delete(`${B}/projects/${pid}/issues/${num}/worklogs/${logId}`)),
+  timeReport: (pid: number, q: { from: string; to: string; userId?: number }) => d<TimeReport>(api.get(`${B}/projects/${pid}/reports/time${params(q)}`)),
+  automationRules: (pid: number) => d<AutomationRule[]>(api.get(`${B}/projects/${pid}/automation`)),
+  saveAutomationRule: (pid: number, body: { id?: number; name: string; enabled?: boolean; trigger: RuleTrigger; config: RuleConfig }) =>
+    d<AutomationRule>(api.post(`${B}/projects/${pid}/automation`, body)),
+  setAutomationEnabled: (pid: number, ruleId: number, enabled: boolean) => d(api.patch(`${B}/projects/${pid}/automation/${ruleId}`, { enabled })),
+  deleteAutomationRule: (pid: number, ruleId: number) => d(api.delete(`${B}/projects/${pid}/automation/${ruleId}`)),
+  automationLogs: (pid: number, ruleId?: number) => d<RuleLog[]>(api.get(`${B}/projects/${pid}/automation-logs${ruleId ? `?ruleId=${ruleId}` : ''}`)),
+  testAutomationRule: (pid: number, ruleId: number, number: number) =>
+    d<{ status: RuleLogStatus; message: string }>(api.post(`${B}/projects/${pid}/automation/${ruleId}/test`, { number })),
+  notifySettings: () => d<NotifySettings>(api.get(`${B}/me/notify-settings`)),
+  setNotifySettings: (body: Partial<NotifySettings>) => d<NotifySettings>(api.put(`${B}/me/notify-settings`, body)),
 
   /** Tải file thẳng lên R2: xin URL ký sẵn → PUT → báo hoàn tất. */
   async uploadAttachment(pid: number, num: number, file: File, onProgress?: (pct: number) => void): Promise<IssueAttachment> {

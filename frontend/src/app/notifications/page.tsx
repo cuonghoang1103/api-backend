@@ -19,7 +19,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  Bell, Heart, MessageCircle, AtSign, MessageSquare, UserPlus, UserCheck,
+  Bell, BellRing, Heart, MessageCircle, AtSign, MessageSquare, UserPlus, UserCheck,
   Check, Loader2, FolderOpen, Share2, Crown, Send, CornerDownRight,
   Settings as SettingsIcon, CheckCheck, Inbox,
 } from 'lucide-react';
@@ -32,7 +32,7 @@ import { cn } from '@/lib/utils';
 
 /* ─── CT Work (/work) notifications — English, like the rest of CT Work ─── */
 
-const WORK_TYPES: NotificationType[] = ['WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION'];
+const WORK_TYPES: NotificationType[] = ['WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION', 'WORK_ALERT'];
 const isWorkType = (t: NotificationType) => WORK_TYPES.includes(t);
 
 function describeWork(n: SocialNotification): string {
@@ -45,6 +45,7 @@ function describeWork(n: SocialNotification): string {
     case 'WORK_INVITE': return `${name} added you to ${str(p.workspaceName) || 'a workspace'}`;
     case 'WORK_ASSIGN': return `${name} assigned you ${key}${title ? `: ${title}` : ''}`;
     case 'WORK_COMMENT': return `${name} commented on ${key}${title ? `: ${title}` : ''}`;
+    case 'WORK_ALERT': return `${key}: ${str(p.message) || 'needs your attention'}`;
     default: return `${name} mentioned you in ${key}`;
   }
 }
@@ -83,7 +84,8 @@ function describeNotification(n: SocialNotification): string {
     case 'WORK_INVITE':
     case 'WORK_ASSIGN':
     case 'WORK_COMMENT':
-    case 'WORK_MENTION': return describeWork(n);
+    case 'WORK_MENTION':
+    case 'WORK_ALERT': return describeWork(n);
     case 'ADMIN_ANNOUNCEMENT': {
       const title = (n.payload?.title as string) || 'Thông báo mới';
       return `Thông báo mới từ Admin: ${title}`;
@@ -112,6 +114,7 @@ function typeIcon(t: NotificationType) {
     case 'WORK_ASSIGN': return UserCheck;
     case 'WORK_COMMENT': return MessageCircle;
     case 'WORK_MENTION': return AtSign;
+    case 'WORK_ALERT': return BellRing;
     case 'ADMIN_ANNOUNCEMENT': return Crown;
     case 'NEW_POST': return Send;
     default: return Bell;
@@ -136,7 +139,8 @@ function typeColor(t: NotificationType): string {
     case 'WORK_INVITE':
     case 'WORK_ASSIGN':
     case 'WORK_COMMENT':
-    case 'WORK_MENTION': return '#5e6ad2';
+    case 'WORK_MENTION':
+    case 'WORK_ALERT': return '#5e6ad2';
     case 'ADMIN_ANNOUNCEMENT': return '#fbbf24';
     default: return '#8a8d91';
   }
@@ -217,7 +221,7 @@ const FILTERS: Array<{ key: string; label: string; types: NotificationType[] | n
   { key: 'people', label: 'Bạn bè', types: ['FRIEND_REQUEST', 'FRIEND_ACCEPT', 'NEW_FOLLOW'] as NotificationType[] },
   { key: 'messages', label: 'Tin nhắn', types: ['NEW_MESSAGE'] as NotificationType[] },
   { key: 'shares', label: 'Chia sẻ', types: ['NOTE_SHARE', 'NOTE_COMMENT', 'NOTE_REPLY', 'NOTE_MENTION', 'HUB_SHARE'] as NotificationType[] },
-  { key: 'work', label: 'CT Work', types: ['WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION'] as NotificationType[] },
+  { key: 'work', label: 'CT Work', types: ['WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION', 'WORK_ALERT'] as NotificationType[] },
   { key: 'admin', label: 'Từ Admin', types: ['ADMIN_ANNOUNCEMENT'] as NotificationType[] },
 ];
 

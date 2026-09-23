@@ -26,6 +26,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bell,
+  BellRing,
   Heart,
   MessageCircle,
   AtSign,
@@ -54,7 +55,7 @@ interface NotificationDropdownProps {
 
 /* ─── CT Work (/work) notifications — English, like the rest of CT Work ─── */
 
-const WORK_TYPES: NotificationType[] = ['WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION'];
+const WORK_TYPES: NotificationType[] = ['WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION', 'WORK_ALERT'];
 const isWorkType = (t: NotificationType) => WORK_TYPES.includes(t);
 
 function describeWork(n: SocialNotification): string {
@@ -67,6 +68,7 @@ function describeWork(n: SocialNotification): string {
     case 'WORK_INVITE': return `${name} added you to ${str(p.workspaceName) || 'a workspace'}`;
     case 'WORK_ASSIGN': return `${name} assigned you ${key}${title ? `: ${title}` : ''}`;
     case 'WORK_COMMENT': return `${name} commented on ${key}${title ? `: ${title}` : ''}`;
+    case 'WORK_ALERT': return `${key}: ${str(p.message) || 'needs your attention'}`;
     default: return `${name} mentioned you in ${key}`;
   }
 }
@@ -121,6 +123,7 @@ function describeNotification(n: SocialNotification): string {
     case 'WORK_ASSIGN':
     case 'WORK_COMMENT':
     case 'WORK_MENTION':
+    case 'WORK_ALERT':
       return describeWork(n);
     case 'ADMIN_ANNOUNCEMENT': {
       const title = (n.payload?.title as string) || 'Thông báo mới';
@@ -151,6 +154,7 @@ function typeIcon(t: NotificationType) {
     case 'WORK_ASSIGN': return UserCheck;
     case 'WORK_COMMENT': return MessageCircle;
     case 'WORK_MENTION': return AtSign;
+    case 'WORK_ALERT': return BellRing;
     default: return Bell;
   }
 }
@@ -173,7 +177,8 @@ function typeIconColor(t: NotificationType): string {
     case 'WORK_INVITE':
     case 'WORK_ASSIGN':
     case 'WORK_COMMENT':
-    case 'WORK_MENTION': return '#5e6ad2'; // CT Work accent
+    case 'WORK_MENTION':
+    case 'WORK_ALERT': return '#5e6ad2'; // CT Work accent
     default: return '#94a3b8';
   }
 }

@@ -112,6 +112,25 @@ export function startCronJobs(): void {
     }
   });
 
+  // CT Work: luật tự động chạy theo lịch + thư gộp email, 08:00 giờ VN.
+  // Thư gộp tự tắt khi WORK_EMAIL_NOTIFICATIONS=false.
+  cron.schedule('10 1 * * *', async () => {
+    try {
+      const { runScheduledRules } = await import('./work/automation.service.js');
+      const runs = await runScheduledRules();
+      if (runs) logger.info('[work] scheduled automation', { runs });
+    } catch (err) {
+      logger.warn('[work] scheduled automation failed', { error: (err as Error).message });
+    }
+    try {
+      const { sendDigests } = await import('./work/notify.js');
+      const n = await sendDigests();
+      if (n) logger.info('[work] digest emails sent', { users: n });
+    } catch (err) {
+      logger.warn('[work] digest emails failed', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // CT Work: số liệu burndown — ghi đè số của "hôm nay" (giờ VN) cho mọi sprint
   // đang chạy, mỗi giờ. Lỡ vài giờ cũng không mất điểm của ngày.
   cron.schedule('5 * * * *', async () => {

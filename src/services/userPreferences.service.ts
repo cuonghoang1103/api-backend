@@ -67,6 +67,7 @@ export const NOTIFY_TYPES = [
   'WORK_ASSIGN',
   'WORK_COMMENT',
   'WORK_MENTION',
+  'WORK_ALERT',
 ] as const;
 export type NotifyType = (typeof NOTIFY_TYPES)[number];
 

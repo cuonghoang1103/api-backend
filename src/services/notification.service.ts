@@ -66,6 +66,8 @@ export const NOTIFICATION_TYPES = [
   'WORK_ASSIGN',
   'WORK_COMMENT',
   'WORK_MENTION',
+  // Luật tự động / nhắc hạn: payload.message là câu hiển thị.
+  'WORK_ALERT',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
@@ -604,7 +606,7 @@ export async function notifyPostRepost(
 export async function notifyWork(args: {
   receiverId: number;
   senderId: number;
-  type: 'WORK_INVITE' | 'WORK_ASSIGN' | 'WORK_COMMENT' | 'WORK_MENTION';
+  type: 'WORK_INVITE' | 'WORK_ASSIGN' | 'WORK_COMMENT' | 'WORK_MENTION' | 'WORK_ALERT';
   entityId: number;
   secondaryEntityId?: number | null;
   payload: Record<string, unknown>;

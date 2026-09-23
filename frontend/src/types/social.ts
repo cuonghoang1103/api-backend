@@ -237,6 +237,7 @@ export type NotificationType =
   | 'WORK_ASSIGN'
   | 'WORK_COMMENT'
   | 'WORK_MENTION'
+  | 'WORK_ALERT'
   // Admin announcement (added 2026-07-09, made a real server-side type on
   // 2026-08-08). entityId = the announcement id, payload.title = its
   // title. Deep-links to /forum/:id.

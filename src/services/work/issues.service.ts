@@ -31,7 +31,7 @@ const actorOf = (userId: number, via: Via = 'USER'): WorkActor => ({ kind: via, 
 
 /** Trường của một thẻ trên board/danh sách — gọn, không mô tả. */
 export const CARD_SELECT = {
-  id: true, number: true, title: true, typeId: true, statusId: true, parentId: true, sprintId: true,
+  id: true, number: true, title: true, typeId: true, statusId: true, parentId: true, sprintId: true, fixVersionId: true,
   priority: true, assigneeId: true, reporterId: true, storyPoints: true, dueDate: true, rank: true, version: true,
   resolvedAt: true, createdAt: true, updatedAt: true,
   labels: { select: { labelId: true } },

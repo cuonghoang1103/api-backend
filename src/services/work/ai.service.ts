@@ -16,7 +16,7 @@
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { prisma } from '../../config/database.js';
-import { AppError, BadRequestError } from '../../middleware/errorHandler.js';
+import { AppError, BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
 import { checkTokenQuota, extractJson, isAiAvailable, llmComplete } from '../interview/llm/index.js';
 import { isProEffective } from '../pro.service.js';
 import { displayName } from './common.js';
@@ -556,3 +556,32 @@ export async function weeklyReport(userId: number, projectId: number, input: { a
   return { report: out.report, facts, quota: await aiQuota(userId) };
 }
 
+
+/**
+ * Release notes cho một version (đợt 6.3). Dữ liệu là danh sách thẻ đã xong
+ * của version — model chỉ nhóm lại và diễn đạt, không được thêm tính năng.
+ * Không tự lưu: người dùng sửa rồi bấm Save (PATCH version.releaseNotes).
+ */
+export async function releaseNotes(userId: number, projectId: number, versionId: number, input: { audience: 'users' | 'team'; language?: 'en' | 'vi' }) {
+  const access = await requireProject(userId, projectId, 'ai.use');
+  const version = await prisma.workVersion.findFirst({ where: { id: versionId, projectId }, select: { name: true, releaseDate: true, description: true } });
+  if (!version) throw new NotFoundError('Version not found');
+  const issues = await prisma.workIssue.findMany({
+    where: { projectId, fixVersionId: versionId, deletedAt: null, type: { level: { gte: 0 } } },
+    orderBy: [{ type: { key: 'asc' } }, { number: 'asc' }],
+    take: 150,
+    select: { number: true, title: true, resolvedAt: true, descriptionText: true, type: { select: { key: true, name: true } } },
+  });
+  const done = issues.filter((i) => i.resolvedAt);
+  if (!done.length) throw new BadRequestError('No finished issues in this version yet', 'WORK_NOTHING_TO_SUMMARIZE');
+  const facts = [
+    `Version ${version.name}${version.releaseDate ? ` (release date ${version.releaseDate.toISOString().slice(0, 10)})` : ''}.${version.description ? ` Description: ${version.description}` : ''}`,
+    `Finished issues (${done.length}):`,
+    ...done.map((i) => `- ${access.key}-${i.number} [${i.type.name}] ${i.title}${i.descriptionText ? ` — ${i.descriptionText.replace(/\s+/g, ' ').slice(0, 200)}` : ''}`),
+    `Not finished (${issues.length - done.length}) — do NOT mention these as shipped.`,
+  ].join('\n');
+  const tone = input.audience === 'users' ? 'end users (plain language, benefits, no issue keys)' : 'the team (keep issue keys, group by type)';
+  const system = `Write release notes for ${tone}. Use ONLY the finished issues listed — never invent features. Markdown with sections such as "New", "Improvements", "Bug fixes" (omit empty sections). ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"notes":"markdown"}`;
+  const out = parseJson(await ask(userId, system, facts, 1800, 'work_digest'), z.object({ notes: z.string() }));
+  return { notes: out.notes, quota: await aiQuota(userId) };
+}

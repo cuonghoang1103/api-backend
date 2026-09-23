@@ -55,6 +55,20 @@ export async function search(userId: number, projectId: number, query: string, o
   return { total, items: rows.map(toCard), offset, limit };
 }
 
+/**
+ * Như compileFor nhưng KHÔNG kiểm quyền người gọi — cho luật tự động chạy
+ * dưới danh nghĩa hệ thống. currentUser() trỏ vào actorUserId (người tạo luật).
+ */
+export async function compileForSystem(projectId: number, query: string, actorUserId: number | null) {
+  const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true } });
+  try {
+    return compileJql(parseJql(query.slice(0, 4000)), await jqlContext(projectId, actorUserId ?? 0, p.key));
+  } catch (err) {
+    if (err instanceof JqlError) throw new AppError(err.message, 400, 'WORK_JQL_ERROR', { position: err.pos });
+    throw err;
+  }
+}
+
 // ─── Bộ lọc đã lưu ───────────────────────────────────────────────
 
 export async function listFilters(userId: number, projectId: number) {

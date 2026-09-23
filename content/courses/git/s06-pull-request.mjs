@@ -869,7 +869,7 @@ jobs:
 <h3>Rules that cost more than they give</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Requiring 3+ approvals</span><span class="v">On a team of four this means everyone reviews everything. Approvals become rubber stamps, which is worse than one careful review.</span></div>
-  <div class="kv"><span class="k">Requiring signed commits everywhere</span><span class="v">Good for a release branch; on every branch it blocks contributors whose setup is not ready and produces confusing rejections (12.4).</span></div>
+  <div class="kv"><span class="k">Requiring signed commits everywhere</span><span class="v">Good for a release branch; on every branch it blocks contributors whose setup is not ready and produces confusing rejections (12.2).</span></div>
   <div class="kv"><span class="k">Requiring linear history and merge commits</span><span class="v">Contradictory. Pick one merge strategy (6.3) and configure the protection to match it.</span></div>
   <div class="kv"><span class="k">Including administrators, with no break-glass</span><span class="v">Correct in principle, but have a documented emergency path — a temporary rule change with an audit-log entry beats someone inventing one at 2 a.m.</span></div>
 </div>
@@ -990,7 +990,7 @@ jobs:
 <h3>Những luật tốn nhiều hơn cho lại</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Bắt buộc 3+ lượt duyệt</span><span class="v">Trong một nhóm bốn người thì nghĩa là ai cũng review mọi thứ. Lượt duyệt thành con dấu cao su, còn tệ hơn một lượt review cẩn thận.</span></div>
-  <div class="kv"><span class="k">Bắt buộc ký commit ở khắp nơi</span><span class="v">Tốt cho một nhánh phát hành; áp lên mọi nhánh thì nó chặn những người đóng góp chưa cài xong và sinh ra những lời từ chối khó hiểu (bài 12.4).</span></div>
+  <div class="kv"><span class="k">Bắt buộc ký commit ở khắp nơi</span><span class="v">Tốt cho một nhánh phát hành; áp lên mọi nhánh thì nó chặn những người đóng góp chưa cài xong và sinh ra những lời từ chối khó hiểu (bài 12.2).</span></div>
   <div class="kv"><span class="k">Bắt buộc lịch sử tuyến tính VÀ commit hợp nhất</span><span class="v">Mâu thuẫn với nhau. Hãy chọn một chiến lược merge (bài 6.3) và cấu hình bảo vệ cho khớp với nó.</span></div>
   <div class="kv"><span class="k">Áp cả cho quản trị viên mà không có cửa thoát hiểm</span><span class="v">Đúng về nguyên tắc, nhưng phải có một đường khẩn cấp được ghi lại — một lần đổi luật tạm thời có dòng trong nhật ký kiểm toán vẫn hơn việc ai đó tự nghĩ ra một đường lúc 2 giờ sáng.</span></div>
 </div>

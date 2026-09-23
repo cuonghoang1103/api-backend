@@ -9,6 +9,7 @@
  * Mục đang mở chỉ đổi NỀN, không đổi màu nhấn — màu nhấn dành cho hành động.
  */
 import { useEffect, useState } from 'react';
+import type React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowUpRight, ChevronRight, LogOut, PanelLeftClose, Search } from 'lucide-react';
@@ -66,7 +67,10 @@ export default function AdminSidebar({
     <div className="flex h-full w-full flex-col">
       {/* Không gian làm việc */}
       <div className="flex h-12 shrink-0 items-center gap-2 px-3">
-        <div className="flex h-[22px] w-[22px] items-center justify-center rounded-[5px] bg-[var(--a-text)] text-[11px] font-semibold text-[var(--a-bg)]">
+        <div
+          className="flex h-[22px] w-[22px] items-center justify-center rounded-[6px] text-[11px] font-semibold text-white"
+          style={{ background: 'linear-gradient(140deg, var(--a-accent), #4f5ae0)' }}
+        >
           C
         </div>
         <div className="min-w-0 flex-1 leading-tight">
@@ -98,7 +102,11 @@ export default function AdminSidebar({
         {ADMIN_NAV.map((g) => {
           const collapsed = g.label ? !!gap[g.id] : false;
           return (
-            <div key={g.id} className={g.label ? 'mt-3' : ''}>
+            <div
+              key={g.id}
+              className={g.label ? 'mt-3' : ''}
+              style={g.hue ? ({ '--n-hue': g.hue } as React.CSSProperties) : undefined}
+            >
               {g.label && (
                 <button
                   onClick={() => toggle(g.id)}

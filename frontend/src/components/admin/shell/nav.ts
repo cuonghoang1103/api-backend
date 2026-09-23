@@ -34,6 +34,8 @@ export interface AdminNavItem {
 export interface AdminNavGroup {
   id: string;
   label: string | null;
+  /** Biến màu của nhóm (admin.css) — biểu tượng trong nhóm mang hue này. */
+  hue?: string;
   items: AdminNavItem[];
 }
 
@@ -50,6 +52,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   {
     id: 'learning',
     label: 'Learning',
+    hue: 'var(--n-learning)',
     items: [
       { label: 'Courses', href: '/admin/courses', icon: BookOpen, keywords: 'khoá học quản lý khoá học' },
       { label: 'Course categories', href: '/admin/course-categories', icon: Tag, keywords: 'danh mục khoá học' },
@@ -66,6 +69,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   {
     id: 'commerce',
     label: 'Commerce',
+    hue: 'var(--n-commerce)',
     items: [
       { label: 'Revenue', href: '/admin/commerce', icon: TrendingUp, keywords: 'thương mại doanh thu đối soát chuyển khoản duyệt key ngân hàng' },
       { label: 'Shop', href: '/admin/shop', icon: ShoppingBag, keywords: 'quản lý shop sản phẩm' },
@@ -81,6 +85,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   {
     id: 'content',
     label: 'Content',
+    hue: 'var(--n-content)',
     items: [
       { label: 'Posts', href: '/admin/posts', icon: FileText, keywords: 'bài viết quản lý posts' },
       { label: 'Tech Trends', href: '/admin/tech-trends', icon: Newspaper, keywords: 'blog bài báo tin công nghệ' },
@@ -101,6 +106,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   {
     id: 'people',
     label: 'People',
+    hue: 'var(--n-people)',
     items: [
       { label: 'Users', href: '/admin/users', icon: Users, keywords: 'người dùng quản lý users tài khoản' },
       { label: 'Reports', href: '/admin/reports', icon: AlertTriangle, keywords: 'báo cáo vi phạm' },
@@ -110,6 +116,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   {
     id: 'system',
     label: 'System',
+    hue: 'var(--n-system)',
     items: [
       { label: 'Traffic', href: '/admin/analytics', icon: Activity, keywords: 'lượt truy cập analytics' },
       { label: 'AI analytics', href: '/admin/ai-analytics', icon: Sparkles, keywords: 'ai chat analytics thống kê' },

@@ -22,31 +22,59 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 .admin-root {
-  --a-bg: #0a0a0b;               /* nền cửa sổ + sidebar */
-  --a-panel: #101012;            /* khung nội dung */
-  --a-raised: #161619;           /* ô nhập, menu nổi, ⌘K */
-  --a-hover: rgba(255, 255, 255, 0.045);
-  --a-active: rgba(255, 255, 255, 0.075);
-  --a-border: rgba(255, 255, 255, 0.07);
-  --a-border-strong: rgba(255, 255, 255, 0.12);
-  --a-text: #e6e6e9;
-  --a-text-2: #a0a0a8;
-  --a-text-3: #6c6c74;
-  --a-accent: #6470db;           /* một màu nhấn duy nhất, dùng dè sẻn */
-  --a-accent-hover: #7580e6;
-  --a-accent-text: #a3aaf2;      /* chữ màu nhấn trên nền tối */
-  --a-accent-soft: rgba(100, 112, 219, 0.14);
-  --a-accent-border: rgba(100, 112, 219, 0.45);
-  --a-green: #4cb782;
-  --a-yellow: #d9b44a;
-  --a-orange: #e8875a;
-  --a-red: #e5645f;
-  --a-blue: #4ea7fc;
-  --a-radius: 6px;
-  --a-radius-lg: 8px;
+  /* ── Mặt nền: xám ngả xanh, KHÔNG đen tuyền ──────────────────────────
+     Bản đầu (23/09 sáng) dùng #0a0a0b/#101012 — người dùng xem trên máy
+     thật và nói thẳng "màu đen all trông xấu". Đen tuyền làm mọi lớp dính
+     vào nhau: không thấy được đâu là nền cửa sổ, đâu là khung nội dung,
+     đâu là ô nhập. Bảng dưới ngả xanh nhẹ (hue ~230) và giãn ra 4 nấc
+     sáng rõ, nên chiều sâu đọc được mà vẫn là giao diện tối của công cụ. */
+  --a-bg: #0f1116;               /* nền cửa sổ + sidebar */
+  --a-panel: #15171d;            /* khung nội dung */
+  --a-raised: #1c1f27;           /* ô nhập, menu nổi, ⌘K */
+  --a-raised-2: #232733;         /* hàng được chọn, chip */
+  --a-hover: rgba(255, 255, 255, 0.05);
+  --a-active: rgba(255, 255, 255, 0.085);
+  --a-border: rgba(255, 255, 255, 0.085);
+  --a-border-strong: rgba(255, 255, 255, 0.15);
+  --a-text: #e9ebf2;
+  --a-text-2: #a7adbb;
+  --a-text-3: #737b8a;
 
-  /* Biến giao diện chung của site — trong admin trỏ về bảng màu admin, để
-     mọi thứ đang viết bằng var(--text-primary)/var(--border-color) theo. */
+  /* Màu nhấn — chàm sáng hơn bản cũ để nổi trên nền ngả xanh */
+  --a-accent: #6e7bf2;
+  --a-accent-hover: #808cf7;
+  --a-accent-text: #a9b2fb;
+  --a-accent-soft: rgba(110, 123, 242, 0.16);
+  --a-accent-border: rgba(110, 123, 242, 0.5);
+
+  /* Trạng thái (cố định, KHÔNG dùng làm màu chuỗi dữ liệu) */
+  --a-green: #0ca30c;
+  --a-yellow: #fab219;
+  --a-orange: #ec835a;
+  --a-red: #d03b3b;
+  --a-blue: #3987e5;
+
+  /* ── Màu cho biểu đồ ──────────────────────────────────────────────
+     Bộ 6 hue đã KIỂM bằng scripts/validate_palette.js của bộ kỹ năng
+     dataviz trên đúng nền #15171d: dải sáng, sàn chroma, tách mù màu
+     (ΔE nhỏ nhất 8.4 protan), sàn mắt thường (19.3) và tương phản ≥3:1 —
+     tất cả PASS. Đổi hue thì phải chạy lại bộ kiểm, đừng ước lượng. */
+  --c-1: #3987e5;   /* xanh dương — lượt xem */
+  --c-2: #d95926;   /* cam */
+  --c-3: #199e70;   /* lục lam — doanh thu */
+  --c-4: #c98500;   /* vàng */
+  --c-5: #d55181;   /* hồng sen */
+  --c-6: #9085e9;   /* tím — AI */
+  --c-grid: rgba(255, 255, 255, 0.07);
+
+  /* Hue của từng nhóm trong sidebar — xem AdminSidebar/nav.ts */
+  --n-learning: #3987e5;
+  --n-commerce: #199e70;
+  --n-content: #9085e9;
+  --n-people: #ec835a;
+  --n-system: #c98500;
+
+  /* Biến giao diện chung của site — trong admin trỏ về bảng màu admin */
   --text-primary: var(--a-text);
   --text-secondary: var(--a-text-2);
   --text-muted: var(--a-text-3);
@@ -61,6 +89,9 @@
   --bg-overlay: var(--a-raised);
   --bg-glass: var(--a-raised);
 
+  --a-radius: 6px;
+  --a-radius-lg: 8px;
+
   background: var(--a-bg);
   color: var(--a-text);
   font-family: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
@@ -74,7 +105,7 @@
 .admin-root table td,
 .admin-root table th { font-variant-numeric: tabular-nums; }
 
-.admin-root ::selection { background: rgba(100, 112, 219, 0.35); }
+.admin-root ::selection { background: rgba(110, 123, 242, 0.38); }
 
 /* Thanh cuộn mảnh, không giành chỗ của nội dung. */
 .admin-root * { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.12) transparent; }
@@ -109,7 +140,7 @@
 }
 .admin-root .bg-darkcard { background-color: var(--a-panel); }
 .admin-root .bg-darkbg { background-color: var(--a-bg); }
-.admin-root .bg-darksurface { background-color: var(--a-raised); }
+.admin-root .bg-darksurface { background-color: var(--a-raised-2); }
 .admin-root [class^="bg-darkcard/"],
 .admin-root [class*=" bg-darkcard/"] { background-color: var(--a-panel); }
 .admin-root [class^="bg-darkbg/"],
@@ -166,7 +197,7 @@
 .admin-root [class^="bg-neon-indigo/"],
 .admin-root [class*=" bg-neon-indigo/"] { background-color: var(--a-accent-soft); }
 .admin-root [class*="hover:bg-neon-violet/"]:hover,
-.admin-root [class*="hover:bg-neon-indigo/"]:hover { background-color: rgba(100, 112, 219, 0.2); }
+.admin-root [class*="hover:bg-neon-indigo/"]:hover { background-color: rgba(110, 123, 242, 0.24); }
 .admin-root [class^="border-neon-violet"],
 .admin-root [class*=" border-neon-violet"],
 .admin-root [class^="border-neon-indigo"],
@@ -174,7 +205,7 @@
 .admin-root [class*="focus:border-neon-violet"]:focus,
 .admin-root [class*="focus:border-neon-indigo"]:focus,
 .admin-root [class*="focus-within:border-neon-violet"]:focus-within { border-color: var(--a-accent-border); }
-.admin-root [class*="focus:ring-neon-violet"]:focus { --tw-ring-color: rgba(100, 112, 219, 0.35); }
+.admin-root [class*="focus:ring-neon-violet"]:focus { --tw-ring-color: rgba(110, 123, 242, 0.4); }
 .admin-root [class*="hover:text-neon-violet"]:hover { color: var(--a-accent-text); }
 .admin-root [class*="hover:border-neon-violet"]:hover { border-color: var(--a-accent-border); }
 
@@ -211,18 +242,34 @@
 .admin-root .a-pop { animation: a-pop-in 120ms cubic-bezier(0.2, 0, 0, 1); }
 @media (prefers-reduced-motion: reduce) { .admin-root .a-pop { animation: none; } }
 
-/* Hàng trong sidebar */
+/* Hàng trong sidebar.
+   Biểu tượng mang HUE CỦA NHÓM (--n-*, đặt trên khối nhóm): năm mảng việc
+   phân biệt được bằng màu khi mắt lướt dọc, mà chữ vẫn một màu nên danh sách
+   không thành cầu vồng. Mục đang mở: nền nhạt + một vạch màu nhấn bên trái. */
 .admin-root .a-nav-item {
+  position: relative;
   display: flex; align-items: center; gap: 9px;
   height: 28px; padding: 0 8px; border-radius: 6px;
   font-size: 13px; line-height: 1; color: var(--a-text-2);
   white-space: nowrap;
 }
 .admin-root .a-nav-item:hover { background: var(--a-hover); color: var(--a-text); }
-.admin-root .a-nav-item[aria-current="page"] { background: var(--a-active); color: var(--a-text); }
-.admin-root .a-nav-item svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--a-text-3); }
-.admin-root .a-nav-item:hover svg,
-.admin-root .a-nav-item[aria-current="page"] svg { color: var(--a-text-2); }
+.admin-root .a-nav-item[aria-current="page"] {
+  background: linear-gradient(90deg, var(--a-accent-soft), rgba(255, 255, 255, 0.04));
+  color: var(--a-text);
+  font-weight: 500;
+}
+.admin-root .a-nav-item[aria-current="page"]::before {
+  content: ''; position: absolute; left: -2px; top: 6px; bottom: 6px;
+  width: 2px; border-radius: 2px; background: var(--a-accent);
+}
+.admin-root .a-nav-item svg {
+  width: 15px; height: 15px; flex-shrink: 0;
+  color: var(--n-hue, var(--a-text-3));
+  opacity: 0.85;
+}
+.admin-root .a-nav-item:hover svg { opacity: 1; }
+.admin-root .a-nav-item[aria-current="page"] svg { color: var(--a-accent-text); opacity: 1; }
 
 /* Nút phẳng dùng chung */
 .admin-root .a-btn {
@@ -251,3 +298,51 @@
 }
 .admin-root main tbody tr { border-color: var(--a-border); }
 .admin-root main tbody tr:hover { background-color: var(--a-hover); }
+
+/* ── Biểu đồ ────────────────────────────────────────────────────────────
+   Cột mảnh, bo 3px ở đầu số liệu (đầu kia neo vào đường 0), cách nhau 2px
+   bằng chính màu nền — theo mark spec của bộ kỹ năng dataviz. */
+.admin-root .a-bar {
+  border-radius: 3px 3px 0 0;
+  transition: filter 120ms ease;
+}
+.admin-root .a-bar-col:hover .a-bar { filter: brightness(1.35); }
+
+/* Chip trạng thái/danh mục trong các trang cũ: nền nhạt theo màu chữ của
+   chính nó, viền mảnh — thay vì viên thuốc bão hoà. */
+.admin-root main .rounded-full[class*="bg-"][class*="/1"],
+.admin-root main .rounded-full[class*="bg-"][class*="/2"] {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Bảng: hàng tiêu đề chìm hẳn xuống, thân bảng có nền riêng một nấc so với
+   khung để mắt bám được cột. */
+.admin-root main thead tr { background: rgba(255, 255, 255, 0.022); }
+
+/* ── Chiều sâu cho các trang cũ ────────────────────────────────────────
+   Một vệt sáng rất nhẹ ở mép trên mỗi vùng (2% trắng, tắt dần trong 120px)
+   thay cho bóng đổ: mắt vẫn đọc được "đây là một mặt phẳng riêng" mà không
+   quay lại kiểu thẻ nổi. */
+.admin-root main .bg-darkcard {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0) 120px);
+}
+
+/* Hàng bảng/danh sách: nền rê chuột ngả về màu nhấn thay vì trắng đục */
+.admin-root main tbody tr:hover,
+.admin-root main .divide-darkborder > *:hover {
+  background-color: rgba(110, 123, 242, 0.06);
+}
+
+/* Ô nhập lõm xuống một nấc so với khung, viền sáng lên khi focus */
+.admin-root main input:focus,
+.admin-root main textarea:focus,
+.admin-root main select:focus {
+  border-color: var(--a-accent-border);
+  box-shadow: 0 0 0 3px rgba(110, 123, 242, 0.12);
+}
+
+/* Thanh tiến trình của trang cũ (h-1/h-1.5/h-2 + rounded-full) giữ màu thật
+   của nó; lớp phủ gradient ở trên KHÔNG được chạm vào chúng. */
+.admin-root main .rounded-full.h-1,
+.admin-root main .rounded-full.h-1\.5,
+.admin-root main .rounded-full.h-2 { background-image: none; }

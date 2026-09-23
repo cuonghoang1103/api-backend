@@ -13,7 +13,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, Inbox } from 'lucide-react';
+import { ArrowUpRight, Activity, BarChart3, FileText, Inbox, Sparkles, TrendingUp, Wallet } from 'lucide-react';
 import { api, commerceAdminApi, type CommerceDashboard } from '@/lib/api';
 import { BIEU_TUONG_TIN } from '@/components/admin/bieuTuongTin';
 import { EmptyState, Metric, PageHeader, Section, Status, relTime, type Tone } from '@/components/admin/ui';
@@ -41,22 +41,60 @@ function delta(a: number, b: number): string | null {
 
 const POST_TONE: Record<string, Tone> = { PUBLISHED: 'green', DRAFT: 'gray', SCHEDULED: 'blue', ARCHIVED: 'gray' };
 
-/** Cột mảnh một màu — đủ để thấy xu hướng, không cần thư viện biểu đồ. */
-function Bars({ values, labels, format }: { values: number[]; labels: string[]; format: (v: number) => string }) {
-  const max = Math.max(1, ...values);
+/** Cột mảnh MỘT MÀU cho mỗi biểu đồ (một chuỗi dữ liệu = một hue, không tô
+ *  cầu vồng), bo 3px ở đầu trên, cách nhau 2px, lưới ngang mờ phía sau, mốc
+ *  lớn nhất ghi ở góc, tooltip khi rê. Màu lấy từ bộ hue đã kiểm mù màu
+ *  trong admin.css. Chuỗi toàn số 0 thì nói thẳng là chưa có số liệu, chứ
+ *  không vẽ một khung lưới trống cho người xem tự đoán. */
+function Bars({
+  values, labels, format, color, emptyLabel,
+}: {
+  values: number[];
+  labels: string[];
+  format: (v: number) => string;
+  color: string;
+  emptyLabel: string;
+}) {
+  const max = Math.max(...values, 0);
+  if (max <= 0) {
+    return (
+      <div className="flex h-[108px] items-center justify-center text-[12.5px] text-[var(--a-text-3)]">
+        {emptyLabel}
+      </div>
+    );
+  }
   return (
-    <div className="flex h-24 items-end gap-[3px] pt-3" role="img" aria-label="Daily chart">
-      {values.map((v, i) => (
-        <div key={i} className="group relative flex h-full flex-1 items-end">
-          <div
-            className="w-full rounded-[2px] bg-[var(--a-text-3)] opacity-60 group-hover:bg-[var(--a-accent)] group-hover:opacity-100"
-            style={{ height: `${Math.max(v > 0 ? 3 : 1, (v / max) * 100)}%` }}
-          />
-          <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1.5 hidden -translate-x-1/2 whitespace-nowrap rounded-[5px] border border-[var(--a-border-strong)] bg-[var(--a-raised)] px-2 py-1 text-[11.5px] tabular-nums text-[var(--a-text)] group-hover:block">
-            {labels[i]} · {format(v)}
+    <div className="relative pt-3">
+      {/* lưới ngang: 4 vạch mờ, lùi hẳn ra sau số liệu */}
+      <div className="pointer-events-none absolute inset-x-0 top-3 h-24">
+        {[0, 33, 66, 100].map((t) => (
+          <div key={t} className="absolute inset-x-0 border-t border-[var(--c-grid)]" style={{ top: `${t}%` }} />
+        ))}
+        <span className="absolute -top-[9px] right-0 bg-[var(--a-panel)] pl-1.5 text-[11px] tabular-nums text-[var(--a-text-3)]">
+          {format(max)}
+        </span>
+      </div>
+      <div className="relative flex h-24 items-end gap-[2px]" role="img" aria-label="Daily chart">
+        {values.map((v, i) => (
+          <div key={i} className="a-bar-col group relative flex h-full flex-1 items-end">
+            <div
+              className="a-bar w-full"
+              style={{
+                height: `${Math.max(v > 0 ? 4 : 1.5, (v / max) * 100)}%`,
+                // màu đặc trước, chuyển sắc sau: trình duyệt cũ không hiểu
+                // color-mix() thì bỏ qua dòng thứ hai và cột vẫn có màu.
+                backgroundColor: v > 0 ? color : 'var(--a-border-strong)',
+                backgroundImage: v > 0
+                  ? `linear-gradient(180deg, ${color}, color-mix(in srgb, ${color} 62%, transparent))`
+                  : undefined,
+              }}
+            />
+            <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1.5 hidden -translate-x-1/2 whitespace-nowrap rounded-[6px] border border-[var(--a-border-strong)] bg-[var(--a-raised)] px-2 py-1 text-[11.5px] tabular-nums text-[var(--a-text)] shadow-lg group-hover:block">
+              <span className="text-[var(--a-text-3)]">{labels[i]}</span> · {format(v)}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -130,22 +168,26 @@ export default function AdminDashboard() {
       />
 
       {/* Dải chỉ số */}
-      <div className="grid grid-cols-2 border-y border-[var(--a-border)] sm:grid-cols-3 lg:grid-cols-6 [&>*]:border-[var(--a-border)] [&>*:not(:first-child)]:lg:border-l">
+      <div className="grid grid-cols-2 border-y border-[var(--a-border)] sm:grid-cols-3 xl:grid-cols-6 [&>*]:border-[var(--a-border)] xl:[&>*:not(:first-child)]:border-l">
         <Metric
           label="Visitors today"
           value={traffic ? n(traffic.today.visitors) : '—'}
+          tone="var(--c-1)"
           hint={traffic ? delta(traffic.today.visitors, traffic.yesterday.visitors) ?? `${n(traffic.online)} online` : undefined}
+          up={traffic && traffic.yesterday.visitors ? traffic.today.visitors >= traffic.yesterday.visitors : undefined}
         />
-        <Metric label="Page views today" value={traffic ? n(traffic.today.views) : '—'} hint={traffic ? `${n(traffic.last7d.views)} last 7 days` : undefined} />
-        <Metric label="Revenue today" value={commerce ? vnd(commerce.tomTat.homNay.tienThat) : '—'} hint={commerce ? `${vnd(commerce.tomTat.bayNgay.tienThat)} last 7 days` : undefined} />
-        <Metric label="Revenue · 30 days" value={commerce ? vnd(commerce.tomTat.baMuoiNgay.tienThat) : '—'} hint={commerce ? `${n(commerce.thanhToan.daTra)} paid orders` : undefined} />
-        <Metric label="Users" value={n(totals.users)} hint={`${n(totals.posts)} posts`} />
-        <Metric label="AI conversations" value={n(chat.totalSessions)} hint={`${n(chat.totalMessages)} messages`} />
+        <Metric label="Page views today" value={traffic ? n(traffic.today.views) : '—'} tone="var(--c-1)" hint={traffic ? `${n(traffic.last7d.views)} last 7 days` : undefined} />
+        <Metric label="Revenue today" value={commerce ? vnd(commerce.tomTat.homNay.tienThat) : '—'} tone="var(--c-3)" hint={commerce ? `${vnd(commerce.tomTat.bayNgay.tienThat)} last 7 days` : undefined} />
+        <Metric label="Revenue · 30 days" value={commerce ? vnd(commerce.tomTat.baMuoiNgay.tienThat) : '—'} tone="var(--c-3)" hint={commerce ? `${n(commerce.thanhToan.daTra)} paid orders` : undefined} />
+        <Metric label="Users" value={n(totals.users)} tone="var(--c-2)" hint={`${n(totals.posts)} posts`} />
+        <Metric label="AI conversations" value={n(chat.totalSessions)} tone="var(--c-6)" hint={`${n(chat.totalMessages)} messages`} />
       </div>
 
       <div className="mt-8 grid gap-x-10 gap-y-8 lg:grid-cols-2">
         {/* Việc chờ */}
         <Section
+          icon={Inbox}
+          tone="var(--a-orange)"
           title={<>Needs attention{pendingCount > 0 && <span className="ml-1.5 tabular-nums text-[var(--a-text-3)]">{pendingCount}</span>}</>}
           action={<Link href="/admin/thong-bao" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">Inbox</Link>}
         >
@@ -200,6 +242,8 @@ export default function AdminDashboard() {
 
         {/* Bài viết mới */}
         <Section
+          icon={FileText}
+          tone="var(--c-6)"
           title="Recent posts"
           action={<Link href="/admin/posts" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">All posts</Link>}
         >
@@ -225,6 +269,8 @@ export default function AdminDashboard() {
 
         {/* Doanh thu 30 ngày */}
         <Section
+          icon={Wallet}
+          tone="var(--c-3)"
           title="Revenue · last 30 days"
           action={<Link href="/admin/commerce" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">Details</Link>}
         >
@@ -234,6 +280,8 @@ export default function AdminDashboard() {
                 values={rev.map((d) => d.tienThat)}
                 labels={rev.map((d) => new Date(d.ngay).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }))}
                 format={(v) => `${nf.format(v)} ₫`}
+                color="var(--c-3)"
+                emptyLabel="Chưa có doanh thu trong 30 ngày"
               />
               <div className="mt-2 flex justify-between text-[11.5px] tabular-nums text-[var(--a-text-3)]">
                 <span>{new Date(rev[0].ngay).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
@@ -250,6 +298,8 @@ export default function AdminDashboard() {
 
         {/* Lượt xem 30 ngày */}
         <Section
+          icon={TrendingUp}
+          tone="var(--c-1)"
           title="Page views · last 30 days"
           action={<Link href="/admin/analytics" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">Traffic</Link>}
         >
@@ -259,6 +309,8 @@ export default function AdminDashboard() {
                 values={daily.map((d) => d.views)}
                 labels={daily.map((d) => new Date(d.day).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }))}
                 format={(v) => `${nf.format(v)} views`}
+                color="var(--c-1)"
+                emptyLabel="Chưa có lượt xem nào"
               />
               <div className="mt-2 flex justify-between text-[11.5px] tabular-nums text-[var(--a-text-3)]">
                 <span>{new Date(daily[0].day).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
@@ -272,7 +324,7 @@ export default function AdminDashboard() {
         </Section>
 
         {/* Trang được xem nhiều */}
-        <Section title="Top pages · 7 days">
+        <Section icon={BarChart3} tone="var(--c-4)" title="Top pages · 7 days">
           {topPages.length === 0 ? (
             loaded ? <EmptyState title="No data" /> : <SkeletonRows />
           ) : (
@@ -282,8 +334,8 @@ export default function AdminDashboard() {
                 return (
                   <li key={p.path} className="relative flex h-9 items-center gap-3 border-b border-[var(--a-border)]">
                     <span
-                      className="absolute inset-y-[7px] left-0 rounded-[3px] bg-white/[0.035]"
-                      style={{ width: `${(p.views / max) * 100}%` }}
+                      className="absolute inset-y-[6px] left-0 rounded-[3px]"
+                      style={{ width: `${(p.views / max) * 100}%`, backgroundColor: 'rgba(201, 133, 0, 0.18)' }}
                       aria-hidden
                     />
                     <a
@@ -304,6 +356,8 @@ export default function AdminDashboard() {
 
         {/* AI chat */}
         <Section
+          icon={Sparkles}
+          tone="var(--c-6)"
           title="AI assistant"
           action={<Link href="/admin/ai-analytics" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">Analytics</Link>}
         >
@@ -311,7 +365,6 @@ export default function AdminDashboard() {
             {[
               ['Conversations', n(chat.totalSessions)],
               ['Messages', n(chat.totalMessages)],
-              ['Positive feedback', typeof chat.positiveFeedbackPercent === 'number' ? `${chat.positiveFeedbackPercent}%` : '—'],
               ['Avg. response time', chat.avgResponseTimeMs ? `${nf.format(Math.round(chat.avgResponseTimeMs))} ms` : '—'],
             ].map(([k, v]) => (
               <div key={k} className="flex h-9 items-center justify-between border-b border-[var(--a-border)]">
@@ -319,6 +372,24 @@ export default function AdminDashboard() {
                 <dd className="tabular-nums text-[var(--a-text)]">{v}</dd>
               </div>
             ))}
+            {/* Tỉ lệ hài lòng: một thanh mảnh nói nhanh hơn con số đứng một mình */}
+            <div className="flex h-9 items-center justify-between gap-3 border-b border-[var(--a-border)]">
+              <dt className="shrink-0 text-[var(--a-text-3)]">Positive feedback</dt>
+              <dd className="flex min-w-0 flex-1 items-center justify-end gap-2.5">
+                <span className="h-1.5 w-full max-w-[140px] overflow-hidden rounded-full bg-white/[0.06]">
+                  <span
+                    className="block h-full rounded-full"
+                    style={{
+                      width: `${Math.min(100, Math.max(0, Number(chat.positiveFeedbackPercent) || 0))}%`,
+                      background: 'var(--a-green)',
+                    }}
+                  />
+                </span>
+                <span className="w-10 shrink-0 text-right tabular-nums text-[var(--a-text)]">
+                  {typeof chat.positiveFeedbackPercent === 'number' ? `${chat.positiveFeedbackPercent}%` : '—'}
+                </span>
+              </dd>
+            </div>
           </dl>
         </Section>
       </div>

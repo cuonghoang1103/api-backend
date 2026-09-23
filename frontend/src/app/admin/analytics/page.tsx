@@ -134,12 +134,27 @@ export default function AdminAnalyticsPage() {
             Chưa có dữ liệu — số liệu bắt đầu được ghi từ lúc tính năng này lên prod.
           </p>
         ) : (
-          <div className="flex h-40 items-end gap-1">
+          /* ⚠️ Cột phải CAO BẰNG CẢ KHUNG (`h-full items-end`) thì `height: %`
+             của thanh bên trong mới có gì để tính. Bản cũ để cột là
+             `flex-1` trong một hàng `items-end`: chiều cao cột bằng chiều cao
+             NỘI DUNG = 0, nên phần trăm của thanh cũng ra 0 — biểu đồ này
+             chưa từng vẽ ra gì, chỉ là một khung trống (bắt 23/09/2026). */
+          <div className="relative flex h-40 items-end gap-[2px]">
             {daily.map((d) => (
-              <div key={d.day} className="group relative flex-1" title={`${d.day}: ${d.views} lượt · ${d.visitors} khách`}>
+              <div
+                key={d.day}
+                className="a-bar-col group relative flex h-full flex-1 items-end"
+                title={`${d.day}: ${d.views} lượt · ${d.visitors} khách`}
+              >
                 <div
-                  className="w-full rounded-t bg-neon-violet/70 transition-all group-hover:bg-neon-violet"
-                  style={{ height: `${Math.max(2, (d.views / max) * 100)}%` }}
+                  className="a-bar w-full"
+                  style={{
+                    height: `${Math.max(d.views > 0 ? 4 : 1.5, (d.views / max) * 100)}%`,
+                    backgroundColor: d.views > 0 ? 'var(--c-1)' : 'var(--a-border-strong)',
+                    backgroundImage: d.views > 0
+                      ? 'linear-gradient(180deg, var(--c-1), color-mix(in srgb, var(--c-1) 62%, transparent))'
+                      : undefined,
+                  }}
                 />
               </div>
             ))}

@@ -28,10 +28,14 @@ const MAX_MEMBERS_PER_WORKSPACE = 200;
 
 // ─── Không gian ──────────────────────────────────────────────────
 
+/** Đoạn đường dẫn tĩnh dưới /work — không gian mang tên này sẽ bị trang tĩnh che mất. */
+const RESERVED_SLUGS = new Set(['invite', 'share', 'developer', 'new', 'settings', 'api', 'me']);
+
 async function uniqueSlug(name: string): Promise<string> {
   const base = slugify(name, 40);
   for (let i = 0; i < 50; i++) {
     const slug = i === 0 ? base : `${base}-${i + 1}`;
+    if (RESERVED_SLUGS.has(slug)) continue;
     const hit = await prisma.workSpace.findUnique({ where: { slug }, select: { id: true } });
     if (!hit) return slug;
   }

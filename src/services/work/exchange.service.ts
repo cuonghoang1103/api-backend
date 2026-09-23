@@ -101,25 +101,38 @@ function colName(i: number): string {
   return s;
 }
 
-/** File .xlsx tối giản nhưng hợp lệ: một sheet, hàng tiêu đề in đậm + cố định. */
+/** File .xlsx của danh sách thẻ. */
 export function toXlsx(rows: ExportRow[], sheetName = 'Issues'): Buffer {
+  const widths = COLUMNS.map(([k]) => (k === 'summary' ? 50 : k === 'description' ? 60 : 16));
+  return xlsxTable(COLUMNS.map(([, h]) => h), rows.map((r) => COLUMNS.map(([k]) => r[k])), sheetName, widths);
+}
+
+/**
+ * File .xlsx tối giản nhưng hợp lệ từ một bảng bất kỳ: một sheet, hàng tiêu
+ * đề in đậm + cố định + bộ lọc. `pre` = vài dòng tóm tắt đặt TRÊN bảng.
+ */
+export function xlsxTable(headers: string[], data: unknown[][], sheetName = 'Sheet1', widths?: number[], pre: string[][] = []): Buffer {
   const cell = (ref: string, v: unknown, style = 0) => {
     if (typeof v === 'number' && Number.isFinite(v)) return `<c r="${ref}"${style ? ` s="${style}"` : ''}><v>${v}</v></c>`;
     const s = v === null || v === undefined ? '' : String(v);
     return s ? `<c r="${ref}" t="inlineStr"${style ? ` s="${style}"` : ''}><is><t xml:space="preserve">${xmlEsc(s)}</t></is></c>` : '';
   };
-  const header = `<row r="1">${COLUMNS.map(([, h], i) => cell(`${colName(i)}1`, h, 1)).join('')}</row>`;
-  const body = rows.map((r, ri) => `<row r="${ri + 2}">${COLUMNS.map(([k], ci) => cell(`${colName(ci)}${ri + 2}`, r[k])).join('')}</row>`).join('');
-  const widths = COLUMNS.map(([k], i) => `<col min="${i + 1}" max="${i + 1}" width="${k === 'summary' ? 50 : k === 'description' ? 60 : 16}" customWidth="1"/>`).join('');
+  const off = pre.length ? pre.length + 1 : 0; // chừa một dòng trống sau phần tóm tắt
+  const top = pre.map((line, ri) => `<row r="${ri + 1}">${line.map((v, ci) => cell(`${colName(ci)}${ri + 1}`, v, ci === 0 ? 1 : 0)).join('')}</row>`).join('');
+  const hr = off + 1;
+  const header = `<row r="${hr}">${headers.map((h, i) => cell(`${colName(i)}${hr}`, h, 1)).join('')}</row>`;
+  const body = data.map((r, ri) => `<row r="${hr + ri + 1}">${r.map((v, ci) => cell(`${colName(ci)}${hr + ri + 1}`, v)).join('')}</row>`).join('');
+  const cols = headers.map((_, i) => `<col min="${i + 1}" max="${i + 1}" width="${widths?.[i] ?? 18}" customWidth="1"/>`).join('');
+  const last = colName(headers.length - 1);
   const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${widths}</cols><sheetData>${header}${body}</sheetData><autoFilter ref="A1:${colName(COLUMNS.length - 1)}${rows.length + 1}"/></worksheet>`;
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="${hr}" topLeftCell="A${hr + 1}" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${cols}</cols><sheetData>${top}${header}${body}</sheetData><autoFilter ref="A${hr}:${last}${hr + data.length}"/></worksheet>`;
   const zip = new AdmZip();
   zip.addFile('[Content_Types].xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`));
   zip.addFile('_rels/.rels', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`));
   zip.addFile('xl/workbook.xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${xmlEsc(sheetName.slice(0, 31))}" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">'${xmlEsc(sheetName.slice(0, 31))}'!$A$1:$${colName(COLUMNS.length - 1)}$${rows.length + 1}</definedName></definedNames></workbook>`));
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${xmlEsc(sheetName.slice(0, 31))}" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">'${xmlEsc(sheetName.slice(0, 31))}'!$A$${hr}:$${last}$${hr + data.length}</definedName></definedNames></workbook>`));
   zip.addFile('xl/_rels/workbook.xml.rels', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`));
   zip.addFile('xl/styles.xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -128,8 +141,18 @@ export function toXlsx(rows: ExportRow[], sheetName = 'Issues'): Buffer {
   return zip.toBuffer();
 }
 
-/** PDF khổ A4 ngang: bảng gọn (mã, loại, trạng thái, người làm, hạn, tiêu đề). */
+/** PDF danh sách thẻ: bảng gọn (mã, loại, trạng thái, người làm, hạn, tiêu đề). */
 export function toPdf(title: string, subtitle: string, rows: ExportRow[]): Promise<Buffer> {
+  const cols: Array<{ key: keyof ExportRow; label: string; w: number }> = [
+    { key: 'key', label: 'Key', w: 62 }, { key: 'type', label: 'Type', w: 60 }, { key: 'status', label: 'Status', w: 78 },
+    { key: 'priority', label: 'Priority', w: 52 }, { key: 'assignee', label: 'Assignee', w: 96 }, { key: 'dueDate', label: 'Due', w: 62 },
+    { key: 'summary', label: 'Summary', w: 360 },
+  ];
+  return pdfTable(title, subtitle, cols.map((c) => ({ label: c.label, w: c.w })), rows.map((r) => cols.map((c) => String(r[c.key] ?? ''))), [], 'No issues match this filter.');
+}
+
+/** PDF A4 ngang từ một bảng bất kỳ; `summary` = các dòng tóm tắt in trên bảng. */
+export function pdfTable(title: string, subtitle: string, cols: Array<{ label: string; w: number }>, data: string[][], summary: string[] = [], empty = 'No rows.'): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ size: 'A4', layout: 'landscape', margin: 36, info: { Title: title, Creator: 'CT Work' } });
     const chunks: Buffer[] = [];
@@ -139,12 +162,12 @@ export function toPdf(title: string, subtitle: string, rows: ExportRow[]): Promi
     doc.registerFont('vi', notoSansViBuffer());
     doc.registerFont('vi-bold', notoSansViBoldBuffer());
     doc.font('vi-bold').fontSize(16).fillColor('#0f172a').text(title);
-    doc.font('vi').fontSize(9).fillColor('#64748b').text(subtitle).moveDown(0.8);
-    const cols: Array<{ key: keyof ExportRow; label: string; w: number }> = [
-      { key: 'key', label: 'Key', w: 62 }, { key: 'type', label: 'Type', w: 60 }, { key: 'status', label: 'Status', w: 78 },
-      { key: 'priority', label: 'Priority', w: 52 }, { key: 'assignee', label: 'Assignee', w: 96 }, { key: 'dueDate', label: 'Due', w: 62 },
-      { key: 'summary', label: 'Summary', w: 360 },
-    ];
+    doc.font('vi').fontSize(9).fillColor('#64748b').text(subtitle).moveDown(0.6);
+    if (summary.length) {
+      doc.font('vi').fontSize(10).fillColor('#0f172a');
+      for (const line of summary) doc.text(line);
+      doc.moveDown(0.6);
+    }
     const left = doc.page.margins.left;
     const bottom = () => doc.page.height - doc.page.margins.bottom;
     const drawHeader = () => {
@@ -157,15 +180,15 @@ export function toPdf(title: string, subtitle: string, rows: ExportRow[]): Promi
     };
     drawHeader();
     doc.font('vi').fontSize(8.5).fillColor('#0f172a');
-    for (const r of rows) {
-      const h = Math.max(...cols.map((c) => doc.heightOfString(String(r[c.key] ?? ''), { width: c.w - 6 }))) + 5;
+    for (const r of data) {
+      const h = Math.max(...cols.map((c, i) => doc.heightOfString(r[i] ?? '', { width: c.w - 6 }))) + 5;
       if (doc.y + h > bottom()) { doc.addPage(); drawHeader(); doc.font('vi').fontSize(8.5).fillColor('#0f172a'); }
       const y = doc.y;
       let x = left;
-      for (const c of cols) { doc.text(String(r[c.key] ?? ''), x, y, { width: c.w - 6 }); x += c.w; }
+      cols.forEach((c, i) => { doc.text(r[i] ?? '', x, y, { width: c.w - 6 }); x += c.w; });
       doc.y = y + h;
     }
-    if (!rows.length) doc.fillColor('#64748b').text('No issues match this filter.');
+    if (!data.length) doc.fillColor('#64748b').text(empty, left, doc.y);
     doc.end();
   });
 }

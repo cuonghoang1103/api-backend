@@ -3,7 +3,9 @@
 /**
  * Khung /work (CT Work) — công cụ toàn màn hình: sidebar trái + vùng nội dung.
  * Navbar của site ẩn ở đây (Navbar.tsx); middleware đã chặn người chưa đăng
- * nhập (trừ /work/invite/*). Toàn bộ chữ trong /work bằng tiếng Anh.
+ * nhập (trừ /work/invite/* và link chia sẻ /work/share/*). Hai đường công khai
+ * đó KHÔNG có sidebar / bảng lệnh / AI (những thứ cần đăng nhập). Toàn bộ chữ
+ * trong /work bằng tiếng Anh.
  */
 
 import './work.css';
@@ -18,7 +20,7 @@ import { Spinner } from '@/components/work/ui';
 
 export default function WorkLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
-  const isInvite = pathname.startsWith('/work/invite/');
+  const isPublic = pathname.startsWith('/work/invite/') || pathname.startsWith('/work/share/');
   const { daDangNhap, sanSang } = useDaDangNhap();
   const [mobileNav, setMobileNav] = useState(false);
 
@@ -26,14 +28,14 @@ export default function WorkLayout({ children }: { children: React.ReactNode }) 
 
   // Lưới đỡ phía client (middleware là chốt chính): phiên hết hạn giữa chừng.
   useEffect(() => {
-    if (sanSang && !daDangNhap && !isInvite) {
+    if (sanSang && !daDangNhap && !isPublic) {
       window.location.href = `/login?callbackUrl=${encodeURIComponent(pathname)}`;
     }
-  }, [sanSang, daDangNhap, isInvite, pathname]);
+  }, [sanSang, daDangNhap, isPublic, pathname]);
 
   return (
     <div className="work-root fixed inset-0 z-[45] flex overflow-hidden">
-      {isInvite ? (
+      {isPublic ? (
         <main className="flex-1 overflow-y-auto">{children}</main>
       ) : !sanSang || !daDangNhap ? (
         <div className="flex flex-1 items-center justify-center"><Spinner size={20} /></div>

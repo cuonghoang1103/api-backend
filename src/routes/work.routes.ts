@@ -449,7 +449,7 @@ router.post('/projects/:pid/issues/:num/attachments/presign', asyncHandler(async
   ok(res, await issues.presignAttachment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
 }));
 router.post('/projects/:pid/issues/:num/attachments/complete', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ key: z.string().min(1).max(500), fileName: z.string().min(1).max(255) }), req.body);
+  const body = parse(z.object({ key: z.string().min(1).max(500), fileName: z.string().min(1).max(255), runId: id.nullable().optional() }), req.body);
   ok(res, await issues.completeAttachment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body), 201);
 }));
 // Trả URL ký sẵn (không 302): client dùng cho cả <img> xem trước lẫn nút tải.
@@ -691,6 +691,18 @@ router.post('/projects/:pid/ai/apply', asyncHandler(async (req, res) => {
 router.post('/projects/:pid/ai/weekly-report', asyncHandler(async (req, res) => {
   const body = parse(z.object({ audience: z.enum(['teacher', 'client', 'team']).default('team'), language: z.enum(['en', 'vi']).optional() }), req.body ?? {});
   ok(res, await ai.weeklyReport(callerId(req), idParam(req, 'pid'), body));
+}));
+router.post('/projects/:pid/ai/plan-sprint', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ sprintId: id, explain: z.boolean().optional(), language: z.enum(['en', 'vi']).optional() }), req.body);
+  ok(res, await ai.planSprint(callerId(req), idParam(req, 'pid'), body));
+}));
+router.post('/projects/:pid/ai/retro', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ sprintId: id, notes: z.string().max(20_000).nullable().optional(), language: z.enum(['en', 'vi']).optional() }), req.body);
+  ok(res, await ai.retro(callerId(req), idParam(req, 'pid'), body));
+}));
+router.post('/projects/:pid/ai/daily-brief', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ language: z.enum(['en', 'vi']).optional() }), req.body ?? {});
+  ok(res, await ai.dailyBrief(callerId(req), idParam(req, 'pid'), body));
 }));
 router.get('/projects/:pid/insights', asyncHandler(async (req, res) => {
   ok(res, await ai.insights(callerId(req), idParam(req, 'pid')));
@@ -1006,6 +1018,48 @@ router.get('/projects/:pid/export', asyncHandler(async (req, res) => {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${file}.pdf"`);
     res.send(pdf);
+  }
+}));
+// Báo cáo một test cycle (SWT301: nộp kèm Excel/PDF): tóm tắt + từng lần chạy.
+router.get('/projects/:pid/test-cycles/:cycleId/export', asyncHandler(async (req, res) => {
+  const { format } = parse(z.object({ format: z.enum(['csv', 'xlsx', 'pdf']).default('xlsx') }), req.query);
+  const pid = idParam(req, 'pid');
+  const c = await tests.getCycle(callerId(req), pid, idParam(req, 'cycleId'));
+  const cfg = await projects.getProjectConfig(callerId(req), pid);
+  const name = (u: { displayName: string | null; fullName: string | null; username: string } | null) => (u ? u.displayName || u.fullName || u.username : '');
+  const assignee = (idv: number | null) => name(cfg.members.find((m) => m.id === idv) ?? null);
+  const headers = ['Test', 'Title', 'Priority', 'Status', 'Assignee', 'Executed by', 'Executed at', 'Steps', 'Defects', 'Comment'];
+  const pri = ['', 'Highest', 'High', 'Medium', 'Low', 'Lowest'];
+  const rows = c.runs.map((r) => [
+    `${cfg.key}-${r.test.number}`, r.test.title, pri[r.test.priority] ?? '', r.status, assignee(r.assigneeId), name(r.executedBy),
+    r.executedAt ? new Date(r.executedAt).toISOString().replace('T', ' ').slice(0, 16) : '', r.stepCount,
+    r.defects.map((d) => `${cfg.key}-${d.number}`).join(', '), r.comment ?? '',
+  ]);
+  const summary = [
+    ['Cycle', c.name], ['Environment', c.environment ?? ''], ['Build', c.build ?? ''], ['State', c.state],
+    ['Tests', String(c.total)], ['Executed', `${c.executed} / ${c.total}`],
+    ['Pass rate', c.passRate === null ? '—' : `${c.passRate}%`],
+    ['Results', Object.entries(c.counts).filter(([, n]) => n).map(([k, n]) => `${k} ${n}`).join(' · ')],
+  ];
+  const file = `${cfg.key}-test-cycle-${c.id}-${new Date().toISOString().slice(0, 10)}`;
+  if (format === 'xlsx') {
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="${file}.xlsx"`);
+    res.send(exchange.xlsxTable(headers, rows, 'Test cycle', [12, 44, 10, 12, 18, 18, 17, 7, 16, 40], summary));
+  } else if (format === 'pdf') {
+    const cols = [{ label: 'Test', w: 58 }, { label: 'Title', w: 250 }, { label: 'Status', w: 64 }, { label: 'Executed by', w: 90 }, { label: 'Executed at', w: 86 }, { label: 'Defects', w: 80 }, { label: 'Comment', w: 142 }];
+    const pdf = await exchange.pdfTable(
+      `Test cycle report — ${c.name}`, `${cfg.name} (${cfg.key}) · exported ${new Date().toISOString().slice(0, 10)}`,
+      cols, rows.map((r) => [r[0], r[1], r[3], r[5], r[6], r[8], r[9]].map(String)), summary.map(([k, v]) => `${k}: ${v}`), 'This cycle has no tests.',
+    );
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${file}.pdf"`);
+    res.send(pdf);
+  } else {
+    const esc = (v: unknown) => { let x = String(v ?? ''); if (/^[=+\-@]/.test(x)) x = `'${x}`; return /[",\n\r]/.test(x) ? `"${x.replace(/"/g, '""')}"` : x; };
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${file}.csv"`);
+    res.send(`﻿${[...summary.map((l) => l.map(esc).join(',')), '', headers.join(','), ...rows.map((r) => r.map(esc).join(','))].join('\r\n')}\r\n`);
   }
 }));
 router.post('/projects/:pid/import', asyncHandler(async (req, res) => {

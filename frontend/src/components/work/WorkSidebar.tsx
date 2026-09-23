@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
-  ArrowLeft, CalendarRange, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, LayoutDashboard, List, ListOrdered, Plus, Settings, Users, LayoutGrid, Check,
+  ArrowLeft, CalendarRange, KeyRound, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, LayoutDashboard, List, ListOrdered, Plus, Settings, Users, LayoutGrid, Check,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi } from '@/lib/work-api';
@@ -18,10 +18,13 @@ import { useAuthStore } from '@/store/authStore';
 import { wk } from './hooks';
 import { Popover, UserAvatar, useToggle } from './ui';
 
+const NOT_SLUG = new Set(['invite', 'share', 'developer']);
+
 export function useWorkPath() {
   const pathname = usePathname() ?? '';
   const parts = pathname.split('/').filter(Boolean); // ['work', slug, key, view, ...]
-  const slug = parts[1] && parts[1] !== 'invite' ? decodeURIComponent(parts[1]) : undefined;
+  // Các trang tĩnh dưới /work không phải slug không gian.
+  const slug = parts[1] && !NOT_SLUG.has(parts[1]) ? decodeURIComponent(parts[1]) : undefined;
   const key = parts[2] && parts[2] !== 'settings' ? decodeURIComponent(parts[2]).toUpperCase() : undefined;
   const view = parts[3];
   return { pathname, slug, key, view };
@@ -150,6 +153,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
       </div>
 
       <div className="border-t border-[var(--w-border)] p-2">
+        <NavItem href="/work/developer" icon={KeyRound} label="API tokens" active={pathname.startsWith('/work/developer')} />
         <Link href="/" className="flex h-[28px] items-center gap-2 rounded-[5px] px-2 text-[var(--w-text-2)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]">
           <ArrowLeft size={14} /> Back to CuongThai
         </Link>

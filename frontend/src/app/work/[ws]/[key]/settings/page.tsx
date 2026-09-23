@@ -19,9 +19,13 @@ import ProjectBoard from '@/components/work/settings/ProjectBoard';
 import ProjectIssueTypes from '@/components/work/settings/ProjectIssueTypes';
 import ProjectFields from '@/components/work/settings/ProjectFields';
 import ProjectAutomation from '@/components/work/settings/ProjectAutomation';
+import ProjectGithub from '@/components/work/settings/ProjectGithub';
+import ProjectImport from '@/components/work/settings/ProjectImport';
+import ProjectShare from '@/components/work/settings/ProjectShare';
+import ProjectTrash from '@/components/work/settings/ProjectTrash';
 import ProjectDanger from '@/components/work/settings/ProjectDanger';
 
-type Tab = 'details' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'automation' | 'danger';
+type Tab = 'details' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'automation' | 'github' | 'share' | 'import' | 'trash' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -42,6 +46,10 @@ function ProjectSettings() {
     { key: 'types', label: 'Issue types' },
     { key: 'fields', label: 'Fields' },
     { key: 'automation', label: 'Automation' },
+    { key: 'github', label: 'GitHub' },
+    { key: 'share', label: 'Public links' },
+    ...(config?.permissions.settings ? [{ key: 'import' as const, label: 'Import' }] : []),
+    ...(config?.permissions.deleteIssues ? [{ key: 'trash' as const, label: 'Trash' }] : []),
     ...(config?.permissions.settings ? [{ key: 'danger' as const, label: 'Danger zone' }] : []),
   ];
   const raw = search?.get('tab') as Tab | null;
@@ -93,6 +101,10 @@ function ProjectSettings() {
           {tab === 'types' && <ProjectIssueTypes config={config} slug={slug} />}
           {tab === 'fields' && <ProjectFields config={config} slug={slug} />}
           {tab === 'automation' && <ProjectAutomation config={config} slug={slug} />}
+          {tab === 'github' && <ProjectGithub config={config} slug={slug} />}
+          {tab === 'share' && <ProjectShare config={config} slug={slug} />}
+          {tab === 'trash' && <ProjectTrash config={config} slug={slug} />}
+          {tab === 'import' && <ProjectImport config={config} slug={slug} />}
           {tab === 'danger' && <ProjectDanger config={config} slug={slug} />}
         </div>
       </div>

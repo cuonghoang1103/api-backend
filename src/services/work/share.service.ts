@@ -90,7 +90,8 @@ export async function publicSummary(token: string) {
     project: { key: project.key, name: project.name, description: project.description, type: project.type, archived: !!project.archivedAt, workspace: project.workspace.name },
     workflows, issueTypes: types, sprints, labels,
     // Chỉ tên + ảnh; không username (tránh dò tài khoản), không email.
-    members: members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER').map((m) => ({ id: m.id, name: m.displayName || m.fullName || m.username, avatarUrl: m.avatarUrl })),
+    // Mọi thành viên — thẻ có thể đã giao cho người sau này đổi sang vai trò chỉ xem.
+    members: members.map((m) => ({ id: m.id, name: m.displayName || m.fullName || m.username, avatarUrl: m.avatarUrl })),
   };
 }
 

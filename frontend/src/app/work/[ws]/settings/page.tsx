@@ -1,6 +1,6 @@
 'use client';
 
-/** /work/<slug>/settings — cài đặt không gian: General · Members · Invitations. */
+/** /work/<slug>/settings — cài đặt không gian: General · Members · Invitations · Trash. */
 
 import { Suspense } from 'react';
 import Link from 'next/link';
@@ -13,8 +13,10 @@ import { PageHeader, SettingsTabs, type TabDef } from '@/components/work/setting
 import WorkspaceGeneral from '@/components/work/settings/WorkspaceGeneral';
 import WorkspaceMembers from '@/components/work/settings/WorkspaceMembers';
 import WorkspaceInvitations from '@/components/work/settings/WorkspaceInvitations';
+import WorkspaceTrash from '@/components/work/settings/WorkspaceTrash';
+import WorkspaceAudit from '@/components/work/settings/WorkspaceAudit';
 
-type Tab = 'general' | 'members' | 'invitations';
+type Tab = 'general' | 'members' | 'invitations' | 'audit' | 'trash';
 
 function WorkspaceSettings() {
   const params = useParams<{ ws: string }>();
@@ -29,7 +31,7 @@ function WorkspaceSettings() {
   const tabs: TabDef<Tab>[] = [
     { key: 'general', label: 'General' },
     { key: 'members', label: 'Members' },
-    ...(canManage ? [{ key: 'invitations' as const, label: 'Invitations' }] : []),
+    ...(canManage ? [{ key: 'invitations' as const, label: 'Invitations' }, { key: 'audit' as const, label: 'Audit log' }, { key: 'trash' as const, label: 'Trash' }] : []),
   ];
   const raw = search?.get('tab') as Tab | null;
   const tab: Tab = raw && tabs.some((t) => t.key === raw) ? raw : 'general';
@@ -55,6 +57,8 @@ function WorkspaceSettings() {
           {tab === 'general' && <WorkspaceGeneral ws={ws} />}
           {tab === 'members' && <WorkspaceMembers ws={ws} />}
           {tab === 'invitations' && <WorkspaceInvitations ws={ws} />}
+          {tab === 'audit' && <WorkspaceAudit workspaceId={ws.id} />}
+          {tab === 'trash' && <WorkspaceTrash ws={ws} />}
         </div>
       </div>
     </div>

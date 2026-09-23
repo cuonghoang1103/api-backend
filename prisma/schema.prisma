@@ -10006,12 +10006,16 @@ model WorkAttachment {
   fileName   String   @map("file_name") @db.VarChar(255)
   mime       String   @db.VarChar(100)
   size       Int
+  /// Bằng chứng của một lần chạy test (ảnh chụp lỗi…). File vẫn thuộc thẻ test case.
+  runId      Int?     @map("run_id")
   createdAt  DateTime @default(now()) @map("created_at")
 
-  issue    WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
-  uploader User?     @relation("WorkAttachmentUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
+  issue    WorkIssue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  uploader User?        @relation("WorkAttachmentUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
+  run      WorkTestRun? @relation(fields: [runId], references: [id], onDelete: SetNull)
 
   @@index([issueId], name: "idx_work_attachment_issue")
+  @@index([runId], name: "idx_work_attachment_run")
   @@map("work_attachments")
 }
 
@@ -10209,6 +10213,7 @@ model WorkTestRun {
   executedBy User?                @relation("WorkTestRunExecutor", fields: [executedById], references: [id], onDelete: SetNull)
   steps      WorkTestStepResult[]
   defects    WorkTestRunDefect[]
+  evidence   WorkAttachment[]
 
   @@unique([cycleId, testCaseId], name: "uk_work_test_run", map: "uk_work_test_run")
   @@index([testCaseId], name: "idx_work_test_run_case")

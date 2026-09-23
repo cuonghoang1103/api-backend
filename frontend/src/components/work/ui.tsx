@@ -206,23 +206,27 @@ export function PickerList<T>({ options, selected, onPick, multi, placeholder = 
 // ─── Hộp thoại ───────────────────────────────────────────────────
 
 export function Dialog({
-  open, onClose, title, children, width = 520, footer,
-}: { open: boolean; onClose: () => void; title?: ReactNode; children: ReactNode; width?: number; footer?: ReactNode }) {
+  open, onClose, title, children, width = 520, footer, dismissible = true,
+}: {
+  open: boolean; onClose: () => void; title?: ReactNode; children: ReactNode; width?: number; footer?: ReactNode;
+  /** false = Esc / bấm nền / nút X không đóng được (vd hộp hiện token một lần). */
+  dismissible?: boolean;
+}) {
   useEffect(() => {
-    if (!open) return;
+    if (!open || !dismissible) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && !e.defaultPrevented && onClose();
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
+  }, [open, onClose, dismissible]);
   if (!open) return null;
   return (
     <WorkPortal>
-      <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-black/40 px-4 py-[8vh]" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-black/40 px-4 py-[8vh]" onMouseDown={(e) => dismissible && e.target === e.currentTarget && onClose()}>
         <div role="dialog" aria-modal="true" style={{ maxWidth: width, boxShadow: 'var(--w-shadow-pop)' }} className="w-full rounded-[10px] bg-[var(--w-panel)]">
           {title !== undefined && (
             <div className="flex items-center justify-between border-b border-[var(--w-border)] px-5 py-3.5">
               <div className="text-[15px] font-semibold">{title}</div>
-              <button type="button" onClick={onClose} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Close"><X size={15} /></button>
+              {dismissible && <button type="button" onClick={onClose} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Close"><X size={15} /></button>}
             </div>
           )}
           <div className="px-5 py-4">{children}</div>

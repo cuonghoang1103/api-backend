@@ -32,6 +32,7 @@ import {
 import { useLookups, wk, type Lookups } from './hooks';
 import IssueActivity from './IssueActivity';
 import { TimeTrackingBlock } from './TimeTracking';
+import DevelopmentPanel from './DevelopmentPanel';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
@@ -467,6 +468,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
       )}
       <CustomFieldsGroup pid={pid} num={num} typeKey={type?.key} config={config} editable={editable} />
       <TimeTrackingBlock pid={pid} issue={issue} config={config} />
+      <DevelopmentPanel pid={pid} num={num} issueKey={lk.issueKey(num)} />
       <div className="mt-4 space-y-1 border-t border-[var(--w-border)] pt-3 text-[12px] text-[var(--w-text-3)]">
         <div>Created {formatDate(issue.createdAt)} · {relativeTime(issue.createdAt)}</div>
         <div>Updated {relativeTime(issue.updatedAt)}</div>

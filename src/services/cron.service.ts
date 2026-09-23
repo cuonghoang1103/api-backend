@@ -123,6 +123,13 @@ export function startCronJobs(): void {
       logger.warn('[work] scheduled automation failed', { error: (err as Error).message });
     }
     try {
+      const { runDailyBriefs } = await import('./work/ai.service.js');
+      const n = await runDailyBriefs();
+      if (n) logger.info('[work] daily AI briefs', { projects: n });
+    } catch (err) {
+      logger.warn('[work] daily AI briefs failed', { error: (err as Error).message });
+    }
+    try {
       const { sendDigests } = await import('./work/notify.js');
       const n = await sendDigests();
       if (n) logger.info('[work] digest emails sent', { users: n });

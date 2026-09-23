@@ -24,7 +24,7 @@ import { PRIORITY_MAX, PRIORITY_MIN } from './constants.js';
 import { addComment, createIssueAs, updateIssueAs } from './issues.service.js';
 import { requireProject, type ProjectAccess } from './permissions.js';
 import { projectMembers } from './projects.service.js';
-import { bulkUpdate, estimateOf, estimationOf } from './sprints.service.js';
+import { bulkUpdate, computeSprintReport, estimateOf, estimationOf } from './sprints.service.js';
 import { createTest } from './tests.service.js';
 
 // ─── Hạn mức ─────────────────────────────────────────────────────
@@ -584,4 +584,154 @@ export async function releaseNotes(userId: number, projectId: number, versionId:
   const system = `Write release notes for ${tone}. Use ONLY the finished issues listed — never invent features. Markdown with sections such as "New", "Improvements", "Bug fixes" (omit empty sections). ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"notes":"markdown"}`;
   const out = parseJson(await ask(userId, system, facts, 1800, 'work_digest'), z.object({ notes: z.string() }));
   return { notes: out.notes, quota: await aiQuota(userId) };
+}
+
+// ─── Lập kế hoạch sprint theo velocity (4.7) ─────────────────────
+
+/**
+ * Đề xuất thẻ cho một sprint: MÃ tính velocity trung bình 3 sprint gần nhất
+ * rồi xếp thẻ backlog theo thứ tự ưu tiên (rank) tới khi đầy. AI (tuỳ chọn)
+ * chỉ viết lời giải thích — con số và danh sách luôn do mã quyết.
+ * Không tự ghi: giao diện dùng bulkUpdate để chuyển thẻ khi người dùng đồng ý.
+ */
+export async function planSprint(userId: number, projectId: number, input: { sprintId: number; explain?: boolean; language?: 'en' | 'vi' }) {
+  const access = await requireProject(userId, projectId, 'sprint.manage');
+  const mode = await estimationOf(projectId);
+  const sprint = await prisma.workSprint.findFirst({ where: { id: input.sprintId, projectId }, select: { id: true, name: true, state: true, startAt: true, endAt: true } });
+  if (!sprint) throw new NotFoundError('Sprint not found');
+  if (sprint.state === 'CLOSED') throw new BadRequestError('This sprint is already closed', 'WORK_SPRINT_CLOSED');
+  const history = await prisma.workSprint.findMany({
+    where: { projectId, state: 'CLOSED', completedPoints: { not: null } },
+    orderBy: { completedAt: 'desc' }, take: 3,
+    select: { name: true, committedPoints: true, completedPoints: true },
+  });
+  const velocity = history.length ? Math.round((history.reduce((s, h) => s + (h.completedPoints ?? 0), 0) / history.length) * 10) / 10 : null;
+  const [inSprint, backlog] = await Promise.all([
+    prisma.workIssue.findMany({ where: { sprintId: sprint.id, deletedAt: null, resolvedAt: null, type: { level: 0 } }, select: { number: true, title: true, storyPoints: true, originalEstimateMin: true } }),
+    prisma.workIssue.findMany({
+      where: { projectId, sprintId: null, deletedAt: null, resolvedAt: null, type: { level: 0 } },
+      orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: 300,
+      select: { number: true, title: true, priority: true, storyPoints: true, originalEstimateMin: true, assigneeId: true,
+        linksIn: { where: { type: 'BLOCKS', fromIssue: { resolvedAt: null, deletedAt: null } }, select: { fromIssue: { select: { number: true, sprintId: true } } } } },
+    }),
+  ]);
+  const already = Math.round(inSprint.reduce((s, i) => s + estimateOf(i, mode), 0) * 10) / 10;
+  // Chưa có lịch sử: không đoán bừa — dùng 20 điểm / 60 giờ và nói rõ.
+  const target = velocity ?? (mode === 'HOURS' ? 60 : 20);
+  let total = already;
+  const selected: Array<{ number: number; title: string; points: number }> = [];
+  const warnings: string[] = [];
+  const unestimated: number[] = [];
+  for (const i of backlog) {
+    const pts = estimateOf(i, mode);
+    if (!pts) { unestimated.push(i.number); continue; }
+    if (total + pts > target) continue;
+    const blocker = i.linksIn.find((l) => l.fromIssue.sprintId !== sprint.id);
+    if (blocker) { warnings.push(`${access.key}-${i.number} is blocked by ${access.key}-${blocker.fromIssue.number}, which is not in this sprint — skipped`); continue; }
+    selected.push({ number: i.number, title: i.title, points: pts });
+    total = Math.round((total + pts) * 10) / 10;
+  }
+  if (!velocity) warnings.unshift(`No completed sprints yet — using a default capacity of ${target} ${mode === 'HOURS' ? 'hours' : 'points'}. Adjust after your first sprint.`);
+  if (unestimated.length) warnings.push(`${unestimated.length} backlog issue(s) have no estimate and were not planned: ${unestimated.slice(0, 10).map((n) => `${access.key}-${n}`).join(', ')}${unestimated.length > 10 ? '…' : ''}`);
+  const result = {
+    sprint: { id: sprint.id, name: sprint.name }, unit: mode, velocity, history, target, alreadyPlanned: already,
+    selected, plannedTotal: total, warnings, rationale: null as string | null,
+  };
+  if (input.explain) {
+    const facts = [
+      `Sprint ${sprint.name}. Unit: ${mode === 'HOURS' ? 'hours' : 'story points'}.`,
+      `Velocity (last ${history.length} sprints): ${history.map((h) => `${h.name}: committed ${h.committedPoints ?? '?'}, completed ${h.completedPoints}`).join('; ') || 'none'} → average ${velocity ?? 'n/a'}.`,
+      `Already in sprint: ${already}. Proposed additions (${selected.length}): ${selected.map((s) => `${access.key}-${s.number} "${s.title}" (${s.points})`).join('; ') || 'none'}. Planned total ${total} of target ${target}.`,
+      `Warnings: ${warnings.join(' | ') || 'none'}.`,
+    ].join('\n');
+    const system = `You are a Scrum coach. Explain this sprint plan to the team in 4-7 short bullet points: whether the load is realistic versus velocity, notable risks, and what to clarify before starting. Use ONLY the facts. ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"rationale":"markdown"}`;
+    result.rationale = parseJson(await ask(userId, system, facts, 900, 'work_digest'), z.object({ rationale: z.string() })).rationale;
+  }
+  return result;
+}
+
+// ─── Retro (4.10) ────────────────────────────────────────────────
+
+/**
+ * Tóm tắt retrospective: số liệu sprint (mã tính) + ghi chú nhóm dán vào ⇒
+ * Went well / Didn't go well / Action items. Action item thành ĐỀ XUẤT
+ * create_issue để người dùng duyệt (không tự tạo).
+ */
+export async function retro(userId: number, projectId: number, input: { sprintId: number; notes?: string | null; language?: 'en' | 'vi' }) {
+  const access = await requireProject(userId, projectId, 'ai.use');
+  const s = await prisma.workSprint.findFirst({ where: { id: input.sprintId, projectId }, select: { id: true, name: true, goal: true, state: true, startAt: true, endAt: true, report: true } });
+  if (!s) throw new NotFoundError('Sprint not found');
+  const stored = s.report as (Partial<Awaited<ReturnType<typeof computeSprintReport>>> & { committedIssueIds?: number[] }) | null;
+  const rep = stored?.completed ? (stored as Awaited<ReturnType<typeof computeSprintReport>>) : await computeSprintReport(projectId, s.id);
+  const members = await projectMembers(projectId);
+  const facts = [
+    `Sprint ${s.name} (${s.state})${s.goal ? `, goal: ${s.goal}` : ''}. ${s.startAt ? `From ${s.startAt.toISOString().slice(0, 10)}` : ''}${s.endAt ? ` to ${s.endAt.toISOString().slice(0, 10)}` : ''}.`,
+    `Committed ${rep.committedPoints} ${rep.unit === 'HOURS' ? 'hours' : 'points'}, completed ${rep.completedPoints}.`,
+    `Completed (${rep.completed.length}): ${rep.completed.map((i) => `${access.key}-${i.number} ${i.title}`).join('; ') || 'none'}.`,
+    `Not completed (${rep.incomplete.length}): ${rep.incomplete.map((i) => `${access.key}-${i.number} ${i.title}`).join('; ') || 'none'}.`,
+    `Scope change: ${rep.added.length} added after start, ${rep.removed.length} removed.`,
+    `Members: ${members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER').map((m) => m.username).join(', ')}.`,
+    input.notes ? `Team notes:\n${clip(input.notes, 12_000)}` : 'No team notes provided.',
+  ].join('\n');
+  const system = `You facilitate a sprint retrospective. Using ONLY the facts and team notes, write markdown with sections "What went well", "What didn't go well", "Action items" (each action item concrete, with an owner only if the notes name one). Then propose each action item as {"type":"create_issue","issueType":"TASK","title":"…","description":"…","assignee":"username"} (only usernames from the member list). ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"summary":"markdown","actions":[...]}`;
+  const out = parseJson(await ask(userId, system, facts, 1800, 'work_assistant'), z.object({ summary: z.string(), actions: z.unknown().optional() }));
+  return { summary: out.summary, actions: saneActions(out.actions), facts, quota: await aiQuota(userId) };
+}
+
+// ─── Bản tin hằng ngày (4.8) ─────────────────────────────────────
+
+/**
+ * Bản tin ngắn cho dự án: MÃ tính rủi ro (insights), AI viết 3–6 gạch đầu
+ * dòng. Lưu vào settings.dailyBrief để cả nhóm đọc trên tab Health — gọi
+ * một lần cho cả nhóm, không phải mỗi người một lần.
+ */
+export async function dailyBrief(userId: number, projectId: number, input: { language?: 'en' | 'vi' } = {}) {
+  const access = await requireProject(userId, projectId, 'ai.use');
+  const risks = await insights(userId, projectId);
+  const since = new Date(Date.now() - 86_400_000);
+  const [doneYesterday, createdYesterday, project] = await Promise.all([
+    prisma.workIssue.findMany({ where: { projectId, deletedAt: null, resolvedAt: { gte: since } }, select: { number: true, title: true }, take: 30 }),
+    prisma.workIssue.count({ where: { projectId, deletedAt: null, createdAt: { gte: since } } }),
+    prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { name: true, settings: true } }),
+  ]);
+  const facts = [
+    `Project ${access.key} "${project.name}". Last 24h: ${doneYesterday.length} finished (${doneYesterday.map((d) => `${access.key}-${d.number} ${d.title}`).join('; ') || 'none'}), ${createdYesterday} created.`,
+    `Overdue: ${risks.overdue.map((i) => `${i.key} ${i.title} (@${i.assignee ?? 'unassigned'})`).join('; ') || 'none'}.`,
+    `Due in 3 days: ${risks.dueSoon.map((i) => `${i.key} (@${i.assignee ?? 'unassigned'})`).join('; ') || 'none'}.`,
+    `Stuck in progress: ${risks.stale.map((i) => `${i.key} ${i.idleDays}d`).join('; ') || 'none'}.`,
+    `Urgent but unassigned: ${risks.unassignedUrgent.map((i) => i.key).join('; ') || 'none'}.`,
+    `Overloaded: ${risks.overloaded.map((l) => `@${l.username} ${l.points}`).join(', ') || 'none'}.`,
+    risks.sprintRisk ? `Sprint ${risks.sprintRisk.sprint}: ${risks.sprintRisk.remaining} left, ${risks.sprintRisk.daysLeft} days left, needs ${risks.sprintRisk.neededPerDay}/day vs recent ${risks.sprintRisk.recentPerDay}/day → ${risks.sprintRisk.atRisk ? 'AT RISK' : 'on track'}.` : 'No active sprint.',
+  ].join('\n');
+  const system = `Write today's stand-up brief for the team: 3-6 short markdown bullets, most important first (risks, overdue work, who should look at what). Use ONLY the facts; do not invent. ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"brief":"markdown"}`;
+  const out = parseJson(await ask(userId, system, facts, 700, 'work_digest'), z.object({ brief: z.string() }));
+  const brief = { text: out.brief.slice(0, 5000), at: new Date().toISOString(), by: userId };
+  const settings = (project.settings ?? {}) as Record<string, unknown>;
+  await prisma.workProject.update({ where: { id: projectId }, data: { settings: { ...settings, dailyBrief: brief } as Prisma.InputJsonValue } });
+  return { ...brief, facts, quota: await aiQuota(userId) };
+}
+
+/**
+ * Cron 08:00: bản tin cho các dự án có hoạt động hôm qua. Mặc định TẮT
+ * (WORK_DIGEST_ENABLED=true mới chạy — việc AI chạy nền phải bật tay, xem
+ * CLAUDE.md "Việc chạy nền mặc định TẮT"). Tính lượt AI vào người dẫn dự án.
+ */
+export async function runDailyBriefs(): Promise<number> {
+  if (process.env.WORK_DIGEST_ENABLED !== 'true') return 0;
+  const since = new Date(Date.now() - 86_400_000);
+  const projects = await prisma.workProject.findMany({
+    where: { deletedAt: null, archivedAt: null, workspace: { deletedAt: null }, issues: { some: { updatedAt: { gte: since } } } },
+    select: { id: true, leadId: true, workspace: { select: { ownerId: true } } },
+    take: 200,
+  });
+  let n = 0;
+  for (const p of projects) {
+    try {
+      await dailyBrief(p.leadId ?? p.workspace.ownerId, p.id);
+      n += 1;
+    } catch {
+      // hết hạn mức / AI lỗi: bỏ qua dự án này, ngày mai thử lại
+    }
+  }
+  return n;
 }

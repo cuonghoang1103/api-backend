@@ -54,6 +54,12 @@ export const wk = {
   /** Ngày nghỉ theo KHÔNG GIAN (không theo dự án). */
   timeOff: (wsId: number) => ['work', 'time-off', wsId] as const,
   notifySettings: ['work', 'notify-settings'] as const,
+  /** Commit/nhánh/PR của thẻ nằm dưới wk.issue(pid) ⇒ webhook GitHub (issue.updated) làm tươi. */
+  devActivity: (pid: number, num: number) => ['work', 'issue', pid, num, 'dev'] as const,
+  /** Kết nối GitHub nằm dưới wk.project ⇒ project.updated làm tươi. */
+  github: (pid: number) => ['work', 'project', pid, 'github'] as const,
+  /** Nhật ký quản trị theo KHÔNG GIAN. */
+  audit: (wsId: number) => ['work', 'audit', wsId] as const,
 };
 
 /** /work/<slug>/<KEY> ⇒ cấu hình dự án. */

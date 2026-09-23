@@ -75,7 +75,8 @@ export async function middleware(request: NextRequest) {
  }
  // CT Work — cần đăng nhập, TRỪ trang lời mời: người chưa có tài khoản phải
  // xem được "ai mời mình vào đâu" trước khi đăng ký (trang đó tự mời đăng nhập).
- if ((pathname === '/work' || pathname.startsWith('/work/')) && !pathname.startsWith('/work/invite/')) {
+ // Và TRỪ link chia sẻ chỉ đọc /work/share/* (giảng viên, khách hàng không có tài khoản).
+ if ((pathname === '/work' || pathname.startsWith('/work/')) && !pathname.startsWith('/work/invite/') && !pathname.startsWith('/work/share/')) {
  return handleLearnRoute(request, pathname);
  }
  return NextResponse.next();

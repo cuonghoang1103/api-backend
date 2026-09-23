@@ -5,11 +5,12 @@
 import { Suspense, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
-import { ChevronRight, Plus } from 'lucide-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { ChevronRight, Plus, RotateCcw } from 'lucide-react';
 import { workApi, workError } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
-import { EmptyState, Spinner, useToggle } from '@/components/work/ui';
+import { EmptyState, relativeTime, Spinner, useToggle } from '@/components/work/ui';
 import { PageHeader, WorkspaceMark, WS_ROLE_LABEL } from '@/components/work/settings/shared';
 import CreateWorkspaceDialog from '@/components/work/workspace/CreateWorkspaceDialog';
 import MyWork from '@/components/work/MyWork';
@@ -22,6 +23,47 @@ const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
 ];
 
 const plural = (n: number, one: string) => `${n} ${one}${n === 1 ? '' : 's'}`;
+
+/** Không gian mình sở hữu đã bị xoá — chỉ hiện khi có, khôi phục một chạm. */
+function DeletedWorkspaces() {
+  const qc = useQueryClient();
+  const key = ['work', 'me', 'workspace-trash'] as const;
+  const q = useQuery({ queryKey: key, queryFn: workApi.workspaceTrash, staleTime: 30_000 });
+  const restore = useMutation({
+    mutationFn: (id: number) => workApi.restoreWorkspace(id),
+    onSuccess: (_d, id) => {
+      const w = q.data?.find((x) => x.id === id);
+      toast.success(w ? `${w.name} restored` : 'Workspace restored');
+      qc.invalidateQueries({ queryKey: key });
+      qc.invalidateQueries({ queryKey: wk.workspaces });
+    },
+    onError: (err) => toast.error(workError(err, 'Could not restore the workspace')),
+  });
+  if (!q.data?.length) return null;
+  return (
+    <section className="mt-8">
+      <h2 className="mb-1 text-[13px] font-semibold">Recently deleted workspaces</h2>
+      <p className="mb-3 text-[12px] text-[var(--w-text-3)]">Workspaces you own that were deleted. Restoring brings back every project and member.</p>
+      <div className="overflow-hidden rounded-[8px] border border-dashed border-[var(--w-border-strong)]">
+        {q.data.map((w) => {
+          const pending = restore.isPending && restore.variables === w.id;
+          return (
+            <div key={w.id} className="flex items-center gap-3 border-b border-[var(--w-border)] px-4 py-2.5 last:border-b-0">
+              <span className="opacity-60"><WorkspaceMark name={w.name} size={28} /></span>
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-[13px] font-medium text-[var(--w-text-2)]">{w.name}</div>
+                <div className="truncate text-[12px] text-[var(--w-text-3)]">{plural(w._count.projects, 'project')} · deleted {relativeTime(w.deletedAt)}</div>
+              </div>
+              <button type="button" className="w-btn w-btn-sm shrink-0" disabled={pending} onClick={() => restore.mutate(w.id)}>
+                {pending ? <Spinner size={11} /> : <RotateCcw size={13} />} Restore
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
 
 function WorkspacesHome() {
   const router = useRouter();
@@ -127,6 +169,7 @@ function WorkspacesHome() {
               ))}
             </div>
           )}
+          {!q.isLoading && tab === 'workspaces' && <DeletedWorkspaces />}
         </div>
       </div>
       <CreateWorkspaceDialog open={dialog.on} onClose={closeDialog} />

@@ -27,6 +27,7 @@ import IssueDrawer from '@/components/work/IssueDrawer';
 import CreateIssueDialog from '@/components/work/CreateIssueDialog';
 import { JqlInput, type JqlInputHandle } from '@/components/work/search/JqlInput';
 import SavedFilters from '@/components/work/search/SavedFilters';
+import ExportMenu from '@/components/work/search/ExportMenu';
 import { basicToJql, jqlErrorOf } from '@/components/work/search/jql';
 
 const PAGE = 100;
@@ -414,6 +415,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
           onLoad={loadFilter}
           onSaved={loadFilter}
         />
+        <ExportMenu pid={config.id} getJql={() => (jqlMode ? jqlParam : currentBasicJql())} />
         {canCreate && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue">
             <Plus size={14} /> <span className="max-sm:!hidden">Create issue</span>

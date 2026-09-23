@@ -477,6 +477,7 @@ export async function getRun(userId: number, projectId: number, runId: number) {
       testCase: { select: { preconditions: true, kind: true, issue: { select: { number: true, title: true, priority: true } } } },
       steps: { orderBy: { position: 'asc' }, select: { id: true, position: true, action: true, data: true, expected: true, status: true, actual: true } },
       defects: { select: { issue: { select: { number: true, title: true, statusId: true, deletedAt: true } } } },
+      evidence: { orderBy: { createdAt: 'asc' }, select: { id: true, fileName: true, mime: true, size: true, createdAt: true, uploader: { select: PUBLIC_USER } } },
     },
   });
   return { ...r, defects: r.defects.filter((d) => !d.issue.deletedAt).map((d) => d.issue) };

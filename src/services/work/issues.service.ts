@@ -474,10 +474,15 @@ export async function presignAttachment(userId: number, projectId: number, numbe
   return { uploadUrl, key, headers: { 'Content-Type': contentType } };
 }
 
-export async function completeAttachment(userId: number, projectId: number, number: number, input: { key: string; fileName: string }) {
+export async function completeAttachment(userId: number, projectId: number, number: number, input: { key: string; fileName: string; runId?: number | null }) {
   await requireProject(userId, projectId, 'attachment.add');
   assertR2();
   const { id } = await findIssue(projectId, number);
+  // Bằng chứng của lần chạy test: lần chạy phải là của CHÍNH test case này.
+  if (input.runId) {
+    const run = await prisma.workTestRun.findFirst({ where: { id: input.runId, testCase: { issueId: id }, cycle: { projectId } }, select: { id: true } });
+    if (!run) throw new BadRequestError('Test run not found for this test', 'WORK_BAD_RUN');
+  }
   // Key phải nằm dưới đúng thư mục của thẻ này — không cho "nhận" file của thẻ khác.
   if (!input.key.startsWith(attachmentPrefix(projectId, id)) || input.key.includes('..')) {
     throw new BadRequestError('Invalid attachment key', 'WORK_BAD_KEY');
@@ -489,7 +494,7 @@ export async function completeAttachment(userId: number, projectId: number, numb
     throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
   }
   const att = await prisma.workAttachment.create({
-    data: { issueId: id, uploaderId: userId, r2Key: input.key, fileName: input.fileName.slice(0, 255) || 'file', mime: head.contentType.slice(0, 100), size: head.size },
+    data: { issueId: id, runId: input.runId ?? null, uploaderId: userId, r2Key: input.key, fileName: input.fileName.slice(0, 255) || 'file', mime: head.contentType.slice(0, 100), size: head.size },
     select: { id: true, fileName: true, mime: true, size: true, createdAt: true, uploader: { select: PUBLIC_USER } },
   });
   await prisma.workHistory.create({ data: { issueId: id, actorId: userId, actorKind: 'USER', field: 'attachment', toValue: att.fileName } });

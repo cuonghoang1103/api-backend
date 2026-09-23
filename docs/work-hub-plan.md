@@ -231,13 +231,22 @@ Mỗi đợt kết thúc bằng: checklist pre-push, deploy bằng `deploy-nha.s
 thêm một route GET không cần tham số vào smoke-test của `deploy.sh`.
 
 ### Đợt 0 — Nền móng
-- [ ] 0.1 Chốt schema phần lõi (mục 5, bảng tổ chức + issue + workflow) · M
-- [ ] 0.2 Migration viết tay + `prisma migrate deploy` + kiểm drift rỗng · M
-- [ ] 0.3 `permissions.ts` + bộ test quyền cho 6 vai trò (bảng quyền đầy đủ) · M
-- [ ] 0.4 `applyIssueChange()`: ghi lịch sử + phát socket + hook tự động/thông báo (rỗng) · M
-- [ ] 0.5 `work.socket.ts`: xác thực, vào phòng dự án có kiểm quyền · S
-- [ ] 0.6 Khung route `/api/v1/work`, mount, smoke-test · S
+- [x] 0.1 Chốt schema phần lõi (mục 5, bảng tổ chức + issue + workflow) · M
+- [x] 0.2 Migration viết tay + `prisma migrate deploy` + kiểm drift rỗng · M
+- [x] 0.3 `permissions.ts` + bộ test quyền cho 6 vai trò (bảng quyền đầy đủ) · M
+- [x] 0.4 `applyIssueChange()`: ghi lịch sử + phát socket + hook tự động/thông báo (rỗng) · M
+- [x] 0.5 `work.socket.ts`: xác thực, vào phòng dự án có kiểm quyền · S
+- [x] 0.6 Khung route `/api/v1/work`, mount, smoke-test · S
 - **Nghiệm thu:** test quyền xanh; hai người tạo thẻ cùng lúc không trùng số (test chạy thật).
+- ✅ **Đã nghiệm thu 23/09/2026:** 35 unit test + 10 test trên DB thật (`WORK_DB_TEST=1 npx tsx
+  --test src/services/work/issueChange.db.test.ts`): 20 lệnh tạo thẻ đồng thời ra số 1..20 không
+  trùng; vòng đời Bug chặn Fixed → Closed; version cũ trả 409; xoá dự án dây chuyền chạy được.
+  Route: không token 401, có token 200. Socket: người trong dự án nhận `issue.created`, người
+  ngoài bị từ chối vào phòng và không nhận gì.
+- ⚠️ Hai bẫy Postgres đã gặp (ghi ở migration `…fk_no_action` và `…issue_fk_deferred`): RESTRICT
+  kiểm ngay lập tức nên chặn xoá dây chuyền; và một dòng bị cập nhật 2 lần trong cùng câu lệnh thì
+  mọi khoá ngoại bị kiểm lại ⇒ khoá ngoại của `work_issues` phải `DEFERRABLE INITIALLY DEFERRED`.
+  Thêm khoá ngoại mới vào `work_issues` thì cũng phải cho nó DEFERRABLE.
 
 ### Đợt 1 — Lõi: dự án, thẻ, board
 - [ ] 1.1 Workspace + dự án + mời thành viên (email/link) + vai trò · L

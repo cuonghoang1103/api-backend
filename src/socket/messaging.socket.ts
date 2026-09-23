@@ -37,6 +37,7 @@ import { logger } from '../utils/logger.js';
 // handlers + listen:<roomId> rooms; does not touch the messaging logic.
 import { registerListenTogether } from './listen-together.js';
 import { registerCallSignaling } from './call.socket.js';
+import { registerWorkRealtime } from './work.socket.js';
 
 export interface MessageEventPayload {
   threadId: number;
@@ -509,6 +510,9 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
 
     // Gọi thoại 1-1 — cũng tự chứa như trên, xem `call.socket.ts`.
     registerCallSignaling(io!, socket, user);
+
+    // CT Work — phòng theo dự án cho board thời gian thực (work.socket.ts).
+    registerWorkRealtime(io!, socket, user);
 
     // Typing indicator — broadcast to the other side of the
     // conversation (excludes the sender by default).

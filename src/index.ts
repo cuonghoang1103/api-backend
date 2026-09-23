@@ -116,6 +116,8 @@ const socialRoutes = (await import(path.join(__dirname, 'routes', 'social.routes
 const notificationRoutes = (await import(path.join(__dirname, 'routes', 'notifications.routes.js'))).default;
 const githubRoutes = (await import(path.join(__dirname, 'routes', 'github.routes.js'))).default;
 const dashboardRoutes = (await import(path.join(__dirname, 'routes', 'dashboard.routes.js'))).default;
+// CT Work — quản lý dự án kiểu Jira (docs/work-hub-plan.md).
+const workRoutes = (await import(path.join(__dirname, 'routes', 'work.routes.js'))).default;
 const hubRoutesModule = await import(path.join(__dirname, 'routes', 'hub.routes.js'));
 const hubRoutes = hubRoutesModule.default;
 const { hubPublicRouter } = hubRoutesModule;
@@ -589,6 +591,7 @@ app.use('/api/v1/devices', deviceRoutes);
 app.use('/api/v1/feed', socialRoutes);
 app.use('/api/v1/repos', githubRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
+app.use('/api/v1/work', workRoutes);
 // Hub — personal bookmark manager. Authenticated router for
 // folders/links/scrape; public router for /public/:slug lookups
 // (mounted on the same prefix but with no auth middleware).

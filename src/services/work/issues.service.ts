@@ -21,6 +21,13 @@ import { canDeleteIssue, canModifyComment, requireProject, type ProjectAccess } 
 import { tiptapToText } from './tiptapText.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
+/**
+ * Thao tác do trợ lý AI đề xuất và người dùng bấm "Apply": vẫn chạy dưới quyền
+ * của CHÍNH người đó, nhưng lịch sử ghi actorKind AI ⇒ báo cáo đóng góp không
+ * cộng công cho ai (đúng luật "AI không làm hộ điểm").
+ */
+export type Via = 'USER' | 'AI';
+const actorOf = (userId: number, via: Via = 'USER'): WorkActor => ({ kind: via, userId });
 
 /** Trường của một thẻ trên board/danh sách — gọn, không mô tả. */
 export const CARD_SELECT = {
@@ -207,16 +214,16 @@ export interface CreateIssueBody extends Omit<IssuePatch, 'statusId'> {
   componentIds?: number[];
 }
 
-export async function createIssueAs(userId: number, projectId: number, body: CreateIssueBody) {
+export async function createIssueAs(userId: number, projectId: number, body: CreateIssueBody, via: Via = 'USER') {
   const access = await requireProject(userId, projectId, 'issue.create');
   // Khách hàng tạo thẻ (báo lỗi, gửi yêu cầu) nhưng không tự giao việc hay xếp sprint.
   if (access.role === 'CLIENT' && (body.assigneeId || body.sprintId || body.storyPoints !== undefined)) {
     throw new ForbiddenError('Clients can report issues but cannot assign or plan them');
   }
   const { labelIds, componentIds, ...rest } = body;
-  const issue = await createIssue({ ...rest, projectId }, userActor(userId));
+  const issue = await createIssue({ ...rest, projectId }, actorOf(userId, via));
   if (labelIds?.length || componentIds?.length) {
-    await setIssueTags(access, issue.id, { labelIds, componentIds }, userId, false);
+    await setIssueTags(access, issue.id, { labelIds, componentIds }, userId, false, via);
   }
   return issue;
 }
@@ -227,14 +234,15 @@ export async function updateIssueAs(
   number: number,
   body: IssuePatch & { labelIds?: number[]; componentIds?: number[] },
   expectedVersion?: number,
+  via: Via = 'USER',
 ) {
   const onlyStatus = Object.keys(body).every((k) => k === 'statusId');
   const access = await requireProject(userId, projectId, onlyStatus ? 'issue.transition' : 'issue.edit');
   const { id } = await findIssue(projectId, number);
   const { labelIds, componentIds, ...patch } = body;
-  const res = await applyIssueChange(id, patch, userActor(userId), { expectedVersion });
+  const res = await applyIssueChange(id, patch, actorOf(userId, via), { expectedVersion });
   if (labelIds !== undefined || componentIds !== undefined) {
-    await setIssueTags(access, id, { labelIds, componentIds }, userId, true);
+    await setIssueTags(access, id, { labelIds, componentIds }, userId, true, via);
   }
   return res.issue;
 }
@@ -255,6 +263,7 @@ async function setIssueTags(
   input: { labelIds?: number[]; componentIds?: number[] },
   userId: number,
   emit: boolean,
+  via: Via = 'USER',
 ) {
   const changes: Array<{ field: string; from: string | null; to: string | null }> = [];
   await prisma.$transaction(async (tx) => {
@@ -286,13 +295,13 @@ async function setIssueTags(
     }
     if (changes.length) {
       await tx.workHistory.createMany({
-        data: changes.map((c) => ({ issueId, actorId: userId, actorKind: 'USER', field: c.field, fromValue: c.from, toValue: c.to })),
+        data: changes.map((c) => ({ issueId, actorId: userId, actorKind: via, field: c.field, fromValue: c.from, toValue: c.to })),
       });
       await tx.workIssue.update({ where: { id: issueId }, data: { version: { increment: 1 } } });
     }
   });
   if (emit && changes.length) {
-    emitWorkEvent({ type: 'issue.updated', projectId: access.projectId, issueId, actor: userActor(userId), changes });
+    emitWorkEvent({ type: 'issue.updated', projectId: access.projectId, issueId, actor: actorOf(userId, via), changes });
   }
 }
 
@@ -388,17 +397,19 @@ export async function listComments(userId: number, projectId: number, number: nu
   return prisma.workComment.findMany({ where: { issueId: id, deletedAt: null }, orderBy: { createdAt: 'asc' }, take: 500, select: COMMENT_SELECT });
 }
 
-export async function addComment(userId: number, projectId: number, number: number, bodyJson: Prisma.InputJsonValue) {
+export async function addComment(userId: number, projectId: number, number: number, bodyJson: Prisma.InputJsonValue, via: Via = 'USER') {
   await requireProject(userId, projectId, 'comment.create');
   const { id } = await findIssue(projectId, number);
   const bodyText = commentBody(bodyJson);
   const comment = await prisma.$transaction(async (tx) => {
-    const c = await tx.workComment.create({ data: { issueId: id, authorId: userId, bodyJson, bodyText }, select: COMMENT_SELECT });
+    // Bình luận AI soạn: vẫn ghi người đã duyệt (authorId) nhưng đánh dấu isAi —
+    // hiện là "CT Work AI" và không tính vào số bình luận của ai.
+    const c = await tx.workComment.create({ data: { issueId: id, authorId: userId, isAi: via === 'AI', bodyJson, bodyText }, select: COMMENT_SELECT });
     // Bình luận vào thẻ nào thì tự theo dõi thẻ đó (như Jira).
     await tx.workWatcher.createMany({ data: [{ issueId: id, userId }], skipDuplicates: true });
     return c;
   });
-  emitWorkEvent({ type: 'comment.created', projectId, issueId: id, commentId: comment.id, actor: userActor(userId) });
+  emitWorkEvent({ type: 'comment.created', projectId, issueId: id, commentId: comment.id, actor: actorOf(userId, via) });
   return comment;
 }
 

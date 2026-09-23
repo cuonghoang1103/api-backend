@@ -147,9 +147,11 @@ export async function contributions(userId: number, projectId: number, range: { 
       where: { projectId, deletedAt: null, resolvedAt: hasRange ? inRange : { not: null }, assigneeId: { not: null } },
       select: { assigneeId: true, storyPoints: true, originalEstimateMin: true, type: { select: { level: true } } },
     }),
-    prisma.workIssue.groupBy({
-      by: ['reporterId'],
-      where: { projectId, deletedAt: null, reporterId: { not: null }, ...(hasRange ? { createdAt: inRange } : {}) },
+    // "Tạo" đếm theo dòng lịch sử 'created' do NGƯỜI làm — thẻ AI soạn rồi
+    // người dùng bấm Apply có actorKind AI nên không cộng công.
+    prisma.workHistory.groupBy({
+      by: ['actorId'],
+      where: { issue: { projectId, deletedAt: null }, field: 'created', actorKind: 'USER', actorId: { not: null }, ...(hasRange ? { createdAt: inRange } : {}) },
       _count: { _all: true },
     }),
     prisma.workComment.groupBy({
@@ -189,7 +191,7 @@ export async function contributions(userId: number, projectId: number, range: { 
     if (i.type.level === -1) r.subtasks += 1;
     else if (i.type.level === 0) { r.resolved += 1; r.points = round1(r.points + estimateOf(i, mode)); }
   }
-  for (const c of created) { const r = row(c.reporterId!); if (r) r.created = c._count._all; }
+  for (const c of created) { const r = row(c.actorId!); if (r) r.created = c._count._all; }
   for (const c of comments) { const r = row(c.authorId!); if (r) r.comments = c._count._all; }
   for (const a of actions) { const r = row(a.actorId!); if (r) r.updates = a._count._all; }
   for (const o of open) { const r = row(o.assigneeId!); if (r) r.open = o._count._all; }

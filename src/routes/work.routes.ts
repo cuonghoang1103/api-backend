@@ -25,6 +25,8 @@ import * as projects from '../services/work/projects.service.js';
 import * as reports from '../services/work/reports.service.js';
 import * as sprints from '../services/work/sprints.service.js';
 import * as tests from '../services/work/tests.service.js';
+import * as ai from '../services/work/ai.service.js';
+import { myWork } from '../services/work/myWork.service.js';
 import * as workspaces from '../services/work/workspaces.service.js';
 
 registerWorkNotifications();
@@ -599,6 +601,55 @@ router.delete('/projects/:pid/test-runs/:runId/defects/:num', asyncHandler(async
 
 router.get('/projects/:pid/reports/traceability', asyncHandler(async (req, res) => {
   ok(res, await tests.traceability(callerId(req), idParam(req, 'pid')));
+}));
+
+// ═══ Trợ lý AI (đợt 4) ══════════════════════════════════════════════
+
+router.get('/ai/quota', asyncHandler(async (req, res) => {
+  ok(res, await ai.aiQuota(callerId(req)));
+}));
+router.post('/projects/:pid/ai/chat', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    message: z.string().min(1).max(8000),
+    history: z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(12000) })).max(20).optional(),
+    issueNumber: id.nullable().optional(),
+  }), req.body);
+  ok(res, await ai.chat(callerId(req), idParam(req, 'pid'), body));
+}));
+router.post('/projects/:pid/ai/quick', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    task: z.enum(['write_story', 'split', 'generate_tests', 'improve_bug', 'summarize', 'review_story', 'meeting_notes']),
+    issueNumber: id.nullable().optional(),
+    text: z.string().max(20000).nullable().optional(),
+  }), req.body);
+  ok(res, await ai.quick(callerId(req), idParam(req, 'pid'), body));
+}));
+router.post('/projects/:pid/ai/filter', asyncHandler(async (req, res) => {
+  const { question } = parse(z.object({ question: z.string().min(2).max(500) }), req.body);
+  ok(res, await ai.naturalFilter(callerId(req), idParam(req, 'pid'), question));
+}));
+router.post('/projects/:pid/ai/apply', asyncHandler(async (req, res) => {
+  const { action } = parse(z.object({ action: ai.actionSchema }), req.body);
+  ok(res, await ai.applyAction(callerId(req), idParam(req, 'pid'), action));
+}));
+router.post('/projects/:pid/ai/weekly-report', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ audience: z.enum(['teacher', 'client', 'team']).default('team'), language: z.enum(['en', 'vi']).optional() }), req.body ?? {});
+  ok(res, await ai.weeklyReport(callerId(req), idParam(req, 'pid'), body));
+}));
+router.get('/projects/:pid/insights', asyncHandler(async (req, res) => {
+  ok(res, await ai.insights(callerId(req), idParam(req, 'pid')));
+}));
+router.get('/projects/:pid/similar', asyncHandler(async (req, res) => {
+  const title = typeof req.query.title === 'string' ? req.query.title.slice(0, 255) : '';
+  ok(res, await ai.similarIssues(callerId(req), idParam(req, 'pid'), title));
+}));
+router.get('/projects/:pid/suggest-assignee', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ parentId: id.optional(), labels: idList }), req.query);
+  ok(res, await ai.suggestAssignee(callerId(req), idParam(req, 'pid'), { parentId: q.parentId, labelIds: q.labels }));
+}));
+
+router.get('/me/work', asyncHandler(async (req, res) => {
+  ok(res, await myWork(callerId(req)));
 }));
 
 export default router;

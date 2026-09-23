@@ -100,6 +100,18 @@ export function startCronJobs(): void {
   }, { timezone: 'UTC' });
 
   // ─── Hourly health check ───
+  // CT Work: email nhắc việc 08:00 giờ VN (01:00 UTC). Tự tắt nếu
+  // WORK_REMINDER_EMAILS khác 'true' — mặc định KHÔNG gửi gì.
+  cron.schedule('0 1 * * *', async () => {
+    try {
+      const { sendMorningReminders } = await import('./work/myWork.service.js');
+      const n = await sendMorningReminders();
+      if (n) logger.info('[work] reminder emails sent', { users: n });
+    } catch (err) {
+      logger.warn('[work] reminder emails failed', { error: (err as Error).message });
+    }
+  });
+
   // CT Work: số liệu burndown — ghi đè số của "hôm nay" (giờ VN) cho mọi sprint
   // đang chạy, mỗi giờ. Lỡ vài giờ cũng không mất điểm của ngày.
   cron.schedule('5 * * * *', async () => {

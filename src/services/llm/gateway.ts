@@ -320,7 +320,9 @@ export type LlmPurpose =
   | 'exam_tutor'          // CuongMini — AI đồng hành khi thi (Pro), đi cổng rambo như agent_code
   | 'lab_room'            // Phòng Lab LAB211 — giảng đề, kèm code, chấm bài nộp; cổng rambo, model mạnh nhất
   | 'academy_advisor'     // Phòng tư vấn chọn ngành hẹp ở /academy — chat tương tác, neo vào dữ liệu curated
-  | 'finance_advisor';    // MoneyFlow — đọc số liệu tiền nong của CHÍNH người dùng rồi khuyên
+  | 'finance_advisor'     // MoneyFlow — đọc số liệu tiền nong của CHÍNH người dùng rồi khuyên
+  | 'work_assistant'      // CT Work — trợ lý trong dự án: viết story, tách việc, sinh test, trả lời về dự án
+  | 'work_digest';        // CT Work — diễn đạt lại số liệu mã đã tính (báo cáo tuần, bản tin)
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -412,6 +414,16 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * Vặn lại bằng `LLM_MODEL_FINANCE_ADVISOR` nếu cần.
    */
   finance_advisor: 'claude-sonnet-5',
+
+  /**
+   * CT Work (23/09/2026). Trợ lý là việc TƯƠNG TÁC người dùng đọc từng chữ rồi
+   * bấm "Apply" để nó tạo/sửa thẻ thật ⇒ sonnet-5, như mọi việc tương tác khác.
+   * `work_digest` chỉ DIỄN ĐẠT LẠI con số mã đã tính sẵn (báo cáo tuần) ⇒ model
+   * rẻ là đủ; con số không bao giờ do model tự tính.
+   * Vặn bằng `LLM_MODEL_WORK_ASSISTANT` / `LLM_MODEL_WORK_DIGEST`.
+   */
+  work_assistant: 'claude-sonnet-5',
+  work_digest: 'gpt-5.4-mini',
 
   cv_critique: 'gpt-5.6-sol',
   cv_writing: 'gpt-5.6-sol',

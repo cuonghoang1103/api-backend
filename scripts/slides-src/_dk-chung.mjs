@@ -24,8 +24,11 @@ import { CSS as CR_CSS, esc, mindmap as crMindmap } from './_cr-chung.mjs';
 import { GIT_CSS, G as GG, term as gitTerm, diagram as gitDiagram } from './_git-chung.mjs';
 
 export {
-  esc, cards, box, steps, table, vs, kpis, flow, tag, quote, two, list, cap, note, code, bars, chart, calendar, seg, tree,
+  esc, cards, box, steps, table, vs, kpis, flow, tag, quote, two, list, cap, note, code, bars, chart, calendar, seg,
 } from './_cr-chung.mjs';
+import { tree as crTree } from './_cr-chung.mjs';
+/** tree() của CR gắn 🎞 (phim) cho file — khoá Docker dùng 📄. */
+export const tree = (src) => crTree(src).replaceAll('🎞 ', '📄 ');
 export { conflict } from './_git-chung.mjs';
 
 /* ─────────────────────────────── BẢNG MÀU ─────────────────────────────── */

@@ -17,7 +17,8 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/DK';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'dk-05': 'v2' }. */
-const VER = {};
+// v2 (24/09/2026): tree() đổi icon file 🎞 → 📄
+const VER = { 'dk-09': 'v2' };
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

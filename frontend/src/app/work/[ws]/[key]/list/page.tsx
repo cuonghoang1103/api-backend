@@ -7,6 +7,8 @@
  * để link một bộ lọc là chia sẻ được; thẻ đang mở là ?issue=NUM để Back đóng
  * được drawer. Trạng thái lọc THEO TÊN (gộp mọi quy trình): chọn "In Progress"
  * là chọn mọi statusId mang tên đó.
+ *
+ * Chế độ JQL: ?mode=jql&jql=<câu truy vấn>&filter=<id bộ lọc đã lưu>.
  */
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
@@ -15,7 +17,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { ChevronDown, Plus, Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
-import { workApi, workError, userName, type IssueCard, type IssueQuery, type StatusCategory } from '@/lib/work-api';
+import { workApi, workError, userName, type IssueCard, type IssueQuery, type SavedFilter, type StatusCategory } from '@/lib/work-api';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import {
   EmptyState, IssueTypeIcon, PickerList, Popover, PriorityIcon, Spinner, StatusBadge, UserAvatar,
@@ -23,6 +25,9 @@ import {
 } from '@/components/work/ui';
 import IssueDrawer from '@/components/work/IssueDrawer';
 import CreateIssueDialog from '@/components/work/CreateIssueDialog';
+import { JqlInput, type JqlInputHandle } from '@/components/work/search/JqlInput';
+import SavedFilters from '@/components/work/search/SavedFilters';
+import { basicToJql, jqlErrorOf } from '@/components/work/search/jql';
 
 const PAGE = 100;
 const ME = -1; // giá trị "Me" trong picker; trên URL là chữ `me`
@@ -91,6 +96,29 @@ function FilterButton<T>({
   );
 }
 
+/** Công tắc Basic | JQL. */
+function ModeToggle({ mode, onChange }: { mode: 'basic' | 'jql'; onChange: (m: 'basic' | 'jql') => void }) {
+  return (
+    <div className="inline-flex shrink-0 rounded-[var(--w-radius)] border border-[var(--w-border-strong)] p-0.5" role="tablist" aria-label="Search mode">
+      {(['basic', 'jql'] as const).map((m) => (
+        <button
+          key={m}
+          type="button"
+          role="tab"
+          aria-selected={mode === m}
+          onClick={() => mode !== m && onChange(m)}
+          className={cn(
+            'h-[22px] rounded-[4px] px-2 text-[12px] font-medium',
+            mode === m ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'text-[var(--w-text-2)] hover:text-[var(--w-text)]',
+          )}
+        >
+          {m === 'basic' ? 'Basic' : 'JQL'}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 // ─── Trang ───────────────────────────────────────────────────────
 
 export default function IssuesListPage({ params }: { params: { ws: string; key: string } }) {
@@ -118,6 +146,10 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   const assigneeSel = useMemo(() => assigneeList(sp?.get('assignee') ?? null), [sp]);
   const labelSel = useMemo(() => numList(sp?.get('label') ?? null), [sp]);
   const showDone = sp?.get('done') === '1';
+  const jqlMode = sp?.get('mode') === 'jql';
+  const jqlParam = sp?.get('jql') ?? '';
+  const filterParam = Number(sp?.get('filter'));
+  const activeFilterId = Number.isInteger(filterParam) && filterParam > 0 ? filterParam : null;
   const issueParam = Number(sp?.get('issue'));
   const openNum = Number.isInteger(issueParam) && issueParam > 0 ? issueParam : null;
 
@@ -180,16 +212,42 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   // Lọc theo trạng thái mà cấu hình chưa về thì chưa dựng được danh sách id — chờ.
   const ready = !!pid && !!config;
 
-  const list = useInfiniteQuery({
+  const basicList = useInfiniteQuery({
     queryKey: [...wk.issues(pid ?? 0), query],
     queryFn: ({ pageParam }) => workApi.issues(pid!, { ...query, cursor: (pageParam as string | undefined) || undefined }),
     initialPageParam: '' as string,
     getNextPageParam: (last) => last.nextCursor ?? undefined,
-    enabled: ready,
+    enabled: ready && !jqlMode,
     staleTime: 15_000,
   });
 
-  const items = useMemo(() => list.data?.pages.flatMap((p) => p.items) ?? [], [list.data]);
+  // ── JQL ──
+  const jqlRef = useRef<JqlInputHandle>(null);
+  const [jqlDraft, setJqlDraft] = useState(jqlParam);
+  // URL đổi từ ngoài (Back, nạp bộ lọc đã lưu) ⇒ đồng bộ lại ô JQL.
+  useEffect(() => setJqlDraft(jqlParam), [jqlParam]);
+  const jqlList = useInfiniteQuery({
+    queryKey: wk.search(pid ?? 0, jqlParam),
+    queryFn: ({ pageParam }) => workApi.search(pid!, jqlParam, { limit: PAGE, offset: pageParam }),
+    initialPageParam: 0,
+    getNextPageParam: (last) => (last.offset + last.items.length < last.total ? last.offset + last.items.length : undefined),
+    enabled: ready && jqlMode,
+    staleTime: 15_000,
+    // Lỗi cú pháp thì thử lại cũng vô ích.
+    retry: (n, err) => !jqlErrorOf(err) && n < 2,
+  });
+  const jqlError = jqlMode && jqlList.isError ? jqlErrorOf(jqlList.error) : null;
+
+  // Hai nguồn, một bảng: gom về cùng một hình.
+  const list = jqlMode
+    ? { data: jqlList.data, isLoading: jqlList.isLoading, isError: jqlList.isError, error: jqlList.error, hasNextPage: jqlList.hasNextPage, isFetchingNextPage: jqlList.isFetchingNextPage, fetchNextPage: () => void jqlList.fetchNextPage(), refetch: () => void jqlList.refetch() }
+    : { data: basicList.data, isLoading: basicList.isLoading, isError: basicList.isError, error: basicList.error, hasNextPage: basicList.hasNextPage, isFetchingNextPage: basicList.isFetchingNextPage, fetchNextPage: () => void basicList.fetchNextPage(), refetch: () => void basicList.refetch() };
+  const jqlTotal = jqlList.data?.pages[0]?.total;
+
+  const items = useMemo(
+    () => (jqlMode ? jqlList.data?.pages.flatMap((p) => p.items) : basicList.data?.pages.flatMap((p) => p.items)) ?? [],
+    [jqlMode, jqlList.data, basicList.data],
+  );
   // IssueCard chỉ có parentId — tra số của cha trong những thẻ đã tải.
   const numById = useMemo(() => new Map(items.map((i) => [i.id, i.number])), [items]);
 
@@ -223,7 +281,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   // ── Bàn phím ──
   const [hi, setHi] = useState(-1);
   const rowsRef = useRef<HTMLDivElement>(null);
-  useEffect(() => setHi(-1), [query]);
+  useEffect(() => setHi(-1), [query, jqlParam, jqlMode]);
   useEffect(() => {
     if (hi < 0) return;
     rowsRef.current?.querySelector<HTMLElement>(`[data-row="${hi}"]`)?.scrollIntoView({ block: 'nearest' });
@@ -254,13 +312,17 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
         setCreateOpen(true);
       } else if (k === '/') {
         e.preventDefault();
-        searchRef.current?.focus();
-        searchRef.current?.select();
+        if (jqlMode) {
+          jqlRef.current?.focus();
+        } else {
+          searchRef.current?.focus();
+          searchRef.current?.select();
+        }
       }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [items, hi, createOpen, openNum, canCreate, openIssue]);
+  }, [items, hi, createOpen, openNum, canCreate, openIssue, jqlMode]);
 
   // ── Lựa chọn cho picker ──
   const typeOptions = useMemo<PickOption<number>[]>(
@@ -302,6 +364,24 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
 
   const summaryOf = (labels: string[]) => (labels.length === 1 ? `· ${labels[0]}` : `· ${labels.length}`);
 
+  // Bộ lọc cơ bản đang chọn ⇒ JQL tương đương (sang JQL không mất bộ lọc).
+  const currentBasicJql = () =>
+    basicToJql({
+      q: qParam,
+      typeNames: typeSel.map((id) => lk.types.get(id)?.name).filter((x): x is string => !!x),
+      statusNames: statusSel,
+      assignees: assigneeSel.map((a) => (a === ME ? 'me' : a === 0 ? 'none' : lk.members.get(a)?.username ?? '')).filter(Boolean),
+      labelNames: labelSel.map((id) => lk.labels.get(id)?.name).filter((x): x is string => !!x),
+      includeDone: showDone,
+    });
+
+  const setMode = (m: 'basic' | 'jql') => {
+    if (m === 'jql') setParams({ mode: 'jql', jql: jqlParam || currentBasicJql() || null });
+    else setParams({ mode: null, jql: null, filter: null });
+  };
+  const runJql = (q: string) => setParams({ mode: 'jql', jql: q || null });
+  const loadFilter = (f: SavedFilter) => setParams({ mode: 'jql', jql: f.query || null, filter: String(f.id) });
+
   // ── Trạng thái tải trang ──
   if (projectError) {
     return (
@@ -314,7 +394,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
     return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
   }
 
-  const countLabel = list.isLoading ? '' : `${items.length}${list.hasNextPage ? '+' : ''}`;
+  const countLabel = list.isLoading || list.isError ? '' : jqlMode && jqlTotal !== undefined ? String(jqlTotal) : `${items.length}${list.hasNextPage ? '+' : ''}`;
   const today = todayLocal();
 
   return (
@@ -326,15 +406,36 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
         <h1 className="text-[14px] font-semibold">Issues</h1>
         {countLabel && <span className="tabular rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 text-[11px] text-[var(--w-text-2)]">{countLabel}</span>}
         <div className="flex-1" />
+        <ModeToggle mode={jqlMode ? 'jql' : 'basic'} onChange={setMode} />
+        <SavedFilters
+          config={config}
+          activeId={activeFilterId}
+          query={jqlMode ? jqlDraft.trim() : currentBasicJql()}
+          onLoad={loadFilter}
+          onSaved={loadFilter}
+        />
         {canCreate && (
-          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)}>
-            <Plus size={14} /> <span>Create issue</span>
+          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue">
+            <Plus size={14} /> <span className="max-sm:!hidden">Create issue</span>
             <kbd className="ml-1 hidden rounded-[3px] bg-white/20 px-1 text-[10px] font-medium leading-[16px] md:inline">C</kbd>
           </button>
         )}
       </div>
 
       {/* Thanh lọc */}
+      {jqlMode ? (
+        <div className="shrink-0 border-b border-[var(--w-border)] px-3 py-2 md:px-4">
+          <JqlInput
+            ref={jqlRef}
+            value={jqlDraft}
+            onChange={setJqlDraft}
+            onRun={runJql}
+            config={config}
+            error={jqlError}
+            ranQuery={jqlParam}
+          />
+        </div>
+      ) : (
       <div className="flex shrink-0 flex-wrap items-center gap-1.5 border-b border-[var(--w-border)] px-3 py-2 md:px-4">
         <div className="relative w-full sm:w-[240px]">
           <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
@@ -405,6 +506,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
           </button>
         )}
       </div>
+      )}
 
       {/* Bảng */}
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
@@ -435,11 +537,18 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
               </div>
             ))}
           </div>
+        ) : jqlError ? (
+          <EmptyState title="Fix the query to see results" body="Check the highlighted part of your query, or open Syntax help for fields and examples." />
         ) : list.isError ? (
           <EmptyState
             title="Couldn't load issues"
             body={workError(list.error)}
             action={<button type="button" className="w-btn" onClick={() => list.refetch()}>Try again</button>}
+          />
+        ) : !items.length && jqlMode ? (
+          <EmptyState
+            title="No issues match this query"
+            body={jqlParam ? 'Try widening the query: remove a clause or include done issues.' : 'This project has no issues yet.'}
           />
         ) : !items.length ? (
           hasFilters ? (

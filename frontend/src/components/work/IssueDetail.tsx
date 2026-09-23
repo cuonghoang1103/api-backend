@@ -22,6 +22,7 @@ import {
   type ProjectConfig, type TiptapDoc, type IssueAttachment,
 } from '@/lib/work-api';
 import CreateIssueDialog from './CreateIssueDialog';
+import CustomFieldsGroup from './CustomFields';
 import AiIssueMenu from './ai/AiIssueMenu';
 import { ConfirmDialog } from './settings/shared';
 import {
@@ -462,6 +463,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
       {config.components.length > 0 && (
         <Prop label="Components"><ComponentsPicker config={config} value={issue.componentIds} onChange={(componentIds) => set({ componentIds })} bare disabled={!editable} /></Prop>
       )}
+      <CustomFieldsGroup pid={pid} num={num} typeKey={type?.key} config={config} editable={editable} />
       <div className="mt-4 space-y-1 border-t border-[var(--w-border)] pt-3 text-[12px] text-[var(--w-text-3)]">
         <div>Created {formatDate(issue.createdAt)} · {relativeTime(issue.createdAt)}</div>
         <div>Updated {relativeTime(issue.updatedAt)}</div>

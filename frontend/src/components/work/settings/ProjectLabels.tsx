@@ -13,7 +13,7 @@ import { useProjectInvalidate } from './useProjectInvalidate';
 /** Bảng màu nhãn — màu dữ liệu, nên được phép viết cứng. */
 export const LABEL_COLORS = ['#64748b', '#dc2626', '#ea580c', '#ca8a04', '#16a34a', '#0891b2', '#2563eb', '#7c3aed'];
 
-function ColorPicker({ value, onChange, disabled }: { value: string; onChange: (c: string) => void; disabled?: boolean }) {
+export function ColorPicker({ value, onChange, disabled, ariaLabel = 'Label colour' }: { value: string; onChange: (c: string) => void; disabled?: boolean; ariaLabel?: string }) {
   const ref = useRef<HTMLButtonElement>(null);
   const pop = useToggle();
   return (
@@ -23,7 +23,7 @@ function ColorPicker({ value, onChange, disabled }: { value: string; onChange: (
         type="button"
         disabled={disabled}
         onClick={pop.toggle}
-        aria-label="Label colour"
+        aria-label={ariaLabel}
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] border border-[var(--w-border-strong)] hover:bg-[var(--w-hover)] disabled:cursor-not-allowed disabled:opacity-60"
       >
         <span className="h-3 w-3 rounded-full" style={{ background: value }} />

@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
-  ArrowLeft, FlaskConical, BarChart3, ChevronDown, Columns3, List, ListOrdered, Plus, Settings, Users, LayoutGrid, Check,
+  ArrowLeft, FlaskConical, BarChart3, ChevronDown, Columns3, LayoutDashboard, List, ListOrdered, Plus, Settings, Users, LayoutGrid, Check,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi } from '@/lib/work-api';
@@ -133,6 +133,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                       <NavItem href={`${base}/list`} icon={List} label="Issues" active={view === 'list' || view === 'issue'} indent />
                       <NavItem href={`${base}/tests`} icon={FlaskConical} label="Tests" active={view === 'tests'} indent />
                       <NavItem href={`${base}/reports`} icon={BarChart3} label="Reports" active={view === 'reports'} indent />
+                      <NavItem href={`${base}/dashboards`} icon={LayoutDashboard} label="Dashboards" active={view === 'dashboards'} indent />
                       <NavItem href={`${base}/settings`} icon={Settings} label="Project settings" active={view === 'settings'} indent />
                     </div>
                   )}

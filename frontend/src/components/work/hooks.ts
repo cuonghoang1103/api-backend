@@ -30,6 +30,14 @@ export const wk = {
   reports: (pid: number) => ['work', 'reports', pid] as const,
   /** Mọi dữ liệu kiểm thử (test, plan, cycle, lần chạy, truy vết) nằm dưới khoá này. */
   tests: (pid: number) => ['work', 'tests', pid] as const,
+  /** Kết quả JQL nằm dưới wk.issues ⇒ sự kiện thẻ làm tươi luôn. */
+  search: (pid: number, jql: string) => ['work', 'issues', pid, 'jql', jql] as const,
+  filters: (pid: number) => ['work', 'filters', pid] as const,
+  dashboards: (pid: number) => ['work', 'dashboards', pid] as const,
+  /** Số liệu widget nằm dưới wk.reports ⇒ sự kiện thẻ làm tươi luôn. */
+  widget: (pid: number) => ['work', 'reports', pid, 'widget'] as const,
+  /** Giá trị trường tuỳ chỉnh nằm dưới wk.issue(pid) ⇒ issue.updated làm tươi. */
+  customValues: (pid: number, num: number) => ['work', 'issue', pid, num, 'custom'] as const,
 };
 
 /** /work/<slug>/<KEY> ⇒ cấu hình dự án. */

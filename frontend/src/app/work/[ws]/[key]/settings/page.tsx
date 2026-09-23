@@ -15,9 +15,12 @@ import ProjectMembers from '@/components/work/settings/ProjectMembers';
 import ProjectLabels from '@/components/work/settings/ProjectLabels';
 import ProjectComponents from '@/components/work/settings/ProjectComponents';
 import ProjectWorkflow from '@/components/work/settings/ProjectWorkflow';
+import ProjectBoard from '@/components/work/settings/ProjectBoard';
+import ProjectIssueTypes from '@/components/work/settings/ProjectIssueTypes';
+import ProjectFields from '@/components/work/settings/ProjectFields';
 import ProjectDanger from '@/components/work/settings/ProjectDanger';
 
-type Tab = 'details' | 'members' | 'labels' | 'components' | 'workflow' | 'danger';
+type Tab = 'details' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -34,6 +37,9 @@ function ProjectSettings() {
     { key: 'labels', label: 'Labels' },
     { key: 'components', label: 'Components' },
     { key: 'workflow', label: 'Workflow' },
+    { key: 'board', label: 'Board' },
+    { key: 'types', label: 'Issue types' },
+    { key: 'fields', label: 'Fields' },
     ...(config?.permissions.settings ? [{ key: 'danger' as const, label: 'Danger zone' }] : []),
   ];
   const raw = search?.get('tab') as Tab | null;
@@ -73,14 +79,17 @@ function ProjectSettings() {
               This project is archived. Restore it from the Danger zone to show it in the sidebar again.
             </div>
           )}
-          {!config.permissions.settings && tab !== 'workflow' && (
+          {!config.permissions.settings && (
             <ReadOnlyNotice>You can view these settings, but only project admins can change them.</ReadOnlyNotice>
           )}
           {tab === 'details' && <ProjectDetails config={config} slug={slug} />}
           {tab === 'members' && <ProjectMembers config={config} slug={slug} />}
           {tab === 'labels' && <ProjectLabels config={config} slug={slug} />}
           {tab === 'components' && <ProjectComponents config={config} slug={slug} />}
-          {tab === 'workflow' && <ProjectWorkflow config={config} />}
+          {tab === 'workflow' && <ProjectWorkflow config={config} slug={slug} />}
+          {tab === 'board' && <ProjectBoard config={config} slug={slug} />}
+          {tab === 'types' && <ProjectIssueTypes config={config} slug={slug} />}
+          {tab === 'fields' && <ProjectFields config={config} slug={slug} />}
           {tab === 'danger' && <ProjectDanger config={config} slug={slug} />}
         </div>
       </div>

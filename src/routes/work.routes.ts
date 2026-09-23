@@ -27,6 +27,8 @@ import * as sprints from '../services/work/sprints.service.js';
 import * as tests from '../services/work/tests.service.js';
 import * as ai from '../services/work/ai.service.js';
 import { myWork } from '../services/work/myWork.service.js';
+import * as custom from '../services/work/customize.service.js';
+import * as searchSvc from '../services/work/search.service.js';
 import * as workspaces from '../services/work/workspaces.service.js';
 
 registerWorkNotifications();
@@ -650,6 +652,136 @@ router.get('/projects/:pid/suggest-assignee', asyncHandler(async (req, res) => {
 
 router.get('/me/work', asyncHandler(async (req, res) => {
   ok(res, await myWork(callerId(req)));
+}));
+
+// ═══ Tuỳ biến & tìm kiếm (đợt 5) ════════════════════════════════════
+
+router.post('/projects/:pid/workflows', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ name: z.string().min(1).max(80), copyFrom: id.nullable().optional() }), req.body);
+  ok(res, await custom.createWorkflow(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.post('/projects/:pid/workflows/:wfId/statuses', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ name: z.string().min(1).max(60), category: z.enum(custom.STATUS_CATEGORIES), color: hexColor.optional() }), req.body);
+  ok(res, await custom.addStatus(callerId(req), idParam(req, 'pid'), idParam(req, 'wfId'), body), 201);
+}));
+router.put('/projects/:pid/workflows/:wfId/order', asyncHandler(async (req, res) => {
+  const { statusIds } = parse(z.object({ statusIds: z.array(id).min(1).max(50) }), req.body);
+  await custom.reorderStatuses(callerId(req), idParam(req, 'pid'), idParam(req, 'wfId'), statusIds);
+  ok(res, { updated: true });
+}));
+router.put('/projects/:pid/workflows/:wfId/transitions', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    mode: z.enum(['free', 'restricted']),
+    transitions: z.array(z.object({ from: id.nullable(), to: id })).max(500).optional(),
+  }), req.body);
+  await custom.setTransitions(callerId(req), idParam(req, 'pid'), idParam(req, 'wfId'), body);
+  ok(res, { updated: true });
+}));
+router.patch('/projects/:pid/statuses/:statusId', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(60).optional(), category: z.enum(custom.STATUS_CATEGORIES).optional(),
+    color: hexColor.optional(), wipLimit: z.number().int().min(1).max(500).nullable().optional(),
+  }), req.body);
+  await custom.updateStatus(callerId(req), idParam(req, 'pid'), idParam(req, 'statusId'), body);
+  ok(res, { updated: true });
+}));
+router.delete('/projects/:pid/statuses/:statusId', asyncHandler(async (req, res) => {
+  const moveTo = req.query.moveTo ? parse(id, req.query.moveTo) : undefined;
+  await custom.deleteStatus(callerId(req), idParam(req, 'pid'), idParam(req, 'statusId'), moveTo);
+  ok(res, { deleted: true });
+}));
+router.put('/projects/:pid/board-columns', asyncHandler(async (req, res) => {
+  const { columns } = parse(z.object({
+    columns: z.array(z.object({ name: z.string().min(1).max(40), statusIds: z.array(id).max(50), wipLimit: z.number().int().min(1).max(500).nullable().optional() })).max(20).nullable(),
+  }), req.body);
+  await custom.setBoardColumns(callerId(req), idParam(req, 'pid'), columns);
+  ok(res, { updated: true });
+}));
+router.post('/projects/:pid/issue-types', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(40), level: z.union([z.literal(0), z.literal(-1), z.literal(1)]),
+    color: hexColor.optional(), icon: z.string().max(24).optional(), workflowId: id.nullable().optional(),
+  }), req.body);
+  ok(res, await custom.addIssueType(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.patch('/projects/:pid/issue-types/:typeId', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(40).optional(), color: hexColor.optional(), icon: z.string().max(24).optional(),
+    archived: z.boolean().optional(), workflowId: id.nullable().optional(),
+  }), req.body);
+  await custom.updateIssueType(callerId(req), idParam(req, 'pid'), idParam(req, 'typeId'), body);
+  ok(res, { updated: true });
+}));
+
+const optionBody = z.object({ id: z.string().max(40).optional(), label: z.string().min(1).max(60), color: hexColor.optional() });
+router.get('/projects/:pid/custom-fields', asyncHandler(async (req, res) => {
+  ok(res, await custom.listCustomFields(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/custom-fields', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(60), kind: z.enum(custom.CUSTOM_KINDS), options: z.array(optionBody).max(100).optional(),
+    typeKeys: z.array(z.string().max(20)).max(20).nullable().optional(), required: z.boolean().optional(),
+  }), req.body);
+  ok(res, await custom.createCustomField(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.patch('/projects/:pid/custom-fields/:fieldId', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(60).optional(), options: z.array(optionBody).max(100).optional(),
+    typeKeys: z.array(z.string().max(20)).max(20).nullable().optional(), required: z.boolean().optional(), position: z.number().int().min(0).optional(),
+  }), req.body);
+  await custom.updateCustomField(callerId(req), idParam(req, 'pid'), idParam(req, 'fieldId'), body);
+  ok(res, { updated: true });
+}));
+router.delete('/projects/:pid/custom-fields/:fieldId', asyncHandler(async (req, res) => {
+  await custom.deleteCustomField(callerId(req), idParam(req, 'pid'), idParam(req, 'fieldId'));
+  ok(res, { deleted: true });
+}));
+router.get('/projects/:pid/issues/:num/custom-values', asyncHandler(async (req, res) => {
+  ok(res, await custom.getCustomValues(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.put('/projects/:pid/issues/:num/custom-values', asyncHandler(async (req, res) => {
+  const { values } = parse(z.object({ values: z.record(z.unknown()) }), req.body);
+  ok(res, await custom.setCustomValues(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), values));
+}));
+
+router.get('/projects/:pid/search', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ jql: z.string().max(4000).default(''), limit: z.coerce.number().int().min(1).max(500).optional(), offset: z.coerce.number().int().min(0).optional() }), req.query);
+  ok(res, await searchSvc.search(callerId(req), idParam(req, 'pid'), q.jql, { limit: q.limit, offset: q.offset }));
+}));
+router.get('/projects/:pid/stats', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ jql: z.string().max(4000).default(''), groupBy: z.enum(searchSvc.GROUP_BYS) }), req.query);
+  ok(res, await searchSvc.stats(callerId(req), idParam(req, 'pid'), q.jql, q.groupBy));
+}));
+router.get('/projects/:pid/stats/created-resolved', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ days: z.coerce.number().int().min(7).max(90).default(30), jql: z.string().max(4000).default('') }), req.query);
+  ok(res, await searchSvc.createdVsResolved(callerId(req), idParam(req, 'pid'), q.days, q.jql));
+}));
+router.get('/projects/:pid/filters', asyncHandler(async (req, res) => {
+  ok(res, await searchSvc.listFilters(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/filters', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ id: id.optional(), name: z.string().min(1).max(100), query: z.string().max(4000), shared: z.boolean().optional() }), req.body);
+  ok(res, await searchSvc.saveFilter(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.delete('/projects/:pid/filters/:filterId', asyncHandler(async (req, res) => {
+  await searchSvc.deleteFilter(callerId(req), idParam(req, 'pid'), idParam(req, 'filterId'));
+  ok(res, { deleted: true });
+}));
+const widgetBody = z.object({
+  id: z.string().max(40).default(''), kind: z.enum(searchSvc.WIDGET_KINDS), title: z.string().max(80).default(''),
+  query: z.string().max(4000).optional(), groupBy: z.enum(searchSvc.GROUP_BYS).optional(), sprintId: id.nullable().optional(),
+  days: z.number().int().min(7).max(90).optional(), text: z.string().max(5000).optional(), size: z.enum(['half', 'full']).optional(),
+});
+router.get('/projects/:pid/dashboards', asyncHandler(async (req, res) => {
+  ok(res, await searchSvc.listDashboards(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/dashboards', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ id: id.optional(), name: z.string().min(1).max(100), shared: z.boolean().optional(), widgets: z.array(widgetBody).max(30) }), req.body);
+  ok(res, await searchSvc.saveDashboard(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.delete('/projects/:pid/dashboards/:dashId', asyncHandler(async (req, res) => {
+  await searchSvc.deleteDashboard(callerId(req), idParam(req, 'pid'), idParam(req, 'dashId'));
+  ok(res, { deleted: true });
 }));
 
 export default router;

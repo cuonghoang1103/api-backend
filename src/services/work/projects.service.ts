@@ -181,11 +181,18 @@ interface WfLite { id: number; isDefault: boolean; statuses: Array<{ id: number;
  * settings.boardColumns (đợt 5) sẽ cho người dùng tự chia cột.
  */
 export function boardColumns(workflows: WfLite[], settings: unknown) {
-  const custom = (settings as { boardColumns?: Array<{ name: string; statusIds: number[] }> } | null)?.boardColumns;
+  const custom = (settings as { boardColumns?: Array<{ name: string; statusIds: number[]; wipLimit?: number | null }> } | null)?.boardColumns;
   const main = workflows.find((w) => w.isDefault) ?? workflows[0];
   if (!main) return [];
   if (custom?.length) {
-    return custom.map((c, i) => ({ key: `c${i}`, name: c.name, statusIds: c.statusIds, category: 'CUSTOM', wipLimit: null as number | null }));
+    // Nhóm của cột tuỳ chỉnh = nhóm của trạng thái đầu tiên trong cột (board dùng
+    // nó để biết cột "xong" — không cho thêm nhanh thẻ vào đó).
+    const all = workflows.flatMap((w) => w.statuses);
+    // Trạng thái đã bị xoá sau khi cấu hình cột thì bỏ qua, không làm vỡ board.
+    return custom.map((c, i) => {
+      const ids = c.statusIds.filter((id) => all.some((s) => s.id === id));
+      return { key: `c${i}`, name: c.name, statusIds: ids, category: all.find((s) => s.id === ids[0])?.category ?? 'TODO', wipLimit: c.wipLimit ?? null };
+    });
   }
   const cols = main.statuses.map((s) => ({ key: `s${s.id}`, name: s.name, category: s.category, statusIds: [s.id], wipLimit: s.wipLimit }));
   for (const wf of workflows) {

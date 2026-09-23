@@ -322,6 +322,94 @@ export interface ContributionRow {
 }
 export interface ContributionData { unit: EstimationUnit; from: string | null; to: string | null; members: ContributionRow[] }
 
+
+// ─── Đợt 3: kiểm thử ─────────────────────────────────────────────
+
+export type RunStatus = 'TODO' | 'IN_PROGRESS' | 'PASS' | 'FAIL' | 'BLOCKED' | 'SKIP' | 'RETEST';
+export type StepStatus = 'TODO' | 'PASS' | 'FAIL' | 'BLOCKED' | 'SKIP';
+export type CycleState = 'PLANNED' | 'IN_PROGRESS' | 'DONE';
+export interface TestStep { id?: number; position?: number; action: string; data?: string | null; expected?: string | null }
+export interface IssueRef { number: number; title: string; statusId?: number }
+
+export interface TestListItem {
+  id: number; number: number; title: string; priority: number; statusId: number; assigneeId: number | null; updatedAt: string;
+  labelIds: number[]; kind: 'MANUAL' | 'GHERKIN'; stepCount: number;
+  requirements: IssueRef[];
+  lastRun: { status: RunStatus; executedAt: string | null; cycleName: string } | null;
+}
+export interface TestDetail {
+  number: number; title: string; testCaseId: number; kind: 'MANUAL' | 'GHERKIN'; preconditions: string | null; gherkin: string | null;
+  updatedAt: string; steps: Array<{ id: number; position: number; action: string; data: string | null; expected: string | null }>;
+  runs: Array<{ id: number; status: RunStatus; executedAt: string | null; comment: string | null; executedBy: WorkUser | null;
+    cycle: { id: number; name: string; environment: string | null }; defects: IssueRef[] }>;
+  plans: Array<{ id: number; name: string }>;
+}
+export interface TestInput {
+  title?: string; preconditions?: string | null; kind?: 'MANUAL' | 'GHERKIN'; gherkin?: string | null; steps?: TestStep[];
+  requirementKeys?: string[]; priority?: number; labelIds?: number[]; assigneeId?: number | null;
+}
+export interface TestPlan { id: number; name: string; description: string | null; archivedAt: string | null; createdAt: string; cycleCount: number; testNumbers: number[] }
+export interface CycleCounts { counts: Record<RunStatus, number>; total: number; executed: number; passRate: number | null; progress: number }
+export interface TestCycleSummary extends CycleCounts {
+  id: number; name: string; environment: string | null; build: string | null; state: CycleState;
+  startAt: string | null; endAt: string | null; createdAt: string; plan: { id: number; name: string } | null;
+}
+export interface TestRunRow {
+  id: number; status: RunStatus; executedAt: string | null; comment: string | null; assigneeId: number | null; executedBy: WorkUser | null;
+  stepCount: number; test: { number: number; title: string; priority: number }; defects: IssueRef[];
+}
+export interface TestCycleDetail extends TestCycleSummary { runs: TestRunRow[] }
+export interface TestRunDetail {
+  id: number; status: RunStatus; comment: string | null; gherkin: string | null; executedAt: string | null; assigneeId: number | null;
+  executedBy: WorkUser | null;
+  cycle: { id: number; name: string; environment: string | null; build: string | null; state: CycleState };
+  testCase: { preconditions: string | null; kind: 'MANUAL' | 'GHERKIN'; issue: { number: number; title: string; priority: number } };
+  steps: Array<{ id: number; position: number; action: string; data: string | null; expected: string | null; status: StepStatus; actual: string | null }>;
+  defects: IssueRef[];
+}
+export type Coverage = 'NOT_COVERED' | 'NOT_RUN' | 'FAILING' | 'BLOCKED' | 'PASSING';
+export interface TraceabilityData {
+  rows: Array<{ number: number; title: string; statusId: number; typeId: number; coverage: Coverage;
+    tests: Array<{ number: number; title: string; lastStatus: RunStatus | null; openBugs: IssueRef[] }> }>;
+  summary: { total: number; covered: number; passing: number; failing: number; coveragePct: number; passingPct: number };
+}
+
+
+// ─── Đợt 4: AI ───────────────────────────────────────────────────
+
+export interface AiQuota { pro: boolean; used: number; limit: number | null; remaining: number | null; available: boolean }
+export type AiAction =
+  | { type: 'create_issue'; issueType: string; title: string; description?: string | null; acceptanceCriteria?: string[] | null; priority?: number | null; assignee?: string | null; storyPoints?: number | null; parent?: number | null; sprint?: string | null }
+  | { type: 'update_issue'; number: number; title?: string | null; description?: string | null; priority?: number | null; assignee?: string | null; storyPoints?: number | null; status?: string | null; sprint?: string | null; dueDate?: string | null }
+  | { type: 'add_comment'; number: number; text: string }
+  | { type: 'move_to_sprint'; numbers: number[]; sprint: string }
+  | { type: 'create_test'; title: string; preconditions?: string | null; steps: Array<{ action: string; data?: string | null; expected?: string | null }>; requirement?: number | null };
+export interface AiAnswer { reply: string; actions: AiAction[]; quota: AiQuota }
+export type AiQuickTask = 'write_story' | 'split' | 'generate_tests' | 'improve_bug' | 'summarize' | 'review_story' | 'meeting_notes';
+export interface AiFilterResult {
+  filter: { status: number[]; type: number[]; assignee: number[]; label: number[]; sprint?: number | 'backlog'; q?: string; includeDone?: boolean };
+  explanation: string | null; quota: AiQuota;
+}
+export interface InsightIssue { key: string; number: number; title: string; assignee: string | null; status: string; dueDate: string | null }
+export interface InsightsData {
+  overdue: InsightIssue[]; dueSoon: InsightIssue[]; stale: Array<InsightIssue & { idleDays: number }>; unassignedUrgent: InsightIssue[];
+  overloaded: Array<{ username: string; points: number; issues: number }>; loads: Array<{ username: string; points: number; issues: number }>;
+  sprintRisk: null | { sprint: string; remaining: number; daysLeft: number; neededPerDay: number; recentPerDay: number; atRisk: boolean };
+  unit: EstimationUnit;
+}
+export interface MyWorkItem {
+  key: string; number: number; title: string; priority: number; dueDate: string | null; bucket: 'overdue' | 'today' | 'soon' | 'later' | 'none';
+  type: { key: string; name: string; color: string }; status: { name: string; category: StatusCategory }; updatedAt: string;
+  project: { key: string; name: string }; workspace: { slug: string; name: string }; url: string;
+}
+export interface MyWorkData { items: MyWorkItem[]; counts: { overdue: number; dueToday: number; dueSoon: number; inProgress: number; total: number } }
+
+/** Lỗi hết lượt AI miễn phí (402) — giao diện hiện hộp "Upgrade to Pro". */
+export function isAiQuotaError(err: unknown): boolean {
+  const e = err as { response?: { status?: number; data?: { code?: string } } };
+  return e?.response?.status === 402 || e?.response?.data?.code === 'WORK_AI_QUOTA_EXCEEDED';
+}
+
 // ─── Gọi API ─────────────────────────────────────────────────────
 
 const B = '/work';
@@ -437,6 +525,55 @@ export const workApi = {
     const q = p.toString();
     return d<ContributionData>(api.get(`${B}/projects/${pid}/reports/contributions${q ? `?${q}` : ''}`));
   },
+
+  // Kiểm thử
+  enableTesting: (pid: number) => d(api.post(`${B}/projects/${pid}/tests/enable`)),
+  tests: (pid: number, q?: string) => d<TestListItem[]>(api.get(`${B}/projects/${pid}/tests${q ? `?q=${encodeURIComponent(q)}` : ''}`)),
+  test: (pid: number, num: number) => d<TestDetail>(api.get(`${B}/projects/${pid}/tests/${num}`)),
+  createTest: (pid: number, body: TestInput & { title: string }) => d<{ number: number; failedLinks: string[] }>(api.post(`${B}/projects/${pid}/tests`, body)),
+  updateTest: (pid: number, num: number, body: TestInput) => d<TestDetail>(api.put(`${B}/projects/${pid}/tests/${num}`, body)),
+  importTests: (pid: number, rows: Array<TestInput & { title: string }>) =>
+    d<{ created: number[]; failed: Array<{ row: number; title: string; error: string }> }>(api.post(`${B}/projects/${pid}/tests/import`, { rows })),
+  testPlans: (pid: number) => d<TestPlan[]>(api.get(`${B}/projects/${pid}/test-plans`)),
+  createTestPlan: (pid: number, body: { name: string; description?: string | null; numbers?: number[] }) => d<{ id: number }>(api.post(`${B}/projects/${pid}/test-plans`, body)),
+  updateTestPlan: (pid: number, planId: number, body: { name?: string; description?: string | null; archived?: boolean; addNumbers?: number[]; removeNumbers?: number[] }) =>
+    d(api.patch(`${B}/projects/${pid}/test-plans/${planId}`, body)),
+  deleteTestPlan: (pid: number, planId: number) => d(api.delete(`${B}/projects/${pid}/test-plans/${planId}`)),
+  testCycles: (pid: number) => d<TestCycleSummary[]>(api.get(`${B}/projects/${pid}/test-cycles`)),
+  createTestCycle: (pid: number, body: { name: string; environment?: string | null; build?: string | null; planId?: number | null; numbers?: number[] }) =>
+    d<{ id: number }>(api.post(`${B}/projects/${pid}/test-cycles`, body)),
+  testCycle: (pid: number, cycleId: number) => d<TestCycleDetail>(api.get(`${B}/projects/${pid}/test-cycles/${cycleId}`)),
+  updateTestCycle: (pid: number, cycleId: number, body: { name?: string; environment?: string | null; build?: string | null; state?: CycleState; addNumbers?: number[]; removeRunIds?: number[] }) =>
+    d(api.patch(`${B}/projects/${pid}/test-cycles/${cycleId}`, body)),
+  deleteTestCycle: (pid: number, cycleId: number) => d(api.delete(`${B}/projects/${pid}/test-cycles/${cycleId}`)),
+  testRun: (pid: number, runId: number) => d<TestRunDetail>(api.get(`${B}/projects/${pid}/test-runs/${runId}`)),
+  updateTestRun: (pid: number, runId: number, body: { status?: RunStatus; comment?: string | null; assigneeId?: number | null; reset?: boolean }) =>
+    d<TestRunDetail>(api.patch(`${B}/projects/${pid}/test-runs/${runId}`, body)),
+  updateStepResult: (pid: number, runId: number, stepId: number, body: { status?: StepStatus; actual?: string | null }) =>
+    d<TestRunDetail>(api.patch(`${B}/projects/${pid}/test-runs/${runId}/steps/${stepId}`, body)),
+  createDefect: (pid: number, runId: number, body: { title?: string; stepResultId?: number | null; priority?: number; assigneeId?: number | null } = {}) =>
+    d<{ number: number }>(api.post(`${B}/projects/${pid}/test-runs/${runId}/defects`, body)),
+  linkDefect: (pid: number, runId: number, num: number) => d(api.put(`${B}/projects/${pid}/test-runs/${runId}/defects/${num}`)),
+  unlinkDefect: (pid: number, runId: number, num: number) => d(api.delete(`${B}/projects/${pid}/test-runs/${runId}/defects/${num}`)),
+  traceability: (pid: number) => d<TraceabilityData>(api.get(`${B}/projects/${pid}/reports/traceability`)),
+
+  // AI
+  aiQuota: () => d<AiQuota>(api.get(`${B}/ai/quota`)),
+  aiChat: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null }) =>
+    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: 120_000 })),
+  aiQuick: (pid: number, body: { task: AiQuickTask; issueNumber?: number | null; text?: string | null }) =>
+    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/quick`, body, { timeout: 120_000 })),
+  aiFilter: (pid: number, question: string) => d<AiFilterResult>(api.post(`${B}/projects/${pid}/ai/filter`, { question }, { timeout: 60_000 })),
+  aiApply: (pid: number, action: AiAction) => d<{ summary: string; number?: number }>(api.post(`${B}/projects/${pid}/ai/apply`, { action })),
+  aiWeeklyReport: (pid: number, body: { audience: 'teacher' | 'client' | 'team'; language?: 'en' | 'vi' }) =>
+    d<{ report: string; facts: string; quota: AiQuota }>(api.post(`${B}/projects/${pid}/ai/weekly-report`, body, { timeout: 120_000 })),
+  insights: (pid: number) => d<InsightsData>(api.get(`${B}/projects/${pid}/insights`)),
+  similar: (pid: number, title: string) =>
+    d<Array<{ number: number; title: string; score: number; resolved: boolean }>>(api.get(`${B}/projects/${pid}/similar?title=${encodeURIComponent(title)}`)),
+  suggestAssignee: (pid: number, q: { parentId?: number; labelIds?: number[] } = {}) =>
+    d<Array<{ userId: number; username: string; name: string; openIssues: number; load: number; familiarity: number }>>(
+      api.get(`${B}/projects/${pid}/suggest-assignee${q.parentId || q.labelIds?.length ? `?${new URLSearchParams({ ...(q.parentId ? { parentId: String(q.parentId) } : {}), ...(q.labelIds?.length ? { labels: q.labelIds.join(',') } : {}) })}` : ''}`)),
+  myWork: () => d<MyWorkData>(api.get(`${B}/me/work`)),
 
   /** Tải file thẳng lên R2: xin URL ký sẵn → PUT → báo hoàn tất. */
   async uploadAttachment(pid: number, num: number, file: File, onProgress?: (pct: number) => void): Promise<IssueAttachment> {

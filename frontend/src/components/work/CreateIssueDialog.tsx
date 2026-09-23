@@ -6,16 +6,31 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
-import { workApi, workError, type ProjectConfig, type TiptapDoc } from '@/lib/work-api';
+import { isAiQuotaError, workApi, workError, type ProjectConfig, type TiptapDoc } from '@/lib/work-api';
+import UpgradeDialog from './ai/UpgradeDialog';
 import { useLookups, wk } from './hooks';
 import {
   AssigneePicker, LabelsPicker, ParentPicker, PriorityPicker, SprintPicker, TypePicker,
 } from './fields';
 import RichEditor, { isDocEmpty } from './RichEditor';
 import { Dialog } from './ui';
+
+/** Chữ trơn của một tài liệu TipTap (đoạn cách nhau bằng xuống dòng). */
+function docText(doc: TiptapDoc | null): string {
+  const out: string[] = [];
+  const walk = (n: unknown) => {
+    const node = n as { type?: string; text?: string; content?: unknown[] };
+    if (typeof node?.text === 'string') out.push(node.text);
+    node?.content?.forEach(walk);
+    if (node?.type && ['paragraph', 'heading', 'listItem', 'taskItem'].includes(node.type)) out.push('\n');
+  };
+  if (doc) walk(doc);
+  return out.join('').replace(/\n{2,}/g, '\n').trim();
+}
 
 export interface CreateIssueDefaults {
   typeId?: number;
@@ -56,7 +71,53 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
   const [sprintId, setSprintId] = useState<number | null>(defaults?.sprintId ?? null);
   const [parent, setParent] = useState<{ id: number; number: number; title: string } | null>(null);
   const [another, setAnother] = useState(false);
+  const [storyPoints, setStoryPoints] = useState<number | null>(null);
+  const [drafting, setDrafting] = useState(false);
+  const [upgrade, setUpgrade] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null);
+
+  // Gợi ý thẻ có thể trùng khi đang gõ tiêu đề (pg_trgm ở backend — không tốn lượt AI).
+  const [debouncedTitle, setDebouncedTitle] = useState('');
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedTitle(title.trim()), 350);
+    return () => clearTimeout(t);
+  }, [title]);
+  const similar = useQuery({
+    queryKey: ['work', 'similar', config.id, debouncedTitle],
+    queryFn: () => workApi.similar(config.id, debouncedTitle),
+    enabled: open && debouncedTitle.length >= 8,
+    staleTime: 30_000,
+  });
+
+  /** "Draft with AI": biến ý tưởng (tiêu đề + mô tả đang gõ) thành một story đầy đủ. */
+  const draftWithAi = async () => {
+    const idea = [title.trim(), docText(desc)].filter(Boolean).join('\n').trim();
+    if (!idea) { toast.error('Type a short idea first'); return; }
+    setDrafting(true);
+    try {
+      const r = await workApi.aiQuick(config.id, { task: 'write_story', text: idea });
+      const a = r.actions.find((x) => x.type === 'create_issue');
+      if (!a || a.type !== 'create_issue') { toast.error('The AI did not return a story. Try rephrasing your idea.'); return; }
+      setTitle(a.title);
+      const content: unknown[] = (a.description ?? '').split(/\n{2,}/).filter(Boolean).map((p) => ({ type: 'paragraph', content: [{ type: 'text', text: p.trim() }] }));
+      if (a.acceptanceCriteria?.length) {
+        content.push({ type: 'heading', attrs: { level: 3 }, content: [{ type: 'text', text: 'Acceptance criteria' }] });
+        content.push({ type: 'taskList', content: a.acceptanceCriteria.map((c) => ({ type: 'taskItem', attrs: { checked: false }, content: [{ type: 'paragraph', content: [{ type: 'text', text: c }] }] })) });
+      }
+      setDesc({ type: 'doc', content });
+      setDescKey((k) => k + 1);
+      if (a.priority) setPriority(a.priority);
+      if (a.storyPoints !== undefined && a.storyPoints !== null) setStoryPoints(a.storyPoints);
+      const story = config.issueTypes.find((t) => t.key === (a.issueType || 'STORY').toUpperCase());
+      if (story && level !== -1) setTypeId(story.id);
+      toast.success('Draft ready — review it before creating');
+    } catch (err) {
+      if (isAiQuotaError(err)) setUpgrade(true);
+      else toast.error(workError(err, 'The AI could not draft this issue'));
+    } finally {
+      setDrafting(false);
+    }
+  };
 
   const type = lk.types.get(typeId);
   const level = type?.level ?? 0;
@@ -73,6 +134,7 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
     setLabelIds([]);
     setSprintId(defaults?.sprintId ?? null);
     setParent(defaults?.parent ?? null);
+    setStoryPoints(null);
     setTimeout(() => titleRef.current?.focus(), 30);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- so theo id: object `defaults` mới mỗi lần render không được xoá chữ đang gõ
   }, [open, defaultType, defaults?.sprintId, defaults?.parent?.id]);
@@ -99,6 +161,7 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
       statusId: defaults?.statusId && lk.workflowOfType(typeId)?.statuses.some((s) => s.id === defaults.statusId) ? defaults.statusId : undefined,
       parentId: parent?.id,
       labelIds: labelIds.length ? labelIds : undefined,
+      ...(storyPoints !== null && !isClient ? { storyPoints } : {}),
     }),
     onSuccess: (issue) => {
       qc.invalidateQueries({ queryKey: wk.board(config.id) });
@@ -169,6 +232,26 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
           className="mb-3 w-full bg-transparent text-[18px] font-semibold text-[var(--w-text)] outline-none placeholder:text-[var(--w-text-3)]"
         />
 
+        {config.permissions.useAi && level !== -1 && (
+          <div className="-mt-1 mb-2 flex items-center gap-2">
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm" disabled={drafting} onClick={draftWithAi} title="Turn your idea into a user story with acceptance criteria (uses 1 AI request)">
+              <Sparkles size={13} /> {drafting ? 'Drafting…' : 'Draft with AI'}
+            </button>
+            {storyPoints !== null && <span className="text-[12px] text-[var(--w-text-3)]">Suggested estimate: {storyPoints} pts</span>}
+          </div>
+        )}
+        {!!similar.data?.length && (
+          <div className="mb-3 rounded-[6px] border border-[color-mix(in_srgb,var(--w-orange)_35%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_8%,transparent)] px-3 py-2 text-[12px]">
+            <div className="mb-1 font-medium text-[var(--w-text)]">Possible duplicates</div>
+            {similar.data.slice(0, 3).map((x) => (
+              <div key={x.number} className="flex items-center gap-2 text-[var(--w-text-2)]">
+                <span className="font-mono text-[11px] text-[var(--w-text-3)]">{lk.issueKey(x.number)}</span>
+                <span className="truncate">{x.title}</span>
+                {x.resolved && <span className="text-[var(--w-text-3)]">(done)</span>}
+              </div>
+            ))}
+          </div>
+        )}
         <RichEditor
           key={descKey}
           value={desc}
@@ -206,6 +289,7 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
         </div>
         {needsParent && <p className="mt-3 text-[12px] text-[var(--w-orange)]">Choose the parent issue for this sub-task.</p>}
       </div>
+      <UpgradeDialog open={upgrade} onClose={() => setUpgrade(false)} />
     </Dialog>
   );
 }

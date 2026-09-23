@@ -22,6 +22,7 @@ import {
   type ProjectConfig, type TiptapDoc, type IssueAttachment,
 } from '@/lib/work-api';
 import CreateIssueDialog from './CreateIssueDialog';
+import AiIssueMenu from './ai/AiIssueMenu';
 import { ConfirmDialog } from './settings/shared';
 import {
   AssigneePicker, ComponentsPicker, DateInput, LabelsPicker, NumberInput, ParentPicker, PriorityPicker, SprintPicker,
@@ -487,6 +488,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           <span className="font-mono text-[var(--w-text-2)]">{lk.issueKey(issue.number)}</span>
         </div>
         <div className="ml-auto flex items-center gap-1">
+          {type && <AiIssueMenu config={config} issueNumber={issue.number} typeKey={type.key} />}
           <button
             type="button"
             title={issue.isWatching ? 'Stop watching' : 'Watch — get notified about changes'}

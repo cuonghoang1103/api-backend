@@ -17,8 +17,13 @@ import VelocityTab from '@/components/work/reports/VelocityTab';
 import SprintReportTab from '@/components/work/reports/SprintReportTab';
 import EpicsTab from '@/components/work/reports/EpicsTab';
 import ContributionsTab from '@/components/work/reports/ContributionsTab';
+import HealthTab from '@/components/work/reports/HealthTab';
+import WeeklyReportTab from '@/components/work/reports/WeeklyReportTab';
+import IssueDrawer from '@/components/work/IssueDrawer';
 
 const TABS = [
+  { id: 'health', label: 'Health' },
+  { id: 'weekly', label: 'Weekly report' },
   { id: 'burndown', label: 'Burndown' },
   { id: 'velocity', label: 'Velocity' },
   { id: 'sprint', label: 'Sprint report' },
@@ -35,11 +40,22 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
   useProjectRealtime(pid);
 
   const raw = search?.get('tab');
-  const tab: TabId = TABS.some((t) => t.id === raw) ? (raw as TabId) : 'burndown';
+  const tab: TabId = TABS.some((t) => t.id === raw) ? (raw as TabId) : 'health';
   const setTab = useCallback((id: TabId) => {
     const p = new URLSearchParams(search?.toString());
-    if (id === 'burndown') p.delete('tab');
+    if (id === 'health') p.delete('tab');
     else p.set('tab', id);
+    const s = p.toString();
+    router.replace(s ? `${pathname}?${s}` : pathname!, { scroll: false });
+  }, [router, pathname, search]);
+
+  // ?issue=<số> mở ngăn chi tiết thẻ (từ tab Health).
+  const issueParam = Number(search?.get('issue'));
+  const openNum = Number.isInteger(issueParam) && issueParam > 0 ? issueParam : null;
+  const setIssue = useCallback((num: number | null) => {
+    const p = new URLSearchParams(search?.toString());
+    if (num) p.set('issue', String(num));
+    else p.delete('issue');
     const s = p.toString();
     router.replace(s ? `${pathname}?${s}` : pathname!, { scroll: false });
   }, [router, pathname, search]);
@@ -72,6 +88,8 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         <div className="mx-auto w-full max-w-[1100px] px-4 py-5">
+          {tab === 'health' && <HealthTab pid={pid} onOpenIssue={setIssue} />}
+          {tab === 'weekly' && <WeeklyReportTab pid={pid} config={config} />}
           {tab === 'burndown' && <BurndownTab pid={pid} />}
           {tab === 'velocity' && <VelocityTab pid={pid} />}
           {tab === 'sprint' && <SprintReportTab pid={pid} config={config} lk={lk} />}
@@ -79,6 +97,7 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
           {tab === 'contributions' && <ContributionsTab pid={pid} config={config} />}
         </div>
       </div>
+      <IssueDrawer pid={pid} num={openNum} onClose={() => setIssue(null)} onOpenIssue={(n) => setIssue(n)} />
     </div>
   );
 }

@@ -5,6 +5,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import type { ProjectConfig } from '@/lib/work-api';
+import AiButton from './ai/AiButton';
 
 export default function ProjectHeader({ config, title, children }: { config: ProjectConfig; title: string; children?: ReactNode }) {
   return (
@@ -17,7 +18,10 @@ export default function ProjectHeader({ config, title, children }: { config: Pro
         <span className="truncate font-semibold">{title}</span>
         {config.archivedAt && <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] text-[var(--w-text-3)]">Archived</span>}
       </div>
-      <div className="ml-auto flex items-center gap-2">{children}</div>
+      <div className="ml-auto flex items-center gap-2">
+        <AiButton config={config} />
+        {children}
+      </div>
     </div>
   );
 }

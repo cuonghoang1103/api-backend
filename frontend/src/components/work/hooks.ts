@@ -28,6 +28,8 @@ export const wk = {
   backlog: (pid: number) => ['work', 'backlog', pid] as const,
   sprints: (pid: number) => ['work', 'sprints', pid] as const,
   reports: (pid: number) => ['work', 'reports', pid] as const,
+  /** Mọi dữ liệu kiểm thử (test, plan, cycle, lần chạy, truy vết) nằm dưới khoá này. */
+  tests: (pid: number) => ['work', 'tests', pid] as const,
 };
 
 /** /work/<slug>/<KEY> ⇒ cấu hình dự án. */
@@ -122,7 +124,9 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
       if (e.projectId !== pid) return;
       onEventRef.current?.(e);
       if (e.type === 'project.updated') {
+        // Service kiểm thử báo thay đổi bằng project.updated (không có kiểu sự kiện riêng).
         queue(wk.project(pid));
+        queue(wk.tests(pid));
         return;
       }
       queue(wk.board(pid));
@@ -130,6 +134,7 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
       queue(wk.issue(pid));
       queue(wk.backlog(pid));
       queue(wk.reports(pid));
+      queue(wk.tests(pid)); // thẻ TEST/BUG đổi ⇒ danh sách test + truy vết đổi theo
       if (e.type === 'sprint.updated') {
         queue(wk.sprints(pid));
         queue(wk.project(pid)); // config.sprints (ô chọn sprint) cũng đổi

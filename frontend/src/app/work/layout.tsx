@@ -12,6 +12,7 @@ import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import WorkSidebar from '@/components/work/WorkSidebar';
 import CommandPalette from '@/components/work/CommandPalette';
+import AiPanelHost from '@/components/work/ai/AiPanelHost';
 import { useDaDangNhap } from '@/hooks/useDaDangNhap';
 import { Spinner } from '@/components/work/ui';
 
@@ -59,6 +60,7 @@ export default function WorkLayout({ children }: { children: React.ReactNode }) 
             <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
           </main>
           <CommandPalette />
+          <AiPanelHost />
         </>
       )}
       <div id="work-portal" />

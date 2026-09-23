@@ -10035,10 +10035,35 @@ model WorkSprint {
   completedPoints Float?    @map("completed_points")
   position        Int       @default(0)
   createdAt       DateTime  @default(now()) @map("created_at")
+  /// Chụp lúc bấm Complete: thẻ xong / chưa xong / thêm giữa chừng / bị bỏ ra.
+  /// Phải chụp lúc đóng — sau đó thẻ chưa xong đã dời sang sprint khác, và
+  /// không còn cách nào biết chúng từng thuộc sprint này ngoài lịch sử.
+  report          Json?
 
-  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  issues  WorkIssue[]
+  project   WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issues    WorkIssue[]
+  snapshots WorkSprintSnapshot[]
 
   @@index([projectId, state], name: "idx_work_sprint_project")
   @@map("work_sprints")
+}
+
+/// Số liệu một ngày của sprint đang chạy — nuôi burndown/burnup. Cron ghi đè
+/// dòng của NGÀY HÔM NAY (giờ VN) mỗi giờ, nên dòng cuối của ngày ≈ cuối ngày
+/// và backend tắt vài giờ cũng không mất điểm nào.
+model WorkSprintSnapshot {
+  id              Int      @id @default(autoincrement())
+  sprintId        Int      @map("sprint_id")
+  /// YYYY-MM-DD theo giờ Việt Nam.
+  day             String   @db.VarChar(10)
+  totalPoints     Float    @default(0) @map("total_points")
+  remainingPoints Float    @default(0) @map("remaining_points")
+  totalIssues     Int      @default(0) @map("total_issues")
+  doneIssues      Int      @default(0) @map("done_issues")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  sprint WorkSprint @relation(fields: [sprintId], references: [id], onDelete: Cascade)
+
+  @@unique([sprintId, day], name: "uk_work_sprint_snapshot", map: "uk_work_sprint_snapshot")
+  @@map("work_sprint_snapshots")
 }

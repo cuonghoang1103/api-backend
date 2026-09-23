@@ -59,6 +59,13 @@ export const NOTIFICATION_TYPES = [
   // (the server had never heard of it). Now it's a real row per user.
   // 18 chars — fits the VARCHAR(20) `type` column.
   'ADMIN_ANNOUNCEMENT',
+  // ─── CT Work — quản lý dự án (23/09/2026) ─────────────────
+  // entityId = id thẻ (hoặc id không gian với WORK_INVITE); payload mang
+  // mã thẻ + đường dẫn để chuông mở thẳng /work/... không cần gọi thêm.
+  'WORK_INVITE',
+  'WORK_ASSIGN',
+  'WORK_COMMENT',
+  'WORK_MENTION',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
@@ -591,4 +598,16 @@ export async function notifyPostRepost(
   _postId: number,
 ): Promise<void> {
   // In-app repost notification not part of the v1 cut.
+}
+
+/** CT Work — một thông báo của module quản lý dự án (xem services/work/notify.ts). */
+export async function notifyWork(args: {
+  receiverId: number;
+  senderId: number;
+  type: 'WORK_INVITE' | 'WORK_ASSIGN' | 'WORK_COMMENT' | 'WORK_MENTION';
+  entityId: number;
+  secondaryEntityId?: number | null;
+  payload: Record<string, unknown>;
+}): Promise<void> {
+  await pushNotification({ ...args, payload: { ...args.payload, surface: 'work' } });
 }

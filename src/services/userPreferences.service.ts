@@ -94,6 +94,10 @@ export interface UserPreferences {
    *  combo can ship without a backend deploy. */
   academy: {
     isStudent: boolean | null;
+    /** Khối ngành ('it' | 'business' | …). ⚠️ Thiếu trường này trong allowlist
+     *  thì máy chủ âm thầm bỏ nó, và máy khác đọc về suy ra 'it' từ `major` —
+     *  sinh viên Kinh doanh sang máy mới thành "CNTT / bba" và mất sạch môn. */
+    faculty: string | null;
     major: string | null;
     combo: string | null;
     /** ISO time the student answered, for "bạn đã chọn ngành này từ …". */
@@ -131,6 +135,7 @@ export function defaultPreferences(): UserPreferences {
     },
     academy: {
       isStudent: null,
+      faculty: null,
       major: null,
       combo: null,
       chosenAt: null,
@@ -146,7 +151,10 @@ export function defaultPreferences(): UserPreferences {
 function asSlug(v: unknown): string | null {
   if (typeof v !== 'string') return null;
   const t = v.trim();
-  return /^[a-z0-9][a-z0-9-]{0,39}$/i.test(t) ? t : null;
+  // ⚠️ Phải nhận cả `_`: mọi ngành hẹp ngoài CNTT có mã dạng `bba_mkt`
+  // (34/58 mã). Thiếu nó là combo của họ bị lưu thành null, và máy khác
+  // đọc về thì không lọc được môn nào.
+  return /^[a-z0-9][a-z0-9_-]{0,39}$/i.test(t) ? t : null;
 }
 
 function asBool(v: unknown, fallback: boolean): boolean {
@@ -228,6 +236,7 @@ export function sanitize(input: unknown, base: UserPreferences): UserPreferences
   if (src.academy && typeof src.academy === 'object') {
     const a = src.academy as Record<string, unknown>;
     if ('isStudent' in a) out.academy.isStudent = typeof a.isStudent === 'boolean' ? a.isStudent : null;
+    if ('faculty' in a) out.academy.faculty = asSlug(a.faculty);
     if ('major' in a) out.academy.major = asSlug(a.major);
     if ('combo' in a) out.academy.combo = asSlug(a.combo);
     if ('chosenAt' in a) {

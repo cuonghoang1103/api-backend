@@ -106,7 +106,9 @@ export function Sidebar() {
                 {dich(GROUP_LABELS[group])}
               </div>
               {items.map((item) => {
-                const active = route === item.path;
+                /* Cả trang CON của một cây (`/work/acme/WEB/board`) cũng sáng mục
+                   gốc — so theo ranh giới đoạn, để `/workout` không làm sáng `/work`. */
+                const active = route === item.path || route.startsWith(`${item.path}/`);
                 return (
                   <button
                     key={item.path}

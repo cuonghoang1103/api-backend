@@ -6,7 +6,7 @@
  * (đã từng là nguồn của vòng vẽ vô tận) và cách lùi về đường dẫn cha.
  */
 import { describe, expect, it } from 'vitest';
-import { chupTruyVan, datTruyVanCho, theoDoiTruyVan } from './next-navigation';
+import { chupTruyVan, datTruyVanCho, tachHref, theoDoiTruyVan } from './next-navigation';
 
 /** Bản sao phép tính "lùi về cha" trong `useRouter().back()`. */
 function duongCha(route: string): string {
@@ -70,5 +70,31 @@ describe('kho chuỗi truy vấn', () => {
   it('ảnh chụp là CÙNG một chuỗi khi không đổi', () => {
     datTruyVanCho('/y', 'q=1');
     expect(Object.is(chupTruyVan('/y'), chupTruyVan('/y'))).toBe(true);
+  });
+});
+
+describe('tachHref — href của router.push/replace', () => {
+  it('tách đường dẫn và truy vấn', () => {
+    expect(tachHref('/work/acme/WEB/board?issue=5', '/x')).toEqual(['/work/acme/WEB/board', 'issue=5']);
+    expect(tachHref('/work/acme', '/x')).toEqual(['/work/acme', '']);
+  });
+
+  /* CT Work mở ngăn chi tiết thẻ bằng cách đổi MỖI truy vấn. Bản cũ tách ra
+     đường dẫn rỗng ⇒ `navigate('')` ⇒ màn "Không tìm thấy". */
+  it('chỉ có truy vấn thì giữ trang hiện tại', () => {
+    expect(tachHref('?issue=7', '/work/acme/WEB/board')).toEqual(['/work/acme/WEB/board', 'issue=7']);
+  });
+
+  it('bỏ phần neo #…', () => {
+    expect(tachHref('/work/acme/WEB/list?jql=a#top', '/x')).toEqual(['/work/acme/WEB/list', 'jql=a']);
+    expect(tachHref('/work#top', '/x')).toEqual(['/work', '']);
+  });
+
+  it('`/` (trang chủ web) thành bảng điều khiển của app', () => {
+    expect(tachHref('/', '/work/acme')).toEqual(['/dashboard', '']);
+  });
+
+  it('giữ nguyên dấu `?` thứ hai nằm trong giá trị', () => {
+    expect(tachHref('/a?q=x?y', '/x')).toEqual(['/a', 'q=x?y']);
   });
 });

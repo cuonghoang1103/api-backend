@@ -1,5 +1,26 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { TUYEN_WEB, khopTuyenWeb, thuocCayWeb } from './dinhTuyenWeb';
+
+/** Mọi `page.tsx` dưới một thư mục của `frontend/src/app`, đổi thành mẫu `:ten`. */
+function mauTuCayWeb(goc: string): string[] {
+  const app = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../../../frontend/src/app');
+  const ra: string[] = [];
+  const di = (thuMuc: string): void => {
+    for (const m of fs.readdirSync(thuMuc, { withFileTypes: true })) {
+      const p = path.join(thuMuc, m.name);
+      if (m.isDirectory()) di(p);
+      else if (m.name === 'page.tsx') {
+        const tuongDoi = path.relative(app, path.dirname(p)).split(path.sep);
+        ra.push(`/${tuongDoi.map((d) => d.replace(/^\[(.+)\]$/, ':$1')).join('/')}`);
+      }
+    }
+  };
+  di(path.join(app, goc.replace(/^\//, '')));
+  return ra.sort();
+}
 
 describe('khopTuyenWeb', () => {
   it('khớp đường dẫn tĩnh', () => {
@@ -109,6 +130,68 @@ describe('khopTuyenWeb', () => {
     expect(khopTuyenWeb('/finance/wallets/3')?.thamSo).toEqual({ id: '3' });
   });
 
+  /*
+   * CT Work (23/09/2026). Ba đường TĨNH cùng hình dạng với đường ĐỘNG:
+   * `/work/developer` ~ `/work/:ws`, `/work/invite/:token` và
+   * `/work/share/:token` ~ `/work/:ws/:key`, cộng `/work/:ws/settings` ~
+   * `/work/:ws/:key`. Đảo thứ tự là "developer" thành slug không gian, "invite"
+   * thành slug và mã mời thành mã dự án — trang mở ra, gọi API sai, hiện
+   * "not found". Hỏng CÂM.
+   */
+  it('CT Work: tĩnh thắng động ở cả bốn chỗ', () => {
+    const cap: [string, string, Record<string, string>][] = [
+      ['/work', '/work', {}],
+      ['/work/developer', '/work/developer', {}],
+      ['/work/invite/abc123', '/work/invite/:token', { token: 'abc123' }],
+      ['/work/share/tok-9', '/work/share/:token', { token: 'tok-9' }],
+      ['/work/acme/settings', '/work/:ws/settings', { ws: 'acme' }],
+    ];
+    for (const [duong, mau, thamSo] of cap) {
+      const k = khopTuyenWeb(duong);
+      expect(k?.tuyen.mau, duong).toBe(mau);
+      expect(k?.thamSo, duong).toEqual(thamSo);
+    }
+  });
+
+  it('CT Work: rút đủ ws · key · num · cycleId', () => {
+    expect(khopTuyenWeb('/work/acme')?.thamSo).toEqual({ ws: 'acme' });
+    const d = khopTuyenWeb('/work/acme/WEB');
+    expect(d?.tuyen.mau).toBe('/work/:ws/:key');
+    expect(d?.thamSo).toEqual({ ws: 'acme', key: 'WEB' });
+
+    for (const v of ['board', 'backlog', 'list', 'timeline', 'releases', 'reports',
+                     'dashboards', 'tests', 'settings']) {
+      const k = khopTuyenWeb(`/work/acme/WEB/${v}`);
+      expect(k?.tuyen.mau, v).toBe(`/work/:ws/:key/${v}`);
+      expect(k?.thamSo, v).toEqual({ ws: 'acme', key: 'WEB' });
+    }
+
+    const i = khopTuyenWeb('/work/acme/WEB/issue/42');
+    expect(i?.tuyen.mau).toBe('/work/:ws/:key/issue/:num');
+    expect(i?.thamSo).toEqual({ ws: 'acme', key: 'WEB', num: '42' });
+
+    const t = khopTuyenWeb('/work/acme/WEB/tests/7');
+    expect(t?.tuyen.mau).toBe('/work/:ws/:key/tests/:num');
+    expect(t?.thamSo).toEqual({ ws: 'acme', key: 'WEB', num: '7' });
+
+    const c = khopTuyenWeb('/work/acme/WEB/tests/cycles/3');
+    expect(c?.tuyen.mau).toBe('/work/:ws/:key/tests/cycles/:cycleId');
+    expect(c?.thamSo).toEqual({ ws: 'acme', key: 'WEB', cycleId: '3' });
+
+    // Không có trang cho màn con lạ — không được rơi bừa vào màn nào.
+    expect(khopTuyenWeb('/work/acme/WEB/khong-co')).toBeNull();
+  });
+
+  /* Cây CT Work đang lớn nhanh (nhiều phiên cùng thêm trang). Trang mới trên
+     web mà quên thêm vào bảng thì trong app bấm vào là "Không tìm thấy" — nên
+     đối chiếu THẲNG với thư mục, không với một con số chép tay. */
+  it('CT Work: mọi page.tsx dưới frontend/src/app/work đều có tuyến, và ngược lại', () => {
+    const tuThuMuc = mauTuCayWeb('/work');
+    expect(tuThuMuc.length, 'không đọc được cây /work — bộ kiểm hỏng').toBeGreaterThan(10);
+    const trongBang = TUYEN_WEB.map((t) => t.mau).filter((m) => m === '/work' || m.startsWith('/work/')).sort();
+    expect(trongBang).toEqual(tuThuMuc);
+  });
+
   it('không khớp thì trả null, không đoán bừa', () => {
     expect(khopTuyenWeb('/language/ja/khong-co-trang-nay')).toBeNull();
     expect(khopTuyenWeb('/chat')).toBeNull();
@@ -137,8 +220,9 @@ describe('khopTuyenWeb', () => {
        này ra và nhìn lại danh sách. 65 → 73 ngày 07/09/2026 khi cây
        `/tech-trends` (8 tuyến) được dùng lại từ web. 73 → 75 ngày 15/09/2026:
        hai trang tư vấn của Học viện (`/academy/tu-van-nganh`,
-       `/academy/so-do-mon-hoc`) — app trước đó không có chúng. */
-    expect(thay.size).toBe(75);
+       `/academy/so-do-mon-hoc`) — app trước đó không có chúng. 75 → 94 ngày
+       23/09/2026: cây CT Work (`/work`, 19 trang). */
+    expect(thay.size).toBe(94);
   });
 });
 
@@ -166,6 +250,15 @@ describe('thuocCayWeb', () => {
                      '/saved', '/forum/3', '/exp-hub/abc']) {
       expect(thuocCayWeb(d), d).toBe(true);
     }
+  });
+
+  it('nhận cả cây CT Work, kể cả hai đường công khai', () => {
+    for (const d of ['/work', '/work/acme', '/work/acme/WEB/board',
+                     '/work/invite/abc', '/work/share/abc']) {
+      expect(thuocCayWeb(d), d).toBe(true);
+    }
+    expect(thuocCayWeb('/workout')).toBe(false);
+    expect(thuocCayWeb('/works')).toBe(false);
   });
 
   it('KHÔNG nhận route chỉ trùng tiền tố chuỗi', () => {

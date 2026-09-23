@@ -37,6 +37,7 @@ import {
   FlaskConical,
   Gamepad2,
   GraduationCap,
+  KanbanSquare,
   Languages,
   LayoutDashboard,
   Library,
@@ -165,6 +166,11 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['creator', 'studio', 'kich ban', 'video', 'xuong'] },
   { path: '/xuong-remix', label: 'Xưởng Remix', icon: AudioWaveform, group: 'lam',
     keywords: ['remix', 'dj', 'tach stem', 'vocal', 'bpm', 'vinahouse', 'nhac'] },
+  /* CT Work — công cụ quản lý dự án kiểu Jira của web (`/work`), dùng lại
+     nguyên cây trang + khung `app/work/layout.tsx`. Xem `features/work/CtWorkPage`. */
+  { path: '/work', label: 'CT Work', icon: KanbanSquare, group: 'lam',
+    keywords: ['work', 'jira', 'kanban', 'board', 'sprint', 'backlog', 'issue',
+               'quan ly du an', 'quản lý dự án', 'cong viec', 'công việc', 'task'] },
   { path: '/projects', label: 'Dự án', icon: Briefcase, group: 'lam',
     keywords: ['projects', 'du an'] },
   { path: '/repos', label: 'Kho mã', icon: Library, group: 'lam',

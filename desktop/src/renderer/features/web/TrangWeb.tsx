@@ -29,7 +29,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { configureWebApi } from '../../shims/web-api-adapter';
-import { LoiChuyenHuong, LoiKhongTimThay, ThamSoTuyen } from '../../shims/next-navigation';
+import { LoiChuyenHuong, LoiKhongTimThay, ThamSoTuyen, useSearchParams } from '../../shims/next-navigation';
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
 import { khopTuyenWeb } from './dinhTuyenWeb';
 /* ⚠️ `dich` (hàm tầm mô-đun) chứ không chỉ `useDich`: `RanhGioiTuyen` là CLASS
@@ -210,16 +210,49 @@ class RanhGioiTuyen extends Component<
   }
 }
 
+/** Hai prop Next truyền vào mọi `page.tsx`. */
+interface PropsTrangNext {
+  params: Readonly<Record<string, string>>;
+  searchParams: Readonly<Record<string, string>>;
+}
+
 /**
  * Dựng trang web theo ĐƯỜNG DẪN HIỆN TẠI, kèm tham số động.
  * Dùng cho Ngoại ngữ và Lộ trình — hai cây có trang con.
  */
-export function TrangWebTheoTuyen({ ten }: { ten: string }) {
+export function TrangWebTheoTuyen({ ten, khung: Khung }: {
+  ten: string;
+  /**
+   * Bố cục CHUNG của cả cây — thứ Next dựng từ `app/<cây>/layout.tsx` (23/09/2026,
+   * cho CT Work: thanh bên, bảng lệnh, khung AI, `#work-portal`).
+   *
+   * ⚠️ Truyền một component ỔN ĐỊNH (khai ở tầm mô-đun). Tạo mới ở mỗi lần vẽ
+   * là React tháo cả khung lẫn trang rồi dựng lại.
+   *
+   * Khung nằm NGOÀI ranh giới có `key={route}`: đổi trang thì chỉ trang con gắn
+   * lại, còn thanh bên giữ nguyên trạng thái (mục đang mở, vị trí cuộn) — đúng
+   * như layout của Next.
+   */
+  khung?: ComponentType<{ children: ReactNode }>;
+}) {
   const { dich } = useDich();
   const { route, navigate } = useAppState();
   const san = useCauNoiWeb();
   const khop = useMemo(() => khopTuyenWeb(route), [route]);
-  const Lazy = useMemo(() => (khop ? lazy(khop.tuyen.nap) : null), [khop]);
+  /*
+   * ⚠️ PROPS CỦA TRANG NEXT (23/09/2026). Next truyền `{ params, searchParams }`
+   * vào MỌI trang, và một số trang đọc tham số từ ĐÓ chứ không từ `useParams()`:
+   * `work/[ws]/[key]/list`, `roadmap/[slug]`, `creator/projects/[id]`. Không
+   * truyền thì chúng nổ ngay lượt vẽ đầu: "Cannot read properties of undefined
+   * (reading 'ws')". Bộ kiểm gắn cây CT Work (`features/work/gan.test.tsx`) bắt
+   * được — `tsc` thì không, vì ranh giới kiểu với web là `ComponentType` trơn.
+   */
+  const Lazy = useMemo(
+    () => (khop ? (lazy(khop.tuyen.nap) as unknown as ComponentType<PropsTrangNext>) : null),
+    [khop],
+  );
+  const q = useSearchParams();
+  const searchParams = useMemo(() => Object.fromEntries(q.entries()), [q]);
 
   if (!khop || !Lazy) {
     /* Đường dẫn thuộc cây này nhưng không có trang — chỉ xảy ra với deep link
@@ -247,11 +280,25 @@ export function TrangWebTheoTuyen({ ten }: { ten: string }) {
         {/* `key` trên RANH GIỚI, không phải trên `Lazy`: ranh giới giữ lỗi
             trong state, đổi đường dẫn mà không gắn lại thì trang mới cũng hiện
             lỗi của trang cũ. */}
-        <RanhGioiTuyen key={route} ten={ten} chuyenHuong={navigate}>
-          <Suspense fallback={<DangMo ten={ten} />}>
-            <Lazy />
-          </Suspense>
-        </RanhGioiTuyen>
+        {Khung ? (
+          <RanhGioiTuyen ten={ten} chuyenHuong={navigate}>
+            <Suspense fallback={<DangMo ten={ten} />}>
+              <Khung>
+                <RanhGioiTuyen key={route} ten={ten} chuyenHuong={navigate}>
+                  <Suspense fallback={<DangMo ten={ten} />}>
+                    <Lazy params={khop.thamSo} searchParams={searchParams} />
+                  </Suspense>
+                </RanhGioiTuyen>
+              </Khung>
+            </Suspense>
+          </RanhGioiTuyen>
+        ) : (
+          <RanhGioiTuyen key={route} ten={ten} chuyenHuong={navigate}>
+            <Suspense fallback={<DangMo ten={ten} />}>
+              <Lazy params={khop.thamSo} searchParams={searchParams} />
+            </Suspense>
+          </RanhGioiTuyen>
+        )}
       </ThamSoTuyen.Provider>
     </VoWeb>
   );

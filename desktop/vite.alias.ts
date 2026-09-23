@@ -69,6 +69,16 @@ export function aliasDesktop(goc: string): Record<string, string> {
     'react/jsx-runtime': o('node_modules/react/jsx-runtime.js'),
     'react/jsx-dev-runtime': o('node_modules/react/jsx-dev-runtime.js'),
     zustand: o('node_modules/zustand'),
+    /**
+     * `sonner` cũng là một SINGLETON (kho toast cấp mô-đun), cùng lý do như
+     * `zustand`. Đo 23/09/2026 trên `dist/renderer`: bản dựng mang HAI lớp kho
+     * toast (`this.subscribers=[]` hai lần) — `<Toaster>` trong `App.tsx` nghe
+     * kho của desktop, còn mọi `toast.*` trong cây web ghi vào kho của
+     * `frontend/node_modules/sonner`. Không ai vẽ kho thứ hai ⇒ mọi toast của
+     * cây web im lặng, đúng điều `toastCayWeb.test.ts` định chặn. Hai bên cùng
+     * bản 1.7.4 nên ghim về một bản là an toàn.
+     */
+    sonner: o('node_modules/sonner'),
 
     'next/dynamic': o('src/renderer/shims/next-dynamic.tsx'),
     'next/link': o('src/renderer/shims/next-link.tsx'),

@@ -226,6 +226,38 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/profile', nap: () => import('@/app/profile/page') },
   { mau: '/profile/:id', nap: () => import('@/app/profile/[id]/page') },
   { mau: '/profile/:id/v2', nap: () => import('@/app/profile/[id]/v2/page') },
+
+  /* ── CT Work (kiểu Jira) — 23/09/2026 ──
+     Đối chiếu bằng `find frontend/src/app/work -name page.tsx` ⇒ 19 trang.
+     Khung chung (`app/work/layout.tsx`: thanh bên, bảng lệnh ⌘K, AI, `#work-portal`,
+     `work.css`) do `CtWorkPage` dựng — xem tệp đó.
+
+     ⚠️ TĨNH TRƯỚC ĐỘNG, BA chỗ: `/work/invite/:token`, `/work/share/:token` cùng
+     hình dạng với `/work/:ws/:key`, còn `/work/developer` cùng hình dạng với
+     `/work/:ws`. Đảo thứ tự là "developer" bị đọc thành slug không gian làm việc
+     và trang hiện "workspace not found" — hỏng CÂM.
+     Tương tự `/work/:ws/settings` phải đứng trước `/work/:ws/:key` (không thì
+     "settings" thành mã dự án), và `/work/:ws/:key/tests/cycles/:cycleId` dài 6
+     đoạn nên không đụng `/work/:ws/:key/tests/:num` (5 đoạn). */
+  { mau: '/work', nap: () => import('@/app/work/page') },
+  { mau: '/work/developer', nap: () => import('@/app/work/developer/page') },
+  { mau: '/work/invite/:token', nap: () => import('@/app/work/invite/[token]/page') },
+  { mau: '/work/share/:token', nap: () => import('@/app/work/share/[token]/page') },
+  { mau: '/work/:ws', nap: () => import('@/app/work/[ws]/page') },
+  { mau: '/work/:ws/settings', nap: () => import('@/app/work/[ws]/settings/page') },
+  { mau: '/work/:ws/:key', nap: () => import('@/app/work/[ws]/[key]/page') },
+  { mau: '/work/:ws/:key/board', nap: () => import('@/app/work/[ws]/[key]/board/page') },
+  { mau: '/work/:ws/:key/backlog', nap: () => import('@/app/work/[ws]/[key]/backlog/page') },
+  { mau: '/work/:ws/:key/list', nap: () => import('@/app/work/[ws]/[key]/list/page') },
+  { mau: '/work/:ws/:key/timeline', nap: () => import('@/app/work/[ws]/[key]/timeline/page') },
+  { mau: '/work/:ws/:key/releases', nap: () => import('@/app/work/[ws]/[key]/releases/page') },
+  { mau: '/work/:ws/:key/reports', nap: () => import('@/app/work/[ws]/[key]/reports/page') },
+  { mau: '/work/:ws/:key/dashboards', nap: () => import('@/app/work/[ws]/[key]/dashboards/page') },
+  { mau: '/work/:ws/:key/tests', nap: () => import('@/app/work/[ws]/[key]/tests/page') },
+  { mau: '/work/:ws/:key/settings', nap: () => import('@/app/work/[ws]/[key]/settings/page') },
+  { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
+  { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
+  { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },
 ];
 
 export interface KhopTuyen {
@@ -267,6 +299,8 @@ export const GOC_WEB: readonly string[] = [
      tuyến) — `nativePageFor` khớp chính xác TRƯỚC khi hỏi tới cây web, nên
      mục này chỉ mở đường cho các trang CON: `tu-van-nganh`, `so-do-mon-hoc`. */
   '/academy',
+  /* CT Work — cả cây, gồm hai đường công khai `invite/*` và `share/*`. */
+  '/work',
 ];
 
 /** Đường dẫn này có thuộc một cây web không (kể cả các trang con động). */

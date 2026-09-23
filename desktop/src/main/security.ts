@@ -22,6 +22,7 @@ import {
   IS_DEV,
   MEDIA_ORIGIN,
 } from './config';
+import { duongNoiBoTuUrl } from './dieuHuongNoiBo';
 
 /**
  * Phải gọi TRƯỚC `app.whenReady()`. Chromium chốt danh sách scheme đặc quyền
@@ -250,6 +251,14 @@ export function hardenWebContents(window: BrowserWindow): void {
   const { webContents } = window;
 
   webContents.on('will-navigate', (event, url) => {
+    /* `window.location.href = '/work/…'` trong mã web dùng lại ⇒ điều hướng
+       TRONG app thay vì tải lại cả renderer. Xem `dieuHuongNoiBo.ts`. */
+    const noiBo = duongNoiBoTuUrl(url, IS_DEV ? [APP_ORIGIN, DEV_SERVER_URL] : [APP_ORIGIN]);
+    if (noiBo) {
+      event.preventDefault();
+      webContents.send('app:navigate', noiBo);
+      return;
+    }
     const origin = originOf(url);
     if (origin === null || !ALLOWED_NAVIGATION_ORIGINS.includes(origin)) {
       event.preventDefault();

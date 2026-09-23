@@ -2731,6 +2731,28 @@ code {
   min-height: 100%;
 }
 
+/* ── CT Work (`features/work/CtWorkPage.tsx`) ──────────────────────────
+ *
+ * `app/work/layout.tsx` của web dựng `.work-root` là `fixed inset-0 z-[45]`
+ * — trên web nó phủ cả cửa sổ trình duyệt (và che navbar của site, có chủ
+ * đích). Trong app, `fixed` mặc định tính theo CỬA SỔ, nên nó phủ luôn thanh
+ * bên, thanh tiêu đề và thanh trạng thái của app: không còn đường ra.
+ *
+ * `contain: layout paint` biến host thành KHỐI CHỨA cho con `fixed` (và một
+ * ngữ cảnh xếp lớp riêng): `inset-0` thành đúng vùng nội dung, `z-[45]` không
+ * vượt ra ngoài, và mọi hộp thoại portal vào `#work-portal` cũng nằm gọn trong
+ * vùng này. */
+.ct-work-host {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  contain: layout paint;
+}
+
+.ct-work-host > .ct-web-host {
+  overflow: hidden;
+}
+
 .ct-notes-host {
   height: 100%;
   overflow: hidden;

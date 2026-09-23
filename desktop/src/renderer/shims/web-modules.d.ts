@@ -268,6 +268,14 @@ declare module '@/app/*/page' {
   export default Trang;
 }
 
+/* Bố cục chung của cây CT Work (`app/work/layout.tsx`) — `CtWorkPage` dựng nó
+   quanh mọi trang `/work/**` vì router của app không biết layout của Next. */
+declare module '@/app/work/layout' {
+  import type { ComponentType, ReactNode } from 'react';
+  const KhungCtWork: ComponentType<{ children: ReactNode }>;
+  export default KhungCtWork;
+}
+
 /* Provider react-query của web. `VoWeb` dựng nó cho MỌI cây web dùng lại —
    `/creator` và `/saved` gọi `useQuery`, và thiếu nó thì chúng nổ ngay lúc vẽ
    với "No QueryClient set". Khai riêng vì wildcard trên chỉ phủ module TRANG. */

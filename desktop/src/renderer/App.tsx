@@ -67,7 +67,11 @@ function Content() {
 
 function Shell() {
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const { settings, setSetting, resolvedTheme } = useAppState();
+  const { settings, setSetting, resolvedTheme, route } = useAppState();
+  /* CT Work có bảng lệnh ⌘K RIÊNG (`components/work/CommandPalette`, nghe ở
+     `document` — tới TRƯỚC `window` ở đây). Không nhường thì một cú ⌘K mở CẢ
+     HAI bảng chồng lên nhau. Bảng của app vẫn mở được bằng nút trên thanh tiêu đề. */
+  const trongCtWork = route === '/work' || route.startsWith('/work/');
 
   // Phím tắt chỉ đảo giữa 'full' và 'hidden' — bỏ qua 'icons'. Người bấm ⌘B
   // muốn CHỖ, không muốn đi qua một trạng thái trung gian rồi phải bấm tiếp.
@@ -80,6 +84,7 @@ function Shell() {
       // Cmd trên macOS, Ctrl ở nơi khác. Dùng `metaKey || ctrlKey` thay vì rẽ
       // nhánh theo nền tảng: bàn phím ngoài cắm chéo nền tảng là chuyện thường.
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        if (trongCtWork && event.defaultPrevented) return;
         event.preventDefault();
         setPaletteOpen((open) => !open);
       }
@@ -94,7 +99,7 @@ function Shell() {
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [settings.sidebarMode, setSetting]);
+  }, [settings.sidebarMode, setSetting, trongCtWork]);
 
   return (
     /* Nhạc bọc NGOÀI cả shell.

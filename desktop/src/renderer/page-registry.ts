@@ -46,6 +46,7 @@ import { MoPhongPage } from './features/simulation/MoPhongPage';
 import { LoTrinhPage } from './features/roadmap/LoTrinhPage';
 import { NgoaiNguPage } from './features/language/NgoaiNguPage';
 import { PhongVanPage } from './features/interview/PhongVanPage';
+import { CtWorkPage } from './features/work/CtWorkPage';
 import { thuocCayWeb } from './features/web/dinhTuyenWeb';
 
 export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
@@ -79,6 +80,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/forum': DienDanPage,
   '/saved': DaLuuPage,
   '/profile': TrangCaNhanPage,
+  '/work': CtWorkPage,
 };
 
 /**
@@ -113,6 +115,7 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
      `so-do-mon-hoc` — vốn app chưa từng có. Thứ tự trong `nativePageFor` bảo
      đảm điều đó: khớp chính xác trước, cây web sau. */
   ['/academy', TuVanNganhPage],
+  ['/work', CtWorkPage],
 ];
 
 export function nativePageFor(path: string): ComponentType | undefined {

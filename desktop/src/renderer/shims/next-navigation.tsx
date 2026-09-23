@@ -82,20 +82,46 @@ export function useSearchParams(): URLSearchParams {
  */
 const nganXep: string[] = [];
 
+/** Tuỳ chọn thứ hai của `router.push/replace` bên Next (`{ scroll: false }`).
+ *  CT Work truyền nó ở ~20 chỗ; ở đây không có gì để làm với nó, nhưng chữ ký
+ *  phải nhận thì mã web mới biên dịch được. */
+interface TuyChonDieuHuong { scroll?: boolean }
+
 interface BoDieuHuong {
-  push(href: string): void;
-  replace(href: string): void;
+  push(href: string, tuyChon?: TuyChonDieuHuong): void;
+  replace(href: string, tuyChon?: TuyChonDieuHuong): void;
   back(): void;
   /** Có trong API của Next; ở đây không có gì để nạp trước. */
   prefetch(): void;
   refresh(): void;
 }
 
+/**
+ * Tách `href` thành [đường dẫn, chuỗi truy vấn], theo cách trình duyệt hiểu
+ * một href TƯƠNG ĐỐI so với trang hiện tại.
+ *
+ * ⚠️ `'?issue=5'` (chỉ có truy vấn) nghĩa là "trang NÀY, truy vấn mới" — bản cũ
+ * tách ra đường dẫn RỖNG và điều hướng tới `''`, tức màn "không tìm thấy". CT
+ * Work mở ngăn chi tiết thẻ đúng bằng kiểu đổi-mỗi-truy-vấn này. Phần `#…` bị
+ * bỏ: app không cuộn theo neo, và để nó dính vào đường dẫn là không khớp route.
+ */
+export function tachHref(href: string, hienTai: string): [string, string] {
+  const khongNeo = href.split('#')[0] ?? '';
+  const i = khongNeo.indexOf('?');
+  const duong = i < 0 ? khongNeo : khongNeo.slice(0, i);
+  const q = i < 0 ? '' : khongNeo.slice(i + 1);
+  /* `/` là trang chủ của WEB; app không có route đó (vào là màn "không có
+     trang") — trang chủ của app là bảng điều khiển. Thanh bên CT Work có nút
+     "Back to CuongThai" trỏ đúng `/`. */
+  if (duong === '/') return ['/dashboard', q];
+  return [duong || hienTai, q];
+}
+
 export function useRouter(): BoDieuHuong {
   const { route, navigate } = useAppState();
 
   const di = useCallback((href: string, ghiDe: boolean) => {
-    const [duong = '/', q = ''] = href.split('?');
+    const [duong, q] = tachHref(href, route);
     dat(duong, q);
     if (!ghiDe && route !== duong) nganXep.push(route);
     navigate(duong, q || undefined);

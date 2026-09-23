@@ -461,7 +461,7 @@ git ls-files --stage vendor/ui-kit                <span class="tok-comment"># tr
 <h3>📌 Tóm tắt</h3>
 <ul><li>Submodule lưu một cái ghim 40 ký tự (gitlink, mode 160000), không bao giờ lưu mã của thư viện.</li><li>Clone thường để submodule trống (dấu <code>-</code> trong <code>submodule status</code>); <code>update --init</code> hoặc <code>clone --recurse-submodules</code> mới điền vào.</li><li>Dời ghim là một thay đổi của kho cha: <code>update --remote</code>, rồi <code>git add</code>, commit và push nó.</li><li>Push submodule trước kho cha — <code>git push --recurse-submodules=check</code> ép luật đó giúp bạn.</li><li>Subtree chép file thật vào nên bạn cùng nhóm không cần biết gì thêm; còn publish được thành gói thì registry thắng cả hai.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/C%C3%A1c-C%C3%B4ng-C%E1%BB%A5-Git-Submodules" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 7.11 (tiếng Việt) — Submodule</span><span class="lc-sub">Gồm cả mục "Vấn đề với Submodule", viết rất thẳng thắn.</span></span>
 </a>

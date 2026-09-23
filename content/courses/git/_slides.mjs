@@ -18,7 +18,8 @@ export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/GIT';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'git-05': 'v2' }. */
 // v2 (23/09/2026): mindmap không nhận màu 'git' ⇒ mất đường nối một nhánh ở slide 2
-const VER = { 'git-01': 'v2', 'git-03': 'v2', 'git-04': 'v2' };
+// v2 git-00 (23/09/2026 tối): thêm slide 18–31 cho hai bài "Bắt đầu tại đây"
+const VER = { 'git-00': 'v2', 'git-01': 'v2', 'git-03': 'v2', 'git-04': 'v2' };
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

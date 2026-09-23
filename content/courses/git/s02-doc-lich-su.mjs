@@ -1264,7 +1264,7 @@ done</code></pre>
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: chạy cuộc điều tra này trên một kho đã gieo sẵn lỗi</span><span class="lc-sub">Bài tập Code Lab cấy một lỗi tương tự và chấm điểm chẩn đoán của bạn.</span></span>
 </a>
-<a class="link-card" href="https://git-scm.com/book/vi/v2/C%C3%A1c-C%C3%B4ng-C%E1%BB%A5-Git-G%E1%BB%A1-L%E1%BB%97i-V%E1%BB%9Bi-Git" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Debugging-with-Git" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 7.10 (tiếng Việt) — Gỡ lỗi với Git</span><span class="lc-sub">Chương chính thức về blame và bisect, kèm một ví dụ chạy trọn vẹn.</span></span>
 </a>

@@ -14,27 +14,689 @@ export default {
   title: 'Section 0 — Introduction, Why Git, Setup & How to Study|||Mục 0 — Giới thiệu, Vì sao cần Git, Cài đặt & Cách học',
   description: 'Đọc trước tiên: khoá này dành cho ai, vấn đề mà Git thực sự giải quyết (và vì sao thư mục "báo cáo_final_v2_sửa_lần_cuối" là một hệ quản lý phiên bản tồi), cài đặt và cấu hình Git trên cả ba hệ điều hành, tạo khoá SSH cho GitHub, và cách học khoá này để kiến thức đọng lại.',
   lessons: [
+    /* ─────────────────── 0.5 · BẮT ĐẦU TẠI ĐÂY (1/2) ─────────────────── */
+    {
+      title: 'Start here (1/2) — Git and GitHub: what they are, where they came from, why they matter|||Bắt đầu tại đây (1/2) — Git và GitHub là gì, ra đời thế nào, và vì sao quan trọng với bạn',
+      slug: 'git-0-5-bat-dau-tai-day',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Bài mở cửa cho người chưa từng dùng Git: Git và GitHub là gì (bằng hình ảnh đời thường trước, định nghĩa sau), khác nhau ra sao, câu chuyện Linus Torvalds viết Git năm 2005, GitHub từ 2008 tới 180 triệu lập trình viên, và Git giúp gì cho đồ án, thực tập, đi làm của chính bạn.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>Hello. Before you type a single command, know what you are learning — and why</h2>
+<p class="lead">Welcome. If you have never used Git, or you have used it only by copying <code>git add .</code>, <code>git commit</code>, <code>git push</code> from a friend without knowing what they do, this lesson is for you. No commands to memorise here. In twenty minutes you will know what Git and GitHub are, where they came from, what problem they were built to solve, and why almost every software team on earth uses them — including the team you are about to join for your SWP391 project.</p>
+<p>This lesson and the next one are the front door of the course. Lesson 2 of the pair tells real stories of what happens <em>without</em> Git and gives you a study plan that does not burn you out. After that, lesson 0.1 shows the full map, 0.2 goes deeper into the problem Git solves, 0.3 installs everything, and 0.4 builds your safe practice playground.</p>
+
+<h3>What Git is — an everyday picture first</h3>
+${slide('git-00', 18, 'Git là gì? Nút “lưu game” cho cả thư mục')}
+<p>Forget the textbook definition for a moment. Picture three things you already know:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🎮 A "save game" button</span><span class="v">Before a hard boss fight you save; if you lose, you reload. Git gives your <strong>whole project folder</strong> a save button. Each save is called a <strong>commit</strong>. You can keep hundreds of them, and go back to any one.</span></div>
+  <div class="kv"><span class="k">⏳ A time machine</span><span class="v">"Show me the project exactly as it was last Monday, before I broke the login page." One command, and the folder is back to Monday. Another, and you are back in today.</span></div>
+  <div class="kv"><span class="k">📓 A diary with signatures</span><span class="v">Every entry says <em>who</em> changed <em>which lines</em>, <em>when</em>, and <em>why</em> (the commit message). Nobody can quietly rewrite an old entry without it showing — Git fingerprints every version with a hash.</span></div>
+</div>
+<p>Now the proper definition, and it will make sense: <strong>Git is a distributed version control system</strong>. Word by word:</p>
+<ul>
+  <li><strong>Version</strong> — one saved state of your project (one commit).</li>
+  <li><strong>Version control</strong> — a tool that keeps all those versions, tells you what changed between them, and lets several people combine their changes.</li>
+  <li><strong>Distributed</strong> — every person's computer holds the <em>complete</em> history, not just the latest files. There is no single machine whose death kills the project. (Lesson 0.2 compares this with older "centralised" tools.)</li>
+</ul>
+<div class="callout ok"><strong>One sentence to keep:</strong> Git is a free program on your own computer that takes snapshots of your project folder, labels each one with who, when and why, and lets you move between them — and merge other people's snapshots with yours.</div>
+
+<h3>What GitHub is</h3>
+${slide('git-00', 19, 'Git ≠ GitHub — máy bạn ⇄ GitHub ⇄ bạn cùng nhóm')}
+<p>Git lives on your laptop. But a team of five needs one <em>shared</em> copy that everybody sends work to and fetches work from. <strong>GitHub</strong> is a website that stores that shared copy of a Git repository for you — and then adds a set of team tools on top that Git itself does not have:</p>
+<ul>
+  <li><strong>Pull requests</strong> — "here are my changes, please review them before they go into the main branch".</li>
+  <li><strong>Issues</strong> and <strong>Projects</strong> — a to-do list and a board for the team's tasks and bugs.</li>
+  <li><strong>Actions</strong> — robots that run your tests or deploy your site every time someone pushes.</li>
+  <li><strong>Pages</strong> — free hosting for a static website such as your portfolio.</li>
+  <li><strong>Your profile</strong> — a public record of what you have built, which recruiters really do open.</li>
+</ul>
+<p>A useful picture: Git is the camera in everyone's pocket; GitHub is the shared online album where the team puts the photos, comments on them, and decides which ones go into the final book.</p>
+
+<h3>Git vs GitHub — side by side</h3>
+${slide('git-00', 20, 'Git và GitHub — so từng dòng')}
+<table>
+  <tr><th></th><th>Git</th><th>GitHub</th></tr>
+  <tr><td>What it is</td><td>A version control program</td><td>A website that hosts Git repositories + team tools</td></tr>
+  <tr><td>Where it runs</td><td>On your computer, in the hidden <code>.git/</code> folder</td><td>On GitHub's servers; you use it in a browser or via <code>git push</code> / <code>git pull</code></td></tr>
+  <tr><td>Needs internet / account?</td><td>No</td><td>Yes, both</td></tr>
+  <tr><td>Who made it</td><td>Linus Torvalds, April 2005; maintained by Junio Hamano since July 2005</td><td>Four founders, launched April 2008; owned by Microsoft since 2018</td></tr>
+  <tr><td>Cost</td><td>Free and open source</td><td>Free plan; extra benefits for students (Chapter 15)</td></tr>
+  <tr><td>Alternatives</td><td>Practically none today — Git dominates</td><td>GitLab, Bitbucket, Gitea… all use Git underneath</td></tr>
+</table>
+<div class="callout warn"><strong>Beginner misunderstanding no. 1: "Git = GitHub".</strong> It leads to sentences like "GitHub is down so I cannot commit" (you can — commits are local), "I deleted the repo on GitHub so my code is gone" (the copy on your laptop is untouched), or "I need an account to use Git" (you do not). Keep the two apart: Chapters 1–4 are pure Git on your machine, and GitHub enters in Chapter 5.</div>
+
+<h3>How Git was born — a true story</h3>
+${slide('git-00', 21, 'Dòng thời gian: từ email vá lỗi tới 180 triệu lập trình viên')}
+<p><strong>Before Git.</strong> From 1991 to 2002, the Linux kernel — the heart of Android phones, most web servers and many supercomputers — was developed by passing changes around as patches in emails and as archive files. Other teams at the time used tools such as CVS and Subversion (SVN), which kept the history on <em>one central server</em>: if the server was down, nobody could save a version; if it was lost, so was the history.</p>
+<p><strong>2002 — BitKeeper.</strong> The kernel project started using BitKeeper, a commercial, distributed tool whose company let the Linux community use it free of charge. It worked well, but the code of the tool itself was closed.</p>
+<p><strong>Early 2005 — the break-up.</strong> The relationship broke down. BitMover, the company behind BitKeeper, objected to Andrew Tridgell (a well-known open-source developer) building a tool to read BitKeeper's data, and in April 2005 announced it would stop providing the free version. Linus Torvalds, the creator of Linux, later said he had spent weeks trying to mediate before deciding he could not keep using it. None of the free tools of the day were fast enough and distributed enough for a project the size of Linux. So he wrote his own.</p>
+<p><strong>April 2005 — ten days.</strong> Work began on 3 April 2005. Linus announced the project on 6 April, and on 7 April Git was already storing its own source code — "self-hosting". The very first commit in Git's history, still visible on GitHub today, has the message <code>Initial revision of "git", the information manager from hell</code>. In a 2015 interview Linus said it came together in "about ten days or so", at which point he made his first kernel commit with it. On 18 April the first merge of multiple branches happened, and on 16 June 2005 the Linux 2.6.12 release was managed with Git.</p>
+<p><strong>July 2005 — handing it over.</strong> On 26 July 2005 Linus passed maintenance to <strong>Junio Hamano</strong>, who still maintains Git today. Version 1.0 came out on 21 December 2005.</p>
+<p><strong>The name.</strong> "Git" is British slang for an unpleasant, annoying person. Linus joked that he names all his projects after himself — first Linux, now git. The original README also offered other readings, depending on your mood: "the stupid content tracker", or "global information tracker" when it works.</p>
+
+<h3>Why it was born — the five design goals</h3>
+${slide('git-00', 22, 'Vì sao Git ra đời: BitKeeper đổ vỡ → mục tiêu thiết kế')}
+<p>The Pro Git book lists the goals Linus set for the new system. Every one of them still shapes how you use Git today:</p>
+<table>
+  <tr><th>Goal</th><th>What it means for you</th></tr>
+  <tr><td><strong>Speed</strong></td><td>Commit, switch branch, view history: usually instant, because it all happens on your disk.</td></tr>
+  <tr><td><strong>Simple design</strong></td><td>Underneath, Git is just snapshots plus pointers. Chapter 1 teaches that model; Chapter 9 opens <code>.git/</code> so you can see it.</td></tr>
+  <tr><td><strong>Strong support for non-linear development</strong> (thousands of parallel branches)</td><td>Five students can each work on their own branch at the same time and merge later. Branches cost almost nothing.</td></tr>
+  <tr><td><strong>Fully distributed</strong></td><td>Every clone is a full backup of the history. You can commit on a bus with no Wi-Fi.</td></tr>
+  <tr><td><strong>Handles large projects efficiently</strong></td><td>The same tool runs a school project and the Linux kernel.</td></tr>
+</table>
+<p>And one more that runs through all of them: <strong>integrity</strong>. Every version is identified by a hash of its own content, so if even one bit of history were altered, the hash would no longer match. That is why commits have names like <code>cf119fa</code> instead of "version 3".</p>
+
+<h3>GitHub: from 2008 to 180 million developers</h3>
+<p>GitHub was launched in April 2008 by four founders (Tom Preston-Werner, Chris Wanstrath, P. J. Hyett and Scott Chacon — Scott is also the author of the Pro Git book). It made Git easy to share: one web address per project, a friendly page for every commit, and — the killer feature — pull requests. On 4 June 2018 Microsoft announced it would buy GitHub for 7.5 billion US dollars in Microsoft stock; the deal completed on 26 October 2018.</p>
+<p>According to GitHub's Octoverse 2025 report (published 28/10/2025), more than <strong>180 million developers</strong> build on GitHub, more than 36 million joined in the past year — more than one new developer every second — and it hosts <strong>630 million repositories</strong>. In 2025 developers pushed nearly 1 billion commits and merged on average 43.2 million pull requests every month.</p>
+
+<h3>What Git is used for</h3>
+${slide('git-00', 24, 'Git dùng để làm gì — tám việc, tám chương')}
+<table>
+  <tr><th>Job</th><th>In plain words</th><th>Where you learn it</th></tr>
+  <tr><td>Keep the history</td><td>Every commit is a snapshot of the whole project, kept forever</td><td>Ch 1</td></tr>
+  <tr><td>Go back to a working version</td><td>Undo a bad change without destroying the history</td><td>Ch 4</td></tr>
+  <tr><td>Work in parallel with branches</td><td>4–5 people change one project without stepping on each other</td><td>Ch 3</td></tr>
+  <tr><td>See who changed what and why</td><td><code>git log</code>, <code>git blame</code>, find the commit that introduced a bug</td><td>Ch 2</td></tr>
+  <tr><td>Review code</td><td>Teammates read your pull request before it reaches <code>main</code></td><td>Ch 6</td></tr>
+  <tr><td>CI/CD</td><td>Every push automatically runs tests or deploys the site (GitHub Actions)</td><td>Ch 11</td></tr>
+  <tr><td>Portfolio for job hunting</td><td>Your GitHub profile is proof you can build things</td><td>Ch 15</td></tr>
+  <tr><td>Contribute to open source</td><td>Fork → change → pull request into someone else's project</td><td>Ch 5, 15</td></tr>
+</table>
+
+<h3>Does it really matter? The numbers</h3>
+${slide('git-00', 25, 'Quan trọng tới mức nào? Con số có nguồn')}
+<p>The Stack Overflow Developer Survey 2022 asked developers which version control system they use. <strong>93.87%</strong> of all respondents said Git. Among professional developers it was <strong>96.65%</strong>. Even among people still <em>learning to code</em>, <strong>81.87%</strong> already used Git. The next tool on the list, SVN, was at 5.18%. In other words: Git is not one option among many — it is the standard, and the question in a job interview is not "have you used Git?" but "how well?".</p>
+
+<h3>What it does for YOU</h3>
+${slide('git-00', 26, 'Git giúp gì cho bạn — từ năm nhất tới đi làm')}
+<div class="kv-grid">
+  <div class="kv"><span class="k">Your own assignments</span><span class="v">Commit after each step that works. When a "small change" breaks everything at midnight, you go back to the last good commit in seconds instead of pressing Ctrl+Z two hundred times.</span></div>
+  <div class="kv"><span class="k">SWP391 and other team projects</span><span class="v">Four or five people editing one codebase for weeks. Without Git: zip files over Zalo, overwritten work, arguments. With Git: one repository, a branch per feature, pull requests, and a history that shows fairly who did what.</span></div>
+  <div class="kv"><span class="k">Internship and interviews</span><span class="v">Recruiters open your GitHub. Typical interview questions: "What is the difference between merge and rebase?", "fetch vs pull?", "You committed a password — what now?", "How do you resolve a conflict?". Every one of them is answered in this course.</span></div>
+  <div class="kv"><span class="k">Your first job</span><span class="v">Day one at almost any software company: "clone this repository, create a branch, open a pull request". Git is assumed, like knowing how to use email.</span></div>
+  <div class="kv"><span class="k">Everything else you will learn</span><span class="v">Docker images, deploying to a server, GitHub Actions — the other courses on this site all start from a Git repository.</span></div>
+</div>
+
+<h3>Where this course takes you</h3>
+${slide('git-00', 4, 'Lộ trình toàn khoá — 17 phần')}
+<p>Seventeen parts: this Section 0, then Chapters 1–4 (the model: commits, history, branches, undo), 5–8 (teamwork on GitHub), 9–12 (depth and automation), 13 (a rescue cookbook for emergencies), and 14–16 (your everyday tools, your GitHub profile as a student, and a full team project that ends with the 20-question final exam). You do not need all of it for your first team project — the next lesson gives you a one-week minimum route. The full map with every chapter is in lesson 0.1.</p>
+
+<div class="pitfall co-tieu-de"><strong>How beginners start in the wrong place.</strong> A new student creates a GitHub account, clicks "Upload files" in the browser to put the project online, and believes that is "using Git". It works for a day. Then two teammates each upload their own copy of the same file. Each upload becomes a commit on GitHub, but the second one simply replaces the whole file with a copy that never contained the first person's changes — nothing is merged, and the lost work only shows up days later as "my fix disappeared". Merging only happens when everyone works in Git on their own machine and pulls before pushing. Learn Git on your own machine first (Chapters 1–4); GitHub is where you <em>share</em> the history Git creates, not a replacement for it.</div>
+
+<h3>🧪 Practice (10 minutes — guaranteed to work)</h3>
+<div class="callout ok"><ol><li>Open a terminal (Windows: Git Bash; if you do not have it yet, skip to step 2 and come back after lesson 0.3) and run <code>git --version</code>. Any version from 2.30 up is fine.</li><li>Create a free GitHub account at <code>github.com</code>. Pick a username you would be happy to show a recruiter (for example <code>nguyenvancuong</code>, not <code>xxboy2k6</code>) and use an email you will keep after graduation.</li><li>Open <code>github.com/git/git</code> — the official mirror of Git's own source code. Look around: this is the real history of the tool you are about to learn, with tens of thousands of commits. Then open the link card <em>“The first commit of Git”</em> below — commit <code>e83c516</code>, by Linus Torvalds, 7 April 2005 — and read its message and its date.</li><li>Open <code>github.com/torvalds/linux</code> and note two numbers from the page: how many commits, and how many contributors.</li><li>In one sentence of your own, write down the difference between Git and GitHub.</li></ol>
+<pre><code class="language-bash">git --version</code></pre>
+<div class="out">git version 2.51.1</div>
+<p>(Real output on the author's Mac, 09/2026 — yours may show a different version number.)</p>
+<p><strong>Done when:</strong> you have a GitHub account, you have seen the message <code>Initial revision of "git", the information manager from hell</code> with your own eyes, you have written down the commit and contributor counts of the Linux repository, and your one-sentence definition does not say "Git and GitHub are the same thing".</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Git</span><span class="v">A free distributed version control program that runs on your computer.</span></div>
+  <div class="kv"><span class="k">GitHub</span><span class="v">A website that hosts Git repositories and adds team tools (pull requests, issues, Actions, Pages).</span></div>
+  <div class="kv"><span class="k">Version control system (VCS)</span><span class="v">A tool that keeps every version of a set of files and shows what changed between them.</span></div>
+  <div class="kv"><span class="k">Commit</span><span class="v">One saved snapshot of the whole project, with author, time and a message saying why.</span></div>
+  <div class="kv"><span class="k">Repository (repo)</span><span class="v">A project folder plus its full history in the hidden <code>.git/</code> folder.</span></div>
+  <div class="kv"><span class="k">Distributed</span><span class="v">Every copy of the repository contains the complete history, not just the latest files.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Git is a "save game" button for your whole project folder: each commit records what, who, when and why.</li><li>GitHub is a website that stores a shared copy of Git repositories and adds pull requests, issues and Actions; GitLab and Bitbucket are alternatives.</li><li>Linus Torvalds wrote Git in April 2005, in about ten days, after the Linux kernel lost free use of BitKeeper; Junio Hamano has maintained it since July 2005.</li><li>Git was designed to be fast, simple, branch-friendly, fully distributed and tamper-evident — and those goals explain how you use it today.</li><li>93.87% of developers in the Stack Overflow 2022 survey used Git; GitHub now has 180 million+ developers — Git is the standard you will meet in SWP391, internships and every job.</li></ul>
+
+<a class="link-card" href="https://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Pro Git 1.2 — A Short History of Git</span><span class="lc-sub">BitKeeper, 2005, and the design goals, from the official book.</span></span>
+</a>
+<a class="link-card" href="https://www.linuxfoundation.org/blog/blog/10-years-of-git-an-interview-with-git-creator-linus-torvalds" target="_blank" rel="noopener">
+  <span class="lc-ico">🎙️</span>
+  <span class="lc-body"><span class="lc-title">10 Years of Git: an interview with Linus Torvalds (2015)</span><span class="lc-sub">"About ten days", self-hosting in a day, and why he stopped using BitKeeper — in his own words.</span></span>
+</a>
+<a class="link-card" href="https://github.com/git/git/commit/e83c5163316f89bfbde7d9ab23ca2e25604af290" target="_blank" rel="noopener">
+  <span class="lc-ico">🥇</span>
+  <span class="lc-body"><span class="lc-title">The first commit of Git, 7 April 2005</span><span class="lc-sub">"Initial revision of git, the information manager from hell" — open it for the practice above.</span></span>
+</a>
+<a class="link-card" href="https://en.wikipedia.org/wiki/Git" target="_blank" rel="noopener">
+  <span class="lc-ico">📚</span>
+  <span class="lc-body"><span class="lc-title">Wikipedia — Git</span><span class="lc-sub">The 2005 timeline (3 April, 7 April, 16 June, 26 July, 21 December) and the story of the name.</span></span>
+</a>
+<a class="link-card" href="https://github.blog/news-insights/company-news/github-microsoft/" target="_blank" rel="noopener">
+  <span class="lc-ico">🤝</span>
+  <span class="lc-body"><span class="lc-title">GitHub Blog — GitHub + Microsoft (04/06/2018)</span><span class="lc-sub">GitHub's own announcement of the acquisition.</span></span>
+</a>
+<a class="link-card" href="https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/" target="_blank" rel="noopener">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">GitHub Octoverse 2025</span><span class="lc-sub">180M+ developers, 630M repositories, nearly 1 billion commits in 2025.</span></span>
+</a>
+<a class="link-card" href="https://survey.stackoverflow.co/2022/" target="_blank" rel="noopener">
+  <span class="lc-ico">📈</span>
+  <span class="lc-body"><span class="lc-title">Stack Overflow Developer Survey 2022</span><span class="lc-sub">Section "Version control": Git 93.87% of all respondents, 96.65% of professional developers.</span></span>
+</a>
+<p class="note-ct"><strong>Next:</strong> lesson 2 of "Start here" — real disasters that happened without a safety net, the situations student teams hit every semester, and a study plan that keeps you going.</p>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Chào bạn. Trước khi gõ lệnh nào, hãy biết mình đang học cái gì — và vì sao</h2>
+<p class="lead">Chào mừng bạn. Nếu bạn chưa từng dùng Git, hoặc chỉ dùng bằng cách chép ba dòng <code>git add .</code>, <code>git commit</code>, <code>git push</code> của bạn cùng nhóm mà không biết chúng làm gì, thì bài này viết cho bạn. Ở đây không có lệnh nào phải học thuộc. Trong hai mươi phút, bạn sẽ biết Git và GitHub là gì, chúng ra đời từ đâu, sinh ra để giải quyết chuyện gì, và vì sao gần như mọi nhóm làm phần mềm trên thế giới đều dùng chúng — kể cả nhóm đồ án SWP391 mà bạn sắp vào.</p>
+<p>Bài này và bài kế tiếp là cửa vào của cả khoá. Bài thứ hai kể những chuyện có thật xảy ra khi <em>không có</em> Git và đưa bạn một kế hoạch học để không bị nản giữa chừng. Sau đó bài 0.1 cho bạn xem bản đồ đầy đủ, 0.2 đào sâu vấn đề Git giải quyết, 0.3 cài đặt mọi thứ, và 0.4 dựng sân tập an toàn để bạn tha hồ nghịch.</p>
+
+<h3>Git là gì — nói bằng hình ảnh đời thường trước</h3>
+${slide('git-00', 18, 'Git là gì? Nút “lưu game” cho cả thư mục')}
+<p>Tạm quên định nghĩa trong sách. Hãy hình dung ba thứ bạn đã quen:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🎮 Nút “lưu game”</span><span class="v">Trước khi đánh trùm khó, bạn lưu game; thua thì nạp lại. Git gắn một nút lưu như vậy cho <strong>cả thư mục dự án</strong>. Mỗi lần lưu gọi là một <strong>commit</strong> (điểm lưu). Bạn giữ được hàng trăm điểm lưu và quay về điểm nào cũng được.</span></div>
+  <div class="kv"><span class="k">⏳ Cỗ máy thời gian</span><span class="v">“Cho tôi xem dự án đúng như sáng thứ Hai tuần trước, trước lúc tôi làm hỏng trang đăng nhập.” Một lệnh là thư mục trở về thứ Hai. Một lệnh nữa là bạn về lại hôm nay.</span></div>
+  <div class="kv"><span class="k">📓 Sổ nhật ký có chữ ký</span><span class="v">Mỗi trang ghi <em>ai</em> sửa <em>dòng nào</em>, <em>lúc nào</em>, <em>vì sao</em> (lời nhắn commit). Không ai lén sửa được trang cũ mà không lộ — Git đóng dấu vân tay (mã băm — hash) lên từng phiên bản.</span></div>
+</div>
+<p>Giờ tới định nghĩa chuẩn, và bạn sẽ thấy nó dễ hiểu: <strong>Git là một hệ quản lý phiên bản phân tán</strong> (distributed version control system). Tách từng chữ:</p>
+<ul>
+  <li><strong>Phiên bản</strong> (version) — một trạng thái đã lưu của dự án (một commit).</li>
+  <li><strong>Quản lý phiên bản</strong> (version control) — công cụ giữ hết các phiên bản đó, chỉ cho bạn thấy giữa chúng đã đổi gì, và giúp nhiều người gộp thay đổi của nhau lại.</li>
+  <li><strong>Phân tán</strong> (distributed) — máy của mỗi người đều giữ <em>toàn bộ</em> lịch sử, không chỉ bản mới nhất. Không có một cái máy nào mà nó chết là dự án chết theo. (Bài 0.2 so sánh chuyện này với các công cụ “tập trung” đời trước.)</li>
+</ul>
+<div class="callout ok"><strong>Một câu để nhớ:</strong> Git là một phần mềm miễn phí chạy trên máy bạn, chụp lại thư mục dự án thành từng ảnh chụp (snapshot), ghi kèm ai — lúc nào — vì sao, cho bạn đi lại giữa các ảnh chụp đó, và gộp ảnh chụp của người khác với của bạn.</div>
+
+<h3>GitHub là gì</h3>
+${slide('git-00', 19, 'Git ≠ GitHub — máy bạn ⇄ GitHub ⇄ bạn cùng nhóm')}
+<p>Git sống trên laptop của bạn. Nhưng một nhóm năm người cần một bản <em>dùng chung</em> để ai cũng gửi việc lên và lấy việc của người khác về. <strong>GitHub</strong> là một trang web giữ hộ bạn bản dùng chung đó của kho Git — rồi thêm lên trên một bộ công cụ làm việc nhóm mà bản thân Git không có:</p>
+<ul>
+  <li><strong>Pull request</strong> (yêu cầu gộp mã) — “đây là phần mình sửa, các bạn đọc giúp trước khi nó vào nhánh chính nhé”.</li>
+  <li><strong>Issues</strong> (phiếu công việc) và <strong>Projects</strong> (bảng công việc) — danh sách việc cần làm, lỗi cần sửa của cả nhóm.</li>
+  <li><strong>Actions</strong> (tự động hoá) — “con robot” tự chạy test hoặc tự deploy trang web mỗi khi có người push.</li>
+  <li><strong>Pages</strong> — chỗ đăng miễn phí một trang web tĩnh, ví dụ portfolio của bạn.</li>
+  <li><strong>Trang hồ sơ</strong> (profile) — bản ghi công khai những gì bạn đã làm, và nhà tuyển dụng thật sự có mở ra xem.</li>
+</ul>
+<p>Một hình ảnh dễ nhớ: Git là chiếc máy ảnh trong túi mỗi người; GitHub là album online chung, nơi cả nhóm đưa ảnh lên, bình luận từng tấm, và cùng chọn tấm nào vào cuốn kỷ yếu cuối cùng.</p>
+
+<h3>Git và GitHub — so từng dòng</h3>
+${slide('git-00', 20, 'Git và GitHub — so từng dòng')}
+<table>
+  <tr><th></th><th>Git</th><th>GitHub</th></tr>
+  <tr><td>Là gì</td><td>Một phần mềm quản lý phiên bản</td><td>Một trang web lưu kho Git + công cụ làm việc nhóm</td></tr>
+  <tr><td>Chạy ở đâu</td><td>Trên máy bạn, trong thư mục ẩn <code>.git/</code></td><td>Trên máy chủ của GitHub; bạn dùng qua trình duyệt hoặc <code>git push</code> / <code>git pull</code></td></tr>
+  <tr><td>Cần mạng, cần tài khoản?</td><td>Không cần gì</td><td>Cần cả hai</td></tr>
+  <tr><td>Ai làm ra</td><td>Linus Torvalds, tháng 4/2005; Junio Hamano bảo trì từ tháng 7/2005</td><td>Bốn nhà sáng lập, ra mắt tháng 4/2008; thuộc Microsoft từ 2018</td></tr>
+  <tr><td>Giá</td><td>Miễn phí, mã nguồn mở</td><td>Có gói miễn phí; sinh viên có thêm ưu đãi (Chương 15)</td></tr>
+  <tr><td>Thay thế được bằng</td><td>Gần như không — Git đang thống trị</td><td>GitLab, Bitbucket, Gitea… đều dùng Git bên dưới</td></tr>
+</table>
+<div class="callout warn"><strong>Hiểu lầm số 1 của người mới: “Git = GitHub”.</strong> Nó sinh ra những câu như “GitHub sập nên mình không commit được” (được chứ — commit nằm trên máy bạn), “mình lỡ xoá repo trên GitHub nên mất hết code” (bản trên laptop vẫn nguyên), hay “phải có tài khoản mới dùng được Git” (không cần). Hãy tách bạch hai thứ: Chương 1–4 là Git thuần tuý trên máy bạn, GitHub bước vào từ Chương 5.</div>
+
+<h3>Git ra đời thế nào — một câu chuyện có thật</h3>
+${slide('git-00', 21, 'Dòng thời gian: từ email vá lỗi tới 180 triệu lập trình viên')}
+<p><strong>Trước khi có Git.</strong> Từ 1991 tới 2002, nhân Linux — trái tim của điện thoại Android, của đa số máy chủ web và nhiều siêu máy tính — được phát triển bằng cách gửi qua lại các bản vá (patch) trong email và các file nén. Nhiều nhóm khác thời đó dùng CVS hay Subversion (SVN), những công cụ giữ lịch sử trên <em>một máy chủ trung tâm</em>: máy chủ sập thì không ai lưu được phiên bản nào; máy chủ mất thì mất luôn lịch sử.</p>
+<p><strong>2002 — BitKeeper.</strong> Dự án nhân Linux chuyển sang BitKeeper, một công cụ thương mại, phân tán, mà công ty làm ra nó cho cộng đồng Linux dùng miễn phí. Nó chạy tốt, nhưng mã nguồn của chính công cụ thì đóng.</p>
+<p><strong>Đầu 2005 — đổ vỡ.</strong> Quan hệ giữa hai bên rạn nứt. BitMover, công ty đứng sau BitKeeper, phản đối việc Andrew Tridgell (một lập trình viên mã nguồn mở nổi tiếng) viết công cụ đọc dữ liệu của BitKeeper, và tháng 4/2005 tuyên bố ngừng cung cấp bản miễn phí. Linus Torvalds, cha đẻ của Linux, sau này kể ông đã mất nhiều tuần cố hoà giải trước khi quyết định không thể tiếp tục dùng nó. Không công cụ miễn phí nào thời đó đủ nhanh và đủ phân tán cho một dự án cỡ Linux. Thế là ông tự viết.</p>
+<p><strong>Tháng 4/2005 — khoảng mười ngày.</strong> Việc bắt đầu ngày 3/4/2005. Linus công bố dự án ngày 6/4, và tới ngày 7/4 Git đã tự lưu được mã nguồn của chính nó — gọi là “self-hosting” (tự lưu chính mình). Commit đầu tiên trong lịch sử của Git, hôm nay vẫn xem được trên GitHub, có lời nhắn <code>Initial revision of "git", the information manager from hell</code> (tạm dịch: “bản đầu tiên của git, trình quản lý thông tin đến từ địa ngục”). Trong một cuộc phỏng vấn năm 2015, Linus nói Git thành hình trong “khoảng mười ngày”, tới lúc đó ông đã commit nhân Linux bằng chính nó. Ngày 18/4 có lần merge nhiều nhánh đầu tiên, và ngày 16/6/2005 bản phát hành Linux 2.6.12 được quản lý bằng Git.</p>
+<p><strong>Tháng 7/2005 — trao tay.</strong> Ngày 26/7/2005 Linus giao việc bảo trì cho <strong>Junio Hamano</strong>, người tới giờ vẫn là người bảo trì Git. Bản 1.0 ra ngày 21/12/2005.</p>
+<p><strong>Cái tên.</strong> Trong tiếng lóng Anh, “git” là từ chê một người khó ưa, cứng đầu. Linus đùa rằng ông đặt tên mọi dự án theo chính mình — trước là Linux, giờ là git. File README đầu tiên còn đưa thêm vài cách hiểu tuỳ tâm trạng: “the stupid content tracker” (trình theo dõi nội dung ngốc nghếch), hay “global information tracker” (trình theo dõi thông tin toàn cầu) những hôm nó chạy ngon.</p>
+
+<h3>Vì sao nó ra đời — năm mục tiêu thiết kế</h3>
+${slide('git-00', 22, 'Vì sao Git ra đời: BitKeeper đổ vỡ → mục tiêu thiết kế')}
+<p>Sách Pro Git liệt kê những mục tiêu Linus đặt cho hệ thống mới. Mỗi mục tiêu tới nay vẫn quyết định cách bạn dùng Git:</p>
+<table>
+  <tr><th>Mục tiêu</th><th>Với bạn, nó nghĩa là</th></tr>
+  <tr><td><strong>Nhanh</strong> (speed)</td><td>Commit, đổi nhánh, xem lịch sử: thường tức thì, vì mọi thứ diễn ra ngay trên ổ đĩa của bạn.</td></tr>
+  <tr><td><strong>Thiết kế đơn giản</strong> (simple design)</td><td>Bên dưới, Git chỉ là ảnh chụp cộng con trỏ. Chương 1 dạy mô hình đó; Chương 9 mở <code>.git/</code> cho bạn tận mắt thấy.</td></tr>
+  <tr><td><strong>Hỗ trợ mạnh phát triển song song</strong> (hàng nghìn nhánh cùng lúc)</td><td>Năm sinh viên mỗi người làm trên nhánh riêng cùng một lúc rồi gộp lại sau. Tạo nhánh gần như không tốn gì.</td></tr>
+  <tr><td><strong>Phân tán hoàn toàn</strong> (fully distributed)</td><td>Mỗi bản clone là một bản sao lưu đầy đủ lịch sử. Bạn commit được trên xe buýt không có Wi-Fi.</td></tr>
+  <tr><td><strong>Xử lý tốt dự án lớn</strong></td><td>Cùng một công cụ chạy được đồ án của bạn lẫn nhân Linux.</td></tr>
+</table>
+<p>Và một mục tiêu nữa xuyên suốt tất cả: <strong>toàn vẹn dữ liệu</strong>. Mỗi phiên bản được đặt tên bằng mã băm của chính nội dung nó, nên chỉ cần một bit trong lịch sử bị sửa lén là mã băm không còn khớp. Đó là lý do commit có tên kiểu <code>cf119fa</code> chứ không phải “bản 3”.</p>
+
+<h3>GitHub: từ 2008 tới 180 triệu lập trình viên</h3>
+<p>GitHub ra mắt tháng 4/2008, do bốn người sáng lập (Tom Preston-Werner, Chris Wanstrath, P. J. Hyett và Scott Chacon — Scott cũng là tác giả cuốn sách Pro Git). Nó làm cho Git dễ chia sẻ: mỗi dự án một địa chỉ web, mỗi commit một trang dễ đọc, và — tính năng “ăn tiền” nhất — pull request. Ngày 4/6/2018 Microsoft công bố mua GitHub với giá 7,5 tỷ USD trả bằng cổ phiếu Microsoft; thương vụ hoàn tất ngày 26/10/2018.</p>
+<p>Theo báo cáo Octoverse 2025 của GitHub (đăng 28/10/2025), hơn <strong>180 triệu lập trình viên</strong> đang làm việc trên GitHub, hơn 36 triệu người mới tham gia trong một năm — trung bình mỗi giây hơn một người — và nền tảng này chứa <strong>630 triệu kho mã</strong>. Riêng năm 2025, lập trình viên đã đẩy lên gần 1 tỷ commit và trung bình mỗi tháng gộp 43,2 triệu pull request.</p>
+
+<h3>Git dùng để làm gì</h3>
+${slide('git-00', 24, 'Git dùng để làm gì — tám việc, tám chương')}
+<table>
+  <tr><th>Việc</th><th>Nói nôm na</th><th>Học ở</th></tr>
+  <tr><td>Lưu lịch sử</td><td>Mỗi commit là một ảnh chụp cả dự án, giữ mãi</td><td>Ch 1</td></tr>
+  <tr><td>Quay về bản chạy được</td><td>Hoàn tác một thay đổi hỏng mà không phá lịch sử</td><td>Ch 4</td></tr>
+  <tr><td>Làm song song bằng nhánh</td><td>4–5 người cùng sửa một dự án mà không giẫm chân nhau</td><td>Ch 3</td></tr>
+  <tr><td>Biết ai sửa gì, vì sao</td><td><code>git log</code>, <code>git blame</code>, tìm ra commit nào gây lỗi</td><td>Ch 2</td></tr>
+  <tr><td>Review mã (đọc chéo)</td><td>Bạn cùng nhóm đọc pull request của bạn trước khi nó vào <code>main</code></td><td>Ch 6</td></tr>
+  <tr><td>CI/CD (tích hợp và triển khai liên tục)</td><td>Mỗi lần push, máy tự chạy test hoặc tự deploy trang web (GitHub Actions)</td><td>Ch 11</td></tr>
+  <tr><td>Portfolio xin việc</td><td>Hồ sơ GitHub là bằng chứng bạn làm được sản phẩm</td><td>Ch 15</td></tr>
+  <tr><td>Đóng góp mã nguồn mở</td><td>Fork (tách bản) → sửa → gửi pull request vào dự án của người khác</td><td>Ch 5, 15</td></tr>
+</table>
+
+<h3>Có thật sự quan trọng không? Nhìn con số</h3>
+${slide('git-00', 25, 'Quan trọng tới mức nào? Con số có nguồn')}
+<p>Khảo sát lập trình viên của Stack Overflow năm 2022 hỏi mọi người đang dùng hệ quản lý phiên bản nào. <strong>93,87%</strong> người trả lời chọn Git. Trong nhóm lập trình viên chuyên nghiệp, con số là <strong>96,65%</strong>. Ngay cả trong nhóm <em>đang học lập trình</em>, <strong>81,87%</strong> đã dùng Git. Công cụ đứng thứ hai, SVN, chỉ có 5,18%. Nói cách khác: Git không phải một lựa chọn trong nhiều lựa chọn — nó là chuẩn chung, và câu hỏi lúc phỏng vấn không phải “bạn dùng Git chưa?” mà là “bạn dùng Git tốt tới đâu?”.</p>
+
+<h3>Git giúp gì cho chính BẠN</h3>
+${slide('git-00', 26, 'Git giúp gì cho bạn — từ năm nhất tới đi làm')}
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bài tập của riêng bạn</span><span class="v">Chạy được bước nào thì commit bước đó. Nửa đêm một “sửa nhỏ” làm hỏng tất cả, bạn quay về commit tốt gần nhất trong vài giây thay vì bấm Ctrl+Z hai trăm lần.</span></div>
+  <div class="kv"><span class="k">SWP391 và các đồ án nhóm</span><span class="v">Bốn, năm người cùng sửa một bộ mã suốt nhiều tuần. Không có Git: gửi file zip qua Zalo, đè mất việc của nhau, cãi nhau. Có Git: một kho chung, mỗi tính năng một nhánh, pull request, và một lịch sử cho thấy công bằng ai đã làm gì.</span></div>
+  <div class="kv"><span class="k">Thực tập và phỏng vấn</span><span class="v">Nhà tuyển dụng mở GitHub của bạn ra xem. Câu hỏi phỏng vấn hay gặp: “merge khác rebase thế nào?”, “fetch khác pull?”, “lỡ commit mật khẩu thì làm gì?”, “giải xung đột ra sao?”. Câu nào cũng có lời giải trong khoá này.</span></div>
+  <div class="kv"><span class="k">Công việc đầu tiên</span><span class="v">Ngày đầu ở gần như bất kỳ công ty phần mềm nào: “clone kho này về, tạo một nhánh, mở pull request”. Biết Git được coi là đương nhiên, như biết dùng email.</span></div>
+  <div class="kv"><span class="k">Mọi thứ khác bạn sẽ học</span><span class="v">Docker, deploy lên máy chủ, GitHub Actions — các khoá khác trên site này đều bắt đầu từ một kho Git.</span></div>
+</div>
+
+<h3>Khoá này sẽ đưa bạn đi tới đâu</h3>
+${slide('git-00', 4, 'Lộ trình toàn khoá — 17 phần')}
+<p>Mười bảy phần: Mục 0 này, rồi Chương 1–4 (mô hình: commit, lịch sử, nhánh, hoàn tác), 5–8 (làm việc nhóm trên GitHub), 9–12 (chiều sâu và tự động hoá), 13 (sách công thức cứu hộ khi có sự cố), và 14–16 (công cụ hằng ngày, hồ sơ GitHub của sinh viên, và một dự án nhóm trọn vẹn kết thúc bằng bài thi cuối khoá 20 câu). Bạn không cần học hết mới làm được đồ án đầu tiên — bài kế tiếp đưa bạn lộ trình tối thiểu một tuần. Bản đồ chi tiết từng chương nằm ở bài 0.1.</p>
+
+<div class="pitfall co-tieu-de"><strong>Người mới hay bắt đầu sai chỗ thế này.</strong> Một bạn tạo tài khoản GitHub, bấm “Upload files” trên trình duyệt để đưa dự án lên mạng, và tin rằng thế là “dùng Git”. Được một hôm. Rồi hai bạn cùng nhóm, mỗi người tải lên bản của riêng mình cho cùng một file. Mỗi lần tải lên thành một commit trên GitHub, nhưng lần thứ hai chỉ đơn giản thay cả file bằng một bản chưa từng chứa phần sửa của người thứ nhất — không có gì được gộp, và phần việc bị mất chỉ lộ ra vài hôm sau dưới dạng “ơ, chỗ mình sửa đâu rồi”. Việc gộp (merge) chỉ xảy ra khi mọi người làm bằng Git trên máy mình và pull trước khi push. Hãy học Git trên máy mình trước (Chương 1–4); GitHub là nơi <em>chia sẻ</em> lịch sử mà Git tạo ra, không phải thứ thay thế Git.</div>
+
+<h3>🧪 Thực hành (10 phút — chắc chắn làm được)</h3>
+<div class="callout ok"><ol><li>Mở terminal (Windows: Git Bash; nếu chưa có thì làm bước 2 trước, học xong bài 0.3 quay lại) và chạy <code>git --version</code>. Từ bản 2.30 trở lên là ổn.</li><li>Tạo một tài khoản GitHub miễn phí ở <code>github.com</code>. Chọn tên người dùng mà bạn không ngại cho nhà tuyển dụng xem (ví dụ <code>nguyenvancuong</code>, đừng là <code>xxboy2k6</code>) và dùng email bạn vẫn giữ sau khi ra trường.</li><li>Mở <code>github.com/git/git</code> — bản sao chính thức của mã nguồn Git. Nhìn quanh một lượt: đây là lịch sử thật của chính công cụ bạn sắp học, với hàng chục nghìn commit. Rồi mở thẻ liên kết <em>“Commit đầu tiên của Git”</em> bên dưới — commit <code>e83c516</code>, tác giả Linus Torvalds, ngày 7/4/2005 — đọc lời nhắn và ngày giờ của nó.</li><li>Mở <code>github.com/torvalds/linux</code> và ghi lại hai con số trên trang: bao nhiêu commit, bao nhiêu người đóng góp (contributors).</li><li>Tự viết một câu, bằng lời của bạn, nói Git khác GitHub ở đâu.</li></ol>
+<pre><code class="language-bash">git --version</code></pre>
+<div class="out">git version 2.51.1</div>
+<p>(Output thật trên máy Mac soạn bài, 09/2026 — số phiên bản của bạn có thể khác.)</p>
+<p><strong>Đạt khi:</strong> bạn có tài khoản GitHub, đã tận mắt thấy lời nhắn <code>Initial revision of "git", the information manager from hell</code>, đã ghi lại số commit và số người đóng góp của kho Linux, và câu định nghĩa của bạn KHÔNG nói “Git và GitHub là một”.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Git</span><span class="v">Phần mềm quản lý phiên bản phân tán, miễn phí, chạy trên máy bạn.</span></div>
+  <div class="kv"><span class="k">GitHub</span><span class="v">Trang web lưu kho Git và thêm công cụ nhóm (pull request, issues, Actions, Pages).</span></div>
+  <div class="kv"><span class="k">Version control system (VCS)</span><span class="v">Hệ quản lý phiên bản — công cụ giữ mọi phiên bản của một nhóm file và cho thấy giữa chúng đã đổi gì.</span></div>
+  <div class="kv"><span class="k">Commit</span><span class="v">Điểm lưu — một ảnh chụp cả dự án, kèm tác giả, thời điểm và lời nhắn vì sao.</span></div>
+  <div class="kv"><span class="k">Repository (repo)</span><span class="v">Kho mã — thư mục dự án cộng toàn bộ lịch sử trong thư mục ẩn <code>.git/</code>.</span></div>
+  <div class="kv"><span class="k">Distributed</span><span class="v">Phân tán — mỗi bản sao của kho đều chứa đủ lịch sử, không chỉ file mới nhất.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Git là nút “lưu game” cho cả thư mục dự án: mỗi commit ghi lại đổi gì, ai đổi, lúc nào, vì sao.</li><li>GitHub là trang web giữ bản dùng chung của kho Git và thêm pull request, issues, Actions; GitLab, Bitbucket là các lựa chọn khác.</li><li>Linus Torvalds viết Git tháng 4/2005, trong khoảng mười ngày, sau khi nhân Linux mất quyền dùng miễn phí BitKeeper; Junio Hamano bảo trì Git từ tháng 7/2005.</li><li>Git được thiết kế để nhanh, đơn giản, tạo nhánh dễ, phân tán hoàn toàn và chống sửa lén — những mục tiêu đó giải thích cách bạn dùng nó hôm nay.</li><li>93,87% người trả lời khảo sát Stack Overflow 2022 dùng Git; GitHub có hơn 180 triệu lập trình viên — Git là chuẩn chung bạn sẽ gặp ở SWP391, lúc thực tập và ở mọi công việc.</li></ul>
+
+<a class="link-card" href="https://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Pro Git 1.2 — Lược sử Git (tiếng Anh)</span><span class="lc-sub">BitKeeper, năm 2005 và các mục tiêu thiết kế, từ cuốn sách chính thức.</span></span>
+</a>
+<a class="link-card" href="https://www.linuxfoundation.org/blog/blog/10-years-of-git-an-interview-with-git-creator-linus-torvalds" target="_blank" rel="noopener">
+  <span class="lc-ico">🎙️</span>
+  <span class="lc-body"><span class="lc-title">10 năm Git: phỏng vấn Linus Torvalds (2015)</span><span class="lc-sub">“Khoảng mười ngày”, tự lưu chính mình sau một ngày, và vì sao ông thôi dùng BitKeeper — lời chính ông kể.</span></span>
+</a>
+<a class="link-card" href="https://github.com/git/git/commit/e83c5163316f89bfbde7d9ab23ca2e25604af290" target="_blank" rel="noopener">
+  <span class="lc-ico">🥇</span>
+  <span class="lc-body"><span class="lc-title">Commit đầu tiên của Git, 7/4/2005</span><span class="lc-sub">“Initial revision of git, the information manager from hell” — mở ra cho bài thực hành phía trên.</span></span>
+</a>
+<a class="link-card" href="https://en.wikipedia.org/wiki/Git" target="_blank" rel="noopener">
+  <span class="lc-ico">📚</span>
+  <span class="lc-body"><span class="lc-title">Wikipedia — Git</span><span class="lc-sub">Các mốc năm 2005 (3/4, 7/4, 16/6, 26/7, 21/12) và chuyện cái tên.</span></span>
+</a>
+<a class="link-card" href="https://github.blog/news-insights/company-news/github-microsoft/" target="_blank" rel="noopener">
+  <span class="lc-ico">🤝</span>
+  <span class="lc-body"><span class="lc-title">GitHub Blog — GitHub + Microsoft (4/6/2018)</span><span class="lc-sub">Thông báo thương vụ từ chính GitHub.</span></span>
+</a>
+<a class="link-card" href="https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/" target="_blank" rel="noopener">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">GitHub Octoverse 2025</span><span class="lc-sub">180 triệu+ lập trình viên, 630 triệu kho mã, gần 1 tỷ commit trong năm 2025.</span></span>
+</a>
+<a class="link-card" href="https://survey.stackoverflow.co/2022/" target="_blank" rel="noopener">
+  <span class="lc-ico">📈</span>
+  <span class="lc-body"><span class="lc-title">Stack Overflow Developer Survey 2022</span><span class="lc-sub">Mục “Version control”: Git 93,87% mọi người trả lời, 96,65% lập trình viên chuyên nghiệp.</span></span>
+</a>
+<p class="note-ct"><strong>Bài kế tiếp:</strong> “Bắt đầu tại đây” phần 2 — những sự cố có thật khi thiếu lưới an toàn, những tình huống nhóm sinh viên gặp mỗi học kỳ, và một kế hoạch học giúp bạn đi tới cùng.</p>
+</div>
+`,
+    },
+
+    /* ─────────────────── 0.6 · BẮT ĐẦU TẠI ĐÂY (2/2) ─────────────────── */
+    {
+      title: 'Start here (2/2) — Life without Git: real disasters and learning Git without quitting|||Bắt đầu tại đây (2/2) — Khi không có Git: những sự cố thật, và cách học Git mà không bỏ cuộc',
+      slug: 'git-0-6-bat-dau-khi-khong-co-git',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Bốn sự cố có thật đã kiểm nguồn (Toy Story 2, GitLab 2017, Uber 2016, 28,65 triệu bí mật lộ trên GitHub năm 2025), sáu tình huống điển hình của nhóm đồ án sinh viên, vì sao người mới hay bỏ Git, bảy lời khuyên để học không nản, lộ trình tối thiểu một tuần và nhịp một buổi học.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>Life without Git — and how to learn it without giving up</h2>
+<p class="lead">In the previous lesson you met Git and GitHub. This one answers the two questions every beginner quietly asks: "Is it really that bad without it?" and "Will I be able to learn this, or will I quit after three days like last time?" First the stories — some real and documented, some so typical of student teams that you have probably lived one already. Then a plan.</p>
+
+<h3>One week of a team project without Git</h3>
+${slide('git-00', 23, 'Trước Git · Sau Git — một tuần đồ án nhóm')}
+<p><em>(An illustrative scenario, not a real team.)</em> Monday: An sends <code>src.zip</code> to the group chat. Tuesday: Bình unzips it, works all day on the booking page, and sends <code>src-binh.zip</code>. Meanwhile An has fixed the login bug in her own copy. Wednesday: Chi unzips Bình's zip on top of her folder — An's login fix is gone, and nobody notices until the demo on Friday, when the login bug is back. Thursday night: someone "just cleans up the code a bit", the app stops starting, and the folder now contains <code>do-an-final-v3-sua-lan-cuoi.zip</code>, <code>do-an-final-v3-sua-lan-cuoi(1).zip</code> and <code>do-an-THAT-SU-CUOI.zip</code>. Which one worked on Tuesday? Nobody knows.</p>
+<p>Now the same week with Git: each person works on a branch, Git merges the changes and only asks about lines that really overlap, every version has an author and a message, and "the version that worked on Tuesday" is one <code>git log</code> away. That difference is what the rest of this course is about.</p>
+
+<h3>Real incidents — checked against their sources</h3>
+${slide('git-00', 27, 'Bốn chuyện có thật — đã kiểm nguồn')}
+<p>Four stories that really happened, each with a link to its source at the end of the lesson. Read them for the <em>lesson</em>, not the drama — and notice that not all of them are problems Git solves on its own.</p>
+<div class="callout warn"><strong>🎬 Toy Story 2 almost deleted (Pixar, 1998).</strong><br><strong>What happened:</strong> someone ran the command <code>/bin/rm -r -f *</code> on the root folder of the film's files. About 90% of two years of work vanished — and it turned out the backups had not been working for about a month.<br><strong>How it ended:</strong> technical director Galyn Susman, working from home to care for her newborn, had a copy of the film on her home computer. Almost everything was recovered except a few recent days of work.<br><strong>The lesson for you:</strong> a copy on only one machine is a copy waiting to die, and a backup you never tested is not a backup. Git's "every clone is a full copy" design gives you exactly what saved Pixar — the history lives on your laptop, on GitHub, and on every teammate's machine. <strong>Learn it in:</strong> Chapter 5 (remotes: <code>push</code> is your off-site copy).</div>
+<div class="callout warn"><strong>🗄️ GitLab.com loses six hours of data (31 January 2017).</strong><br><strong>What happened:</strong> during a late-night fight against database overload, an engineer wiped the PostgreSQL data directory believing he was on the secondary server — it was the primary. Several backup methods turned out not to be working.<br><strong>Consequence:</strong> the site was down for about 18 hours and roughly 6 hours of database changes were lost — around 5,000 projects, 5,000 comments and 700 new user accounts, restored from a snapshot taken 6 hours earlier.<br><strong>The lesson for you — read carefully:</strong> this was a <em>database</em> disaster, not a Git one. GitLab's own report says the code repositories were not affected by the data loss. <strong>Git does not back up your database.</strong> Your SWP391 project's code can live safely in Git, but the rows in your MySQL/SQL Server/PostgreSQL database need their own backup (a dump), tested by actually restoring it. <strong>Learn it in:</strong> not a Git chapter — keep it as a warning about what Git is <em>not</em>.</div>
+<div class="callout danger"><strong>🔑 Uber, 2016: a key in a private repository.</strong><br><strong>What happened:</strong> according to the US Federal Trade Commission, an access key to Uber's Amazon cloud storage had been posted, in plain text, in a <em>private</em> GitHub repository. Attackers got into that repository, used the key, and downloaded personal data — including 25.6 million names and email addresses. Uber paid the attackers 100,000 USD through its bug bounty program.<br><strong>The lesson for you:</strong> "private" is not "safe". A password, API key or <code>.env</code> file committed once stays in the history even if you delete it in the next commit. <strong>Learn it in:</strong> Chapter 1.5 (<code>.gitignore</code>), Chapter 8 (removing a secret from all history), Chapter 11 (secret scanning), Chapter 13 (rescue).</div>
+<div class="callout danger"><strong>📈 28.65 million secrets in one year (GitGuardian, March 2026).</strong><br><strong>What happened:</strong> the security company GitGuardian scans public GitHub commits. Its State of Secrets Sprawl 2026 report counted <strong>28.65 million</strong> new hard-coded secrets (keys, passwords, tokens) added to public GitHub commits in 2025 — up 34% from the year before. More than 64% of the secrets it confirmed as valid in 2022 were <em>still valid</em> in January 2026.<br><strong>The lesson for you:</strong> leaking a key is common; <em>not revoking it</em> is the real disaster. If you push a key, the first move is to revoke/rotate it at the provider, then clean the history. <strong>Learn it in:</strong> Chapter 8 and Chapter 13.</div>
+
+<h3>Illustrative situations — probably your team</h3>
+${slide('git-00', 28, 'Tình huống minh hoạ — rất có thể là nhóm bạn')}
+<p>These six are <em>illustrations</em>, not reports of real events — but ask any senior student and they will tell you a version of each one.</p>
+<table>
+  <tr><th>Situation</th><th>What it costs</th><th>How Git (used properly) prevents it</th><th>Chapter</th></tr>
+  <tr><td><code>do-an-final-final-v3-sua-lan-cuoi.zip</code></td><td>Seven zips, nobody dares delete any, nobody knows which one works</td><td>One folder, many commits, each with a message; <code>git log</code> shows which is which</td><td>Ch 1–2</td></tr>
+  <tr><td>Two friends send files over Zalo and overwrite each other</td><td>Two days of An's code gone</td><td>Branches + merge: both sets of changes are kept, Git only asks about true overlaps</td><td>Ch 3</td></tr>
+  <tr><td>Hard drive dies the night before the deadline</td><td>Everything that lived only on that laptop</td><td>Commit and <code>git push</code> every day; the history is also on GitHub and on teammates' machines</td><td>Ch 5</td></tr>
+  <tr><td>"I only changed a little" — and the app no longer runs</td><td>Hours of guessing which edit broke it</td><td><code>git diff</code> shows exactly what changed; <code>git restore</code> / <code>git revert</code> go back</td><td>Ch 1, 4</td></tr>
+  <tr><td>A dispute about who did what, when grades are given</td><td>You cannot prove your part</td><td>Every commit carries your name and date; pull requests show your reviews</td><td>Ch 6, 16</td></tr>
+  <tr><td>The database password is pushed to a public repo</td><td>Anyone can read (or wipe) your database</td><td><code>.env</code> in <code>.gitignore</code> from day one; if leaked, change the password first</td><td>Ch 1.5, 8, 13</td></tr>
+</table>
+
+<div class="pitfall co-tieu-de"><strong>Do not learn the wrong lesson from these stories.</strong> Two traps. First: "Git is a backup tool, so I am safe." Git protects what you <em>commit and push</em>; files you never committed, and your database, are not protected at all. Second: "Our repository is private, so secrets are fine in it." Uber's key was in a private repository. Private means fewer people can see it today — not that it is a safe. Commit often, push daily, keep secrets out of Git entirely.</div>
+
+<h3>Why beginners give up on Git</h3>
+${slide('git-00', 29, 'Vì sao người mới hay bỏ Git — và cách chữa')}
+<p>If you tried Git before and gave up, you are in large company. It is rarely a lack of intelligence. It is usually one of these:</p>
+<ul>
+  <li><strong>English jargon everywhere.</strong> Staging, HEAD, detached, upstream, rebase, fast-forward — ten new words before your first commit. <em>Fix in this course:</em> every term gets its meaning right next to it, and every lesson ends with a 🗂 glossary.</li>
+  <li><strong>Fear of breaking the team's repository.</strong> So you never experiment, so you never learn. <em>Fix:</em> the scratch repository <code>thu-git</code> from lesson 0.4 — break it on purpose, it costs nothing.</li>
+  <li><strong>Learning commands as isolated recipes.</strong> You memorise <code>git pull</code> without knowing what it does, and the first time the recipe does not match the situation, you are stuck. <em>Fix:</em> Chapter 1 teaches the model — snapshots plus pointers — and every later command is explained in terms of it.</li>
+  <li><strong>The first conflict.</strong> The screen fills with <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>, it is 11 p.m., and it feels like the project is broken. <em>Fix:</em> in Chapter 3 you create conflicts on purpose in the playground, so the real one looks familiar.</li>
+  <li><strong>Believing one mistake loses everything.</strong> <em>Fix:</em> anything that was committed can almost always be brought back with <code>git reflog</code> (Chapter 4). Knowing this lowers your stress more than any command.</li>
+</ul>
+
+<h3>Seven pieces of advice that keep you going</h3>
+<ol>
+  <li><strong>Learn the model before the commands.</strong> Chapter 1 first, even if you are in a hurry. Fifteen commands that you understand beat a hundred that you copied.</li>
+  <li><strong>Run <code>git status</code> constantly.</strong> Before and after every command. It tells you which branch you are on, what changed, and very often which command to run next.</li>
+  <li><strong>Practise in a scratch repository, never in the team project.</strong> Break things on purpose; that is how you learn how to fix them.</li>
+  <li><strong>Remember: committed is (almost) never lost.</strong> Commit small and often on your own branch. Each commit is a save point <code>reflog</code> can find again.</li>
+  <li><strong>Read the error message to the end.</strong> Git's messages are long because they are helpful. Two real examples below.</li>
+  <li><strong>Use the 🗂 box.</strong> When a word blocks you, look it up in the glossary of the lesson before reading on. One minute now saves ten minutes of confusion.</li>
+  <li><strong>Ask for help the right way.</strong> Paste the exact command, the full output, and the result of <code>git status</code>, and say what you expected. "Git is broken, help" gets no useful answer; those three things usually get a fix in minutes.</li>
+</ol>
+<p>Real output from git 2.51 — a typo, and a push before any remote exists. In both cases Git tells you what to do:</p>
+<pre><code class="language-bash">git stauts
+git push</code></pre>
+<div class="out">git: 'stauts' is not a git command. See 'git --help'.
+
+The most similar command is
+	status
+fatal: No configured push destination.
+Either specify the URL from the command-line or configure a remote repository using
+
+    git remote add &lt;name&gt; &lt;url&gt;
+
+and then push using the remote name
+
+    git push &lt;name&gt;</div>
+
+<h3>A minimum route and a full route</h3>
+${slide('git-00', 30, 'Lộ trình: tối thiểu 1 tuần · đầy đủ vài tuần')}
+<p><strong>Minimum route — enough for a team project, about one week (5 sittings of about an hour):</strong></p>
+<table>
+  <tr><th>Sitting</th><th>Study</th><th>You can then…</th></tr>
+  <tr><td>1</td><td>Section 0 (these two lessons + 0.3 setup + 0.4 playground)</td><td>run Git, have a GitHub account and an SSH key</td></tr>
+  <tr><td>2</td><td>Chapter 1 — the model and the daily loop</td><td>commit with good messages, use <code>.gitignore</code></td></tr>
+  <tr><td>3</td><td>Chapter 3 — branches and merging</td><td>work on a branch, merge, resolve a conflict</td></tr>
+  <tr><td>4</td><td>Chapter 5 — remotes and GitHub</td><td>clone, push, pull, work with the team repository</td></tr>
+  <tr><td>5</td><td>Chapter 6 — pull requests and review</td><td>open a pull request and review a teammate's</td></tr>
+</table>
+<p><strong>Full route:</strong> all 17 parts, about one chapter per sitting, in order for Chapters 1–4, then as the table in lesson 0.4 suggests. When your project deadline has passed, come back for Chapter 2 (reading history), Chapter 4 (undo) and Chapter 7 (team workflow) — they will make much more sense after you have used Git for real. Chapter 13 can be opened in the middle of any emergency.</p>
+
+<h3>The rhythm of one sitting, and milestones to celebrate</h3>
+${slide('git-00', 31, 'Nhịp một buổi học và các mốc “mình làm được”')}
+<p>About an hour: <strong>look at the slides</strong> (5 minutes — get the picture), <strong>read the lesson</strong> (about 20 minutes), <strong>type the commands yourself</strong> in <code>thu-git</code> (do not copy-paste; your fingers need to learn too), do the <strong>🧪 practice</strong> (15–20 minutes), and at the end of each chapter take the <strong>10-question quiz</strong>. Stop while you still feel like continuing — tomorrow's sitting will be easier.</p>
+<p>Mark these milestones when you reach them. Each one is a real skill that many working developers do not have:</p>
+<ul>
+  <li><strong>Milestone 1:</strong> your first commit — <code>git log</code> shows your name.</li>
+  <li><strong>Milestone 2:</strong> you create and resolve a conflict on your own — the word CONFLICT no longer scares you.</li>
+  <li><strong>Milestone 3:</strong> you push to GitHub and open your first pull request.</li>
+  <li><strong>Milestone 4:</strong> you bring back a "lost" commit with <code>reflog</code> — from here on, Git is no longer frightening.</li>
+</ul>
+
+<h3>🧪 Practice (10 minutes — your first commit, today)</h3>
+<div class="callout ok"><ol><li>Make a scratch folder that is <strong>not</strong> your team project: <code>mkdir ~/ke-hoach-hoc &amp;&amp; cd ~/ke-hoach-hoc &amp;&amp; git init</code>. (If Git is not installed yet, do lesson 0.3 first; if Git asks "Please tell me who you are", run the two <code>git config --global</code> lines from lesson 0.3 and try again.)</li><li>Create <code>ke-hoach.md</code> with your study plan: which route (minimum or full), which days of the week, how long each sitting. Three lines is enough.</li><li>Run <code>git status</code> and read what it says — notice it tells you the next command (<code>git add</code>).</li><li>Commit the plan, then add one more line "Milestone 1: first commit — DONE" and commit again.</li><li>Run <code>git log --oneline</code>. You are looking at your own history.</li></ol>
+<pre><code class="language-bash">mkdir ~/ke-hoach-hoc &amp;&amp; cd ~/ke-hoach-hoc &amp;&amp; git init
+printf <span class="tok-string">'# Kế hoạch học Git\\nLộ trình: Mục 0 → Ch1 → Ch3 → Ch5 → Ch6\\nBuổi học: tối T3, T5, T7 — 45 phút\\n'</span> &gt; ke-hoach.md
+git status
+git add ke-hoach.md
+git commit -m <span class="tok-string">"Thêm kế hoạch học Git"</span>
+printf <span class="tok-string">'Mốc 1: tạo commit đầu tiên — XONG\\n'</span> &gt;&gt; ke-hoach.md
+git commit -am <span class="tok-string">"Đánh dấu mốc 1: commit đầu tiên"</span>
+git log --oneline</code></pre>
+<div class="out">Initialized empty Git repository in …/ke-hoach-hoc/.git/
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+	ke-hoach.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+[main (root-commit) cf119fa] Thêm kế hoạch học Git
+ 1 file changed, 3 insertions(+)
+ create mode 100644 ke-hoach.md
+[main c466a83] Đánh dấu mốc 1: commit đầu tiên
+ 1 file changed, 1 insertion(+)
+c466a83 Đánh dấu mốc 1: commit đầu tiên
+cf119fa Thêm kế hoạch học Git</div>
+<p>(Real output from git 2.51.1; the long folder path in the first line is cut to <code>…</code>. Your hashes will differ. If your first branch is called <code>master</code> instead of <code>main</code>, that is fine — lesson 0.3 shows how to change the default.)</p>
+<p><strong>Done when:</strong> <code>git log --oneline</code> shows two commits written by you, <code>git status</code> says "nothing to commit, working tree clean", and your plan names a route and at least three study days. That is milestone 1 — congratulations.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Backup</span><span class="v">A separate copy you can restore from. Git protects committed and pushed code — not databases, not uncommitted files.</span></div>
+  <div class="kv"><span class="k">Secret</span><span class="v">A password, API key or token. It must never be committed, even to a private repository.</span></div>
+  <div class="kv"><span class="k">Revoke / rotate</span><span class="v">Cancel a leaked key and issue a new one — the first thing to do after a leak, before cleaning history.</span></div>
+  <div class="kv"><span class="k">Conflict</span><span class="v">Two changes to the same lines that Git cannot combine by itself and asks you to decide.</span></div>
+  <div class="kv"><span class="k">Scratch repository</span><span class="v">A throwaway repository (<code>thu-git</code>, <code>ke-hoach-hoc</code>) where breaking things is safe.</span></div>
+  <div class="kv"><span class="k">Working tree clean</span><span class="v">Git's way of saying every change is committed — nothing waiting.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Pixar's Toy Story 2 survived only because one copy lived on another machine — Git gives every teammate a full copy by design.</li><li>GitLab's 2017 outage lost database data, not Git repositories: Git does not back up your database.</li><li>Uber's 2016 breach started from a key in a <em>private</em> GitHub repository, and 28.65 million secrets hit public GitHub in 2025: never commit secrets, and revoke first if you do.</li><li>People quit Git because of jargon, fear and memorised recipes; learning the model, practising in a scratch repository and knowing that commits are recoverable fixes all three.</li><li>Minimum route for a team project: Section 0 → Ch 1 → Ch 3 → Ch 5 → Ch 6 in about a week; one sitting = slides, lesson, typing, practice, quiz.</li></ul>
+
+<a class="link-card" href="https://en.wikipedia.org/wiki/Toy_Story_2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎬</span>
+  <span class="lc-body"><span class="lc-title">Wikipedia — Toy Story 2 (Production)</span><span class="lc-sub">The 1998 deletion, the broken backups, and Galyn Susman's home copy.</span></span>
+</a>
+<a class="link-card" href="https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">GitLab — Postmortem of database outage of January 31 (2017)</span><span class="lc-sub">GitLab's own report: what was lost, what was not, and which backups failed.</span></span>
+</a>
+<a class="link-card" href="https://www.ftc.gov/business-guidance/blog/2018/04/ftc-addresses-ubers-undisclosed-data-breach-new-proposed-order" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">FTC — Uber's undisclosed 2016 data breach</span><span class="lc-sub">The access key in a private GitHub repository, and what was taken.</span></span>
+</a>
+<a class="link-card" href="https://blog.gitguardian.com/the-state-of-secrets-sprawl-2026/" target="_blank" rel="noopener">
+  <span class="lc-ico">📈</span>
+  <span class="lc-body"><span class="lc-title">GitGuardian — The State of Secrets Sprawl 2026</span><span class="lc-sub">28.65 million new secrets on public GitHub in 2025, and how long they stay valid.</span></span>
+</a>
+<a class="link-card" href="https://git-scm.com/book/en/v2" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Pro Git — the free official book</span><span class="lc-sub">Your reference beside this course; chapters 1–3 match our Chapters 1–3.</span></span>
+</a>
+<p class="note-ct"><strong>Next:</strong> lesson 0.0 has every Section 0 slide in one place, and lesson 0.1 shows the full map of the course. If you already did the practice above, you have already made your first commit — the rest is building on it.</p>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Khi không có Git — và cách học nó mà không bỏ cuộc</h2>
+<p class="lead">Bài trước bạn đã làm quen với Git và GitHub. Bài này trả lời hai câu hỏi mà người mới nào cũng thầm hỏi: “Không có nó thì tệ tới vậy thật à?” và “Liệu mình có học nổi không, hay lại bỏ sau ba ngày như lần trước?”. Trước hết là những câu chuyện — có chuyện có thật, có ghi chép rõ ràng; có chuyện điển hình tới mức rất có thể bạn đã trải qua một lần. Sau đó là một kế hoạch.</p>
+
+<h3>Một tuần đồ án nhóm không có Git</h3>
+${slide('git-00', 23, 'Trước Git · Sau Git — một tuần đồ án nhóm')}
+<p><em>(Tình huống minh hoạ, không phải một nhóm có thật.)</em> Thứ Hai: An gửi <code>src.zip</code> vào nhóm Zalo. Thứ Ba: Bình giải nén, làm cả ngày trang đặt lịch, rồi gửi <code>src-binh.zip</code>. Trong lúc đó An đã sửa lỗi đăng nhập trên bản của mình. Thứ Tư: Chi giải nén file của Bình đè lên thư mục của Chi — bản sửa lỗi đăng nhập của An biến mất, và không ai để ý cho tới buổi demo thứ Sáu, khi lỗi đăng nhập quay lại. Tối thứ Năm: một bạn “dọn code một chút thôi”, app không chạy nữa, và thư mục giờ có <code>do-an-final-v3-sua-lan-cuoi.zip</code>, <code>do-an-final-v3-sua-lan-cuoi(1).zip</code> và <code>do-an-THAT-SU-CUOI.zip</code>. Bản nào chạy được hôm thứ Ba? Không ai biết.</p>
+<p>Giờ cùng tuần đó mà có Git: mỗi người làm trên một nhánh, Git tự gộp thay đổi và chỉ hỏi ở những dòng thật sự trùng nhau, mỗi phiên bản có tên người làm và lời nhắn, còn “bản chạy được hôm thứ Ba” chỉ cách bạn một lệnh <code>git log</code>. Khoảng cách giữa hai tuần đó chính là nội dung của cả khoá này.</p>
+
+<h3>Những sự cố có thật — đã đối chiếu nguồn</h3>
+${slide('git-00', 27, 'Bốn chuyện có thật — đã kiểm nguồn')}
+<p>Bốn chuyện đã thật sự xảy ra, mỗi chuyện có link nguồn ở cuối bài. Hãy đọc để lấy <em>bài học</em>, đừng chỉ đọc cho kịch tính — và để ý rằng không phải chuyện nào Git cũng tự giải quyết được.</p>
+<div class="callout warn"><strong>🎬 Toy Story 2 suýt bị xoá sạch (Pixar, 1998).</strong><br><strong>Chuyện gì xảy ra:</strong> một người chạy lệnh <code>/bin/rm -r -f *</code> (xoá tất cả, không hỏi lại) ngay thư mục gốc chứa dữ liệu phim. Khoảng 90% công sức của hai năm biến mất — và lúc đó mới phát hiện hệ thống sao lưu đã không chạy được khoảng một tháng.<br><strong>Kết cục:</strong> đạo diễn kỹ thuật Galyn Susman, đang làm việc ở nhà để chăm con mới sinh, có một bản sao phim trên máy tính ở nhà. Gần như mọi thứ được cứu, chỉ mất vài ngày làm việc gần nhất.<br><strong>Bài học cho bạn:</strong> dữ liệu chỉ nằm trên một máy là dữ liệu đang chờ chết, và bản sao lưu chưa từng thử khôi phục thì chưa phải là bản sao lưu. Thiết kế “mỗi bản clone là một bản sao đầy đủ” của Git cho bạn đúng thứ đã cứu Pixar — lịch sử nằm trên laptop của bạn, trên GitHub, và trên máy từng bạn cùng nhóm. <strong>Học ở:</strong> Chương 5 (remote: <code>push</code> chính là bản sao ngoài máy của bạn).</div>
+<div class="callout warn"><strong>🗄️ GitLab.com mất sáu giờ dữ liệu (31/01/2017).</strong><br><strong>Chuyện gì xảy ra:</strong> trong lúc chống quá tải cơ sở dữ liệu lúc nửa đêm, một kỹ sư xoá thư mục dữ liệu PostgreSQL vì tưởng mình đang ở máy phụ — thật ra đó là máy chính. Rồi nhiều cách sao lưu hoá ra không hoạt động.<br><strong>Hậu quả:</strong> trang web ngừng khoảng 18 giờ và khoảng 6 giờ thay đổi trong cơ sở dữ liệu bị mất — chừng 5.000 project, 5.000 bình luận và 700 tài khoản mới — phải khôi phục từ một bản chụp làm 6 tiếng trước đó.<br><strong>Bài học cho bạn — đọc kỹ:</strong> đây là thảm hoạ <em>cơ sở dữ liệu</em>, không phải thảm hoạ Git. Chính báo cáo của GitLab ghi rằng các kho mã không bị mất dữ liệu. <strong>Git không sao lưu cơ sở dữ liệu của bạn.</strong> Mã nguồn đồ án SWP391 nằm an toàn trong Git, nhưng dữ liệu trong MySQL/SQL Server/PostgreSQL cần bản sao lưu riêng (một file dump), và phải thử khôi phục thật mới biết nó dùng được. <strong>Học ở:</strong> không phải một chương Git — hãy giữ nó như lời cảnh báo về thứ Git <em>không</em> làm.</div>
+<div class="callout danger"><strong>🔑 Uber, 2016: một chiếc khoá trong kho riêng tư.</strong><br><strong>Chuyện gì xảy ra:</strong> theo Uỷ ban Thương mại Liên bang Mỹ (FTC), một khoá truy cập vào kho lưu trữ đám mây Amazon của Uber đã bị để dạng chữ thường trong một kho GitHub <em>riêng tư</em> (private). Kẻ tấn công vào được kho đó, dùng khoá và tải về dữ liệu cá nhân — trong đó có 25,6 triệu tên kèm địa chỉ email. Uber trả cho kẻ tấn công 100.000 USD qua chương trình thưởng tìm lỗi (bug bounty).<br><strong>Bài học cho bạn:</strong> “riêng tư” không có nghĩa là “an toàn”. Một mật khẩu, khoá API hay file <code>.env</code> đã commit một lần thì vẫn nằm trong lịch sử, kể cả khi bạn xoá nó ở commit sau. <strong>Học ở:</strong> Chương 1.5 (<code>.gitignore</code>), Chương 8 (gỡ bí mật khỏi toàn bộ lịch sử), Chương 11 (quét bí mật), Chương 13 (cứu hộ).</div>
+<div class="callout danger"><strong>📈 28,65 triệu bí mật trong một năm (GitGuardian, 03/2026).</strong><br><strong>Chuyện gì xảy ra:</strong> công ty bảo mật GitGuardian quét các commit công khai trên GitHub. Báo cáo State of Secrets Sprawl 2026 của họ đếm được <strong>28,65 triệu</strong> bí mật mới (khoá, mật khẩu, token) bị viết thẳng vào mã và commit lên GitHub công khai trong năm 2025 — tăng 34% so với năm trước. Hơn 64% số bí mật họ xác nhận còn hiệu lực năm 2022 thì tới tháng 1/2026 <em>vẫn còn hiệu lực</em>.<br><strong>Bài học cho bạn:</strong> lỡ lộ khoá là chuyện rất hay gặp; <em>không thu hồi khoá</em> mới là thảm hoạ thật. Lỡ push một khoá lên thì việc đầu tiên là thu hồi/đổi khoá ở nhà cung cấp, rồi mới dọn lịch sử. <strong>Học ở:</strong> Chương 8 và Chương 13.</div>
+
+<h3>Tình huống minh hoạ — rất có thể là nhóm bạn</h3>
+${slide('git-00', 28, 'Tình huống minh hoạ — rất có thể là nhóm bạn')}
+<p>Sáu tình huống dưới đây là <em>minh hoạ</em>, không phải chuyện có thật được kể lại — nhưng hỏi bất kỳ anh chị khoá trên nào, họ cũng kể cho bạn một phiên bản của từng cái.</p>
+<table>
+  <tr><th>Tình huống</th><th>Cái giá phải trả</th><th>Git (dùng đúng) chặn nó thế nào</th><th>Chương</th></tr>
+  <tr><td><code>do-an-final-final-v3-sua-lan-cuoi.zip</code></td><td>Bảy file zip, không ai dám xoá cái nào, không ai biết cái nào chạy</td><td>Một thư mục, nhiều commit, mỗi cái có lời nhắn; <code>git log</code> cho biết cái nào là cái nào</td><td>Ch 1–2</td></tr>
+  <tr><td>Hai bạn gửi file qua Zalo và ghi đè lên nhau</td><td>Mất 2 ngày code của An</td><td>Nhánh + merge: giữ cả hai bộ thay đổi, Git chỉ hỏi chỗ trùng thật</td><td>Ch 3</td></tr>
+  <tr><td>Ổ cứng hỏng đêm trước hạn nộp</td><td>Mất mọi thứ chỉ nằm trên laptop đó</td><td>Commit và <code>git push</code> mỗi ngày; lịch sử còn trên GitHub và máy các bạn cùng nhóm</td><td>Ch 5</td></tr>
+  <tr><td>“Mình chỉ sửa một chút” — rồi app hết chạy</td><td>Hàng giờ đoán mò chỗ nào làm hỏng</td><td><code>git diff</code> chỉ đúng chỗ đã đổi; <code>git restore</code> / <code>git revert</code> để quay lại</td><td>Ch 1, 4</td></tr>
+  <tr><td>Tranh chấp “ai làm phần nào” lúc chấm điểm</td><td>Không chứng minh được phần việc của mình</td><td>Mỗi commit mang tên và ngày của bạn; pull request cho thấy cả việc bạn review</td><td>Ch 6, 16</td></tr>
+  <tr><td>Lỡ push mật khẩu CSDL lên repo công khai</td><td>Ai cũng đọc được (hoặc xoá sạch) cơ sở dữ liệu của bạn</td><td><code>.env</code> nằm trong <code>.gitignore</code> từ ngày đầu; lỡ lộ thì đổi mật khẩu trước</td><td>Ch 1.5, 8, 13</td></tr>
+</table>
+
+<div class="pitfall co-tieu-de"><strong>Đừng rút ra bài học sai từ những chuyện này.</strong> Có hai cái bẫy. Một: “Git là công cụ sao lưu, vậy là mình an toàn.” Git chỉ bảo vệ những gì bạn đã <em>commit và push</em>; file chưa từng commit, và cơ sở dữ liệu của bạn, thì không được bảo vệ chút nào. Hai: “Repo của nhóm là private, để mật khẩu trong đó cũng được.” Khoá của Uber nằm đúng trong một repo private. Private nghĩa là hôm nay ít người xem được hơn — không có nghĩa nó là két sắt. Hãy commit thường xuyên, push mỗi ngày, và giữ bí mật ra khỏi Git hoàn toàn.</div>
+
+<h3>Vì sao người mới hay bỏ Git</h3>
+${slide('git-00', 29, 'Vì sao người mới hay bỏ Git — và cách chữa')}
+<p>Nếu bạn từng thử Git rồi bỏ, bạn không hề đơn độc. Hiếm khi là do bạn kém. Thường là do một trong những điều sau:</p>
+<ul>
+  <li><strong>Thuật ngữ tiếng Anh dày đặc.</strong> Staging, HEAD, detached, upstream, rebase, fast-forward — mười từ mới trước cả commit đầu tiên. <em>Khoá này chữa bằng cách:</em> mỗi thuật ngữ có nghĩa tiếng Việt ngay cạnh, và mỗi bài kết thúc bằng một ô 🗂 thuật ngữ.</li>
+  <li><strong>Sợ làm hỏng repo của nhóm.</strong> Nên không dám thử, nên không bao giờ học được. <em>Chữa:</em> kho nháp <code>thu-git</code> ở bài 0.4 — cố tình phá nó đi, chẳng tốn gì.</li>
+  <li><strong>Học lệnh như những công thức rời rạc.</strong> Thuộc <code>git pull</code> mà không biết nó làm gì, và lần đầu tiên công thức không khớp tình huống là tắc. <em>Chữa:</em> Chương 1 dạy mô hình — ảnh chụp cộng con trỏ — và mọi lệnh về sau đều được giải thích bằng mô hình đó.</li>
+  <li><strong>Lần xung đột (conflict) đầu tiên.</strong> Màn hình đầy <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> và <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>, đồng hồ chỉ 11 giờ đêm, và cảm giác như dự án hỏng rồi. <em>Chữa:</em> ở Chương 3 bạn cố tình tạo xung đột trong sân tập, để tới lúc gặp thật thì nó trông quen thuộc.</li>
+  <li><strong>Tin rằng lỡ tay một lần là mất hết.</strong> <em>Chữa:</em> thứ gì đã commit thì gần như luôn lấy lại được bằng <code>git reflog</code> (Chương 4). Biết điều này giúp bạn bớt căng thẳng hơn bất kỳ lệnh nào.</li>
+</ul>
+
+<h3>Bảy lời khuyên để học không nản</h3>
+<ol>
+  <li><strong>Học mô hình trước, lệnh sau.</strong> Chương 1 trước tiên, kể cả khi đang vội. Mười lăm lệnh mà bạn hiểu có giá hơn một trăm lệnh chép lại.</li>
+  <li><strong>Chạy <code>git status</code> liên tục.</strong> Trước và sau mỗi lệnh. Nó cho biết bạn đang ở nhánh nào, file nào đã đổi, và rất hay gợi ý luôn lệnh nên chạy tiếp.</li>
+  <li><strong>Tập trong kho nháp, không bao giờ tập trong đồ án của nhóm.</strong> Cố tình làm hỏng; đó là cách học sửa.</li>
+  <li><strong>Nhớ rằng: đã commit thì (gần như) không bao giờ mất.</strong> Commit nhỏ và thường xuyên trên nhánh của mình. Mỗi commit là một điểm lưu mà <code>reflog</code> tìm lại được.</li>
+  <li><strong>Đọc thông báo lỗi tới chữ cuối cùng.</strong> Thông báo của Git dài vì nó muốn giúp. Hai ví dụ thật ngay bên dưới.</li>
+  <li><strong>Dùng ô 🗂.</strong> Khi một từ làm bạn khựng lại, tra nó trong ô thuật ngữ của bài trước khi đọc tiếp. Một phút lúc này đỡ mười phút rối về sau.</li>
+  <li><strong>Hỏi đúng cách khi bí.</strong> Dán nguyên văn lệnh đã gõ, toàn bộ output, và kết quả <code>git status</code>, rồi nói bạn mong đợi điều gì. Câu “Git bị lỗi, cứu với” không nhận được câu trả lời nào hữu ích; ba thứ kia thường được gỡ trong vài phút.</li>
+</ol>
+<p>Output thật từ git 2.51 — một lần gõ nhầm, và một lần push khi chưa có remote nào. Cả hai lần Git đều bảo bạn phải làm gì:</p>
+<pre><code class="language-bash">git stauts
+git push</code></pre>
+<div class="out">git: 'stauts' is not a git command. See 'git --help'.
+
+The most similar command is
+	status
+fatal: No configured push destination.
+Either specify the URL from the command-line or configure a remote repository using
+
+    git remote add &lt;name&gt; &lt;url&gt;
+
+and then push using the remote name
+
+    git push &lt;name&gt;</div>
+<p>Dòng đầu nói “stauts không phải lệnh git — lệnh giống nhất là <code>status</code>”. Khối sau nói “chưa có nơi nào để push — hãy thêm một remote bằng <code>git remote add</code>”. Bạn chưa cần hiểu remote là gì (Chương 5), chỉ cần thấy: Git không mắng bạn, nó chỉ đường.</p>
+
+<h3>Lộ trình tối thiểu và lộ trình đầy đủ</h3>
+${slide('git-00', 30, 'Lộ trình: tối thiểu 1 tuần · đầy đủ vài tuần')}
+<p><strong>Lộ trình tối thiểu — đủ dùng cho đồ án nhóm, khoảng một tuần (5 buổi, mỗi buổi chừng một giờ):</strong></p>
+<table>
+  <tr><th>Buổi</th><th>Học</th><th>Học xong bạn…</th></tr>
+  <tr><td>1</td><td>Mục 0 (hai bài này + 0.3 cài đặt + 0.4 sân tập)</td><td>chạy được Git, có tài khoản GitHub và khoá SSH</td></tr>
+  <tr><td>2</td><td>Chương 1 — mô hình và vòng lặp hằng ngày</td><td>commit với lời nhắn tử tế, dùng được <code>.gitignore</code></td></tr>
+  <tr><td>3</td><td>Chương 3 — nhánh và hợp nhất</td><td>làm việc trên nhánh, merge, giải một xung đột</td></tr>
+  <tr><td>4</td><td>Chương 5 — remote và GitHub</td><td>clone, push, pull, làm việc với kho chung của nhóm</td></tr>
+  <tr><td>5</td><td>Chương 6 — pull request và review</td><td>mở pull request và review PR của bạn cùng nhóm</td></tr>
+</table>
+<p><strong>Lộ trình đầy đủ:</strong> cả 17 phần, mỗi buổi khoảng một chương, Chương 1–4 học đúng thứ tự, phần còn lại theo bảng ở bài 0.4. Khi đã qua hạn nộp đồ án, hãy quay lại học Chương 2 (đọc lịch sử), Chương 4 (hoàn tác) và Chương 7 (quy trình nhóm) — lúc đó bạn đã dùng Git thật nên sẽ thấm hơn nhiều. Chương 13 thì mở ra được ngay giữa lúc đang có sự cố.</p>
+
+<h3>Nhịp một buổi học, và những mốc đáng ăn mừng</h3>
+${slide('git-00', 31, 'Nhịp một buổi học và các mốc “mình làm được”')}
+<p>Khoảng một giờ: <strong>xem slide</strong> (5 phút — nắm hình trước), <strong>đọc bài</strong> (khoảng 20 phút), <strong>tự gõ lại lệnh</strong> trong <code>thu-git</code> (đừng chép-dán; ngón tay cũng cần học), làm <strong>🧪 thực hành</strong> (15–20 phút), và cuối mỗi chương làm <strong>quiz 10 câu</strong>. Dừng lại khi bạn vẫn còn muốn học tiếp — buổi mai sẽ dễ bắt đầu hơn.</p>
+<p>Đánh dấu những mốc này khi bạn chạm tới. Mỗi mốc là một kỹ năng thật mà không ít người đi làm rồi vẫn chưa có:</p>
+<ul>
+  <li><strong>Mốc 1:</strong> commit đầu tiên của đời mình — <code>git log</code> hiện tên bạn.</li>
+  <li><strong>Mốc 2:</strong> tự tạo và tự giải một xung đột — chữ CONFLICT hết đáng sợ.</li>
+  <li><strong>Mốc 3:</strong> push lên GitHub và mở pull request đầu tiên.</li>
+  <li><strong>Mốc 4:</strong> cứu lại một commit “đã mất” bằng <code>reflog</code> — từ đây Git không còn làm bạn sợ nữa.</li>
+</ul>
+
+<h3>🧪 Thực hành (10 phút — commit đầu tiên, ngay hôm nay)</h3>
+<div class="callout ok"><ol><li>Tạo một thư mục nháp, <strong>không phải</strong> đồ án của nhóm: <code>mkdir ~/ke-hoach-hoc &amp;&amp; cd ~/ke-hoach-hoc &amp;&amp; git init</code>. (Chưa cài Git thì làm bài 0.3 trước; nếu Git hỏi “Please tell me who you are” — hãy cho tôi biết bạn là ai — thì chạy hai dòng <code>git config --global</code> ở bài 0.3 rồi thử lại.)</li><li>Tạo file <code>ke-hoach.md</code> ghi kế hoạch học của bạn: đi lộ trình nào (tối thiểu hay đầy đủ), học những ngày nào trong tuần, mỗi buổi bao lâu. Ba dòng là đủ.</li><li>Chạy <code>git status</code> và đọc nó nói gì — để ý nó chỉ luôn lệnh tiếp theo (<code>git add</code>).</li><li>Commit kế hoạch, rồi thêm một dòng “Mốc 1: tạo commit đầu tiên — XONG” và commit lần nữa.</li><li>Chạy <code>git log --oneline</code>. Bạn đang nhìn lịch sử của chính mình.</li></ol>
+<pre><code class="language-bash">mkdir ~/ke-hoach-hoc &amp;&amp; cd ~/ke-hoach-hoc &amp;&amp; git init
+printf <span class="tok-string">'# Kế hoạch học Git\\nLộ trình: Mục 0 → Ch1 → Ch3 → Ch5 → Ch6\\nBuổi học: tối T3, T5, T7 — 45 phút\\n'</span> &gt; ke-hoach.md
+git status
+git add ke-hoach.md
+git commit -m <span class="tok-string">"Thêm kế hoạch học Git"</span>
+printf <span class="tok-string">'Mốc 1: tạo commit đầu tiên — XONG\\n'</span> &gt;&gt; ke-hoach.md
+git commit -am <span class="tok-string">"Đánh dấu mốc 1: commit đầu tiên"</span>
+git log --oneline</code></pre>
+<div class="out">Initialized empty Git repository in …/ke-hoach-hoc/.git/
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+	ke-hoach.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+[main (root-commit) cf119fa] Thêm kế hoạch học Git
+ 1 file changed, 3 insertions(+)
+ create mode 100644 ke-hoach.md
+[main c466a83] Đánh dấu mốc 1: commit đầu tiên
+ 1 file changed, 1 insertion(+)
+c466a83 Đánh dấu mốc 1: commit đầu tiên
+cf119fa Thêm kế hoạch học Git</div>
+<p>(Output thật từ git 2.51.1; đường dẫn thư mục dài ở dòng đầu được cắt thành <code>…</code>. Mã băm của bạn sẽ khác. Nếu nhánh đầu tiên của bạn tên <code>master</code> thay vì <code>main</code> thì cũng không sao — bài 0.3 chỉ cách đổi mặc định.)</p>
+<p><strong>Đạt khi:</strong> <code>git log --oneline</code> hiện hai commit do chính bạn viết, <code>git status</code> báo “nothing to commit, working tree clean” (không còn gì để commit, thư mục sạch), và kế hoạch của bạn có ghi một lộ trình cùng ít nhất ba ngày học. Đó là mốc 1 — chúc mừng bạn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Backup</span><span class="v">Bản sao lưu — một bản riêng để khôi phục khi cần. Git bảo vệ mã đã commit và push — không bảo vệ cơ sở dữ liệu hay file chưa commit.</span></div>
+  <div class="kv"><span class="k">Secret</span><span class="v">Bí mật — mật khẩu, khoá API hay token. Không bao giờ được commit, kể cả vào repo private.</span></div>
+  <div class="kv"><span class="k">Revoke / rotate</span><span class="v">Thu hồi / thay khoá — huỷ khoá bị lộ và cấp khoá mới; việc đầu tiên phải làm khi lộ, trước cả dọn lịch sử.</span></div>
+  <div class="kv"><span class="k">Conflict</span><span class="v">Xung đột — hai thay đổi trên cùng những dòng mà Git không tự gộp được, nên hỏi bạn chọn.</span></div>
+  <div class="kv"><span class="k">Scratch repository</span><span class="v">Kho nháp — kho vứt đi (<code>thu-git</code>, <code>ke-hoach-hoc</code>) nơi làm hỏng không sao cả.</span></div>
+  <div class="kv"><span class="k">Working tree clean</span><span class="v">Thư mục làm việc sạch — cách Git nói mọi thay đổi đã được commit, không còn gì chờ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Toy Story 2 của Pixar sống sót chỉ vì còn một bản sao trên máy khác — Git cho mỗi thành viên một bản sao đầy đủ ngay từ thiết kế.</li><li>Sự cố GitLab 2017 mất dữ liệu cơ sở dữ liệu, không mất kho Git: Git không sao lưu cơ sở dữ liệu của bạn.</li><li>Vụ Uber 2016 bắt đầu từ một khoá nằm trong repo GitHub <em>private</em>, và 28,65 triệu bí mật lộ lên GitHub công khai năm 2025: không bao giờ commit bí mật, lỡ lộ thì thu hồi trước.</li><li>Người ta bỏ Git vì thuật ngữ, vì sợ, và vì học thuộc công thức; học mô hình, tập trong kho nháp và biết commit lấy lại được sẽ chữa cả ba.</li><li>Lộ trình tối thiểu cho đồ án: Mục 0 → Ch 1 → Ch 3 → Ch 5 → Ch 6 trong khoảng một tuần; một buổi = slide, đọc bài, tự gõ, thực hành, quiz.</li></ul>
+
+<a class="link-card" href="https://en.wikipedia.org/wiki/Toy_Story_2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎬</span>
+  <span class="lc-body"><span class="lc-title">Wikipedia — Toy Story 2 (phần Production)</span><span class="lc-sub">Vụ xoá năm 1998, hệ thống sao lưu hỏng, và bản sao ở nhà của Galyn Susman.</span></span>
+</a>
+<a class="link-card" href="https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">GitLab — Báo cáo sự cố cơ sở dữ liệu 31/01/2017</span><span class="lc-sub">Báo cáo của chính GitLab: mất gì, không mất gì, và những bản sao lưu nào đã hỏng.</span></span>
+</a>
+<a class="link-card" href="https://www.ftc.gov/business-guidance/blog/2018/04/ftc-addresses-ubers-undisclosed-data-breach-new-proposed-order" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">FTC — Vụ rò rỉ dữ liệu Uber 2016</span><span class="lc-sub">Khoá truy cập trong repo GitHub private, và những gì đã bị lấy.</span></span>
+</a>
+<a class="link-card" href="https://blog.gitguardian.com/the-state-of-secrets-sprawl-2026/" target="_blank" rel="noopener">
+  <span class="lc-ico">📈</span>
+  <span class="lc-body"><span class="lc-title">GitGuardian — The State of Secrets Sprawl 2026</span><span class="lc-sub">28,65 triệu bí mật mới trên GitHub công khai năm 2025, và chúng còn hiệu lực bao lâu.</span></span>
+</a>
+<a class="link-card" href="https://git-scm.com/book/en/v2" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Pro Git — sách chính thức, miễn phí (tiếng Anh)</span><span class="lc-sub">Cuốn tra cứu đặt cạnh khoá này; chương 1–3 của sách đi cặp với Chương 1–3 của ta.</span></span>
+</a>
+<p class="note-ct"><strong>Tiếp theo:</strong> bài 0.0 gom mọi slide của Mục 0 vào một chỗ, và bài 0.1 cho bạn xem bản đồ đầy đủ của khoá. Nếu bạn đã làm bài thực hành phía trên thì bạn đã có commit đầu tiên rồi — phần còn lại là xây tiếp lên đó.</p>
+</div>
+`,
+    },
+
     /* ─────────────────────────── 0.0 ─────────────────────────── */
     {
       title: '0.0 — Section 0 slides: getting started in pictures|||0.0 — Slide Mục 0: bắt đầu với Git bằng hình',
       slug: 'git-0-0-slides',
       type: 'DOCUMENT',
       isFreePreview: true,
-      description: 'Bộ 17 slide của Mục 0: khoá này cho ai, lộ trình 17 phần, vấn đề "final_v2_THẬT.docx", Git khác GitHub, cài đặt trên ba hệ điều hành, git config, khoá SSH và sân tập thu-git.',
+      description: 'Bộ 31 slide của Mục 0: 14 slide “Bắt đầu tại đây” (Git và GitHub là gì, lịch sử, số liệu, sự cố thật, cách học không nản) rồi khoá này cho ai, lộ trình 17 phần, vấn đề "final_v2_THẬT.docx", Git khác GitHub, cài đặt trên ba hệ điều hành, git config, khoá SSH và sân tập thu-git.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Slides</span>
-<h2>Section 0 in 17 slides</h2>
+<h2>Section 0 in 31 slides</h2>
 <p class="lead">Skim these before reading the lessons to see where the whole course goes, then keep them open while you install Git and create your SSH key. Every picture here reappears inside the lesson that explains it.</p>
-<p>The slides are in Vietnamese; the pictures (the 17-stop roadmap, Git vs GitHub, the SSH key pair) read the same in any language. Every terminal on the slides is real output from a real run. The last two slides are a cheat sheet and a 30-minute setup session — finish that session and you are ready for Chapter 1.</p>
+<p>The first 14 pictures below (slides 18–31) belong to the two "Start here" lessons: what Git and GitHub are, the 2005 timeline, the numbers, real incidents and a study plan. After them come slides 1–17 for lessons 0.1–0.4. The slides are in Vietnamese; the pictures (the 17-stop roadmap, Git vs GitHub, the SSH key pair) read the same in any language. Every terminal on the slides is real output from a real run. Slides 16 and 17 are a cheat sheet and a 30-minute setup session — finish that session and you are ready for Chapter 1.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Slide</span>
-<h2>Mục 0 trong 17 slide</h2>
+<h2>Mục 0 trong 31 slide</h2>
 <p class="lead">Lướt bộ này trước khi đọc bài để thấy cả khoá sẽ đi tới đâu, rồi mở nó bên cạnh lúc bạn cài Git và tạo khoá SSH. Mỗi hình ở đây đều xuất hiện lại trong bài giảng giải thích nó.</p>
-<p>Mọi terminal trên slide là output thật của một lần chạy thật. Hai slide cuối là bảng tra nhanh và một buổi cài đặt 30 phút — làm xong buổi đó là bạn sẵn sàng vào Chương 1.</p>
+<p>14 hình đầu bên dưới (slide 18–31) thuộc hai bài “Bắt đầu tại đây”: Git và GitHub là gì, dòng thời gian năm 2005, các con số, sự cố có thật và kế hoạch học. Tiếp theo là slide 1–17 cho bài 0.1–0.4. Mọi terminal trên slide là output thật của một lần chạy thật. Slide 16 và 17 là bảng tra nhanh và một buổi cài đặt 30 phút — làm xong buổi đó là bạn sẵn sàng vào Chương 1.</p>
 </div>
 ${gallery('git-00', [
+  [18, 'Git là gì? Nút “lưu game” cho cả thư mục'], [19, 'Git ≠ GitHub — máy bạn ⇄ GitHub ⇄ bạn cùng nhóm'], [20, 'Git và GitHub — so từng dòng'],
+  [21, 'Dòng thời gian: từ email vá lỗi tới 180 triệu lập trình viên'], [22, 'Vì sao Git ra đời: BitKeeper đổ vỡ → mục tiêu thiết kế'],
+  [23, 'Trước Git · Sau Git — một tuần đồ án nhóm'], [24, 'Git dùng để làm gì — tám việc, tám chương'], [25, 'Quan trọng tới mức nào? Con số có nguồn'],
+  [26, 'Git giúp gì cho bạn — từ năm nhất tới đi làm'], [27, 'Bốn chuyện có thật — đã kiểm nguồn'], [28, 'Tình huống minh hoạ — rất có thể là nhóm bạn'],
+  [29, 'Vì sao người mới hay bỏ Git — và cách chữa'], [30, 'Lộ trình: tối thiểu 1 tuần · đầy đủ vài tuần'], [31, 'Nhịp một buổi học và các mốc “mình làm được”'],
   [1, 'Bìa'], [2, 'Bản đồ Mục 0'], [3, 'Khoá này viết cho ai'], [4, 'Lộ trình toàn khoá — 17 phần'],
   [5, 'Ba chương mới 14–16'], [6, 'final_v2_THẬT.docx và git log'], [7, 'Bốn thứ thư mục không làm được'],
   [8, 'Ba thế hệ quản lý phiên bản'], [9, 'Git ≠ GitHub'], [10, 'Cài Git trên ba hệ điều hành'], [11, 'git config tối thiểu'],
@@ -259,9 +921,9 @@ bạn cùng nhóm commit file .env     → Ch 1.5 (.gitignore), Ch 8, Ch 13</cod
 <h3>📌 Tóm tắt</h3>
 <ul><li>Git lưu ảnh chụp cộng vài con trỏ; mọi lệnh hoặc tạo ảnh chụp, hoặc dời con trỏ.</li><li>Khoá có 17 phần: Mục 0 cộng 16 chương, từ mô hình (Ch 1) tới một dự án nhóm thật (Ch 16).</li><li>Chương 1–4 là nền móng — học theo thứ tự; Chương 13 mở ra được ngay giữa lúc sự cố.</li><li>Chương 14–16 (mới 09/2026) dạy công cụ hằng ngày, hồ sơ GitHub của sinh viên và một dự án nhóm tổng kết.</li><li>Bài thi cuối khoá 20 câu nằm ở cuối Chương 16; mọi chương khác kết thúc bằng bài kiểm tra 10 câu.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git (Chacon &amp; Straub) — sách chính thức, miễn phí, có bản tiếng Việt</span><span class="lc-sub">Cuốn tra cứu chuẩn mực. Chương 10 "Git Internals" đi cặp với Chương 9 của ta.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git (Chacon &amp; Straub) — sách chính thức, miễn phí (bản tiếng Anh — bản tiếng Việt trên git-scm.com đã bị gỡ)</span><span class="lc-sub">Cuốn tra cứu chuẩn mực. Chương 10 "Git Internals" đi cặp với Chương 9 của ta.</span></span>
 </a>
 <a class="link-card" href="https://docs.github.com/en/get-started" target="_blank" rel="noopener">
   <span class="lc-ico">🐙</span>
@@ -481,7 +1143,7 @@ git diff HEAD~1</code></pre>
 <h3>📌 Tóm tắt</h3>
 <ul><li>Thư mục đầy file <code>_final_v2</code> cũng là một hệ quản lý phiên bản — một cái không nói được vì sao, không cho thấy đổi gì, không hợp nhất được, không quay lại an toàn được.</li><li>Git là phân tán: mỗi bản clone là bản sao đầy đủ của lịch sử, nên chạy được khi mất mạng và sống sót khi máy chủ sập.</li><li>Git không phải Dropbox: nó chỉ đồng bộ khi bạn chủ ý commit và push, và khoảng ngắt đó là nơi review diễn ra.</li><li>Git không phải GitHub: Git là phần mềm trên máy bạn; GitHub là trang web lưu kho và thêm PR, issue, Actions.</li><li>Đừng để kho mã trong thư mục Dropbox / Google Drive / OneDrive — chia sẻ bằng remote của Git.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/M%E1%BB%9F-%C4%90%E1%BA%A7u-V%E1%BB%81-Qu%E1%BA%A3n-L%C3%BD-Phi%C3%AAn-B%E1%BA%A3n" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 1.1 (tiếng Việt) — Về Quản Lý Phiên Bản</span><span class="lc-sub">Ba thế hệ VCS, kèm những sơ đồ kinh điển.</span></span>
 </a>

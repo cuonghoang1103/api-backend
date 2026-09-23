@@ -246,7 +246,7 @@ MM a.txt          <span class="tok-comment"># M trái = đã staging (a2), M ph�
 <h3>📌 Tóm tắt</h3>
 <ul><li>Mỗi file có thể tồn tại ba phiên bản cùng lúc: thư mục làm việc, index, HEAD.</li><li><code>git add</code> chuyển thư mục làm việc → index; <code>git commit</code> chuyển index → HEAD.</li><li><code>git status -s</code>: cột trái = index so với HEAD, cột phải = thư mục làm việc so với index.</li><li>Trước khi commit, đọc <code>git diff --staged</code> — đó chính xác là thứ sẽ được ghi lại.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/C%C4%83n-B%E1%BA%A3n-Git-Ghi-Nh%E1%BA%ADn-Thay-%C4%90%E1%BB%95i-V%C3%A0o-Kho-Ch%E1%BB%A9a" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 2.2 (tiếng Việt) — Ghi nhận thay đổi vào kho chứa</span><span class="lc-sub">Sơ đồ vòng đời tracked / untracked / staged trong sách chính thức.</span></span>
 </a>

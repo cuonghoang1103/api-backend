@@ -290,7 +290,7 @@ HEAD is now at 6a952eb feat: doi loi chao
 <h3>📌 Tóm tắt</h3>
 <ul><li><code>objects/</code> cộng <code>refs/</code> là toàn bộ kho mã; mọi thứ khác là cấu hình, bộ đệm hoặc tiện ích.</li><li>Một nhánh là file chữ 41 byte chứa mã băm commit; <code>HEAD</code> là file một dòng gọi tên nhánh đó.</li><li>HEAD lìa cành đơn giản là <code>.git/HEAD</code> chứa mã băm thay vì tên nhánh.</li><li>Index là một file nhị phân thật, liệt kê mọi đường dẫn được theo dõi kèm mã băm nội dung đã staging.</li><li>Đọc <code>.git/</code> thoải mái; ghi vào nó qua lệnh như <code>git rev-parse</code>, <code>git branch</code> và <code>git update-ref</code>.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/Git-N%E1%BB%99i-T%E1%BA%A1i-Plumbing-v%C3%A0-Porcelain" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 10.1 (tiếng Việt) — Plumbing và Porcelain</span><span class="lc-sub">Phân biệt giữa những lệnh người ta dùng và những lệnh dựng nên chúng.</span></span>
 </a>
@@ -581,7 +581,7 @@ git status -s
 <h3>📌 Tóm tắt</h3>
 <ul><li>Cả cơ sở dữ liệu chỉ có bốn loại đối tượng: blob, tree, commit và tag có chú thích.</li><li>Tên file nằm trong tree, nên đổi tên mà không sửa nội dung thì dùng lại đúng blob cũ.</li><li>Một commit sửa một file chỉ ghi các đối tượng trên đường từ file đó lên tới commit; mọi blob khác được dùng chung.</li><li><code>git commit</code> là <code>write-tree</code> + <code>commit-tree</code> + <code>update-ref</code>, cộng cấu hình, trình soạn thảo, hook và reflog.</li><li>Cùng byte thì cùng mã băm blob trên mọi máy; mã băm commit khác nhau vì có tác giả và thời điểm.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/Git-N%E1%BB%99i-T%E1%BA%A1i-%C4%90%E1%BB%91i-T%C6%B0%E1%BB%A3ng-Git" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 10.2 (tiếng Việt) — Đối tượng Git</span><span class="lc-sub">Cùng cách dựng bằng tay, kèm chi tiết hơn về định dạng mục trong tree.</span></span>
 </a>
@@ -844,7 +844,7 @@ fatal: Not a valid object name 4098f32</code></pre>
 <h3>📌 Tóm tắt</h3>
 <ul><li>Đối tượng mới ra đời ở dạng rời, mỗi cái một file; <code>git gc</code> gói chúng vào một packfile.</li><li>Trong pack, các đối tượng giống nhau lưu dưới dạng delta — mô hình vẫn là ảnh chụp, còn chỗ chứa thì nhỏ lại.</li><li>Git giữ bản mới nhất nguyên vẹn và biến bản cũ thành delta, vì bản mới nhất được đọc nhiều nhất.</li><li>Một đối tượng chỉ biến mất khi không còn gì với tới nó — không ref, không dòng index, không dòng reflog — và gc tỉa nó đi.</li><li>Kích thước kho do mọi thứ TỪNG được commit quyết định; <code>--filter=blob:none</code> và <code>--depth</code> làm clone rẻ hơn mà không phải viết lại lịch sử.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/Git-N%E1%BB%99i-T%E1%BA%A1i-Packfiles" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Internals-Packfiles" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
   <span class="lc-body"><span class="lc-title">Pro Git 10.4 (tiếng Việt) — Packfile</span><span class="lc-sub">Cách chọn đối tượng gốc cho delta, và đọc output của verify-pack.</span></span>
 </a>

@@ -733,7 +733,7 @@ dat-lich.js:3: trailing whitespace.
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Đi tiếp: track Git trên Code Lab</span><span class="lc-sub">Bài tập chấm điểm trải khắp mọi chương, kèm lời giải.</span></span>
 </a>
-<a class="link-card" href="https://git-scm.com/book/vi/v2" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git — cuốn tra cứu nên mở từ giờ trở đi</span><span class="lc-sub">Bạn đã có mô hình; cuốn sách là bảng tra.</span></span>
 </a>

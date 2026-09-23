@@ -24,8 +24,9 @@ export default {
   courseSlug: 'git',
   defaultVideoTrack: 'YT',
   lessons: {
-
     /* ── Mục 0 — Giới thiệu, Vì sao cần Git, Cài đặt & Cách học ── */
+    'git-0-5-bat-dau-tai-day': { yt: 'sCr_gb8rdEI', credit: "GitHub — Two decades of Git: A conversation with creator Linus Torvalds" },
+    'git-0-6-bat-dau-khi-khong-co-git': { yt: '1JuYQgpbrW0', credit: "Phạm Huy Hoàng — Từ gà tới pro Git và Github trong 20 phút - Tự học Git siêu tốc" },
     'git-0-0-slides': { yt: 'r8jQ9hVA2qs', credit: "GitHub — A brief introduction to Git for beginners | GitHub" },
     'git-0-1-gioi-thieu-lo-trinh': { yt: 'zTjRZNkhiEU', credit: "freeCodeCamp.org — Learn Git – Full Course for Beginners" },
     'git-0-2-van-de-git-giai-quyet': { yt: 'lJu5xwbGgRk', credit: "Computerphile — Git Version Control _final_new_final.new - Computerphile" },

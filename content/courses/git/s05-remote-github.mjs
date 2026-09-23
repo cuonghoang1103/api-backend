@@ -279,7 +279,7 @@ git clone --bare &lt;url&gt;           <span class="tok-comment"># không có th
 <h3>📌 Tóm tắt</h3>
 <ul><li><code>origin</code> chỉ là biệt danh của một URL; một kho có thể có nhiều remote.</li><li><code>origin/main</code> là ảnh chụp, không phải bản trực tiếp — nó chỉ dịch khi fetch, pull hoặc push.</li><li><code>git fetch</code> luôn an toàn: nó đổi điều bạn BIẾT, không đổi thứ bạn CÓ.</li><li><code>git pull</code> = fetch + tích hợp; đặt <code>pull.ff only</code> để nó không bao giờ merge sau lưng bạn.</li><li>Trước khi tin "up to date", hãy chạy <code>git fetch</code>.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/C%C4%83n-B%E1%BA%A3n-Git-L%C3%A0m-Vi%E1%BB%87c-V%E1%BB%9Bi-Remote" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 2.5 (tiếng Việt) — Làm việc với Remote</span><span class="lc-sub">remote add/rename/remove, và "nhánh theo dõi remote" nghĩa là gì.</span></span>
 </a>

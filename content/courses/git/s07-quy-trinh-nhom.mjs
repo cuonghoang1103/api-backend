@@ -532,7 +532,7 @@ git describe --tags         <span class="tok-comment"># nhap</span></code></pre>
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Semantic Versioning 2.0.0 — bản đặc tả (có tiếng Việt)</span><span class="lc-sub">Ngắn và đáng đọc trọn vẹn một lần; luật sắp thứ tự bản tiền phát hành là chỗ người ta hay hiểu sai.</span></span>
 </a>
-<a class="link-card" href="https://git-scm.com/book/vi/v2/C%C4%83n-B%E1%BA%A3n-Git-G%E1%BA%AFn-Th%E1%BA%BB" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Basics-Tagging" target="_blank" rel="noopener">
   <span class="lc-ico">🏷️</span>
   <span class="lc-body"><span class="lc-title">Pro Git 2.6 (tiếng Việt) — Gắn thẻ</span><span class="lc-sub">Tag nhẹ vs có chú thích, ký tag, và gắn tag cho commit quá khứ.</span></span>
 </a>

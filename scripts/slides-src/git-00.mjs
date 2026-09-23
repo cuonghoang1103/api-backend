@@ -1,7 +1,7 @@
 /** Git & GitHub · Deck git-00 — Mục 0: Giới thiệu · Vì sao cần Git · Cài đặt · Cách học.
  * Output terminal trên slide là output THẬT (git 2.51.1, OpenSSH 10.3, HOME tạm — 23/09/2026).
  * Dòng in đường dẫn HOME tạm dài đã được CẮT BỎ (không sửa chữ). */
-import { S, G, esc, cover, cards, box, steps, table, vs, flow, two, list, code, mindmap, term, diagram } from './_git-chung.mjs';
+import { S, G, esc, cover, cards, box, steps, table, vs, kpis, flow, two, list, code, mindmap, term, diagram, graph, seg } from './_git-chung.mjs';
 
 export const deck = { key: 'git-00', code: 'GIT · MỤC 0', title: 'Giới thiệu, cài đặt & cách học', sub: 'Git & GitHub · Mục 0' };
 
@@ -44,6 +44,41 @@ const roadmap = () => {
 };
 const legend = () => `<div style="display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;font-size:15px;color:${G.mu};margin-top:4px">` +
   STAGES.map((x) => `<span><i style="display:inline-block;width:22px;height:8px;border-radius:4px;background:${x.c};margin-right:6px;vertical-align:middle"></i>${esc(x.n)}</span>`).join('') + `</div>`;
+
+/* ───────── Dòng thời gian lịch sử Git & GitHub (SVG nội tuyến) — slide 21 ─────────
+ * Mọi mốc đã đối chiếu nguồn 23/09/2026: Pro Git 1.2, Wikipedia "Git"/"GitHub", phỏng vấn
+ * Linus Torvalds (Linux Foundation, 04/2015), news.microsoft.com 04/06/2018, Octoverse 2025. */
+const EVENTS = [
+  ['1991–2002', 'Gửi bản vá', 'qua email, file nén', G.mu],
+  ['2002', 'Linux dùng', 'BitKeeper (miễn phí)', G.mu],
+  ['đầu 2005', 'Linux ↔ BitKeeper', 'đổ vỡ, mất bản free', G.red],
+  ['03/04/2005', 'Linus bắt đầu', 'viết Git', G.git],
+  ['07/04/2005', 'Commit đầu tiên', 'Git tự lưu chính nó', G.git],
+  ['16/06/2005', 'Linux 2.6.12', 'phát hành bằng Git', G.git],
+  ['26/07/2005', 'Junio Hamano', 'nhận bảo trì Git', G.amb],
+  ['21/12/2005', 'Git 1.0', '', G.amb],
+  ['04/2008', 'GitHub', 'ra mắt', G.blu],
+  ['06/2018', 'Microsoft mua', 'GitHub 7,5 tỷ USD', G.blu],
+  ['2025', '180 triệu+ dev', '630 triệu kho mã', G.grn],
+];
+const timeline = () => {
+  const W = 1160, H = 430, Y = 215, x = (i) => 62 + i * 103.6;
+  let s = `<svg class="c-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">`;
+  const bx1 = x(2) - 80, bx2 = x(7) + 30;  // ngoặc "năm 2005" nằm TRÊN nhãn, không cắt qua chữ
+  s += `<path d="M${bx1} ${Y - 118} V${Y - 132} H${bx2} V${Y - 118}" stroke="${G.git}" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>`;
+  s += `<text x="${(bx1 + bx2) / 2}" y="${Y - 142}" text-anchor="middle" font-size="15" font-weight="700" fill="${G.git}">năm 2005 — phóng to (không theo tỉ lệ)</text>`;
+  s += `<path d="M20 ${Y} H1140" stroke="#3b4453" stroke-width="6" stroke-linecap="round"/>`;
+  EVENTS.forEach(([d, a, b, c], i) => {
+    const X = x(i), up = i % 2 === 0, ly = up ? Y - 34 : Y + 34;
+    s += `<line x1="${X}" y1="${Y}" x2="${X}" y2="${up ? Y - 26 : Y + 26}" stroke="${c}" stroke-width="2"/>`;
+    s += `<circle cx="${X}" cy="${Y}" r="11" fill="#0d1117" stroke="${c}" stroke-width="4"/>`;
+    const t0 = up ? ly - 50 : ly + 20;
+    s += `<text x="${X}" y="${t0}" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="15" font-weight="700" fill="${c}">${esc(d)}</text>`;
+    s += `<text x="${X}" y="${t0 + 23}" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">${esc(a)}</text>`;
+    if (b) s += `<text x="${X}" y="${t0 + 44}" text-anchor="middle" font-size="14.5" fill="${G.mu}">${esc(b)}</text>`;
+  });
+  return s + `</svg>`;
+};
 
 /* ───────── Cây thư mục "final_v2" (HTML) ───────── */
 const folder = () => `<div class="g-term"><div class="tb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>📁 Bao-cao-SWP391 — Finder</span></div><pre style="font-size:15px;line-height:1.7">` +
@@ -209,4 +244,172 @@ git reflog -10                         # HEAD vừa đi đâu`, 'bash')}
       ['Dựng <code>thu-git</code>, 5 commit, <code>reset --hard HEAD~3</code>', 'cứu lại bằng <code>git reflog</code>'],
     ])}
     ${box('good', '<b>Đạt khi:</b> <code>git config user.email</code> in đúng email trên GitHub · <code>ssh -T</code> chào tên bạn · <code>git lg</code> trong thu-git lại thấy “commit số 5”.')}` },
+
+  /* ═══════════ 18–31: "Bắt đầu tại đây" (bài 0.5 và 0.6) — THÊM VÀO CUỐI, không đổi số slide cũ ═══════════ */
+
+  { t: 'Git là gì? Nút “lưu game” cho cả thư mục', body: two(
+    `${graph({ w: 560, h: 250, dx: 140, x0: 60, y0: 110, commits: [
+      { id: '1', x: 0, t: 'dàn ý' }, { id: '2', x: 1, p: ['1'], t: 'thêm đăng nhập' },
+      { id: '3', x: 2, p: ['2'], t: 'sửa lỗi form' }, { id: '4', x: 3, p: ['3'], t: 'đặt lịch', hl: true },
+    ], refs: [{ to: '4', n: 'HEAD → main', k: 'head' }] })}
+    ${box('info', 'Mỗi vòng tròn là một <b>commit</b> = một “điểm lưu” của <b>cả dự án</b>, kèm tên người lưu, thời điểm và lời nhắn <i>vì sao</i>. Quay về điểm nào cũng được.')}`,
+    cards([
+      { ic: '🎮', t: 'Nút lưu game', d: 'Trước trận khó thì lưu; thua thì nạp lại. Commit là điểm lưu cho code.', c: 'git' },
+      { ic: '⏳', t: 'Cỗ máy thời gian', d: 'Xem dự án đúng như hôm thứ Hai tuần trước, rồi quay về hôm nay.', c: 'blu' },
+      { ic: '📓', t: 'Sổ nhật ký có chữ ký', d: 'Ai sửa dòng nào, lúc nào, vì sao — không ai tẩy xoá lén được.', c: 'grn' },
+    ], 1), 'l') },
+
+  { t: 'Git ≠ GitHub — ai ở đâu?', body: `
+    ${diagram({ w: 1160, h: 330, nodes: [
+      { id: 'me', x: 0, y: 40, w: 290, h: 150, t: '💻 Máy bạn', d: 'Git (phần mềm)\ncode + .git/ = TOÀN BỘ lịch sử\ncommit được khi mất mạng', c: 'git' },
+      { id: 'gh', x: 435, y: 55, w: 290, h: 120, t: '🐙 GitHub', d: 'một bản sao chung trên mạng\n+ PR · Issues · Actions', c: 'blu' },
+      { id: 'tm', x: 870, y: 40, w: 290, h: 150, t: '💻 Máy bạn cùng nhóm', d: 'Git (phần mềm)\ncũng có TOÀN BỘ lịch sử\nWindows, Mac hay Linux', c: 'git' },
+      { id: 'ot', x: 435, y: 235, w: 290, h: 80, t: 'GitLab · Bitbucket · Gitea', d: 'những “GitHub” khác, cùng nói Git', c: 'dim', dash: true },
+    ], edges: [
+      { from: 'me', to: 'gh', t: 'push ↑ / pull ↓', both: true, c: 'grn', fs: 'r', ts: 'l' },
+      { from: 'tm', to: 'gh', t: 'push ↑ / pull ↓', both: true, c: 'grn', fs: 'l', ts: 'r' },
+    ] })}
+    ${box('tip', '<b>Git</b> = phần mềm trên máy từng người. <b>GitHub</b> = chỗ gửi chung + công cụ làm nhóm. GitHub sập bạn vẫn commit được; mất laptop thì bản trên GitHub cứu bạn.')}` },
+
+  { t: 'Git và GitHub — so từng dòng', body: `
+    ${table(['', '💻 Git', '🐙 GitHub'], [
+      ['Là gì', 'Phần mềm quản lý phiên bản (VCS) phân tán', 'Trang web lưu kho Git + công cụ làm việc nhóm'],
+      ['Chạy ở đâu', 'Trên máy bạn (thư mục ẩn <code>.git/</code>)', 'Trên máy chủ của GitHub, bạn dùng qua trình duyệt / <code>git push</code>'],
+      ['Cần mạng, tài khoản?', '+Không cần gì cả', 'Cần mạng và một tài khoản'],
+      ['Ai làm ra, khi nào', 'Linus Torvalds, 04/2005 · nay do Junio Hamano bảo trì', '4 nhà sáng lập, ra mắt 04/2008 · Microsoft mua 2018'],
+      ['Giá', 'Miễn phí, mã nguồn mở', 'Có gói miễn phí; sinh viên có gói ưu đãi (Ch 15)'],
+      ['Thứ chỉ nó có', 'commit · nhánh · merge · lịch sử · reflog', 'Pull request · Issues · Actions (CI/CD) · Pages'],
+      ['Thay được bằng', '(gần như không — Git thống trị)', 'GitLab, Bitbucket, Gitea… đều dùng Git bên dưới'],
+    ], { sm: true })}
+    ${box('bad', '<b>Hiểu lầm số 1 của người mới:</b> “Git = GitHub”. Học Git trước (Ch 1–4, không cần mạng), GitHub sau (Ch 5 trở đi).')}` },
+
+  { t: 'Lịch sử: từ email vá lỗi tới 180 triệu lập trình viên', body: `${timeline()}
+    ${box('info', 'Nguồn: Pro Git 1.2 · Wikipedia “Git”, “GitHub” · phỏng vấn Linus Torvalds (Linux Foundation, 2015) · Microsoft News 04/06/2018 · GitHub Octoverse 2025.')}` },
+
+  { t: 'Vì sao Git ra đời?', body: `
+    ${flow([
+      { e: '🤝', t: '2002–2005', d: 'Nhân Linux dùng BitKeeper — thương mại, cho dùng miễn phí', c: 'dim' },
+      { e: '💥', t: 'Đầu 2005', d: 'Hai bên đổ vỡ, bản miễn phí bị rút', c: 'red' },
+      { e: '🤔', t: 'Linus', d: 'không hệ miễn phí nào đủ nhanh + phân tán ⇒ tự viết', c: 'amb' },
+      { e: '⚡', t: '~10 ngày', d: 'Git đủ dùng để commit nhân Linux', c: 'git' },
+    ])}
+    ${cards([
+      { ic: '🚀', t: 'Nhanh', d: 'Hàng nghìn người, kho mã khổng lồ', c: 'git' },
+      { ic: '🌿', t: 'Nhánh rẻ', d: 'Hàng nghìn nhánh song song', c: 'grn' },
+      { ic: '🌐', t: 'Phân tán', d: 'Máy nào cũng có đủ lịch sử', c: 'blu' },
+      { ic: '🔒', t: 'Toàn vẹn', d: 'Mã băm: sửa lén 1 bit là lộ', c: 'vio' },
+    ], 4)}
+    ${box('good', 'Commit đầu tiên của chính Git — 07/04/2005, tác giả Linus Torvalds: <code>Initial revision of "git", the information manager from hell</code>')}` },
+
+  { t: 'Trước Git · Sau Git — một tuần đồ án nhóm', body: `${vs({
+    no: { t: 'Không có Git', items: [
+      'Gửi <code>src.zip</code> qua Zalo, ai giải nén sau thì đè bản của người trước',
+      '<code>do-an-final-v3-sua-lan-cuoi.zip</code> — không ai biết bản nào chạy được',
+      'Sửa “một chút” hỏng cả app, không có đường quay lại',
+      'Ổ cứng chết đêm trước hạn nộp = mất hết',
+      'Cãi nhau “ai làm phần này?” mà không có bằng chứng',
+    ] },
+    yes: { t: 'Có Git + GitHub', items: [
+      'Mỗi người một nhánh, Git tự hợp nhất, chỉ hỏi chỗ trùng thật',
+      '<code>git log</code>: mỗi phiên bản có tên, lời nhắn, thời điểm',
+      '<code>git revert</code> / <code>git restore</code>: về bản chạy được trong vài giây',
+      'Bản sao trên GitHub + trên máy từng bạn — mất một máy không sao',
+      'Trang Insights / <code>git log --author</code> cho thấy ai commit gì',
+    ] },
+  })}` },
+
+  { t: 'Git dùng để làm gì?', body: table(['Việc', 'Nghĩa là', 'Học ở'], [
+    ['💾 Lưu lịch sử', 'Mỗi commit là một bản chụp cả dự án, giữ mãi', 'Ch 1'],
+    ['↩️ Quay lại bản chạy được', 'Hoàn tác một commit mà không xoá lịch sử', 'Ch 4'],
+    ['🌿 Làm song song bằng nhánh', '4–5 bạn cùng sửa một dự án, không giẫm chân', 'Ch 3'],
+    ['🔍 Ai sửa gì, vì sao', '<code>git log</code>, <code>git blame</code>, tìm commit gây lỗi', 'Ch 2'],
+    ['👀 Review mã', 'Pull request: bạn cùng nhóm đọc trước khi gộp vào main', 'Ch 6'],
+    ['🤖 CI/CD', 'Mỗi lần push, máy tự chạy test / tự deploy (GitHub Actions)', 'Ch 11'],
+    ['🎓 Portfolio xin việc', 'Hồ sơ GitHub = bằng chứng bạn biết làm', 'Ch 15'],
+    ['🌍 Đóng góp mã nguồn mở', 'Fork → sửa → PR vào dự án của người khác', 'Ch 5, 15'],
+  ], { sm: true }) },
+
+  { t: 'Quan trọng tới mức nào? Con số có nguồn', body: `
+    ${kpis([
+      { v: '93,87%', l: 'người trả lời dùng Git<br>(Stack Overflow Survey 2022)', c: 'git' },
+      { v: '96,65%', l: 'lập trình viên chuyên nghiệp<br>dùng Git (cùng khảo sát)', c: 'amb' },
+      { v: '180 triệu+', l: 'lập trình viên trên GitHub<br>(Octoverse 2025)', c: 'blu' },
+      { v: '630 triệu', l: 'kho mã trên GitHub<br>(Octoverse 2025)', c: 'grn' },
+    ])}
+    ${two(box('info', 'Năm 2025: gần <b>1 tỷ</b> commit được đẩy lên GitHub, trung bình <b>43,2 triệu</b> pull request được gộp mỗi tháng, và cứ mỗi giây có hơn một lập trình viên mới đăng ký (Octoverse 2025).'),
+      box('warn', 'Ngay cả người <b>đang học lập trình</b> trong khảo sát 2022 cũng đã có <b>81,87%</b> dùng Git. Bạn không học sớm — bạn đang học <b>đúng lúc</b>.'), '')}` },
+
+  { t: 'Git giúp gì cho BẠN — từ năm nhất tới đi làm', body: `
+    ${flow([
+      { e: '📚', t: 'Bài tập cá nhân', d: 'lưu từng bước, quay lại khi sửa hỏng', c: 'dim' },
+      { e: '👥', t: 'Đồ án SWP391', d: '4–5 người, một repo, nhánh + PR', c: 'amb' },
+      { e: '🎯', t: 'Thực tập', d: 'nhà tuyển dụng mở GitHub của bạn', c: 'blu' },
+      { e: '💼', t: 'Đi làm', d: 'ngày đầu tiên: clone repo công ty', c: 'git' },
+    ])}
+    ${cards([
+      { ic: '❓', t: 'Câu phỏng vấn hay gặp', d: 'merge khác rebase? pull khác fetch? lỡ commit mật khẩu thì làm gì?', c: 'vio' },
+      { ic: '🐳', t: 'Mọi khoá khác đứng trên Git', d: 'Docker, deploy, GitHub Actions trên site này đều bắt đầu bằng một repo', c: 'tea' },
+      { ic: '🛟', t: 'Ngủ ngon trước hạn nộp', d: 'Code đã push lên GitHub thì máy hỏng vẫn còn', c: 'grn' },
+    ], 3)}` },
+
+  { t: 'Chuyện có thật khi không có (hoặc thiếu) một lưới an toàn', body: cards([
+    { ic: '🎬', t: 'Toy Story 2 · 1998', d: 'Một lệnh <code>rm -r -f *</code> xoá ~90% công sức 2 năm; bản sao lưu hỏng cả tháng mà không ai biết. Cứu nhờ một bản sao trên máy ở nhà của đạo diễn kỹ thuật Galyn Susman.', c: 'amb' },
+    { ic: '🗄️', t: 'GitLab.com · 31/01/2017', d: 'Kỹ sư xoá nhầm thư mục CSDL trên máy CHÍNH. Mất ~6 giờ dữ liệu: ~5.000 project, ~5.000 bình luận, ~700 tài khoản. <strong>Kho Git thì không mất.</strong>', c: 'red' },
+    { ic: '🔑', t: 'Uber · 2016', d: 'Khoá truy cập AWS nằm dạng chữ thường trong một repo GitHub <strong>riêng tư</strong>. Kẻ tấn công lấy được ⇒ 25,6 triệu tên + email bị lộ (theo FTC).', c: 'vio' },
+    { ic: '📈', t: '28,65 triệu bí mật · 2025', d: 'Số khoá/mật khẩu mới bị commit lên GitHub công khai trong một năm, tăng 34% (GitGuardian, 03/2026).', c: 'git' },
+  ], 2) },
+
+  { t: 'Tình huống minh hoạ — rất có thể là nhóm bạn', body: `
+    ${cards([
+      { ic: '🗜️', t: 'final-final-v3.zip', d: '7 file zip, không ai dám xoá bản nào', c: 'amb' },
+      { ic: '💬', t: 'Đè nhau qua Zalo', d: 'Bình giải nén bản cũ lên — mất 2 ngày code của An', c: 'red' },
+      { ic: '💀', t: 'Ổ cứng chết', d: '23h đêm trước hạn nộp, code chỉ nằm trên một máy', c: 'red' },
+      { ic: '🔧', t: '“Sửa một chút thôi”', d: 'App hết chạy, không biết quay về bản nào', c: 'amb' },
+      { ic: '⚖️', t: 'Tranh chấp điểm', d: 'Không chứng minh được phần mình đã làm', c: 'blu' },
+      { ic: '🔓', t: 'Push mật khẩu CSDL', d: 'File <code>.env</code> lên repo công khai', c: 'vio' },
+    ], 3)}
+    ${box('tip', 'Đây là tình huống <b>minh hoạ</b>, không phải chuyện có thật được kể lại. Mỗi cái có một chương chữa: Ch 1, 3, 4, 5, 8, 13.')}` },
+
+  { t: 'Vì sao người mới hay bỏ Git — và cách chữa', body: `${table(['Lý do bỏ cuộc', 'Cách chữa trong khoá này'], [
+    ['-Thuật ngữ tiếng Anh dày đặc', '+Nghĩa tiếng Việt ngay cạnh mỗi từ + ô 🗂 thuật ngữ cuối bài'],
+    ['-Sợ “làm hỏng” repo của nhóm', '+Tập trong kho nháp <code>thu-git</code>, phá thoải mái'],
+    ['-Học lệnh rời rạc, không hiểu', '+Học <b>mô hình</b> trước (Ch 1): ảnh chụp + con trỏ'],
+    ['-Lần đầu gặp xung đột thì hoảng', '+Tự tạo xung đột trong sân tập trước khi gặp thật (Ch 3)'],
+    ['-Tưởng lỡ tay là mất hết', '+Đã commit thì <code>git reflog</code> gần như luôn cứu được (Ch 4)'],
+    ['-Thông báo lỗi dài, bỏ qua', '+Đọc nó: Git thường gợi ý đúng lệnh cần gõ'],
+  ], { sm: true })}
+    ${two(term(['$ git stauts', "! git: 'stauts' is not a git command. See 'git --help'.", 'The most similar command is', '= \tstatus'], { title: 'output thật — git 2.51', dir: '~/thu-git', branch: 'main' }),
+      box('tip', 'Gõ nhầm cũng không sao: Git đoán giúp bạn lệnh gần nhất. Đọc hết thông báo trước khi hoảng.'), 'l')}` },
+
+  { t: 'Lộ trình: tối thiểu 1 tuần · đầy đủ vài tuần', body: `
+    <div style="font-size:19px;font-weight:700;color:#fff;margin:4px 0 8px">⚡ Tối thiểu — đủ dùng cho đồ án nhóm (≈ 1 tuần, 5 buổi)</div>
+    ${seg([
+      { t: 'Mục 0', d: 'hiểu + cài', c: 'dim', w: 1 },
+      { t: 'Ch 1', d: 'commit', c: G.git, w: 1.3 },
+      { t: 'Ch 3', d: 'nhánh + xung đột', c: 'amb', w: 1.3 },
+      { t: 'Ch 5', d: 'GitHub', c: 'blu', w: 1.2 },
+      { t: 'Ch 6', d: 'pull request', c: 'vio', w: 1.2 },
+    ])}
+    <div style="font-size:19px;font-weight:700;color:#fff;margin:20px 0 8px">🗺️ Đầy đủ — 17 phần, mỗi buổi một chương</div>
+    ${seg([
+      { t: '0', c: 'dim', w: 0.7 }, { t: '1–2', d: 'mô hình', c: G.git, w: 1 }, { t: '3–4', d: 'nhánh, hoàn tác', c: 'amb', w: 1 },
+      { t: '5–8', d: 'làm nhóm', c: 'blu', w: 1.6 }, { t: '9–12', d: 'chiều sâu', c: 'vio', w: 1.6 },
+      { t: '13', d: 'cứu hộ', c: 'red', w: 0.8 }, { t: '14–16', d: 'công cụ, nghề, dự án', c: 'grn', w: 1.4 },
+    ])}
+    ${box('tip', 'Đang sát hạn đồ án? Đi lộ trình tối thiểu trước, xong đồ án quay lại Ch 2, 4, 7… Ch 13 mở ra được ngay giữa lúc sự cố.')}` },
+
+  { t: 'Nhịp một buổi học (~60 phút) và các mốc “mình làm được”', body: `
+    ${flow([
+      { e: '🖼️', t: 'Xem slide', d: '5 phút — nắm hình', c: 'dim' },
+      { e: '📖', t: 'Đọc bài', d: '20 phút', c: 'blu' },
+      { e: '⌨️', t: 'Gõ lại lệnh', d: 'trong thu-git', c: 'amb' },
+      { e: '🧪', t: 'Thực hành', d: '15–20 phút', c: 'grn' },
+      { e: '✅', t: 'Quiz', d: '10 câu cuối chương', c: 'git' },
+    ])}
+    ${steps([
+      ['Mốc 1 — commit đầu tiên của đời mình', '<code>git log</code> hiện tên bạn'],
+      ['Mốc 2 — tự tạo và tự giải một xung đột', 'không còn sợ chữ CONFLICT'],
+      ['Mốc 3 — push lên GitHub, mở pull request đầu tiên', 'bạn cùng nhóm review được'],
+      ['Mốc 4 — cứu lại commit “đã mất” bằng reflog', 'từ đây Git hết đáng sợ'],
+    ])}` },
 ]);

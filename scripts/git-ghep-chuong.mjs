@@ -34,8 +34,11 @@ const ls = mod.lessons || [];
 console.log(`── ${path.basename(file)} · ${ls.length} bài · "${mod.title}"`);
 if (!mod.title?.includes('|||')) err('section title thiếu |||');
 
-const m0 = ls[0]?.slug?.match(/^git-(\d+)-0-slides$/);
-if (!m0 || ls[0].type !== 'DOCUMENT') err('bài đầu phải là git-N-0-slides, type DOCUMENT');
+// Mục 0 được có tối đa 2 bài "Bắt đầu tại đây" (slug …-bat-dau-…) đứng TRƯỚC bài slide — trang đầu tiên người mới bấm vào.
+const i0 = ls.findIndex((l) => !/^git-0-\d+-bat-dau/.test(l.slug || ''));
+if (i0 > 2) err('Mục 0: tối đa 2 bài bat-dau trước bài slide');
+const m0 = ls[i0]?.slug?.match(/^git-(\d+)-0-slides$/);
+if (!m0 || ls[i0].type !== 'DOCUMENT') err('bài đầu phải là git-N-0-slides, type DOCUMENT');
 const N = m0 ? m0[1] : '?';
 const quizzes = ls.filter((l) => l.type === 'QUIZ');
 if (N === '0') { if (quizzes.length) err('Mục 0 không có quiz'); }

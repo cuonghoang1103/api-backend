@@ -273,7 +273,7 @@ hint: If you are sure you want to delete it, run 'git branch -D thu/nhanh'</code
 <h3>📌 Tóm tắt</h3>
 <ul><li>Một nhánh là một file 41 byte chứa mã băm commit; tạo nhánh không chép gì cả.</li><li><code>HEAD</code> gọi tên nhánh hiện tại, và commit mới chỉ dời đúng nhánh đó.</li><li><code>git switch -c ten</code> vừa tạo vừa chuyển; <code>git switch -</code> quay về nhánh trước.</li><li>HEAD lìa cành là trạng thái bình thường — commit nào tạo ở đó thì đặt cho nó một nhánh trước khi rời đi.</li><li>Xoá nhánh mặc định bằng <code>-d</code>: khi nó từ chối là nó đang giữ hộ phần việc không nằm ở đâu khác.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/Nh%C3%A1nh-Nh%C3%A1nh-Trong-Git-L%C3%A0-G%C3%AC" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 3.1 (tiếng Việt) — Nhánh trong Git là gì</span><span class="lc-sub">Cùng ý "một nhánh là một con trỏ", kèm sơ đồ của sách.</span></span>
 </a>
@@ -522,7 +522,7 @@ git show --no-patch --format="%h cha: %p" HEAD
 <h3>📌 Tóm tắt</h3>
 <ul><li>Nếu nhánh bạn đang đứng là tổ tiên của nhánh kia, <code>git merge</code> chỉ trượt con trỏ — tua thẳng, không có commit mới.</li><li>Nếu cả hai bên đã tiến, Git so từng bên với điểm gốc hợp nhất rồi ghi một commit có hai cha.</li><li><code>HEAD^1</code> là phía bạn đang đứng; <code>HEAD^2</code> là nhánh được nhập vào.</li><li><code>--no-ff</code> giữ mỗi tính năng một "nút" nhìn thấy được; <code>--ff-only</code> từ chối mọi thứ trừ tua thẳng.</li><li>Merge không xung đột chưa chứng minh mã chạy được — chạy test SAU khi merge.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/Nh%C3%A1nh-C%C4%83n-B%E1%BA%A3n-V%E1%BB%81-Nh%C3%A1nh-v%C3%A0-H%C3%B2a-Tr%E1%BB%99n" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 3.2 (tiếng Việt) — Căn bản về nhánh và hoà trộn</span><span class="lc-sub">Sơ đồ fast-forward và ba chiều, trong sách chính thức.</span></span>
 </a>
@@ -793,7 +793,7 @@ config.txt:7: leftover conflict marker</code></pre>
 <h3>📌 Tóm tắt</h3>
 <ul><li>Xung đột nghĩa là hai bên sửa cùng những dòng; việc hợp nhất tạm dừng và không có gì bị mất.</li><li>Nửa trên (<code>HEAD</code>) là nhánh bạn đang đứng, nửa dưới là nhánh được nhập vào; zdiff3 chèn bản gốc vào giữa.</li><li>Giải xung đột = sửa file, xoá mọi ký hiệu, <code>git add</code>, <code>git commit</code> — rồi chạy test.</li><li><code>git diff --check</code> bắt ký hiệu còn sót trước khi chúng lọt vào lịch sử.</li><li><code>git merge --abort</code> luôn dùng được cho tới khi bạn commit.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/C%C3%A1c-C%C3%B4ng-C%E1%BB%A5-Git-H%C3%B2a-Tr%E1%BB%99n-N%C3%A2ng-Cao" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 7.8 (tiếng Việt) — Hoà trộn nâng cao</span><span class="lc-sub">Kiểu hiển thị xung đột, ours/theirs, rerere, và hợp nhất file nhị phân.</span></span>
 </a>
@@ -1048,7 +1048,7 @@ c17550f HEAD@{4}: checkout: moving from main to feature/rebase</code></pre>
 <h3>📌 Tóm tắt</h3>
 <ul><li>Rebase sao chép commit của bạn lên gốc mới; mỗi bản sao có mã băm mới, bản gốc chỉ còn trong reflog.</li><li>Merge giữ lịch sử song song thật; rebase cho ra một đường thẳng.</li><li>Luật vàng: chỉ rebase commit chưa ai khác có — nhánh tính năng của riêng bạn, không bao giờ là <code>main</code> hay <code>develop</code>.</li><li>Khi xung đột lúc rebase, <code>HEAD</code> là nhánh bạn rebase LÊN, commit của bạn là nửa dưới; xong thì <code>git rebase --continue</code>.</li><li><code>pull.rebase true</code> an toàn cho việc hằng ngày vì nó chỉ dời những commit chưa push của chính bạn.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/Nh%C3%A1nh-Rebase" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 3.6 (tiếng Việt) — Rebase</span><span class="lc-sub">Gồm cả mục "Hiểm hoạ của Rebase", chính là luật vàng kèm sơ đồ.</span></span>
 </a>
@@ -1337,7 +1337,7 @@ git reflog -6
 <h3>📌 Tóm tắt</h3>
 <ul><li><code>git rebase -i</code> mở một kịch bản, commit cũ nhất ở trên cùng; chưa có gì xảy ra cho tới khi bạn lưu và đóng.</li><li><code>fixup</code> gộp vào dòng trên và bỏ lời nhắn; <code>squash</code> gộp và hỏi bạn lời nhắn chung.</li><li>Dời dòng là đổi thứ tự commit — cách gom những việc làm cách nhau vài giờ.</li><li><code>--fixup</code> trong lúc làm cộng <code>--autosquash</code> trước khi mở PR thì hiếm khi phải sửa danh sách bằng tay.</li><li>Kết quả sai chỉ tốn một lệnh: <code>git reflog</code> → dòng dưới "rebase (start)" → <code>git reset --hard</code>.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/C%C3%A1c-C%C3%B4ng-C%E1%BB%A5-Git-Vi%E1%BA%BFt-L%E1%BA%A1i-L%E1%BB%8Bch-S%E1%BB%AD" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 7.6 (tiếng Việt) — Viết lại lịch sử</span><span class="lc-sub">Rebase tương tác, chẻ commit, và quy trình amend.</span></span>
 </a>

@@ -212,7 +212,7 @@ bd06a69 style: thêm style.css</code></pre>
 <h3>📌 Tóm tắt</h3>
 <ul><li>Xếp mọi lệnh hoàn tác theo việc nó đụng vào cây nào trong ba cây — thế là chúng hết chồng lấn.</li><li>Chỉ <code>restore &lt;file&gt;</code> và <code>reset --hard</code> (cộng với <code>checkout -- &lt;file&gt;</code> kiểu cũ) huỷ việc chưa commit.</li><li>Mọi cách hoàn tác còn lại là dời con trỏ, và dời con trỏ thì đảo ngược được nhờ reflog.</li><li>Chưa push: reset hay amend thoải mái. Đã push và đã chia sẻ: chỉ revert.</li><li>Kiểm thay vì đoán: <code>git log --oneline origin/main..HEAD</code> liệt kê những gì vẫn chỉ là của riêng bạn.</li></ul>
 
-<a class="link-card" href="https://git-scm.com/book/vi/v2/C%C3%A1c-C%C3%B4ng-C%E1%BB%A5-Git-Gi%E1%BA%A3i-M%C3%A3-Reset" target="_blank" rel="noopener">
+<a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Pro Git 7.7 (tiếng Việt) — Giải mã Reset</span><span class="lc-sub">Cách giải thích reset theo ba cây, kèm bảng cho từng chế độ.</span></span>
 </a>

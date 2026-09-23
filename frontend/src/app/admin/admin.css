@@ -179,7 +179,7 @@
 }
 
 /* Kính mờ: chỉ lớp phủ toàn màn hình (fixed) còn dùng. */
-.admin-root [class*="backdrop-blur"]:not(.fixed) { -webkit-backdrop-filter: none; backdrop-filter: none; }
+.admin-root [class*="backdrop-blur"]:not(.fixed):not(.a-topbar) { -webkit-backdrop-filter: none; backdrop-filter: none; }
 
 /* Chữ: một họ chữ (Inter). Poppins của trang ngoài không vào đây. */
 .admin-root .font-heading { font-family: inherit; letter-spacing: -0.011em; }
@@ -301,6 +301,18 @@
 }
 .admin-root .a-icon-btn:hover { background: var(--a-hover); color: var(--a-text); }
 .admin-root .a-icon-btn:active { transform: scale(0.94); }
+
+/* Thanh trên trong mờ như navigation bar của iOS: nội dung cuộn phía dưới
+   thấy mờ mờ qua nó. Đây là chỗ DUY NHẤT trong admin còn dùng kính mờ —
+   ở đây nó có nghĩa (báo rằng còn nội dung bên dưới), không phải trang trí. */
+.admin-root .a-topbar {
+  background: color-mix(in srgb, var(--a-panel) 78%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .admin-root .a-topbar { background: var(--a-panel); }
+}
 
 /* ── Điều khiển phân đoạn (segmented control) kiểu iOS ──────────────
    Dùng cho VI/EN trên thanh trên và các bộ lọc: rãnh nền lõm, mảnh

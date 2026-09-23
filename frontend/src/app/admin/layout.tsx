@@ -153,7 +153,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             sidebarHidden ? 'md:ml-2' : ''
           }`}
         >
-          <header className="flex h-12 shrink-0 items-center gap-2 border-b border-[var(--a-border)] px-3 md:px-4">
+          <header className="a-topbar flex h-12 shrink-0 items-center gap-2 border-b border-[var(--a-border)] px-3 md:px-4">
             <button onClick={() => setMobileOpen(true)} className="a-icon-btn md:hidden" aria-label={t('openMenu')}>
               <Menu className="h-[18px] w-[18px]" strokeWidth={2} />
             </button>

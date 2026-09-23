@@ -324,6 +324,9 @@ app.use(cors(corsOptions));
 // `ai.routes.ts`. PHẢI đứng TRƯỚC bộ 10mb dưới đây: bộ nào chạy trước thì
 // bộ đó quyết, và bộ 10mb đã từng trả 413 cho hai PDF bài giảng.
 app.use('/api/v1/ai/chat', aiRoutesModule.chatBodyParser);
+// Webhook GitHub của CT Work cần THÂN GỐC để kiểm chữ ký HMAC — phải đứng
+// trước express.json (bộ nào đọc thân trước thì bộ sau bỏ qua).
+app.use('/api/v1/work/github/webhook', express.raw({ type: '*/*', limit: '5mb' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser(config.cookieSecret));

@@ -33,6 +33,12 @@ import * as workspaces from '../services/work/workspaces.service.js';
 import * as planning from '../services/work/planning.service.js';
 import * as automation from '../services/work/automation.service.js';
 import { EMAIL_MODES, getNotifySettings, setNotifySettings } from '../services/work/notify.js';
+import { audit, auditProject, listAudit } from '../services/work/audit.js';
+import * as github from '../services/work/github.service.js';
+import * as exchange from '../services/work/exchange.service.js';
+import * as share from '../services/work/share.service.js';
+import * as apiTokens from '../services/work/apiTokens.service.js';
+import * as trash from '../services/work/trash.service.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -47,6 +53,12 @@ function callerId(req: Request): number {
 }
 
 const ok = (res: Response, data: unknown, status = 200) => res.status(status).json({ success: true, data });
+
+/** Tên người cho dòng audit log. */
+async function who(userId: number): Promise<string> {
+  const u = await prisma.user.findUnique({ where: { id: userId }, select: { username: true } });
+  return u ? `@${u.username}` : `user #${userId}`;
+}
 
 /** Chạy zod; lỗi thành 400 với thông điệp đọc được. */
 function parse<T extends z.ZodTypeAny>(schema: T, value: unknown): z.infer<T> {
@@ -91,7 +103,36 @@ router.get('/invites/:token', asyncHandler(async (req, res) => {
   ok(res, await workspaces.previewInvite(String(req.params.token)));
 }));
 
-router.use(authenticate);
+// GitHub gọi vào đây — xác thực bằng chữ ký HMAC, không bằng phiên. Thân
+// request là Buffer (index.ts gắn express.raw cho đúng đường này).
+router.post('/github/webhook/:pid', asyncHandler(async (req, res) => {
+  const raw = Buffer.isBuffer(req.body) ? req.body : Buffer.from(JSON.stringify(req.body ?? {}));
+  const event = typeof req.headers['x-github-event'] === 'string' ? req.headers['x-github-event'] : undefined;
+  const sig = typeof req.headers['x-hub-signature-256'] === 'string' ? req.headers['x-hub-signature-256'] : undefined;
+  ok(res, await github.handleWebhook(idParam(req, 'pid'), event, sig, raw));
+}));
+
+// Link công khai chỉ đọc — ai có link là xem được, không cần tài khoản.
+router.get('/share/:token', asyncHandler(async (req, res) => {
+  ok(res, await share.publicSummary(String(req.params.token)));
+}));
+router.get('/share/:token/issues', asyncHandler(async (req, res) => {
+  const { section } = parse(z.object({ section: z.enum(['board', 'backlog']).default('board') }), req.query);
+  ok(res, await share.publicIssues(String(req.params.token), section));
+}));
+router.get('/share/:token/issues/:num', asyncHandler(async (req, res) => {
+  ok(res, await share.publicIssue(String(req.params.token), idParam(req, 'num')));
+}));
+router.get('/share/:token/reports', asyncHandler(async (req, res) => {
+  ok(res, await share.publicReports(String(req.params.token)));
+}));
+router.get('/share/:token/tests', asyncHandler(async (req, res) => {
+  ok(res, await share.publicTests(String(req.params.token)));
+}));
+
+// API token cá nhân (Bearer ctw_…) đi trước; không phải token thì JWT như cũ.
+router.use(apiTokens.apiTokenAuth);
+router.use((req, res, next) => (req.workToken ? next() : authenticate(req, res, next)));
 
 // ═══ Không gian ═════════════════════════════════════════════════════
 
@@ -136,6 +177,7 @@ router.patch('/workspaces/:wsId', asyncHandler(async (req, res) => {
 router.delete('/workspaces/:wsId', asyncHandler(async (req, res) => {
   const { confirmName } = parse(z.object({ confirmName: z.string() }), req.body);
   await workspaces.deleteWorkspace(callerId(req), idParam(req, 'wsId'), confirmName);
+  await audit({ workspaceId: idParam(req, 'wsId'), actorId: callerId(req), action: 'workspace.delete', targetType: 'workspace', targetId: idParam(req, 'wsId'), summary: 'Deleted the workspace (can be restored by the owner)' });
   ok(res, { deleted: true });
 }));
 
@@ -147,11 +189,13 @@ router.get('/workspaces/:wsId/members', asyncHandler(async (req, res) => {
 router.patch('/workspaces/:wsId/members/:userId', asyncHandler(async (req, res) => {
   const { role } = parse(z.object({ role: z.enum(WORKSPACE_ROLES) }), req.body);
   await workspaces.updateMemberRole(callerId(req), idParam(req, 'wsId'), idParam(req, 'userId'), role);
+  await audit({ workspaceId: idParam(req, 'wsId'), actorId: callerId(req), action: 'workspace.member_role', targetType: 'user', targetId: idParam(req, 'userId'), summary: `Changed ${await who(idParam(req, 'userId'))}'s workspace role to ${role}` });
   ok(res, { updated: true });
 }));
 
 router.delete('/workspaces/:wsId/members/:userId', asyncHandler(async (req, res) => {
   await workspaces.removeMember(callerId(req), idParam(req, 'wsId'), idParam(req, 'userId'));
+  await audit({ workspaceId: idParam(req, 'wsId'), actorId: callerId(req), action: 'workspace.member_remove', targetType: 'user', targetId: idParam(req, 'userId'), summary: `Removed ${await who(idParam(req, 'userId'))} from the workspace` });
   ok(res, { removed: true });
 }));
 
@@ -231,23 +275,27 @@ router.patch('/projects/:pid', asyncHandler(async (req, res) => {
 router.post('/projects/:pid/archive', asyncHandler(async (req, res) => {
   const { archived } = parse(z.object({ archived: z.boolean() }), req.body);
   await projects.setProjectArchived(callerId(req), idParam(req, 'pid'), archived);
+  await auditProject(idParam(req, 'pid'), { actorId: callerId(req), action: archived ? 'project.archive' : 'project.unarchive', targetType: 'project', targetId: idParam(req, 'pid'), summary: archived ? 'Archived the project' : 'Unarchived the project' });
   ok(res, { archived });
 }));
 
 router.delete('/projects/:pid', asyncHandler(async (req, res) => {
   const { confirmKey } = parse(z.object({ confirmKey: z.string() }), req.body);
   await projects.deleteProject(callerId(req), idParam(req, 'pid'), confirmKey);
+  await auditProject(idParam(req, 'pid'), { actorId: callerId(req), action: 'project.delete', targetType: 'project', targetId: idParam(req, 'pid'), summary: `Deleted project ${confirmKey.toUpperCase()} (restorable from workspace trash)` });
   ok(res, { deleted: true });
 }));
 
 router.put('/projects/:pid/members/:userId', asyncHandler(async (req, res) => {
   const { role } = parse(z.object({ role: z.enum(PROJECT_ROLES) }), req.body);
   await projects.setProjectMember(callerId(req), idParam(req, 'pid'), idParam(req, 'userId'), role);
+  await auditProject(idParam(req, 'pid'), { actorId: callerId(req), action: 'project.member_role', targetType: 'user', targetId: idParam(req, 'userId'), summary: `Set ${await who(idParam(req, 'userId'))}'s project role to ${role}` });
   ok(res, { updated: true });
 }));
 
 router.delete('/projects/:pid/members/:userId', asyncHandler(async (req, res) => {
   await projects.removeProjectMember(callerId(req), idParam(req, 'pid'), idParam(req, 'userId'));
+  await auditProject(idParam(req, 'pid'), { actorId: callerId(req), action: 'project.member_remove', targetType: 'user', targetId: idParam(req, 'userId'), summary: `Removed ${await who(idParam(req, 'userId'))} from the project` });
   ok(res, { removed: true });
 }));
 
@@ -354,6 +402,7 @@ router.post('/projects/:pid/issues/:num/move', asyncHandler(async (req, res) => 
 
 router.delete('/projects/:pid/issues/:num', asyncHandler(async (req, res) => {
   await issues.deleteIssueAs(callerId(req), idParam(req, 'pid'), idParam(req, 'num'));
+  await auditProject(idParam(req, 'pid'), { actorId: callerId(req), action: 'issue.delete', targetType: 'issue', summary: `Moved issue #${idParam(req, 'num')} to trash` });
   ok(res, { deleted: true });
 }));
 
@@ -916,6 +965,111 @@ router.put('/me/notify-settings', asyncHandler(async (req, res) => {
   const hour = z.number().int().min(0).max(23).nullable();
   const body = parse(z.object({ emailMode: z.enum(EMAIL_MODES).optional(), quietStart: hour.optional(), quietEnd: hour.optional() }), req.body);
   ok(res, await setNotifySettings(callerId(req), body));
+}));
+
+// ═══ Tích hợp, quản trị, chia sẻ (đợt 7) ═══════════════════════════
+
+router.get('/projects/:pid/github', asyncHandler(async (req, res) => {
+  ok(res, await github.getConnection(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/github', asyncHandler(async (req, res) => {
+  const { rotate } = parse(z.object({ rotate: z.boolean().optional() }), req.body ?? {});
+  ok(res, await github.connect(callerId(req), idParam(req, 'pid'), rotate ?? false), 201);
+}));
+router.patch('/projects/:pid/github', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ repoFullName: z.string().max(200).nullable().optional(), prOpenedStatusId: id.nullable().optional(), prMergedStatusId: id.nullable().optional() }), req.body);
+  ok(res, await github.updateConnection(callerId(req), idParam(req, 'pid'), body));
+}));
+router.delete('/projects/:pid/github', asyncHandler(async (req, res) => {
+  await github.disconnect(callerId(req), idParam(req, 'pid'));
+  ok(res, { disconnected: true });
+}));
+router.get('/projects/:pid/issues/:num/dev', asyncHandler(async (req, res) => {
+  ok(res, await github.devActivity(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+
+router.get('/projects/:pid/export', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ format: z.enum(['csv', 'xlsx', 'pdf']).default('csv'), jql: z.string().max(4000).default('') }), req.query);
+  const data = await exchange.exportRows(callerId(req), idParam(req, 'pid'), q.jql);
+  const stamp = new Date().toISOString().slice(0, 10);
+  const file = `${data.key}-issues-${stamp}`;
+  if (q.format === 'csv') {
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${file}.csv"`);
+    res.send(exchange.toCsv(data.rows));
+  } else if (q.format === 'xlsx') {
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="${file}.xlsx"`);
+    res.send(exchange.toXlsx(data.rows, data.key));
+  } else {
+    const pdf = await exchange.toPdf(`${data.name} (${data.key})`, `${data.rows.length} issues · ${q.jql || 'all issues'} · exported ${stamp}`, data.rows);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${file}.pdf"`);
+    res.send(pdf);
+  }
+}));
+router.post('/projects/:pid/import', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ csv: z.string().min(1).max(8_000_000), dryRun: z.boolean().default(true) }), req.body);
+  ok(res, await exchange.importCsv(callerId(req), idParam(req, 'pid'), body));
+}));
+
+router.get('/workspaces/:wsId/audit', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ projectId: id.optional(), action: z.string().max(48).optional(), before: id.optional(), limit: z.coerce.number().int().min(1).max(200).optional() }), req.query);
+  ok(res, await listAudit(callerId(req), idParam(req, 'wsId'), q));
+}));
+
+router.get('/projects/:pid/trash', asyncHandler(async (req, res) => {
+  ok(res, await trash.listDeletedIssues(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/trash/:num/restore', asyncHandler(async (req, res) => {
+  await trash.restoreIssue(callerId(req), idParam(req, 'pid'), idParam(req, 'num'));
+  ok(res, { restored: true });
+}));
+router.delete('/projects/:pid/trash/:num', asyncHandler(async (req, res) => {
+  await trash.purgeIssue(callerId(req), idParam(req, 'pid'), idParam(req, 'num'));
+  ok(res, { purged: true });
+}));
+router.get('/workspaces/:wsId/trash', asyncHandler(async (req, res) => {
+  ok(res, await trash.listDeletedProjects(callerId(req), idParam(req, 'wsId')));
+}));
+router.post('/workspaces/:wsId/trash/projects/:pid/restore', asyncHandler(async (req, res) => {
+  await trash.restoreProject(callerId(req), idParam(req, 'wsId'), idParam(req, 'pid'));
+  ok(res, { restored: true });
+}));
+router.get('/me/trash/workspaces', asyncHandler(async (req, res) => {
+  ok(res, await trash.listDeletedWorkspaces(callerId(req)));
+}));
+router.post('/me/trash/workspaces/:wsId/restore', asyncHandler(async (req, res) => {
+  await trash.restoreWorkspace(callerId(req), idParam(req, 'wsId'));
+  ok(res, { restored: true });
+}));
+
+router.get('/projects/:pid/share-links', asyncHandler(async (req, res) => {
+  ok(res, await share.listLinks(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/share-links', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    label: z.string().max(100).nullable().optional(),
+    options: z.object({ board: z.boolean(), backlog: z.boolean(), reports: z.boolean(), tests: z.boolean(), descriptions: z.boolean() }).partial().optional(),
+    expiresInDays: z.number().int().min(1).max(365).nullable().optional(),
+  }), req.body);
+  ok(res, await share.createLink(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.delete('/projects/:pid/share-links/:linkId', asyncHandler(async (req, res) => {
+  await share.revokeLink(callerId(req), idParam(req, 'pid'), idParam(req, 'linkId'));
+  ok(res, { revoked: true });
+}));
+
+router.get('/me/api-tokens', asyncHandler(async (req, res) => {
+  ok(res, await apiTokens.listTokens(callerId(req)));
+}));
+router.post('/me/api-tokens', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ name: z.string().min(1).max(100), scopes: z.array(z.enum(apiTokens.TOKEN_SCOPES)).max(2).default(['read']), expiresInDays: z.number().int().min(1).max(365).nullable().optional() }), req.body);
+  ok(res, await apiTokens.createToken(callerId(req), body), 201);
+}));
+router.delete('/me/api-tokens/:tokenId', asyncHandler(async (req, res) => {
+  await apiTokens.revokeToken(callerId(req), idParam(req, 'tokenId'));
+  ok(res, { revoked: true });
 }));
 
 export default router;

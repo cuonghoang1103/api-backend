@@ -470,6 +470,56 @@ export interface RuleLog {
 export type EmailMode = 'INSTANT' | 'DIGEST' | 'OFF';
 export interface NotifySettings { emailMode: EmailMode; quietStart: number | null; quietEnd: number | null }
 
+// ─── Tích hợp, quản trị, chia sẻ (đợt 7) ───────────────────────
+export interface GithubConnection {
+  connected: boolean; webhookUrl: string; secret?: string | null; repoFullName?: string | null;
+  config?: { prOpenedStatusId?: number | null; prMergedStatusId?: number | null }; lastEventAt?: string | null;
+}
+export interface DevItem { id: number; kind: 'COMMIT' | 'BRANCH' | 'PR'; externalId: string; title: string; url: string; state: string | null; author: string | null; repo: string | null; createdAt: string; updatedAt: string }
+export interface DevActivity { branches: DevItem[]; commits: DevItem[]; pullRequests: DevItem[] }
+export interface ImportPreviewRow { row: number; summary: string; type: string; status: string; parent: string | null; errors: string[]; warnings: string[] }
+export type ImportResult =
+  | { dryRun: true; total: number; valid: number; rows: ImportPreviewRow[] }
+  | { dryRun: false; total: number; created: number; skipped: number; failures: Array<{ row: number; error: string }> };
+export interface AuditItem {
+  id: number; projectId: number | null; actorId: number | null; actorName: string | null; action: string; targetType: string | null; targetId: number | null;
+  summary: string; detail: unknown; createdAt: string; project: { id: number; key: string; name: string } | null;
+}
+export interface TrashIssue { id: number; number: number; title: string; deletedAt: string; typeId: number; statusId: number; parentId: number | null; reporter: WorkUser | null; deletedBy: WorkUser | null }
+export interface TrashProject { id: number; key: string; name: string; deletedAt: string; _count: { issues: number } }
+export interface TrashWorkspace { id: number; name: string; slug: string; deletedAt: string; _count: { projects: number } }
+export interface ShareOptions { board: boolean; backlog: boolean; reports: boolean; tests: boolean; descriptions: boolean }
+export interface ShareLink {
+  id: number; token: string; url: string; label: string | null; options: ShareOptions; expiresAt: string | null; expired: boolean;
+  viewCount: number; lastViewedAt: string | null; createdAt: string;
+}
+export type TokenScope = 'read' | 'write';
+export interface ApiToken { id: number; name: string; prefix: string; scopes: TokenScope[]; expiresAt: string | null; lastUsedAt: string | null; lastUsedIp: string | null; createdAt: string }
+/** Dữ liệu trang công khai /work/share/[token] — không có email, bình luận, file. */
+export interface ShareSummary {
+  label: string | null; options: ShareOptions; expiresAt: string | null;
+  project: { key: string; name: string; description: string | null; type: ProjectType; archived: boolean; workspace: string };
+  workflows: Array<{ id: number; isDefault: boolean; statuses: Array<{ id: number; name: string; category: StatusCategory; color: string; position: number }> }>;
+  issueTypes: Array<{ id: number; key: string; name: string; icon: string; color: string; level: number }>;
+  sprints: WorkSprint[]; labels: WorkLabel[]; members: Array<{ id: number; name: string; avatarUrl: string | null }>;
+}
+export interface ShareIssue {
+  key: string; number: number; title: string; typeId: number; statusId: number; parentId: number | null; sprintId: number | null; priority: number;
+  assigneeId: number | null; storyPoints: number | null; dueDate: string | null; resolvedAt: string | null; rank: string;
+}
+export interface ShareIssueDetail extends ShareIssue {
+  description: string | null; startDate: string | null; createdAt: string; parent: { number: number; title: string } | null;
+  children: Array<{ number: number; title: string; statusId: number }>;
+}
+export interface ShareReports {
+  unit: EstimationUnit; totals: { issues: number; done: number; points: number; donePoints: number };
+  burndown: BurndownData | null; velocity: VelocityData | null;
+}
+export interface ShareTestCycle {
+  id: number; name: string; environment: string | null; build: string | null; state: CycleState; createdAt: string;
+  total: number; counts: Record<string, number>; executed: number; passRate: number | null;
+}
+
 /** Lỗi hết lượt AI miễn phí (402) — giao diện hiện hộp "Upgrade to Pro". */
 export function isAiQuotaError(err: unknown): boolean {
   const e = err as { response?: { status?: number; data?: { code?: string } } };
@@ -720,6 +770,44 @@ export const workApi = {
     d<{ status: RuleLogStatus; message: string }>(api.post(`${B}/projects/${pid}/automation/${ruleId}/test`, { number })),
   notifySettings: () => d<NotifySettings>(api.get(`${B}/me/notify-settings`)),
   setNotifySettings: (body: Partial<NotifySettings>) => d<NotifySettings>(api.put(`${B}/me/notify-settings`, body)),
+
+  // Tích hợp, quản trị, chia sẻ
+  github: (pid: number) => d<GithubConnection>(api.get(`${B}/projects/${pid}/github`)),
+  connectGithub: (pid: number, rotate = false) => d<GithubConnection>(api.post(`${B}/projects/${pid}/github`, { rotate })),
+  updateGithub: (pid: number, body: { repoFullName?: string | null; prOpenedStatusId?: number | null; prMergedStatusId?: number | null }) =>
+    d<GithubConnection>(api.patch(`${B}/projects/${pid}/github`, body)),
+  disconnectGithub: (pid: number) => d(api.delete(`${B}/projects/${pid}/github`)),
+  devActivity: (pid: number, num: number) => d<DevActivity>(api.get(`${B}/projects/${pid}/issues/${num}/dev`)),
+  /** Tải file xuất (CSV/Excel/PDF) — trả Blob để trình duyệt lưu. */
+  exportIssues: async (pid: number, format: 'csv' | 'xlsx' | 'pdf', jql = '') => {
+    const res = await api.get(`${B}/projects/${pid}/export${params({ format, jql })}`, { responseType: 'blob', timeout: 120_000 });
+    const cd = String(res.headers['content-disposition'] ?? '');
+    const name = /filename="([^"]+)"/.exec(cd)?.[1] ?? `issues.${format}`;
+    return { blob: res.data as Blob, fileName: name };
+  },
+  importIssues: (pid: number, body: { csv: string; dryRun: boolean }) => d<ImportResult>(api.post(`${B}/projects/${pid}/import`, body, { timeout: 300_000 })),
+  audit: (wsId: number, q: { projectId?: number; action?: string; before?: number; limit?: number } = {}) =>
+    d<{ items: AuditItem[]; nextBefore: number | null }>(api.get(`${B}/workspaces/${wsId}/audit${params(q)}`)),
+  trash: (pid: number) => d<TrashIssue[]>(api.get(`${B}/projects/${pid}/trash`)),
+  restoreIssue: (pid: number, num: number) => d(api.post(`${B}/projects/${pid}/trash/${num}/restore`)),
+  purgeIssue: (pid: number, num: number) => d(api.delete(`${B}/projects/${pid}/trash/${num}`)),
+  projectTrash: (wsId: number) => d<TrashProject[]>(api.get(`${B}/workspaces/${wsId}/trash`)),
+  restoreProject: (wsId: number, pid: number) => d(api.post(`${B}/workspaces/${wsId}/trash/projects/${pid}/restore`)),
+  workspaceTrash: () => d<TrashWorkspace[]>(api.get(`${B}/me/trash/workspaces`)),
+  restoreWorkspace: (wsId: number) => d(api.post(`${B}/me/trash/workspaces/${wsId}/restore`)),
+  shareLinks: (pid: number) => d<ShareLink[]>(api.get(`${B}/projects/${pid}/share-links`)),
+  createShareLink: (pid: number, body: { label?: string | null; options?: Partial<ShareOptions>; expiresInDays?: number | null }) =>
+    d<ShareLink>(api.post(`${B}/projects/${pid}/share-links`, body)),
+  revokeShareLink: (pid: number, linkId: number) => d(api.delete(`${B}/projects/${pid}/share-links/${linkId}`)),
+  apiTokens: () => d<ApiToken[]>(api.get(`${B}/me/api-tokens`)),
+  createApiToken: (body: { name: string; scopes: TokenScope[]; expiresInDays?: number | null }) => d<ApiToken & { token: string }>(api.post(`${B}/me/api-tokens`, body)),
+  revokeApiToken: (id: number) => d(api.delete(`${B}/me/api-tokens/${id}`)),
+  // Trang công khai (không cần đăng nhập)
+  share: (token: string) => d<ShareSummary>(api.get(`${B}/share/${encodeURIComponent(token)}`)),
+  shareIssues: (token: string, section: 'board' | 'backlog') => d<ShareIssue[]>(api.get(`${B}/share/${encodeURIComponent(token)}/issues?section=${section}`)),
+  shareIssue: (token: string, num: number) => d<ShareIssueDetail>(api.get(`${B}/share/${encodeURIComponent(token)}/issues/${num}`)),
+  shareReports: (token: string) => d<ShareReports>(api.get(`${B}/share/${encodeURIComponent(token)}/reports`)),
+  shareTests: (token: string) => d<ShareTestCycle[]>(api.get(`${B}/share/${encodeURIComponent(token)}/tests`)),
 
   /** Tải file thẳng lên R2: xin URL ký sẵn → PUT → báo hoàn tất. */
   async uploadAttachment(pid: number, num: number, file: File, onProgress?: (pct: number) => void): Promise<IssueAttachment> {

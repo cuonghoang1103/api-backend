@@ -114,6 +114,7 @@ export async function getProjectConfig(userId: number, projectId: number) {
       },
       issueTypes: { where: { archived: false }, orderBy: { position: 'asc' }, select: { id: true, key: true, name: true, icon: true, color: true, level: true, workflowId: true } },
       labels: { orderBy: { name: 'asc' }, select: { id: true, name: true, color: true } },
+      customFields: { orderBy: [{ position: 'asc' }, { id: 'asc' }], select: { id: true, name: true, kind: true, options: true, typeKeys: true, required: true, position: true } },
       components: { orderBy: { name: 'asc' }, select: { id: true, name: true, description: true, leadId: true } },
       sprints: {
         where: { state: { not: 'CLOSED' } },

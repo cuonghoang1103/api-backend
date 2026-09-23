@@ -64,7 +64,7 @@ export interface WorkspaceDetail {
 export interface WorkStatus { id: number; name: string; category: StatusCategory; color: string; position: number; wipLimit: number | null }
 export interface WorkTransition { id: number; fromStatusId: number | null; toStatusId: number; name: string | null }
 export interface WorkWorkflow { id: number; name: string; isDefault: boolean; statuses: WorkStatus[]; transitions: WorkTransition[] }
-export interface WorkIssueType { id: number; key: IssueTypeKey; name: string; icon: string; color: string; level: number; workflowId: number | null }
+export interface WorkIssueType { id: number; key: IssueTypeKey | (string & {}); name: string; icon: string; color: string; level: number; workflowId: number | null }
 export interface WorkLabel { id: number; name: string; color: string }
 export interface WorkComponent { id: number; name: string; description: string | null; leadId: number | null }
 export interface WorkSprint { id: number; name: string; goal: string | null; state: 'PLANNED' | 'ACTIVE' | 'CLOSED'; startAt: string | null; endAt: string | null }
@@ -107,6 +107,7 @@ export interface ProjectConfig {
   permissions: ProjectPermissions;
   boardColumns: BoardColumn[];
   members: ProjectMember[];
+  customFields: CustomField[];
 }
 
 /** Một thẻ trên board / danh sách. */
@@ -404,6 +405,24 @@ export interface MyWorkItem {
 }
 export interface MyWorkData { items: MyWorkItem[]; counts: { overdue: number; dueToday: number; dueSoon: number; inProgress: number; total: number } }
 
+// ─── Tuỳ biến & tìm kiếm (đợt 5) ───────────────────────────────
+export type CustomKind = 'TEXT' | 'NUMBER' | 'DATE' | 'SELECT' | 'MULTISELECT' | 'USER' | 'URL' | 'CHECKBOX';
+export interface CustomOption { id: string; label: string; color: string }
+export interface CustomField { id: number; name: string; kind: CustomKind; options: CustomOption[]; typeKeys: string[] | null; required: boolean; position: number }
+/** Giá trị theo kiểu: TEXT/URL/DATE(YYYY-MM-DD)/SELECT(option id) = string, NUMBER/USER = number, CHECKBOX = boolean, MULTISELECT = string[]. */
+export type CustomValue = string | number | boolean | string[] | null;
+export type CustomValues = Record<string, CustomValue>;
+export type GroupBy = 'status' | 'statusCategory' | 'assignee' | 'type' | 'priority' | 'label' | 'sprint' | 'component';
+export interface StatsGroup { key: string; label: string; count: number; points: number; color?: string }
+export interface StatsData { unit: EstimationUnit; total: number; groups: StatsGroup[] }
+export interface SavedFilter { id: number; name: string; query: string; shared: boolean; ownerId: number; updatedAt: string; owner: { username: string } }
+export type WidgetKind = 'filter' | 'pie' | 'bar' | 'counter' | 'created_resolved' | 'burndown' | 'my_issues' | 'text' | 'health';
+export interface DashboardWidget {
+  id: string; kind: WidgetKind; title: string; query?: string; groupBy?: GroupBy; sprintId?: number | null; days?: number; text?: string; size?: 'half' | 'full';
+}
+export interface WorkDashboard { id: number; name: string; shared: boolean; ownerId: number; widgets: DashboardWidget[]; updatedAt: string }
+export interface SearchResult { total: number; items: IssueCard[]; offset: number; limit: number }
+
 /** Lỗi hết lượt AI miễn phí (402) — giao diện hiện hộp "Upgrade to Pro". */
 export function isAiQuotaError(err: unknown): boolean {
   const e = err as { response?: { status?: number; data?: { code?: string } } };
@@ -574,6 +593,41 @@ export const workApi = {
     d<Array<{ userId: number; username: string; name: string; openIssues: number; load: number; familiarity: number }>>(
       api.get(`${B}/projects/${pid}/suggest-assignee${q.parentId || q.labelIds?.length ? `?${new URLSearchParams({ ...(q.parentId ? { parentId: String(q.parentId) } : {}), ...(q.labelIds?.length ? { labels: q.labelIds.join(',') } : {}) })}` : ''}`)),
   myWork: () => d<MyWorkData>(api.get(`${B}/me/work`)),
+
+  // Tuỳ biến & tìm kiếm
+  createWorkflow: (pid: number, body: { name: string; copyFrom?: number | null }) => d<{ id: number }>(api.post(`${B}/projects/${pid}/workflows`, body)),
+  addStatus: (pid: number, wfId: number, body: { name: string; category: StatusCategory; color?: string }) => d<WorkStatus>(api.post(`${B}/projects/${pid}/workflows/${wfId}/statuses`, body)),
+  reorderStatuses: (pid: number, wfId: number, statusIds: number[]) => d(api.put(`${B}/projects/${pid}/workflows/${wfId}/order`, { statusIds })),
+  setTransitions: (pid: number, wfId: number, body: { mode: 'free' | 'restricted'; transitions?: Array<{ from: number | null; to: number }> }) =>
+    d(api.put(`${B}/projects/${pid}/workflows/${wfId}/transitions`, body)),
+  updateStatus: (pid: number, statusId: number, body: { name?: string; category?: StatusCategory; color?: string; wipLimit?: number | null }) =>
+    d(api.patch(`${B}/projects/${pid}/statuses/${statusId}`, body)),
+  deleteStatus: (pid: number, statusId: number, moveTo?: number) => d(api.delete(`${B}/projects/${pid}/statuses/${statusId}${moveTo ? `?moveTo=${moveTo}` : ''}`)),
+  setBoardColumns: (pid: number, columns: Array<{ name: string; statusIds: number[]; wipLimit?: number | null }> | null) =>
+    d(api.put(`${B}/projects/${pid}/board-columns`, { columns })),
+  addIssueType: (pid: number, body: { name: string; level: 0 | -1 | 1; color?: string; icon?: string; workflowId?: number | null }) =>
+    d<WorkIssueType>(api.post(`${B}/projects/${pid}/issue-types`, body)),
+  updateIssueType: (pid: number, typeId: number, body: { name?: string; color?: string; icon?: string; archived?: boolean; workflowId?: number | null }) =>
+    d(api.patch(`${B}/projects/${pid}/issue-types/${typeId}`, body)),
+  customFields: (pid: number) => d<CustomField[]>(api.get(`${B}/projects/${pid}/custom-fields`)),
+  createCustomField: (pid: number, body: { name: string; kind: CustomKind; options?: Array<{ label: string; color?: string }>; typeKeys?: string[] | null; required?: boolean }) =>
+    d<CustomField>(api.post(`${B}/projects/${pid}/custom-fields`, body)),
+  updateCustomField: (pid: number, fieldId: number, body: { name?: string; options?: Array<{ id?: string; label: string; color?: string }>; typeKeys?: string[] | null; required?: boolean; position?: number }) =>
+    d(api.patch(`${B}/projects/${pid}/custom-fields/${fieldId}`, body)),
+  deleteCustomField: (pid: number, fieldId: number) => d(api.delete(`${B}/projects/${pid}/custom-fields/${fieldId}`)),
+  customValues: (pid: number, num: number) => d<CustomValues>(api.get(`${B}/projects/${pid}/issues/${num}/custom-values`)),
+  setCustomValues: (pid: number, num: number, values: CustomValues) => d<CustomValues>(api.put(`${B}/projects/${pid}/issues/${num}/custom-values`, { values })),
+  search: (pid: number, jql: string, opts: { limit?: number; offset?: number } = {}) =>
+    d<SearchResult>(api.get(`${B}/projects/${pid}/search?${new URLSearchParams({ jql, ...(opts.limit ? { limit: String(opts.limit) } : {}), ...(opts.offset ? { offset: String(opts.offset) } : {}) })}`)),
+  stats: (pid: number, groupBy: GroupBy, jql = '') => d<StatsData>(api.get(`${B}/projects/${pid}/stats?${new URLSearchParams({ groupBy, jql })}`)),
+  createdResolved: (pid: number, days = 30, jql = '') =>
+    d<Array<{ day: string; created: number; resolved: number }>>(api.get(`${B}/projects/${pid}/stats/created-resolved?${new URLSearchParams({ days: String(days), jql })}`)),
+  savedFilters: (pid: number) => d<SavedFilter[]>(api.get(`${B}/projects/${pid}/filters`)),
+  saveFilter: (pid: number, body: { id?: number; name: string; query: string; shared?: boolean }) => d<SavedFilter>(api.post(`${B}/projects/${pid}/filters`, body)),
+  deleteFilter: (pid: number, filterId: number) => d(api.delete(`${B}/projects/${pid}/filters/${filterId}`)),
+  dashboards: (pid: number) => d<WorkDashboard[]>(api.get(`${B}/projects/${pid}/dashboards`)),
+  saveDashboard: (pid: number, body: { id?: number; name: string; shared?: boolean; widgets: DashboardWidget[] }) => d<WorkDashboard>(api.post(`${B}/projects/${pid}/dashboards`, body)),
+  deleteDashboard: (pid: number, dashId: number) => d(api.delete(`${B}/projects/${pid}/dashboards/${dashId}`)),
 
   /** Tải file thẳng lên R2: xin URL ký sẵn → PUT → báo hoàn tất. */
   async uploadAttachment(pid: number, num: number, file: File, onProgress?: (pct: number) => void): Promise<IssueAttachment> {

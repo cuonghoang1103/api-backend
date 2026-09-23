@@ -9850,8 +9850,12 @@ model WorkIssue {
   deletedAt            DateTime? @map("deleted_at")
 
   project     WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  type        WorkIssueType        @relation(fields: [typeId], references: [id], onDelete: Restrict)
-  status      WorkStatus           @relation(fields: [statusId], references: [id], onDelete: Restrict)
+  // NoAction chứ KHÔNG Restrict: Postgres kiểm RESTRICT ngay lập tức, nên xoá
+  // dự án (cascade xuống loại thẻ, trạng thái VÀ thẻ) bị chặn khi loại thẻ bị
+  // xoá trước thẻ. NO ACTION kiểm ở cuối câu lệnh — xoá dây chuyền chạy được,
+  // còn xoá riêng một trạng thái đang có thẻ vẫn bị chặn. Bắt được bằng test DB.
+  type        WorkIssueType        @relation(fields: [typeId], references: [id], onDelete: NoAction)
+  status      WorkStatus           @relation(fields: [statusId], references: [id], onDelete: NoAction)
   parent      WorkIssue?           @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
   children    WorkIssue[]          @relation("WorkIssueParent")
   sprint      WorkSprint?          @relation(fields: [sprintId], references: [id], onDelete: SetNull)

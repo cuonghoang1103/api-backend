@@ -339,6 +339,11 @@ thêm một route GET không cần tham số vào smoke-test của `deploy.sh`.
    Token chỉ dành cho công cụ bên ngoài: GitHub Actions đẩy kết quả test, script, Claude
    Code/MCP đọc-ghi thẻ.
 
+5. **Toàn bộ sản phẩm bằng TIẾNG ANH** (chốt 23/09): mọi chữ trên giao diện web/app, thông
+   báo lỗi API, email, thông báo, mẫu dự án, dữ liệu mẫu. Trợ lý AI mặc định trả lời tiếng
+   Anh, nhưng người dùng viết tiếng Việt thì AI trả lời tiếng Việt. Chú thích trong mã vẫn
+   viết tiếng Việt theo quy ước của repo.
+
 ## 12. Cách làm an toàn khi nhiều phiên cùng sửa repo
 
 Phát triển trên **nhánh `feat/ct-work` trong git worktree riêng**, không sửa thẳng cây làm

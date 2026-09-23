@@ -69,16 +69,27 @@ async function findSprint(projectId: number, sprintId: number) {
   return s;
 }
 
+/**
+ * Tên mặc định "Sprint N" — N = số sprint của dự án + 1, nhưng nhảy qua số đã
+ * có người đặt (xoá sprint rồi tạo lại không ra hai "Sprint 3"). Nhận cả tên
+ * kiểu cũ "KEY Sprint N".
+ */
+export async function nextSprintName(projectId: number): Promise<string> {
+  const rows = await prisma.workSprint.findMany({ where: { projectId }, select: { name: true } });
+  const used = rows.map((r) => /^(?:[A-Z][A-Z0-9]* )?Sprint (\d+)$/i.exec(r.name.trim())?.[1]).filter(Boolean).map(Number);
+  return `Sprint ${Math.max(rows.length, ...used) + 1}`;
+}
+
 export async function createSprint(userId: number, projectId: number, input: { name?: string; goal?: string | null } = {}) {
-  const access = await requireProject(userId, projectId, 'sprint.manage');
-  const [count, last] = await Promise.all([
-    prisma.workSprint.count({ where: { projectId } }),
+  await requireProject(userId, projectId, 'sprint.manage');
+  const [defaultName, last] = await Promise.all([
+    nextSprintName(projectId),
     prisma.workSprint.findFirst({ where: { projectId }, orderBy: { position: 'desc' }, select: { position: true } }),
   ]);
   const sprint = await prisma.workSprint.create({
     data: {
       projectId,
-      name: input.name?.trim().slice(0, 100) || `${access.key} Sprint ${count + 1}`,
+      name: input.name?.trim().slice(0, 100) || defaultName,
       goal: input.goal?.trim() || null,
       position: (last?.position ?? 0) + 1,
     },
@@ -243,7 +254,7 @@ export async function computeSprintReport(projectId: number, sprintId: number): 
  * 'backlog', 'new' (tạo sprint mới), hoặc id một sprint chưa bắt đầu.
  */
 export async function completeSprint(userId: number, projectId: number, sprintId: number, moveTo: 'backlog' | 'new' | number) {
-  const access = await requireProject(userId, projectId, 'sprint.manage');
+  await requireProject(userId, projectId, 'sprint.manage');
   const s = await findSprint(projectId, sprintId);
   if (s.state !== 'ACTIVE') throw new BadRequestError('Only the running sprint can be completed', 'WORK_SPRINT_NOT_ACTIVE');
   await snapshotSprint(sprintId);
@@ -251,9 +262,9 @@ export async function completeSprint(userId: number, projectId: number, sprintId
 
   let targetId: number | null = null;
   if (moveTo === 'new') {
-    const n = await prisma.workSprint.count({ where: { projectId } });
+    const name = await nextSprintName(projectId);
     const last = await prisma.workSprint.findFirst({ where: { projectId }, orderBy: { position: 'desc' }, select: { position: true } });
-    targetId = (await prisma.workSprint.create({ data: { projectId, name: `${access.key} Sprint ${n + 1}`, position: (last?.position ?? 0) + 1 } })).id;
+    targetId = (await prisma.workSprint.create({ data: { projectId, name, position: (last?.position ?? 0) + 1 } })).id;
   } else if (typeof moveTo === 'number') {
     const t = await prisma.workSprint.findFirst({ where: { id: moveTo, projectId }, select: { state: true } });
     if (!t || t.state !== 'PLANNED' || moveTo === sprintId) throw new BadRequestError('Choose a sprint that has not started', 'WORK_BAD_SPRINT');

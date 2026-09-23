@@ -21,11 +21,55 @@ type TokKind = 'word' | 'string' | 'op' | 'lparen' | 'rparen' | 'comma' | 'eof';
 interface Tok { kind: TokKind; value: string; pos: number }
 
 export class JqlError extends Error {
-  constructor(message: string, public pos: number) {
+  /** `suggestion`: giá trị/trường gần đúng nhất ("did you mean") — client tự thay vào. */
+  constructor(message: string, public pos: number, public suggestion?: string) {
     super(message);
     this.name = 'JqlError';
   }
 }
+
+// ─── Gợi ý "did you mean" ────────────────────────────────────────
+
+/** Khoảng cách Levenshtein có tính đảo hai ký tự kề nhau = 1 ("Bgu" → "Bug"). */
+export function levenshtein(a: string, b: string): number {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  const d: number[][] = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 0; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+    }
+  }
+  return d[a.length][b.length];
+}
+
+/**
+ * Ứng viên gần nhất: trùng tiền tố (gõ dở "In Prog") thắng trước, rồi
+ * Levenshtein ≤ 2 (≤ 1 với từ ngắn ≤ 3 ký tự để "QA" không gợi ý "API").
+ */
+export function suggest(input: string, candidates: string[]): string | undefined {
+  const q = input.trim().toLowerCase().replace(/^@/, '');
+  if (!q) return undefined;
+  const uniq = [...new Set(candidates.filter(Boolean))];
+  const prefix = uniq.filter((c) => c.toLowerCase().startsWith(q) || (q.length >= 3 && q.startsWith(c.toLowerCase()) && c.length >= 3));
+  if (prefix.length) return prefix.sort((a, b) => a.length - b.length)[0];
+  let best: string | undefined;
+  let bestD = Infinity;
+  for (const c of uniq) {
+    const d = levenshtein(q, c.toLowerCase());
+    const limit = Math.min(q.length, c.length) <= 3 ? 1 : 2;
+    if (d <= limit && d < bestD) { best = c; bestD = d; }
+  }
+  return best;
+}
+
+/** Giá trị có dấu cách/ký tự lạ thì trả kèm dấu nháy để thay thẳng vào truy vấn. */
+const quoteIfNeeded = (v: string) => (/^[\p{L}\p{N}_\-.:/+@]+(\(\))?$/u.test(v) ? v : `"${v.replace(/"/g, '\\"')}"`);
+const didYouMean = (msg: string, hit: string | undefined) => (hit ? `${msg}. Did you mean ${quoteIfNeeded(hit)}?` : msg);
 
 const OPS = ['!~', '!=', '>=', '<=', '=', '>', '<', '~'];
 
@@ -64,7 +108,8 @@ function tokenize(src: string): Tok[] {
 
 // ─── Cây cú pháp ─────────────────────────────────────────────────
 
-export type JqlValue = { kind: 'literal'; value: string; quoted: boolean } | { kind: 'fn'; name: string; args: string[] };
+/** `pos`: vị trí của CHÍNH giá trị trong chuỗi (để tô đỏ đúng chỗ sai). */
+export type JqlValue = { kind: 'literal'; value: string; quoted: boolean; pos?: number } | { kind: 'fn'; name: string; args: string[]; pos?: number };
 export type Operator = '=' | '!=' | '>' | '>=' | '<' | '<=' | '~' | '!~' | 'in' | 'not in' | 'is empty' | 'is not empty';
 
 export type JqlNode =
@@ -72,7 +117,12 @@ export type JqlNode =
   | { kind: 'not'; child: JqlNode }
   | { kind: 'clause'; field: string; op: Operator; values: JqlValue[]; pos: number };
 
-export interface JqlQuery { where: JqlNode | null; orderBy: Array<{ field: string; dir: 'asc' | 'desc' }> }
+export interface JqlQuery {
+  where: JqlNode | null;
+  orderBy: Array<{ field: string; dir: 'asc' | 'desc' }>;
+  /** Vị trí từng trường trong ORDER BY (song song với orderBy). */
+  orderPos?: number[];
+}
 
 const upper = (s: string) => s.toUpperCase();
 
@@ -90,7 +140,7 @@ export function parseJql(src: string): JqlQuery {
 
   function value(): JqlValue {
     const t = next();
-    if (t.kind === 'string') return { kind: 'literal', value: t.value, quoted: true };
+    if (t.kind === 'string') return { kind: 'literal', value: t.value, quoted: true, pos: t.pos };
     if (t.kind !== 'word') throw new JqlError('Expected a value', t.pos);
     if (peek().kind === 'lparen') {
       next();
@@ -102,9 +152,9 @@ export function parseJql(src: string): JqlQuery {
         if (peek().kind === 'comma') next();
       }
       next();
-      return { kind: 'fn', name: t.value.toLowerCase(), args };
+      return { kind: 'fn', name: t.value.toLowerCase(), args, pos: t.pos };
     }
-    return { kind: 'literal', value: t.value, quoted: false };
+    return { kind: 'literal', value: t.value, quoted: false, pos: t.pos };
   }
 
   function clause(): JqlNode {
@@ -170,6 +220,7 @@ export function parseJql(src: string): JqlQuery {
   let where: JqlNode | null = null;
   if (peek().kind !== 'eof' && !isWord('ORDER')) where = orExpr();
   const orderBy: JqlQuery['orderBy'] = [];
+  const orderPos: number[] = [];
   if (isWord('ORDER')) {
     next();
     if (!isWord('BY')) throw new JqlError('Expected BY after ORDER', peek().pos);
@@ -181,10 +232,11 @@ export function parseJql(src: string): JqlQuery {
       if (isWord('ASC')) next();
       else if (isWord('DESC')) { next(); dir = 'desc'; }
       orderBy.push({ field: f.value, dir });
+      orderPos.push(f.pos);
     } while (peek().kind === 'comma' && next());
   }
   if (peek().kind !== 'eof') throw new JqlError(`Unexpected "${peek().value}"`, peek().pos);
-  return { where, orderBy };
+  return { where, orderBy, orderPos };
 }
 
 // ─── Ngày tương đối ──────────────────────────────────────────────
@@ -268,27 +320,37 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
   const lc = (s: string) => s.toLowerCase();
   const now = ctx.now ?? new Date();
 
-  const fail = (msg: string, pos: number): never => { throw new JqlError(msg, pos); };
-  const lit = (v: JqlValue, pos: number): string => (v.kind === 'literal' ? v.value : fail(`${v.name}() is not allowed here`, pos));
+  // suggestion gửi cho client ở dạng thay-thẳng-vào-truy-vấn (có nháy nếu cần).
+  const fail = (msg: string, pos: number, suggestion?: string): never => { throw new JqlError(msg, pos, suggestion ? quoteIfNeeded(suggestion) : undefined); };
+  // Lỗi về GIÁ TRỊ trỏ vào chính giá trị đó, không phải tên trường.
+  const at = (v: JqlValue | undefined, pos: number) => v?.pos ?? pos;
+  const lit = (v: JqlValue, pos: number): string => (v.kind === 'literal' ? v.value : fail(`${v.name}() is not allowed here`, at(v, pos)));
+  const miss = (msg: string, v: JqlValue, pos: number, candidates: string[]): never => {
+    const hit = v.kind === 'literal' ? suggest(v.value, candidates) : undefined;
+    return fail(didYouMean(msg, hit), at(v, pos), hit);
+  };
 
   const userIds = (vals: JqlValue[], pos: number): Array<number | null> => vals.map((v) => {
-    if (v.kind === 'fn') return v.name === 'currentuser' ? ctx.userId : fail(`Unknown function ${v.name}()`, pos);
+    if (v.kind === 'fn') return v.name === 'currentuser' ? ctx.userId : fail(`Unknown function ${v.name}()`, at(v, pos), suggest(v.name, ['currentUser']) && 'currentUser()');
     if (['empty', 'null', 'unassigned'].includes(lc(v.value))) return null;
     const u = ctx.members.find((m) => lc(m.username) === lc(v.value.replace(/^@/, '')));
-    return u ? u.id : fail(`No member "${v.value}"`, pos);
+    if (u) return u.id;
+    // "me"/"myself" = currentUser() — sau khi đã thử tên thật (lỡ có người tên "me").
+    if (!v.quoted && ['me', 'myself'].includes(lc(v.value))) return ctx.userId;
+    return miss(`No member "${v.value}"`, v, pos, ctx.members.map((m) => m.username));
   });
 
   const nameIds = <T extends { id: number; name: string }>(list: T[], vals: JqlValue[], what: string, pos: number, extra?: (t: T) => string[]) =>
     vals.flatMap((v) => {
       const s = lc(lit(v, pos));
       const hits = list.filter((x) => lc(x.name) === s || (extra?.(x) ?? []).some((e) => lc(e) === s));
-      return hits.length ? hits.map((h) => h.id) : fail(`No ${what} "${lit(v, pos)}"`, pos);
+      return hits.length ? hits.map((h) => h.id) : miss(`No ${what} "${lit(v, pos)}"`, v, pos, list.map((x) => x.name));
     });
 
   const issueNumber = (v: JqlValue, pos: number) => {
     const s = lit(v, pos);
     const m = /^(?:([A-Za-z][A-Za-z0-9]*)-)?(\d+)$/.exec(s);
-    if (!m || (m[1] && upper(m[1]) !== upper(ctx.projectKey))) fail(`"${s}" is not an issue key of ${ctx.projectKey}`, pos);
+    if (!m || (m[1] && upper(m[1]) !== upper(ctx.projectKey))) fail(`"${s}" is not an issue key of ${ctx.projectKey}`, at(v, pos));
     return Number(m![2]);
   };
 
@@ -319,18 +381,22 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
 
     if (!field) {
       const cf = ctx.customFields.find((f) => lc(f.name) === raw || `cf[${f.id}]` === raw);
-      if (!cf) return fail(`Unknown field "${c.field}"`, pos);
+      if (!cf) {
+        const hit = suggest(c.field, [...JQL_FIELDS, ...Object.keys(FIELD_ALIASES).filter((k) => !k.includes(' ')), ...ctx.customFields.map((f) => f.name)]);
+        return fail(didYouMean(`Unknown field "${c.field}"`, hit), pos, hit);
+      }
       if (empty) return { customValues: { none: { fieldId: cf.id } } };
       if (notEmpty) return { customValues: { some: { fieldId: cf.id } } };
       const texts = values.map((v) => lit(v, pos));
       if (cf.kind === 'NUMBER') {
         const n = Number(texts[0]);
-        if (!Number.isFinite(n)) return fail(`"${texts[0]}" is not a number`, pos);
+        if (!Number.isFinite(n)) return fail(`"${texts[0]}" is not a number`, at(values[0], pos));
         const pathFilter: Prisma.JsonFilter<'WorkCustomValue'> = op === '=' ? { equals: n } : op === '>' ? { gt: n } : op === '>=' ? { gte: n } : op === '<' ? { lt: n } : op === '<=' ? { lte: n } : fail(`Operator ${op} is not supported for numbers`, pos);
         return { customValues: { some: { fieldId: cf.id, value: pathFilter } } };
       }
       if (cf.kind === 'SELECT' || cf.kind === 'MULTISELECT') {
-        const optIds = texts.map((t) => cf.options.find((o) => lc(o.label) === lc(t))?.id ?? fail(`"${t}" is not an option of ${cf.name}`, pos));
+        const optIds = texts.map((t, i) => cf.options.find((o) => lc(o.label) === lc(t))?.id
+          ?? miss(`"${t}" is not an option of ${cf.name}`, values[i], pos, cf.options.map((o) => o.label)));
         const matches: W = cf.kind === 'SELECT'
           ? { customValues: { some: { fieldId: cf.id, OR: optIds.map((id) => ({ value: { equals: id } })) } } }
           : { customValues: { some: { fieldId: cf.id, OR: optIds.map((id) => ({ value: { array_contains: [id] } })) } } };
@@ -369,7 +435,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
         const cats = values.map((v) => {
           const s = lc(lit(v, pos)).replace(/[\s_-]/g, '');
           const cat = s === 'todo' || s === 'new' ? 'TODO' : s === 'inprogress' ? 'IN_PROGRESS' : s === 'done' || s === 'complete' ? 'DONE' : null;
-          return cat ?? fail(`statusCategory is "To Do", "In Progress" or "Done"`, pos);
+          return cat ?? fail(`statusCategory is "To Do", "In Progress" or "Done"`, at(v, pos), suggest(lit(v, pos), ['To Do', 'In Progress', 'Done']));
         });
         const ids = ctx.statuses.filter((s) => (cats as string[]).includes(s.category)).map((s) => s.id);
         return inOrNot(op, pos) ? { statusId: { notIn: ids } } : { statusId: { in: ids } };
@@ -382,7 +448,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
         const toN = (v: JqlValue) => {
           const s = lc(lit(v, pos));
           const n = PRIORITY_NAMES[s] ?? Number(s);
-          return n >= 1 && n <= 5 ? n : fail(`Priority is Highest, High, Medium, Low, Lowest or 1–5`, pos);
+          return n >= 1 && n <= 5 ? n : miss(`Priority is Highest, High, Medium, Low, Lowest or 1–5`, v, pos, ['Highest', 'High', 'Medium', 'Low', 'Lowest']);
         };
         // Jira: "priority > High" nghĩa là QUAN TRỌNG hơn High ⇒ số NHỎ hơn.
         if (['>', '>=', '<', '<='].includes(op)) {
@@ -420,7 +486,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
         if (notEmpty) return { sprintId: { not: null } };
         const ids = values.flatMap((v) => {
           if (v.kind === 'fn') {
-            const state = v.name === 'opensprints' ? 'ACTIVE' : v.name === 'closedsprints' ? 'CLOSED' : v.name === 'futuresprints' ? 'PLANNED' : fail(`Unknown function ${v.name}()`, pos);
+            const state = v.name === 'opensprints' ? 'ACTIVE' : v.name === 'closedsprints' ? 'CLOSED' : v.name === 'futuresprints' ? 'PLANNED' : fail(`Unknown function ${v.name}()`, at(v, pos));
             return ctx.sprints.filter((s) => s.state === state).map((s) => s.id);
           }
           return nameIds(ctx.sprints, [v], 'sprint', pos);
@@ -438,7 +504,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
         if (empty) return { storyPoints: null };
         if (notEmpty) return { storyPoints: { not: null } };
         const n = Number(lit(values[0], pos));
-        if (!Number.isFinite(n)) return fail('Points must be a number', pos);
+        if (!Number.isFinite(n)) return fail('Points must be a number', at(values[0], pos));
         if (op === 'in' || op === 'not in') {
           const ns = values.map((v) => Number(lit(v, pos)));
           return op === 'in' ? { storyPoints: { in: ns } } : { storyPoints: { notIn: ns } };
@@ -454,7 +520,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
         if (notEmpty) return { [col]: { not: null } };
         if (!['=', '!=', '>', '>=', '<', '<='].includes(op)) return fail(`Use =, <, <=, >, >= with dates`, pos);
         let d: Date;
-        try { d = resolveDate(values[0], now); } catch (e) { return fail((e as Error).message, pos); }
+        try { d = resolveDate(values[0], now); } catch (e) { return fail((e as Error).message, at(values[0], pos)); }
         if (op === '=') {
           // "= 2026-09-01" nghĩa là cả ngày đó.
           const end = new Date(d.getTime() + 86_400_000);
@@ -468,7 +534,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
         return inOrNot(op, pos) ? { NOT: m } : m;
       }
       default:
-        return fail(`Unknown field "${c.field}"`, pos);
+        return fail(`Unknown field "${c.field}"`, pos, suggest(c.field, JQL_FIELDS));
     }
   }
 
@@ -494,10 +560,12 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
     status: (dir) => ({ statusId: dir }),
     assignee: (dir) => ({ assignee: { username: dir } }),
   };
-  const orderBy = q.orderBy.map((o) => {
+  const orderBy = q.orderBy.map((o, i) => {
     const f = FIELD_ALIASES[lc(o.field)] ?? lc(o.field);
     const fn = ORDERABLE[f];
-    return fn ? fn(o.dir) : fail(`Cannot order by "${o.field}"`, 0);
+    if (fn) return fn(o.dir);
+    const hit = suggest(o.field, Object.keys(ORDERABLE));
+    return fail(didYouMean(`Cannot order by "${o.field}"`, hit), q.orderPos?.[i] ?? 0, hit);
   });
 
   return { where: q.where ? walk(q.where) : {}, orderBy: [...orderBy, { rank: 'asc' }, { id: 'asc' }] };

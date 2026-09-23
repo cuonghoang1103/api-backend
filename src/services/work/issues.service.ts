@@ -305,6 +305,55 @@ async function setIssueTags(
   }
 }
 
+/**
+ * Nhân bản một thẻ (như "Clone" của Jira): chép tiêu đề ("Copy of …"), mô tả,
+ * loại, ưu tiên, người giao, ước lượng, ngày, cha, sprint, version, nhãn,
+ * component; trạng thái về đầu quy trình. Thẻ mới được nối CLONES → thẻ gốc.
+ * Việc con, bình luận, đính kèm KHÔNG chép.
+ */
+export async function cloneIssueAs(userId: number, projectId: number, number: number) {
+  const access = await requireProject(userId, projectId, 'issue.create');
+  const src = await prisma.workIssue.findFirst({
+    where: { projectId, number, deletedAt: null },
+    select: {
+      id: true, typeId: true, title: true, descriptionJson: true, priority: true, assigneeId: true, storyPoints: true,
+      originalEstimateMin: true, startDate: true, dueDate: true, parentId: true, sprintId: true, fixVersionId: true,
+      type: { select: { level: true } },
+      sprint: { select: { state: true } },
+      labels: { select: { labelId: true } },
+      components: { select: { componentId: true } },
+    },
+  });
+  if (!src) throw new NotFoundError('Issue not found');
+  const client = access.role === 'CLIENT';
+  const title = `Copy of ${src.title}`.slice(0, 255);
+  const created = await createIssueAs(userId, projectId, {
+    typeId: src.typeId,
+    title,
+    descriptionJson: (src.descriptionJson ?? undefined) as Prisma.InputJsonValue | undefined,
+    priority: src.priority,
+    startDate: src.startDate,
+    dueDate: src.dueDate,
+    parentId: src.parentId,
+    fixVersionId: src.fixVersionId,
+    // Khách hàng không được giao việc / xếp sprint / ước lượng (luật của createIssueAs).
+    ...(client ? {} : {
+      assigneeId: src.assigneeId,
+      storyPoints: src.storyPoints ?? undefined,
+      originalEstimateMin: src.originalEstimateMin,
+      // Sprint đã đóng thì không thả bản sao vào đó; việc con tự theo sprint của cha.
+      sprintId: src.type.level === 0 && src.sprint && src.sprint.state !== 'CLOSED' ? src.sprintId : null,
+    }),
+    labelIds: src.labels.map((l) => l.labelId),
+    componentIds: src.components.map((c) => c.componentId),
+  });
+  await prisma.workIssueLink.create({ data: { fromIssueId: created.id, toIssueId: src.id, type: 'CLONES', createdById: userId } });
+  await prisma.workHistory.create({
+    data: { issueId: created.id, actorId: userId, actorKind: 'USER', field: 'link', toValue: `CLONES ${access.key}-${number}` },
+  });
+  return created;
+}
+
 /** Xoá mềm thẻ và việc con của nó. Khôi phục được (đợt 7: thùng rác). */
 export async function deleteIssueAs(userId: number, projectId: number, number: number) {
   const access = await requireProject(userId, projectId, 'project.view');

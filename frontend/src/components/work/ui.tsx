@@ -13,11 +13,11 @@ import {
   type ReactNode, type RefObject,
 } from 'react';
 import { createPortal } from 'react-dom';
+import Link from 'next/link';
 import {
   AlertOctagon, Bookmark, Bug, CheckSquare, ChevronsUp, ChevronUp, ChevronDown, ChevronsDown, Equal,
-  FileText, FlaskConical, Layers, SquareDashedBottom, X, Check, Search,
+  FileText, FlaskConical, Layers, SquareDashedBottom, X, Check, Search, SearchX,
 } from 'lucide-react';
-import SafeAvatar from '@/components/ui/SafeAvatar';
 import { cn } from '@/lib/utils';
 import { userName, type IssueTypeKey, type StatusCategory, type WorkUser } from '@/lib/work-api';
 
@@ -239,19 +239,71 @@ export function Dialog({
 
 // ─── Người ───────────────────────────────────────────────────────
 
+/** Bảng màu dễ chịu, đủ tương phản với chữ trắng ở cả hai theme. */
+const AVATAR_COLORS = ['#5e6ad2', '#2f8f65', '#c8612f', '#b83f6f', '#2a6fd1', '#8a4fd1', '#0f8a86', '#a8741a', '#c9423e', '#56627a'];
+
+function hashStr(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+/** Màu cố định theo người (cùng username ⇒ cùng màu ở mọi nơi). */
+export function avatarColor(seed: string): string {
+  return AVATAR_COLORS[hashStr(seed || '?') % AVATAR_COLORS.length];
+}
+
+/** Chữ tắt: chữ cái đầu của tối đa 2 từ trong tên hiển thị; không có thì username. */
+export function initialsOf(user: { username: string; fullName?: string | null; displayName?: string | null }): string {
+  const name = (user.displayName || user.fullName || '').trim();
+  const words = name.split(/\s+/).filter(Boolean);
+  if (words.length >= 2) return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+  if (words.length === 1) return words[0].slice(0, 1).toUpperCase();
+  return (user.username || '?').slice(0, 1).toUpperCase();
+}
+
 export function UserAvatar({ user, size = 22, className }: { user: Pick<WorkUser, 'username' | 'fullName' | 'displayName' | 'avatarUrl'> | null | undefined; size?: number; className?: string }) {
+  const [broken, setBroken] = useState(false);
+  const src = user?.avatarUrl;
+  useEffect(() => setBroken(false), [src]);
   if (!user) {
     return (
       <span
         title="Unassigned"
+        aria-label="Unassigned"
         style={{ width: size, height: size }}
         className={cn('inline-flex shrink-0 items-center justify-center rounded-full border border-dashed border-[var(--w-border-strong)]', className)}
       />
     );
   }
+  const name = userName(user);
+  if (src && !broken) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt={name}
+        title={name}
+        width={size}
+        height={size}
+        onError={() => setBroken(true)}
+        style={{ width: size, height: size }}
+        className={cn('inline-block shrink-0 rounded-full object-cover', className)}
+      />
+    );
+  }
+  const initials = initialsOf(user);
+  // Chữ tắt phải NẰM TRONG vòng tròn: ~42% đường kính, hai chữ thì nhỏ hơn chút.
+  const fs = Math.max(9, Math.round(size * (initials.length > 1 ? 0.38 : 0.44)));
   return (
-    <span title={userName(user)} className={cn('inline-flex shrink-0', className)}>
-      <SafeAvatar src={user.avatarUrl} alt={userName(user)} seed={user.username} size={size} rounded="full" fallbackType="initials" />
+    <span
+      role="img"
+      aria-label={name}
+      title={name}
+      style={{ width: size, height: size, fontSize: fs, background: avatarColor(user.username || name) }}
+      className={cn('inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-full font-semibold leading-none tracking-[-0.01em] text-white', className)}
+    >
+      {size >= 14 ? initials : null}
     </span>
   );
 }
@@ -289,23 +341,58 @@ export const PRIORITIES = [
   { value: 5, label: 'Lowest', color: 'var(--w-text-3)', Icon: ChevronsDown },
 ] as const;
 
-export function PriorityIcon({ priority, size = 15 }: { priority: number; size?: number }) {
-  const p = PRIORITIES.find((x) => x.value === priority) ?? PRIORITIES[2];
-  const Icon = priority === 1 ? AlertOctagon : p.Icon;
-  return <Icon size={size} style={{ color: p.color }} aria-label={`${p.label} priority`}><title>{`${p.label} priority`}</title></Icon>;
+export function priorityOf(priority: number) {
+  return PRIORITIES.find((x) => x.value === priority) ?? PRIORITIES[2];
 }
+
+/** Biểu tượng ưu tiên, luôn có tooltip tên; `showLabel` hiện thêm chữ. */
+export function PriorityIcon({ priority, size = 15, showLabel, className }: { priority: number; size?: number; showLabel?: boolean; className?: string }) {
+  const p = priorityOf(priority);
+  const Icon = p.value === 1 ? AlertOctagon : p.Icon;
+  const label = `${p.label} priority`;
+  return (
+    <span title={label} aria-label={label} role="img" className={cn('inline-flex shrink-0 items-center gap-1.5', className)}>
+      <Icon size={size} style={{ color: p.color }} strokeWidth={2.25} aria-hidden="true" />
+      {showLabel && <span className="text-[13px] text-[var(--w-text)]">{p.label}</span>}
+    </span>
+  );
+}
+
+/** Màu chấm theo nhóm trạng thái: chưa làm xám · đang làm xanh dương · xong xanh lá. */
+export const CATEGORY_DOT: Record<StatusCategory, string> = {
+  TODO: 'var(--w-text-3)',
+  IN_PROGRESS: 'var(--w-blue)',
+  DONE: 'var(--w-green)',
+};
 
 const CATEGORY_STYLE: Record<StatusCategory, string> = {
   TODO: 'bg-[var(--w-sunken)] text-[var(--w-text-2)] border-[var(--w-border-strong)]',
-  IN_PROGRESS: 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)] border-[var(--w-accent-border)]',
-  DONE: 'bg-[color-mix(in_srgb,var(--w-green)_14%,transparent)] text-[var(--w-green)] border-[color-mix(in_srgb,var(--w-green)_40%,transparent)]',
+  IN_PROGRESS: 'bg-[color-mix(in_srgb,var(--w-blue)_12%,transparent)] text-[var(--w-text)] border-[color-mix(in_srgb,var(--w-blue)_35%,transparent)]',
+  DONE: 'bg-[color-mix(in_srgb,var(--w-green)_12%,transparent)] text-[var(--w-text)] border-[color-mix(in_srgb,var(--w-green)_35%,transparent)]',
 };
+
+/** "In review" thay vì "IN REVIEW": viết hoa chữ đầu, giữ nguyên chữ viết tắt (QA, UAT…). */
+function sentenceCase(name: string): string {
+  const words = name.trim().split(/\s+/);
+  return words
+    .map((w, i) => {
+      if (w.length > 1 && w === w.toUpperCase() && /[A-Z]/.test(w) && w.length <= 3) return w; // viết tắt
+      const lower = w.toLowerCase();
+      return i === 0 ? lower.charAt(0).toUpperCase() + lower.slice(1) : lower;
+    })
+    .join(' ');
+}
 
 export function StatusBadge({ status, className }: { status: { name: string; category: StatusCategory } | undefined; className?: string }) {
   if (!status) return null;
+  const text = sentenceCase(status.name);
   return (
-    <span className={cn('inline-flex h-[22px] items-center rounded-[4px] border px-1.5 text-[11px] font-semibold uppercase tracking-[0.02em]', CATEGORY_STYLE[status.category], className)}>
-      {status.name}
+    <span
+      title={status.name}
+      className={cn('inline-flex h-[22px] max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border px-2 text-[12px] font-medium leading-none', CATEGORY_STYLE[status.category], className)}
+    >
+      <span aria-hidden="true" className="inline-block h-[7px] w-[7px] shrink-0 rounded-full align-middle" style={{ background: CATEGORY_DOT[status.category] }} />
+      <span className="min-w-0 truncate">{text}</span>
     </span>
   );
 }
@@ -325,12 +412,34 @@ export const Spinner = ({ size = 16 }: { size?: number }) => (
   <span style={{ width: size, height: size }} className="inline-block animate-spin rounded-full border-2 border-[var(--w-border-strong)] border-t-[var(--w-accent)]" />
 );
 
-export function EmptyState({ title, body, action }: { title: string; body?: string; action?: ReactNode }) {
+const NOT_FOUND_RE = /not found|unavailable|no access|does not exist/i;
+
+/**
+ * Trạng thái rỗng / lỗi. Tiêu đề kiểu "… not found" mà trang không đưa nút
+ * nào ⇒ tự thêm lối về (My work · Workspaces) để không bao giờ là ngõ cụt.
+ * Thân trùng tiêu đề (lỗi máy chủ trả đúng "Project not found") thì thay bằng
+ * câu giải thích.
+ */
+export function EmptyState({ title, body, action, icon }: { title: string; body?: string; action?: ReactNode; icon?: ReactNode }) {
+  const notFound = NOT_FOUND_RE.test(title);
+  const same = body && body.trim().replace(/[.!]$/, '').toLowerCase() === title.trim().replace(/[.!]$/, '').toLowerCase();
+  const text = same ? (notFound ? 'It may have been deleted, renamed, or you no longer have access to it.' : undefined) : body;
+  const act = action ?? (notFound ? (
+    <div className="flex flex-wrap items-center justify-center gap-2">
+      <Link href="/work?tab=my-work" className="w-btn w-btn-primary">Back to My work</Link>
+      <Link href="/work?tab=workspaces" className="w-btn">Workspaces</Link>
+    </div>
+  ) : undefined);
   return (
     <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-      <div className="text-[15px] font-semibold">{title}</div>
-      {body && <p className="mt-1.5 max-w-[420px] text-[13px] leading-relaxed text-[var(--w-text-2)]">{body}</p>}
-      {action && <div className="mt-4">{action}</div>}
+      {(icon || notFound) && (
+        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full border border-[var(--w-border)] bg-[var(--w-sunken)] text-[var(--w-text-3)]">
+          {icon ?? <SearchX size={20} />}
+        </div>
+      )}
+      <div className="text-[16px] font-semibold">{title}</div>
+      {text && <p className="mt-1.5 max-w-[440px] text-[14px] leading-relaxed text-[var(--w-text-2)]">{text}</p>}
+      {act && <div className="mt-5">{act}</div>}
     </div>
   );
 }

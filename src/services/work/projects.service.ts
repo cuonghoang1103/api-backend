@@ -10,7 +10,9 @@ import {
   PROJECT_KEY_RE, type ProjectRole, type ProjectTemplate, type ProjectType, type ProjectVisibility,
 } from './constants.js';
 import { emitWorkEvent, evictFromProject } from './events.js';
-import { can, effectiveProjectRole, loadProjectAccess, requireProject, requireWorkspace } from './permissions.js';
+import {
+  can, effectiveProjectRole, loadProjectAccess, requireProject, requireWorkspace, type ProjectOptions,
+} from './permissions.js';
 import { seedProjectConfig } from './templates.js';
 
 const MAX_PROJECTS_PER_WORKSPACE = 100;
@@ -21,6 +23,8 @@ export async function createProject(
   input: {
     key: string; name: string; description?: string | null;
     type: ProjectType; template: ProjectTemplate; visibility?: ProjectVisibility;
+    /** Bỏ trống = theo mẫu (SWP391/SWR302 Scrum có sẵn "Sprint 1"). */
+    firstSprint?: boolean;
   },
 ) {
   await requireWorkspace(userId, workspaceId, 'workspace.createProject');
@@ -43,7 +47,7 @@ export async function createProject(
       });
       // Người tạo luôn là ADMIN của dự án mình tạo — kể cả khi chỉ là MEMBER của không gian.
       await tx.workProjectMember.create({ data: { projectId: project.id, userId, role: 'ADMIN' } });
-      await seedProjectConfig(tx, project.id, input.template, input.type);
+      await seedProjectConfig(tx, project.id, input.template, input.type, { firstSprint: input.firstSprint });
       return { id: project.id, key: project.key, name: project.name };
     });
   } catch (err) {
@@ -128,14 +132,14 @@ export async function getProjectConfig(userId: number, projectId: number) {
     ...project,
     role: access.role,
     workspaceRole: access.workspaceRole,
-    permissions: permissionFlags(access.role),
+    permissions: permissionFlags(access.role, access.options),
     boardColumns: boardColumns(project.workflows, project.settings),
     members,
   };
 }
 
 /** Cờ quyền gửi cho client để ẩn/hiện nút. Chỉ để hiển thị — API vẫn kiểm lại. */
-export function permissionFlags(role: ProjectRole) {
+export function permissionFlags(role: ProjectRole, opts: ProjectOptions = {}) {
   return {
     editIssues: can(role, 'issue.edit'),
     createIssues: can(role, 'issue.create'),
@@ -143,7 +147,7 @@ export function permissionFlags(role: ProjectRole) {
     deleteIssues: can(role, 'issue.delete'),
     comment: can(role, 'comment.create'),
     attach: can(role, 'attachment.add'),
-    manageSprints: can(role, 'sprint.manage'),
+    manageSprints: can(role, 'sprint.manage', opts),
     settings: can(role, 'project.settings'),
     manageMembers: can(role, 'project.members'),
     useAi: can(role, 'ai.use'),

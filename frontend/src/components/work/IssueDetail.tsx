@@ -13,7 +13,7 @@ import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  Copy, Eye, ExternalLink, Link2, MoreHorizontal, Paperclip, Plus, Trash2, X, Download, FileText,
+  Copy, CopyPlus, ChevronDown, ChevronRight, Eye, ExternalLink, Link2, MoreHorizontal, Paperclip, Plus, Trash2, X, Download, FileText,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
@@ -31,6 +31,7 @@ import {
 } from './fields';
 import { useLookups, wk, type Lookups } from './hooks';
 import IssueActivity from './IssueActivity';
+import { MobileNavButton } from './shell/mobileNav';
 import { TimeTrackingBlock } from './TimeTracking';
 import DevelopmentPanel from './DevelopmentPanel';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
@@ -358,6 +359,8 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
   const menuRef = useRef<HTMLButtonElement>(null);
   const [subtaskOpen, setSubtaskOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  // Trang riêng trên điện thoại/iPad dọc: thẻ "Details" ngay dưới tiêu đề, mở sẵn.
+  const [detailsOpen, setDetailsOpen] = useState(true);
 
   const q = useQuery({ queryKey: wk.issue(pid, num), queryFn: () => workApi.issue(pid, num), retry: (n, err) => workErrorStatus(err) !== 404 && n < 2 });
   const issue = q.data;
@@ -396,6 +399,18 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
       onClose?.();
     },
     onError: (err) => toast.error(workError(err, 'Could not delete')),
+  });
+
+  const clone = useMutation({
+    mutationFn: () => workApi.cloneIssue(pid, num),
+    onSuccess: (copy) => {
+      qc.invalidateQueries({ queryKey: wk.board(pid) });
+      qc.invalidateQueries({ queryKey: wk.issues(pid) });
+      qc.invalidateQueries({ queryKey: wk.backlog(pid) });
+      qc.invalidateQueries({ queryKey: wk.issue(pid, num) });
+      toast.success(`Cloned as ${lk.issueKey(copy.number)}`, { action: { label: 'Open', onClick: () => onOpenIssue(copy.number) } });
+    },
+    onError: (err) => toast.error(workError(err, 'Could not clone the issue')),
   });
 
   const subtaskDefaults = useMemo(() => (issue ? { parent: { id: issue.id, number: issue.number, title: issue.title } } : undefined), [issue]);
@@ -482,6 +497,8 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
     <div className="flex h-full flex-col">
       {/* Thanh trên */}
       <div className="flex h-12 shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-4">
+        {/* Trang riêng: nút ☰ của điện thoại nằm ở header này (thay thanh dự phòng của layout). */}
+        {variant === 'page' && <MobileNavButton />}
         <div className="flex min-w-0 items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
           {issue.parent && (
             <>
@@ -510,18 +527,31 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           {variant === 'drawer' && (
             <Link href={`${base}/issue/${num}`} title="Open full page" className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><ExternalLink size={13} /></Link>
           )}
-          {issue.canDelete && (
+          {(issue.canDelete || config.permissions.createIssues) && (
             <>
               <button ref={menuRef} type="button" onClick={menu.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="More actions"><MoreHorizontal size={14} /></button>
               <Popover open={menu.on} onClose={menu.close} anchorRef={menuRef} width={200} align="end">
                 <div className="p-1">
-                  <button
-                    type="button"
-                    onClick={() => { menu.close(); setConfirmDelete(true); }}
-                    className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] text-[var(--w-red)] hover:bg-[var(--w-hover)]"
-                  >
-                    <Trash2 size={13} /> Delete issue
-                  </button>
+                  {config.permissions.createIssues && (
+                    <button
+                      type="button"
+                      disabled={clone.isPending}
+                      onClick={() => { menu.close(); clone.mutate(); }}
+                      title="Create a copy with the same fields, labels and description"
+                      className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)] disabled:opacity-50"
+                    >
+                      <CopyPlus size={13} /> Clone
+                    </button>
+                  )}
+                  {issue.canDelete && (
+                    <button
+                      type="button"
+                      onClick={() => { menu.close(); setConfirmDelete(true); }}
+                      className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] text-[var(--w-red)] hover:bg-[var(--w-hover)]"
+                    >
+                      <Trash2 size={13} /> Delete issue
+                    </button>
+                  )}
                 </div>
               </Popover>
             </>
@@ -536,6 +566,28 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           <div className="min-w-0 flex-1 space-y-6">
             <TitleEditor value={issue.title} editable={editable} onSave={(title) => set({ title })} />
             <div className="xl:hidden">{variant === 'drawer' && properties}</div>
+            {variant === 'page' && (
+              // Dưới lg: thuộc tính nằm ngay dưới tiêu đề (không bị đẩy xuống sau mọi bình luận).
+              <section className="rounded-[8px] border border-[var(--w-border)] lg:hidden">
+                <button
+                  type="button"
+                  onClick={() => setDetailsOpen((v) => !v)}
+                  aria-expanded={detailsOpen}
+                  className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-semibold"
+                >
+                  {detailsOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                  Details
+                  {!detailsOpen && (
+                    <span className="ml-auto flex min-w-0 items-center gap-2 font-normal">
+                      <StatusBadge status={lk.statuses.get(issue.statusId)} />
+                      <PriorityIcon priority={issue.priority} size={13} />
+                      <UserAvatar user={issue.assignee} size={18} />
+                    </span>
+                  )}
+                </button>
+                {detailsOpen && <div className="border-t border-[var(--w-border)] px-3 pb-3 pt-3">{properties}</div>}
+              </section>
+            )}
             <section>
               <h3 className="mb-1.5 text-[13px] font-semibold">Description</h3>
               <Description issue={issue} config={config} editable={editable} onSave={(d) => set({ descriptionJson: d })} saving={update.isPending} />
@@ -545,7 +597,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             <Attachments issue={issue} pid={pid} config={config} />
             <IssueActivity pid={pid} num={num} config={config} lk={lk} />
           </div>
-          <aside className={cn('shrink-0', variant === 'page' ? 'lg:w-[300px]' : 'hidden xl:block xl:w-[280px]')}>
+          <aside className={cn('shrink-0', variant === 'page' ? 'hidden lg:block lg:w-[300px]' : 'hidden xl:block xl:w-[280px]')}>
             <div className={cn(variant === 'page' && 'lg:sticky lg:top-0')}>{properties}</div>
           </aside>
         </div>

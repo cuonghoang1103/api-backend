@@ -7,15 +7,16 @@
 
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, ChevronDown, CircleDashed, Tag } from 'lucide-react';
+import { CalendarDays, Check, ChevronDown, CircleDashed, Tag } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
   userName, workApi, workError, type IssueCard, type ProjectConfig, type WorkLabel,
 } from '@/lib/work-api';
 import { allowedTargets, wk, type Lookups } from './hooks';
+import DatePopover, { formatYmd } from './shell/DatePopover';
 import {
-  IssueTypeIcon, LabelChip, PickerList, Popover, PRIORITIES, PriorityIcon, StatusBadge, UserAvatar, useToggle,
+  CATEGORY_DOT, IssueTypeIcon, LabelChip, PickerList, Popover, PRIORITIES, PriorityIcon, StatusBadge, UserAvatar, useToggle,
   type PickOption,
 } from './ui';
 
@@ -29,6 +30,7 @@ function Trigger({ children, disabled, bare, onClick, triggerRef, className }: {
       type="button"
       disabled={disabled}
       onClick={onClick}
+      aria-haspopup="dialog"
       className={cn(
         'flex min-h-[30px] w-full items-center gap-2 rounded-[6px] px-2 text-left text-[13px] transition-colors',
         bare ? 'hover:bg-[var(--w-hover)]' : 'border border-[var(--w-border-strong)] bg-[var(--w-panel)] hover:bg-[var(--w-hover)]',
@@ -93,7 +95,7 @@ export function StatusPicker({ lk, issue, onChange, bare, disabled }: {
         <PickerList
           options={(wf?.statuses ?? []).filter((s) => allowed.includes(s.id) || s.id === issue.statusId).map((s) => ({
             value: s.id, label: s.name, hint: s.id === issue.statusId ? 'Current' : undefined,
-            icon: <span className="h-2 w-2 rounded-full" style={{ background: s.category === 'DONE' ? 'var(--w-green)' : s.category === 'IN_PROGRESS' ? 'var(--w-accent)' : 'var(--w-text-3)' }} />,
+            icon: <span className="h-2 w-2 rounded-full" style={{ background: CATEGORY_DOT[s.category] }} />,
           }))}
           selected={[issue.statusId]}
           onPick={(id) => { if (id !== issue.statusId) onChange(id); p.close(); }}
@@ -307,15 +309,22 @@ export function ParentPicker({ config, lk, childLevel, value, onChange, excludeI
 
 // ─── Ngày + số ───────────────────────────────────────────────────
 
-export function DateInput({ value, onChange, disabled }: { value: string | null; onChange: (v: string | null) => void; disabled?: boolean }) {
+/** Ô ngày: nút hiện "Sep 26, 2026", bấm mở lịch nhỏ (shell/DatePopover). */
+export function DateInput({ value, onChange, disabled, placeholder = 'None', bare = true }: {
+  value: string | null; onChange: (v: string | null) => void; disabled?: boolean; placeholder?: string; bare?: boolean;
+}) {
+  const p = usePick();
+  const text = formatYmd(value);
   return (
-    <input
-      type="date"
-      disabled={disabled}
-      value={value ? value.slice(0, 10) : ''}
-      onChange={(e) => onChange(e.target.value || null)}
-      className="w-input w-input-bare"
-    />
+    <>
+      <Trigger triggerRef={p.ref} onClick={p.toggle} bare={bare} disabled={disabled}>
+        <CalendarDays size={14} className="shrink-0 text-[var(--w-text-3)]" />
+        <span className={cn('flex-1 truncate tabular-nums', !text && 'text-[var(--w-text-3)]')}>{text || placeholder}</span>
+      </Trigger>
+      <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={264}>
+        <DatePopover value={value ? value.slice(0, 10) : null} onChange={(v) => { if (v !== (value ? value.slice(0, 10) : null)) onChange(v); }} onClose={p.close} />
+      </Popover>
+    </>
   );
 }
 

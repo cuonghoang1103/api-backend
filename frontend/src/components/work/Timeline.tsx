@@ -259,9 +259,10 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
 
   // ── Đường găng + xung đột ────────────────────────────────────
   const critical = useMemo(() => {
-    const ids = new Set(data?.criticalPath ?? []);
+    // Không có phụ thuộc ⇒ không tô thanh nào là "găng".
+    const p = data?.dependencies.length ? data.criticalPath : [];
+    const ids = new Set(p);
     const edges = new Set<string>();
-    const p = data?.criticalPath ?? [];
     for (let i = 1; i < p.length; i++) edges.add(`${p[i - 1]}>${p[i]}`);
     return { ids, edges };
   }, [data]);
@@ -387,7 +388,8 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
               <AlertTriangle size={12} /> {data.conflicts.length} scheduling conflict{data.conflicts.length === 1 ? '' : 's'}
             </span>
           )}
-          {data.criticalPath.length > 0 && (
+          {/* Không có phụ thuộc nào thì "đường găng" chỉ là một thẻ dài nhất — vô nghĩa, ẩn đi. */}
+          {data.dependencies.length > 0 && data.criticalPath.length > 1 && (
             <>
               {showCritical && (
                 <span className="inline-flex h-[24px] items-center rounded-full bg-[color-mix(in_srgb,var(--w-orange)_16%,transparent)] px-2 text-[12px] font-medium text-[var(--w-orange)]">
@@ -497,12 +499,25 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                         title="Click a day to schedule this issue"
                         onClick={(e) => clickEmptyRow(e, r.item)}
                       >
-                        {hoverRow === idx && (
-                          <span className="pointer-events-none sticky inline-flex h-full items-center gap-1 pl-2 text-[11.5px] text-[var(--w-text-3)]" style={{ left: treeW + 8 }}>
-                            <CalendarPlus size={12} /> Schedule — click a start day
-                          </span>
-                        )}
+                        {/* Luôn thấy (không chỉ khi rê chuột): thẻ chưa có ngày trông như dòng trống bị lỗi. */}
+                        <span
+                          className={cn(
+                            'pointer-events-none sticky mt-[5px] inline-flex items-center gap-1 rounded-[5px] border border-dashed px-2 text-[11.5px]',
+                            hoverRow === idx ? 'border-[var(--w-accent-border)] text-[var(--w-accent-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-3)]',
+                          )}
+                          style={{ left: treeW + 8, height: ROW_H - 10 }}
+                        >
+                          <CalendarPlus size={12} /> {hoverRow === idx ? 'Click the start day' : 'Not scheduled — click to add dates'}
+                        </span>
                       </div>
+                    )}
+                    {r.kind !== 'group' && !spans.has(r.item.id) && !canEdit && (
+                      <span
+                        className="pointer-events-none sticky mt-[5px] inline-flex items-center gap-1 rounded-[5px] border border-dashed border-[var(--w-border-strong)] px-2 text-[11.5px] text-[var(--w-text-3)]"
+                        style={{ left: treeW + 8, height: ROW_H - 10 }}
+                      >
+                        Not scheduled
+                      </span>
                     )}
                   </div>
                 ))}

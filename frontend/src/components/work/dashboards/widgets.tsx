@@ -82,6 +82,28 @@ function groupColor(g: StatsGroup, i: number, groupBy: GroupBy | undefined): str
   return g.color || PALETTE[i % PALETTE.length];
 }
 
+/**
+ * Màu cho cả nhóm, KHÔNG trùng nhau: nhiều trạng thái mặc định chung một màu
+ * xám ⇒ biểu đồ tròn thành một khối. Màu thứ hai trở đi bị trùng thì lấy màu
+ * chưa dùng kế tiếp trong bảng màu phân loại.
+ */
+function distinctColors(groups: StatsGroup[], groupBy: GroupBy | undefined): string[] {
+  const used = new Set<string>();
+  let next = 0;
+  return groups.map((g, i) => {
+    let c = groupColor(g, i, groupBy);
+    const norm = c.toLowerCase();
+    if (g.key !== 'none' && used.has(norm)) {
+      for (let k = 0; k < PALETTE.length; k++) {
+        const cand = PALETTE[(next + k) % PALETTE.length];
+        if (!used.has(cand.toLowerCase())) { c = cand; next = (next + k + 1) % PALETTE.length; break; }
+      }
+    }
+    used.add(c.toLowerCase());
+    return c;
+  });
+}
+
 // ─── Khung chung ─────────────────────────────────────────────────
 
 function Loading() {
@@ -206,7 +228,11 @@ function useStats(pid: number, groupBy: GroupBy, jql: string) {
 
 function PieWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: GroupBy }) {
   const q = useStats(pid, groupBy, jql);
-  const data = useMemo(() => (q.data?.groups ?? []).map((g, i) => ({ ...g, color: groupColor(g, i, groupBy) })), [q.data, groupBy]);
+  const data = useMemo(() => {
+    const groups = q.data?.groups ?? [];
+    const colors = distinctColors(groups, groupBy);
+    return groups.map((g, i) => ({ ...g, color: colors[i] }));
+  }, [q.data, groupBy]);
   if (q.isLoading) return <Loading />;
   if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
   if (!q.data.total) return <Empty>No issues match this query.</Empty>;
@@ -243,7 +269,11 @@ function PieWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: G
 
 function BarWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: GroupBy }) {
   const q = useStats(pid, groupBy, jql);
-  const data = useMemo(() => (q.data?.groups ?? []).slice(0, 15).map((g, i) => ({ ...g, color: groupColor(g, i, groupBy) })), [q.data, groupBy]);
+  const data = useMemo(() => {
+    const groups = (q.data?.groups ?? []).slice(0, 15);
+    const colors = distinctColors(groups, groupBy);
+    return groups.map((g, i) => ({ ...g, color: colors[i] }));
+  }, [q.data, groupBy]);
   if (q.isLoading) return <Loading />;
   if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
   if (!q.data.total) return <Empty>No issues match this query.</Empty>;

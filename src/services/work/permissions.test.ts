@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 
 import type { ProjectRole, WorkspaceRole } from './constants.js';
 import {
-  can, canDeleteIssue, canModifyComment, canWorkspace, effectiveProjectRole, type ProjectAction,
+  can, canDeleteIssue, canModifyComment, canWorkspace, effectiveProjectRole, projectOptionsOf, type ProjectAction,
 } from './permissions.js';
 
 describe('vai trò hiệu lực trong dự án', () => {
@@ -54,6 +54,25 @@ describe('bảng quyền dự án', () => {
   it('VIEWER chỉ xem, không một quyền ghi nào', () => {
     const writes = (Object.keys(expected) as ProjectAction[]).filter((a) => a !== 'project.view');
     for (const a of writes) assert.equal(can('VIEWER', a), false, a);
+  });
+});
+
+describe('tuỳ chọn "Allow members to manage sprints"', () => {
+  it('bật ⇒ MEMBER quản lý được sprint; vai trò khác không đổi', () => {
+    const on = projectOptionsOf({ membersManageSprints: true });
+    assert.equal(can('MEMBER', 'sprint.manage', on), true);
+    assert.equal(can('VIEWER', 'sprint.manage', on), false);
+    assert.equal(can('TEACHER', 'sprint.manage', on), false);
+    assert.equal(can('CLIENT', 'sprint.manage', on), false);
+    assert.equal(can(null, 'sprint.manage', on), false);
+    // Chỉ nới đúng một quyền — không kéo theo quyền cài đặt.
+    assert.equal(can('MEMBER', 'project.settings', on), false);
+  });
+  it('tắt / thiếu / sai kiểu ⇒ mặc định chặt', () => {
+    assert.equal(can('MEMBER', 'sprint.manage', projectOptionsOf({})), false);
+    assert.equal(can('MEMBER', 'sprint.manage', projectOptionsOf(null)), false);
+    assert.equal(can('MEMBER', 'sprint.manage', projectOptionsOf({ membersManageSprints: 'true' })), false);
+    assert.equal(can('ADMIN', 'sprint.manage', projectOptionsOf({ membersManageSprints: false })), true);
   });
 });
 

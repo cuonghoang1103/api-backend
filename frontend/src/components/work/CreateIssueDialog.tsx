@@ -3,9 +3,13 @@
 /**
  * Hộp thoại "Create issue". ⌘/Ctrl+Enter để tạo; bật "Create another" thì
  * giữ hộp thoại mở và giữ loại/sprint/epic — nhập liền tay cả backlog.
+ *
+ * Mở từ Board (không truyền sprint) ⇒ mặc định vào sprint đang chạy, để thẻ
+ * mới hiện ngay ở cột đầu tiên của board thay vì lặn vào backlog.
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
@@ -14,7 +18,7 @@ import { isAiQuotaError, workApi, workError, type ProjectConfig, type TiptapDoc 
 import UpgradeDialog from './ai/UpgradeDialog';
 import { useLookups, wk } from './hooks';
 import {
-  AssigneePicker, LabelsPicker, ParentPicker, PriorityPicker, SprintPicker, TypePicker,
+  AssigneePicker, DateInput, LabelsPicker, NumberInput, ParentPicker, PriorityPicker, SprintPicker, TypePicker,
 } from './fields';
 import RichEditor, { isDocEmpty } from './RichEditor';
 import { Dialog } from './ui';
@@ -52,6 +56,12 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
   const lk = useLookups(config);
   const meId = useAuthStore((s) => s.user?.id);
   const isClient = config.role === 'CLIENT';
+  const pathname = usePathname() ?? '';
+  // Sprint mặc định: truyền vào (backlog/sprint cụ thể) > đang ở Board thì sprint đang chạy > backlog.
+  const activeSprintId = config.sprints.find((s) => s.state === 'ACTIVE')?.id ?? null;
+  const fromBoard = /\/board\/?$/.test(pathname);
+  const defaultSprint = defaults?.sprintId !== undefined ? defaults.sprintId : fromBoard ? activeSprintId : null;
+  const hoursMode = config.settings?.estimation === 'HOURS';
 
   const defaultType = useMemo(() => {
     if (defaults?.typeId) return defaults.typeId;
@@ -68,7 +78,8 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
   const [assigneeId, setAssigneeId] = useState<number | null>(null);
   const [priority, setPriority] = useState(3);
   const [labelIds, setLabelIds] = useState<number[]>([]);
-  const [sprintId, setSprintId] = useState<number | null>(defaults?.sprintId ?? null);
+  const [sprintId, setSprintId] = useState<number | null>(defaultSprint);
+  const [dueDate, setDueDate] = useState<string | null>(null);
   const [parent, setParent] = useState<{ id: number; number: number; title: string } | null>(null);
   const [another, setAnother] = useState(false);
   const [storyPoints, setStoryPoints] = useState<number | null>(null);
@@ -132,12 +143,13 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
     setAssigneeId(null);
     setPriority(3);
     setLabelIds([]);
-    setSprintId(defaults?.sprintId ?? null);
+    setSprintId(defaultSprint);
     setParent(defaults?.parent ?? null);
     setStoryPoints(null);
+    setDueDate(null);
     setTimeout(() => titleRef.current?.focus(), 30);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- so theo id: object `defaults` mới mỗi lần render không được xoá chữ đang gõ
-  }, [open, defaultType, defaults?.sprintId, defaults?.parent?.id]);
+  }, [open, defaultType, defaultSprint, defaults?.parent?.id]);
 
   // Có parentId mặc định (bấm "Add sub-task" trong thẻ) ⇒ tải tiêu đề cha để hiện.
   useEffect(() => {
@@ -161,17 +173,23 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
       statusId: defaults?.statusId && lk.workflowOfType(typeId)?.statuses.some((s) => s.id === defaults.statusId) ? defaults.statusId : undefined,
       parentId: parent?.id,
       labelIds: labelIds.length ? labelIds : undefined,
-      ...(storyPoints !== null && !isClient ? { storyPoints } : {}),
+      ...(storyPoints !== null && !isClient
+        ? hoursMode ? { originalEstimateMin: Math.round(storyPoints * 60) } : { storyPoints }
+        : {}),
+      ...(dueDate ? { dueDate } : {}),
     }),
     onSuccess: (issue) => {
       qc.invalidateQueries({ queryKey: wk.board(config.id) });
       qc.invalidateQueries({ queryKey: wk.issues(config.id) });
-      toast.success(`Created ${lk.issueKey(issue.number)}`, {
+      qc.invalidateQueries({ queryKey: wk.backlog(config.id) });
+      const sprintName = issue.sprintId ? config.sprints.find((s) => s.id === issue.sprintId)?.name : null;
+      toast.success(`Created ${lk.issueKey(issue.number)}${sprintName ? ` in ${sprintName}` : level === 0 && config.type !== 'KANBAN' ? ' in the backlog' : ''}`, {
         action: onCreated ? { label: 'Open', onClick: () => onCreated(issue.number) } : undefined,
       });
       if (another) {
         setTitle('');
         setDesc(null);
+        setStoryPoints(null);
         setDescKey((k) => k + 1);
         titleRef.current?.focus();
       } else {
@@ -237,7 +255,6 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
             <button type="button" className="w-btn w-btn-ghost w-btn-sm" disabled={drafting} onClick={draftWithAi} title="Turn your idea into a user story with acceptance criteria (uses 1 AI request)">
               <Sparkles size={13} /> {drafting ? 'Drafting…' : 'Draft with AI'}
             </button>
-            {storyPoints !== null && <span className="text-[12px] text-[var(--w-text-3)]">Suggested estimate: {storyPoints} pts</span>}
           </div>
         )}
         {!!similar.data?.length && (
@@ -286,6 +303,18 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
               <SprintPicker config={config} value={sprintId} onChange={setSprintId} />
             </div>
           )}
+          {!isClient && level !== 1 && (
+            <div>
+              <div className="w-label">{hoursMode ? 'Estimate (hours)' : 'Story points'}</div>
+              <div className="rounded-[var(--w-radius)] border border-[var(--w-border-strong)]">
+                <NumberInput value={storyPoints} onCommit={setStoryPoints} placeholder={hoursMode ? 'e.g. 4' : 'e.g. 3'} />
+              </div>
+            </div>
+          )}
+          <div>
+            <div className="w-label">Due date</div>
+            <DateInput value={dueDate} onChange={setDueDate} bare={false} />
+          </div>
         </div>
         {needsParent && <p className="mt-3 text-[12px] text-[var(--w-orange)]">Choose the parent issue for this sub-task.</p>}
       </div>

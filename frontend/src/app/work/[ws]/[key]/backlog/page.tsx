@@ -13,13 +13,15 @@ import { userName, workApi, workError, type BacklogIssue, type ProjectConfig } f
 import Backlog from '@/components/work/Backlog';
 import CreateIssueDialog from '@/components/work/CreateIssueDialog';
 import IssueDrawer from '@/components/work/IssueDrawer';
+import GettingStartedCard from '@/components/work/onboarding/GettingStartedCard';
+import StartProjectButton from '@/components/work/onboarding/StartProjectButton';
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import { EmptyState, isTyping, Spinner, UserAvatar } from '@/components/work/ui';
 
 const EPIC_PANEL_KEY = 'work.backlog.epics';
 
-function BacklogView({ config, pid }: { config: ProjectConfig; pid: number }) {
+function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number; slug: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
@@ -184,6 +186,8 @@ function BacklogView({ config, pid }: { config: ProjectConfig; pid: number }) {
           </aside>
         )}
         <div className="min-w-0 flex-1 overflow-y-auto">
+          {/* Danh sách "Getting started" nằm trong vùng cuộn để không chiếm chỗ cố định. */}
+          <GettingStartedCard config={config} slug={slug} onCreateIssue={config.permissions.createIssues ? () => setCreateOpen(true) : undefined} className="mx-4 mt-3" />
           {backlog.isLoading ? (
             <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>
           ) : backlog.error ? (
@@ -217,6 +221,6 @@ function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
-  return <BacklogView config={config} pid={pid} />;
+  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} action={<StartProjectButton label="Start a new project" />} />;
+  return <BacklogView config={config} pid={pid} slug={params.ws} />;
 }

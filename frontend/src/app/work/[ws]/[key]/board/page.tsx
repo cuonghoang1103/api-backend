@@ -15,6 +15,8 @@ import { userName, workApi, workError, type ProjectConfig } from '@/lib/work-api
 import Board from '@/components/work/Board';
 import CreateIssueDialog from '@/components/work/CreateIssueDialog';
 import IssueDrawer from '@/components/work/IssueDrawer';
+import GettingStartedCard from '@/components/work/onboarding/GettingStartedCard';
+import StartProjectButton from '@/components/work/onboarding/StartProjectButton';
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { CompleteSprintDialog } from '@/components/work/SprintDialogs';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
@@ -28,7 +30,7 @@ function daysLeft(end: string | null) {
   return d;
 }
 
-function BoardView({ config, pid }: { config: ProjectConfig; pid: number }) {
+function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; slug: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
@@ -95,28 +97,9 @@ function BoardView({ config, pid }: { config: ProjectConfig; pid: number }) {
   const sprint = board.data?.sprint;
   const left = daysLeft(sprint?.endAt ?? null);
 
-  return (
-    <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title={sprint ? sprint.name : 'Board'}>
-        {sprint && left !== null && (
-          <span className={cn('hidden text-[12px] sm:inline', left < 0 ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]')}>
-            {left < 0 ? `${-left} days overdue` : left === 0 ? 'Ends today' : `${left} days left`}
-          </span>
-        )}
-        {sprint?.state === 'ACTIVE' && config.permissions.manageSprints && (
-          <button type="button" className="w-btn w-btn-sm" onClick={() => setCompleteOpen(true)}>
-            <CheckCircle2 size={13} /> <span className="hidden sm:inline">Complete sprint</span>
-          </button>
-        )}
-        {config.permissions.createIssues && (
-          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue (C)">
-            <Plus size={14} /> <span className="hidden sm:inline">Create</span>
-          </button>
-        )}
-      </ProjectHeader>
-
-      {/* Bộ lọc */}
-      <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-4 py-2">
+  // Bộ lọc của trang — Board vẽ chung một hàng với Group by / quick filters.
+  const filterControls = (
+    <>
         <div className="relative">
           <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
           <input
@@ -161,8 +144,28 @@ function BoardView({ config, pid }: { config: ProjectConfig; pid: number }) {
             <X size={12} /> Clear
           </button>
         )}
-        {filtered && <span className="text-[12px] text-[var(--w-text-3)]">{visible!.size} of {issues?.length ?? 0} issues</span>}
-      </div>
+    </>
+  );
+
+  return (
+    <div className="flex h-full flex-col">
+      <ProjectHeader config={config} title={sprint ? sprint.name : 'Board'}>
+        {sprint && left !== null && (
+          <span className={cn('hidden text-[12px] sm:inline', left < 0 ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]')}>
+            {left < 0 ? `${-left} days overdue` : left === 0 ? 'Ends today' : `${left} days left`}
+          </span>
+        )}
+        {sprint?.state === 'ACTIVE' && config.permissions.manageSprints && (
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setCompleteOpen(true)}>
+            <CheckCircle2 size={13} /> <span className="hidden sm:inline">Complete sprint</span>
+          </button>
+        )}
+        {config.permissions.createIssues && (
+          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue (C)">
+            <Plus size={14} /> <span className="hidden sm:inline">Create</span>
+          </button>
+        )}
+      </ProjectHeader>
 
       {board.data?.fallback && (
         <div className="flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] bg-[var(--w-accent-soft)] px-4 py-2 text-[12px] text-[var(--w-text-2)]">
@@ -176,6 +179,9 @@ function BoardView({ config, pid }: { config: ProjectConfig; pid: number }) {
         </div>
       )}
 
+      {/* Danh sách "Getting started" — tự ẩn khi xong hoặc bị tắt. */}
+      <GettingStartedCard config={config} slug={slug} onCreateIssue={config.permissions.createIssues ? () => setCreateOpen(true) : undefined} className="mx-4 mt-3 shrink-0" />
+
       <div className="min-h-0 flex-1">
         {board.isLoading ? (
           <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>
@@ -188,7 +194,7 @@ function BoardView({ config, pid }: { config: ProjectConfig; pid: number }) {
             action={config.permissions.createIssues ? <button type="button" className="w-btn w-btn-primary" onClick={() => setCreateOpen(true)}><Plus size={14} /> Create issue</button> : undefined}
           />
         ) : board.data ? (
-          <Board config={config} lk={lk} data={board.data} visible={visible} onOpen={openIssue} />
+          <Board config={config} lk={lk} data={board.data} visible={visible} onOpen={openIssue} toolbarLeading={filterControls} />
         ) : null}
       </div>
 
@@ -221,7 +227,7 @@ function BoardPageInner() {
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
   if (error || !config || !pid) {
-    return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
+    return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} action={<StartProjectButton label="Start a new project" />} />;
   }
-  return <BoardView config={config} pid={pid} />;
+  return <BoardView config={config} pid={pid} slug={params.ws} />;
 }

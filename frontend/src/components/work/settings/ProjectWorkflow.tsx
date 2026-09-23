@@ -34,7 +34,7 @@ export function WipInput({ value, onCommit, disabled, label }: { value: number |
       type="number"
       min={1}
       inputMode="numeric"
-      className="w-input !h-7 !w-[72px] shrink-0 !px-2 text-[12px] disabled:opacity-60"
+      className="w-input !h-7 !w-[88px] shrink-0 !px-2 text-[12px] disabled:opacity-60"
       placeholder="No limit"
       title="WIP limit (leave empty for no limit)"
       aria-label={label}

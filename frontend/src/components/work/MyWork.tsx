@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Bell, CheckCircle2 } from 'lucide-react';
+import { AlertTriangle, Bell, CalendarClock, CheckCircle2, CircleDot, Inbox } from 'lucide-react';
 import { workApi, workError, type EmailMode, type MyWorkItem, type NotifySettings } from '@/lib/work-api';
 import { Dialog, EmptyState, formatDate, IssueTypeIcon, PriorityIcon, Spinner, StatusBadge } from '@/components/work/ui';
 import { wk } from '@/components/work/hooks';
@@ -24,11 +24,14 @@ const GROUPS: Array<{ id: MyWorkItem['bucket']; label: string; tone?: string }> 
   { id: 'none', label: 'No due date' },
 ];
 
-function Counter({ label, value, tone }: { label: string; value: number; tone?: string }) {
+function Counter({ label, value, tone, icon: Icon }: { label: string; value: number; tone?: string; icon: typeof Bell }) {
   return (
-    <div className="min-w-0 rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2.5">
-      <div className="truncate text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{label}</div>
-      <div className={cn('mt-1 text-[18px] font-semibold tabular-nums', value > 0 && tone)}>{value}</div>
+    <div className="w-card min-w-0 px-4 py-3.5">
+      <div className="flex items-center gap-1.5 truncate text-[13px] font-medium text-[var(--w-text-2)]">
+        <Icon size={14} className={cn('shrink-0 text-[var(--w-text-3)]', value > 0 && tone)} />
+        {label}
+      </div>
+      <div className={cn('mt-1.5 text-[24px] font-semibold leading-none tabular-nums', value > 0 && tone)}>{value}</div>
     </div>
   );
 }
@@ -130,8 +133,8 @@ function NotifyButton() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button type="button" className="w-btn w-btn-sm" onClick={() => setOpen(true)}>
-        <Bell size={12} /> Notification settings
+      <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setOpen(true)}>
+        <Bell size={13} /> Email &amp; notification settings
       </button>
       <NotifySettingsDialog open={open} onClose={() => setOpen(false)} />
     </>
@@ -149,18 +152,18 @@ export default function MyWork() {
 
   return (
     <div className="space-y-5">
-      <div className="-mb-2 flex justify-end">
-        <NotifyButton />
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Counter label="Overdue" value={counts.overdue} tone="text-[var(--w-red)]" icon={AlertTriangle} />
+        <Counter label="Due today" value={counts.dueToday} tone="text-[var(--w-orange)]" icon={CalendarClock} />
+        <Counter label="In progress" value={counts.inProgress} tone="text-[var(--w-blue)]" icon={CircleDot} />
+        <Counter label="Open" value={counts.total} icon={Inbox} />
       </div>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Counter label="Overdue" value={counts.overdue} tone="text-[var(--w-red)]" />
-        <Counter label="Due today" value={counts.dueToday} tone="text-[var(--w-orange)]" />
-        <Counter label="In progress" value={counts.inProgress} tone="text-[var(--w-accent-text)]" />
-        <Counter label="Open" value={counts.total} />
+      <div className="flex justify-end">
+        <NotifyButton />
       </div>
 
       {!items.length ? (
-        <div className="flex flex-col items-center px-6 py-14 text-center">
+        <div className="w-card flex flex-col items-center px-6 py-14 text-center">
           <CheckCircle2 size={28} className="text-[var(--w-green)]" />
           <div className="mt-3 text-[15px] font-semibold">You&apos;re all caught up</div>
           <p className="mt-1.5 max-w-[420px] text-[13px] leading-relaxed text-[var(--w-text-2)]">
@@ -173,21 +176,21 @@ export default function MyWork() {
           if (!rows.length) return null;
           return (
             <section key={g.id} aria-label={g.label}>
-              <h2 className={cn('mb-2 flex items-center gap-2 text-[12px] font-semibold uppercase tracking-wide text-[var(--w-text-2)]', g.tone)}>
+              <h2 className={cn('mb-2 flex items-center gap-2 text-[14px] font-semibold text-[var(--w-text)]', g.tone)}>
                 {g.label}
-                <span className="font-normal tabular-nums text-[var(--w-text-3)]">{rows.length}</span>
+                <span className="rounded-full bg-[var(--w-sunken)] px-2 text-[12px] font-medium leading-[20px] tabular-nums text-[var(--w-text-2)]">{rows.length}</span>
               </h2>
-              <ul className="overflow-hidden rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)]">
+              <ul className="w-card overflow-hidden">
                 {rows.map((it) => (
                   <li key={it.key} className="border-b border-[var(--w-border)] last:border-b-0">
-                    <Link href={it.url} className="flex min-w-0 items-start gap-3 px-3 py-2.5 hover:bg-[var(--w-hover)] md:items-center">
+                    <Link href={it.url} className="flex min-h-[48px] min-w-0 items-start gap-3 px-4 py-3 transition-colors hover:bg-[var(--w-hover)] md:items-center">
                       <span className="mt-0.5 md:mt-0"><IssueTypeIcon type={it.type} /></span>
                       <div className="min-w-0 flex-1 md:flex md:items-center md:gap-3">
                         <div className="flex min-w-0 items-center gap-2 md:flex-1">
                           <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{it.key}</span>
-                          <span className="truncate text-[13px] font-medium">{it.title}</span>
+                          <span className="truncate text-[14px] font-medium">{it.title}</span>
                         </div>
-                        <div className="mt-1 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-[var(--w-text-2)] md:mt-0 md:shrink-0 md:flex-nowrap">
+                        <div className="mt-1 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-[var(--w-text-2)] md:mt-0 md:shrink-0 md:flex-nowrap">
                           <span className="max-w-[160px] truncate" title={`${it.workspace.name} / ${it.project.name}`}>{it.project.name}</span>
                           <PriorityIcon priority={it.priority} size={14} />
                           <StatusBadge status={it.status} className="max-w-[140px] truncate" />

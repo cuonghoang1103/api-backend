@@ -98,8 +98,24 @@ export function effectiveProjectRole(input: {
   return null;
 }
 
-export function can(role: ProjectRole | null, action: ProjectAction): boolean {
-  return role !== null && PROJECT_MATRIX[action].includes(role);
+export function can(role: ProjectRole | null, action: ProjectAction, opts: ProjectOptions = {}): boolean {
+  if (role === null) return false;
+  if (PROJECT_MATRIX[action].includes(role)) return true;
+  // Tuỳ chọn của dự án nới quyền (chỉ nới, không bao giờ siết dưới bảng gốc).
+  if (action === 'sprint.manage' && role === 'MEMBER' && opts.membersManageSprints === true) return true;
+  return false;
+}
+
+/** Tuỳ chọn quyền lưu trong WorkProject.settings. */
+export interface ProjectOptions {
+  /** "Allow members to manage sprints" — MEMBER được tạo/bắt đầu/kết thúc sprint. */
+  membersManageSprints?: boolean;
+}
+
+/** Đọc tuỳ chọn quyền từ settings JSON (thiếu/sai kiểu ⇒ mặc định chặt). */
+export function projectOptionsOf(settings: unknown): ProjectOptions {
+  const s = (settings ?? {}) as Record<string, unknown>;
+  return { membersManageSprints: s.membersManageSprints === true };
 }
 
 export function canWorkspace(role: WorkspaceRole | null, action: WorkspaceAction): boolean {
@@ -126,6 +142,7 @@ export interface ProjectAccess {
   key: string;
   role: ProjectRole;
   workspaceRole: WorkspaceRole;
+  options: ProjectOptions;
 }
 
 /**
@@ -140,6 +157,7 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
       key: true,
       workspaceId: true,
       visibility: true,
+      settings: true,
       workspace: { select: { members: { where: { userId }, select: { role: true } } } },
       members: { where: { userId }, select: { role: true } },
     },
@@ -152,14 +170,14 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
     visibility: project.visibility as ProjectVisibility,
   });
   if (!role || !workspaceRole) return null;
-  return { projectId: project.id, workspaceId: project.workspaceId, key: project.key, role, workspaceRole };
+  return { projectId: project.id, workspaceId: project.workspaceId, key: project.key, role, workspaceRole, options: projectOptionsOf(project.settings) };
 }
 
 /** Như loadProjectAccess nhưng ném lỗi: 404 khi không thấy, 403 khi thấy mà không được làm. */
 export async function requireProject(userId: number, projectId: number, action: ProjectAction): Promise<ProjectAccess> {
   const access = await loadProjectAccess(userId, projectId);
   if (!access) throw new NotFoundError('Project not found');
-  if (!can(access.role, action)) throw new ForbiddenError('You do not have permission to do this in this project');
+  if (!can(access.role, action, access.options)) throw new ForbiddenError('You do not have permission to do this in this project');
   return access;
 }
 

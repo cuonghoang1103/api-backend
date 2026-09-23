@@ -18,14 +18,14 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeSanitize from 'rehype-sanitize';
 import { toast } from 'sonner';
-import { AlertTriangle, ArrowUp, Sparkles, Trash2, X } from 'lucide-react';
+import { AlertTriangle, ArrowUp, Sparkles, Square, Trash2, X } from 'lucide-react';
 import {
   isAiQuotaError, workApi, workError, workErrorStatus,
   type AiAnswer, type AiQuickTask, type AiQuota, type ProjectConfig,
 } from '@/lib/work-api';
 import { cn } from '@/lib/utils';
 import { wk } from '../hooks';
-import { Spinner, WorkPortal } from '../ui';
+import { WorkPortal } from '../ui';
 import { ActionGroup, type ActionItem } from './ActionCard';
 import UpgradeDialog from './UpgradeDialog';
 import { useAiPanel, type AiQuickRequest } from './store';
@@ -147,6 +147,9 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   const [conv, setConv] = useState<{ pid: number; turns: Turn[] }>(() => ({ pid, turns: loadTurns(pid) }));
   const [draft, setDraft] = useState('');
   const [waiting, setWaiting] = useState<string | null>(null); // nhãn của việc đang chờ
+  /** Huỷ lượt đang chờ: chat thì huỷ hẳn request; việc một chạm thì bỏ qua kết quả về muộn. */
+  const abortRef = useRef<AbortController | null>(null);
+  const waitGen = useRef(0);
   const [unavailable, setUnavailable] = useState(false);
   const [upgrade, setUpgrade] = useState(false);
   const pidRef = useRef(pid);
@@ -211,23 +214,36 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
     const userTurn: Turn = { id: uid(), role: 'user', content: message };
     append(forPid, userTurn);
     setDraft('');
-    setWaiting('Thinking');
+    setWaiting(CHAT_WAIT);
     setUnavailable(false);
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
+    const gen = ++waitGen.current;
     try {
-      const a = await workApi.aiChat(forPid, { message, history, issueNumber });
+      const a = await workApi.aiChatAbortable(forPid, { message, history, issueNumber }, ctrl.signal);
       append(forPid, { id: uid(), role: 'assistant', content: a.reply, actions: toActionItems(a) });
       onQuota(a.quota);
     } catch (err) {
-      // Hỏi hỏng thì trả câu hỏi về ô soạn để gửi lại, không để một lượt "treo" trong lịch sử.
+      // Hỏi hỏng (hoặc bấm Cancel) thì trả câu hỏi về ô soạn để gửi lại, không để một lượt "treo".
       if (pidRef.current === forPid) {
         removeTurn(userTurn.id);
         setDraft((d) => d || message);
       }
-      handleError(err);
+      if (ctrl.signal.aborted) qc.invalidateQueries({ queryKey: QUOTA_KEY });
+      else handleError(err);
     } finally {
-      setWaiting(null);
+      if (abortRef.current === ctrl) abortRef.current = null;
+      if (waitGen.current === gen) setWaiting(null);
     }
-  }, [waiting, pid, turns, issueNumber, append, removeTurn, onQuota, handleError]);
+  }, [waiting, pid, turns, issueNumber, append, removeTurn, onQuota, handleError, qc]);
+
+  const cancel = useCallback(() => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    waitGen.current += 1; // kết quả việc một chạm về muộn sẽ bị bỏ qua
+    setWaiting(null);
+    requestAnimationFrame(() => inputRef.current?.focus());
+  }, []);
 
   // ── Việc một chạm từ store: chạy ngay khi mở ──
   const ranQuick = useRef<AiQuickRequest | null>(null);
@@ -239,13 +255,15 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
     const title = quick.label ?? QUICK_TITLES[quick.task];
     setWaiting(title);
     setUnavailable(false);
+    const gen = ++waitGen.current;
     workApi.aiQuick(forPid, { task: quick.task, issueNumber: quick.issueNumber ?? null, text: quick.text ?? null })
       .then((a) => {
-        append(forPid, { id: uid(), role: 'assistant', title, content: a.reply, actions: toActionItems(a) });
         onQuota(a.quota);
+        if (waitGen.current !== gen) return; // đã bấm Cancel
+        append(forPid, { id: uid(), role: 'assistant', title, content: a.reply, actions: toActionItems(a) });
       })
-      .catch(handleError)
-      .finally(() => setWaiting(null));
+      .catch((err) => { if (waitGen.current === gen) handleError(err); })
+      .finally(() => { if (waitGen.current === gen) setWaiting(null); });
   }, [quick, pid, onQuickTaken, append, onQuota, handleError]);
 
   // ── Cuộn xuống cuối khi có lượt mới ──
@@ -358,7 +376,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                   ) : null}
                 </div>
               )))}
-              {waiting && <Typing label={waiting} />}
+              {waiting && <Typing label={waiting} onCancel={cancel} />}
             </div>
           )}
         </div>
@@ -387,8 +405,10 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => {
-                if (e.nativeEvent.isComposing) return;
-                if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                // Đang gõ bộ gõ tiếng Việt/IME thì Enter là chốt chữ, không phải gửi.
+                if (e.nativeEvent.isComposing || e.keyCode === 229) return;
+                // Enter gửi; Shift+Enter xuống dòng (⌘/Ctrl+Enter vẫn gửi như cũ).
+                if (e.key === 'Enter' && !e.shiftKey && !e.altKey) {
                   e.preventDefault();
                   send(draft);
                 }
@@ -400,19 +420,31 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
               aria-label="Message the AI assistant"
               className="max-h-[200px] min-h-[64px] flex-1 resize-none bg-transparent px-1.5 py-1 text-[13.5px] leading-relaxed text-[var(--w-text)] outline-none placeholder:text-[var(--w-text-3)] disabled:opacity-60"
             />
-            <button
-              type="button"
-              className="w-btn w-btn-primary w-btn-icon !h-[30px] !w-[30px] shrink-0"
-              onClick={() => send(draft)}
-              disabled={!draft.trim() || !!waiting}
-              aria-label="Send"
-              title="Send (⌘/Ctrl+Enter)"
-            >
-              {waiting ? <Spinner size={13} /> : <ArrowUp size={15} />}
-            </button>
+            {waiting ? (
+              <button
+                type="button"
+                className="w-btn w-btn-icon !h-[30px] !w-[30px] shrink-0"
+                onClick={cancel}
+                aria-label="Cancel"
+                title="Cancel"
+              >
+                <Square size={11} fill="currentColor" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="w-btn w-btn-primary w-btn-icon !h-[30px] !w-[30px] shrink-0"
+                onClick={() => send(draft)}
+                disabled={!draft.trim()}
+                aria-label="Send"
+                title="Send (Enter)"
+              >
+                <ArrowUp size={15} />
+              </button>
+            )}
           </div>
           <p className="mt-1.5 text-[11px] leading-snug text-[var(--w-text-3)]">
-            The AI only suggests changes. Nothing happens until you click Apply. <span className="max-sm:hidden">⌘/Ctrl+Enter to send.</span>
+            The AI only suggests changes. Nothing happens until you click Apply. <span className="max-sm:hidden">Enter to send · Shift+Enter for a new line.</span>
           </p>
         </div>
       </div>
@@ -441,15 +473,39 @@ function QuotaChip({ quota }: { quota: AiQuota }) {
   );
 }
 
-function Typing({ label }: { label: string }) {
+/** Nhãn chờ của câu hỏi tự do (việc một chạm dùng tên việc làm nhãn). */
+const CHAT_WAIT = 'chat';
+
+/** Các giai đoạn hiển thị theo thời gian chờ — model không báo tiến độ thật. */
+function stageOf(sec: number): string {
+  if (sec < 3) return 'Reading your project…';
+  if (sec < 10) return 'Thinking…';
+  return 'Writing the answer…';
+}
+
+function Typing({ label, onCancel }: { label: string; onCancel: () => void }) {
+  const [sec, setSec] = useState(0);
+  useEffect(() => {
+    const t0 = Date.now();
+    const id = window.setInterval(() => setSec(Math.floor((Date.now() - t0) / 1000)), 500);
+    return () => window.clearInterval(id);
+  }, [label]);
+  const stage = stageOf(sec);
   return (
-    <div className="flex items-center gap-2 text-[12.5px] text-[var(--w-text-3)]" role="status">
-      <span className="inline-flex items-center gap-1 rounded-[12px] rounded-bl-[4px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2.5">
+    <div className="flex flex-wrap items-center gap-2 text-[12.5px] text-[var(--w-text-3)]" role="status" aria-live="polite">
+      <span className="inline-flex items-center gap-1 rounded-[12px] rounded-bl-[4px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2.5" aria-hidden>
         {[0, 150, 300].map((d) => (
           <span key={d} className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--w-text-3)]" style={{ animationDelay: `${d}ms` }} />
         ))}
       </span>
-      {label}…
+      <span>
+        {label === CHAT_WAIT ? stage : <><span className="font-medium text-[var(--w-text-2)]">{label}</span> · {stage}</>}
+        <span className="ml-1 tabular-nums">{sec}s</span>
+      </span>
+      <button type="button" onClick={onCancel} className="rounded-[4px] px-1.5 py-0.5 text-[12px] text-[var(--w-accent-text)] hover:bg-[var(--w-hover)]">
+        Cancel
+      </button>
+      {sec >= 30 && <span className="w-full text-[11.5px]">Big projects can take up to a minute.</span>}
     </div>
   );
 }

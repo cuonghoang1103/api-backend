@@ -98,3 +98,47 @@ describe('JQL — dịch sang Prisma', () => {
     assert.deepEqual(r.orderBy, [{ priority: 'asc' }, { rank: 'asc' }, { id: 'asc' }]);
   });
 });
+
+describe('JQL — thân thiện (23/09)', () => {
+  const err = (q: string) => {
+    try { compileJql(parseJql(q), ctx); } catch (e) { if (e instanceof JqlError) return e; throw e; }
+    throw new Error(`không lỗi: ${q}`);
+  };
+  it('me / myself = currentUser() trong trường người', () => {
+    const cur = w('assignee = currentUser()');
+    assert.deepEqual(w('assignee = me'), cur);
+    assert.deepEqual(w('assignee = MYSELF'), cur);
+    assert.deepEqual(w('reporter IN (me, minh)'), { OR: [{ reporterId: { in: [7, 8] } }] });
+    // "me" trong dấu nháy là tên thật — không có ai tên đó thì báo lỗi.
+    assert.throws(() => w('assignee = "me"'), /No member "me"/);
+  });
+  it('lỗi trỏ vào GIÁ TRỊ sai, không phải tên trường', () => {
+    const q = 'type = Story AND status = Shipped';
+    assert.equal(err(q).pos, q.indexOf('Shipped'));
+    const q2 = 'labels IN (payment, paymnet)';
+    assert.equal(err(q2).pos, q2.indexOf('paymnet'));
+    const q3 = 'created >= yesterday';
+    assert.equal(err(q3).pos, q3.indexOf('yesterday'));
+    // Trường sai thì vẫn trỏ vào trường.
+    assert.equal(err('status = Done AND colour = red').pos, 'status = Done AND '.length);
+  });
+  it('"did you mean" cho trạng thái, loại, nhãn, người, trường', () => {
+    const a = err('status = "In Progres"');
+    assert.equal(a.suggestion, '"In Progress"');
+    assert.match(a.message, /Did you mean "In Progress"\?/);
+    assert.equal(err('status = don').suggestion, 'Done');
+    assert.equal(err('type = Bgu').suggestion, 'Bug');
+    assert.equal(err('labels = paymnet').suggestion, 'payment');
+    assert.equal(err('assignee = cuogn').suggestion, 'cuong');
+    assert.equal(err('statsu = Done').suggestion, 'status');
+    assert.equal(err('Browsr = Chrome').suggestion, 'Browser');
+    assert.equal(err('Browser = Chrom').suggestion, 'Chrome');
+    assert.equal(err('priority = Hihg').suggestion, 'High');
+    assert.equal(err('ORDER BY prority').suggestion, 'priority');
+    assert.equal(err('ORDER BY prority').pos, 'ORDER BY '.length);
+  });
+  it('không gợi ý bừa khi quá xa', () => {
+    assert.equal(err('status = Shipped').suggestion, undefined);
+    assert.equal(err('colour = red').suggestion, undefined);
+  });
+});

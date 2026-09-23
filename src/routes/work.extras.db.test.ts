@@ -144,6 +144,31 @@ describe('CT Work — phần bù đợt 3–4', { skip: !RUN }, () => {
     const run = (await call(dev, 'GET', `/projects/${pid}/test-runs/${run1.id}`)).data;
     assert.deepEqual(run.evidence, []);
   });
+  it('clone thẻ: "Copy of …", giữ trường/nhãn/mô tả, trạng thái đầu, nối CLONES; viewer bị chặn', async () => {
+    const label = (await call(lead, 'POST', `/projects/${pid}/labels`, { name: `cl-${tag}` })).data;
+    const desc = { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Body to copy' }] }] };
+    const src = await newIssue('Original story', { storyPoints: 3, priority: 2, assigneeId: dev.id, dueDate: '2026-10-01', labelIds: [label.id], descriptionJson: desc });
+    await call(dev, 'PATCH', `/projects/${pid}/issues/${src.number}`, { statusId: st('In Progress') });
+    assert.equal((await call(viewer, 'POST', `/projects/${pid}/issues/${src.number}/clone`)).status, 403);
+    const r = await call(dev, 'POST', `/projects/${pid}/issues/${src.number}/clone`);
+    assert.equal(r.status, 201, JSON.stringify(r.raw));
+    const c = r.data;
+    assert.notEqual(c.number, src.number);
+    assert.equal(c.title, 'Copy of Original story');
+    assert.equal(c.storyPoints, 3);
+    assert.equal(c.priority, 2);
+    assert.equal(c.assigneeId, dev.id);
+    assert.equal(c.dueDate.slice(0, 10), '2026-10-01');
+    assert.deepEqual(c.labelIds, [label.id]);
+    assert.equal(c.descriptionJson.content[0].content[0].text, 'Body to copy');
+    assert.equal(c.statusId, cfg.workflows.find((w: any) => w.isDefault).statuses.sort((a: any, b: any) => a.position - b.position)[0].id, 'trạng thái về đầu quy trình');
+    const link = c.links.find((l: any) => l.type === 'CLONES');
+    assert.ok(link && link.direction === 'outward' && link.issue.number === src.number, JSON.stringify(c.links));
+    const back = (await call(dev, 'GET', `/projects/${pid}/issues/${src.number}`)).data;
+    assert.ok(back.links.some((l: any) => l.type === 'CLONES' && l.direction === 'inward' && l.issue.number === c.number));
+    assert.equal((await call(dev, 'POST', `/projects/${pid}/issues/99999/clone`)).status, 404);
+  });
+
   it('báo cáo bình luận: ghi audit, báo ADMIN dự án, không tự báo, không trùng', async () => {
     const t = await newIssue('Comment target');
     const c = (await call(dev, 'POST', `/projects/${pid}/issues/${t.number}/comments`, { bodyJson: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'rude words' }] }] } })).data;

@@ -38,7 +38,7 @@ export async function compileFor(userId: number, projectId: number, query: strin
     const compiled = compileJql(parseJql(query.slice(0, 4000)), ctx);
     return { access, ...compiled };
   } catch (err) {
-    if (err instanceof JqlError) throw new AppError(err.message, 400, 'WORK_JQL_ERROR', { position: err.pos });
+    if (err instanceof JqlError) throw new AppError(err.message, 400, 'WORK_JQL_ERROR', { position: err.pos, ...(err.suggestion ? { suggestion: err.suggestion } : {}) });
     throw err;
   }
 }
@@ -64,7 +64,7 @@ export async function compileForSystem(projectId: number, query: string, actorUs
   try {
     return compileJql(parseJql(query.slice(0, 4000)), await jqlContext(projectId, actorUserId ?? 0, p.key));
   } catch (err) {
-    if (err instanceof JqlError) throw new AppError(err.message, 400, 'WORK_JQL_ERROR', { position: err.pos });
+    if (err instanceof JqlError) throw new AppError(err.message, 400, 'WORK_JQL_ERROR', { position: err.pos, ...(err.suggestion ? { suggestion: err.suggestion } : {}) });
     throw err;
   }
 }

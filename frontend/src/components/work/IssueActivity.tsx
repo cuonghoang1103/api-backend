@@ -38,10 +38,13 @@ function CommentComposer({ config, pid, num }: { config: ProjectConfig; pid: num
   const empty = isDocEmpty(doc);
   const submit = () => !empty && !add.isPending && add.mutate();
   const me = useAuthStore((s) => s.user);
+  // Lấy đúng bản ghi thành viên của dự án (cùng nguồn với board/bình luận) — authStore có thể đặt displayName = username.
+  const meMember = me ? config.members.find((m) => m.id === me.id) : undefined;
+  const meUser = meMember ?? (me ? { username: me.username, fullName: me.fullName ?? null, displayName: me.displayName ?? null, avatarUrl: me.avatarUrl ?? null } : null);
 
   return (
     <div className="flex gap-3">
-      <UserAvatar user={me ? { username: me.username, fullName: me.fullName ?? null, displayName: me.displayName ?? null, avatarUrl: me.avatarUrl ?? null } : null} size={26} className="mt-1" />
+      <UserAvatar user={meUser} size={26} className="mt-1" />
       <div className="min-w-0 flex-1" onFocusCapture={() => setFocused(true)}>
         <RichEditor
           key={key}

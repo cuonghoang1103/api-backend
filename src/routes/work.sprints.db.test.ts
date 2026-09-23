@@ -61,7 +61,7 @@ describe('CT Work đợt 2 — sprint & báo cáo', { skip: !RUN }, () => {
     [lead, dev, dev2] = await Promise.all(['lead', 'dev', 'dev2'].map(mkUser));
     const ws = (await call(lead, 'POST', '/workspaces', { name: `Sprint test ${tag}` })).data;
     await call(lead, 'POST', `/workspaces/${ws.id}/invites`, { emails: [dev.email, dev2.email], role: 'MEMBER' });
-    pid = (await call(lead, 'POST', `/workspaces/${ws.id}/projects`, { key: 'SPR', name: 'Sprinty', template: 'SWP391' })).data.id;
+    pid = (await call(lead, 'POST', `/workspaces/${ws.id}/projects`, { key: 'SPR', name: 'Sprinty', template: 'SWP391', firstSprint: false })).data.id;
     cfg = (await call(lead, 'GET', `/projects/${pid}`)).data;
   });
 
@@ -78,7 +78,7 @@ describe('CT Work đợt 2 — sprint & báo cáo', { skip: !RUN }, () => {
   it('tạo sprint tự đặt tên, chỉ ADMIN được quản lý sprint', async () => {
     const a = await call(lead, 'POST', `/projects/${pid}/sprints`, {});
     assert.equal(a.status, 201);
-    assert.equal(a.data.name, 'SPR Sprint 1');
+    assert.equal(a.data.name, 'Sprint 1');
     s1 = a.data.id;
     s2 = (await call(lead, 'POST', `/projects/${pid}/sprints`, { name: 'Hardening' })).data.id;
     assert.equal((await call(dev, 'POST', `/projects/${pid}/sprints`, {})).status, 403);
@@ -109,7 +109,7 @@ describe('CT Work đợt 2 — sprint & báo cáo', { skip: !RUN }, () => {
   it('backlog: sprint chưa đóng + thẻ chưa vào sprint, epic kèm tiến độ, không có việc con', async () => {
     await mk('Loose idea');
     const b = (await call(lead, 'GET', `/projects/${pid}/backlog`)).data;
-    assert.deepEqual(b.sprints.map((s: any) => s.name), ['SPR Sprint 1', 'Hardening']);
+    assert.deepEqual(b.sprints.map((s: any) => s.name), ['Sprint 1', 'Hardening']);
     const inS1 = b.issues.filter((i: any) => i.sprintId === s1).map((i: any) => i.number).sort();
     assert.deepEqual(inS1, [nums.a, nums.b, nums.c].sort());
     assert.ok(b.issues.some((i: any) => i.title === 'Loose idea' && i.sprintId === null));

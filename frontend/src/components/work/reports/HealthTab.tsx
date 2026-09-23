@@ -93,25 +93,39 @@ function Verdict({ d }: { d: InsightsData }) {
     );
   }
   const risk = r.atRisk;
+  // Trạng thái trung tính: chưa ước lượng / mới ngày đầu — không xanh, không đỏ.
+  const neutral = !risk && (r.status === 'NO_ESTIMATES' || r.status === 'TOO_EARLY');
+  const headline = risk
+    ? r.daysLeft === 0
+      ? `Sprint overdue: ${num(r.remaining)} ${u} still open after the end date`
+      : `Sprint at risk: needs ${num(r.neededPerDay)} ${u}/day, team is doing ${num(r.recentPerDay)} ${u}/day`
+    : r.status === 'NO_ESTIMATES'
+      ? 'No estimates yet — add story points to get a forecast'
+      : r.status === 'TOO_EARLY'
+        ? `Day ${r.elapsedDays ?? 1} of the sprint — too early to forecast`
+        : r.remaining === 0 ? 'Sprint complete — everything is done' : 'Sprint on track';
   return (
     <div
       className={cn(
         'flex items-start gap-3 rounded-[var(--w-radius-lg)] border px-4 py-3',
-        risk
-          ? 'border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-red)_8%,transparent)]'
-          : 'border-[color-mix(in_srgb,var(--w-green)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-green)_8%,transparent)]',
+        neutral
+          ? 'border-[var(--w-border)] bg-[var(--w-panel)]'
+          : risk
+            ? 'border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-red)_8%,transparent)]'
+            : 'border-[color-mix(in_srgb,var(--w-green)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-green)_8%,transparent)]',
       )}
     >
-      {risk ? <AlertTriangle size={18} className="mt-0.5 shrink-0 text-[var(--w-red)]" /> : <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-[var(--w-green)]" />}
+      {risk ? <AlertTriangle size={18} className="mt-0.5 shrink-0 text-[var(--w-red)]" />
+        : neutral ? <Clock size={18} className="mt-0.5 shrink-0 text-[var(--w-text-3)]" />
+          : <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-[var(--w-green)]" />}
       <div className="min-w-0">
-        <div className={cn('text-[14px] font-semibold', risk ? 'text-[var(--w-red)]' : 'text-[var(--w-green)]')}>
-          {risk
-            ? `Sprint at risk: needs ${num(r.neededPerDay)} ${u}/day, team is doing ${num(r.recentPerDay)} ${u}/day`
-            : r.remaining === 0 ? 'Sprint complete — everything is done' : 'Sprint on track'}
+        <div className={cn('text-[14px] font-semibold', neutral ? 'text-[var(--w-text)]' : risk ? 'text-[var(--w-red)]' : 'text-[var(--w-green)]')}>
+          {headline}
         </div>
         <div className="mt-0.5 text-[12px] text-[var(--w-text-2)]">
-          {r.sprint} · {num(r.remaining)} {u} left · {r.daysLeft} {r.daysLeft === 1 ? 'day' : 'days'} left
-          {!risk && r.remaining > 0 && <> · needs {num(r.neededPerDay)} {u}/day, recent pace {num(r.recentPerDay)} {u}/day</>}
+          {r.sprint} · {num(r.remaining)} {u} left{r.total !== undefined && r.total > 0 ? ` of ${num(r.total)}` : ''} · {r.daysLeft} {r.daysLeft === 1 ? 'day' : 'days'} left
+          {r.status === 'TOO_EARLY' && r.done !== undefined && <> · {num(r.done)} {u} done so far</>}
+          {!risk && !neutral && r.remaining > 0 && <> · needs {num(r.neededPerDay)} {u}/day, recent pace {num(r.recentPerDay)} {u}/day</>}
         </div>
       </div>
     </div>

@@ -9,66 +9,102 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 .work-root {
-  --w-bg: #f7f7f8;
+  /* Thang chữ — dùng cho mọi chỗ mới; chỗ cũ viết text-[13px] vẫn chạy. */
+  --w-fs-xs: 12px;
+  --w-fs-sm: 13px;
+  --w-fs-md: 14px;
+  --w-fs-lg: 16px;
+  --w-fs-xl: 20px;
+
+  --w-bg: #f4f4f6;
   --w-panel: #ffffff;
   --w-raised: #ffffff;
-  --w-sunken: #f1f1f3;
+  --w-sunken: #f3f3f5;
   --w-hover: rgba(15, 15, 20, 0.045);
-  --w-active: rgba(15, 15, 20, 0.08);
-  --w-border: rgba(15, 15, 20, 0.08);
-  --w-border-strong: rgba(15, 15, 20, 0.16);
+  --w-active: rgba(94, 106, 210, 0.1);
+  --w-border: rgba(15, 15, 20, 0.09);
+  --w-border-strong: rgba(15, 15, 20, 0.17);
   --w-text: #16161a;
-  --w-text-2: #55555e;
-  --w-text-3: #8a8a93;
+  --w-text-2: #4f4f58;
+  /* ≥4.5:1 trên --w-panel (5.3) và --w-sunken (4.7) — WCAG AA. */
+  --w-text-3: #6b6b74;
   --w-accent: #5e6ad2;
   --w-accent-hover: #4f5bc4;
-  --w-accent-text: #4b56c0;
+  --w-accent-text: #4450bd;
   --w-accent-soft: rgba(94, 106, 210, 0.1);
-  --w-accent-border: rgba(94, 106, 210, 0.4);
-  --w-green: #2f9e6a;
-  --w-yellow: #b8901f;
-  --w-orange: #d9713f;
-  --w-red: #d9443f;
-  --w-blue: #2f80ed;
-  --w-shadow-pop: 0 8px 28px rgba(15, 15, 20, 0.12), 0 0 0 1px rgba(15, 15, 20, 0.06);
+  --w-accent-border: rgba(94, 106, 210, 0.45);
+  --w-green: #23845a;
+  --w-yellow: #a57f12;
+  --w-orange: #c9602e;
+  --w-red: #d23b36;
+  --w-blue: #2474e0;
+  --w-shadow-card: 0 1px 2px rgba(15, 15, 20, 0.05), 0 1px 1px rgba(15, 15, 20, 0.03);
+  --w-shadow-pop: 0 10px 30px rgba(15, 15, 20, 0.13), 0 0 0 1px rgba(15, 15, 20, 0.07);
   --w-radius: 6px;
   --w-radius-lg: 8px;
 
   background: var(--w-bg);
   color: var(--w-text);
+  font-size: var(--w-fs-md);
+  line-height: 1.5;
   font-family: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: 'cv11', 'ss03';
   -webkit-font-smoothing: antialiased;
 }
 
+/* Nền tối: bề mặt tách lớp rõ hơn (nền < panel < nổi) để bớt "phẳng". */
 html.theme-dark .work-root {
-  --w-bg: #0a0a0b;
-  --w-panel: #101012;
-  --w-raised: #161619;
-  --w-sunken: #0d0d0f;
-  --w-hover: rgba(255, 255, 255, 0.045);
-  --w-active: rgba(255, 255, 255, 0.075);
-  --w-border: rgba(255, 255, 255, 0.07);
-  --w-border-strong: rgba(255, 255, 255, 0.13);
-  --w-text: #e6e6e9;
-  --w-text-2: #a0a0a8;
-  --w-text-3: #6c6c74;
+  color-scheme: dark;
+  --w-bg: #0b0b0d;
+  --w-panel: #121215;
+  --w-raised: #1a1a1f;
+  --w-sunken: #0e0e11;
+  --w-hover: rgba(255, 255, 255, 0.05);
+  --w-active: rgba(120, 130, 235, 0.16);
+  --w-border: rgba(255, 255, 255, 0.075);
+  --w-border-strong: rgba(255, 255, 255, 0.14);
+  --w-text: #ececef;
+  --w-text-2: #adadb5;
+  /* ≥4.5:1 trên --w-panel (5.8) và --w-raised (5.3). */
+  --w-text-3: #8e8e97;
   --w-accent: #6470db;
   --w-accent-hover: #7580e6;
-  --w-accent-text: #a3aaf2;
-  --w-accent-soft: rgba(100, 112, 219, 0.14);
-  --w-accent-border: rgba(100, 112, 219, 0.45);
+  --w-accent-text: #aab0f5;
+  --w-accent-soft: rgba(100, 112, 219, 0.16);
+  --w-accent-border: rgba(120, 130, 235, 0.5);
   --w-green: #4cb782;
   --w-yellow: #d9b44a;
   --w-orange: #e8875a;
-  --w-red: #e5645f;
+  --w-red: #eb6a65;
   --w-blue: #4ea7fc;
-  --w-shadow-pop: 0 10px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --w-shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 1px 3px rgba(0, 0, 0, 0.35);
+  --w-shadow-pop: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.09);
 }
 
 .work-root ::selection { background: rgba(94, 106, 210, 0.3); }
 .work-root * { scrollbar-width: thin; scrollbar-color: var(--w-border-strong) transparent; }
 .work-root .tabular { font-variant-numeric: tabular-nums; }
+
+/* Lưới đỡ cỡ chữ: không chữ nào trong /work nhỏ hơn 11px (chữ 9–10px khó
+   đọc trên màn thường). Độ ưu tiên (0,2,0) thắng tiện ích Tailwind. */
+.work-root .text-\[9px\],
+.work-root .text-\[9\.5px\],
+.work-root .text-\[10px\],
+.work-root .text-\[10\.5px\] { font-size: 11px; }
+.work-root .text-\[11px\],
+.work-root .text-\[11\.5px\] { font-size: 12px; }
+
+/* Thẻ nổi nhẹ (danh sách, ô số liệu) — thay cho border phẳng. */
+.w-card {
+  background: var(--w-raised); border: 1px solid var(--w-border); border-radius: var(--w-radius-lg);
+  box-shadow: var(--w-shadow-card);
+}
+a.w-card, button.w-card { transition: border-color 120ms, background-color 120ms, box-shadow 120ms; }
+a.w-card:hover, button.w-card:hover { border-color: var(--w-border-strong); }
+a.w-card:focus-visible, button.w-card:focus-visible { outline: 2px solid var(--w-accent-border); outline-offset: 1px; }
+
+/* Nhãn nhóm nhỏ (sidebar, danh mục cài đặt). */
+.w-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--w-text-3); }
 
 /* Nút cơ bản — dùng class chứ không tạo component cho mọi biến thể.
    ⚠️ File này nạp SAU Tailwind, nên .w-btn { display } thắng `hidden` cùng độ
@@ -96,22 +132,37 @@ html.theme-dark .work-root {
 .w-btn-sm { height: 26px; padding: 0 8px; font-size: 12px; }
 .w-btn-icon { width: 28px; padding: 0; }
 
-.w-input {
+/* Ô nhập. Bộ chọn cố ý có độ ưu tiên THẤP (0,0,1): `input:where(.w-input)`
+   thắng preflight `input { padding: 0 }` (cùng độ ưu tiên, nạp sau) nhưng THUA
+   mọi tiện ích Tailwind (0,1,0). Trước đây `.w-input` (0,1,0, nạp sau) nuốt
+   pl-7 / h-[28px] / w-[180px] / text-[12px] ⇒ icon kính lúp đè lên chữ gợi ý
+   ở 9 ô tìm kiếm. Mọi .w-input trong /work đều là input/select/textarea. */
+:is(input, select, textarea):where(.w-input) {
   width: 100%; height: 32px; padding: 0 10px; border-radius: var(--w-radius);
   border: 1px solid var(--w-border-strong); background: var(--w-panel); color: var(--w-text);
-  font-size: 13px; outline: none; transition: border-color 120ms, box-shadow 120ms;
+  font-size: 13px; outline: none; transition: border-color 120ms, box-shadow 120ms, background-color 120ms;
 }
-.w-input::placeholder { color: var(--w-text-3); }
+.w-input::placeholder { color: var(--w-text-3); opacity: 1; }
+.w-input:hover:not(:disabled):not(:focus) { border-color: color-mix(in srgb, var(--w-border-strong) 70%, var(--w-text-3)); }
 .w-input:focus { border-color: var(--w-accent-border); box-shadow: 0 0 0 3px var(--w-accent-soft); }
-textarea.w-input { height: auto; padding: 8px 10px; line-height: 1.5; resize: vertical; }
+textarea:where(.w-input) { height: auto; padding: 8px 10px; line-height: 1.5; resize: vertical; }
+/* select: bỏ mũi tên gốc, vẽ chevron riêng theo màu token (mask nên đổi màu theo theme). */
+select:where(.w-input) {
+  appearance: none; -webkit-appearance: none; padding-right: 28px; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--w-text-3) 50%), linear-gradient(135deg, var(--w-text-3) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 52%, calc(100% - 10px) 52%;
+  background-size: 4px 4px, 4px 4px;
+  background-repeat: no-repeat;
+}
+select.w-input option { background: var(--w-raised); color: var(--w-text); }
 /* Ô nhập "trần" trong cột thuộc tính của thẻ: không viền cho tới khi rê/chọn,
    để thẳng hàng với các ô chọn (Priority, Labels…) bên cạnh. */
-.w-input-bare { height: 30px; padding: 0 8px; border-color: transparent; background: transparent; }
-.w-input-bare:hover:not(:disabled) { background: var(--w-hover); }
-.w-input-bare:focus { background: var(--w-panel); border-color: var(--w-accent-border); }
+:is(input, select, textarea):where(.w-input-bare) { height: 30px; padding: 0 8px; border-color: transparent; background-color: transparent; box-shadow: none; }
+.w-input-bare:hover:not(:disabled) { background-color: var(--w-hover); border-color: transparent; }
+.w-input-bare:focus { background-color: var(--w-panel); border-color: var(--w-accent-border); }
 .w-input-bare:disabled { cursor: default; }
 .w-input-bare::-webkit-calendar-picker-indicator { opacity: 0.45; cursor: pointer; }
-html.theme-dark .work-root .w-input-bare { color-scheme: dark; }
+html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[type='time'] { color-scheme: dark; }
 
 .w-label { display: block; font-size: 12px; font-weight: 500; color: var(--w-text-2); margin-bottom: 6px; }
 .w-kbd {
@@ -146,4 +197,23 @@ html.theme-dark .work-root .w-input-bare { color-scheme: dark; }
 }
 .w-prose p.is-editor-empty:first-child::before {
   content: attr(data-placeholder); color: var(--w-text-3); float: left; height: 0; pointer-events: none;
+}
+
+/* ─── Điện thoại + màn cảm ứng ────────────────────────────────────────── */
+
+/* iOS phóng to trang khi chạm ô nhập < 16px — ép 16px trên điện thoại. */
+@media (max-width: 640px) {
+  .work-root input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+  .work-root textarea,
+  .work-root select,
+  .work-root [contenteditable='true'] { font-size: 16px !important; }
+}
+
+/* Ngón tay cần đích chạm lớn hơn chuột. */
+@media (pointer: coarse) {
+  .work-root .w-btn { min-height: 36px; }
+  .work-root .w-btn-icon { min-width: 36px; }
+  .work-root .w-header .w-btn { min-height: 40px; }
+  .work-root .w-header .w-btn-icon { min-width: 40px; }
+  .work-root .w-nav-row { min-height: 38px; }
 }

@@ -400,8 +400,22 @@ export interface InsightIssue { key: string; number: number; title: string; assi
 export interface InsightsData {
   overdue: InsightIssue[]; dueSoon: InsightIssue[]; stale: Array<InsightIssue & { idleDays: number }>; unassignedUrgent: InsightIssue[];
   overloaded: Array<{ username: string; points: number; issues: number }>; loads: Array<{ username: string; points: number; issues: number }>;
-  sprintRisk: null | { sprint: string; remaining: number; daysLeft: number; neededPerDay: number; recentPerDay: number; atRisk: boolean };
+  sprintRisk: null | {
+    sprint: string; remaining: number; daysLeft: number; neededPerDay: number; recentPerDay: number; atRisk: boolean;
+    // Thêm 23/09 (sprintPace.ts) — tuỳ chọn để tương thích bản backend cũ.
+    status?: 'NO_ESTIMATES' | 'TOO_EARLY' | 'DONE' | 'AT_RISK' | 'ON_TRACK'; total?: number; done?: number; committed?: number;
+    elapsedDays?: number; estimated?: boolean; summary?: string;
+  };
   unit: EstimationUnit;
+}
+/** GET /projects/:pid/onboarding — mỗi bước đọc từ dữ liệu thật của dự án. */
+export interface OnboardingStatus {
+  scrum: boolean;
+  steps: { createIssues: boolean; inviteTeam: boolean; planSprint: boolean; startSprint: boolean; moveToDone: boolean; shareLink: boolean };
+  completed: boolean;
+  issueCount: number;
+  sampleData: { issues: number; at: string } | null;
+  canAddSample: boolean;
 }
 export interface MyWorkItem {
   key: string; number: number; title: string; priority: number; dueDate: string | null; bucket: 'overdue' | 'today' | 'soon' | 'later' | 'none';
@@ -624,6 +638,8 @@ export const workApi = {
   moveIssue: (pid: number, num: number, body: { statusId?: number; sprintId?: number | null; beforeIssueId?: number | null; afterIssueId?: number | null; version?: number }) =>
     d<IssueCard>(api.post(`${B}/projects/${pid}/issues/${num}/move`, body)),
   deleteIssue: (pid: number, num: number) => d(api.delete(`${B}/projects/${pid}/issues/${num}`)),
+  /** Nhân bản thẻ ("Copy of …" + link CLONES) — trả chi tiết thẻ mới. */
+  cloneIssue: (pid: number, num: number) => d<IssueDetail>(api.post(`${B}/projects/${pid}/issues/${num}/clone`)),
   history: (pid: number, num: number) => d<HistoryEntry[]>(api.get(`${B}/projects/${pid}/issues/${num}/history`)),
   addLink: (pid: number, num: number, body: { type: LinkType; targetKey: string }) => d(api.post(`${B}/projects/${pid}/issues/${num}/links`, body)),
   removeLink: (pid: number, num: number, linkId: number) => d(api.delete(`${B}/projects/${pid}/issues/${num}/links/${linkId}`)),
@@ -701,6 +717,13 @@ export const workApi = {
   aiQuota: () => d<AiQuota>(api.get(`${B}/ai/quota`)),
   aiChat: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null }) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: 120_000 })),
+  /** Như aiChat nhưng huỷ được (nút Cancel trong khung AI). */
+  aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null }, signal?: AbortSignal) =>
+    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: 120_000, signal })),
+  // Lần chạy đầu: dữ liệu mẫu + danh sách Getting started
+  onboarding: (pid: number) => d<OnboardingStatus>(api.get(`${B}/projects/${pid}/onboarding`)),
+  addSampleData: (pid: number) => d<{ issues: number; labels: number; sprintId: number | null; plans: number }>(api.post(`${B}/projects/${pid}/sample-data`, {}, { timeout: 120_000 })),
+  removeSampleData: (pid: number) => d<{ issues: number; labels: number; sprintRemoved: boolean }>(api.delete(`${B}/projects/${pid}/sample-data`, { timeout: 60_000 })),
   aiQuick: (pid: number, body: { task: AiQuickTask; issueNumber?: number | null; text?: string | null }) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/quick`, body, { timeout: 120_000 })),
   aiFilter: (pid: number, question: string) => d<AiFilterResult>(api.post(`${B}/projects/${pid}/ai/filter`, { question }, { timeout: 60_000 })),

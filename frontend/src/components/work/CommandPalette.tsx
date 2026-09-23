@@ -12,11 +12,14 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
 import { useQuery } from '@tanstack/react-query';
-import { Columns3, CornerDownLeft, FolderKanban, LayoutGrid, List, Plus, Search, Settings, Users } from 'lucide-react';
+import { BookOpen, CircleHelp, Columns3, CornerDownLeft, FolderKanban, LayoutGrid, List, Plus, Search, Settings, Users } from 'lucide-react';
 import { workApi } from '@/lib/work-api';
 import { openCreateIssue, wk } from './hooks';
 import { useWorkPath } from './WorkSidebar';
 import { IssueTypeIcon, Spinner, StatusBadge, WorkPortal } from './ui';
+import { searchHelp } from './help/content';
+import { openContextualHelp, openHelp } from './help/store';
+import { readHelpLang } from './help/HelpPanel';
 
 const ITEM =
   'flex h-9 cursor-pointer items-center gap-2.5 rounded-[6px] px-2.5 text-[13px] text-[var(--w-text-2)] data-[selected=true]:bg-[var(--w-hover)] data-[selected=true]:text-[var(--w-text)]';
@@ -114,7 +117,7 @@ function Palette({ onClose }: { onClose: () => void }) {
   };
 
   const actions = useMemo(() => {
-    const list: Array<{ id: string; label: string; icon: ReactNode; hint?: string; run: () => void }> = [];
+    const list: Array<{ id: string; label: string; icon: ReactNode; hint?: string; keywords?: string; run: () => void }> = [];
     if (inProject && config?.permissions.createIssues) {
       list.push({
         id: 'create',
@@ -137,15 +140,30 @@ function Palette({ onClose }: { onClose: () => void }) {
       list.push({ id: 'projects', label: 'All projects', icon: <LayoutGrid size={15} />, run: () => go(`/work/${slug}`) });
       list.push({ id: 'ws-settings', label: 'Workspace settings', icon: <Users size={15} />, run: () => go(`/work/${slug}/settings`) });
     }
-    return list.filter((a) => matches(a.label, q));
+    // Trợ giúp luôn có (mọi trang), tìm được bằng cả "guide", "huong dan".
+    list.push({
+      id: 'help',
+      label: 'Help & guide',
+      icon: <CircleHelp size={15} />,
+      hint: '?',
+      keywords: 'guide docs how to tutorial huong dan tro giup',
+      run: () => {
+        onClose();
+        openContextualHelp();
+      },
+    });
+    return list.filter((a) => matches(`${a.label} ${a.keywords ?? ''}`, q));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inProject, config, slug, key, q]);
 
   const projects = (workspace.data?.projects ?? []).filter((p) => !p.archivedAt && matches(`${p.key} ${p.name}`, q)).slice(0, 8);
   const wsList = (workspaces.data ?? []).filter((w) => matches(w.name, q)).slice(0, 6);
   const issueItems = pid && debounced ? issues.data?.items ?? [] : [];
+  // Bài hướng dẫn khớp chữ đang gõ (tìm cục bộ, không gọi máy chủ).
+  const helpLang = useMemo(() => readHelpLang(), []);
+  const helpItems = q.length >= 2 ? searchHelp(q).slice(0, 4) : [];
   const searching = !!pid && q.length > 0 && (q !== debounced || issues.isFetching);
-  const nothing = !actions.length && !projects.length && !wsList.length && !issueItems.length;
+  const nothing = !actions.length && !projects.length && !wsList.length && !issueItems.length && !helpItems.length;
 
   return (
     <WorkPortal>
@@ -220,6 +238,22 @@ function Palette({ onClose }: { onClose: () => void }) {
                       <span className="w-[48px] shrink-0 truncate font-mono text-[11px] font-semibold text-[var(--w-text-3)]">{p.key}</span>
                       <span className="min-w-0 flex-1 truncate">{p.name}</span>
                       {p.key === key && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">Current</span>}
+                    </Command.Item>
+                  ))}
+                </Command.Group>
+              )}
+
+              {helpItems.length > 0 && (
+                <Command.Group heading="Help" className={GROUP}>
+                  {helpItems.map((a) => (
+                    <Command.Item
+                      key={`help-${a.id}`}
+                      value={`help-${a.id}`}
+                      onSelect={() => { onClose(); openHelp(a.id); }}
+                      className={ITEM}
+                    >
+                      <BookOpen size={15} className="shrink-0 text-[var(--w-text-3)]" />
+                      <span className="min-w-0 flex-1 truncate">{a.title[helpLang]}</span>
                     </Command.Item>
                   ))}
                 </Command.Group>

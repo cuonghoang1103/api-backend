@@ -29,7 +29,12 @@ import {
 } from '@/components/work/tests/runStatus';
 
 type Filter = RunStatus | 'ALL' | 'NOT_RUN';
+// "Not run" = chưa thực thi (khớp công thức executed của backend): To do + In progress + Retest.
 const NOT_RUN: RunStatus[] = ['TODO', 'IN_PROGRESS', 'RETEST'];
+/** Trạng thái đã thực thi — mỗi cái một chip; phần chưa chạy gộp thành một chip "Not run". */
+const EXECUTED: RunStatus[] = ['PASS', 'FAIL', 'BLOCKED', 'SKIP'];
+/** Nhãn riêng trang này: TODO gọi là "Not started" để không trùng nghĩa với chip "Not run". */
+const legendLabel = (s: RunStatus) => (s === 'TODO' ? 'Not started' : RUN_META[s].label);
 const GRID = 'grid grid-cols-[minmax(260px,2.4fr)_70px_minmax(150px,1fr)_110px_minmax(150px,1fr)_minmax(110px,0.8fr)_36px] items-center gap-3';
 
 function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: number; cycleId: number }) {
@@ -136,11 +141,17 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
   }
 
   const notRun = data.total - data.executed;
-  const chips: Array<{ key: Filter; label: string; count: number; color?: string }> = [
+  const chips: Array<{ key: Filter; label: string; count: number; color?: string; hint?: string }> = [
     { key: 'ALL', label: 'All', count: data.total },
-    { key: 'NOT_RUN', label: 'Not run', count: notRun },
-    ...RUN_ORDER.filter((s) => data.counts[s] > 0).map((s) => ({ key: s as Filter, label: RUN_META[s].label, count: data.counts[s], color: RUN_META[s].color })),
+    ...EXECUTED.filter((s) => data.counts[s] > 0 || s !== 'SKIP').map((s) => ({ key: s as Filter, label: RUN_META[s].label, count: data.counts[s], color: RUN_META[s].color })),
+    {
+      key: 'NOT_RUN', label: 'Not run', count: notRun, color: 'var(--w-text-3)',
+      hint: `Not executed yet: ${data.counts.TODO} not started, ${data.counts.IN_PROGRESS} in progress, ${data.counts.RETEST} waiting for retest`,
+    },
   ];
+  const passRateHint = data.passRate === null
+    ? 'Pass rate = passed ÷ executed runs. Nothing has been executed yet.'
+    : `Pass rate = passed ÷ executed runs = ${data.counts.PASS} ÷ ${data.executed}. Executed means passed, failed, blocked or skipped; ${notRun} not-run ${notRun === 1 ? 'test is' : 'tests are'} excluded.`;
 
   return (
     <Shell config={config}>
@@ -184,14 +195,14 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
             <Stat label="Failed" value={data.counts.FAIL} color="var(--w-red)" onClick={() => setFilter('FAIL')} />
             <Stat label="Blocked" value={data.counts.BLOCKED} color="var(--w-orange)" onClick={() => setFilter('BLOCKED')} />
             <Stat label="Not run" value={notRun} onClick={() => setFilter('NOT_RUN')} />
-            <Stat label="Pass rate" value={data.passRate === null ? '—' : `${data.passRate}%`} hint={`${data.executed} of ${data.total} executed`} />
+            <Stat label="Pass rate" sub="of executed" value={data.passRate === null ? '—' : `${data.passRate}%`} hint={passRateHint} />
           </div>
           <StatusBar counts={data.counts} total={data.total} height={8} className="mt-3" />
           <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-[var(--w-text-3)]">
             {RUN_ORDER.filter((s) => data.counts[s] > 0).map((s) => (
               <span key={s} className="inline-flex items-center gap-1">
                 <span className="h-2 w-2 rounded-[2px]" style={{ background: s === 'TODO' ? 'var(--w-sunken)' : s === 'SKIP' ? 'var(--w-border-strong)' : RUN_META[s].color, border: s === 'TODO' ? '1px solid var(--w-border-strong)' : undefined }} />
-                {RUN_META[s].label} {data.counts[s]}
+                {legendLabel(s)} {data.counts[s]}
               </span>
             ))}
           </div>
@@ -204,6 +215,8 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
               key={c.key}
               type="button"
               onClick={() => setFilter(c.key)}
+              title={c.hint}
+              aria-pressed={filter === c.key}
               className={cn('inline-flex h-[26px] items-center gap-1.5 rounded-full border px-2.5 text-[12px]', filter === c.key ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}
             >
               {c.color && <span className="h-1.5 w-1.5 rounded-full" style={{ background: c.color }} />}
@@ -224,18 +237,50 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
           />
         ) : (
           <div className="overflow-x-auto pb-6">
-            <div className="min-w-[900px]">
-              <div className={cn(GRID, 'border-y border-[var(--w-border)] bg-[var(--w-sunken)] px-4 py-2 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]')}>
+            <div className="sm:min-w-[900px]">
+              <div className={cn(GRID, 'max-sm:!hidden border-y border-[var(--w-border)] bg-[var(--w-sunken)] px-4 py-2 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]')}>
                 <span>Test</span><span>Priority</span><span>Assignee</span><span>Status</span><span>Executed</span><span>Defects</span><span />
               </div>
               {!runs.length && <div className="px-4 py-8 text-center text-[13px] text-[var(--w-text-3)]">No runs match this filter.</div>}
               {runs.map((r, i) => (
+                <div key={r.id} className="group">
+                {/* Điện thoại (< 640px): dạng thẻ, vẫn giữ trạng thái + người + lỗi */}
                 <div
-                  key={r.id}
                   role="button"
                   tabIndex={-1}
                   onClick={() => openRun(r.id)}
-                  className={cn(GRID, 'cursor-pointer border-b border-[var(--w-border)] px-4 py-2 text-[13px]', cursor === i ? 'bg-[var(--w-hover)]' : 'hover:bg-[var(--w-hover)]', runParam === r.id && 'bg-[var(--w-active)]')}
+                  className={cn('flex cursor-pointer flex-col gap-1.5 border-b border-[var(--w-border)] px-4 py-2.5 text-[13px] sm:hidden', runParam === r.id ? 'bg-[var(--w-active)]' : 'active:bg-[var(--w-hover)]')}
+                >
+                  <div className="flex min-w-0 items-start gap-2">
+                    <span className="shrink-0 pt-px text-[12px] font-medium text-[var(--w-text-2)]">{lk.issueKey(r.test.number)}</span>
+                    <span className="min-w-0 flex-1 leading-snug">{r.test.title}</span>
+                    <RunStatusPill status={r.status} />
+                  </div>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-[var(--w-text-3)]">
+                    <PriorityIcon priority={r.test.priority} size={13} />
+                    <span className="min-w-0 max-w-[55%]" onClick={(e) => e.stopPropagation()}>
+                      <AssigneePicker config={config} value={r.assigneeId} bare disabled={!canExecute} onChange={(id) => setAssignee(r.id, id)} />
+                    </span>
+                    {r.executedAt && <span className="truncate">{formatDateTime(r.executedAt)}</span>}
+                    {r.defects.map((d) => (
+                      <button
+                        key={d.number}
+                        type="button"
+                        title={d.title}
+                        onClick={(e) => { e.stopPropagation(); openIssue(d.number); }}
+                        className="rounded-[4px] border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] px-1 text-[11px] font-medium text-[var(--w-red)]"
+                      >
+                        {lk.issueKey(d.number)}
+                      </button>
+                    ))}
+                    {r.comment && <MessageSquare size={12} aria-label="Has a comment" />}
+                  </div>
+                </div>
+                <div
+                  role="button"
+                  tabIndex={-1}
+                  onClick={() => openRun(r.id)}
+                  className={cn(GRID, 'max-sm:!hidden cursor-pointer border-b border-[var(--w-border)] px-4 py-2 text-[13px]', cursor === i ? 'bg-[var(--w-hover)]' : 'hover:bg-[var(--w-hover)]', runParam === r.id && 'bg-[var(--w-active)]')}
                 >
                   <div className="flex min-w-0 items-center gap-2">
                     <span className="shrink-0 text-[12px] font-medium text-[var(--w-text-2)]">{lk.issueKey(r.test.number)}</span>
@@ -270,11 +315,12 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
                   </div>
                   <div onClick={(e) => e.stopPropagation()} className="flex justify-end">
                     {canEdit && (
-                      <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" title="Remove from cycle" aria-label={`Remove ${lk.issueKey(r.test.number)} from cycle`} onClick={() => setRemoveRun({ id: r.id, label: `${lk.issueKey(r.test.number)} ${r.test.title}` })}>
+                      <button type="button" className={cn('w-btn w-btn-ghost w-btn-sm w-btn-icon', cursor !== i && runParam !== r.id && '[@media(hover:hover)]:opacity-0 [@media(hover:hover)]:focus-visible:opacity-100 [@media(hover:hover)]:group-hover:opacity-100')} title="Remove from cycle" aria-label={`Remove ${lk.issueKey(r.test.number)} from cycle`} onClick={() => setRemoveRun({ id: r.id, label: `${lk.issueKey(r.test.number)} ${r.test.title}` })}>
                         <X size={13} />
                       </button>
                     )}
                   </div>
+                </div>
                 </div>
               ))}
             </div>
@@ -358,7 +404,7 @@ function Shell({ config, children }: { config: ProjectConfig; children: React.Re
   );
 }
 
-function Stat({ label, value, color, hint, onClick }: { label: string; value: number | string; color?: string; hint?: string; onClick?: () => void }) {
+function Stat({ label, value, color, hint, sub, onClick }: { label: string; value: number | string; color?: string; hint?: string; sub?: string; onClick?: () => void }) {
   const Tag = onClick ? 'button' : 'div';
   return (
     <Tag
@@ -367,8 +413,11 @@ function Stat({ label, value, color, hint, onClick }: { label: string; value: nu
       title={hint}
       className={cn('rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-left', onClick && 'hover:bg-[var(--w-hover)]')}
     >
-      <div className="text-[11px] text-[var(--w-text-3)]">{label}</div>
-      <div className="text-[18px] font-semibold tabular" style={color && value ? { color } : undefined}>{value}</div>
+      <div className="flex items-center gap-1 text-[11px] text-[var(--w-text-3)]">{label}{hint && !onClick && <span aria-hidden className="cursor-help rounded-full border border-[var(--w-border-strong)] px-1 text-[9px] leading-[12px]">?</span>}</div>
+      <div className="flex items-baseline gap-1.5">
+        <span className="text-[18px] font-semibold tabular" style={color && value ? { color } : undefined}>{value}</span>
+        {sub && <span className="text-[11px] text-[var(--w-text-3)]">{sub}</span>}
+      </div>
     </Tag>
   );
 }

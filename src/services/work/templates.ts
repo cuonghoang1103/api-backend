@@ -36,7 +36,24 @@ interface TemplateSpec {
   /** Quy trình riêng cho Bug (vòng Retest của SWT301). */
   bugWorkflow?: StatusSeed[];
   settings: Record<string, unknown>;
+  /** Tạo sẵn "Sprint 1" (chưa bắt đầu) — mẫu Scrum của môn học hứa điều này. */
+  firstSprint?: boolean;
+  /** Trường tuỳ chỉnh dựng sẵn (vd MoSCoW của SWR302). */
+  customFields?: Array<{ name: string; kind: 'SELECT'; options: Array<{ id: string; label: string; color: string }>; typeKeys: IssueTypeKey[] | null }>;
 }
+
+/** MoSCoW — id cố định để dữ liệu mẫu / JQL / AI gọi đúng lựa chọn. */
+export const MOSCOW_FIELD = {
+  name: 'MoSCoW',
+  kind: 'SELECT' as const,
+  options: [
+    { id: 'must', label: 'Must', color: '#dc2626' },
+    { id: 'should', label: 'Should', color: '#ea580c' },
+    { id: 'could', label: 'Could', color: '#2563eb' },
+    { id: 'wont', label: "Won't", color: '#64748b' },
+  ],
+  typeKeys: ['REQUIREMENT', 'STORY', 'EPIC'] as IssueTypeKey[],
+};
 
 const SCRUM_STATUSES = [s('To Do', 'TODO'), s('In Progress', 'IN_PROGRESS'), s('In Review', 'IN_PROGRESS'), s('Done', 'DONE')];
 const KANBAN_STATUSES = [s('Backlog', 'TODO'), s('Selected', 'TODO'), s('In Progress', 'IN_PROGRESS'), s('Done', 'DONE')];
@@ -57,11 +74,14 @@ export function templateSpec(template: ProjectTemplate, type: ProjectType): Temp
   const base = { estimation: 'POINTS', sprintLengthDays: 14, definitionOfDone: DEFAULT_DOD };
   switch (template) {
     case 'SWR302':
-      return { statuses, types: ['EPIC', 'REQUIREMENT', 'STORY', 'TASK', 'SUBTASK'], settings: { ...base, prioritization: 'MOSCOW' } };
+      return {
+        statuses, types: ['EPIC', 'REQUIREMENT', 'STORY', 'TASK', 'SUBTASK'], settings: { ...base, prioritization: 'MOSCOW' },
+        firstSprint: type === 'SCRUM', customFields: [MOSCOW_FIELD],
+      };
     case 'SWT301':
       return { statuses, types: [...BASE_TYPES, 'TEST'], bugWorkflow: BUG_LIFECYCLE, settings: { ...base, estimation: 'HOURS' } };
     case 'SWP391':
-      return { statuses, types: BASE_TYPES, bugWorkflow: BUG_LIFECYCLE, settings: base };
+      return { statuses, types: BASE_TYPES, bugWorkflow: BUG_LIFECYCLE, settings: base, firstSprint: type === 'SCRUM' };
     case 'FREELANCE':
       return { statuses, types: BASE_TYPES, settings: { ...base, estimation: 'HOURS', sprintLengthDays: 7 } };
     case 'COMPANY':
@@ -86,6 +106,7 @@ export async function seedProjectConfig(
   projectId: number,
   template: ProjectTemplate,
   type: ProjectType,
+  opts: { firstSprint?: boolean } = {},
 ): Promise<void> {
   const spec = templateSpec(template, type);
 
@@ -131,6 +152,17 @@ export async function seedProjectConfig(
       workflowId: key === 'BUG' && bugWorkflowId ? bugWorkflowId : main.id,
     })),
   });
+
+  for (const [i, f] of (spec.customFields ?? []).entries()) {
+    await tx.workCustomField.create({
+      data: { projectId, name: f.name, kind: f.kind, options: f.options as Prisma.InputJsonValue, typeKeys: (f.typeKeys ?? undefined) as Prisma.InputJsonValue | undefined, position: i },
+    });
+  }
+
+  // "Sprint 1" chưa bắt đầu: người mới vào Backlog thấy ngay chỗ kéo thẻ vào.
+  if (opts.firstSprint ?? spec.firstSprint) {
+    await tx.workSprint.create({ data: { projectId, name: 'Sprint 1', position: 1 } });
+  }
 
   await tx.workProject.update({ where: { id: projectId }, data: { settings: spec.settings as Prisma.InputJsonValue } });
 }

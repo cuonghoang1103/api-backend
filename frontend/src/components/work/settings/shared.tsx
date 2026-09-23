@@ -6,24 +6,26 @@
  */
 
 import { useEffect, useState, type ReactNode, type SelectHTMLAttributes } from 'react';
-import { Lock } from 'lucide-react';
+import { Lock, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Dialog, Spinner } from '../ui';
+import { avatarColor, Dialog, Spinner } from '../ui';
+import { MobileNavButton } from '../shell/mobileNav';
 
-/** Thanh tiêu đề 48px: tiêu đề trái, hành động phải. */
+/** Thanh tiêu đề 52px: nút ☰ (điện thoại), tiêu đề trái, hành động phải. */
 export function PageHeader({ title, sub, actions }: { title: ReactNode; sub?: ReactNode; actions?: ReactNode }) {
   return (
-    <div className="flex h-12 shrink-0 items-center gap-3 border-b border-[var(--w-border)] px-4 md:px-6">
+    <header className="w-header flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:gap-3 md:px-5">
+      <MobileNavButton />
       <div className="flex min-w-0 flex-1 items-center gap-2">
-        <h1 className="truncate text-[14px] font-semibold">{title}</h1>
+        <h1 className="flex min-w-0 items-center truncate text-[15px] font-semibold">{title}</h1>
         {sub && <span className="hidden truncate text-[13px] text-[var(--w-text-3)] sm:inline">{sub}</span>}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
-    </div>
+    </header>
   );
 }
 
-export interface TabDef<K extends string> { key: K; label: string }
+export interface TabDef<K extends string> { key: K; label: string; icon?: LucideIcon }
 
 /** Tab ngang, cuộn ngang khi hẹp (trong vùng riêng, không làm trang cuộn ngang). */
 export function SettingsTabs<K extends string>({ tabs, active, onChange }: { tabs: TabDef<K>[]; active: K; onChange: (k: K) => void }) {
@@ -44,6 +46,72 @@ export function SettingsTabs<K extends string>({ tabs, active, onChange }: { tab
           {t.label}
         </button>
       ))}
+    </div>
+  );
+}
+
+export interface NavGroup<K extends string> { label: string; tabs: TabDef<K>[]; danger?: boolean }
+
+/**
+ * Khung trang cài đặt: cột điều hướng dọc chia nhóm bên trái (≥md), ô chọn ở
+ * đầu trang trên điện thoại. Nội dung dùng hết bề ngang, riêng form giới hạn
+ * ~880px cho dễ đọc. Nhóm rỗng (không đủ quyền) tự ẩn.
+ */
+export function SettingsLayout<K extends string>({ groups, active, onChange, children, label = 'Settings sections' }: {
+  groups: NavGroup<K>[]; active: K; onChange: (k: K) => void; children: ReactNode; label?: string;
+}) {
+  const visible = groups.filter((g) => g.tabs.length);
+  return (
+    <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+      {/* Điện thoại: một ô chọn thay cho cột điều hướng. */}
+      <div className="shrink-0 border-b border-[var(--w-border)] px-4 py-3 md:hidden">
+        <Select aria-label={label} value={active} onChange={(e) => onChange(e.target.value as K)} className="!h-10">
+          {visible.map((g) => (
+            <optgroup key={g.label} label={g.label}>
+              {g.tabs.map((t) => <option key={t.key} value={t.key}>{t.label}</option>)}
+            </optgroup>
+          ))}
+        </Select>
+      </div>
+      <nav aria-label={label} className="hidden w-[220px] shrink-0 overflow-y-auto border-r border-[var(--w-border)] px-3 py-5 md:block">
+        {visible.map((g, gi) => (
+          <div key={g.label} className={cn(gi > 0 && 'mt-5')}>
+            <div className={cn('w-eyebrow mb-1.5 px-2', g.danger && '!text-[var(--w-red)]')}>{g.label}</div>
+            <ul className="space-y-0.5">
+              {g.tabs.map((t) => {
+                const on = t.key === active;
+                const Icon = t.icon;
+                return (
+                  <li key={t.key}>
+                    <button
+                      type="button"
+                      onClick={() => onChange(t.key)}
+                      aria-current={on ? 'page' : undefined}
+                      className={cn(
+                        'w-nav-row relative flex h-8 w-full items-center gap-2 rounded-[6px] px-2 text-left text-[13px] transition-colors',
+                        on
+                          ? 'bg-[var(--w-active)] font-medium text-[var(--w-text)]'
+                          : g.danger
+                            ? 'text-[var(--w-red)] hover:bg-[var(--w-hover)]'
+                            : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]',
+                      )}
+                    >
+                      {on && <span aria-hidden="true" className="absolute inset-y-1.5 left-0 w-[3px] rounded-full bg-[var(--w-accent)]" />}
+                      {Icon && <Icon size={15} className="shrink-0 opacity-80" />}
+                      <span className="truncate">{t.label}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </nav>
+      <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
+        <div className="w-full max-w-[880px] px-4 py-6 md:px-8 md:py-7">
+          {children}
+        </div>
+      </div>
     </div>
   );
 }
@@ -73,9 +141,14 @@ export function ReadOnlyNotice({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Ô chọn gốc (giữ native cho bàn phím / trình đọc màn hình / bánh xe iOS) nhưng
+ * cùng "vỏ" với ô nhập: cao 32px, chevron riêng theo token, màu theo theme.
+ * Kiểu dáng nằm ở `select:where(.w-input)` trong work.css.
+ */
 export function Select({ className, children, ...rest }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select {...rest} className={cn('w-input cursor-pointer pr-7 disabled:cursor-not-allowed disabled:opacity-60', className)}>
+    <select {...rest} className={cn('w-input disabled:cursor-not-allowed disabled:opacity-60', className)}>
       {children}
     </select>
   );
@@ -169,8 +242,8 @@ export function WorkspaceMark({ name, size = 32 }: { name: string; size?: number
     .toUpperCase() || '?';
   return (
     <span
-      style={{ width: size, height: size, fontSize: Math.round(size * 0.38) }}
-      className="inline-flex shrink-0 items-center justify-center rounded-[6px] bg-[var(--w-accent)] font-semibold text-white"
+      style={{ width: size, height: size, fontSize: Math.round(size * 0.38), background: avatarColor(name) }}
+      className="inline-flex shrink-0 items-center justify-center rounded-[7px] font-semibold leading-none text-white"
     >
       {initials}
     </span>

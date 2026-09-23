@@ -9,34 +9,57 @@
  * là chọn mọi statusId mang tên đó.
  *
  * Chế độ JQL: ?mode=jql&jql=<câu truy vấn>&filter=<id bộ lọc đã lưu>.
+ *
+ * Như "issue navigator" của Jira: bấm đầu cột để sắp xếp (JQL: viết lại
+ * ORDER BY; Basic hoặc cột JQL không sắp được: sắp trên các thẻ đã tải,
+ * ?sort=<cột>.<asc|desc>), menu Columns ẩn/hiện cột (localStorage), chọn
+ * nhiều dòng ⇒ thanh sửa hàng loạt (cùng API với Backlog).
  */
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { ChevronDown, Plus, Search, X } from 'lucide-react';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { ArrowDown, ArrowUp, ChevronDown, Plus, Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
-import { workApi, workError, userName, type IssueCard, type IssueQuery, type SavedFilter, type StatusCategory } from '@/lib/work-api';
+import { workApi, workError, userName, type BulkPatch, type IssueCard, type IssueQuery, type SavedFilter, type StatusCategory } from '@/lib/work-api';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import {
-  EmptyState, IssueTypeIcon, PickerList, Popover, PriorityIcon, Spinner, StatusBadge, UserAvatar,
-  formatDate, isTyping, relativeTime, useToggle, type PickOption,
+  EmptyState, IssueTypeIcon, PickerList, Popover, Spinner, UserAvatar,
+  isTyping, useToggle, type PickOption,
 } from '@/components/work/ui';
+import { ConfirmDialog } from '@/components/work/settings/shared';
+import BulkBar from '@/components/work/board/BulkBar';
+import { bulkSetStatusByName, type BulkResult } from '@/components/work/board/bulk';
+import {
+  COLUMNS, ColumnsMenu, DEFAULT_COLUMNS, gridTemplates, jqlOrder, withOrder, type ColId, type ListCtx,
+} from '@/components/work/search/columns';
 import IssueDrawer from '@/components/work/IssueDrawer';
 import CreateIssueDialog from '@/components/work/CreateIssueDialog';
 import { JqlInput, type JqlInputHandle } from '@/components/work/search/JqlInput';
 import SavedFilters from '@/components/work/search/SavedFilters';
 import ExportMenu from '@/components/work/search/ExportMenu';
+import { MobileNavButton } from '@/components/work/shell/mobileNav';
 import { basicToJql, jqlErrorOf } from '@/components/work/search/jql';
 
 const PAGE = 100;
 const ME = -1; // giá trị "Me" trong picker; trên URL là chữ `me`
 const CATEGORY_ORDER: Record<StatusCategory, number> = { TODO: 0, IN_PROGRESS: 1, DONE: 2 };
 
-// Cột lưới: dưới md ẩn Points / Due / Updated.
-const GRID =
-  'grid items-center gap-x-2.5 grid-cols-[18px_60px_minmax(0,1fr)_88px_16px_22px] md:grid-cols-[18px_76px_minmax(0,1fr)_128px_18px_26px_44px_96px_76px]';
+// Lưới: mẫu cột nằm trong biến CSS (--cols-m điện thoại, --cols-d từ md) vì cột ẩn/hiện được.
+const GRID = 'grid items-center gap-x-2.5 [grid-template-columns:var(--cols-m)] md:[grid-template-columns:var(--cols-d)]';
+
+function readCols(pid: number): ColId[] {
+  try {
+    const v = JSON.parse(window.localStorage.getItem(`ctwork:list:${pid}:cols`) ?? 'null') as ColId[] | null;
+    if (Array.isArray(v)) {
+      const ok = v.filter((c) => c in COLUMNS);
+      if (ok.length) return ok.includes('title') ? ok : ['title', ...ok];
+    }
+  } catch { /* cửa sổ riêng tư */ }
+  return DEFAULT_COLUMNS;
+}
 
 // ─── URL ⇄ bộ lọc ────────────────────────────────────────────────
 
@@ -252,6 +275,100 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   // IssueCard chỉ có parentId — tra số của cha trong những thẻ đã tải.
   const numById = useMemo(() => new Map(items.map((i) => [i.id, i.number])), [items]);
 
+  // ── Cột (lưu theo dự án) ──
+  const [cols, setColsState] = useState<ColId[]>(DEFAULT_COLUMNS);
+  useEffect(() => { if (pid) setColsState(readCols(pid)); }, [pid]);
+  const setCols = (c: ColId[]) => {
+    setColsState(c);
+    try { window.localStorage.setItem(`ctwork:list:${pid}:cols`, JSON.stringify(c)); } catch { /* bỏ qua */ }
+  };
+  const tpl = useMemo(() => gridTemplates(cols), [cols]);
+  const versionsQ = useQuery({
+    queryKey: wk.versions(pid ?? 0),
+    queryFn: () => workApi.versions(pid!),
+    enabled: !!pid && cols.includes('fixVersion'),
+    staleTime: 60_000,
+  });
+  const today = todayLocal();
+  const ctx = useMemo<ListCtx | null>(() => (config ? {
+    lk, config, today,
+    versionName: (id) => (id ? versionsQ.data?.find((v) => v.id === id)?.name ?? '' : ''),
+    parentNum: (i) => (i.parentId ? numById.get(i.parentId) ?? i.parentNumber ?? undefined : undefined),
+  } : null), [lk, config, today, versionsQ.data, numById]);
+
+  // ── Sắp xếp ──
+  const sortParam = sp?.get('sort') ?? '';
+  const clientSort = useMemo(() => {
+    const [col, dir] = sortParam.split('.');
+    return col && col in COLUMNS ? { col: col as ColId, dir: dir === 'desc' ? 'desc' as const : 'asc' as const } : null;
+  }, [sortParam]);
+  const jqlSort = useMemo(() => {
+    if (!jqlMode) return null;
+    const o = jqlOrder(jqlParam);
+    const col = (Object.keys(COLUMNS) as ColId[]).find((c) => COLUMNS[c].jql === o.field);
+    return o.field && col ? { col, dir: o.dir } : null;
+  }, [jqlMode, jqlParam]);
+  const sortState = clientSort ?? jqlSort;
+  const onSort = (col: ColId) => {
+    const cur = sortState?.col === col ? sortState.dir : null;
+    const dir: 'asc' | 'desc' = cur === 'asc' ? 'desc' : 'asc';
+    const field = COLUMNS[col].jql;
+    if (jqlMode && field) {
+      // JQL: sắp ở server — viết lại ORDER BY rồi chạy lại.
+      setParams({ mode: 'jql', jql: withOrder(jqlParam, field, dir), sort: null });
+    } else {
+      setParams({ sort: `${col}.${dir}` });
+    }
+  };
+  const rows = useMemo(() => {
+    if (!clientSort || !ctx) return items;
+    const def = COLUMNS[clientSort.col];
+    const sorted = [...items].sort((a, b) => def.cmp(a, b, ctx) || a.number - b.number);
+    return clientSort.dir === 'desc' ? sorted.reverse() : sorted;
+  }, [items, clientSort, ctx]);
+
+  // ── Chọn nhiều + sửa hàng loạt ──
+  const qc = useQueryClient();
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const lastPicked = useRef<number | null>(null);
+  useEffect(() => setSelected(new Set()), [query, jqlParam, jqlMode]);
+  const toggleRow = (id: number, shift: boolean) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (shift && lastPicked.current !== null) {
+        const a = rows.findIndex((r) => r.id === lastPicked.current);
+        const b = rows.findIndex((r) => r.id === id);
+        if (a !== -1 && b !== -1) {
+          rows.slice(Math.min(a, b), Math.max(a, b) + 1).forEach((r) => next.add(r.id));
+          return next;
+        }
+      }
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+    lastPicked.current = id;
+  };
+  const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
+  const someSelected = !allSelected && rows.some((r) => selected.has(r.id));
+  const [bulkDelete, setBulkDelete] = useState(false);
+  const bulk = useMutation({
+    mutationFn: async (v: { patch?: BulkPatch; status?: string; label: string }): Promise<BulkResult & { label: string }> => {
+      const picked = items.filter((i) => selected.has(i.id));
+      const r = v.status
+        ? await bulkSetStatusByName(pid!, lk, picked, v.status)
+        : await workApi.bulkUpdate(pid!, picked.map((i) => i.number), v.patch ?? {});
+      return { ...r, label: v.label };
+    },
+    onSuccess: (r) => {
+      if (r.updated.length) toast.success(`${r.updated.length} ${r.updated.length === 1 ? 'issue' : 'issues'} ${r.label}`);
+      if (r.failed.length) toast.error(`${r.failed.length} could not be changed: ${r.failed.slice(0, 3).map((f) => `${lk.issueKey(f.number)} (${f.error})`).join(', ')}`);
+      const failedNums = new Set(r.failed.map((f) => f.number));
+      setSelected(new Set(items.filter((i) => failedNums.has(i.number)).map((i) => i.id)));
+      for (const k of [wk.issues(pid!), wk.board(pid!), wk.backlog(pid!)]) qc.invalidateQueries({ queryKey: k });
+    },
+    onError: (err) => toast.error(workError(err, 'Bulk change failed')),
+  });
+
   // ── Drawer ──
   const pushedIssue = useRef(false);
   const openIssue = useCallback(
@@ -303,10 +420,17 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
         e.preventDefault();
         setHi((h) => Math.max(h - 1, 0));
       } else if (k === 'Enter') {
-        if (hi >= 0 && items[hi]) {
+        if (hi >= 0 && rows[hi]) {
           e.preventDefault();
-          openIssue(items[hi].number);
+          openIssue(rows[hi].number);
         }
+      } else if (k === 'x') {
+        if (hi >= 0 && rows[hi]) {
+          e.preventDefault();
+          toggleRow(rows[hi].id, false);
+        }
+      } else if (k === 'Escape' && selected.size) {
+        setSelected(new Set());
       } else if (k === 'c') {
         if (!canCreate) return;
         e.preventDefault();
@@ -323,7 +447,8 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [items, hi, createOpen, openNum, canCreate, openIssue, jqlMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- toggleRow đổi mỗi lần render
+  }, [items, rows, hi, createOpen, openNum, canCreate, openIssue, jqlMode, selected.size]);
 
   // ── Lựa chọn cho picker ──
   const typeOptions = useMemo<PickOption<number>[]>(
@@ -396,12 +521,14 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   }
 
   const countLabel = list.isLoading || list.isError ? '' : jqlMode && jqlTotal !== undefined ? String(jqlTotal) : `${items.length}${list.hasNextPage ? '+' : ''}`;
-  const today = todayLocal();
+  const gridVars = { '--cols-d': tpl.d, '--cols-m': tpl.m } as React.CSSProperties;
+  const canBulk = config.permissions.editIssues || config.permissions.transition || config.permissions.deleteIssues;
 
   return (
     <div className="flex h-full min-w-0 flex-col">
       {/* Thanh đầu */}
       <div className="flex h-12 shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:px-4">
+        <MobileNavButton />
         <span className="hidden truncate text-[13px] text-[var(--w-text-3)] sm:inline">{config.name}</span>
         <span className="hidden text-[var(--w-text-3)] sm:inline">/</span>
         <h1 className="text-[14px] font-semibold">Issues</h1>
@@ -415,6 +542,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
           onLoad={loadFilter}
           onSaved={loadFilter}
         />
+        <ColumnsMenu value={cols} onChange={setCols} />
         <ExportMenu pid={config.id} getJql={() => (jqlMode ? jqlParam : currentBasicJql())} />
         {canCreate && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue">
@@ -511,31 +639,58 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
       )}
 
       {/* Bảng */}
-      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="min-h-0 flex-1 overflow-auto">
+       <div style={{ ...gridVars, minWidth: tpl.minWidth }} className="max-md:!min-w-0">
         <div
           role="row"
           className={cn(GRID, 'sticky top-0 z-[1] h-8 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-3 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)] md:px-4')}
         >
-          <span />
-          <span>Key</span>
-          <span>Title</span>
-          <span>Status</span>
-          {/* KHÔNG sr-only: nó là position:absolute, rút ô khỏi lưới và làm các cột sau lệch hai ô. */}
-          <span aria-label="Priority" />
-          <span aria-label="Assignee" />
-          <span className="hidden text-right md:block">Pts</span>
-          <span className="hidden md:block">Due</span>
-          <span className="hidden text-right md:block">Updated</span>
+          <span className="flex items-center" role="columnheader" aria-label="Select">
+            {canBulk && (
+              <input
+                type="checkbox"
+                aria-label={allSelected ? 'Clear selection' : 'Select all loaded issues'}
+                title={allSelected ? 'Clear selection' : 'Select all loaded issues'}
+                checked={allSelected}
+                ref={(el) => { if (el) el.indeterminate = someSelected; }}
+                onChange={() => setSelected(allSelected ? new Set() : new Set(rows.map((r) => r.id)))}
+                className="h-3.5 w-3.5 accent-[var(--w-accent)]"
+              />
+            )}
+          </span>
+          {cols.map((c) => {
+            const def = COLUMNS[c];
+            const active = sortState?.col === c;
+            return (
+              <button
+                key={c}
+                type="button"
+                role="columnheader"
+                aria-sort={active ? (sortState!.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
+                onClick={() => onSort(c)}
+                title={`Sort by ${def.label.toLowerCase()}${jqlMode && def.jql ? ' (ORDER BY in JQL)' : jqlMode ? ' (loaded rows only)' : ''}`}
+                className={cn(
+                  'flex h-full min-w-0 items-center gap-1 uppercase tracking-wide hover:text-[var(--w-text)]',
+                  def.align === 'right' && 'justify-end',
+                  !def.mobile && 'max-md:hidden',
+                  active && 'text-[var(--w-text)]',
+                )}
+              >
+                <span className="truncate">{c === 'type' ? 'Type' : def.label}</span>
+                {active && (sortState!.dir === 'asc' ? <ArrowUp size={11} /> : <ArrowDown size={11} />)}
+              </button>
+            );
+          })}
         </div>
 
         {list.isLoading || !ready ? (
           <div aria-busy="true">
             {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className={cn(GRID, 'h-9 border-b border-[var(--w-border)] px-3 md:px-4')}>
+              <div key={i} className="flex h-9 items-center gap-3 border-b border-[var(--w-border)] px-3 md:px-4">
                 <span className="h-4 w-4 rounded-[4px] bg-[var(--w-sunken)]" />
                 <span className="h-3 w-12 rounded bg-[var(--w-sunken)]" />
-                <span className="h-3 rounded bg-[var(--w-sunken)]" style={{ width: `${40 + ((i * 37) % 45)}%` }} />
-                <span className="h-4 w-16 rounded bg-[var(--w-sunken)]" />
+                <span className="h-3 rounded bg-[var(--w-sunken)]" style={{ width: `${30 + ((i * 37) % 40)}%` }} />
+                <span className="h-4 w-16 rounded-full bg-[var(--w-sunken)]" />
               </div>
             ))}
           </div>
@@ -586,15 +741,17 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
           )
         ) : (
           <div ref={rowsRef} role="rowgroup">
-            {items.map((it, i) => (
+            {ctx && rows.map((it, i) => (
               <IssueRow
                 key={it.id}
                 issue={it}
                 index={i}
                 highlighted={i === hi || it.number === openNum}
-                lk={lk}
-                parentNum={it.parentId ? numById.get(it.parentId) : undefined}
-                today={today}
+                selected={selected.has(it.id)}
+                selectable={canBulk}
+                onToggle={(shift) => toggleRow(it.id, shift)}
+                cols={cols}
+                ctx={ctx}
                 onOpen={() => {
                   setHi(i);
                   openIssue(it.number);
@@ -612,12 +769,38 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
             <div className="hidden items-center gap-3 px-4 py-3 text-[11px] text-[var(--w-text-3)] md:flex">
               <span className="flex items-center gap-1"><kbd className="w-kbd">J</kbd><kbd className="w-kbd">K</kbd> move</span>
               <span className="flex items-center gap-1"><kbd className="w-kbd">↵</kbd> open</span>
+              {canBulk && <span className="flex items-center gap-1"><kbd className="w-kbd">X</kbd> select</span>}
+              {clientSort && list.hasNextPage && <span>Sorted within loaded issues — load more to include the rest.</span>}
               {canCreate && <span className="flex items-center gap-1"><kbd className="w-kbd">C</kbd> create</span>}
               <span className="flex items-center gap-1"><kbd className="w-kbd">/</kbd> search</span>
             </div>
           </div>
         )}
+       </div>
       </div>
+
+      {selected.size > 0 && (
+        <BulkBar
+          count={selected.size}
+          config={config}
+          lk={lk}
+          sprints={config.sprints}
+          busy={bulk.isPending}
+          onPatch={(patch, label) => bulk.mutate({ patch, label })}
+          onStatus={(name) => bulk.mutate({ status: name, label: `moved to ${name}` })}
+          onClear={() => setSelected(new Set())}
+          onDelete={() => setBulkDelete(true)}
+        />
+      )}
+      <ConfirmDialog
+        open={bulkDelete}
+        onClose={() => setBulkDelete(false)}
+        onConfirm={() => { setBulkDelete(false); bulk.mutate({ patch: { delete: true }, label: 'deleted' }); }}
+        title={`Delete ${selected.size} ${selected.size === 1 ? 'issue' : 'issues'}`}
+        body="The selected issues and their sub-tasks move to the project trash. Project admins can restore them from Settings → Trash."
+        confirmLabel="Delete"
+        pending={bulk.isPending}
+      />
 
       {pid && <IssueDrawer pid={pid} num={openNum} onClose={closeIssue} onOpenIssue={(n) => setParams({ issue: String(n) })} />}
       {createOpen && (
@@ -635,53 +818,54 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
 // ─── Một dòng ────────────────────────────────────────────────────
 
 function IssueRow({
-  issue, index, highlighted, lk, parentNum, today, onOpen,
+  issue, index, highlighted, selected, selectable, onToggle, cols, ctx, onOpen,
 }: {
   issue: IssueCard;
   index: number;
   highlighted: boolean;
-  lk: ReturnType<typeof useLookups>;
-  parentNum: number | undefined;
-  today: string;
+  selected: boolean;
+  selectable: boolean;
+  onToggle: (shift: boolean) => void;
+  cols: ColId[];
+  ctx: ListCtx;
   onOpen: () => void;
 }) {
-  const status = lk.statuses.get(issue.statusId);
-  const type = lk.types.get(issue.typeId);
-  const assignee = issue.assigneeId ? lk.members.get(issue.assigneeId) ?? null : null;
-  const due = issue.dueDate?.slice(0, 10);
-  const overdue = !!due && due < today && status?.category !== 'DONE';
   return (
     <div
       role="row"
+      aria-selected={selected}
       data-row={index}
       tabIndex={-1}
-      onClick={onOpen}
+      onClick={(e) => {
+        if (selectable && (e.metaKey || e.ctrlKey || e.shiftKey)) onToggle(e.shiftKey);
+        else onOpen();
+      }}
       className={cn(
         GRID,
-        'h-9 cursor-pointer border-b border-[var(--w-border)] px-3 text-[13px] md:px-4',
-        highlighted ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]',
+        'group h-9 cursor-pointer border-b border-[var(--w-border)] px-3 text-[13px] md:px-4',
+        selected ? 'bg-[var(--w-accent-soft)]' : highlighted ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]',
       )}
     >
-      <IssueTypeIcon type={type} size={14} />
-      <span className="truncate font-mono text-[11.5px] text-[var(--w-text-3)]">{lk.issueKey(issue.number)}</span>
-      <span className="flex min-w-0 items-center gap-2">
-        <span className={cn('truncate', status?.category === 'DONE' && 'text-[var(--w-text-2)]')}>{issue.title}</span>
-        {parentNum !== undefined && (
-          <span className="hidden shrink-0 font-mono text-[10.5px] text-[var(--w-text-3)] sm:inline">{lk.issueKey(parentNum)}</span>
+      <span className="flex items-center" role="cell">
+        {selectable && (
+          <input
+            type="checkbox"
+            aria-label={`Select ${ctx.lk.issueKey(issue.number)}`}
+            checked={selected}
+            onClick={(e) => { e.stopPropagation(); onToggle(e.shiftKey); }}
+            onChange={() => {}}
+            className={cn('h-3.5 w-3.5 accent-[var(--w-accent)]', !selected && 'md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100')}
+          />
         )}
       </span>
-      <span className="min-w-0">
-        <StatusBadge status={status} className="!block max-w-full truncate leading-[20px]" />
-      </span>
-      <PriorityIcon priority={issue.priority} size={15} />
-      <UserAvatar user={assignee} size={20} />
-      <span className="tabular hidden text-right text-[12px] text-[var(--w-text-2)] md:block">{issue.storyPoints ?? ''}</span>
-      <span className={cn('tabular hidden truncate text-[12px] md:block', overdue ? 'font-medium text-[var(--w-red)]' : 'text-[var(--w-text-2)]')} title={overdue ? 'Overdue' : undefined}>
-        {due ? formatDate(due) : ''}
-      </span>
-      <span className="tabular hidden truncate text-right text-[12px] text-[var(--w-text-3)] md:block" title={new Date(issue.updatedAt).toLocaleString('en-US')}>
-        {relativeTime(issue.updatedAt)}
-      </span>
+      {cols.map((c) => {
+        const def = COLUMNS[c];
+        return (
+          <span key={c} role="cell" className={cn('flex min-w-0 items-center', def.align === 'right' && 'justify-end', !def.mobile && 'max-md:hidden')}>
+            {def.cell(issue, ctx)}
+          </span>
+        );
+      })}
     </div>
   );
 }

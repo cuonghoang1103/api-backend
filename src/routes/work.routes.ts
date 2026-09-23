@@ -39,6 +39,7 @@ import * as exchange from '../services/work/exchange.service.js';
 import * as share from '../services/work/share.service.js';
 import * as apiTokens from '../services/work/apiTokens.service.js';
 import * as trash from '../services/work/trash.service.js';
+import * as onboarding from '../services/work/onboarding.service.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -248,6 +249,7 @@ router.post('/workspaces/:wsId/projects', asyncHandler(async (req, res) => {
     type: z.enum(PROJECT_TYPES).default('SCRUM'),
     template: z.enum(PROJECT_TEMPLATES).default('BLANK'),
     visibility: z.enum(PROJECT_VISIBILITY).optional(),
+    firstSprint: z.boolean().optional(),
   }), req.body);
   ok(res, await projects.createProject(callerId(req), idParam(req, 'wsId'), body), 201);
 }));
@@ -404,6 +406,12 @@ router.delete('/projects/:pid/issues/:num', asyncHandler(async (req, res) => {
   await issues.deleteIssueAs(callerId(req), idParam(req, 'pid'), idParam(req, 'num'));
   await auditProject(idParam(req, 'pid'), { actorId: callerId(req), action: 'issue.delete', targetType: 'issue', summary: `Moved issue #${idParam(req, 'num')} to trash` });
   ok(res, { deleted: true });
+}));
+
+// Nhân bản thẻ ("Clone" trong menu ⋯) — trả chi tiết thẻ MỚI.
+router.post('/projects/:pid/issues/:num/clone', asyncHandler(async (req, res) => {
+  const issue = await issues.cloneIssueAs(callerId(req), idParam(req, 'pid'), idParam(req, 'num'));
+  ok(res, await issues.getIssueDetail(callerId(req), idParam(req, 'pid'), issue.number), 201);
 }));
 
 router.get('/projects/:pid/issues/:num/history', asyncHandler(async (req, res) => {
@@ -1128,6 +1136,19 @@ router.post('/me/api-tokens', asyncHandler(async (req, res) => {
 router.delete('/me/api-tokens/:tokenId', asyncHandler(async (req, res) => {
   await apiTokens.revokeToken(callerId(req), idParam(req, 'tokenId'));
   ok(res, { revoked: true });
+}));
+
+// ═══ Lần chạy đầu (onboarding) — dữ liệu mẫu + danh sách Getting started ═══
+// Khối riêng (23/09): quyền kiểm trong onboarding.service (ADMIN mới rải/gỡ mẫu).
+
+router.get('/projects/:pid/onboarding', asyncHandler(async (req, res) => {
+  ok(res, await onboarding.onboardingStatus(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/sample-data', asyncHandler(async (req, res) => {
+  ok(res, await onboarding.addSampleData(callerId(req), idParam(req, 'pid')), 201);
+}));
+router.delete('/projects/:pid/sample-data', asyncHandler(async (req, res) => {
+  ok(res, await onboarding.removeSampleData(callerId(req), idParam(req, 'pid')));
 }));
 
 export default router;

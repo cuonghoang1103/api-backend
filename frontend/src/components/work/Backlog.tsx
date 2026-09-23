@@ -19,19 +19,25 @@ import { CSS } from '@dnd-kit/utilities';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  ChevronDown, ChevronRight, MoreHorizontal, Pencil, Play, Plus, Trash2, UserRound, X, Flag, ArrowRightLeft, CheckCircle2, Sparkles,
+  ChevronDown, ChevronRight, MoreHorizontal, Pencil, Play, Plus, Trash2, CheckCircle2, Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  userName, workApi, workError, workErrorStatus, type BacklogData, type BacklogIssue, type BulkPatch, type ProjectConfig,
+  workApi, workError, workErrorStatus, type BacklogData, type BacklogIssue, type BulkPatch, type ProjectConfig,
   type SprintFull,
 } from '@/lib/work-api';
 import { wk, type Lookups } from './hooks';
 import { CompleteSprintDialog, EditSprintDialog, PlanSprintDialog, sprintRange, StartSprintDialog, unitLabel } from './SprintDialogs';
 import { ConfirmDialog } from './settings/shared';
 import {
-  IssueTypeIcon, PickerList, Popover, PRIORITIES, PriorityIcon, StatusBadge, UserAvatar, useToggle,
+  IssueTypeIcon, Popover, StatusBadge, UserAvatar, useToggle,
 } from './ui';
+import { PriorityWithTip } from './board/BoardCard';
+import BulkBar from './board/BulkBar';
+import { bulkSetStatusByName, type BulkResult } from './board/bulk';
+
+/** Thành viên không có quyền sprint vẫn THẤY nút (mờ) và biết vì sao — không giấu im lặng. */
+const NO_SPRINT_PERM = 'Only project admins can manage sprints';
 
 type Container = number | 'backlog';
 const cid = (c: Container) => `box:${c}`;
@@ -69,16 +75,16 @@ function EstimateCell({ issue, unit, editable, onSave }: { issue: BacklogIssue; 
     <button
       type="button"
       disabled={!editable}
-      title={unit === 'HOURS' ? 'Estimate (hours)' : 'Story points'}
+      title={editable ? (unit === 'HOURS' ? 'Estimate (hours) — click to edit' : 'Story points — click to edit') : unit === 'HOURS' ? 'Estimate (hours)' : 'Story points'}
       onPointerDown={(e) => e.stopPropagation()}
       onClick={(e) => { e.stopPropagation(); setDraft(val === null ? '' : String(val)); }}
       className={cn(
-        'inline-flex h-5 min-w-[26px] items-center justify-center rounded-full px-1.5 text-[11px] font-medium tabular',
+        'inline-flex h-5 min-w-[40px] items-center justify-center rounded-full px-1.5 text-[11px] font-medium tabular',
         val === null ? 'text-[var(--w-text-3)]' : 'bg-[var(--w-sunken)] text-[var(--w-text-2)]',
         editable && 'hover:bg-[var(--w-active)]',
       )}
     >
-      {val === null ? '–' : unit === 'HOURS' ? `${val}h` : val}
+      {val === null ? '–' : unit === 'HOURS' ? `${val}h` : `${val} ${val === 1 ? 'pt' : 'pts'}`}
     </button>
   );
 }
@@ -132,10 +138,10 @@ function Row({ issue, lk, unit, selected, onSelect, onOpen, editable, epicTitle,
           {epicTitle}
         </span>
       )}
-      {issue.subtaskCount > 0 && <span className="hidden text-[11px] text-[var(--w-text-3)] sm:inline" title="Sub-tasks">{issue.subtaskCount} sub</span>}
+      {issue.subtaskCount > 0 && <span className="hidden text-[11px] text-[var(--w-text-3)] sm:inline" title="Sub-tasks">{issue.subtaskCount} {issue.subtaskCount === 1 ? 'sub-task' : 'sub-tasks'}</span>}
       <span className="hidden sm:inline"><StatusBadge status={lk.statuses.get(issue.statusId)} /></span>
       <EstimateCell issue={issue} unit={unit} editable={editable} onSave={(v) => onEstimate(issue, v)} />
-      <PriorityIcon priority={issue.priority} size={13} />
+      <PriorityWithTip priority={issue.priority} size={13} />
       <UserAvatar user={issue.assigneeId ? lk.members.get(issue.assigneeId) : null} size={20} />
     </div>
   );
@@ -156,16 +162,47 @@ function Box({ id, children, empty }: { id: Container; children: ReactNode; empt
   );
 }
 
-function PointsPills({ todo, progress, done, unit }: { todo: number; progress: number; done: number; unit: BacklogData['unit'] }) {
+interface BoxTotals { count: number; todo: number; progress: number; done: number; nTodo: number; nProgress: number; nDone: number }
+const EMPTY_TOTALS: BoxTotals = { count: 0, todo: 0, progress: 0, done: 0, nTodo: 0, nProgress: 0, nDone: 0 };
+
+/** "2 to do · 1 in progress · 1 done · 21 pts" — chữ rõ nghĩa thay cho ba con số trơn. */
+function SprintSummary({ t, unit }: { t: BoxTotals; unit: BacklogData['unit'] }) {
   const r = (n: number) => Math.round(n * 10) / 10;
-  const pill = (v: number, cls: string, title: string) => (
-    <span title={`${title}: ${r(v)} ${unitLabel(unit)}`} className={cn('inline-flex h-5 min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular', cls)}>{r(v)}</span>
+  const u = unit === 'HOURS' ? 'h' : 'pts';
+  const part = (n: number, pts: number, label: string, color: string) => (
+    <span className="inline-flex items-center gap-1" title={`${n} ${n === 1 ? 'issue' : 'issues'} ${label} · ${r(pts)} ${unitLabel(unit)}`}>
+      <span className="h-2 w-2 rounded-full" style={{ background: color }} />
+      <span className="tabular">{n}</span> {label}
+    </span>
   );
+  const total = t.todo + t.progress + t.done;
   return (
-    <span className="hidden items-center gap-1 sm:flex">
-      {pill(todo, 'bg-[var(--w-sunken)] text-[var(--w-text-2)]', 'To do')}
-      {pill(progress, 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]', 'In progress')}
-      {pill(done, 'bg-[color-mix(in_srgb,var(--w-green)_16%,transparent)] text-[var(--w-green)]', 'Done')}
+    <span className="hidden items-center gap-2 text-[12px] text-[var(--w-text-2)] sm:flex">
+      {part(t.nTodo, t.todo, 'to do', 'var(--w-text-3)')}
+      <span className="text-[var(--w-text-3)]">·</span>
+      {part(t.nProgress, t.progress, 'in progress', 'var(--w-accent)')}
+      <span className="text-[var(--w-text-3)]">·</span>
+      {part(t.nDone, t.done, 'done', 'var(--w-green)')}
+      <span
+        className="rounded-full bg-[var(--w-sunken)] px-1.5 py-px text-[11px] font-semibold tabular text-[var(--w-text)]"
+        title={`Total estimate: ${r(total)} ${unitLabel(unit)} (${r(t.done)} done)`}
+      >
+        {r(total)} {u}
+      </span>
+    </span>
+  );
+}
+
+/** Nút sprint: có quyền thì bấm được; không thì mờ + chú thích. */
+function SprintBtn({ allowed, disabledReason, onClick, children, ghost }: {
+  allowed: boolean; disabledReason?: string; onClick: () => void; children: ReactNode; ghost?: boolean;
+}) {
+  const off = !allowed || !!disabledReason;
+  return (
+    <span title={!allowed ? NO_SPRINT_PERM : disabledReason} className={cn('inline-flex', off && 'cursor-not-allowed')}>
+      <button type="button" disabled={off} onClick={onClick} className={cn('w-btn w-btn-sm', ghost && 'w-btn-ghost', off && 'pointer-events-none')}>
+        {children}
+      </button>
     </span>
   );
 }
@@ -202,63 +239,6 @@ function QuickCreate({ onCreate }: { onCreate: (title: string) => Promise<unknow
         className="w-input h-8"
       />
     </form>
-  );
-}
-
-// ─── Thanh sửa hàng loạt ─────────────────────────────────────────
-
-function BulkBar({ count, config, sprints, onApply, onClear, onDelete }: {
-  count: number; config: ProjectConfig; sprints: SprintFull[]; onApply: (p: BulkPatch, label: string) => void; onClear: () => void; onDelete: () => void;
-}) {
-  const move = useToggle();
-  const assign = useToggle();
-  const prio = useToggle();
-  const moveRef = useRef<HTMLButtonElement>(null);
-  const assignRef = useRef<HTMLButtonElement>(null);
-  const prioRef = useRef<HTMLButtonElement>(null);
-  const assignable = config.members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER');
-  return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-5 z-[55] flex justify-center px-4">
-      <div className="pointer-events-auto flex flex-wrap items-center gap-1.5 rounded-[10px] border border-[var(--w-border-strong)] bg-[var(--w-raised)] px-2 py-1.5 text-[13px]" style={{ boxShadow: 'var(--w-shadow-pop)' }}>
-        <span className="px-2 font-semibold tabular">{count} selected</span>
-        <button ref={moveRef} type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={move.toggle}><ArrowRightLeft size={13} /> Move to</button>
-        <Popover open={move.on} onClose={move.close} anchorRef={moveRef} width={220}>
-          <PickerList
-            options={[...sprints.map((s) => ({ value: s.id, label: s.name, hint: s.state === 'ACTIVE' ? 'Active' : undefined })), { value: 0, label: 'Backlog' }]}
-            selected={[]}
-            onPick={(v) => { move.close(); onApply({ sprintId: v || null }, v ? `moved to ${sprints.find((s) => s.id === v)?.name}` : 'moved to the backlog'); }}
-            placeholder="Sprint…"
-          />
-        </Popover>
-        {config.permissions.editIssues && (
-          <>
-            <button ref={assignRef} type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={assign.toggle}><UserRound size={13} /> Assign</button>
-            <Popover open={assign.on} onClose={assign.close} anchorRef={assignRef} width={240}>
-              <PickerList
-                options={[{ value: 0, label: 'Unassigned', icon: <UserAvatar user={null} size={16} /> }, ...assignable.map((m) => ({ value: m.id, label: userName(m), keywords: m.username, icon: <UserAvatar user={m} size={16} /> }))]}
-                selected={[]}
-                onPick={(v) => { assign.close(); onApply({ assigneeId: v || null }, v ? `assigned to ${userName(assignable.find((m) => m.id === v))}` : 'unassigned'); }}
-                placeholder="Assign to…"
-              />
-            </Popover>
-            <button ref={prioRef} type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={prio.toggle}><Flag size={13} /> Priority</button>
-            <Popover open={prio.on} onClose={prio.close} anchorRef={prioRef} width={200}>
-              <PickerList
-                options={PRIORITIES.map((p) => ({ value: p.value, label: p.label, icon: <PriorityIcon priority={p.value} size={14} /> }))}
-                selected={[]}
-                onPick={(v) => { prio.close(); onApply({ priority: v }, `set to ${PRIORITIES.find((p) => p.value === v)?.label}`); }}
-                placeholder="Priority…"
-              />
-            </Popover>
-          </>
-        )}
-        {config.permissions.deleteIssues && (
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-danger" onClick={onDelete}><Trash2 size={13} /> Delete</button>
-        )}
-        <span className="mx-1 h-4 w-px bg-[var(--w-border)]" />
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title="Clear selection (Esc)" onClick={onClear}><X size={14} /></button>
-      </div>
-    </div>
   );
 }
 
@@ -315,13 +295,14 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
 
   // Tổng điểm theo khung, tính trên TOÀN BỘ thẻ (không theo bộ lọc) — giống Jira.
   const totals = useMemo(() => {
-    const t = new Map<Container, { count: number; todo: number; progress: number; done: number }>();
+    const t = new Map<Container, BoxTotals>();
     for (const i of data.issues) {
-      const c: Container = (optimistic.get(i.id)?.sprintId ?? i.sprintId) ?? 'backlog';
-      const x = t.get(c) ?? { count: 0, todo: 0, progress: 0, done: 0 };
+      const o = optimistic.get(i.id);
+      const c: Container = (o ? o.sprintId : i.sprintId) ?? 'backlog';
+      const x = t.get(c) ?? { ...EMPTY_TOTALS };
       x.count += 1;
       const cat = lk.statuses.get(i.statusId)?.category;
-      if (cat === 'DONE') x.done += i.estimate; else if (cat === 'IN_PROGRESS') x.progress += i.estimate; else x.todo += i.estimate;
+      if (cat === 'DONE') { x.done += i.estimate; x.nDone += 1; } else if (cat === 'IN_PROGRESS') { x.progress += i.estimate; x.nProgress += 1; } else { x.todo += i.estimate; x.nTodo += 1; }
       t.set(c, x);
     }
     return t;
@@ -349,8 +330,13 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
   };
 
   const bulk = useMutation({
-    mutationFn: (v: { patch: BulkPatch; label: string }) =>
-      workApi.bulkUpdate(pid, [...selected].map((id) => byId.get(id)!.number).filter(Boolean), v.patch).then((r) => ({ ...r, label: v.label })),
+    mutationFn: async (v: { patch?: BulkPatch; status?: string; label: string }): Promise<BulkResult & { label: string }> => {
+      const picked = [...selected].map((id) => byId.get(id)).filter((i): i is BacklogIssue => !!i);
+      const r = v.status
+        ? await bulkSetStatusByName(pid, lk, picked, v.status)
+        : await workApi.bulkUpdate(pid, picked.map((i) => i.number), v.patch ?? {});
+      return { ...r, label: v.label };
+    },
     onSuccess: (r) => {
       if (r.updated.length) toast.success(`${r.updated.length} ${r.updated.length === 1 ? 'issue' : 'issues'} ${r.label}`);
       if (r.failed.length) {
@@ -482,7 +468,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
         onKeyDown={(e) => { if (e.key === 'Escape' && selected.size && !document.querySelector('[role="dialog"]')) setSelected(new Set()); }}
       >
         {data.sprints.map((s) => {
-          const t = totals.get(s.id) ?? { count: 0, todo: 0, progress: 0, done: 0 };
+          const t = totals.get(s.id) ?? EMPTY_TOTALS;
           const isCollapsed = collapsed.has(s.id);
           const range = sprintRange(s);
           return (
@@ -500,8 +486,8 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
                 {range && <span className="text-[12px] text-[var(--w-text-3)]">{range}</span>}
                 <span className="text-[12px] text-[var(--w-text-3)] tabular">({t.count} {t.count === 1 ? 'issue' : 'issues'})</span>
                 <span className="ml-auto flex items-center gap-2">
-                  <PointsPills {...t} unit={data.unit} />
-                  {canPlan && s.state === 'PLANNED' && (
+                  <SprintSummary t={t} unit={data.unit} />
+                  {s.state === 'PLANNED' && canPlan && (
                     <button
                       type="button"
                       className="w-btn w-btn-ghost w-btn-sm"
@@ -511,21 +497,19 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
                       <Sparkles size={12} /> <span className="max-sm:!hidden">Plan with AI</span>
                     </button>
                   )}
-                  {canPlan && s.state === 'PLANNED' && (
-                    <button
-                      type="button"
-                      className="w-btn w-btn-sm"
-                      disabled={!!active}
-                      title={active ? `${active.name} is still running` : 'Start this sprint'}
+                  {s.state === 'PLANNED' && (
+                    <SprintBtn
+                      allowed={canPlan}
+                      disabledReason={active ? `${active.name} is still running — complete it first` : undefined}
                       onClick={() => setDialog({ kind: 'start', sprint: s })}
                     >
                       <Play size={12} /> Start sprint
-                    </button>
+                    </SprintBtn>
                   )}
-                  {canPlan && s.state === 'ACTIVE' && (
-                    <button type="button" className="w-btn w-btn-sm" onClick={() => setDialog({ kind: 'complete', sprint: s })}>
+                  {s.state === 'ACTIVE' && (
+                    <SprintBtn allowed={canPlan} onClick={() => setDialog({ kind: 'complete', sprint: s })}>
                       <CheckCircle2 size={12} /> Complete sprint
-                    </button>
+                    </SprintBtn>
                   )}
                   {canPlan && <SprintMenu sprint={s} onEdit={() => setDialog({ kind: 'edit', sprint: s })} onDelete={() => setDialog({ kind: 'delete', sprint: s })} />}
                 </span>
@@ -560,18 +544,15 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
             </button>
             <span className="text-[12px] text-[var(--w-text-3)] tabular">({totals.get('backlog')?.count ?? 0} issues)</span>
             <span className="ml-auto flex items-center gap-2">
-              {totals.get('backlog') && <PointsPills {...totals.get('backlog')!} unit={data.unit} />}
-              {canPlan && (
-                <button
-                  type="button"
-                  className="w-btn w-btn-sm"
-                  onClick={async () => {
-                    try { await workApi.createSprint(pid); refresh(); qc.invalidateQueries({ queryKey: wk.project(pid) }); } catch (err) { toast.error(workError(err)); }
-                  }}
-                >
-                  <Plus size={12} /> Create sprint
-                </button>
-              )}
+              {totals.get('backlog') && <SprintSummary t={totals.get('backlog')!} unit={data.unit} />}
+              <SprintBtn
+                allowed={canPlan}
+                onClick={async () => {
+                  try { await workApi.createSprint(pid); refresh(); qc.invalidateQueries({ queryKey: wk.project(pid) }); } catch (err) { toast.error(workError(err)); }
+                }}
+              >
+                <Plus size={12} /> Create sprint
+              </SprintBtn>
             </span>
           </div>
           {!collapsed.has('backlog') && (
@@ -604,8 +585,12 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
         <BulkBar
           count={selected.size}
           config={config}
+          lk={lk}
           sprints={data.sprints}
-          onApply={(patch, label) => bulk.mutate({ patch, label })}
+          epics={data.epics.filter((e) => !e.done)}
+          busy={bulk.isPending}
+          onPatch={(patch, label) => bulk.mutate({ patch, label })}
+          onStatus={(name) => bulk.mutate({ status: name, label: `moved to ${name}` })}
           onClear={() => setSelected(new Set())}
           onDelete={() => setBulkDelete(true)}
         />

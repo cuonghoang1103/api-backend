@@ -9,6 +9,7 @@
  * backend kiểm lại mọi JQL của widget trước khi lưu.
  */
 
+import SortableWidgets from '@/components/work/dashboards/SortableWidgets';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -281,17 +282,21 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
                   ) : undefined}
                 />
               ) : (
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                  {widgets.map((w, i) => (
+                <SortableWidgets
+                  items={widgets.map((w, i) => (w.id ? w : { ...w, id: `new-${i}` }))}
+                  editing={editing}
+                  onReorder={(next) => setDraft((d) => (d ? { ...d, widgets: next.map((w) => (w.id.startsWith('new-') ? { ...w, id: '' } : w)) } : d))}
+                  className="grid grid-cols-1 gap-3 md:grid-cols-2"
+                  itemClassName={(w) => (w.size === 'full' ? 'md:col-span-2' : undefined)}
+                  renderItem={(w, i, handle) => (
                     <section
-                      key={w.id || i}
                       className={cn(
-                        'min-w-0 rounded-[var(--w-radius-lg)] border bg-[var(--w-panel)]',
-                        w.size === 'full' && 'md:col-span-2',
+                        'h-full min-w-0 rounded-[var(--w-radius-lg)] border bg-[var(--w-panel)]',
                         editing ? 'border-dashed border-[var(--w-border-strong)]' : 'border-[var(--w-border)]',
                       )}
                     >
                       <div className="flex min-h-[40px] items-center gap-1 border-b border-[var(--w-border)] py-1.5 pl-4 pr-2">
+                        {handle}
                         <h3 className="min-w-0 flex-1 truncate text-[13px] font-semibold" title={w.query || undefined}>{w.title || WIDGET_META[w.kind]?.defaultTitle}</h3>
                         {editing && (
                           <div className="flex shrink-0 items-center">
@@ -306,8 +311,8 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
                         <WidgetBody w={w} pid={pid} config={config} lk={lk} onOpenIssue={(n) => openIssue(n)} />
                       </div>
                     </section>
-                  ))}
-                </div>
+                  )}
+                />
               )}
             </div>
           </div>

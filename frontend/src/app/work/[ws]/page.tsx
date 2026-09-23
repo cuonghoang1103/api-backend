@@ -5,67 +5,66 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { ChevronRight, Lock, Plus, Settings } from 'lucide-react';
+import { ChevronRight, CircleDot, FolderKanban, Lock, Plus, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { userName, workApi, workError, type ProjectSummary } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
-import { EmptyState, Spinner, UserAvatar, useToggle } from '@/components/work/ui';
-import { PageHeader, PROJECT_ROLE_LABEL, PROJECT_TYPE_LABEL } from '@/components/work/settings/shared';
+import { avatarColor, EmptyState, Spinner, UserAvatar, useToggle } from '@/components/work/ui';
+import { PageHeader, PROJECT_ROLE_LABEL, PROJECT_TYPE_LABEL, WorkspaceMark, WS_ROLE_LABEL } from '@/components/work/settings/shared';
 import CreateProjectDialog from '@/components/work/workspace/CreateProjectDialog';
 
-function ProjectRow({ p, onOpen, muted }: { p: ProjectSummary; onOpen: () => void; muted?: boolean }) {
+/** Thẻ dự án: ô khoá màu, tên, loại, người phụ trách, số việc đang mở. */
+function ProjectCard({ p, slug, muted }: { p: ProjectSummary; slug: string; muted?: boolean }) {
   return (
-    <tr
-      onClick={onOpen}
-      onKeyDown={(e) => e.key === 'Enter' && onOpen()}
-      tabIndex={0}
-      className={cn('cursor-pointer border-b border-[var(--w-border)] last:border-b-0 hover:bg-[var(--w-hover)] focus:bg-[var(--w-hover)] focus:outline-none', muted && 'text-[var(--w-text-2)]')}
-    >
-      <td className="w-[88px] py-2.5 pl-4 pr-2 font-mono text-[12px] font-medium text-[var(--w-text-2)]">{p.key}</td>
-      <td className="max-w-0 px-2 py-2.5">
-        <div className="flex items-center gap-1.5">
-          <span className="truncate font-medium">{p.name}</span>
-          {p.visibility === 'PRIVATE' && <Lock size={12} className="shrink-0 text-[var(--w-text-3)]" aria-label="Private project" />}
+    <Link href={`/work/${slug}/${p.key}/board`} className={cn('w-card group flex flex-col p-4', muted && 'opacity-70')}>
+      <div className="flex items-start gap-3">
+        <span
+          aria-hidden="true"
+          style={{ background: avatarColor(p.key) }}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[8px] text-[15px] font-bold text-white"
+        >
+          {p.key.slice(0, 2)}
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <span className="truncate text-[15px] font-semibold">{p.name}</span>
+            {p.visibility === 'PRIVATE' && <Lock size={13} className="shrink-0 text-[var(--w-text-3)]" aria-label="Private project" />}
+          </div>
+          <div className="mt-0.5 flex items-center gap-1.5 text-[13px] text-[var(--w-text-3)]">
+            <span className="font-mono">{p.key}</span>
+            <span aria-hidden="true">·</span>
+            <span>{PROJECT_TYPE_LABEL[p.type]}</span>
+            <span aria-hidden="true">·</span>
+            <span>{PROJECT_ROLE_LABEL[p.role]}</span>
+          </div>
         </div>
-      </td>
-      <td className="hidden px-2 py-2.5 text-[var(--w-text-2)] md:table-cell">{PROJECT_TYPE_LABEL[p.type]}</td>
-      <td className="hidden px-2 py-2.5 md:table-cell">
+        <ChevronRight size={16} className="mt-1 shrink-0 text-[var(--w-text-3)] transition-transform group-hover:translate-x-0.5" />
+      </div>
+      {p.description && <p className="mt-3 line-clamp-2 text-[13px] leading-relaxed text-[var(--w-text-2)]">{p.description}</p>}
+      <div className="min-h-[12px] flex-1" />
+      <div className="flex items-center justify-between gap-3 border-t border-[var(--w-border)] pt-3 text-[13px] text-[var(--w-text-2)]">
         {p.lead ? (
           <span className="flex min-w-0 items-center gap-2">
-            <UserAvatar user={p.lead} size={20} />
-            <span className="truncate text-[var(--w-text-2)]">{userName(p.lead)}</span>
+            <UserAvatar user={p.lead} size={22} />
+            <span className="truncate">{userName(p.lead)}</span>
           </span>
         ) : (
-          <span className="text-[var(--w-text-3)]">—</span>
+          <span className="text-[var(--w-text-3)]">No lead</span>
         )}
-      </td>
-      <td className="tabular px-2 py-2.5 text-right text-[var(--w-text-2)]">{p.openIssues}</td>
-      <td className="hidden px-2 py-2.5 text-[var(--w-text-2)] sm:table-cell">{PROJECT_ROLE_LABEL[p.role]}</td>
-      <td className="w-8 pr-3 text-[var(--w-text-3)]"><ChevronRight size={14} /></td>
-    </tr>
+        <span className="flex shrink-0 items-center gap-1.5 tabular-nums">
+          <CircleDot size={14} className="text-[var(--w-blue)]" />
+          {p.openIssues} open
+        </span>
+      </div>
+    </Link>
   );
 }
 
-function ProjectTable({ projects, onOpen, muted }: { projects: ProjectSummary[]; onOpen: (p: ProjectSummary) => void; muted?: boolean }) {
+function ProjectGrid({ projects, slug, muted }: { projects: ProjectSummary[]; slug: string; muted?: boolean }) {
   return (
-    <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
-      <table className="w-full table-fixed text-[13px]">
-        <thead>
-          <tr className="border-b border-[var(--w-border)] bg-[var(--w-sunken)] text-left text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
-            <th className="w-[88px] py-2 pl-4 pr-2 font-medium">Key</th>
-            <th className="px-2 py-2 font-medium">Name</th>
-            <th className="hidden w-[90px] px-2 py-2 font-medium md:table-cell">Type</th>
-            <th className="hidden w-[180px] px-2 py-2 font-medium md:table-cell">Lead</th>
-            <th className="w-[64px] px-2 py-2 text-right font-medium">Open</th>
-            <th className="hidden w-[90px] px-2 py-2 font-medium sm:table-cell">Your role</th>
-            <th className="w-8" />
-          </tr>
-        </thead>
-        <tbody>
-          {projects.map((p) => <ProjectRow key={p.id} p={p} onOpen={() => onOpen(p)} muted={muted} />)}
-        </tbody>
-      </table>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      {projects.map((p) => <ProjectCard key={p.id} p={p} slug={slug} muted={muted} />)}
     </div>
   );
 }
@@ -96,70 +95,83 @@ function WorkspaceOverview() {
 
   const active = ws?.projects.filter((p) => !p.archivedAt) ?? [];
   const archived = ws?.projects.filter((p) => p.archivedAt) ?? [];
-  const open = (p: ProjectSummary) => router.push(`/work/${slug}/${p.key}/board`);
 
   if (q.isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
   if (q.error || !ws) {
     return (
-      <div className="h-full overflow-y-auto">
-        <EmptyState
-          title="Workspace unavailable"
-          body={workError(q.error, 'This workspace does not exist or you no longer have access to it.')}
-          action={<Link href="/work" className="w-btn">Back to workspaces</Link>}
-        />
+      <div className="flex h-full flex-col">
+        <PageHeader title="Workspace" />
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <EmptyState title="Workspace not found" body={workError(q.error, 'This workspace does not exist or you no longer have access to it.')} />
+        </div>
       </div>
     );
   }
+
+  const openIssues = active.reduce((n, p) => n + p.openIssues, 0);
 
   return (
     <div className="flex h-full flex-col">
       <PageHeader
         title={ws.name}
-        sub={`${active.length} project${active.length === 1 ? '' : 's'}`}
         actions={
           <>
-            <Link href={`/work/${slug}/settings`} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Workspace settings" title="Workspace settings">
-              <Settings size={15} />
+            <Link href={`/work/${slug}/settings`} className="w-btn w-btn-sm" aria-label="Members & settings" title="Members & settings">
+              <Settings size={14} /> <span className="max-sm:hidden">Members &amp; settings</span>
             </Link>
             {canCreate && (
               <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={dialog.open}>
-                <Plus size={14} /> <span className="hidden sm:inline">Create project</span><span className="sm:hidden">New</span>
+                <Plus size={14} /> New project
               </button>
             )}
           </>
         }
       />
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="mx-auto w-full max-w-[1100px] px-4 py-6 md:px-6">
-          {ws.description && <p className="mb-5 max-w-[720px] text-[13px] leading-relaxed text-[var(--w-text-2)]">{ws.description}</p>}
+        <div className="mx-auto w-full max-w-[1120px] px-4 py-6 md:px-8 md:py-8">
+          <div className="mb-6 flex items-start gap-4">
+            <WorkspaceMark name={ws.name} size={48} />
+            <div className="min-w-0 flex-1">
+              <h2 className="truncate text-[20px] font-semibold tracking-[-0.01em]">{ws.name}</h2>
+              <p className="mt-1 text-[14px] text-[var(--w-text-2)]">
+                {ws.description || 'Your team\'s projects live here. Open one to see its board, backlog and reports.'}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-[var(--w-text-3)]">
+                <span>{active.length} project{active.length === 1 ? '' : 's'}</span>
+                <span>{openIssues} open issue{openIssues === 1 ? '' : 's'}</span>
+                <span>Your role: {WS_ROLE_LABEL[ws.role]}</span>
+              </div>
+            </div>
+          </div>
 
           {active.length ? (
-            <ProjectTable projects={active} onOpen={open} />
+            <ProjectGrid projects={active} slug={slug} />
           ) : (
-            <div className="rounded-[8px] border border-dashed border-[var(--w-border-strong)]">
+            <div className="w-card !border-dashed !shadow-none">
               <EmptyState
+                icon={<FolderKanban size={20} />}
                 title="No projects yet"
                 body={canCreate
                   ? 'Create a project to start planning sprints, tracking bugs and managing tests. Templates set up the workflow for you.'
                   : 'You have not been added to any project in this workspace yet. Ask a workspace admin to add you.'}
-                action={canCreate ? <button type="button" className="w-btn w-btn-primary" onClick={dialog.open}><Plus size={14} /> Create project</button> : undefined}
+                action={canCreate ? <button type="button" className="w-btn w-btn-primary" onClick={dialog.open}><Plus size={14} /> Create your first project</button> : undefined}
               />
             </div>
           )}
 
           {archived.length > 0 && (
-            <div className="mt-8">
+            <div className="mt-10">
               <button
                 type="button"
                 onClick={() => setShowArchived((v) => !v)}
-                className="mb-2 flex items-center gap-1.5 text-[12px] font-medium text-[var(--w-text-2)] hover:text-[var(--w-text)]"
+                className="mb-3 flex h-8 items-center gap-1.5 text-[14px] font-medium text-[var(--w-text-2)] hover:text-[var(--w-text)]"
                 aria-expanded={showArchived}
               >
-                <ChevronRight size={13} className={cn('transition-transform', showArchived && 'rotate-90')} />
+                <ChevronRight size={14} className={cn('transition-transform', showArchived && 'rotate-90')} />
                 Archived
                 <span className="text-[var(--w-text-3)]">{archived.length}</span>
               </button>
-              {showArchived && <ProjectTable projects={archived} onOpen={open} muted />}
+              {showArchived && <ProjectGrid projects={archived} slug={slug} muted />}
             </div>
           )}
         </div>

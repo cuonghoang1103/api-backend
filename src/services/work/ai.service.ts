@@ -23,6 +23,7 @@ import { displayName } from './common.js';
 import { PRIORITY_MAX, PRIORITY_MIN } from './constants.js';
 import { addComment, createIssueAs, updateIssueAs } from './issues.service.js';
 import { requireProject, type ProjectAccess } from './permissions.js';
+import { activeSprintPace, type SprintPace } from './sprintPace.js';
 import { projectMembers } from './projects.service.js';
 import { bulkUpdate, computeSprintReport, estimateOf, estimationOf } from './sprints.service.js';
 import { createTest } from './tests.service.js';
@@ -82,7 +83,7 @@ const LANG_RULE = 'Reply in the same language the user writes in (Vietnamese or 
 const clip = (s: string | null | undefined, n: number) => (s ? (s.length > n ? `${s.slice(0, n)}…` : s) : '');
 
 async function projectContext(access: ProjectAccess, focusText: string) {
-  const [project, members, statuses, sprints] = await Promise.all([
+  const [project, members, statuses, sprints, pace] = await Promise.all([
     prisma.workProject.findUniqueOrThrow({
       where: { id: access.projectId },
       select: { key: true, name: true, description: true, type: true, template: true, issueTypes: { where: { archived: false }, select: { key: true, name: true, level: true } } },
@@ -90,6 +91,7 @@ async function projectContext(access: ProjectAccess, focusText: string) {
     projectMembers(access.projectId),
     prisma.workStatus.findMany({ where: { workflow: { projectId: access.projectId } }, select: { id: true, name: true, category: true } }),
     prisma.workSprint.findMany({ where: { projectId: access.projectId, state: { not: 'CLOSED' } }, select: { id: true, name: true, state: true, goal: true, endAt: true } }),
+    activeSprintPace(access.projectId),
   ]);
   const statusName = new Map(statuses.map((s) => [s.id, `${s.name}${s.category === 'DONE' ? ' (done)' : ''}`]));
   const memberName = new Map(members.map((m) => [m.id, m.username]));
@@ -124,6 +126,7 @@ async function projectContext(access: ProjectAccess, focusText: string) {
       `Statuses: ${[...new Set(statuses.map((s) => s.name))].join(', ')}.`,
       `Members who can be assigned: ${members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER').map((m) => `@${m.username} (${displayName(m)})`).join(', ') || 'none'}.`,
       `Open sprints: ${sprints.map((s) => `${s.name} [${s.state}]${s.goal ? ` goal: ${clip(s.goal, 120)}` : ''}${s.endAt ? ` ends ${s.endAt.toISOString().slice(0, 10)}` : ''}`).join('; ') || 'none'}.`,
+      ...(pace ? [`Sprint pace (computed): ${pace.summary}`] : []),
       `Relevant issues (most recently updated first):`,
       ...lines,
     ].join('\n'),
@@ -497,19 +500,9 @@ export async function insights(userId: number, projectId: number) {
   const avg = loads.length ? loads.reduce((s, l) => s + l.points, 0) / loads.length : 0;
   const overloaded = loads.filter((l) => avg > 0 && l.points > avg * 1.6 && l.points - avg >= 3);
 
-  let sprintRisk: null | { sprint: string; remaining: number; daysLeft: number; neededPerDay: number; recentPerDay: number; atRisk: boolean } = null;
-  const active = await prisma.workSprint.findFirst({ where: { projectId, state: 'ACTIVE' }, select: { id: true, name: true, startAt: true, endAt: true } });
-  if (active?.startAt && active.endAt) {
-    const snaps = await prisma.workSprintSnapshot.findMany({ where: { sprintId: active.id }, orderBy: { day: 'asc' } });
-    const inSprint = await prisma.workIssue.findMany({ where: { sprintId: active.id, deletedAt: null, type: { level: 0 } }, select: { storyPoints: true, originalEstimateMin: true, resolvedAt: true } });
-    const remaining = Math.round(inSprint.filter((i) => !i.resolvedAt).reduce((s, i) => s + estimateOf(i, mode), 0) * 10) / 10;
-    const daysLeft = Math.max(0, Math.ceil((active.endAt.getTime() - now) / day));
-    const elapsed = Math.max(1, Math.ceil((now - active.startAt.getTime()) / day));
-    const burned = snaps.length ? Math.max(0, snaps[0].remainingPoints - remaining) : 0;
-    const recentPerDay = Math.round((burned / elapsed) * 10) / 10;
-    const neededPerDay = daysLeft ? Math.round((remaining / daysLeft) * 10) / 10 : remaining;
-    sprintRisk = { sprint: active.name, remaining, daysLeft, neededPerDay, recentPerDay, atRisk: remaining > 0 && (daysLeft === 0 || (elapsed >= 2 && neededPerDay > recentPerDay * 1.3)) };
-  }
+  // Tốc độ sprint: dùng chung mốc cam kết với Burndown (sprintPace.ts) — không
+  // phụ thuộc cron snapshot nên ngày đầu không còn báo "0 pts/day, AT RISK".
+  const sprintRisk: SprintPace | null = await activeSprintPace(projectId, new Date(now));
   const brief = (i: (typeof open)[number]) => ({ key: `${access.key}-${i.number}`, number: i.number, title: i.title, assignee: name(i.assigneeId), status: i.status.name, dueDate: i.dueDate });
   return {
     overdue: overdue.map(brief),
@@ -546,7 +539,7 @@ export async function weeklyReport(userId: number, projectId: number, input: { a
     `New issues created: ${created}.`,
     `Overdue: ${risks.overdue.map((i) => `${i.key} ${i.title}`).join('; ') || 'none'}.`,
     `Stuck in progress > 5 days: ${risks.stale.map((i) => `${i.key} (${i.idleDays}d)`).join('; ') || 'none'}.`,
-    risks.sprintRisk ? `Active sprint ${risks.sprintRisk.sprint}: ${risks.sprintRisk.remaining} ${risks.unit === 'HOURS' ? 'hours' : 'points'} left, ${risks.sprintRisk.daysLeft} days left, ${risks.sprintRisk.atRisk ? 'AT RISK' : 'on track'}.` : 'No active sprint.',
+    risks.sprintRisk ? risks.sprintRisk.summary : 'No active sprint.',
     `Workload: ${risks.loads.map((l) => `@${l.username} ${l.issues} open`).join(', ')}.`,
   ].join('\n');
   const who = input.audience === 'teacher' ? 'the course lecturer (formal, highlight each member\'s work)' : input.audience === 'client' ? 'the client (non-technical, outcomes and risks)' : 'the team (direct, action-oriented)';
@@ -639,7 +632,7 @@ export async function planSprint(userId: number, projectId: number, input: { spr
   };
   if (input.explain) {
     const facts = [
-      `Sprint ${sprint.name}. Unit: ${mode === 'HOURS' ? 'hours' : 'story points'}.`,
+      `Sprint "${sprint.name}". Unit: ${mode === 'HOURS' ? 'hours' : 'story points'}.`,
       `Velocity (last ${history.length} sprints): ${history.map((h) => `${h.name}: committed ${h.committedPoints ?? '?'}, completed ${h.completedPoints}`).join('; ') || 'none'} → average ${velocity ?? 'n/a'}.`,
       `Already in sprint: ${already}. Proposed additions (${selected.length}): ${selected.map((s) => `${access.key}-${s.number} "${s.title}" (${s.points})`).join('; ') || 'none'}. Planned total ${total} of target ${target}.`,
       `Warnings: ${warnings.join(' | ') || 'none'}.`,
@@ -665,7 +658,7 @@ export async function retro(userId: number, projectId: number, input: { sprintId
   const rep = stored?.completed ? (stored as Awaited<ReturnType<typeof computeSprintReport>>) : await computeSprintReport(projectId, s.id);
   const members = await projectMembers(projectId);
   const facts = [
-    `Sprint ${s.name} (${s.state})${s.goal ? `, goal: ${s.goal}` : ''}. ${s.startAt ? `From ${s.startAt.toISOString().slice(0, 10)}` : ''}${s.endAt ? ` to ${s.endAt.toISOString().slice(0, 10)}` : ''}.`,
+    `Sprint "${s.name}" (${s.state})${s.goal ? `, goal: ${s.goal}` : ''}. ${s.startAt ? `From ${s.startAt.toISOString().slice(0, 10)}` : ''}${s.endAt ? ` to ${s.endAt.toISOString().slice(0, 10)}` : ''}.`,
     `Committed ${rep.committedPoints} ${rep.unit === 'HOURS' ? 'hours' : 'points'}, completed ${rep.completedPoints}.`,
     `Completed (${rep.completed.length}): ${rep.completed.map((i) => `${access.key}-${i.number} ${i.title}`).join('; ') || 'none'}.`,
     `Not completed (${rep.incomplete.length}): ${rep.incomplete.map((i) => `${access.key}-${i.number} ${i.title}`).join('; ') || 'none'}.`,
@@ -701,7 +694,7 @@ export async function dailyBrief(userId: number, projectId: number, input: { lan
     `Stuck in progress: ${risks.stale.map((i) => `${i.key} ${i.idleDays}d`).join('; ') || 'none'}.`,
     `Urgent but unassigned: ${risks.unassignedUrgent.map((i) => i.key).join('; ') || 'none'}.`,
     `Overloaded: ${risks.overloaded.map((l) => `@${l.username} ${l.points}`).join(', ') || 'none'}.`,
-    risks.sprintRisk ? `Sprint ${risks.sprintRisk.sprint}: ${risks.sprintRisk.remaining} left, ${risks.sprintRisk.daysLeft} days left, needs ${risks.sprintRisk.neededPerDay}/day vs recent ${risks.sprintRisk.recentPerDay}/day → ${risks.sprintRisk.atRisk ? 'AT RISK' : 'on track'}.` : 'No active sprint.',
+    risks.sprintRisk ? risks.sprintRisk.summary : 'No active sprint.',
   ].join('\n');
   const system = `Write today's stand-up brief for the team: 3-6 short markdown bullets, most important first (risks, overdue work, who should look at what). Use ONLY the facts; do not invent. ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"brief":"markdown"}`;
   const out = parseJson(await ask(userId, system, facts, 700, 'work_digest'), z.object({ brief: z.string() }));

@@ -65,7 +65,7 @@ export default function SafeAvatar({
     return (
       <div
         className={`flex items-center justify-center bg-gradient-to-br from-neon-indigo to-neon-violet text-white font-bold ${radius} ${className}`}
-        style={{ ...dim, fontSize: Math.max(20, size * 0.4) }}
+        style={{ ...dim, fontSize: Math.max(9, Math.round(size * 0.42)) }}
         role="img"
         aria-label={alt}
       >

@@ -6,7 +6,7 @@
  * không nút sửa. Dữ liệu từ các endpoint /work/share/* (không cần đăng nhập).
  */
 
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CalendarDays, ChevronRight, X } from 'lucide-react';
@@ -100,13 +100,42 @@ function BoardCard({ issue, lk, onOpen }: { issue: ShareIssue; lk: ShareLookups;
         )}
         <span className="ml-auto flex items-center gap-1.5">
           {issue.storyPoints !== null && (
-            <span className="rounded-full bg-[var(--w-sunken)] px-1.5 py-px font-medium tabular text-[var(--w-text-2)]" title="Story points">{issue.storyPoints}</span>
+            <span className="rounded-full bg-[var(--w-sunken)] px-1.5 py-px font-medium tabular text-[var(--w-text-2)]" title="Story points">{issue.storyPoints} {issue.storyPoints === 1 ? 'pt' : 'pts'}</span>
           )}
           <PriorityIcon priority={issue.priority} size={14} />
           <Assignee id={issue.assigneeId} lk={lk} />
         </span>
       </div>
     </button>
+  );
+}
+
+/** Vùng cuộn ngang có mờ dần ở mép khi còn nội dung bị khuất — cho người xem biết còn cột. */
+function HScroll({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = useState({ left: false, right: false });
+  const measure = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    setEdges({ left: el.scrollLeft > 2, right: el.scrollLeft + el.clientWidth < el.scrollWidth - 2 });
+  }, []);
+  useEffect(() => {
+    measure();
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    if (el.firstElementChild) ro.observe(el.firstElementChild);
+    return () => ro.disconnect();
+  }, [measure]);
+  return (
+    <div className="relative">
+      <div ref={ref} onScroll={measure} className="overflow-x-auto pb-3 [scrollbar-color:var(--w-border-strong)_transparent] [scrollbar-width:thin]">
+        {children}
+      </div>
+      {edges.left && <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-[var(--w-bg)] to-transparent" />}
+      {edges.right && <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[var(--w-bg)] to-transparent" />}
+    </div>
   );
 }
 
@@ -139,14 +168,17 @@ export function ShareBoard({ token, summary, lk, onOpen }: { token: string; summ
           {active.goal && <span className="block truncate sm:inline"><span className="hidden sm:inline"> · </span>Goal: {active.goal}</span>}
         </div>
       )}
-      {/* Cột cuộn ngang trong vùng riêng — trang không cuộn ngang trên điện thoại. */}
-      <div className="-mx-4 overflow-x-auto px-4 pb-2 md:-mx-6 md:px-6">
-        <div className="flex gap-3">
+      <p className="mb-2 text-[12px] text-[var(--w-text-3)]">
+        {(q.data?.length ?? 0)} {(q.data?.length ?? 0) === 1 ? 'issue' : 'issues'} · sub-tasks are not listed separately — open an issue to see its sub-tasks.
+      </p>
+      {/* Cột co giãn để vừa màn hình rộng; hẹp hơn thì cuộn ngang, có thanh cuộn + mép mờ. */}
+      <HScroll>
+        <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${lk.columns.length}, minmax(220px, 1fr))` }}>
           {lk.columns.map((c) => {
             const items = byColumn.get(c.id) ?? [];
             const points = items.reduce((s, i) => s + (i.storyPoints ?? 0), 0);
             return (
-              <div key={c.id} className="flex w-[272px] shrink-0 flex-col">
+              <div key={c.id} className="flex min-w-0 flex-col">
                 <div className="mb-2 flex h-7 items-center gap-2 px-1">
                   <span className="truncate text-[12px] font-semibold uppercase tracking-[0.03em] text-[var(--w-text-2)]">{c.name}</span>
                   <span className="text-[12px] tabular text-[var(--w-text-3)]">{items.length}</span>
@@ -160,7 +192,7 @@ export function ShareBoard({ token, summary, lk, onOpen }: { token: string; summ
             );
           })}
         </div>
-      </div>
+      </HScroll>
     </div>
   );
 }

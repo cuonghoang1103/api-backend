@@ -25,6 +25,9 @@ export const wk = {
   issue: (pid: number, num?: number) => (num === undefined ? (['work', 'issue', pid] as const) : (['work', 'issue', pid, num] as const)),
   comments: (pid: number, num: number) => ['work', 'comments', pid, num] as const,
   history: (pid: number, num: number) => ['work', 'history', pid, num] as const,
+  backlog: (pid: number) => ['work', 'backlog', pid] as const,
+  sprints: (pid: number) => ['work', 'sprints', pid] as const,
+  reports: (pid: number) => ['work', 'reports', pid] as const,
 };
 
 /** /work/<slug>/<KEY> ⇒ cấu hình dự án. */
@@ -125,6 +128,12 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
       queue(wk.board(pid));
       queue(wk.issues(pid));
       queue(wk.issue(pid));
+      queue(wk.backlog(pid));
+      queue(wk.reports(pid));
+      if (e.type === 'sprint.updated') {
+        queue(wk.sprints(pid));
+        queue(wk.project(pid)); // config.sprints (ô chọn sprint) cũng đổi
+      }
       if (e.type === 'comment.created' || e.type === 'issue.updated') {
         queue(['work', 'comments', pid]);
         queue(['work', 'history', pid]);

@@ -8,7 +8,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { Filter, Info, Plus, Search, X } from 'lucide-react';
+import { CheckCircle2, Filter, Info, Plus, Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { userName, workApi, workError, type ProjectConfig } from '@/lib/work-api';
@@ -16,6 +16,7 @@ import Board from '@/components/work/Board';
 import CreateIssueDialog from '@/components/work/CreateIssueDialog';
 import IssueDrawer from '@/components/work/IssueDrawer';
 import ProjectHeader from '@/components/work/ProjectHeader';
+import { CompleteSprintDialog } from '@/components/work/SprintDialogs';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import {
   EmptyState, IssueTypeIcon, isTyping, PickerList, Popover, Spinner, UserAvatar, useToggle,
@@ -41,6 +42,7 @@ function BoardView({ config, pid }: { config: ProjectConfig; pid: number }) {
   const [people, setPeople] = useState<number[]>([]);
   const [types, setTypes] = useState<number[]>([]);
   const [createOpen, setCreateOpen] = useState(false);
+  const [completeOpen, setCompleteOpen] = useState(false);
   const typeMenu = useToggle();
   const typeRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -101,6 +103,11 @@ function BoardView({ config, pid }: { config: ProjectConfig; pid: number }) {
             {left < 0 ? `${-left} days overdue` : left === 0 ? 'Ends today' : `${left} days left`}
           </span>
         )}
+        {sprint?.state === 'ACTIVE' && config.permissions.manageSprints && (
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setCompleteOpen(true)}>
+            <CheckCircle2 size={13} /> <span className="hidden sm:inline">Complete sprint</span>
+          </button>
+        )}
         {config.permissions.createIssues && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue (C)">
             <Plus size={14} /> <span className="hidden sm:inline">Create</span>
@@ -160,7 +167,7 @@ function BoardView({ config, pid }: { config: ProjectConfig; pid: number }) {
       {board.data?.fallback && (
         <div className="flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] bg-[var(--w-accent-soft)] px-4 py-2 text-[12px] text-[var(--w-text-2)]">
           <Info size={13} className="shrink-0 text-[var(--w-accent-text)]" />
-          No sprint is running, so the board shows every open issue. Sprint planning arrives with the Backlog view.
+          No sprint is running, so the board shows every open issue. Plan and start a sprint from the Backlog.
         </div>
       )}
       {sprint?.goal && (
@@ -186,6 +193,15 @@ function BoardView({ config, pid }: { config: ProjectConfig; pid: number }) {
       </div>
 
       <CreateIssueDialog open={createOpen} onClose={() => setCreateOpen(false)} config={config} onCreated={openIssue} />
+      {sprint && completeOpen && (
+        <CompleteSprintDialog
+          open
+          onClose={() => setCompleteOpen(false)}
+          pid={pid}
+          sprint={{ ...sprint, completedAt: null, committedPoints: null, completedPoints: null, position: 0 }}
+          plannedSprints={config.sprints.filter((s) => s.state === 'PLANNED').map((s) => ({ ...s, completedAt: null, committedPoints: null, completedPoints: null, position: 0 }))}
+        />
+      )}
       <IssueDrawer pid={pid} num={issueParam} onClose={closeIssue} onOpenIssue={openIssue} />
     </div>
   );

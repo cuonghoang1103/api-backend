@@ -70,7 +70,12 @@ html.theme-dark .work-root {
 .work-root * { scrollbar-width: thin; scrollbar-color: var(--w-border-strong) transparent; }
 .work-root .tabular { font-variant-numeric: tabular-nums; }
 
-/* Nút cơ bản — dùng class chứ không tạo component cho mọi biến thể. */
+/* Nút cơ bản — dùng class chứ không tạo component cho mọi biến thể.
+   ⚠️ File này nạp SAU Tailwind, nên .w-btn { display } thắng `hidden` cùng độ
+   ưu tiên: muốn ẩn một .w-btn theo màn hình thì viết `max-md:!hidden`, KHÔNG
+   `hidden md:inline-flex`. Đừng bọc file này trong @layer để "sửa" — preflight
+   của Tailwind (button { background: transparent }, * { border-width: 0 })
+   cũng không có layer và sẽ xoá nền + viền của mọi nút. */
 .w-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   height: 30px; padding: 0 12px; border-radius: var(--w-radius);

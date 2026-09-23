@@ -243,6 +243,85 @@ export type WorkEvent =
   | { type: 'sprint.updated'; projectId: number; sprintId: number; actor: { kind: string; userId: number | null } }
   | { type: 'project.updated'; projectId: number; actor: { kind: string; userId: number | null } };
 
+
+// ─── Đợt 2: sprint, backlog, báo cáo ─────────────────────────────
+
+export type EstimationUnit = 'POINTS' | 'HOURS';
+
+export interface SprintFull extends WorkSprint {
+  completedAt: string | null;
+  committedPoints: number | null;
+  completedPoints: number | null;
+  position: number;
+}
+
+export interface BacklogIssue extends IssueCard {
+  originalEstimateMin: number | null;
+  /** Điểm hoặc giờ tuỳ settings.estimation của dự án. */
+  estimate: number;
+}
+
+export interface BacklogEpic {
+  id: number; number: number; title: string; statusId: number; done: boolean;
+  total: number; completed: number; points: number; pointsDone: number;
+}
+
+export interface BacklogData {
+  unit: EstimationUnit;
+  sprints: SprintFull[];
+  issues: BacklogIssue[];
+  epics: BacklogEpic[];
+}
+
+export interface BulkPatch {
+  sprintId?: number | null;
+  assigneeId?: number | null;
+  priority?: number;
+  statusId?: number;
+  parentId?: number | null;
+  addLabelIds?: number[];
+  delete?: true;
+}
+
+export interface SprintReportItem { id: number; number: number; title: string; points: number }
+export interface SprintReport {
+  completed: SprintReportItem[];
+  incomplete: SprintReportItem[];
+  added: number[];
+  removed: number[];
+  committedPoints: number;
+  completedPoints: number;
+  unit: EstimationUnit;
+}
+
+export interface BurndownPoint { day: string; remaining: number | null; total: number | null; done: number | null; ideal: number }
+export interface BurndownData { sprint: SprintFull & { goal: string | null }; unit: EstimationUnit; points: BurndownPoint[] }
+export interface VelocityData {
+  unit: EstimationUnit;
+  sprints: Array<{ id: number; name: string; committedPoints: number; completedPoints: number; completedAt: string | null }>;
+  /** Trung bình điểm hoàn thành của 3 sprint gần nhất (null nếu chưa có sprint nào đóng). */
+  average: number | null;
+}
+export interface EpicProgress {
+  id: number; number: number; title: string; statusId: number; dueDate: string | null; resolved: boolean;
+  total: number; completed: number; points: number; pointsDone: number; percent: number;
+}
+export interface ContributionRow {
+  user: WorkUser;
+  /** Thẻ tầng 0 đã xong mà người này đang được giao. */
+  resolved: number;
+  points: number;
+  subtasks: number;
+  created: number;
+  comments: number;
+  /** Số lần sửa thẻ (không tính của AI/tự động). */
+  updates: number;
+  open: number;
+  /** % điểm hoàn thành trên tổng của cả nhóm. */
+  share: number;
+}
+export interface ContributionData { unit: EstimationUnit; from: string | null; to: string | null; members: ContributionRow[] }
+
 // ─── Gọi API ─────────────────────────────────────────────────────
 
 const B = '/work';
@@ -330,6 +409,34 @@ export const workApi = {
   attachmentUrl: (pid: number, aid: number, inline = false) =>
     d<{ url: string }>(api.get(`${B}/projects/${pid}/attachments/${aid}/url${inline ? '?inline=1' : ''}`)).then((r) => r.url),
   deleteAttachment: (pid: number, aid: number) => d(api.delete(`${B}/projects/${pid}/attachments/${aid}`)),
+
+  // Sprint & backlog
+  sprints: (pid: number, includeClosed = false) => d<SprintFull[]>(api.get(`${B}/projects/${pid}/sprints${includeClosed ? '?includeClosed=true' : ''}`)),
+  createSprint: (pid: number, body: { name?: string; goal?: string | null } = {}) => d<SprintFull>(api.post(`${B}/projects/${pid}/sprints`, body)),
+  updateSprint: (pid: number, sid: number, body: { name?: string; goal?: string | null; startAt?: string | null; endAt?: string | null }) =>
+    d<SprintFull>(api.patch(`${B}/projects/${pid}/sprints/${sid}`, body)),
+  deleteSprint: (pid: number, sid: number) => d(api.delete(`${B}/projects/${pid}/sprints/${sid}`)),
+  startSprint: (pid: number, sid: number, body: { name?: string; goal?: string | null; startAt: string; endAt: string }) =>
+    d<SprintFull>(api.post(`${B}/projects/${pid}/sprints/${sid}/start`, body)),
+  completeSprint: (pid: number, sid: number, moveTo: 'backlog' | 'new' | number) =>
+    d<{ report: SprintReport; movedTo: number | null }>(api.post(`${B}/projects/${pid}/sprints/${sid}/complete`, { moveTo })),
+  backlog: (pid: number) => d<BacklogData>(api.get(`${B}/projects/${pid}/backlog`)),
+  bulkUpdate: (pid: number, numbers: number[], patch: BulkPatch) =>
+    d<{ updated: number[]; failed: Array<{ number: number; error: string }> }>(api.post(`${B}/projects/${pid}/issues/bulk`, { numbers, patch })),
+
+  // Báo cáo
+  burndown: (pid: number, sprintId: number) => d<BurndownData>(api.get(`${B}/projects/${pid}/reports/burndown?sprintId=${sprintId}`)),
+  velocity: (pid: number) => d<VelocityData>(api.get(`${B}/projects/${pid}/reports/velocity`)),
+  sprintReport: (pid: number, sprintId: number) => d<{ sprint: SprintFull; report: SprintReport }>(api.get(`${B}/projects/${pid}/reports/sprint?sprintId=${sprintId}`)),
+  epicReport: (pid: number) => d<{ unit: EstimationUnit; epics: EpicProgress[] }>(api.get(`${B}/projects/${pid}/reports/epics`)),
+  contributions: (pid: number, range: { from?: string; to?: string; sprintId?: number } = {}) => {
+    const p = new URLSearchParams();
+    if (range.from) p.set('from', range.from);
+    if (range.to) p.set('to', range.to);
+    if (range.sprintId) p.set('sprintId', String(range.sprintId));
+    const q = p.toString();
+    return d<ContributionData>(api.get(`${B}/projects/${pid}/reports/contributions${q ? `?${q}` : ''}`));
+  },
 
   /** Tải file thẳng lên R2: xin URL ký sẵn → PUT → báo hoàn tất. */
   async uploadAttachment(pid: number, num: number, file: File, onProgress?: (pct: number) => void): Promise<IssueAttachment> {

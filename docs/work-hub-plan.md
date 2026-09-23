@@ -271,13 +271,23 @@ thêm một route GET không cần tham số vào smoke-test của `deploy.sh`.
   được trước khi có Backlog/Sprint ở đợt 2.
 
 ### Đợt 2 — Scrum
-- [ ] 2.1 Backlog: xếp hạng kéo thả, nhóm theo epic, ước lượng point · M
-- [ ] 2.2 Sprint: tạo, bắt đầu, kết thúc, chuyển việc dở, sprint goal · M
-- [ ] 2.3 Ảnh chụp cuối ngày (cron) + burndown/burnup + velocity · M
-- [ ] 2.4 Báo cáo sprint, báo cáo epic · M
-- [ ] 2.5 Trang đóng góp thành viên (thẻ xong, point, bình luận, theo thời gian) · M
-- [ ] 2.6 Mẫu SWR302 · S
+- [x] 2.1 Backlog: xếp hạng kéo thả, nhóm theo epic, ước lượng point · M — kèm chọn nhiều + sửa hàng loạt (nợ từ 1.5)
+- [x] 2.2 Sprint: tạo, bắt đầu, kết thúc, chuyển việc dở, sprint goal · M
+- [x] 2.3 Ảnh chụp cuối ngày (cron) + burndown/burnup + velocity · M
+- [x] 2.4 Báo cáo sprint, báo cáo epic · M
+- [x] 2.5 Trang đóng góp thành viên (thẻ xong, point, bình luận, theo thời gian) · M
+- [x] 2.6 Mẫu SWR302 · S
 - **Nghiệm thu:** burndown khớp số tính tay trên một sprint mẫu có đổi phạm vi giữa chừng.
+- ✅ **Đã nghiệm thu 23/09/2026:** 10 test DB (`work.sprints.db.test.ts`): điểm cam kết không tính việc
+  con, chỉ một sprint chạy (409), thêm/bỏ thẻ giữa sprint so với DANH SÁCH CAM KẾT lúc bấm Start (test
+  bắt được bản đầu so theo ngày `startAt` — sai khi người dùng chọn ngày bắt đầu lùi về quá khứ),
+  đóng sprint dời thẻ chưa xong + việc con chưa xong, velocity, epic, đóng góp không tính AI, sửa hàng
+  loạt báo lỗi riêng từng thẻ. Playwright 16 bước trên bản build: backlog → tạo sprint → kéo thẻ vào
+  sprint → chọn nhiều + chuyển hàng loạt → sửa điểm tại dòng → Start (có mục tiêu) → board → kéo sang
+  Done (API xác nhận) → burndown → Complete từ board → 5 tab báo cáo → nền sáng → điện thoại 390px.
+- ⚠️ Bẫy CSS: `work.css` nạp SAU Tailwind ⇒ `.w-btn{display}` thắng `hidden`. Dùng `max-md:!hidden`.
+  KHÔNG bọc work.css trong `@layer` (preflight của Tailwind sẽ xoá nền/viền mọi nút).
+- ⚠️ Kịch bản Playwright: đợi `#app-splash` biến mất (~1s sau tải trang) trước khi kéo thả.
 
 ### Đợt 3 — Kiểm thử (thay Xray, phục vụ SWT301)
 - [ ] 3.1 Test case: bước, dữ liệu, kết quả mong đợi, Gherkin, nhập từ CSV/Excel · L

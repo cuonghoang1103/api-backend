@@ -82,7 +82,7 @@ export default function ProjectMembers({ config, slug }: { config: ProjectConfig
             {m.explicit && (
               <button
                 type="button"
-                className="w-btn w-btn-ghost w-btn-sm hidden sm:inline-flex"
+                className="w-btn w-btn-ghost w-btn-sm max-sm:!hidden"
                 disabled={busyId === m.id}
                 onClick={() => reset.mutate(m.id)}
                 title="Use the role this person gets from the workspace"

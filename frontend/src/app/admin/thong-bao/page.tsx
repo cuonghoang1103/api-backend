@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { Check, CheckCheck, Loader2, ExternalLink, Inbox } from 'lucide-react';
 import { BIEU_TUONG_TIN } from '@/components/admin/bieuTuongTin';
 import { EmptyState, PageHeader, Tabs, relTime } from '@/components/admin/ui';
+import { useAdminT } from '@/components/admin/i18n';
 
 interface TinAdmin {
   id: number;
@@ -26,16 +27,18 @@ interface TinAdmin {
   nguoi: { id: number; username: string | null; fullName: string | null } | null;
 }
 
-const TEN_LOAI: Record<string, string> = {
-  XIN_KEY: 'Key request', DON_MOI: 'New order', DA_THANH_TOAN: 'Paid',
-  CHUYEN_KHOAN_CHO_DUYET: 'Transfer to confirm', DOI_KEY: 'Key replacement', BAO_CAO: 'Report',
-  XOA_TAI_KHOAN: 'Account deletion', NAP_DIEM: 'Top-up', MUA_PRO: 'Pro purchase', KHAC: 'Other',
+const TEN_LOAI: Record<string, [en: string, vi: string]> = {
+  XIN_KEY: ['Key request', 'Xin cấp key'], DON_MOI: ['New order', 'Đơn mới'],
+  DA_THANH_TOAN: ['Paid', 'Đã thanh toán'], CHUYEN_KHOAN_CHO_DUYET: ['Transfer to confirm', 'Chờ xác nhận CK'],
+  DOI_KEY: ['Key replacement', 'Đổi key hỏng'], BAO_CAO: ['Report', 'Báo cáo'],
+  XOA_TAI_KHOAN: ['Account deletion', 'Xoá tài khoản'], NAP_DIEM: ['Top-up', 'Nạp điểm'],
+  MUA_PRO: ['Pro purchase', 'Mua Pro'], KHAC: ['Other', 'Khác'],
 };
 
 const BO_LOC = [
-  { ma: 'can_xu_ly', ten: 'Pending' },
-  { ma: 'chua_doc', ten: 'Unread' },
-  { ma: 'tat_ca', ten: 'All' },
+  { ma: 'can_xu_ly', khoa: 'pending' },
+  { ma: 'chua_doc', khoa: 'unread' },
+  { ma: 'tat_ca', khoa: 'all' },
 ] as const;
 
 function ngayGio(iso: string): string {
@@ -43,6 +46,9 @@ function ngayGio(iso: string): string {
 }
 
 export default function TrangThongBaoAdmin() {
+  // `t` đã là tên của từng tin trong map bên dưới → hàm dịch đặt tên `tt`.
+  const { t: tt, vi } = useAdminT();
+  const tenLoai = (ma: string) => (TEN_LOAI[ma] ? TEN_LOAI[ma][vi ? 1 : 0] : ma);
   const [loc, setLoc] = useState<(typeof BO_LOC)[number]['ma']>('can_xu_ly');
   const [loai, setLoai] = useState<string>('');
   const [tin, setTin] = useState<TinAdmin[]>([]);
@@ -76,17 +82,17 @@ export default function TrangThongBaoAdmin() {
   return (
     <div className="max-w-4xl">
       <PageHeader
-        title="Inbox"
+        title={tt('inbox')}
         description={
           <>
-            {dem.canXuLy > 0 ? `${dem.canXuLy} việc đang chờ bạn xử lý` : 'Không còn việc nào đang chờ'}
-            {dem.chuaDoc > 0 && ` · ${dem.chuaDoc} chưa đọc`}
+            {dem.canXuLy > 0 ? `${dem.canXuLy} ${tt('waitingOnYou')}` : tt('nothingPending')}
+            {dem.chuaDoc > 0 && ` · ${dem.chuaDoc} ${tt('unreadCount')}`}
           </>
         }
         actions={
           dem.chuaDoc > 0 && (
             <button onClick={docHet} className="a-btn">
-              <CheckCheck className="h-3.5 w-3.5" /> Mark all read
+              <CheckCheck className="h-3.5 w-3.5" /> {tt('markAllRead')}
             </button>
           )
         }
@@ -98,7 +104,7 @@ export default function TrangThongBaoAdmin() {
           onChange={setLoc}
           items={BO_LOC.map((b) => ({
             value: b.ma,
-            label: b.ten,
+            label: tt(b.khoa),
             count: b.ma === 'can_xu_ly' ? dem.canXuLy : b.ma === 'chua_doc' ? dem.chuaDoc : undefined,
           }))}
         />
@@ -108,9 +114,9 @@ export default function TrangThongBaoAdmin() {
           aria-label="Filter by type"
           className="h-7 rounded-[6px] border border-[var(--a-border-strong)] bg-transparent px-2 text-[12.5px] text-[var(--a-text-2)] outline-none"
         >
-          <option value="">All types</option>
+          <option value="">{tt('allTypes')}</option>
           {Object.entries(TEN_LOAI).map(([ma, ten]) => (
-            <option key={ma} value={ma}>{ten}</option>
+            <option key={ma} value={ma}>{ten[vi ? 1 : 0]}</option>
           ))}
         </select>
       </div>
@@ -118,8 +124,8 @@ export default function TrangThongBaoAdmin() {
       {dangTai ? (
         <div className="flex justify-center py-16"><Loader2 className="h-4 w-4 animate-spin text-[var(--a-text-3)]" /></div>
       ) : tin.length === 0 ? (
-        <EmptyState icon={Inbox} title={loc === 'can_xu_ly' ? 'Nothing pending' : 'No notifications'}>
-          {loc === 'can_xu_ly' ? 'Mọi việc đã xử lý xong.' : 'Chưa có thông báo nào ở bộ lọc này.'}
+        <EmptyState icon={Inbox} title={loc === 'can_xu_ly' ? tt('nothingPending') : tt('noNotifications')}>
+          {loc === 'can_xu_ly' ? tt('allDone') : tt('noneInFilter')}
         </EmptyState>
       ) : (
         <ul>
@@ -139,21 +145,21 @@ export default function TrangThongBaoAdmin() {
                     <p className="mt-0.5 line-clamp-3 whitespace-pre-line break-words text-[12.5px] leading-snug text-[var(--a-text-3)]">{t.noiDung}</p>
                   )}
                   <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-[var(--a-text-3)]">
-                    <span>{TEN_LOAI[t.loai] ?? t.loai}</span>
+                    <span>{tenLoai(t.loai)}</span>
                     {t.nguoi?.username && <span>{t.nguoi.fullName || t.nguoi.username}</span>}
                     {t.mucDo === 'can_xu_ly' && (
                       <span className={t.daXuLy ? 'text-[var(--a-green)]' : 'font-medium text-[var(--a-orange)]'}>
-                        {t.daXuLy ? 'Done' : 'Needs action'}
+                        {t.daXuLy ? tt('done') : tt('needsAction')}
                       </span>
                     )}
                     {t.duongDan && (
                       <Link href={t.duongDan} className="inline-flex items-center gap-1 text-[var(--a-accent-text)] hover:underline">
-                        Open <ExternalLink className="h-3 w-3" />
+                        {tt('open')} <ExternalLink className="h-3 w-3" />
                       </Link>
                     )}
                     {cho && (
                       <button onClick={() => xong(t.id)} className="inline-flex items-center gap-1 hover:text-[var(--a-green)]">
-                        <Check className="h-3 w-3" /> Mark done
+                        <Check className="h-3 w-3" /> {tt('markDone')}
                       </button>
                     )}
                   </div>

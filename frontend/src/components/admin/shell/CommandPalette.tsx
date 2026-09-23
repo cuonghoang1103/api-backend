@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowUpRight, CornerDownLeft, Globe, LogOut, PanelLeft, Search } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { ADMIN_NAV } from './nav';
+import { useAdminT } from '../i18n';
 
 interface Entry {
   id: string;
@@ -53,6 +54,7 @@ export default function CommandPalette({
   onLogout: () => void;
 }) {
   const router = useRouter();
+  const { t, vi } = useAdminT();
   const [q, setQ] = useState('');
   const [sel, setSel] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -62,21 +64,21 @@ export default function CommandPalette({
     const pages: Entry[] = ADMIN_NAV.flatMap((g) =>
       g.items.map((it) => ({
         id: it.href,
-        label: it.label,
-        group: 'Go to',
+        label: vi && it.vi ? it.vi : it.label,
+        group: t('cmdGoTo'),
         icon: it.icon,
-        hint: g.label ?? undefined,
-        haystack: fold(`${it.label} ${it.keywords ?? ''} ${it.href} ${g.label ?? ''}`),
+        hint: (vi ? g.viLabel ?? g.label : g.label) ?? undefined,
+        haystack: fold(`${it.label} ${it.vi ?? ''} ${it.keywords ?? ''} ${it.href} ${g.label ?? ''}`),
         run: () => router.push(it.href),
       })),
     );
     const actions: Entry[] = [
-      { id: 'act:sidebar', label: 'Toggle sidebar', group: 'Actions', icon: PanelLeft, hint: '[', haystack: 'toggle sidebar an hien thanh ben', run: onToggleSidebar },
-      { id: 'act:site', label: 'Open public site', group: 'Actions', icon: Globe, haystack: 'open site ve trang chu public', run: () => window.open('/', '_blank') },
-      { id: 'act:logout', label: 'Log out', group: 'Actions', icon: LogOut, haystack: 'log out sign out dang xuat', run: onLogout },
+      { id: 'act:sidebar', label: t('cmdToggleSidebar'), group: t('cmdActions'), icon: PanelLeft, hint: '[', haystack: 'toggle sidebar an hien thanh ben', run: onToggleSidebar },
+      { id: 'act:site', label: t('cmdOpenSite'), group: t('cmdActions'), icon: Globe, haystack: 'open site ve trang chu public mo trang ngoai', run: () => window.open('/', '_blank') },
+      { id: 'act:logout', label: t('logOut'), group: t('cmdActions'), icon: LogOut, haystack: 'log out sign out dang xuat', run: onLogout },
     ];
     return [...pages, ...actions];
-  }, [router, onToggleSidebar, onLogout]);
+  }, [router, onToggleSidebar, onLogout, t, vi]);
 
   const results = useMemo(() => {
     const fq = fold(q.trim());
@@ -127,7 +129,7 @@ export default function CommandPalette({
       <div
         role="dialog"
         aria-label="Command menu"
-        className="a-pop relative w-full max-w-[560px] overflow-hidden rounded-[10px] border border-[var(--a-border-strong)] bg-[var(--a-raised)]"
+        className="a-pop relative w-full max-w-[580px] overflow-hidden rounded-[18px] border border-[var(--a-border-strong)] bg-[var(--a-raised)]"
         style={{ boxShadow: '0 0 0 1px rgba(0,0,0,.4), 0 24px 64px -12px rgba(0,0,0,.7)' }}
       >
         <div className="flex items-center gap-2.5 border-b border-[var(--a-border)] px-3.5">
@@ -136,7 +138,7 @@ export default function CommandPalette({
             ref={inputRef}
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search pages and actions…"
+            placeholder={t('cmdPlaceholder')}
             className="h-11 w-full bg-transparent text-[14px] text-[var(--a-text)] outline-none placeholder:text-[var(--a-text-3)]"
             aria-activedescendant={results[sel] ? `cmd-${sel}` : undefined}
           />
@@ -145,7 +147,7 @@ export default function CommandPalette({
 
         <div ref={listRef} className="max-h-[min(60vh,420px)] overflow-y-auto p-1.5" role="listbox">
           {results.length === 0 ? (
-            <p className="px-3 py-8 text-center text-[13px] text-[var(--a-text-3)]">No results for “{q}”</p>
+            <p className="px-3 py-8 text-center text-[13px] text-[var(--a-text-3)]">{t('cmdNoResult')} “{q}”</p>
           ) : (
             results.map((e, idx) => {
               const header = e.group !== lastGroup ? e.group : null;
@@ -163,7 +165,7 @@ export default function CommandPalette({
                     aria-selected={active}
                     onMouseMove={() => sel !== idx && setSel(idx)}
                     onClick={() => choose(e)}
-                    className={`flex h-9 w-full items-center gap-2.5 rounded-[6px] px-2.5 text-left text-[13px] ${
+                    className={`flex h-10 w-full items-center gap-2.5 rounded-[10px] px-2.5 text-left text-[13.5px] ${
                       active ? 'bg-[var(--a-active)] text-[var(--a-text)]' : 'text-[var(--a-text-2)]'
                     }`}
                   >
@@ -180,9 +182,9 @@ export default function CommandPalette({
         </div>
 
         <div className="flex items-center gap-3 border-t border-[var(--a-border)] px-3.5 py-2 text-[11px] text-[var(--a-text-3)]">
-          <span className="flex items-center gap-1"><kbd className="a-kbd">↑</kbd><kbd className="a-kbd">↓</kbd> navigate</span>
-          <span className="flex items-center gap-1"><kbd className="a-kbd">↵</kbd> open</span>
-          <span className="ml-auto">{results.length} results</span>
+          <span className="flex items-center gap-1"><kbd className="a-kbd">↑</kbd><kbd className="a-kbd">↓</kbd> {t('cmdNavigate')}</span>
+          <span className="flex items-center gap-1"><kbd className="a-kbd">↵</kbd> {t('cmdOpen')}</span>
+          <span className="ml-auto">{results.length} {t('cmdResults')}</span>
         </div>
       </div>
     </div>

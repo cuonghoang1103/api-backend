@@ -17,6 +17,7 @@ import { ArrowUpRight, Activity, BarChart3, FileText, Inbox, Sparkles, TrendingU
 import { api, commerceAdminApi, type CommerceDashboard } from '@/lib/api';
 import { BIEU_TUONG_TIN } from '@/components/admin/bieuTuongTin';
 import { EmptyState, Metric, PageHeader, Section, Status, relTime, type Tone } from '@/components/admin/ui';
+import { useAdminT } from '@/components/admin/i18n';
 
 interface Pair { views: number; visitors: number }
 interface TrafficOverview { today: Pair; yesterday: Pair; last7d: Pair; last30d: Pair; online: number }
@@ -33,10 +34,10 @@ const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFra
 const n = (v: number | null | undefined) => (typeof v === 'number' ? nf.format(v) : '—');
 const vnd = (v: number | null | undefined) => (typeof v === 'number' ? `${compact.format(v)} ₫` : '—');
 
-function delta(a: number, b: number): string | null {
+function delta(a: number, b: number, duoi: string): string | null {
   if (!b) return null;
   const pct = Math.round(((a - b) / b) * 100);
-  return `${pct >= 0 ? '+' : ''}${pct}% vs yesterday`;
+  return `${pct >= 0 ? '+' : ''}${pct}% ${duoi}`;
 }
 
 const POST_TONE: Record<string, Tone> = { PUBLISHED: 'green', DRAFT: 'gray', SCHEDULED: 'blue', ARCHIVED: 'gray' };
@@ -100,6 +101,7 @@ function Bars({
 }
 
 export default function AdminDashboard() {
+  const { t, lang } = useAdminT();
   const [traffic, setTraffic] = useState<TrafficOverview | null>(null);
   const [daily, setDaily] = useState<Daily[]>([]);
   const [topPages, setTopPages] = useState<TopPage[]>([]);
@@ -148,8 +150,8 @@ export default function AdminDashboard() {
   }, []);
 
   const today = useMemo(
-    () => new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }),
-    [],
+    () => new Date().toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }),
+    [lang],
   );
 
   const rev = commerce?.theoNgay ?? [];
@@ -158,11 +160,11 @@ export default function AdminDashboard() {
   return (
     <div className="mx-auto max-w-[1180px]">
       <PageHeader
-        title="Overview"
+        title={t('overview')}
         description={today}
         actions={
           <a href="/" target="_blank" rel="noreferrer" className="a-btn">
-            Open site <ArrowUpRight className="h-3.5 w-3.5" />
+            {t('openSite')} <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
         }
       />
@@ -170,17 +172,17 @@ export default function AdminDashboard() {
       {/* Dải chỉ số */}
       <div className="grid grid-cols-2 border-y border-[var(--a-border)] sm:grid-cols-3 xl:grid-cols-6 [&>*]:border-[var(--a-border)] xl:[&>*:not(:first-child)]:border-l">
         <Metric
-          label="Visitors today"
+          label={t('visitorsToday')}
           value={traffic ? n(traffic.today.visitors) : '—'}
           tone="var(--c-1)"
-          hint={traffic ? delta(traffic.today.visitors, traffic.yesterday.visitors) ?? `${n(traffic.online)} online` : undefined}
+          hint={traffic ? delta(traffic.today.visitors, traffic.yesterday.visitors, t('vsYesterday')) ?? `${n(traffic.online)} ${t('online')}` : undefined}
           up={traffic && traffic.yesterday.visitors ? traffic.today.visitors >= traffic.yesterday.visitors : undefined}
         />
-        <Metric label="Page views today" value={traffic ? n(traffic.today.views) : '—'} tone="var(--c-1)" hint={traffic ? `${n(traffic.last7d.views)} last 7 days` : undefined} />
-        <Metric label="Revenue today" value={commerce ? vnd(commerce.tomTat.homNay.tienThat) : '—'} tone="var(--c-3)" hint={commerce ? `${vnd(commerce.tomTat.bayNgay.tienThat)} last 7 days` : undefined} />
-        <Metric label="Revenue · 30 days" value={commerce ? vnd(commerce.tomTat.baMuoiNgay.tienThat) : '—'} tone="var(--c-3)" hint={commerce ? `${n(commerce.thanhToan.daTra)} paid orders` : undefined} />
-        <Metric label="Users" value={n(totals.users)} tone="var(--c-2)" hint={`${n(totals.posts)} posts`} />
-        <Metric label="AI conversations" value={n(chat.totalSessions)} tone="var(--c-6)" hint={`${n(chat.totalMessages)} messages`} />
+        <Metric label={t('viewsToday')} value={traffic ? n(traffic.today.views) : '—'} tone="var(--c-1)" hint={traffic ? `${n(traffic.last7d.views)} ${t('last7')}` : undefined} />
+        <Metric label={t('revenueToday')} value={commerce ? vnd(commerce.tomTat.homNay.tienThat) : '—'} tone="var(--c-3)" hint={commerce ? `${vnd(commerce.tomTat.bayNgay.tienThat)} ${t('last7')}` : undefined} />
+        <Metric label={t('revenue30')} value={commerce ? vnd(commerce.tomTat.baMuoiNgay.tienThat) : '—'} tone="var(--c-3)" hint={commerce ? `${n(commerce.thanhToan.daTra)} ${t('paidOrders')}` : undefined} />
+        <Metric label={t('users')} value={n(totals.users)} tone="var(--c-2)" hint={`${n(totals.posts)} ${t('posts')}`} />
+        <Metric label={t('aiConversations')} value={n(chat.totalSessions)} tone="var(--c-6)" hint={`${n(chat.totalMessages)} ${t('messages')}`} />
       </div>
 
       <div className="mt-8 grid gap-x-10 gap-y-8 lg:grid-cols-2">
@@ -188,28 +190,28 @@ export default function AdminDashboard() {
         <Section
           icon={Inbox}
           tone="var(--a-orange)"
-          title={<>Needs attention{pendingCount > 0 && <span className="ml-1.5 tabular-nums text-[var(--a-text-3)]">{pendingCount}</span>}</>}
-          action={<Link href="/admin/thong-bao" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">Inbox</Link>}
+          title={<>{t('needsAttention')}{pendingCount > 0 && <span className="ml-1.5 tabular-nums text-[var(--a-text-3)]">{pendingCount}</span>}</>}
+          action={<Link href="/admin/thong-bao" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">{t('inbox')}</Link>}
         >
           {cho && (cho.chuyenKhoanChoDuyet > 0 || cho.yeuCauDoiKey > 0 || cho.donChoThanhToan > 0) && (
             <div className="flex flex-wrap gap-x-4 gap-y-1 border-b border-[var(--a-border)] py-2 text-[12px] text-[var(--a-text-3)]">
               {cho.chuyenKhoanChoDuyet > 0 && (
                 <Link href="/admin/commerce?tab=chuyenkhoan" className="hover:text-[var(--a-text)]">
-                  <Status tone="orange">{cho.chuyenKhoanChoDuyet} transfers to confirm</Status>
+                  <Status tone="orange">{cho.chuyenKhoanChoDuyet} {t('transfersToConfirm')}</Status>
                 </Link>
               )}
               {cho.yeuCauDoiKey > 0 && (
                 <Link href="/admin/commerce?tab=doikey" className="hover:text-[var(--a-text)]">
-                  <Status tone="orange">{cho.yeuCauDoiKey} key replacements</Status>
+                  <Status tone="orange">{cho.yeuCauDoiKey} {t('keyReplacements')}</Status>
                 </Link>
               )}
-              {cho.donChoThanhToan > 0 && <Status tone="gray">{cho.donChoThanhToan} orders awaiting payment</Status>}
+              {cho.donChoThanhToan > 0 && <Status tone="gray">{cho.donChoThanhToan} {t('ordersAwaiting')}</Status>}
             </div>
           )}
           {!loaded ? (
             <SkeletonRows />
           ) : pending.length === 0 ? (
-            <EmptyState icon={Inbox} title="Nothing pending">Mọi việc đã xử lý xong.</EmptyState>
+            <EmptyState icon={Inbox} title={t('nothingPending')}>{t('allDone')}</EmptyState>
           ) : (
             <ul>
               {pending.map((t) => {
@@ -244,13 +246,13 @@ export default function AdminDashboard() {
         <Section
           icon={FileText}
           tone="var(--c-6)"
-          title="Recent posts"
-          action={<Link href="/admin/posts" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">All posts</Link>}
+          title={t('recentPosts')}
+          action={<Link href="/admin/posts" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">{t('allPosts')}</Link>}
         >
           {!loaded ? (
             <SkeletonRows />
           ) : posts.length === 0 ? (
-            <EmptyState title="No posts yet" />
+            <EmptyState title={t('noPosts')} />
           ) : (
             <ul>
               {posts.map((p) => (
@@ -271,8 +273,8 @@ export default function AdminDashboard() {
         <Section
           icon={Wallet}
           tone="var(--c-3)"
-          title="Revenue · last 30 days"
-          action={<Link href="/admin/commerce" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">Details</Link>}
+          title={t('revenue30d')}
+          action={<Link href="/admin/commerce" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">{t('details')}</Link>}
         >
           {rev.length ? (
             <>
@@ -281,18 +283,18 @@ export default function AdminDashboard() {
                 labels={rev.map((d) => new Date(d.ngay).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }))}
                 format={(v) => `${nf.format(v)} ₫`}
                 color="var(--c-3)"
-                emptyLabel="Chưa có doanh thu trong 30 ngày"
+                emptyLabel={t('noRevenue30')}
               />
               <div className="mt-2 flex justify-between text-[11.5px] tabular-nums text-[var(--a-text-3)]">
                 <span>{new Date(rev[0].ngay).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
                 <span>
-                  {commerce && `${commerce.thanhToan.tiLeHoanTat}% checkout completion`}
+                  {commerce && `${commerce.thanhToan.tiLeHoanTat}% ${t('checkoutCompletion')}`}
                 </span>
-                <span>Today</span>
+                <span>{t('today')}</span>
               </div>
             </>
           ) : (
-            <EmptyState title={loaded ? 'No revenue data' : 'Loading…'} />
+            <EmptyState title={loaded ? t('noRevenue30') : '…'} />
           )}
         </Section>
 
@@ -300,33 +302,33 @@ export default function AdminDashboard() {
         <Section
           icon={TrendingUp}
           tone="var(--c-1)"
-          title="Page views · last 30 days"
-          action={<Link href="/admin/analytics" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">Traffic</Link>}
+          title={t('views30d')}
+          action={<Link href="/admin/analytics" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">{t('traffic')}</Link>}
         >
           {daily.length ? (
             <>
               <Bars
                 values={daily.map((d) => d.views)}
                 labels={daily.map((d) => new Date(d.day).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }))}
-                format={(v) => `${nf.format(v)} views`}
+                format={(v) => `${nf.format(v)} ${t('viewsUnit')}`}
                 color="var(--c-1)"
-                emptyLabel="Chưa có lượt xem nào"
+                emptyLabel={t('noViews')}
               />
               <div className="mt-2 flex justify-between text-[11.5px] tabular-nums text-[var(--a-text-3)]">
                 <span>{new Date(daily[0].day).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
-                <span>{traffic && `${n(traffic.last30d.visitors)} visitors`}</span>
-                <span>Today</span>
+                <span>{traffic && `${n(traffic.last30d.visitors)} ${t('visitors')}`}</span>
+                <span>{t('today')}</span>
               </div>
             </>
           ) : (
-            <EmptyState title={loaded ? 'No traffic data' : 'Loading…'} />
+            <EmptyState title={loaded ? t('noViews') : '…'} />
           )}
         </Section>
 
         {/* Trang được xem nhiều */}
-        <Section icon={BarChart3} tone="var(--c-4)" title="Top pages · 7 days">
+        <Section icon={BarChart3} tone="var(--c-4)" title={t('topPages')}>
           {topPages.length === 0 ? (
-            loaded ? <EmptyState title="No data" /> : <SkeletonRows />
+            loaded ? <EmptyState title={t('noData')} /> : <SkeletonRows />
           ) : (
             <ul>
               {topPages.map((p) => {
@@ -358,14 +360,14 @@ export default function AdminDashboard() {
         <Section
           icon={Sparkles}
           tone="var(--c-6)"
-          title="AI assistant"
-          action={<Link href="/admin/ai-analytics" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">Analytics</Link>}
+          title={t('aiAssistant')}
+          action={<Link href="/admin/ai-analytics" className="text-[12px] text-[var(--a-text-3)] hover:text-[var(--a-text)]">{t('analytics')}</Link>}
         >
           <dl className="text-[13px]">
             {[
-              ['Conversations', n(chat.totalSessions)],
-              ['Messages', n(chat.totalMessages)],
-              ['Avg. response time', chat.avgResponseTimeMs ? `${nf.format(Math.round(chat.avgResponseTimeMs))} ms` : '—'],
+              [t('conversations'), n(chat.totalSessions)],
+              [t('messagesCap'), n(chat.totalMessages)],
+              [t('avgResponse'), chat.avgResponseTimeMs ? `${nf.format(Math.round(chat.avgResponseTimeMs))} ms` : '—'],
             ].map(([k, v]) => (
               <div key={k} className="flex h-9 items-center justify-between border-b border-[var(--a-border)]">
                 <dt className="text-[var(--a-text-3)]">{k}</dt>
@@ -374,7 +376,7 @@ export default function AdminDashboard() {
             ))}
             {/* Tỉ lệ hài lòng: một thanh mảnh nói nhanh hơn con số đứng một mình */}
             <div className="flex h-9 items-center justify-between gap-3 border-b border-[var(--a-border)]">
-              <dt className="shrink-0 text-[var(--a-text-3)]">Positive feedback</dt>
+              <dt className="shrink-0 text-[var(--a-text-3)]">{t('positiveFeedback')}</dt>
               <dd className="flex min-w-0 flex-1 items-center justify-end gap-2.5">
                 <span className="h-1.5 w-full max-w-[140px] overflow-hidden rounded-full bg-white/[0.06]">
                   <span

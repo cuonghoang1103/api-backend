@@ -37,6 +37,7 @@ import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
   EmptyState,
+  publicOrigin,
 } from './ui';
 
 const LINK_PHRASE: Record<LinkType, [string, string]> = {
@@ -416,7 +417,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
   }
 
   const type = lk.types.get(issue.typeId);
-  const url = typeof window !== 'undefined' ? `${window.location.origin}${base}/issue/${num}` : '';
+  const url = `${publicOrigin()}${base}/issue/${num}`;
 
   const properties = (
     <div className="space-y-0.5">

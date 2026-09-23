@@ -439,6 +439,10 @@ router.patch('/projects/:pid/issues/:num/comments/:cid', asyncHandler(async (req
   const { bodyJson } = parse(z.object({ bodyJson: tiptapDoc }), req.body);
   ok(res, await issues.editComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'cid'), bodyJson));
 }));
+router.post('/projects/:pid/issues/:num/comments/:cid/report', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ reason: z.enum(issues.COMMENT_REPORT_REASONS), details: z.string().max(1000).nullable().optional() }), req.body);
+  ok(res, await issues.reportComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'cid'), body), 201);
+}));
 router.delete('/projects/:pid/issues/:num/comments/:cid', asyncHandler(async (req, res) => {
   await issues.deleteComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'cid'));
   ok(res, { deleted: true });

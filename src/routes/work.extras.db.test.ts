@@ -144,4 +144,19 @@ describe('CT Work — phần bù đợt 3–4', { skip: !RUN }, () => {
     const run = (await call(dev, 'GET', `/projects/${pid}/test-runs/${run1.id}`)).data;
     assert.deepEqual(run.evidence, []);
   });
+  it('báo cáo bình luận: ghi audit, báo ADMIN dự án, không tự báo, không trùng', async () => {
+    const t = await newIssue('Comment target');
+    const c = (await call(dev, 'POST', `/projects/${pid}/issues/${t.number}/comments`, { bodyJson: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'rude words' }] }] } })).data;
+    assert.ok(c?.id, 'tạo được bình luận');
+    const path = `/projects/${pid}/issues/${t.number}/comments/${c.id}/report`;
+    assert.equal((await call(dev, 'POST', path, { reason: 'spam' })).status, 400, 'tự báo bình luận của mình');
+    const r = await call(viewer, 'POST', path, { reason: 'harassment', details: 'insulting' });
+    assert.equal(r.status, 201, JSON.stringify(r.raw));
+    assert.equal(r.data.duplicate, false);
+    assert.equal((await call(viewer, 'POST', path, { reason: 'harassment' })).data.duplicate, true);
+    const log = await prisma.workAuditLog.findFirst({ where: { action: 'comment.report', targetId: c.id } });
+    assert.ok(log);
+    const n = await prisma.socialNotification.findFirst({ where: { receiverId: lead.id, type: 'WORK_ALERT', secondaryEntityId: c.id } });
+    assert.ok(n, 'ADMIN dự án nhận cảnh báo');
+  });
 });

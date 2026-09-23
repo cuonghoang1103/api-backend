@@ -163,6 +163,8 @@ export interface IssueDetail extends IssueCard {
 
 export interface TiptapDoc { type: 'doc'; content?: unknown[] }
 
+export type CommentReportReason = 'spam' | 'harassment' | 'hate' | 'sexual' | 'violence' | 'other';
+
 export interface WorkComment {
   id: number;
   bodyJson: TiptapDoc;
@@ -630,6 +632,8 @@ export const workApi = {
   addComment: (pid: number, num: number, bodyJson: TiptapDoc) => d<WorkComment>(api.post(`${B}/projects/${pid}/issues/${num}/comments`, { bodyJson })),
   editComment: (pid: number, num: number, cid: number, bodyJson: TiptapDoc) => d<WorkComment>(api.patch(`${B}/projects/${pid}/issues/${num}/comments/${cid}`, { bodyJson })),
   deleteComment: (pid: number, num: number, cid: number) => d(api.delete(`${B}/projects/${pid}/issues/${num}/comments/${cid}`)),
+  reportComment: (pid: number, num: number, cid: number, body: { reason: CommentReportReason; details?: string | null }) =>
+    d<{ reported: boolean; duplicate: boolean }>(api.post(`${B}/projects/${pid}/issues/${num}/comments/${cid}/report`, body)),
   attachmentUrl: (pid: number, aid: number, inline = false) =>
     d<{ url: string }>(api.get(`${B}/projects/${pid}/attachments/${aid}/url${inline ? '?inline=1' : ''}`)).then((r) => r.url),
   deleteAttachment: (pid: number, aid: number) => d(api.delete(`${B}/projects/${pid}/attachments/${aid}`)),

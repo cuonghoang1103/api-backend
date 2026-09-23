@@ -375,6 +375,16 @@ export function formatDate(iso: string | null | undefined): string {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 }
 
+/**
+ * Gốc web công khai để dựng link chia sẻ / URL API. Trong app desktop trang
+ * chạy ở `app://cuongthai` — link đó vô dụng với người khác, nên đổi về web thật.
+ */
+export function publicOrigin(): string {
+  if (typeof window === 'undefined') return 'https://cuongthai.com';
+  const o = window.location.origin;
+  return /^https?:/.test(o) ? o : 'https://cuongthai.com';
+}
+
 export function formatBytes(n: number): string {
   if (n < 1024) return `${n} B`;
   if (n < 1024 * 1024) return `${(n / 1024).toFixed(0)} KB`;

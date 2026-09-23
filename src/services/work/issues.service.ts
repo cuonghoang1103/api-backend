@@ -526,3 +526,46 @@ export async function deleteAttachment(userId: number, projectId: number, attach
   void deleteObject(att.r2Key).catch(() => {});
   emitWorkEvent({ type: 'issue.updated', projectId, issueId: att.issueId, actor: userActor(userId), changes: [] });
 }
+
+// ─── Báo cáo bình luận (App Store 1.2 — nội dung do người dùng tạo) ──
+
+export const COMMENT_REPORT_REASONS = ['spam', 'harassment', 'hate', 'sexual', 'violence', 'other'] as const;
+
+/**
+ * Báo cáo một bình luận vi phạm. Không cần bảng mới: ghi vào audit log của
+ * không gian (quản trị xem ở Settings → Audit log) và báo ngay cho ADMIN dự
+ * án — chính họ có quyền xoá bình luận (comment.moderate). Mỗi người chỉ
+ * báo một bình luận một lần; tự báo bình luận của mình vô nghĩa ⇒ 400.
+ */
+export async function reportComment(
+  userId: number, projectId: number, number: number, commentId: number,
+  input: { reason: (typeof COMMENT_REPORT_REASONS)[number]; details?: string | null },
+) {
+  const access = await requireProject(userId, projectId, 'project.view');
+  const { id } = await findIssue(projectId, number);
+  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null }, select: { authorId: true, bodyText: true } });
+  if (!c) throw new NotFoundError('Comment not found');
+  if (c.authorId === userId) throw new BadRequestError('You cannot report your own comment', 'WORK_REPORT_SELF');
+  const dup = await prisma.workAuditLog.findFirst({ where: { workspaceId: access.workspaceId, actorId: userId, action: 'comment.report', targetId: commentId } });
+  if (dup) return { reported: true, duplicate: true };
+  const { auditProject } = await import('./audit.js');
+  await auditProject(projectId, {
+    actorId: userId, action: 'comment.report', targetType: 'comment', targetId: commentId,
+    summary: `Reported a comment on ${access.key}-${number} (${input.reason})`,
+    detail: { reason: input.reason, details: input.details?.slice(0, 1000) ?? null, authorId: c.authorId, excerpt: c.bodyText.slice(0, 300) },
+  });
+  const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { workspace: { select: { slug: true } } } });
+  const { projectMembers } = await import('./projects.service.js');
+  const { notifyWork } = await import('./notify.js');
+  const admins = (await projectMembers(projectId)).filter((m) => m.role === 'ADMIN' && m.id !== userId);
+  for (const a of admins) {
+    await notifyWork({
+      receiverId: a.id, senderId: userId, type: 'WORK_ALERT', entityId: id, secondaryEntityId: commentId,
+      payload: {
+        issueKey: `${access.key}-${number}`, title: '', message: `A comment was reported (${input.reason}). Review and remove it if needed.`,
+        url: `/work/${project.workspace.slug}/${access.key}/issue/${number}?comment=${commentId}`,
+      },
+    });
+  }
+  return { reported: true, duplicate: false };
+}

@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 import { AlertTriangle, Check, Copy, KeyRound, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, workError, type ApiToken, type TokenScope } from '@/lib/work-api';
-import { Dialog, EmptyState, Field, formatDate, relativeTime, Spinner } from '@/components/work/ui';
+import { Dialog, EmptyState, Field, formatDate, publicOrigin, relativeTime, Spinner } from '@/components/work/ui';
 import { ConfirmDialog, PageHeader, Section, Select } from '@/components/work/settings/shared';
 import { copyText } from '@/components/work/settings/ProjectShare';
 
@@ -298,7 +298,7 @@ const ENDPOINTS: Endpoint[] = [
 function ApiReference() {
   // Địa chỉ thật của trang đang chạy — đọc sau khi mount để không lệch SSR.
   const [base, setBase] = useState('https://your-domain/api/v1/work');
-  useEffect(() => setBase(`${window.location.origin}/api/v1/work`), []);
+  useEffect(() => setBase(`${publicOrigin()}/api/v1/work`), []);
 
   return (
     <div className="space-y-6">

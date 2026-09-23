@@ -7,15 +7,15 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Bot, Pencil, Trash2 } from 'lucide-react';
+import { Bot, Flag, Pencil, Trash2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import {
-  userName, workApi, workError, type HistoryEntry, type ProjectConfig, type TiptapDoc, type WorkComment,
+  userName, workApi, workError, type CommentReportReason, type HistoryEntry, type ProjectConfig, type TiptapDoc, type WorkComment,
 } from '@/lib/work-api';
 import { wk, type Lookups } from './hooks';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
-import { PRIORITIES, relativeTime, Spinner, UserAvatar, formatDate } from './ui';
+import { Dialog, PRIORITIES, relativeTime, Spinner, UserAvatar, formatDate } from './ui';
 import { ConfirmDialog } from './settings/shared';
 import { WorklogList } from './TimeTracking';
 
@@ -67,11 +67,57 @@ function CommentComposer({ config, pid, num }: { config: ProjectConfig; pid: num
   );
 }
 
+const REPORT_REASONS: Array<{ value: CommentReportReason; label: string }> = [
+  { value: 'spam', label: 'Spam or advertising' },
+  { value: 'harassment', label: 'Harassment or bullying' },
+  { value: 'hate', label: 'Hate speech' },
+  { value: 'sexual', label: 'Sexual content' },
+  { value: 'violence', label: 'Violence or threats' },
+  { value: 'other', label: 'Something else' },
+];
+
+/** Báo cáo bình luận vi phạm — ADMIN dự án nhận cảnh báo, ghi vào audit log. */
+function ReportCommentDialog({ open, onClose, pid, num, cid }: { open: boolean; onClose: () => void; pid: number; num: number; cid: number }) {
+  const [reason, setReason] = useState<CommentReportReason>('spam');
+  const [details, setDetails] = useState('');
+  const send = useMutation({
+    mutationFn: () => workApi.reportComment(pid, num, cid, { reason, details: details.trim() || null }),
+    onSuccess: (r) => { toast.success(r.duplicate ? 'You already reported this comment' : 'Thanks — project admins have been notified'); onClose(); },
+    onError: (err) => toast.error(workError(err, 'Could not send the report')),
+  });
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      title="Report comment"
+      width={440}
+      footer={(
+        <>
+          <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn w-btn-danger-solid" disabled={send.isPending} onClick={() => send.mutate()}>{send.isPending && <Spinner size={12} />} Report</button>
+        </>
+      )}
+    >
+      <p className="mb-3 text-[13px] text-[var(--w-text-2)]">Project admins will review this comment and remove it if it breaks the rules.</p>
+      <div className="space-y-1.5">
+        {REPORT_REASONS.map((r) => (
+          <label key={r.value} className="flex cursor-pointer items-center gap-2 text-[13px]">
+            <input type="radio" name="report-reason" checked={reason === r.value} onChange={() => setReason(r.value)} />
+            {r.label}
+          </label>
+        ))}
+      </div>
+      <textarea className="w-input mt-3 !h-auto min-h-[72px] w-full py-2" maxLength={1000} placeholder="Add details (optional)" value={details} onChange={(e) => setDetails(e.target.value)} />
+    </Dialog>
+  );
+}
+
 function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectConfig; pid: number; num: number }) {
   const qc = useQueryClient();
   const meId = useAuthStore((s) => s.user?.id);
   const [editing, setEditing] = useState(false);
   const [confirmDel, setConfirmDel] = useState(false);
+  const [reporting, setReporting] = useState(false);
   const [draft, setDraft] = useState<TiptapDoc>(c.bodyJson);
   const mine = !!c.author && c.author.id === meId;
   const canDelete = (mine && config.permissions.comment) || config.role === 'ADMIN';
@@ -100,8 +146,11 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
           <span className="font-semibold text-[var(--w-text)]">{c.isAi ? 'CT Work AI' : userName(c.author)}</span>
           <span className="text-[var(--w-text-3)]" title={new Date(c.createdAt).toLocaleString('en-US')}>{relativeTime(c.createdAt)}</span>
           {c.editedAt && <span className="text-[var(--w-text-3)]">(edited)</span>}
-          {!editing && (mine || canDelete) && (
-            <span className="ml-auto flex gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+          {!editing && (
+            <span className="ml-auto flex gap-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+              {!mine && (
+                <button type="button" title="Report comment" aria-label="Report comment" onClick={() => setReporting(true)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Flag size={12} /></button>
+              )}
               {mine && (
                 <button type="button" title="Edit" onClick={() => { setDraft(c.bodyJson); setEditing(true); }} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Pencil size={12} /></button>
               )}
@@ -123,6 +172,7 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
           <RichView value={c.bodyJson} />
         )}
       </div>
+      <ReportCommentDialog open={reporting} onClose={() => setReporting(false)} pid={pid} num={num} cid={c.id} />
       <ConfirmDialog
         open={confirmDel}
         onClose={() => setConfirmDel(false)}

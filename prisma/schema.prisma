@@ -397,6 +397,8 @@ model User {
   workWatching           WorkWatcher[]       @relation("WorkWatcherUser")
   workTestRunsAssigned   WorkTestRun[]       @relation("WorkTestRunAssignee")
   workTestRunsExecuted   WorkTestRun[]       @relation("WorkTestRunExecutor")
+  workSavedFilters       WorkSavedFilter[]   @relation("WorkSavedFilterOwner")
+  workDashboards         WorkDashboard[]     @relation("WorkDashboardOwner")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -9700,18 +9702,21 @@ model WorkProject {
   updatedAt    DateTime  @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
 
-  workspace  WorkSpace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  lead       User?               @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
-  members    WorkProjectMember[]
-  invites    WorkInvite[]
-  workflows  WorkWorkflow[]
-  issueTypes WorkIssueType[]
-  issues     WorkIssue[]
-  labels     WorkLabel[]
-  components WorkComponent[]
-  sprints    WorkSprint[]
-  testPlans  WorkTestPlan[]
-  testCycles WorkTestCycle[]
+  workspace    WorkSpace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lead         User?               @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
+  members      WorkProjectMember[]
+  invites      WorkInvite[]
+  workflows    WorkWorkflow[]
+  issueTypes   WorkIssueType[]
+  issues       WorkIssue[]
+  labels       WorkLabel[]
+  components   WorkComponent[]
+  sprints      WorkSprint[]
+  testPlans    WorkTestPlan[]
+  testCycles   WorkTestCycle[]
+  customFields WorkCustomField[]
+  savedFilters WorkSavedFilter[]
+  dashboards   WorkDashboard[]
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -9853,28 +9858,29 @@ model WorkIssue {
   updatedAt            DateTime  @updatedAt @map("updated_at")
   deletedAt            DateTime? @map("deleted_at")
 
-  project     WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project      WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
   // NoAction chứ KHÔNG Restrict: Postgres kiểm RESTRICT ngay lập tức, nên xoá
   // dự án (cascade xuống loại thẻ, trạng thái VÀ thẻ) bị chặn khi loại thẻ bị
   // xoá trước thẻ. NO ACTION kiểm ở cuối câu lệnh — xoá dây chuyền chạy được,
   // còn xoá riêng một trạng thái đang có thẻ vẫn bị chặn. Bắt được bằng test DB.
-  type        WorkIssueType        @relation(fields: [typeId], references: [id], onDelete: NoAction)
-  status      WorkStatus           @relation(fields: [statusId], references: [id], onDelete: NoAction)
-  parent      WorkIssue?           @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
-  children    WorkIssue[]          @relation("WorkIssueParent")
-  sprint      WorkSprint?          @relation(fields: [sprintId], references: [id], onDelete: SetNull)
-  assignee    User?                @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
-  reporter    User?                @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
-  linksOut    WorkIssueLink[]      @relation("WorkIssueLinkFrom")
-  linksIn     WorkIssueLink[]      @relation("WorkIssueLinkTo")
-  labels      WorkIssueLabel[]
-  components  WorkIssueComponent[]
-  comments    WorkComment[]
-  attachments WorkAttachment[]
-  history     WorkHistory[]
-  watchers    WorkWatcher[]
-  testCase    WorkTestCase?
-  defectOf    WorkTestRunDefect[]
+  type         WorkIssueType        @relation(fields: [typeId], references: [id], onDelete: NoAction)
+  status       WorkStatus           @relation(fields: [statusId], references: [id], onDelete: NoAction)
+  parent       WorkIssue?           @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
+  children     WorkIssue[]          @relation("WorkIssueParent")
+  sprint       WorkSprint?          @relation(fields: [sprintId], references: [id], onDelete: SetNull)
+  assignee     User?                @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  reporter     User?                @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
+  linksOut     WorkIssueLink[]      @relation("WorkIssueLinkFrom")
+  linksIn      WorkIssueLink[]      @relation("WorkIssueLinkTo")
+  labels       WorkIssueLabel[]
+  components   WorkIssueComponent[]
+  comments     WorkComment[]
+  attachments  WorkAttachment[]
+  history      WorkHistory[]
+  watchers     WorkWatcher[]
+  testCase     WorkTestCase?
+  defectOf     WorkTestRunDefect[]
+  customValues WorkCustomValue[]
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -10220,4 +10226,79 @@ model WorkTestRunDefect {
   @@id([runId, issueId])
   @@index([issueId], name: "idx_work_run_defect_issue")
   @@map("work_test_run_defects")
+}
+
+// ─── CT Work — tuỳ biến & tìm kiếm (đợt 5) ────────────────────────────
+
+/// Trường tuỳ chỉnh của dự án. kind: TEXT | NUMBER | DATE | SELECT | MULTISELECT
+/// | USER | URL | CHECKBOX. options (SELECT/MULTISELECT): [{ id, label, color }].
+/// typeKeys null = áp cho mọi loại thẻ; có mảng thì chỉ các loại đó.
+model WorkCustomField {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  name      String   @db.VarChar(60)
+  kind      String   @db.VarChar(16)
+  options   Json     @default("[]")
+  typeKeys  Json?    @map("type_keys")
+  required  Boolean  @default(false)
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project WorkProject       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  values  WorkCustomValue[]
+
+  @@unique([projectId, name], name: "uk_work_custom_field", map: "uk_work_custom_field")
+  @@map("work_custom_fields")
+}
+
+/// Giá trị trường tuỳ chỉnh của một thẻ (JSON theo kind: chuỗi, số, "YYYY-MM-DD",
+/// id lựa chọn, mảng id, id người, true/false).
+model WorkCustomValue {
+  issueId Int  @map("issue_id")
+  fieldId Int  @map("field_id")
+  value   Json
+
+  issue WorkIssue       @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  field WorkCustomField @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  @@id([issueId, fieldId])
+  @@index([fieldId], name: "idx_work_custom_value_field")
+  @@map("work_custom_values")
+}
+
+/// Bộ lọc đã lưu (truy vấn kiểu JQL). shared = cả dự án thấy.
+model WorkSavedFilter {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  ownerId   Int      @map("owner_id")
+  name      String   @db.VarChar(100)
+  query     String   @db.Text
+  shared    Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  owner   User        @relation("WorkSavedFilterOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], name: "idx_work_saved_filter_project")
+  @@map("work_saved_filters")
+}
+
+/// Dashboard: danh sách widget (JSON) — mỗi widget { id, kind, title, query?,
+/// groupBy?, sprintId?, size }. Dữ liệu widget tính lúc xem, không lưu.
+model WorkDashboard {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  ownerId   Int      @map("owner_id")
+  name      String   @db.VarChar(100)
+  shared    Boolean  @default(true)
+  widgets   Json     @default("[]")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  owner   User        @relation("WorkDashboardOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], name: "idx_work_dashboard_project")
+  @@map("work_dashboards")
 }

@@ -7,7 +7,7 @@
 
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ChevronDown, CircleDashed, Tag } from 'lucide-react';
+import { Check, ChevronDown, CircleDashed, Tag } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -347,3 +347,63 @@ export function NumberInput({ value, onCommit, placeholder = 'None', disabled, s
   );
 }
 
+
+// ─── Fix version ─────────────────────────────────────────────────
+
+/** Chọn version phát hành: chỉ version chưa phát hành chọn được; đã phát hành hiện mờ. */
+export function FixVersionPicker({ config, value, onChange, bare, disabled }: {
+  config: ProjectConfig; value: number | null; onChange: (id: number | null) => void; bare?: boolean; disabled?: boolean;
+}) {
+  const p = usePick();
+  const q = useQuery({ queryKey: wk.versions(config.id), queryFn: () => workApi.versions(config.id), staleTime: 60_000 });
+  const versions = (q.data ?? []).filter((v) => v.status !== 'ARCHIVED' || v.id === value);
+  const cur = q.data?.find((v) => v.id === value);
+  const pick = (id: number | null) => { if (id !== value) onChange(id); p.close(); };
+  return (
+    <>
+      <Trigger triggerRef={p.ref} onClick={p.toggle} bare={bare} disabled={disabled}>
+        <span className={cn('flex-1 truncate', !cur && 'text-[var(--w-text-3)]')}>{cur ? cur.name : value ? 'Unknown version' : 'None'}</span>
+        {cur?.status === 'RELEASED' && <span className="rounded-[4px] bg-[color-mix(in_srgb,var(--w-green)_14%,transparent)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-green)]">Released</span>}
+      </Trigger>
+      <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={240}>
+        <div className="max-h-[280px] overflow-y-auto p-1" role="listbox" aria-label="Fix version">
+          <button
+            type="button"
+            role="option"
+            aria-selected={value === null}
+            onClick={() => pick(null)}
+            className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]"
+          >
+            <span className="flex-1 text-[var(--w-text-2)]">None</span>
+            {value === null && <Check size={13} className="text-[var(--w-accent-text)]" />}
+          </button>
+          {q.isLoading && <div className="px-2 py-3 text-center text-[12px] text-[var(--w-text-3)]">Loading…</div>}
+          {!q.isLoading && !versions.length && <div className="px-2 py-3 text-center text-[12px] text-[var(--w-text-3)]">No versions yet</div>}
+          {versions.map((v) => {
+            const locked = v.status !== 'UNRELEASED';
+            return (
+              <button
+                key={v.id}
+                type="button"
+                role="option"
+                aria-selected={v.id === value}
+                aria-disabled={locked}
+                disabled={locked}
+                title={locked ? `${v.name} is ${v.status === 'RELEASED' ? 'released' : 'archived'}` : undefined}
+                onClick={() => pick(v.id)}
+                className={cn(
+                  'flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px]',
+                  locked ? 'cursor-not-allowed opacity-50' : 'hover:bg-[var(--w-hover)]',
+                )}
+              >
+                <span className="min-w-0 flex-1 truncate">{v.name}</span>
+                {locked && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{v.status === 'RELEASED' ? 'Released' : 'Archived'}</span>}
+                {v.id === value && <Check size={13} className="shrink-0 text-[var(--w-accent-text)]" />}
+              </button>
+            );
+          })}
+        </div>
+      </Popover>
+    </>
+  );
+}

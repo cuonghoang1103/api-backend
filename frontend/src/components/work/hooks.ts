@@ -38,6 +38,22 @@ export const wk = {
   widget: (pid: number) => ['work', 'reports', pid, 'widget'] as const,
   /** Giá trị trường tuỳ chỉnh nằm dưới wk.issue(pid) ⇒ issue.updated làm tươi. */
   customValues: (pid: number, num: number) => ['work', 'issue', pid, num, 'custom'] as const,
+  /** Timeline nằm dưới wk.issues ⇒ mọi sự kiện thẻ (đổi ngày, link BLOCKS) làm tươi. */
+  timeline: (pid: number) => ['work', 'issues', pid, 'timeline'] as const,
+  /** Version nằm dưới wk.project ⇒ project.updated (tạo/sửa/phát hành version) làm tươi. */
+  versions: (pid: number) => ['work', 'project', pid, 'versions'] as const,
+  version: (pid: number, id: number) => ['work', 'project', pid, 'versions', id] as const,
+  /** Worklog nằm dưới wk.issue(pid) ⇒ issue.updated (ghi/xoá giờ) làm tươi. */
+  worklogs: (pid: number, num: number) => ['work', 'issue', pid, num, 'worklogs'] as const,
+  /** Luật tự động + nhật ký chạy. */
+  automation: (pid: number) => ['work', 'automation', pid] as const,
+  automationLogs: (pid: number) => ['work', 'automation', pid, 'logs'] as const,
+  /** Capacity + báo cáo giờ nằm dưới wk.reports ⇒ sự kiện thẻ làm tươi. */
+  capacity: (pid: number) => ['work', 'reports', pid, 'capacity'] as const,
+  timeReport: (pid: number) => ['work', 'reports', pid, 'time'] as const,
+  /** Ngày nghỉ theo KHÔNG GIAN (không theo dự án). */
+  timeOff: (wsId: number) => ['work', 'time-off', wsId] as const,
+  notifySettings: ['work', 'notify-settings'] as const,
 };
 
 /** /work/<slug>/<KEY> ⇒ cấu hình dự án. */

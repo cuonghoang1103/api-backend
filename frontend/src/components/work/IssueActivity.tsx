@@ -17,6 +17,7 @@ import { wk, type Lookups } from './hooks';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import { PRIORITIES, relativeTime, Spinner, UserAvatar, formatDate } from './ui';
 import { ConfirmDialog } from './settings/shared';
+import { WorklogList } from './TimeTracking';
 
 function CommentComposer({ config, pid, num }: { config: ProjectConfig; pid: number; num: number }) {
   const qc = useQueryClient();
@@ -141,6 +142,7 @@ const FIELD_LABEL: Record<string, string> = {
   title: 'title', description: 'description', statusId: 'status', assigneeId: 'assignee', priority: 'priority',
   storyPoints: 'story points', originalEstimateMin: 'original estimate', remainingEstimateMin: 'remaining estimate',
   startDate: 'start date', dueDate: 'due date', parentId: 'parent', sprintId: 'sprint', labels: 'labels', components: 'components',
+  timeSpentMin: 'time spent', fixVersionId: 'fix version',
 };
 
 function describe(h: HistoryEntry, lk: Lookups, config: ProjectConfig): { text: string; from?: string; to?: string } {
@@ -160,9 +162,11 @@ function describe(h: HistoryEntry, lk: Lookups, config: ProjectConfig): { text: 
     case 'priority': return { text: 'changed the priority', from: prio(h.fromValue), to: prio(h.toValue) };
     case 'sprintId': return { text: 'moved the issue', from: sprint(h.fromValue), to: sprint(h.toValue) };
     case 'originalEstimateMin':
-    case 'remainingEstimateMin': return { text: `changed the ${FIELD_LABEL[h.field]}`, from: minutes(h.fromValue), to: minutes(h.toValue) };
+    case 'remainingEstimateMin':
+    case 'timeSpentMin': return { text: `changed the ${FIELD_LABEL[h.field]}`, from: minutes(h.fromValue), to: minutes(h.toValue) };
     case 'startDate':
     case 'dueDate': return { text: `changed the ${FIELD_LABEL[h.field]}`, from: formatDate(h.fromValue) || 'None', to: formatDate(h.toValue) || 'None' };
+    case 'fixVersionId': return { text: h.toValue ? 'changed the fix version' : 'removed the fix version' };
     case 'parentId': return { text: h.toValue ? 'changed the parent' : 'removed the parent' };
     default: return { text: `changed the ${FIELD_LABEL[h.field] ?? h.field}`, from: h.fromValue ?? 'None', to: h.toValue ?? 'None' };
   }
@@ -198,20 +202,26 @@ function HistoryList({ pid, num, config, lk }: { pid: number; num: number; confi
   );
 }
 
+const ACTIVITY_TABS = [
+  { id: 'comments', label: 'Comments' },
+  { id: 'history', label: 'History' },
+  { id: 'worklog', label: 'Work log' },
+] as const;
+
 export default function IssueActivity({ pid, num, config, lk }: { pid: number; num: number; config: ProjectConfig; lk: Lookups }) {
-  const [tab, setTab] = useState<'comments' | 'history'>('comments');
+  const [tab, setTab] = useState<(typeof ACTIVITY_TABS)[number]['id']>('comments');
   const comments = useQuery({ queryKey: wk.comments(pid, num), queryFn: () => workApi.comments(pid, num) });
   return (
     <section>
       <div className="mb-4 flex items-center gap-1 border-b border-[var(--w-border)]">
-        {(['comments', 'history'] as const).map((t) => (
+        {ACTIVITY_TABS.map((t) => (
           <button
-            key={t}
+            key={t.id}
             type="button"
-            onClick={() => setTab(t)}
-            className={cn('-mb-px border-b-2 px-2 pb-2 text-[13px] font-medium capitalize', tab === t ? 'border-[var(--w-accent)] text-[var(--w-text)]' : 'border-transparent text-[var(--w-text-3)] hover:text-[var(--w-text-2)]')}
+            onClick={() => setTab(t.id)}
+            className={cn('-mb-px whitespace-nowrap border-b-2 px-2 pb-2 text-[13px] font-medium', tab === t.id ? 'border-[var(--w-accent)] text-[var(--w-text)]' : 'border-transparent text-[var(--w-text-3)] hover:text-[var(--w-text-2)]')}
           >
-            {t}{t === 'comments' && comments.data?.length ? <span className="ml-1.5 text-[var(--w-text-3)]">{comments.data.length}</span> : null}
+            {t.label}{t.id === 'comments' && comments.data?.length ? <span className="ml-1.5 text-[var(--w-text-3)]">{comments.data.length}</span> : null}
           </button>
         ))}
       </div>
@@ -225,8 +235,10 @@ export default function IssueActivity({ pid, num, config, lk }: { pid: number; n
             <p className="text-[12px] text-[var(--w-text-3)]">You have view-only access to this project.</p>
           )}
         </div>
-      ) : (
+      ) : tab === 'history' ? (
         <HistoryList pid={pid} num={num} config={config} lk={lk} />
+      ) : (
+        <WorklogList pid={pid} num={num} config={config} />
       )}
     </section>
   );

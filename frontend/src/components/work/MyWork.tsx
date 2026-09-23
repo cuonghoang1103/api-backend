@@ -6,10 +6,14 @@
  */
 
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
-import { CheckCircle2 } from 'lucide-react';
-import { workApi, workError, type MyWorkItem } from '@/lib/work-api';
-import { EmptyState, formatDate, IssueTypeIcon, PriorityIcon, Spinner, StatusBadge } from '@/components/work/ui';
+import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { Bell, CheckCircle2 } from 'lucide-react';
+import { workApi, workError, type EmailMode, type MyWorkItem, type NotifySettings } from '@/lib/work-api';
+import { Dialog, EmptyState, formatDate, IssueTypeIcon, PriorityIcon, Spinner, StatusBadge } from '@/components/work/ui';
+import { wk } from '@/components/work/hooks';
+import { Select, Switch } from '@/components/work/settings/shared';
 import { cn } from '@/lib/utils';
 
 const GROUPS: Array<{ id: MyWorkItem['bucket']; label: string; tone?: string }> = [
@@ -29,6 +33,111 @@ function Counter({ label, value, tone }: { label: string; value: number; tone?: 
   );
 }
 
+// ─── Cài đặt thông báo (email + giờ im lặng, giờ Việt Nam) ────────
+
+const EMAIL_MODES: Array<{ id: EmailMode; label: string; help: string }> = [
+  { id: 'INSTANT', label: 'Instantly', help: 'An email for each notification, as it happens.' },
+  { id: 'DIGEST', label: 'Daily digest', help: 'One summary email every morning at 08:00.' },
+  { id: 'OFF', label: 'Off', help: 'In-app notifications only.' },
+];
+
+const HOURS = Array.from({ length: 24 }, (_, h) => h);
+const fmtHour = (h: number) => `${String(h).padStart(2, '0')}:00`;
+
+function NotifyForm({ initial, onClose }: { initial: NotifySettings; onClose: () => void }) {
+  const qc = useQueryClient();
+  const [mode, setMode] = useState<EmailMode>(initial.emailMode);
+  const [quiet, setQuiet] = useState(initial.quietStart !== null && initial.quietEnd !== null);
+  const [start, setStart] = useState(initial.quietStart ?? 22);
+  const [end, setEnd] = useState(initial.quietEnd ?? 7);
+  const save = useMutation({
+    mutationFn: () => workApi.setNotifySettings({ emailMode: mode, quietStart: quiet ? start : null, quietEnd: quiet ? end : null }),
+    onSuccess: (data) => {
+      qc.setQueryData(wk.notifySettings, data);
+      toast.success('Notification settings saved');
+      onClose();
+    },
+    onError: (err) => toast.error(workError(err, 'Could not save notification settings')),
+  });
+  const same = quiet && start === end;
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); if (!save.isPending && !same) save.mutate(); }}>
+      <fieldset className="mb-5">
+        <legend className="w-label">Email notifications</legend>
+        <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
+          {EMAIL_MODES.map((m) => (
+            <label key={m.id} className={cn('flex cursor-pointer items-start gap-2.5 border-b border-[var(--w-border)] px-3 py-2.5 last:border-b-0', mode === m.id && 'bg-[var(--w-accent-soft)]')}>
+              <input type="radio" name="w-email-mode" className="mt-0.5" checked={mode === m.id} onChange={() => setMode(m.id)} />
+              <span className="min-w-0">
+                <span className="block text-[13px] font-medium">{m.label}</span>
+                <span className="block text-[12px] text-[var(--w-text-2)]">{m.help}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <div className={cn('mb-1', mode === 'OFF' && 'opacity-50')}>
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <div className="text-[13px] font-medium">Quiet hours</div>
+            <p className="text-[12px] text-[var(--w-text-2)]">Emails during these hours wait for the next digest. Vietnam time (UTC+7).</p>
+          </div>
+          <Switch checked={quiet} disabled={mode === 'OFF'} onChange={setQuiet} label="Quiet hours" />
+        </div>
+        {quiet && (
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-[13px]">
+            <span className="text-[var(--w-text-2)]">From</span>
+            <Select aria-label="Quiet hours start" value={start} disabled={mode === 'OFF'} onChange={(e) => setStart(Number(e.target.value))} className="!w-auto">
+              {HOURS.map((h) => <option key={h} value={h}>{fmtHour(h)}</option>)}
+            </Select>
+            <span className="text-[var(--w-text-2)]">to</span>
+            <Select aria-label="Quiet hours end" value={end} disabled={mode === 'OFF'} onChange={(e) => setEnd(Number(e.target.value))} className="!w-auto">
+              {HOURS.map((h) => <option key={h} value={h}>{fmtHour(h)}</option>)}
+            </Select>
+          </div>
+        )}
+        {same && <p className="mt-1.5 text-[12px] text-[var(--w-red)]">Start and end must be different.</p>}
+      </div>
+
+      <div className="mt-5 flex justify-end gap-2 border-t border-[var(--w-border)] pt-3">
+        <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+        <button type="submit" className="w-btn w-btn-primary" disabled={save.isPending || same}>
+          {save.isPending && <Spinner size={12} />}
+          Save
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function NotifySettingsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const q = useQuery({ queryKey: wk.notifySettings, queryFn: workApi.notifySettings, enabled: open });
+  return (
+    <Dialog open={open} onClose={onClose} title="Notification settings" width={480}>
+      {q.isLoading ? (
+        <div className="flex justify-center py-8"><Spinner /></div>
+      ) : q.error || !q.data ? (
+        <EmptyState title="Could not load your settings" body={q.error ? workError(q.error) : undefined} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+      ) : (
+        <NotifyForm key={q.dataUpdatedAt} initial={q.data} onClose={onClose} />
+      )}
+    </Dialog>
+  );
+}
+
+function NotifyButton() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button type="button" className="w-btn w-btn-sm" onClick={() => setOpen(true)}>
+        <Bell size={12} /> Notification settings
+      </button>
+      <NotifySettingsDialog open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+}
+
 export default function MyWork() {
   const q = useQuery({ queryKey: ['work', 'my-work'], queryFn: workApi.myWork, staleTime: 30_000 });
 
@@ -40,6 +149,9 @@ export default function MyWork() {
 
   return (
     <div className="space-y-5">
+      <div className="-mb-2 flex justify-end">
+        <NotifyButton />
+      </div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <Counter label="Overdue" value={counts.overdue} tone="text-[var(--w-red)]" />
         <Counter label="Due today" value={counts.dueToday} tone="text-[var(--w-orange)]" />

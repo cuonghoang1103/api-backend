@@ -18,9 +18,10 @@ import ProjectWorkflow from '@/components/work/settings/ProjectWorkflow';
 import ProjectBoard from '@/components/work/settings/ProjectBoard';
 import ProjectIssueTypes from '@/components/work/settings/ProjectIssueTypes';
 import ProjectFields from '@/components/work/settings/ProjectFields';
+import ProjectAutomation from '@/components/work/settings/ProjectAutomation';
 import ProjectDanger from '@/components/work/settings/ProjectDanger';
 
-type Tab = 'details' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'danger';
+type Tab = 'details' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'automation' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -40,6 +41,7 @@ function ProjectSettings() {
     { key: 'board', label: 'Board' },
     { key: 'types', label: 'Issue types' },
     { key: 'fields', label: 'Fields' },
+    { key: 'automation', label: 'Automation' },
     ...(config?.permissions.settings ? [{ key: 'danger' as const, label: 'Danger zone' }] : []),
   ];
   const raw = search?.get('tab') as Tab | null;
@@ -90,6 +92,7 @@ function ProjectSettings() {
           {tab === 'board' && <ProjectBoard config={config} slug={slug} />}
           {tab === 'types' && <ProjectIssueTypes config={config} slug={slug} />}
           {tab === 'fields' && <ProjectFields config={config} slug={slug} />}
+          {tab === 'automation' && <ProjectAutomation config={config} slug={slug} />}
           {tab === 'danger' && <ProjectDanger config={config} slug={slug} />}
         </div>
       </div>

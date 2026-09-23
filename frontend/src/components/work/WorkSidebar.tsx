@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
-  ArrowLeft, FlaskConical, BarChart3, ChevronDown, Columns3, LayoutDashboard, List, ListOrdered, Plus, Settings, Users, LayoutGrid, Check,
+  ArrowLeft, CalendarRange, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, LayoutDashboard, List, ListOrdered, Plus, Settings, Users, LayoutGrid, Check,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi } from '@/lib/work-api';
@@ -130,6 +130,8 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                     <div className="mt-0.5 space-y-0.5">
                       <NavItem href={`${base}/board`} icon={Columns3} label="Board" active={view === 'board' || view === undefined} indent />
                       <NavItem href={`${base}/backlog`} icon={ListOrdered} label="Backlog" active={view === 'backlog'} indent />
+                      <NavItem href={`${base}/timeline`} icon={CalendarRange} label="Timeline" active={view === 'timeline'} indent />
+                      <NavItem href={`${base}/releases`} icon={Rocket} label="Releases" active={view === 'releases'} indent />
                       <NavItem href={`${base}/list`} icon={List} label="Issues" active={view === 'list' || view === 'issue'} indent />
                       <NavItem href={`${base}/tests`} icon={FlaskConical} label="Tests" active={view === 'tests'} indent />
                       <NavItem href={`${base}/reports`} icon={BarChart3} label="Reports" active={view === 'reports'} indent />

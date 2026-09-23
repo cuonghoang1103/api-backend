@@ -26,11 +26,12 @@ import CustomFieldsGroup from './CustomFields';
 import AiIssueMenu from './ai/AiIssueMenu';
 import { ConfirmDialog } from './settings/shared';
 import {
-  AssigneePicker, ComponentsPicker, DateInput, LabelsPicker, NumberInput, ParentPicker, PriorityPicker, SprintPicker,
+  AssigneePicker, ComponentsPicker, DateInput, FixVersionPicker, LabelsPicker, NumberInput, ParentPicker, PriorityPicker, SprintPicker,
   StatusPicker,
 } from './fields';
 import { useLookups, wk, type Lookups } from './hooks';
 import IssueActivity from './IssueActivity';
+import { TimeTrackingBlock } from './TimeTracking';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
@@ -445,6 +446,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
       {config.type !== 'KANBAN' && type?.level === 0 && (
         <Prop label="Sprint"><SprintPicker config={config} value={issue.sprintId} onChange={(sprintId) => set({ sprintId })} bare disabled={!editable} /></Prop>
       )}
+      <Prop label="Fix version"><FixVersionPicker config={config} value={issue.fixVersionId} onChange={(fixVersionId) => set({ fixVersionId })} bare disabled={!editable} /></Prop>
       {type?.level !== 1 && (
         <Prop label={config.settings?.estimation === 'HOURS' ? 'Estimate (h)' : 'Story points'}>
           {config.settings?.estimation === 'HOURS' ? (
@@ -464,6 +466,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         <Prop label="Components"><ComponentsPicker config={config} value={issue.componentIds} onChange={(componentIds) => set({ componentIds })} bare disabled={!editable} /></Prop>
       )}
       <CustomFieldsGroup pid={pid} num={num} typeKey={type?.key} config={config} editable={editable} />
+      <TimeTrackingBlock pid={pid} issue={issue} config={config} />
       <div className="mt-4 space-y-1 border-t border-[var(--w-border)] pt-3 text-[12px] text-[var(--w-text-3)]">
         <div>Created {formatDate(issue.createdAt)} · {relativeTime(issue.createdAt)}</div>
         <div>Updated {relativeTime(issue.updatedAt)}</div>

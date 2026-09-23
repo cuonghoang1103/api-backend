@@ -19,6 +19,8 @@ import EpicsTab from '@/components/work/reports/EpicsTab';
 import ContributionsTab from '@/components/work/reports/ContributionsTab';
 import HealthTab from '@/components/work/reports/HealthTab';
 import WeeklyReportTab from '@/components/work/reports/WeeklyReportTab';
+import TimeTab from '@/components/work/reports/TimeTab';
+import CapacityTab from '@/components/work/reports/CapacityTab';
 import IssueDrawer from '@/components/work/IssueDrawer';
 
 const TABS = [
@@ -29,6 +31,8 @@ const TABS = [
   { id: 'sprint', label: 'Sprint report' },
   { id: 'epics', label: 'Epics' },
   { id: 'contributions', label: 'Contributions' },
+  { id: 'time', label: 'Time' },
+  { id: 'capacity', label: 'Capacity' },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -95,6 +99,8 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
           {tab === 'sprint' && <SprintReportTab pid={pid} config={config} lk={lk} />}
           {tab === 'epics' && <EpicsTab pid={pid} config={config} lk={lk} />}
           {tab === 'contributions' && <ContributionsTab pid={pid} config={config} />}
+          {tab === 'time' && <TimeTab pid={pid} config={config} onOpenIssue={setIssue} />}
+          {tab === 'capacity' && <CapacityTab pid={pid} config={config} />}
         </div>
       </div>
       <IssueDrawer pid={pid} num={openNum} onClose={() => setIssue(null)} onOpenIssue={(n) => setIssue(n)} />

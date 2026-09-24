@@ -331,7 +331,11 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   const qc = useQueryClient();
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const lastPicked = useRef<number | null>(null);
-  useEffect(() => setSelected(new Set()), [query, jqlParam, jqlMode]);
+  // So theo NỘI DUNG truy vấn: mảng lọc có thể là object mới mỗi lần render, và
+  // `new Set()` luôn là giá trị mới ⇒ so theo tham chiếu sẽ lặp render vô hạn
+  // (bộ kiểm dựng trang trong app desktop treo đúng chỗ này).
+  const queryKeyStr = JSON.stringify(query);
+  useEffect(() => setSelected((s) => (s.size ? new Set() : s)), [queryKeyStr, jqlParam, jqlMode]);
   const toggleRow = (id: number, shift: boolean) => {
     setSelected((prev) => {
       const next = new Set(prev);
@@ -399,7 +403,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   // ── Bàn phím ──
   const [hi, setHi] = useState(-1);
   const rowsRef = useRef<HTMLDivElement>(null);
-  useEffect(() => setHi(-1), [query, jqlParam, jqlMode]);
+  useEffect(() => setHi(-1), [queryKeyStr, jqlParam, jqlMode]);
   useEffect(() => {
     if (hi < 0) return;
     rowsRef.current?.querySelector<HTMLElement>(`[data-row="${hi}"]`)?.scrollIntoView({ block: 'nearest' });

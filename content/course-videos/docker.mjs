@@ -5,10 +5,10 @@
  * pill of the learn page, until the Vietnamese/English recordings are made.
  *
  * 24/09/2026: rà lại cả khoá theo yêu cầu "video chuyên sâu đúng bài" — giữ 24, thay 39 (kênh nghi AI,
- * video chung chung, lệch trọng tâm), thêm 15 cho bài mới (2 bài "Bắt đầu tại đây" + 13 bài slide N.0).
+ * video chung chung, lệch trọng tâm), thêm 15 cho bài mới (2 bài "Bắt đầu tại đây" + 13 bài slide N.0), rồi 20 cho Ch13–16 mới.
  * Credit = đúng `author_name — title` của oEmbed. Ghép bằng scripts/ghep-video-khoa.mjs (TSV), kiểm bằng
  *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/docker.mjs --cham
- * (24/09: 78/78 sống, nhúng được, xem được — không members-only).
+ * (24/09: 98/98 sống, nhúng được, xem được — không members-only).
  *
  * QUIZ lessons are deliberately absent — they have no video frame.
  */
@@ -119,5 +119,33 @@ export default {
     'dk-12-3-khoi-dong-roi-chet': { yt: 'PYssZ081c3I', credit: "NextOps Videos — 11 Troubleshooting Docker Containers - Container Logs, Restart Policies" },
     'dk-12-4-dung-hong': { yt: 'hd1AKYGiWNk', credit: "anthonywritescode — debugging a failed docker build (intermediate) anthony explains #339" },
     'dk-12-5-ket-khoa': { yt: 'fqMOX6JJhGo', credit: "freeCodeCamp.org — Docker Tutorial for Beginners - A Full DevOps Course on How to Run Applications in Containers" },
+
+    /* ── Chương 13 — Docker trong vòng lặp phát triển hằng ngày ── */
+    'dk-13-0-slides': { yt: 'zkMRWDQV4Tg', credit: "ArjanCodes — How To Use Docker To Make Local Development A Breeze" },
+    'dk-13-1-dev-containers': { yt: 'kPMA9cnpScU', credit: "Syntax — you should be using dev containers" },
+    'dk-13-2-hot-reload-debug': { yt: 'u1q8AyNMxd4', credit: "Docker — Deciding Between Volumes, Bind Mounts, and Compose Watch (DockerCon 2023)" },
+    'dk-13-3-db-that-cho-test': { yt: 'sNg0bnMF_qY', credit: "Dreams of Code — Testcontainers have forever changed the way I write tests" },
+    'dk-13-4-mac-windows': { yt: 'gcacQ29AjOo', credit: "Bret Fisher — Docker Desktop for macOS Setup and Tips" },
+
+    /* ── Chương 14 — Docker cho mọi việc: công cụ, tự host & AI ── */
+    'dk-14-0-slides': { yt: 'RUqGlWr5LBA', credit: "NetworkChuck — 18 Weird and Wonderful ways I use Docker" },
+    'dk-14-1-cong-cu-khong-cai': { yt: 'Iz7HkvitqQE', credit: "Pablo's Spot — Productivity with Containers - AWS Command Line Interface using Docker Container" },
+    'dk-14-2-kho-du-lieu-mot-lenh': { yt: 'Hs9Fh1fr5s8', credit: "Caleb Curry — Run Postgres in a Docker Container (Easiest PostgreSQL Setup)" },
+    'dk-14-3-tu-host': { yt: 'AjWonyr8nxI', credit: "Christian Lempa — Caddy: Everyone Says It’s the EASIEST… I Tested It" },
+    'dk-14-4-gpu-ai': { yt: '4YA1n2zs6XA', credit: "Techno Tim — Run AI Models with Docker - No Setup, No Headaches" },
+
+    /* ── Chương 15 — Nâng cao: build, bảo mật & vượt khỏi một máy ── */
+    'dk-15-0-slides': { yt: 'V4f_sHTzvCI', credit: "Bret Fisher — Docker Production Best Practices from Bret Fisher at DockerCon" },
+    'dk-15-1-buildx-bake': { yt: '99QLREnqL7A', credit: "Bret Fisher — Docker Build the best way with Docker Bake" },
+    'dk-15-2-rootless-podman': { yt: 'jeTKgAEyhsA', credit: "The Linux Foundation — Rootless Containers from Scratch - Liz Rice, Aqua Security" },
+    'dk-15-3-swarm': { yt: '_YsPt7dIvqU', credit: "Christian Lempa — Docker Swarm Mode: EASY Tutorial" },
+    'dk-15-4-kubernetes': { yt: 'ZW_ONm4-WdM', credit: "Christian Lempa — From Docker to Kubernetes with ease! // Helm + Kompose Tutorial" },
+
+    /* ── Chương 16 — Dự án cuối khoá: đóng gói và đưa một ứng dụng thật lên production ── */
+    'dk-16-0-slides': { yt: 'lEcULR30-GM', credit: "freeCodeCamp.org — Master Full-Stack Docker & CI/CD – Build a Production-Ready Pipeline" },
+    'dk-16-1-dong-goi': { yt: 'Zgx0o8QjJk4', credit: "Bret Fisher — Docker and Node.js Best Practices from Bret Fisher at DockerCon" },
+    'dk-16-2-compose-dev-prod': { yt: 'T--X3v2pwtU', credit: "Nick Janetakis — Best Practices Around Production Ready Web Apps with Docker Compose" },
+    'dk-16-3-ci-ghcr-deploy': { yt: '-NH8Urs4ST0', credit: "Nick Janetakis — Build Git Tagged Multi-Arch Docker Images with GitHub Actions" },
+    'dk-16-4-van-hanh-su-co': { yt: 'Kr-3WKA1_fI', credit: "Danie van der Merwe — Docker Punching Holes Through Your VPS Firewall? This Is How I Solved It" },
   },
 };

@@ -16,6 +16,13 @@
  * the UI advertises) is compatible with it, and the export-my-data path is
  * untouched and still instant.
  *
+ * ⚠️ 24/09/2026 — TỰ XOÁ sau 72 giờ. App Store 5.1.1(v) chỉ chấp nhận bước
+ * duyệt tay với ngành bị quản lý chặt; với app thường, yêu cầu xoá phải
+ * dẫn tới xoá THẬT trong một thời hạn nói rõ. Trước đây yêu cầu có thể nằm
+ * PENDING vô thời hạn nếu admin không bấm. Nay `tuXoaQuaHan()` (cron mỗi
+ * giờ) xoá mọi yêu cầu PENDING đã quá 72 giờ. Admin vẫn duyệt sớm được;
+ * người dùng vẫn huỷ được trong 72 giờ đó.
+ *
  * State machine:
  *
  *     (none) ──request()──► PENDING ──approve()──► APPROVED  (account erased)
@@ -269,4 +276,42 @@ export async function reject(id: number, adminId: number, note: unknown) {
     },
     select: PUBLIC_SELECT,
   });
+}
+
+/** Thời hạn ân hạn trước khi yêu cầu xoá tự có hiệu lực (khớp chữ trong app/web). */
+export const HAN_TU_XOA_GIO = 72;
+
+/**
+ * Xoá mọi yêu cầu PENDING đã quá `HAN_TU_XOA_GIO`. Gọi từ cron mỗi giờ.
+ * Từng yêu cầu chạy riêng: một tài khoản xoá lỗi không chặn những cái khác,
+ * và yêu cầu đó giữ PENDING để lượt sau thử lại (giống `approve()`).
+ */
+export async function tuXoaQuaHan(): Promise<number> {
+  const moc = new Date(Date.now() - HAN_TU_XOA_GIO * 3600_000);
+  const quaHan = await prisma.accountDeletionRequest.findMany({
+    where: { status: 'PENDING', createdAt: { lte: moc } },
+    select: { id: true, userId: true, usernameAtRequest: true },
+    take: 50,
+  });
+  let n = 0;
+  for (const row of quaHan) {
+    try {
+      await anonymizeAccount(row.userId);
+      await prisma.accountDeletionRequest.update({
+        where: { id: row.id },
+        data: {
+          status: 'APPROVED',
+          reviewedAt: new Date(),
+          adminNote: `Tự xoá sau ${HAN_TU_XOA_GIO} giờ`,
+        },
+      });
+      n++;
+      logger.warn('account erased automatically after grace window', {
+        requestId: row.id, userId: row.userId, username: row.usernameAtRequest,
+      });
+    } catch (err) {
+      logger.error('tự xoá tài khoản lỗi', { requestId: row.id, error: (err as Error).message });
+    }
+  }
+  return n;
 }

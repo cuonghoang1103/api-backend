@@ -120,18 +120,17 @@ export async function getHomeFeedStories(currentUserId: number) {
         { userId: currentUserId },
         { visibility: 'FRIENDS', userId: { in: friendIds } },
       ],
-      // Exclude stories from users the current user has hidden
+      // Bỏ những tin người xem đã ẩn. ⚠️ Trước 24/09/2026 chỗ này lấy
+      // `h.userId` — tức id CỦA CHÍNH NGƯỜI XEM — nên ai ẩn một tin là mất
+      // luôn tin của mình, còn tin muốn ẩn vẫn hiện. Lọc theo `storyId`.
       NOT: {
-        userId: {
+        id: {
           in: await prisma.storyHide
             .findMany({
               where: { userId: currentUserId },
-              select: { storyId: true, userId: true },
+              select: { storyId: true },
             })
-            .then((hides) => {
-              // Get userIds of story owners whose stories are hidden
-              return hides.map((h) => h.userId);
-            }),
+            .then((hides) => hides.map((h) => h.storyId)),
         },
       },
     },
@@ -255,13 +254,13 @@ export async function getRingStories(currentUserId: number) {
       visibility: 'PUBLIC',
       // Exclude hidden stories
       NOT: {
-        userId: {
+        id: {
           in: await prisma.storyHide
             .findMany({
               where: { userId: currentUserId },
-              select: { storyId: true, userId: true },
+              select: { storyId: true },
             })
-            .then((hides) => hides.map((h) => h.userId)),
+            .then((hides) => hides.map((h) => h.storyId)),
         },
       },
     },

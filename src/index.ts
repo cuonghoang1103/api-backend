@@ -57,6 +57,7 @@ import rateLimit from 'express-rate-limit';
 import { RedisStore } from 'rate-limit-redis';
 import { getRedis } from './config/redis.js';
 import { nanoid } from 'nanoid';
+import { locLoiMoiMuaChoIos } from './utils/appIos.js';
 
 // Dynamic imports với absolute path
 const { config } = await import(path.join(__dirname, 'config', 'env.js'));
@@ -330,6 +331,9 @@ app.use('/api/v1/work/github/webhook', express.raw({ type: '*/*', limit: '5mb' }
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser(config.cookieSecret));
+// App iOS: bỏ lời mời mua ("Nâng cấp tại /pro") khỏi thông báo — App Store 3.1.1.
+// Chỉ chạy khi có header `X-Client-Platform: ios`; web/desktop không đổi.
+app.use(locLoiMoiMuaChoIos);
 
 // ─── 5. Compression (gzip/brotli) ──────────────────────────
 app.use(compression({

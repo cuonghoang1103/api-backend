@@ -619,9 +619,15 @@ router.post('/advisor/report-answer', authenticate, async (req: any, res: Respon
     const question = String(req.body?.question || '').trim().slice(0, 500);
     const reason = String(req.body?.reason || '').trim().slice(0, 300);
     const facultyId = String(req.body?.facultyId || '').trim().slice(0, 64);
+    // App iOS dùng chung đường này cho MỌI nội dung chưa có đường báo cáo
+    // riêng (tin 24h, hồ sơ, bình luận câu thi, câu trả lời AI ở các màn
+    // khác — Apple 1.2/4.7). Có `nguon` thì tiêu đề nói đúng nguồn đó.
+    const nguon = String(req.body?.nguon || '').trim().slice(0, 64);
     await baoAdmin({
       loai: 'BAO_CAO', mucDo: 'can_xu_ly',
-      tieuDe: `Báo cáo câu trả lời AI ở Phòng tư vấn${facultyId ? ` (${facultyId})` : ''}`,
+      tieuDe: nguon
+        ? `Báo cáo nội dung: ${nguon}`
+        : `Báo cáo câu trả lời AI ở Phòng tư vấn${facultyId ? ` (${facultyId})` : ''}`,
       noiDung: [reason && `Lý do: ${reason}`, question && `Hỏi: ${question}`, `Đáp: ${answer}`].filter(Boolean).join('\n'),
       userId: req.userId ?? null,
     });

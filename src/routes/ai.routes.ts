@@ -32,6 +32,7 @@ import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 import type { ChatMessageDto } from '../types/index.js';
 import { getGenStats, getFeatureUsers } from '../services/genStats.service.js';
+import { laAppIos } from '../utils/appIos.js';
 
 const router = Router();
 
@@ -472,6 +473,7 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       (req.body as { ngonNgu?: unknown }).ngonNgu,
     ),
     choTimWeb: (req.body as { choTimWeb?: unknown }).choTimWeb !== false,
+    appIos: laAppIos(req),
 
     /*
      * BƯỚC và NGUỒN đi bằng khung SSE RIÊNG, không lẫn vào `chunk`.

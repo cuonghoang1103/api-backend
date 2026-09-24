@@ -38,6 +38,17 @@ export function startCronJobs(): void {
   }
   _started = true;
 
+  // ─── Tự xoá tài khoản quá 72 giờ — MỖI GIỜ (App Store 5.1.1(v)) ───
+  cron.schedule('17 * * * *', async () => {
+    try {
+      const { tuXoaQuaHan } = await import('./accountDeletion.service.js');
+      const n = await tuXoaQuaHan();
+      if (n) logger.info('cron đã tự xoá tài khoản quá hạn', { soTaiKhoan: n });
+    } catch (err) {
+      logger.error('cron tự xoá tài khoản lỗi', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Nhắc việc cho robot — MỖI PHÚT ───
   //
   // Nhịp một phút vì đây là báo thức: chậm 5 phút thì nó không còn là

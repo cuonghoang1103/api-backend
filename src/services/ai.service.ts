@@ -407,6 +407,7 @@ function buildSystemPrompt(
   deep = false,
   voice = false,
   ngonNgu?: 'vi' | 'en',
+  appIos = false,
 ): string {
   return (
     'Bạn là CuongMini — trợ lý AI chính thức của website cuongthai.com (CuongHoangDev), do Hoàng Nghĩa Cường xây dựng. '
@@ -417,7 +418,10 @@ function buildSystemPrompt(
     + '- Định dạng bằng Markdown chuẩn: xuống dòng rõ ràng, gạch đầu dòng cho danh sách, ```lang cho code, bảng khi so sánh.\n'
     + '- Về Cường hoặc về website/tính năng: CHỈ dùng thông tin trong "Ngữ cảnh từ hệ thống" bên dưới. Nếu ngữ cảnh không có thông tin đó, nói thẳng là chưa có và gợi ý liên hệ admin — TUYỆT ĐỐI không bịa.\n'
     + '- Khi người dùng hỏi cách dùng một tính năng của web, hướng dẫn từng bước ngắn gọn và kèm đường dẫn trang (ví dụ: /interview, /cv, /language, /pro).\n'
-    + '- Nếu tính năng người dùng cần thuộc gói Pro, cho biết điều đó một cách thân thiện và chỉ tới trang /pro.\n'
+    + (appIos
+      // App iOS: App Store 3.1.1 cấm mọi lời dẫn tới kênh mua ngoài app.
+      ? '- Người dùng đang dùng APP iOS. TUYỆT ĐỐI không nhắc giá, cách mua/nâng cấp/gia hạn gói Pro, trang /pro, chuyển khoản hay bất kỳ kênh thanh toán nào. Nếu tính năng thuộc gói Pro, chỉ nói ngắn gọn rằng nó dành cho tài khoản Pro.\n'
+      : '- Nếu tính năng người dùng cần thuộc gói Pro, cho biết điều đó một cách thân thiện và chỉ tới trang /pro.\n')
     + '- Công thức toán viết bằng LaTeX trong `$...$` (trong dòng) hoặc `$$...$$` (đứng riêng), không bọc trong khối code.\n'
     + luatTaoFile()
     + '- Cần hình minh hoạ (hình học, sơ đồ) thì vẽ bằng khối ```svg — thẻ `<svg>` có `viewBox`, nét `stroke="currentColor" fill="none"`, tính toạ độ cho đúng chứ đừng vẽ áng chừng.\n'
@@ -487,6 +491,8 @@ interface ChatContext {
    * trợ lý. Ngôn ngữ là lựa chọn có ràng buộc, không phải chữ người dùng gõ.
    */
   ngonNgu?: 'vi' | 'en';
+  /** Yêu cầu từ app iOS (`X-Client-Platform: ios`) — lời nhắc bỏ mọi lời mời mua Pro. */
+  appIos?: boolean;
   /**
    * Cho phép lượt này TÌM WEB. Mặc định bật; tắt cho lượt của robot/giọng
    * nói (câu trả lời nói ra không đọc được thẻ nguồn, mà tìm kiếm thì thêm
@@ -1123,7 +1129,7 @@ export class AIService {
     // KHÔNG Pro bấm micro thì nhận về câu đầy markdown rồi máy đọc phải đọc cả
     // dấu sao và gạch đầu dòng. Đo thật 18/08: bậc Pro rơi xuống đường miễn phí
     // (tài khoản chưa Pro) và câu trả lời ra `- **Lập trình & phát triển`.
-    const systemPrompt = buildSystemPrompt(ragContext, false, !!context.voice, context.ngonNgu);
+    const systemPrompt = buildSystemPrompt(ragContext, false, !!context.voice, context.ngonNgu, !!context.appIos);
 
     // Save user message
     if (sessionId) {
@@ -1188,7 +1194,7 @@ export class AIService {
      * LÀM GIÀU, không phải mắt xích bắt buộc.
      */
     const nguCanhWeb = await timNeuCan(context);
-    const systemPrompt = buildSystemPrompt(ragContext, selected.tier === 'claude', !!context.voice, context.ngonNgu)
+    const systemPrompt = buildSystemPrompt(ragContext, selected.tier === 'claude', !!context.voice, context.ngonNgu, !!context.appIos)
       + nguCanhWeb;
 
     // Save user message

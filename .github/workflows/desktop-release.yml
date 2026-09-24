@@ -58,11 +58,19 @@ jobs:
       - name: Chặn dựng đè bản đã công bố
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          # 24/09/2026: inputs.version đi qua env:, KHÔNG nhét `${{ }}` thẳng vào script —
+          # biểu thức được thay vào TRƯỚC khi shell chạy, nên một chuỗi gõ sai/độc sẽ thành
+          # lệnh (script injection; zizmor bắt 4 chỗ). Xem khoá GitHub Actions bài 3.1.
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
+          # Chỉ nhận đúng dạng số phiên bản X.Y.Z (có thể kèm -beta.1…), còn lại từ chối ngay.
+          if [ -n "$INPUT_VERSION" ] && ! printf '%s' "$INPUT_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$'; then
+            echo "::error::inputs.version không đúng dạng X.Y.Z: $INPUT_VERSION"; exit 1
+          fi
           # ⚠️ Phải là `if`, KHÔNG phải `[ -z … ] && …`. Runner chạy `bash -e`,
           # nên khi `inputs.version` CÓ giá trị thì vế trái sai, cả câu trả về
           # 1, và bước này chết ngay — đúng ở nhánh ít dùng nên rất dễ lọt.
-          VER='${{ inputs.version }}'
+          VER="$INPUT_VERSION"
           if [ -z "$VER" ]; then
             VER=$(node -p "require('./desktop/package.json').version")
           fi
@@ -202,7 +210,9 @@ jobs:
 
       - name: Đặt phiên bản
         if: inputs.version != ''
-        run: npm version "${{ inputs.version }}" --no-git-tag-version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: npm version "$INPUT_VERSION" --no-git-tag-version
         working-directory: desktop
 
       # ⛔ KHÔNG `--publish` ở đây.
@@ -274,9 +284,11 @@ jobs:
 
       - name: Xác định thẻ phiên bản
         id: tag
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
-          if [ -n "${{ inputs.version }}" ]; then
-            VER="${{ inputs.version }}"
+          if [ -n "$INPUT_VERSION" ]; then
+            VER="$INPUT_VERSION"
           else
             VER=$(node -p "require('./desktop/package.json').version")
           fi

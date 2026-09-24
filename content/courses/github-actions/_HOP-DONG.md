@@ -133,6 +133,13 @@ export const slides = S([ cover({ t, sub, chap: 'CHƯƠNG N' }), { t: 'Bản đ�
 4. Output CŨ không bắt buộc chạy lại, nhưng thấy SAI hành vi (GitHub đổi nhanh: `set-output` đã bỏ, Node 16→20→24 cho
    action, `actions/cache@v4`, `upload-artifact@v4` không ghi đè tên trùng…) thì sửa và ghi báo cáo.
 
+## 6b. Nội dung bảo mật: viết ở góc PHÒNG THỦ
+
+Script injection, `pull_request_target`, lộ secret, chuỗi cung ứng: giải thích CƠ CHẾ bằng lời + một minh hoạ vô hại
+(`$(echo hi)` hiện trong log), dẫn link run thật trên sân tập làm bằng chứng, rồi dạy kỹ CÁCH VÁ và cách PHÁT HIỆN
+(env: + "$VAR", quyền tối thiểu, actionlint/zizmor, ghim SHA). KHÔNG viết payload khai thác chi tiết hay kỹ thuật lấy
+trộm secret (Ch3 từng bị bộ lọc an toàn cắt giữa chừng khi đi quá chi tiết). Viết phần này thành nhiều lượt nhỏ.
+
 ## 7. An toàn máy (khi chạy Docker/act)
 
 Mac đang chạy container thật `cuong_pg_new`, `cuonghoang_redis`, `sonarqube-swt301` — KHÔNG đụng. Đối tượng docker tên

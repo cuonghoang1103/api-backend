@@ -1,5 +1,5 @@
 /**
- * Lập trình với AI — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (status DRAFT), chi tiết soạn sau.
+ * Lập trình với AI — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"), chi tiết soạn sau.
  * Khi soạn chi tiết: model, giá, giới hạn đổi rất nhanh — kiểm trang chính thức và ghi mốc thời gian. Xem _chung/khung.mjs.
  */
 import { khung } from './_chung/khung.mjs';
@@ -11,7 +11,7 @@ export default {
     title: 'Coding with AI',
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
-    status: 'DRAFT',
+    status: 'PUBLISHED',
     isFeatured: false,
     syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/ai-coding.png?v=1',

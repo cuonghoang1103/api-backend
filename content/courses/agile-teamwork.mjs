@@ -1,5 +1,5 @@
 /**
- * Làm việc nhóm phần mềm — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (status DRAFT), chi tiết soạn sau.
+ * Làm việc nhóm phần mềm — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"), chi tiết soạn sau.
  * Bổ trợ môn SWR302 (yêu cầu, user story, backlog) ở Academy: khoá này là phía VẬN HÀNH hằng ngày của đội code — không
  * dạy lại phần viết yêu cầu, trỏ sang SWR302. Dùng CT Work (/work) trên chính trang này để thực hành. Xem _chung/khung.mjs.
  */
@@ -12,7 +12,7 @@ export default {
     title: 'Software Teamwork: Agile, Scrum & Code Review',
     level: 'BEGINNER',
     language: 'Vietnamese',
-    status: 'DRAFT',
+    status: 'PUBLISHED',
     isFeatured: false,
     syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/agile-teamwork.png?v=1',

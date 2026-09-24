@@ -1,5 +1,5 @@
 /**
- * Cloud cơ bản (AWS) — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (status DRAFT), chi tiết soạn sau.
+ * Cloud cơ bản (AWS) — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"), chi tiết soạn sau.
  * ⚠️ Khi soạn chi tiết: chỉ dùng Free Tier, luôn đặt cảnh báo chi phí (Budgets) trước, dọn tài nguyên sau mỗi bài.
  * Xem _chung/khung.mjs.
  */
@@ -12,7 +12,7 @@ export default {
     title: 'Cloud Fundamentals (AWS)',
     level: 'BEGINNER',
     language: 'Vietnamese',
-    status: 'DRAFT',
+    status: 'PUBLISHED',
     isFeatured: false,
     syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/cloud-aws.png?v=1',

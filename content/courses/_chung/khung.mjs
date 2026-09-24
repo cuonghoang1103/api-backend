@@ -1,7 +1,7 @@
 /**
  * _chung/khung.mjs — dựng KHUNG cho một khoá /courses mới (24/09/2026): chương + bài + đề cương, CHƯA có bài giảng.
  *
- * Khoá dựng bằng khung để status: 'DRAFT' (người học không thấy — route công khai lọc isPublished). Mỗi bài có nội dung
+ * 24/09/2026: người dùng quyết định CÔNG KHAI luôn các khoá khung (status PUBLISHED) — bài chưa soạn hiện "Đang soạn". Mỗi bài có nội dung
  * tạm song ngữ: tiêu đề + "Bài này sẽ dạy" (chính là đề cương cho lúc soạn chi tiết theo quy trình khoá Docker/Git:
  * slide + đào sâu + 🧪/🗂/📌 + quiz 10 câu có giải thích — xem content/courses/docker/_HOP-DONG.md).
  * Khi soạn chi tiết một chương: thay phần tử trong `sections` bằng file chương thật (<slug>/sNN-*.mjs), GIỮ NGUYÊN slug bài

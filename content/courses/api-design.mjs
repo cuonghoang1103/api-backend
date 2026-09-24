@@ -1,5 +1,5 @@
 /**
- * API & System Design — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (status DRAFT), chi tiết soạn sau
+ * API & System Design — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"), chi tiết soạn sau
  * theo quy trình khoá Docker (content/courses/docker/_HOP-DONG.md). Xem _chung/khung.mjs.
  */
 import { khung } from './_chung/khung.mjs';
@@ -11,7 +11,7 @@ export default {
     title: 'API & System Design',
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
-    status: 'DRAFT',
+    status: 'PUBLISHED',
     isFeatured: false,
     syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/api-design.png?v=1',

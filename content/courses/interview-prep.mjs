@@ -1,5 +1,5 @@
 /**
- * Chuẩn bị phỏng vấn IT — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (status DRAFT), chi tiết soạn sau.
+ * Chuẩn bị phỏng vấn IT — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"), chi tiết soạn sau.
  * Nối mọi khoá kỹ thuật (Git, Docker, GitHub Actions, Testing, API design, DSA…) thành câu chuyện phỏng vấn. Xem _chung/khung.mjs.
  */
 import { khung } from './_chung/khung.mjs';
@@ -11,7 +11,7 @@ export default {
     title: 'IT Interview Prep',
     level: 'BEGINNER',
     language: 'Vietnamese',
-    status: 'DRAFT',
+    status: 'PUBLISHED',
     isFeatured: false,
     syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/interview-prep.png?v=1',

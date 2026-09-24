@@ -40,6 +40,8 @@ export default {
     language: 'Vietnamese',
     status: 'PUBLISHED',
     isFeatured: true,
+    // Bài N.0 (slide) mới chèn ĐẦU chương — thiếu cờ này seeder đẩy nó xuống cuối chương.
+    syncOrder: true,
     // Sinh bằng scripts/course-cover.mjs (logo Simple Icons chính thức trên nền
     // bìa dùng chung của CuongThai). Sinh lại, KHÔNG sửa tay:
     //   docker exec cuonghoangdev_backend node scripts/course-cover.mjs \

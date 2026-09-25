@@ -741,6 +741,19 @@ function KhungChat({ onDong }: { onDong: () => void }) {
   const [su, datSu] = useState<Array<{ id: string; ten: string; luc: string; so: number }>>([]);
   const [bao, datBao] = useState<string | null>(null);
   const cuonRef = useRef<HTMLDivElement>(null);
+  const oNhapRef = useRef<HTMLTextAreaElement>(null);
+
+  /* Ô nhập TỰ GIÃN theo số dòng, tới trần rồi mới cuộn trong chính nó.
+     Trước 25/09/2026 đây là một `<input>` một dòng: Shift+Enter không xuống
+     dòng được, và câu dài chạy mãi sang phải che mất phần đầu (ảnh người dùng
+     gửi). Đặt `height: auto` TRƯỚC khi đo, không thì xoá bớt chữ mà ô không
+     co lại — `scrollHeight` không bao giờ nhỏ hơn chiều cao đang có. */
+  useLayoutEffect(() => {
+    const el = oNhapRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 132)}px`;
+  }, [nhap]);
 
   /*
    * ── GIA SƯ CỦA BÀI ĐANG HỌC ──
@@ -803,7 +816,7 @@ function KhungChat({ onDong }: { onDong: () => void }) {
   /* Dán ảnh bằng Ctrl/Cmd+V ngay trong ô nhập. Đây là cách người dùng nêu tên
      thẳng ("copy paste"), và nó cũng là cách nhanh nhất: chụp màn hình xong
      dán luôn, không qua bước lưu file. */
-  const nhanDan = (e: React.ClipboardEvent<HTMLInputElement>): void => {
+  const nhanDan = (e: React.ClipboardEvent<HTMLTextAreaElement>): void => {
     const tep = [...e.clipboardData.items]
       .filter((x) => x.kind === 'file' && x.type.startsWith('image/'))
       .map((x) => x.getAsFile())
@@ -953,6 +966,11 @@ function KhungChat({ onDong }: { onDong: () => void }) {
   return (
     <div className="rb-chat">
       <div className="rb-chat-dau">
+        <span className="rb-chat-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+          </svg>
+        </span>
         <strong>{cheDoGiaSu ? dich('Gia sư bài học') : dich('Trợ lý')}</strong>
         {/* Bậc model CHỈ có nghĩa với trợ lý chung. Gia sư bài học chạy model
             riêng do máy chủ phân theo việc (`course_tutor`), nên để cái chọn
@@ -1053,9 +1071,13 @@ function KhungChat({ onDong }: { onDong: () => void }) {
           </div>
         )}
         {luot.length === 0 && !moSu && !cheDoGiaSu && (
-          <p className="rb-chat-trong">
-            {dich('Hỏi nhanh một câu, dán ảnh vào cũng được. Bấm Lịch sử để mở lại cuộc cũ.')}
-          </p>
+          <div className="rb-chao">
+            <div className="rb-chao-icon" aria-hidden="true">👋</div>
+            <p className="rb-chao-tieu">{dich('Chào bạn! Tớ giúp gì được nào?')}</p>
+            <p className="rb-chat-trong">
+              {dich('Hỏi nhanh một câu, dán ảnh vào cũng được. Bấm Lịch sử để mở lại cuộc cũ.')}
+            </p>
+          </div>
         )}
         {luot.map((l, i) => (
           <div key={i} className={l.toi ? 'rb-toi' : 'rb-may'}>
@@ -1068,7 +1090,12 @@ function KhungChat({ onDong }: { onDong: () => void }) {
               : <Suspense fallback={l.chu}><ChuAgent text={l.chu} /></Suspense>}
           </div>
         ))}
-        {dangCho && <div className="rb-may rb-cho">{dich('Chờ tớ suy nghĩ xíu nhé…')}</div>}
+        {dangCho && (
+          <div className="rb-may rb-cho" aria-label={dich('Chờ tớ suy nghĩ xíu nhé…')}>
+            <span className="rb-go"><i /><i /><i /></span>
+            {dich('Chờ tớ suy nghĩ xíu nhé…')}
+          </div>
+        )}
       </div>
 
       {bao && <p className="rb-bao">{bao}</p>}
@@ -1085,7 +1112,10 @@ function KhungChat({ onDong }: { onDong: () => void }) {
       )}
 
       <div className="rb-chat-soan">
-        <input
+        <textarea
+          ref={oNhapRef}
+          rows={1}
+          autoFocus
           value={nhap}
           placeholder={dich('Nhắn nhanh, dán ảnh được…')}
           onChange={(e) => datNhap(e.target.value)}
@@ -1093,15 +1123,22 @@ function KhungChat({ onDong }: { onDong: () => void }) {
           onKeyDown={(e) => {
             // Bộ gõ tiếng Việt dùng Enter để chốt chữ đang gõ.
             if (e.nativeEvent.isComposing) return;
-            if (e.key === 'Enter') { e.preventDefault(); void gui(); }
+            /* Enter gửi, Shift+Enter xuống dòng — quy ước của mọi ô chat.
+               Không chặn Shift+Enter thì textarea tự chèn "\n" như mong muốn. */
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void gui(); }
           }}
         />
         <button
           type="button"
+          className="rb-gui"
           onClick={() => void gui()}
           disabled={(!nhap.trim() && anh.length === 0) || dangCho}
+          title={dich('Gửi')}
+          aria-label={dich('Gửi')}
         >
-          {dich('Gửi')}
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7" />
+          </svg>
         </button>
       </div>
     </div>

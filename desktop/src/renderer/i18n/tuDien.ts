@@ -356,6 +356,7 @@ export const TU_DIEN: Record<string, string> = {
   'Hỏi nhanh một câu, dán ảnh vào cũng được. Bấm Lịch sử để mở lại cuộc cũ.':
     'Ask a quick question — you can paste an image too. Tap History to reopen an old chat.',
   'Nhắn nhanh, dán ảnh được…': 'Quick message, paste an image…',
+  'Chào bạn! Tớ giúp gì được nào?': 'Hi there! How can I help?',
   'Lịch sử trò chuyện': 'Chat history',
   'Mở trang AI Chat': 'Open the AI Chat page',
   'Bỏ ảnh': 'Remove image',

@@ -58,7 +58,7 @@ function nhan(kt: { width: number; height: number }): { width: number; height: n
   return { width: Math.round(kt.width * h), height: Math.round(kt.height * h) };
 }
 /** Lúc mở khung chat mini. */
-const RONG = { width: 380, height: 520 };
+const RONG = { width: 420, height: 600 };
 
 /**
  * Cỡ khi robot đang NÓI — tính TỪ SỐ ĐO THẬT của bong bóng, không phải hằng số.

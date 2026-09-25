@@ -733,6 +733,7 @@ export async function llmComplete(opts: {
       }
     }
 
+    let daThuLaiRambo = false;
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         // Tuyến Anthropic (`/v1/messages`) KHÔNG tồn tại trên máy nhà —
@@ -790,6 +791,7 @@ export async function llmComplete(opts: {
           xin.tra = () => {};        // `finally` bên dưới không được trả lần hai
           ep = fallbackEndpoint();
           model = modelForStep(opts.step, opts.feature, opts.purpose, ep);
+          ep = fallbackEndpoint(model); // khoá theo nhóm của model vừa chọn
           // ⚠️ `attempt--` RỒI mới `continue`: `continue` trong vòng `for` VẪN
           // chạy phép tăng, nên nếu không lùi lại thì việc đổi đích tự ăn mất
           // một lượt thử. Với caller đặt `maxRetries: 0` (những chỗ nhạy độ
@@ -813,6 +815,21 @@ export async function llmComplete(opts: {
         // Claude (đo 20/08: liệt kê đủ 6 model nhưng gọi thật thì 500/503/hết
         // giờ), nên lùi hai việc đó sang modelapi chỉ đổi một lỗi lấy một lỗi.
         if (ep.label === 'cong-agent' && !RAMBO_PURPOSES_CO_DINH.has(purpose)) {
+          // Rambo hỏng CHẬP CHỜN: đo 25/09/2026, cùng một request trợ lý CT Work
+          // lần đầu 502 (`bad response status code 502` từ nhà cung cấp phía sau
+          // rambo), phát lại nguyên văn 7 lần liền đều 200. Nên lỗi máy chủ (5xx /
+          // mạng) được thử lại rambo MỘT lần trước khi bỏ nó — lùi ngay là mất model
+          // tốt vì một cú giật. Lỗi 4xx thì không thử lại: gửi lại cũng hỏng y vậy.
+          if (!daThuLaiRambo && !(e instanceof LLMError && !e.retryable)) {
+            daThuLaiRambo = true;
+            logger.warn('llm: rambo lỗi, thử lại rambo một lần', {
+              purpose, feature: opts.feature ?? null, model,
+              error: e instanceof Error ? e.message : String(e),
+            });
+            await sleep(600);
+            attempt--;
+            continue;
+          }
           baoRamboHong();
           logger.warn('llm: rambo hỏng, lượt này lùi sang modelapi', {
             purpose, feature: opts.feature ?? null, model,
@@ -820,6 +837,7 @@ export async function llmComplete(opts: {
           });
           ep = fallbackEndpoint();
           model = modelForStep(opts.step, opts.feature, opts.purpose, ep);
+          ep = fallbackEndpoint(model); // khoá phải cùng NHÓM với model lùi, xem fallbackEndpoint
           attempt--; // xem chú thích ở nhánh máy nhà: `continue` vẫn tăng attempt
           continue;
         }

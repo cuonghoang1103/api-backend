@@ -758,10 +758,14 @@ export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // đó CHỈ hiện ra đúng lúc rambo đang sập — tức lúc tệ nhất, và lúc khó đối
   // chứng nhất. Lệch này đã âm thầm tồn tại từ 07/09 theo chiều ngược lại
   // (việc dùng model `claude-*` lấy khoá nhóm CLAUDE rồi gửi `gpt-5.6-sol`).
-  const modelSeDung = ramboDangNghi()
+  return { root: gatewayRoot(), key: gatewayKeyFor(modelSeDungOCong(purpose)), local: false, label: 'cong' };
+}
+
+/** Model mà việc này sẽ gửi lên CỔNG modelapi lúc này (tính cả cầu dao rambo). Khoá phải theo nó. */
+function modelSeDungOCong(purpose: LlmPurpose): string {
+  return ramboDangNghi()
     ? (process.env[`LLM_MODEL_${purpose.toUpperCase()}`]?.trim() || MODELAPI_DU_PHONG)
     : modelCong(purpose);
-  return { root: gatewayRoot(), key: gatewayKeyFor(modelSeDung), local: false, label: 'cong' };
 }
 
 /**
@@ -857,9 +861,17 @@ export function congAnthropic(model: string, tuyen: 'messages' | 'chat' = 'messa
   return { url: `${rieng.root}${duong}`, key: rieng.key };
 }
 
-/** Cổng dự phòng khi máy nhà không trả lời. Luôn là cổng, không bao giờ ngược lại. */
-export function fallbackEndpoint(): LlmEndpoint {
-  return { root: gatewayRoot(), key: gatewayKey(), local: false, label: 'cong' };
+/**
+ * Cổng dự phòng khi máy nhà / rambo không trả lời. Luôn là cổng, không bao giờ ngược lại.
+ *
+ * ⚠️ Truyền `model` sẽ LÙI TỚI để khoá khớp NHÓM của model đó (xem `gatewayKeyFor`).
+ * Không truyền ⇒ khoá mặc định (nhóm claude). 25/09/2026: nhánh "rambo hỏng" gọi hàm
+ * này không kèm model rồi gửi `gpt-5.6-sol` bằng khoá nhóm claude ⇒ cổng trả
+ * `503 No available channel … under group claude`, nên ĐƯỜNG LÙI chết đúng lúc
+ * đường chính chết — trợ lý CT Work báo "Internal Server Error".
+ */
+export function fallbackEndpoint(model?: string): LlmEndpoint {
+  return { root: gatewayRoot(), key: model ? gatewayKeyFor(model) : gatewayKey(), local: false, label: 'cong' };
 }
 
 // ─── Xếp hàng trên máy nhà ─────────────────────────────────────────
@@ -924,7 +936,7 @@ export async function xinDiemCuoi(purpose: LlmPurpose): Promise<DiemCuoiDaXep> {
   if (ve.duoc) return { ep, tra: ve.tra, choMs: ve.choMs };
 
   // Bị đẩy ra cổng. KHÔNG phải lỗi — đây chính là việc lớp 2 sinh ra để làm.
-  return { ep: fallbackEndpoint(), tra: () => {}, choMs: ve.choMs, lyDo: ve.lyDo };
+  return { ep: fallbackEndpoint(modelSeDungOCong(purpose)), tra: () => {}, choMs: ve.choMs, lyDo: ve.lyDo };
 }
 
 /** `POST` cho một điểm cuối bất kỳ. */

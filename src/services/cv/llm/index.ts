@@ -296,6 +296,7 @@ export async function cvLlmComplete(opts: {
           ep = fallbackEndpoint();
           provider = congProvider;
           model = modelForTask(opts.task, ep);
+          ep = fallbackEndpoint(model); // khoá theo nhóm của model vừa chọn
           // Cổng thì phải qua cầu dao ngân sách, máy nhà thì không — bỏ qua
           // bước này lúc đổi đích là mở một đường lách trần tiền.
           const verdict = await checkBudget('interactive');

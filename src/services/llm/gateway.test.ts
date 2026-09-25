@@ -21,6 +21,7 @@ import {
   baoRamboHong,
   baoRamboOk,
   endpointFor,
+  fallbackEndpoint,
   goiDuocModel,
   LLM_PURPOSES,
   modelFor,
@@ -220,6 +221,24 @@ test('lùi về modelapi: KHOÁ đi theo model lùi, không theo bản đồ', (
     assert.notEqual(endpointFor('chat_pro').key, 'sk-gia-lap-nhom-gpt', 'khoá không còn phân theo nhóm model');
   } finally {
     baoRamboOk();
+    for (const [t, gt] of luu) {
+      if (gt === undefined) delete process.env[t];
+      else process.env[t] = gt;
+    }
+  }
+});
+
+test('đường lùi lấy khoá theo NHÓM của model lùi, không lấy khoá mặc định', () => {
+  // 25/09/2026: nhánh "rambo hỏng" gửi gpt-5.6-sol bằng khoá nhóm claude ⇒
+  // 503 "No available channel … under group claude", trợ lý CT Work chết hẳn.
+  const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY_GPT'].map((t) => [t, process.env[t]] as const);
+  try {
+    process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-nhom-claude';
+    process.env.LLM_GATEWAY_API_KEY_GPT = 'sk-gia-lap-nhom-gpt';
+    assert.equal(fallbackEndpoint('gpt-5.6-sol').key, 'sk-gia-lap-nhom-gpt');
+    assert.equal(fallbackEndpoint('claude-sonnet-5').key, 'sk-gia-lap-nhom-claude');
+    assert.equal(fallbackEndpoint().key, 'sk-gia-lap-nhom-claude', 'không truyền model thì vẫn là khoá mặc định');
+  } finally {
     for (const [t, gt] of luu) {
       if (gt === undefined) delete process.env[t];
       else process.env[t] = gt;

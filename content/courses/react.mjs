@@ -3,25 +3,14 @@
  * Next.js; bổ trợ môn FER202 ở Academy. Xem _chung/khung.mjs.
  */
 import { khung } from './_chung/khung.mjs';
+import s01 from './react/s01-component.mjs';
 
-export default {
-  category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
-  course: {
-    slug: 'react',
-    title: 'React',
-    level: 'BEGINNER',
-    language: 'Vietnamese',
-    status: 'PUBLISHED',
-    isFeatured: false,
-    syncOrder: true,
-    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/react.png?v=1',
-    shortDescription: 'React from the ground up, the modern way: components, props and state, effects without bugs, forms, data fetching, performance, testing and TypeScript — the foundation Next.js assumes you already have.|||React từ gốc, theo cách hiện đại: component, props và state, effect không dính bug, form, lấy dữ liệu, hiệu năng, testing và TypeScript — nền móng mà Next.js giả định bạn đã có.',
-    description: 'Khoá React nền tảng với TypeScript và Vite. Đi từ JSX và component, props, state và cách React render lại, danh sách và key, sự kiện, form (kiểm soát, React Hook Form + Zod), effect và vòng đời (và vì sao bạn cần ít effect hơn bạn nghĩ), context và quản lý state (Zustand), lấy dữ liệu với TanStack Query, routing, hiệu năng (memo, lazy, đo bằng Profiler), khả năng tiếp cận, testing, tới dự án cuối khoá giao diện đặt lịch khám. Là nền trước khi học khoá Next.js.',
-    whatYouLearn: 'Chia giao diện thành component hợp lý; quản lý state đúng chỗ; viết effect không vòng lặp vô hạn; làm form có kiểm dữ liệu; lấy và cache dữ liệu từ API; tối ưu render khi cần; viết giao diện dễ tiếp cận; test component; và gõ TypeScript cho React tự tin.',
-    requirements: 'HTML, CSS, JavaScript cơ bản (khoá Web Foundations là đủ). Nên biết TypeScript cơ bản.',
-    documentsNote: 'Tài liệu chính: react.dev • vite.dev • tanstack.com/query • react-hook-form.com • zustand docs • testing-library.com.',
-  },
-  sections: khung('rx', [
+/*
+ * KHUNG (24/09/2026) — giữ NGUYÊN để biết slug/tiêu đề gốc; chương nào đã soạn chi tiết thì thay phần tử
+ * tương ứng trong `sections` bằng file chương thật (content/courses/react/sNN-*.mjs). Quy trình:
+ * content/courses/react/_HOP-DONG.md · kiểm: node scripts/rx-ghep-chuong.mjs <file chương> --render <dir>
+ */
+const K = khung('rx', [
     ['Section 0 — Why React', 'Mục 0 — Vì sao React', 'React giải quyết gì và cách học.', [
       ['bat-dau-tai-day', 'Start here (1/2) — What React is, where it came from, and why companies still hire for it', 'Bắt đầu tại đây (1/2) — React là gì, ra đời thế nào, vì sao công ty vẫn tuyển', 'UI là hàm của state · Lịch sử: Facebook 2013, Hooks 2019, React 19 · Hệ sinh thái · Câu hỏi phỏng vấn'],
       ['bat-dau-khi-khong-co', 'Start here (2/2) — Frontend without structure, and learning React without burnout', 'Bắt đầu tại đây (2/2) — Frontend không cấu trúc, và học React không kiệt sức', 'Giao diện lệch dữ liệu · Tình huống đồ án · Lộ trình học'],
@@ -88,5 +77,36 @@ export default {
       ['chat-luong', 'Polish: performance, a11y, tests', 'Hoàn thiện: hiệu năng, tiếp cận, test', 'Profiler · axe · Test'],
       ['tong-ket', 'Deploy and the checklist', 'Deploy và checklist', 'Build · Deploy tĩnh · Checklist cả khoá'],
     ]],
-  ]),
+]);
+
+export default {
+  category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
+  course: {
+    slug: 'react',
+    title: 'React',
+    level: 'BEGINNER',
+    language: 'Vietnamese',
+    status: 'PUBLISHED',
+    isFeatured: false,
+    syncOrder: true,
+    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/react.png?v=1',
+    shortDescription: 'React from the ground up, the modern way: components, props and state, effects without bugs, forms, data fetching, performance, testing and TypeScript — the foundation Next.js assumes you already have.|||React từ gốc, theo cách hiện đại: component, props và state, effect không dính bug, form, lấy dữ liệu, hiệu năng, testing và TypeScript — nền móng mà Next.js giả định bạn đã có.',
+    description: 'Khoá React nền tảng với TypeScript và Vite. Đi từ JSX và component, props, state và cách React render lại, danh sách và key, sự kiện, form (kiểm soát, React Hook Form + Zod), effect và vòng đời (và vì sao bạn cần ít effect hơn bạn nghĩ), context và quản lý state (Zustand), lấy dữ liệu với TanStack Query, routing, hiệu năng (memo, lazy, đo bằng Profiler), khả năng tiếp cận, testing, tới dự án cuối khoá giao diện đặt lịch khám. Là nền trước khi học khoá Next.js.',
+    whatYouLearn: 'Chia giao diện thành component hợp lý; quản lý state đúng chỗ; viết effect không vòng lặp vô hạn; làm form có kiểm dữ liệu; lấy và cache dữ liệu từ API; tối ưu render khi cần; viết giao diện dễ tiếp cận; test component; và gõ TypeScript cho React tự tin.',
+    requirements: 'HTML, CSS, JavaScript cơ bản (khoá Web Foundations là đủ). Nên biết TypeScript cơ bản.',
+    documentsNote: 'Tài liệu chính: react.dev • vite.dev • tanstack.com/query • react-hook-form.com • zustand docs • testing-library.com.',
+  },
+  sections: [
+    K[0],
+    s01,
+    K[2],
+    K[3],
+    K[4],
+    K[5],
+    K[6],
+    K[7],
+    K[8],
+    K[9],
+    K[10],
+  ],
 };

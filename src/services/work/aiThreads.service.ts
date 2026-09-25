@@ -53,7 +53,7 @@ function canSee(t: ThreadRow, userId: number): boolean {
 export async function visibleThread(userId: number, projectId: number, threadId: number) {
   const t = await prisma.workAiThread.findUnique({
     where: { id: threadId },
-    select: { id: true, projectId: true, createdById: true, visibility: true, deletedAt: true, issueNumber: true, title: true },
+    select: { id: true, projectId: true, createdById: true, visibility: true, deletedAt: true, issueNumber: true, title: true, mode: true },
   });
   if (!t || t.projectId !== projectId || !canSee(t, userId)) throw new NotFoundError('Conversation not found');
   return t;
@@ -65,7 +65,7 @@ export async function openThread(userId: number, access: ProjectAccess, input: {
   const title = clip(input.seed.replace(/\s+/g, ' ').trim() || 'New conversation', 160);
   return prisma.workAiThread.create({
     data: { projectId: access.projectId, createdById: userId, title, issueNumber: input.issueNumber ?? null },
-    select: { id: true, projectId: true, createdById: true, visibility: true, deletedAt: true, issueNumber: true, title: true },
+    select: { id: true, projectId: true, createdById: true, visibility: true, deletedAt: true, issueNumber: true, title: true, mode: true },
   });
 }
 
@@ -114,12 +114,12 @@ export async function clearFailed(messageId: number) {
 }
 
 /** Tạo hội thoại trống TRƯỚC câu hỏi đầu tiên — để câu đầu mà hỏng thì client vẫn biết hội thoại nào có nút "Retry". */
-export async function createThread(userId: number, projectId: number, input: { title: string; issueNumber?: number | null; visibility?: ThreadVisibility }) {
+export async function createThread(userId: number, projectId: number, input: { title: string; issueNumber?: number | null; visibility?: ThreadVisibility; mode?: 'CHAT' | 'DEFENSE' }) {
   await requireProject(userId, projectId, 'ai.use');
   const t = await prisma.workAiThread.create({
     data: {
       projectId, createdById: userId, title: clip(input.title.replace(/\s+/g, ' ').trim() || 'New conversation', 160),
-      issueNumber: input.issueNumber ?? null, visibility: input.visibility ?? 'PROJECT',
+      issueNumber: input.issueNumber ?? null, visibility: input.visibility ?? 'PROJECT', mode: input.mode ?? 'CHAT',
     },
     select: { id: true },
   });
@@ -156,7 +156,7 @@ export async function listThreads(userId: number, projectId: number, opts: { sco
   const rows = await prisma.workAiThread.findMany({
     where, orderBy: { lastMessageAt: 'desc' }, take: Math.min(opts.limit ?? 50, 100),
     select: {
-      id: true, title: true, visibility: true, issueNumber: true, messageCount: true, lastMessageAt: true, createdAt: true, createdById: true,
+      id: true, title: true, visibility: true, mode: true, issueNumber: true, messageCount: true, lastMessageAt: true, createdAt: true, createdById: true,
       createdBy: { select: AUTHOR_SELECT },
     },
   });
@@ -181,7 +181,7 @@ export async function getThread(userId: number, projectId: number, threadId: num
   const t = await prisma.workAiThread.findUniqueOrThrow({
     where: { id: threadId },
     select: {
-      id: true, title: true, visibility: true, issueNumber: true, messageCount: true, lastMessageAt: true, createdAt: true, createdById: true,
+      id: true, title: true, visibility: true, mode: true, issueNumber: true, messageCount: true, lastMessageAt: true, createdAt: true, createdById: true,
       createdBy: { select: AUTHOR_SELECT },
     },
   });

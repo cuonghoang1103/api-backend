@@ -712,7 +712,7 @@ router.post('/projects/:pid/ai/chat', asyncHandler(async (req, res) => {
 }));
 router.post('/projects/:pid/ai/quick', asyncHandler(async (req, res) => {
   const body = parse(z.object({
-    task: z.enum(['write_story', 'split', 'generate_tests', 'improve_bug', 'summarize', 'review_story', 'meeting_notes']),
+    task: z.enum(['write_story', 'split', 'generate_tests', 'improve_bug', 'summarize', 'review_story', 'meeting_notes', 'req_review', 'team_health']),
     issueNumber: id.nullable().optional(),
     text: z.string().max(20000).nullable().optional(),
     threadId: id.nullable().optional(),
@@ -725,6 +725,11 @@ router.post('/projects/:pid/ai/quick', asyncHandler(async (req, res) => {
 router.get('/projects/:pid/ai/threads', asyncHandler(async (req, res) => {
   const q = parse(z.object({ scope: z.enum(['all', 'mine']).optional(), q: z.string().max(200).optional() }), req.query);
   ok(res, await aiThreads.listThreads(callerId(req), idParam(req, 'pid'), q));
+}));
+// Luyện bảo vệ: tạo hội thoại chế độ DEFENSE, AI (hội đồng) hỏi câu đầu tiên.
+router.post('/projects/:pid/ai/defense', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ focus: z.string().max(8).nullable().optional(), visibility: z.enum(['PROJECT', 'PRIVATE']).optional() }), req.body ?? {});
+  ok(res, await ai.startDefense(callerId(req), idParam(req, 'pid'), body));
 }));
 router.post('/projects/:pid/ai/threads', asyncHandler(async (req, res) => {
   const body = parse(z.object({ title: z.string().min(1).max(2000), issueNumber: id.nullable().optional(), visibility: z.enum(['PROJECT', 'PRIVATE']).optional() }), req.body);

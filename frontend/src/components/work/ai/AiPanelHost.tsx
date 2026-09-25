@@ -20,7 +20,7 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeSanitize from 'rehype-sanitize';
 import { toast } from 'sonner';
-import { AlertTriangle, ArrowUp, History, Lock, RotateCcw, Search, Sparkles, Square, SquarePen, Trash2, Users, X } from 'lucide-react';
+import { Activity, AlertTriangle, ArrowUp, ClipboardCheck, GraduationCap, History, Lock, RotateCcw, Search, Sparkles, Square, SquarePen, Trash2, Users, X } from 'lucide-react';
 import {
   isAiQuotaError, workApi, workError, workErrorStatus,
   type AiMessage, type AiQuickTask, type AiQuota, type ProjectConfig,
@@ -31,7 +31,7 @@ import { wk } from '../hooks';
 import { relativeTime, Spinner, UserAvatar, WorkPortal } from '../ui';
 import { ActionGroup, type ActionItem } from './ActionCard';
 import UpgradeDialog from './UpgradeDialog';
-import { useAiPanel, type AiQuickRequest } from './store';
+import { openAiPanel, useAiPanel, type AiQuickRequest } from './store';
 
 // ─── Kiểu + lưu trữ ──────────────────────────────────────────────
 
@@ -47,6 +47,8 @@ export const QUICK_TITLES: Record<AiQuickTask, string> = {
   summarize: 'Summarize',
   review_story: 'Review story quality',
   meeting_notes: 'Meeting notes to tasks',
+  req_review: 'Requirement check before submitting',
+  team_health: 'Team health check',
 };
 
 /**
@@ -331,6 +333,32 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose, view]);
 
+  // ── Luyện bảo vệ: AI (hội đồng) mở buổi mới và hỏi câu đầu ──
+  const startDefense = useCallback(async (focus: string) => {
+    if (waiting) return;
+    const gen = ++waitGen.current;
+    setWaiting('Starting defense practice');
+    setUnavailable(false);
+    try {
+      const t = await workApi.aiStartDefense(pid, { focus });
+      qc.setQueryData(threadKey(pid, t.id), t);
+      selectThread(t.id);
+      setView('chat');
+      qc.invalidateQueries({ queryKey: threadsKey(pid) });
+      qc.invalidateQueries({ queryKey: QUOTA_KEY });
+    } catch (err) {
+      handleError(err);
+    } finally {
+      if (waitGen.current === gen) setWaiting(null);
+    }
+  }, [waiting, pid, qc, selectThread, handleError]);
+
+  /** Soát Req / sức khoẻ nhóm: số liệu do server tính, AI diễn giải — chạy như việc một chạm. */
+  const runTool = (task: 'req_review' | 'team_health') => {
+    if (waiting) return;
+    openAiPanel({ pid, quick: { task } });
+  };
+
   const newConversation = () => {
     if (waiting) return;
     selectThread(null);
@@ -428,6 +456,9 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
             {/* Thanh hội thoại: ai thấy được + quản lý */}
             {thread && (
               <div className="flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 py-1.5 text-[12px] text-[var(--w-text-2)]">
+                {thread.mode === 'DEFENSE' && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--w-accent-soft)] px-2 py-0.5 text-[11.5px] font-medium text-[var(--w-accent-text)]"><GraduationCap size={12} /> Defense practice</span>
+                )}
                 {thread.visibility === 'PRIVATE'
                   ? <span className="inline-flex items-center gap-1"><Lock size={12} /> Only you</span>
                   : <span className="inline-flex items-center gap-1"><Users size={12} /> Shared with the project</span>}
@@ -457,7 +488,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
               {threadId && !thread && threadQ.isLoading ? (
                 <div className="flex justify-center pt-10"><Spinner size={16} /></div>
               ) : !messages.length && !pendingQ && !waiting ? (
-                <EmptyState suggestions={suggestions} onPick={fill} disabled={aiOff} onBrowse={() => setView('history')} />
+                <EmptyState suggestions={suggestions} onPick={fill} disabled={aiOff} onBrowse={() => setView('history')} onTool={runTool} onDefense={startDefense} />
               ) : (
                 <div className="space-y-4">
                   {messages.map((m) => (m.role === 'user' ? (
@@ -550,7 +581,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                   disabled={!!waiting}
                   rows={3}
                   maxLength={8000}
-                  placeholder={thread ? 'Continue this conversation…' : issueKey ? `Ask about ${issueKey}…` : 'Ask anything about this project…'}
+                  placeholder={thread?.mode === 'DEFENSE' ? 'Type your answer to the panel…' : thread ? 'Continue this conversation…' : issueKey ? `Ask about ${issueKey}…` : 'Ask anything about this project…'}
                   aria-label="Message the AI assistant"
                   className="max-h-[200px] min-h-[64px] flex-1 resize-none bg-transparent px-1.5 py-1 text-[13.5px] leading-relaxed text-[var(--w-text)] outline-none placeholder:text-[var(--w-text-3)] disabled:opacity-60"
                 />
@@ -745,7 +776,13 @@ function Typing({ label, onCancel }: { label: string; onCancel: () => void }) {
   );
 }
 
-function EmptyState({ suggestions, onPick, disabled, onBrowse }: { suggestions: string[]; onPick: (s: string) => void; disabled?: boolean; onBrowse?: () => void }) {
+const DEFENSE_FOCUS: Array<[string, string]> = [['me', 'My screens'], ['C1', 'C1'], ['C2', 'C2'], ['C3', 'C3'], ['C4', 'C4'], ['C5', 'C5'], ['all', 'Whole project']];
+
+function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense }: {
+  suggestions: string[]; onPick: (s: string) => void; disabled?: boolean; onBrowse?: () => void;
+  onTool?: (task: 'req_review' | 'team_health') => void; onDefense?: (focus: string) => void;
+}) {
+  const [picking, setPicking] = useState(false);
   return (
     <div className="flex flex-col items-center px-2 pt-6 text-center">
       <span className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]">
@@ -768,6 +805,44 @@ function EmptyState({ suggestions, onPick, disabled, onBrowse }: { suggestions: 
           </button>
         ))}
       </div>
+      {(onTool || onDefense) && (
+        <div className="mt-5 w-full text-left">
+          <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--w-text-3)]">Project tools</div>
+          <div className="flex flex-col gap-1.5">
+            {onDefense && (
+              <div className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)]">
+                <button type="button" disabled={disabled} onClick={() => setPicking((v) => !v)} aria-expanded={picking}
+                  className="flex w-full items-start gap-2.5 px-3 py-2 text-left hover:bg-[var(--w-hover)] disabled:opacity-50">
+                  <GraduationCap size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
+                  <span><span className="block text-[13px] font-medium">Practice the defense</span><span className="block text-[12px] text-[var(--w-text-2)]">The AI plays the 2-lecturer panel: one question at a time, a score out of 10, what was missing and a model answer.</span></span>
+                </button>
+                {picking && (
+                  <div className="flex flex-wrap gap-1.5 border-t border-[var(--w-border)] px-3 py-2">
+                    <span className="w-full text-[11.5px] text-[var(--w-text-3)]">Whose screens should the panel ask about?</span>
+                    {DEFENSE_FOCUS.map(([v, label]) => (
+                      <button key={v} type="button" onClick={() => { setPicking(false); onDefense(v); }} className="inline-flex h-7 items-center rounded-full border border-[var(--w-border)] px-2.5 text-[12.5px] hover:border-[var(--w-accent-border)] hover:bg-[var(--w-accent-soft)]">{label}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            {onTool && (
+              <>
+                <button type="button" disabled={disabled} onClick={() => onTool('req_review')}
+                  className="flex items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-left hover:bg-[var(--w-hover)] disabled:opacity-50">
+                  <ClipboardCheck size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
+                  <span><span className="block text-[13px] font-medium">Check requirements before submitting</span><span className="block text-[12px] text-[var(--w-text-2)]">Finds every Req in this iteration missing a PIC, unhappy cases, Quality L2, Evidence or finished SRS/SDS/Code/Test — and what to fix first.</span></span>
+                </button>
+                <button type="button" disabled={disabled} onClick={() => onTool('team_health')}
+                  className="flex items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-left hover:bg-[var(--w-hover)] disabled:opacity-50">
+                  <Activity size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
+                  <span><span className="block text-[13px] font-medium">Team health check</span><span className="block text-[12px] text-[var(--w-text-2)]">Who is behind on planned LOC, work stuck for 3+ days with no commits, and overdue issues.</span></span>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
       {onBrowse && (
         <button type="button" onClick={onBrowse} className="mt-4 inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[var(--w-accent-text)] hover:underline">
           <History size={13} /> See what your team already asked

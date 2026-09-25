@@ -28,6 +28,7 @@ import { projectMembers } from './projects.service.js';
 import { bulkUpdate, computeSprintReport, estimateOf, estimationOf } from './sprints.service.js';
 import { createTest } from './tests.service.js';
 import * as threads from './aiThreads.service.js';
+import { defenseScope, reqReviewFacts, teamHealthFacts } from './aiInsights.service.js';
 
 // ─── Hạn mức ─────────────────────────────────────────────────────
 
@@ -300,6 +301,23 @@ export async function chat(
   const userMsg = retry ? null : await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: input.message, issueNumber: input.issueNumber ?? null });
   const questionId = retry?.id ?? userMsg!.id;
   if (retry) await threads.clearFailed(retry.id);
+
+  // Chế độ luyện bảo vệ: AI là hội đồng — chấm câu vừa trả lời rồi hỏi câu kế. Không đề xuất thay đổi gì.
+  if (thread.mode === 'DEFENSE') {
+    const lbl = /·\s*(C[1-5]|my screens|whole project)\s*$/i.exec(thread.title)?.[1] ?? 'whole project';
+    const focusTag = /^C[1-5]$/i.test(lbl) ? lbl.toUpperCase() : lbl.toLowerCase() === 'my screens' ? 'me' : 'all';
+    const scope = await defenseScope(projectId, userId, focusTag);
+    let reply: string;
+    try {
+      reply = parseJson(await ask(userId, defenseSystem(ctx.project.name, scope), `${history ? `Session so far:\n${history}\n\n` : ''}Student @${me.username} answers: ${input.message}`, 2500), z.object({ reply: z.string() })).reply;
+    } catch (err) {
+      await threads.markFailed(questionId, err);
+      throw err;
+    }
+    const answer = await threads.addMessage(thread.id, { role: 'assistant', title: 'Panel', content: reply });
+    return { reply, actions: [], quota: await aiQuota(userId), threadId: thread.id, question: userMsg, answer };
+  }
+
   const system = `You are the CT Work project assistant — a senior Scrum master, business analyst and QA lead in one.
 You help a team manage their project (software school projects like SWP391/SWR302/SWT301, freelance and company work).
 You can read the project context below. Be concrete, short and practical. Use Markdown in "reply" (short lists, bold key facts). ${LANG_RULE}
@@ -326,7 +344,7 @@ Return ONLY JSON: {"reply":"markdown","actions":[…]}`;
 
 // ─── Việc một chạm ───────────────────────────────────────────────
 
-export type QuickTask = 'write_story' | 'split' | 'generate_tests' | 'improve_bug' | 'summarize' | 'review_story' | 'meeting_notes';
+export type QuickTask = 'write_story' | 'split' | 'generate_tests' | 'improve_bug' | 'summarize' | 'review_story' | 'meeting_notes' | 'req_review' | 'team_health';
 
 const QUICK_PROMPTS: Record<QuickTask, string> = {
   write_story: 'Turn the user\'s idea into ONE well-formed user story: title "As a <role>, I want <goal> so that <benefit>" (or a short imperative title if that reads better), a description, 3–7 testable acceptance criteria (Given/When/Then or checklist) and a Fibonacci story point estimate. Propose it as a create_issue action.',
@@ -336,25 +354,73 @@ const QUICK_PROMPTS: Record<QuickTask, string> = {
   summarize: 'Summarise the focused issue and its discussion in at most 6 bullet points: current state, decisions, open questions, blockers, next step. No actions.',
   review_story: 'Review the focused story against INVEST (Independent, Negotiable, Valuable, Estimable, Small, Testable) and check whether each acceptance criterion is testable. Give a score out of 10 per letter in a small table, list concrete problems, and propose ONE update_issue action with an improved description only if it clearly helps.',
   meeting_notes: 'The user pasted meeting notes. Extract every concrete task/decision into create_issue actions (assign owners only if a member username is clearly mentioned, set due dates only if stated). In "reply" give a short summary of the meeting: decisions, action items, open questions.',
+  req_review: 'You are checking SWP391 requirements (screens) before the iteration is submitted to the lecturer. The facts block lists every requirement with problems COMPUTED BY CODE — never change a number or invent a problem. In "reply": 1) one line: how many are ready vs not and days left; 2) a short "Fix first" list ordered by impact on grading (missing unhappy cases / Quality below L2 lose the most LOC; missing Evidence blocks Done; unfinished SRS/SDS blocks the document package), grouped by PIC, each item naming the issue key; 3) one line on what is already good. Use short Markdown. Write in Vietnamese (keep issue keys and technical terms as they are). Propose NO actions.',
+  team_health: 'You are the team lead reviewing progress. The facts block is COMPUTED BY CODE — never change numbers. In "reply": 1) a one-line verdict for the iteration; 2) who is BEHIND and by how much, with one concrete next step each (name the issue keys); 3) stale and overdue work to unblock first; 4) at most 3 suggestions for the lead. Be direct and kind; no blame. Use short Markdown. Write in Vietnamese (keep issue keys and technical terms as they are). Propose NO actions.',
 };
 
 const QUICK_LABELS: Record<QuickTask, string> = {
   write_story: 'Write a user story', split: 'Split into sub-tasks', generate_tests: 'Generate test cases',
   improve_bug: 'Improve bug report', summarize: 'Summarize', review_story: 'Review story quality', meeting_notes: 'Meeting notes to tasks',
+  req_review: 'Requirement check before submitting', team_health: 'Team health check',
 };
+
+/** Hội đồng bảo vệ SWP391 — hỏi một câu, chấm câu trả lời, hỏi câu kế. */
+function defenseSystem(projectName: string, scope: string): string {
+  return `You are the SWP391 FINAL DEFENSE PANEL for the project "${projectName}": two lecturers who are NOT the class teacher.
+Grading weights: Team working 20%, Product/implementation 40%, Requirement analysis 20%, Software design 20%. Passing needs 5/10.
+The student defends THESE screens/functions (their own work):
+${scope}
+How to run the session:
+- Ask exactly ONE question per turn. Rotate topics: requirements & business rules, use cases & screen flow, database design & ERD, state machines, transactions & concurrency (e.g. two users booking the same slot), security & authorization, testing (unhappy cases, test cases, defects vs leakage), deployment, teamwork & Git, responsible AI use. Prefer questions about THEIR screens; sometimes ask "show me the code / table / test for X".
+- After each answer: give "**Score: n/10**", then "**Good:**" (1–2 points), "**Missing:**" (what a strict lecturer would still expect), "**Model answer:**" (3–5 lines, concrete, in the student's language), then "**Next question:**".
+- If the answer is vague, a follow-up that digs deeper counts as the next question. If the student says they don't know, show the model answer and move on kindly.
+- Never invent facts about their code; when you need a detail, ask them.
+LANGUAGE: speak Vietnamese by default (the student defends at FPT University); keep technical terms in English. Switch to English only if the student answers in English.
+Return ONLY JSON: {"reply":"markdown"}`;
+}
+
+/**
+ * Bắt đầu một buổi luyện bảo vệ: tạo hội thoại chế độ DEFENSE, AI mở màn + hỏi câu 1.
+ * focus: C1…C5 (vai) · 'me' (việc giao cho mình) · 'all'.
+ */
+export async function startDefense(userId: number, projectId: number, input: { focus?: string | null; visibility?: 'PROJECT' | 'PRIVATE' }) {
+  await requireProject(userId, projectId, 'ai.use');
+  const focus = /^(C[1-5]|me|all)$/i.test(input.focus ?? '') ? String(input.focus) : 'me';
+  const label = focus === 'me' ? 'my screens' : focus === 'all' ? 'whole project' : focus.toUpperCase();
+  const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { name: true } });
+  const t = await threads.createThread(userId, projectId, { title: `Defense practice · ${label}`, visibility: input.visibility ?? 'PRIVATE', mode: 'DEFENSE' });
+  const me = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { username: true } });
+  const scope = await defenseScope(projectId, userId, focus);
+  const kickoff = await threads.addMessage(t.id, { role: 'user', authorId: userId, content: `Bắt đầu luyện bảo vệ (${focus === 'me' ? 'màn hình của em' : focus === 'all' ? 'cả dự án' : focus.toUpperCase()}).` });
+  let reply: string;
+  try {
+    reply = parseJson(await ask(userId, defenseSystem(project.name, scope), `Student @${me.username} is ready. Greet them in one line, say how the session works in one line, then ask the first question.`, 1200), z.object({ reply: z.string() })).reply;
+  } catch (err) {
+    await threads.markFailed(kickoff.id, err);
+    throw err;
+  }
+  await threads.addMessage(t.id, { role: 'assistant', title: 'Panel', content: reply });
+  return threads.getThread(userId, projectId, t.id);
+}
 
 export async function quick(userId: number, projectId: number, input: { task: QuickTask; issueNumber?: number | null; text?: string | null; threadId?: number | null; label?: string | null }) {
   const access = await requireProject(userId, projectId, 'ai.use');
   const needsIssue = ['split', 'generate_tests', 'improve_bug', 'summarize', 'review_story'].includes(input.task);
   if (needsIssue && !input.issueNumber) throw new BadRequestError('Choose an issue first', 'WORK_AI_NEEDS_ISSUE');
-  if (!needsIssue && !input.text?.trim()) throw new BadRequestError('Write something for the AI to work with', 'WORK_AI_NEEDS_TEXT');
+  const computed = input.task === 'req_review' || input.task === 'team_health';
+  if (!needsIssue && !computed && !input.text?.trim()) throw new BadRequestError('Write something for the AI to work with', 'WORK_AI_NEEDS_TEXT');
   const focus = input.issueNumber ? await issueContext(projectId, access.key, input.issueNumber) : null;
   const ctx = await projectContext(access, `${input.text ?? ''} ${focus?.issue.title ?? ''}`);
   const system = `You are the CT Work project assistant (senior BA, Scrum master and QA lead). ${LANG_RULE}
 ${QUICK_PROMPTS[input.task]}
 ${ACTIONS_DOC}
 Return ONLY JSON: {"reply":"short markdown explanation","actions":[…]}`;
-  const user = `${ctx.text}${focus ? `\n\nFocused issue:\n${focus.text}` : ''}${input.text ? `\n\nUser input:\n${clip(input.text, 12000)}` : ''}`;
+  // Soát Req / sức khoẻ nhóm: số liệu do MÃ tính, model chỉ diễn giải (text = tên iteration nếu muốn chọn).
+  const facts = input.task === 'req_review' ? (await reqReviewFacts(projectId, input.text)).text
+    : input.task === 'team_health' ? (await teamHealthFacts(projectId)).text : null;
+  const user = facts
+    ? `Facts (computed by code):\n${facts}\n\nToday is ${new Date().toISOString().slice(0, 10)}.`
+    : `${ctx.text}${focus ? `\n\nFocused issue:\n${focus.text}` : ''}${input.text ? `\n\nUser input:\n${clip(input.text, 12000)}` : ''}`;
   // Việc một chạm cũng vào hội thoại: một dòng "câu hỏi" mô tả việc đã bấm + câu trả lời có tiêu đề.
   const label = (input.label?.trim() || QUICK_LABELS[input.task]).slice(0, 120);
   const asked = `${label}${input.issueNumber ? ` · ${access.key}-${input.issueNumber}` : ''}${input.text ? `\n\n${clip(input.text, 4000)}` : ''}`;

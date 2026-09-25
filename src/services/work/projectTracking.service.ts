@@ -47,8 +47,18 @@ function display(field: Field | undefined, value: unknown): string | number | nu
   return String(value);
 }
 
-export async function projectTrackingXlsx(userId: number, projectId: number): Promise<{ file: string; buffer: Buffer; count: number }> {
-  await requireProject(userId, projectId, 'project.view');
+/** Một Req đã đọc xong — dùng chung cho file Project Tracking, soát Req và sức khoẻ nhóm. */
+export interface ReqRow {
+  number: number; key: string; screen: string; title: string; wf: string; iteration: string; pic: string;
+  assignee: string; assigneeId: number | null; complexity: string | number; planned: string | number | null;
+  quality: string | number; graded: string | number | null; status: string; category: string; done: boolean;
+  phases: string[]; evidence: string | number; resolved: string; updated: string; updatedAt: Date; dueDate: Date | null;
+  unhappyCount: number; descriptionLength: number;
+  version: { name: string; startDate: Date | null; releaseDate: Date | null } | null;
+}
+
+/** Đọc mọi Req của dự án (nhãn Req hoặc có Screen ID) — KHÔNG kiểm quyền, nơi gọi phải kiểm. */
+export async function loadRequirements(projectId: number): Promise<{ project: { key: string; name: string }; rows: ReqRow[] }> {
   const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true, name: true } });
   const fields: Field[] = await prisma.workCustomField.findMany({ where: { projectId }, select: { id: true, name: true, kind: true, options: true } });
   const f = (name: string) => fields.find((x) => x.name.trim().toLowerCase() === name.toLowerCase());
@@ -64,10 +74,10 @@ export async function projectTrackingXlsx(userId: number, projectId: number): Pr
     },
     orderBy: { number: 'asc' },
     select: {
-      number: true, title: true, updatedAt: true, resolvedAt: true,
+      number: true, title: true, updatedAt: true, resolvedAt: true, dueDate: true, assigneeId: true, descriptionText: true,
       status: { select: { name: true, category: true } },
       assignee: { select: { username: true, fullName: true, displayName: true } },
-      fixVersion: { select: { name: true } },
+      fixVersion: { select: { name: true, startDate: true, releaseDate: true } },
       labels: { select: { label: { select: { name: true } } } },
       customValues: { select: { fieldId: true, value: true } },
       children: { where: { deletedAt: null }, select: { title: true, status: { select: { category: true } } } },
@@ -75,7 +85,7 @@ export async function projectTrackingXlsx(userId: number, projectId: number): Pr
   });
 
   const val = (it: (typeof issues)[number], field: Field | undefined) => display(field, it.customValues.find((c) => c.fieldId === field?.id)?.value);
-  const rows = issues.map((it) => {
+  const rows: ReqRow[] = issues.map((it) => {
     const labels = it.labels.map((l) => l.label.name);
     const iteration = it.fixVersion?.name ?? labels.find((l) => /^iter\d+$/i.test(l)) ?? '';
     const pic = (val(it, F.ws) as string | null) ?? (it.assignee ? displayName(it.assignee) : '');
@@ -83,20 +93,33 @@ export async function projectTrackingXlsx(userId: number, projectId: number): Pr
       const sub = it.children.find((c) => re.test(c.title.trim()));
       return sub ? CATEGORY_TEXT[sub.status.category] ?? sub.status.category : '';
     });
-    const title = it.title.replace(/^\s*[SN]\d{1,3}\s+/, ''); // "S22 Create reservation…" ⇒ bỏ mã màn ở đầu (đã có cột Screen ID)
+    const desc = it.descriptionText ?? '';
     return {
+      number: it.number,
       screen: (val(it, F.screen) as string | null) ?? (/^\s*([SN]\d{1,3})\s/.exec(it.title)?.[1] ?? ''),
-      title, key: `${project.key}-${it.number}`,
+      title: it.title.replace(/^\s*[SN]\d{1,3}\s+/, ''), key: `${project.key}-${it.number}`,
       wf: labels.find((l) => /^WF\d$/i.test(l)) ?? '',
       iteration, pic,
-      assignee: it.assignee ? displayName(it.assignee) : '',
+      assignee: it.assignee ? displayName(it.assignee) : '', assigneeId: it.assigneeId,
       complexity: val(it, F.cx) ?? '', planned: val(it, F.planned), quality: val(it, F.quality) ?? '', graded: val(it, F.graded),
-      status: it.status.name, done: it.status.category === 'DONE',
+      status: it.status.name, category: it.status.category, done: it.status.category === 'DONE',
       phases,
       evidence: val(it, F.evidence) ?? '',
-      resolved: fmtDate(it.resolvedAt), updated: fmtDate(it.updatedAt),
+      resolved: fmtDate(it.resolvedAt), updated: fmtDate(it.updatedAt), updatedAt: it.updatedAt, dueDate: it.dueDate,
+      // Chỉ đếm DÒNG tiêu chí "Unhappy: …" (mẫu Req) — không đếm chữ unhappy trong câu giải thích Quality.
+      unhappyCount: (desc.match(/(^|\n)\s*unhappy\s*:/gi) ?? []).length,
+      descriptionLength: desc.trim().length,
+      version: it.fixVersion ? { name: it.fixVersion.name, startDate: it.fixVersion.startDate, releaseDate: it.fixVersion.releaseDate } : null,
     };
   });
+  return { project, rows };
+}
+
+export const PHASE_LABELS = PHASES.map(([l]) => l);
+
+export async function projectTrackingXlsx(userId: number, projectId: number): Promise<{ file: string; buffer: Buffer; count: number }> {
+  await requireProject(userId, projectId, 'project.view');
+  const { project, rows } = await loadRequirements(projectId);
 
   const product = {
     name: 'Product',

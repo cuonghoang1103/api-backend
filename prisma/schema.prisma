@@ -10600,6 +10600,8 @@ model WorkAiThread {
   createdById   Int?      @map("created_by_id")
   title         String    @db.VarChar(160)
   visibility    String    @default("PROJECT") @db.VarChar(12)
+  /// CHAT (mặc định) | DEFENSE (AI đóng vai hội đồng bảo vệ, hỏi–chấm từng câu)
+  mode          String    @default("CHAT") @db.VarChar(12)
   issueNumber   Int?      @map("issue_number")
   messageCount  Int       @default(0) @map("message_count")
   lastMessageAt DateTime  @default(now()) @map("last_message_at")

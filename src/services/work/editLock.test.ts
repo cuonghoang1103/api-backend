@@ -5,7 +5,7 @@ import { isAllowedWhileLocked } from './editLock.service.js';
 
 test('vẫn cho: bình luận, cảm xúc, theo dõi, hỏi AI, hội thoại AI, bỏ qua đề xuất, bộ lọc', () => {
   for (const p of ['/edit-lock', '/issues/17/comments', '/issues/17/comments/5', '/issues/17/comments/5/reactions/%F0%9F%91%8D', '/issues/17/comments/5/report',
-    '/issues/17/watch', '/ai/chat', '/ai/quick', '/ai/threads', '/ai/threads/4', '/ai/messages/9/retry', '/ai/messages/9/actions/0', '/filters', '/filters/3', '/dashboards/2']) {
+    '/issues/17/watch', '/ai/chat', '/ai/quick', '/ai/defense', '/ai/threads', '/ai/threads/4', '/ai/messages/9/retry', '/ai/messages/9/actions/0', '/filters', '/filters/3', '/dashboards/2']) {
     assert.equal(isAllowedWhileLocked(p), true, p);
   }
 });

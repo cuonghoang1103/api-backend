@@ -435,11 +435,11 @@ export interface AiMessage {
 }
 export type AiThreadVisibility = 'PROJECT' | 'PRIVATE';
 export interface AiThreadSummary {
-  id: number; title: string; visibility: AiThreadVisibility; issueNumber: number | null; messageCount: number;
+  id: number; title: string; visibility: AiThreadVisibility; mode?: 'CHAT' | 'DEFENSE'; issueNumber: number | null; messageCount: number;
   lastMessageAt: string; createdAt: string; createdById: number | null; createdBy: WorkUser | null; participants: WorkUser[]; mine: boolean;
 }
 export interface AiThread extends Omit<AiThreadSummary, 'participants' | 'mine'> { canManage: boolean; messages: AiMessage[] }
-export type AiQuickTask = 'write_story' | 'split' | 'generate_tests' | 'improve_bug' | 'summarize' | 'review_story' | 'meeting_notes';
+export type AiQuickTask = 'write_story' | 'split' | 'generate_tests' | 'improve_bug' | 'summarize' | 'review_story' | 'meeting_notes' | 'req_review' | 'team_health';
 export interface AiFilterResult {
   filter: { status: number[]; type: number[]; assignee: number[]; label: number[]; sprint?: number | 'backlog'; q?: string; includeDone?: boolean };
   explanation: string | null; quota: AiQuota;
@@ -791,6 +791,9 @@ export const workApi = {
   aiThreads: (pid: number, params: { scope?: 'all' | 'mine'; q?: string }) =>
     d<AiThreadSummary[]>(api.get(`${B}/projects/${pid}/ai/threads`, { params })),
   aiThread: (pid: number, tid: number) => d<AiThread>(api.get(`${B}/projects/${pid}/ai/threads/${tid}`)),
+  /** Luyện bảo vệ: AI (hội đồng) mở buổi và hỏi câu đầu. focus = C1…C5 | 'me' | 'all'. */
+  aiStartDefense: (pid: number, body: { focus: string; visibility?: AiThreadVisibility }) =>
+    d<AiThread>(api.post(`${B}/projects/${pid}/ai/defense`, body, { timeout: 120_000 })),
   aiCreateThread: (pid: number, body: { title: string; issueNumber?: number | null; visibility?: AiThreadVisibility }) =>
     d<AiThread>(api.post(`${B}/projects/${pid}/ai/threads`, body)),
   aiUpdateThread: (pid: number, tid: number, body: { title?: string; visibility?: AiThreadVisibility }) =>

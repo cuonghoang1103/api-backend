@@ -24,7 +24,7 @@ const ALLOWED_WHILE_LOCKED: RegExp[] = [
   /^\/edit-lock$/,
   /^\/issues\/\d+\/comments(\/\d+)?(\/reactions\/[^/]+|\/report)?$/,
   /^\/issues\/\d+\/watch$/,
-  /^\/ai\/(chat|quick|filter|weekly-report|plan-sprint|retro|daily-brief)$/,
+  /^\/ai\/(chat|quick|filter|weekly-report|plan-sprint|retro|daily-brief|defense)$/,
   /^\/ai\/threads(\/\d+)?$/,
   /^\/ai\/messages\/\d+\/retry$/,
   /^\/ai\/messages\/\d+\/actions\/\d+$/, // bỏ qua / khôi phục đề xuất — KHÔNG phải /apply

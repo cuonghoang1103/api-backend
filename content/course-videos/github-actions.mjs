@@ -50,6 +50,7 @@ export default {
     'ga-2-5-ma-tran': { yt: 'Pj23Yy6J3oA', credit: "Sumanshu Nankana — GitHub # 0011 # GitHub Actions - Strategy Matrix (Run Job on Multiple Versions) and Fail Fast" },
 
     /* ── Chương 3 — Biểu thức, context, và lúc nào thứ gì tồn tại ── */
+    'ga-3-0-slides': { yt: 'MdjyWei7ZKo', credit: "ExamPro — Expressions Follow Along: Advanced Expression Usage – GitHub Actions Course" },
     'ga-3-1-ranh-gioi': { yt: 'y8eJTk4lPks', credit: "Execute Automation — Part 5 - Understanding Context and Env variables with ${{ Expression }}" },
     'ga-3-2-context': { yt: 'zI7WVWe9bHM', credit: "Testing Mini Bytes — Part 4 | Contexts | Different Contexts in Github Actions | How to use Contexts in GIthub Actions |" },
     'ga-3-3-ep-kieu': { yt: 'Br6vyKKCwr4', credit: "Infrasity — Github Action If-else Statement" },
@@ -57,6 +58,7 @@ export default {
     'ga-3-5-dieu-kien': { yt: 'swS_7tMqHE0', credit: "Daminda Dinesh Imaduwa Gamage — GitHub Actions conditionals : how \"if\" works" },
 
     /* ── Chương 4 — Action, và chuyện chạy mã của người khác ── */
+    'ga-4-0-slides': { yt: 'W-1Zf8lrdxU', credit: "glich.stream — E5 - GitHub Actions: Write custom Javascript & Docker actions || Beginner Friendly" },
     'ga-4-1-action-la-gi': { yt: 'JYOGmLzMbpM', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 4 - The GitHub Marketplace" },
     'ga-4-2-ghim': { yt: '8uQLyErG4EE', credit: "bdougie — Ensure your GitHub Actions are pinned to a SHA" },
     'ga-4-3-checkout': { yt: 'nAK3mFRxfFA', credit: "DevOps Hint — How to use actions/checkout in GitHub Actions | GitHub - jobs : what is : use actions/checkout" },
@@ -64,6 +66,7 @@ export default {
     'ga-4-5-tu-viet': { yt: 'zQdEsIBbVjE', credit: "Mickey Gousset — Create Your First Custom GitHub Action" },
 
     /* ── Chương 5 — Cache và artifact, đo thật ── */
+    'ga-5-0-slides': { yt: 'yaN-NyTbx2w', credit: "Testing Mini Bytes — Part 8 | Reduce workflow time | Caching Maven | Caching Docker Image Layers | Github Actions" },
     'ga-5-1-cache-mua-gi': { yt: 'BDQivAobxKA', credit: "CoderDave — Caching Dependencies to SPEED UP Workflows in GitHub Actions" },
     'ga-5-2-khoa-cache': { yt: 'lkn3FPRh5ps', credit: "Cameron McKenzie — Cache GitHub Actions Workflow Dependencies" },
     'ga-5-3-cache-chet': { yt: '7PVUjRXUY0o', credit: "Mickey Gousset — Cache Management with GitHub actions" },
@@ -71,6 +74,7 @@ export default {
     'ga-5-5-hoa-von': { yt: 'tw9e61Bct-E', credit: "Cloud With VarJosh — GitHub Actions Artifacts & Caching Explained | Share Files & Optimize Builds" },
 
     /* ── Chương 6 — Bí mật, quyền, và cái token ── */
+    'ga-6-0-slides': { yt: 'MpTqyYyvHk0', credit: "semgrep — Common Vulnerabilities in GitHub Actions - And How to Protect Against Them" },
     'ga-6-1-che-bi-mat': { yt: 'TLB5MY9BBa4', credit: "CoderDave — GitHub Actions Tutorial | From Zero to Hero in 90 minutes (Environments, Secrets, Runners, etc)" },
     'ga-6-2-token': { yt: 'jEK07KPEjnY', credit: "CoderDave — GitHub Actions: GITHUB_TOKEN Explained | How it works, Change Permissions, Customizations" },
     'ga-6-3-oidc': { yt: 'Sdzd4N6L5Hg', credit: "Integrations Ninjas — Authenticate GitHub Actions with AWS Using OIDC — No Secrets Needed" },
@@ -78,6 +82,7 @@ export default {
     'ga-6-5-soat': { yt: 'ntZwaRzhVSA', credit: "HashiCorp, an IBM Company — Building Scalable Enterprise Secrets Management with GitHub OIDC and HashiCorp Vault" },
 
     /* ── Chương 7 — Tốc độ, concurrency, và cái giá của nó ── */
+    'ga-7-0-slides': { yt: 'PZ_A0QiLvz8', credit: "Mickey Gousset — GitHub Actions: Concurrency" },
     'ga-7-1-duong-toi-han': { yt: 'reRT-uZoJpk', credit: "DevTips Daily — Matrix Builds & Parallel Jobs in GitHub Actions | Speed Up Your CI/CD!" },
     'ga-7-2-concurrency': { yt: 'yAb8OSYCHTc', credit: "DevStoriesEU — GitHub Actions · 7/14 · Controlling Flow with Concurrency" },
     'ga-7-3-phuong-sai': { yt: 'FSQDtRMtSHo', credit: "Techi Nik — GitHub Actions Matrix Strategy: Run Jobs Faster & Smarter" },
@@ -85,6 +90,7 @@ export default {
     'ga-7-5-gia-tri': { yt: 'AHIaVb22U2o', credit: "LearnwithDevOpsEngineer — GitHub Actions Is NOT Free | Pricing Explained + Self-Hosted Runners & Jenkins Comparison" },
 
     /* ── Chương 8 — Khi CI đỏ ── */
+    'ga-8-0-slides': { yt: 'HWGot0-P1Ps', credit: "dotslashrun — Debugging GitHub Actions - GitHub Hosted Runners with tmate" },
     'ga-8-1-ma-thoat': { yt: 'Y8KdR-AyyyA', credit: "Jonathan Soma — Fix \"Error: Process completed with exit code\" errors on GitHub Actions" },
     'ga-8-2-flake': { yt: 'Mhe-quHWe60', credit: "Semaphore — 3 Steps to Fix Flaky Tests" },
     'ga-8-3-tai-lap': { yt: 'OW121yjV1IM', credit: "Society of Research Software Engineering — Pascal Führlich: Debugging GitHub Actions Locally" },
@@ -92,6 +98,7 @@ export default {
     'ga-8-5-kiem-ban-va': { yt: 'Oqq-_QZWzhg', credit: "Cypress.io — GitHub Actions + Cypress: Debugging Test Failures in CI" },
 
     /* ── Chương 9 — Deploy từ CI, và vì sao kho này ĐÃ THÔI ── */
+    'ga-9-0-slides': { yt: 'w_37LDOy4sI', credit: "CoderDave — GitHub Actions: Approvals, Environments and Visualization DEEP DIVE" },
     'ga-9-1-push-de-deploy': { yt: 'X3F3El_yvFg', credit: "Traversy Media — Automatic Deployment With Github Actions" },
     'ga-9-2-o-dau': { yt: 'NIAEruc-eP8', credit: "Learn Code With Durgesh — 🚀 Complete CI/CD Pipeline Tutorial with GitHub Actions & Docker | DevOps Masterclass" },
     'ga-9-3-rollback': { yt: 'sVl6De94evo', credit: "Hello World — Multi-stage deployments with GitHub Actions" },
@@ -99,13 +106,43 @@ export default {
     'ga-9-5-thong-bao': { yt: 'cNcorU57m94', credit: "DevTips Daily — Send Slack Notifications from GitHub Actions | Pass/Fail Alerts" },
 
     /* ── Chương 10 — Chẩn đoán bằng ca thật ── */
+    'ga-10-0-slides': { yt: '_u03uI-zCCk', credit: "Google Cloud Tech — What are smoke tests? | Serverless Reliability" },
     'ga-10-1-build-cu': { yt: 'lEcULR30-GM', credit: "freeCodeCamp.org — Master Full-Stack Docker & CI/CD – Build a Production-Ready Pipeline" },
     'ga-10-2-seed-vo': { yt: 'PX881bVAPxM', credit: "Neon Postgres — Prisma essentials: from development to production (Prisma Migrate workflow)" },
     'ga-10-3-checker-hong': { yt: 'm1oMj29P--Y', credit: "Modern Software Engineering — 3 Reasons Your CI/CD Pipeline Isn't Working As It Should..." },
     'ga-10-4-diet-cong': { yt: 'ZZxhzr3GGlY', credit: "Mickey Gousset — The actions/checkout action fails with two possible error messages" },
     'ga-10-5-migration': { yt: '0Ik45qw8KhM', credit: "fromDev2Dev — Let's learn Prisma ORM: migrate in detail (seeding, down migration, production)" },
 
-    /* ── Chương 11 — Ôn tổng và kỳ thi cuối ── */
+    /* ── Chương 11 — Ôn tổng giữa khoá: Chương 1–10 ── */
     'ga-11-1-chot': { yt: 'BQrohJ3PT7I', credit: "GitHub — How to use GitHub Actions | GitHub for Beginners" },
+    'ga-11-0-slides': { yt: 'Tz7FsunBbfQ', credit: "freeCodeCamp.org — GitHub Actions Certification – Full Course to PASS the Exam" },
+
+    /* ── Chương 12 — Tái sử dụng ở quy mô đội: workflow dùng lại, composite action & action tự viết ── */
+    'ga-12-0-slides': { yt: 'zc19mR3O4a4', credit: "CoderDave — Composite Actions VS Reusable Workflows in GitHub Actions [2023 Update]" },
+    'ga-12-1-reusable-workflow': { yt: 'gDBZGCGSs6E', credit: "Mickey Gousset — Create Your First Reusable Workflow" },
+    'ga-12-2-composite-action': { yt: 'w8ZALhqoHgs', credit: "Yankee Maharjan — Ultimate Guide to GitHub Composite Actions (Complete Walkthrough!)" },
+    'ga-12-3-action-js-docker': { yt: 'sjSmSzMJL5s', credit: "Cloud With VarJosh — GitHub JavaScript & Docker Actions Explained | Hands-on Demos" },
+    'ga-12-4-mau-cho-to-chuc': { yt: 'Imv7zzJmpwU', credit: "TechTrapture — Creating Starter Workflow in GitHub Actions" },
+
+    /* ── Chương 13 — Runner của riêng bạn: self-hosted, container & mở rộng ── */
+    'ga-13-0-slides': { yt: '2wJU225zKOw', credit: "TechTrapture — GitHub Actions Runners: Understanding GitHub Hosted and Self hosted runners" },
+    'ga-13-1-runner-hoat-dong': { yt: 'SASoUr9X0QA', credit: "Mickey Gousset — GitHub Actions - Self-hosted runners - Installation & Calling" },
+    'ga-13-2-tu-dung-runner': { yt: 'VNWUHX1wzN0', credit: "Coding Adda — Setting Up Self-Hosted Runner using Docker | Github Actions Series - #6" },
+    'ga-13-3-bao-mat-self-hosted': { yt: '5P7KatZBr_I', credit: "DEFCONConference — DEF CON 32 - Grand Theft Actions Abusing Self Hosted GitHub Runners - Adnan Khan, John Stawinski" },
+    'ga-13-4-mo-rong': { yt: 'nrnMNre9v3A', credit: "Mathis Van Eetvelde — Self-host your Github Actions runners on Kubernetes NOW!" },
+
+    /* ── Chương 14 — Cổng chất lượng, bảo mật chuỗi cung ứng & phát hành ── */
+    'ga-14-0-slides': { yt: '19l6sLyR3zo', credit: "NDC Conferences — Beyond the Commit: Weaponizing and Hardening GitHub Actions - Niek Palm - NDC Security 2026" },
+    'ga-14-1-cong-chat-luong': { yt: 'ZTbM-h9RZOo', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 6 - Repository Rulesets" },
+    'ga-14-2-bao-mat-chuoi-cung-ung': { yt: 'pTKS99Nfaxw', credit: "fwd:cloudsec — Vulnerabilities and Misconfigurations in GitHub Actions - Rojan Rijal" },
+    'ga-14-3-phat-hanh': { yt: 'mah8PV6ugNY', credit: "Dave's Dev Channel — Automate your GitHub Actions Releases (with Semantic Release)!" },
+    'ga-14-4-monorepo': { yt: 'A1Z3vAJpmsw', credit: "Knowledge Amplifier — Executing GitHub Actions jobs or steps only when specific files change" },
+
+    /* ── Chương 15 — Dự án cuối khoá: một pipeline CI/CD hoàn chỉnh từ số 0 ── */
+    'ga-15-0-slides': { yt: 'YLtlz88zrLg', credit: "Tom Shaw — CI/CD Tutorial using GitHub Actions - Automated Testing & Automated Deployments" },
+    'ga-15-1-ci-cho-pr': { yt: '3mzQRJY1GVE', credit: "TECH SCHOOL — [Backend #10] Setup Github Actions for Golang + Postgres to run automated tests" },
+    'ga-15-2-build-anh': { yt: '-NH8Urs4ST0', credit: "Nick Janetakis — Build Git Tagged Multi-Arch Docker Images with GitHub Actions" },
+    'ga-15-3-deploy-an-toan': { yt: '-9LhRHXWjrc', credit: "Petabridge — Continuous Deployment of Docker Compose Applications Using GitHub Actions" },
+    'ga-15-4-van-hanh-pipeline': { yt: 'zNXJVeGcUmw', credit: "Initialized Capital — Trunk: Why CI Breaks at Scale — Merge Queues, Flaky Tests, and AI Coding" },
   },
 };

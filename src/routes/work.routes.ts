@@ -40,6 +40,7 @@ import * as github from '../services/work/github.service.js';
 import * as projectTracking from '../services/work/projectTracking.service.js';
 import * as chatHooks from '../services/work/chatHooks.service.js';
 import * as gitlab from '../services/work/gitlab.service.js';
+import * as editLock from '../services/work/editLock.service.js';
 import * as exchange from '../services/work/exchange.service.js';
 import * as share from '../services/work/share.service.js';
 import * as apiTokens from '../services/work/apiTokens.service.js';
@@ -148,6 +149,16 @@ router.get('/share/:token/tests', asyncHandler(async (req, res) => {
 // API token cá nhân (Bearer ctw_…) đi trước; không phải token thì JWT như cũ.
 router.use(apiTokens.apiTokenAuth);
 router.use((req, res, next) => (req.workToken ? next() : authenticate(req, res, next)));
+// Khoá chỉnh sửa cá nhân: lệnh ghi trong dự án đang khoá ⇒ 423 (xem editLock.service.ts).
+router.use(editLock.editLockGuard());
+
+router.get('/projects/:pid/edit-lock', asyncHandler(async (req, res) => {
+  ok(res, await editLock.getLock(callerId(req), idParam(req, 'pid')));
+}));
+router.put('/projects/:pid/edit-lock', asyncHandler(async (req, res) => {
+  const { locked } = parse(z.object({ locked: z.boolean() }), req.body);
+  ok(res, await editLock.setLock(callerId(req), idParam(req, 'pid'), locked));
+}));
 
 // ═══ Không gian ═════════════════════════════════════════════════════
 

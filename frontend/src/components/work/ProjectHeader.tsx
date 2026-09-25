@@ -11,6 +11,7 @@ import type { ReactNode } from 'react';
 import { ChevronRight } from 'lucide-react';
 import type { ProjectConfig } from '@/lib/work-api';
 import AiButton from './ai/AiButton';
+import { EditLockButton } from './editLock';
 import HelpButton from './help/HelpButton';
 import { MobileNavButton } from './shell/mobileNav';
 
@@ -45,6 +46,7 @@ export default function ProjectHeader({ config, title, children }: { config: Pro
       </nav>
       <div className="flex shrink-0 items-center gap-1.5 md:gap-2">
         <HelpButton />
+        <EditLockButton config={config} />
         <AiButton config={config} />
         {children}
       </div>

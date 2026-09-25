@@ -900,6 +900,9 @@ export const workApi = {
   updateGithub: (pid: number, body: { repoFullName?: string | null; prOpenedStatusId?: number | null; prMergedStatusId?: number | null }) =>
     d<GithubConnection>(api.patch(`${B}/projects/${pid}/github`, body)),
   disconnectGithub: (pid: number) => d(api.delete(`${B}/projects/${pid}/github`)),
+  /** Khoá chỉnh sửa CÁ NHÂN của dự án (lướt xem không sợ lỡ tay sửa). */
+  editLock: (pid: number) => d<{ locked: boolean; since: string | null }>(api.get(`${B}/projects/${pid}/edit-lock`)),
+  setEditLock: (pid: number, locked: boolean) => d<{ locked: boolean; since: string | null }>(api.put(`${B}/projects/${pid}/edit-lock`, { locked })),
   gitlab: (pid: number) => d<GitlabConnection>(api.get(`${B}/projects/${pid}/gitlab`)),
   connectGitlab: (pid: number, rotate = false) => d<GitlabConnection>(api.post(`${B}/projects/${pid}/gitlab`, { rotate })),
   updateGitlab: (pid: number, body: { repoPath?: string | null; mrOpenedStatusId?: number | null; mrMergedStatusId?: number | null }) =>
@@ -1002,6 +1005,19 @@ export const workApi = {
 export function workError(err: unknown, fallback = 'Something went wrong'): string {
   const e = err as { response?: { data?: { error?: string; message?: string } }; message?: string };
   return e?.response?.data?.error || e?.response?.data?.message || e?.message || fallback;
+}
+
+/** Server từ chối vì người dùng đang BẬT khoá chỉnh sửa dự án (xem components/work/editLock.tsx). */
+export const EDIT_LOCKED_CODE = 'WORK_EDIT_LOCKED';
+export function isEditLockedError(err: unknown): boolean {
+  return (err as { response?: { data?: { code?: string } } })?.response?.data?.code === EDIT_LOCKED_CODE;
+}
+/** Dự án của request bị từ chối vì khoá (đọc từ URL của request). */
+export function editLockedPid(err: unknown): number | null {
+  if (!isEditLockedError(err)) return null;
+  const url = String((err as { config?: { url?: string } })?.config?.url ?? '');
+  const m = /\/projects\/(\d+)(\/|$)/.exec(url);
+  return m ? Number(m[1]) : null;
 }
 
 /** Mã lỗi backend (vd 'CONFLICT' khi version lệch). */

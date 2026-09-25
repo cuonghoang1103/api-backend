@@ -407,6 +407,7 @@ model User {
   workApiTokens          WorkApiToken[]        @relation("WorkApiTokenUser")
   workAiThreads          WorkAiThread[]        @relation("WorkAiThreadCreator")
   workAiMessages         WorkAiMessage[]       @relation("WorkAiMessageAuthor")
+  workEditLocks          WorkEditLock[]
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -9739,6 +9740,7 @@ model WorkProject {
   aiThreads    WorkAiThread[]
   chatHooks    WorkChatHook[]
   gitlab       WorkGitlabConnection?
+  editLocks    WorkEditLock[]
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -10674,4 +10676,19 @@ model WorkGitlabConnection {
   project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@map("work_gitlab_connections")
+}
+
+/// "Khoá chỉnh sửa" CÁ NHÂN theo dự án: có dòng = người này đang khoá dự án đó
+/// (lướt kế hoạch không sợ lỡ tay kéo/sửa). Server chặn mọi lệnh ghi của CHÍNH người
+/// đó trong dự án (423 WORK_EDIT_LOCKED); người khác không bị ảnh hưởng.
+model WorkEditLock {
+  userId    Int      @map("user_id")
+  projectId Int      @map("project_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([userId, projectId])
+  @@map("work_edit_locks")
 }

@@ -10,6 +10,7 @@ import s03 from './react/s03-form.mjs';
 import s04 from './react/s04-effect.mjs';
 import s05 from './react/s05-chia-se-state.mjs';
 import s06 from './react/s06-du-lieu.mjs';
+import s11 from './react/s11-ben-trong.mjs';
 
 /*
  * KHUNG (24/09/2026) — giữ NGUYÊN để biết slug/tiêu đề gốc; chương nào đã soạn chi tiết thì thay phần tử
@@ -114,5 +115,6 @@ export default {
     K[8],
     K[9],
     K[10],
+    s11,
   ],
 };

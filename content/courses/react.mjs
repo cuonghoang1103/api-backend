@@ -3,6 +3,7 @@
  * Next.js; bổ trợ môn FER202 ở Academy. Xem _chung/khung.mjs.
  */
 import { khung } from './_chung/khung.mjs';
+import s00 from './react/s00-intro.mjs';
 import s01 from './react/s01-component.mjs';
 
 /*
@@ -97,7 +98,7 @@ export default {
     documentsNote: 'Tài liệu chính: react.dev • vite.dev • tanstack.com/query • react-hook-form.com • zustand docs • testing-library.com.',
   },
   sections: [
-    K[0],
+    s00,
     s01,
     K[2],
     K[3],

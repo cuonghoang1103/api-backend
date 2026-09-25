@@ -8,9 +8,9 @@
  *      vượt quyền người hỏi. Lịch sử ghi actorKind AI ⇒ không cộng công.
  *   2. Con số do MÃ tính (insights, tải việc, rủi ro sprint); model chỉ diễn
  *      đạt. Tìm thẻ trùng dùng pg_trgm, không tốn lượt AI.
- *   3. Hạn mức: Pro (hoặc admin) dùng theo trần token chung; tài khoản thường
- *      được WORK_AI_FREE_DAILY lượt/ngày, hết thì lỗi 402
- *      WORK_AI_QUOTA_EXCEEDED ⇒ giao diện hiện "Upgrade to Pro".
+ *   3. Hạn mức: mặc định KHÔNG giới hạn số lượt cho mọi thành viên (25/09/2026),
+ *      chỉ còn trần token/ngày chung. Đặt WORK_AI_FREE_DAILY=<số> thì tài khoản
+ *      thường bị trần lượt/ngày, hết thì lỗi 402 WORK_AI_QUOTA_EXCEEDED ⇒ "Upgrade to Pro".
  */
 
 import { Prisma } from '@prisma/client';
@@ -31,7 +31,18 @@ import * as threads from './aiThreads.service.js';
 
 // ─── Hạn mức ─────────────────────────────────────────────────────
 
-export const FREE_DAILY = () => Math.max(0, Number(process.env.WORK_AI_FREE_DAILY ?? 5) || 0);
+/**
+ * Số lượt AI miễn phí/ngày cho tài khoản thường. `null` = KHÔNG GIỚI HẠN — mặc định từ
+ * 25/09/2026 (chủ web: trợ lý CT Work là công cụ làm việc chính của nhóm, đừng chặn thành viên).
+ * Đặt `WORK_AI_FREE_DAILY=<số>` để bật lại trần (0 = khoá hẳn AI cho tài khoản thường).
+ * Lưới chống lạm dụng vẫn còn: trần TOKEN/ngày (`checkTokenQuota`) và trần tiền/ngày (budget.ts).
+ */
+export const FREE_DAILY = (): number | null => {
+  const raw = process.env.WORK_AI_FREE_DAILY?.trim();
+  if (!raw) return null;
+  const n = Number(raw);
+  return Number.isFinite(n) ? Math.max(0, Math.floor(n)) : null;
+};
 
 async function usedToday(userId: number): Promise<number> {
   const start = new Date();
@@ -42,13 +53,15 @@ async function usedToday(userId: number): Promise<number> {
 export async function aiQuota(userId: number) {
   const pro = await isProEffective(userId).catch(() => false);
   const used = await usedToday(userId);
-  return { pro, used, limit: pro ? null : FREE_DAILY(), remaining: pro ? null : Math.max(0, FREE_DAILY() - used), available: isAiAvailable('work') };
+  const cap = pro ? null : FREE_DAILY();
+  return { pro, used, limit: cap, remaining: cap === null ? null : Math.max(0, cap - used), available: isAiAvailable('work') };
 }
 
 async function assertQuota(userId: number) {
   if (!isAiAvailable('work')) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
   const q = await aiQuota(userId);
-  if (q.pro) {
+  // Pro, admin, và (mặc định) mọi thành viên: không đếm lượt — chỉ còn trần token/ngày chống lạm dụng.
+  if (q.pro || q.limit === null) {
     if (!(await checkTokenQuota(userId))) throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
     return;
   }

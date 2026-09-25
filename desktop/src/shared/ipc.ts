@@ -1920,6 +1920,8 @@ export const EVENT_CHANNELS = [
   'nhac:phim',
   /** Tiến độ tải/cài AI ngoại tuyến. Nhiều phút, nên phải chảy dần. */
   'aiCucBo:tienDo',
+  /** Tiến độ cài OpenCode Terminal: tải (%), giải nén, kiểm, thêm PATH. */
+  'opencode:tienDo',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];
@@ -2196,10 +2198,11 @@ export interface DesktopBridge {
       outputToken: number;
     }): Promise<{ ok: true; duongDan: string; soModel: number }>;
     /**
-     * Cài `opencode-ai` toàn cục. KHÔNG cần thư mục dự án, không qua agent.
+     * Cài OpenCode. KHÔNG cần thư mục dự án, không qua agent, và từ
+     * 25/09/2026 KHÔNG cần Node.js: tải bản chạy sẵn vào `~/.opencode/bin`,
+     * npm chỉ là đường lùi. Tiến độ chảy qua sự kiện `opencode:tienDo`.
      *
-     * `canNode` = máy chưa có Node.js nên không tự cài được; `huongDan` là câu
-     * chỉ đường đúng hệ điều hành để người dùng làm một bước đó bằng tay.
+     * `canNode`/`huongDan` giữ lại cho bản cũ; main không còn trả chúng nữa.
      */
     cai(): Promise<{
       ok: boolean;
@@ -2208,6 +2211,9 @@ export interface DesktopBridge {
       phienBan?: string;
       loi?: string;
       log?: string;
+      /** Có khi cài bản chạy sẵn: file nằm đâu, và đã thêm PATH vào những file nào. */
+      duongDan?: string;
+      path?: string[];
     }>;
   };
 

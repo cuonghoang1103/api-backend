@@ -81,6 +81,18 @@ export function timKeyDangDung(thanPhanHoi: unknown): DonKey | null {
  * CHƯA chọn thư mục dự án nào, đúng nhóm người dùng nút này phục vụ.
  * `dangChay` giữ lại: đang có việc chạy thì đừng xen một lần cài vào giữa.
  */
+/** Chữ trên nút lúc đang cài, theo bước main báo về. */
+function chuTienDo(t: { buoc: string; phanTram?: number } | null): string {
+  switch (t?.buoc) {
+    case 'tai': return `Đang tải OpenCode… ${t.phanTram ?? 0}%`;
+    case 'giai-nen': return 'Đang giải nén…';
+    case 'kiem': return 'Đang kiểm tra…';
+    case 'path': return 'Đang thêm vào terminal…';
+    case 'npm': return 'Đang cài qua npm… (1–2 phút)';
+    default: return 'Đang chuẩn bị…';
+  }
+}
+
 export function NutOpenCode({ dangChay }: { dangChay: boolean }) {
   const { api } = useSession();
   const [key, setKey] = useState<string | null>(null);
@@ -101,6 +113,12 @@ export function NutOpenCode({ dangChay }: { dangChay: boolean }) {
    * và không ai biết vì sao. Tách ra để lần sau lỗi tự nói tên nó.
    */
   const [loiTai, setLoiTai] = useState<string | null>(null);
+  /** Bước đang chạy khi cài — tải về cỡ 50–60MB nên phải cho người dùng thấy nó đang chạy. */
+  const [tienDo, setTienDo] = useState<{ buoc: string; phanTram?: number } | null>(null);
+
+  useEffect(() => window.cuongthai?.on('opencode:tienDo', (p) => {
+    setTienDo(p as { buoc: string; phanTram?: number });
+  }), []);
 
   useEffect(() => {
     let huy = false;
@@ -178,26 +196,25 @@ export function NutOpenCode({ dangChay }: { dangChay: boolean }) {
        */
       const cai = await window.cuongthai?.opencode.cai();
 
-      if (cai?.canNode) {
-        /* Cài Node cần quyền quản trị — ta KHÔNG tự làm. Nhưng cũng không bỏ
-           mặc: đưa đúng một câu lệnh cho hệ điều hành này, và nhờ agent giải
-           thích tiếp nếu người dùng cần. */
-        setLoi(`Máy chưa có Node.js nên chưa cài được. Chạy lệnh này trong terminal rồi bấm lại:\n${cai.huongDan}`);
-        return;
-      }
+      /* 25/09/2026: không còn nhánh "máy chưa có Node.js, tự cài tay đi" — main
+         tải bản chạy sẵn, nên máy mới tinh cũng cài được một lèo. */
       if (!cai?.ok) {
-        setLoi(cai?.loi ?? 'Không cài được.');
+        setLoi(`${cai?.loi ?? 'Không cài được.'}\nKiểm tra kết nối mạng rồi bấm lại nhé.`);
         return;
       }
 
-      setXong(`Xong! OpenCode ${cai.phienBan ?? ''} đã sẵn sàng. Cấu hình ở ${kq.duongDan}. `
-        + 'Mở terminal, vào thư mục dự án của bạn và gõ `opencode` để bắt đầu.');
+      /* ⚠️ Nói rõ "mở terminal MỚI": PATH vừa được thêm chỉ có hiệu lực ở cửa
+         sổ terminal mở SAU khi cài. Terminal đang mở sẵn gõ `opencode` sẽ báo
+         "command not found", và người dùng sẽ tưởng cài hỏng. */
+      setXong(`Xong! OpenCode ${cai.phienBan ?? ''} đã sẵn sàng, key đã được cắm vào (${kq.duongDan}).\n`
+        + 'Mở một cửa sổ terminal MỚI, vào thư mục dự án của bạn và gõ: opencode');
       /* Nạp lại trạng thái máy để nút đổi sang "đã cài" mà không phải mở lại app. */
       setMay(await window.cuongthai?.opencode.doMayNay() ?? null);
     } catch (e) {
       setLoi(e instanceof Error ? e.message : 'Không cài được.');
     } finally {
       setDangCai(false);
+      setTienDo(null);
     }
   }, [key, tin, dangCai]);
 
@@ -215,14 +232,14 @@ export function NutOpenCode({ dangChay }: { dangChay: boolean }) {
         className={`nut-opencode${coKey ? ' nut-opencode--sang' : ''}`}
       >
         {dangCai
-          ? 'Đang cài… (có thể mất 1–2 phút)'
+          ? chuTienDo(tienDo)
           : may?.opencode ? 'Cài lại OpenCode Terminal' : 'Cài OpenCode Terminal'}
       </button>
 
       {/* `white-space: pre-line` để câu lệnh hướng dẫn xuống dòng đúng chỗ —
           gộp một dòng thì người dùng chép nhầm cả câu dẫn vào terminal. */}
       {loi && <p className="nut-opencode__loi" style={{ whiteSpace: 'pre-line' }}>{loi}</p>}
-      {xong && <p className="nut-opencode__xong">{xong}</p>}
+      {xong && <p className="nut-opencode__xong" style={{ whiteSpace: 'pre-line' }}>{xong}</p>}
       {loiTai && !coKey && (
         <p className="nut-opencode__loi">
           Chưa kiểm được key của bạn ({loiTai}). Nút đang tạm khoá — thử mở lại app,

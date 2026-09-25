@@ -82,6 +82,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'oauth:xong',
   'nhac:phim',
   'aiCucBo:tienDo',
+  'opencode:tienDo',
 ];
 
 const bridge: DesktopBridge = {
@@ -264,6 +265,7 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('opencode:cai') as Promise<{
         ok: boolean; canNode?: boolean; huongDan?: string;
         phienBan?: string; loi?: string; log?: string;
+        duongDan?: string; path?: string[];
       }>,
   },
   academy: {

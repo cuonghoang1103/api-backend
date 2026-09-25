@@ -23,6 +23,7 @@ export default {
       description: 'Một "test" chỉ là code kiểm tra code khác chạy đúng — tự động, lặp lại được. Bài này giải thích test mua cho bạn điều gì (sự tự tin khi sửa), và ba tầng test: unit, integration, e2e.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> The React part of this chapter is taught in depth in the <a href="/courses/react">React</a> course (Chapter 9 for Vitest and Testing Library). What is specific to Next.js here: testing Server Components and Route Handlers, and end-to-end tests with Playwright.</div>
 <span class="eyebrow">Chapter 19 · Lesson 19.1</span>
 <h2>What a test is, and what it buys you</h2>
 <p class="lead">A <strong>test</strong> is just a small piece of code that runs your real code and checks it behaves as expected. Instead of clicking through the app by hand every time you change something, you write the check once and a computer runs it in seconds, forever. That is the whole idea.</p>
@@ -72,6 +73,7 @@ export default {
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Phần React của chương này được dạy kỹ ở khoá <a href="/courses/react">React</a> (Chương 9 phần Vitest và Testing Library). Phần riêng của Next.js ở đây: test Server Component và Route Handler, và test end-to-end bằng Playwright.</div>
 <span class="eyebrow">Chương 19 · Bài 19.1</span>
 <h2>Test là gì, và nó mua cho bạn điều gì</h2>
 <p class="lead">Một <strong>test</strong> chỉ là một mẩu code nhỏ chạy code thật của bạn và kiểm nó hành xử đúng như mong đợi. Thay vì bấm qua app bằng tay mỗi lần bạn đổi gì đó, bạn viết phép kiểm một lần và máy chạy nó trong vài giây, mãi mãi. Đó là toàn bộ ý tưởng.</p>

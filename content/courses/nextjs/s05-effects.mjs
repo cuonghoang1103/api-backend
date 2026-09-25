@@ -21,6 +21,7 @@ export default {
       description: 'Effect là chỗ để đồng bộ component với hệ thống bên ngoài React — sau khi render đã lên màn hình. Render vẫn thuần; effect mới có tác dụng phụ.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Chapter 4). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>Effects reach outside React — after the render</h2>
 <p class="lead">Chapter 2 said render must be pure: no side effects during render. But real apps must talk to the outside world — a browser API, a subscription, a timer, sometimes the network. <code>useEffect</code> is the sanctioned place for that. It runs your code <em>after</em> React has rendered and committed to the DOM, not during.</p>
@@ -87,6 +88,7 @@ function ChatRoom({ roomId }) {
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Chương này là phần ôn nhanh React &mdash; cùng chủ đề được dạy kỹ ở khoá <a href="/courses/react">React</a> (Chương 4). Đọc lướt hoặc chuyển thẳng sang <strong>Chương 8</strong>, nơi bắt đầu phần riêng của Next.js. Nhớ: Next.js là <em>framework dựng trên React</em> &mdash; mọi component, props, state, hook ở đây vẫn là React thuần.</div>
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
 <h2>Effect với ra bên ngoài React — sau khi render</h2>
 <p class="lead">Chương 2 nói render phải thuần: không tác dụng phụ trong lúc render. Nhưng app thật phải nói chuyện với thế giới bên ngoài — một API trình duyệt, một subscription, một timer, đôi khi là mạng. <code>useEffect</code> là chỗ được phép làm điều đó. Nó chạy code của bạn <em>sau</em> khi React đã render và commit vào DOM, không phải trong lúc render.</p>

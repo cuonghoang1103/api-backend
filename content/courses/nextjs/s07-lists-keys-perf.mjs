@@ -21,6 +21,7 @@ export default {
       description: 'React so cây element mới với cây cũ theo vị trí và type: cùng type thì cập nhật tại chỗ (giữ state), khác type thì gỡ và dựng lại.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Chapter 1 for lists and keys, Chapter 11 for reconciliation, Chapter 8 for performance). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>How React turns a new description into minimal DOM changes</h2>
 <p class="lead">Chapter 1 said you describe the UI and React updates the DOM. This lesson is <em>how</em>. After a render, React holds two element trees — the previous one and the new one — and walks them together, deciding at each position: update this node, or throw it away and build a new one. That process is <strong>reconciliation</strong>.</p>
@@ -71,6 +72,7 @@ export default {
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Chương này là phần ôn nhanh React &mdash; cùng chủ đề được dạy kỹ ở khoá <a href="/courses/react">React</a> (Chương 1 phần danh sách và key, Chương 11 phần reconciliation, Chương 8 phần hiệu năng). Đọc lướt hoặc chuyển thẳng sang <strong>Chương 8</strong>, nơi bắt đầu phần riêng của Next.js. Nhớ: Next.js là <em>framework dựng trên React</em> &mdash; mọi component, props, state, hook ở đây vẫn là React thuần.</div>
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
 <h2>React biến một mô tả mới thành thay đổi DOM tối thiểu thế nào</h2>
 <p class="lead">Chương 1 nói bạn mô tả UI và React cập nhật DOM. Bài này là <em>bằng cách nào</em>. Sau một render, React giữ hai cây element — cây trước và cây mới — và đi song song chúng, quyết ở mỗi vị trí: cập nhật nút này, hay vứt đi và dựng nút mới. Quá trình đó là <strong>reconciliation</strong>.</p>

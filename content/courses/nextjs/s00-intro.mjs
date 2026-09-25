@@ -213,6 +213,7 @@ export default {
       description: 'React là thư viện; Next.js là framework bọc quanh nó. Ai tạo ra chúng, năm nào, vì sao — và vì sao cần cả hai.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Next.js is a framework FOR React, not a separate library.</strong> React is the library that draws the UI (components, props, state, hooks). Next.js is a framework built on top of it that adds routing by folders, Server Components, data caching, SEO and deployment. So the recommended order on CuongThai is: <a href="/courses/react">React</a> first, then this course. If you already know React, Chapters 1&ndash;7 are a refresher you can skim.</div>
 <span class="eyebrow">Section 0 · Lesson 0.2</span>
 <h2>React is a library. Next.js is a framework.</h2>
 <p class="lead">People say "React or Next.js?" as if they compete. They don't. React is the engine that turns your data into a user interface. Next.js is the car built around that engine — it adds the routing, the server, the build system and the deployment story that React deliberately leaves out.</p>
@@ -266,6 +267,7 @@ export default {
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Next.js là framework CHO React, không phải một thư viện tách biệt.</strong> React là thư viện vẽ giao diện (component, props, state, hook). Next.js là framework dựng trên nó, thêm định tuyến theo thư mục, Server Component, cache dữ liệu, SEO và deploy. Nên thứ tự học trên CuongThai là: khoá <a href="/courses/react">React</a> trước, rồi khoá này. Đã biết React thì Chương 1&ndash;7 là phần ôn, đọc lướt được.</div>
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
 <h2>React là một THƯ VIỆN. Next.js là một FRAMEWORK.</h2>
 <p class="lead">Người ta hay hỏi "React hay Next.js?" như thể chúng cạnh tranh nhau. Không hề. React là cỗ máy biến dữ liệu của bạn thành giao diện. Next.js là chiếc xe dựng quanh cỗ máy đó — nó bổ sung router, server, hệ thống build và câu chuyện triển khai mà React cố tình để trống.</p>

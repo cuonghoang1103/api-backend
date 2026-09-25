@@ -23,6 +23,7 @@ export default {
       description: 'App Router cho hai cách làm form: form gắn thẳng Server Action (Chương 12) và form phía client với react-hook-form. Bài này so sánh và chỉ khi nào dùng cái nào.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> The React part of this chapter is taught in depth in the <a href="/courses/react">React</a> course (Chapter 3 for react-hook-form and Zod). What is specific to Next.js here: validating the same Zod schema inside a Server Action, and uploading files to storage.</div>
 <span class="eyebrow">Chapter 16 · Lesson 16.1</span>
 <h2>Server Action forms vs client forms — pick by need</h2>
 <p class="lead">You have already built one kind of form: a <code>&lt;form action={serverAction}&gt;</code> in Chapter 12, which submits straight to the server with progressive enhancement. This chapter adds the other kind — rich client-side forms with <strong>react-hook-form</strong> — and shows where each fits.</p>
@@ -68,6 +69,7 @@ export default {
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Phần React của chương này được dạy kỹ ở khoá <a href="/courses/react">React</a> (Chương 3 phần react-hook-form và Zod). Phần riêng của Next.js ở đây: kiểm cùng một schema Zod trong Server Action, và upload file lên storage.</div>
 <span class="eyebrow">Chương 16 · Bài 16.1</span>
 <h2>Form Server Action vs form client — chọn theo nhu cầu</h2>
 <p class="lead">Bạn đã dựng một kiểu form: một <code>&lt;form action={serverAction}&gt;</code> ở Chương 12, submit thẳng tới server với progressive enhancement. Chương này thêm kiểu còn lại — form phía client phong phú với <strong>react-hook-form</strong> — và chỉ chỗ mỗi cái hợp.</p>

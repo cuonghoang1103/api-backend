@@ -23,6 +23,7 @@ export default {
       description: 'Trước khi chọn thư viện, phải phân biệt: state UI (bộ lọc đang chọn, modal mở) sống ở client; còn danh sách bài, hồ sơ người dùng chỉ là BẢN SAO của dữ liệu trên server. Trộn hai cái là gốc của nhiều bug.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> The React part of this chapter is taught in depth in the <a href="/courses/react">React</a> course (Chapter 5 for Zustand, Chapter 6 for TanStack Query). What is specific to Next.js here: which state belongs on the server now that Server Components can fetch it, and how client caches meet server rendering.</div>
 <span class="eyebrow">Chapter 14 · Lesson 14.1</span>
 <h2>Not all "state" is the same thing</h2>
 <p class="lead">By now you have <code>useState</code> (Chapter 3) and Context (Chapter 6). They are enough for a small app, but at scale the important move is not reaching for a bigger library — it is realising there are <strong>two fundamentally different kinds of state</strong>, and they want different tools.</p>
@@ -73,6 +74,7 @@ useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); 
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Phần React của chương này được dạy kỹ ở khoá <a href="/courses/react">React</a> (Chương 5 phần Zustand, Chương 6 phần TanStack Query). Phần riêng của Next.js ở đây: state nào nay thuộc về server vì Server Component tự fetch được, và cache phía client gặp render phía server ra sao.</div>
 <span class="eyebrow">Chương 14 · Bài 14.1</span>
 <h2>Không phải "state" nào cũng là một thứ</h2>
 <p class="lead">Tới giờ bạn có <code>useState</code> (Chương 3) và Context (Chương 6). Chúng đủ cho app nhỏ, nhưng ở quy mô lớn, bước quan trọng không phải với tay lấy thư viện to hơn — mà là nhận ra có <strong>hai loại state khác nhau về bản chất</strong>, và chúng cần công cụ khác nhau.</p>

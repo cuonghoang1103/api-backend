@@ -11,6 +11,12 @@ bằng import file thật → render (`scripts/_render-slides.mjs`) → `_kiem-t
 --render <dir> --moi` → `course-content-check` → upload `--prefix RX/v1 --decks rx-NN` → `--cdn` → seed thử → commit → deploy-nha.
 GIỮ slug + title chương + slug bài đang có trong khung (Ch8–10). Ch12–14 là section MỚI (slug rx-12…rx-14).
 
+## CHỐNG TRÙNG với khoá "Next.js: The React Framework" (/courses/nextjs) — chốt 25/09
+Next.js = framework dựng trên React, học SAU React. Khoá Next Ch1–7 (+ phần React của Ch14/16/19) đã có callout "đã học React
+thì bỏ qua — xem React Ch X". Khi soạn tiếp React: **Ch12** chỉ dạy React 19 phía client — Server Components/Server Actions chỉ
+nêu khái niệm rồi trỏ link `/courses/nextjs` (Next Ch9–12); **Ch9** không dạy Playwright E2E (Next Ch19 lo); **Ch14** deploy
+bản build tĩnh (Vite), deploy Next để Next Ch20. Mỗi chương mới nên có link-card "Học tiếp" trỏ khoá liên quan.
+
 ## Chương còn thiếu (thứ tự ưu tiên)
 1. **Ch8 — Hiệu năng và khả năng tiếp cận** (khung có sẵn: Profiler · memo/useMemo/useCallback khi nào có ích · chia bundle
    & lazy · component dễ tiếp cận). Đo THẬT bằng React Profiler/Lighthouse, không bịa số.

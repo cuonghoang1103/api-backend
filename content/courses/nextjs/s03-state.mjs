@@ -18,6 +18,7 @@ export default {
       description: 'useState trả về giá trị hiện tại và một hàm để đặt lại nó. Gọi hàm đặt là cách duy nhất kích hoạt một lần render lại.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Chapter 2). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
 <h2>A component that remembers</h2>
 <p class="lead">Props come from the parent and a component can't change them. But a component often needs its own data that changes over time and survives across renders — the text in an input, whether a menu is open, a counter. That is <strong>state</strong>, and <code>useState</code> is how you declare it.</p>
@@ -72,6 +73,7 @@ function Counter() {
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Chương này là phần ôn nhanh React &mdash; cùng chủ đề được dạy kỹ ở khoá <a href="/courses/react">React</a> (Chương 2). Đọc lướt hoặc chuyển thẳng sang <strong>Chương 8</strong>, nơi bắt đầu phần riêng của Next.js. Nhớ: Next.js là <em>framework dựng trên React</em> &mdash; mọi component, props, state, hook ở đây vẫn là React thuần.</div>
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
 <h2>Một component biết nhớ</h2>
 <p class="lead">Props tới từ cha và component không đổi được chúng. Nhưng một component thường cần dữ liệu riêng thay đổi theo thời gian và sống sót qua các lần render — chữ trong một ô nhập, một menu đang mở hay không, một bộ đếm. Đó là <strong>state</strong>, và <code>useState</code> là cách bạn khai báo nó.</p>

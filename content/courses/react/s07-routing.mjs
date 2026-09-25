@@ -1154,6 +1154,7 @@ ${LINK('https://github.com/alan2207/bulletproof-react/blob/master/docs/project-s
       description: 'SPA gửi HTML rỗng còn Next.js gửi HTML có sẵn nội dung (đo bằng curl), bảng chuyển route React Router sang thư mục app/ của Next.js 16, next build dựng sẵn sáu trang bác sĩ, Server Component và "use client" (lỗi build thật khi quên), và bảng quyết định khi nào Vite SPA là đủ — trỏ sang khoá Next.js.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Where to go next.</strong> Everything in this lesson is covered end to end in the <a href="/courses/nextjs">Next.js: The React Framework</a> course (App Router, Server Components, caching, Server Actions, SEO, deploy). Next.js is a framework built on React, so what you learned here carries over unchanged &mdash; start at its Chapter 8.</div>
 <span class="eyebrow">Chapter 7 · Lesson 7.4</span>
 <h2>From React to Next.js: what changes, when you need it, and how our routes map</h2>
 <p class="lead">Job ads say "React" and then, two lines later, "Next.js". They are not competitors: Next.js <em>is</em> React — the same components, hooks and JSX — plus a server, a file-based router, and rendering strategies that a Vite SPA does not have. This lesson moves a slice of the clinic app to Next.js 16 so that you can see, with real output, what actually changes, what stays, and when the extra machinery is worth it. The full course is at <a href="/courses/nextjs">/courses/nextjs</a>; this is the bridge.</p>
@@ -1274,6 +1275,7 @@ ${LINK('https://react.dev/reference/rsc/server-components', '📄', 'react.dev �
 ${LINK('https://react.dev/learn/creating-a-react-app', '📄', 'react.dev — Creating a React App', 'Why the React team recommends a framework such as Next.js or React Router for new apps.')}
 </div>
 <div class="ml-vi">
+<div class="callout ok"><strong>Học tiếp ở đâu.</strong> Mọi thứ trong bài này được dạy trọn vẹn ở khoá <a href="/courses/nextjs">Next.js: The React Framework</a> (App Router, Server Component, cache, Server Actions, SEO, deploy). Next.js là framework dựng trên React, nên mọi thứ bạn học ở đây dùng nguyên được &mdash; bắt đầu từ Chương 8 của khoá đó.</div>
 <span class="eyebrow">Chương 7 · Bài 7.4</span>
 <h2>Từ React sang Next.js: khác gì, khi nào cần, và route của ta chuyển sang thế nào</h2>
 <p class="lead">Tin tuyển dụng ghi "React", rồi hai dòng sau ghi "Next.js". Chúng không phải đối thủ: Next.js <em>chính là</em> React — cùng component, cùng hook, cùng JSX — cộng thêm một máy chủ, một router dựa trên file, và những cách render mà một SPA Vite không có. Bài này chuyển một lát của app phòng khám sang Next.js 16 để bạn thấy, bằng output thật, cái gì thực sự đổi, cái gì giữ nguyên, và khi nào bộ máy thêm vào đáng công. Khoá đầy đủ ở <a href="/courses/nextjs">/courses/nextjs</a>; bài này là cây cầu.</p>

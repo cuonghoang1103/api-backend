@@ -17,6 +17,7 @@ export default {
       description: 'Props là đối số của một component, chảy một chiều từ cha xuống con, và chỉ đọc. Sửa props là một bug.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Chapter 1). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
 <h2>A component is a function; props are its arguments</h2>
 <p class="lead">In Chapter 1 you saw a component is a function that returns UI. Props are simply the arguments to that function — the data a parent passes down so a child can render itself. Everything about how React apps are structured falls out of one rule: data flows <em>down</em>, one way, and props are read-only.</p>
@@ -74,6 +75,7 @@ function UserCard({ user }) {
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Chương này là phần ôn nhanh React &mdash; cùng chủ đề được dạy kỹ ở khoá <a href="/courses/react">React</a> (Chương 1). Đọc lướt hoặc chuyển thẳng sang <strong>Chương 8</strong>, nơi bắt đầu phần riêng của Next.js. Nhớ: Next.js là <em>framework dựng trên React</em> &mdash; mọi component, props, state, hook ở đây vẫn là React thuần.</div>
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
 <h2>Component là một hàm; props là đối số của nó</h2>
 <p class="lead">Ở Chương 1 bạn thấy component là một hàm trả về giao diện. Props đơn giản là đối số của hàm đó — dữ liệu cha truyền xuống để con tự render chính mình. Mọi thứ về cách cấu trúc một app React đều suy ra từ một quy tắc: dữ liệu chảy <em>xuống</em>, một chiều, và props chỉ đọc.</p>

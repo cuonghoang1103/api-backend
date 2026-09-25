@@ -22,6 +22,7 @@ export default {
       description: 'Ref là một cái hộp .current đọc/ghi được mà KHÔNG gây render — để nhớ giá trị qua các render, và để với tới nút DOM.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Chapter 4 for custom hooks, Chapter 5 for context and useReducer, Chapter 11 for useRef). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>A box you can write to without re-rendering</h2>
 <p class="lead">Chapter 4 met <code>useRef</code> for reading a form input. Its full job is broader: a ref is a mutable box whose <code>.current</code> you can read and write at any time, and — crucially — <strong>changing it does not trigger a re-render.</strong> That single property is what makes it different from state, and what it's for.</p>
@@ -82,6 +83,7 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Chương này là phần ôn nhanh React &mdash; cùng chủ đề được dạy kỹ ở khoá <a href="/courses/react">React</a> (Chương 4 phần hook tự viết, Chương 5 phần context và useReducer, Chương 11 phần useRef). Đọc lướt hoặc chuyển thẳng sang <strong>Chương 8</strong>, nơi bắt đầu phần riêng của Next.js. Nhớ: Next.js là <em>framework dựng trên React</em> &mdash; mọi component, props, state, hook ở đây vẫn là React thuần.</div>
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
 <h2>Một cái hộp bạn ghi vào được mà không render lại</h2>
 <p class="lead">Chương 4 đã gặp <code>useRef</code> để đọc một input form. Nhiệm vụ đầy đủ của nó rộng hơn: một ref là một cái hộp thay đổi được mà <code>.current</code> của nó bạn đọc và ghi bất cứ lúc nào, và — quan trọng — <strong>đổi nó không kích hoạt render.</strong> Chính đặc tính đó khiến nó khác state, và là lý do nó tồn tại.</p>

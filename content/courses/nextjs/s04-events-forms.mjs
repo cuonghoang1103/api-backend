@@ -19,6 +19,7 @@ export default {
       description: 'Truyền một hàm cho onClick/onChange (không phải chuỗi, không gọi ngay), đọc event object, và preventDefault.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Chapter 2 for events, Chapter 3 for forms). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 4 · Lesson 4.1</span>
 <h2>Responding to the user</h2>
 <p class="lead">State from Chapter 3 changes in response to something the user does — a click, a keystroke, a form submit. You wire those up with event handlers: functions you pass to props like <code>onClick</code> and <code>onChange</code>. There are two mistakes everyone makes once, and then never again.</p>
@@ -77,6 +78,7 @@ function handleKeyDown(e) {
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Chương này là phần ôn nhanh React &mdash; cùng chủ đề được dạy kỹ ở khoá <a href="/courses/react">React</a> (Chương 2 phần sự kiện, Chương 3 phần form). Đọc lướt hoặc chuyển thẳng sang <strong>Chương 8</strong>, nơi bắt đầu phần riêng của Next.js. Nhớ: Next.js là <em>framework dựng trên React</em> &mdash; mọi component, props, state, hook ở đây vẫn là React thuần.</div>
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
 <h2>Phản hồi người dùng</h2>
 <p class="lead">State ở Chương 3 thay đổi để đáp lại việc người dùng làm — một cú click, một phím gõ, một form gửi đi. Bạn nối chúng bằng handler sự kiện: những hàm bạn truyền cho các prop như <code>onClick</code> và <code>onChange</code>. Có hai lỗi ai cũng mắc một lần, rồi không bao giờ mắc lại.</p>

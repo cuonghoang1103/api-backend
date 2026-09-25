@@ -22,6 +22,7 @@ export default {
       description: 'Cách làm mệnh lệnh (tự sờ vào DOM) so với cách khai báo của React: bạn mô tả kết quả, React lo cách đạt tới.',
       content: `
 <div class="ml-en">
+<div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Section 0, the JSX lesson, and Chapter 1). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>You describe the UI. React makes the screen match.</h2>
 <p class="lead">The single idea that everything in React is built on: you never tell the browser "create this element, put it here, now change that text". You write a function that says <em>what the screen should look like for the current data</em>, and React figures out the smallest set of DOM changes to make that true.</p>
@@ -89,6 +90,7 @@ document.body.append(p, button);</code></pre>
 </div>
 
 <div class="ml-vi">
+<div class="callout ok"><strong>Đã học khoá React?</strong> Chương này là phần ôn nhanh React &mdash; cùng chủ đề được dạy kỹ ở khoá <a href="/courses/react">React</a> (Mục 0 bài JSX, và Chương 1). Đọc lướt hoặc chuyển thẳng sang <strong>Chương 8</strong>, nơi bắt đầu phần riêng của Next.js. Nhớ: Next.js là <em>framework dựng trên React</em> &mdash; mọi component, props, state, hook ở đây vẫn là React thuần.</div>
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
 <h2>Bạn MÔ TẢ giao diện. React làm cho màn hình khớp với mô tả đó.</h2>
 <p class="lead">Ý tưởng duy nhất mà mọi thứ trong React dựng lên từ đó: bạn không bao giờ bảo trình duyệt "tạo phần tử này, đặt vào đây, giờ đổi đoạn chữ kia". Bạn viết một hàm nói <em>màn hình nên trông thế nào với dữ liệu hiện tại</em>, và React tự tìm ra tập thay đổi DOM nhỏ nhất để biến điều đó thành thật.</p>

@@ -8,6 +8,7 @@ import s01 from './react/s01-component.mjs';
 import s02 from './react/s02-state.mjs';
 import s03 from './react/s03-form.mjs';
 import s04 from './react/s04-effect.mjs';
+import s05 from './react/s05-chia-se-state.mjs';
 
 /*
  * KHUNG (24/09/2026) — giữ NGUYÊN để biết slug/tiêu đề gốc; chương nào đã soạn chi tiết thì thay phần tử
@@ -106,7 +107,7 @@ export default {
     s02,
     s03,
     s04,
-    K[5],
+    s05,
     K[6],
     K[7],
     K[8],

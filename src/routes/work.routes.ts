@@ -26,6 +26,7 @@ import * as reports from '../services/work/reports.service.js';
 import * as sprints from '../services/work/sprints.service.js';
 import * as tests from '../services/work/tests.service.js';
 import * as ai from '../services/work/ai.service.js';
+import * as aiThreads from '../services/work/aiThreads.service.js';
 import { myWork } from '../services/work/myWork.service.js';
 import * as custom from '../services/work/customize.service.js';
 import * as searchSvc from '../services/work/search.service.js';
@@ -682,6 +683,7 @@ router.post('/projects/:pid/ai/chat', asyncHandler(async (req, res) => {
     message: z.string().min(1).max(8000),
     history: z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(12000) })).max(20).optional(),
     issueNumber: id.nullable().optional(),
+    threadId: id.nullable().optional(),
   }), req.body);
   ok(res, await ai.chat(callerId(req), idParam(req, 'pid'), body));
 }));
@@ -690,8 +692,43 @@ router.post('/projects/:pid/ai/quick', asyncHandler(async (req, res) => {
     task: z.enum(['write_story', 'split', 'generate_tests', 'improve_bug', 'summarize', 'review_story', 'meeting_notes']),
     issueNumber: id.nullable().optional(),
     text: z.string().max(20000).nullable().optional(),
+    threadId: id.nullable().optional(),
+    label: z.string().max(120).nullable().optional(),
   }), req.body);
   ok(res, await ai.quick(callerId(req), idParam(req, 'pid'), body));
+}));
+
+// ─── Hội thoại AI lưu ở server, dùng chung trong dự án ───
+router.get('/projects/:pid/ai/threads', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ scope: z.enum(['all', 'mine']).optional(), q: z.string().max(200).optional() }), req.query);
+  ok(res, await aiThreads.listThreads(callerId(req), idParam(req, 'pid'), q));
+}));
+router.post('/projects/:pid/ai/threads', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ title: z.string().min(1).max(2000), issueNumber: id.nullable().optional(), visibility: z.enum(['PROJECT', 'PRIVATE']).optional() }), req.body);
+  ok(res, await aiThreads.createThread(callerId(req), idParam(req, 'pid'), body));
+}));
+router.get('/projects/:pid/ai/threads/:tid', asyncHandler(async (req, res) => {
+  ok(res, await aiThreads.getThread(callerId(req), idParam(req, 'pid'), idParam(req, 'tid')));
+}));
+router.patch('/projects/:pid/ai/threads/:tid', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ title: z.string().min(1).max(160).optional(), visibility: z.enum(['PROJECT', 'PRIVATE']).optional() }), req.body);
+  ok(res, await aiThreads.updateThread(callerId(req), idParam(req, 'pid'), idParam(req, 'tid'), body));
+}));
+router.delete('/projects/:pid/ai/threads/:tid', asyncHandler(async (req, res) => {
+  ok(res, await aiThreads.deleteThread(callerId(req), idParam(req, 'pid'), idParam(req, 'tid')));
+}));
+router.post('/projects/:pid/ai/messages/:mid/retry', asyncHandler(async (req, res) => {
+  ok(res, await ai.chat(callerId(req), idParam(req, 'pid'), { message: '', retryMessageId: idParam(req, 'mid') }));
+}));
+router.post('/projects/:pid/ai/messages/:mid/actions/:idx/apply', asyncHandler(async (req, res) => {
+  const idx = parse(z.coerce.number().int().min(0).max(49), req.params.idx);
+  const { action } = parse(z.object({ action: ai.actionSchema.optional() }), req.body ?? {});
+  ok(res, await ai.applyStoredAction(callerId(req), idParam(req, 'pid'), idParam(req, 'mid'), idx, action));
+}));
+router.patch('/projects/:pid/ai/messages/:mid/actions/:idx', asyncHandler(async (req, res) => {
+  const idx = parse(z.coerce.number().int().min(0).max(49), req.params.idx);
+  const { status } = parse(z.object({ status: z.enum(['dismissed', 'pending']) }), req.body);
+  ok(res, await ai.setStoredActionStatus(callerId(req), idParam(req, 'pid'), idParam(req, 'mid'), idx, status));
 }));
 router.post('/projects/:pid/ai/filter', asyncHandler(async (req, res) => {
   const { question } = parse(z.object({ question: z.string().min(2).max(500) }), req.body);

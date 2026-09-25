@@ -422,7 +422,23 @@ export type AiAction =
   | { type: 'add_comment'; number: number; text: string }
   | { type: 'move_to_sprint'; numbers: number[]; sprint: string }
   | { type: 'create_test'; title: string; preconditions?: string | null; steps: Array<{ action: string; data?: string | null; expected?: string | null }>; requirement?: number | null };
-export interface AiAnswer { reply: string; actions: AiAction[]; quota: AiQuota }
+export interface AiAnswer {
+  reply: string; actions: AiAction[]; quota: AiQuota;
+  /** Hội thoại đã lưu ở server (trả về từ chat/quick). */
+  threadId?: number; question?: AiMessage | null; answer?: AiMessage;
+}
+export type AiStoredStatus = 'pending' | 'applying' | 'done' | 'error' | 'dismissed';
+export interface AiStoredAction { index: number; action: AiAction; status: AiStoredStatus; summary?: string; number?: number; error?: string; byId?: number; byName?: string; at?: string }
+export interface AiMessage {
+  id: number; threadId: number; role: 'user' | 'assistant'; content: string; title: string | null;
+  issueNumber: number | null; error: string | null; createdAt: string; author: WorkUser | null; actions: AiStoredAction[];
+}
+export type AiThreadVisibility = 'PROJECT' | 'PRIVATE';
+export interface AiThreadSummary {
+  id: number; title: string; visibility: AiThreadVisibility; issueNumber: number | null; messageCount: number;
+  lastMessageAt: string; createdAt: string; createdById: number | null; createdBy: WorkUser | null; participants: WorkUser[]; mine: boolean;
+}
+export interface AiThread extends Omit<AiThreadSummary, 'participants' | 'mine'> { canManage: boolean; messages: AiMessage[] }
 export type AiQuickTask = 'write_story' | 'split' | 'generate_tests' | 'improve_bug' | 'summarize' | 'review_story' | 'meeting_notes';
 export interface AiFilterResult {
   filter: { status: number[]; type: number[]; assignee: number[]; label: number[]; sprint?: number | 'backlog'; q?: string; includeDone?: boolean };
@@ -759,13 +775,27 @@ export const workApi = {
   aiChat: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null }) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: 120_000 })),
   /** Như aiChat nhưng huỷ được (nút Cancel trong khung AI). */
-  aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null }, signal?: AbortSignal) =>
+  aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null; threadId?: number | null }, signal?: AbortSignal) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: 120_000, signal })),
+  // Hội thoại AI lưu ở server, dùng chung trong dự án
+  aiThreads: (pid: number, params: { scope?: 'all' | 'mine'; q?: string }) =>
+    d<AiThreadSummary[]>(api.get(`${B}/projects/${pid}/ai/threads`, { params })),
+  aiThread: (pid: number, tid: number) => d<AiThread>(api.get(`${B}/projects/${pid}/ai/threads/${tid}`)),
+  aiCreateThread: (pid: number, body: { title: string; issueNumber?: number | null; visibility?: AiThreadVisibility }) =>
+    d<AiThread>(api.post(`${B}/projects/${pid}/ai/threads`, body)),
+  aiUpdateThread: (pid: number, tid: number, body: { title?: string; visibility?: AiThreadVisibility }) =>
+    d<AiThread>(api.patch(`${B}/projects/${pid}/ai/threads/${tid}`, body)),
+  aiDeleteThread: (pid: number, tid: number) => d<{ ok: true }>(api.delete(`${B}/projects/${pid}/ai/threads/${tid}`)),
+  aiRetry: (pid: number, mid: number) => d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/messages/${mid}/retry`, {}, { timeout: 120_000 })),
+  aiApplyStored: (pid: number, mid: number, idx: number, action?: AiAction) =>
+    d<AiStoredAction>(api.post(`${B}/projects/${pid}/ai/messages/${mid}/actions/${idx}/apply`, action ? { action } : {})),
+  aiSetStoredStatus: (pid: number, mid: number, idx: number, status: 'dismissed' | 'pending') =>
+    d<AiStoredAction>(api.patch(`${B}/projects/${pid}/ai/messages/${mid}/actions/${idx}`, { status })),
   // Lần chạy đầu: dữ liệu mẫu + danh sách Getting started
   onboarding: (pid: number) => d<OnboardingStatus>(api.get(`${B}/projects/${pid}/onboarding`)),
   addSampleData: (pid: number) => d<{ issues: number; labels: number; sprintId: number | null; plans: number }>(api.post(`${B}/projects/${pid}/sample-data`, {}, { timeout: 120_000 })),
   removeSampleData: (pid: number) => d<{ issues: number; labels: number; sprintRemoved: boolean }>(api.delete(`${B}/projects/${pid}/sample-data`, { timeout: 60_000 })),
-  aiQuick: (pid: number, body: { task: AiQuickTask; issueNumber?: number | null; text?: string | null }) =>
+  aiQuick: (pid: number, body: { task: AiQuickTask; issueNumber?: number | null; text?: string | null; threadId?: number | null; label?: string | null }) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/quick`, body, { timeout: 120_000 })),
   aiFilter: (pid: number, question: string) => d<AiFilterResult>(api.post(`${B}/projects/${pid}/ai/filter`, { question }, { timeout: 60_000 })),
   aiApply: (pid: number, action: AiAction) => d<{ summary: string; number?: number }>(api.post(`${B}/projects/${pid}/ai/apply`, { action })),

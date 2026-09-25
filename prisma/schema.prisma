@@ -405,6 +405,8 @@ model User {
   workNotifySetting      WorkNotifySetting?    @relation("WorkNotifySettingUser")
   workEmailQueue         WorkEmailQueue[]      @relation("WorkEmailQueueUser")
   workApiTokens          WorkApiToken[]        @relation("WorkApiTokenUser")
+  workAiThreads          WorkAiThread[]        @relation("WorkAiThreadCreator")
+  workAiMessages         WorkAiMessage[]       @relation("WorkAiMessageAuthor")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -9734,6 +9736,7 @@ model WorkProject {
   github       WorkGithubConnection?
   devActivity  WorkDevActivity[]
   publicLinks  WorkPublicLink[]
+  aiThreads    WorkAiThread[]
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -10582,4 +10585,50 @@ model WorkApiToken {
 
   @@index([userId], name: "idx_work_api_token_user")
   @@map("work_api_tokens")
+}
+
+/// Hội thoại với trợ lý AI trong một dự án CT Work — lưu ở SERVER để không mất khi
+/// đóng khung/tải lại trang, và để cả nhóm xem + hỏi tiếp hội thoại của nhau.
+/// visibility: PROJECT (mọi thành viên xem được) | PRIVATE (chỉ người tạo).
+model WorkAiThread {
+  id            Int       @id @default(autoincrement())
+  projectId     Int       @map("project_id")
+  createdById   Int?      @map("created_by_id")
+  title         String    @db.VarChar(160)
+  visibility    String    @default("PROJECT") @db.VarChar(12)
+  issueNumber   Int?      @map("issue_number")
+  messageCount  Int       @default(0) @map("message_count")
+  lastMessageAt DateTime  @default(now()) @map("last_message_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  project   WorkProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy User?           @relation("WorkAiThreadCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  messages  WorkAiMessage[]
+
+  @@index([projectId, lastMessageAt], name: "idx_work_ai_thread_project")
+  @@map("work_ai_threads")
+}
+
+/// Một lượt trong hội thoại AI. `actions` = đề xuất của AI kèm TRẠNG THÁI áp dụng
+/// ([{action, status, summary?, number?, error?, byId?, at?}]) — lưu ở server để hai
+/// người cùng xem không áp dụng trùng một đề xuất. `error` ≠ null: câu hỏi chưa được trả lời.
+model WorkAiMessage {
+  id          Int      @id @default(autoincrement())
+  threadId    Int      @map("thread_id")
+  role        String   @db.VarChar(12)
+  authorId    Int?     @map("author_id")
+  content     String   @db.Text
+  title       String?  @db.VarChar(120)
+  issueNumber Int?     @map("issue_number")
+  actions     Json?
+  error       String?  @db.VarChar(300)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  thread WorkAiThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  author User?        @relation("WorkAiMessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([threadId, id], name: "idx_work_ai_message_thread")
+  @@map("work_ai_messages")
 }

@@ -27,6 +27,7 @@ import { activeSprintPace, type SprintPace } from './sprintPace.js';
 import { projectMembers } from './projects.service.js';
 import { bulkUpdate, computeSprintReport, estimateOf, estimationOf } from './sprints.service.js';
 import { createTest } from './tests.service.js';
+import * as threads from './aiThreads.service.js';
 
 // ─── Hạn mức ─────────────────────────────────────────────────────
 
@@ -220,13 +221,32 @@ Priority: 1=Highest 2=High 3=Medium 4=Low 5=Lowest. Use issue NUMBERS (12), not 
 export async function chat(
   userId: number,
   projectId: number,
-  input: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null },
+  input: {
+    message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null;
+    /** Hỏi tiếp hội thoại đã lưu (của mình hoặc của người khác trong nhóm); bỏ trống = hội thoại mới. */
+    threadId?: number | null;
+    /** Hỏi lại câu đã lưu nhưng chưa được trả lời (không tạo câu hỏi mới). */
+    retryMessageId?: number | null;
+  },
 ) {
   const access = await requireProject(userId, projectId, 'ai.use');
+  // Lượt "hỏi lại": lấy lại đúng câu hỏi đã lưu, kiểm nó thuộc hội thoại người này xem được.
+  let retry: Awaited<ReturnType<typeof threads.visibleMessage>> | null = null;
+  if (input.retryMessageId) {
+    retry = await threads.visibleMessage(userId, projectId, input.retryMessageId);
+    if (retry.role !== 'user' || !retry.error) throw new BadRequestError('This question already has an answer', 'WORK_AI_NOTHING_TO_RETRY');
+    input = { ...input, message: retry.content, threadId: retry.threadId, issueNumber: retry.issueNumber };
+  }
+  const thread = await threads.openThread(userId, access, { threadId: input.threadId, seed: input.message, issueNumber: input.issueNumber });
   const ctx = await projectContext(access, input.message);
   const focus = input.issueNumber ? await issueContext(projectId, access.key, input.issueNumber) : null;
   const me = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { username: true } });
-  const history = (input.history ?? []).slice(-10).map((m) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${clip(m.content, 2500)}`).join('\n');
+  // Lịch sử lấy từ SERVER (đúng thứ cả nhóm thấy), không tin mảng client gửi lên.
+  const history = await threads.historyText(thread.id, retry?.id);
+  // Lưu câu hỏi TRƯỚC khi gọi AI: cổng hỏng hay người dùng đóng khung khi chờ thì câu hỏi vẫn còn.
+  const userMsg = retry ? null : await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: input.message, issueNumber: input.issueNumber ?? null });
+  const questionId = retry?.id ?? userMsg!.id;
+  if (retry) await threads.clearFailed(retry.id);
   const system = `You are the CT Work project assistant — a senior Scrum master, business analyst and QA lead in one.
 You help a team manage their project (software school projects like SWP391/SWR302/SWT301, freelance and company work).
 You can read the project context below. Be concrete, short and practical. Use Markdown in "reply" (short lists, bold key facts). ${LANG_RULE}
@@ -235,9 +255,20 @@ ${ACTIONS_DOC}
 Only propose actions when the user asks for changes or clearly benefits from them; otherwise return an empty list.
 Never invent issue numbers that are not in the context (except for issues you propose to create).
 Return ONLY JSON: {"reply":"markdown","actions":[…]}`;
-  const user = `${ctx.text}${focus ? `\n\nFocused issue:\n${focus.text}` : ''}${history ? `\n\nConversation so far:\n${history}` : ''}\n\nUser: ${input.message}`;
-  const out = parseJson(await ask(userId, system, user, 2200), z.object({ reply: z.string(), actions: z.unknown().optional() }));
-  return { reply: out.reply, actions: saneActions(out.actions), quota: await aiQuota(userId) };
+  const user = `${ctx.text}${focus ? `\n\nFocused issue:\n${focus.text}` : ''}${history ? `\n\nConversation so far (several team members may have asked):\n${history}` : ''}\n\nUser @${me.username}: ${input.message}`;
+  let out: { reply: string; actions?: unknown };
+  try {
+    out = parseJson(await ask(userId, system, user, 2200), z.object({ reply: z.string(), actions: z.unknown().optional() }));
+  } catch (err) {
+    await threads.markFailed(questionId, err);
+    throw err;
+  }
+  const actions = saneActions(out.actions);
+  const answer = await threads.addMessage(thread.id, {
+    role: 'assistant', content: out.reply, issueNumber: input.issueNumber ?? null,
+    actions: actions.map((action) => ({ action, status: 'pending' as const })),
+  });
+  return { reply: out.reply, actions, quota: await aiQuota(userId), threadId: thread.id, question: userMsg, answer };
 }
 
 // ─── Việc một chạm ───────────────────────────────────────────────
@@ -254,7 +285,12 @@ const QUICK_PROMPTS: Record<QuickTask, string> = {
   meeting_notes: 'The user pasted meeting notes. Extract every concrete task/decision into create_issue actions (assign owners only if a member username is clearly mentioned, set due dates only if stated). In "reply" give a short summary of the meeting: decisions, action items, open questions.',
 };
 
-export async function quick(userId: number, projectId: number, input: { task: QuickTask; issueNumber?: number | null; text?: string | null }) {
+const QUICK_LABELS: Record<QuickTask, string> = {
+  write_story: 'Write a user story', split: 'Split into sub-tasks', generate_tests: 'Generate test cases',
+  improve_bug: 'Improve bug report', summarize: 'Summarize', review_story: 'Review story quality', meeting_notes: 'Meeting notes to tasks',
+};
+
+export async function quick(userId: number, projectId: number, input: { task: QuickTask; issueNumber?: number | null; text?: string | null; threadId?: number | null; label?: string | null }) {
   const access = await requireProject(userId, projectId, 'ai.use');
   const needsIssue = ['split', 'generate_tests', 'improve_bug', 'summarize', 'review_story'].includes(input.task);
   if (needsIssue && !input.issueNumber) throw new BadRequestError('Choose an issue first', 'WORK_AI_NEEDS_ISSUE');
@@ -266,8 +302,63 @@ ${QUICK_PROMPTS[input.task]}
 ${ACTIONS_DOC}
 Return ONLY JSON: {"reply":"short markdown explanation","actions":[…]}`;
   const user = `${ctx.text}${focus ? `\n\nFocused issue:\n${focus.text}` : ''}${input.text ? `\n\nUser input:\n${clip(input.text, 12000)}` : ''}`;
-  const out = parseJson(await ask(userId, system, user, 3000), z.object({ reply: z.string(), actions: z.unknown().optional() }));
-  return { reply: out.reply, actions: saneActions(out.actions), quota: await aiQuota(userId) };
+  // Việc một chạm cũng vào hội thoại: một dòng "câu hỏi" mô tả việc đã bấm + câu trả lời có tiêu đề.
+  const label = (input.label?.trim() || QUICK_LABELS[input.task]).slice(0, 120);
+  const asked = `${label}${input.issueNumber ? ` · ${access.key}-${input.issueNumber}` : ''}${input.text ? `\n\n${clip(input.text, 4000)}` : ''}`;
+  const thread = await threads.openThread(userId, access, { threadId: input.threadId, seed: asked, issueNumber: input.issueNumber });
+  const userMsg = await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: asked, issueNumber: input.issueNumber ?? null });
+  let out: { reply: string; actions?: unknown };
+  try {
+    out = parseJson(await ask(userId, system, user, 3000), z.object({ reply: z.string(), actions: z.unknown().optional() }));
+  } catch (err) {
+    await threads.markFailed(userMsg.id, err);
+    throw err;
+  }
+  const actions = saneActions(out.actions);
+  const answer = await threads.addMessage(thread.id, {
+    role: 'assistant', title: label, content: out.reply, issueNumber: input.issueNumber ?? null,
+    actions: actions.map((action) => ({ action, status: 'pending' as const })),
+  });
+  return { reply: out.reply, actions, quota: await aiQuota(userId), threadId: thread.id, question: userMsg, answer };
+}
+
+// ─── Đề xuất đã lưu trong hội thoại ──────────────────────────────
+
+/**
+ * Áp dụng đề xuất THỨ `index` của tin nhắn AI đã lưu. Chạy đúng đề xuất lưu ở
+ * server (client không gửi nội dung đề xuất ⇒ không sửa được nó trước khi áp),
+ * bằng quyền của CHÍNH người bấm, và giành khoá trước ⇒ hai người trong nhóm
+ * không thể áp dụng cùng một đề xuất hai lần.
+ */
+export async function applyStoredAction(userId: number, projectId: number, messageId: number, index: number, edited?: AiAction) {
+  await requireProject(userId, projectId, 'project.view');
+  const msg = await threads.visibleMessage(userId, projectId, messageId);
+  if (msg.role !== 'assistant') throw new BadRequestError('Only AI answers have suggestions');
+  const me = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { username: true } });
+  const item = await threads.claimAction(userId, me.username, messageId, index);
+  // Người dùng sửa đề xuất trước khi áp (ô sửa trong ActionCard): lưu bản đã sửa để cả nhóm thấy đúng thứ đã áp.
+  if (edited) await threads.patchAction(messageId, index, { action: edited });
+  const parsed = actionSchema.safeParse(edited ?? item.action);
+  if (!parsed.success) {
+    await threads.patchAction(messageId, index, { status: 'error', error: 'This suggestion is no longer valid' });
+    throw new BadRequestError('This suggestion is no longer valid');
+  }
+  try {
+    const r = await applyAction(userId, projectId, parsed.data);
+    return threads.patchAction(messageId, index, { status: 'done', summary: r.summary, number: r.number, error: undefined, at: new Date().toISOString() });
+  } catch (err) {
+    const text = err instanceof Error ? err.message : 'Could not apply this change';
+    await threads.patchAction(messageId, index, { status: 'error', error: text.slice(0, 300) });
+    throw err;
+  }
+}
+
+/** Bỏ qua / khôi phục một đề xuất đã lưu (ai trong nhóm cũng thấy trạng thái này). */
+export async function setStoredActionStatus(userId: number, projectId: number, messageId: number, index: number, status: 'dismissed' | 'pending') {
+  await requireProject(userId, projectId, 'ai.use');
+  await threads.visibleMessage(userId, projectId, messageId);
+  const from: threads.StoredActionStatus[] = status === 'dismissed' ? ['pending', 'error'] : ['dismissed'];
+  return threads.patchAction(messageId, index, { status, error: undefined }, from);
 }
 
 /** Câu hỏi bằng lời ⇒ bộ lọc danh sách thẻ (client áp vào trang Issues). */

@@ -74,10 +74,14 @@ function useOpenResult(config: ProjectConfig) {
 
 // ─── Nhóm thẻ + Apply all ────────────────────────────────────────
 
-export function ActionGroup({ config, items, onUpdate }: {
+export function ActionGroup({ config, items, onUpdate, applyFn, dismissFn }: {
   config: ProjectConfig;
   items: ActionItem[];
   onUpdate: (id: string, patch: Partial<ActionItem>) => void;
+  /** Đề xuất đã lưu ở server (hội thoại AI dùng chung): áp qua server để giữ trạng thái + chống áp trùng. */
+  applyFn?: (item: ActionItem) => Promise<{ summary?: string; number?: number }>;
+  /** Bỏ qua cũng lưu ở server để cả nhóm thấy. */
+  dismissFn?: (item: ActionItem) => Promise<void>;
 }) {
   const qc = useQueryClient();
   const openResult = useOpenResult(config);
@@ -87,14 +91,14 @@ export function ActionGroup({ config, items, onUpdate }: {
   const applyOne = useCallback(async (item: ActionItem): Promise<boolean> => {
     onUpdate(item.id, { status: 'applying', error: undefined });
     try {
-      const r = await workApi.aiApply(pid, item.action);
+      const r = applyFn ? await applyFn(item) : await workApi.aiApply(pid, item.action);
       onUpdate(item.id, { status: 'done', summary: r.summary, number: r.number });
       return true;
     } catch (err) {
       onUpdate(item.id, { status: 'error', error: workError(err, 'Could not apply this change') });
       return false;
     }
-  }, [pid, onUpdate]);
+  }, [pid, onUpdate, applyFn]);
 
   const refresh = useCallback(() => {
     qc.invalidateQueries({ predicate: (q) => q.queryKey[0] === 'work' && q.queryKey[2] === pid });
@@ -144,7 +148,10 @@ export function ActionGroup({ config, items, onUpdate }: {
           busy={bulk}
           onEdit={(action) => onUpdate(it.id, { action })}
           onApply={() => apply(it)}
-          onDismiss={() => onUpdate(it.id, { status: 'dismissed' })}
+          onDismiss={() => {
+            if (!dismissFn) { onUpdate(it.id, { status: 'dismissed' }); return; }
+            dismissFn(it).then(() => onUpdate(it.id, { status: 'dismissed' }), (err) => onUpdate(it.id, { status: 'error', error: workError(err, 'Could not dismiss') }));
+          }}
           onOpen={() => openResult(it)}
         />
       ))}

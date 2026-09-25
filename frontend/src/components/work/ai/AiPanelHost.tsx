@@ -7,44 +7,37 @@
  * AI không tự ghi gì: câu trả lời đi kèm các đề xuất (ActionCard) và chỉ khi
  * người dùng bấm Apply thì thay đổi mới xảy ra.
  *
- * Lịch sử hội thoại giữ theo từng dự án (state + sessionStorage, bọc try/catch
- * vì trình duyệt riêng tư có thể ném lỗi) và chỉ gửi 10 lượt gần nhất.
+ * Hội thoại LƯU Ở SERVER theo dự án (25/09/2026): đóng khung / tải lại / đổi máy
+ * không mất; cả nhóm xem được hội thoại của nhau (ghi tên người hỏi) và hỏi tiếp.
+ * Người tạo có thể đặt hội thoại thành riêng tư. Đề xuất AI lưu kèm trạng thái
+ * "đã áp dụng bởi @ai" — server khoá để hai người không áp dụng trùng.
  */
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeSanitize from 'rehype-sanitize';
 import { toast } from 'sonner';
-import { AlertTriangle, ArrowUp, Sparkles, Square, Trash2, X } from 'lucide-react';
+import { AlertTriangle, ArrowUp, History, Lock, RotateCcw, Search, Sparkles, Square, SquarePen, Trash2, Users, X } from 'lucide-react';
 import {
   isAiQuotaError, workApi, workError, workErrorStatus,
-  type AiAnswer, type AiQuickTask, type AiQuota, type ProjectConfig,
+  type AiMessage, type AiQuickTask, type AiQuota, type ProjectConfig,
 } from '@/lib/work-api';
+import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import { wk } from '../hooks';
-import { WorkPortal } from '../ui';
+import { relativeTime, Spinner, UserAvatar, WorkPortal } from '../ui';
 import { ActionGroup, type ActionItem } from './ActionCard';
 import UpgradeDialog from './UpgradeDialog';
 import { useAiPanel, type AiQuickRequest } from './store';
 
 // ─── Kiểu + lưu trữ ──────────────────────────────────────────────
 
-interface Turn {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  /** Tiêu đề cho lượt do việc một chạm sinh ra ("Split into sub-tasks"). */
-  title?: string;
-  actions?: ActionItem[];
-}
-
 const QUOTA_KEY = ['work', 'ai-quota'] as const;
-const MAX_HISTORY = 10;
-const MAX_STORED = 40;
-const storeKey = (pid: number) => `ctwork-ai:${pid}`;
+const threadKey = (pid: number, tid: number) => ['work', 'ai-thread', pid, tid] as const;
+const threadsKey = (pid: number) => ['work', 'ai-threads', pid] as const;
 
 export const QUICK_TITLES: Record<AiQuickTask, string> = {
   write_story: 'Write a user story',
@@ -56,34 +49,35 @@ export const QUICK_TITLES: Record<AiQuickTask, string> = {
   meeting_notes: 'Meeting notes to tasks',
 };
 
-let seq = 0;
-const uid = () => `${Date.now().toString(36)}-${(seq++).toString(36)}`;
-
-function loadTurns(pid: number): Turn[] {
+/**
+ * Hội thoại đang mở của từng dự án — chỉ là tiện ích PER-VIEWER (mở lại khung
+ * thì về đúng chỗ đang đọc). Nội dung hội thoại nằm ở SERVER, không ở đây.
+ */
+const lastKey = (pid: number) => `ctwork-ai-thread:${pid}`;
+function loadLast(pid: number): number | null {
   try {
-    const raw = sessionStorage.getItem(storeKey(pid));
-    if (!raw) return [];
-    const turns = JSON.parse(raw) as Turn[];
-    if (!Array.isArray(turns)) return [];
-    // Một lượt Apply đang chạy dở khi tải lại trang thì không biết kết quả — cho bấm lại.
-    return turns.map((t) => ({
-      ...t,
-      actions: t.actions?.map((a) => (a.status === 'applying' ? { ...a, status: 'pending' as const } : a)),
-    }));
-  } catch {
-    return [];
-  }
+    const n = Number(localStorage.getItem(lastKey(pid)));
+    return Number.isInteger(n) && n > 0 ? n : null;
+  } catch { return null; }
+}
+function saveLast(pid: number, tid: number | null) {
+  try {
+    if (tid) localStorage.setItem(lastKey(pid), String(tid));
+    else localStorage.removeItem(lastKey(pid));
+    sessionStorage.removeItem(`ctwork-ai:${pid}`); // lịch sử kiểu cũ (chỉ trong tab) — dọn đi
+  } catch { /* chế độ riêng tư — chỉ mất chỗ đang đọc */ }
 }
 
-function saveTurns(pid: number, turns: Turn[]) {
-  try {
-    if (!turns.length) sessionStorage.removeItem(storeKey(pid));
-    else sessionStorage.setItem(storeKey(pid), JSON.stringify(turns.slice(-MAX_STORED)));
-  } catch { /* hết chỗ / chế độ riêng tư — chỉ mất lịch sử khi tải lại */ }
-}
-
-function toActionItems(a: AiAnswer): ActionItem[] {
-  return (a.actions ?? []).map((action) => ({ id: uid(), action, status: 'pending' }));
+/** Đề xuất lưu ở server ⇒ thẻ ActionCard. "Đã áp dụng bởi @ai" để cả nhóm biết ai đã bấm. */
+function storedItems(m: AiMessage): ActionItem[] {
+  return m.actions.map((a) => ({
+    id: `${m.id}:${a.index}`,
+    action: a.action,
+    status: a.status,
+    summary: a.status === 'done' ? `${a.summary ?? 'Applied'}${a.byName ? ` · by @${a.byName}` : ''}` : a.summary,
+    number: a.number,
+    error: a.status === 'applying' && a.byName ? `@${a.byName} is applying this…` : a.error,
+  }));
 }
 
 // ─── Markdown ────────────────────────────────────────────────────
@@ -144,54 +138,69 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   onQuickTaken: () => void;
 }) {
   const qc = useQueryClient();
-  const [conv, setConv] = useState<{ pid: number; turns: Turn[] }>(() => ({ pid, turns: loadTurns(pid) }));
+  const meId = useAuthStore((s) => s.user?.id);
+  const [threadId, setThreadId] = useState<number | null>(() => loadLast(pid));
+  const [view, setView] = useState<'chat' | 'history'>('chat');
   const [draft, setDraft] = useState('');
-  const [waiting, setWaiting] = useState<string | null>(null); // nhãn của việc đang chờ
-  /** Huỷ lượt đang chờ: chat thì huỷ hẳn request; việc một chạm thì bỏ qua kết quả về muộn. */
+  /** Câu vừa gửi, hiện ngay trong lúc chờ server lưu + AI trả lời. */
+  const [pendingQ, setPendingQ] = useState<string | null>(null);
+  const [waiting, setWaiting] = useState<string | null>(null);
+  const [newPrivate, setNewPrivate] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const waitGen = useRef(0);
   const [unavailable, setUnavailable] = useState(false);
   const [upgrade, setUpgrade] = useState(false);
-  const pidRef = useRef(pid);
-  pidRef.current = pid;
-  const mounted = useRef(true);
-  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+  /** Sửa tại chỗ của người đang xem (ô sửa đề xuất, trạng thái đang bấm) — phủ lên trạng thái server. */
+  const [overlay, setOverlay] = useState<Record<string, Partial<ActionItem>>>({});
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
   const { data: quota } = useQuery({ queryKey: QUOTA_KEY, queryFn: workApi.aiQuota, staleTime: 30_000 });
 
-  // Đổi dự án ⇒ nạp hội thoại của dự án đó.
+  const selectThread = useCallback((tid: number | null) => {
+    setThreadId(tid);
+    saveLast(pid, tid);
+    setOverlay({});
+    setConfirmDelete(false);
+  }, [pid]);
+
+  // Đổi dự án ⇒ về hội thoại đang mở của dự án đó.
+  const shownPid = useRef(pid);
   useEffect(() => {
-    setConv((c) => (c.pid === pid ? c : { pid, turns: loadTurns(pid) }));
+    if (shownPid.current === pid) return;
+    shownPid.current = pid;
+    setThreadId(loadLast(pid));
+    setView('chat');
+    setOverlay({});
     setUnavailable(false);
   }, [pid]);
-  useEffect(() => saveTurns(conv.pid, conv.turns), [conv]);
 
-  const turns = useMemo(() => (conv.pid === pid ? conv.turns : []), [conv, pid]);
+  // Hội thoại đang mở — đọc từ server, tự làm mới để thấy người khác vừa hỏi gì.
+  const threadQ = useQuery({
+    queryKey: threadKey(pid, threadId ?? 0),
+    queryFn: () => workApi.aiThread(pid, threadId!),
+    enabled: !!threadId && view === 'chat',
+    refetchInterval: waiting ? false : 15_000,
+    retry: (n, err) => workErrorStatus(err) !== 404 && n < 2,
+  });
+  // Hội thoại đã bị xoá / chuyển riêng tư ⇒ về màn trống, không kẹt lỗi.
+  useEffect(() => {
+    if (threadQ.isError && workErrorStatus(threadQ.error) === 404) selectThread(null);
+  }, [threadQ.isError, threadQ.error, selectThread]);
+  const thread = threadId && threadQ.data?.id === threadId ? threadQ.data : null;
+  const messages = thread?.messages ?? [];
+
   const key = config?.key ?? '';
   const issueKey = issueNumber ? `${key}-${issueNumber}` : null;
 
-  /** Thêm lượt vào đúng dự án đã hỏi (người dùng có thể đã chuyển dự án hoặc đóng ngăn khi chờ). */
-  const append = useCallback((forPid: number, ...add: Turn[]) => {
-    if (mounted.current && pidRef.current === forPid) setConv((c) => (c.pid === forPid ? { ...c, turns: [...c.turns, ...add] } : c));
-    else saveTurns(forPid, [...loadTurns(forPid), ...add]);
-  }, []);
-
-  const removeTurn = useCallback((id: string) => {
-    setConv((c) => ({ ...c, turns: c.turns.filter((t) => t.id !== id) }));
-  }, []);
-
-  const updateAction = useCallback((turnId: string, actionId: string, patch: Partial<ActionItem>) => {
-    setConv((c) => ({
-      ...c,
-      turns: c.turns.map((t) => (t.id !== turnId ? t : {
-        ...t,
-        actions: t.actions?.map((a) => (a.id === actionId ? { ...a, ...patch } : a)),
-      })),
-    }));
-  }, []);
+  const refresh = useCallback(async (tid: number | null) => {
+    await Promise.all([
+      tid ? qc.invalidateQueries({ queryKey: threadKey(pid, tid) }) : Promise.resolve(),
+      qc.invalidateQueries({ queryKey: threadsKey(pid) }),
+    ]);
+  }, [qc, pid]);
 
   const onQuota = useCallback((q: AiQuota | undefined) => {
     if (q) qc.setQueryData(QUOTA_KEY, q);
@@ -205,72 +214,104 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
     qc.invalidateQueries({ queryKey: QUOTA_KEY });
   }, [qc]);
 
+  /** Hội thoại để ghi vào: đang mở thì dùng, chưa có thì tạo (TRƯỚC câu hỏi — xem createThread). */
+  const ensureThread = useCallback(async (title: string): Promise<number> => {
+    if (threadId) return threadId;
+    const t = await workApi.aiCreateThread(pid, { title, issueNumber, visibility: newPrivate ? 'PRIVATE' : 'PROJECT' });
+    qc.setQueryData(threadKey(pid, t.id), t);
+    selectThread(t.id);
+    return t.id;
+  }, [threadId, pid, issueNumber, newPrivate, qc, selectThread]);
+
   // ── Hỏi tự do ──
   const send = useCallback(async (text: string) => {
     const message = text.trim();
     if (!message || waiting) return;
-    const forPid = pid;
-    const history = turns.slice(-MAX_HISTORY).map((t) => ({ role: t.role, content: t.content }));
-    const userTurn: Turn = { id: uid(), role: 'user', content: message };
-    append(forPid, userTurn);
+    setPendingQ(message);
     setDraft('');
     setWaiting(CHAT_WAIT);
     setUnavailable(false);
     const ctrl = new AbortController();
     abortRef.current = ctrl;
     const gen = ++waitGen.current;
+    let tid: number | null = threadId;
     try {
-      const a = await workApi.aiChatAbortable(forPid, { message, history, issueNumber }, ctrl.signal);
-      append(forPid, { id: uid(), role: 'assistant', content: a.reply, actions: toActionItems(a) });
+      tid = await ensureThread(message);
+      const a = await workApi.aiChatAbortable(pid, { message, issueNumber, threadId: tid }, ctrl.signal);
       onQuota(a.quota);
     } catch (err) {
-      // Hỏi hỏng (hoặc bấm Cancel) thì trả câu hỏi về ô soạn để gửi lại, không để một lượt "treo".
-      if (pidRef.current === forPid) {
-        removeTurn(userTurn.id);
-        setDraft((d) => d || message);
-      }
-      if (ctrl.signal.aborted) qc.invalidateQueries({ queryKey: QUOTA_KEY });
-      else handleError(err);
+      // Server đã LƯU câu hỏi (kèm dấu lỗi + nút Retry) nếu request tới được nó.
+      // Chỉ khi câu hỏi không có trong hội thoại mới trả nó về ô soạn để khỏi gõ lại.
+      const fresh = tid ? await workApi.aiThread(pid, tid).catch(() => null) : null;
+      const saved = fresh?.messages.slice(-3).some((m) => m.role === 'user' && m.content === message);
+      if (!saved) setDraft((d) => d || message);
+      if (ctrl.signal.aborted) {
+        toast.message('Stopped waiting. If the AI still answers, the reply is saved in this conversation.');
+        qc.invalidateQueries({ queryKey: QUOTA_KEY });
+      } else handleError(err);
     } finally {
       if (abortRef.current === ctrl) abortRef.current = null;
-      if (waitGen.current === gen) setWaiting(null);
+      if (waitGen.current === gen) { setWaiting(null); setPendingQ(null); }
+      await refresh(tid);
     }
-  }, [waiting, pid, turns, issueNumber, append, removeTurn, onQuota, handleError, qc]);
+  }, [waiting, threadId, pid, issueNumber, ensureThread, onQuota, handleError, qc, refresh]);
+
+  const retry = useCallback(async (mid: number) => {
+    if (waiting || !threadId) return;
+    const gen = ++waitGen.current;
+    setWaiting('Asking again');
+    setUnavailable(false);
+    try {
+      const a = await workApi.aiRetry(pid, mid);
+      onQuota(a.quota);
+    } catch (err) {
+      handleError(err);
+    } finally {
+      if (waitGen.current === gen) setWaiting(null);
+      await refresh(threadId);
+    }
+  }, [waiting, threadId, pid, onQuota, handleError, refresh]);
 
   const cancel = useCallback(() => {
     abortRef.current?.abort();
     abortRef.current = null;
-    waitGen.current += 1; // kết quả việc một chạm về muộn sẽ bị bỏ qua
+    waitGen.current += 1; // kết quả việc một chạm về muộn: vẫn được lưu ở server, chỉ không chờ nữa
     setWaiting(null);
+    setPendingQ(null);
     requestAnimationFrame(() => inputRef.current?.focus());
   }, []);
 
-  // ── Việc một chạm từ store: chạy ngay khi mở ──
+  // ── Việc một chạm từ store: chạy ngay khi mở, ghi vào hội thoại đang mở ──
   const ranQuick = useRef<AiQuickRequest | null>(null);
   useEffect(() => {
     if (!quick || ranQuick.current === quick) return;
     ranQuick.current = quick;
     onQuickTaken();
-    const forPid = pid;
     const title = quick.label ?? QUICK_TITLES[quick.task];
+    setView('chat');
     setWaiting(title);
     setUnavailable(false);
     const gen = ++waitGen.current;
-    workApi.aiQuick(forPid, { task: quick.task, issueNumber: quick.issueNumber ?? null, text: quick.text ?? null })
-      .then((a) => {
+    let tid: number | null = threadId;
+    (async () => {
+      try {
+        tid = await ensureThread(`${title}${quick.issueNumber && key ? ` · ${key}-${quick.issueNumber}` : ''}`);
+        const a = await workApi.aiQuick(pid, { task: quick.task, issueNumber: quick.issueNumber ?? null, text: quick.text ?? null, threadId: tid, label: title });
         onQuota(a.quota);
-        if (waitGen.current !== gen) return; // đã bấm Cancel
-        append(forPid, { id: uid(), role: 'assistant', title, content: a.reply, actions: toActionItems(a) });
-      })
-      .catch((err) => { if (waitGen.current === gen) handleError(err); })
-      .finally(() => { if (waitGen.current === gen) setWaiting(null); });
-  }, [quick, pid, onQuickTaken, append, onQuota, handleError]);
+      } catch (err) {
+        if (waitGen.current === gen) handleError(err);
+      } finally {
+        if (waitGen.current === gen) setWaiting(null);
+        await refresh(tid);
+      }
+    })();
+  }, [quick, pid, key, threadId, onQuickTaken, ensureThread, onQuota, handleError, refresh]);
 
   // ── Cuộn xuống cuối khi có lượt mới ──
   useEffect(() => {
     const el = scrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [turns.length, waiting]);
+    if (el && view === 'chat') el.scrollTop = el.scrollHeight;
+  }, [messages.length, pendingQ, waiting, view, threadId]);
 
   // ── Focus + Esc ──
   useEffect(() => {
@@ -281,18 +322,41 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape' || e.defaultPrevented) return;
-      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return; // hộp thoại (Upgrade…) đóng trước
-      e.preventDefault(); // IssueDrawer phía dưới bỏ qua Esc này
-      onClose();
+      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
+      e.preventDefault();
+      if (view === 'history') setView('chat');
+      else onClose();
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  }, [onClose, view]);
 
-  const clearConversation = () => {
+  const newConversation = () => {
     if (waiting) return;
-    setConv({ pid, turns: [] });
-    inputRef.current?.focus();
+    selectThread(null);
+    setView('chat');
+    setNewPrivate(false);
+    requestAnimationFrame(() => inputRef.current?.focus());
+  };
+
+  const toggleVisibility = async () => {
+    if (!thread) return;
+    try {
+      const t = await workApi.aiUpdateThread(pid, thread.id, { visibility: thread.visibility === 'PRIVATE' ? 'PROJECT' : 'PRIVATE' });
+      qc.setQueryData(threadKey(pid, t.id), t);
+      qc.invalidateQueries({ queryKey: threadsKey(pid) });
+      toast.success(t.visibility === 'PRIVATE' ? 'Only you can see this conversation now' : 'Everyone in this project can see this conversation now');
+    } catch (err) { toast.error(workError(err, 'Could not change who can see this')); }
+  };
+
+  const deleteThread = async () => {
+    if (!thread) return;
+    try {
+      await workApi.aiDeleteThread(pid, thread.id);
+      qc.invalidateQueries({ queryKey: threadsKey(pid) });
+      selectThread(null);
+      toast.success('Conversation deleted');
+    } catch (err) { toast.error(workError(err, 'Could not delete this conversation')); }
   };
 
   const fill = (text: string) => {
@@ -315,6 +379,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   ];
 
   const aiOff = unavailable || quota?.available === false;
+  const isPrivate = thread ? thread.visibility === 'PRIVATE' : newPrivate;
 
   return (
     <WorkPortal>
@@ -324,7 +389,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
         role="dialog"
         aria-modal="false"
         aria-label="AI assistant"
-        className="fixed inset-y-0 right-0 z-[66] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-bg)] sm:w-[420px]"
+        className="fixed inset-y-0 right-0 z-[66] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-bg)] sm:w-[440px]"
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
       >
         {/* Đầu ngăn */}
@@ -334,123 +399,293 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <h2 className="text-[14px] font-semibold">AI assistant</h2>
-              {key && <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 font-mono text-[11px] text-[var(--w-text-2)]">{key}</span>}
+              <h2 className="truncate text-[14px] font-semibold" title={view === 'chat' && thread ? thread.title : undefined}>
+                {view === 'history' ? 'Team conversations' : thread ? thread.title : 'AI assistant'}
+              </h2>
+              {key && <span className="shrink-0 rounded-[4px] bg-[var(--w-sunken)] px-1.5 font-mono text-[11px] text-[var(--w-text-2)]">{key}</span>}
             </div>
-            <div className="mt-0.5 h-[18px] text-[12px] text-[var(--w-text-3)]">
-              {quota ? <QuotaChip quota={quota} /> : null}
+            <div className="mt-0.5 flex h-[18px] items-center gap-2 text-[12px] text-[var(--w-text-3)]">
+              {view === 'chat' && thread?.createdBy ? (
+                <span className="truncate">Started by {thread.createdById === meId ? 'you' : `@${thread.createdBy.username}`} · {relativeTime(thread.createdAt)}</span>
+              ) : quota ? <QuotaChip quota={quota} /> : null}
             </div>
           </div>
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={clearConversation} disabled={!turns.length || !!waiting} aria-label="Clear conversation" title="Clear conversation">
-            <Trash2 size={14} />
+          <button type="button" className={cn('w-btn w-btn-ghost w-btn-icon w-btn-sm', view === 'history' && 'bg-[var(--w-active)]')} onClick={() => setView(view === 'history' ? 'chat' : 'history')} aria-label="Conversation history" title="Team conversations">
+            <History size={14} />
+          </button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={newConversation} disabled={!!waiting} aria-label="New conversation" title="New conversation">
+            <SquarePen size={14} />
           </button>
           <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onClose} aria-label="Close AI assistant" title="Close (Esc)">
             <X size={15} />
           </button>
         </div>
 
-        {/* Hội thoại */}
-        <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-4 py-4" aria-live="polite">
-          {!turns.length && !waiting ? (
-            <EmptyState suggestions={suggestions} onPick={fill} disabled={aiOff} />
-          ) : (
-            <div className="space-y-4">
-              {turns.map((t) => (t.role === 'user' ? (
-                <div key={t.id} className="flex justify-end">
-                  <div className="max-w-[85%] whitespace-pre-wrap break-words rounded-[12px] rounded-br-[4px] bg-[var(--w-accent)] px-3 py-2 text-[13.5px] leading-relaxed text-white">
-                    {t.content}
-                  </div>
-                </div>
-              ) : (
-                <div key={t.id}>
-                  <div className="rounded-[12px] rounded-bl-[4px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2.5">
-                    {t.title && (
-                      <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]">
-                        <Sparkles size={11} /> {t.title}
-                      </div>
+        {view === 'history' ? (
+          <ThreadList pid={pid} projectKey={key} meId={meId} currentId={threadId} onOpen={(tid) => { selectThread(tid); setView('chat'); }} onNew={newConversation} />
+        ) : (
+          <>
+            {/* Thanh hội thoại: ai thấy được + quản lý */}
+            {thread && (
+              <div className="flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 py-1.5 text-[12px] text-[var(--w-text-2)]">
+                {thread.visibility === 'PRIVATE'
+                  ? <span className="inline-flex items-center gap-1"><Lock size={12} /> Only you</span>
+                  : <span className="inline-flex items-center gap-1"><Users size={12} /> Shared with the project</span>}
+                <span className="text-[var(--w-text-3)]">· {thread.messageCount} message{thread.messageCount === 1 ? '' : 's'}</span>
+                {thread.canManage && (
+                  <span className="ml-auto flex items-center gap-1">
+                    <button type="button" className="w-btn w-btn-ghost w-btn-sm !h-6 !px-1.5 text-[12px]" onClick={toggleVisibility}>
+                      {thread.visibility === 'PRIVATE' ? <><Users size={12} /> Share</> : <><Lock size={12} /> Make private</>}
+                    </button>
+                    {confirmDelete ? (
+                      <>
+                        <button type="button" className="w-btn w-btn-sm !h-6 !px-1.5 text-[12px] text-[var(--w-red)]" onClick={deleteThread}>Delete</button>
+                        <button type="button" className="w-btn w-btn-ghost w-btn-sm !h-6 !px-1.5 text-[12px]" onClick={() => setConfirmDelete(false)}>Keep</button>
+                      </>
+                    ) : (
+                      <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm !h-6 !w-6" onClick={() => setConfirmDelete(true)} aria-label="Delete conversation" title="Delete conversation">
+                        <Trash2 size={12} />
+                      </button>
                     )}
-                    {t.content ? <AiMarkdown text={t.content} /> : <span className="text-[13px] text-[var(--w-text-3)]">No answer.</span>}
-                  </div>
-                  {config && t.actions?.length ? (
-                    <ActionGroup config={config} items={t.actions} onUpdate={(id, patch) => updateAction(t.id, id, patch)} />
-                  ) : null}
-                </div>
-              )))}
-              {waiting && <Typing label={waiting} onCancel={cancel} />}
-            </div>
-          )}
-        </div>
-
-        {/* Soạn */}
-        <div className="shrink-0 border-t border-[var(--w-border)] bg-[var(--w-panel)] px-4 pb-3 pt-2.5">
-          {aiOff && (
-            <div className="mb-2 flex items-start gap-2 rounded-[6px] border border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_10%,transparent)] px-2.5 py-2 text-[12px] text-[var(--w-text)]">
-              <AlertTriangle size={14} className="mt-[1px] shrink-0 text-[var(--w-orange)]" />
-              AI is temporarily unavailable. Please try again in a little while.
-            </div>
-          )}
-          {issueKey && (
-            <div className="mb-2 flex">
-              <span className="inline-flex h-[22px] items-center gap-1 rounded-full border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] pl-2 pr-0.5 text-[11.5px] text-[var(--w-accent-text)]">
-                About <span className="font-mono">{issueKey}</span>
-                <button type="button" onClick={onClearIssue} aria-label={`Stop asking about ${issueKey}`} className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-full hover:bg-[var(--w-hover)]">
-                  <X size={11} />
-                </button>
-              </span>
-            </div>
-          )}
-          <div className="flex items-end gap-2 rounded-[8px] border border-[var(--w-border-strong)] bg-[var(--w-panel)] p-1.5 focus-within:border-[var(--w-accent-border)] focus-within:shadow-[0_0_0_3px_var(--w-accent-soft)]">
-            <textarea
-              ref={inputRef}
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              onKeyDown={(e) => {
-                // Đang gõ bộ gõ tiếng Việt/IME thì Enter là chốt chữ, không phải gửi.
-                if (e.nativeEvent.isComposing || e.keyCode === 229) return;
-                // Enter gửi; Shift+Enter xuống dòng (⌘/Ctrl+Enter vẫn gửi như cũ).
-                if (e.key === 'Enter' && !e.shiftKey && !e.altKey) {
-                  e.preventDefault();
-                  send(draft);
-                }
-              }}
-              disabled={!!waiting}
-              rows={3}
-              maxLength={8000}
-              placeholder={issueKey ? `Ask about ${issueKey}…` : 'Ask anything about this project…'}
-              aria-label="Message the AI assistant"
-              className="max-h-[200px] min-h-[64px] flex-1 resize-none bg-transparent px-1.5 py-1 text-[13.5px] leading-relaxed text-[var(--w-text)] outline-none placeholder:text-[var(--w-text-3)] disabled:opacity-60"
-            />
-            {waiting ? (
-              <button
-                type="button"
-                className="w-btn w-btn-icon !h-[30px] !w-[30px] shrink-0"
-                onClick={cancel}
-                aria-label="Cancel"
-                title="Cancel"
-              >
-                <Square size={11} fill="currentColor" />
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="w-btn w-btn-primary w-btn-icon !h-[30px] !w-[30px] shrink-0"
-                onClick={() => send(draft)}
-                disabled={!draft.trim()}
-                aria-label="Send"
-                title="Send (Enter)"
-              >
-                <ArrowUp size={15} />
-              </button>
+                  </span>
+                )}
+              </div>
             )}
-          </div>
-          <p className="mt-1.5 text-[11px] leading-snug text-[var(--w-text-3)]">
-            The AI only suggests changes. Nothing happens until you click Apply. <span className="max-sm:hidden">Enter to send · Shift+Enter for a new line.</span>
-          </p>
-        </div>
+
+            {/* Hội thoại */}
+            <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-4 py-4" aria-live="polite">
+              {threadId && !thread && threadQ.isLoading ? (
+                <div className="flex justify-center pt-10"><Spinner size={16} /></div>
+              ) : !messages.length && !pendingQ && !waiting ? (
+                <EmptyState suggestions={suggestions} onPick={fill} disabled={aiOff} onBrowse={() => setView('history')} />
+              ) : (
+                <div className="space-y-4">
+                  {messages.map((m) => (m.role === 'user' ? (
+                    <UserTurn key={m.id} m={m} mine={m.author?.id === meId} projectKey={key} onRetry={() => retry(m.id)} busy={!!waiting} />
+                  ) : (
+                    <div key={m.id}>
+                      <div className="rounded-[12px] rounded-bl-[4px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2.5">
+                        {m.title && (
+                          <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]">
+                            <Sparkles size={11} /> {m.title}
+                          </div>
+                        )}
+                        {m.content ? <AiMarkdown text={m.content} /> : <span className="text-[13px] text-[var(--w-text-3)]">No answer.</span>}
+                      </div>
+                      <div className="mt-1 px-1 text-[11px] text-[var(--w-text-3)]" title={new Date(m.createdAt).toLocaleString('en-US')}>{relativeTime(m.createdAt)}</div>
+                      {config && m.actions.length ? (
+                        <ActionGroup
+                          config={config}
+                          items={storedItems(m).map((it) => ({ ...it, ...overlay[it.id] }))}
+                          onUpdate={(id, patch) => setOverlay((o) => ({ ...o, [id]: { ...o[id], ...patch } }))}
+                          applyFn={async (it) => {
+                            const idx = Number(it.id.split(':')[1]);
+                            const edited = overlay[it.id]?.action;
+                            try {
+                              const r = await workApi.aiApplyStored(pid, m.id, idx, edited);
+                              return { summary: `${r.summary ?? 'Applied'}${r.byName ? ` · by @${r.byName}` : ''}`, number: r.number };
+                            } finally {
+                              refresh(m.threadId);
+                            }
+                          }}
+                          dismissFn={async (it) => {
+                            await workApi.aiSetStoredStatus(pid, m.id, Number(it.id.split(':')[1]), 'dismissed');
+                            refresh(m.threadId);
+                          }}
+                        />
+                      ) : null}
+                    </div>
+                  )))}
+                  {pendingQ && (
+                    <div className="flex justify-end opacity-70">
+                      <div className="max-w-[85%] whitespace-pre-wrap break-words rounded-[12px] rounded-br-[4px] bg-[var(--w-accent)] px-3 py-2 text-[13.5px] leading-relaxed text-white">{pendingQ}</div>
+                    </div>
+                  )}
+                  {waiting && <Typing label={waiting} onCancel={cancel} />}
+                </div>
+              )}
+            </div>
+
+            {/* Soạn */}
+            <div className="shrink-0 border-t border-[var(--w-border)] bg-[var(--w-panel)] px-4 pb-3 pt-2.5">
+              {aiOff && (
+                <div className="mb-2 flex items-start gap-2 rounded-[6px] border border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_10%,transparent)] px-2.5 py-2 text-[12px] text-[var(--w-text)]">
+                  <AlertTriangle size={14} className="mt-[1px] shrink-0 text-[var(--w-orange)]" />
+                  AI is temporarily unavailable. Your question is kept — press Retry on it in a little while.
+                </div>
+              )}
+              <div className="mb-2 flex flex-wrap items-center gap-1.5">
+                {issueKey && (
+                  <span className="inline-flex h-[22px] items-center gap-1 rounded-full border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] pl-2 pr-0.5 text-[11.5px] text-[var(--w-accent-text)]">
+                    About <span className="font-mono">{issueKey}</span>
+                    <button type="button" onClick={onClearIssue} aria-label={`Stop asking about ${issueKey}`} className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-full hover:bg-[var(--w-hover)]">
+                      <X size={11} />
+                    </button>
+                  </span>
+                )}
+                {!thread && (
+                  <button
+                    type="button"
+                    onClick={() => setNewPrivate((v) => !v)}
+                    className={cn('inline-flex h-[22px] items-center gap-1 rounded-full border px-2 text-[11.5px]', newPrivate ? 'border-[var(--w-border-strong)] bg-[var(--w-sunken)] text-[var(--w-text)]' : 'border-[var(--w-border)] text-[var(--w-text-2)]')}
+                    title="Choose who can see this new conversation"
+                  >
+                    {newPrivate ? <><Lock size={11} /> Private — only you</> : <><Users size={11} /> Shared with the project</>}
+                  </button>
+                )}
+              </div>
+              <div className="flex items-end gap-2 rounded-[8px] border border-[var(--w-border-strong)] bg-[var(--w-panel)] p-1.5 focus-within:border-[var(--w-accent-border)] focus-within:shadow-[0_0_0_3px_var(--w-accent-soft)]">
+                <textarea
+                  ref={inputRef}
+                  value={draft}
+                  onChange={(e) => setDraft(e.target.value)}
+                  onKeyDown={(e) => {
+                    // Đang gõ bộ gõ tiếng Việt/IME thì Enter là chốt chữ, không phải gửi.
+                    if (e.nativeEvent.isComposing || e.keyCode === 229) return;
+                    if (e.key === 'Enter' && !e.shiftKey && !e.altKey) {
+                      e.preventDefault();
+                      send(draft);
+                    }
+                  }}
+                  disabled={!!waiting}
+                  rows={3}
+                  maxLength={8000}
+                  placeholder={thread ? 'Continue this conversation…' : issueKey ? `Ask about ${issueKey}…` : 'Ask anything about this project…'}
+                  aria-label="Message the AI assistant"
+                  className="max-h-[200px] min-h-[64px] flex-1 resize-none bg-transparent px-1.5 py-1 text-[13.5px] leading-relaxed text-[var(--w-text)] outline-none placeholder:text-[var(--w-text-3)] disabled:opacity-60"
+                />
+                {waiting ? (
+                  <button type="button" className="w-btn w-btn-icon !h-[30px] !w-[30px] shrink-0" onClick={cancel} aria-label="Stop waiting" title="Stop waiting">
+                    <Square size={11} fill="currentColor" />
+                  </button>
+                ) : (
+                  <button type="button" className="w-btn w-btn-primary w-btn-icon !h-[30px] !w-[30px] shrink-0" onClick={() => send(draft)} disabled={!draft.trim()} aria-label="Send" title="Send (Enter)">
+                    <ArrowUp size={15} />
+                  </button>
+                )}
+              </div>
+              <p className="mt-1.5 text-[11px] leading-snug text-[var(--w-text-3)]">
+                {isPrivate ? 'Saved privately for you.' : 'Saved for your team — anyone in this project can read and continue it.'} Don&apos;t paste passwords or keys. The AI only suggests changes; nothing happens until someone clicks Apply.
+              </p>
+            </div>
+          </>
+        )}
       </div>
 
       <UpgradeDialog open={upgrade} onClose={() => setUpgrade(false)} limit={quota?.limit} />
     </WorkPortal>
+  );
+}
+
+// ─── Lượt hỏi (có tên người hỏi — hội thoại dùng chung) ───────────
+
+function UserTurn({ m, mine, projectKey, onRetry, busy }: { m: AiMessage; mine: boolean; projectKey: string; onRetry: () => void; busy: boolean }) {
+  const name = mine ? 'You' : m.author ? `@${m.author.username}` : 'Former member';
+  return (
+    <div className={cn('flex flex-col', mine ? 'items-end' : 'items-start')}>
+      <div className={cn('mb-1 flex items-center gap-1.5 px-1 text-[11.5px] text-[var(--w-text-3)]', mine && 'flex-row-reverse')}>
+        <UserAvatar user={m.author} size={16} />
+        <span className="font-medium text-[var(--w-text-2)]">{name}</span>
+        <span title={new Date(m.createdAt).toLocaleString('en-US')}>{relativeTime(m.createdAt)}</span>
+        {m.issueNumber && projectKey ? <span className="rounded-[4px] bg-[var(--w-sunken)] px-1 font-mono text-[10.5px]">{projectKey}-{m.issueNumber}</span> : null}
+      </div>
+      <div className={cn(
+        'max-w-[85%] whitespace-pre-wrap break-words rounded-[12px] px-3 py-2 text-[13.5px] leading-relaxed',
+        mine ? 'rounded-br-[4px] bg-[var(--w-accent)] text-white' : 'rounded-bl-[4px] border border-[var(--w-border)] bg-[var(--w-sunken)] text-[var(--w-text)]',
+      )}>
+        {m.content}
+      </div>
+      {m.error && (
+        <div className="mt-1 flex max-w-[85%] items-center gap-2 px-1 text-[12px] text-[var(--w-red)]">
+          <AlertTriangle size={12} className="shrink-0" />
+          <span className="min-w-0">Not answered yet — the question is saved.</span>
+          <button type="button" className="w-btn w-btn-sm !h-6 shrink-0" onClick={onRetry} disabled={busy}>
+            <RotateCcw size={12} /> Retry
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Danh sách hội thoại của cả nhóm ─────────────────────────────
+
+function ThreadList({ pid, projectKey, meId, currentId, onOpen, onNew }: {
+  pid: number; projectKey: string; meId: number | undefined; currentId: number | null;
+  onOpen: (tid: number) => void; onNew: () => void;
+}) {
+  const [scope, setScope] = useState<'all' | 'mine'>('all');
+  const [q, setQ] = useState('');
+  const [debounced, setDebounced] = useState('');
+  useEffect(() => {
+    const t = window.setTimeout(() => setDebounced(q.trim()), 250);
+    return () => window.clearTimeout(t);
+  }, [q]);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [...threadsKey(pid), scope, debounced],
+    queryFn: () => workApi.aiThreads(pid, { scope, q: debounced || undefined }),
+    refetchInterval: 30_000,
+  });
+  return (
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="shrink-0 space-y-2 border-b border-[var(--w-border)] px-4 py-3">
+        <div className="flex items-center gap-2 rounded-[6px] border border-[var(--w-border-strong)] bg-[var(--w-panel)] px-2 focus-within:border-[var(--w-accent-border)]">
+          <Search size={13} className="text-[var(--w-text-3)]" />
+          <input
+            id="ai-thread-search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search questions and answers…"
+            className="h-8 flex-1 bg-transparent text-[13px] outline-none placeholder:text-[var(--w-text-3)]"
+            aria-label="Search conversations"
+          />
+        </div>
+        <div className="flex items-center gap-1" role="tablist" aria-label="Which conversations">
+          {(['all', 'mine'] as const).map((s) => (
+            <button key={s} type="button" role="tab" aria-selected={scope === s} onClick={() => setScope(s)}
+              className={cn('rounded-[5px] px-2.5 py-1 text-[12.5px]', scope === s ? 'bg-[var(--w-active)] font-medium text-[var(--w-text)]' : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}>
+              {s === 'all' ? 'Everyone' : 'I took part'}
+            </button>
+          ))}
+          <button type="button" className="w-btn w-btn-sm ml-auto" onClick={onNew}><SquarePen size={12} /> New</button>
+        </div>
+      </div>
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        {isLoading ? (
+          <div className="flex justify-center pt-10"><Spinner size={16} /></div>
+        ) : isError ? (
+          <p className="px-4 pt-8 text-center text-[13px] text-[var(--w-text-2)]">Could not load conversations. Try again in a moment.</p>
+        ) : !data?.length ? (
+          <p className="px-6 pt-10 text-center text-[13px] leading-relaxed text-[var(--w-text-2)]">
+            {debounced ? `Nothing matches “${debounced}”.` : scope === 'mine' ? 'You have not asked the AI anything in this project yet.' : 'No conversations yet. Questions anyone asks here are saved for the whole team.'}
+          </p>
+        ) : (
+          <ul className="divide-y divide-[var(--w-border)]">
+            {data.map((t) => (
+              <li key={t.id}>
+                <button type="button" onClick={() => onOpen(t.id)}
+                  className={cn('flex w-full flex-col gap-1 px-4 py-2.5 text-left hover:bg-[var(--w-hover)]', t.id === currentId && 'bg-[var(--w-accent-soft)]')}>
+                  <span className="flex items-center gap-1.5">
+                    {t.visibility === 'PRIVATE' && <Lock size={12} className="shrink-0 text-[var(--w-text-3)]" aria-label="Private" />}
+                    <span className="line-clamp-2 text-[13.5px] font-medium text-[var(--w-text)]">{t.title}</span>
+                  </span>
+                  <span className="flex items-center gap-2 text-[11.5px] text-[var(--w-text-3)]">
+                    <span className="flex -space-x-1">
+                      {t.participants.slice(0, 4).map((u) => <UserAvatar key={u.id} user={u} size={16} className="ring-2 ring-[var(--w-bg)]" />)}
+                    </span>
+                    <span className="truncate">
+                      {t.createdById === meId ? 'You' : t.createdBy ? `@${t.createdBy.username}` : 'Former member'}
+                      {t.participants.length > 1 ? ` + ${t.participants.length - 1}` : ''} · {t.messageCount} msg · {relativeTime(t.lastMessageAt)}
+                    </span>
+                    {t.issueNumber && projectKey ? <span className="ml-auto shrink-0 rounded-[4px] bg-[var(--w-sunken)] px-1 font-mono text-[10.5px]">{projectKey}-{t.issueNumber}</span> : null}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -510,7 +745,7 @@ function Typing({ label, onCancel }: { label: string; onCancel: () => void }) {
   );
 }
 
-function EmptyState({ suggestions, onPick, disabled }: { suggestions: string[]; onPick: (s: string) => void; disabled?: boolean }) {
+function EmptyState({ suggestions, onPick, disabled, onBrowse }: { suggestions: string[]; onPick: (s: string) => void; disabled?: boolean; onBrowse?: () => void }) {
   return (
     <div className="flex flex-col items-center px-2 pt-6 text-center">
       <span className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]">
@@ -533,6 +768,11 @@ function EmptyState({ suggestions, onPick, disabled }: { suggestions: string[]; 
           </button>
         ))}
       </div>
+      {onBrowse && (
+        <button type="button" onClick={onBrowse} className="mt-4 inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[var(--w-accent-text)] hover:underline">
+          <History size={13} /> See what your team already asked
+        </button>
+      )}
     </div>
   );
 }

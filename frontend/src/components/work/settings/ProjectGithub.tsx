@@ -16,7 +16,7 @@ import { wk } from '../hooks';
 import { relativeTime, Spinner } from '../ui';
 import { ConfirmDialog, Section, Select } from './shared';
 
-function CopyField({ label, value, secret, mono = true }: { label: string; value: string; secret?: boolean; mono?: boolean }) {
+export function CopyField({ label, value, secret, mono = true }: { label: string; value: string; secret?: boolean; mono?: boolean }) {
   const [shown, setShown] = useState(!secret);
   const [copied, setCopied] = useState(false);
   const copy = () => {
@@ -46,7 +46,7 @@ function CopyField({ label, value, secret, mono = true }: { label: string; value
   );
 }
 
-function Step({ n, title, children }: { n: number; title: ReactNode; children?: ReactNode }) {
+export function Step({ n, title, children }: { n: number; title: ReactNode; children?: ReactNode }) {
   return (
     <li className="flex gap-3">
       <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--w-accent-soft)] text-[11px] font-semibold text-[var(--w-accent-text)]">{n}</span>
@@ -59,7 +59,7 @@ function Step({ n, title, children }: { n: number; title: ReactNode; children?: 
 }
 
 /** Ô chọn trạng thái — gom theo quy trình khi dự án có nhiều quy trình. */
-function StatusSelect({ config, value, onChange, disabled, label }: { config: ProjectConfig; value: number | null; onChange: (v: number | null) => void; disabled?: boolean; label: string }) {
+export function StatusSelect({ config, value, onChange, disabled, label }: { config: ProjectConfig; value: number | null; onChange: (v: number | null) => void; disabled?: boolean; label: string }) {
   const multi = config.workflows.length > 1;
   return (
     <Select value={value ?? ''} onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)} disabled={disabled} aria-label={label} className="w-full sm:w-[260px]">

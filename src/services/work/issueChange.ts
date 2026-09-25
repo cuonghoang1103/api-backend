@@ -66,6 +66,31 @@ async function assertStatusInWorkflow(tx: Tx, statusId: number, workflowId: numb
   return st;
 }
 
+/** Cài đặt dự án: trường phải có giá trị trước khi thẻ vào cột DONE (vd Evidence — Definition of Done SWP391). */
+export interface DoneRequirements { fieldIds: number[]; typeKeys?: string[] | null }
+
+/**
+ * Chặn chuyển sang DONE khi thiếu trường bắt buộc (25/09/2026). Chạy TRONG cửa ghi
+ * chung nên kéo trên board, sửa hàng loạt, app mobile hay AI "Apply" đều bị chặn
+ * như nhau. Không áp cho luật tự động / hệ thống (PR merge của GitHub/GitLab):
+ * những đường đó do admin tự cấu hình, và chặn im lặng thì luật trông như hỏng.
+ */
+export async function assertDoneRequirements(tx: Tx, projectId: number, issueId: number, typeKey: string, issueKey: string) {
+  const p = await tx.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  const req = (p?.settings as { doneRequirements?: DoneRequirements } | null)?.doneRequirements;
+  if (!req?.fieldIds?.length) return;
+  if (req.typeKeys?.length && !req.typeKeys.includes(typeKey)) return;
+  const fields = await tx.workCustomField.findMany({ where: { projectId, id: { in: req.fieldIds } }, select: { id: true, name: true, typeKeys: true } });
+  const applicable = fields.filter((f) => !Array.isArray(f.typeKeys) || (f.typeKeys as string[]).includes(typeKey));
+  if (!applicable.length) return;
+  const values = await tx.workCustomValue.findMany({ where: { issueId, fieldId: { in: applicable.map((f) => f.id) } }, select: { fieldId: true, value: true } });
+  const filled = (v: unknown) => v !== null && v !== undefined && v !== false && !(typeof v === 'string' && !v.trim()) && !(Array.isArray(v) && !v.length);
+  const missing = applicable.filter((f) => !filled(values.find((x) => x.fieldId === f.id)?.value)).map((f) => f.name);
+  if (missing.length) {
+    throw new BadRequestError(`Fill in ${missing.join(', ')} on ${issueKey} before moving it to Done (Definition of Done).`, 'WORK_DONE_REQUIREMENTS');
+  }
+}
+
 /** Quy trình không có luồng chuyển nào = chuyển tự do. Có thì phải khớp một dòng. */
 async function assertTransitionAllowed(tx: Tx, workflowId: number, fromStatusId: number, toStatusId: number) {
   if (fromStatusId === toStatusId) return;
@@ -253,7 +278,7 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
     await tx.$queryRaw`SELECT id FROM work_issues WHERE id = ${issueId} FOR UPDATE`;
     const before = await tx.workIssue.findFirst({
       where: { id: issueId, deletedAt: null },
-      include: { type: { select: { level: true, workflowId: true } }, status: { select: { category: true } } },
+      include: { type: { select: { level: true, workflowId: true, key: true } }, status: { select: { category: true } }, project: { select: { key: true } } },
     });
     if (!before) throw new NotFoundError('Issue not found');
     const data: Prisma.WorkIssueUncheckedUpdateInput = {};
@@ -320,6 +345,9 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
       // Vào cột DONE thì ghi thời điểm xong; rời DONE thì xoá — báo cáo
       // velocity/burndown đọc resolvedAt chứ không đọc tên cột.
       if (target.category === 'DONE' && before.status.category !== 'DONE') {
+        if (actor.kind === 'USER' || actor.kind === 'AI') {
+          await assertDoneRequirements(tx, before.projectId, issueId, before.type.key, `${before.project.key}-${before.number}`);
+        }
         data.resolvedAt = new Date();
         data.resolution = before.resolution ?? 'DONE';
       } else if (target.category !== 'DONE' && before.status.category === 'DONE') {

@@ -37,6 +37,9 @@ import * as automation from '../services/work/automation.service.js';
 import { EMAIL_MODES, getNotifySettings, setNotifySettings } from '../services/work/notify.js';
 import { audit, auditProject, listAudit } from '../services/work/audit.js';
 import * as github from '../services/work/github.service.js';
+import * as projectTracking from '../services/work/projectTracking.service.js';
+import * as chatHooks from '../services/work/chatHooks.service.js';
+import * as gitlab from '../services/work/gitlab.service.js';
 import * as exchange from '../services/work/exchange.service.js';
 import * as share from '../services/work/share.service.js';
 import * as apiTokens from '../services/work/apiTokens.service.js';
@@ -46,6 +49,7 @@ import * as onboarding from '../services/work/onboarding.service.js';
 registerWorkNotifications();
 tests.registerTestingHooks();
 automation.registerAutomation();
+chatHooks.registerChatHooks();
 
 const router = Router();
 
@@ -113,6 +117,14 @@ router.post('/github/webhook/:pid', asyncHandler(async (req, res) => {
   const event = typeof req.headers['x-github-event'] === 'string' ? req.headers['x-github-event'] : undefined;
   const sig = typeof req.headers['x-hub-signature-256'] === 'string' ? req.headers['x-hub-signature-256'] : undefined;
   ok(res, await github.handleWebhook(idParam(req, 'pid'), event, sig, raw));
+}));
+
+// GitLab gọi vào đây — xác thực bằng header X-Gitlab-Token (so thời gian hằng), không bằng phiên.
+router.post('/gitlab/webhook/:pid', asyncHandler(async (req, res) => {
+  const token = typeof req.headers['x-gitlab-token'] === 'string' ? req.headers['x-gitlab-token'] : undefined;
+  let body: unknown = req.body;
+  if (Buffer.isBuffer(body)) { try { body = JSON.parse(body.toString('utf8')); } catch { body = null; } }
+  ok(res, await gitlab.handleWebhook(idParam(req, 'pid'), token, body));
 }));
 
 // Link công khai chỉ đọc — ai có link là xem được, không cần tài khoản.
@@ -1031,6 +1043,25 @@ router.put('/me/notify-settings', asyncHandler(async (req, res) => {
 
 // ═══ Tích hợp, quản trị, chia sẻ (đợt 7) ═══════════════════════════
 
+// ─── Thông báo ra kênh chat (Discord / Slack / Google Chat) — chỉ ADMIN dự án ───
+router.get('/projects/:pid/chat-hooks', asyncHandler(async (req, res) => {
+  ok(res, await chatHooks.listHooks(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/chat-hooks', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ kind: z.enum(chatHooks.CHAT_KINDS), name: z.string().max(80).optional(), url: z.string().min(10).max(600), events: z.array(z.enum(chatHooks.CHAT_EVENTS)).max(10).optional() }), req.body);
+  ok(res, await chatHooks.createHook(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.patch('/projects/:pid/chat-hooks/:hid', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ name: z.string().max(80).optional(), url: z.string().max(600).optional(), events: z.array(z.enum(chatHooks.CHAT_EVENTS)).max(10).optional(), enabled: z.boolean().optional() }), req.body);
+  ok(res, await chatHooks.updateHook(callerId(req), idParam(req, 'pid'), idParam(req, 'hid'), body));
+}));
+router.delete('/projects/:pid/chat-hooks/:hid', asyncHandler(async (req, res) => {
+  ok(res, await chatHooks.deleteHook(callerId(req), idParam(req, 'pid'), idParam(req, 'hid')));
+}));
+router.post('/projects/:pid/chat-hooks/:hid/test', asyncHandler(async (req, res) => {
+  ok(res, await chatHooks.testHook(callerId(req), idParam(req, 'pid'), idParam(req, 'hid')));
+}));
+
 router.get('/projects/:pid/github', asyncHandler(async (req, res) => {
   ok(res, await github.getConnection(callerId(req), idParam(req, 'pid')));
 }));
@@ -1046,10 +1077,33 @@ router.delete('/projects/:pid/github', asyncHandler(async (req, res) => {
   await github.disconnect(callerId(req), idParam(req, 'pid'));
   ok(res, { disconnected: true });
 }));
+
+router.get('/projects/:pid/gitlab', asyncHandler(async (req, res) => {
+  ok(res, await gitlab.getConnection(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/gitlab', asyncHandler(async (req, res) => {
+  const { rotate } = parse(z.object({ rotate: z.boolean().optional() }), req.body ?? {});
+  ok(res, await gitlab.connect(callerId(req), idParam(req, 'pid'), rotate ?? false), 201);
+}));
+router.patch('/projects/:pid/gitlab', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ repoPath: z.string().max(200).nullable().optional(), mrOpenedStatusId: id.nullable().optional(), mrMergedStatusId: id.nullable().optional() }), req.body);
+  ok(res, await gitlab.updateConnection(callerId(req), idParam(req, 'pid'), body));
+}));
+router.delete('/projects/:pid/gitlab', asyncHandler(async (req, res) => {
+  await gitlab.disconnect(callerId(req), idParam(req, 'pid'));
+  ok(res, { disconnected: true });
+}));
 router.get('/projects/:pid/issues/:num/dev', asyncHandler(async (req, res) => {
   ok(res, await github.devActivity(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
 }));
 
+// Project Tracking theo mẫu SWP391 (sheet Product + Summary theo PIC)
+router.get('/projects/:pid/export/project-tracking', asyncHandler(async (req, res) => {
+  const out = await projectTracking.projectTrackingXlsx(callerId(req), idParam(req, 'pid'));
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  res.setHeader('Content-Disposition', `attachment; filename="${out.file}.xlsx"`);
+  res.send(out.buffer);
+}));
 router.get('/projects/:pid/export', asyncHandler(async (req, res) => {
   const q = parse(z.object({ format: z.enum(['csv', 'xlsx', 'pdf']).default('csv'), jql: z.string().max(4000).default('') }), req.query);
   const data = await exchange.exportRows(callerId(req), idParam(req, 'pid'), q.jql);

@@ -547,6 +547,16 @@ export interface DailyBrief { text: string; at: string; by: number }
 export interface NotifySettings { emailMode: EmailMode; quietStart: number | null; quietEnd: number | null }
 
 // ─── Tích hợp, quản trị, chia sẻ (đợt 7) ───────────────────────
+export interface GitlabConnection {
+  connected: boolean; webhookUrl: string; token?: string | null; repoPath?: string | null;
+  config?: { mrOpenedStatusId?: number | null; mrMergedStatusId?: number | null }; lastEventAt?: string | null;
+}
+export type ChatHookKind = 'DISCORD' | 'SLACK' | 'GOOGLE_CHAT';
+export type ChatHookEvent = 'issue.created' | 'issue.assigned' | 'issue.done' | 'comment.created';
+export interface ChatHook {
+  id: number; kind: ChatHookKind; name: string; urlMasked: string; events: ChatHookEvent[]; enabled: boolean;
+  lastSentAt: string | null; lastError: string | null; createdAt: string;
+}
 export interface GithubConnection {
   connected: boolean; webhookUrl: string; secret?: string | null; repoFullName?: string | null;
   config?: { prOpenedStatusId?: number | null; prMergedStatusId?: number | null }; lastEventAt?: string | null;
@@ -890,6 +900,25 @@ export const workApi = {
   updateGithub: (pid: number, body: { repoFullName?: string | null; prOpenedStatusId?: number | null; prMergedStatusId?: number | null }) =>
     d<GithubConnection>(api.patch(`${B}/projects/${pid}/github`, body)),
   disconnectGithub: (pid: number) => d(api.delete(`${B}/projects/${pid}/github`)),
+  gitlab: (pid: number) => d<GitlabConnection>(api.get(`${B}/projects/${pid}/gitlab`)),
+  connectGitlab: (pid: number, rotate = false) => d<GitlabConnection>(api.post(`${B}/projects/${pid}/gitlab`, { rotate })),
+  updateGitlab: (pid: number, body: { repoPath?: string | null; mrOpenedStatusId?: number | null; mrMergedStatusId?: number | null }) =>
+    d<GitlabConnection>(api.patch(`${B}/projects/${pid}/gitlab`, body)),
+  disconnectGitlab: (pid: number) => d(api.delete(`${B}/projects/${pid}/gitlab`)),
+  chatHooks: (pid: number) => d<ChatHook[]>(api.get(`${B}/projects/${pid}/chat-hooks`)),
+  createChatHook: (pid: number, body: { kind: ChatHookKind; name?: string; url: string; events?: ChatHookEvent[] }) =>
+    d<ChatHook>(api.post(`${B}/projects/${pid}/chat-hooks`, body)),
+  updateChatHook: (pid: number, hid: number, body: { name?: string; url?: string; events?: ChatHookEvent[]; enabled?: boolean }) =>
+    d<ChatHook>(api.patch(`${B}/projects/${pid}/chat-hooks/${hid}`, body)),
+  deleteChatHook: (pid: number, hid: number) => d(api.delete(`${B}/projects/${pid}/chat-hooks/${hid}`)),
+  testChatHook: (pid: number, hid: number) => d<{ ok: true }>(api.post(`${B}/projects/${pid}/chat-hooks/${hid}/test`, {}, { timeout: 20_000 })),
+  /** Project Tracking theo mẫu SWP391 (Product + Summary theo PIC). */
+  exportProjectTracking: async (pid: number) => {
+    const res = await api.get(`${B}/projects/${pid}/export/project-tracking`, { responseType: 'blob', timeout: 120_000 });
+    const cd = String(res.headers['content-disposition'] ?? '');
+    const name = /filename="([^"]+)"/.exec(cd)?.[1] ?? 'ProjectTracking.xlsx';
+    return { blob: res.data as Blob, fileName: name };
+  },
   devActivity: (pid: number, num: number) => d<DevActivity>(api.get(`${B}/projects/${pid}/issues/${num}/dev`)),
   /** Tải file xuất (CSV/Excel/PDF) — trả Blob để trình duyệt lưu. */
   exportIssues: async (pid: number, format: 'csv' | 'xlsx' | 'pdf', jql = '') => {

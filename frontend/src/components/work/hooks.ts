@@ -60,6 +60,8 @@ export const wk = {
   devActivity: (pid: number, num: number) => ['work', 'issue', pid, num, 'dev'] as const,
   /** Kết nối GitHub nằm dưới wk.project ⇒ project.updated làm tươi. */
   github: (pid: number) => ['work', 'project', pid, 'github'] as const,
+  gitlab: (pid: number) => ['work', 'project', pid, 'gitlab'] as const,
+  chatHooks: (pid: number) => ['work', 'project', pid, 'chat-hooks'] as const,
   /** Nhật ký quản trị theo KHÔNG GIAN. */
   audit: (wsId: number) => ['work', 'audit', wsId] as const,
   /** Đề xuất kế hoạch sprint — NGOÀI wk.backlog để sự kiện realtime không xoá lựa chọn đang dở. */

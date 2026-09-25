@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
-  Archive, Boxes, Columns3, Github, Link2, Shapes, SlidersHorizontal, Tag, TextCursorInput, Trash2, TriangleAlert, Upload, Users, Workflow, Zap,
+  Archive, Boxes, Columns3, Download, GitMerge, Github, Link2, MessageSquareShare, Shapes, SlidersHorizontal, Tag, TextCursorInput, Trash2, TriangleAlert, Upload, Users, Workflow, Zap,
 } from 'lucide-react';
 import { workError } from '@/lib/work-api';
 import { useProject } from '@/components/work/hooks';
@@ -23,12 +23,15 @@ import ProjectIssueTypes from '@/components/work/settings/ProjectIssueTypes';
 import ProjectFields from '@/components/work/settings/ProjectFields';
 import ProjectAutomation from '@/components/work/settings/ProjectAutomation';
 import ProjectGithub from '@/components/work/settings/ProjectGithub';
+import ProjectGitlab from '@/components/work/settings/ProjectGitlab';
+import ProjectChat from '@/components/work/settings/ProjectChat';
+import ProjectExport from '@/components/work/settings/ProjectExport';
 import ProjectImport from '@/components/work/settings/ProjectImport';
 import ProjectShare from '@/components/work/settings/ProjectShare';
 import ProjectTrash from '@/components/work/settings/ProjectTrash';
 import ProjectDanger from '@/components/work/settings/ProjectDanger';
 
-type Tab = 'details' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'automation' | 'github' | 'share' | 'import' | 'trash' | 'danger';
+type Tab = 'details' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'automation' | 'github' | 'gitlab' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -57,9 +60,12 @@ function ProjectSettings() {
     { label: 'Automation & integrations', tabs: [
       { key: 'automation', label: 'Automation', icon: Zap },
       { key: 'github', label: 'GitHub', icon: Github },
+      { key: 'gitlab', label: 'GitLab', icon: GitMerge },
+      ...(perms?.settings ? [{ key: 'chat' as const, label: 'Chat notifications', icon: MessageSquareShare }] : []),
       { key: 'share', label: 'Public links', icon: Link2 },
     ] },
     { label: 'Data', tabs: [
+      { key: 'export', label: 'Export', icon: Download },
       ...(perms?.settings ? [{ key: 'import' as const, label: 'Import', icon: Upload }] : []),
       ...(perms?.deleteIssues ? [{ key: 'trash' as const, label: 'Trash', icon: Trash2 }] : []),
     ] },
@@ -124,6 +130,9 @@ function ProjectSettings() {
         {tab === 'fields' && <ProjectFields config={config} slug={slug} />}
         {tab === 'automation' && <ProjectAutomation config={config} slug={slug} />}
         {tab === 'github' && <ProjectGithub config={config} slug={slug} />}
+        {tab === 'gitlab' && <ProjectGitlab config={config} slug={slug} />}
+        {tab === 'chat' && <ProjectChat config={config} slug={slug} />}
+        {tab === 'export' && <ProjectExport config={config} slug={slug} />}
         {tab === 'share' && <ProjectShare config={config} slug={slug} />}
         {tab === 'trash' && <ProjectTrash config={config} slug={slug} />}
         {tab === 'import' && <ProjectImport config={config} slug={slug} />}

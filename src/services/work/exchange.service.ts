@@ -112,32 +112,44 @@ export function toXlsx(rows: ExportRow[], sheetName = 'Issues'): Buffer {
  * đề in đậm + cố định + bộ lọc. `pre` = vài dòng tóm tắt đặt TRÊN bảng.
  */
 export function xlsxTable(headers: string[], data: unknown[][], sheetName = 'Sheet1', widths?: number[], pre: string[][] = []): Buffer {
+  return xlsxWorkbook([{ name: sheetName, headers, data, widths, pre }]);
+}
+
+export interface XlsxSheet { name: string; headers: string[]; data: unknown[][]; widths?: number[]; pre?: string[][] }
+
+/** Workbook nhiều sheet (Project Tracking SWP391: Product + Summary). Mỗi sheet có tiêu đề cố định + bộ lọc. */
+export function xlsxWorkbook(sheets: XlsxSheet[]): Buffer {
   const cell = (ref: string, v: unknown, style = 0) => {
     if (typeof v === 'number' && Number.isFinite(v)) return `<c r="${ref}"${style ? ` s="${style}"` : ''}><v>${v}</v></c>`;
     const s = v === null || v === undefined ? '' : String(v);
     return s ? `<c r="${ref}" t="inlineStr"${style ? ` s="${style}"` : ''}><is><t xml:space="preserve">${xmlEsc(s)}</t></is></c>` : '';
   };
-  const off = pre.length ? pre.length + 1 : 0; // chừa một dòng trống sau phần tóm tắt
-  const top = pre.map((line, ri) => `<row r="${ri + 1}">${line.map((v, ci) => cell(`${colName(ci)}${ri + 1}`, v, ci === 0 ? 1 : 0)).join('')}</row>`).join('');
-  const hr = off + 1;
-  const header = `<row r="${hr}">${headers.map((h, i) => cell(`${colName(i)}${hr}`, h, 1)).join('')}</row>`;
-  const body = data.map((r, ri) => `<row r="${hr + ri + 1}">${r.map((v, ci) => cell(`${colName(ci)}${hr + ri + 1}`, v)).join('')}</row>`).join('');
-  const cols = headers.map((_, i) => `<col min="${i + 1}" max="${i + 1}" width="${widths?.[i] ?? 18}" customWidth="1"/>`).join('');
-  const last = colName(headers.length - 1);
-  const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="${hr}" topLeftCell="A${hr + 1}" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${cols}</cols><sheetData>${top}${header}${body}</sheetData><autoFilter ref="A${hr}:${last}${hr + data.length}"/></worksheet>`;
+  const names = sheets.map((sh, i) => (sh.name.replace(/[\\/?*[\]:]/g, ' ').slice(0, 31) || `Sheet${i + 1}`));
+  const built = sheets.map((sh) => {
+    const pre = sh.pre ?? [];
+    const off = pre.length ? pre.length + 1 : 0; // chừa một dòng trống sau phần tóm tắt
+    const top = pre.map((line, ri) => `<row r="${ri + 1}">${line.map((v, ci) => cell(`${colName(ci)}${ri + 1}`, v, ci === 0 ? 1 : 0)).join('')}</row>`).join('');
+    const hr = off + 1;
+    const header = `<row r="${hr}">${sh.headers.map((h, i) => cell(`${colName(i)}${hr}`, h, 1)).join('')}</row>`;
+    const body = sh.data.map((r, ri) => `<row r="${hr + ri + 1}">${r.map((v, ci) => cell(`${colName(ci)}${hr + ri + 1}`, v)).join('')}</row>`).join('');
+    const cols = sh.headers.map((_, i) => `<col min="${i + 1}" max="${i + 1}" width="${sh.widths?.[i] ?? 18}" customWidth="1"/>`).join('');
+    const last = colName(Math.max(0, sh.headers.length - 1));
+    const xml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="${hr}" topLeftCell="A${hr + 1}" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${cols}</cols><sheetData>${top}${header}${body}</sheetData><autoFilter ref="A${hr}:${last}${hr + sh.data.length}"/></worksheet>`;
+    return { xml, hr, last, rows: sh.data.length };
+  });
   const zip = new AdmZip();
   zip.addFile('[Content_Types].xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`));
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${built.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`));
   zip.addFile('_rels/.rels', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`));
   zip.addFile('xl/workbook.xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${xmlEsc(sheetName.slice(0, 31))}" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">'${xmlEsc(sheetName.slice(0, 31))}'!$A$${hr}:$${last}$${hr + data.length}</definedName></definedNames></workbook>`));
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${names.map((n, i) => `<sheet name="${xmlEsc(n)}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('')}</sheets><definedNames>${built.map((b, i) => `<definedName name="_xlnm._FilterDatabase" localSheetId="${i}" hidden="1">'${xmlEsc(names[i])}'!$A$${b.hr}:$${b.last}$${b.hr + b.rows}</definedName>`).join('')}</definedNames></workbook>`));
   zip.addFile('xl/_rels/workbook.xml.rels', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`));
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${built.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('')}<Relationship Id="rId${built.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`));
   zip.addFile('xl/styles.xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs></styleSheet>`));
-  zip.addFile('xl/worksheets/sheet1.xml', Buffer.from(sheet));
+  built.forEach((b, i) => zip.addFile(`xl/worksheets/sheet${i + 1}.xml`, Buffer.from(b.xml)));
   return zip.toBuffer();
 }
 

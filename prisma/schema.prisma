@@ -9737,6 +9737,8 @@ model WorkProject {
   devActivity  WorkDevActivity[]
   publicLinks  WorkPublicLink[]
   aiThreads    WorkAiThread[]
+  chatHooks    WorkChatHook[]
+  gitlab       WorkGitlabConnection?
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -10631,4 +10633,45 @@ model WorkAiMessage {
 
   @@index([threadId, id], name: "idx_work_ai_message_thread")
   @@map("work_ai_messages")
+}
+
+/// Gửi thông báo dự án ra kênh chat của nhóm (Discord / Slack / Google Chat) qua
+/// incoming webhook. URL là BÍ MẬT (ai có nó gửi được tin vào kênh) ⇒ bảng riêng,
+/// chỉ ADMIN dự án đọc — không nằm trong settings (settings gửi cho mọi người xem dự án).
+/// events: ["issue.created","issue.assigned","issue.done","comment.created"].
+model WorkChatHook {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  kind        String    @db.VarChar(16)
+  name        String    @db.VarChar(80)
+  url         String    @db.VarChar(600)
+  events      Json      @default("[]")
+  enabled     Boolean   @default(true)
+  createdById Int?      @map("created_by_id")
+  lastSentAt  DateTime? @map("last_sent_at")
+  lastError   String?   @map("last_error") @db.VarChar(300)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], name: "idx_work_chat_hook_project")
+  @@map("work_chat_hooks")
+}
+
+/// Tích hợp GitLab (gitlab.com hoặc GitLab tự host) qua webhook — cùng ý với GitHub:
+/// commit / nhánh / merge request nhắc KEY-123 ⇒ panel Development của thẻ đó.
+/// GitLab gửi token nguyên văn trong header X-Gitlab-Token (không ký HMAC).
+model WorkGitlabConnection {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @unique(map: "uk_work_gitlab_project") @map("project_id")
+  repoPath    String?   @map("repo_path") @db.VarChar(200)
+  token       String    @db.VarChar(100)
+  /// { mrOpenedStatusId?, mrMergedStatusId? }
+  config      Json      @default("{}")
+  lastEventAt DateTime? @map("last_event_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("work_gitlab_connections")
 }

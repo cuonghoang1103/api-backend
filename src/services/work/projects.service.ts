@@ -238,6 +238,17 @@ export async function updateProject(
     data.leadId = input.leadId;
   }
   if (input.settings !== undefined) {
+    // Điều kiện Done: chỉ nhận trường của CHÍNH dự án này, loại thẻ là chuỗi.
+    if ('doneRequirements' in input.settings) {
+      const raw = input.settings.doneRequirements as { fieldIds?: unknown; typeKeys?: unknown } | null;
+      if (raw !== null) {
+        const ids = Array.isArray(raw?.fieldIds) ? [...new Set(raw.fieldIds.filter((x): x is number => Number.isInteger(x)))] : [];
+        const own = ids.length ? await prisma.workCustomField.count({ where: { projectId, id: { in: ids } } }) : 0;
+        if (own !== ids.length) throw new BadRequestError('Some required fields do not belong to this project', 'WORK_BAD_FIELD');
+        const typeKeys = Array.isArray(raw?.typeKeys) ? raw.typeKeys.filter((x): x is string => typeof x === 'string').slice(0, 20) : null;
+        input.settings = { ...input.settings, doneRequirements: { fieldIds: ids, typeKeys: typeKeys?.length ? typeKeys : null } };
+      }
+    }
     const cur = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
     data.settings = { ...((cur.settings as object) ?? {}), ...input.settings } as Prisma.InputJsonValue;
   }

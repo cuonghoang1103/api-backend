@@ -92,6 +92,7 @@ export default function ProjectDetails({ config, slug }: { config: ProjectConfig
       </form>
     </Section>
     <DefinitionOfDone config={config} slug={slug} />
+    <DoneRules config={config} slug={slug} />
     <TeamRules config={config} slug={slug} />
     </>
   );
@@ -149,6 +150,87 @@ function DefinitionOfDone({ config, slug }: { config: ProjectConfig; slug: strin
         </ul>
       ) : (
         <p className="text-[13px] text-[var(--w-text-3)]">No Definition of Done yet. A project admin can add one.</p>
+      )}
+    </Section>
+  );
+}
+
+/** Đọc settings.doneRequirements (trường bắt buộc trước khi vào Done). */
+function readDoneRules(settings: Record<string, unknown>): { fieldIds: number[]; typeKeys: string[] } {
+  const v = settings?.doneRequirements as { fieldIds?: unknown; typeKeys?: unknown } | null | undefined;
+  return {
+    fieldIds: Array.isArray(v?.fieldIds) ? v!.fieldIds.filter((x): x is number => typeof x === 'number') : [],
+    typeKeys: Array.isArray(v?.typeKeys) ? v!.typeKeys.filter((x): x is string => typeof x === 'string') : [],
+  };
+}
+
+/**
+ * Done rules — BẮT BUỘC một số trường có giá trị trước khi thẻ vào cột Done
+ * (vd Evidence: link PR / test report / demo). Server chặn ở cửa ghi chung nên
+ * kéo board, sửa hàng loạt, app mobile hay AI "Apply" đều bị chặn như nhau.
+ * Luật tự động và GitHub/GitLab (PR merge) không bị chặn.
+ */
+function DoneRules({ config, slug }: { config: ProjectConfig; slug: string }) {
+  const invalidate = useProjectInvalidate(config.id, slug);
+  const canEdit = config.permissions.settings;
+  const saved = readDoneRules(config.settings);
+  const [fieldIds, setFieldIds] = useState<number[]>(saved.fieldIds);
+  const [typeKeys, setTypeKeys] = useState<string[]>(saved.typeKeys);
+  useEffect(() => { const r = readDoneRules(config.settings); setFieldIds(r.fieldIds); setTypeKeys(r.typeKeys); }, [config.settings]);
+  const dirty = JSON.stringify([...fieldIds].sort()) !== JSON.stringify([...saved.fieldIds].sort()) || JSON.stringify([...typeKeys].sort()) !== JSON.stringify([...saved.typeKeys].sort());
+  const fields = config.customFields;
+  const types = config.issueTypes.filter((t) => t.key !== 'EPIC');
+
+  const save = useMutation({
+    mutationFn: () => workApi.updateProject(config.id, { settings: { doneRequirements: fieldIds.length ? { fieldIds, typeKeys: typeKeys.length ? typeKeys : null } : null } }),
+    onSuccess: () => { toast.success(fieldIds.length ? 'Done rules saved — they apply right away' : 'Done rules turned off'); invalidate(); },
+    onError: (err) => toast.error(workError(err, 'Could not save the Done rules')),
+  });
+  const toggle = <T,>(list: T[], v: T) => (list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
+
+  return (
+    <Section
+      title="Done rules"
+      description="Block moving an issue to Done until these fields are filled in — for example Evidence (a PR, test report or demo link). Enforced for everyone, on the board, in bulk edits and in the apps. Automation rules and GitHub/GitLab merges are not blocked."
+    >
+      {!fields.length ? (
+        <p className="text-[13px] text-[var(--w-text-3)]">Add a custom field first (Settings → Fields), such as an “Evidence” URL field.</p>
+      ) : (
+        <div className="max-w-[640px] space-y-4">
+          <div>
+            <div className="mb-1.5 text-[12.5px] font-medium">Required before Done</div>
+            <div className="flex flex-wrap gap-1.5">
+              {fields.map((f) => {
+                const on = fieldIds.includes(f.id);
+                return (
+                  <button key={f.id} type="button" disabled={!canEdit} aria-pressed={on} onClick={() => setFieldIds((l) => toggle(l, f.id))}
+                    className={`inline-flex h-7 items-center rounded-full border px-2.5 text-[12.5px] ${on ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]'}`}>
+                    {f.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div>
+            <div className="mb-1.5 text-[12.5px] font-medium">Only for these issue types <span className="font-normal text-[var(--w-text-3)]">(none selected = all types)</span></div>
+            <div className="flex flex-wrap gap-1.5">
+              {types.map((t) => {
+                const on = typeKeys.includes(t.key);
+                return (
+                  <button key={t.id} type="button" disabled={!canEdit || !fieldIds.length} aria-pressed={on} onClick={() => setTypeKeys((l) => toggle(l, t.key))}
+                    className={`inline-flex h-7 items-center rounded-full border px-2.5 text-[12.5px] disabled:opacity-50 ${on ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]'}`}>
+                    {t.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {canEdit && (
+            <button type="button" className="w-btn w-btn-primary" disabled={!dirty || save.isPending} onClick={() => save.mutate()}>
+              {save.isPending && <Spinner size={12} />} Save Done rules
+            </button>
+          )}
+        </div>
       )}
     </Section>
   );

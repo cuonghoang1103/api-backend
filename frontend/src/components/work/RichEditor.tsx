@@ -17,10 +17,15 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import { common, createLowlight } from 'lowlight';
 import { Bold, Code, Italic, List, ListChecks, ListOrdered, Link2, Quote, SquareCode } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { userName, type TiptapDoc, type WorkUser } from '@/lib/work-api';
 import { UserAvatar, WorkPortal } from './ui';
+
+/** ~35 ngôn ngữ phổ biến (java, ts, sql, bash, yaml, json…) — tạo một lần cho cả trang. */
+const LOWLIGHT = createLowlight(common);
 
 const Mention = Node.create({
   name: 'mention',
@@ -116,7 +121,10 @@ export default function RichEditor({
     editable,
     content: (value as object) ?? '',
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      // Khối code tô màu cú pháp (decoration của ProseMirror ⇒ đúng cả lúc xem lẫn lúc sửa).
+      // Không khai ngôn ngữ thì lowlight tự đoán.
+      StarterKit.configure({ heading: { levels: [1, 2, 3] }, codeBlock: false }),
+      CodeBlockLowlight.configure({ lowlight: LOWLIGHT, HTMLAttributes: { class: 'w-code' } }),
       Placeholder.configure({ placeholder }),
       Link.configure({ openOnClick: !editable, autolink: true, HTMLAttributes: { rel: 'noopener noreferrer nofollow', target: '_blank' } }),
       TaskList,

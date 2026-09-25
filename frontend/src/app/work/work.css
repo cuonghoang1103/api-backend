@@ -31,6 +31,7 @@
   --w-accent: #5e6ad2;
   --w-accent-hover: #4f5bc4;
   --w-accent-text: #4450bd;
+  --w-code-inline: #b4400c;
   --w-accent-soft: rgba(94, 106, 210, 0.1);
   --w-accent-border: rgba(94, 106, 210, 0.45);
   --w-green: #23845a;
@@ -70,6 +71,7 @@ html.theme-dark .work-root {
   --w-accent: #6470db;
   --w-accent-hover: #7580e6;
   --w-accent-text: #aab0f5;
+  --w-code-inline: #f4a261;
   --w-accent-soft: rgba(100, 112, 219, 0.16);
   --w-accent-border: rgba(120, 130, 235, 0.5);
   --w-green: #4cb782;
@@ -176,9 +178,20 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 .w-prose:focus { outline: none; }
 .w-prose p { margin: 0 0 8px; }
 .w-prose p:last-child { margin-bottom: 0; }
-.w-prose h1 { font-size: 20px; font-weight: 600; margin: 16px 0 8px; }
-.w-prose h2 { font-size: 17px; font-weight: 600; margin: 14px 0 6px; }
-.w-prose h3 { font-size: 15px; font-weight: 600; margin: 12px 0 6px; }
+.w-prose h1 { font-size: 20px; font-weight: 700; margin: 18px 0 8px; color: var(--w-text); }
+.w-prose h2 { font-size: 17px; font-weight: 700; margin: 18px 0 8px; color: var(--w-text); padding-bottom: 4px; border-bottom: 1px solid var(--w-border); }
+/* Tiêu đề mục trong mô tả thẻ (Cần học trước, Các bước gợi ý…): phải tách khỏi chữ thường
+   bằng MÀU + vạch, không chỉ bằng độ đậm — chỉ đậm hơn thì mắt không bắt được ranh giới mục. */
+.w-prose h3 {
+  font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--w-accent-text); margin: 20px 0 8px; padding-left: 9px; border-left: 3px solid var(--w-accent-text); line-height: 1.3;
+}
+.w-prose > h1:first-child, .w-prose > h2:first-child, .w-prose > h3:first-child { margin-top: 2px; }
+.w-prose strong { color: var(--w-text); font-weight: 700; }
+.w-prose li::marker { color: var(--w-accent-text); }
+.w-prose ol > li::marker { font-weight: 600; }
+.w-prose li + li { margin-top: 3px; }
+.w-prose ul[data-type='taskList'] input[type='checkbox'] { accent-color: var(--w-accent-text); }
 .w-prose ul, .w-prose ol { padding-left: 22px; margin: 0 0 8px; }
 .w-prose ul { list-style: disc; }
 .w-prose ol { list-style: decimal; }
@@ -187,9 +200,26 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 .w-prose ul[data-type='taskList'] li { display: flex; gap: 8px; align-items: flex-start; }
 .w-prose ul[data-type='taskList'] li > label { margin-top: 4px; }
 .w-prose blockquote { border-left: 3px solid var(--w-border-strong); padding-left: 12px; color: var(--w-text-2); margin: 0 0 8px; }
-.w-prose code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; background: var(--w-sunken); border: 1px solid var(--w-border); border-radius: 4px; padding: 1px 4px; }
-.w-prose pre { background: var(--w-sunken); border: 1px solid var(--w-border); border-radius: var(--w-radius); padding: 10px 12px; overflow-x: auto; margin: 0 0 8px; }
-.w-prose pre code { background: none; border: 0; padding: 0; }
+.w-prose code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; background: var(--w-sunken); border: 1px solid var(--w-border); border-radius: 4px; padding: 1px 4px; color: var(--w-code-inline); }
+/* Khối code: bảng màu VS Code Dark+ ở CẢ hai giao diện sáng/tối (như editor thật), để code
+   đọc giống lúc gõ trong IDE. Token do lowlight/highlight.js gắn class hljs-*. */
+.w-prose pre {
+  background: #1e1e1e; color: #d4d4d4; border: 1px solid #2d2d2d; border-radius: var(--w-radius);
+  padding: 12px 14px; overflow-x: auto; margin: 4px 0 10px; font-size: 12.5px; line-height: 1.6;
+}
+.w-prose pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+.w-prose pre .hljs-keyword, .w-prose pre .hljs-built_in, .w-prose pre .hljs-literal, .w-prose pre .hljs-selector-tag { color: #569cd6; }
+.w-prose pre .hljs-type, .w-prose pre .hljs-class .hljs-title, .w-prose pre .hljs-title.class_ { color: #4ec9b0; }
+.w-prose pre .hljs-title, .w-prose pre .hljs-title.function_, .w-prose pre .hljs-function .hljs-title { color: #dcdcaa; }
+.w-prose pre .hljs-string, .w-prose pre .hljs-regexp, .w-prose pre .hljs-template-string { color: #ce9178; }
+.w-prose pre .hljs-number { color: #b5cea8; }
+.w-prose pre .hljs-comment, .w-prose pre .hljs-quote { color: #6a9955; font-style: italic; }
+.w-prose pre .hljs-attr, .w-prose pre .hljs-attribute, .w-prose pre .hljs-variable, .w-prose pre .hljs-params, .w-prose pre .hljs-property { color: #9cdcfe; }
+.w-prose pre .hljs-meta, .w-prose pre .hljs-annotation, .w-prose pre .hljs-symbol { color: #c586c0; }
+.w-prose pre .hljs-tag, .w-prose pre .hljs-name, .w-prose pre .hljs-section { color: #569cd6; }
+.w-prose pre .hljs-bullet, .w-prose pre .hljs-operator, .w-prose pre .hljs-punctuation { color: #d4d4d4; }
+.w-prose pre .hljs-deletion { color: #f48771; }
+.w-prose pre .hljs-addition { color: #b5cea8; }
 .w-prose a { color: var(--w-accent-text); text-decoration: underline; text-underline-offset: 2px; }
 .w-prose hr { border: 0; border-top: 1px solid var(--w-border); margin: 12px 0; }
 .w-prose .w-mention {

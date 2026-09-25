@@ -2090,15 +2090,6 @@ function MediaGrid({
     }
   };
 
-  if (visual.length === 0) {
-    // Pure file post (no image / video). Hand off to the file list
-    // renderer below so we don't end up rendering an empty grid.
-    return (
-      <>
-        <FileAttachmentList media={files} />
-      </>
-    );
-  }
 
   // Single-image path is a degenerate case of the carousel
   // (no dots, no arrows) so the JSX below handles 1+ uniformly.
@@ -2302,6 +2293,18 @@ function MediaGrid({
   // pointerdown + pointerup on the same target within a small
   // distance + short time — anything else is a drag.
   const tapStartRef = useRef<{ x: number; y: number; t: number; target: EventTarget | null } | null>(null);
+
+  // Nằm SAU mọi hook của carousel (trước đây đứng trên chúng ⇒ số hook đổi khi bài
+  // chuyển giữa "chỉ có file" và "có ảnh/video" ⇒ React error #310).
+  if (visual.length === 0) {
+    // Pure file post (no image / video). Hand off to the file list
+    // renderer below so we don't end up rendering an empty grid.
+    return (
+      <>
+        <FileAttachmentList media={files} />
+      </>
+    );
+  }
   const onTilePointerDown = (e: React.PointerEvent, item: SocialMedia) => {
     tapStartRef.current = {
       x: e.clientX,

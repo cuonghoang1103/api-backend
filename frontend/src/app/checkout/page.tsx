@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -259,7 +259,10 @@ export default function CheckoutPage() {
    * Mọi nút trả tiền đều phải đi qua đây — thêm một nút mới mà quên bọc là
    * mở lại đúng cái lỗ bấm-hai-lần vừa bịt.
    */
-  const chayThanhToan = useCallback(async (viec: () => Promise<void>) => {
+  // Hàm THƯỜNG, không useCallback: nó nằm SAU `if (!mounted) return` ở trên, nên một hook ở đây
+  // làm số hook đổi giữa hai lần render ⇒ React error #310, trang thanh toán trắng (13/09 → 25/09).
+  // Khoá chống bấm hai lần nằm ở submitLock (useRef ở đầu component), không cần memo hàm.
+  const chayThanhToan = async (viec: () => Promise<void>) => {
     if (submitLock.current) return;
     submitLock.current = true;
     setIsProcessing(true);
@@ -271,8 +274,7 @@ export default function CheckoutPage() {
       submitLock.current = false;
       setIsProcessing(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   /** PayOS (mặc định): tạo đơn → lấy link → chuyển hướng sang cổng. */
   const handlePayosPayment = () =>

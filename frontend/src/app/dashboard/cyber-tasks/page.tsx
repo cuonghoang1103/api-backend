@@ -39,45 +39,40 @@ export default function CyberTasksPage() {
   const [levelUp, setLevelUp] = useState(false);
   const [lastMintedCoupon, setLastMintedCoupon] = useState<import('@/lib/api').DiscountCode | null>(null);
 
-  // ── Security Guard ────────────────────────────────────────────────────────
-  if (authStore.isLoading) {
-    return (
-      <div className="min-h-screen bg-cyber-bg flex items-center justify-center">
-        <div className="font-mono text-neon-green animate-pulse">[ AUTHENTICATING... ]</div>
-      </div>
-    );
-  }
-
-  if (!authStore.isAuthenticated) {
-    useEffect(() => {
-      window.location.href = '/login';
-    }, []);
-    return null;
-  }
+  // Hook nào cũng phải chạy ở MỌI lần render, nên khối chặn đăng nhập nằm SAU hook cuối
+  // (trước đây nằm ở đây ⇒ React error #310 mỗi lần isLoading đổi true → false).
+  const daVao = !authStore.isLoading && authStore.isAuthenticated;
+  useEffect(() => {
+    if (!authStore.isLoading && !authStore.isAuthenticated) window.location.href = '/login';
+  }, [authStore.isLoading, authStore.isAuthenticated]);
 
   // ── Data Fetching ────────────────────────────────────────────────────────
   const { data: tasksData, isLoading: tasksLoading } = useQuery({
     queryKey: ['cyber-tasks', selectedDate],
     queryFn: () => api.getTasks(selectedDate).then((r) => r.data.data ?? []),
     staleTime: 30_000,
+    enabled: daVao,
   });
 
   const { data: profileData, isLoading: profileLoading } = useQuery({
     queryKey: ['cyber-profile'],
     queryFn: () => api.getProfile().then((r) => r.data.data!),
     staleTime: 30_000,
+    enabled: daVao,
   });
 
   const { data: inventoryData, isLoading: inventoryLoading } = useQuery({
     queryKey: ['cyber-inventory'],
     queryFn: () => api.getInventory().then((r) => r.data.data!),
     staleTime: 30_000,
+    enabled: daVao,
   });
 
   const { data: analyticsData, isLoading: analyticsLoading } = useQuery({
     queryKey: ['cyber-analytics'],
     queryFn: () => api.getAnalytics('month').then((r) => r.data.data!),
     staleTime: 60_000,
+    enabled: daVao,
   });
 
   // Sync lastProfile for level-up detection
@@ -188,6 +183,16 @@ export default function CyberTasksPage() {
     window.addEventListener('cyber:add-task', handler);
     return () => window.removeEventListener('cyber:add-task', handler);
   }, [createMutation]);
+
+  // ── Security Guard ────────────────────────────────────────────────────────
+  if (authStore.isLoading) {
+    return (
+      <div className="min-h-screen bg-cyber-bg flex items-center justify-center">
+        <div className="font-mono text-neon-green animate-pulse">[ AUTHENTICATING... ]</div>
+      </div>
+    );
+  }
+  if (!authStore.isAuthenticated) return null;
 
   const tasks: CyberTask[] = tasksData ?? [];
   const profile: CyberProfile | null = profileData ?? null;

@@ -82,12 +82,52 @@ async function ask(userId: number, system: string, user: string, maxTokens = 180
   return r.text;
 }
 
-function parseJson<T>(text: string, schema: z.ZodType<T>): T {
+/**
+ * Đọc JSON của model — KHOAN DUNG. 25/09/2026: câu trả lời dài (~1.600 token) của
+ * trợ lý thỉnh thoảng hỏng đuôi JSON (thiếu `}` / dấu phẩy thừa sau `"reply"`), và
+ * người dùng nhận "could not read" DÙ model đã viết xong câu trả lời — mất token,
+ * mất lượt. Thứ tự cứu: đọc chuẩn → vá đuôi → rút từng trường chữ → chữ thường
+ * làm câu trả lời. Chỉ báo lỗi khi thật sự không còn gì để hiển thị. Phần `actions`
+ * hỏng thì bỏ (saneActions nhận undefined ⇒ không đề xuất) — không bịa đề xuất.
+ */
+export function parseJson<T>(text: string, schema: z.ZodType<T>): T {
+  const ok = (v: unknown) => { const r = schema.safeParse(v); return r.success ? r.data : undefined; };
   try {
-    return schema.parse(extractJson(text));
-  } catch {
-    throw new AppError('The AI returned an answer we could not read. Please try again.', 502, 'WORK_AI_BAD_OUTPUT');
+    const v = ok(extractJson(text));
+    if (v !== undefined) return v;
+  } catch { /* thử cách khác */ }
+
+  const body = text.replace(/^\s*```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+  const start = body.indexOf('{');
+  if (start >= 0) {
+    const cut = body.slice(start).replace(/,\s*$/, '');
+    for (const tail of ['', '}', '"}', ']}', '"]}', '}]}', '"}]}']) {
+      try {
+        const v = ok(JSON.parse(cut + tail));
+        if (v !== undefined) return v;
+      } catch { /* thử đuôi khác */ }
+    }
   }
+
+  // Rút từng trường CHỮ của schema (reply/report/notes/…) kể cả khi chuỗi bị cụt giữa chừng.
+  const shape = schema instanceof z.ZodObject ? (schema.shape as Record<string, z.ZodTypeAny>) : {};
+  const salvaged: Record<string, unknown> = {};
+  for (const [k, t] of Object.entries(shape)) {
+    if (!(t instanceof z.ZodString)) continue;
+    const m = new RegExp(`"${k}"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)`).exec(body);
+    if (!m) continue;
+    try { salvaged[k] = JSON.parse(`"${m[1]}"`); } catch { salvaged[k] = m[1].replace(/\\n/g, '\n').replace(/\\"/g, '"'); }
+  }
+  let v = ok(salvaged);
+  if (v !== undefined) return v;
+
+  // Model trả chữ thường (không JSON): chữ đó CHÍNH là câu trả lời.
+  const strKeys = Object.entries(shape).filter(([, t]) => t instanceof z.ZodString).map(([k]) => k);
+  if (start < 0 && strKeys.length === 1 && body) {
+    v = ok({ [strKeys[0]]: body });
+    if (v !== undefined) return v;
+  }
+  throw new AppError('The AI returned an answer we could not read. Please try again.', 502, 'WORK_AI_BAD_OUTPUT');
 }
 
 const LANG_RULE = 'Reply in the same language the user writes in (Vietnamese or English). Keep issue titles in that language too.';
@@ -271,7 +311,7 @@ Return ONLY JSON: {"reply":"markdown","actions":[…]}`;
   const user = `${ctx.text}${focus ? `\n\nFocused issue:\n${focus.text}` : ''}${history ? `\n\nConversation so far (several team members may have asked):\n${history}` : ''}\n\nUser @${me.username}: ${input.message}`;
   let out: { reply: string; actions?: unknown };
   try {
-    out = parseJson(await ask(userId, system, user, 2200), z.object({ reply: z.string(), actions: z.unknown().optional() }));
+    out = parseJson(await ask(userId, system, user, 4000), z.object({ reply: z.string(), actions: z.unknown().optional() }));
   } catch (err) {
     await threads.markFailed(questionId, err);
     throw err;
@@ -322,7 +362,7 @@ Return ONLY JSON: {"reply":"short markdown explanation","actions":[…]}`;
   const userMsg = await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: asked, issueNumber: input.issueNumber ?? null });
   let out: { reply: string; actions?: unknown };
   try {
-    out = parseJson(await ask(userId, system, user, 3000), z.object({ reply: z.string(), actions: z.unknown().optional() }));
+    out = parseJson(await ask(userId, system, user, 5000), z.object({ reply: z.string(), actions: z.unknown().optional() }));
   } catch (err) {
     await threads.markFailed(userMsg.id, err);
     throw err;

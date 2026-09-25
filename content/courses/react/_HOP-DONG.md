@@ -122,7 +122,7 @@ export interface BenhNhan { hoTen: string; soDienThoai: string; ngaySinh: string
 export type TrangThaiLichHen = 'cho-xac-nhan' | 'da-xac-nhan' | 'da-huy';
 export interface LichHen { id: string; bacSiId: string; khungGioId: string; benhNhan: BenhNhan; lyDo: string; trangThai: TrangThaiLichHen }
 ```
-Dữ liệu mẫu `src/du-lieu/bac-si.ts`: 6 bác sĩ (`bs-1` BS. Nguyễn Minh An · noi · 12 năm; `bs-2` BS. Trần Thu Hà · nhi · 8;
+Dữ liệu mẫu `src/du-lieu/bac-si.ts` (export `danhSachBacSi: BacSi[]`; nhãn chuyên khoa ở `src/du-lieu/chuyen-khoa.ts` export `TEN_CHUYEN_KHOA: Record<ChuyenKhoa, string>` — tên chốt ở Ch1): 6 bác sĩ (`bs-1` BS. Nguyễn Minh An · noi · 12 năm; `bs-2` BS. Trần Thu Hà · nhi · 8;
 `bs-3` BS. Lê Quốc Bảo · da-lieu · 5; `bs-4` BS. Phạm Ngọc Lan · rang-ham-mat · 15; `bs-5` BS. Hoàng Đức Huy · noi · 3;
 `bs-6` BS. Vũ Thảo Vy · nhi · 20). API giả (từ Ch6, bằng MSW, `src/mocks/`): `GET /api/bac-si`, `GET /api/bac-si/:id`,
 `GET /api/bac-si/:id/khung-gio?ngay=YYYY-MM-DD`, `POST /api/lich-hen`, `GET /api/lich-hen`, `PATCH /api/lich-hen/:id`,
@@ -145,6 +145,10 @@ Dữ liệu mẫu `src/du-lieu/bac-si.ts`: 6 bác sĩ (`bs-1` BS. Nguyễn Minh 
 | Ch12 | `use()` + Suspense cho chi tiết bác sĩ, `useTransition` khi lọc danh sách lớn, `useOptimistic` khi huỷ lịch, form góp ý bằng `useActionState`, bật thử React Compiler và đo |
 | Ch13 | `Tabs` compound cho trang chi tiết, ô tìm headless, `Button` polymorphic `as`, virtualization danh sách khung giờ dài (đo thật), hiển thị giới thiệu bác sĩ an toàn (XSS), i18n Việt/Anh |
 | Ch14 | Đăng nhập, token, route bảo vệ, 401 → làm mới token → gọi lại, lỗi mạng/timeout/thử lại, biến môi trường `VITE_…`, build + đo bundle, workflow CI GitHub Actions |
+
+⚠️ `src/test/setup.ts` PHẢI có `afterEach(() => cleanup())` (import `cleanup` từ `@testing-library/react`, `afterEach` từ
+`vitest`): Vitest mặc định `globals: false` ⇒ Testing Library KHÔNG tự dọn DOM, test thứ hai thấy cả DOM của test trước
+(Ch1 đo thật: 12 thẻ thay vì 6). Dự án mẫu đã sửa từ 25/09/2026.
 
 **Làm sao các chương song song khớp nhau:** agent chương N làm trong `SCRATCH/rx/du-an/chNN/` —
 1. Nếu có ảnh chụp dự án của chương trước `SCRATCH/rx/du-an/sau-chMM/` (M < N lớn nhất) thì chép nó làm điểm đầu
@@ -170,7 +174,7 @@ export const slides = S([ cover({ t, sub, chap: 'CHƯƠNG N' }), { t: 'Bản đ�
   - `term([...])` — output thật của `npm create vite`, `tsc`, `vitest`, `vite build`. `code(...)`/`yaml(...)` — đoạn TSX ngắn
     có ghi chú bên lề (yaml() tô được TSX đơn giản). `diagram()`, `sv/R/T/A` — tự vẽ (luồng dữ liệu, cache, dòng thời gian).
 - Màu: `'rx'` (xanh React #149eca) ở `diagram/term/mindmap/sv/compTree`; khối CR (`cards/bars/seg/kpis/flow/steps`) dùng `'blu'`.
-  Trong `cards` chữ đậm dùng `<strong>`. Lệnh dài trong term tách dòng bằng `\`. ⚠️ Font mono vỡ dấu ỗ/ẫ.
+  Trong `cards` chữ đậm dùng `<strong>`. Lệnh dài trong term tách dòng bằng `\`. Chữ mono dùng Liberation Mono (đủ dấu tiếng Việt, đã đặt sẵn trong `_rx-chung`).
 - Kiểm tràn + render + ⛔ **MỞ TỪNG ẢNH bằng Read**, sửa tới khi sạch (bộ đo không thấy: chữ đè mũi tên, tràn chân trang,
   tiêu đề 2 dòng, terminal gãy dòng).
 

@@ -14,7 +14,7 @@
  *
  * Màu đặt bằng tên: rx (xanh React) · blu · tea · grn · amb · ora · vio · pnk · red · dim.
  * Khung slide 1280×720, vùng thân (.bd) rộng ~1168px, cao ~520px sau tiêu đề.
- * Chữ đơn cách rộng ~0,6×cỡ chữ; chữ thường trung bình ~0,52×cỡ chữ. ⚠️ Font mono vỡ dấu ỗ/ẫ — tránh trong chữ mono.
+ * Chữ đơn cách rộng ~0,6×cỡ chữ; chữ thường trung bình ~0,52×cỡ chữ. Chữ mono dùng Liberation Mono trước (đủ dấu tiếng Việt).
  */
 import { CSS as CR_CSS, esc, mindmap as crMindmap } from './_cr-chung.mjs';
 import { GIT_CSS, G as GG, term as gitTerm, diagram as gitDiagram } from './_git-chung.mjs';
@@ -89,6 +89,9 @@ body{background:${D.bg}}
 .d-yml .c .k{color:#79c0ff}.d-yml .c .s{color:#a5d6ff}.d-yml .c .cm{color:#6e7681}.d-yml .c .kw{color:#ff7b72;font-weight:700}
 .d-yml .a{font-size:calc(var(--fs,16px) - 1.5px);line-height:1.55;color:${D.tea};white-space:nowrap}
 .d-yml .a:not(:empty)::before{content:"← ";color:${D.dim}}
+/* Chữ mono tiếng Việt: "monospace" trên máy dựng Linux là DejaVu Sans Mono — THIẾU dải U+1EA0… (ố ầ ử ỗ vỡ).
+   Liberation Mono đủ glyph ⇒ đặt nó đứng đầu (bài học deck rx-01, 25/09/2026). */
+.g-term pre,.g-term .tb span,.d-yml .c,.slide .bd code,.c-code{font-family:"Liberation Mono","SF Mono",Menlo,monospace!important}
 </style>`;
 
 /** mindmap của CR, hiểu cả tên màu của Docker ('dk', 'tea', …). */
@@ -183,7 +186,7 @@ export const yaml = (lines, { fs = 16, lang = 'yaml' } = {}) => {
  *   R(x, y, w, h, {c, fill, dash, r, sw, op}) — hộp; T(x, y, chữ, {fs, c, a:'start'|'middle'|'end', b, mono}) — chữ (tự escape)
  *   A(x1, y1, x2, y2, {c, dash, sw})         — mũi tên thẳng
  */
-const MONO = 'SF Mono,Menlo,monospace';
+const MONO = 'Liberation Mono,SF Mono,Menlo,monospace';
 export const sv = (w, h, inner) => `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" style="display:block;margin:0 auto"><defs>` +
   ['dk', 'ga', 'rx', 'blu', 'tea', 'grn', 'amb', 'ora', 'vio', 'pnk', 'red', 'mu', 'dim'].map((k) => `<marker id="m-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="${D[k]}"/></marker>`).join('') +
   `</defs>${inner}</svg>`;
@@ -316,7 +319,7 @@ export const anh = (deck, ten, { w = 760, h, url = 'localhost:5173', cap } = {})
   return `<div style="width:${w}px;margin:0 auto;border:1.5px solid ${D.bd};border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 12px 40px rgba(0,0,0,.45)">` +
     `<div style="display:flex;align-items:center;gap:7px;padding:7px 12px;background:#1b2436;border-bottom:1.5px solid ${D.bd}">` +
     `<i style="width:11px;height:11px;border-radius:50%;background:#ff5f57"></i><i style="width:11px;height:11px;border-radius:50%;background:#febc2e"></i><i style="width:11px;height:11px;border-radius:50%;background:#28c840"></i>` +
-    `<span style="margin-left:10px;flex:1;background:#0b1220;border-radius:6px;padding:2px 10px;font:13px 'SF Mono',Menlo,monospace;color:${D.mu};text-align:left">${esc(url)}</span></div>` +
+    `<span style="margin-left:10px;flex:1;background:#0b1220;border-radius:6px;padding:2px 10px;font:13px 'Liberation Mono','SF Mono',Menlo,monospace;color:${D.mu};text-align:left">${esc(url)}</span></div>` +
     `<div style="${h ? `height:${h}px;` : ''}overflow:hidden"><img src="data:${mime};base64,${b64}" style="display:block;width:100%"/></div></div>` +
     (cap ? `<div style="text-align:center;font-size:15px;color:${D.mu};margin-top:8px">${cap}</div>` : '');
 };

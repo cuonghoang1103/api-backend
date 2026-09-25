@@ -78,6 +78,9 @@ describe('JQL — dịch sang Prisma', () => {
   });
   it('sprint theo hàm', () => {
     assert.deepEqual(w('sprint IN openSprints()'.replace('openSprints()', '(openSprints())')), { sprintId: { in: [41] } });
+    // Dạng trần như Jira — trợ giúp trong app gợi ý đúng dạng này.
+    assert.deepEqual(w('sprint IN openSprints()'), { sprintId: { in: [41] } });
+    assert.deepEqual(w('sprint in openSprints() AND priority = High'), { AND: [{ sprintId: { in: [41] } }, { priority: { in: [2] } }] });
   });
   it('ngày "=" là cả ngày', () => {
     assert.deepEqual(w('created = 2026-09-01'), { createdAt: { gte: new Date('2026-09-01T00:00:00Z'), lt: new Date('2026-09-02T00:00:00Z') } });

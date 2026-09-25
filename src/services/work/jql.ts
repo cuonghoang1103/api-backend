@@ -182,6 +182,10 @@ export function parseJql(src: string): JqlQuery {
       op = o.value as Operator;
     }
     if (op === 'in' || op === 'not in') {
+      // Jira also accepts a bare list function: `sprint IN openSprints()`.
+      if (peek().kind === 'word' && toks[p + 1]?.kind === 'lparen') {
+        return { kind: 'clause', field: f.value, op, values: [value()], pos: f.pos };
+      }
       expect('lparen', '"(" after IN');
       const values: JqlValue[] = [];
       while (peek().kind !== 'rparen') {

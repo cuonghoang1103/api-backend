@@ -229,6 +229,11 @@ export default function ProjectsClient() {
         break;
     }
 
+    // Dự án ghim luôn đứng đầu, bất kể kiểu sắp xếp (sort ổn định giữ thứ tự bên trong mỗi nhóm).
+    // (Không dùng Infinity - Infinity: ra NaN và làm sort loạn giữa các dự án không ghim.)
+    const pin = (p: Project) => (p.pinOrder == null ? Number.MAX_SAFE_INTEGER : p.pinOrder);
+    result.sort((a, b) => pin(a) - pin(b));
+
     return result;
   }, [projects, searchKeyword, categoryFilter, techFilter, levelFilter, statusFilter, sortBy]);
 

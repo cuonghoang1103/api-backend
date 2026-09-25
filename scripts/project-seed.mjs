@@ -29,6 +29,7 @@
  *     slug, title, description, techStack, role, duration, status,
  *     category, difficulty, projectUrl, githubUrl,
  *     startDate: '2026-06-08', endDate: null, isFeatured, isPublished,
+ *     pinOrder,            // số nguyên = ghim lên đầu /projects (nhỏ trước); bỏ trống = không ghim
  *     schemaCode, schemaLang,
  *     bodyMdx: `# heading …`,
  *     milestones: [{ phase, title, description, date, codeBlock, codeLang }],
@@ -348,6 +349,7 @@ const data = {
   endDate: spec.endDate ? new Date(spec.endDate) : null,
   isFeatured: spec.isFeatured !== undefined ? Boolean(spec.isFeatured) : true,
   isPublished: spec.isPublished !== undefined ? Boolean(spec.isPublished) : true,
+  pinOrder: Number.isInteger(spec.pinOrder) ? spec.pinOrder : null,
   ...(spec.thumbnailUrl !== undefined ? { thumbnailUrl: spec.thumbnailUrl } : {}),
   ...(spec.images !== undefined ? { images: JSON.stringify(spec.images) } : {}),
 };

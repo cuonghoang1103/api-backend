@@ -783,6 +783,10 @@ model Project {
   viewCount     Int       @default(0) @map("view_count")
   likeCount     Int       @default(0) @map("like_count")
   isPublished   Boolean   @default(true) @map("is_published")
+  // pinOrder — ghim lên đầu /projects (NULL = không ghim; số nhỏ đứng trước).
+  // Tách khỏi isFeatured vì seeder mặc định isFeatured = true cho mọi dự án,
+  // nên "featured" không phân biệt được dự án nào thật sự được ghim.
+  pinOrder      Int?      @map("pin_order")
   // ─── English translation columns (Phase 3, additive) ───
   // The site ships a VI/EN switch that flips content live
   // (cookie `locale` + `locale-changed` event, no reload).

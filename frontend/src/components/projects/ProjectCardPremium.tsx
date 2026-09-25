@@ -23,7 +23,7 @@
 import { useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, useReducedMotion, useSpring } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { ExternalLink, Github, Play, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ExternalLink, Github, Play, Star, Pin, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Project } from '@/types';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { useProjectLang, LEVEL_LABELS_I18N, CATEGORY_LABELS_I18N, labelOf } from '@/lib/projectI18n';
@@ -134,8 +134,16 @@ function CardCarousel({
  </button>
  )}
 
- {/* Featured badge — top left, only if featured. */}
- {project.featured && (
+ {/* Pinned badge — thay chỗ FEATURED: dự án ghim là thứ chủ trang muốn người xem thấy đầu tiên. */}
+ {project.pinOrder != null && (
+ <div className="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-emerald-300 to-teal-400 text-emerald-950 text-[10px] font-bold rounded-lg shadow-lg tracking-wider">
+ <Pin className="w-2.5 h-2.5 fill-current" />
+ {lang === 'en' ? 'PINNED' : 'ĐÃ GHIM'}
+ </div>
+ )}
+
+ {/* Featured badge — top left, only if featured (and not pinned). */}
+ {project.featured && project.pinOrder == null && (
  <div className="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-yellow-300 to-orange-400 text-yellow-950 text-[10px] font-bold rounded-lg shadow-lg tracking-wider">
  <Star className="w-2.5 h-2.5 fill-current" />
  FEATURED
@@ -409,7 +417,7 @@ export default function ProjectCardPremium({
  className="group relative cursor-pointer"
  >
  <div
- className={`relative rounded-3xl glass-frost gradient-border-violet overflow-hidden flex flex-col h-full ${isHovered ? 'is-active shadow-premium-card-hover' : 'shadow-premium-card'}`}
+ className={`relative rounded-3xl glass-frost gradient-border-violet overflow-hidden flex flex-col h-full ${isHovered ? 'is-active shadow-premium-card-hover' : 'shadow-premium-card'} ${project.pinOrder != null ? 'ring-2 ring-emerald-400/70' : ''}`}
  style={{
  transformStyle: 'preserve-3d',
  transition: 'box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1)',

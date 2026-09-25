@@ -25,6 +25,12 @@ const PUBLIC_INCLUDE = {
  listItems: { orderBy: { order: 'asc' as const } },
 };
 
+// Dự án ghim (pinOrder nhỏ trước) luôn đứng đầu, còn lại mới nhất trước.
+const PUBLIC_ORDER = [
+ { pinOrder: { sort: 'asc' as const, nulls: 'last' as const } },
+ { createdAt: 'desc' as const },
+];
+
 function normalizeProject(project: Record<string, unknown>) {
  const rawImages = project.images;
  let images: string[] = [];
@@ -149,7 +155,7 @@ router.get('/', async (req, res: Response<ApiResponse>, next) => {
  where,
  skip,
  take: sizeNum,
- orderBy: { createdAt: 'desc' },
+ orderBy: PUBLIC_ORDER,
  include: PUBLIC_INCLUDE,
  }),
  prisma.project.count({ where }),
@@ -177,7 +183,7 @@ router.get('/featured', async (req, res: Response<ApiResponse>, next) => {
  const projects = await prisma.project.findMany({
  where: { isFeatured: true, isPublished: true },
  take: parseInt(String(size), 10),
- orderBy: { createdAt: 'desc' },
+ orderBy: PUBLIC_ORDER,
  include: PUBLIC_INCLUDE,
  });
  const normalized = projects.map((p) => normalizeProject(p as unknown as Record<string, unknown>));

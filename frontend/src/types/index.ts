@@ -118,6 +118,8 @@ export interface Project {
  duration?: string;
  status: string;
  featured: boolean;
+ /** Ghim lên đầu /projects — null/undefined = không ghim, số nhỏ đứng trước. */
+ pinOrder?: number | null;
  startDate?: string;
  endDate?: string;
  skillNames?: string[];

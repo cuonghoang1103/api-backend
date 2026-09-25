@@ -5,6 +5,7 @@
 import { khung } from './_chung/khung.mjs';
 import s00 from './react/s00-intro.mjs';
 import s01 from './react/s01-component.mjs';
+import s02 from './react/s02-state.mjs';
 
 /*
  * KHUNG (24/09/2026) — giữ NGUYÊN để biết slug/tiêu đề gốc; chương nào đã soạn chi tiết thì thay phần tử
@@ -100,7 +101,7 @@ export default {
   sections: [
     s00,
     s01,
-    K[2],
+    s02,
     K[3],
     K[4],
     K[5],

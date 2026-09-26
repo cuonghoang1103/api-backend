@@ -515,3 +515,13 @@ declare module '@/components/academy/locTheoNganh' {
   ): Array<{ course: T; isOld: boolean; isProject: boolean }>;
   export function tenChuan(t?: string | null): string;
 }
+
+/* Ghi nhanh (⌥⇧N) của Sổ tay — bộ nghe phím + ô nổi của web. Trên web nó gắn ở
+   `app/layout.tsx`, mà app không dùng layout đó nên `Shell` (App.tsx) tự gắn.
+   Không nhận prop nào; giao tiếp qua sự kiện window `ghi-nhanh:mo`,
+   `so-lenh:on-the`. */
+declare module '@/components/notes/QuickCaptureHost' {
+  import type { ComponentType } from 'react';
+  const QuickCaptureHost: ComponentType;
+  export default QuickCaptureHost;
+}

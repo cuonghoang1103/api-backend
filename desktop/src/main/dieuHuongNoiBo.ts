@@ -15,7 +15,13 @@
  */
 
 /** Gốc các cây trang web được dựng TRONG app và từng bị gán `location.href`. */
-const CAY_NOI_BO: readonly string[] = ['/work'];
+/*
+ * `/notes` thêm 26/09/2026: Ghi nhanh (⌥⇧N) mở ghi chú vừa lưu bằng
+ * `window.location.href = '/notes?note=ID'`, nút "Xem Sổ lệnh ↗" dùng
+ * `location.assign`, ⌘K/trang chủ Sổ tay trỏ `/notes/graph`. Không chặn thì
+ * mỗi cú bấm tải lại cả app và rơi về `lastRoute`, không mở ghi chú nào.
+ */
+const CAY_NOI_BO: readonly string[] = ['/work', '/notes'];
 
 export function duongNoiBoTuUrl(
   url: string,

@@ -39,6 +39,27 @@ describe('vaFetch', () => {
     expect(daGoi[0]?.auth, 'gắn token cho bên thứ ba là RÒ RỈ').toBeNull();
   });
 
+  it('URL TUYỆT ĐỐI của chính gốc API cũng được gắn Bearer (SSE "Sắp xếp lại" của Notes)', async () => {
+    // `notesApi.aiSapXep` dựng URL từ `api.defaults.baseURL` (đã tuyệt đối ở bản
+    // đóng gói) và tự đọc token từ `document.cookie` — trong app không có cookie.
+    await fetch('https://cuongthai.com/api/v1/notes/ai/sap-xep', { method: 'POST', credentials: 'include' });
+    expect(daGoi[0]?.url).toBe('https://cuongthai.com/api/v1/notes/ai/sap-xep');
+    expect(daGoi[0]?.auth).toBe('Bearer tok-123');
+  });
+
+  it('host GIẢ trùng tiền tố với gốc API thì KHÔNG nhận token', async () => {
+    await fetch('https://cuongthai.com.evil.example/api/v1/x');
+    expect(daGoi[0]?.auth).toBeNull();
+    await fetch('https://cuongthai.com/apix/v1');
+    expect(daGoi[1]?.auth).toBeNull();
+  });
+
+  it('gốc RỖNG (dev) thì URL tuyệt đối nào cũng không bị đụng', async () => {
+    datCauHinhChoKiem({ apiBase: '', getToken: () => 'tok-123' });
+    await fetch('https://cuongthai.com/api/v1/x');
+    expect(daGoi[0]?.auth).toBeNull();
+  });
+
   it('KHÔNG đụng vào đường dẫn tương đối khác', async () => {
     await fetch('/assets/anh.png');
     expect(daGoi[0]?.url).toBe('/assets/anh.png');

@@ -303,6 +303,9 @@ export const GOC_WEB: readonly string[] = [
   '/academy',
   /* CT Work — cả cây, gồm hai đường công khai `invite/*` và `share/*`. */
   '/work',
+  /* Sổ tay: `/notes` là màn `NotesPage` (khớp chính xác); mục này mở đường cho
+     `/notes/graph` — "Đồ thị liên kết" trong ⌘K và trang chủ Sổ tay. */
+  '/notes',
 ];
 
 /** Đường dẫn này có thuộc một cây web không (kể cả các trang con động). */

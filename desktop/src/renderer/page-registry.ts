@@ -116,6 +116,10 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
      đảm điều đó: khớp chính xác trước, cây web sau. */
   ['/academy', TuVanNganhPage],
   ['/work', CtWorkPage],
+  /* `/notes/graph` (Đồ thị liên kết) — ⌘K và trang chủ Sổ tay trỏ tới. Chỉ
+     trang CON; `/notes` vẫn khớp chính xác ở `NATIVE_PAGES`. `NotesPage` tự
+     rẽ theo `route`. */
+  ['/notes', NotesPage],
 ];
 
 export function nativePageFor(path: string): ComponentType | undefined {

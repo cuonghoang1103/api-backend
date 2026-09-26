@@ -22,6 +22,7 @@ import { Settings } from './pages/Settings';
 import { nativePageFor } from './page-registry';
 import { findRoute, INTERNAL_ROUTES } from './routes';
 import { Toaster } from 'sonner';
+import QuickCaptureHost from '@/components/notes/QuickCaptureHost';
 
 function Content() {
   const { route } = useAppState();
@@ -173,6 +174,29 @@ function Shell() {
             },
           }}
         />
+        {/*
+         * ⚡ GHI NHANH (⌥⇧N / Alt+Shift+N) — bản nâng cấp Sổ tay 26/09/2026.
+         *
+         * Trên web nó gắn ở `app/layout.tsx`, mà app KHÔNG dùng layout đó ⇒
+         * thiếu dòng này thì phím tắt chết câm ở MỌI trang, kể cả trong Sổ tay,
+         * và sự kiện `ghi-nhanh:mo` (nút "Ghi nhanh" trong Sổ tay, trình soạn
+         * phát ra) không ai nghe.
+         *
+         * Đặt ở `Shell`, cạnh `<Toaster>`: MỘT bản duy nhất phủ mọi trang, và
+         * nằm ngoài ErrorBoundary của nội dung. Chỉ là bộ nghe phím nhỏ — ô nổi
+         * thật được nạp lười lần đầu mở.
+         *
+         * Phím là phím của RENDERER (keydown), không phải `globalShortcut`: giữ
+         * ⌥⇧N toàn hệ thống là cướp một tổ hợp gõ ký tự (˜ trên bàn phím Mac)
+         * của mọi ứng dụng khác. Chỉ chạy khi cửa sổ app đang có tiêu điểm.
+         *
+         * `ct-ghi-nhanh-host` (display: contents) khai biến màu của web
+         * (`--bg-card`, `--text-primary`…) theo token của app — ô nổi tô màu
+         * bằng chúng, và ngoài vùng bài học thì app không khai ⇒ nền trong suốt.
+         */}
+        <div className="ct-ghi-nhanh-host">
+          <QuickCaptureHost />
+        </div>
         {/* Odin nằm NGOÀI vùng nội dung để không bị cuộn theo trang, và ngoài
             ErrorBoundary của nội dung để một trang hỏng không kéo nó chết theo. */}
         <OdinDock />

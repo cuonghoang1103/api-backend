@@ -37,7 +37,7 @@ import { useDich } from '../../i18n';
 
 export function OdinDock() {
   const { dich } = useDich();
-  const { navigate, settings, setSetting, online } = useAppState();
+  const { navigate, settings, setSetting, online, route } = useAppState();
   const { api } = useSession();
   /** Ngôn ngữ Odin nói. Mặc định tiếng Việt — đây là app tiếng Việt. */
   const ngonNgu: 'vi' | 'en' = settings.odinNgonNgu === 'en' ? 'en' : 'vi';
@@ -391,6 +391,11 @@ export function OdinDock() {
   }, [enabled, phai, duoi, khung, setSetting]);
 
   if (!enabled) return null;
+  /* Sổ tay có nút "✨ Hỏi ghi chú" riêng ở ĐÚNG góc dưới-phải này, và robot đè
+     kín nó (đo 26/09/2026, ảnh chụp app 1440×900). Web đã ẩn robot nổi trên
+     /notes vì cùng lý do — theo đúng quyết định đó. Chỉ ẩn phần VẼ; mọi effect
+     ở trên vẫn chạy nên quay ra trang khác là robot có mặt ngay, đúng trạng thái. */
+  if (route === '/notes' || route.startsWith('/notes/')) return null;
 
   return (
     <div

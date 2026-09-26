@@ -105,13 +105,36 @@ export function vaFetch(): void {
 
   const boc = (dau: RequestInfo | URL, tuy?: RequestInit): Promise<Response> => {
     const url = typeof dau === 'string' ? dau : dau instanceof URL ? dau.href : dau.url;
-    if (!url.startsWith('/api/')) return goc(dau, tuy);
+    const { apiBase } = cauHinh;
+    /*
+     * ⚠️ HAI dạng URL của cùng một máy chủ API.
+     *  • `/api/...` — tương đối (mã web viết tay). Phải ghép gốc vào.
+     *  • `${apiBase}/api/...` — ĐÃ tuyệt đối, vì mã web dựng nó từ
+     *    `api.defaults.baseURL` mà `configureWebApi` đã đặt. Ví dụ thật
+     *    26/09/2026: "✨ Sắp xếp lại" của Notes (`notesApi.aiSapXep`) gọi
+     *    `fetch(`${baseURL}/notes/ai/sap-xep`)` và tự lấy token từ
+     *    `document.cookie` — trong app cookie đó KHÔNG tồn tại. Chỉ nhận dạng
+     *    đầu thì ở bản đóng gói (gốc là https://…) lời gọi đi ra không có
+     *    Bearer ⇒ 401 ⇒ nút AI hỏng câm; ở dev (gốc rỗng) lại chạy, nên thử ở
+     *    máy dev không bao giờ thấy.
+     * Chỉ gắn token cho ĐÚNG gốc API của app — không bao giờ cho host lạ.
+     */
+    const tuongDoi = url.startsWith('/api/');
+    const tuyetDoi = apiBase !== '' && url.startsWith(`${apiBase}/api/`);
+    if (!tuongDoi && !tuyetDoi) return goc(dau, tuy);
 
     const header = new Headers(tuy?.headers ?? (typeof dau === 'object' && 'headers' in dau ? dau.headers : undefined));
     const token = cauHinh.getToken();
     if (token && !header.has('Authorization')) header.set('Authorization', `Bearer ${token}`);
 
-    return goc(`${cauHinh.apiBase}${url}`, { ...tuy, headers: header });
+    /* `credentials: 'omit'` cùng lý do `withCredentials = false` ở trên: app
+       xác thực bằng Bearer, cookie chỉ là đường thứ hai để nhầm phiên. */
+    const dich = tuongDoi ? `${apiBase}${url}` : url;
+    if (typeof dau === 'object' && !(dau instanceof URL)) {
+      // Request object: giữ method/body của nó, chỉ đổi URL + header.
+      return goc(new Request(dich, dau), { ...tuy, headers: header, credentials: 'omit' });
+    }
+    return goc(dich, { ...tuy, headers: header, credentials: 'omit' });
   };
 
   (boc as { [DAU_BOC]?: true })[DAU_BOC] = true;

@@ -2791,6 +2791,41 @@ code {
   height: 100%;
 }
 
+/* `pt-16` của trang Notes web = chỗ chừa thanh nav cố định của web (cùng lý do
+   luật `.ct-web-host > .pt-16` ở trên — Notes đi host riêng nên luật đó không
+   với tới). App không có thanh nav ⇒ 64px trống trên đầu Sổ tay. */
+.ct-notes-host .notes-page.pt-16 {
+  padding-top: 0;
+}
+
+/* Nút "✨ Hỏi ghi chú" (`fixed bottom-4 right-4`) tính theo mép dưới CỬA SỔ, mà
+   ở app đáy cửa sổ là thanh trạng thái 30px ⇒ nút đè lên ô zoom. Nhấc lên trên
+   thanh trạng thái. Nhắm theo `title` — nút không có lớp riêng. */
+.ct-notes-host button[title='Hỏi về ghi chú của bạn'] {
+  bottom: calc(var(--ct-statusbar-h) + 16px);
+}
+
+/*
+ * Ô GHI NHANH (⌥⇧N) của web — `QuickCapturePanel` tô nền/chữ/viền bằng biến
+ * chủ đề CỦA WEB. App chỉ khai chúng trong vùng bài học (`.ct-hv-*`), nên gắn
+ * ở `Shell` mà không khai ở đây thì `var(--bg-card)` không giải được ⇒ trình
+ * duyệt vứt cả khai báo ⇒ ô nổi TRONG SUỐT, chữ đè lên trang bên dưới.
+ * Ánh xạ sang token của app nên tự theo chủ đề sáng/tối của app.
+ *
+ * `--app-chrome-bottom`: ô nổi đặt `bottom: 16px + biến này` — chừa đúng thanh
+ * trạng thái của app để nó không đè lên.
+ */
+.ct-ghi-nhanh-host {
+  display: contents;
+  --text-primary: var(--ct-text);
+  --text-secondary: var(--ct-text-muted);
+  --text-muted: var(--ct-text-faint);
+  --bg-card: var(--ct-surface);
+  --bg-surface: var(--ct-surface-2);
+  --border-color: var(--ct-border);
+  --app-chrome-bottom: var(--ct-statusbar-h);
+}
+
 /*
  * Preflight của Tailwind reset `button` về không viền, nền trong suốt. App
  * desktop vốn đã tự đặt những thứ này nên phần lớn không đổi — nhưng nó cũng

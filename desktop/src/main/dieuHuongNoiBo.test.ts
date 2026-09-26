@@ -13,6 +13,16 @@ describe('duongNoiBoTuUrl', () => {
       .toEqual({ path: '/work/acme', query: '' });
   });
 
+  it('nhận đường Sổ tay (Ghi nhanh → "Mở", ⌘K → Đồ thị liên kết)', () => {
+    expect(duongNoiBoTuUrl('app://cuongthai/notes?note=42', GOC))
+      .toEqual({ path: '/notes', query: '?note=42' });
+    expect(duongNoiBoTuUrl('http://localhost:5273/notes', GOC))
+      .toEqual({ path: '/notes', query: '' });
+    expect(duongNoiBoTuUrl('app://cuongthai/notes/graph', GOC))
+      .toEqual({ path: '/notes/graph', query: '' });
+    expect(duongNoiBoTuUrl('app://cuongthai/notesx', GOC)).toBeNull();
+  });
+
   it('KHÔNG nhận đường ngoài danh sách — giữ nguyên luồng cũ', () => {
     expect(duongNoiBoTuUrl('app://cuongthai/', GOC)).toBeNull();
     expect(duongNoiBoTuUrl('app://cuongthai/index.html', GOC)).toBeNull();

@@ -260,6 +260,8 @@ describe('thuocCayWeb', () => {
     }
     expect(thuocCayWeb('/workout')).toBe(false);
     expect(thuocCayWeb('/works')).toBe(false);
+    expect(thuocCayWeb('/notes/graph')).toBe(true);
+    expect(thuocCayWeb('/notesx')).toBe(false);
   });
 
   it('KHÔNG nhận route chỉ trùng tiền tố chuỗi', () => {

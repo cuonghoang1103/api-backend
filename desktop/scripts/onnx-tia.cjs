@@ -40,6 +40,67 @@ function coCay(duong) {
 
 const MB = (b) => `${(b / 1024 / 1024).toFixed(0)} MB`;
 
+/**
+ * TERMINAL THẬT (PTY) — `@lydell/node-pty-<nền>-<kiến trúc>` (26/09/2026).
+ *
+ * Tỉa gói của nền khác, rồi ĐÒI thấy gói của nền đang dựng. Khác ONNX ở chỗ
+ * thiếu gói này là LỖI DỰNG chứ không phải cảnh báo: app vẫn lùi được về chế
+ * độ ống, nhưng khi đó `ssh`/`sudo` hỏi mật khẩu sẽ không chạy — đúng thứ
+ * terminal này sinh ra để làm, và người dùng không có cách nào tự biết.
+ *
+ * Nguyên nhân hay gặp: CI macOS chạy trên máy arm64 nên `npm ci` chỉ cài gói
+ * arm64, trong khi ta dựng CẢ bản x64. Workflow có bước cài bù gói x64.
+ */
+function tiaPty(goc, nen, arch) {
+  const thuMuc = path.join(goc, 'node_modules', '@lydell');
+  if (!fs.existsSync(thuMuc)) {
+    throw new Error(`Không thấy ${thuMuc} — asarUnpack cho @lydell/node-pty không khớp. Terminal thật sẽ không chạy.`);
+  }
+  /* Gói nhị phân có thể nằm ở HAI chỗ: cấp trên (`node_modules/@lydell/…`),
+     hoặc LỒNG trong `@lydell/node-pty/node_modules/@lydell/…` — electron-builder
+     đặt optionalDependency ở chỗ lồng. Đo thật 26/09/2026 khi đóng gói bản Mac:
+     chốt cũ chỉ tìm cấp trên nên báo THIẾU dù nhị phân có đủ. `require` của Node
+     tìm được cả hai chỗ nên phải soi cả hai. */
+  const choTim = [thuMuc, path.join(thuMuc, 'node-pty', 'node_modules', '@lydell')].filter((d) => fs.existsSync(d));
+  /* Bản universal của macOS chạy trên CẢ HAI kiến trúc ⇒ giữ cả hai gói. */
+  const dsGiu = arch === 'universal' ? [`node-pty-${nen}-x64`, `node-pty-${nen}-arm64`] : [`node-pty-${nen}-${arch}`];
+  for (const d of choTim) {
+    for (const ten of fs.readdirSync(d)) {
+      if (/^node-pty-/.test(ten) && !dsGiu.includes(ten)) fs.rmSync(path.join(d, ten), { recursive: true, force: true });
+    }
+  }
+  for (const canGiu of dsGiu) {
+    const o = choTim.find((d) => fs.existsSync(path.join(d, canGiu))) ?? thuMuc;
+    kiemGoiPty(o, canGiu, nen, arch);
+  }
+  console.log(`  → PTY: giữ ${dsGiu.map((t) => `@lydell/${t}`).join(', ')}, đã tỉa gói của nền khác.`);
+}
+
+function kiemGoiPty(thuMuc, canGiu, nen, arch) {
+  const dir = path.join(thuMuc, canGiu, 'prebuilds');
+  const coNode = fs.existsSync(dir) && (function tim(d) {
+    return fs.readdirSync(d, { withFileTypes: true }).some((m) =>
+      m.isDirectory() ? tim(path.join(d, m.name)) : m.name.endsWith('.node'));
+  })(dir);
+  if (!coNode) {
+    throw new Error(
+      `THIẾU nhị phân terminal cho ${nen}/${arch} (@lydell/${canGiu}).\n`
+      + `Trên CI: cài bù \`npm install --no-save @lydell/${canGiu}@<cùng phiên bản>\` trước khi dựng.`,
+    );
+  }
+  /* macOS/Linux: `spawn-helper` phải chạy được — mất bit thực thi là mở
+     terminal báo "posix_spawnp failed" trên máy người dùng. */
+  if (nen !== 'win32') {
+    (function chmod(d) {
+      for (const m of fs.readdirSync(d, { withFileTypes: true })) {
+        const f = path.join(d, m.name);
+        if (m.isDirectory()) chmod(f);
+        else if (m.name === 'spawn-helper') fs.chmodSync(f, 0o755);
+      }
+    })(dir);
+  }
+}
+
 exports.default = async function onnxTia(context) {
   const nen = context.electronPlatformName;                 // darwin | win32 | linux
   const arch = TEN_ARCH[context.arch] ?? String(context.arch);
@@ -51,6 +112,8 @@ exports.default = async function onnxTia(context) {
     ? path.join(context.appOutDir, `${context.packager.appInfo.productFilename}.app`,
                 'Contents', 'Resources', 'app.asar.unpacked')
     : path.join(context.appOutDir, 'resources', 'app.asar.unpacked');
+
+  tiaPty(goc, nen, arch);
 
   const binOnnx = path.join(goc, 'node_modules', 'onnxruntime-node', 'bin');
 

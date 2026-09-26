@@ -16,6 +16,7 @@ import { contextBridge, ipcRenderer, webUtils } from 'electron';
 import type {
   AgentInfo,
   TerminalKetQua,
+  PhienPty,
   TerminalDauRa,
   AgentCuocDangMo,
   AgentMcpTrangThai,
@@ -83,6 +84,8 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'nhac:phim',
   'aiCucBo:tienDo',
   'opencode:tienDo',
+  'pty:du',
+  'pty:trangThai',
 ];
 
 const bridge: DesktopBridge = {
@@ -311,6 +314,17 @@ const bridge: DesktopBridge = {
     hoi: (p) => ipcRenderer.invoke('aiCucBo:hoi', p),
   },
 
+  pty: {
+    mo: (cuocId: string, cot: number, dong: number) =>
+      ipcRenderer.invoke('pty:mo', { cuocId, cot, dong }) as Promise<{ ok: boolean; phien?: PhienPty; loi?: string }>,
+    gui: (id: string, du: string) => ipcRenderer.invoke('pty:gui', { id, du }) as Promise<boolean>,
+    coLai: (id: string, cot: number, dong: number) =>
+      ipcRenderer.invoke('pty:coLai', { id, cot, dong }) as Promise<void>,
+    dong: (id: string) => ipcRenderer.invoke('pty:dong', { id }) as Promise<boolean>,
+    ds: (cuocId: string) => ipcRenderer.invoke('pty:ds', { cuocId }) as Promise<PhienPty[]>,
+    demTho: (id: string) => ipcRenderer.invoke('pty:demTho', { id }) as Promise<string>,
+    mayCo: () => ipcRenderer.invoke('pty:mayCo') as Promise<{ co: boolean; loi: string | null }>,
+  },
   terminal: {
     chay: (cuocId: string, lenh: string) =>
       ipcRenderer.invoke('terminal:chay', { cuocId, lenh }) as Promise<TerminalKetQua>,

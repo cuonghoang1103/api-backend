@@ -53,6 +53,12 @@ export default defineConfig({
          */
         'libflacjs',
         '@breezystack/lamejs',
+        /**
+         * Terminal thật (PTY) — module NATIVE, phải nằm ngoài bundle và ngoài
+         * asar (xem `asarUnpack`). Gói nó vào bundle thì `require` tìm file
+         * `.node` theo đường dẫn sai và terminal lùi về chế độ ống im lặng.
+         */
+        /^@lydell\/node-pty/,
         ...builtinModules,
         ...builtinModules.map((m) => `node:${m}`),
       ],

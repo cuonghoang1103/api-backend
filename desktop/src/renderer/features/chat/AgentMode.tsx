@@ -32,7 +32,7 @@ import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
 import { ThanhDangLam } from './ThanhDangLam';
 import { viecDangLam, viecCuaTool } from './viecDangLam';
-import { BangLenh } from './BangLenh';
+import { TerminalThat } from './TerminalThat';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
 import { NutOpenCode } from './NutOpenCode';
@@ -244,6 +244,13 @@ export function AgentMode({
   /* Bảng chạy lệnh — mở/đóng bằng nút, KHÔNG tự mở. Nó chiếm chỗ dưới bảng
      ghi, và người dùng phần lớn thời gian không cần tới. */
   const [moBangLenh, datMoBangLenh] = useState(false);
+  /* Agent vừa mở terminal hoặc đụng lời hỏi mật khẩu ⇒ BẬT khung Terminal kể
+     cả khi đang ẩn: nó sẽ nói "gõ mật khẩu vào terminal", và khung đó phải
+     đang hiện. Lọc theo tab: agent của tab khác không được giật khung ở đây. */
+  useEffect(() => window.cuongthai?.on('pty:trangThai', (p) => {
+    const e = p as { cuocId?: string; nguon?: string; dangChay?: boolean; choNhap?: string | null };
+    if (e.cuocId === cuocId && e.nguon === 'agent' && e.dangChay) datMoBangLenh(true);
+  }), [cuocId]);
   useEffect(() => {
     const cau = window.cuongthai;
     if (!cau) return;
@@ -797,10 +804,10 @@ export function AgentMode({
           className="ct-btn ct-btn-ghost"
           data-bat={moBangLenh}
           onClick={() => datMoBangLenh((v) => !v)}
-          title={dich('Chạy lệnh trong thư mục dự án — npm test, git status… (không phải terminal đầy đủ)')}
+          title={dich('Terminal thật trong thư mục dự án — gõ lệnh, ssh, mật khẩu… (agent cũng dùng chung)')}
         >
           <SquareTerminal size={13} aria-hidden />
-          {moBangLenh ? dich('Bảng lệnh: MỞ') : dich('Bảng lệnh')}
+          {moBangLenh ? dich('Terminal: MỞ') : 'Terminal'}
         </button>
 
         {/* KHÔNG bọc trong `coThuMuc`: sổ ghi chú nằm trên máy chủ, không phải
@@ -1232,7 +1239,7 @@ export function AgentMode({
       <DaiTepCode tep={dk.tep.filter((x) => !x.dataUrl)} bo={dk.bo} />
 
       {moBangLenh && (
-        <BangLenh cuocId={cuocId} coThuMuc={coThuMuc} onDong={() => datMoBangLenh(false)} />
+        <TerminalThat cuocId={cuocId} onDong={() => datMoBangLenh(false)} onCanMo={() => datMoBangLenh(true)} />
       )}
 
       {lenhTraLoi !== null && (

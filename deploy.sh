@@ -1013,6 +1013,7 @@ for route in \
     llm-keys/info \
     admin/thong-bao/dem \
     admin/fable \
+    agent/ky-nang \
     cv/profile \
     tech-trends/articles \
     voice \

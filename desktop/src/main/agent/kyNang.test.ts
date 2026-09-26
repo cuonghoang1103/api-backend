@@ -9,7 +9,7 @@ import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { dsKyNang, dsKyNangDuAn, docThanKyNang, docDauKyNang, kyNangSan } from './kyNang';
+import { _datBanMayChu, dsKyNang, dsKyNangDuAn, docThanKyNang, docDauKyNang, kyNangSan } from './kyNang';
 
 async function duAn(kn: Record<string, string>): Promise<string> {
   const goc = await mkdtemp(join(tmpdir(), 'ct-kn-'));
@@ -100,9 +100,13 @@ describe('tách phần đầu', () => {
 });
 
 describe('kỹ năng CÀI SẴN trong app (26/09/2026)', () => {
-  it('có đủ bốn kỹ năng, mỗi cái có mô tả và thân', () => {
+  it('có đủ 12 kỹ năng đóng gói, mỗi cái có mô tả và thân', () => {
+    _datBanMayChu(null);
     const ds = kyNangSan();
-    expect(ds.map((k) => k.ten).sort()).toEqual(['deploy', 'lam-viec-chuan', 'may-chu-ssh', 'phat-hanh-app']);
+    expect(ds.map((k) => k.ten).sort()).toEqual([
+      'bao-mat', 'database', 'deploy', 'do-an-bao-cao', 'giao-dien-web', 'git-github',
+      'kiem-thu', 'lam-viec-chuan', 'may-chu-ssh', 'phat-hanh-app', 'thiet-ke-api', 'tinh-nang-ai',
+    ]);
     for (const k of ds) {
       expect(k.moTa.length).toBeGreaterThan(40);
       expect(k.than.length).toBeGreaterThan(1000);
@@ -131,6 +135,20 @@ describe('kỹ năng CÀI SẴN trong app (26/09/2026)', () => {
     const than = kyNangSan().find((k) => k.ten === 'deploy')!.than;
     expect(than).toContain('BatchMode=yes');
     expect(than).toContain('SQL Server');
+  });
+});
+
+describe('kỹ năng tải từ MÁY CHỦ (sửa không cần phát hành app)', () => {
+  it('có bản máy chủ ⇒ dùng bản máy chủ thay bản đóng gói', async () => {
+    _datBanMayChu([{ ten: 'deploy', moTa: 'Bản mới từ máy chủ', than: 'Nội dung mới nhất.' }]);
+    try {
+      expect(kyNangSan().map((k) => k.ten)).toEqual(['deploy']);
+      expect(await docThanKyNang(null, 'deploy')).toBe('Nội dung mới nhất.');
+    } finally {
+      _datBanMayChu(null);
+    }
+    // Hết bản máy chủ ⇒ quay về bản đóng gói đủ 12.
+    expect(kyNangSan()).toHaveLength(12);
   });
 });
 

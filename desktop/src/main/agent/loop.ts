@@ -28,7 +28,7 @@ import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
 import { chayHook } from './hook';
 import { cauImLang, docCoHanIm, TRAN_MOT_LUOT_MS } from './hanImLang';
-import { dsKyNang, docThanKyNang } from './kyNang';
+import { dsKyNang, docThanKyNang, napKyNangMayChu } from './kyNang';
 import { dsAgentPhu, docThanAgentPhu } from './agentPhu';
 import {
   datTokenChoDatTen, docPhien, dungLaiHienThi, luuPhien, taoPhienNhanh,
@@ -41,6 +41,7 @@ import { napQuyenLau, xoaQuyenLau } from './quyenLau';
 import { getSettings } from '../store';
 import type { CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
+import { dongTerminalCua } from '../terminal/phienTerminal';
 import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
 import { hoiNguoiDung, huyTatCa, type YeuCauXinPhep } from './xinPhep';
 
@@ -492,6 +493,8 @@ export function dongCuoc(id: string): void {
   // Dọn lệnh nền của cuộc này. Không dọn thì đóng tab để lại một `next dev` ăn
   // CPU mãi mãi mà không còn giao diện nào nhắc tới nó.
   dungLenhNenCua(id);
+  // Terminal thật của tab này (cả của agent lẫn của người dùng) đóng theo tab.
+  dongTerminalCua(id);
   cuoc.delete(id);
 }
 
@@ -847,7 +850,7 @@ export async function chayLuot(
     // và thứ tư: người dùng đã phải cân nhắc hai lần rồi, và mỗi lời gọi vẫn
     // phải duyệt riêng. `git_write` theo `choSua` vì commit là ghi vào repo;
     // `shell_nen` theo `choChayLenh` vì nó vẫn là chạy lệnh.
-    if (boiCanh.choChayLenh) capabilities.push('shell', 'shell_nen');
+    if (boiCanh.choChayLenh) capabilities.push('shell', 'shell_nen', 'terminal');
     if (boiCanh.choTrinhDuyet) capabilities.push('browser');
     if (boiCanh.choSua) capabilities.push('git_write');
     /* Sửa ảnh đi theo `choSua` vì nó ghi một file vào dự án — nhưng là khả
@@ -868,6 +871,8 @@ export async function chayLuot(
      mới thấy. Chỉ là tên + mô tả nên rẻ. */
   /* Luôn có bộ kỹ năng CÀI SẴN (deploy, máy chủ SSH, phát hành app, làm việc
      chuẩn) — kể cả khi chưa mở thư mục nào. Xem `kyNangSan/index.ts`. */
+  // Bản mới nhất từ máy chủ (đệm 10 phút, không bao giờ làm hỏng lượt).
+  await napKyNangMayChu(API_ORIGIN, phien.sessionToken);
   const kyNang = await dsKyNang(boiCanh.goc);
   /* Loại agent phụ dự án khai (`.claude/agents/*.md`). Chỉ tên + mô tả — thân
      file chỉ được đọc khi model THẬT SỰ giao việc cho loại đó, cùng lý do
@@ -1032,6 +1037,8 @@ export async function chayLuot(
               signal: dieuKhien.signal,
               xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) =>
                 phat({ loai: 'xinPhepLenh', id: y.id, lenh: y.duongDan, phanLoai: y.phanLoai }),
+              // Terminal thật tự duyệt theo CÙNG luật với lệnh thường.
+              tuDuyetLenh: (muc: 'thuong' | 'cankiem' | 'nguyhiem') => tuDuyetLenh(c.cheDoQuyen, muc),
             }
           : undefined;
 

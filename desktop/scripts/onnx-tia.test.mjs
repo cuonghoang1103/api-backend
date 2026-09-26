@@ -24,7 +24,7 @@ const THAT = [
 let tam;
 
 /** Dựng cây `appOutDir` giống hệt thứ electron-builder đẻ ra. */
-function dungCay(nen, capCo = THAT) {
+function dungCay(nen, capCo = THAT, ptyCo = THAT) {
   const goc = nen === 'darwin'
     ? path.join(tam, 'CuongThai.app', 'Contents', 'Resources', 'app.asar.unpacked')
     : path.join(tam, 'resources', 'app.asar.unpacked');
@@ -33,6 +33,14 @@ function dungCay(nen, capCo = THAT) {
     fs.mkdirSync(d, { recursive: true });
     fs.writeFileSync(path.join(d, 'onnxruntime_binding.node'), Buffer.alloc(1024));
     fs.writeFileSync(path.join(d, 'libonnxruntime.so'), Buffer.alloc(4096));
+  }
+  /* Terminal thật (PTY): mỗi nền một gói `@lydell/node-pty-<nền>-<arch>` —
+     danh sách RIÊNG, để test thiếu ONNX không vô tình thiếu luôn PTY. */
+  for (const [n, a] of ptyCo) {
+    const pty = path.join(goc, 'node_modules', '@lydell', `node-pty-${n}-${a}`, 'prebuilds', `${n}-${a}`);
+    fs.mkdirSync(pty, { recursive: true });
+    fs.writeFileSync(path.join(pty, 'pty.node'), Buffer.alloc(512));
+    if (n !== 'win32') fs.writeFileSync(path.join(pty, 'spawn-helper'), Buffer.alloc(64), { mode: 0o644 });
   }
   return path.join(goc, 'node_modules', 'onnxruntime-node', 'bin', 'napi-v6');
 }
@@ -124,3 +132,24 @@ describe('những chỗ móc phải lên tiếng', () => {
     await expect(onnxTia(boiCanh('linux', 'x64'))).rejects.toThrow(/\.node/);
   });
 });
+
+describe('terminal thật (PTY) trong bản cài', () => {
+  const thuMucLydell = (nen) => path.join(
+    nen === 'darwin' ? path.join(tam, 'CuongThai.app', 'Contents', 'Resources') : path.join(tam, 'resources'),
+    'app.asar.unpacked', 'node_modules', '@lydell',
+  );
+
+  it('⭐ chỉ giữ gói PTY của đúng nền, và spawn-helper chạy được', async () => {
+    dungCay('darwin');
+    await onnxTia(boiCanh('darwin', 'x64'));
+    expect(fs.readdirSync(thuMucLydell('darwin'))).toEqual(['node-pty-darwin-x64']);
+    const helper = path.join(thuMucLydell('darwin'), 'node-pty-darwin-x64', 'prebuilds', 'darwin-x64', 'spawn-helper');
+    expect(fs.statSync(helper).mode & 0o111).not.toBe(0);
+  });
+
+  it('⭐ THIẾU gói PTY của nền đang dựng thì NÉM — không phát hành terminal hỏng', async () => {
+    dungCay('darwin', THAT, [['darwin', 'arm64']]);   // CI arm64 quên cài bù gói x64
+    await expect(onnxTia(boiCanh('darwin', 'x64'))).rejects.toThrow(/THIẾU nhị phân terminal/);
+  });
+});
+

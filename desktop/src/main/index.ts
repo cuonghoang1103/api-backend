@@ -234,6 +234,8 @@ async function bootstrap(): Promise<void> {
     // Lệnh nền SỐNG LÂU HƠN lượt sinh ra nó — đó là điểm của nó. Nhưng nó không
     // được sống lâu hơn cả app: thiếu dòng này là để lại `npm run dev` mồ côi.
     void import('./agent/lenhNen').then(({ dungMoiLenhNen }) => dungMoiLenhNen()).catch(() => {});
+    // Terminal thật cũng thế: shell con không được sống lâu hơn app.
+    void import('./terminal/phienTerminal').then(({ dongMoiTerminal }) => dongMoiTerminal()).catch(() => {});
   });
 
   app.on('activate', () => {

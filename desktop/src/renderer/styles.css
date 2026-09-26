@@ -14093,3 +14093,73 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
+
+/* ══ TERMINAL THẬT (xterm + PTY) — 26/09/2026 ═════════════════════════════
+   Thay "Bảng lệnh". Nền đen cố định (khớp THEME trong `TerminalThat.tsx`) dù
+   app đang sáng hay tối: một terminal nền trắng làm lệch màu ANSI của mọi
+   chương trình. Viền và tab dùng biến `--ct-*` để hợp phần còn lại. */
+.ct-tt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex-shrink: 0;
+  margin: 8px var(--ct-le-doc, 16px) 0;
+  border: 1px solid var(--ct-border);
+  border-radius: 10px;
+  background: #070a09;
+  overflow: hidden;
+}
+.ct-tt-keo {
+  position: absolute; top: -4px; left: 0; right: 0; height: 8px;
+  cursor: ns-resize; z-index: 2; touch-action: none;
+}
+.ct-tt-dau {
+  display: flex; align-items: center; gap: 6px;
+  min-width: 0;
+  padding: 4px 6px 4px 10px;
+  border-bottom: 1px solid var(--ct-border);
+  background: var(--ct-surface);
+  color: var(--ct-text-muted);
+  font-size: 11.5px;
+}
+.ct-tt-tabs { display: flex; align-items: center; gap: 3px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.ct-tt-tabs::-webkit-scrollbar { display: none; }
+.ct-tt-tab {
+  display: flex; align-items: center; flex: none;
+  border: 1px solid transparent; border-radius: 6px;
+  max-width: 220px;
+}
+.ct-tt-tab[data-chon='true'] { background: var(--ct-active); border-color: color-mix(in srgb, var(--ct-accent) 35%, transparent); }
+.ct-tt-tab[data-song='false'] { opacity: 0.65; }
+.ct-tt-tab > button:first-child {
+  display: inline-flex; align-items: center; gap: 4px;
+  min-width: 0; padding: 3px 4px 3px 8px;
+  border: 0; background: none; color: inherit; cursor: pointer;
+  font-family: var(--ct-term-mono, ui-monospace, Menlo, Consolas, monospace); font-size: 11px;
+}
+.ct-tt-tab[data-chon='true'] > button:first-child { color: var(--ct-text); }
+.ct-tt-tab > button:first-child > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ct-tt-tab > button:first-child > em { font-style: normal; color: var(--ct-text-faint); }
+.ct-tt-tab svg[aria-label='agent'] { color: var(--ct-accent); }
+.ct-tt-x, .ct-tt-them, .ct-tt-dong {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: none; width: 22px; height: 22px; padding: 0;
+  border: 0; border-radius: 5px; background: none; color: var(--ct-text-faint); cursor: pointer;
+}
+.ct-tt-x:hover, .ct-tt-them:hover, .ct-tt-dong:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-tt-nhac {
+  display: flex; align-items: center; gap: 7px;
+  padding: 6px 10px;
+  font-size: 11.5px;
+  color: #04130a;
+  background: #facc15;
+}
+.ct-tt-nhac[data-loai='canh'] { color: var(--ct-text); background: color-mix(in srgb, var(--ct-warn) 18%, transparent); }
+.ct-tt-nhac[data-loai='loi'] { color: #fff; background: color-mix(in srgb, var(--ct-err) 70%, transparent); }
+.ct-tt-than { position: relative; flex: 1; min-height: 0; padding: 4px 0 0 6px; }
+.ct-tt-o { position: absolute; inset: 4px 0 0 6px; }
+.ct-tt-o[data-hien='false'] { visibility: hidden; pointer-events: none; }
+.ct-tt-o .xterm { height: 100%; }
+.ct-tt-o .xterm-viewport { background: transparent !important; }
+.ct-tt-trong { margin: 12px; color: #5f766b; font-size: 12px; }

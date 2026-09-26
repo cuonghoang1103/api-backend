@@ -889,6 +889,22 @@ export const modelAgentSchema = z.enum([
   'opus-5', 'fable-5',
 ]);
 export type ModelAgent = z.infer<typeof modelAgentSchema>;
+
+/** Một phiên terminal thật — khớp `PhienTerminal` ở `main/terminal/phienTerminal.ts`. */
+export interface PhienPty {
+  id: string;
+  cuocId: string;
+  cwd: string;
+  tieuDe: string;
+  nguon: 'agent' | 'nguoiDung';
+  /** `false` = máy không nạp được PTY, đang chạy chế độ ống (không có /dev/tty). */
+  pty: boolean;
+  dangChay: boolean;
+  ma: number | null;
+  batDau: number;
+  /** Chỉ có trong sự kiện: agent phát hiện terminal đang chờ nhập. */
+  choNhap?: 'matKhau' | 'xacNhan' | null;
+}
 export const agentModelSchema = z.object({ model: modelAgentSchema });
 
 /** Một việc trong kế hoạch agent công bố. */
@@ -1693,6 +1709,25 @@ export const INVOKE_CHANNELS = {
   'terminal:doc': z.object({ id: z.string().min(1).max(64) }),
   'terminal:dung': z.object({ id: z.string().min(1).max(64) }),
 
+  /* ── TERMINAL THẬT (PTY) — xem `main/terminal/phienTerminal.ts` (26/09/2026) ── */
+  'pty:mo': z.object({
+    cuocId: z.string().min(1).max(64),
+    cot: z.number().int().min(20).max(500),
+    dong: z.number().int().min(5).max(300),
+  }),
+  /* Trần 64KB một lần gửi: đủ cho một lần dán đoạn mã dài, không đủ để một
+     trang lỗi đẩy hàng MB vào stdin. */
+  'pty:gui': z.object({ id: z.string().min(1).max(64), du: z.string().max(65_536) }),
+  'pty:coLai': z.object({
+    id: z.string().min(1).max(64),
+    cot: z.number().int().min(20).max(500),
+    dong: z.number().int().min(5).max(300),
+  }),
+  'pty:dong': z.object({ id: z.string().min(1).max(64) }),
+  'pty:ds': z.object({ cuocId: z.string().min(1).max(64) }),
+  'pty:demTho': z.object({ id: z.string().min(1).max(64) }),
+  'pty:mayCo': null,
+
   'robot:datCo': z.object({ nac: z.number().int().min(0).max(3) }),
   'robot:keoBatDau': z.object({}).optional(),
   /* Độ lệch so với chỗ bấm xuống, đơn vị điểm ảnh CSS. Chặn hai đầu để một
@@ -1932,6 +1967,10 @@ export const EVENT_CHANNELS = [
   'nhac:phim',
   /** Tiến độ tải/cài AI ngoại tuyến. Nhiều phút, nên phải chảy dần. */
   'aiCucBo:tienDo',
+  /** Terminal thật: byte mới từ một phiên (`{ id, du }`). */
+  'pty:du',
+  /** Terminal thật: phiên mở/đóng/thoát, hoặc đang chờ nhập (`PhienPty`). */
+  'pty:trangThai',
   /** Tiến độ cài OpenCode Terminal: tải (%), giải nén, kiểm, thêm PATH. */
   'opencode:tienDo',
 ] as const;
@@ -2300,6 +2339,18 @@ export interface DesktopBridge {
     }): Promise<{ chu: string; loi?: string }>;
   };
 
+  /** Terminal thật (PTY). Agent và người dùng cùng gõ vào một phiên. */
+  pty: {
+    mo(cuocId: string, cot: number, dong: number): Promise<{ ok: boolean; phien?: PhienPty; loi?: string }>;
+    gui(id: string, du: string): Promise<boolean>;
+    coLai(id: string, cot: number, dong: number): Promise<void>;
+    dong(id: string): Promise<boolean>;
+    ds(cuocId: string): Promise<PhienPty[]>;
+    /** Toàn bộ đầu ra THÔ đã có — để khung xterm vẽ lại khi vừa mở. */
+    demTho(id: string): Promise<string>;
+    /** Máy này có PTY thật không (hay đang lùi về chế độ ống). */
+    mayCo(): Promise<{ co: boolean; loi: string | null }>;
+  };
   terminal: {
     /** Chạy một lệnh trong thư mục dự án của cuộc này. Trả về NGAY kèm mã. */
     chay(cuocId: string, lenh: string): Promise<TerminalKetQua>;

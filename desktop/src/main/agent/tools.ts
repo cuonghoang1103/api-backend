@@ -36,6 +36,9 @@ import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from '.
 import { chayQuyenCao, hopSeHien, type Nen } from './quyenCao';
 import { goiYKhiThieuQuyen } from './npmQuyen';
 import { batLenhNen, docDauRaNen, dungLenhNen } from './lenhNen';
+import {
+  PHIM, choNhapHienTai, choVaDoc, dongTerminal, dsTerminal, guiVao, layPhien, moTerminal, type DocAgent,
+} from '../terminal/phienTerminal';
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 import { toolNotesTao, toolNotesGhi, type BoiCanhNote } from './ghiNote';
 import * as trinhDuyet from '../browser';
@@ -78,6 +81,8 @@ export interface BoiCanhNen {
   so: SoCuoc;
   signal: AbortSignal;
   xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) => void;
+  /** Chế độ quyền cho phép tự duyệt lệnh mức 'thuong' không (dùng cho terminal). */
+  tuDuyetLenh?: (muc: 'thuong' | 'cankiem' | 'nguyhiem') => boolean;
 }
 
 export interface BoiCanhGit {
@@ -279,6 +284,23 @@ export async function chayToolAgent(
       case 'dung_lenh_nen': {
         if (!nen) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh nền.', tomTat: 'không có quyền' };
         return toolDungLenhNen(args);
+      }
+      /* ── TERMINAL THẬT (PTY) — 26/09/2026 ── cùng quyền với lệnh nền. */
+      case 'terminal_mo': {
+        if (!nen) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh.', tomTat: 'không có quyền' };
+        return await toolTerminalMo(goc, args, nen);
+      }
+      case 'terminal_gui': {
+        if (!nen) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh.', tomTat: 'không có quyền' };
+        return await toolTerminalGui(args, nen);
+      }
+      case 'terminal_doc': {
+        if (!nen) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh.', tomTat: 'không có quyền' };
+        return await toolTerminalDoc(args, nen);
+      }
+      case 'terminal_dong': {
+        if (!nen) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh.', tomTat: 'không có quyền' };
+        return toolTerminalDong(args, nen);
       }
       case 'git_commit': {
         if (!gitGhi) return { noiDung: 'LỖI: phiên này không bật quyền ghi git.', tomTat: 'không có quyền' };
@@ -1515,6 +1537,146 @@ async function toolChayLenhNen(
       + 'khởi động trông y hệt lệnh đang chạy tốt.',
     tomTat: `nền ${kq.id}`,
   };
+}
+
+// ─── TERMINAL THẬT (PTY) ────────────────────────────────────────────
+//
+// Xem `main/terminal/phienTerminal.ts` cho LÝ DO. Ở đây chỉ là bốn tool:
+//   terminal_mo   mở shell ở gốc dự án + gõ một lệnh      (XIN DUYỆT)
+//   terminal_gui  gõ chữ / phím vào terminal đang mở       (XIN DUYỆT)
+//   terminal_doc  chờ nó lắng xuống rồi đọc phần mới        (không cần duyệt)
+//   terminal_dong đóng                                        (không cần duyệt)
+//
+// ⚠️ MẬT KHẨU KHÔNG BAO GIỜ ĐI QUA MODEL. Khi terminal đang hỏi mật khẩu,
+// `terminal_gui` TỪ CHỐI gõ chữ thường vào đó — model không biết mật khẩu,
+// thứ nó gõ chỉ có thể là đoán (hoặc tệ hơn: một mật khẩu nó "nhớ" từ hội
+// thoại). Đúng việc là dừng lại và nhờ người dùng gõ vào khung Terminal.
+
+/** Giây chờ tối đa khi đọc — cân giữa "đợi lệnh chạy xong" và "đừng treo lượt". */
+const CHO_MAC_DINH_S = 10;
+const CHO_TOI_DA_S = 120;
+
+function giayCho(args: Record<string, unknown>): number {
+  const g = Number(args.cho_giay);
+  return Number.isFinite(g) && g > 0 ? Math.min(CHO_TOI_DA_S, g) : CHO_MAC_DINH_S;
+}
+
+function baoCaoTerminal(id: string, r: DocAgent): string {
+  const trangThai = r.dangChay
+    ? 'shell đang mở (gõ tiếp được bằng terminal_gui)'
+    : `shell ĐÃ THOÁT, mã ${r.ma ?? '?'} — mở terminal mới nếu cần làm tiếp`;
+  const nhac = r.choNhap === 'matKhau'
+    ? '\n\n🔐 TERMINAL ĐANG HỎI MẬT KHẨU. Bạn KHÔNG được gõ mật khẩu. Hãy DỪNG và nói người dùng: '
+      + '"gõ mật khẩu vào khung Terminal ở đáy màn hình rồi nhấn Enter", sau đó gọi terminal_doc để đọc tiếp.'
+    : r.choNhap === 'xacNhan'
+      ? '\n\n❓ Terminal đang chờ xác nhận (y/n). Chỉ trả lời nếu việc đó ĐÚNG là việc người dùng đã nhờ; '
+        + 'thao tác xoá/ghi đè/không đảo ngược được thì hỏi người dùng trước.'
+      : '';
+  return `[terminal ${id}] ${trangThai}${r.catBot ? ' (đầu ra đã cắt, chỉ giữ phần cuối)' : ''}\n`
+    + `--- đầu ra mới ---\n${r.moi.trim() ? r.moi : '(chưa in gì mới)'}${nhac}`;
+}
+
+async function toolTerminalMo(goc: string, args: Record<string, unknown>, nen: BoiCanhNen): Promise<KetQuaTool> {
+  const lenh = typeof args.lenh === 'string' ? args.lenh.trim() : '';
+  if (!lenh) return { noiDung: 'LỖI: thiếu tham số "lenh".', tomTat: 'thiếu lệnh' };
+  if (lenh.length > 4000) return { noiDung: 'LỖI: lệnh quá dài (trần 4000 ký tự).', tomTat: 'quá dài' };
+  const phanLoai = phanLoaiLenh(lenh);
+  const quyet = await hoiNguoiDung(
+    {
+      ten: 'run_command', duongDan: `⌨ terminal: ${lenh}`, khoa: `pty:${lenh}`, choNho: phanLoai.choNho,
+      tuDuyet: nen.tuDuyetLenh?.(phanLoai.muc) === true,
+    },
+    (y) => nen.xinPhepLenh({ ...y, phanLoai }),
+    nen.signal,
+    nen.so,
+  );
+  if (quyet === 'tuChoi') return { noiDung: `NGƯỜI DÙNG TỪ CHỐI mở terminal chạy: ${lenh}`, tomTat: 'bị từ chối' };
+
+  const tieuDe = typeof args.tieu_de === 'string' && args.tieu_de.trim() ? args.tieu_de.trim() : lenh;
+  const kq = moTerminal({ cuocId: nen.cuocId, cwd: goc, nguon: 'agent', tieuDe, lenh });
+  if (!kq.ok || !kq.phien) return { noiDung: `LỖI: ${kq.loi ?? 'không mở được terminal'}`, tomTat: 'không mở được' };
+  const r = await choVaDoc(kq.phien.id, { toiDaMs: giayCho(args) * 1000, signal: nen.signal });
+  if (!r) return { noiDung: 'LỖI: terminal vừa mở đã biến mất.', tomTat: 'mất terminal' };
+  const cheDo = kq.phien.pty ? '' : '\n⚠️ Máy này không có PTY — terminal chạy chế độ ống: trả lời y/n được, nhưng lệnh đọc mật khẩu từ /dev/tty (ssh, sudo) sẽ không hỏi được.';
+  return {
+    noiDung: `Đã mở terminal "${kq.phien.id}" ở ${goc} và gõ: ${lenh}${cheDo}\n`
+      + 'Người dùng NHÌN THẤY terminal này ở đáy màn hình và gõ được vào đó.\n\n' + baoCaoTerminal(kq.phien.id, r),
+    tomTat: r.choNhap === 'matKhau' ? `${kq.phien.id} · chờ mật khẩu` : `terminal ${kq.phien.id}`,
+  };
+}
+
+async function toolTerminalGui(args: Record<string, unknown>, nen: BoiCanhNen): Promise<KetQuaTool> {
+  const id = typeof args.id === 'string' ? args.id : '';
+  const p = layPhien(id);
+  if (!p || p.cuocId !== nen.cuocId) return { noiDung: `LỖI: không có terminal "${id}" trong việc này.`, tomTat: 'không có terminal' };
+  if (!p.dangChay) return { noiDung: `LỖI: terminal "${id}" đã thoát (mã ${p.ma ?? '?'}). Mở cái mới bằng terminal_mo.`, tomTat: 'đã thoát' };
+
+  const chu = typeof args.chu === 'string' ? args.chu : '';
+  const phim = typeof args.phim === 'string' ? args.phim.trim().toLowerCase() : '';
+  if (!chu && !phim) return { noiDung: 'LỖI: cần "chu" (chữ gõ vào) hoặc "phim" (enter, ctrl_c, tab, len, xuong…).', tomTat: 'thiếu nội dung' };
+  if (phim && !(phim in PHIM)) {
+    return { noiDung: `LỖI: phím "${phim}" không hỗ trợ. Có: ${Object.keys(PHIM).join(', ')}.`, tomTat: 'phím lạ' };
+  }
+  if (chu.length > 4000) return { noiDung: 'LỖI: quá dài (trần 4000 ký tự).', tomTat: 'quá dài' };
+
+  /* Đang hỏi mật khẩu ⇒ KHÔNG gõ chữ vào (xem chú thích đầu mục). Ctrl+C
+     thì vẫn cho: đó là cách thoát khỏi lời hỏi khi người dùng không muốn. */
+  if (choNhapHienTai(id) === 'matKhau' && chu) {
+    return {
+      noiDung: 'TỪ CHỐI: terminal đang hỏi MẬT KHẨU. Bạn không được gõ mật khẩu. '
+        + 'Nói người dùng tự gõ vào khung Terminal ở đáy màn hình rồi nhấn Enter, sau đó gọi terminal_doc.',
+      tomTat: 'chờ người dùng gõ mật khẩu',
+    };
+  }
+
+  const enter = args.enter !== false && !phim;
+  const hienThi = phim ? `[phím ${phim}]` : `${chu}${enter ? ' ⏎' : ''}`;
+  const phanLoai = chu ? phanLoaiLenh(chu) : { muc: 'thuong' as const, lyDo: [], choNho: false };
+  /* Ctrl+C / điều hướng không đổi gì ⇒ không cần hỏi. Mọi CHỮ gõ vào thì hỏi:
+     "y" ở đúng chỗ có thể là "xoá hết", và người dùng phải thấy nó trước. */
+  const canHoi = Boolean(chu) || !['ctrl_c', 'len', 'xuong', 'trai', 'phai', 'esc', 'q'].includes(phim);
+  if (canHoi) {
+    const quyet = await hoiNguoiDung(
+      {
+        ten: 'run_command', duongDan: `⌨ ${id} ← ${hienThi}`, khoa: `pty-gui:${Date.now()}`, choNho: false,
+        tuDuyet: nen.tuDuyetLenh?.(phanLoai.muc) === true,
+      },
+      (y) => nen.xinPhepLenh({ ...y, phanLoai }),
+      nen.signal,
+      nen.so,
+    );
+    if (quyet === 'tuChoi') return { noiDung: `NGƯỜI DÙNG TỪ CHỐI gõ vào terminal: ${hienThi}`, tomTat: 'bị từ chối' };
+  }
+  guiVao(id, phim ? PHIM[phim]! : `${chu}${enter ? '\r' : ''}`);
+  const r = await choVaDoc(id, { toiDaMs: giayCho(args) * 1000, signal: nen.signal });
+  if (!r) return { noiDung: 'LỖI: terminal vừa biến mất.', tomTat: 'mất terminal' };
+  return { noiDung: baoCaoTerminal(id, r), tomTat: r.choNhap === 'matKhau' ? 'chờ mật khẩu' : `đã gõ vào ${id}` };
+}
+
+async function toolTerminalDoc(args: Record<string, unknown>, nen: BoiCanhNen): Promise<KetQuaTool> {
+  const id = typeof args.id === 'string' ? args.id : '';
+  if (!id) {
+    const ds = dsTerminal(nen.cuocId);
+    return {
+      noiDung: ds.length
+        ? 'Terminal đang có:\n' + ds.map((p) => `- ${p.id} · ${p.dangChay ? 'đang mở' : `đã thoát (${p.ma})`} · ${p.nguon === 'agent' ? 'của bạn' : 'người dùng mở'} · ${p.tieuDe}`).join('\n')
+        : 'Chưa có terminal nào. Mở bằng terminal_mo.',
+      tomTat: `${ds.length} terminal`,
+    };
+  }
+  const p = layPhien(id);
+  if (!p || p.cuocId !== nen.cuocId) return { noiDung: `LỖI: không có terminal "${id}" trong việc này.`, tomTat: 'không có terminal' };
+  const r = await choVaDoc(id, { toiDaMs: giayCho(args) * 1000, signal: nen.signal });
+  if (!r) return { noiDung: 'LỖI: terminal vừa biến mất.', tomTat: 'mất terminal' };
+  return { noiDung: baoCaoTerminal(id, r), tomTat: r.choNhap === 'matKhau' ? 'chờ mật khẩu' : `đọc ${id}` };
+}
+
+function toolTerminalDong(args: Record<string, unknown>, nen: BoiCanhNen): KetQuaTool {
+  const id = typeof args.id === 'string' ? args.id : '';
+  const p = layPhien(id);
+  if (!p || p.cuocId !== nen.cuocId) return { noiDung: `LỖI: không có terminal "${id}" trong việc này.`, tomTat: 'không có terminal' };
+  dongTerminal(id);
+  return { noiDung: `Đã đóng terminal ${id}.`, tomTat: `đóng ${id}` };
 }
 
 function toolDocDauRaNen(args: Record<string, unknown>): KetQuaTool {

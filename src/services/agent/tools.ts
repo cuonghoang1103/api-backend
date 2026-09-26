@@ -44,6 +44,12 @@ export type AgentCapability =
   /** Chạy lệnh ở NỀN + đọc đầu ra + dừng. Tách khỏi `shell` để app cũ không nhận tool nó chưa biết chạy. */
   | 'shell_nen'
   /**
+   * TERMINAL THẬT (PTY) — mở shell, gõ tiếp vào chương trình đang hỏi, đọc,
+   * đóng (26/09/2026). Tách khỏi `shell_nen`: app cũ không có PTY sẽ không
+   * gửi khả năng này, nên model không bao giờ được mời một tool nó không chạy.
+   */
+  | 'terminal'
+  /**
    * Dự án CÓ kỹ năng (`.claude/skills/…`). App chỉ gửi khả năng này khi thật
    * sự tìm thấy ít nhất một cái — không thì model nhận một tool mà mọi lời gọi
    * đều trả "không có kỹ năng nào", và nó sẽ thử vài lần trước khi bỏ cuộc.
@@ -481,7 +487,7 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     ring: 'client',
     capability: 'ky_nang',
     description:
-      'Đọc hướng dẫn đầy đủ của một KỸ NĂNG mà dự án này định nghĩa. '
+      'Đọc hướng dẫn đầy đủ của một KỸ NĂNG — của dự án này, hoặc cài sẵn trong app (deploy, máy chủ SSH, database, kiểm thử, bảo mật…). '
       + 'Danh sách kỹ năng có sẵn nằm trong phần KỸ NĂNG của hướng dẫn hệ thống, kèm mô tả mỗi cái làm gì. '
       + 'GỌI NGAY khi việc người dùng nhờ khớp với mô tả của một kỹ năng, TRƯỚC khi bắt tay làm — '
       + 'kỹ năng chứa quy ước riêng của dự án mà bạn không thể đoán ra, và đọc nó sau khi đã làm sai thì vô ích. '
@@ -605,6 +611,79 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     parameters: {
       type: 'object',
       properties: { id: { type: 'string', description: 'Mã do chay_lenh_nen trả về.' } },
+      required: ['id'],
+    },
+  },
+
+  // ─── TERMINAL THẬT (PTY) ───────────────────────────────────────
+  {
+    name: 'terminal_mo',
+    ring: 'client',
+    capability: 'terminal',
+    description:
+      'Mở một TERMINAL THẬT (có tty) ở gốc dự án, gõ một lệnh vào, chờ nó lắng xuống rồi trả đầu ra + mã terminal. '
+      + 'Terminal SỐNG TIẾP sau lệnh đó: gõ thêm bằng terminal_gui, đọc bằng terminal_doc. '
+      + 'DÙNG KHI lệnh cần HỎI-ĐÁP: `ssh` lần đầu (fingerprint yes/no, mật khẩu), `sudo`, trình cài hỏi [y/N], '
+      + '`npm init`/`create-*` hỏi từng câu, REPL (`python`, `node`, `psql`, `mysql`), `docker exec -it`, '
+      + 'hoặc một phiên ssh vào server để chạy nhiều lệnh liên tiếp. '
+      + 'Lệnh chạy một phát không hỏi gì (`npm test`, `tsc`) thì dùng run_command; server chạy mãi thì chay_lenh_nen. '
+      + 'Người dùng NHÌN THẤY terminal này trong khung ở đáy màn hình và gõ được vào đó. '
+      + '🔐 Terminal hỏi MẬT KHẨU ⇒ bạn KHÔNG được gõ (bạn không biết và không được đoán): dừng lại, nhờ người dùng tự gõ '
+      + 'vào khung Terminal rồi nhấn Enter, sau đó gọi terminal_doc. Người dùng phải DUYỆT lệnh mở.',
+    parameters: {
+      type: 'object',
+      properties: {
+        lenh: { type: 'string', description: 'Lệnh gõ vào đầu tiên (shell đăng nhập của máy: PowerShell trên Windows, zsh/bash trên macOS/Linux).' },
+        tieu_de: { type: 'string', description: 'Tên ngắn cho tab terminal, vd "ssh vps" hay "psql".' },
+        cho_giay: { type: 'integer', description: 'Chờ tối đa bấy nhiêu giây cho đầu ra lắng xuống (mặc định 10, tối đa 120). Lệnh cài/build lâu thì khai cao.' },
+      },
+      required: ['lenh'],
+    },
+  },
+  {
+    name: 'terminal_gui',
+    ring: 'client',
+    capability: 'terminal',
+    description:
+      'Gõ vào một terminal đang mở: một dòng chữ (mặc định kèm Enter) HOẶC một phím đặc biệt, rồi chờ và trả phần đầu ra mới. '
+      + 'Dùng để trả lời "y"/"yes", gõ lệnh tiếp theo trong phiên ssh/REPL, chọn mục bằng phím mũi tên, thoát bằng ctrl_c. '
+      + 'Mọi CHỮ gõ vào đều qua thẻ duyệt của người dùng. KHÔNG BAO GIỜ dùng để gõ mật khẩu — app sẽ từ chối.',
+    parameters: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'Mã terminal (vd "t3") do terminal_mo trả về.' },
+        chu: { type: 'string', description: 'Chữ gõ vào. Bỏ trống nếu chỉ bấm phím.' },
+        enter: { type: 'boolean', description: 'Nhấn Enter sau chữ (mặc định true).' },
+        phim: { type: 'string', description: 'Một phím: enter, ctrl_c, ctrl_d, ctrl_z, tab, esc, len, xuong, trai, phai, backspace, q.' },
+        cho_giay: { type: 'integer', description: 'Chờ tối đa bấy nhiêu giây (mặc định 10, tối đa 120).' },
+      },
+      required: ['id'],
+    },
+  },
+  {
+    name: 'terminal_doc',
+    ring: 'client',
+    capability: 'terminal',
+    description:
+      'Chờ terminal lắng xuống rồi đọc phần đầu ra MỚI kể từ lần đọc trước (đã gỡ mã màu), kèm trạng thái: còn mở, đã thoát, '
+      + 'hay đang CHỜ NHẬP (mật khẩu / xác nhận). Dùng sau khi người dùng vừa gõ mật khẩu, hoặc để theo dõi lệnh đang chạy. '
+      + 'Bỏ trống id để xem danh sách terminal của việc này. Không cần duyệt.',
+    parameters: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'Mã terminal. Bỏ trống = liệt kê.' },
+        cho_giay: { type: 'integer', description: 'Chờ tối đa bấy nhiêu giây (mặc định 10, tối đa 120).' },
+      },
+    },
+  },
+  {
+    name: 'terminal_dong',
+    ring: 'client',
+    capability: 'terminal',
+    description: 'Đóng một terminal (giết shell và mọi thứ chạy trong nó). Xong việc thì đóng — đừng để phiên ssh treo mãi. Không cần duyệt.',
+    parameters: {
+      type: 'object',
+      properties: { id: { type: 'string', description: 'Mã terminal.' } },
       required: ['id'],
     },
   },
@@ -1082,7 +1161,7 @@ export function laToolMcp(name: string): boolean {
  */
 export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
-  'notes_write', 'browser', 'ky_nang', 'anh_sua',
+  'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

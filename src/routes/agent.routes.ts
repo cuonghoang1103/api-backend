@@ -31,6 +31,7 @@ import { dsModelAgent } from '../services/agent/models.js';
 import { datTenViec } from '../services/agent/datTen.js';
 import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
 import { xemHanMucFable } from '../services/agent/fable.js';
+import { dsKyNangSan } from '../services/agent/kyNangSan.js';
 import { prisma } from '../config/database.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 
@@ -164,6 +165,19 @@ router.post('/fable/xin', chiPro, async (req: any, res: Response<ApiResponse>, n
       khoaChongTrung: `XIN_FABLE:${don.id}`,
     });
     res.status(201).json({ success: true, data: await xemHanMucFable(req.userId) });
+  } catch (err) { next(err); }
+});
+
+/**
+ * GET /ky-nang — kho kỹ năng cài sẵn của AI Code (deploy, máy chủ SSH,
+ * database, kiểm thử, bảo mật…). App tải mỗi lượt, đệm 10 phút; sửa file
+ * `.md` + deploy backend là mọi người có bản mới, không cần phát hành app.
+ * Không chặn Pro: nội dung là hướng dẫn chung, và app gọi nó cả khi đang kiểm
+ * quyền.
+ */
+router.get('/ky-nang', async (_req: any, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await dsKyNangSan() });
   } catch (err) { next(err); }
 });
 

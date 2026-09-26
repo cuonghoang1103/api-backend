@@ -879,8 +879,31 @@ await ctx.addInitScript((nn) => {
       return typeof v === 'function' ? v(...tv) : v;
     },
   });
+  /* Terminal thật (26/09/2026): nhóm `pty` cần giá trị RIÊNG — các tên hàm
+     của nó (`mo`, `ds`, `gui`) quá chung để nhét vào bảng phẳng ở trên, sẽ
+     đè lên hàm cùng tên của nhóm khác. Màn hình mẫu có màu ANSI và một lời
+     hỏi mật khẩu, để ảnh chụp cho thấy xterm vẽ thật chứ không phải ô trống. */
+  let demPty = 0;
+  const phienGia = (id, tieuDe, nguon) => ({
+    id, cuocId: 'cuoc-1', cwd: '/tmp/du-an-do-bo-cuc', tieuDe, nguon, pty: true, dangChay: true, ma: null, batDau: Date.now(),
+  });
+  const ptyGia = {
+    mayCo: async () => ({ co: true, loi: null }),
+    ds: async () => [phienGia('t1', 'ssh deploy@vps', 'agent')],
+    mo: async () => ({ ok: true, phien: phienGia(`t${++demPty + 1}`, 'Terminal', 'nguoiDung') }),
+    gui: async () => true,
+    coLai: async () => {},
+    dong: async () => true,
+    demTho: async (id) => id === 't1'
+      ? '\x1b[32mcuong@mac\x1b[0m:\x1b[34m~/du-an\x1b[0m$ ssh deploy@160.1.2.3\r\n'
+        + 'The authenticity of host can\'t be established.\r\n'
+        + 'Are you sure you want to continue connecting (yes/no/[fingerprint])? yes\r\n'
+        + '\x1b[33mWarning:\x1b[0m Permanently added to the list of known hosts.\r\n'
+        + 'deploy@160.1.2.3\'s password: '
+      : '\x1b[32mcuong@mac\x1b[0m:\x1b[34m~/du-an\x1b[0m$ ',
+  };
   window.cuongthai = new Proxy({ on: () => () => {} }, {
-    get: (t, nhom) => (nhom === 'on' ? t.on : nhomGia),
+    get: (t, nhom) => (nhom === 'on' ? t.on : nhom === 'pty' ? ptyGia : nhomGia),
   });
 }, process.env.CT_NGON_NGU === 'en' ? 'en' : null);
 
@@ -1370,6 +1393,20 @@ const CHUAN_BI = {
     await p.waitForTimeout(350);
     await kiemTB('xoá tìm', 'ielts', false);
     await kiemTB('xoá tìm (giữ lựa chọn đã nhớ)', 'ett1', true);
+
+    /* ─── TERMINAL THẬT (26/09/2026) ───
+       Mở khung Terminal rồi ĐÒI thấy xterm vẽ ra CHỮ — không chỉ một khung
+       rỗng. PTY giả (`ptyGia`) trả sẵn một màn hình có lời hỏi mật khẩu. Để
+       khung MỞ khi đo, nên phép đo tràn ngang ở dưới cũng soi luôn nó. */
+    // CHỈ tab đang hiện: sáu tab đều dựng, năm cái ẩn bằng CSS.
+    const tabHien = p.locator('.ct-tab-noi[data-hien="true"]');
+    await tabHien.locator('.ct-agent-bar button', { hasText: 'Terminal' }).first().click();
+    await tabHien.locator('.ct-tt .xterm-screen').first().waitFor({ timeout: 5000 });
+    await p.waitForTimeout(400);
+    const chuTerm = await p.evaluate(() => document.querySelector('.ct-tab-noi[data-hien="true"] .ct-tt .ct-tt-o[data-hien="true"] .xterm-rows')?.textContent ?? '');
+    if (!/password/.test(chuTerm)) {
+      throw new Error(`Khung Terminal mở nhưng xterm KHÔNG vẽ nội dung phiên (đọc được: "${chuTerm.slice(0, 80)}").`);
+    }
   },
   '/notes': async (p) => {
     const demHang = () => p.evaluate(() =>

@@ -204,6 +204,18 @@ jobs:
       - run: npm ci
         working-directory: desktop
 
+      # Terminal thật (PTY): `npm ci` chỉ cài nhị phân của ĐÚNG kiến trúc máy CI.
+      # Máy macOS của GitHub là arm64 mà ta dựng cả bản x64 ⇒ cài bù cả hai gói
+      # darwin, cùng phiên bản đã khoá. Thiếu thì `scripts/onnx-tia.cjs` làm đỏ
+      # bản dựng thay vì phát hành một terminal hỏng.
+      - name: Cài bù nhị phân terminal cho mọi kiến trúc macOS
+        if: runner.os == 'macOS'
+        working-directory: desktop
+        run: |
+          V=$(node -p "require('./node_modules/@lydell/node-pty/package.json').version")
+          npm install --no-save --no-package-lock --force "@lydell/node-pty-darwin-x64@$V" "@lydell/node-pty-darwin-arm64@$V"
+          ls node_modules/@lydell
+
       # Cùng lý do như ở job kiểm tra: renderer biên dịch mã nguồn của frontend.
       - run: npm ci
         working-directory: frontend

@@ -105,7 +105,57 @@ async function duyet(goc: string): Promise<Array<{ ten: string; moTa: string; du
  * Kỹ năng CÀI SẴN trong app (xem `kyNangSan/index.ts`) — tách phần đầu một
  * lần. Hàm chứ không hằng: bộ kiểm cần gọi lại, và chi phí chỉ là vài chuỗi.
  */
+/* ── BẢN TỪ MÁY CHỦ (26/09/2026) ──
+   Kỹ năng sống ở backend (`src/services/agent/kyNangSan/*.md`) và được phục
+   vụ qua `GET /api/v1/agent/ky-nang`. Có bản máy chủ thì dùng NÓ — sửa kỹ năng
+   chỉ cần deploy backend. Không tải được (mất mạng, máy chủ cũ) ⇒ bản đóng gói. */
+let banMayChu: { ds: Array<{ ten: string; moTa: string; than: string }>; luc: number } | null = null;
+let dangNap: Promise<void> | null = null;
+/** Đệm 10 phút: đủ tươi để sửa kỹ năng có hiệu lực trong buổi, đủ thưa để không gọi mỗi lượt. */
+const DEM_MS = 10 * 60_000;
+
+/**
+ * Nạp kho kỹ năng từ máy chủ nếu bản đệm đã cũ. KHÔNG BAO GIỜ ném, và không
+ * bắt lượt agent chờ quá 4 giây — hỏng thì lượt này dùng bản đang có.
+ */
+export async function napKyNangMayChu(apiOrigin: string, token: string | null): Promise<void> {
+  if (!token) return;
+  if (banMayChu && Date.now() - banMayChu.luc < DEM_MS) return;
+  if (!dangNap) {
+    dangNap = (async () => {
+      try {
+        const r = await fetch(`${apiOrigin}/api/v1/agent/ky-nang`, {
+          headers: { Authorization: `Bearer ${token}` },
+          signal: AbortSignal.timeout(4000),
+        });
+        if (!r.ok) return;
+        const j = await r.json() as { data?: { ds?: unknown } };
+        const ds = Array.isArray(j.data?.ds) ? j.data!.ds as unknown[] : null;
+        if (!ds) return;
+        const sach = ds
+          .filter((k): k is { ten: string; moTa: string; than: string } => !!k && typeof k === 'object'
+            && typeof (k as any).ten === 'string' && typeof (k as any).moTa === 'string'
+            && typeof (k as any).than === 'string')
+          .filter((k) => tenHopLe(k.ten) && k.moTa.trim() && k.than.trim())
+          .slice(0, MAX_KY_NANG)
+          .map((k) => ({ ten: k.ten, moTa: k.moTa.slice(0, 300), than: k.than.slice(0, MAX_BYTE) }));
+        /* Máy chủ trả RỖNG (thư mục mất trong ảnh Docker) ⇒ đừng xoá sạch kỹ
+           năng của người dùng; giữ bản đóng gói. */
+        if (sach.length) banMayChu = { ds: sach, luc: Date.now() };
+      } catch { /* mất mạng / máy chủ cũ chưa có route ⇒ dùng bản đang có */ }
+      finally { dangNap = null; }
+    })();
+  }
+  await dangNap;
+}
+
+/** Chỉ cho bộ kiểm: đặt/xoá bản máy chủ. */
+export function _datBanMayChu(ds: Array<{ ten: string; moTa: string; than: string }> | null): void {
+  banMayChu = ds ? { ds, luc: Date.now() } : null;
+}
+
 export function kyNangSan(): Array<{ ten: string; moTa: string; than: string }> {
+  if (banMayChu?.ds.length) return banMayChu.ds;
   const ra: Array<{ ten: string; moTa: string; than: string }> = [];
   for (const tho of KY_NANG_SAN_THO) {
     const { ten, moTa, than } = docDauKyNang(tho);

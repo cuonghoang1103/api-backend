@@ -186,6 +186,7 @@ export function buildSystemPrompt(opts: {
   const coGit = opts.capabilities.includes('git_read');
   const coSua = opts.capabilities.includes('fs_write');
   const coLenh = opts.capabilities.includes('shell');
+  const coTerminal = opts.capabilities.includes('terminal');
   const coKeHoach = opts.capabilities.includes('plan');
   const coWeb = opts.capabilities.includes('browser');
   const coAnh = opts.capabilities.includes('anh_sua');
@@ -499,7 +500,17 @@ export function buildSystemPrompt(opts: {
      • \`chay_lenh_nen\`   — bật nó lên, trả về NGAY kèm một mã.
      • \`doc_dau_ra_nen\` — đọc phần đầu ra MỚI. Gọi lại nhiều lần được.
      • \`dung_lenh_nen\`  — tắt khi xong. Tắt đi, đừng để nó chạy mãi.
-   Nhịp đúng: bật nền → làm việc khác → đọc đầu ra → thấy "ready"/lỗi thì xử lý.`);
+   Nhịp đúng: bật nền → làm việc khác → đọc đầu ra → thấy "ready"/lỗi thì xử lý.${coTerminal ? `
+
+   ⌨ LỆNH CẦN HỎI-ĐÁP thì dùng TERMINAL THẬT (terminal_mo / terminal_gui /
+   terminal_doc / terminal_dong): ssh lần đầu (yes/no, mật khẩu), sudo, trình
+   cài hỏi [y/N], npm init, REPL (python, psql), phiên ssh chạy nhiều lệnh.
+     • Người dùng THẤY terminal đó ở đáy màn hình và gõ được vào.
+     • 🔐 Nó hỏi MẬT KHẨU ⇒ bạn KHÔNG gõ. Nói người dùng gõ vào khung
+       Terminal rồi Enter, rồi gọi terminal_doc đọc tiếp. Không bao giờ hỏi
+       người dùng dán mật khẩu vào khung chat.
+     • Trả lời "y" chỉ khi đó đúng là việc người dùng đã nhờ; thứ xoá/ghi đè
+       thì hỏi trước. Xong việc thì terminal_dong.` : ''}`);
   } else {
     muc.push(`BẠN CHƯA CHẠY ĐƯỢC LỆNH
    Không có terminal ở phiên này. Vì KHÔNG chạy được test, đừng nói "đã sửa

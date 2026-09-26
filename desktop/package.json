@@ -39,6 +39,7 @@
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
     "@hocuspocus/provider": "^2.15.3",
+    "@lydell/node-pty": "^1.2.0-beta.15",
     "@tiptap/extension-bubble-menu": "^2.27.2",
     "@tiptap/extension-collaboration": "^2.27.2",
     "@tiptap/extension-collaboration-cursor": "^2.27.2",
@@ -53,6 +54,8 @@
     "@tiptap/pm": "^2.27.2",
     "@tiptap/react": "^2.27.2",
     "@tiptap/starter-kit": "^2.27.2",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
     "axios": "^1.19.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",

@@ -88,6 +88,7 @@ export async function registerIpcHandlers(): Promise<void> {
     { registerMusicHandlers },
     { registerAgentHandlers },
     { registerTerminalHandlers },
+    { registerPtyHandlers },
     { registerOauthHandlers },
     { registerBrowserHandlers },
     { registerRobotHandlers },
@@ -106,6 +107,7 @@ export async function registerIpcHandlers(): Promise<void> {
     import('./music'),
     import('./agent'),
     import('./terminal'),
+    import('./pty'),
     import('./oauthVong'),
     import('./browser'),
     import('./robot'),
@@ -125,6 +127,7 @@ export async function registerIpcHandlers(): Promise<void> {
   registerMusicHandlers();
   registerAgentHandlers();
   registerTerminalHandlers();
+  registerPtyHandlers();
   registerOauthHandlers();
   registerBrowserHandlers();
   registerRobotHandlers();

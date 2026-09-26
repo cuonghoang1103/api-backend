@@ -57,6 +57,9 @@ files:
 # trong asar, và Electron tự nối hai bên khi `require`.
 asarUnpack:
   - '**/node_modules/onnxruntime-node/bin/**'
+  # Terminal thật (PTY): `.node` + `spawn-helper` (macOS) phải nằm NGOÀI asar —
+  # hệ điều hành không nạp/chạy được file nằm trong kho asar.
+  - '**/node_modules/@lydell/**'
 
 # Sau khi đóng gói: tỉa nhị phân của những nền KHÔNG phải nền đang dựng, rồi
 # ĐÒI thấy nhị phân của nền đang dựng. Xem `scripts/onnx-tia.cjs` để biết vì

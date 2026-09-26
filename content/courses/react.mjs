@@ -17,6 +17,7 @@ import s10 from './react/s10-du-an.mjs';
 import s11 from './react/s11-ben-trong.mjs';
 import s12 from './react/s12-react-19.mjs';
 import s13 from './react/s13-kien-truc.mjs';
+import s14 from './react/s14-production.mjs';
 
 /*
  * KHUNG (24/09/2026) — giữ NGUYÊN để biết slug/tiêu đề gốc; chương nào đã soạn chi tiết thì thay phần tử
@@ -124,5 +125,6 @@ export default {
     s11,
     s12,
     s13,
+    s14,
   ],
 };

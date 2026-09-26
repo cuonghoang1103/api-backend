@@ -12,6 +12,7 @@ import s05 from './react/s05-chia-se-state.mjs';
 import s06 from './react/s06-du-lieu.mjs';
 import s07 from './react/s07-routing.mjs';
 import s08 from './react/s08-hieu-nang.mjs';
+import s09 from './react/s09-test.mjs';
 import s11 from './react/s11-ben-trong.mjs';
 import s12 from './react/s12-react-19.mjs';
 
@@ -116,7 +117,7 @@ export default {
     s06,
     s07,
     s08,
-    K[9],
+    s09,
     K[10],
     s11,
     s12,

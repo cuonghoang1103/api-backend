@@ -1348,6 +1348,7 @@ const L4 = {
 
 <h3>One place to turn it on: <code>vite.config.ts</code></h3>
 ${slide('rx-12', 22, 'Compiler on for the whole app: all 32 components compiled')}
+<div class="callout warn"><p><strong>⚠️ Found later, in Chapter 9:</strong> "32/32 compiled" does not mean "32/32 correct". With the compiler on, <code>FormDatLich</code> kept showing a validation error after it was fixed, and hid the second field's error — React Hook Form mutates its <code>errors</code> object in place, while compiled code compares by identity. The fix and the test that catches it are in <a href="/courses/react/learn?lessonSlug=rx-9-1-testing-library">Lesson 9.1</a>. Turning the compiler on for a whole app is only safe together with tests that exercise the UI.</p></div>
 <p>Chapter 8 kept the compiler in a separate <code>vite.compiler.config.ts</code> for experiments. Now it moves into the real config, so dev server, <code>vite build</code> and Vitest all run compiled code:</p>
 ${pre('ts', SN.viteConfig)}
 ${SD.compilerEn}
@@ -1478,6 +1479,7 @@ ${LINK_TRONG('/courses/nextjs', '▲', 'Next up: Next.js course — Chapters 9�
 
 <h3>Một chỗ để bật: <code>vite.config.ts</code></h3>
 ${slide('rx-12', 22, 'Bật compiler cho cả app: cả 32 component được biên dịch')}
+<div class="callout warn"><p><strong>⚠️ Phát hiện sau, ở Chương 9:</strong> "32/32 được biên dịch" không có nghĩa là "32/32 chạy đúng". Bật compiler xong, <code>FormDatLich</code> vẫn hiện lỗi dù đã sửa đúng, và giấu mất lỗi của ô thứ hai — React Hook Form sửa object <code>errors</code> tại chỗ, còn mã đã biên dịch so bằng danh tính. Cách sửa và test bắt được lỗi này ở <a href="/courses/react/learn?lessonSlug=rx-9-1-testing-library">Bài 9.1</a>. Bật compiler cho cả app chỉ an toàn khi đi kèm test chạy thật giao diện.</p></div>
 <p>Chương 8 để compiler trong một file riêng <code>vite.compiler.config.ts</code> cho việc thử. Giờ nó chuyển vào cấu hình thật, nên dev server, <code>vite build</code> và Vitest đều chạy code đã biên dịch:</p>
 ${pre('ts', SN.viteConfig)}
 ${SD.compilerVi}

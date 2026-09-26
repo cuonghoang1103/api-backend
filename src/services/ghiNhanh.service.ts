@@ -27,7 +27,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import { updateNote } from './notes.service.js';
 import {
   docToHtml, htmlToDoc, markdownToDoc, markdownToHtml, titleFromMarkdown, findTemplate, NOTE_TEMPLATES,
-  themDongSoLenh, docSoLenh, matTruocThe, doanLuuBlocks, docDoanDaLuu,
+  themDongSoLenh, sapXepSoLenh, docSoLenh, matTruocThe, doanLuuBlocks, docDoanDaLuu,
   type TiptapDoc, type DongLenh,
 } from './ghiNhanhNoiDung.js';
 
@@ -278,6 +278,22 @@ export async function damBaoSoLenh(userId: number) {
     title: '⌨️ Sổ lệnh',
     doc: htmlToDoc(tpl.html),
   }));
+}
+
+/**
+ * Mở Sổ lệnh mặc định: tạo nếu chưa có, và nếu trang còn bố cục cũ (một bảng
+ * dẹt 5 cột, dòng trùng, chưa gom nhóm) thì dựng lại MỘT lần. Dựng lại là
+ * idempotent nên trang đã đúng bố cục thì không ghi gì (không đẻ phiên bản rỗng).
+ */
+export async function moSoLenh(userId: number) {
+  const n = await damBaoSoLenh(userId);
+  await tuanTu(n.id, async () => {
+    const doc = await docCuaTrang(userId, n.id);
+    const truoc = JSON.stringify(doc);
+    sapXepSoLenh(doc);
+    if (docSoLenh(doc).length > 0 && JSON.stringify(doc) !== truoc) await ghiTrang(userId, n.id, doc);
+  });
+  return n;
 }
 
 /** Thêm một lệnh vào Sổ lệnh (mặc định hoặc `noteId` chỉ định của chính user). */

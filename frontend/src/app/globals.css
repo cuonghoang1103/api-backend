@@ -3407,48 +3407,43 @@ html[data-notes-theme='brown'] .note-bubble__btn:hover { background: rgba(67, 54
 .note-prose [data-type="math-inline"] { font-size: 0.95em; }
 .note-prose [data-type="math-block"] { display: block; }
 
-/* Table — minimal styling, hỗ trợ cả sáng lẫn tối. */
+/* Table — màu khung/nền tính theo MÀU CHỮ (currentColor), không theo một
+   màu cứng. Trước 26/09/2026 khung là rgba(0,0,0,.14): trên nền tối (theme
+   tối của Notes lẫn chế độ tối ép của trình duyệt như Cốc Cốc) nó tàng hình —
+   bảng Sổ lệnh trông như chữ rơi tự do. currentColor đúng với mọi theme. */
 .note-prose .note-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1em 0;
+  margin: 0.75em 0 1.5em;
   font-size: 0.92em;
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  border-radius: 0.5rem;
-  overflow: hidden;
-  table-layout: fixed;
+  line-height: 1.5;
+  border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+  table-layout: auto;
 }
 .note-prose .note-table th,
 .note-prose .note-table td {
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  padding: 0.5em 0.75em;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  padding: 0.6em 0.85em;
   vertical-align: top;
   min-width: 1.5em;
 }
 .note-prose .note-table th {
-  background: rgba(0, 0, 0, 0.05);
+  background: color-mix(in srgb, currentColor 9%, transparent);
   font-weight: 600;
   text-align: left;
-  color: #0f172a;
+  white-space: nowrap;
 }
-.note-prose .note-table tr:nth-child(even) td { background: rgba(0, 0, 0, 0.025); }
+.note-prose .note-table tr:nth-child(even) td { background: color-mix(in srgb, currentColor 3%, transparent); }
+/* Ô gộp dọc (Sổ lệnh: một lệnh gốc cho nhiều tuỳ chọn) — nổi lên như nhãn nhóm. */
+.note-prose .note-table td[rowspan]:not([rowspan="1"]) {
+  background: color-mix(in srgb, currentColor 6%, transparent) !important;
+  font-weight: 600;
+}
+/* Lệnh ngắn trong 2 cột đầu không bị bẻ giữa chừng (`cd <thư-mục>` từng gãy làm 2 dòng). */
+.note-prose .note-table td:nth-child(-n+2) code { white-space: nowrap; }
 .note-prose .note-table td.selectedCell,
 .note-prose .note-table th.selectedCell {
   background: rgba(13, 148, 136, 0.18) !important;
-}
-
-/* Dark theme override cho table */
-.dark .note-prose .note-table { border-color: rgba(255, 255, 255, 0.18); }
-.dark .note-prose .note-table th,
-.dark .note-prose .note-table td { border-color: rgba(255, 255, 255, 0.14); }
-.dark .note-prose .note-table th {
-  background: rgba(255, 255, 255, 0.07);
-  color: #f1f5f9;
-}
-.dark .note-prose .note-table tr:nth-child(even) td { background: rgba(255, 255, 255, 0.03); }
-.dark .note-prose .note-table td.selectedCell,
-.dark .note-prose .note-table th.selectedCell {
-  background: rgba(45, 212, 191, 0.18) !important;
 }
 
 /* ─── Phase 4 perf follow-up: post card frame ─────────────────

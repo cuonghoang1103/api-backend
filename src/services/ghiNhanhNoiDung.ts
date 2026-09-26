@@ -26,14 +26,6 @@ export type TiptapDoc = JSONContent & { type: 'doc'; content: JSONContent[] };
 
 // ─── Chuyển đổi cơ bản ───────────────────────────────────────
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
 /** HTML (bất kỳ) → JSON TipTap đúng schema Notes. Thứ ngoài schema bị bỏ. */
 export function htmlToDoc(html: string): TiptapDoc {
   const json = generateJSON(html || '<p></p>', noteRealtimeExtensions) as TiptapDoc;
@@ -110,11 +102,32 @@ export interface NoteTemplate {
   html: string;
 }
 
+// ─── Sổ lệnh ─────────────────────────────────────────────────
+//
+// Bố cục (26/09/2026, theo ảnh người dùng: bảng dẹt một cục, lệnh trùng,
+// `mkdir` và `mkdir -p` nằm rời nhau):
+//
+//   ## 💻 Terminal                       ← mỗi NHÓM một tiêu đề + một bảng
+//   | Lệnh  | Tuỳ chọn | Nghĩa | Ví dụ | Lỗi từng gặp |
+//   | mkdir |          | tạo thư mục …                 |   ← dòng lệnh gốc
+//   |  (gộp)| -p       | tạo cả chuỗi …                |   ← ô "Lệnh" gộp
+//   |  (gộp)| -v       | in ra …                       |     (rowspan)
+//
+// Trang này do máy DỰNG LẠI mỗi lần thêm lệnh: đọc mọi dòng (cả bảng kiểu cũ
+// 5 cột có cột "Nhóm"), gom theo nhóm → lệnh gốc → tuỳ chọn, gộp dòng trùng,
+// rồi thay các bảng + tiêu đề nhóm cũ bằng bản mới. Chữ người dùng viết ở
+// chỗ khác trên trang giữ nguyên. Dựng lại là idempotent: đọc bản vừa dựng
+// rồi dựng tiếp ra đúng bản đó.
+
 /** Tên cột của Sổ lệnh — nhận diện bảng bằng tên cột, không bằng vị trí. */
-export const SO_LENH_COT = ['Lệnh', 'Nghĩa', 'Ví dụ', 'Nhóm', 'Lỗi từng gặp'] as const;
+export const SO_LENH_COT = ['Lệnh', 'Tuỳ chọn', 'Nghĩa', 'Ví dụ', 'Lỗi từng gặp'] as const;
 export const SO_LENH_NHOM = ['Terminal', 'Git', 'npm', 'HTML', 'CSS', 'JavaScript', 'SQL', 'Docker', 'Khác'] as const;
+const NHOM_ICON: Record<string, string> = {
+  Terminal: '💻', Git: '🌿', npm: '📦', HTML: '🧱', CSS: '🎨', JavaScript: '⚡', SQL: '🗄️', Docker: '🐳', Khác: '📌',
+};
 
 export interface DongLenh {
+  /** Cả câu lệnh như người dùng gõ, vd `mkdir -p a/b` — tách gốc/tuỳ chọn bằng `tachLenh`. */
   lenh: string;
   nghia: string;
   viDu?: string;
@@ -123,29 +136,284 @@ export interface DongLenh {
 }
 
 const VI_DU_SO_LENH: DongLenh[] = [
-  { lenh: 'pwd', nghia: 'in ra thư mục đang đứng', viDu: 'pwd → /Users/cuong/hoc', nhom: 'Terminal', loi: '' },
-  { lenh: 'ls -la', nghia: 'liệt kê mọi file, kể cả file ẩn', viDu: 'ls -la ~/Downloads', nhom: 'Terminal', loi: '' },
+  { lenh: 'pwd', nghia: 'in ra thư mục đang đứng', viDu: 'pwd → /Users/cuong/hoc', nhom: 'Terminal' },
+  { lenh: 'ls', nghia: 'liệt kê file trong thư mục', nhom: 'Terminal' },
+  { lenh: 'ls -la', nghia: 'liệt kê mọi file, kể cả file ẩn, kèm chi tiết', viDu: 'ls -la ~/Downloads', nhom: 'Terminal' },
   { lenh: 'cd <thư-mục>', nghia: 'chuyển sang thư mục khác', viDu: 'cd ..  (lùi một cấp)', nhom: 'Terminal', loi: 'cd: no such file or directory — gõ sai tên, dùng Tab để tự điền' },
-  { lenh: 'mkdir -p <tên>', nghia: 'tạo thư mục mới (cả thư mục cha nếu thiếu)', viDu: 'mkdir -p du-an/src', nhom: 'Terminal', loi: 'File exists — thư mục đã có, thêm -p để khỏi báo lỗi' },
 ];
 
-function cell(tag: 'th' | 'td', inner: string): string {
-  return `<${tag}><p>${inner}</p></${tag}>`;
+function chuanHoa(s: string): string {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase().trim();
 }
 
-export function dongLenhHtml(d: DongLenh): string {
-  const lenh = d.lenh.trim() ? `<code>${escapeHtml(d.lenh.trim())}</code>` : '';
-  return `<tr>${cell('td', lenh)}${cell('td', escapeHtml(d.nghia ?? ''))}${cell('td', escapeHtml(d.viDu ?? ''))}${cell('td', escapeHtml(d.nhom ?? ''))}${cell('td', escapeHtml(d.loi ?? ''))}</tr>`;
+/** Công cụ có lệnh con: `git commit`, `npm run`… — lệnh gốc gồm 2 từ. */
+const CONG_CU_CO_LENH_CON = new Set(['git', 'npm', 'npx', 'pnpm', 'yarn', 'docker', 'gh', 'brew', 'kubectl', 'prisma', 'systemctl', 'pip', 'pip3']);
+
+export interface LenhDaTach {
+  goc: string;
+  /** Chữ hiện ở cột "Tuỳ chọn": cờ + chỗ điền kiểu `<tên>`; rỗng = dòng lệnh gốc. */
+  tuyChon: string;
+  /** Khoá gộp dòng trùng trong cùng một lệnh gốc. */
+  khoa: string;
+  /** Câu lệnh có đối số cụ thể (`a/b/c`) — bị bỏ khỏi cột Tuỳ chọn nên đẩy sang Ví dụ. */
+  viDuTuLenh: string;
+}
+
+/**
+ * `mkdir -p a/b/c` → gốc `mkdir`, tuỳ chọn `-p`, ví dụ `mkdir -p a/b/c`.
+ * `mkdir -p <tên>` → gốc `mkdir`, tuỳ chọn `-p <tên>` (chỗ điền giữ lại), gộp cùng dòng trên.
+ * `cd ..`          → gốc `cd`, tuỳ chọn `..` (không có cờ thì đối số CHÍNH là thứ đáng nhớ).
+ */
+export function tachLenh(lenh: string): LenhDaTach {
+  const tu = lenh.trim().split(/\s+/).filter(Boolean);
+  if (tu.length === 0) return { goc: '', tuyChon: '', khoa: '', viDuTuLenh: '' };
+  let n = 1;
+  if (CONG_CU_CO_LENH_CON.has(tu[0].toLowerCase()) && tu[1] && /^[a-z][\w:.-]*$/i.test(tu[1])) n = 2;
+  const goc = tu.slice(0, n).join(' ');
+  const con = tu.slice(n);
+  const co = con.filter((t) => t.startsWith('-'));
+  if (co.length === 0) {
+    const tuyChon = con.join(' ');
+    return { goc, tuyChon, khoa: tuyChon, viDuTuLenh: '' };
+  }
+  const choDien = (t: string) => /^<.*>$|^\[.*\]$|^\.\.\.$/.test(t);
+  const hien = con.filter((t) => t.startsWith('-') || choDien(t));
+  const coDoiSoThat = con.some((t) => !t.startsWith('-') && !choDien(t));
+  return { goc, tuyChon: hien.join(' '), khoa: co.join(' '), viDuTuLenh: coDoiSoThat ? tu.join(' ') : '' };
+}
+
+/** Nhóm người dùng gõ → tên nhóm chuẩn (so không dấu, không hoa thường). */
+function nhomChuan(nhom: string | undefined): string {
+  const t = chuanHoa(nhom ?? '');
+  if (!t) return 'Khác';
+  return SO_LENH_NHOM.find((g) => chuanHoa(g) === t) ?? (nhom ?? '').trim();
+}
+
+/** Tiêu đề `## 💻 Terminal` → 'Terminal'; không phải tiêu đề nhóm thì null. */
+function nhomCuaTieuDe(text: string, nhomDaBiet: Set<string>): string | null {
+  const bo = text.replace(/^[^\p{L}\p{N}]+/u, '').trim();
+  const t = chuanHoa(bo);
+  for (const g of [...SO_LENH_NHOM, ...nhomDaBiet]) if (chuanHoa(g) === t) return g;
+  return null;
+}
+
+type CotKey = 'lenh' | 'tuyChon' | 'nghia' | 'viDu' | 'nhom' | 'loi';
+
+function cotCuaTieuDe(text: string): CotKey | null {
+  const t = chuanHoa(text);
+  if (t === 'lenh' || t.startsWith('lenh ')) return 'lenh';
+  if (t.startsWith('tuy chon') || t.startsWith('tuy chon') || t.startsWith('option')) return 'tuyChon';
+  if (t.startsWith('nghia')) return 'nghia';
+  if (t.startsWith('vi du')) return 'viDu';
+  if (t.startsWith('nhom')) return 'nhom';
+  if (t.startsWith('loi')) return 'loi';
+  return null;
+}
+
+function laBangSoLenh(n: JSONContent): (CotKey | null)[] | null {
+  if (n.type !== 'table') return null;
+  const header = n.content?.[0];
+  if (!header) return null;
+  const cot = (header.content ?? []).map((c) => cotCuaTieuDe(nodeText(c)));
+  return cot.includes('lenh') && cot.includes('nghia') ? cot : null;
+}
+
+/** Bảng Sổ lệnh đầu tiên (nhận theo TÊN cột "Lệnh" + "Nghĩa"). */
+export function timBangSoLenh(doc: JSONContent): { table: JSONContent; cot: (CotKey | null)[] } | null {
+  let found: { table: JSONContent; cot: (CotKey | null)[] } | null = null;
+  walk(doc, (n) => {
+    if (found) return;
+    const cot = laBangSoLenh(n);
+    if (cot) found = { table: n, cot };
+  });
+  return found;
+}
+
+/** Các dòng của một bảng, tính cả ô gộp dọc (rowspan). */
+function dongCuaBang(table: JSONContent, cot: (CotKey | null)[], nhomTieuDe: string | null): DongLenh[] {
+  const keo: { con: number; gt: string }[] = cot.map(() => ({ con: 0, gt: '' }));
+  const out: DongLenh[] = [];
+  for (const r of (table.content ?? []).slice(1)) {
+    const o = [...(r.content ?? [])];
+    const gt: Partial<Record<CotKey, string>> = {};
+    for (let i = 0; i < cot.length; i++) {
+      let v: string;
+      if (keo[i].con > 0) {
+        keo[i].con--;
+        v = keo[i].gt;
+      } else {
+        const c = o.shift();
+        v = nodeText(c).trim();
+        const span = Number(c?.attrs?.rowspan ?? 1);
+        if (span > 1) keo[i] = { con: span - 1, gt: v };
+      }
+      const k = cot[i];
+      if (k) gt[k] = v;
+    }
+    const lenh = [gt.lenh ?? '', gt.tuyChon ?? ''].filter(Boolean).join(' ').trim();
+    if (!lenh) continue;
+    const d: DongLenh = { lenh, nghia: gt.nghia ?? '' };
+    if (gt.viDu !== undefined) d.viDu = gt.viDu;
+    const nhom = gt.nhom || nhomTieuDe;
+    if (nhom) d.nhom = nhom;
+    if (gt.loi !== undefined) d.loi = gt.loi;
+    out.push(d);
+  }
+  return out;
+}
+
+/** Mọi dòng của Sổ lệnh trên trang, theo thứ tự xuất hiện. Nhóm lấy từ cột "Nhóm" (bảng kiểu cũ) hoặc tiêu đề đứng trên bảng. */
+export function docSoLenh(doc: JSONContent): DongLenh[] {
+  const out: DongLenh[] = [];
+  let nhom: string | null = null;
+  const daBiet = new Set<string>();
+  for (const n of doc.content ?? []) {
+    if (n.type === 'heading') {
+      nhom = nhomCuaTieuDe(nodeText(n), daBiet);
+      continue;
+    }
+    const cot = laBangSoLenh(n);
+    if (cot) {
+      for (const d of dongCuaBang(n, cot, nhom)) {
+        if (d.nhom) daBiet.add(d.nhom);
+        out.push(d);
+      }
+    }
+  }
+  // Bảng lồng trong khối khác (callout, cột…) — hiếm, đọc theo kiểu cũ.
+  if (out.length === 0) {
+    const b = timBangSoLenh(doc);
+    if (b) out.push(...dongCuaBang(b.table, b.cot, null));
+  }
+  return out;
+}
+
+interface DongGop { tuyChon: string; nghia: string; viDu: string[]; loi: string[] }
+
+function themDongKhongTrung(ds: string[], text: string | undefined) {
+  for (const l of (text ?? '').split('\n').map((x) => x.trim()).filter(Boolean)) {
+    if (!ds.some((c) => chuanHoa(c) === chuanHoa(l))) ds.push(l);
+  }
+}
+
+/** Nhóm → lệnh gốc → dòng (khoá tuỳ chọn). Map giữ thứ tự thêm vào. */
+type SoGop = Map<string, Map<string, Map<string, DongGop>>>;
+
+function gopDong(so: SoGop, d: DongLenh) {
+  const t = tachLenh(d.lenh);
+  if (!t.goc) return;
+  const nhom = nhomChuan(d.nhom);
+  if (!so.has(nhom)) so.set(nhom, new Map());
+  const theoGoc = so.get(nhom)!;
+  if (!theoGoc.has(t.goc)) theoGoc.set(t.goc, new Map());
+  const dong = theoGoc.get(t.goc)!;
+  let g = dong.get(t.khoa);
+  if (!g) {
+    g = { tuyChon: t.tuyChon, nghia: '', viDu: [], loi: [] };
+    dong.set(t.khoa, g);
+  } else if (t.tuyChon.length > g.tuyChon.length) {
+    g.tuyChon = t.tuyChon; // `-p` rồi `-p <tên>` → giữ bản nói rõ cú pháp hơn
+  }
+  const nghia = (d.nghia ?? '').trim();
+  if (nghia && !chuanHoa(g.nghia).includes(chuanHoa(nghia))) g.nghia = g.nghia ? `${g.nghia} · ${nghia}` : nghia;
+  themDongKhongTrung(g.viDu, t.viDuTuLenh);
+  themDongKhongTrung(g.viDu, d.viDu);
+  themDongKhongTrung(g.loi, d.loi);
+}
+
+function oBang(type: 'tableCell' | 'tableHeader', text: string, opts: { code?: boolean; rowspan?: number } = {}): JSONContent {
+  const content: JSONContent[] = [];
+  text.split('\n').forEach((l, i) => {
+    if (i > 0) content.push({ type: 'hardBreak' });
+    if (l) content.push({ type: 'text', text: l, ...(opts.code ? { marks: [{ type: 'code' }] } : {}) });
+  });
+  const para: JSONContent = { type: 'paragraph' };
+  if (content.length) para.content = content;
+  return { type, attrs: { colspan: 1, rowspan: opts.rowspan ?? 1, colwidth: null }, content: [para] };
+}
+
+function thuTuNhom(so: SoGop): string[] {
+  const biet = SO_LENH_NHOM.filter((g) => so.has(g) && g !== 'Khác');
+  const la = [...so.keys()].filter((g) => !(SO_LENH_NHOM as readonly string[]).includes(g));
+  return [...biet, ...la, ...(so.has('Khác') ? ['Khác'] : [])];
+}
+
+/** Khối tiêu đề + bảng cho từng nhóm. */
+function dungKhoiSoLenh(so: SoGop): JSONContent[] {
+  const out: JSONContent[] = [];
+  for (const nhom of thuTuNhom(so)) {
+    const theoGoc = so.get(nhom)!;
+    const rows: JSONContent[] = [{ type: 'tableRow', content: SO_LENH_COT.map((c) => oBang('tableHeader', c)) }];
+    for (const [goc, dong] of theoGoc) {
+      // Dòng lệnh gốc (không tuỳ chọn) luôn đứng đầu khối.
+      const ds = [...dong.values()].sort((a, b) => Number(Boolean(a.tuyChon)) - Number(Boolean(b.tuyChon)));
+      ds.forEach((g, i) => {
+        const cells: JSONContent[] = [];
+        if (i === 0) cells.push(oBang('tableCell', goc, { code: true, rowspan: ds.length }));
+        cells.push(
+          oBang('tableCell', g.tuyChon, { code: true }),
+          oBang('tableCell', g.nghia),
+          oBang('tableCell', g.viDu.join('\n')),
+          oBang('tableCell', g.loi.join('\n')),
+        );
+        rows.push({ type: 'tableRow', content: cells });
+      });
+    }
+    out.push(
+      { type: 'heading', attrs: { level: 2 }, content: [{ type: 'text', text: `${NHOM_ICON[nhom] ?? '📌'} ${nhom}` }] },
+      { type: 'table', content: rows },
+    );
+  }
+  return out;
+}
+
+/**
+ * Dựng lại phần Sổ lệnh của trang (đổi tại chỗ), có thể kèm dòng mới. Bảng
+ * Sổ lệnh + tiêu đề nhóm cũ bị thay bằng bản gom nhóm; mọi thứ khác giữ nguyên
+ * chỗ. Trang chưa có bảng nào thì thêm vào cuối.
+ */
+export function sapXepSoLenh(doc: TiptapDoc, them?: DongLenh): TiptapDoc {
+  const dong = docSoLenh(doc);
+  if (them) dong.push(them);
+  const so: SoGop = new Map();
+  for (const d of dong) gopDong(so, d);
+  const nhomCo = new Set(so.keys());
+
+  const giu: JSONContent[] = [];
+  let viTri = -1;
+  for (const n of doc.content) {
+    const laTieuDeNhom = n.type === 'heading' && nhomCuaTieuDe(nodeText(n), nhomCo) !== null;
+    if (laBangSoLenh(n) || laTieuDeNhom) {
+      if (viTri < 0) viTri = giu.length;
+      continue;
+    }
+    giu.push(n);
+  }
+  const khoi = dungKhoiSoLenh(so);
+  if (viTri < 0) {
+    viTri = giu.length;
+    khoi.push({ type: 'paragraph' });
+  }
+  giu.splice(viTri, 0, ...khoi);
+  doc.content = giu;
+  return doc;
+}
+
+/** Thêm một lệnh: gộp vào dòng cũ nếu trùng lệnh gốc + cờ, rồi dựng lại cả sổ. */
+export function themDongSoLenh(doc: TiptapDoc, d: DongLenh): TiptapDoc {
+  return sapXepSoLenh(doc, d);
 }
 
 function soLenhHtml(): string {
-  const head = `<tr>${SO_LENH_COT.map((c) => cell('th', c)).join('')}</tr>`;
+  const so: SoGop = new Map();
+  for (const d of VI_DU_SO_LENH) gopDong(so, d);
   return [
-    '<aside data-type="callout" data-kind="tip"><p>Mỗi dòng một lệnh. Cột <strong>Lệnh</strong> để dạng <code>code</code>, cột <strong>Nghĩa</strong> viết bằng lời của bạn — nút “Ôn bằng flashcard” sẽ hỏi ngược: “Lệnh nào để &lt;nghĩa&gt;?”. Ghi nhanh một lệnh từ bất kỳ trang nào: <strong>Alt+Shift+N</strong> (Mac: ⌥⇧N) → thẻ “Sổ lệnh”.</p></aside>',
-    `<table><tbody>${head}${VI_DU_SO_LENH.map(dongLenhHtml).join('')}</tbody></table>`,
+    '<aside data-type="callout" data-kind="tip"><p>Gõ cả lệnh lẫn tuỳ chọn, vd <code>mkdir -p</code> — sổ tự gom vào lệnh gốc <code>mkdir</code>, trong nhóm 💻 Terminal. Ghi trùng thì gộp vào dòng cũ. Cột <strong>Nghĩa</strong> viết bằng lời của bạn — nút “Ôn bằng flashcard” sẽ hỏi ngược: “Lệnh nào để &lt;nghĩa&gt;?”. Ghi nhanh từ bất kỳ trang nào: <strong>Alt+Shift+N</strong> (Mac: ⌥⇧N) → thẻ “Sổ lệnh”.</p></aside>',
+    docToHtml({ type: 'doc', content: dungKhoiSoLenh(so) }),
     '<p></p>',
   ].join('');
 }
+
 
 export const NOTE_TEMPLATES: NoteTemplate[] = [
   {
@@ -183,88 +451,6 @@ export const NOTE_TEMPLATES: NoteTemplate[] = [
 
 export function findTemplate(key: unknown): NoteTemplate | null {
   return NOTE_TEMPLATES.find((t) => t.key === key) ?? null;
-}
-
-// ─── Sổ lệnh: đọc / thêm dòng trong bảng ─────────────────────
-
-function chuanHoa(s: string): string {
-  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase().trim();
-}
-
-type CotKey = 'lenh' | 'nghia' | 'viDu' | 'nhom' | 'loi';
-
-function cotCuaTieuDe(text: string): CotKey | null {
-  const t = chuanHoa(text);
-  if (t === 'lenh' || t.startsWith('lenh ')) return 'lenh';
-  if (t.startsWith('nghia')) return 'nghia';
-  if (t.startsWith('vi du')) return 'viDu';
-  if (t.startsWith('nhom')) return 'nhom';
-  if (t.startsWith('loi')) return 'loi';
-  return null;
-}
-
-interface BangSoLenh {
-  table: JSONContent;
-  cot: (CotKey | null)[];
-}
-
-/** Bảng đầu tiên có cả cột "Lệnh" và "Nghĩa" — nhận theo TÊN cột. */
-export function timBangSoLenh(doc: JSONContent): BangSoLenh | null {
-  let found: BangSoLenh | null = null;
-  walk(doc, (n) => {
-    if (found || n.type !== 'table') return;
-    const header = n.content?.[0];
-    if (!header) return;
-    const cot = (header.content ?? []).map((c) => cotCuaTieuDe(nodeText(c)));
-    if (cot.includes('lenh') && cot.includes('nghia')) found = { table: n, cot };
-  });
-  return found;
-}
-
-/** Các dòng của Sổ lệnh (bỏ dòng tiêu đề và dòng thiếu lệnh). */
-export function docSoLenh(doc: JSONContent): DongLenh[] {
-  const bang = timBangSoLenh(doc);
-  if (!bang) return [];
-  const rows = (bang.table.content ?? []).slice(1);
-  const out: DongLenh[] = [];
-  for (const r of rows) {
-    const d: DongLenh = { lenh: '', nghia: '' };
-    (r.content ?? []).forEach((c, i) => {
-      const k = bang.cot[i];
-      if (k) d[k] = nodeText(c).trim();
-    });
-    if (d.lenh) out.push(d);
-  }
-  return out;
-}
-
-function cellJson(type: 'tableCell', text: string, code = false): JSONContent {
-  const para: JSONContent = { type: 'paragraph' };
-  if (text) para.content = [{ type: 'text', text, ...(code ? { marks: [{ type: 'code' }] } : {}) }];
-  return { type, attrs: { colspan: 1, rowspan: 1, colwidth: null }, content: [para] };
-}
-
-/**
- * Thêm một dòng vào bảng Sổ lệnh của `doc` (đổi tại chỗ). Không có bảng thì
- * chèn nguyên bảng mẫu (không kèm dòng ví dụ) vào cuối trang rồi thêm vào đó.
- */
-export function themDongSoLenh(doc: TiptapDoc, d: DongLenh): TiptapDoc {
-  let bang = timBangSoLenh(doc);
-  if (!bang) {
-    const head = `<tr>${SO_LENH_COT.map((c) => cell('th', c)).join('')}</tr>`;
-    const table = htmlToDoc(`<table><tbody>${head}</tbody></table>`).content[0];
-    doc.content.push(table, { type: 'paragraph' });
-    bang = timBangSoLenh(doc)!;
-  }
-  const row: JSONContent = {
-    type: 'tableRow',
-    content: bang.cot.map((k) => {
-      if (k === 'lenh') return cellJson('tableCell', d.lenh.trim(), true);
-      return cellJson('tableCell', k ? String(d[k] ?? '').trim() : '');
-    }),
-  };
-  bang.table.content = [...(bang.table.content ?? []), row];
-  return doc;
 }
 
 /** Mặt trước thẻ ôn: "Lệnh nào để <nghĩa>?" */

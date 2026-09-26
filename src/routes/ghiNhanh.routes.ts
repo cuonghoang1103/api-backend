@@ -10,7 +10,7 @@ import { Router, type Request, type Response } from 'express';
 import { authenticate } from '../middleware/auth.js';
 import type { ApiResponse } from '../types/index.js';
 import {
-  ensureInboxSubject, listTemplates, ghiNhanh, taoTuMau, damBaoSoLenh, themLenh,
+  ensureInboxSubject, listTemplates, ghiNhanh, taoTuMau, moSoLenh, themLenh,
   taoTheTuSoLenh, luuDoanBaiHoc, doanCuaBai, nhapMarkdown,
 } from '../services/ghiNhanh.service.js';
 
@@ -44,10 +44,10 @@ router.post('/tu-mau', async (req: Request, res: Response<ApiResponse>, next) =>
   } catch (err) { next(err); }
 });
 
-/** Sổ lệnh mặc định (trong Hộp thư) — tạo nếu chưa có. */
+/** Sổ lệnh mặc định (trong Hộp thư) — tạo nếu chưa có; bố cục cũ thì sắp xếp lại một lần. */
 router.get('/so-lenh', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
-    const n = await damBaoSoLenh(req.userId!);
+    const n = await moSoLenh(req.userId!);
     res.json({ success: true, data: { noteId: n.id, title: n.title, subjectId: n.subjectId } });
   } catch (err) { next(err); }
 });

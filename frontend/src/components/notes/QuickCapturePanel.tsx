@@ -7,8 +7,9 @@
  *   📝 Ghi chú — tiêu đề tuỳ chọn + nội dung (Markdown: `pwd`, ```bash …```,
  *                "- " …) → một trang mới trong 📥 Hộp thư. Chọn thêm mẫu
  *                "Ghi chú bài học" / "Nhật ký lỗi" thì khung mẫu nằm dưới.
- *   ⌨️ Sổ lệnh — Lệnh · Nghĩa · Ví dụ · Nhóm · Lỗi → thêm MỘT DÒNG vào bảng
- *                "⌨️ Sổ lệnh" (trong Hộp thư, tự tạo từ mẫu lần đầu).
+ *   ⌨️ Sổ lệnh — Lệnh · Nghĩa · Ví dụ · Nhóm · Lỗi → máy chủ gom vào trang
+ *                "⌨️ Sổ lệnh" (Hộp thư): mỗi nhóm một bảng, lệnh gốc gộp ô,
+ *                `mkdir -p` nằm dưới `mkdir`, ghi trùng thì gộp dòng cũ.
  *                Nút "Ôn bằng flashcard" sinh thẻ "Lệnh nào để <nghĩa>?".
  *
  * Phím: Enter lưu · Shift+Enter xuống dòng · Esc đóng (bản nháp vẫn giữ).
@@ -77,6 +78,33 @@ function baoDaLuu(noteId: number, tenMon: string, loiNhan = 'Đã lưu vào') {
 export function loiApi(e: unknown, macDinh: string): string {
   const msg = (e as { response?: { data?: { message?: string; error?: { message?: string } } } })?.response?.data;
   return msg?.message || msg?.error?.message || macDinh;
+}
+
+/**
+ * Ô chữ tự giãn theo nội dung. Trước đây Nghĩa/Ví dụ/Lỗi là <input> một dòng:
+ * câu dài trôi khuất sang trái (không thấy mình gõ đúng hay sai) và
+ * Shift+Enter không làm gì. Enter vẫn lưu — do `onKeyDown` truyền vào quyết.
+ */
+function OTuGian(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight + 2, 200)}px`;
+  }, [props.value]);
+  return <textarea ref={ref} rows={1} {...props} className={`${props.className ?? ''} resize-none overflow-y-auto leading-snug`} />;
+}
+
+/** Xem trước chỗ lệnh sẽ nằm trong sổ — cùng quy tắc với `tachLenh` phía máy chủ (ghiNhanhNoiDung.ts). */
+const CONG_CU_CO_LENH_CON = new Set(['git', 'npm', 'npx', 'pnpm', 'yarn', 'docker', 'gh', 'brew', 'kubectl', 'prisma', 'systemctl', 'pip', 'pip3']);
+function xemTruocLenh(lenh: string): { goc: string; co: string } | null {
+  const tu = lenh.trim().split(/\s+/).filter(Boolean);
+  if (tu.length === 0) return null;
+  const n = CONG_CU_CO_LENH_CON.has(tu[0].toLowerCase()) && tu[1] && /^[a-z][\w:.-]*$/i.test(tu[1]) ? 2 : 1;
+  const con = tu.slice(n);
+  const co = con.filter((t) => t.startsWith('-'));
+  return { goc: tu.slice(0, n).join(' '), co: co.length ? co.join(' ') : con.join(' ') };
 }
 
 /** Enter (không Shift, không đang ghép chữ) → true. */
@@ -332,7 +360,18 @@ export default function QuickCapturePanel({ open, prefill, onClose, onOnThe }: P
               {NHOM.map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </div>
-          <input
+          {(() => {
+            const x = xemTruocLenh(b.lenh);
+            if (!x) return null;
+            return (
+              <p className="px-1 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                Sẽ nằm trong nhóm <b>{b.nhom}</b> → lệnh <code className="font-mono">{x.goc}</code>
+                {x.co ? <> → tuỳ chọn <code className="font-mono">{x.co}</code></> : ' (dòng lệnh gốc)'}
+                {' '}· ghi trùng thì gộp vào dòng cũ
+              </p>
+            );
+          })()}
+          <OTuGian
             value={b.nghia}
             onChange={(e) => sua({ nghia: e.target.value })}
             onKeyDown={onEnter(luuLenh)}
@@ -341,7 +380,7 @@ export default function QuickCapturePanel({ open, prefill, onClose, onOnThe }: P
             className={oNhap}
             style={oStyle}
           />
-          <input
+          <OTuGian
             value={b.viDu}
             onChange={(e) => sua({ viDu: e.target.value })}
             onKeyDown={onEnter(luuLenh)}
@@ -350,7 +389,7 @@ export default function QuickCapturePanel({ open, prefill, onClose, onOnThe }: P
             className={`${oNhap} font-mono`}
             style={oStyle}
           />
-          <input
+          <OTuGian
             value={b.loi}
             onChange={(e) => sua({ loi: e.target.value })}
             onKeyDown={onEnter(luuLenh)}
@@ -389,7 +428,7 @@ export default function QuickCapturePanel({ open, prefill, onClose, onOnThe }: P
         >
           <FileUp className="h-3.5 w-3.5" /> Nhập .md
         </button>
-        <span className="ml-auto hidden text-[11px] sm:inline" style={{ color: 'var(--text-muted)' }}>Enter lưu · Esc đóng</span>
+        <span className="ml-auto hidden text-[11px] sm:inline" style={{ color: 'var(--text-muted)' }}>Enter lưu · Shift+Enter xuống dòng · Esc đóng</span>
         <button
           type="button"
           onClick={() => void (b.mode === 'so-lenh' ? luuLenh() : luuGhiChu())}

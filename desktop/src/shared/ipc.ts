@@ -1969,6 +1969,8 @@ export const EVENT_CHANNELS = [
   'aiCucBo:tienDo',
   /** Terminal thật: byte mới từ một phiên (`{ id, du }`). */
   'pty:du',
+  /** Danh sách phiên AI Code vừa đổi (vừa lưu) ⇒ thanh bên nạp lại ngay. */
+  'agent:phienDoi',
   /** Terminal thật: phiên mở/đóng/thoát, hoặc đang chờ nhập (`PhienPty`). */
   'pty:trangThai',
   /** Tiến độ cài OpenCode Terminal: tải (%), giải nén, kiểm, thêm PATH. */

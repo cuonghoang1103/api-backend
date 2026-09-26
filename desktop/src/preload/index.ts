@@ -86,6 +86,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'opencode:tienDo',
   'pty:du',
   'pty:trangThai',
+  'agent:phienDoi',
 ];
 
 const bridge: DesktopBridge = {

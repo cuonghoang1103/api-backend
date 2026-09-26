@@ -889,9 +889,52 @@ export async function chayLuot(
   /** Đã thử lại mấy lần ở CHỖ KẸT HIỆN TẠI. Đi được một bước là về 0. */
   let daThuLai = 0;
 
+  /*
+   * ⚠️ LƯU THEO TỪNG VÒNG, không chỉ ở `finally` (26/09/2026).
+   *
+   * Người dùng: *"bị ngắt hay gián đoạn là mất hết câu trả lời và hội thoại cũ,
+   * làm tiếp tốn rất nhiều token cho việc đã làm rồi"*. `finally` không chạy
+   * khi app bị tắt/sập giữa lượt — mất trọn những bước đã đi và đã trả tiền.
+   *
+   * Chỉ lưu ở ĐIỂM NHẤT QUÁN: đầu mỗi vòng, lúc mọi `tool_call` của vòng trước
+   * đã có kết quả. Lưu giữa chừng (tool_call chưa có trả lời) là ghi ra một
+   * hội thoại mà cổng sẽ TỪ CHỐI cả lượt khi mở lại.
+   */
+  const luuGiuaChung = (): void => {
+    void luuPhien(c.phienId, c.hoiThoai as TinNhanLuu[], c.duAn, c.goc)
+      .then(() => baoPhienDoi())
+      .catch(() => { /* ghi đĩa hỏng không được làm hỏng lượt */ });
+  };
+  /* Lưu NGAY khi có câu hỏi: dự án mới hiện lên thanh bên từ lúc bắt đầu,
+     không phải đợi lượt xong (người dùng phải đổi trang rồi quay lại mới thấy). */
+  luuGiuaChung();
+
+  /** Chữ model đã chảy về trong vòng hiện tại — để giữ lại nếu bị ngắt giữa chừng. */
+  let chuVong = '';
+  const phatVaGom = (e: SuKienAgent): void => {
+    if (e.loai === 'chu') chuVong += e.delta;
+    phat(e);
+  };
+  /**
+   * Bị ngắt khi model đang viết ⇒ GIỮ phần đã viết vào hội thoại, đánh dấu
+   * dở dang. Không giữ thì "làm tiếp" bắt model viết lại từ đầu — trả tiền hai
+   * lần cho cùng một đoạn. Chỉ giữ chữ (tool_call dở thì không dùng được).
+   */
+  const giuChuDo = (): void => {
+    const t = chuVong.trim();
+    if (t.length < 40) return;
+    c.hoiThoai.push({
+      role: 'assistant',
+      content: `${t}\n\n[… câu trả lời bị NGẮT giữa chừng. Nếu người dùng bảo làm tiếp: VIẾT TIẾP từ chỗ dừng, đừng lặp lại phần trên.]`,
+    } as TinNhan);
+    chuVong = '';
+  };
+
   try {
     for (let vong = 0; vong < MAX_VONG; vong++) {
-      if (dieuKhien.signal.aborted) { phat({ loai: 'huy' }); return; }
+      if (dieuKhien.signal.aborted) { giuChuDo(); phat({ loai: 'huy' }); return; }
+      if (vong > 0) luuGiuaChung();
+      chuVong = '';
 
       const phanHoi = await mgoiMotLuot({
         token: phien.sessionToken,
@@ -917,7 +960,7 @@ export async function chayLuot(
           name: t.ten, description: t.moTa, parameters: t.thamSo,
         })),
         signal: dieuKhien.signal,
-        phat,
+        phat: phatVaGom,
       });
 
       if (!phanHoi.ok) {
@@ -952,6 +995,7 @@ export async function chayLuot(
           vong--; // lần thử lại không tính là một vòng
           continue;
         }
+        giuChuDo();
         phat({ loai: 'loi', thongDiep: phanHoi.thongDiep, ma: phanHoi.ma });
         return;
       }
@@ -1180,6 +1224,7 @@ export async function chayLuot(
       ma: 'MAX_ROUNDS',
     });
   } catch (err) {
+    giuChuDo();
     if (dieuKhien.signal.aborted) phat({ loai: 'huy' });
     else phat({ loai: 'loi', thongDiep: (err as Error).message || 'Lỗi không rõ.' });
   } finally {
@@ -1188,7 +1233,7 @@ export async function chayLuot(
     // người dùng bấm Dừng vẫn chứa những bước agent đã đi và đã trả tiền —
     // mất chúng chỉ vì lượt không kết thúc đẹp là mất đúng thứ đáng giữ nhất.
     {
-      void luuPhien(c.phienId, c.hoiThoai as TinNhanLuu[], c.duAn, c.goc).catch(() => {
+      void luuPhien(c.phienId, c.hoiThoai as TinNhanLuu[], c.duAn, c.goc).then(() => baoPhienDoi()).catch(() => {
         /* ghi đĩa hỏng KHÔNG được làm hỏng lượt vừa chạy xong */
       });
     }
@@ -1666,6 +1711,16 @@ async function mgoiMotLuotThat(o: {
  * `BrowserWindow` giả. Nuốt lỗi vì đây là thông báo phụ: robot không mở thì
  * cũng không có gì hỏng.
  */
+/**
+ * Báo MỌI cửa sổ: danh sách phiên vừa đổi ⇒ thanh bên nạp lại ngay.
+ * Nhập ĐỘNG vì `loop.ts` chạy trong vitest (xem `baoViecRaRobot`).
+ */
+function baoPhienDoi(): void {
+  void import('electron').then(({ BrowserWindow }) => {
+    for (const w of BrowserWindow.getAllWindows()) if (!w.isDestroyed()) w.webContents.send('agent:phienDoi', {});
+  }).catch(() => {});
+}
+
 function baoViecRaRobot(chu: string | null): void {
   void import('../robotTin').then(({ baoAgentViec }) => baoAgentViec(chu)).catch(() => {});
 }

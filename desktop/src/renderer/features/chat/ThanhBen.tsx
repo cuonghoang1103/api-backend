@@ -107,6 +107,19 @@ export function ThanhBen({
   useEffect(() => { void nap(); }, [nap]);
   // Nạp lại khi đổi tab: phiên vừa chạy xong ở tab kia phải xuất hiện.
   useEffect(() => { void nap(); }, [cuocId, nap]);
+  /* ⚠️ Nạp lại MỖI KHI main lưu phiên (đầu lượt, sau mỗi vòng, cuối lượt) —
+     26/09/2026. Trước đây chỉ nạp khi gắn và khi đổi tab, nên mở một dự án
+     mới rồi hỏi thì dự án đó KHÔNG hiện lên thanh bên; người dùng phải sang
+     trang khác rồi quay lại. Gộp nhịp 300ms: một lượt dài lưu nhiều lần. */
+  useEffect(() => {
+    let hen: ReturnType<typeof setTimeout> | null = null;
+    const napGop = (): void => {
+      if (hen) clearTimeout(hen);
+      hen = setTimeout(() => { hen = null; void nap(); }, 300);
+    };
+    const bo = window.cuongthai?.on('agent:phienDoi', napGop);
+    return () => { if (hen) clearTimeout(hen); bo?.(); };
+  }, [nap]);
   useEffect(() => {
     datPhienDaMo((c) => (c && c.cuoc === null && cuocId ? { ...c, cuoc: cuocId } : c));
   }, [cuocId]);

@@ -9,9 +9,11 @@
  * thao tác này BẮT BUỘC phải lùi lại được bằng Cmd+Z: mọi thay đổi đi qua một
  * transaction duy nhất của TipTap, tức là một bước hoàn tác duy nhất.
  *
- * Chèn theo Markdown chứ không chèn chữ thô: "Chuyển thành checklist" và "Tạo
- * bảng" trả về cú pháp Markdown, và chèn thô sẽ ra một đoạn văn đầy dấu gạch
- * ngang với dấu ống thay vì một checklist và một cái bảng.
+ * Chèn NÚT TipTap do backend dựng (`nodes`), không chèn chuỗi: "Tạo bảng",
+ * "Chuyển thành checklist", "Sổ lệnh" trả về Markdown, mà `insertContentAt`
+ * nhận chuỗi thì đọc nó như HTML — ra một đoạn đầy dấu `|` và `- [ ]` thay vì
+ * một cái bảng. (Chú thích cũ ở đây nói "chèn theo Markdown" nhưng mã thì chèn
+ * chuỗi thô — đúng cái lỗi nó tả.)
  */
 import { useState } from 'react';
 import { Loader2, Sparkles } from 'lucide-react';
@@ -37,6 +39,7 @@ const ACTIONS: { key: string; label: string }[] = [
   { key: 'checklist', label: 'Chuyển thành checklist' },
   { key: 'tasks', label: 'Rút trích nhiệm vụ' },
   { key: 'table', label: 'Tạo bảng' },
+  { key: 'command_sheet', label: 'Chuyển thành Sổ lệnh' },
   { key: 'translate_en', label: 'Dịch sang tiếng Anh' },
   { key: 'translate_vi', label: 'Dịch sang tiếng Việt' },
 ];
@@ -53,15 +56,26 @@ export default function NoteAiMenu({ editor }: { editor: Editor }) {
     setBusy(action);
     try {
       const res = await notesApi.aiAssist(action, selection);
-      const text = res.data.data.text;
+      const { text, nodes } = res.data.data;
       if (!text) { toast.error('AI không trả về nội dung'); return; }
+
+      // Một đoạn văn duy nhất ⇒ chèn phần NỘI DÒNG của nó, để thay chữ ngay
+      // trong câu mà không tách đoạn. Nhiều khối (bảng, danh sách…) ⇒ chèn khối.
+      // Backend cũ chưa trả `nodes` ⇒ lùi về chèn chữ như trước.
+      const noiDongMotDoan = nodes?.length === 1 && nodes[0].type === 'paragraph'
+        ? (nodes[0].content as Record<string, unknown>[] | undefined)
+        : undefined;
+      const noiDung: string | Record<string, unknown>[] = noiDongMotDoan?.length
+        ? noiDongMotDoan
+        : nodes?.length ? nodes : text;
 
       // "Viết tiếp" CHÈN THÊM, các việc khác THAY THẾ. Thay thế ở "viết tiếp"
       // sẽ xoá mất đúng đoạn người dùng vừa viết — thứ họ muốn giữ.
       if (action === 'continue') {
-        editor.chain().focus().insertContentAt(to, `\n\n${text}`).run();
+        const tiep = noiDongMotDoan?.length ? [{ type: 'text', text: ' ' }, ...noiDongMotDoan] : noiDung;
+        editor.chain().focus().insertContentAt(to, tiep as never).run();
       } else {
-        editor.chain().focus().insertContentAt({ from, to }, text).run();
+        editor.chain().focus().insertContentAt({ from, to }, noiDung as never).run();
       }
       setOpen(false);
     } catch (error) {

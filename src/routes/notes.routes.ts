@@ -9,6 +9,7 @@
  */
 import { Router, type Response, type Request } from 'express';
 import { authenticate } from '../middleware/auth.js';
+import ghiNhanhRouter from './ghiNhanh.routes.js';
 import type { ApiResponse } from '../types/index.js';
 import {
   getTree,
@@ -40,6 +41,7 @@ import {
   updateLink,
   deleteLink,
   searchNotes,
+  searchPalette,
   listTags,
   listVocab,
   addVocab,
@@ -396,6 +398,56 @@ router.post('/ai/hoi', async (req: Request, res: Response<ApiResponse>, next) =>
   } catch (err) { next(err); }
 });
 
+/**
+ * "✨ Sắp xếp lại trang này" — AI dựng lại cả trang (mục, bảng, khối code, tóm
+ * tắt) mà KHÔNG thêm/bớt ý. Chỉ TRẢ VỀ bản đề xuất; không ghi gì vào DB. Người
+ * dùng xem so sánh rồi tự bấm Giữ, và lúc đó editor lưu qua đường lưu của nó.
+ *
+ * Trả bằng SSE chứ không phải JSON một cục: một trang dài chạy quá 100 giây,
+ * và proxy Cloudflare cắt mọi phản hồi chưa có byte nào sau 100 giây (524).
+ * Khung: {type:'progress',chars} … rồi {type:'done',data} hoặc
+ * {type:'error',error,code,status}.
+ */
+router.post('/ai/sap-xep', async (req: Request, res: Response) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+  res.flushHeaders?.();
+
+  const send = (obj: unknown): void => { if (!res.writableEnded) res.write(`data: ${JSON.stringify(obj)}\n\n`); };
+  const keepalive = setInterval(() => { if (!res.writableEnded) res.write(': ka\n\n'); }, 15_000);
+  req.on('close', () => clearInterval(keepalive));
+  let lanGuiCuoi = 0;
+
+  try {
+    const { sapXepTrangGhiChu } = await import('../services/noteFormat.service.js');
+    const data = await sapXepTrangGhiChu(req.userId!, req.body?.noteId, req.body?.doc, (chars) => {
+      const now = Date.now();
+      if (now - lanGuiCuoi < 400) return;
+      lanGuiCuoi = now;
+      send({ type: 'progress', chars });
+    });
+    send({ type: 'done', data });
+  } catch (e) {
+    const err = e as { message?: string; statusCode?: number; code?: string };
+    // Lỗi 5xx không có câu dành cho người đọc ⇒ nói chung chung + ghi log thật.
+    if (!err.statusCode || err.statusCode >= 500) {
+      const { logger } = await import('../utils/logger.js');
+      logger.error('[notes] sap-xep lỗi', { error: err.message, userId: req.userId });
+    }
+    send({
+      type: 'error',
+      error: err.statusCode && err.statusCode < 500 ? err.message : 'Máy chủ lỗi khi sắp xếp trang. Trang giữ nguyên — thử lại sau.',
+      code: err.code ?? null,
+      status: err.statusCode ?? 500,
+    });
+  } finally {
+    clearInterval(keepalive);
+    if (!res.writableEnded) res.end();
+  }
+});
+
 router.get('/search', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const results = await searchNotes(req.userId!, {
@@ -404,6 +456,14 @@ router.get('/search', async (req: Request, res: Response<ApiResponse>, next) => 
       tag: typeof req.query.tag === 'string' ? req.query.tag : undefined,
     });
     res.json({ success: true, data: results });
+  } catch (err) { next(err); }
+});
+
+/** Bảng lệnh ⌘K: trang (kèm Môn › Chương + đoạn trích) · môn · chương. */
+router.get('/search/palette', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await searchPalette(req.userId!, typeof req.query.q === 'string' ? req.query.q : '');
+    res.json({ success: true, data });
   } catch (err) { next(err); }
 });
 
@@ -474,5 +534,9 @@ router.post('/flashcards/reset', async (req: Request, res: Response<ApiResponse>
     res.json({ success: true, data: result });
   } catch (err) { next(err); }
 });
+
+// ─── Ghi nhanh · Sổ lệnh · Sổ tay khoá · Nhập .md ─────────────
+// Router riêng (src/routes/ghiNhanh.routes.ts), gắn dưới /notes/ghi-nhanh.
+router.use('/ghi-nhanh', ghiNhanhRouter);
 
 export default router;

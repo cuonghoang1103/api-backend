@@ -94,6 +94,13 @@ const LangReviewReminder = dynamic(
   { ssr: false }
 )
 
+// Ghi nhanh (Alt+Shift+N / sự kiện 'ghi-nhanh:mo') — chỉ bộ nghe phím nhỏ;
+// ô nổi thật được tải lười khi mở lần đầu. Khách thì không làm gì.
+const QuickCaptureHost = dynamic(
+  () => import('@/components/notes/QuickCaptureHost'),
+  { ssr: false }
+)
+
 const PWAInstallPrompt = dynamic(
   () => import('@/components/providers/PWAInstallPrompt'),
   { ssr: false }
@@ -395,6 +402,7 @@ export default function RootLayout({
               <FloatingAIAssistant />
               <ProExpiryReminder />
               <LangReviewReminder />
+              <QuickCaptureHost />
               <SoundInitializer />
               <PWAInstallPrompt />
               <PostCommentModal />

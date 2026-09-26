@@ -15,7 +15,10 @@ import { notesApi, noteShareApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull, NoteTab } from '@/types';
 import type { NoteSharedFull, NoteSharedSubjectFull } from '@/lib/api';
-import NotesSidebar from '@/components/notes/NotesSidebar';
+import NotesSidebar, { type SidebarReveal } from '@/components/notes/NotesSidebar';
+import NotesCommandPalette, { rememberOpenedNote } from '@/components/notes/NotesCommandPalette';
+import NotesHome from '@/components/notes/NotesHome';
+import NotesNewPageDialog from '@/components/notes/NotesNewPageDialog';
 import type { NoteSavePatch } from '@/components/notes/NoteEditor';
 import SharedNoteViewer from '@/components/notes/SharedNoteViewer';
 import NoteResourcePanel from '@/components/notes/NoteResourcePanel';
@@ -30,7 +33,6 @@ import NoteVersionHistory from '@/components/notes/NoteVersionHistory';
 import NoteCommentsPanel from '@/components/notes/NoteCommentsPanel';
 import NoteBacklinksPanel from '@/components/notes/NoteBacklinksPanel';
 import NoteAssistantPanel from '@/components/notes/NoteAssistantPanel';
-import NoteQuickOpen from '@/components/notes/NoteQuickOpen';
 import NoteBreadcrumb, { type BreadcrumbEntry } from '@/components/notes/NoteBreadcrumb';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
 import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
@@ -220,7 +222,14 @@ function NotesPageInner() {
   const [loading, setLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [resourceOpen, setResourceOpen] = useState(false);
+  /** Tìm nâng cao (lọc theo môn/thẻ) — hộp NotesSearch cũ, mở từ bảng lệnh. */
   const [searchOpen, setSearchOpen] = useState(false);
+  /** Bảng lệnh ⌘K — lối tìm chính. */
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  /** Hộp "Trang mới…" (trang chủ, bảng lệnh, trang môn). */
+  const [newPageFor, setNewPageFor] = useState<{ subjectId: number; chapterId: number | null } | null | undefined>(undefined);
+  /** Yêu cầu thanh bên bung + cuộn tới một môn/chương. */
+  const [reveal, setReveal] = useState<SidebarReveal | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [trashAction, setTrashAction] = useState<'restore' | 'delete' | null>(null);
@@ -383,6 +392,20 @@ function NotesPageInner() {
     refreshTree().finally(() => setLoading(false));
   }, [isAuthenticated, refreshTree]);
 
+  /* Ghi nhanh (component QuickCapture*, nằm ngoài trang này) lưu xong thì báo
+   * bằng sự kiện `ghi-nhanh:da-luu` — nạp lại cây để Hộp thư đếm đúng. */
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const onSaved = () => { void refreshTree().catch(() => {}); };
+    // QuickCapture phát `notes:tai-lai-cay`; giữ cả tên cũ cho chắc.
+    window.addEventListener('ghi-nhanh:da-luu', onSaved);
+    window.addEventListener('notes:tai-lai-cay', onSaved);
+    return () => {
+      window.removeEventListener('ghi-nhanh:da-luu', onSaved);
+      window.removeEventListener('notes:tai-lai-cay', onSaved);
+    };
+  }, [isAuthenticated, refreshTree]);
+
   // Phase 3d: when the user picks a filter pill, fetch the flat
   // list. Cached in state so toggling back to "tree" is instant.
   useEffect(() => {
@@ -430,6 +453,7 @@ function NotesPageInner() {
       // Open in tab
       const note = res.data.data;
       openTab('note', id, note.title);
+      rememberOpenedNote(id, note.title);
     } catch { /* note may have been deleted; ignore */ }
   }, [openTab]);
 
@@ -451,8 +475,11 @@ function NotesPageInner() {
       ? selectNote(noteId)
       : handleOpenSharedSubject(sharedSubjectId).then(() => handleOpenSharedNote(sharedSubjectId, sharedNoteId));
     void openTarget.then(() => {
-      setFocusCommentId(Number.isInteger(commentId) && commentId > 0 ? commentId : null);
-      setCommentsOpen(true);
+      // Chỉ bật panel bình luận khi link thật sự trỏ tới một bình luận —
+      // `?note=ID` trơn (vd từ "Đã lưu vào Hộp thư → Mở") chỉ mở trang.
+      const coComment = Number.isInteger(commentId) && commentId > 0;
+      setFocusCommentId(coComment ? commentId : null);
+      if (coComment) setCommentsOpen(true);
     }).catch(() => {
       // The note may have been deleted or the share revoked since the
       // notification was sent. Land on /notes instead of throwing an
@@ -487,61 +514,102 @@ function NotesPageInner() {
     try { const res = await notesApi.getSubject(subjectView.id); setSubjectView(res.data.data); } catch { /* ignore */ }
   }, [subjectView]);
 
-  // Cmd/Ctrl+K opens global search.
+  /*
+   * ⌘K / Ctrl+K — MỘT chỗ bắt duy nhất, mở bảng lệnh.
+   *
+   * Trước đây có HAI chỗ cùng bắt tổ hợp này (NoteQuickOpen ở pha capture và
+   * một listener ở đây mở NotesSearch) nên một cú bấm mở HAI hộp chồng lên
+   * nhau. Bắt ở pha CAPTURE vì TipTap nghe phím trên DOM của nó và nuốt mất.
+   */
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setSearchOpen(true); }
+      if ((e.metaKey || e.ctrlKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        e.stopPropagation();
+        setSearchOpen(false);
+        setPaletteOpen((v) => !v);
+      }
     };
-    window.addEventListener('keydown', h);
-    return () => window.removeEventListener('keydown', h);
+    window.addEventListener('keydown', h, true);
+    return () => window.removeEventListener('keydown', h, true);
   }, []);
 
   // ─── Mutations (refresh tree after structural changes) ─────
   /*
-   * TẠO XONG LÀ MỞ Ô ĐẶT TÊN NGAY.
+   * TẠO CÓ TÊN — không còn "Môn học mới" / "Chương mới" / "Ghi chú mới".
    *
-   * Trước đây tạo xong để nguyên tên mặc định, và người dùng phải tự đi tìm
-   * dòng mới rồi nhấp đúp. Bấm ba lần là ba dòng "Môn học mới" y hệt nhau —
-   * đúng thứ đang có trên màn hình của người dùng (6 môn + 3 chương trùng tên).
-   *
-   * `vuaTao` là khoá của mục vừa tạo; thanh bên mở ô đổi tên cho đúng hàng đó.
-   * Xoá khoá sau một nhịp: giữ mãi thì mở lại ô đặt tên mỗi lần cây vẽ lại.
+   * Bản cũ tạo ngay với tên mặc định rồi mới mở ô đổi tên; bấm hụt hay bấm hai
+   * lần là thêm một dòng trùng tên (người dùng có hai trang "Ghi chú mới" trong
+   * cùng một môn). Nay thanh bên hỏi tên TRƯỚC (kèm cảnh báo trùng), rồi mới gọi
+   * mấy hàm này. Lỗi thì báo và ném lại để ô đặt tên giữ nguyên chữ đã gõ.
    */
-  const [vuaTao, setVuaTao] = useState<string | null>(null);
-  useEffect(() => {
-    if (!vuaTao) return;
-    const t = setTimeout(() => setVuaTao(null), 1500);
-    return () => clearTimeout(t);
-  }, [vuaTao]);
+  const baoLoiTao = (e: unknown, hong: string) => {
+    const chiTiet = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+    toast.error(chiTiet ? `${hong}: ${chiTiet}` : hong);
+  };
 
-  /*
-   * ⚠️ ĐẶT `vuaTao` TRƯỚC `refreshTree()`, không phải sau.
-   *
-   * `refreshTree()` là thứ DỰNG RA hàng mới. Đặt cờ sau nó nghĩa là hàng đã
-   * mount xong với cờ `false`, và `Row` đọc cờ bằng `useState` — chỉ đọc một
-   * lần, lần đầu. Hôm nay React 18 gộp hai lần đặt state ấy làm một lượt dựng
-   * nên nó vẫn chạy — nhưng đó là chi tiết cài đặt, không phải hợp đồng. Đặt
-   * cờ trước thì thứ tự đúng không phụ thuộc vào việc React có gộp hay không.
-   * (`Row` cũng nghe cờ đổi, hai lớp cùng chắn.)
-   */
-  const addSubject = useCallback(async () => {
-    const res = await notesApi.createSubject({ name: 'Môn học mới', emoji: '📘' });
-    setVuaTao(`mon:${res.data.data.id}`);
-    await refreshTree();
+  const createSubject = useCallback(async (name: string) => {
+    try {
+      const res = await notesApi.createSubject({ name });
+      await refreshTree();
+      return res.data.data.id;
+    } catch (e) { baoLoiTao(e, 'Không tạo được môn'); throw e; }
   }, [refreshTree]);
 
-  const addChapter = useCallback(async (subjectId: number) => {
-    const res = await notesApi.createChapter({ subjectId, title: 'Chương mới' });
-    setVuaTao(`chuong:${res.data.data.id}`);
-    await refreshTree();
+  const createChapter = useCallback(async (subjectId: number, title: string) => {
+    try {
+      const res = await notesApi.createChapter({ subjectId, title });
+      await refreshTree();
+      return res.data.data.id;
+    } catch (e) { baoLoiTao(e, 'Không tạo được chương'); throw e; }
   }, [refreshTree]);
 
-  const addNote = useCallback(async (subjectId: number, chapterId: number | null) => {
-    const res = await notesApi.createNote({ subjectId, chapterId, title: 'Ghi chú mới' });
-    setVuaTao(`ghichu:${res.data.data.id}`);
-    await refreshTree();
-    setSelected(res.data.data);
-  }, [refreshTree]);
+  const createNote = useCallback(async (subjectId: number, chapterId: number | null, title: string) => {
+    try {
+      const res = await notesApi.createNote({ subjectId, chapterId, title });
+      await refreshTree();
+      void selectNote(res.data.data.id);
+      return res.data.data.id;
+    } catch (e) { baoLoiTao(e, 'Không tạo được trang'); throw e; }
+  }, [refreshTree, selectNote]);
+
+  /** Chuyển trang sang môn/chương khác (menu ⋯ › Di chuyển tới…, Hộp thư › Sắp xếp). */
+  const moveNote = useCallback(async (noteId: number, subjectId: number, chapterId: number | null) => {
+    try {
+      await notesApi.updateNote(noteId, { subjectId, chapterId });
+      const dest = tree.find((s) => s.id === subjectId);
+      const ch = chapterId ? dest?.chapters.find((c) => c.id === chapterId) : null;
+      toast.success(`Đã chuyển tới ${dest?.name ?? 'môn'}${ch ? ` › ${ch.title}` : ''}`);
+      setSelected((cur) => (cur && cur.id === noteId ? { ...cur, subjectId, chapterId } : cur));
+    } catch (e) {
+      baoLoiTao(e, 'Không chuyển được trang');
+    } finally {
+      await refreshTree();
+    }
+  }, [refreshTree, tree]);
+
+  /** Về trang chủ Sổ tay. */
+  const goHome = useCallback(() => {
+    setSelected(null);
+    setSubjectView(null);
+    setSharedSubject(null);
+    setSharedSelectedNote(null);
+    setActiveTabId(null);
+    setFilter('tree');
+    setDrawerOpen(false);
+  }, []);
+
+  const revealInTree = useCallback((subjectId: number, chapterId: number | null) => {
+    setReveal({ subjectId, chapterId, nonce: Date.now() });
+    setFilter('tree');
+    if (typeof window !== 'undefined' && !window.matchMedia('(min-width: 768px)').matches) setDrawerOpen(true);
+    else setSidebarGap(false);
+  }, []);
+
+  const openQuickCapture = useCallback(() => {
+    // Tính năng Ghi nhanh (component QuickCapture*) lắng nghe sự kiện này.
+    window.dispatchEvent(new CustomEvent('ghi-nhanh:mo'));
+  }, []);
 
  const renameSubject = useCallback(async (id: number, name: string) => { await notesApi.updateSubject(id, { name }); await refreshTree(); }, [refreshTree]);
  const renameChapter = useCallback(async (id: number, title: string) => { await notesApi.updateChapter(id, { title }); await refreshTree(); }, [refreshTree]);
@@ -641,7 +709,12 @@ function NotesPageInner() {
  // but no data is lost. We do NOT block the UI on the API; the
  // server endpoint is idempotent so a duplicate click is safe.
  const reorderSubjectsCb = useCallback(async (orderedIds: number[]) => {
- setTree((prev) => subjectOrderFromIds(prev, orderedIds));
+ // Môn KHÔNG có trong danh sách (vd. 📥 Hộp thư, vẽ ở khối riêng) phải được
+ // giữ lại ở cuối — `subjectOrderFromIds` chỉ trả về các id được đưa vào.
+ setTree((prev) => {
+   const ordered = subjectOrderFromIds(prev, orderedIds);
+   return [...ordered, ...prev.filter((s) => !orderedIds.includes(s.id))];
+ });
  try {
  await notesApi.reorderSubjects(orderedIds);
  } catch { await refreshTree(); }
@@ -818,13 +891,14 @@ function NotesPageInner() {
    }, []);
 
    const callbacks = {
-    /* Khoá mục vừa tạo — thanh bên mở ô đặt tên cho đúng hàng đó. */
-    vuaTao,
     onSelectNote: selectNote,
     onOpenSubject: openSubject,
-    onAddSubject: addSubject,
-    onAddChapter: addChapter,
-    onAddNote: addNote,
+    onGoHome: goHome,
+    onOpenSearch: () => setPaletteOpen(true),
+    onCreateSubject: createSubject,
+    onCreateChapter: createChapter,
+    onCreateNote: createNote,
+    onMoveNote: moveNote,
     onRenameSubject: renameSubject,
     onRenameChapter: renameChapter,
     onRenameNote: renameNote,
@@ -868,10 +942,10 @@ function NotesPageInner() {
       <div className="min-h-0 flex-1">
         <NotesSidebar
           tree={tree}
-          recent={recent}
           selectedNoteId={selected?.id ?? null}
           filter={filter}
           filteredNotes={filteredNotes}
+          reveal={reveal}
           {...callbacks}
         />
       </div>
@@ -882,9 +956,20 @@ function NotesPageInner() {
     <div className="notes-page h-[calc(100dvh-var(--app-chrome-bottom))] pt-16
       bg-[var(--notes-bg,#ffffff)] text-[var(--notes-text,#1e293b)]
       dark:bg-[#0c0f14] dark:text-slate-200">
-      {/* Mở nhanh Cmd/Ctrl+K. Đặt ở cấp trang chứ không trong editor: nó phải
-          mở được cả khi chưa chọn ghi chú nào, và đó chính là lúc cần nhất. */}
-      <NoteQuickOpen onOpen={(id) => { void selectNote(id); }} />
+      {/* Bảng lệnh ⌘K. Ở cấp trang chứ không trong editor: nó phải mở được cả
+          khi chưa chọn trang nào, và đó chính là lúc cần nhất. */}
+      <NotesCommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        tree={tree}
+        recent={recent}
+        onOpenNote={(id) => { void selectNote(id); }}
+        onOpenSubject={(id) => { void openSubject(id); revealInTree(id, null); }}
+        onRevealChapter={(subjectId, chapterId) => revealInTree(subjectId, chapterId)}
+        onQuickCapture={openQuickCapture}
+        onNewPage={() => setNewPageFor(null)}
+        onAdvancedSearch={() => setSearchOpen(true)}
+      />
       <div className="flex h-full">
         {/* Desktop sidebar — resizable (drag the right edge, Notion-style) */}
         {!sidebarGap && (
@@ -930,7 +1015,7 @@ function NotesPageInner() {
             <button onClick={() => setDrawerOpen(true)} className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05] md:hidden" aria-label="Mở danh sách">
               <Menu className="h-5 w-5" />
             </button>
-            <button onClick={() => setSearchOpen(true)} className="flex min-h-[36px] min-w-0 shrink items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-[13px] text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:border-white/[0.06] dark:hover:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/[0.05] dark:hover:text-slate-200">
+            <button onClick={() => setPaletteOpen(true)} className="flex min-h-[36px] min-w-0 shrink items-center gap-2 rounded-lg border border-slate-200 bg-black/[0.03] px-3 py-1.5 text-[13px] text-slate-500 hover:bg-black/[0.06] hover:text-slate-800 dark:border-white/[0.08] dark:bg-white/[0.03] dark:text-slate-400 dark:hover:bg-white/[0.05] dark:hover:text-slate-200">
               <Search className="h-4 w-4" /> <span className="hidden sm:inline">Tìm kiếm</span>
               <kbd className="ml-1 hidden rounded bg-slate-200 px-1.5 text-[10px] text-slate-500 dark:bg-white/[0.06] md:inline">⌘K</kbd>
             </button>
@@ -1213,7 +1298,7 @@ function NotesPageInner() {
               )}
             </div>
           ) : subjectView ? (
-            <SubjectView subject={subjectView} treeSubject={treeSubjectFor(subjectView.id)} onChanged={refreshSubject} onSelectNote={selectNote} onAddNote={addNote} />
+            <SubjectView subject={subjectView} treeSubject={treeSubjectFor(subjectView.id)} onChanged={refreshSubject} onSelectNote={selectNote} onAddNote={(subjectId, chapterId) => setNewPageFor({ subjectId, chapterId })} />
           ) : selected?.deletedAt ? (
             <DeletedNoteView
               note={selected}
@@ -1244,10 +1329,21 @@ function NotesPageInner() {
               />
             </>
           ) : (
-            <div className="flex h-[60vh] flex-col items-center justify-center px-6 text-center text-slate-500">
-              <NotebookPen className="mb-3 h-9 w-9 text-teal-400/50" />
-              <p className="text-sm">Chọn một ghi chú để bắt đầu,<br />hoặc tạo môn học mới từ thanh bên.</p>
-            </div>
+            <NotesHome
+              tree={tree}
+              recent={recent}
+              onSelectNote={(id) => { void selectNote(id); }}
+              onOpenSubject={(id) => { void openSubject(id); }}
+              onReveal={revealInTree}
+              onQuickCapture={openQuickCapture}
+              onNewPage={() => setNewPageFor(null)}
+              onSearch={() => setPaletteOpen(true)}
+              onPinSubject={togglePinSubject}
+              onPinChapter={togglePinChapter}
+              onPinNote={togglePinNote}
+              onMoveNote={moveNote}
+              onChangeFilter={(f) => { setFilter(f); if (typeof window !== 'undefined' && !window.matchMedia('(min-width: 768px)').matches) setDrawerOpen(true); else setSidebarGap(false); }}
+            />
           )}
         </main>
       </div>
@@ -1310,11 +1406,11 @@ function NotesPageInner() {
         <button
           type="button"
           onClick={() => setTroLyOpen(true)}
-          title="Hỏi trợ lý về ghi chú của bạn"
+          title="Hỏi về ghi chú của bạn"
           className="fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full bg-violet-600 px-4 py-3 text-sm font-medium text-white shadow-xl hover:bg-violet-500"
         >
           <Sparkles size={16} />
-          Hỏi trợ lý
+          Hỏi ghi chú
         </button>
       )}
       {troLyOpen && (
@@ -1381,7 +1477,22 @@ function NotesPageInner() {
         )}
       </AnimatePresence>
 
+  {/* Tìm nâng cao: lọc theo môn + thẻ. Mở từ bảng lệnh ⌘K › "Tìm nâng cao". */}
   <NotesSearch open={searchOpen} onClose={() => setSearchOpen(false)} subjects={tree} onJump={selectNote} />
+
+  {newPageFor !== undefined && (
+    <NotesNewPageDialog
+      tree={tree}
+      defaultTarget={newPageFor ?? (() => {
+        // Mặc định: nơi của trang đang mở; không thì Hộp thư/môn đầu tiên (hộp thoại tự chọn).
+        if (!selected) return null;
+        return { subjectId: selected.subjectId, chapterId: selected.chapterId ?? null };
+      })()}
+      onCreate={createNote}
+      onOpenExisting={(id) => { void selectNote(id); }}
+      onClose={() => setNewPageFor(undefined)}
+    />
+  )}
 
   {/* Share Modal (Phase 4) */}
   <NotesShareManagerModal
@@ -1408,10 +1519,10 @@ function NotesPageInner() {
    />
    <NotesSidebar
     tree={tree}
-    recent={recent}
     selectedNoteId={selected?.id ?? null}
     filter={filter}
     filteredNotes={filteredNotes}
+    reveal={reveal}
     onClose={() => setDrawerOpen(false)}
     {...callbacks}
    />

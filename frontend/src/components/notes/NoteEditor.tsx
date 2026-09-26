@@ -38,9 +38,9 @@ import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import Link from '@tiptap/extension-link';
-import { fileApi } from '@/lib/api';
+import { fileApi, notesApi } from '@/lib/api';
 import type { NoteFull, NoteSubjectTree } from '@/types';
-import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle, Undo2, Redo2, SlidersHorizontal, ChevronRight, Wifi, WifiOff, Bold, Italic, Strikethrough, Code as CodeIcon, Link2, Link2Off, Quote as QuoteIcon, List, ListOrdered, ListChecks, Heading1, Heading2, Heading3, Pilcrow } from 'lucide-react';
+import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle, Undo2, Redo2, SlidersHorizontal, ChevronRight, Wifi, WifiOff, Bold, Italic, Strikethrough, Code as CodeIcon, Link2, Link2Off, Quote as QuoteIcon, List, ListOrdered, ListChecks, Heading1, Heading2, Heading3, Pilcrow, Sparkles, History, X } from 'lucide-react';
 import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
 import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
@@ -56,6 +56,7 @@ import NoteSyncedBlock from '@/components/notes/extensions/NoteSyncedBlock';
 import SlashMenu, { type SlashMenuRef } from '@/components/notes/SlashMenu';
 import NoteTableOfContents from '@/components/notes/NoteTableOfContents';
 import NotePropertiesPanel from '@/components/notes/NotePropertiesPanel';
+import NoteFormatDiff from '@/components/notes/NoteFormatDiff';
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 
@@ -110,6 +111,14 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [propertiesOpen, setPropertiesOpen] = useState(false);
+  /** Màn so sánh "✨ Sắp xếp lại" đang mở. */
+  const [sapXepMo, setSapXepMo] = useState(false);
+  /**
+   * Bản trước khi áp "Sắp xếp lại" — để khôi phục trong phiên bằng một nút.
+   * `phienBan` là số phiên bản đã chụp vào Lịch sử (null = không chụp được,
+   * vd người sửa chung không phải chủ trang).
+   */
+  const [banTruocSapXep, setBanTruocSapXep] = useState<{ doc: Record<string, unknown>; phienBan: number | null } | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const slashRef = useRef<SlashMenuRef>(null);
@@ -469,6 +478,8 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       noteIdRef.current = note.id;
       setTitle(note.title);
       setSaveState('idle');
+      setSapXepMo(false);
+      setBanTruocSapXep(null);
       if (!collaboration) editor?.commands.setContent(note.contentJson ?? '', false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -502,6 +513,39 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
   }, [collaboration]);
 
   useEffect(() => () => { if (saveTimer.current) clearTimeout(saveTimer.current); }, []);
+
+  /**
+   * Áp bản "Sắp xếp lại" mà người dùng vừa bấm Giữ.
+   *
+   * Thứ tự có chủ đích:
+   *  1. Chủ trang: xả lượt autosave đang chờ rồi chụp một phiên bản vào Lịch sử
+   *     — chụp TRƯỚC khi ghi, để bản cũ nằm trên máy chủ chứ không chỉ trong tab.
+   *     Không chụp được (người sửa chung, mạng lỗi) thì vẫn áp: bản cũ còn trong
+   *     phiên (nút "Khôi phục bản cũ") và trong Ctrl+Z.
+   *  2. Ghi bằng `setContent(…, true)` — đúng đường lưu của editor: ở chế độ
+   *     thường nó bắn onUpdate ⇒ autosave REST; ở chế độ cộng tác nó đi qua
+   *     Y.Doc ⇒ Hocuspocus lưu và đồng bộ cho người khác. KHÔNG PATCH thẳng
+   *     `contentJson` lên REST: Y.Doc đang mở sẽ ghi đè ngược lại ngay.
+   *  3. Là MỘT transaction ⇒ một bước Ctrl+Z.
+   */
+  const apDungSapXep = useCallback(async (docMoi: Record<string, unknown>, docCu: Record<string, unknown>) => {
+    if (!editor) return;
+    let phienBan: number | null = null;
+    if (ownerControls) {
+      try {
+        if (!collaboration) {
+          if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
+          await onSave({ contentJson: docCu, contentHtml: editor.getHTML() });
+        }
+        const snap = await notesApi.createVersion(note.id);
+        phienBan = snap.data.data.version ?? null;
+      } catch {
+        // Không chặn việc áp: bản cũ vẫn còn trong phiên — banner báo rõ điều đó.
+      }
+    }
+    editor.chain().setContent(docMoi, true).run();
+    setBanTruocSapXep({ doc: docCu, phienBan });
+  }, [editor, ownerControls, collaboration, onSave, note.id]);
 
   const currentSubject = tree.find((item) => item.id === note.subjectId) ?? null;
   const currentChapter = currentSubject?.chapters.find((item) => item.id === note.chapterId) ?? null;
@@ -555,6 +599,16 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
               )}
             </div>
           )}
+          <button
+            type="button"
+            onClick={() => setSapXepMo(true)}
+            disabled={!editor || !editor.isEditable || sapXepMo}
+            title="AI sắp xếp lại cả trang: sửa chính tả, chia mục, bảng, khối code — xem trước rồi mới quyết định"
+            className="mr-1 flex items-center gap-1 rounded px-2 py-1 font-medium text-violet-700 hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-30 dark:text-violet-300 dark:hover:bg-violet-500/10 transition-colors"
+          >
+            <Sparkles className="h-3.5 w-3.5" aria-hidden />
+            <span>Sắp xếp lại</span>
+          </button>
           <button
             type="button"
             onClick={() => editor?.chain().focus().undo().run()}
@@ -667,6 +721,41 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       )}
 
       <div className="my-4 h-px w-full bg-slate-100 dark:bg-white/[0.06]" />
+
+      {banTruocSapXep && (
+        <div className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-violet-300/60 bg-violet-50 px-3 py-2 text-[12px] text-violet-900 dark:border-violet-500/25 dark:bg-violet-500/10 dark:text-violet-100" role="status">
+          <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden />
+          <span className="flex-1">
+            Đã sắp xếp lại trang.{' '}
+            {banTruocSapXep.phienBan != null
+              ? <>Bản cũ đã lưu vào Lịch sử phiên bản (<History className="inline h-3 w-3" aria-hidden /> #{banTruocSapXep.phienBan}).</>
+              : 'Bản cũ còn giữ trong phiên này — đóng tab là mất, khôi phục ngay nếu cần.'}
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              editor?.chain().setContent(banTruocSapXep.doc, true).run();
+              setBanTruocSapXep(null);
+            }}
+            className="rounded-md border border-violet-400/60 px-2 py-1 font-medium hover:bg-violet-100 dark:hover:bg-violet-500/20"
+          >
+            Khôi phục bản cũ
+          </button>
+          <button type="button" onClick={() => setBanTruocSapXep(null)} aria-label="Ẩn thông báo" className="rounded p-1 hover:bg-violet-100 dark:hover:bg-violet-500/20">
+            <X className="h-3 w-3" />
+          </button>
+        </div>
+      )}
+
+      {sapXepMo && editor && (
+        <NoteFormatDiff
+          editor={editor}
+          noteId={note.id}
+          subjectId={note.subjectId ?? null}
+          onGiu={apDungSapXep}
+          onDong={() => setSapXepMo(false)}
+        />
+      )}
 
       {/* Auto-generated table of contents (only renders when headings exist). */}
       <NoteTableOfContents editor={editor} />

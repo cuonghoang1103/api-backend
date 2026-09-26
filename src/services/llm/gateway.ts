@@ -322,7 +322,8 @@ export type LlmPurpose =
   | 'academy_advisor'     // Phòng tư vấn chọn ngành hẹp ở /academy — chat tương tác, neo vào dữ liệu curated
   | 'finance_advisor'     // MoneyFlow — đọc số liệu tiền nong của CHÍNH người dùng rồi khuyên
   | 'work_assistant'      // CT Work — trợ lý trong dự án: viết story, tách việc, sinh test, trả lời về dự án
-  | 'work_digest';        // CT Work — diễn đạt lại số liệu mã đã tính (báo cáo tuần, bản tin)
+  | 'work_digest'         // CT Work — diễn đạt lại số liệu mã đã tính (báo cáo tuần, bản tin)
+  | 'note_format';        // Notes — "✨ Sắp xếp lại trang": sửa chính tả + dựng mục/bảng/khối code, KHÔNG thêm ý
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -424,6 +425,22 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    */
   work_assistant: 'claude-sonnet-5',
   work_digest: 'gpt-5.4-mini',
+
+  /**
+   * Notes — "✨ Sắp xếp lại trang này" (26/09/2026). `claude-sonnet-4-6`.
+   *
+   * Việc này là BIẾN ĐỔI TRUNG THÀNH cả một trang: sửa dấu tiếng Việt, dựng
+   * mục/bảng/khối code, và tuyệt đối không thêm ý. Không cần suy luận sâu ⇒
+   * không cần opus. Nhưng đầu ra DÀI (bằng cả trang) ⇒ giá mỗi token ra quyết
+   * định, và model GPT tính thêm ~21% token suy luận không thấy (xem CLAUDE.md).
+   * `gpt-5.4-mini` rẻ hơn nhưng KHÔNG còn trong danh sách nhóm GPT đo 14/09, và
+   * bù dấu tiếng Việt là chỗ model nhỏ hay trượt. sonnet-4-6 là model Claude rẻ
+   * nhất đo được (0,597/lượt) và nhận cả hai cổng.
+   *
+   * Lưu ý: đi đường RAMBO thì `modelFor()` bỏ qua bảng này (mặc định opus-4-8).
+   * Trang dài mà thấy chậm thì ghim: `LLM_MODEL_NOTE_FORMAT=claude-sonnet-5`.
+   */
+  note_format: 'claude-sonnet-4-6',
 
   cv_critique: 'gpt-5.6-sol',
   cv_writing: 'gpt-5.6-sol',

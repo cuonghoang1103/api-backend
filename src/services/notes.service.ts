@@ -64,6 +64,8 @@ export async function getTree(userId: number) {
     select: {
       id: true, name: true, color: true, emoji: true, description: true,
       sortOrder: true, isPinned: true,
+      // Thanh bên nhận ra "📥 Hộp thư" bằng clientId === 'he-thong:hop-thu'.
+      clientId: true,
       chapters: {
         orderBy: [{ isPinned: 'desc' }, { sortOrder: 'asc' }, { createdAt: 'asc' }],
         select: {
@@ -1101,6 +1103,161 @@ export async function searchNotes(
       snippet: q ? snippet(text, q) : text.slice(0, 120),
     };
   });
+}
+
+// ─── Bảng lệnh ⌘K (command palette) ─────────────────────────────
+//
+// Khác `searchNotes` ở chỗ trả về CẢ BA loại (trang · môn · chương) và kèm
+// đường dẫn Môn › Chương cho từng trang, để người dùng thấy trang nằm ở đâu
+// trước khi mở. `searchNotes` giữ nguyên hình dạng vì trợ lý AI
+// (`agent/serverTools.ts`) còn dùng nó.
+//
+// ⚠️ BỎ DẤU: Postgres chỉ làm được với extension `unaccent`. Đo 26/09/2026 trên
+// DB máy nhà: `unaccent` CÓ trong `pg_available_extensions` nhưng CHƯA được cài
+// (chỉ có plpgsql, pg_trgm, vector), và cài nó cần một migration + quyền
+// superuser. Production chưa kiểm được. Nên:
+//   · tên trang / môn / chương → khớp bỏ dấu trong JS (`foldVi`), đủ rẻ vì
+//     chỉ đọc tên, không đọc thân bài;
+//   · NỘI DUNG trang → Prisma `contains` + `mode: 'insensitive'` (không phân
+//     biệt hoa thường nhưng CÓ phân biệt dấu). Gõ "ham" tìm được trang TÊN
+//     "Hàm", nhưng chỉ tìm được chữ "hàm" trong thân bài khi gõ đủ dấu.
+
+/** Hạ chữ thường + bỏ dấu, GIỮ NGUYÊN ĐỘ DÀI (mỗi ký tự ra đúng một ký tự)
+ *  để vị trí khớp trên chuỗi đã gập dùng lại được cho chuỗi gốc. */
+export function foldVi(input: string): string {
+  let out = '';
+  for (const ch of input) {
+    const lower = ch.toLowerCase();
+    if (lower === 'đ') { out += 'd'; continue; }
+    const base = lower.normalize('NFD').replace(/[̀-ͯ]/g, '');
+    // Ký tự ngoài bảng (emoji ghép…) có thể dài hơn 1 — giữ độ dài bằng cách
+    // lấy đúng số đơn vị UTF-16 của ký tự gốc.
+    out += base.length === ch.length ? base : lower.length === ch.length ? lower : ch;
+  }
+  return out;
+}
+
+function snippetFolded(text: string, q: string, radius = 70): string {
+  if (!text) return '';
+  const i = foldVi(text).indexOf(foldVi(q));
+  if (i < 0) return text.slice(0, radius * 2);
+  const start = Math.max(0, i - radius);
+  const end = i + q.length + radius;
+  return (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+}
+
+const PALETTE_NOTE_LIMIT = 20;
+const PALETTE_SUBJECT_LIMIT = 6;
+const PALETTE_CHAPTER_LIMIT = 8;
+/** Trần số tên trang đọc lên để khớp bỏ dấu. Tên ngắn — 3.000 dòng chỉ vài trăm KB. */
+const PALETTE_TITLE_SCAN = 3000;
+
+export interface PaletteNoteHit {
+  id: number; title: string;
+  subjectId: number; subjectName: string; subjectEmoji: string | null;
+  chapterId: number | null; chapterTitle: string | null;
+  snippet: string; matchIn: 'title' | 'content'; updatedAt: Date;
+}
+
+export async function searchPalette(userId: number, rawQ: unknown) {
+  const q = String(rawQ ?? '').trim().slice(0, 100);
+  if (!q) return { notes: [] as PaletteNoteHit[], subjects: [], chapters: [] };
+  const fq = foldVi(q);
+
+  const [subjects, chapters] = await Promise.all([
+    prisma.noteSubject.findMany({
+      where: { userId },
+      select: { id: true, name: true, emoji: true, color: true, clientId: true },
+    }),
+    prisma.noteChapter.findMany({
+      where: { userId },
+      select: { id: true, title: true, subjectId: true },
+    }),
+  ]);
+  const subjectById = new Map(subjects.map((s) => [s.id, s]));
+  const chapterById = new Map(chapters.map((c) => [c.id, c]));
+
+  // Xếp hạng tên: bắt đầu bằng từ khoá > có từ khoá ở đầu một từ > chứa ở giữa.
+  const rankName = (name: string): number => {
+    const f = foldVi(name);
+    const i = f.indexOf(fq);
+    if (i < 0) return -1;
+    if (i === 0) return 3;
+    return /\s/.test(f[i - 1] ?? '') ? 2 : 1;
+  };
+
+  const subjectHits = subjects
+    .map((s) => ({ s, r: rankName(s.name) }))
+    .filter((x) => x.r > 0)
+    .sort((a, b) => b.r - a.r)
+    .slice(0, PALETTE_SUBJECT_LIMIT)
+    .map(({ s }) => ({ id: s.id, name: s.name, emoji: s.emoji, color: s.color, clientId: s.clientId }));
+
+  const chapterHits = chapters
+    .map((c) => ({ c, r: rankName(c.title) }))
+    .filter((x) => x.r > 0)
+    .sort((a, b) => b.r - a.r)
+    .slice(0, PALETTE_CHAPTER_LIMIT)
+    .map(({ c }) => {
+      const s = subjectById.get(c.subjectId);
+      return { id: c.id, title: c.title, subjectId: c.subjectId, subjectName: s?.name ?? '', subjectEmoji: s?.emoji ?? null };
+    });
+
+  const baseWhere: Prisma.NoteWhereInput = { userId, deletedAt: null, isArchived: false };
+
+  // (1) Tên trang — khớp bỏ dấu trong JS.
+  const titleRows = await prisma.note.findMany({
+    where: baseWhere,
+    orderBy: { updatedAt: 'desc' },
+    take: PALETTE_TITLE_SCAN,
+    select: { id: true, title: true, subjectId: true, chapterId: true, updatedAt: true },
+  });
+  const titleHits = titleRows
+    .map((n) => ({ n, r: rankName(n.title) }))
+    .filter((x) => x.r > 0)
+    .sort((a, b) => b.r - a.r || b.n.updatedAt.getTime() - a.n.updatedAt.getTime())
+    .slice(0, PALETTE_NOTE_LIMIT);
+  const seen = new Set(titleHits.map((x) => x.n.id));
+
+  // (2) Nội dung — Prisma, tham số hoá, không phân biệt hoa thường.
+  const contentRows = titleHits.length >= PALETTE_NOTE_LIMIT ? [] : await prisma.note.findMany({
+    where: { AND: [baseWhere, { contentHtml: { contains: q, mode: 'insensitive' } }, { id: { notIn: [...seen] } }] },
+    orderBy: { updatedAt: 'desc' },
+    take: PALETTE_NOTE_LIMIT - titleHits.length,
+    select: { id: true, title: true, subjectId: true, chapterId: true, updatedAt: true, contentHtml: true },
+  });
+
+  // Đoạn trích cho các trang khớp TÊN: cần thân bài, đọc riêng đúng các id đó.
+  const titleIds = titleHits.map((x) => x.n.id);
+  const bodies = titleIds.length === 0 ? [] : await prisma.note.findMany({
+    where: { userId, id: { in: titleIds } },
+    select: { id: true, contentHtml: true },
+  });
+  const bodyById = new Map(bodies.map((b) => [b.id, b.contentHtml]));
+
+  const toHit = (
+    n: { id: number; title: string; subjectId: number; chapterId: number | null; updatedAt: Date },
+    html: string | null,
+    matchIn: 'title' | 'content',
+  ): PaletteNoteHit => {
+    const s = subjectById.get(n.subjectId);
+    const c = n.chapterId ? chapterById.get(n.chapterId) : undefined;
+    const text = htmlToText(html);
+    return {
+      id: n.id, title: n.title,
+      subjectId: n.subjectId, subjectName: s?.name ?? '', subjectEmoji: s?.emoji ?? null,
+      chapterId: n.chapterId, chapterTitle: c?.title ?? null,
+      snippet: matchIn === 'content' ? snippetFolded(text, q) : snippetFolded(text, q).slice(0, 160),
+      matchIn, updatedAt: n.updatedAt,
+    };
+  };
+
+  const notes = [
+    ...titleHits.map(({ n }) => toHit(n, bodyById.get(n.id) ?? null, 'title')),
+    ...contentRows.map((n) => toHit(n, n.contentHtml, 'content')),
+  ];
+
+  return { notes, subjects: subjectHits, chapters: chapterHits };
 }
 
 /** Distinct tags across the user's notes (for the search tag filter). */

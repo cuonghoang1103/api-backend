@@ -15,6 +15,7 @@
  */
 import { BadRequestError } from '../middleware/errorHandler.js';
 import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
+import { markdownThanhNut, type PmNode } from './noteFormat.service.js';
 
 /** Trần chữ gửi đi mỗi lượt. Bôi cả một ghi chú dài rồi bấm là hết hạn mức. */
 const MAX_INPUT_CHARS = 6000;
@@ -74,6 +75,14 @@ export const AI_ACTIONS: Record<string, ActionSpec> = {
     system: `Bạn chuyển văn bản thành một bảng Markdown. Chỉ trả về bảng. ${VIETNAMESE_RULE}`,
     build: (t) => `Chuyển đoạn sau thành bảng Markdown:\n\n${t}`,
   },
+  command_sheet: {
+    label: 'Chuyển thành Sổ lệnh',
+    // "Không bịa" nói thẳng vì đây là chỗ model thích "bổ sung cho đủ bộ": thấy
+    // `git add` là tiện tay thêm `git commit`, và người học chép nhầm lệnh chưa
+    // từng ghi.
+    system: `Bạn gom mọi lệnh terminal / câu lệnh / hàm có trong đoạn văn thành MỘT bảng Markdown 3 cột: "Lệnh | Nghĩa | Ví dụ". Cột Lệnh để trong \`code\` và giữ NGUYÊN từng ký tự như trong đoạn. Cột Nghĩa lấy từ lời giải thích trong đoạn (viết gọn, sửa chính tả); đoạn không giải thích thì ghi "—". Cột Ví dụ chỉ điền khi đoạn có ví dụ dùng lệnh đó, không thì ghi "—". KHÔNG thêm lệnh nào không có trong đoạn. Chỉ trả về bảng. ${VIETNAMESE_RULE}`,
+    build: (t) => `Chuyển các lệnh trong đoạn sau thành sổ lệnh (bảng Lệnh | Nghĩa | Ví dụ):\n\n${t}`,
+  },
   translate_en: {
     label: 'Dịch sang tiếng Anh',
     system: 'Bạn dịch sang tiếng Anh tự nhiên. Chỉ trả về bản dịch, không thêm lời dẫn hay giải thích.',
@@ -93,6 +102,15 @@ export function listAiActions() {
 export interface AiAssistResult {
   text: string;
   action: string;
+  /**
+   * `text` đã dựng sẵn thành nút TipTap (bảng, checklist, khối code…).
+   *
+   * Trước đây editor chèn thẳng `text` bằng `insertContentAt(chuỗi)` — TipTap
+   * đọc chuỗi như HTML, nên Markdown của "Tạo bảng"/"Chuyển thành checklist"
+   * rơi vào trang thành một đoạn đầy dấu `|` và `- [ ]`, không phải bảng hay
+   * checklist. Dựng ở đây bằng cùng bộ chuyển với "Sắp xếp lại trang".
+   */
+  nodes: PmNode[];
 }
 
 export async function runAiAssist(
@@ -139,5 +157,7 @@ export async function runAiAssist(
    * Dặn trong system prompt là chưa đủ — model bọc mã theo phản xạ, và một
    * đoạn văn bị bọc trong ``` sẽ được chèn vào ghi chú thành khối mã. */
   const fenced = /^```[a-z]*\n([\s\S]*?)\n?```$/i.exec(out);
-  return { text: fenced?.[1]?.trim() ?? out, action: key };
+  const ketQua = fenced?.[1]?.trim() ?? out;
+  // Chỉ giữ liên kết có trong đoạn gốc — liên kết AI tự nghĩ ra thành chữ thường.
+  return { text: ketQua, action: key, nodes: markdownThanhNut(ketQua, (href) => text.includes(href)) };
 }

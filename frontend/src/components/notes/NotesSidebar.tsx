@@ -1,393 +1,837 @@
 'use client';
 
-// NotesSidebar — collapsible tree: Subjects → Chapters → Notes.
-// Presentational + callback-driven; the page owns the data and
-// mutations. Supports add / inline-rename (double-click) / delete /
-// select / drag-reorder. Drag only within the same scope (subjects
-// among subjects, chapters within a subject, notes within their
-// subject-or-chapter parent) — moving a note across chapters is out
-// of scope for Phase 2.5 to keep the contract small + idempotent.
-//
-// Calm-study styling: subject color dot for scanning, restrained
-// teal accent for the active note, generous tap targets on mobile.
-
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+/**
+ * NotesSidebar — cây Môn › Chương › Trang của Sổ tay (bản 26/09/2026).
+ *
+ * Người dùng gửi ảnh và kể năm điều, bản này sửa đúng năm điều đó:
+ *
+ *  1. "Vào trang là mọi môn bung hết" ⇒ mặc định MỌI MÔN GẬP. Chỉ tự mở môn
+ *     (và chương) chứa trang đang mở. Môn nào người dùng tự mở thì nhớ trong
+ *     localStorage (khoá MỚI `notes-tree-open-v2` — khoá cũ `notes-expanded`
+ *     mang ngữ nghĩa "không ghi gì = đang mở", đọc lại nó là bung hết như cũ).
+ *  2. "Icon môn/chương/trang na ná nhau" ⇒ ba bậc khác nhau ở icon (ô emoji có
+ *     màu riêng của môn · 📂 · 📄), cỡ chữ, độ đậm, và có đường dẫn dọc mảnh.
+ *  3. "Nút tạo/sửa giống nhau nên lỡ tạo trùng" ⇒ MỘT nút "+ Mới" (menu Trang /
+ *     Chương / Môn theo ngữ cảnh), tạo qua ô đặt tên (chưa có tên thì chưa có
+ *     gì trong DB), cảnh báo trùng tên anh em. Sửa/xoá/ghim/đổi tên/di chuyển
+ *     nằm trong menu ⋯ riêng của mỗi dòng.
+ *  4. "Ở Đã ghim không bỏ ghim được" ⇒ mỗi dòng ghim có nút bỏ ghim + menu ⋯.
+ *     Mục ghim là LỐI TẮT, môn được ghim vẫn nằm trong cây như mọi môn khác
+ *     (bản cũ rút nó ra khỏi cây nên muốn sửa phải đi tìm).
+ *  5. Tìm kiếm ⇒ ô "Lọc cây" ngay trên cây (bỏ dấu, tô đậm, tự bung), còn tìm
+ *     trong NỘI DUNG thì là bảng lệnh ⌘K (`NotesCommandPalette`).
+ *
+ * "📥 Hộp thư" là một NoteSubject bình thường, nhận diện bằng clientId
+ * `he-thong:hop-thu` (tính năng Ghi nhanh tạo nó). Ở đây nó được tách ra một
+ * khối riêng, không trộn vào danh sách môn.
+ *
+ * Kéo-thả sắp xếp: kéo cả dòng (chuột: rê ≥ 6px; cảm ứng: giữ 250ms), trong
+ * cùng một phạm vi như trước (môn giữa các môn, chương trong môn, trang trong
+ * cha của nó). Chuyển trang sang môn/chương khác: menu ⋯ › "Di chuyển tới…".
+ */
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
- ChevronRight, Plus, Trash2, FileText, FolderPlus, BookOpen, Pin, Clock, X, PanelRight, GripVertical,
- Star, Archive, AlertCircle, FolderTree, Share2, PinOff, Smile, Pencil,
+  ChevronRight, ChevronDown, Plus, Trash2, FileText, FolderPlus, Pin, X, PanelRight,
+  Star, Archive, AlertCircle, FolderTree, Share2, PinOff, Smile, Pencil, MoreHorizontal,
+  Search, ListFilter, Home, FilePlus2, Library, FolderInput, ExternalLink,
 } from 'lucide-react';
 import {
- DndContext, DragOverlay,
- PointerSensor, KeyboardSensor,
- useSensor, useSensors,
- closestCenter,
- type DragEndEvent, type DragStartEvent,
+  DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors, closestCenter,
+  type DragEndEvent,
 } from '@dnd-kit/core';
-import {
- SortableContext, useSortable, verticalListSortingStrategy,
- sortableKeyboardCoordinates, arrayMove,
-} from '@dnd-kit/sortable';
+import { SortableContext, useSortable, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import type { NoteSubjectTree, NoteRecent, NoteSummary } from '@/types';
-
-export interface SidebarCallbacks {
- onSelectNote: (id: number) => void;
- onOpenSubject: (id: number) => void;
- /**
-  * Khoá của mục VỪA ĐƯỢC TẠO (`mon:12` / `chuong:34` / `ghichu:56`).
-  *
-  * Hàng khớp khoá này mở ô đặt tên NGAY. Không có nó thì mỗi lần bấm "+" đẻ ra
-  * một "Môn học mới" nữa và người dùng phải tự đi tìm rồi nhấp đúp — bấm ba
-  * lần là ba dòng trùng tên không phân biệt nổi.
-  */
- vuaTao?: string | null;
- onAddSubject: () => void;
- onAddChapter: (subjectId: number) => void;
- onAddNote: (subjectId: number, chapterId: number | null) => void;
- onRenameSubject: (id: number, name: string) => void;
- onRenameChapter: (id: number, title: string) => void;
- onRenameNote: (id: number, title: string) => void;
- onDeleteSubject: (id: number) => void;
- onDeleteChapter: (id: number) => void;
- onDeleteNote: (id: number) => void;
- // Phase 4 — share callbacks
- onShareSubject: (subject: NoteSubjectTree) => void;
- // Phase 5 — pin callbacks
- onPinSubject: (id: number, pinned: boolean) => void;
- onPinChapter: (id: number, pinned: boolean) => void;
- onPinNote: (id: number, pinned: boolean) => void;
- // Phase 5 — icon callbacks
- onChangeSubjectIcon: (id: number, emoji: string) => void;
-  // Phase 2.5 — drag-reorder callbacks. Each is given the full
-  // ordered list of ids in the scope that was reordered. The page
-  // forwards to the API and refreshes the tree. We keep the callback
-  // shape small (just an id list) so the component does not need to
-  // know about the API envelope.
-  onReorderSubjects: (orderedIds: number[]) => void;
-  onReorderChapters: (subjectId: number, orderedIds: number[]) => void;
-  /** Reorder notes in a single scope (subject-root or chapter). */
-  onReorderNotes: (orderedIds: number[]) => void;
-  // Phase 3d — filter pill switcher. `'tree'` is the default
-  // hierarchical view; the others flatten their matches.
-  onChangeFilter: (filter: 'tree' | 'favorites' | 'archive' | 'needs-review' | 'trash') => void;
-}
+import type { NoteSubjectTree, NoteChapterTree, NoteSummary } from '@/types';
+import { NotesMenu, type MenuEntry } from './NotesMenu';
+import NotesNameInput from './NotesNameInput';
+import NoteMovePicker from './NoteMovePicker';
+import { foldIncludes, Highlight, isInboxSubject, subjectName } from './notesText';
 
 export type NoteSidebarFilter = 'tree' | 'favorites' | 'archive' | 'needs-review' | 'trash';
 
+export interface SidebarCallbacks {
+  onSelectNote: (id: number) => void;
+  onOpenSubject: (id: number) => void;
+  /** Về trang chủ Sổ tay (bỏ chọn trang). */
+  onGoHome?: () => void;
+  /** Mở bảng lệnh ⌘K. */
+  onOpenSearch?: () => void;
+  /** Tạo có TÊN — không còn "Ghi chú mới"/"Môn học mới" mặc định. Trả về id mới. */
+  onCreateSubject: (name: string) => Promise<number | void>;
+  onCreateChapter: (subjectId: number, title: string) => Promise<number | void>;
+  onCreateNote: (subjectId: number, chapterId: number | null, title: string) => Promise<number | void>;
+  onMoveNote: (noteId: number, subjectId: number, chapterId: number | null) => Promise<void> | void;
+  onRenameSubject: (id: number, name: string) => void;
+  onRenameChapter: (id: number, title: string) => void;
+  onRenameNote: (id: number, title: string) => void;
+  onDeleteSubject: (id: number) => void;
+  onDeleteChapter: (id: number) => void;
+  onDeleteNote: (id: number) => void;
+  onShareSubject: (subject: NoteSubjectTree) => void;
+  onPinSubject: (id: number, pinned: boolean) => void;
+  onPinChapter: (id: number, pinned: boolean) => void;
+  onPinNote: (id: number, pinned: boolean) => void;
+  onChangeSubjectIcon: (id: number, emoji: string) => void;
+  onReorderSubjects: (orderedIds: number[]) => void;
+  onReorderChapters: (subjectId: number, orderedIds: number[]) => void;
+  onReorderNotes: (orderedIds: number[]) => void;
+  onChangeFilter: (filter: NoteSidebarFilter) => void;
+}
+
+/** Yêu cầu bung + cuộn tới một môn/chương (từ ⌘K, trang chủ). `nonce` đổi mỗi lần. */
+export interface SidebarReveal { subjectId: number; chapterId?: number | null; nonce: number }
+
 interface Props extends SidebarCallbacks {
   tree: NoteSubjectTree[];
-  recent: NoteRecent[];
   selectedNoteId: number | null;
-  /** Active filter pill. `'tree'` = hierarchical Subjects/Chapters/Notes. */
   filter: NoteSidebarFilter;
-  /** Flat list when `filter !== 'tree'`. Empty when filter is 'tree'. */
   filteredNotes: NoteSummary[];
-  /** When provided (mobile drawer), renders a close button in the header. */
   onClose?: () => void;
+  reveal?: SidebarReveal | null;
 }
 
-const SPRING = { type: 'spring' as const, stiffness: 380, damping: 32 };
+type CreateKind = { kind: 'note'; subjectId: number; chapterId: number | null }
+  | { kind: 'chapter'; subjectId: number }
+  | { kind: 'subject' };
 
-// ─── Reduced-motion helper ──────────────────────────────────────
-// Single source of truth for "should we animate?" Used by the
-// dnd-kit transition AND the framer-motion expand/collapse so both
-// honor the user's OS-level preference in one place.
-function usePrefersReducedMotion(): boolean {
- const [reduced, setReduced] = useState(false);
- useEffect(() => {
- if (typeof window === 'undefined' || !window.matchMedia) return;
- const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
- const onChange = () => setReduced(mq.matches);
- onChange();
- mq.addEventListener('change', onChange);
- return () => mq.removeEventListener('change', onChange);
- }, []);
- return reduced;
+const OPEN_KEY = 'notes-tree-open-v2';
+const PINNED_OPEN_KEY = 'notes-pinned-open';
+const sKey = (id: number) => `s:${id}`;
+const cKey = (id: number) => `c:${id}`;
+const UNTITLED = 'Không có tiêu đề';
+
+// ─── Kích thước — một chỗ để cả cây thẳng hàng ─────────────────
+const BASE_PAD = 6;
+const STEP = 16;
+const padFor = (depth: number) => BASE_PAD + depth * STEP;
+
+function useTreeSensors() {
+  return useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 8 } }),
+  );
 }
 
-// ─── Drag activation ─────────────────────────────────────────────
-// 200ms delay on touch so vertical scrolling and tap-to-select keep
-// working on phones. 5px tolerance so a slight finger jitter does
-// not start a drag. Keyboard sensor is enabled for accessibility
-// (Tab to row, Space to pick up, arrows to move, Space to drop).
-function makeSensors(reduced: boolean) {
- return useSensors(
- useSensor(PointerSensor, {
- activationConstraint: reduced
- ? { distance: 4 }
- : { delay: 200, tolerance: 5 },
- }),
- useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
- );
+function countNotes(s: NoteSubjectTree): number {
+  return s.notes.length + s.chapters.reduce((n, c) => n + c.notes.length, 0);
 }
 
-export default function NotesSidebar({ tree, recent, selectedNoteId, filter, filteredNotes, onClose, ...cb }: Props) {
-  // Persist which subjects/chapters are open/closed so the tree keeps its
-  // shape when the user leaves /notes and comes back (it used to reset to
-  // all-open on every remount).
-  const [expanded, setExpanded] = useState<Record<number, boolean>>(() => {
-    if (typeof window === 'undefined') return {};
-    try { return JSON.parse(window.localStorage.getItem('notes-expanded') || '{}'); } catch { return {}; }
-  });
+export default function NotesSidebar({
+  tree, selectedNoteId, filter, filteredNotes, onClose, reveal, ...cb
+}: Props) {
+  const sensors = useTreeSensors();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // ─── Trạng thái mở/gập — mặc định GẬP ────────────────────────
+  const [openKeys, setOpenKeys] = useState<Record<string, boolean>>({});
+  const loadedRef = useRef(false);
   useEffect(() => {
-    try { window.localStorage.setItem('notes-expanded', JSON.stringify(expanded)); } catch { /* ignore */ }
-  }, [expanded]);
-  const toggle = (id: number) => setExpanded((e) => ({ ...e, [id]: !e[id] }));
-  const reduced = usePrefersReducedMotion();
-  const sensors = makeSensors(reduced);
-  // Track which scope is currently being dragged so we can render a
-  // single DragOverlay across the 3 nested DndContexts. Without this,
-  // the overlay would only follow the row inside the scope that owns
-  // the draggable.
-  const [activeId, setActiveId] = useState<{ scope: 'subject' | 'chapter' | 'note'; id: number } | null>(null);
+    try {
+      const raw = window.localStorage.getItem(OPEN_KEY);
+      const parsed: unknown = raw ? JSON.parse(raw) : {};
+      if (parsed && typeof parsed === 'object') {
+        setOpenKeys((cur) => ({ ...(parsed as Record<string, boolean>), ...cur }));
+      }
+    } catch { /* localStorage hỏng / bị chặn — mặc định gập */ }
+    loadedRef.current = true;
+  }, []);
+  useEffect(() => {
+    if (!loadedRef.current) return;
+    try {
+      // Chỉ lưu khoá đang mở: gọn, và "không có" luôn nghĩa là gập.
+      const slim: Record<string, true> = {};
+      Object.entries(openKeys).forEach(([k, v]) => { if (v) slim[k] = true; });
+      window.localStorage.setItem(OPEN_KEY, JSON.stringify(slim));
+    } catch { /* ignore */ }
+  }, [openKeys]);
+  const isOpen = (k: string) => Boolean(openKeys[k]);
+  const setOpen = useCallback((k: string, v: boolean) => setOpenKeys((o) => ({ ...o, [k]: v })), []);
+  const openMany = useCallback((keys: string[]) => setOpenKeys((o) => {
+    if (keys.every((k) => o[k])) return o;
+    const n = { ...o };
+    keys.forEach((k) => { n[k] = true; });
+    return n;
+  }), []);
 
-  // ─── PART 2: Separate pinned items ───────────────────────────────
-  const pinnedSubjects = tree.filter(s => s.isPinned);
-  const unpinnedSubjects = tree.filter(s => !s.isPinned);
-  const pinnedNotes = recent.filter(n => n.isPinned).slice(0, 5);
+  const [pinnedOpen, setPinnedOpen] = useState(true);
+  useEffect(() => {
+    try { if (window.localStorage.getItem(PINNED_OPEN_KEY) === '0') setPinnedOpen(false); } catch { /* ignore */ }
+  }, []);
+  const togglePinnedOpen = () => setPinnedOpen((v) => {
+    try { window.localStorage.setItem(PINNED_OPEN_KEY, v ? '0' : '1'); } catch { /* ignore */ }
+    return !v;
+  });
 
-  // ─── PART 3: Emoji picker state ─────────────────────────────────
-  const [emojiPickerSubject, setEmojiPickerSubject] = useState<{ id: number; emoji: string } | null>(null);
+  // ─── Phân loại ───────────────────────────────────────────────
+  const inbox = useMemo(() => tree.find((s) => isInboxSubject(s)) ?? null, [tree]);
+  const subjects = useMemo(() => tree.filter((s) => !isInboxSubject(s)), [tree]);
 
-  const openEmojiPicker = (subjectId: number) => {
-    const subject = tree.find(s => s.id === subjectId);
-    if (subject) {
-      setEmojiPickerSubject({ id: subjectId, emoji: subject.emoji || '📁' });
+  /** noteId → vị trí trong cây. */
+  const noteLoc = useMemo(() => {
+    const m = new Map<number, { subjectId: number; chapterId: number | null; note: NoteSummary }>();
+    tree.forEach((s) => {
+      s.notes.forEach((n) => m.set(n.id, { subjectId: s.id, chapterId: null, note: n }));
+      s.chapters.forEach((c) => c.notes.forEach((n) => m.set(n.id, { subjectId: s.id, chapterId: c.id, note: n })));
+    });
+    return m;
+  }, [tree]);
+
+  // ─── Ngữ cảnh cho "+ Mới" ────────────────────────────────────
+  const [ctx, setCtx] = useState<{ subjectId: number; chapterId: number | null } | null>(null);
+
+  // Trang đang mở ⇒ tự mở môn + chương chứa nó, và cuộn tới dòng đó.
+  useEffect(() => {
+    if (!selectedNoteId) return;
+    const loc = noteLoc.get(selectedNoteId);
+    if (!loc) return;
+    setCtx({ subjectId: loc.subjectId, chapterId: loc.chapterId });
+    openMany(loc.chapterId ? [sKey(loc.subjectId), cKey(loc.chapterId)] : [sKey(loc.subjectId)]);
+    const raf = requestAnimationFrame(() => {
+      scrollRef.current?.querySelector(`[data-note-row="${selectedNoteId}"]`)?.scrollIntoView({ block: 'nearest' });
+    });
+    return () => cancelAnimationFrame(raf);
+    // Chỉ chạy khi ĐỔI trang, không phải mỗi lần cây vẽ lại (người dùng có thể
+    // vừa tự gập môn đó).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedNoteId, noteLoc.size]);
+
+  // Yêu cầu bung + cuộn từ ngoài (⌘K chọn môn/chương, trang chủ).
+  useEffect(() => {
+    if (!reveal) return;
+    const keys = [sKey(reveal.subjectId)];
+    if (reveal.chapterId) keys.push(cKey(reveal.chapterId));
+    openMany(keys);
+    setCtx({ subjectId: reveal.subjectId, chapterId: reveal.chapterId ?? null });
+    const target = reveal.chapterId ? cKey(reveal.chapterId) : sKey(reveal.subjectId);
+    const t = setTimeout(() => {
+      const el = scrollRef.current?.querySelector(`[data-tree-key="${target}"]`) as HTMLElement | null;
+      if (el) {
+        el.scrollIntoView({ block: 'center' });
+        el.classList.add('ring-2', 'ring-teal-500/50');
+        setTimeout(() => el.classList.remove('ring-2', 'ring-teal-500/50'), 1200);
+      }
+    }, 60);
+    return () => clearTimeout(t);
+  }, [reveal, openMany]);
+
+  const ctxResolved = useMemo(() => {
+    const valid = ctx && tree.some((s) => s.id === ctx.subjectId) ? ctx : null;
+    if (valid) {
+      const s = tree.find((x) => x.id === valid.subjectId)!;
+      const c = valid.chapterId ? s.chapters.find((x) => x.id === valid.chapterId) ?? null : null;
+      return { subject: s, chapter: c };
     }
+    const s = subjects[0] ?? inbox;
+    return s ? { subject: s, chapter: null } : null;
+  }, [ctx, tree, subjects, inbox]);
+
+  // ─── Tạo / đổi tên / menu / di chuyển ────────────────────────
+  const [creating, setCreating] = useState<CreateKind | null>(null);
+  const [renaming, setRenaming] = useState<string | null>(null);
+  const [menu, setMenu] = useState<{ anchor: HTMLElement; items: MenuEntry[]; key: string; align?: 'start' | 'end' } | null>(null);
+  const [moving, setMoving] = useState<{ id: number; title: string; subjectId: number; chapterId: number | null } | null>(null);
+  const [emojiFor, setEmojiFor] = useState<{ id: number; emoji: string } | null>(null);
+  const closeMenu = useCallback(() => setMenu(null), []);
+
+  const startCreate = useCallback((c: CreateKind) => {
+    if (c.kind === 'note') openMany(c.chapterId ? [sKey(c.subjectId), cKey(c.chapterId)] : [sKey(c.subjectId)]);
+    if (c.kind === 'chapter') openMany([sKey(c.subjectId)]);
+    cb.onChangeFilter('tree');
+    setCreating(c);
+  }, [openMany, cb]);
+
+  const submitCreate = useCallback(async (name: string) => {
+    if (!creating) return;
+    try {
+      if (creating.kind === 'subject') {
+        const id = await cb.onCreateSubject(name);
+        if (typeof id === 'number') { openMany([sKey(id)]); setCtx({ subjectId: id, chapterId: null }); }
+      } else if (creating.kind === 'chapter') {
+        const id = await cb.onCreateChapter(creating.subjectId, name);
+        if (typeof id === 'number') { openMany([sKey(creating.subjectId), cKey(id)]); setCtx({ subjectId: creating.subjectId, chapterId: id }); }
+      } else {
+        await cb.onCreateNote(creating.subjectId, creating.chapterId, name);
+      }
+      setCreating(null);
+    } catch { /* trang đã báo lỗi; giữ ô để người dùng thử lại */ }
+  }, [creating, cb, openMany]);
+
+  const openNewMenu = (anchor: HTMLElement) => {
+    const r = ctxResolved;
+    const where = r ? `${r.subject.emoji || '📚'} ${r.subject.name}${r.chapter ? ` › ${r.chapter.title}` : ''}` : '';
+    setMenu({
+      key: 'new',
+      anchor,
+      align: 'end',
+      items: [
+        ...(r ? [{ heading: `Tạo trong ${where}` }] : []),
+        {
+          key: 'note', label: 'Trang mới', icon: <FilePlus2 className="h-4 w-4" />,
+          hint: r ? (r.chapter ? 'trong chương' : 'trong môn') : 'tạo môn trước',
+          disabled: !r,
+          onSelect: () => r && startCreate({ kind: 'note', subjectId: r.subject.id, chapterId: r.chapter?.id ?? null }),
+        },
+        {
+          key: 'chapter', label: 'Chương mới', icon: <FolderPlus className="h-4 w-4" />,
+          hint: r ? 'trong môn' : 'tạo môn trước',
+          disabled: !r || (inbox !== null && r.subject.id === inbox.id),
+          onSelect: () => r && startCreate({ kind: 'chapter', subjectId: r.subject.id }),
+        },
+        'divider',
+        { key: 'subject', label: 'Môn mới', icon: <Library className="h-4 w-4" />, onSelect: () => startCreate({ kind: 'subject' }) },
+      ],
+    });
   };
 
-  const handleEmojiSelect = (emoji: string) => {
-    if (emojiPickerSubject) {
-      cb.onChangeSubjectIcon(emojiPickerSubject.id, emoji);
-      setEmojiPickerSubject(null);
+  const subjectMenu = (s: NoteSubjectTree): MenuEntry[] => {
+    const isInbox = inbox?.id === s.id;
+    return [
+      { key: 'open', label: 'Mở trang môn', hint: 'tệp · bảng', icon: <PanelRight className="h-4 w-4" />, onSelect: () => cb.onOpenSubject(s.id) },
+      { key: 'new-note', label: 'Tạo trang trong môn', icon: <FilePlus2 className="h-4 w-4" />, onSelect: () => startCreate({ kind: 'note', subjectId: s.id, chapterId: null }) },
+      ...(!isInbox ? [{ key: 'new-ch', label: 'Tạo chương', icon: <FolderPlus className="h-4 w-4" />, onSelect: () => startCreate({ kind: 'chapter', subjectId: s.id }) }] : []),
+      'divider',
+      ...(!isInbox ? [
+        { key: 'rename', label: 'Đổi tên', icon: <Pencil className="h-4 w-4" />, onSelect: () => setRenaming(sKey(s.id)) },
+        { key: 'emoji', label: 'Đổi biểu tượng', icon: <Smile className="h-4 w-4" />, onSelect: () => setEmojiFor({ id: s.id, emoji: s.emoji || '📚' }) },
+        { key: 'pin', label: s.isPinned ? 'Bỏ ghim' : 'Ghim lên đầu', icon: s.isPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />, onSelect: () => cb.onPinSubject(s.id, !s.isPinned) },
+        { key: 'share', label: 'Chia sẻ…', icon: <Share2 className="h-4 w-4" />, onSelect: () => cb.onShareSubject(s) },
+        'divider' as const,
+        { key: 'del', label: 'Xoá môn', danger: true, icon: <Trash2 className="h-4 w-4" />, onSelect: () => cb.onDeleteSubject(s.id) },
+      ] : [
+        { key: 'share', label: 'Chia sẻ…', icon: <Share2 className="h-4 w-4" />, onSelect: () => cb.onShareSubject(s) },
+      ]),
+    ];
+  };
+
+  const chapterMenu = (s: NoteSubjectTree, c: NoteChapterTree): MenuEntry[] => [
+    { key: 'new-note', label: 'Tạo trang trong chương', icon: <FilePlus2 className="h-4 w-4" />, onSelect: () => startCreate({ kind: 'note', subjectId: s.id, chapterId: c.id }) },
+    'divider',
+    { key: 'rename', label: 'Đổi tên', icon: <Pencil className="h-4 w-4" />, onSelect: () => setRenaming(cKey(c.id)) },
+    { key: 'pin', label: c.isPinned ? 'Bỏ ghim' : 'Ghim', icon: c.isPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />, onSelect: () => cb.onPinChapter(c.id, !c.isPinned) },
+    'divider',
+    { key: 'del', label: 'Xoá chương', danger: true, icon: <Trash2 className="h-4 w-4" />, onSelect: () => cb.onDeleteChapter(c.id) },
+  ];
+
+  const noteMenu = (n: NoteSummary, subjectId: number, chapterId: number | null): MenuEntry[] => [
+    { key: 'open', label: 'Mở', icon: <ExternalLink className="h-4 w-4" />, onSelect: () => cb.onSelectNote(n.id) },
+    { key: 'rename', label: 'Đổi tên', icon: <Pencil className="h-4 w-4" />, onSelect: () => { openMany(chapterId ? [sKey(subjectId), cKey(chapterId)] : [sKey(subjectId)]); setRenaming(`n:${n.id}`); } },
+    { key: 'pin', label: n.isPinned ? 'Bỏ ghim' : 'Ghim', icon: n.isPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />, onSelect: () => cb.onPinNote(n.id, !n.isPinned) },
+    { key: 'move', label: 'Di chuyển tới…', icon: <FolderInput className="h-4 w-4" />, onSelect: () => setMoving({ id: n.id, title: n.title, subjectId, chapterId }) },
+    'divider',
+    { key: 'del', label: 'Chuyển vào Thùng rác', danger: true, icon: <Trash2 className="h-4 w-4" />, onSelect: () => cb.onDeleteNote(n.id) },
+  ];
+
+  const showMenu = (key: string, anchor: HTMLElement, items: MenuEntry[]) => {
+    setMenu((m) => (m?.key === key ? null : { key, anchor, items }));
+  };
+
+  // ─── Lọc cây ─────────────────────────────────────────────────
+  const [treeQ, setTreeQ] = useState('');
+  const filtering = treeQ.trim().length > 0;
+  const noteMatch = (n: NoteSummary) => foldIncludes(n.title || UNTITLED, treeQ);
+
+  // ─── Kéo-thả ─────────────────────────────────────────────────
+  const [dragging, setDragging] = useState<{ label: string; icon: ReactNode } | null>(null);
+  const onSubjectDragEnd = (e: DragEndEvent) => {
+    setDragging(null);
+    const { active, over } = e;
+    if (!over || active.id === over.id) return;
+    const ids = subjects.map((s) => s.id);
+    const a = ids.indexOf(Number(active.id));
+    const b = ids.indexOf(Number(over.id));
+    if (a < 0 || b < 0) return;
+    const next = arrayMove(ids, a, b);
+    cb.onReorderSubjects(inbox ? [...next, inbox.id] : next);
+  };
+  const scopeDragEnd = (ids: number[], apply: (next: number[]) => void) => (e: DragEndEvent) => {
+    setDragging(null);
+    const { active, over } = e;
+    if (!over || active.id === over.id) return;
+    const a = ids.indexOf(Number(active.id));
+    const b = ids.indexOf(Number(over.id));
+    if (a < 0 || b < 0) return;
+    apply(arrayMove(ids, a, b));
+  };
+
+  // ─── Dựng một trang ──────────────────────────────────────────
+  const renderNote = (n: NoteSummary, depth: number, subjectId: number, chapterId: number | null) => {
+    const key = `n:${n.id}`;
+    return (
+      <SortableRow key={n.id} id={n.id} disabled={filtering || renaming === key}>
+        {(drag) => (
+          <TreeRow
+            kind="note"
+            depth={depth}
+            treeKey={key}
+            noteId={n.id}
+            label={n.title || UNTITLED}
+            q={treeQ}
+            icon={<span className="text-[12.5px] leading-none opacity-90">📄</span>}
+            active={selectedNoteId === n.id}
+            pinned={n.isPinned}
+            menuOpen={menu?.key === key}
+            editing={renaming === key}
+            drag={drag}
+            onClick={() => { setCtx({ subjectId, chapterId }); cb.onSelectNote(n.id); }}
+            onStartRename={() => setRenaming(key)}
+            onRename={(v) => { setRenaming(null); if (v !== n.title) cb.onRenameNote(n.id, v); }}
+            onCancelRename={() => setRenaming(null)}
+            onMenu={(el) => showMenu(key, el, noteMenu(n, subjectId, chapterId))}
+            onDragLabel={() => setDragging({ label: n.title || UNTITLED, icon: '📄' })}
+          />
+        )}
+      </SortableRow>
+    );
+  };
+
+  const renderCreateInput = (c: CreateKind, depth: number) => {
+    let siblings: { id: number; name: string }[] = [];
+    let placeholder = '';
+    let kindLabel = '';
+    let icon: ReactNode = null;
+    if (c.kind === 'subject') {
+      siblings = tree.map((s) => ({ id: s.id, name: s.name }));
+      placeholder = 'Tên môn mới…'; kindLabel = 'môn'; icon = '📚';
+    } else if (c.kind === 'chapter') {
+      const s = tree.find((x) => x.id === c.subjectId);
+      siblings = (s?.chapters ?? []).map((x) => ({ id: x.id, name: x.title }));
+      placeholder = 'Tên chương mới…'; kindLabel = 'chương'; icon = '📂';
+    } else {
+      const s = tree.find((x) => x.id === c.subjectId);
+      const list = c.chapterId ? s?.chapters.find((x) => x.id === c.chapterId)?.notes ?? [] : s?.notes ?? [];
+      siblings = list.map((x) => ({ id: x.id, name: x.title || UNTITLED }));
+      placeholder = 'Tên trang mới…'; kindLabel = 'trang'; icon = '📄';
     }
+    return (
+      <NotesNameInput
+        key={`create-${c.kind}`}
+        placeholder={placeholder}
+        kindLabel={kindLabel}
+        siblings={siblings}
+        indent={padFor(depth)}
+        icon={icon}
+        onSubmit={submitCreate}
+        onCancel={() => setCreating(null)}
+        onOpenExisting={(id) => {
+          setCreating(null);
+          if (c.kind === 'note') cb.onSelectNote(id);
+          else if (c.kind === 'chapter') openMany([sKey(c.subjectId), cKey(id)]);
+          else openMany([sKey(id)]);
+        }}
+      />
+    );
+  };
+
+  const renderChapter = (s: NoteSubjectTree, c: NoteChapterTree, forcedFilter: boolean) => {
+    const key = cKey(c.id);
+    const selfMatch = filtering && foldIncludes(c.title, treeQ);
+    const matchedNotes = filtering && !forcedFilter ? c.notes.filter(noteMatch) : c.notes;
+    const hasDesc = filtering && !forcedFilter && matchedNotes.length > 0;
+    if (filtering && !forcedFilter && !selfMatch && !hasDesc) return null;
+    const open = hasDesc || isOpen(key) || (creating?.kind === 'note' && creating.chapterId === c.id);
+    const shownNotes = hasDesc ? matchedNotes : c.notes;
+    const ids = shownNotes.map((n) => n.id);
+    return (
+      <div key={c.id}>
+        <SortableRow id={c.id} disabled={filtering || renaming === key}>
+          {(drag) => (
+            <TreeRow
+              kind="chapter"
+              depth={1}
+              treeKey={key}
+              label={c.title}
+              q={treeQ}
+              icon={<span className="text-[13px] leading-none">{open ? '📂' : '📁'}</span>}
+              open={open}
+              count={c.notes.length}
+              pinned={c.isPinned}
+              active={false}
+              menuOpen={menu?.key === key}
+              editing={renaming === key}
+              drag={drag}
+              onClick={() => { setCtx({ subjectId: s.id, chapterId: c.id }); setOpen(key, !open); }}
+              onToggle={() => setOpen(key, !open)}
+              onStartRename={() => setRenaming(key)}
+              onRename={(v) => { setRenaming(null); if (v !== c.title) cb.onRenameChapter(c.id, v); }}
+              onCancelRename={() => setRenaming(null)}
+              onMenu={(el) => showMenu(key, el, chapterMenu(s, c))}
+              onDragLabel={() => setDragging({ label: c.title, icon: '📂' })}
+            />
+          )}
+        </SortableRow>
+        {open && (
+          <Guide depth={1}>
+            {creating?.kind === 'note' && creating.chapterId === c.id && renderCreateInput(creating, 2)}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={scopeDragEnd(ids, cb.onReorderNotes)}
+              onDragCancel={() => setDragging(null)}
+            >
+              <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+                {shownNotes.map((n) => renderNote(n, 2, s.id, c.id))}
+              </SortableContext>
+            </DndContext>
+            {shownNotes.length === 0 && !(creating?.kind === 'note' && creating.chapterId === c.id) && (
+              <EmptyHint depth={2} onClick={() => startCreate({ kind: 'note', subjectId: s.id, chapterId: c.id })}>Chương trống — thêm trang</EmptyHint>
+            )}
+          </Guide>
+        )}
+      </div>
+    );
+  };
+
+  /** Dựng một môn. `standalone` = không nằm trong DndContext của danh sách môn (Hộp thư). */
+  const renderSubject = (s: NoteSubjectTree, opts: { standalone?: boolean } = {}) => {
+    const key = sKey(s.id);
+    const selfMatch = filtering && foldIncludes(s.name, treeQ);
+    const matchedRoot = filtering ? s.notes.filter(noteMatch) : s.notes;
+    const matchedChapters = filtering
+      ? s.chapters.filter((c) => foldIncludes(c.title, treeQ) || c.notes.some(noteMatch))
+      : s.chapters;
+    const hasDesc = filtering && (matchedRoot.length > 0 || matchedChapters.length > 0);
+    if (filtering && !selfMatch && !hasDesc) return null;
+    // Môn chỉ khớp TÊN (con không khớp) thì bung ra là thấy đủ con như thường.
+    const forcedFilter = filtering && !hasDesc;
+    const creatingHere = creating && creating.kind !== 'subject' && creating.subjectId === s.id;
+    const open = hasDesc || isOpen(key) || Boolean(creatingHere);
+    const rootNotes = hasDesc ? matchedRoot : s.notes;
+    const chapters = hasDesc ? matchedChapters : s.chapters;
+    const rootIds = rootNotes.map((n) => n.id);
+    const chapterIds = chapters.map((c) => c.id);
+    const isInbox = inbox?.id === s.id;
+
+    const row = (drag?: DragBits) => (
+      <TreeRow
+        kind="subject"
+        depth={0}
+        treeKey={key}
+        label={subjectName(s)}
+        q={treeQ}
+        icon={<SubjectIcon emoji={isInbox ? '📥' : s.emoji} color={s.color} onClick={isInbox ? undefined : () => setEmojiFor({ id: s.id, emoji: s.emoji || '📚' })} />}
+        open={open}
+        count={countNotes(s)}
+        pinned={s.isPinned && !isInbox}
+        active={false}
+        menuOpen={menu?.key === key}
+        editing={renaming === key}
+        drag={drag}
+        onClick={() => { setCtx({ subjectId: s.id, chapterId: null }); setOpen(key, !open); }}
+        onToggle={() => setOpen(key, !open)}
+        onStartRename={isInbox ? undefined : () => setRenaming(key)}
+        onRename={(v) => { setRenaming(null); if (v !== s.name) cb.onRenameSubject(s.id, v); }}
+        onCancelRename={() => setRenaming(null)}
+        onMenu={(el) => showMenu(key, el, subjectMenu(s))}
+        onDragLabel={() => setDragging({ label: s.name, icon: s.emoji || '📚' })}
+      />
+    );
+
+    return (
+      <div key={s.id} className="mb-px">
+        {opts.standalone ? row() : (
+          <SortableRow id={s.id} disabled={filtering || renaming === key}>{(drag) => row(drag)}</SortableRow>
+        )}
+        {open && (
+          <Guide depth={0}>
+            {creating?.kind === 'note' && creating.subjectId === s.id && creating.chapterId === null && renderCreateInput(creating, 1)}
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={scopeDragEnd(rootIds, cb.onReorderNotes)} onDragCancel={() => setDragging(null)}>
+              <SortableContext items={rootIds} strategy={verticalListSortingStrategy}>
+                {rootNotes.map((n) => renderNote(n, 1, s.id, null))}
+              </SortableContext>
+            </DndContext>
+            {creating?.kind === 'chapter' && creating.subjectId === s.id && renderCreateInput(creating, 1)}
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={scopeDragEnd(chapterIds, (next) => cb.onReorderChapters(s.id, next))} onDragCancel={() => setDragging(null)}>
+              <SortableContext items={chapterIds} strategy={verticalListSortingStrategy}>
+                {chapters.map((c) => renderChapter(s, c, forcedFilter))}
+              </SortableContext>
+            </DndContext>
+            {rootNotes.length === 0 && chapters.length === 0 && !creatingHere && (
+              <EmptyHint depth={1} onClick={() => startCreate({ kind: 'note', subjectId: s.id, chapterId: null })}>
+                {isInbox ? 'Hộp thư trống — Ghi nhanh sẽ vào đây' : 'Môn trống — thêm trang'}
+              </EmptyHint>
+            )}
+          </Guide>
+        )}
+      </div>
+    );
+  };
+
+  // ─── Mục đã ghim (lối tắt) ───────────────────────────────────
+  const pinnedItems = useMemo(() => {
+    const out: { key: string; kind: 'subject' | 'chapter' | 'note'; label: string; sub: string; icon: ReactNode; subjectId: number; chapterId: number | null; note?: NoteSummary; chapter?: NoteChapterTree; subject: NoteSubjectTree }[] = [];
+    tree.forEach((s) => {
+      if (s.isPinned && !isInboxSubject(s)) out.push({ key: sKey(s.id), kind: 'subject', label: s.name, sub: 'Môn', icon: s.emoji || '📚', subjectId: s.id, chapterId: null, subject: s });
+      s.chapters.forEach((c) => {
+        if (c.isPinned) out.push({ key: cKey(c.id), kind: 'chapter', label: c.title, sub: s.name, icon: '📂', subjectId: s.id, chapterId: c.id, chapter: c, subject: s });
+      });
+    });
+    tree.forEach((s) => {
+      const push = (n: NoteSummary, c: NoteChapterTree | null) => {
+        if (n.isPinned) out.push({ key: `n:${n.id}`, kind: 'note', label: n.title || UNTITLED, sub: c ? `${s.name} › ${c.title}` : s.name, icon: '📄', subjectId: s.id, chapterId: c?.id ?? null, note: n, subject: s });
+      };
+      s.notes.forEach((n) => push(n, null));
+      s.chapters.forEach((c) => c.notes.forEach((n) => push(n, c)));
+    });
+    return out;
+  }, [tree]);
+
+  const revealLocal = (subjectId: number, chapterId: number | null) => {
+    openMany(chapterId ? [sKey(subjectId), cKey(chapterId)] : [sKey(subjectId)]);
+    setTreeQ('');
+    const target = chapterId ? cKey(chapterId) : sKey(subjectId);
+    setTimeout(() => {
+      const el = scrollRef.current?.querySelector(`[data-tree-key="${target}"]`) as HTMLElement | null;
+      el?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }, 60);
   };
 
   return (
-   <div className="flex h-full flex-col text-sm">
-       {/* Header */}
-       <div className="flex items-center justify-between px-3 pt-3 pb-2">
-         <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500">Sổ tay</h2>
-         <div className="flex items-center gap-1">
-           <button
-             onClick={cb.onAddSubject}
-             className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.05] hover:text-teal-600 dark:hover:text-teal-300 sm:h-7 sm:w-7"
-             title="Thêm môn học"
-             aria-label="Thêm môn học"
-           >
-             <Plus className="h-4 w-4" />
-           </button>
-           {onClose && (
-             <button
-               onClick={onClose}
-               className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200 md:hidden"
-               title="Đóng"
-               aria-label="Đóng"
-             >
-               <X className="h-4 w-4" />
-             </button>
-           )}
-         </div>
-       </div>
+    <div className="flex h-full flex-col text-sm">
+      {/* ── Đầu cột ── */}
+      <div className="flex items-center gap-1 px-2 pb-2 pt-3">
+        <button
+          type="button"
+          onClick={cb.onGoHome}
+          title="Trang chủ Sổ tay"
+          className="flex min-h-[32px] min-w-0 flex-1 items-center gap-1.5 rounded-md px-1.5 text-left hover:bg-black/[0.04] dark:hover:bg-white/[0.05]"
+        >
+          <Home className="h-3.5 w-3.5 shrink-0 text-slate-500" />
+          <span className="truncate text-[12px] font-semibold uppercase tracking-[0.1em] text-slate-600 dark:text-slate-400">Sổ tay</span>
+        </button>
+        {cb.onOpenSearch && (
+          <button
+            type="button"
+            onClick={cb.onOpenSearch}
+            title="Tìm mọi nơi (⌘K / Ctrl+K)"
+            aria-label="Tìm kiếm"
+            className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-black/[0.05] hover:text-slate-800 dark:text-slate-400 dark:hover:bg-white/[0.06] dark:hover:text-slate-200 sm:h-8 sm:w-8"
+          >
+            <Search className="h-4 w-4" />
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={(e) => openNewMenu(e.currentTarget)}
+          aria-haspopup="menu"
+          aria-expanded={menu?.key === 'new'}
+          className="flex h-9 items-center gap-1 rounded-md bg-teal-600 pl-2 pr-1.5 text-[12.5px] font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 sm:h-8"
+        >
+          <Plus className="h-4 w-4" /> Mới <ChevronDown className="h-3.5 w-3.5 opacity-80" />
+        </button>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-black/[0.05] dark:text-slate-400 dark:hover:bg-white/[0.06] md:hidden"
+            title="Đóng"
+            aria-label="Đóng"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+      </div>
 
-      {/* Phase 3d — filter pills. Each pill swaps the body below for
-          a flat list view of the matching notes (favorites / archive
-          / needs-review), or back to the default tree. */}
-      <div className="mb-2 flex flex-wrap items-center gap-1 px-2">
-        <FilterPill active={filter === 'tree'} icon={<FolderTree className="h-3 w-3" />} label="Môn học" onClick={() => cb.onChangeFilter('tree')} />
+      {/* ── Bộ lọc nhanh: một dòng, cuộn ngang khi hẹp ── */}
+      <div className="mb-1.5 flex items-center gap-1 overflow-x-auto px-2 pb-0.5 [scrollbar-width:none]">
+        <FilterPill active={filter === 'tree'} icon={<FolderTree className="h-3 w-3" />} label="Cây" onClick={() => cb.onChangeFilter('tree')} />
         <FilterPill active={filter === 'favorites'} icon={<Star className="h-3 w-3" />} label="Yêu thích" onClick={() => cb.onChangeFilter('favorites')} />
         <FilterPill active={filter === 'needs-review'} icon={<AlertCircle className="h-3 w-3" />} label="Cần ôn" onClick={() => cb.onChangeFilter('needs-review')} />
         <FilterPill active={filter === 'archive'} icon={<Archive className="h-3 w-3" />} label="Lưu trữ" onClick={() => cb.onChangeFilter('archive')} />
         <FilterPill active={filter === 'trash'} icon={<Trash2 className="h-3 w-3" />} label="Thùng rác" onClick={() => cb.onChangeFilter('trash')} />
       </div>
 
-      {/* PART 2: Pinned section */}
-      {filter === 'tree' && (pinnedSubjects.length > 0 || pinnedNotes.length > 0) && (
-        <div className="mb-2 px-1.5">
-          <div className="mb-1 flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-amber-500">
-            <Pin className="h-3 w-3" /> Đã ghim
-          </div>
-          {/* Pinned subjects */}
-          {pinnedSubjects.map((subject) => (
-            <PinnedSubjectRow
-              key={`pinned-subject-${subject.id}`}
-              subject={subject}
-              selectedNoteId={selectedNoteId}
-              expanded={expanded}
-              setExpanded={setExpanded}
-              reduced={reduced}
-              sensors={sensors}
-              activeId={activeId}
-              setActiveId={setActiveId}
-              cb={cb}
+      {/* ── Lọc cây ── */}
+      {filter === 'tree' && tree.length > 0 && (
+        <div className="px-2 pb-1.5">
+          <div className="flex items-center gap-1.5 rounded-md border border-black/[0.08] bg-black/[0.02] px-2 focus-within:border-teal-500/60 focus-within:bg-transparent dark:border-white/[0.08] dark:bg-white/[0.02]">
+            <ListFilter className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+            <input
+              value={treeQ}
+              onChange={(e) => setTreeQ(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.nativeEvent.isComposing) return;
+                if (e.key === 'Escape') { e.preventDefault(); setTreeQ(''); }
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const first = scrollRef.current?.querySelector('[data-note-row]') as HTMLElement | null;
+                  const id = Number(first?.dataset.noteRow);
+                  if (id) cb.onSelectNote(id);
+                }
+              }}
+              placeholder="Lọc cây…"
+              aria-label="Lọc cây theo tên môn, chương, trang"
+              className="min-h-[30px] min-w-0 flex-1 bg-transparent text-[12.5px] text-slate-800 placeholder:text-slate-400 focus:outline-none dark:text-slate-200 dark:placeholder:text-slate-500"
             />
-          ))}
-          {/* Pinned notes */}
-          {pinnedNotes.map((n) => (
-            <button
-              key={`pinned-note-${n.id}`}
-              onClick={() => cb.onSelectNote(n.id)}
-              className={`group flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
-                selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
-              }`}
-            >
-              <Pin className="h-3 w-3 shrink-0 text-amber-400" />
-              <span className="truncate">{n.title || 'Không có tiêu đề'}</span>
-            </button>
-          ))}
-          <div className="my-2 h-px bg-slate-100 dark:bg-white/[0.05]" />
+            {treeQ && (
+              <button type="button" onClick={() => setTreeQ('')} aria-label="Xoá lọc" className="flex h-6 w-6 items-center justify-center rounded text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
         </div>
       )}
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-1.5 pb-6">
-        {/* Recent rail */}
-        {recent.length > 0 && (
-          <div className="mb-2 px-1.5">
-            <div className="mb-1 flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-500 dark:text-slate-600">
-              <Clock className="h-3 w-3" /> Gần đây
-            </div>
-            {recent.slice(0, 5).map((n) => (
-              <button
-                key={`r-${n.id}`}
-                onClick={() => cb.onSelectNote(n.id)}
-                className={`flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
-                  selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
-                }`}
-              >
-                {n.isPinned ? <Pin className="h-3 w-3 shrink-0 text-amber-400" /> : <FileText className="h-3 w-3 shrink-0 opacity-60" />}
-                <span className="truncate">{n.title || 'Không có tiêu đề'}</span>
-              </button>
-            ))}
-            <div className="my-2 h-px bg-slate-100 dark:bg-white/[0.05]" />
-          </div>
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-1.5 pb-8">
+        {filter === 'tree' && (
+          <>
+            {/* ── 📥 Hộp thư — khối riêng ── */}
+            {inbox && !filtering && (
+              <div className="mb-2 rounded-lg bg-sky-500/[0.05] py-0.5 dark:bg-sky-400/[0.05]">
+                {renderSubject(inbox, { standalone: true })}
+              </div>
+            )}
+            {inbox && filtering && renderSubject(inbox, { standalone: true })}
+
+            {/* ── Đã ghim ── */}
+            {!filtering && pinnedItems.length > 0 && (
+              <section className="mb-2">
+                <SectionHeader onClick={togglePinnedOpen} open={pinnedOpen} icon={<Pin className="h-3 w-3 text-amber-500" />} label="Đã ghim" count={pinnedItems.length} />
+                {pinnedOpen && pinnedItems.map((p) => (
+                  <PinnedRow
+                    key={`p-${p.key}`}
+                    label={p.label}
+                    sub={p.sub}
+                    icon={p.icon}
+                    active={p.kind === 'note' && selectedNoteId === p.note?.id}
+                    menuOpen={menu?.key === `pin-${p.key}`}
+                    onClick={() => {
+                      if (p.kind === 'note' && p.note) cb.onSelectNote(p.note.id);
+                      else revealLocal(p.subjectId, p.chapterId);
+                    }}
+                    onUnpin={() => {
+                      if (p.kind === 'subject') cb.onPinSubject(p.subjectId, false);
+                      else if (p.kind === 'chapter' && p.chapter) cb.onPinChapter(p.chapter.id, false);
+                      else if (p.note) cb.onPinNote(p.note.id, false);
+                    }}
+                    onMenu={(el) => showMenu(`pin-${p.key}`, el, p.kind === 'subject'
+                      ? subjectMenu(p.subject)
+                      : p.kind === 'chapter' && p.chapter ? chapterMenu(p.subject, p.chapter)
+                        : noteMenu(p.note!, p.subjectId, p.chapterId))}
+                  />
+                ))}
+              </section>
+            )}
+
+            {/* ── Môn học ── */}
+            <SectionHeader icon={<span className="text-[11px] leading-none">📚</span>} label="Môn học" count={subjects.length} />
+            {creating?.kind === 'subject' && renderCreateInput(creating, 0)}
+
+            {subjects.length === 0 && creating?.kind !== 'subject' && (
+              <div className="px-3 py-8 text-center text-[12.5px] leading-relaxed text-slate-500">
+                <div className="mb-2 text-2xl">📚</div>
+                Chưa có môn học nào.
+                <button type="button" onClick={() => startCreate({ kind: 'subject' })} className="mt-2 block w-full rounded-md border border-dashed border-teal-500/40 px-3 py-1.5 text-teal-700 hover:bg-teal-500/10 dark:text-teal-300">
+                  + Tạo môn đầu tiên
+                </button>
+              </div>
+            )}
+
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={onSubjectDragEnd}
+              onDragCancel={() => setDragging(null)}
+            >
+              <SortableContext items={subjects.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+                {subjects.map((s) => renderSubject(s))}
+              </SortableContext>
+              <DragOverlay dropAnimation={null}>
+                {dragging ? (
+                  <div className="flex w-64 items-center gap-2 rounded-md border border-teal-500/30 bg-[var(--notes-surface,#fff)] px-2 py-1.5 text-[13px] shadow-xl dark:bg-[#161b23]">
+                    <span>{dragging.icon}</span><span className="truncate">{dragging.label}</span>
+                  </div>
+                ) : null}
+              </DragOverlay>
+            </DndContext>
+
+            {filtering && subjects.every((s) => !foldIncludes(s.name, treeQ) && !s.notes.some(noteMatch) && !s.chapters.some((c) => foldIncludes(c.title, treeQ) || c.notes.some(noteMatch)))
+              && !(inbox && (inbox.notes.some(noteMatch) || inbox.chapters.some((c) => c.notes.some(noteMatch)))) && (
+              <div className="px-3 py-6 text-center text-[12px] text-slate-500">
+                Không có gì trong cây khớp “{treeQ}”.
+                {cb.onOpenSearch && (
+                  <button type="button" onClick={cb.onOpenSearch} className="mt-2 block w-full text-teal-700 hover:underline dark:text-teal-300">
+                    Tìm trong nội dung (⌘K)
+                  </button>
+                )}
+              </div>
+            )}
+
+          </>
         )}
 
-  {tree.length === 0 && filter === 'tree' && (
-  <div className="px-3 py-10 text-center text-xs text-slate-500 dark:text-slate-500 dark:text-slate-600">
-  <BookOpen className="mx-auto mb-2 h-6 w-6 opacity-40" />
-  Chưa có môn học nào.<br />Nhấn <span className="text-teal-400">+</span> để tạo môn đầu tiên.
-  </div>
-  )}
-
-  {/* Phase 3d — flat list shown when a filter pill is active.
-      Replaces the hierarchical tree so the user sees just the
-      matching notes in a single column. */}
-  {filter !== 'tree' && (
-    <div className="mb-2 px-1.5">
-      <div className="mb-1 flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-500 dark:text-slate-600">
-        {filter === 'favorites' && (<><Star className="h-3 w-3" /> Yêu thích</>)}
-        {filter === 'archive' && (<><Archive className="h-3 w-3" /> Lưu trữ</>)}
-        {filter === 'needs-review' && (<><AlertCircle className="h-3 w-3" /> Cần ôn</>)}
-        {filter === 'trash' && (<><Trash2 className="h-3 w-3" /> Thùng rác · tự xóa sau 30 ngày</>)}
-        <span className="ml-auto text-slate-500 dark:text-slate-500">{filteredNotes.length}</span>
-      </div>
-      {filteredNotes.length === 0 ? (
-        <div className="px-3 py-6 text-center text-[12px] text-slate-500 dark:text-slate-500 dark:text-slate-600">
-          {filter === 'favorites' && 'Chưa đánh dấu ghi chú nào.'}
-          {filter === 'archive' && 'Không có ghi chú trong lưu trữ.'}
-          {filter === 'needs-review' && 'Không có ghi chú cần ôn.'}
-          {filter === 'trash' && 'Thùng rác đang trống.'}
-        </div>
-      ) : (
-        filteredNotes.map((n) => (
-          <button
-            key={`f-${n.id}`}
-            onClick={() => cb.onSelectNote(n.id)}
-            className={`flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
-              selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
-            }`}
-          >
-            {filter === 'trash' ? <Trash2 className="h-3 w-3 shrink-0 text-rose-400" /> : n.isPinned ? <Pin className="h-3 w-3 shrink-0 text-amber-400" /> : <FileText className="h-3 w-3 shrink-0 opacity-60" />}
-            <span className="min-w-0 flex-1 truncate">{n.title || 'Không có tiêu đề'}</span>
-            {filter === 'trash' && n.deletedAt && (
-              <span className="shrink-0 text-[10px] text-slate-400">{trashDaysRemaining(n.deletedAt)} ngày</span>
+        {/* ── Danh sách phẳng cho bộ lọc nhanh ── */}
+        {filter !== 'tree' && (
+          <div className="mb-2 px-0.5">
+            <div className="mb-1 flex items-center gap-1.5 px-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-slate-500">
+              {filter === 'favorites' && (<><Star className="h-3 w-3" /> Yêu thích</>)}
+              {filter === 'archive' && (<><Archive className="h-3 w-3" /> Lưu trữ</>)}
+              {filter === 'needs-review' && (<><AlertCircle className="h-3 w-3" /> Cần ôn</>)}
+              {filter === 'trash' && (<><Trash2 className="h-3 w-3" /> Thùng rác · tự xoá sau 30 ngày</>)}
+              <span className="ml-auto tabular-nums">{filteredNotes.length}</span>
+            </div>
+            {filteredNotes.length === 0 ? (
+              <div className="px-3 py-6 text-center text-[12px] text-slate-500">
+                {filter === 'favorites' && 'Chưa đánh dấu ghi chú nào.'}
+                {filter === 'archive' && 'Không có ghi chú trong lưu trữ.'}
+                {filter === 'needs-review' && 'Không có ghi chú cần ôn.'}
+                {filter === 'trash' && 'Thùng rác đang trống.'}
+              </div>
+            ) : (
+              filteredNotes.map((n) => (
+                <button
+                  key={`f-${n.id}`}
+                  onClick={() => cb.onSelectNote(n.id)}
+                  className={`flex min-h-[34px] w-full items-center gap-2 truncate rounded-md px-2 text-left text-[13px] ${
+                    selectedNoteId === n.id ? 'bg-teal-500/[0.12] text-teal-800 dark:text-teal-200' : 'text-slate-700 hover:bg-black/[0.04] dark:text-slate-300 dark:hover:bg-white/[0.05]'
+                  }`}
+                >
+                  {filter === 'trash' ? <Trash2 className="h-3.5 w-3.5 shrink-0 text-rose-400" /> : <FileText className="h-3.5 w-3.5 shrink-0 opacity-60" />}
+                  <span className="min-w-0 flex-1 truncate">{n.title || UNTITLED}</span>
+                  {filter === 'trash' && n.deletedAt && <span className="shrink-0 text-[10.5px] text-slate-400">{trashDaysRemaining(n.deletedAt)} ngày</span>}
+                  {n.isFavorite && filter !== 'favorites' && <Star className="h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />}
+                  {n.needsReview && filter !== 'needs-review' && <AlertCircle className="h-3 w-3 shrink-0 text-rose-400" />}
+                </button>
+              ))
             )}
-            {n.isFavorite && <Star className="ml-auto h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />}
-            {n.needsReview && <AlertCircle className="ml-auto h-3 w-3 shrink-0 text-rose-400" />}
-            {n.isArchived && <Archive className="ml-auto h-3 w-3 shrink-0 text-slate-500 dark:text-slate-500" />}
-          </button>
-        ))
+          </div>
+        )}
+      </div>
+
+      {menu && <NotesMenu anchor={menu.anchor} items={menu.items} onClose={closeMenu} align={menu.align ?? 'end'} width={248} />}
+      {moving && (
+        <NoteMovePicker
+          tree={tree}
+          noteTitle={moving.title}
+          current={{ subjectId: moving.subjectId, chapterId: moving.chapterId }}
+          onClose={() => setMoving(null)}
+          onPick={async (subjectId, chapterId) => {
+            setMoving(null);
+            await cb.onMoveNote(moving.id, subjectId, chapterId);
+            openMany(chapterId ? [sKey(subjectId), cKey(chapterId)] : [sKey(subjectId)]);
+          }}
+        />
       )}
-      <div className="my-2 h-px bg-slate-100 dark:bg-white/[0.05]" />
+      {emojiFor && (
+        <EmojiPicker
+          currentEmoji={emojiFor.emoji}
+          onSelect={(emoji) => { cb.onChangeSubjectIcon(emojiFor.id, emoji); setEmojiFor(null); }}
+          onClose={() => setEmojiFor(null)}
+        />
+      )}
     </div>
-  )}
-
-{/*
-  * DndContext for SUBJECTS (root scope). Each subject is also a
-  * SortableContext of its chapters and subject-level notes, but those
-  * are nested with their own DndContext so dnd-kit can reason about
-  * each scope independently (a chapter drag is distinct from a
-  * subject drag from the user's perspective).
-  * PART 2: Only show unpinned subjects in main tree; pinned show in Pinned section.
-  */}
-  {filter === 'tree' && (
-  <DndContext
-  sensors={sensors}
-  collisionDetection={closestCenter}
-  onDragStart={(e) => {
-  const id = Number(e.active.id);
-  if (tree.some((s) => s.id === id)) setActiveId({ scope: 'subject', id });
-  }}
-  onDragEnd={handleSubjectDragEnd}
-  onDragCancel={() => setActiveId(null)}
-  >
-  <SortableContext items={unpinnedSubjects.map((s) => s.id)} strategy={verticalListSortingStrategy}>
-  {unpinnedSubjects.map((subject) => {
-  const isOpen = expanded[subject.id] ?? true;
-  return (
-   <SubjectBranch
-   key={subject.id}
-   subject={subject}
-   isOpen={isOpen}
-   selectedNoteId={selectedNoteId}
-   expanded={expanded}
-   setExpanded={setExpanded}
-   reduced={reduced}
-   sensors={sensors}
-   activeId={activeId}
-   setActiveId={setActiveId}
-   cb={cb}
-   onOpenEmojiPicker={openEmojiPicker}
-   />
-   );
-  })}
-  </SortableContext>
-   <DragOverlay dropAnimation={reduced ? null : undefined}>
-   {activeId ? <DragGhost scope={activeId.scope} activeId={activeId.id} tree={tree} /> : null}
-   </DragOverlay>
-   </DndContext>
-   )}
-
-   {/* PART 3: Emoji picker modal */}
-   {emojiPickerSubject && (
-     <EmojiPicker
-       currentEmoji={emojiPickerSubject.emoji}
-       onSelect={handleEmojiSelect}
-       onClose={() => setEmojiPickerSubject(null)}
-     />
-   )}
-  </div>
-  </div>
   );
+}
 
- // ─── Reorder handlers ────────────────────────────────────────
- // Each handler converts the dnd-kit event into the ordered id list
- // the API expects, then calls the matching callback. If the
- // drop was a no-op (same position) we still call the API — it is
- // idempotent (assigns the same sortOrder to the same row), so the
- // cost is one transaction with the same value, which is fine.
- function handleSubjectDragEnd(e: DragEndEvent) {
- setActiveId(null);
- const { active, over } = e;
- if (!over || active.id === over.id) return;
- const ids = tree.map((s) => s.id);
- const oldIndex = ids.indexOf(Number(active.id));
- const newIndex = ids.indexOf(Number(over.id));
- if (oldIndex < 0 || newIndex < 0) return;
- const next = arrayMove(ids, oldIndex, newIndex);
- cb.onReorderSubjects(next);
- }
+/** Nhánh con có đường dẫn dọc mảnh canh giữa chevron của cha.
+ *  ⚠️ Phải là component CẤP TỆP: khai báo bên trong NotesSidebar thì mỗi lần vẽ
+ *  lại là một "loại" component mới ⇒ React gỡ và dựng lại cả nhánh con (mất ô
+ *  đổi tên đang gõ, mất trạng thái kéo-thả). */
+function Guide({ depth, children }: { depth: number; children: ReactNode }) {
+  return (
+    <div className="relative">
+      <span aria-hidden className="pointer-events-none absolute bottom-1 top-0 w-px bg-black/[0.08] dark:bg-white/[0.08]" style={{ left: padFor(depth) + 8 }} />
+      {children}
+    </div>
+  );
 }
 
 function trashDaysRemaining(deletedAt: string): number {
@@ -395,677 +839,300 @@ function trashDaysRemaining(deletedAt: string): number {
   return Math.max(0, Math.ceil((expires - Date.now()) / (24 * 60 * 60 * 1000)));
 }
 
-// ─── SubjectBranch — owns the per-subject DndContexts ──────────
-// Extracted to keep NotesSidebar readable. Each subject has:
-// - 1 SortableContext of its subject-level notes (chapterId = null)
-// - 1 SortableContext of its chapters (reorders chapter rows)
-// - per-chapter SortableContext of chapter notes
-function SubjectBranch({
- subject, isOpen, selectedNoteId, expanded, setExpanded, reduced, sensors, activeId, setActiveId, cb, onOpenEmojiPicker,
-}: {
- subject: NoteSubjectTree;
- isOpen: boolean;
- selectedNoteId: number | null;
- expanded: Record<number, boolean>;
- setExpanded: React.Dispatch<React.SetStateAction<Record<number, boolean>>>;
- reduced: boolean;
- sensors: ReturnType<typeof makeSensors>;
- activeId: { scope: 'subject' | 'chapter' | 'note'; id: number } | null;
- setActiveId: (v: { scope: 'subject' | 'chapter' | 'note'; id: number } | null) => void;
- cb: SidebarCallbacks;
- onOpenEmojiPicker: (subjectId: number) => void;
-}) {
- const handleNoteScopeDragEnd = (scopeNoteIds: number[], e: DragEndEvent) => {
- setActiveId(null);
- const { active, over } = e;
- if (!over || active.id === over.id) return;
- const oldIndex = scopeNoteIds.indexOf(Number(active.id));
- const newIndex = scopeNoteIds.indexOf(Number(over.id));
- if (oldIndex < 0 || newIndex < 0) return;
- const next = arrayMove(scopeNoteIds, oldIndex, newIndex);
- cb.onReorderNotes(next);
- };
+// ─── Kéo-thả: mỗi dòng là một sortable, nghe chuột/cảm ứng trên CẢ dòng ──
+interface DragBits { listeners: Record<string, unknown> | undefined; isDragging: boolean }
 
- const handleChapterDragEnd = (e: DragEndEvent) => {
- setActiveId(null);
- const { active, over } = e;
- if (!over || active.id === over.id) return;
- const ids = subject.chapters.map((c) => c.id);
- const oldIndex = ids.indexOf(Number(active.id));
- const newIndex = ids.indexOf(Number(over.id));
- if (oldIndex < 0 || newIndex < 0) return;
- const next = arrayMove(ids, oldIndex, newIndex);
- cb.onReorderChapters(subject.id, next);
- };
-
- // The "subject root" notes (chapterId = null) share one scope
- // for drag-reorder. They are a flat list, siblings to chapters.
- const subjectRootNoteIds = subject.notes.map((n) => n.id);
-
+function SortableRow({ id, disabled, children }: { id: number; disabled?: boolean; children: (d: DragBits) => ReactNode }) {
+  const { listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id, disabled });
+  const style: React.CSSProperties = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.35 : 1,
+  };
+  // CỐ Ý không rải `attributes` (role/tabIndex) và không dùng KeyboardSensor:
+  // Enter/Space trên nút tên bên trong sẽ nổi bọt lên và bắt đầu một lượt kéo.
   return (
-  <div className="mb-0.5">
-  {/* Subject row (draggable — handled by parent DndContext) */}
-  <SortableRow id={subject.id}>
-  {(handleProps) => (
-  <Row
-  depth={0}
-  bac="mon"
-  datTenNgay={cb.vuaTao === `mon:${subject.id}`}
-  open={isOpen}
-  onToggle={() => setExpanded((e) => ({ ...e, [subject.id]: !e[subject.id] }))}
-  color={subject.color}
-  emoji={subject.emoji}
-   label={subject.name}
-   active={false}
-   onRename={(v) => cb.onRenameSubject(subject.id, v)}
-   onDelete={() => cb.onDeleteSubject(subject.id)}
-   onIconClick={() => onOpenEmojiPicker(subject.id)}
-   actions={[
-     { icon: Smile, title: 'Đổi biểu tượng', onClick: () => onOpenEmojiPicker(subject.id) },
-     { icon: subject.isPinned ? PinOff : Pin, title: subject.isPinned ? 'Bỏ ghim' : 'Ghim', onClick: () => cb.onPinSubject(subject.id, !subject.isPinned) },
-     { icon: PanelRight, title: 'Mở môn học (tệp & liên kết)', onClick: () => cb.onOpenSubject(subject.id) },
-     { icon: Share2, title: 'Chia sẻ', onClick: () => cb.onShareSubject(subject) },
-     { icon: FolderPlus, title: 'Thêm chương', onClick: () => cb.onAddChapter(subject.id) },
-     { icon: Plus, title: 'Thêm ghi chú', onClick: () => cb.onAddNote(subject.id, null) },
-    ]}
-   dragHandleProps={handleProps}
-   />
-   )}
-   </SortableRow>
- <AnimatePresence initial={false}>
- {isOpen && (
- <motion.div
- initial={reduced ? false : { height: 0, opacity: 0 }}
- animate={{ height: 'auto', opacity: 1 }}
- exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
- transition={SPRING}
- className="overflow-hidden"
- >
- {/* Notes directly under subject (sortable) */}
- <DndContext
- sensors={sensors}
- collisionDetection={closestCenter}
- onDragStart={(e) => {
- const id = Number(e.active.id);
- if (subjectRootNoteIds.includes(id)) setActiveId({ scope: 'note', id });
- }}
- onDragEnd={(e) => handleNoteScopeDragEnd(subjectRootNoteIds, e)}
- onDragCancel={() => setActiveId(null)}
- >
- <SortableContext items={subjectRootNoteIds} strategy={verticalListSortingStrategy}>
- {subject.notes.map((note) => (
- <NoteRow key={note.id} note={note} depth={1} active={selectedNoteId === note.id} cb={cb} />
- ))}
- </SortableContext>
- </DndContext>
-
- {/* Chapters (sortable) */}
- <DndContext
- sensors={sensors}
- collisionDetection={closestCenter}
- onDragStart={(e) => {
- const id = Number(e.active.id);
- if (subject.chapters.some((c) => c.id === id)) setActiveId({ scope: 'chapter', id });
- }}
- onDragEnd={handleChapterDragEnd}
- onDragCancel={() => setActiveId(null)}
- >
- <SortableContext items={subject.chapters.map((c) => c.id)} strategy={verticalListSortingStrategy}>
- {subject.chapters.map((chapter) => {
- const cOpen = expanded[chapter.id * -1] ?? true;
- const chapterNoteIds = chapter.notes.map((n) => n.id);
- return (
- <div key={chapter.id}>
- <SortableRow id={chapter.id}>
- {(handleProps) => (
- <Row
- depth={1}
- bac="chuong"
- datTenNgay={cb.vuaTao === `chuong:${chapter.id}`}
- open={cOpen}
- onToggle={() => setExpanded((e) => ({ ...e, [chapter.id * -1]: !(e[chapter.id * -1] ?? true) }))}
- label={chapter.title}
- icon={BookOpen}
- active={false}
- onRename={(v) => cb.onRenameChapter(chapter.id, v)}
- onDelete={() => cb.onDeleteChapter(chapter.id)}
- actions={[
- { icon: chapter.isPinned ? PinOff : Pin, title: chapter.isPinned ? 'Bỏ ghim' : 'Ghim', onClick: () => cb.onPinChapter(chapter.id, !chapter.isPinned) },
- { icon: Plus, title: 'Thêm ghi chú', onClick: () => cb.onAddNote(subject.id, chapter.id) },
- ]}
- dragHandleProps={handleProps}
- />
- )}
- </SortableRow>
- <AnimatePresence initial={false}>
- {cOpen && (
- <motion.div
- initial={reduced ? false : { height: 0, opacity: 0 }}
- animate={{ height: 'auto', opacity: 1 }}
- exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
- transition={SPRING}
- className="overflow-hidden"
- >
- {/* Chapter notes (sortable) */}
- <DndContext
- sensors={sensors}
- collisionDetection={closestCenter}
- onDragStart={(e) => {
- const id = Number(e.active.id);
- if (chapterNoteIds.includes(id)) setActiveId({ scope: 'note', id });
- }}
- onDragEnd={(e) => handleNoteScopeDragEnd(chapterNoteIds, e)}
- onDragCancel={() => setActiveId(null)}
- >
- <SortableContext items={chapterNoteIds} strategy={verticalListSortingStrategy}>
- {chapter.notes.map((note) => (
- <NoteRow key={note.id} note={note} depth={2} active={selectedNoteId === note.id} cb={cb} />
- ))}
- </SortableContext>
- </DndContext>
- </motion.div>
- )}
- </AnimatePresence>
- </div>
- );
- })}
- </SortableContext>
- </DndContext>
- </motion.div>
- )}
- </AnimatePresence>
- </div>
- );
-}
-
-// ─── PinnedSubjectRow — compact pinned subject for the Pinned section ─
-function PinnedSubjectRow({
-  subject, selectedNoteId, expanded, setExpanded, reduced, sensors, activeId, setActiveId, cb,
-}: {
-  subject: NoteSubjectTree;
-  selectedNoteId: number | null;
-  expanded: Record<number, boolean>;
-  setExpanded: React.Dispatch<React.SetStateAction<Record<number, boolean>>>;
-  reduced: boolean;
-  sensors: ReturnType<typeof makeSensors>;
-  activeId: { scope: 'subject' | 'chapter' | 'note'; id: number } | null;
-  setActiveId: (v: { scope: 'subject' | 'chapter' | 'note'; id: number } | null) => void;
-  cb: SidebarCallbacks;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="mb-0.5">
-      <div className="flex items-center">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[13px] font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.05]"
-        >
-          <ChevronRight className={`h-3.5 w-3.5 transition-transform ${isOpen ? 'rotate-90' : ''}`} />
-          <Pin className="h-3 w-3 shrink-0 text-amber-400" />
-          {subject.emoji && <span className="text-[13px]">{subject.emoji}</span>}
-          {subject.color && !subject.emoji && <span className="h-2 w-2 rounded-full shrink-0" style={{ background: subject.color }} />}
-          {!subject.emoji && !subject.color && <span className="text-[13px]">📁</span>}
-          <span className="truncate">{subject.name}</span>
-        </button>
-        <button
-          onClick={() => cb.onPinSubject(subject.id, false)}
-          className="ml-auto mr-2 flex h-6 w-6 items-center justify-center rounded text-amber-400 opacity-0 transition-opacity hover:bg-slate-100 group-hover:opacity-100 dark:hover:bg-white/10"
-          title="Bỏ ghim"
-        >
-          <PinOff className="h-3 w-3" />
-        </button>
-      </div>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={reduced ? false : { height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-            transition={SPRING}
-            className="overflow-hidden pl-6"
-          >
-            {/* Subject-level notes */}
-            {subject.notes.map((note) => (
-              <NoteRow key={note.id} note={note} depth={1} active={selectedNoteId === note.id} cb={cb} />
-            ))}
-            {/* Chapters with notes */}
-            {subject.chapters.map((chapter) => (
-              <div key={chapter.id}>
-                <div className="flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-500">
-                  <ChevronRight className="h-3 w-3" />
-                  <BookOpen className="h-3 w-3" />
-                  <span className="truncate">{chapter.title}</span>
-                </div>
-                <div className="pl-6">
-                  {chapter.notes.map((note) => (
-                    <NoteRow key={note.id} note={note} depth={2} active={selectedNoteId === note.id} cb={cb} />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div ref={setNodeRef} style={style}>
+      {children({ listeners: disabled ? undefined : (listeners as Record<string, unknown> | undefined), isDragging })}
     </div>
   );
 }
 
-// ─── A note leaf row ─────────────────────────────────────────
-function NoteRow({ note, depth, active, cb }: { note: NoteSummary; depth: number; active: boolean; cb: SidebarCallbacks }) {
- return (
- <SortableRow id={note.id}>
- {(handleProps) => (
- <Row
- depth={depth}
- leaf
- bac="ghichu"
- datTenNgay={cb.vuaTao === `ghichu:${note.id}`}
- label={note.title || 'Không có tiêu đề'}
- icon={note.isPinned ? Pin : FileText}
- active={active}
- onClick={() => cb.onSelectNote(note.id)}
- onRename={(v) => cb.onRenameNote(note.id, v)}
- onDelete={() => cb.onDeleteNote(note.id)}
- actions={[
- { icon: note.isPinned ? PinOff : Pin, title: note.isPinned ? 'Bỏ ghim' : 'Ghim', onClick: () => cb.onPinNote(note.id, !note.isPinned) },
- ]}
- dragHandleProps={handleProps}
- />
- )}
- </SortableRow>
- );
-}
-
-// ─── SortableRow — wires dnd-kit to a Row via render prop ─────
-// The grip handle is rendered by Row (so the user sees where to
-// grab). We pass dnd-kit's listeners/attributes through to the
-// handle so only the grip starts a drag, not the whole row. This
-// means a normal click on the row still selects the note; the user
-// has to grab the grip to drag.
-function SortableRow({ id, children }: { id: number; children: (handleProps: DragHandleProps) => React.ReactNode }) {
- const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
- // transform is null when not dragging. We only translate Y so
- // the row never jitters horizontally mid-drag.
- const style: React.CSSProperties = {
- transform: CSS.Translate.toString(transform),
- transition,
- opacity: isDragging ? 0.35 : 1,
- };
- return (
- <div ref={setNodeRef} style={style} {...(attributes as unknown as Record<string, unknown>)}>
- {children({ listeners, attributes })}
- </div>
- );
-}
-
-// ─── DragGhost — visual stand-in for the row being dragged ───
-// Rendered in the DragOverlay portal so it floats above everything
-// else. Reuses Row's visual style so the user sees the same
-// shape they grabbed, just at a higher z-index.
-function DragGhost({ scope, activeId, tree }: { scope: 'subject' | 'chapter' | 'note'; activeId: number; tree: NoteSubjectTree[] }) {
- let row: React.ReactNode = null;
- if (scope === 'subject') {
- const s = tree.find((x) => x.id === activeId);
- if (s) row = <Row depth={0} label={s.name} color={s.color} emoji={s.emoji} active={false} onRename={() => {}} onDelete={() => {}} />;
- } else if (scope === 'chapter') {
- outer: for (const s of tree) {
- const c = s.chapters.find((x) => x.id === activeId);
- if (c) { row = <Row depth={1} label={c.title} icon={BookOpen} active={false} onRename={() => {}} onDelete={() => {}} />; break outer; }
- }
- } else {
- outer: for (const s of tree) {
- const n = s.notes.find((x) => x.id === activeId) ?? s.chapters.flatMap((c) => c.notes).find((x) => x.id === activeId);
- if (n) { row = <Row depth={1} leaf label={n.title || 'Không có tiêu đề'} icon={FileText} active={false} onRename={() => {}} onDelete={() => {}} />; break outer; }
- }
- }
- return (
- <div className="w-72 rounded-md border border-teal-500/30 bg-white dark:bg-[#10151c] shadow-2xl shadow-black/60">
- {row}
- </div>
- );
-}
-
-// ─── Generic tree row (handles inline rename + hover actions) ─
-interface RowAction { icon: React.ComponentType<{ className?: string }>; title: string; onClick: () => void; }
-
-// Phase 2.5: optional dragHandleProps turns the row into a
-// draggable. Only the grip is wired to the pointer sensor, so the
-// rest of the row keeps its click / double-click behaviour. When
-// the prop is absent (e.g. inside DragGhost) the grip is hidden
-// and the row is purely presentational.
-interface DragHandleProps {
- // dnd-kit's `listeners` and `attributes` are typed loosely
- // (ListenerMap / DraggableAttributes). We expose them as `unknown`
- // here and let Row spread them — TypeScript will widen them to
- // `Record<string, unknown>` at the spread site, which is fine.
- listeners: unknown;
- attributes: unknown;
-}
-function Row({
- depth, label, color, emoji, icon: Icon, open, leaf, active, bac,
- onToggle, onClick, onRename, onDelete, onIconClick, actions = [], dragHandleProps,
- datTenNgay,
+// ─── Một dòng của cây ─────────────────────────────────────────
+function TreeRow({
+  kind, depth, treeKey, noteId, label, q, icon, open, count, pinned, active, menuOpen, editing, drag,
+  onClick, onToggle, onStartRename, onRename, onCancelRename, onMenu, onDragLabel,
 }: {
- depth: number; label: string; color?: string | null; emoji?: string | null;
- icon?: React.ComponentType<{ className?: string }>; open?: boolean; leaf?: boolean; active: boolean;
- /** 'mon' | 'chuong' | 'ghichu' — quyết định cỡ chữ, độ đậm, màu. */
- bac?: 'mon' | 'chuong' | 'ghichu';
- onToggle?: () => void; onClick?: () => void; onRename: (v: string) => void; onDelete: () => void;
- onIconClick?: () => void; actions?: RowAction[];
- dragHandleProps?: DragHandleProps;
- /**
-  * Vừa được tạo ⇒ MỞ Ô ĐẶT TÊN NGAY.
-  *
-  * Không có cái này thì mỗi lần bấm "+" đẻ ra một "Môn học mới" nữa, và người
-  * dùng phải đi tìm nó rồi nhấp đúp để sửa. Ai bấm ba lần thì có ba dòng trùng
-  * tên y hệt và không phân biệt được cái nào là cái nào — đúng thứ đang thấy
-  * trên màn hình của người dùng (6 dòng "Môn học mới", 3 dòng "Chương mới").
-  */
- datTenNgay?: boolean;
+  kind: 'subject' | 'chapter' | 'note';
+  depth: number;
+  treeKey: string;
+  noteId?: number;
+  label: string;
+  q: string;
+  icon: ReactNode;
+  open?: boolean;
+  count?: number;
+  pinned?: boolean;
+  active: boolean;
+  menuOpen: boolean;
+  editing: boolean;
+  drag?: DragBits;
+  onClick: () => void;
+  onToggle?: () => void;
+  onStartRename?: () => void;
+  onRename: (v: string) => void;
+  onCancelRename: () => void;
+  onMenu: (anchor: HTMLElement) => void;
+  onDragLabel: () => void;
 }) {
-  const [editing, setEditing] = useState(Boolean(datTenNgay));
   const [val, setVal] = useState(label);
   const inputRef = useRef<HTMLInputElement>(null);
-  const pad = { paddingLeft: 8 + depth * 14 };
-
-  /*
-   * `useState(Boolean(datTenNgay))` một mình là ĐỦ MỎNG.
-   *
-   * Nó chỉ đọc cờ ở lần dựng ĐẦU của mỗi instance. Hôm nay nó vẫn chạy vì
-   * React 18 gộp `setTree` (trong `refreshTree`) và `setVuaTao` thành MỘT lượt
-   * dựng, nên hàng mới mount đã mang sẵn cờ `true`.
-   *
-   * ⚠️ Đó là một chi tiết CÀI ĐẶT, không phải hợp đồng. Chỉ cần một
-   * `flushSync`, một `await` chen vào giữa, hay một đổi thay trong cách React
-   * gộp — là hàng mount trước khi cờ bật, và ô đặt tên không bao giờ mở nữa,
-   * im lặng. Effect này làm cho việc "cờ bật sau khi mount" cũng chạy đúng.
-   *
-   * ⚠️ CHỈ MỞ, KHÔNG BAO GIỜ ĐÓNG. `vuaTao` tự xoá sau 1,5 giây; nếu effect
-   * này cũng đóng theo thì người dùng gõ chậm bị ô đóng ngang chừng.
-   *
-   * (Đo 10/09/2026: gỡ effect này ra, bộ đo bố cục VẪN xanh — tức nó là lớp
-   * chắn thứ hai, không phải bản vá cho lỗi người dùng đang gặp trên Windows.
-   * Lỗi ấy vẫn chưa dựng lại được ngoài Windows.)
-   */
-  useEffect(() => {
-    if (datTenNgay) { setVal(label); setEditing(true); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [datTenNgay]);
-
-  /* Tên đổi từ NƠI KHÁC (sửa tiêu đề trong trang, đồng bộ về) thì ô nhập phải
-     theo. `useState(label)` cũng chỉ đọc một lần — thiếu dòng này thì mở ô đổi
-     tên lần hai sẽ thấy tên CŨ, và bấm Enter là ghi đè ngược lại tên mới.
-     (Suy từ mã, chưa dựng lại được trên bộ đo — nhưng `useState` giữ giá trị
-     đầu là hành vi chắc chắn, không phải phỏng đoán.) */
-  useEffect(() => {
-    if (!editing) setVal(label);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [label]);
-
-  // Focus + select the rename field when editing starts. autoFocus is
-  // unreliable inside a dnd-kit sortable (the draggable wrapper competes for
-  // focus), so we focus explicitly on the next frame.
+  useEffect(() => { if (!editing) setVal(label); }, [label, editing]);
   useEffect(() => {
     if (!editing) return;
-    const id = requestAnimationFrame(() => {
-      inputRef.current?.focus();
-      inputRef.current?.select();
-    });
+    const id = requestAnimationFrame(() => { inputRef.current?.focus(); inputRef.current?.select(); });
     return () => cancelAnimationFrame(id);
   }, [editing]);
+  // Hàm gọi lại đổi danh tính mỗi lần vẽ; phụ thuộc vào nó sẽ thành vòng lặp
+  // (setDragging → vẽ lại → hàm mới → effect → setDragging…). Giữ qua ref.
+  const dragLabelRef = useRef(onDragLabel);
+  dragLabelRef.current = onDragLabel;
+  useEffect(() => { if (drag?.isDragging) dragLabelRef.current(); }, [drag?.isDragging]);
 
-  const commit = () => { setEditing(false); const v = val.trim(); if (v && v !== label) onRename(v); else setVal(label); };
+  const commit = () => {
+    const v = val.trim().replace(/\s+/g, ' ');
+    if (v && v !== label) onRename(v); else onCancelRename();
+  };
+
+  const text = kind === 'subject'
+    ? 'text-[13.5px] font-semibold tracking-tight text-slate-900 dark:text-slate-100'
+    : kind === 'chapter'
+      ? 'text-[13px] font-medium text-slate-700 dark:text-slate-300'
+      : active ? 'text-[13px] font-medium text-teal-800 dark:text-teal-100' : 'text-[13px] text-slate-600 dark:text-slate-400';
 
   return (
     <div
-      /*
-       * 🐛 `dark:bg-white/[0.04]` THIẾU TIỀN TỐ `hover:`.
-       *
-       * Ở theme tối, mọi hàng đều mang nền xám THƯỜNG TRỰC — cả danh sách
-       * thành một bức tường ô hộp giống hệt nhau, và không có phản hồi nào khi
-       * rê chuột. Trên theme sáng thì đúng (`hover:bg-slate-100`), nên lỗi này
-       * vô hình với ai chỉ thử ở chế độ sáng.
-       *
-       * Hàng ĐANG CHỌN nay có thêm vạch màu bên trái: nền teal nhạt một mình
-       * rất khó thấy khi cả cột đều tối.
-       */
-      className={`group relative flex items-center gap-1 rounded-md pr-1 min-h-[32px] ${
+      data-tree-key={treeKey}
+      {...(noteId ? { 'data-note-row': noteId } : {})}
+      {...(drag?.listeners ?? {})}
+      onContextMenu={(e) => { e.preventDefault(); onMenu((e.currentTarget.querySelector('[data-row-menu]') as HTMLElement | null) ?? e.currentTarget); }}
+      className={`group relative flex select-none items-center gap-1 rounded-md pr-1 transition-colors ${
+        kind === 'subject' ? 'min-h-[34px] sm:min-h-[30px]' : 'min-h-[34px] sm:min-h-[28px]'
+      } ${
         active
-          ? 'bg-teal-100 dark:bg-teal-500/[0.14] before:absolute before:left-0 before:top-1 before:bottom-1 before:w-[2.5px] before:rounded-full before:bg-teal-500'
-          : 'hover:bg-slate-100 dark:hover:bg-white/[0.055]'
+          ? 'bg-teal-500/[0.12] dark:bg-teal-400/[0.12]'
+          : menuOpen ? 'bg-black/[0.05] dark:bg-white/[0.06]' : 'hover:bg-black/[0.04] dark:hover:bg-white/[0.05]'
       }`}
-      style={pad}
+      style={{ paddingLeft: padFor(depth) }}
     >
- {/* Drag grip (Phase 2.5). Pointer listeners live here only;
- clicking anywhere else still triggers select / toggle /
- inline rename. cursor-grab hints that the row is grabbable. */}
- {dragHandleProps && (
- <button
- type="button"
- aria-label="Kéo để sắp xếp"
- title="Kéo để sắp xếp"
- className="flex h-6 w-4 shrink-0 cursor-grab touch-none items-center justify-center text-slate-500 dark:text-slate-500 dark:text-slate-600 hover:text-slate-800 dark:hover:text-slate-300 active:cursor-grabbing"
- {...((dragHandleProps.attributes ?? {}) as Record<string, unknown>)}
- {...((dragHandleProps.listeners ?? {}) as Record<string, unknown>)}
- onClick={(e) => e.preventDefault()}
- >
- <GripVertical className="h-3.5 w-3.5" />
- </button>
- )}
- {!leaf && (
- <button onClick={onToggle} className="flex h-6 w-5 shrink-0 items-center justify-center text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-300" aria-label="Mở/đóng">
- <ChevronRight className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-90' : ''}`} />
- </button>
- )}
-      {/* Leading icon. When onIconClick is provided (subjects), clicking the
-          icon opens the emoji picker so changing a folder's icon is obvious. */}
-      {(() => {
-        const iconEl = (
-          <>
-            {color && <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: color }} />}
-            {emoji && <span className="shrink-0 text-[13px] leading-none">{emoji}</span>}
-            {Icon && !emoji && !color && <Icon className={`h-3.5 w-3.5 shrink-0 ${active ? 'text-teal-600 dark:text-teal-300' : 'text-slate-500 dark:text-slate-500'}`} />}
-            {!emoji && !color && !Icon && <span className="shrink-0 text-[13px] leading-none">📁</span>}
-          </>
-        );
-        return onIconClick ? (
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); onIconClick(); }}
-            title="Đổi biểu tượng"
-            aria-label="Đổi biểu tượng"
-            className="flex h-6 w-6 shrink-0 items-center justify-center rounded hover:bg-slate-200 dark:hover:bg-white/10"
-          >
-            {iconEl}
-          </button>
-        ) : iconEl;
-      })()}
+      {active && <span aria-hidden className="absolute bottom-1 left-0 top-1 w-[2.5px] rounded-full bg-teal-500" />}
+      {kind !== 'note' ? (
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onToggle?.(); }}
+          className="flex h-6 w-4 shrink-0 items-center justify-center text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200"
+          aria-label={open ? 'Gập' : 'Mở'}
+          aria-expanded={open}
+        >
+          <ChevronRight className={`h-3.5 w-3.5 transition-transform duration-150 ${open ? 'rotate-90' : ''}`} />
+        </button>
+      ) : (
+        <span className="w-4 shrink-0" aria-hidden />
+      )}
+      <span className="flex w-5 shrink-0 items-center justify-center">{icon}</span>
 
       {editing ? (
         <input
           ref={inputRef}
           value={val}
+          maxLength={200}
           onChange={(e) => setVal(e.target.value)}
           onBlur={commit}
-          // Keep pointer/key events from bubbling to the draggable wrapper
-          // (dnd-kit) so focus, caret and typing are not hijacked.
           onPointerDown={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => {
             e.stopPropagation();
-            // Bộ gõ tiếng Nhật/Trung/Hàn đang dựng chữ: Enter lúc này là để
-            // CHỐT chữ (watashi → わたし → 私), Escape là để HUỶ chữ đang gõ —
-            // cả hai đều thuộc về bộ gõ, không phải lệnh cho ô đổi tên. Cướp
-            // mất là người dùng gõ được nửa chữ thì ô tự đóng.
             if (e.nativeEvent.isComposing) return;
-            if (e.key === 'Enter') commit();
-            if (e.key === 'Escape') { setEditing(false); setVal(label); }
+            if (e.key === 'Enter') { e.preventDefault(); commit(); }
+            if (e.key === 'Escape') { e.preventDefault(); onCancelRename(); }
           }}
-          className="min-w-0 flex-1 rounded bg-white px-1 py-0.5 text-[13px] text-slate-900 ring-1 ring-slate-300 dark:bg-slate-800 dark:text-slate-100 dark:ring-white/15 focus:outline-none focus:ring-1 focus:ring-teal-500/50"
+          aria-label="Đổi tên"
+          className="min-w-0 flex-1 rounded bg-[var(--notes-surface,#fff)] px-1 py-0.5 text-[13px] text-slate-900 ring-1 ring-teal-500/60 focus:outline-none dark:bg-slate-800 dark:text-slate-100"
         />
       ) : (
         <button
-          onClick={onClick ?? onToggle}
-          onDoubleClick={() => { setVal(label); setEditing(true); }}
-          /*
-           * BA BẬC PHẢI NHÌN RA ĐƯỢC TỪ XA.
-           *
-           * Bản cũ: môn học, chương và ghi chú đều `text-[13px]`, khác nhau
-           * đúng một nấc đậm — nên cả cây là một cột chữ xám đều, và người
-           * dùng nói thẳng "rất khó nhìn, không nổi bật để phân biệt".
-           *
-           * Nay khác nhau ở BA thứ cùng lúc (cỡ chữ · độ đậm · độ sáng), là
-           * mức tối thiểu để phân biệt được khi liếc chứ không phải khi đọc.
-           * Notion cũng làm đúng thế: cấp trên to và đậm hơn hẳn cấp dưới.
-           */
-          className={`min-w-0 flex-1 truncate text-left ${
-            bac === 'mon' ? 'py-1.5 text-[13.5px] font-semibold tracking-tight'
-              : bac === 'chuong' ? 'py-1 text-[12.5px] font-medium'
-                : 'py-1 text-[12.5px]'
-          } ${
-            active ? 'text-teal-700 dark:text-teal-200'
-              : bac === 'mon' ? 'text-slate-900 dark:text-slate-100'
-                : bac === 'chuong' ? 'text-slate-700 dark:text-slate-300'
-                  : 'text-slate-500 dark:text-slate-400'
-          }`}
-          title={`${label} — nhấp đúp để đổi tên`}
+          type="button"
+          onClick={onClick}
+          onDoubleClick={onStartRename ? (e) => { e.preventDefault(); onStartRename(); } : undefined}
+          title={onStartRename ? `${label} — nhấp đúp để đổi tên` : label}
+          className={`min-w-0 flex-1 truncate py-1 pl-0.5 text-left ${text}`}
         >
-          {label}
+          <Highlight text={label} q={q} />
         </button>
       )}
 
-      {/* Row actions — always visible on touch, hover-reveal on desktop */}
-      {/* On desktop the actions are display:none until hover so they don't
-          occupy layout width — otherwise 8 invisible buttons squeeze the
-          flex-1 label to ~0 and the folder name disappears. Always shown on
-          touch (mobile). */}
-      <div className="flex shrink-0 items-center sm:hidden sm:group-hover:flex">
-        {/* Rename — always present so it's discoverable (double-click still works) */}
-        {!editing && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              /*
-               * ⚠️ TRƯỚC ĐÂY DÙNG `window.prompt` — VÀ NÓ LÀM CHẾT BẢN DESKTOP.
-               *
-               * Chú thích cũ ở đây nói inline `<input>` "mất focus/phím trong
-               * hàng kéo-thả" nên đổi sang prompt cho chắc. Nhưng Electron
-               * KHÔNG hỗ trợ `prompt`: đo thật trong app đã build —
-               * `window.prompt('x','y')` NÉM `Error: prompt() is not
-               * supported.` Ném, chứ không phải trả `null`. Nên mọi câu lệnh
-               * sau nó trong cùng hàm cũng không chạy, và người dùng bấm nút
-               * đổi tên thì KHÔNG CÓ GÌ XẢY RA.
-               *
-               * Còn cái lý do cũ thì đã hết từ lâu: phím kéo-thả nay chỉ gắn ở
-               * TAY NẮM (xem `dragHandleProps` bên dưới), và ô nhập đã chặn
-               * `pointerdown`/`keydown` lan lên. Nhấp đúp vào tên vẫn dùng
-               * đúng ô đó suốt thời gian qua và không ai báo hỏng.
-               */
-              setVal(label);
-              setEditing(true);
-            }}
-            title="Đổi tên"
-            aria-label="Đổi tên"
-            className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300"
-          >
-            <Pencil className="h-3.5 w-3.5" />
-          </button>
-        )}
-        {/* Delete kept leading (right after rename) so it's never the button
-            clipped off the right edge when the row is narrow. */}
-        <button onClick={onDelete} title="Xoá" aria-label="Xoá" className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-red-500/10 hover:text-red-400">
-          <Trash2 className="h-3.5 w-3.5" />
+      {!editing && pinned && <Pin className="h-3 w-3 shrink-0 text-amber-500/80" aria-label="Đã ghim" />}
+      {!editing && typeof count === 'number' && count > 0 && (
+        <span className="shrink-0 px-0.5 text-[11px] tabular-nums text-slate-400 group-hover:hidden dark:text-slate-500 [@media(hover:none)]:hidden">{count}</span>
+      )}
+      {!editing && (
+        <button
+          type="button"
+          data-row-menu
+          onClick={(e) => { e.stopPropagation(); onMenu(e.currentTarget); }}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          title="Tuỳ chọn"
+          aria-label={`Tuỳ chọn cho ${label}`}
+          aria-haspopup="menu"
+          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded text-slate-500 hover:bg-black/[0.07] hover:text-slate-900 focus-visible:opacity-100 dark:text-slate-400 dark:hover:bg-white/[0.1] dark:hover:text-slate-100 [@media(hover:none)]:opacity-100 ${
+            menuOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          }`}
+        >
+          <MoreHorizontal className="h-4 w-4" />
         </button>
-        {actions.map((a, i) => (
-          <button key={i} onClick={a.onClick} title={a.title} aria-label={a.title} className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300">
-            <a.icon className="h-3.5 w-3.5" />
-          </button>
-        ))}
-      </div>
+      )}
     </div>
   );
 }
 
-
-function FilterPill({ active, icon, label, onClick }: { active: boolean; icon: React.ReactNode; label: string; onClick: () => void }) {
- return (
-  <button
-   type="button"
-   onClick={onClick}
-   className={`flex min-h-[28px] items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
-    active
-     ? 'border-teal-500/40 bg-teal-100 dark:bg-teal-500/15 text-teal-800 dark:text-teal-100'
-     : 'border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/[0.02] text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:border-white/20 hover:bg-slate-100 dark:hover:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200'
-   }`}
-   aria-pressed={active}
-  >
-   {icon}
-   <span>{label}</span>
-  </button>
- );
+function SubjectIcon({ emoji, color, onClick }: { emoji: string | null; color: string | null; onClick?: () => void }) {
+  const tint = color && /^#[0-9a-f]{6}$/i.test(color) ? `${color}2e` : undefined;
+  const inner = (
+    <span
+      className="flex h-5 w-5 items-center justify-center rounded-[5px] bg-black/[0.05] text-[12.5px] leading-none dark:bg-white/[0.07]"
+      style={tint ? { background: tint, boxShadow: `inset 0 0 0 1px ${color}55` } : undefined}
+    >
+      {emoji || '📚'}
+    </span>
+  );
+  if (!onClick) return inner;
+  return (
+    <button
+      type="button"
+      onClick={(e) => { e.stopPropagation(); onClick(); }}
+      onMouseDown={(e) => e.stopPropagation()}
+      title="Đổi biểu tượng"
+      aria-label="Đổi biểu tượng"
+      className="rounded-[6px] hover:ring-1 hover:ring-black/10 dark:hover:ring-white/15"
+    >
+      {inner}
+    </button>
+  );
 }
 
-// ─── PART 3: Emoji Picker for folder icons ─────────────────────────
+function SectionHeader({ icon, label, count, open, onClick }: { icon: ReactNode; label: string; count?: number; open?: boolean; onClick?: () => void }) {
+  const content = (
+    <>
+      {onClick && <ChevronRight className={`h-3 w-3 transition-transform ${open ? 'rotate-90' : ''}`} />}
+      {icon}
+      <span>{label}</span>
+      {typeof count === 'number' && <span className="ml-auto pr-1 tabular-nums font-normal">{count}</span>}
+    </>
+  );
+  const cls = 'mb-0.5 mt-1 flex w-full items-center gap-1.5 px-1.5 py-1 text-[10.5px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-500';
+  return onClick
+    ? <button type="button" onClick={onClick} aria-expanded={open} className={`${cls} rounded hover:text-slate-800 dark:hover:text-slate-300`}>{content}</button>
+    : <div className={cls}>{content}</div>;
+}
+
+function PinnedRow({ label, sub, icon, active, menuOpen, onClick, onUnpin, onMenu }: {
+  label: string; sub: string; icon: ReactNode; active: boolean; menuOpen: boolean;
+  onClick: () => void; onUnpin: () => void; onMenu: (el: HTMLElement) => void;
+}) {
+  return (
+    <div className={`group flex min-h-[34px] items-center gap-1 rounded-md pl-2 pr-1 sm:min-h-[30px] ${
+      active ? 'bg-teal-500/[0.12]' : menuOpen ? 'bg-black/[0.05] dark:bg-white/[0.06]' : 'hover:bg-black/[0.04] dark:hover:bg-white/[0.05]'
+    }`}>
+      <button type="button" onClick={onClick} className="flex min-w-0 flex-1 items-center gap-2 py-1 text-left" title={`${label} — ${sub}`}>
+        <span className="w-5 shrink-0 text-center text-[12.5px] leading-none">{icon}</span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-[13px] text-slate-700 dark:text-slate-200">{label}</span>
+        </span>
+        <span className="hidden max-w-[40%] shrink truncate text-[10.5px] text-slate-400 sm:block">{sub}</span>
+      </button>
+      <button
+        type="button"
+        onClick={onUnpin}
+        title="Bỏ ghim"
+        aria-label={`Bỏ ghim ${label}`}
+        className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-amber-600 opacity-0 hover:bg-amber-500/15 focus-visible:opacity-100 group-hover:opacity-100 dark:text-amber-400 [@media(hover:none)]:opacity-100"
+      >
+        <PinOff className="h-3.5 w-3.5" />
+      </button>
+      <button
+        type="button"
+        onClick={(e) => onMenu(e.currentTarget)}
+        title="Tuỳ chọn"
+        aria-label={`Tuỳ chọn cho ${label}`}
+        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded text-slate-500 hover:bg-black/[0.07] focus-visible:opacity-100 dark:text-slate-400 dark:hover:bg-white/[0.1] [@media(hover:none)]:opacity-100 ${menuOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+      >
+        <MoreHorizontal className="h-4 w-4" />
+      </button>
+    </div>
+  );
+}
+
+function EmptyHint({ depth, onClick, children }: { depth: number; onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex min-h-[28px] w-full items-center gap-1.5 rounded-md pr-2 text-left text-[12px] italic text-slate-400 hover:bg-black/[0.03] hover:text-teal-700 dark:text-slate-500 dark:hover:bg-white/[0.04] dark:hover:text-teal-300"
+      style={{ paddingLeft: padFor(depth) + 20 }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function FilterPill({ active, icon, label, onClick }: { active: boolean; icon: ReactNode; label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex min-h-[26px] shrink-0 items-center gap-1 rounded-full px-2.5 text-[11.5px] font-medium transition-colors ${
+        active
+          ? 'bg-teal-600/[0.12] text-teal-800 ring-1 ring-teal-600/30 dark:bg-teal-400/[0.14] dark:text-teal-100 dark:ring-teal-400/30'
+          : 'text-slate-600 hover:bg-black/[0.05] hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/[0.06] dark:hover:text-slate-200'
+      }`}
+      aria-pressed={active}
+    >
+      {icon}
+      <span>{label}</span>
+    </button>
+  );
+}
+
+// ─── Bảng chọn biểu tượng môn ─────────────────────────────────
 const FOLDER_EMOJIS = [
- '📁', '📚', '📗', '📘', '📙', '📕',
- '📓', '📒', '📔', '📑', '🔖', '📌',
- '💻', '🖥️', '⌨️', '🖱️', '💾', '📀',
- '🔢', '🔣', '🔤', '📝', '✏️', '🖊️',
- '🖋️', '📖', '📃', '📄', '📰', '🗞️',
- '📋', '📌', '📎', '🗂️', '📁', '🗃️',
- '🗄️', '🗑️', '💰', '💵', '💴', '💶',
- '💷', '💸', '💳', '🧾', '💹', '📊',
- '📈', '📉', '📆', '📅', '🗓️', '📇',
- '🔗', '🌐', '🌍', '🌎', '🌏', '🗺️',
- '🏫', '🏢', '🏣', '🏤', '🏥', '🏦',
- '🏨', '🏩', '🏪', '🏬', '🏭', '🏯',
- '🏰', '💒', '🗼', '🗽', '⛪', '⛩️',
- '🔭', '🔬', '🧬', '🧪', '🧫', '🧬',
- '🧮', '🧲', '⚗️', '🔭', '🔬', '💡',
- '🎓', '🎒', '🎒', '🎨', '🎭', '🎪',
- '🎬', '🎤', '🎧', '🎹', '🎸', '🎷',
- '🎺', '🎻', '🥁', '🎷', '🎵', '🎶',
- '⭐', '🌟', '✨', '💫', '🌙', '🌞',
- '❤️', '🧡', '💛', '💚', '💙', '💜',
- '🖤', '🤍', '🤎', '💔', '❣️', '💕',
- '☮️', '✝️', '☯️', '🕉️', '☪️', '🔯',
- '🛐', '⛎', '♈', '♉', '♊', '♋',
- '♌', '♍', '♎', '♏', '♐', '♑',
- '♒', '♓', '🆔', '⚛️', '🉑', '☢️',
- '☣️', '📴', '📳', '🈶', '🈚', '🈸',
- '🈺', '🈷️', '✴️', '🆚', '💮', '🉐',
- '㊙️', '㊗️', '🈴', '🈵', '🈹', '🈲',
- '🅰️', '🅱️', '🆎', '🆑', '🅾️', '🆘',
+  '📚', '📘', '📗', '📙', '📕', '📓', '📒', '📔', '📑', '🔖', '📌', '📝',
+  '💻', '🖥️', '⌨️', '💾', '🧮', '🔢', '🔤', '✏️', '🖊️', '📖', '📄', '📰',
+  '📋', '📎', '🗂️', '🗃️', '🗄️', '💰', '💵', '💳', '🧾', '💹', '📊', '📈',
+  '📉', '📆', '🗓️', '🔗', '🌐', '🌍', '🗺️', '🏫', '🏢', '🏦', '🏥', '🔭',
+  '🔬', '🧬', '🧪', '🧲', '⚗️', '💡', '🎓', '🎒', '🎨', '🎭', '🎬', '🎤',
+  '🎧', '🎹', '🎸', '🎵', '⭐', '🌟', '✨', '🌙', '🌞', '❤️', '🧡', '💛',
+  '💚', '💙', '💜', '🖤', '⚛️', '🧠', '🗣️', '🇬🇧', '🇯🇵', '🇨🇳', '🇰🇷', '🇻🇳',
 ];
 
-interface EmojiPickerProps {
-  currentEmoji: string;
-  onSelect: (emoji: string) => void;
-  onClose: () => void;
-}
-
-function EmojiPicker({ currentEmoji, onSelect, onClose }: EmojiPickerProps) {
+function EmojiPicker({ currentEmoji, onSelect, onClose }: { currentEmoji: string; onSelect: (emoji: string) => void; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[96] flex items-center justify-center px-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative z-10 w-80 max-h-80 overflow-y-auto rounded-xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-white/10 dark:bg-[#1a1f27]">
+      <div className="relative z-10 max-h-80 w-80 overflow-y-auto rounded-xl border border-black/[0.08] bg-[var(--notes-surface,#fff)] p-3 shadow-2xl dark:border-white/10 dark:bg-[#161b23]">
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-sm font-medium text-slate-700 dark:text-slate-200">Chọn biểu tượng</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-            <X className="h-4 w-4" />
-          </button>
+          <h3 className="text-sm font-medium text-slate-700 dark:text-slate-200">Chọn biểu tượng môn</h3>
+          <button onClick={onClose} aria-label="Đóng" className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><X className="h-4 w-4" /></button>
         </div>
         <div className="grid grid-cols-8 gap-1">
-          {FOLDER_EMOJIS.map((emoji) => (
+          {FOLDER_EMOJIS.map((emoji, i) => (
             <button
-              key={emoji}
+              key={`${emoji}-${i}`}
               onClick={() => onSelect(emoji)}
               className={`flex h-8 w-8 items-center justify-center rounded-md text-lg transition-colors ${
-                emoji === currentEmoji
-                  ? 'bg-teal-100 ring-2 ring-teal-500 dark:bg-teal-500/20'
-                  : 'hover:bg-slate-100 dark:hover:bg-white/10'
+                emoji === currentEmoji ? 'bg-teal-100 ring-2 ring-teal-500 dark:bg-teal-500/20' : 'hover:bg-black/[0.05] dark:hover:bg-white/10'
               }`}
             >
               {emoji}

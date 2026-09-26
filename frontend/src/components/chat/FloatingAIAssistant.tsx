@@ -73,6 +73,8 @@ export default function FloatingAIAssistant() {
    || pathname?.startsWith('/nhung-video')
    // CT Work có trợ lý AI riêng trong dự án (đợt 4); robot nổi đè lên board.
    || pathname === '/work' || pathname?.startsWith('/work/')
+   // Sổ tay có nút "Hỏi ghi chú" riêng ở đúng góc này; robot đè lên nó (26/09).
+   || pathname === '/notes' || pathname?.startsWith('/notes/')
    || hiddenOnMobile,
  );
 

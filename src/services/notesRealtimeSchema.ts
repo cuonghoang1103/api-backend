@@ -1,6 +1,7 @@
 import { Node, mergeAttributes, type Extensions } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
 import Table from '@tiptap/extension-table';
@@ -103,5 +104,15 @@ export const noteRealtimeExtensions: Extensions = [
   TableRow,
   TableHeader,
   TableCell,
+  // Mark `link` (26/09/2026). Trình soạn (NoteEditor) có Link từ lâu nhưng schema
+  // này thì không ⇒ note nào có link đều làm toYdoc/generateHTML ném "There is no
+  // mark type link" — phòng realtime không mở được, bản HTML không dựng được.
+  // Cấu hình khớp NoteEditor (protocols không có `javascript:`).
+  Link.configure({
+    openOnClick: false,
+    autolink: false,
+    protocols: ['http', 'https', 'mailto'],
+    HTMLAttributes: { rel: 'noopener noreferrer nofollow', target: '_blank' },
+  }),
 ];
 

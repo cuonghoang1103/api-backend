@@ -40,8 +40,10 @@ import {
   Lightbulb, StickyNote, TriangleAlert, Sigma, SquareRadical, Minus,
   Table2, Quote, ImagePlus, GripHorizontal, Search,
   ChevronRight, Clapperboard, Paperclip, Bookmark, Frame, Database, Unlink,
+  NotebookPen, Keyboard, Bug,
   type LucideIcon,
 } from 'lucide-react';
+import { ghiNhanhApi, type MauTrang, type MauTrangKey } from '@/lib/api';
 
 /** Vùng văn bản của trigger: từ ký tự "/" tới con trỏ. */
 export interface SlashRange { from: number; to: number }
@@ -73,7 +75,7 @@ interface Props {
   onDismiss?: (range: SlashRange) => void;
 }
 
-type Group = 'Cơ bản' | 'Danh sách' | 'Khối nội dung' | 'Nâng cao';
+type Group = 'Cơ bản' | 'Danh sách' | 'Khối nội dung' | 'Nâng cao' | 'Mẫu trang';
 
 interface Item {
   label: string;
@@ -85,7 +87,18 @@ interface Item {
   run: (editor: Editor, range: SlashRange) => void;
 }
 
-const GROUP_ORDER: Group[] = ['Cơ bản', 'Danh sách', 'Khối nội dung', 'Nâng cao'];
+const GROUP_ORDER: Group[] = ['Cơ bản', 'Danh sách', 'Khối nội dung', 'Nâng cao', 'Mẫu trang'];
+
+// ─── Mẫu trang (Ghi chú bài học · Sổ lệnh · Nhật ký lỗi) ─────────────
+// Nội dung mẫu sống ở MỘT chỗ: backend `ghiNhanhNoiDung.ts` (ô Ghi nhanh và
+// endpoint "trang mới từ mẫu" dùng chung). Ở đây chỉ tải về một lần rồi nhớ.
+let mauCache: Promise<MauTrang[]> | null = null;
+function layMau(): Promise<MauTrang[]> {
+  if (!mauCache) {
+    mauCache = ghiNhanhApi.mau().then((r) => r.data.data).catch((e: unknown) => { mauCache = null; throw e; });
+  }
+  return mauCache;
+}
 
 /** Bỏ dấu tiếng Việt để "tieu de" khớp "Tiêu đề". */
 function deaccent(s: string): string {
@@ -269,6 +282,24 @@ function buildItems(
         .insertContent({ type: 'math', attrs: { mode: 'block' }, content: [{ type: 'text', text: '\\sum_{i=0}^n i' }] })
         .run(),
     },
+    ...([
+      ['ghi-chu-bai-hoc', 'Mẫu: Ghi chú bài học', 'Tóm tắt · Lệnh mới · Lỗi gặp · Thắc mắc', NotebookPen, ['mau', 'template', 'ghi chu bai hoc', 'bai hoc', 'tom tat']],
+      ['so-lenh', 'Mẫu: Sổ lệnh', 'Bảng Lệnh · Nghĩa · Ví dụ · Nhóm · Lỗi', Keyboard, ['mau', 'template', 'so lenh', 'lenh', 'terminal', 'command', 'cheatsheet']],
+      ['nhat-ky-loi', 'Mẫu: Nhật ký lỗi', 'Lỗi → Nguyên nhân → Cách sửa → Bài học', Bug, ['mau', 'template', 'nhat ky loi', 'loi', 'bug', 'debug']],
+    ] as [MauTrangKey, string, string, LucideIcon, string[]][]).map(([key, label, hint, icon, keywords]): Item => ({
+      label, hint, icon, keywords, group: 'Mẫu trang',
+      // Xoá "/" ngay, rồi chèn khi mẫu về (lần đầu mất một nhịp mạng, sau đó
+      // lấy từ bộ nhớ). Chèn tại con trỏ HIỆN TẠI chứ không tại `range` cũ.
+      run: (ed, r) => {
+        at(ed, r).run();
+        void layMau()
+          .then((ds) => {
+            const mau = ds.find((m) => m.key === key);
+            if (mau && !ed.isDestroyed) chain(ed).focus().insertContent(mau.html).run();
+          })
+          .catch(() => { /* mạng lỗi — người dùng chọn lại là được */ });
+      },
+    })),
   ];
 }
 

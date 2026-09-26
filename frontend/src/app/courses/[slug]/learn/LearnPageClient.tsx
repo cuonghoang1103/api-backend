@@ -24,6 +24,11 @@ import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
 import type { Course, LessonDto, LessonProgress, LessonDetail, LessonVideoTrack, VideoTrackKey } from '@/types';
 import { useToMauCode } from '@/lib/toMauCode';
+import dynamic from 'next/dynamic';
+
+// Bôi đen → "📝 Lưu vào sổ tay" + mục "Ghi chú của bạn cho bài này".
+// Tải lười, và tự tắt khi chưa đăng nhập — xem LuuVaoSoTay.tsx.
+const LuuVaoSoTay = dynamic(() => import('./LuuVaoSoTay'), { ssr: false });
 
 function formatDuration(seconds: number): string {
   if (!seconds) return '0:00';
@@ -1165,6 +1170,8 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   />
                 </div>
               )}
+
+              <LuuVaoSoTay courseSlug={slug} lessonId={currentLesson.id} />
 
               {/* Gia sư AI — hỏi bất cứ điều gì về bài đang học (bắt đầu từ đâu,
                   chỗ khó, kiến thức nền, tạo/chữa bài tập, review). Pro-gated. */}

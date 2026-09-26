@@ -1,7 +1,11 @@
 'use client';
 
 /**
- * Trợ lý ghi chú — hỏi bằng câu thường, trả lời KÈM NGUỒN.
+ * "Hỏi ghi chú" — hỏi bằng câu thường, trả lời KÈM NGUỒN.
+ *
+ * (Tên cũ "Hỏi trợ lý" đổi 26/09/2026: cạnh nút "✨ Sắp xếp lại" và menu AI,
+ * chữ "trợ lý" không nói được panel này khác gì — cái nó làm là HỎI trên kho
+ * ghi chú của chính bạn.)
  *
  * Khác `NoteAiMenu` (biến đổi đoạn chữ đang bôi đen): panel này đọc toàn bộ
  * kho ghi chú của bạn rồi trả lời, và mỗi ý đều ghi số nguồn `[1]` `[2]` bấm
@@ -48,17 +52,17 @@ export default function NoteAssistantPanel({
       setNguon(res.data.data.sources ?? []);
     } catch (e) {
       const o = e as { response?: { data?: { message?: string } } };
-      setLoi(o.response?.data?.message ?? 'Không hỏi được trợ lý. Thử lại.');
+      setLoi(o.response?.data?.message ?? 'Chưa hỏi được ghi chú. Thử lại.');
     } finally {
       setDangHoi(false);
     }
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-[min(420px,calc(100vw-2rem))] rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-2xl">
+    <div role="dialog" aria-label="Hỏi ghi chú" className="fixed bottom-4 right-4 z-50 w-[min(420px,calc(100vw-2rem))] rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-2xl">
       <div className="flex items-center gap-2 border-b border-[var(--border-color)] px-4 py-3">
         <Sparkles size={16} className="text-violet-400" />
-        <span className="flex-1 text-sm font-semibold text-[var(--text-primary)]">Hỏi trợ lý về ghi chú</span>
+        <span className="flex-1 text-sm font-semibold text-[var(--text-primary)]">Hỏi ghi chú</span>
         <button type="button" onClick={onDong} aria-label="Đóng" className="rounded p-1 hover:bg-[var(--bg-hover)]">
           <X size={15} />
         </button>
@@ -68,7 +72,7 @@ export default function NoteAssistantPanel({
         {!traLoi && !loi && !dangHoi && (
           <p className="text-xs text-[var(--text-secondary)]">
             Ví dụ: “tôi ghi gì về Prisma migration?”, “tóm tắt các ghi chú về PostgreSQL”.
-            Trợ lý chỉ trả lời dựa trên ghi chú của bạn — không thấy thì nó nói thẳng là không thấy.
+            Chỉ trả lời dựa trên ghi chú của bạn — không thấy thì nói thẳng là không thấy.
           </p>
         )}
 
@@ -118,7 +122,7 @@ export default function NoteAssistantPanel({
             if ((e.nativeEvent as unknown as { isComposing?: boolean }).isComposing) return;
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void gui(); }
           }}
-          placeholder="Ask about your notes…"
+          placeholder="Hỏi về ghi chú của bạn…"
           className="flex-1 resize-none rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-violet-500"
         />
         <button

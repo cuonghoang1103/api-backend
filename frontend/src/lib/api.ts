@@ -382,6 +382,31 @@ export const roadmapApi = {
   toggleDone: (nodeId: number) => api.post<{ data: { nodeId: number; done: boolean } }>(`/roadmaps/nodes/${nodeId}/done`),
 };
 
+/** Kết quả "✨ Sắp xếp lại trang" (`POST /notes/ai/sap-xep`). */
+export interface NoteSapXepResult {
+  /** Doc TipTap đề xuất — CHƯA áp vào ghi chú. */
+  doc: Record<string, unknown>;
+  /** Những gì mã đã phải tự sửa hoặc muốn người dùng kiểm lại. */
+  canhBao: string[];
+  thongKe: { muc: number; khoiCode: number; dongLenh: number; bang: number; lienKet: number };
+  /** Tỉ lệ từ của bản gốc còn thấy trong bản mới (0–1). */
+  doPhu: number;
+  soKyTuVao: number;
+}
+
+/** Kết quả bảng lệnh ⌘K của Sổ tay (`GET /notes/search/palette`). */
+export interface NotePaletteNoteHit {
+  id: number; title: string;
+  subjectId: number; subjectName: string; subjectEmoji: string | null;
+  chapterId: number | null; chapterTitle: string | null;
+  snippet: string; matchIn: 'title' | 'content'; updatedAt: string;
+}
+export interface NotePaletteResult {
+  notes: NotePaletteNoteHit[];
+  subjects: { id: number; name: string; emoji: string | null; color: string | null; clientId: string | null }[];
+  chapters: { id: number; title: string; subjectId: number; subjectName: string; subjectEmoji: string | null }[];
+}
+
 export const notesApi = {
   // Tree (sidebar) + recent rail
   getTree: () =>
@@ -492,7 +517,12 @@ export const notesApi = {
     api.get<{ data: { key: string; label: string }[] }>('/notes/ai/actions'),
   /** Nhờ AI xử lý đoạn chữ đang bôi đen. `action` phải nằm trong danh sách trên. */
   aiAssist: (action: string, selection: string) =>
-    api.post<{ data: { text: string; action: string } }>('/notes/ai/assist', { action, selection }),
+    api.post<{ data: {
+      text: string;
+      action: string;
+      /** `text` đã dựng sẵn thành nút TipTap (bảng, checklist…) — chèn cái này, không chèn `text`. */
+      nodes?: Record<string, unknown>[];
+    } }>('/notes/ai/assist', { action, selection }),
 
   /**
    * Tải ghi chú về máy dưới dạng Markdown / Word / PDF.
@@ -531,8 +561,72 @@ export const notesApi = {
       sources: { noteId: number; title: string; trich: string }[];
     } }>('/notes/ai/hoi', { question }),
 
+  /**
+   * "✨ Sắp xếp lại trang này" — gửi JSON đang có TRONG EDITOR (không phải bản
+   * trong DB: ở chế độ cộng tác DB có thể trễ vài giây), nhận về bản đề xuất.
+   * KHÔNG ghi gì vào ghi chú — người dùng xem so sánh rồi mới quyết định.
+   *
+   * Đi bằng `fetch` + SSE chứ không qua axios: trang dài chạy quá 100 giây, mà
+   * proxy Cloudflare cắt phản hồi im lặng quá 100 giây (524). SSE gửi tiến độ
+   * liên tục nên kết nối không bao giờ im.
+   *
+   * Ném `Error` mang ĐÚNG câu máy chủ trả về (trang quá dài, hết hạn mức, AI
+   * làm mất nội dung…) — mỗi câu cần một cách xử lý khác nhau.
+   */
+  aiSapXep: async (
+    noteId: number,
+    doc: Record<string, unknown>,
+    opts: { onProgress?: (chars: number) => void; signal?: AbortSignal } = {},
+  ): Promise<NoteSapXepResult> => {
+    const goc = String(api.defaults.baseURL ?? '/api/v1').replace(/\/+$/, '');
+    const token = typeof document === 'undefined'
+      ? ''
+      : decodeURIComponent(document.cookie.match(/(?:^|;)\s*backend_token=([^;]*)/)?.[1] ?? '');
+    const goi = () => fetch(`${goc}/notes/ai/sap-xep`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+      body: JSON.stringify({ noteId, doc }),
+      signal: opts.signal,
+    });
+    let res = await goi();
+    // Phiên hết hạn: tự làm mới MỘT lần như interceptor của axios rồi gọi lại.
+    if (res.status === 401 && (await refreshSession())) res = await goi();
+    if (!res.ok || !res.body) {
+      let msg = `Máy chủ trả HTTP ${res.status}`;
+      try { msg = ((await res.json()) as { message?: string }).message || msg; } catch { /* thân không phải JSON */ }
+      throw new Error(msg);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const frames = buffer.split('\n\n');
+      buffer = frames.pop() || '';
+      for (const frame of frames) {
+        for (const line of frame.split('\n')) {
+          if (!line.startsWith('data:')) continue;
+          let evt: { type?: string; chars?: number; data?: NoteSapXepResult; error?: string };
+          try { evt = JSON.parse(line.slice(5).trim()); } catch { continue; }
+          if (evt.type === 'progress' && typeof evt.chars === 'number') opts.onProgress?.(evt.chars);
+          else if (evt.type === 'done' && evt.data) return evt.data;
+          else if (evt.type === 'error') throw new Error(evt.error || 'AI chưa sắp xếp được trang.');
+        }
+      }
+    }
+    throw new Error('Kết nối tới máy chủ bị ngắt giữa chừng — trang giữ nguyên. Thử lại.');
+  },
+
   search: (params: { q?: string; subjectId?: number; tag?: string }) =>
     api.get<{ data: import('@/types').NoteSearchResult[] }>('/notes/search', { params }),
+  /** Bảng lệnh ⌘K — trang (kèm Môn › Chương + đoạn trích) · môn · chương.
+   *  `signal` để huỷ lượt cũ khi người dùng gõ tiếp. */
+  searchPalette: (q: string, signal?: AbortSignal) =>
+    api.get<{ data: NotePaletteResult }>('/notes/search/palette', { params: { q }, signal }),
   getTags: () =>
     api.get<{ data: string[] }>('/notes/tags'),
 
@@ -5720,4 +5814,41 @@ export const videoHocApi = {
   phongHoc(lessonId: number) {
     return api.get<{ data: PhuDeBai & { coPhuDe: boolean } }>(`/video-hoc/phong/${lessonId}`);
   },
+};
+
+// ─── Ghi nhanh · Sổ lệnh · Sổ tay khoá · Nhập .md ──────────────
+// Backend: src/routes/ghiNhanh.routes.ts (gắn dưới /notes/ghi-nhanh).
+// "📥 Hộp thư" = NoteSubject có clientId 'he-thong:hop-thu'.
+export type MauTrangKey = 'ghi-chu-bai-hoc' | 'so-lenh' | 'nhat-ky-loi';
+export interface MauTrang { key: MauTrangKey; title: string; icon: string; description: string; html: string }
+export interface GhiNhanhKetQua {
+  note: { id: number; title: string; subjectId: number; chapterId: number | null };
+  subject: { id: number; name: string };
+}
+export interface DoanDaLuu { text: string; laCode: boolean }
+
+export const ghiNhanhApi = {
+  hopThu: () => api.get<{ data: { id: number; name: string; clientId: string } }>('/notes/ghi-nhanh/hop-thu'),
+  mau: () => api.get<{ data: MauTrang[] }>('/notes/ghi-nhanh/mau'),
+  /** `text` là Markdown. */
+  luu: (data: { title?: string; text: string; template?: MauTrangKey }) =>
+    api.post<{ data: GhiNhanhKetQua }>('/notes/ghi-nhanh', data),
+  /** Trang mới từ mẫu; không có subjectId thì vào Hộp thư. */
+  tuMau: (data: { template: MauTrangKey; subjectId?: number; chapterId?: number | null; title?: string }) =>
+    api.post<{ data: { note: GhiNhanhKetQua['note'] } }>('/notes/ghi-nhanh/tu-mau', data),
+  soLenh: () => api.get<{ data: { noteId: number; title: string; subjectId: number } }>('/notes/ghi-nhanh/so-lenh'),
+  themLenh: (data: { lenh: string; nghia: string; viDu?: string; nhom?: string; loi?: string; noteId?: number }) =>
+    api.post<{ data: { noteId: number; soDong: number } }>('/notes/ghi-nhanh/so-lenh/dong', data),
+  /** Sinh/đồng bộ thẻ ôn (NoteVocabEntry) từ bảng Sổ lệnh của trang. */
+  taoThe: (noteId: number) =>
+    api.post<{ data: { noteId: number; soThe: number; taoMoi: number; capNhat: number } }>(`/notes/ghi-nhanh/so-lenh/${noteId}/the`),
+  luuDoanBaiHoc: (data: { courseSlug: string; lessonId: number; text: string; laCode?: boolean }) =>
+    api.post<{ data: { noteId: number; subjectId: number; subjectName: string } }>('/notes/ghi-nhanh/khoa/luu', data),
+  doanCuaBai: (courseSlug: string, lessonId: number) =>
+    api.get<{ data: { noteId: number | null; title?: string; doan: DoanDaLuu[] } }>(
+      `/notes/ghi-nhanh/khoa/${encodeURIComponent(courseSlug)}/bai/${lessonId}`,
+    ),
+  /** File gửi dạng CHỮ trong JSON (không multipart) — tối đa 512 KB. */
+  nhapMd: (data: { filename: string; markdown: string }) =>
+    api.post<{ data: GhiNhanhKetQua }>('/notes/ghi-nhanh/nhap-md', data),
 };

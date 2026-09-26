@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { Search, Filter, ChevronDown, Loader2 } from 'lucide-react';
 import CourseCard from '@/components/course/CourseCard';
+import CourseRoadmap from '@/components/courses/CourseRoadmap';
 import { coursesApi, courseCategoryApi } from '@/lib/api';
 import type { Course, CourseCategory } from '@/types';
 
@@ -33,6 +34,8 @@ function CoursesContent() {
   // Academy courses live in the same table (academyType != 'GENERAL')
   // but are surfaced ONLY here, never in the general "All" list.
   const [academyMode, setAcademyMode] = useState(false);
+  // Tab "Lộ trình": tháp thứ tự học, thay cho lưới khoá. Mở thẳng bằng ?tab=lo-trinh.
+  const [roadmapMode, setRoadmapMode] = useState(searchParams.get('tab') === 'lo-trinh');
 
   useEffect(() => {
     courseCategoryApi.getAll().then(r => setCategories(r.data.data || [])).catch(() => {});
@@ -68,9 +71,10 @@ function CoursesContent() {
   };
 
   useEffect(() => {
+    if (roadmapMode) return;
     fetchCourses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, category, level, academyMode]);
+  }, [page, category, level, academyMode, roadmapMode]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,25 +121,37 @@ function CoursesContent() {
       <div className="max-w-6xl mx-auto px-4 pb-20">
         {/* Top-level tabs: general Courses vs FPTU Academy. Academy
             courses only appear under their own tab. */}
-        <div className="flex items-center gap-2 mb-6 border-b border-darkborder">
+        <div className="flex items-center gap-2 mb-6 border-b border-darkborder overflow-x-auto whitespace-nowrap">
           <button
-            onClick={() => { setAcademyMode(false); setPage(0); }}
+            onClick={() => setRoadmapMode(true)}
+            className={`px-4 py-2.5 text-sm font-medium -mb-px border-b-2 transition-colors flex items-center gap-1.5 ${
+              roadmapMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
+            }`}
+          >
+            🧭 Lộ trình học
+          </button>
+          <button
+            onClick={() => { setRoadmapMode(false); setAcademyMode(false); setPage(0); }}
             className={`px-4 py-2.5 text-sm font-medium -mb-px border-b-2 transition-colors ${
-              !academyMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
+              !roadmapMode && !academyMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
             }`}
           >
             Tất cả khoá học
           </button>
           <button
-            onClick={() => { setAcademyMode(true); setCategory(''); setPage(0); }}
+            onClick={() => { setRoadmapMode(false); setAcademyMode(true); setCategory(''); setPage(0); }}
             className={`px-4 py-2.5 text-sm font-medium -mb-px border-b-2 transition-colors flex items-center gap-1.5 ${
-              academyMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
+              !roadmapMode && academyMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
             }`}
           >
             🎓 FPTU Academy
           </button>
         </div>
 
+        {roadmapMode ? (
+          <CourseRoadmap />
+        ) : (
+        <>
         {/* Filter bar */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3 flex-wrap">
@@ -247,6 +263,8 @@ function CoursesContent() {
               </div>
             )}
           </>
+        )}
+        </>
         )}
       </div>
     </div>

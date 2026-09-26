@@ -13512,3 +13512,195 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   background: rgba(167, 139, 250, .08); border: 1px solid rgba(167, 139, 250, .22);
   white-space: pre-wrap; word-break: break-word;
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+ * AI TERMINAL — giao diện riêng của trang AI Chat / AI Code (25/09/2026)
+ * ══════════════════════════════════════════════════════════════════════
+ *
+ * Người dùng: *"background màu tím trông xấu quá — nền màu đen, như iTerm,
+ * linux hacker gì đó cho có trải nghiệm dùng với AI"*.
+ *
+ * CÁCH LÀM: đổi GIÁ TRỊ biến `--ct-*` trong phạm vi `.ct-ai-term`, không đổi
+ * lớp trên từng thành phần. Mọi thứ trong trang vốn đã vẽ bằng biến, nên chúng
+ * tự sang màu terminal — kể cả thành phần thêm về sau. Áp cả khi app đang ở
+ * chủ đề SÁNG: người dùng muốn trang AI luôn là một cái terminal.
+ *
+ * Bảng màu: đen xanh rêu (không đen tuyệt đối — đọc hàng giờ mỏi mắt, xem
+ * chú thích "Nền tối: DỊU" ở đầu tệp), nhấn xanh lục phốt-pho của terminal cổ,
+ * phụ xanh ngọc cho liên kết/mã. Chữ thân `#d5e3dc` trên nền `#0a0e0d` ≈ 14:1.
+ */
+.ct-ai-term {
+  --ct-bg: #0a0e0d;
+  --ct-surface: #0f1413;
+  --ct-surface-2: #141b19;
+  --ct-sidebar: #0c1110;
+  --ct-border: #1f2b28;
+  --ct-hover: rgba(74, 222, 128, 0.06);
+  --ct-active: rgba(74, 222, 128, 0.13);
+
+  --ct-text: #d5e3dc;
+  --ct-text-muted: #8fa89c;
+  --ct-text-faint: #5f766b;
+
+  --ct-accent: #4ade80;
+  --ct-accent-text: #86efac;
+  --ct-ok: #4ade80;
+  --ct-warn: #facc15;
+  --ct-err: #f87171;
+
+  --ct-shadow: 0 10px 34px rgba(0, 0, 0, 0.6);
+  --ct-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.45);
+
+  --ct-term-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
+  --ct-term-glow: 0 0 0 1px rgba(74, 222, 128, 0.35), 0 0 18px rgba(74, 222, 128, 0.12);
+
+  color-scheme: dark;
+  color: var(--ct-text);
+}
+
+/* Nền: lưới mờ + quầng sáng xanh ở góc — gợi màn hình CRT mà không làm rối
+   chữ. Đặt trên khung panel, không trên từng khối, nên chỉ vẽ một lần. */
+.ct-ai-term .ct-panel {
+  background:
+    radial-gradient(900px 420px at 100% -10%, rgba(74, 222, 128, 0.07), transparent 60%),
+    radial-gradient(700px 380px at -10% 110%, rgba(34, 211, 238, 0.05), transparent 60%),
+    linear-gradient(rgba(74, 222, 128, 0.025) 1px, transparent 1px) 0 0 / 100% 28px,
+    var(--ct-bg);
+  border-color: var(--ct-border);
+}
+
+/* ── Chữ "khung": tiêu đề, tab, nút, thanh bên → monospace ──
+   Câu trả lời của AI vẫn giữ font thường: đọc đoạn văn tiếng Việt dài bằng
+   monospace rất mệt. Terminal ở phần VỎ, dễ đọc ở phần RUỘT. */
+.ct-ai-term .ct-page-head,
+.ct-ai-term .ct-segment,
+.ct-ai-term .ct-tabs,
+.ct-ai-term .ct-tb,
+.ct-ai-term .ct-agent-bar,
+.ct-ai-term .ct-agent-chan,
+.ct-ai-term .ct-agent-tool,
+.ct-ai-term .ct-agent-nguoi,
+.ct-ai-term .ct-agent-o,
+.ct-ai-term .ct-chat-thanh,
+.ct-ai-term .ct-chat-chan,
+.ct-ai-term .ct-empty h1,
+.ct-ai-term .ct-agent-trong h2,
+.ct-ai-term .ct-agent-trong h3 {
+  font-family: var(--ct-term-mono);
+  letter-spacing: -0.01em;
+}
+
+/* Tiêu đề trang thành một dấu nhắc lệnh: `~/ai ❯ Trợ lý AI▌` */
+.ct-ai-term .ct-panel-full > .ct-page-head h1 {
+  font-family: var(--ct-term-mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ct-text);
+}
+.ct-ai-term .ct-panel-full > .ct-page-head h1::before {
+  content: '~/ai ❯ ';
+  color: var(--ct-accent);
+  font-weight: 500;
+}
+.ct-ai-term .ct-panel-full > .ct-page-head h1::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 1.05em;
+  margin-left: 6px;
+  vertical-align: -2px;
+  background: var(--ct-accent);
+  animation: ct-term-nhay 1.1s steps(1) infinite;
+}
+@keyframes ct-term-nhay { 50% { opacity: 0; } }
+
+/* Nút chọn chế độ (Trò chuyện / Lập trình / Trình duyệt) */
+.ct-ai-term .ct-segment {
+  background: var(--ct-surface);
+  border-color: var(--ct-border);
+}
+.ct-ai-term .ct-segment [aria-selected='true'],
+.ct-ai-term .ct-segment-nut[data-chon='true'] {
+  background: var(--ct-active);
+  color: var(--ct-accent-text);
+  box-shadow: inset 0 0 0 1px rgba(74, 222, 128, 0.35);
+}
+
+/* ── Tin nhắn người dùng: một DÒNG LỆNH, không phải bong bóng tím ── */
+.ct-ai-term .ct-agent-nguoi {
+  background: var(--ct-surface-2);
+  color: var(--ct-text);
+  border: 1px solid var(--ct-border);
+  border-left: 2px solid var(--ct-accent);
+  border-radius: 8px;
+  box-shadow: none;
+  font-size: 13px;
+}
+.ct-ai-term .ct-agent-nguoi::before {
+  content: '❯ ';
+  color: var(--ct-accent);
+  font-weight: 700;
+}
+
+/* Câu trả lời: chữ sáng dịu, mã và liên kết xanh ngọc. */
+.ct-ai-term .ct-agent-may { color: var(--ct-text); }
+.ct-ai-term .ct-md a { color: #5eead4; }
+.ct-ai-term .ct-md :not(pre) > code {
+  background: rgba(74, 222, 128, 0.08);
+  color: #a7f3d0;
+  border-color: rgba(74, 222, 128, 0.18);
+}
+.ct-ai-term .ct-md pre,
+.ct-ai-term .ct-md-ma {
+  background: #060908;
+  border-color: var(--ct-border);
+}
+
+/* Dòng công cụ: như log của terminal — tên tool màu xanh. */
+.ct-ai-term .ct-agent-tool code { color: var(--ct-accent-text); }
+.ct-ai-term .ct-agent-tool:hover { background: var(--ct-hover); }
+
+/* ── Ô soạn: dấu nhắc lệnh + viền phát sáng khi gõ ── */
+.ct-ai-term .ct-agent-o {
+  background: #070a09;
+  border-color: var(--ct-border);
+  caret-color: var(--ct-accent);
+  font-size: 13px;
+}
+.ct-ai-term .ct-agent-o::placeholder { color: var(--ct-text-faint); }
+.ct-ai-term .ct-agent-o:focus {
+  border-color: rgba(74, 222, 128, 0.6);
+  box-shadow: var(--ct-term-glow);
+}
+
+/* Nút chính (Gửi…): chữ đen trên nền xanh lục — trắng trên xanh lục sáng
+   chỉ đạt ~1,9:1, không đọc nổi. */
+.ct-ai-term .ct-btn:not(.ct-btn-ghost):not(.ct-agent-dung) {
+  background: var(--ct-accent);
+  color: #04130a;
+  border-color: transparent;
+}
+.ct-ai-term .ct-btn:not(.ct-btn-ghost):not(.ct-agent-dung):hover:not(:disabled) {
+  background: #6ee7a0;
+  box-shadow: var(--ct-term-glow);
+}
+.ct-ai-term .ct-btn-ghost {
+  border-color: var(--ct-border);
+  color: var(--ct-text-muted);
+}
+.ct-ai-term .ct-btn-ghost:hover:not(:disabled) {
+  color: var(--ct-accent-text);
+  border-color: rgba(74, 222, 128, 0.4);
+}
+
+/* Thanh cuộn mảnh, xanh mờ. */
+.ct-ai-term ::-webkit-scrollbar { width: 8px; height: 8px; }
+.ct-ai-term ::-webkit-scrollbar-thumb { background: rgba(74, 222, 128, 0.14); border-radius: 4px; }
+.ct-ai-term ::-webkit-scrollbar-thumb:hover { background: rgba(74, 222, 128, 0.28); }
+.ct-ai-term ::-webkit-scrollbar-track { background: transparent; }
+
+.ct-ai-term ::selection { background: rgba(74, 222, 128, 0.3); color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-ai-term .ct-panel-full > .ct-page-head h1::after { animation: none; }
+}

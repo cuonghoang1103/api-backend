@@ -114,12 +114,21 @@ export function ChatPage() {
    * Đường đúng: báo xuống `AgentMode` qua prop, để nó gọi `moPhien` của
    * `useAgent` — hàm đó mới là chỗ nhận `{ muc }` và đổ vào bảng ghi.
    */
-  const [phienCanMo, datPhienCanMo] = useState<{ id: string; lan: number } | null>(null);
+  /*
+   * ⚠️ `tab` — yêu cầu mở phiên GẮN VỚI ĐÚNG MỘT TAB (25/09/2026).
+   *
+   * Trước đây state này chỉ có `{ id, lan }` và được truyền cho "tab đang mở",
+   * nên nó SỐNG MÃI sau khi đã dùng xong. Mở một việc cũ từ lịch sử rồi bấm
+   * "+" ⇒ tab mới trở thành tab đang mở, NHẬN LUÔN yêu cầu cũ, và effect lúc
+   * gắn của `AgentMode` nạp lại nguyên đoạn chat của việc A vào task mới.
+   * Người dùng báo: "ấn new task mà task mới có đầy đủ đoạn chat của task A".
+   */
+  const [phienCanMo, datPhienCanMo] = useState<{ tab: string; id: string; lan: number } | null>(null);
   const moPhienVaoTab = (id: string): void => {
     if (!tabMo) return;
     // `lan` tăng mỗi lần: bấm LẠI đúng việc vừa mở phải mở lại được, mà chỉ
     // so `id` thì lần thứ hai không đổi prop nên effect không chạy.
-    datPhienCanMo((cu) => ({ id, lan: (cu?.lan ?? 0) + 1 }));
+    datPhienCanMo((cu) => ({ tab: tabMo, id, lan: (cu?.lan ?? 0) + 1 }));
   };
 
   /**
@@ -138,7 +147,7 @@ export function ChatPage() {
       // Đặt SAU khi đổi tab: `phienCanMo` chỉ được truyền xuống tab đang mở
       // (xem chỗ dựng `AgentMode` bên dưới), nên đặt trước thì nó rơi vào tab
       // cũ và bản nhánh đè lên đúng việc ta vừa cố giữ nguyên.
-      datPhienCanMo((cu) => ({ id, lan: (cu?.lan ?? 0) + 1 }));
+      datPhienCanMo((cu) => ({ tab: tabId, id, lan: (cu?.lan ?? 0) + 1 }));
     });
   };
 
@@ -186,7 +195,10 @@ export function ChatPage() {
   const doiGapDau = (): void => setSetting('aiGapDau', !gapDau);
 
   return (
-    <div className="ct-page ct-page-full" data-chua-robot={coRobot}>
+    /* `ct-ai-term`: giao diện TERMINAL riêng của trang AI (25/09/2026) — xem
+       khối "AI TERMINAL" cuối `styles.css`. Chỉ đổi biến màu trong phạm vi
+       trang này, các trang khác của app không bị ảnh hưởng. */
+    <div className="ct-page ct-page-full ct-ai-term" data-chua-robot={coRobot}>
       <div className="ct-panel ct-panel-full" data-gap-dau={gapDau}>
         <div className="ct-page-head">
           <button
@@ -332,7 +344,9 @@ export function ChatPage() {
                       napLai={nap}
                       datTieuDe={(t) => datTenTab((cu) => (cu[id] === t ? cu : { ...cu, [id]: t }))}
                       datDuAn={(d) => datDuAnTab((cu) => (cu[id] === d ? cu : { ...cu, [id]: d }))}
-                      {...(id === tabMo && phienCanMo ? { phienCanMo } : {})}
+                      {...(phienCanMo?.tab === id
+                        ? { phienCanMo: { id: phienCanMo.id, lan: phienCanMo.lan } }
+                        : {})}
                       onTachRaTabMoi={moPhienVaoTabMoi}
                     />
                   </div>

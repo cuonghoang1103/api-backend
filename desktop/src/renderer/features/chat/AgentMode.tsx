@@ -1456,9 +1456,25 @@ function BangKeHoach({ viec }: { viec: AgentViec[] }) {
  * bằng tính từ. "Mạnh hơn" thì ai cũng bấm; "đắt gấp 2,3 lần và chậm hơn 23%"
  * thì người ta bấm khi họ thật sự cần.
  */
+/**
+ * Tên HIỂN THỊ của model — thương hiệu riêng, không trùng tên Claude của
+ * Anthropic (người dùng yêu cầu 25/09/2026): Haiku → "Cuong Haiku", Sonnet →
+ * "Cuong Sonnet", Opus → "CuongMini Max"; số phiên bản giữ nguyên.
+ *
+ * Làm ở CẢ HAI phía: máy chủ (`src/services/agent/models.ts`) đã đổi tên, nhưng
+ * app phải chạy được với máy chủ chưa deploy bản mới — nên đổi thêm lúc hiện.
+ * Chỉ đổi TÊN; `id` gửi lên máy chủ không đụng tới.
+ */
+export function doiTenModel(ten: string): string {
+  return ten
+    .replace(/^Claude Haiku\b/, 'Cuong Haiku')
+    .replace(/^Claude Sonnet\b/, 'Cuong Sonnet')
+    .replace(/^Claude Opus\b/, 'CuongMini Max');
+}
+
 const DS_MODEL: Array<{ id: ModelAgent; ten: string; mo: string }> = [
-  { id: 'sonnet-5', ten: 'Claude Sonnet 5', mo: 'rẻ nhất — mặc định (1,76/việc)' },
-  { id: 'opus-4-8', ten: 'Claude Opus 4.8', mo: 'mạnh nhất — đắt gấp 2,3 lần (4,07/việc)' },
+  { id: 'sonnet-5', ten: 'Cuong Sonnet 5', mo: 'rẻ nhất — mặc định (1,76/việc)' },
+  { id: 'opus-4-8', ten: 'CuongMini Max 4.8', mo: 'mạnh nhất — đắt gấp 2,3 lần (4,07/việc)' },
   { id: 'gpt-sol', ten: 'GPT 5.6 Sol', mo: 'nhà khác — ĐẮT GẤP 7,3 LẦN (12,77/việc)' },
 ];
 
@@ -1500,13 +1516,13 @@ function ChonModelVaMuc({
       })
     : DS_MUC;
   const dsModel = info.models?.length
-    ? info.models.map((m) => ({ id: m.id as ModelAgent, ten: m.ten, mo: m.mo, dungDuoc: m.dungDuoc }))
+    ? info.models.map((m) => ({ id: m.id as ModelAgent, ten: doiTenModel(m.ten), mo: m.mo, dungDuoc: m.dungDuoc }))
     : DS_MODEL.map((m) => ({ ...m, dungDuoc: true }));
 
   const mucNay = dsMuc.find((m) => m.id === muc) ?? dsMuc[1] ?? DS_MUC[1]!;
   const modelNay = dsModel.find((m) => m.id === model) ?? dsModel[0] ?? { ...DS_MODEL[0]!, dungDuoc: true };
   // Tên ngắn cho cái nút — tên đầy đủ không lọt vào thanh công cụ.
-  const tenNgan = modelNay.ten.replace('Claude ', '').replace('GPT ', 'GPT ');
+  const tenNgan = modelNay.ten;
 
   return (
     <div className="ct-chonmm" ref={boc}>

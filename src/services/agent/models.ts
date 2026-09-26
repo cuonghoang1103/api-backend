@@ -34,6 +34,12 @@
  */
 import { congAgent, goiDuocModel } from '../llm/gateway.js';
 
+/*
+ * ⚠️ TÊN HIỂN THỊ là thương hiệu riêng (25/09/2026, người dùng yêu cầu): Haiku →
+ * "Cuong Haiku", Sonnet → "Cuong Sonnet", Opus → "CuongMini Max", số phiên bản
+ * giữ nguyên — để không trùng tên Claude của Anthropic. Chỉ `ten` đổi; `id` và
+ * `model` (tên thật gửi cổng) giữ nguyên.
+ */
 export interface ModelAgent {
   /** Mã app gửi lên. Ngắn, không đổi khi nhà cung cấp đổi tên model. */
   id: string;
@@ -48,13 +54,13 @@ export const MODEL_AGENT: readonly ModelAgent[] = Object.freeze([
   {
     id: 'sonnet-5',
     model: 'claude-sonnet-5',
-    ten: 'Claude Sonnet 5',
+    ten: 'Cuong Sonnet 5',
     mo: 'Mặc định — rẻ nhất, đo 1,76 mỗi việc trên vòng lặp gọi tool',
   },
   {
     id: 'opus-4-8',
     model: 'claude-opus-4-8',
-    ten: 'Claude Opus 4.8',
+    ten: 'CuongMini Max 4.8',
     mo: 'Mạnh nhất — đắt gấp 2,3 lần (4,07/việc). Để dành việc khó',
   },
   {
@@ -83,37 +89,37 @@ const MODEL_AGENT_RIENG: readonly ModelAgent[] = Object.freeze([
   {
     id: 'haiku-4-5',
     model: 'claude-haiku-4-5',
-    ten: 'Claude Haiku 4.5',
+    ten: 'Cuong Haiku 4.5',
     mo: 'Nhẹ nhất — việc vặt, sửa một file, hỏi nhanh',
   },
   {
     id: 'sonnet-4-6',
     model: 'claude-sonnet-4-6',
-    ten: 'Claude Sonnet 4.6',
+    ten: 'Cuong Sonnet 4.6',
     mo: 'Nhanh nhất trong đo thật (2,4s tới chữ đầu) — việc thường ngày',
   },
   {
     id: 'sonnet-5',
     model: 'claude-sonnet-5',
-    ten: 'Claude Sonnet 5',
+    ten: 'Cuong Sonnet 5',
     mo: 'MẶC ĐỊNH — cân bằng nhất giữa nhanh và giỏi',
   },
   {
     id: 'opus-4-6',
     model: 'claude-opus-4-6',
-    ten: 'Claude Opus 4.6',
+    ten: 'CuongMini Max 4.6',
     mo: 'Nặng — việc cần suy luận nhiều bước',
   },
   {
     id: 'opus-4-7',
     model: 'claude-opus-4-7',
-    ten: 'Claude Opus 4.7',
+    ten: 'CuongMini Max 4.7',
     mo: 'Nặng hơn — refactor lớn, đọc cả kiến trúc',
   },
   {
     id: 'opus-4-8',
     model: 'claude-opus-4-8',
-    ten: 'Claude Opus 4.8',
+    ten: 'CuongMini Max 4.8',
     mo: 'Nặng nhất (4,7s tới chữ đầu) — để dành việc khó nhất',
   },
 ]);

@@ -465,14 +465,29 @@ export async function choTai(hanMs = 12_000): Promise<void> {
  * người dùng nhìn thấy đầy chữ.
  */
 export async function docTrang(tranKyTu = 40_000): Promise<string> {
+  return (await docTrangDayDu()).slice(0, tranKyTu);
+}
+
+/**
+ * TOÀN BỘ chữ của trang (26/09/2026).
+ *
+ * ⚠️ Bản cũ lấy `document.querySelector("main,article,#root,#__next")` — tức
+ * phần tử ĐẦU TIÊN theo thứ tự tài liệu khớp BẤT KỲ bộ chọn nào. Trang có một
+ * `<article>` nhỏ (thẻ bài, khung trích dẫn) đứng trước vùng chính là chỉ đọc
+ * được đúng mẩu đó; agent thấy "nội dung có trong DOM mà web_doc chỉ trả vài
+ * nghìn ký tự", rồi đi tải từng file JavaScript của trang để tự moi dữ liệu và
+ * đọc đi đọc lại mãi — người dùng báo đúng vậy. Nay đọc cả `body`; muốn đọc
+ * một vùng thì gọi với `vung` (bộ chọn CSS) rõ ràng.
+ */
+export async function docTrangDayDu(vung?: string): Promise<string> {
   const wc = khung?.webContents;
   if (!wc) return '';
   const chu = await wc.executeJavaScript(
-    '(() => { const e = document.querySelector("main,article,#root,#__next") || document.body;'
+    `(() => { const e = ${vung ? `document.querySelector(${JSON.stringify(vung)})` : 'null'} || document.body;`
     + ' return e ? e.innerText : ""; })()',
     true,
   ) as string;
-  return typeof chu === 'string' ? chu.slice(0, tranKyTu) : '';
+  return typeof chu === 'string' ? chu : '';
 }
 
 /** Ảnh chụp trang, PNG base64. */

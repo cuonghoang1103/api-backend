@@ -370,7 +370,7 @@ export async function chayToolAgent(
       // bắt duyệt từng lần thì agent hỏi năm câu cho một lần xem trang — người
       // dùng sẽ bấm bừa, và lúc đó cái duyệt ở `web_bam` cũng mất giá trị.
       case 'web_mo': return await toolWebMo(args);
-      case 'web_doc': return await toolWebDoc();
+      case 'web_doc': return await toolWebDoc(args);
       case 'web_anh': return await toolWebAnh();
       case 'web_console': return await toolWebConsole();
       case 'web_lien_ket': return await toolWebLienKet(args);
@@ -1812,16 +1812,70 @@ async function toolWebMo(args: Record<string, unknown>): Promise<KetQuaTool> {
   return { noiDung: `Đã mở ${trinhDuyet.urlHienTai()}`, tomTat: url.slice(0, 48) };
 }
 
-async function toolWebDoc(): Promise<KetQuaTool> {
+/** Một lần web_doc trả tối đa bấy nhiêu ký tự — phần còn lại đọc tiếp bằng `tu`. */
+const WEB_DOC_MOT_LAN = 24_000;
+
+/**
+ * Đọc chữ trang đang mở — CÓ PHÂN TRANG và TÌM THEO TỪ (26/09/2026).
+ *
+ * Trước đây tool này trả một cục duy nhất, không có đường đọc tiếp. Trang dài
+ * (hoặc vùng chọn sai — xem `docTrangDayDu`) là agent mắc kẹt: nó biết còn chữ
+ * mà không lấy được, và đi tải từng bundle JavaScript của trang để tự moi —
+ * đọc đi đọc lại mãi. Giờ kết quả luôn nói RÕ: trang dài bao nhiêu, đang trả
+ * đoạn nào, gọi lại với `tu=` bao nhiêu để đọc tiếp — hoặc `tim=` để chỉ lấy
+ * những đoạn quanh một từ khoá.
+ */
+async function toolWebDoc(args: Record<string, unknown> = {}): Promise<KetQuaTool> {
   if (!trinhDuyet.dangMo()) return { noiDung: 'LỖI: chưa mở trang nào. Gọi web_mo trước.', tomTat: 'chưa mở' };
-  const chu = await trinhDuyet.docTrang();
+  const vung = typeof args.vung === 'string' && args.vung.trim() ? args.vung.trim().slice(0, 200) : undefined;
+  let chu: string;
+  try {
+    chu = await trinhDuyet.docTrangDayDu(vung);
+  } catch (e) {
+    return { noiDung: `LỖI: bộ chọn "${vung}" không hợp lệ (${(e as Error).message}).`, tomTat: 'bộ chọn hỏng' };
+  }
   if (!chu.trim()) {
     return {
-      noiDung: 'Trang không có chữ nào hiện ra. Có thể nó đang lỗi — hãy gọi `web_console` để xem.',
+      noiDung: vung
+        ? `Không có phần tử nào khớp "${vung}" (hoặc nó không có chữ). Bỏ \`vung\` để đọc cả trang.`
+        : 'Trang không có chữ nào hiện ra. Có thể nó đang lỗi — hãy gọi `web_console` để xem.',
       tomTat: 'trang trống',
     };
   }
-  return { noiDung: `Nội dung ${trinhDuyet.urlHienTai()}:\n\n${chu}`, tomTat: `${chu.length} ký tự` };
+  const url = trinhDuyet.urlHienTai();
+  const tong = chu.length;
+
+  const tim = typeof args.tim === 'string' ? args.tim.trim() : '';
+  if (tim) {
+    /* Trả từng đoạn QUANH chỗ khớp (±600 ký tự), gộp đoạn chồng nhau. Không
+       phân biệt hoa thường. */
+    const thap = chu.toLowerCase();
+    const k = tim.toLowerCase();
+    const doan: Array<[number, number]> = [];
+    for (let i = thap.indexOf(k); i >= 0 && doan.length < 40; i = thap.indexOf(k, i + k.length)) {
+      const a = Math.max(0, i - 600);
+      const b = Math.min(tong, i + k.length + 600);
+      const cuoi = doan[doan.length - 1];
+      if (cuoi && a <= cuoi[1]) cuoi[1] = Math.max(cuoi[1], b); else doan.push([a, b]);
+    }
+    if (!doan.length) {
+      return { noiDung: `Không thấy "${tim}" trong ${url} (trang dài ${tong} ký tự). Thử từ khoá khác, hoặc đọc theo trang bằng \`tu\`.`, tomTat: 'không khớp' };
+    }
+    let ra = doan.map(([a, b]) => `[ký tự ${a}–${b}]\n${chu.slice(a, b)}`).join('\n\n…\n\n');
+    if (ra.length > WEB_DOC_MOT_LAN) ra = `${ra.slice(0, WEB_DOC_MOT_LAN)}\n[… còn nữa — thu hẹp từ khoá]`;
+    return { noiDung: `Tìm "${tim}" trong ${url} (trang dài ${tong} ký tự), ${doan.length} đoạn:\n\n${ra}`, tomTat: `${doan.length} đoạn khớp` };
+  }
+
+  const tu = Math.max(0, Math.min(tong, Math.floor(Number(args.tu) || 0)));
+  const den = Math.min(tong, tu + WEB_DOC_MOT_LAN);
+  const conNua = den < tong
+    ? `\n\n[ĐÃ TRẢ ký tự ${tu}–${den} / ${tong}. CÒN ${tong - den} ký tự: gọi lại web_doc với tu=${den} để đọc tiếp, `
+      + 'hoặc dùng tim="từ khoá" để chỉ lấy đoạn cần. KHÔNG cần tải file JavaScript của trang.]'
+    : (tu > 0 ? `\n\n[Đã tới cuối trang — ký tự ${tu}–${den} / ${tong}.]` : '');
+  return {
+    noiDung: `Nội dung ${url}${vung ? ` (vùng ${vung})` : ''}${tu > 0 ? ` từ ký tự ${tu}` : ''}:\n\n${chu.slice(tu, den)}${conNua}`,
+    tomTat: `${den - tu}/${tong} ký tự`,
+  };
 }
 
 

@@ -748,8 +748,18 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     description:
       'Đọc CHỮ của trang đang mở, SAU KHI JavaScript đã chạy. '
       + 'Đây là khác biệt với `doc_web`: trang Next/React trả về một thẻ rỗng qua HTTP, nên `doc_web` thấy trang trắng '
-      + 'trong khi người dùng nhìn thấy đầy chữ. Muốn biết trang THẬT SỰ hiện gì thì dùng tool này.',
-    parameters: { type: 'object', properties: {} },
+      + 'trong khi người dùng nhìn thấy đầy chữ. Muốn biết trang THẬT SỰ hiện gì thì dùng tool này. '
+      + 'Mỗi lần trả tối đa ~24.000 ký tự và NÓI RÕ trang dài bao nhiêu: trang dài thì gọi lại với `tu` để đọc tiếp, '
+      + 'hoặc `tim` để chỉ lấy các đoạn quanh một từ khoá (rẻ hơn nhiều). '
+      + '⛔ KHÔNG tải file JavaScript/bundle của trang về để "tìm nguồn dữ liệu" — chữ trang hiện ra đọc được hết bằng tool này.',
+    parameters: {
+      type: 'object',
+      properties: {
+        tu: { type: 'integer', description: 'Đọc từ ký tự thứ mấy (mặc định 0). Kết quả trước sẽ cho biết số cần điền để đọc tiếp.' },
+        tim: { type: 'string', description: 'Chỉ trả các đoạn quanh từ khoá này (không phân biệt hoa thường).' },
+        vung: { type: 'string', description: 'Bộ chọn CSS để chỉ đọc một vùng, vd "main" hay "#bang-gia". Bỏ trống = cả trang.' },
+      },
+    },
   },
   {
     name: 'web_anh',

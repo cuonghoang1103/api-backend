@@ -238,7 +238,24 @@ export default function QuickCapturePanel({ open, prefill, onClose, onOnThe }: P
             <Icon className="h-3.5 w-3.5" /> {label}
           </button>
         ))}
-        <span className="ml-auto hidden text-[11px] sm:inline" style={{ color: 'var(--text-muted)' }}>→ 📥 Hộp thư</span>
+        {/* Nút xem lại chỗ đã lưu (26/09: người dùng hỏi "lưu rồi xem lại ở đâu?") —
+            thẻ Sổ lệnh mở thẳng trang ⌨️ Sổ lệnh, thẻ Ghi chú mở /notes (Hộp thư ở đầu cây). */}
+        <button
+          type="button"
+          onClick={async () => {
+            let dich = '/notes';
+            if (b.mode === 'so-lenh') {
+              try { dich = `/notes?note=${(await ghiNhanhApi.soLenh()).data.data.noteId}`; } catch { /* về /notes */ }
+            }
+            onClose();
+            window.location.assign(dich);
+          }}
+          className="ml-auto rounded-lg px-2 py-1 text-[11px] font-medium hover:bg-black/5"
+          style={{ color: 'var(--text-secondary)' }}
+          title={b.mode === 'so-lenh' ? 'Mở trang ⌨️ Sổ lệnh để xem mọi lệnh đã lưu' : 'Mở Sổ tay — 📥 Hộp thư nằm ở đầu cây'}
+        >
+          {b.mode === 'so-lenh' ? 'Xem Sổ lệnh ↗' : 'Xem 📥 Hộp thư ↗'}
+        </button>
         <button type="button" onClick={dong} className="ml-1 rounded-lg p-1.5 hover:bg-black/5" aria-label="Đóng (Esc)" style={{ color: 'var(--text-secondary)' }}>
           <X className="h-4 w-4" />
         </button>

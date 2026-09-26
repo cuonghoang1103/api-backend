@@ -13,6 +13,7 @@ import s06 from './react/s06-du-lieu.mjs';
 import s07 from './react/s07-routing.mjs';
 import s08 from './react/s08-hieu-nang.mjs';
 import s11 from './react/s11-ben-trong.mjs';
+import s12 from './react/s12-react-19.mjs';
 
 /*
  * KHUNG (24/09/2026) — giữ NGUYÊN để biết slug/tiêu đề gốc; chương nào đã soạn chi tiết thì thay phần tử
@@ -118,5 +119,6 @@ export default {
     K[9],
     K[10],
     s11,
+    s12,
   ],
 };

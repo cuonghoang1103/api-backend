@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Bot, ChevronUp, Globe, Loader2, Terminal } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { AgentMode } from './AgentMode';
+import { RobotGoChu } from './RobotGoChu';
 import { BrowserMode } from './BrowserMode';
 import { ChatMode } from './ChatMode';
 import { ThanhTab, type TabAgent } from './Tabs';
@@ -210,15 +211,19 @@ export function ChatPage() {
           >
             <ChevronUp size={14} aria-hidden />
           </button>
+          {/* 26/09/2026: tiêu đề + dòng mô tả nhường chỗ cho con robot ngồi gõ
+              "Welcome to CuongMini AI" — một hàng nhỏ gọn cao 40px, người dùng
+              muốn "nho nhỏ thôi, để không gian làm việc". Tiêu đề vẫn còn cho
+              trình đọc màn hình; dòng mô tả chuyển thành chữ gợi ý khi rê chuột. */}
           <div className="ct-page-head-chu">
-            <h1>{dich('Trợ lý AI')}</h1>
-            <p className="ct-muted" style={{ margin: 0 }}>
-              {cheDo === 'chat'
+            <h1 className="ct-an-chu">{dich('Trợ lý AI')}</h1>
+            <RobotGoChu
+              title={cheDo === 'chat'
                 ? 'Hỏi đáp thường ngày.'
                 : cheDo === 'web'
                   ? 'Xem dev server và tài liệu ngay trong app.'
                   : 'Agent đọc dự án trên máy bạn và ghi chú của bạn.'}
-            </p>
+            />
           </div>
 
           <div className="ct-segment" role="tablist" aria-label={dich('Chế độ trợ lý')}>

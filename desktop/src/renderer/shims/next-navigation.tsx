@@ -189,3 +189,9 @@ export class LoiChuyenHuong extends Error {
 export function notFound(): never { throw new LoiKhongTimThay(); }
 
 export function redirect(href: string): never { throw new LoiChuyenHuong(href); }
+
+/* `permanentRedirect()` (26/09/2026): trên web nó trả 308 thay vì 307 — khác
+   biệt chỉ có nghĩa với trình thu thập của công cụ tìm kiếm. Trong app không có
+   mã HTTP nào cả, nên nó đi CÙNG đường với `redirect()`. Thiếu hàm này thì một
+   trang web vừa đổi sang `permanentRedirect` làm ĐỎ cả `vite build` của app. */
+export function permanentRedirect(href: string): never { throw new LoiChuyenHuong(href); }

@@ -13632,12 +13632,14 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   font-weight: 600;
   color: var(--ct-text);
 }
-.ct-ai-term .ct-panel-full > .ct-page-head h1::before {
+/* (26/09/2026) Tiêu đề đã ẩn, robot gõ chữ thay chỗ — hai luật dưới giữ lại
+   phòng khi bỏ robot đi, nhưng lúc này h1 là `.ct-an-chu` nên không hiện. */
+.ct-ai-term .ct-panel-full > .ct-page-head h1:not(.ct-an-chu)::before {
   content: '~/ai ❯ ';
   color: var(--ct-accent);
   font-weight: 500;
 }
-.ct-ai-term .ct-panel-full > .ct-page-head h1::after {
+.ct-ai-term .ct-panel-full > .ct-page-head h1:not(.ct-an-chu)::after {
   content: '';
   display: inline-block;
   width: 8px;
@@ -13737,7 +13739,7 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-ai-term ::selection { background: rgba(74, 222, 128, 0.3); color: #fff; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ct-ai-term .ct-panel-full > .ct-page-head h1::after { animation: none; }
+  .ct-ai-term .ct-panel-full > .ct-page-head h1:not(.ct-an-chu)::after { animation: none; }
 }
 
 /* ============================================================
@@ -13939,3 +13941,155 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 .ct-fable-xin textarea:focus { outline: none; border-color: var(--ct-accent); }
 .ct-fable-xin .ct-btn { align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; }
+
+/* ══ ROBOT GÕ CHỮ — đầu trang AI (26/09/2026) ═════════════════════════════
+   Xem `features/chat/RobotGoChu.tsx`. Nhỏ gọn (cao 40px) theo yêu cầu "nho
+   nhỏ thôi, để không gian làm việc". Vòng 10 giây: gõ → ngắm → xoá → gõ lại.
+   Bảng màu robot giữ NGUYÊN nhân vật của web (thép tím nhạt, mắt hổ phách);
+   dòng chữ theo nhấn của giao diện đang dùng (`--ct-accent`). */
+.ct-rgc {
+  --rgc-chu-ky: 10s;
+  --rgc-lit: #dcd7f3;
+  --rgc-mid: #c3bde0;
+  --rgc-dim: #7f7898;
+  --rgc-side: #5a5078;
+  --rgc-panel: #221a38;
+  --rgc-edge: #6f5fc7;
+  --rgc-visor: #3f3370;
+  --rgc-glass: #3d4a6a;
+  --rgc-eye: #f0bd3f;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  min-width: 0;
+}
+.ct-rgc-svg { height: 40px; width: auto; max-width: 100%; overflow: visible; display: block; }
+
+.rgc-tam { stroke: var(--rgc-edge); stroke-width: 0.85; }
+.rgc-sang { fill: url(#rgc-vo); }
+.rgc-toi { fill: var(--rgc-dim); }
+.rgc-canh { fill: url(#rgc-canh); }
+.rgc-dai { fill: var(--rgc-side); }
+.rgc-gay { fill: color-mix(in srgb, var(--rgc-side) 74%, var(--rgc-panel)); }
+.rgc-kinh { fill: url(#rgc-kinh); stroke: var(--rgc-edge); stroke-width: 0.8; }
+.rgc-bong-kinh { fill: #fff; opacity: 0.12; }
+.rgc-mat, .rgc-long, .rgc-anten-den { fill: var(--rgc-eye); }
+.rgc-long-vien { fill: none; stroke: var(--rgc-edge); stroke-width: 0.9; opacity: 0.7; }
+.rgc-anten { fill: none; stroke: var(--rgc-edge); stroke-width: 1.3; stroke-linecap: round; }
+.rgc-san { stroke: var(--ct-border, #333); stroke-width: 1; stroke-linecap: round; }
+.rgc-bong { fill: rgba(0, 0, 0, 0.35); }
+.rgc-may-de { fill: var(--rgc-side); stroke: var(--rgc-edge); stroke-width: 0.85; stroke-linejoin: round; }
+.rgc-may-vo { fill: url(#rgc-vo); stroke: var(--rgc-edge); stroke-width: 0.85; }
+.rgc-ma { fill: none; stroke: var(--rgc-eye); stroke-width: 1.35; stroke-linecap: round; opacity: 0; }
+
+.rgc-chu {
+  fill: var(--ct-text-muted, #a8a8ba);
+  font-family: var(--ct-term-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace);
+  font-size: 14px;
+  font-weight: 600;
+}
+.rgc-chu-nhan { fill: var(--ct-accent, #818cf8); }
+.rgc-con-tro { fill: var(--ct-accent, #818cf8); }
+.rgc-gach { stroke: color-mix(in srgb, var(--ct-accent, #818cf8) 28%, transparent); stroke-width: 1; stroke-linecap: round; }
+
+/* Mọi thứ xoay/trượt theo toạ độ của viewBox, không theo hộp của chính nó. */
+.rgc-mat-na, .rgc-con-tro, .rgc-dau, .rgc-nhin, .rgc-mat, .rgc-than, .rgc-tay-go { transform-box: view-box; }
+.rgc-mat-na { transform-origin: 316px 34px; }
+
+.rgc-mat-na { animation: rgc-go var(--rgc-chu-ky) linear infinite both; }
+.rgc-con-tro {
+  animation:
+    rgc-tro-chay var(--rgc-chu-ky) linear infinite both,
+    rgc-nhay 0.8s steps(1, end) infinite both;
+}
+.rgc-dau { animation: rgc-dau var(--rgc-chu-ky) ease-in-out infinite both; }
+.rgc-nhin { animation: rgc-nhin var(--rgc-chu-ky) ease-in-out infinite both; }
+.rgc-mat { animation: rgc-chop var(--rgc-chu-ky) linear infinite both; }
+.rgc-than { animation: rgc-than var(--rgc-chu-ky) ease-in-out infinite both; }
+.rgc-tay-go {
+  animation:
+    rgc-hien-go var(--rgc-chu-ky) linear infinite both,
+    rgc-go-phim 0.3s ease-in-out infinite both;
+}
+.rgc-tay-go-sau { animation-delay: 0s, -0.15s; }
+.rgc-tay-nghi { animation: rgc-hien-nghi var(--rgc-chu-ky) linear infinite both; }
+.rgc-long, .rgc-anten-den { animation: rgc-tho 2.4s ease-in-out infinite both; }
+.rgc-anten-den { animation-delay: -1.2s; }
+.rgc-ma-1 { animation: rgc-ma-1 var(--rgc-chu-ky) linear infinite both; }
+.rgc-ma-2 { animation: rgc-ma-2 var(--rgc-chu-ky) linear infinite both; }
+.rgc-ma-3 { animation: rgc-ma-3 var(--rgc-chu-ky) linear infinite both; }
+.rgc-ma-4 { animation: rgc-ma-4 var(--rgc-chu-ky) linear infinite both; }
+
+/* Gõ 0→38%, giữ tới 72%, xoá 72→84%, trống tới hết. 23 bước = 23 ký tự. */
+@keyframes rgc-go {
+  0% { transform: scaleX(0); animation-timing-function: steps(23, end); }
+  38% { transform: scaleX(1); }
+  72% { transform: scaleX(1); animation-timing-function: steps(23, end); }
+  84%, 100% { transform: scaleX(0); }
+}
+@keyframes rgc-tro-chay {
+  0% { transform: translateX(0); animation-timing-function: steps(23, end); }
+  38% { transform: translateX(190px); }
+  72% { transform: translateX(190px); animation-timing-function: steps(23, end); }
+  84%, 100% { transform: translateX(0); }
+}
+@keyframes rgc-nhay { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+/* Tay GÕ hiện lúc gõ và lúc xoá; tay NGHỈ hiện lúc còn lại. */
+@keyframes rgc-hien-go {
+  0%, 38% { opacity: 1; }
+  38.5%, 71.5% { opacity: 0; }
+  72%, 84% { opacity: 1; }
+  84.5%, 100% { opacity: 0; }
+}
+@keyframes rgc-hien-nghi {
+  0%, 38% { opacity: 0; }
+  38.5%, 71.5% { opacity: 1; }
+  72%, 84% { opacity: 0; }
+  84.5%, 100% { opacity: 1; }
+}
+@keyframes rgc-go-phim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.7px); } }
+
+/* Đầu: cúi nhìn máy lúc gõ → ngẩng lên ngắm dòng chữ → gật một cái → cúi lại. */
+@keyframes rgc-dau {
+  0%, 36% { transform: rotate(14deg); }
+  42%, 52% { transform: rotate(-3deg); }
+  55% { transform: rotate(6deg); }
+  58%, 68% { transform: rotate(-3deg); }
+  73%, 100% { transform: rotate(14deg); }
+}
+@keyframes rgc-nhin {
+  0%, 36% { transform: translate(1.5px, 0.7px); }
+  42%, 68% { transform: translate(2.4px, -0.6px); }
+  73%, 100% { transform: translate(1.5px, 0.7px); }
+}
+@keyframes rgc-than {
+  0%, 36% { transform: rotate(9deg); }
+  42%, 68% { transform: rotate(4deg); }
+  73%, 100% { transform: rotate(9deg); }
+}
+@keyframes rgc-chop {
+  0%, 17%, 18.4%, 47%, 48.4%, 61%, 62.4%, 90%, 91.4%, 100% { transform: scaleY(1); }
+  17.7%, 47.7%, 61.7%, 90.7% { transform: scaleY(0.12); }
+}
+@keyframes rgc-tho { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
+/* Dòng code trên màn laptop hiện dần theo nhịp gõ, tắt khi xoá xong. */
+@keyframes rgc-ma-1 { 0%, 4% { opacity: 0; } 5%, 83% { opacity: 1; } 84%, 100% { opacity: 0; } }
+@keyframes rgc-ma-2 { 0%, 13% { opacity: 0; } 14%, 81% { opacity: 1; } 82%, 100% { opacity: 0; } }
+@keyframes rgc-ma-3 { 0%, 23% { opacity: 0; } 24%, 78% { opacity: 1; } 79%, 100% { opacity: 0; } }
+@keyframes rgc-ma-4 { 0%, 32% { opacity: 0; } 33%, 75% { opacity: 1; } 76%, 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-rgc * { animation: none !important; }
+  .rgc-mat-na { transform: none; }
+  .rgc-ma { opacity: 1; }
+  .rgc-tay-go { opacity: 0; }
+}
+
+/* Đầu trang AI: robot THAY tiêu đề + dòng mô tả — một hàng gọn. */
+.ct-ai-term .ct-page-head-chu { display: flex; align-items: center; }
+.ct-an-chu {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}

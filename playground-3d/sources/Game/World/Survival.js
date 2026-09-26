@@ -1089,6 +1089,12 @@ export class Survival
         this.sounds.theme = this.game.audio.register({
             path: 'sounds/musics/survival-theme.mp3',
             autoplay: false, loop: true, volume: 0.5, antiSpam: 0,
+            /**
+             * 2,1 MB — file âm thanh lớn nhất trang tải lúc mở. Chỉ nạp khi chế
+             * độ Sinh tồn bật nhạc lần đầu (`item.play()` tự `load()`), không
+             * bắt mọi người chơi tải nó ngay từ màn hình chờ.
+             */
+            preload: false,
         })
 
         /**

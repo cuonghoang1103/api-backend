@@ -58732,14 +58732,23 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       });
     }
     async setRenderer() {
-      return this.renderer = new WebGPURenderer({
+      this.renderer = new WebGPURenderer({
         canvas: this.game.canvasElement,
         powerPreference: "high-performance",
         forceWebGL: false,
         antialias: this.game.viewport.pixelRatio < 2
-      }), this.renderer.setSize(this.game.viewport.width, this.game.viewport.height), this.renderer.setPixelRatio(this.game.viewport.pixelRatio), this.renderer.sortObjects = false, this.renderer.domElement.classList.add("experience"), this.renderer.shadowMap.enabled = true, this.renderer.setOpaqueSort((e, r) => e.renderOrder - r.renderOrder), this.renderer.setTransparentSort((e, r) => e.renderOrder - r.renderOrder), location.hash.match(/inspector/i) && (this.renderer.inspector = new Inspector()), this.renderer.setAnimationLoop((e) => {
-        this.game.ticker.update(e);
-      }), this.renderer.init();
+      }), this.renderer.setSize(this.game.viewport.width, this.game.viewport.height), this.renderer.setPixelRatio(this.game.viewport.pixelRatio), this.renderer.sortObjects = false, this.renderer.domElement.classList.add("experience"), this.renderer.shadowMap.enabled = true, this.renderer.setOpaqueSort((s, o) => s.renderOrder - o.renderOrder), this.renderer.setTransparentSort((s, o) => s.renderOrder - o.renderOrder), location.hash.match(/inspector/i) && (this.renderer.inspector = new Inspector());
+      const e = this.game.quality.isTouch ? 1e3 / 60 - 2 : 0;
+      let r = -1 / 0;
+      return this.loop = (s) => {
+        e && s - r < e || (r = s, this.game.ticker.update(s));
+      }, this.renderer.setAnimationLoop(this.loop), this.renderer.init();
+    }
+    pauseLoop() {
+      this.renderer.setAnimationLoop(null);
+    }
+    resumeLoop() {
+      this.renderer.setAnimationLoop(this.loop);
     }
     setPostprocessing() {
       this.postProcessing = new RenderPipeline(this.renderer);
@@ -86659,11 +86668,12 @@ https://github.com/browserify/crypto-browserify`);
   let View = _View;
   class Viewport {
     constructor(e) {
-      this.domElement = e, this.events = new Events(), this.measure(), this.setResize();
+      var _a2, _b;
+      this.domElement = e, this.events = new Events(), this.pixelRatioMax = ((_b = (_a2 = Game.getInstance()) == null ? void 0 : _a2.quality) == null ? void 0 : _b.isMobile) ? 1.5 : 2, this.measure(), this.setResize();
     }
     measure() {
       const e = this.domElement.getBoundingClientRect();
-      this.width = e.width, this.height = e.height, this.ratio = this.width / this.height, this.pixelRatioPure = window.devicePixelRatio, this.pixelRatioMax = 2, this.pixelRatio = Math.min(this.pixelRatioPure, this.pixelRatioMax);
+      this.width = e.width, this.height = e.height, this.ratio = this.width / this.height, this.pixelRatioPure = window.devicePixelRatio, this.pixelRatio = Math.min(this.pixelRatioPure, this.pixelRatioMax);
     }
     setResize() {
       let r = null;
@@ -104739,7 +104749,8 @@ https://github.com/browserify/crypto-browserify`);
         autoplay: false,
         loop: true,
         volume: 0.5,
-        antiSpam: 0
+        antiSpam: 0,
+        preload: false
       }), this.game.audio.events.on("playlistChange", () => {
         var _a2, _b;
         ((_a2 = this.sounds.theme) == null ? void 0 : _a2.__on) && (((_b = this.game.audio.playlist) == null ? void 0 : _b.enabled) === false ? this.setTheme(false) : this.applyThemeVolume());
@@ -108639,17 +108650,25 @@ https://github.com/browserify/crypto-browserify`);
           typeof r.onPlaying == "function" && r.onPlaying(r);
           let s = 1;
           if (r.positions && r.howl.playing()) {
-            let a = 1 / 0, h = null;
-            for (const d of r.positions) {
-              const f = d.distanceTo(this.game.view.focusPoint.position);
-              f < a && (a = f, h = d);
+            let d = 1 / 0, f = null;
+            for (const m of r.positions) {
+              const b = m.distanceTo(this.game.view.focusPoint.position);
+              b < d && (d = b, f = m);
             }
-            const c = h.clone();
-            c.applyMatrix4(this.game.view.camera.matrixWorldInverse), c.normalize(), c.z *= 0.1, r.distanceFade && (s = remapClamp$2(a, 0, r.distanceFade, 1, 0)), s > 0 && r.howl.pos(c.x, c.y, c.z);
+            const p = f.clone();
+            if (p.applyMatrix4(this.game.view.camera.matrixWorldInverse), p.normalize(), p.z *= 0.1, r.distanceFade && (s = remapClamp$2(d, 0, r.distanceFade, 1, 0)), s > 0) {
+              const m = r.howl._pos;
+              (!m || m[0] !== p.x || m[1] !== p.y || m[2] !== p.z) && r.howl.pos(p.x, p.y, p.z);
+            }
           }
-          r.howl.rate(clamp$5(r.rate * this.globalRate, 0.5, 4));
-          const o = r.volume * s;
-          r.howl.volume(r.volume * s), r.howl.mute(o < 0.01);
+          const o = r.howl;
+          if (o.state() !== "loaded") continue;
+          const a = clamp$5(r.rate * this.globalRate, 0.5, 4);
+          o._rate !== a && o.rate(a);
+          const h = r.volume * s;
+          o._volume !== h && o.volume(h);
+          const c = h < 0.01;
+          o._muted !== c && o.mute(c);
         }
       });
     }
@@ -109547,13 +109566,16 @@ https://github.com/browserify/crypto-browserify`);
   class Quality {
     constructor() {
       this.game = Game.getInstance(), this.events = new Events();
-      const e = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if (this.level = e ? 1 : 0, this.game.debug.active) {
-        const r = this.game.debug.panel.addFolder({
+      const e = navigator.userAgent, r = /Macintosh/i.test(e) && navigator.maxTouchPoints > 1;
+      if (this.isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(e) || r, this.isTouch = this.isMobile || navigator.maxTouchPoints > 1 && matchMedia("(pointer: coarse)").matches, this.level = this.isMobile ? 1 : 0, this.auto = {
+        manual: false,
+        running: false
+      }, this.game.debug.active) {
+        const s = this.game.debug.panel.addFolder({
           title: "\u2699\uFE0F Quality",
           expanded: false
         });
-        this.game.debug.addButtons(r, {
+        this.game.debug.addButtons(s, {
           low: () => {
             this.changeLevel(1);
           },
@@ -109563,10 +109585,30 @@ https://github.com/browserify/crypto-browserify`);
         }, "change");
       }
     }
-    changeLevel(e = 0) {
-      e !== this.level && (this.level = e, this.events.trigger("change", [
+    changeLevel(e = 0, r = false) {
+      r || (this.auto.manual = true), e !== this.level && (this.level = e, this.events.trigger("change", [
         this.level
       ]));
+    }
+    startAuto({ minFps: e = 30, windowMs: r = 3e3 } = {}) {
+      if (this.auto.running) return;
+      this.auto.running = true;
+      const s = this.game.viewport;
+      let o = [], a = performance.now(), h = a, c = 0, d = false;
+      const f = () => {
+        document.hidden && (d = true);
+      };
+      document.addEventListener("visibilitychange", f);
+      const p = () => s.pixelRatio > 1 ? (s.pixelRatioMax = Math.max(1, s.pixelRatio - 0.25), s.measure(), s.events.trigger("change"), true) : this.level === 0 ? (this.changeLevel(1, true), true) : false, m = () => {
+        this.game.ticker.events.off("tick", b), document.removeEventListener("visibilitychange", f), this.auto.running = false;
+      }, b = () => {
+        const _ = performance.now();
+        if (o.push(_ - a), a = _, _ - h < r) return;
+        const M = d || document.hidden || o.length < 5, R = o.sort((L, U) => L - U), O = R[R.length >> 1];
+        if (o = [], h = _, d = false, this.auto.manual) return m();
+        M || (1e3 / O < e ? c++ : c = 0, c >= 2 && (c = 0, p() || m()));
+      };
+      this.game.ticker.events.on("tick", b);
     }
   }
   class Title {
@@ -117635,14 +117677,32 @@ ${e.tab}if ( ${m} ) {
     }
   }
   class PreRenderer {
-    static render() {
-      const e = Game.getInstance(), r = new CubeRenderTarget(32), s = new CubeCamera$1(1, 1e5, r);
-      e.scene.add(s);
-      const o = [];
-      e.scene.traverse((a) => {
-        a.visible === false && typeof a.userData.preventPreRender > "u" && (a.visible = true, o.push(a));
-      }), s.update(e.rendering.renderer, e.scene);
-      for (const a of o) a.visible = false;
+    static async render({ batchSize: e = 16, budgetMs: r = 24 } = {}) {
+      const s = Game.getInstance(), o = s.rendering.renderer, a = new CubeRenderTarget(32), h = new CubeCamera$1(1, 1e5, a), c = [], d = [], f = (p) => {
+        if (!(p.visible === false && typeof p.userData.preventPreRender < "u")) {
+          c.push([
+            p,
+            p.visible
+          ]), (p.isMesh || p.isPoints || p.isLine || p.isSprite) && d.push(p);
+          for (const m of p.children) f(m);
+        }
+      };
+      f(s.scene), s.scene.add(h), s.rendering.pauseLoop();
+      try {
+        for (const [m] of c) m.visible = true;
+        for (const m of d) m.visible = false;
+        let p = performance.now();
+        for (let m = 0; m < d.length; m += e) {
+          const b = d.slice(m, m + e);
+          for (const _ of b) _.visible = true;
+          h.update(o, s.scene);
+          for (const _ of b) _.visible = false;
+          performance.now() - p > r && (await new Promise((_) => requestAnimationFrame(_)), p = performance.now());
+        }
+      } finally {
+        for (const [p, m] of c) p.visible = m;
+        s.scene.remove(h), a.dispose(), s.rendering.resumeLoop();
+      }
     }
   }
   class Options {
@@ -118031,7 +118091,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-Cxydgahv.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-CnwXtbtX.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
@@ -118316,7 +118376,7 @@ ${e.tab}if ( ${m} ) {
       this.RAPIER = d, this.resources = {
         ...c,
         ...this.resources
-      }, this.terrain = new Terrain(), this.physics = new Physics(), this.wireframe = new PhysicsWireframe(), this.physicalVehicle = new PhysicsVehicle(), this.zones = new Zones(), this.player = new Player(), this.closingManager = new ClosingManager(), this.interactivePoints = new InteractivePoints(), this.konamiCode = new KonamiCode(), this.achievements = new Achievements(), this.tornado = new Tornado(), this.map = new Map$1(), this.title = new Title(), this.world.step(1), this.overlay = new Overlay(), this.quality.level === 0 && this.rendering.renderer.backend.isWebGPUBackend && PreRenderer.render(), this.ticker.wait(3, () => {
+      }, this.terrain = new Terrain(), this.physics = new Physics(), this.wireframe = new PhysicsWireframe(), this.physicalVehicle = new PhysicsVehicle(), this.zones = new Zones(), this.player = new Player(), this.closingManager = new ClosingManager(), this.interactivePoints = new InteractivePoints(), this.konamiCode = new KonamiCode(), this.achievements = new Achievements(), this.tornado = new Tornado(), this.map = new Map$1(), this.title = new Title(), this.world.step(1), this.overlay = new Overlay(), this.rendering.renderer.backend.isWebGPUBackend && await PreRenderer.render(), this.quality.startAuto(), this.ticker.wait(3, () => {
         this.reveal.updateStep(0);
       }), this.debug.active && this.achievements.setProgress("debug", 1);
     }

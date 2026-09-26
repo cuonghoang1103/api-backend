@@ -1,4 +1,5 @@
 import { Events } from './Events.js'
+import { Game } from './Game.js'
 
 export class Viewport
 {
@@ -7,6 +8,14 @@ export class Viewport
         this.domElement = domElement
 
         this.events = new Events()
+
+        /**
+         * Độ nét tối đa. Màn điện thoại/iPad có DPR 2–3, vẽ đủ 2x là gấp 4
+         * lần số điểm ảnh so với 1x cho một màn hình vài inch — 1,5x trông gần
+         * như y hệt mà nhẹ hơn ~44%. Máy tính giữ 2x như cũ.
+         * `Quality` có thể hạ tiếp khi máy không kham nổi (xem `startAuto`).
+         */
+        this.pixelRatioMax = Game.getInstance()?.quality?.isMobile ? 1.5 : 2
         
         this.measure()
         this.setResize()
@@ -21,7 +30,6 @@ export class Viewport
         this.ratio = this.width / this.height
 
         this.pixelRatioPure = window.devicePixelRatio
-        this.pixelRatioMax = 2
         this.pixelRatio = Math.min(this.pixelRatioPure, this.pixelRatioMax)
     }
 

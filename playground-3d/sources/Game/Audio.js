@@ -988,17 +988,45 @@ export class Audio
                     }
 
                     if(distanceFadeMultiplier > 0)
-                        item.howl.pos(cameraRelativePosition.x, cameraRelativePosition.y, cameraRelativePosition.z)
+                    {
+                        const pos = item.howl._pos
+                        if(!pos || pos[0] !== cameraRelativePosition.x || pos[1] !== cameraRelativePosition.y || pos[2] !== cameraRelativePosition.z)
+                            item.howl.pos(cameraRelativePosition.x, cameraRelativePosition.y, cameraRelativePosition.z)
+                    }
                 }
 
+                /**
+                 * ⚠️ CHỈ GỌI rate/volume/mute KHI GIÁ TRỊ THẬT SỰ ĐỔI (26/09/2026).
+                 *
+                 * Trước đây ba lệnh này chạy MỖI KHUNG HÌNH cho MỌI âm thanh, kể
+                 * cả âm thanh đang im. Mỗi lệnh là một `AudioParam.setValueAtTime`
+                 * (riêng `rate()` còn huỷ/đặt lại hẹn giờ kết thúc), và với âm
+                 * thanh CHƯA NẠP thì Howler nhét lệnh vào `_queue` — hàng đợi đó
+                 * phình vô hạn. Đo được: `setValueAtTime` ăn 6,6% CPU ở giây 10,
+                 * 34% ở giây 60, FPS tụt 84 → 58 khi đứng yên một phút.
+                 *
+                 * So với giá trị Howler đang giữ (`_rate`/`_volume`/`_muted`) chứ
+                 * không nhớ bản riêng: chỗ khác gọi `howl.volume()` thẳng (vd.
+                 * `Survival.applyThemeVolume`) thì khung sau vẫn bị ghi đè y như cũ.
+                 * Âm thanh chưa nạp thì bỏ qua — nạp xong khung kế tiếp sẽ đặt.
+                 */
+                const howl = item.howl
+                if(howl.state() !== 'loaded')
+                    continue
+
                 // Rate (apply global too)
-                item.howl.rate(clamp(item.rate * this.globalRate, 0.5, 4))
+                const rate = clamp(item.rate * this.globalRate, 0.5, 4)
+                if(howl._rate !== rate)
+                    howl.rate(rate)
 
                 // Volume
                 const volume = item.volume * distanceFadeMultiplier
-                item.howl.volume(item.volume * distanceFadeMultiplier)
+                if(howl._volume !== volume)
+                    howl.volume(volume)
 
-                item.howl.mute(volume < 0.01)
+                const muted = volume < 0.01
+                if(howl._muted !== muted)
+                    howl.mute(muted)
             }
         })
     }

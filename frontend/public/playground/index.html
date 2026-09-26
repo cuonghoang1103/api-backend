@@ -66,10 +66,17 @@
     <meta name="apple-mobile-web-app-title" content="CuongThai" />
     <link rel="manifest" href="./favicons/site.webmanifest" />
 
-    <link rel="preload" href="./respawns/respawnsReferences-compressed.glb" as="fetch" crossorigin>
-    <link rel="preload" href="./behindTheScene/stars.ktx" as="fetch" crossorigin>
-    <link rel="preload" href="./intro/sound.ktx" as="fetch" crossorigin>
-    <link rel="preload" href="./palette.ktx" as="fetch" crossorigin>
+<!--
+        ⚠️ PHẢI KHỚP TỪNG KÝ TỰ với URL mà Game.js tải thật (26/09/2026). Bản cũ
+        tải sẵn `-compressed.glb` + `.ktx` trong khi production build với
+        VITE_COMPRESSED rỗng ⇒ game tải `.glb`/`.png` kèm `?cb=1` ⇒ bốn file
+        tải sẵn bị VỨT và bốn file thật tải lại lần hai. Đổi đường dẫn hay
+        `cb` bên Game.js thì đổi ở đây theo.
+    -->
+    <link rel="preload" href="./respawns/respawnsReferences.glb?cb=1" as="fetch" crossorigin>
+    <link rel="preload" href="./behindTheScene/stars.png?cb=1" as="image" crossorigin>
+    <link rel="preload" href="./intro/sound.png?cb=1" as="image" crossorigin>
+    <link rel="preload" href="./palette.png?cb=1" as="image" crossorigin>
     
     <!--
         ĐÃ GỠ khối Google Analytics của bản gốc. Ba lý do, lý do nào cũng đủ:
@@ -255,7 +262,7 @@
             .fptu-gate-title{ font-size:1.25rem; }
         }
     </style>
-  <script type="module" crossorigin src="./assets/index-BzvckPYU.js"></script>
+  <script type="module" crossorigin src="./assets/index-D5Lf5YOu.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-Dv2h4aYh.css">
 </head>
 <body>

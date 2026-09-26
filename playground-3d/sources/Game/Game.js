@@ -254,9 +254,16 @@ export class Game
         this.world.step(1)
         this.overlay = new Overlay()
 
-        // Pre-render if quality high
-        if(this.quality.level === 0 && this.rendering.renderer.backend.isWebGPUBackend)
-            PreRenderer.render()
+        /**
+         * Dựng sẵn shader cho cả thế giới (chia lô, không đơ trình duyệt — xem
+         * `PreRenderer`). Trước đây chỉ chạy ở chất lượng cao, nên máy di động
+         * (chất lượng thấp) dựng shader NGAY GIỮA LÚC CHƠI, mỗi lần một khu
+         * mới lọt vào khung hình là một cú giật.
+         */
+        if(this.rendering.renderer.backend.isWebGPUBackend)
+            await PreRenderer.render()
+
+        this.quality.startAuto()
 
         this.ticker.wait(3, () =>
         {

@@ -64,11 +64,38 @@ export class Rendering
             this.renderer.inspector = new Inspector()
         }
 
-        // Make the renderer control the ticker
-        this.renderer.setAnimationLoop((elapsedTime) => { this.game.ticker.update(elapsedTime) })
+        /**
+         * Make the renderer control the ticker
+         *
+         * ⚠️ Máy CẢM ỨNG (iPhone/iPad/Android) bị giới hạn ~60 khung/giây: màn
+         * 120Hz chạy gấp đôi số khung là gấp đôi nhiệt và pin mà mắt khó thấy
+         * trên màn nhỏ. Máy tính để nguyên tốc độ màn hình. Bỏ khung thì an
+         * toàn vì `Ticker` tính theo thời gian thật, không theo số khung.
+         */
+        const frameCap = this.game.quality.isTouch ? 1000 / 60 - 2 : 0
+        let lastFrame = -Infinity
+        this.loop = (elapsedTime) =>
+        {
+            if(frameCap && elapsedTime - lastFrame < frameCap)
+                return
+
+            lastFrame = elapsedTime
+            this.game.ticker.update(elapsedTime)
+        }
+        this.renderer.setAnimationLoop(this.loop)
 
         return this.renderer
             .init()
+    }
+
+    pauseLoop()
+    {
+        this.renderer.setAnimationLoop(null)
+    }
+
+    resumeLoop()
+    {
+        this.renderer.setAnimationLoop(this.loop)
     }
 
     setPostprocessing()

@@ -14,6 +14,192 @@ import { gallery, slide } from './_slides.mjs';
 
 const REF = '?ref=%2Fcourses%2Freact%2Flearn&reflabel=React';
 
+/* ─── Sơ đồ mermaid trong bài (≤ 10 nút, nhãn ngắn; khối EN nhãn tiếng Anh, khối VI nhãn tiếng Việt) ─── */
+const H = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/`/g, '&#96;').replace(/\$\{/g, '&#36;{');
+/** Sơ đồ mermaid: trang học đọc textContent của <code class="language-mermaid"> rồi vẽ (LearnPageClient → mermaidRuntime). */
+const MM = (src) => '<pre><code class="language-mermaid">' + H(src.trim()) + '</code></pre>';
+const L = (...dong) => MM(dong.join('\n'));
+const SD = {
+  uiEn: L(
+    "flowchart TB",
+    "  S[\"State: three time slots, one already booked\"] --> C[\"Component DatLich: a function of the state\"]",
+    "  C --> D[\"A description of the screen (JSX)\"]",
+    "  D --> R[\"React compares it with the previous description\"]",
+    "  R --> P[\"Patches only what differs in the DOM\"]",
+    "  P --> U[\"User clicks Đặt 08:30\"]",
+    "  U -->|\"change the data, not the page\"| S",
+  ),
+  uiVi: L(
+    "flowchart TB",
+    "  S[\"State: ba khung giờ, một khung đã đặt\"] --> C[\"Component DatLich: một hàm của state\"]",
+    "  C --> D[\"Bản mô tả màn hình (JSX)\"]",
+    "  D --> R[\"React so với bản mô tả lần trước\"]",
+    "  R --> P[\"Chỉ vá chỗ khác nhau trên DOM\"]",
+    "  P --> U[\"Người dùng bấm Đặt 08:30\"]",
+    "  U -->|\"sửa dữ liệu, không sửa trang\"| S",
+  ),
+  motNguonEn: L(
+    "flowchart TB",
+    "  subgraph RE[\"React: one source of truth\"]",
+    "    direction TB",
+    "    R1[\"Book and Cancel only change conTrong in khungGio\"] --> R2[\"Each render computes every number from khungGio\"]",
+    "    R2 --> R3[\"The screen always matches the data\"]",
+    "  end",
+    "  subgraph JQ[\"jQuery: every handler edits the page by hand\"]",
+    "    direction TB",
+    "    J1[\"Book: button + two counters + list + array\"] --> J2[\"Cancel, added in week 3\"]",
+    "    J2 --> J3[\"Forgets the free-slot counter and the array\"]",
+    "    J3 --> J4[\"Three different truths, no error\"]",
+    "  end",
+  ),
+  motNguonVi: L(
+    "flowchart TB",
+    "  subgraph RE[\"React: một nguồn sự thật\"]",
+    "    direction TB",
+    "    R1[\"Đặt và Huỷ chỉ đổi conTrong trong khungGio\"] --> R2[\"Mỗi lần render tính mọi con số từ khungGio\"]",
+    "    R2 --> R3[\"Màn hình luôn khớp dữ liệu\"]",
+    "  end",
+    "  subgraph JQ[\"jQuery: mỗi handler tự sửa trang\"]",
+    "    direction TB",
+    "    J1[\"Đặt: nút + hai bộ đếm + danh sách + mảng\"] --> J2[\"Huỷ, thêm vào tuần 3\"]",
+    "    J2 --> J3[\"Quên bộ đếm khung trống và mảng\"]",
+    "    J3 --> J4[\"Ba sự thật khác nhau, không báo lỗi\"]",
+    "  end",
+  ),
+  khoiDongEn: L(
+    "flowchart TB",
+    "  A[\"Browser opens localhost:5173\"] --> B[\"index.html: an empty div with id root\"]",
+    "  B --> C[\"Its module script asks for /src/main.tsx\"]",
+    "  C --> D[\"Vite dev server transforms that file: types removed, JSX turned into _jsxDEV calls\"]",
+    "  D --> E[\"createRoot(root div).render(App inside StrictMode)\"]",
+    "  E --> F[\"React calls App and fills the root div\"]",
+  ),
+  khoiDongVi: L(
+    "flowchart TB",
+    "  A[\"Trình duyệt mở localhost:5173\"] --> B[\"index.html: một div rỗng có id root\"]",
+    "  B --> C[\"Thẻ script module xin /src/main.tsx\"]",
+    "  C --> D[\"Dev server của Vite biến đổi file đó: bỏ kiểu, JSX thành lời gọi _jsxDEV\"]",
+    "  D --> E[\"createRoot(div root).render(App bọc trong StrictMode)\"]",
+    "  E --> F[\"React gọi App và đổ nội dung vào div root\"]",
+  ),
+  buildEn: L(
+    "flowchart TB",
+    "  A[\"npm run build = tsc -b && vite build\"] --> B{{\"tsc -b: any type error?\"}}",
+    "  B -->|\"yes\"| C[\"Stops at error TS2322, nothing is built\"]",
+    "  B -->|\"no\"| D[\"vite build: bundle in dist/\"]",
+    "  E[\"vite build on its own\"] --> F[\"Only strips types: bundle built WITH the error inside\"]",
+  ),
+  buildVi: L(
+    "flowchart TB",
+    "  A[\"npm run build = tsc -b && vite build\"] --> B{{\"tsc -b: có lỗi kiểu không?\"}}",
+    "  B -->|\"có\"| C[\"Dừng ở lỗi TS2322, không build gì\"]",
+    "  B -->|\"không\"| D[\"vite build: bundle trong dist/\"]",
+    "  E[\"Chạy vite build một mình\"] --> F[\"Chỉ gỡ kiểu: vẫn build ra bundle CÓ lỗi bên trong\"]",
+  ),
+  jsxEn: L(
+    "flowchart TB",
+    "  A[\"JSX in the-bac-si.tsx: a div with className the\"] --> B[\"Compiler: TypeScript, or Oxc inside Vite\"]",
+    "  B -->|\"new runtime (React 17+)\"| C[\"_jsx('div', props) from react/jsx-runtime\"]",
+    "  B -->|\"classic runtime\"| D[\"React.createElement('div', props, ...)\"]",
+    "  C --> E[\"Returns a plain object: an element\"]",
+    "  D --> E",
+    "  E --> F[\"React reads the elements and updates the DOM\"]",
+  ),
+  jsxVi: L(
+    "flowchart TB",
+    "  A[\"JSX trong the-bac-si.tsx: một div có className the\"] --> B[\"Trình biên dịch: TypeScript, hoặc Oxc trong Vite\"]",
+    "  B -->|\"runtime mới (React 17+)\"| C[\"_jsx('div', props) từ react/jsx-runtime\"]",
+    "  B -->|\"runtime cổ điển\"| D[\"React.createElement('div', props, ...)\"]",
+    "  C --> E[\"Trả về một object thường: phần tử\"]",
+    "  D --> E",
+    "  E --> F[\"React đọc các phần tử rồi cập nhật DOM\"]",
+  ),
+  phanTuEn: L(
+    "flowchart TB",
+    "  C[\"Component TheBacSi: a function\"] -->|\"returns\"| E[\"Element: type div, props, key\"]",
+    "  E -->|\"props.children\"| H2[\"Element: type h2, children = ten\"]",
+    "  E -->|\"props.children\"| P[\"Element: type p\"]",
+    "  E -.->|\"React commits later\"| DOM[\"Real DOM nodes on the page\"]",
+  ),
+  phanTuVi: L(
+    "flowchart TB",
+    "  C[\"Component TheBacSi: một hàm\"] -->|\"trả về\"| E[\"Phần tử: type div, props, key\"]",
+    "  E -->|\"props.children\"| H2[\"Phần tử: type h2, children = ten\"]",
+    "  E -->|\"props.children\"| P[\"Phần tử: type p\"]",
+    "  E -.->|\"sau đó React commit\"| DOM[\"Nút DOM thật trên trang\"]",
+  ),
+  dieuKienEn: L(
+    "flowchart TB",
+    "  Q{{\"What should appear?\"}} -->|\"a whole different output\"| A[\"if + early return (return null = nothing)\"]",
+    "  Q -->|\"one of two things, inside JSX\"| B[\"Ternary: cond ? A : B\"]",
+    "  Q -->|\"one thing or nothing\"| C[\"cond && A, with cond a boolean\"]",
+    "  Q -->|\"a third branch\"| D[\"Move the logic into a variable or a small component\"]",
+  ),
+  dieuKienVi: L(
+    "flowchart TB",
+    "  Q{{\"Cần hiện gì?\"}} -->|\"cả một đầu ra khác hẳn\"| A[\"if + return sớm (return null = không hiện gì)\"]",
+    "  Q -->|\"một trong hai thứ, giữa JSX\"| B[\"Toán tử ba ngôi: cond ? A : B\"]",
+    "  Q -->|\"một thứ hoặc không gì\"| C[\"cond && A, với cond là boolean\"]",
+    "  Q -->|\"nhánh thứ ba\"| D[\"Đưa logic ra biến hoặc component nhỏ\"]",
+  ),
+  spreadEn: L(
+    "flowchart TB",
+    "  L1[\"lich: id lh-1\"] -->|\"benhNhan\"| BN[\"ONE benhNhan object\"]",
+    "  L2[\"lich2 = spread of lich: a NEW outer object\"] -->|\"benhNhan: the same reference\"| BN",
+    "  W[\"lich2.benhNhan.hoTen = 'Mai'\"] -->|\"changes\"| BN",
+    "  BN --> R[\"lich.benhNhan.hoTen is now 'Mai' too\"]",
+  ),
+  spreadVi: L(
+    "flowchart TB",
+    "  L1[\"lich: id lh-1\"] -->|\"benhNhan\"| BN[\"MỘT object benhNhan\"]",
+    "  L2[\"lich2 = spread của lich: object ngoài MỚI\"] -->|\"benhNhan: cùng tham chiếu\"| BN",
+    "  W[\"lich2.benhNhan.hoTen = 'Mai'\"] -->|\"sửa\"| BN",
+    "  BN --> R[\"lich.benhNhan.hoTen cũng thành 'Mai'\"]",
+  ),
+  thamChieuEn: L(
+    "flowchart TB",
+    "  a[\"a\"] --> X[\"Array 1: 1, 2 (then 1, 2, 3)\"]",
+    "  c[\"c = a\"] -->|\"same arrow\"| X",
+    "  b[\"b\"] --> Y[\"Array 2: 1, 2\"]",
+    "  d[\"d = spread of a, plus 4\"] --> Z[\"Array 3: a new array\"]",
+    "  X --- R[\"a === c: true · a === b: false · d === a: false\"]",
+  ),
+  thamChieuVi: L(
+    "flowchart TB",
+    "  a[\"a\"] --> X[\"Mảng 1: 1, 2 (rồi 1, 2, 3)\"]",
+    "  c[\"c = a\"] -->|\"cùng mũi tên\"| X",
+    "  b[\"b\"] --> Y[\"Mảng 2: 1, 2\"]",
+    "  d[\"d = spread của a, thêm 4\"] --> Z[\"Mảng 3: mảng mới\"]",
+    "  X --- R[\"a === c: true · a === b: false · d === a: false\"]",
+  ),
+  asyncEn: L(
+    "sequenceDiagram",
+    "  participant M as main()",
+    "  participant F as Rest of the file",
+    "  participant T as Timer 50 ms",
+    "  M->>M: 1. start",
+    "  M->>T: layBacSi('bs-1', 50) returns a Promise at once",
+    "  M->>M: 2. p is a Promise",
+    "  M-->>F: await p: only main pauses",
+    "  F->>F: 3. the last line runs meanwhile",
+    "  T-->>M: 50 ms later the Promise settles",
+    "  M->>M: 4. result: BS. Nguyễn Minh An",
+  ),
+  asyncVi: L(
+    "sequenceDiagram",
+    "  participant M as main()",
+    "  participant F as Phần còn lại của file",
+    "  participant T as Hẹn giờ 50 ms",
+    "  M->>M: 1. bắt đầu",
+    "  M->>T: layBacSi('bs-1', 50) trả Promise ngay",
+    "  M->>M: 2. p là một Promise",
+    "  M-->>F: await p: chỉ main dừng",
+    "  F->>F: 3. dòng cuối file chạy trong lúc chờ",
+    "  T-->>M: 50 ms sau Promise có kết quả",
+    "  M->>M: 4. có kết quả: BS. Nguyễn Minh An",
+  ),
+};
+
 export default {
   title: 'Section 0 — Why React|||Mục 0 — Vì sao React',
   description: 'React giải quyết gì và cách học: lịch sử có mốc kiểm nguồn, vì sao công ty vẫn tuyển, tạo dự án Vite + TypeScript, JSX thật sự là gì, và phần JavaScript bạn cần trước khi viết component.',
@@ -46,6 +232,7 @@ ${slide('rx-00', 3, 'UI = f(state): sửa dữ liệu, React vẽ lại')}
 <li><strong>render (vẽ ra)</strong> — React calling your component to get that description. "Re-render" means calling it again after something changed;</li>
 <li><strong>declarative (khai báo)</strong> — you describe <em>what</em> the screen should be; the opposite, <strong>imperative (mệnh lệnh)</strong>, is writing each step of <em>how</em> to change it.</li>
 </ul>
+${SD.uiEn}
 <p>Here is the same idea in code, the imperative way first. This is roughly what you would write with plain DOM calls:</p>
 <pre><code class="language-js">// Imperative: you edit the page step by step
 const nut = document.querySelector('#nut-0830');
@@ -192,6 +379,7 @@ ${slide('rx-00', 3, 'UI = f(state): sửa dữ liệu, React vẽ lại')}
 <li><strong>render (vẽ ra)</strong> — React gọi component của bạn để lấy bản mô tả đó. "Render lại" là gọi lại lần nữa sau khi có gì đó đổi;</li>
 <li><strong>declarative (khai báo)</strong> — bạn mô tả màn hình <em>là gì</em>; ngược lại, <strong>imperative (mệnh lệnh)</strong> là tự viết từng bước <em>làm sao</em> để đổi nó.</li>
 </ul>
+${SD.uiVi}
 <p>Cùng một ý bằng code, kiểu mệnh lệnh trước. Đây gần đúng là thứ bạn viết khi gọi DOM trực tiếp:</p>
 <pre><code class="language-js">// Mệnh lệnh: bạn sửa trang từng bước
 const nut = document.querySelector('#nut-0830');
@@ -415,6 +603,7 @@ export function DatLich() {
   )
 }</code></pre>
 <p>Book and Cancel are now the same one-line change to the array: set <code>conTrong</code> to <code>false</code> or <code>true</code> for one slot. Nothing else is touched by hand. "2 slots left", "My bookings (1)", which buttons are disabled, which items are in the "my bookings" list — all are recomputed from the array on every render. There is no place to forget.</p>
+${SD.motNguonEn}
 <p>A test clicks through the same scenario as the jQuery script, the way a user would (by button name), and checks the numbers:</p>
 <pre><code class="language-tsx">test('đặt hai khung rồi huỷ một: mọi con số vẫn khớp nhau', async () =&gt; {
   const user = userEvent.setup()
@@ -600,6 +789,7 @@ export function DatLich() {
   )
 }</code></pre>
 <p>Đặt và Huỷ giờ là cùng một thay đổi một dòng trên mảng: đặt <code>conTrong</code> của một khung thành <code>false</code> hoặc <code>true</code>. Không chỗ nào khác bị sửa bằng tay. "Còn 2 khung trống", "Lịch của tôi (1)", nút nào bị khoá, dòng nào nằm trong "lịch của tôi" — tất cả được tính lại từ mảng mỗi lần render. Không còn chỗ nào để quên.</p>
+${SD.motNguonVi}
 <p>Một bài test bấm qua đúng kịch bản của script jQuery, theo cách người dùng bấm (tìm nút theo tên), rồi kiểm các con số:</p>
 <pre><code class="language-tsx">test('đặt hai khung rồi huỷ một: mọi con số vẫn khớp nhau', async () =&gt; {
   const user = userEvent.setup()
@@ -862,6 +1052,7 @@ ${slide('rx-00', 14, 'Cấu trúc dự án: bạn chỉ sống trong src/')}
 <h3>From index.html to your component</h3>
 ${slide('rx-00', 15, 'index.html → main.tsx → App.tsx')}
 <p>When the browser opens <code>http://localhost:5173/</code>, it receives <code>index.html</code>, sees the module script, and asks the dev server for <code>/src/main.tsx</code>. That file is short, and every line matters:</p>
+${SD.khoiDongEn}
 <pre><code class="language-tsx">import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -915,6 +1106,7 @@ dist/assets/index-CcUL7llf.js   222.07 kB │ gzip: 69.86 kB
 
 src/App.tsx(13,9): error TS2322: Type 'number' is not assignable to type 'string'.</div>
 <p><code>vite build</code> produced a working bundle with the type error inside. That is why the template&#39;s <code>build</code> script is <code>tsc -b &amp;&amp; vite build</code>: the <code>&amp;&amp;</code> runs the second command only if the first succeeded, so <code>npm run build</code> stops at the type error. In the editor, VS Code shows the same error as a red underline while you type. <code>tsc -b</code> ("build mode") follows the references in <code>tsconfig.json</code> and checks both <code>tsconfig.app.json</code> and <code>tsconfig.node.json</code>; with no errors it prints nothing at all — silence is success.</p>
+${SD.buildEn}
 <p>The linter is a separate, third check. On the fresh template <code>npm run lint</code> printed nothing (no problems). With an unused variable it said:</p>
 <div class="out">src/thu-lint.tsx:1:7: warning eslint(no-unused-vars): Variable 'x' is declared but never used. Unused variables should start with a '_'. help: Consider removing this declaration.</div>
 <p>From now on, before every commit: <code>npx tsc -b</code> (types), <code>npx vitest run</code> (tests, added below), <code>npx vite build</code> (bundle). Chapter 14 runs the same three in GitHub Actions.</p>
@@ -1123,6 +1315,7 @@ ${slide('rx-00', 14, 'Cấu trúc dự án: bạn chỉ sống trong src/')}
 <h3>Từ index.html tới component của bạn</h3>
 ${slide('rx-00', 15, 'index.html → main.tsx → App.tsx')}
 <p>Khi trình duyệt mở <code>http://localhost:5173/</code>, nó nhận <code>index.html</code>, thấy thẻ script dạng module, và xin máy chủ dev file <code>/src/main.tsx</code>. File này ngắn, và dòng nào cũng có ý nghĩa:</p>
+${SD.khoiDongVi}
 <pre><code class="language-tsx">import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -1176,6 +1369,7 @@ dist/assets/index-CcUL7llf.js   222.07 kB │ gzip: 69.86 kB
 
 src/App.tsx(13,9): error TS2322: Type 'number' is not assignable to type 'string'.</div>
 <p><code>vite build</code> vẫn cho ra một gói chạy được với lỗi kiểu nằm bên trong. Vì thế script <code>build</code> của template là <code>tsc -b &amp;&amp; vite build</code>: dấu <code>&amp;&amp;</code> chỉ chạy lệnh thứ hai khi lệnh đầu thành công, nên <code>npm run build</code> dừng ở lỗi kiểu. Trong trình soạn thảo, VS Code hiện đúng lỗi đó bằng gạch đỏ ngay khi gõ. <code>tsc -b</code> ("chế độ build") đi theo các tham chiếu trong <code>tsconfig.json</code> và kiểm cả <code>tsconfig.app.json</code> lẫn <code>tsconfig.node.json</code>; không có lỗi thì nó không in gì — im lặng là thành công.</p>
+${SD.buildVi}
 <p>Linter là phép kiểm thứ ba, riêng biệt. Trên template mới <code>npm run lint</code> không in gì (không có vấn đề). Khi có một biến không dùng, nó nói:</p>
 <div class="out">src/thu-lint.tsx:1:7: warning eslint(no-unused-vars): Variable 'x' is declared but never used. Unused variables should start with a '_'. help: Consider removing this declaration.</div>
 <p>Từ giờ, trước mỗi commit: <code>npx tsc -b</code> (kiểu), <code>npx vitest run</code> (test, thêm ở dưới), <code>npx vite build</code> (đóng gói). Chương 14 chạy đúng ba lệnh này trong GitHub Actions.</p>
@@ -1311,6 +1505,7 @@ export function TheBacSi() {
         React.createElement("p", null, "Nhi \\u00B7 8 n\\u0103m")));
 }</code></pre>
 <p>Same tree, but every tag becomes <code>React.createElement(...)</code>, and nothing imports <code>React</code> — hence the error. That is the whole reason old code starts every file with <code>import React from 'react'</code> even when it never writes the word <code>React</code>: the compiled output needs it. With the new runtime (React 17+, and every Vite template) you do not need that line, and the linter will flag it as unused.</p>
+${SD.jsxEn}
 <p>What does Vite itself send to the browser in development? We requested the file from a running dev server:</p>
 <pre><code class="language-js">const _jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
 …
@@ -1346,6 +1541,7 @@ console.log(tieuDe)</code></pre>
 }</div>
 <p>A React <strong>element (phần tử)</strong> is a small, plain object: a <code>type</code> (<code>'h1'</code>, or a component function such as <code>TheBacSi</code>), <code>props</code> (including <code>children</code>), and a <code>key</code> (used in lists, Chapter 1). Creating it does not touch the page. No <code>&lt;h1&gt;</code> exists in the DOM yet; this object is a <em>description</em>, and React reads such descriptions, compares them with the previous ones, and only then edits the real DOM (Chapter 2 names this "render then commit", Chapter 11 goes inside it). The <code>$$typeof</code> symbol is a safety mark React uses to recognise real elements — a JSON string from a server cannot contain a Symbol, so it cannot pretend to be an element.</p>
 <p>Because an element is a value, you can do with JSX everything you do with values: store it in a variable (<code>const tieuDe = &lt;h1&gt;…&lt;/h1&gt;</code>), return it from a function, put several in an array, pass one as a prop. The word <strong>component</strong> is for the function that returns elements; <strong>element</strong> is for what it returns. Mixing them up is common in interviews; now you can tell them apart.</p>
+${SD.phanTuEn}
 
 <h3>Four JSX rules, each with the error you will see</h3>
 ${slide('rx-00', 20, 'Bốn luật JSX — lỗi tsc thật')}
@@ -1436,6 +1632,7 @@ renderToStaticMarkup(&lt;p&gt;{bacSi}&lt;/p&gt;)</code></pre>
 <li><strong>Ternary <code>cond ? A : B</code></strong> — when you choose between two outputs in the middle of JSX.</li>
 <li><strong><code>cond &amp;&amp; A</code></strong> — when you show one thing or nothing. Keep <code>cond</code> a boolean.</li>
 </ul>
+${SD.dieuKienEn}
 <p>Nested ternaries (<code>a ? x : b ? y : z</code>) are legal but hard to read; once you need a third branch, move the logic into a variable or a small component. The home page you build in Lesson 0.3 uses the ternary pattern for the red "Nghỉ" cell: <code>className={dong.gio === 'Nghỉ' ? 'nghi' : undefined}</code> — <code>undefined</code> means "no attribute at all".</p>
 
 <h3>When JSX does not even parse: Vite&#39;s error overlay</h3>
@@ -1566,6 +1763,7 @@ export function TheBacSi() {
         React.createElement("p", null, "Nhi \\u00B7 8 n\\u0103m")));
 }</code></pre>
 <p>Cùng một cây, nhưng mỗi thẻ thành <code>React.createElement(...)</code>, và chẳng có dòng nào import <code>React</code> — nên mới có lỗi. Đó là toàn bộ lý do code cũ mở đầu mọi file bằng <code>import React from 'react'</code> dù không hề viết chữ <code>React</code>: output đã biên dịch cần nó. Với runtime mới (React 17+, và mọi template Vite), bạn không cần dòng đó, và linter sẽ báo nó là thừa.</p>
+${SD.jsxVi}
 <p>Chính Vite gửi gì xuống trình duyệt khi phát triển? Chúng tôi xin file đó từ một máy chủ dev đang chạy:</p>
 <pre><code class="language-js">const _jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
 …
@@ -1601,6 +1799,7 @@ console.log(tieuDe)</code></pre>
 }</div>
 <p>Một <strong>element (phần tử)</strong> React là một object nhỏ, thường: có <code>type</code> (<code>'h1'</code>, hoặc một hàm component như <code>TheBacSi</code>), <code>props</code> (gồm cả <code>children</code>), và <code>key</code> (dùng trong danh sách, Chương 1). Tạo nó ra không đụng gì tới trang. Chưa có thẻ <code>&lt;h1&gt;</code> nào trong DOM; object này là một <em>bản mô tả</em>, và React đọc những bản mô tả đó, so với bản trước, rồi mới sửa DOM thật (Chương 2 gọi là "render rồi commit", Chương 11 đi vào bên trong). Symbol <code>$$typeof</code> là dấu an toàn React dùng để nhận ra phần tử thật — một chuỗi JSON từ server không thể chứa Symbol, nên không giả làm phần tử được.</p>
 <p>Vì phần tử là một giá trị, JSX làm được mọi thứ bạn làm với giá trị: gán vào biến (<code>const tieuDe = &lt;h1&gt;…&lt;/h1&gt;</code>), trả về từ hàm, xếp nhiều cái vào mảng, truyền làm prop. Chữ <strong>component</strong> dành cho hàm trả về phần tử; <strong>element</strong> là thứ nó trả về. Phỏng vấn hay có người lẫn hai chữ này; giờ bạn phân biệt được.</p>
+${SD.phanTuVi}
 
 <h3>Bốn luật JSX, luật nào cũng kèm lỗi bạn sẽ thấy</h3>
 ${slide('rx-00', 20, 'Bốn luật JSX — lỗi tsc thật')}
@@ -1691,6 +1890,7 @@ renderToStaticMarkup(&lt;p&gt;{bacSi}&lt;/p&gt;)</code></pre>
 <li><strong>Ba ngôi <code>đk ? A : B</code></strong> — khi chọn giữa hai kết quả ngay giữa JSX.</li>
 <li><strong><code>đk &amp;&amp; A</code></strong> — khi hiện một thứ hoặc không gì. Giữ <code>đk</code> là boolean.</li>
 </ul>
+${SD.dieuKienVi}
 <p>Ba ngôi lồng nhau (<code>a ? x : b ? y : z</code>) hợp lệ nhưng khó đọc; cần nhánh thứ ba thì đưa logic ra một biến hoặc một component nhỏ. Trang chủ bạn dựng ở Bài 0.3 dùng mẫu ba ngôi cho ô "Nghỉ" màu đỏ: <code>className={dong.gio === 'Nghỉ' ? 'nghi' : undefined}</code> — <code>undefined</code> nghĩa là "không có thuộc tính này".</p>
 
 <h3>Khi JSX không đọc nổi: lớp phủ lỗi của Vite</h3>
@@ -1887,6 +2087,7 @@ console.log(tong(12, 8, 5))</code></pre>
 Mai true
 25</div>
 <p>Line 1: the original still has 12 years, the copy has 13, and they are different objects (<code>false</code>). This "copy, then change the copy" pattern is how you update state in React: you never edit the old object, you create a new one with <code>{ ...cu, truong: moi }</code> or a new array with <code>[...cu, moi]</code>. Line 3 is the trap: changing <code>lich2.benhNhan.hoTen</code> also changed <code>lich</code>, because spread copied the <em>reference</em> to the inner <code>benhNhan</code> object, not the object itself (<code>true</code>: same object). To change a nested field you copy each level you touch: <code>{ ...lich, benhNhan: { ...lich.benhNhan, hoTen: 'Mai' } }</code>. Chapter 2 practises this until it is automatic.</p>
+${SD.spreadEn}
 
 <h3>Same value or same object? Comparing by reference</h3>
 <pre><code class="language-ts">const a = [1, 2]
@@ -1904,6 +2105,7 @@ a sau c.push(3): [ 1, 2, 3 ]
 d === a false | Object.is({}, {}) false
 '1' == 1 true | '1' === 1 false</div>
 <p>For arrays and objects, <code>===</code> asks "is this the <em>same object</em>?", not "do they contain the same things?". <code>a</code> and <code>b</code> look identical but are two arrays; <code>c</code> is just another name for <code>a</code>, so pushing into <code>c</code> changed <code>a</code>. React uses exactly this cheap check (<code>Object.is</code>) to decide whether your state changed. If you <code>push</code> into the state array and set it again, React sees the <em>same</em> array and may skip the update — the most common beginner bug in Chapter 2. A new array (<code>[...a, 4]</code>) is a different object, so React notices. And always use <code>===</code>, never <code>==</code>: the double equals converts types (<code>'1' == 1</code> is <code>true</code>).</p>
+${SD.thamChieuEn}
 
 <div class="callout"><p><strong>Common interview question.</strong> "What is the difference between a shallow copy and a deep copy? Why does it matter in React?"</p>
 <p>Answer: a shallow copy (<code>{ ...obj }</code>, <code>[...arr]</code>) creates a new top-level object but reuses the same nested objects; a deep copy duplicates every level (<code>structuredClone(obj)</code>). React compares state by reference, so an update must produce new objects along the path that changed — and only that path. Mutating a nested object inside a shallow copy changes the old state too, which causes stale UI and bugs; deep-copying everything works but wastes memory and breaks memoization. The usual answer is "copy each level you change".</p></div>
@@ -2072,6 +2274,7 @@ console.log('3. dòng này chạy TRƯỚC khi có kết quả')</code></pre>
 <li>A rejected promise becomes an exception at the <code>await</code>, caught with ordinary <code>try/catch</code> (line 5). An <code>await</code> without <code>try/catch</code> in an event handler is an unhandled error.</li>
 <li><code>Promise.all</code> waits for several promises started together: two 100 ms calls took about 100 ms, not 200. Destructuring (<code>const [a, b] = …</code>) again.</li>
 </ul>
+${SD.asyncEn}
 <p>In React you will not call <code>fetch</code> directly inside components very often: Chapter 6 uses TanStack Query, which handles loading, errors, caching and retries around exactly these promises. But you must be able to read <code>async</code>/<code>await</code> to use it, and forms (Chapter 3) submit with <code>await</code>.</p>
 
 <h3>The minimum TypeScript for this course</h3>
@@ -2499,6 +2702,7 @@ console.log(tong(12, 8, 5))</code></pre>
 Mai true
 25</div>
 <p>Dòng 1: bản gốc vẫn 12 năm, bản sao 13, và chúng là hai object khác nhau (<code>false</code>). Mẫu "chép rồi sửa bản chép" này là cách cập nhật state trong React: bạn không bao giờ sửa object cũ, bạn tạo object mới bằng <code>{ ...cu, truong: moi }</code> hoặc mảng mới bằng <code>[...cu, moi]</code>. Dòng 3 là cái bẫy: sửa <code>lich2.benhNhan.hoTen</code> cũng sửa luôn <code>lich</code>, vì spread chỉ chép <em>tham chiếu</em> tới object <code>benhNhan</code> bên trong, không chép chính object đó (<code>true</code>: cùng một object). Muốn sửa một trường lồng bên trong thì chép từng tầng bạn đụng vào: <code>{ ...lich, benhNhan: { ...lich.benhNhan, hoTen: 'Mai' } }</code>. Chương 2 luyện việc này tới khi thành phản xạ.</p>
+${SD.spreadVi}
 
 <h3>Cùng giá trị hay cùng object? So sánh theo tham chiếu</h3>
 <pre><code class="language-ts">const a = [1, 2]
@@ -2516,6 +2720,7 @@ a sau c.push(3): [ 1, 2, 3 ]
 d === a false | Object.is({}, {}) false
 '1' == 1 true | '1' === 1 false</div>
 <p>Với mảng và object, <code>===</code> hỏi "có phải <em>cùng một object</em> không?", chứ không hỏi "có chứa cùng thứ không?". <code>a</code> và <code>b</code> trông y hệt nhưng là hai mảng; <code>c</code> chỉ là một cái tên khác của <code>a</code>, nên push vào <code>c</code> là đổi <code>a</code>. React dùng đúng phép kiểm rẻ này (<code>Object.is</code>) để quyết định state có đổi không. Nếu bạn <code>push</code> vào mảng state rồi set lại nó, React thấy <em>cùng</em> mảng cũ và có thể bỏ qua cập nhật — bug phổ biến nhất của người mới ở Chương 2. Một mảng mới (<code>[...a, 4]</code>) là object khác, nên React nhận ra. Và luôn dùng <code>===</code>, đừng dùng <code>==</code>: dấu bằng đôi tự đổi kiểu (<code>'1' == 1</code> ra <code>true</code>).</p>
+${SD.thamChieuVi}
 
 <div class="callout"><p><strong>Câu hỏi phỏng vấn hay gặp.</strong> "Shallow copy và deep copy khác nhau thế nào? Vì sao quan trọng với React?"</p>
 <p>Ý trả lời: shallow copy (<code>{ ...obj }</code>, <code>[...arr]</code>) tạo object mới ở tầng ngoài nhưng dùng lại các object lồng bên trong; deep copy nhân bản mọi tầng (<code>structuredClone(obj)</code>). React so state theo tham chiếu, nên một lần cập nhật phải tạo object mới dọc theo đường dẫn đã đổi — và chỉ đường dẫn đó. Sửa object lồng bên trong một bản shallow copy là sửa luôn state cũ, gây giao diện cũ và bug; deep copy tất cả thì chạy nhưng tốn bộ nhớ và phá memo. Câu trả lời thường gặp là "chép từng tầng bạn đổi".</p></div>
@@ -2684,6 +2889,7 @@ console.log('3. dòng này chạy TRƯỚC khi có kết quả')</code></pre>
 <li>Promise bị từ chối (reject) biến thành một exception tại <code>await</code>, bắt bằng <code>try/catch</code> bình thường (dòng 5). Một <code>await</code> không có <code>try/catch</code> trong hàm xử lý sự kiện là một lỗi không ai bắt.</li>
 <li><code>Promise.all</code> chờ nhiều promise bắt đầu cùng lúc: hai lời gọi 100 ms mất khoảng 100 ms, không phải 200. Lại là destructuring (<code>const [a, b] = …</code>).</li>
 </ul>
+${SD.asyncVi}
 <p>Trong React bạn sẽ không hay gọi <code>fetch</code> trực tiếp trong component: Chương 6 dùng TanStack Query, thư viện lo phần đang tải, lỗi, cache và thử lại quanh đúng những promise này. Nhưng bạn phải đọc được <code>async</code>/<code>await</code> mới dùng được nó, và form (Chương 3) gửi đi bằng <code>await</code>.</p>
 
 <h3>TypeScript tối thiểu cho khoá này</h3>

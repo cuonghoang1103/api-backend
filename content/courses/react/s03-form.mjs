@@ -114,6 +114,251 @@ const OUT = {
 };
 
 
+/* ─── Sơ đồ mermaid trong bài (≤ 10 nút, nhãn ngắn; khối EN nhãn tiếng Anh, khối VI nhãn tiếng Việt) ─── */
+/** Sơ đồ mermaid: trang học đọc textContent của <code class="language-mermaid"> rồi vẽ (LearnPageClient → mermaidRuntime). */
+const MM = (src) => '<pre><code class="language-mermaid">' + H(src.trim()) + '</code></pre>';
+const L = (...dong) => MM(dong.join('\n'));
+const SD = {
+  khongKiemSoatEn: L(
+    "flowchart TB",
+    "  A[\"input defaultValue = Nguyễn Văn A, ref = oTen\"] --> B[\"The user types: the DOM element keeps the text\"]",
+    "  B --> C[\"No React render while typing\"]",
+    "  C --> D[\"Press Gửi: the submit handler runs\"]",
+    "  D --> E[\"Read oTen.current?.value ?? empty string\"]",
+    "  E --> F[\"onGui receives Trần Thu Hà\"]",
+  ),
+  khongKiemSoatVi: L(
+    "flowchart TB",
+    "  A[\"input defaultValue = Nguyễn Văn A, ref = oTen\"] --> B[\"Người dùng gõ: phần tử DOM tự giữ chữ\"]",
+    "  B --> C[\"Không có lần render nào của React khi gõ\"]",
+    "  C --> D[\"Bấm Gửi: handler submit chạy\"]",
+    "  D --> E[\"Đọc oTen.current?.value ?? chuỗi rỗng\"]",
+    "  E --> F[\"onGui nhận Trần Thu Hà\"]",
+  ),
+  kiemSoatEn: L(
+    "sequenceDiagram",
+    "  participant U as User",
+    "  participant I as input (value = ten)",
+    "  participant H as onChange",
+    "  participant R as React",
+    "  U->>I: presses L",
+    "  I->>H: e.target.value already includes L",
+    "  H->>R: setTen(e.target.value)",
+    "  R->>R: calls OTenKiemSoat again, ten = the new text",
+    "  R->>I: commit: the input shows exactly ten",
+    "  Note over U,R: Every keystroke goes around this loop once",
+  ),
+  kiemSoatVi: L(
+    "sequenceDiagram",
+    "  participant U as Người dùng",
+    "  participant I as input (value = ten)",
+    "  participant H as onChange",
+    "  participant R as React",
+    "  U->>I: gõ chữ L",
+    "  I->>H: e.target.value đã có chữ L",
+    "  H->>R: setTen(e.target.value)",
+    "  R->>R: gọi lại OTenKiemSoat, ten = chữ mới",
+    "  R->>I: commit: ô hiện đúng ten",
+    "  Note over U,R: Mỗi phím gõ đi hết vòng này một lần",
+  ),
+  chonCachEn: L(
+    "flowchart TB",
+    "  Q1{{\"A file upload?\"}} -->|\"yes\"| U[\"Uncontrolled: the only option\"]",
+    "  Q1 -->|\"no\"| Q2{{\"A real business form: validation, errors, async submit?\"}}",
+    "  Q2 -->|\"yes\"| R[\"React Hook Form + Zod, uncontrolled underneath\"]",
+    "  Q2 -->|\"no\"| Q3{{\"Does the screen need the text on every keystroke, or must you rewrite it?\"}}",
+    "  Q3 -->|\"yes\"| C[\"Controlled: value + onChange\"]",
+    "  Q3 -->|\"no, read only at submit\"| F[\"Uncontrolled: FormData\"]",
+  ),
+  chonCachVi: L(
+    "flowchart TB",
+    "  Q1{{\"Tải file lên?\"}} -->|\"đúng\"| U[\"Không kiểm soát: cách duy nhất\"]",
+    "  Q1 -->|\"không\"| Q2{{\"Form nghiệp vụ thật: kiểm tra, lỗi, gửi bất đồng bộ?\"}}",
+    "  Q2 -->|\"đúng\"| R[\"React Hook Form + Zod, bên dưới là không kiểm soát\"]",
+    "  Q2 -->|\"không\"| Q3{{\"Màn hình cần chữ sau mỗi phím, hoặc phải sửa chữ khi gõ?\"}}",
+    "  Q3 -->|\"đúng\"| C[\"Kiểm soát: value + onChange\"]",
+    "  Q3 -->|\"không, chỉ đọc lúc gửi\"| F[\"Không kiểm soát: FormData\"]",
+  ),
+  rhfEn: L(
+    "flowchart TB",
+    "  I[\"input with ...register(hoTen): RHF keeps the ref, the input is uncontrolled\"] --> S[\"Press Gửi: handleSubmit(onGui)\"]",
+    "  S --> P[\"preventDefault, read every value\"]",
+    "  P --> Z[\"zodResolver(schema): Zod checks the values\"]",
+    "  Z -->|\"valid: clean data\"| G[\"onGui(data) is called\"]",
+    "  Z -->|\"invalid: errors with the path of each field\"| E[\"formState.errors filled, focus on the first invalid field\"]",
+  ),
+  rhfVi: L(
+    "flowchart TB",
+    "  I[\"input với ...register(hoTen): RHF giữ ref, ô là không kiểm soát\"] --> S[\"Bấm Gửi: handleSubmit(onGui)\"]",
+    "  S --> P[\"preventDefault, đọc mọi giá trị\"]",
+    "  P --> Z[\"zodResolver(schema): Zod kiểm giá trị\"]",
+    "  Z -->|\"hợp lệ: dữ liệu sạch\"| G[\"gọi onGui(data)\"]",
+    "  Z -->|\"không hợp lệ: lỗi kèm đường dẫn từng trường\"| E[\"điền formState.errors, đưa focus tới ô sai đầu tiên\"]",
+  ),
+  watchEn: L(
+    "flowchart TB",
+    "  subgraph UW[\"useWatch inside DemKyTuLyDo\"]",
+    "    direction TB",
+    "    U1[\"A keystroke in Lý do\"] --> U2[\"Only DemKyTuLyDo renders again\"]",
+    "    U2 --> U3[\"The form itself: 0 renders\"]",
+    "  end",
+    "  subgraph W[\"watch(lyDo) at the top of the form\"]",
+    "    direction TB",
+    "    W1[\"A keystroke in Lý do\"] --> W2[\"The WHOLE form renders again\"]",
+    "    W2 --> W3[\"15 renders for 15 characters\"]",
+    "  end",
+  ),
+  watchVi: L(
+    "flowchart TB",
+    "  subgraph UW[\"useWatch trong DemKyTuLyDo\"]",
+    "    direction TB",
+    "    U1[\"Một phím trong ô Lý do\"] --> U2[\"Chỉ DemKyTuLyDo render lại\"]",
+    "    U2 --> U3[\"Bản thân form: 0 lần render\"]",
+    "  end",
+    "  subgraph W[\"watch(lyDo) ở đầu form\"]",
+    "    direction TB",
+    "    W1[\"Một phím trong ô Lý do\"] --> W2[\"CẢ form render lại\"]",
+    "    W2 --> W3[\"15 lần render cho 15 ký tự\"]",
+    "  end",
+  ),
+  motSchemaEn: L(
+    "flowchart TB",
+    "  S[\"datLichSchema in src/schema/dat-lich.ts\"] --> C[\"Client: useForm with zodResolver\"]",
+    "  S --> V[\"Server: POST /api/lich-hen runs safeParse\"]",
+    "  S --> T[\"Types: z.input for the form, z.output for onGui\"]",
+    "  V -->|\"400 with issues, e.g. path benhNhan.soDienThoai\"| E[\"The form shows it under that field (Lesson 3.3)\"]",
+  ),
+  motSchemaVi: L(
+    "flowchart TB",
+    "  S[\"datLichSchema trong src/schema/dat-lich.ts\"] --> C[\"Client: useForm với zodResolver\"]",
+    "  S --> V[\"Máy chủ: POST /api/lich-hen chạy safeParse\"]",
+    "  S --> T[\"Kiểu: z.input cho form, z.output cho onGui\"]",
+    "  V -->|\"400 kèm issues, vd path benhNhan.soDienThoai\"| E[\"Form hiện lỗi dưới đúng ô đó (Bài 3.3)\"]",
+  ),
+  bonTrangThaiEn: L(
+    "stateDiagram-v2",
+    "  state \"① Entering: errors under fields\" as NHAP",
+    "  state \"② Sending: isSubmitting, button disabled\" as GUI",
+    "  state \"③ Server said no: errors.root.server\" as LOI",
+    "  state \"④ Done: isSubmitSuccessful\" as XONG",
+    "  [*] --> NHAP",
+    "  NHAP --> NHAP: submit with invalid data",
+    "  NHAP --> GUI: submit, data valid",
+    "  GUI --> XONG: the promise resolves",
+    "  GUI --> LOI: onGui throws, setError",
+    "  LOI --> GUI: submit again, data kept",
+  ),
+  bonTrangThaiVi: L(
+    "stateDiagram-v2",
+    "  state \"① Đang nhập: lỗi dưới từng ô\" as NHAP",
+    "  state \"② Đang gửi: isSubmitting, nút bị khoá\" as GUI",
+    "  state \"③ Máy chủ từ chối: errors.root.server\" as LOI",
+    "  state \"④ Xong: isSubmitSuccessful\" as XONG",
+    "  [*] --> NHAP",
+    "  NHAP --> NHAP: gửi khi dữ liệu sai",
+    "  NHAP --> GUI: gửi, dữ liệu hợp lệ",
+    "  GUI --> XONG: promise xong",
+    "  GUI --> LOI: onGui ném lỗi, setError",
+    "  LOI --> GUI: gửi lại, dữ liệu còn nguyên",
+  ),
+  cungNhipEn: L(
+    "sequenceDiagram",
+    "  participant J as Script: requestSubmit twice",
+    "  participant S as State lock (dangGui)",
+    "  participant F as Ref lock (dangGuiRef)",
+    "  J->>S: submit 1: dangGui is false, send",
+    "  J->>S: submit 2: this render still says false, send again ✗",
+    "  Note over S: setDangGui(true) only shows up in the next render",
+    "  J->>F: submit 1: current is false, set it to true at once, send",
+    "  J->>F: submit 2: current is already true, return ✓",
+  ),
+  cungNhipVi: L(
+    "sequenceDiagram",
+    "  participant J as Script: requestSubmit hai lần",
+    "  participant S as Chốt bằng state (dangGui)",
+    "  participant F as Chốt bằng ref (dangGuiRef)",
+    "  J->>S: lần 1: dangGui là false, gửi",
+    "  J->>S: lần 2: render này vẫn là false, gửi lần nữa ✗",
+    "  Note over S: setDangGui(true) chỉ có mặt ở lần render sau",
+    "  J->>F: lần 1: current là false, đặt true ngay, gửi",
+    "  J->>F: lần 2: current đã là true, return ✓",
+  ),
+  loiMayChuEn: L(
+    "flowchart TB",
+    "  A[\"onGui throws\"] --> B{{\"A LoiKiemTra with a list of field errors?\"}}",
+    "  B -->|\"yes\"| C[\"For each truong: setError(truong, type server, message)\"]",
+    "  C --> D[\"Message under that input, focus on the first one\"]",
+    "  B -->|\"no: network down, server crashed\"| E[\"setError(root.server, general message)\"]",
+    "  E --> F[\"Shown at the top with role alert, input kept\"]",
+  ),
+  loiMayChuVi: L(
+    "flowchart TB",
+    "  A[\"onGui ném lỗi\"] --> B{{\"Là LoiKiemTra kèm danh sách lỗi từng trường?\"}}",
+    "  B -->|\"đúng\"| C[\"Với mỗi truong: setError(truong, type server, thông báo)\"]",
+    "  C --> D[\"Thông báo dưới đúng ô, focus vào ô đầu tiên\"]",
+    "  B -->|\"không: mất mạng, máy chủ sập\"| E[\"setError(root.server, thông báo chung)\"]",
+    "  E --> F[\"Hiện ở đầu form với role alert, dữ liệu còn nguyên\"]",
+  ),
+  imeEn: L(
+    "sequenceDiagram",
+    "  participant K as Keys (VNI)",
+    "  participant I as IME",
+    "  participant B as Browser input",
+    "  participant R as React onChange",
+    "  K->>I: c",
+    "  I->>B: compositionstart, compositionupdate c",
+    "  B->>R: input event: c",
+    "  K->>I: a, m, 3",
+    "  I->>B: compositionupdate ca, cam, cam3, then cảm",
+    "  B->>R: an input event after every update",
+    "  K->>I: Enter while composing (isComposing = true)",
+    "  I->>B: compositionend cảm: the text is committed",
+  ),
+  imeVi: L(
+    "sequenceDiagram",
+    "  participant K as Phím (VNI)",
+    "  participant I as Bộ gõ",
+    "  participant B as Ô input của trình duyệt",
+    "  participant R as onChange của React",
+    "  K->>I: c",
+    "  I->>B: compositionstart, compositionupdate c",
+    "  B->>R: sự kiện input: c",
+    "  K->>I: a, m, 3",
+    "  I->>B: compositionupdate ca, cam, cam3, rồi cảm",
+    "  B->>R: sau mỗi lần update lại có sự kiện input",
+    "  K->>I: Enter khi đang soạn (isComposing = true)",
+    "  I->>B: compositionend cảm: chữ được chốt",
+  ),
+  enterEn: L(
+    "flowchart TB",
+    "  K[\"keydown with key Enter\"] --> Q{{\"e.nativeEvent.isComposing, or keyCode 229?\"}}",
+    "  Q -->|\"yes\"| I[\"return: this Enter belongs to the IME, which commits the word\"]",
+    "  Q -->|\"no\"| S[\"Send the message and clear the input\"]",
+    "  I --> N[\"The next Enter sends cảm, once\"]",
+  ),
+  enterVi: L(
+    "flowchart TB",
+    "  K[\"keydown với phím Enter\"] --> Q{{\"e.nativeEvent.isComposing, hoặc keyCode 229?\"}}",
+    "  Q -->|\"đúng\"| I[\"return: Enter này là của bộ gõ, để nó chốt chữ\"]",
+    "  Q -->|\"không\"| S[\"Gửi tin, xoá ô nhập\"]",
+    "  I --> N[\"Enter kế tiếp gửi cảm, đúng một lần\"]",
+  ),
+  nfcEn: L(
+    "flowchart TB",
+    "  S[\"Unikey Unicode tổ hợp, macOS file names, pasted text\"] --> T[\"Nguyễn arrives as NFC (6 code units) or NFD (8), you do not choose\"]",
+    "  T --> P[\"Compared raw: === false, includes false, length off\"]",
+    "  T --> N[\"datLichSchema: .normalize(NFC) at ONE boundary\"]",
+    "  N --> OK[\"One form: search, the 500-character limit and unique checks agree\"]",
+  ),
+  nfcVi: L(
+    "flowchart TB",
+    "  S[\"Unikey bảng mã tổ hợp, tên file macOS, chữ dán vào\"] --> T[\"Nguyễn tới dưới dạng NFC (6 đơn vị) hoặc NFD (8), bạn không chọn được\"]",
+    "  T --> P[\"So nguyên xi: === false, includes false, length lệch\"]",
+    "  T --> N[\"datLichSchema: .normalize(NFC) ở MỘT ranh giới\"]",
+    "  N --> OK[\"Một dạng duy nhất: tìm kiếm, giới hạn 500 ký tự, kiểm trùng đều khớp\"]",
+  ),
+};
+
 export default {
   title: 'Chapter 3 — Forms|||Chương 3 — Form',
   description: 'Form theo cách công ty làm: ô kiểm soát và không kiểm soát, useRef, React Hook Form + Zod dùng chung schema với máy chủ, lỗi đúng chỗ, trạng thái đang gửi, chặn gửi hai lần, và gõ tiếng Việt với bộ gõ (IME) — mọi hành vi đo thật bằng Vitest và Chromium.',
@@ -189,6 +434,7 @@ ${pre('tsx', SN.khongKiemSoat)}
 </ul>
 <div class="callout"><p><strong>JS quick reminder — <code>?.</code> and <code>??</code>.</strong> <code>a?.b</code> is "optional chaining": if <code>a</code> is <code>null</code> or <code>undefined</code>, the whole expression becomes <code>undefined</code> instead of throwing "Cannot read properties of null". <code>x ?? y</code> is "nullish coalescing": use <code>x</code>, unless it is <code>null</code>/<code>undefined</code>, then use <code>y</code>. Together: "read the value if the element exists, otherwise use an empty string". TypeScript insists on it because <code>oTen.current</code> really is <code>null</code> before the first render.</p></div>
 <p>The test in the project clears the box, types "Trần Thu Hà", presses "Gửi" and checks that <code>onGui</code> received exactly that text. It passes — the DOM held the value the whole time and React never re-rendered while you typed. That last part is the important one; hold on to it.</p>
+${SD.khongKiemSoatEn}
 
 <h3>Controlled: state is the source of truth</h3>
 ${slide('rx-03', 4, 'Ô kiểm soát: value + onChange, mỗi phím đi hết một vòng render')}
@@ -202,6 +448,7 @@ ${pre('tsx', SN.kiemSoat)}
 <li>React calls <code>OTenKiemSoat</code> again; this time <code>ten</code> holds the new text, and the JSX says <code>value={ten}</code>.</li>
 <li>Commit: React makes sure the DOM input shows exactly that string.</li>
 </ol>
+${SD.kiemSoatEn}
 <p>The payoff is that the text now lives in your component. The greeting line <code>Xin chào, {ten}</code> updates as you type, without reading anything from the DOM. Anything else in the component — a character counter, a disabled button, a preview — can use <code>ten</code> directly.</p>
 
 <h3>What only a controlled input can do — and what it costs</h3>
@@ -281,6 +528,7 @@ ${out(OUT.formData)}
 <tr><td>A real business form with validation, errors, async submit</td><td>React Hook Form + Zod (uncontrolled underneath)</td><td>Lesson 3.2 — validation, types and error state for free.</td></tr>
 <tr><td>File upload</td><td>Uncontrolled</td><td>The only option the browser allows.</td></tr>
 </tbody></table>
+${SD.chonCachEn}
 
 <div class="callout"><p><strong>🎓 At FER202 you do it this way — 💼 at work they do it that way.</strong></p>
 <p>FER202 labs usually write every form by hand: one <code>useState</code> per field (or <code>this.state</code> plus a <code>handleChange</code> with <code>[e.target.name]</code> in older class-component slides), React-Bootstrap&#39;s <code>&lt;Form.Control value={…} onChange={…} /&gt;</code>, and a <code>handleSubmit</code> full of <code>if</code> statements that fill an <code>errors</code> object. → At a company, a small interactive input (a search box, a toggle) is still a controlled input exactly like above, but any form that is <em>submitted</em> — sign-up, checkout, booking — is built with <strong>React Hook Form + Zod</strong>. · <em>Why:</em> the hand-written version re-renders the whole form on every keystroke (measured: 12 commits for 12 characters), duplicates validation rules between client and server, and has no types tying the fields to the data you send. Your FER202 way is not wrong — it is exactly how you learn what a form library does for you, and you will meet it again in older codebases and in quick internal tools.</p></div>
@@ -365,6 +613,7 @@ ${pre('tsx', SN.khongKiemSoat)}
 </ul>
 <div class="callout"><p><strong>JS nhắc nhanh — <code>?.</code> và <code>??</code>.</strong> <code>a?.b</code> là "optional chaining (truy cập tuỳ chọn)": nếu <code>a</code> là <code>null</code> hoặc <code>undefined</code>, cả biểu thức thành <code>undefined</code> thay vì ném lỗi "Cannot read properties of null". <code>x ?? y</code> là "nullish coalescing (lấy giá trị thay thế khi rỗng)": dùng <code>x</code>, trừ khi nó là <code>null</code>/<code>undefined</code> thì dùng <code>y</code>. Ghép lại: "đọc value nếu phần tử đã có, không thì lấy chuỗi rỗng". TypeScript bắt bạn viết vậy vì trước lần render đầu <code>oTen.current</code> đúng là <code>null</code>.</p></div>
 <p>Test trong dự án xoá ô, gõ "Trần Thu Hà", bấm "Gửi" và kiểm <code>onGui</code> nhận đúng chữ đó. Test xanh — DOM giữ giá trị suốt, và React không render lại lần nào khi bạn gõ. Ý cuối là ý quan trọng; nhớ nó.</p>
+${SD.khongKiemSoatVi}
 
 <h3>Kiểm soát: state là nguồn sự thật</h3>
 ${slide('rx-03', 4, 'Ô kiểm soát: value + onChange, mỗi phím đi hết một vòng render')}
@@ -378,6 +627,7 @@ ${pre('tsx', SN.kiemSoat)}
 <li>React gọi lại <code>OTenKiemSoat</code>; lần này <code>ten</code> mang chữ mới, và JSX ghi <code>value={ten}</code>.</li>
 <li>Commit: React bảo đảm ô trong DOM hiện đúng chuỗi đó.</li>
 </ol>
+${SD.kiemSoatVi}
 <p>Cái lợi là chữ giờ sống trong component của bạn. Dòng chào <code>Xin chào, {ten}</code> cập nhật theo từng phím mà không phải đọc gì từ DOM. Mọi thứ khác trong component — bộ đếm ký tự, nút bị khoá, phần xem trước — đều dùng thẳng được <code>ten</code>.</p>
 
 <h3>Thứ chỉ ô kiểm soát làm được — và cái giá của nó</h3>
@@ -457,6 +707,7 @@ ${out(OUT.formData)}
 <tr><td>Form nghiệp vụ thật: kiểm dữ liệu, báo lỗi, gửi bất đồng bộ</td><td>React Hook Form + Zod (bên dưới là không kiểm soát)</td><td>Bài 3.2 — kiểm dữ liệu, kiểu và trạng thái lỗi có sẵn.</td></tr>
 <tr><td>Tải file lên</td><td>Không kiểm soát</td><td>Lựa chọn duy nhất trình duyệt cho phép.</td></tr>
 </tbody></table>
+${SD.chonCachVi}
 
 <div class="callout"><p><strong>🎓 Ở FER202 bạn làm thế này — 💼 đi làm người ta làm thế kia.</strong></p>
 <p>Lab FER202 thường viết mọi form bằng tay: mỗi ô một <code>useState</code> (hoặc <code>this.state</code> cộng một <code>handleChange</code> dùng <code>[e.target.name]</code> ở các slide class component cũ), <code>&lt;Form.Control value={…} onChange={…} /&gt;</code> của React-Bootstrap, và một <code>handleSubmit</code> đầy <code>if</code> để nhồi lỗi vào object <code>errors</code>. → Ở công ty, một ô tương tác nhỏ (ô tìm kiếm, công tắc) vẫn là ô kiểm soát y như trên, nhưng mọi form được <em>gửi đi</em> — đăng ký, thanh toán, đặt lịch — đều dựng bằng <strong>React Hook Form + Zod</strong>. · <em>Vì sao:</em> bản tự viết render lại cả form ở mỗi phím (đo được: 12 lần commit cho 12 ký tự), chép luật kiểm tra hai lần ở client và server, và không có kiểu nào ràng các ô với dữ liệu bạn gửi đi. Cách FER202 không sai — đó chính là cách bạn hiểu thư viện form làm gì cho mình, và bạn sẽ gặp lại nó ở dự án cũ cũng như các công cụ nội bộ làm nhanh.</p></div>
@@ -568,6 +819,7 @@ ${slide('rx-03', 10, 'Zod: MỘT schema viết luật, sinh kiểu TypeScript, s
 </ul>
 <div class="callout"><p><strong>JS/TS quick reminder — chaining and <code>typeof</code> in a type.</strong> <code>z.string().trim().min(2)</code> is method chaining: each call returns a new schema, and you call the next method on it. In <code>z.infer&lt;typeof haiOSchema&gt;</code>, <code>typeof</code> is TypeScript&#39;s type-level operator: "the type of this variable". It does not run anything; it only exists for the type checker.</p></div>
 <p><code>zodResolver(schema)</code> from <code>@hookform/resolvers</code> connects the two libraries: RHF hands the raw form values to Zod, Zod returns either clean data or a list of errors with the path of each field, and RHF puts those errors into <code>formState.errors</code> under the same path.</p>
+${SD.rhfEn}
 
 <h3>The clinic&#39;s real schema</h3>
 ${slide('rx-03', 11, 'z.input khác z.output: người dùng gõ bẩn, form gửi đi sạch')}
@@ -619,6 +871,7 @@ ${pre('tsx', SN.watchGoc)}
 ${pre('tsx', SN.useWatchCon)}
 ${out(OUT.watch)}
 <p>With <code>watch(&#39;lyDo&#39;)</code> at the top of the form, every keystroke in "Lý do" re-renders the <em>whole form</em> (15 renders for 15 characters). With <code>useWatch</code> inside a tiny child component, only that child re-renders; the form itself stays at zero. The booking form follows the second pattern: the counter is a separate <code>DemKyTuLyDo</code> component. This is the same idea as Chapter 2&#39;s "keep state low", applied to a subscription.</p>
+${SD.watchEn}
 
 <h3>One schema, also on the server</h3>
 <p>Client-side validation is for the user; it can always be bypassed by calling the API directly. The server must validate again — and with Zod it can use the <em>same</em> file. The test simulates the handler of <code>POST /api/lich-hen</code> with nothing but <code>datLichSchema.safeParse</code>:</p>
@@ -627,6 +880,7 @@ ${out(OUT.mayChu)}
 <p><code>safeParse</code> never throws; it returns <code>{ success: true, data }</code> or <code>{ success: false, error }</code>. Each issue has a <code>path</code> — the same <code>benhNhan.soDienThoai</code> strings RHF uses — so in 3.3 the form can put server errors under the right input. In a real project the schema sits in a shared package (for example <code>packages/schema</code> in a monorepo), or in the backend with the frontend importing it. One warning, measured: <code>z.flattenError</code>, which many tutorials use, only flattens <strong>one</strong> level. With a nested object all three patient errors end up under the single key <code>benhNhan</code>:</p>
 ${out(OUT.flatten)}
 <p>That is why the handler above maps <code>issues</code> to <code>{ truong, loi }</code> itself. (Zod 4 also has <code>z.treeifyError</code> for nested error trees.)</p>
+${SD.motSchemaEn}
 
 <h3>What it costs: bundle size</h3>
 <p>Libraries are not free. The same project built before and after this chapter:</p>
@@ -732,6 +986,7 @@ ${slide('rx-03', 10, 'Zod: MỘT schema viết luật, sinh kiểu TypeScript, s
 </ul>
 <div class="callout"><p><strong>JS/TS nhắc nhanh — gọi nối và <code>typeof</code> trong kiểu.</strong> <code>z.string().trim().min(2)</code> là gọi nối (method chaining): mỗi lần gọi trả về một schema mới, và bạn gọi hàm tiếp theo trên nó. Trong <code>z.infer&lt;typeof haiOSchema&gt;</code>, <code>typeof</code> là toán tử ở tầng kiểu của TypeScript: "kiểu của biến này". Nó không chạy gì cả; nó chỉ tồn tại cho bộ kiểm kiểu.</p></div>
 <p><code>zodResolver(schema)</code> của gói <code>@hookform/resolvers</code> nối hai thư viện: RHF đưa giá trị thô của form cho Zod, Zod trả về hoặc dữ liệu sạch, hoặc danh sách lỗi kèm đường dẫn của từng field, và RHF đặt các lỗi đó vào <code>formState.errors</code> theo đúng đường dẫn.</p>
+${SD.rhfVi}
 
 <h3>Schema thật của phòng khám</h3>
 ${slide('rx-03', 11, 'z.input khác z.output: người dùng gõ bẩn, form gửi đi sạch')}
@@ -783,6 +1038,7 @@ ${pre('tsx', SN.watchGoc)}
 ${pre('tsx', SN.useWatchCon)}
 ${out(OUT.watch)}
 <p>Với <code>watch(&#39;lyDo&#39;)</code> ở đầu form, mỗi phím trong ô "Lý do" làm render lại <em>cả form</em> (15 lần cho 15 ký tự). Với <code>useWatch</code> trong một component con bé xíu, chỉ component con đó render lại; bản thân form vẫn ở con số 0. Form đặt lịch làm theo cách thứ hai: bộ đếm là một component riêng <code>DemKyTuLyDo</code>. Đây vẫn là ý "đặt state càng thấp càng tốt" của Chương 2, chỉ là áp cho một lượt đăng ký theo dõi.</p>
+${SD.watchVi}
 
 <h3>Một schema, dùng cả ở máy chủ</h3>
 <p>Kiểm ở client là để phục vụ người dùng; nó luôn bị lách được bằng cách gọi thẳng API. Máy chủ phải kiểm lại — và với Zod nó dùng được <em>đúng</em> file đó. Test mô phỏng hàm xử lý của <code>POST /api/lich-hen</code> chỉ bằng <code>datLichSchema.safeParse</code>:</p>
@@ -791,6 +1047,7 @@ ${out(OUT.mayChu)}
 <p><code>safeParse</code> không bao giờ ném lỗi; nó trả <code>{ success: true, data }</code> hoặc <code>{ success: false, error }</code>. Mỗi issue có <code>path</code> — đúng những chuỗi <code>benhNhan.soDienThoai</code> mà RHF dùng — nên ở 3.3 form đặt được lỗi của máy chủ vào dưới đúng ô. Ở dự án thật, schema nằm trong một gói dùng chung (ví dụ <code>packages/schema</code> trong monorepo), hoặc nằm ở backend và frontend import nó. Một cảnh báo, đã đo: <code>z.flattenError</code> mà nhiều bài hướng dẫn dùng chỉ làm phẳng <strong>một</strong> tầng. Với object lồng, cả ba lỗi của bệnh nhân dồn vào một khoá <code>benhNhan</code>:</p>
 ${out(OUT.flatten)}
 <p>Đó là lý do hàm xử lý ở trên tự đổi <code>issues</code> thành <code>{ truong, loi }</code>. (Zod 4 cũng có <code>z.treeifyError</code> cho cây lỗi lồng nhau.)</p>
+${SD.motSchemaVi}
 
 <h3>Cái giá: kích thước bundle</h3>
 <p>Thư viện không miễn phí. Cùng dự án, build trước và sau chương này:</p>
@@ -900,6 +1157,7 @@ ${slide('rx-03', 16, 'Bốn trạng thái của một lần gửi — ảnh ch�
 <tr><td>③ Server said no</td><td><code>errors.root.server</code> (you set it)</td><td>A message at the top of the form, <code>role="alert"</code>; data stays so the user can retry.</td></tr>
 <tr><td>④ Done</td><td><code>isSubmitSuccessful</code></td><td>Replace the form with a confirmation, <code>role="status"</code>.</td></tr>
 </tbody></table>
+${SD.bonTrangThaiEn}
 <p>The code for ② and ④:</p>
 ${pre('tsx', SN.trangThaiGui)}
 <p>The key fact about <code>isSubmitting</code>: <code>handleSubmit</code> sets it to <code>true</code>, then <strong>awaits</strong> your submit function, and sets it back to <code>false</code> when that function&#39;s promise settles. So it is only correct if your function returns a promise that lasts as long as the request. The test "hợp lệ ⇒ …" freezes the fake server with a promise it controls, and checks the button in the middle:</p>
@@ -927,6 +1185,7 @@ ${slide('rx-03', 18, 'isSubmitting khoá nút SAU một lần render — ref kho
 ${pre('tsx', SN.testCungNhip)}
 ${out(OUT.cungNhip)}
 <p>This is Chapter 2&#39;s snapshot rule again. <code>if (dangGui) return</code> reads the state of the <em>current</em> render; <code>setDangGui(true)</code> only schedules the next one. Two submits that arrive before that render both see <code>false</code>. <code>isSubmitting</code> is state too, so it has the same blind spot, and a disabled attribute only exists after the commit. A ref is a plain object: <code>dangGuiRef.current = true</code> is visible to the very next line of code, render or not.</p>
+${SD.cungNhipEn}
 <p>How often does "two submits in one task" happen? With a mouse, rarely — the measurements above show a double-click is already handled. It happens with scripts, some browser extensions, automated tests, keyboard shortcuts wired to <code>requestSubmit</code>, and slow devices where events queue up. For a form that books a limited slot or takes money, "rarely" is not good enough, so the booking form adds the ref as a second lock. The final lock always lives on the server (an idempotency key, "khoá chống lặp", so the same request twice creates one booking) — that is Chapter 14 territory.</p>
 
 <h3>Put the ref lock in the right place</h3>
@@ -945,6 +1204,7 @@ ${slide('rx-03', 20, 'Máy chủ vẫn phải kiểm — lỗi nó trả về g�
 <p>Some errors only the server can know: "this phone number already has a pending booking", "this slot was just taken". In 3.2 the server handler answered with <code>400</code> and a list of <code>{ truong, loi }</code>. The form can put each one exactly where a client-side error would go:</p>
 ${pre('tsx', SN.loiMayChu)}
 <p><code>setError(truong, { type: &#39;server&#39;, message }, { shouldFocus })</code> puts the message into <code>errors</code> under that field, so the same <code>&lt;p className="loi"&gt;</code> shows it, and <code>shouldFocus</code> moves the cursor there. Anything the form cannot attach to a field — the network is down, the server crashed — goes to <code>root.server</code> and appears at the top with <code>role="alert"</code>. Both tests in the lesson file pass: the phone field shows "Số này đã có lịch chờ xác nhận" and has focus; a network error shows the general message.</p>
+${SD.loiMayChuEn}
 <p>In the project, the fake server throws a plain <code>Error</code> for the number <code>0999 999 999</code>, and <code>FormDatLich</code> shows it at the top (the screenshot "③ lỗi máy chủ" on slide 16). When Chapter 6 brings a real API, the same <code>setError</code> calls will map its field errors.</p>
 
 <div class="callout"><p><strong>🎓 At FER202 you do it this way — 💼 at work they do it that way.</strong></p>
@@ -1039,6 +1299,7 @@ ${slide('rx-03', 16, 'Bốn trạng thái của một lần gửi — ảnh ch�
 <tr><td>③ Máy chủ từ chối</td><td><code>errors.root.server</code> (bạn tự đặt)</td><td>Thông báo ở đầu form, <code>role="alert"</code>; dữ liệu còn nguyên để thử lại.</td></tr>
 <tr><td>④ Xong</td><td><code>isSubmitSuccessful</code></td><td>Thay form bằng lời xác nhận, <code>role="status"</code>.</td></tr>
 </tbody></table>
+${SD.bonTrangThaiVi}
 <p>Mã cho ② và ④:</p>
 ${pre('tsx', SN.trangThaiGui)}
 <p>Sự thật then chốt về <code>isSubmitting</code>: <code>handleSubmit</code> bật nó thành <code>true</code>, rồi <strong>await</strong> hàm gửi của bạn, và tắt về <code>false</code> khi promise của hàm đó xong. Vậy nó chỉ đúng nếu hàm của bạn trả về một promise kéo dài bằng yêu cầu gửi đi. Test "hợp lệ ⇒ …" đóng băng máy chủ giả bằng một promise do test nắm, rồi kiểm nút ở giữa chừng:</p>
@@ -1066,6 +1327,7 @@ ${slide('rx-03', 18, 'isSubmitting khoá nút SAU một lần render — ref kho
 ${pre('tsx', SN.testCungNhip)}
 ${out(OUT.cungNhip)}
 <p>Đây lại là luật ảnh chụp (snapshot) của Chương 2. <code>if (dangGui) return</code> đọc state của lần render <em>hiện tại</em>; <code>setDangGui(true)</code> chỉ hẹn lần render sau. Hai lần gửi tới trước lần render đó đều thấy <code>false</code>. <code>isSubmitting</code> cũng là state nên có cùng điểm mù, còn thuộc tính <code>disabled</code> chỉ tồn tại sau commit. Ref là một object thường: <code>dangGuiRef.current = true</code> thấy được ngay ở dòng mã tiếp theo, có render hay không cũng vậy.</p>
+${SD.cungNhipVi}
 <p>"Hai lần gửi trong cùng một tác vụ" hay xảy ra tới đâu? Với chuột thì hiếm — số đo ở trên cho thấy bấm đúp đã được chặn. Nó xảy ra với script, vài tiện ích mở rộng của trình duyệt, test tự động, phím tắt gắn vào <code>requestSubmit</code>, và máy yếu nơi sự kiện bị dồn hàng. Với một form đặt khung giờ có hạn hay trừ tiền, "hiếm" là chưa đủ, nên form đặt lịch thêm ref làm chốt thứ hai. Chốt cuối cùng luôn nằm ở máy chủ (khoá chống lặp — idempotency key — để cùng một yêu cầu gửi hai lần chỉ tạo một lịch) — đó là chuyện của Chương 14.</p>
 
 <h3>Đặt chốt ref đúng chỗ</h3>
@@ -1084,6 +1346,7 @@ ${slide('rx-03', 20, 'Máy chủ vẫn phải kiểm — lỗi nó trả về g�
 <p>Có những lỗi chỉ máy chủ biết: "số điện thoại này đang có một lịch chờ xác nhận", "khung giờ này vừa có người đặt". Ở 3.2, hàm xử lý phía máy chủ trả <code>400</code> kèm danh sách <code>{ truong, loi }</code>. Form đặt được từng lỗi vào đúng chỗ mà lỗi phía client sẽ nằm:</p>
 ${pre('tsx', SN.loiMayChu)}
 <p><code>setError(truong, { type: &#39;server&#39;, message }, { shouldFocus })</code> đặt câu báo vào <code>errors</code> dưới field đó, nên cùng thẻ <code>&lt;p className="loi"&gt;</code> hiện nó ra, và <code>shouldFocus</code> đưa con trỏ tới đó. Những gì form không gắn được vào một ô nào — mất mạng, máy chủ sập — đi vào <code>root.server</code> và hiện ở đầu form với <code>role="alert"</code>. Cả hai test trong file bài đều xanh: ô số điện thoại hiện "Số này đã có lịch chờ xác nhận" và có focus; lỗi mạng hiện thông báo chung.</p>
+${SD.loiMayChuVi}
 <p>Trong dự án, máy chủ giả ném một <code>Error</code> thường với số <code>0999 999 999</code>, và <code>FormDatLich</code> hiện nó ở đầu form (ảnh "③ lỗi máy chủ" trên slide 16). Khi Chương 6 mang API thật tới, cũng chính các lời gọi <code>setError</code> này sẽ gắn lỗi theo từng field của nó.</p>
 
 <div class="callout"><p><strong>🎓 Ở FER202 bạn làm thế này — 💼 đi làm người ta làm thế kia.</strong></p>
@@ -1161,6 +1424,7 @@ ${LINK('https://react.dev/learn/state-as-a-snapshot', '📄', 'react.dev — Sta
 <h3>An IME composes text before committing it</h3>
 ${slide('rx-03', 21, 'Bộ gõ “soạn” chữ trước khi chốt — ba sự kiện composition')}
 <p>With many IMEs, typing an accented word is a two-phase process. While you type, the IME shows a provisional, often underlined, piece of text — the <strong>composition</strong>. When you finish the word (space, Enter, or a key that cannot continue it), the IME <strong>commits</strong> the final text. The browser reports this with three events: <code>compositionstart</code>, <code>compositionupdate</code> (for every change), and <code>compositionend</code>. Normal <code>input</code> events still fire in between, which means React&#39;s <code>onChange</code> runs <em>during</em> composition with text that is not final yet.</p>
+${SD.imeEn}
 <p>Here is the real sequence recorded in Chromium 141 on the chapter&#39;s demo page, typing "cảm" the VNI way (c, a, m, 3):</p>
 ${out(OUT.imeSuKien)}
 <p>How was that typed on a machine with no keyboard and no Vietnamese IME? Through Chromium&#39;s own DevTools protocol. <code>Input.imeSetComposition</code> tells the browser "the IME is now showing this text", and Chromium fires the composition and input events itself, exactly as it would for a real IME; <code>Input.insertText</code> commits. The helper used by the measurement script:</p>
@@ -1179,6 +1443,7 @@ ${pre('tsx', SN.dangGoDau)}
 ${pre('tsx', SN.nhanTinDung)}
 ${out(OUT.imeDungKq)}
 <p>With the check, the Enter that finishes the word is left to the IME; nothing is sent, the composition ends normally, and the next Enter sends "cảm". <code>e.nativeEvent</code> is the browser&#39;s original <code>KeyboardEvent</code> underneath React&#39;s wrapper, and <code>isComposing</code> is a standard property of it. The extra <code>e.keyCode === 229</code> is a widely used fallback: browsers report key code 229 for keys that the IME is processing, and some older engines do not set <code>isComposing</code> reliably. (<code>keyCode</code> is deprecated and TypeScript&#39;s types mark it so; here it is used on purpose, only as a fallback.)</p>
+${SD.enterEn}
 <p>You can unit-test this without any browser by firing the events yourself with Testing Library. jsdom accepts <code>isComposing</code> in the event options:</p>
 ${pre('tsx', SN.testIme)}
 <p>The "sai" version sends once, the "đúng" version zero times. This proves your handler reads the flag; it cannot prove that a given real IME sets it — that part stays on the manual list.</p>
@@ -1200,6 +1465,7 @@ ${slide('rx-03', 24, 'Cùng chữ “Nguyễn”, hai chuỗi: NFC 6 đơn vị,
 <p>Unicode can write "ễ" two ways. <strong>NFC</strong> (composed, "dựng sẵn") uses one code point, U+1EC5. <strong>NFD</strong> (decomposed, "tổ hợp") uses three: a plain "e", a combining circumflex U+0302 and a combining tilde U+0303. On screen they look identical. To JavaScript they are different strings:</p>
 ${out(OUT.nfc)}
 <p>Where does NFD come from? Unikey has a "Unicode tổ hợp" character set option; macOS stores file names in a decomposed form, so text copied from a file name can arrive decomposed; and documents pasted from other systems can carry either form. You do not control which one a user sends you. The consequences are practical: a search for "Nguyễn" does not find the NFD "Nguyễn" (<code>includes</code> is <code>false</code> above), two records for the "same" patient do not match, a 500-character limit counts wrong, and a unique index in the database lets both through.</p>
+${SD.nfcEn}
 <p>The cure is to normalise at one boundary. The booking schema does it with <code>.normalize(&#39;NFC&#39;)</code> on the name and the reason, and the project test proves both the conversion and the length rule:</p>
 ${out(OUT.schemaNfd)}
 <p>A 500-character reason written in NFD is 1,500 code units long; after the schema it is 500, and it passes the limit as it should. The doctor search from Chapter 2 was already safe, because <code>boDau()</code> converts to NFD and strips the marks before comparing — two tests in the lesson file check it.</p>
@@ -1329,6 +1595,7 @@ ${LINK('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global
 <h3>Bộ gõ soạn chữ trước khi chốt</h3>
 ${slide('rx-03', 21, 'Bộ gõ “soạn” chữ trước khi chốt — ba sự kiện composition')}
 <p>Với nhiều bộ gõ, gõ một chữ có dấu là quá trình hai pha. Trong lúc gõ, bộ gõ hiện một đoạn chữ tạm, thường có gạch chân — đó là <strong>composition (đoạn đang soạn)</strong>. Khi bạn xong chữ (dấu cách, Enter, hoặc một phím không thể nối tiếp chữ đó), bộ gõ <strong>chốt (commit)</strong> chữ cuối cùng. Trình duyệt báo quá trình này bằng ba sự kiện: <code>compositionstart</code>, <code>compositionupdate</code> (mỗi lần thay đổi), và <code>compositionend</code>. Sự kiện <code>input</code> bình thường vẫn chạy xen giữa, nghĩa là <code>onChange</code> của React chạy <em>trong lúc</em> đang soạn với chữ chưa phải chữ cuối.</p>
+${SD.imeVi}
 <p>Đây là chuỗi sự kiện thật ghi được trong Chromium 141 trên trang ví dụ của chương, gõ "cảm" kiểu VNI (c, a, m, 3):</p>
 ${out(OUT.imeSuKien)}
 <p>Làm sao gõ được như thế trên một máy không có bàn phím và không có bộ gõ tiếng Việt? Qua giao thức DevTools của chính Chromium. <code>Input.imeSetComposition</code> báo cho trình duyệt "bộ gõ đang hiện đoạn chữ này", và Chromium tự phát các sự kiện composition và input, y như với bộ gõ thật; <code>Input.insertText</code> thì chốt chữ. Hàm trợ giúp mà script đo dùng:</p>
@@ -1347,6 +1614,7 @@ ${pre('tsx', SN.dangGoDau)}
 ${pre('tsx', SN.nhanTinDung)}
 ${out(OUT.imeDungKq)}
 <p>Có phép kiểm, cú Enter dùng để chốt chữ được để lại cho bộ gõ; không gì bị gửi, đoạn soạn kết thúc bình thường, và cú Enter tiếp theo gửi "cảm". <code>e.nativeEvent</code> là <code>KeyboardEvent</code> gốc của trình duyệt nằm dưới lớp bọc của React, và <code>isComposing</code> là thuộc tính chuẩn của nó. Phần <code>e.keyCode === 229</code> thêm vào là cách dự phòng phổ biến: trình duyệt báo mã phím 229 cho những phím bộ gõ đang xử lý, và vài engine cũ không đặt <code>isComposing</code> đáng tin cậy. (<code>keyCode</code> đã bị khai tử, kiểu của TypeScript đánh dấu nó như vậy; ở đây nó được dùng có chủ ý, chỉ làm dự phòng.)</p>
+${SD.enterVi}
 <p>Bạn unit test được chuyện này mà không cần trình duyệt, bằng cách tự phát sự kiện với Testing Library. jsdom nhận <code>isComposing</code> trong tuỳ chọn sự kiện:</p>
 ${pre('tsx', SN.testIme)}
 <p>Bản "sai" gửi một lần, bản "đúng" không lần nào. Điều này chứng minh handler của bạn đọc đúng cờ; nó không chứng minh được một bộ gõ thật cụ thể có đặt cờ đó hay không — phần ấy vẫn nằm trong danh sách thử tay.</p>
@@ -1368,6 +1636,7 @@ ${slide('rx-03', 24, 'Cùng chữ “Nguyễn”, hai chuỗi: NFC 6 đơn vị,
 <p>Unicode viết được chữ "ễ" theo hai cách. <strong>NFC</strong> (dựng sẵn) dùng một mã, U+1EC5. <strong>NFD</strong> (tổ hợp) dùng ba mã: chữ "e" trơn, dấu mũ kết hợp U+0302 và dấu ngã kết hợp U+0303. Trên màn hình chúng giống hệt nhau. Với JavaScript chúng là hai chuỗi khác nhau:</p>
 ${out(OUT.nfc)}
 <p>NFD từ đâu ra? Unikey có tuỳ chọn bảng mã "Unicode tổ hợp"; macOS lưu tên file ở dạng tách rời, nên chữ chép từ tên file có thể tới ở dạng tổ hợp; và tài liệu dán từ hệ thống khác có thể mang dạng nào cũng được. Bạn không kiểm soát được người dùng gửi dạng nào. Hậu quả rất thực tế: tìm "Nguyễn" không ra "Nguyễn" dạng NFD (<code>includes</code> ra <code>false</code> ở trên), hai hồ sơ của "cùng" một bệnh nhân không khớp, giới hạn 500 ký tự đếm sai, và chỉ mục unique trong CSDL cho cả hai lọt qua.</p>
+${SD.nfcVi}
 <p>Cách chữa là chuẩn hoá ở MỘT biên giới. Schema đặt lịch làm việc đó bằng <code>.normalize(&#39;NFC&#39;)</code> trên họ tên và lý do, và test của dự án chứng minh cả phép chuyển lẫn luật độ dài:</p>
 ${out(OUT.schemaNfd)}
 <p>Một lý do dài 500 ký tự viết ở dạng NFD dài 1.500 đơn vị mã; qua schema nó còn 500, và vượt qua giới hạn như đúng ra phải thế. Ô tìm bác sĩ của Chương 2 vốn đã an toàn, vì <code>boDau()</code> chuyển sang NFD rồi bỏ dấu trước khi so — hai test trong file bài kiểm điều đó.</p>

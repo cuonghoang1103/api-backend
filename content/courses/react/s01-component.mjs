@@ -9,6 +9,226 @@ import { gallery, slide } from './_slides.mjs';
  * Deck: scripts/slides-src/rx-01.mjs (29 slide). Ảnh chụp giao diện: scripts/slides-src/rx-anh/rx-01/.
  */
 
+/* ─── Sơ đồ mermaid trong bài (≤ 10 nút, nhãn ngắn; khối EN nhãn tiếng Anh, khối VI nhãn tiếng Việt) ─── */
+const H = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/`/g, '&#96;').replace(/\$\{/g, '&#36;{');
+/** Sơ đồ mermaid: trang học đọc textContent của <code class="language-mermaid"> rồi vẽ (LearnPageClient → mermaidRuntime). */
+const MM = (src) => '<pre><code class="language-mermaid">' + H(src.trim()) + '</code></pre>';
+const L = (...dong) => MM(dong.join('\n'));
+const SD = {
+  phaRenderEn: L(
+    "flowchart TB",
+    "  T[\"Trigger: first load, or later a state change\"] --> R[\"Render: React calls App, Header, DanhSachBacSi, TheBacSi × 6\"]",
+    "  R --> C[\"Commit: change the real DOM only where it differs\"]",
+    "  C --> P[\"Paint: the browser draws the pixels\"]",
+    "  S[\"Development + StrictMode: each component called twice, one result kept\"] -.-> R",
+  ),
+  phaRenderVi: L(
+    "flowchart TB",
+    "  T[\"Trigger: lần tải đầu, hoặc sau này một lần đổi state\"] --> R[\"Render: React gọi App, Header, DanhSachBacSi, TheBacSi × 6\"]",
+    "  R --> C[\"Commit: chỉ sửa DOM thật ở chỗ khác nhau\"]",
+    "  C --> P[\"Paint: trình duyệt vẽ điểm ảnh\"]",
+    "  S[\"Lúc phát triển + StrictMode: mỗi component bị gọi hai lần, giữ một kết quả\"] -.-> R",
+  ),
+  thuanKhietEn: L(
+    "flowchart TB",
+    "  Q{{\"Does this line change something that existed before the call?\"}}",
+    "  Q -->|\"no: local variables, building JSX\"| B[\"Fine in the component body\"]",
+    "  Q -->|\"yes: outside variable, a prop, an API call, localStorage, document.title\"| W{{\"When should it happen?\"}}",
+    "  W -->|\"when the user does something\"| H[\"Event handler (Chapter 2)\"]",
+    "  W -->|\"to stay in sync while on screen\"| E[\"Effect (Chapter 4)\"]",
+  ),
+  thuanKhietVi: L(
+    "flowchart TB",
+    "  Q{{\"Dòng này có sửa thứ đã tồn tại trước khi hàm được gọi?\"}}",
+    "  Q -->|\"không: biến cục bộ, dựng JSX\"| B[\"Được, để trong thân component\"]",
+    "  Q -->|\"có: biến bên ngoài, prop, gọi API, localStorage, document.title\"| W{{\"Nên xảy ra khi nào?\"}}",
+    "  W -->|\"khi người dùng làm gì đó\"| H[\"Handler sự kiện (Chương 2)\"]",
+    "  W -->|\"để khớp liên tục khi đang hiện\"| E[\"Effect (Chương 4)\"]",
+  ),
+  longTrongEn: L(
+    "flowchart TB",
+    "  A[\"FormSai renders again after the click\"] --> B[\"function ONhap runs again: a NEW function\"]",
+    "  B --> C{{\"Same component type at this place as last render?\"}}",
+    "  C -->|\"no: a different function\"| D[\"React unmounts the old input and mounts a new, empty one\"]",
+    "  D --> E[\"The typed text đau đầu is gone\"]",
+    "  C -->|\"yes: ONhap declared outside, as in FormDung\"| F[\"React keeps the input: the text stays\"]",
+  ),
+  longTrongVi: L(
+    "flowchart TB",
+    "  A[\"FormSai render lại sau cú bấm\"] --> B[\"function ONhap chạy lại: một hàm MỚI\"]",
+    "  B --> C{{\"Cùng loại component ở vị trí này như lần trước?\"}}",
+    "  C -->|\"không: hàm khác\"| D[\"React gỡ ô input cũ, gắn một ô mới rỗng\"]",
+    "  D --> E[\"Chữ đau đầu vừa gõ mất sạch\"]",
+    "  C -->|\"có: ONhap khai báo bên ngoài, như FormDung\"| F[\"React giữ ô input: chữ còn nguyên\"]",
+  ),
+  propsEn: L(
+    "flowchart TB",
+    "  P[\"Parent writes: TheBacSi bacSi={bs} noiBat\"] --> O[\"Compiled: _jsx(TheBacSi, { bacSi: bs, noiBat: true })\"]",
+    "  O --> R[\"React calls TheBacSi with that ONE object as its argument\"]",
+    "  R --> D[\"The child destructures it: { bacSi, noiBat }\"]",
+    "  D --> J[\"It returns JSX that reads bacSi.ten\"]",
+  ),
+  propsVi: L(
+    "flowchart TB",
+    "  P[\"Cha viết: TheBacSi bacSi={bs} noiBat\"] --> O[\"Biên dịch thành: _jsx(TheBacSi, { bacSi: bs, noiBat: true })\"]",
+    "  O --> R[\"React gọi TheBacSi với MỘT object đó làm đối số\"]",
+    "  R --> D[\"Con tách nó ra: { bacSi, noiBat }\"]",
+    "  D --> J[\"Con trả JSX đọc bacSi.ten\"]",
+  ),
+  childrenEn: L(
+    "flowchart TB",
+    "  U[\"Khung tieuDe = Giờ mở cửa, with two p elements between the tags\"] --> P[\"props = { tieuDe, children: the two p elements }\"]",
+    "  P --> K[\"Khung returns: section, h2 with tieuDe, then {children}\"]",
+    "  K --> S[\"The two p elements appear exactly where {children} is\"]",
+  ),
+  childrenVi: L(
+    "flowchart TB",
+    "  U[\"Khung tieuDe = Giờ mở cửa, giữa hai thẻ có hai phần tử p\"] --> P[\"props = { tieuDe, children: hai phần tử p }\"]",
+    "  P --> K[\"Khung trả về: section, h2 chứa tieuDe, rồi {children}\"]",
+    "  K --> S[\"Hai phần tử p hiện đúng chỗ {children}\"]",
+  ),
+  sortEn: L(
+    "flowchart TB",
+    "  C[\"Parent: danhSachBacSi, order bs-1 … bs-6\"] -->|\"prop danhSach: the SAME array\"| K[\"TheoKinhNghiemSai calls .sort()\"]",
+    "  K -->|\"reorders it in place\"| C",
+    "  C --> O[\"Every other user of the array now sees bs-6, bs-4, bs-1 …\"]",
+    "  C -->|\"prop danhSach\"| T[\"Correct version: .toSorted()\"]",
+    "  T --> N[\"A new sorted array, the parent keeps bs-1 … bs-6\"]",
+  ),
+  sortVi: L(
+    "flowchart TB",
+    "  C[\"Cha: danhSachBacSi, thứ tự bs-1 … bs-6\"] -->|\"prop danhSach: CÙNG một mảng\"| K[\"TheoKinhNghiemSai gọi .sort()\"]",
+    "  K -->|\"xếp lại ngay trên mảng đó\"| C",
+    "  C --> O[\"Mọi nơi khác dùng mảng giờ thấy bs-6, bs-4, bs-1 …\"]",
+    "  C -->|\"prop danhSach\"| T[\"Bản đúng: .toSorted()\"]",
+    "  T --> N[\"Một mảng mới đã xếp, cha vẫn giữ bs-1 … bs-6\"]",
+  ),
+  mapEn: L(
+    "flowchart TB",
+    "  D[\"danhSach: an array of BacSi objects\"] --> E{{\"danhSach.length === 0?\"}}",
+    "  E -->|\"yes\"| X[\"Early return: Chưa có bác sĩ nào.\"]",
+    "  E -->|\"no\"| M[\"danhSach.map: each bs becomes TheBacSi with key = bs.id\"]",
+    "  M --> A[\"An array of 6 elements\"]",
+    "  A --> R[\"Rendered in order inside div.luoi-bac-si\"]",
+  ),
+  mapVi: L(
+    "flowchart TB",
+    "  D[\"danhSach: mảng các object BacSi\"] --> E{{\"danhSach.length === 0?\"}}",
+    "  E -->|\"đúng\"| X[\"return sớm: Chưa có bác sĩ nào.\"]",
+    "  E -->|\"sai\"| M[\"danhSach.map: mỗi bs thành TheBacSi với key = bs.id\"]",
+    "  M --> A[\"Một mảng 6 phần tử\"]",
+    "  A --> R[\"Vẽ theo thứ tự trong div.luoi-bac-si\"]",
+  ),
+  ghepKeyEn: L(
+    "flowchart TB",
+    "  subgraph K[\"key = bs.id\"]",
+    "    direction TB",
+    "    K1[\"Before: bs-1 = An, with the note\"] -->|\"bs-1 still exists\"| K2[\"React moves row bs-1 with its input\"]",
+    "    K2 --> K3[\"bs-7 Tâm gets a new empty row ✓\"]",
+    "  end",
+    "  subgraph I[\"key = index, insert Tâm at the top\"]",
+    "    direction TB",
+    "    I1[\"Before: key 0 = An, with note dị ứng penicillin\"] -->|\"after: key 0 = Tâm\"| I2[\"React: same key 0, keep the row and its input, change the name\"]",
+    "    I2 --> I3[\"The note now sits next to Tâm ✗\"]",
+    "  end",
+  ),
+  ghepKeyVi: L(
+    "flowchart TB",
+    "  subgraph K[\"key = bs.id\"]",
+    "    direction TB",
+    "    K1[\"Trước: bs-1 = An, có ghi chú\"] -->|\"bs-1 vẫn còn\"| K2[\"React dời dòng bs-1 cùng ô input\"]",
+    "    K2 --> K3[\"bs-7 Tâm được một dòng mới rỗng ✓\"]",
+    "  end",
+    "  subgraph I[\"key = index, chèn Tâm lên đầu\"]",
+    "    direction TB",
+    "    I1[\"Trước: key 0 = An, có ghi chú dị ứng penicillin\"] -->|\"sau: key 0 = Tâm\"| I2[\"React: cùng key 0, giữ dòng và ô input, chỉ đổi tên\"]",
+    "    I2 --> I3[\"Ghi chú giờ nằm cạnh Tâm ✗\"]",
+    "  end",
+  ),
+  chonKeyEn: L(
+    "flowchart TB",
+    "  Q{{\"Can the list ever reorder, filter, insert or delete, or do its rows hold state?\"}}",
+    "  Q -->|\"yes, or not sure\"| I{{\"Does the data have an id?\"}}",
+    "  I -->|\"yes\"| A[\"key = the id from the data, e.g. bs.id\"]",
+    "  I -->|\"no, the client creates the items\"| B[\"Give each item an id when it is created: crypto.randomUUID()\"]",
+    "  Q -->|\"no, a static list\"| C[\"The index is acceptable\"]",
+    "  X[\"Never: Math.random() in JSX, or a name such as bs.ten\"]",
+  ),
+  chonKeyVi: L(
+    "flowchart TB",
+    "  Q{{\"Danh sách có bao giờ đổi thứ tự, lọc, chèn, xoá, hoặc dòng có giữ state?\"}}",
+    "  Q -->|\"có, hoặc không chắc\"| I{{\"Dữ liệu có sẵn id?\"}}",
+    "  I -->|\"có\"| A[\"key = id trong dữ liệu, vd bs.id\"]",
+    "  I -->|\"không, phía client tự tạo phần tử\"| B[\"Gán id lúc TẠO phần tử: crypto.randomUUID()\"]",
+    "  Q -->|\"không, danh sách tĩnh\"| C[\"Dùng index được\"]",
+    "  X[\"Không bao giờ: Math.random() trong JSX, hay tên như bs.ten\"]",
+  ),
+  cayEn: L(
+    "flowchart TB",
+    "  subgraph R[\"Render tree: what React builds\"]",
+    "    direction TB",
+    "    RA[\"App\"] --> RH[\"Header\"]",
+    "    RA --> RD[\"DanhSachBacSi\"]",
+    "    RA --> RF[\"Footer\"]",
+    "    RD --> RT[\"TheBacSi × 6: bs-1 … bs-6\"]",
+    "  end",
+    "  subgraph M[\"Module tree: which file imports which\"]",
+    "    direction TB",
+    "    MA[\"App.tsx\"] --> MD[\"DanhSachBacSi.tsx\"]",
+    "    MD --> MT[\"TheBacSi.tsx, imported once\"]",
+    "  end",
+  ),
+  cayVi: L(
+    "flowchart TB",
+    "  subgraph R[\"Cây render: thứ React dựng ra\"]",
+    "    direction TB",
+    "    RA[\"App\"] --> RH[\"Header\"]",
+    "    RA --> RD[\"DanhSachBacSi\"]",
+    "    RA --> RF[\"Footer\"]",
+    "    RD --> RT[\"TheBacSi × 6: bs-1 … bs-6\"]",
+    "  end",
+    "  subgraph M[\"Cây module: file nào import file nào\"]",
+    "    direction TB",
+    "    MA[\"App.tsx\"] --> MD[\"DanhSachBacSi.tsx\"]",
+    "    MD --> MT[\"TheBacSi.tsx, import một lần\"]",
+    "  end",
+  ),
+  tachEn: L(
+    "flowchart TB",
+    "  Q1{{\"Does it repeat?\"}} -->|\"yes, like the six cards\"| S[\"Make it a component\"]",
+    "  Q1 -->|\"no\"| Q2{{\"Can you name its job in two or three words?\"}}",
+    "  Q2 -->|\"no, only its looks\"| K[\"Keep it inside the parent\"]",
+    "  Q2 -->|\"yes\"| Q3{{\"Worth testing alone, or a long file with a clear seam?\"}}",
+    "  Q3 -->|\"yes\"| S",
+    "  Q3 -->|\"no\"| K",
+  ),
+  tachVi: L(
+    "flowchart TB",
+    "  Q1{{\"Nó có lặp lại không?\"}} -->|\"có, như sáu thẻ\"| S[\"Tách thành component\"]",
+    "  Q1 -->|\"không\"| Q2{{\"Gọi được tên việc của nó bằng hai ba chữ?\"}}",
+    "  Q2 -->|\"không, chỉ tả được hình dáng\"| K[\"Để nguyên trong cha\"]",
+    "  Q2 -->|\"được\"| Q3{{\"Đáng test riêng, hoặc file dài có đường cắt rõ?\"}}",
+    "  Q3 -->|\"có\"| S",
+    "  Q3 -->|\"không\"| K",
+  ),
+  motChieuEn: L(
+    "flowchart TB",
+    "  DL[\"du-lieu/bac-si.ts: danhSachBacSi\"] -->|\"import\"| A[\"App\"]",
+    "  A -->|\"prop danhSach\"| D[\"DanhSachBacSi\"]",
+    "  D -->|\"props bacSi, noiBat\"| T[\"TheBacSi\"]",
+    "  API[\"Chapter 6: an API through TanStack Query\"] -.->|\"only the source changes\"| A",
+    "  T -.->|\"Chapter 2: calls a function the parent passed down\"| A",
+  ),
+  motChieuVi: L(
+    "flowchart TB",
+    "  DL[\"du-lieu/bac-si.ts: danhSachBacSi\"] -->|\"import\"| A[\"App\"]",
+    "  A -->|\"prop danhSach\"| D[\"DanhSachBacSi\"]",
+    "  D -->|\"props bacSi, noiBat\"| T[\"TheBacSi\"]",
+    "  API[\"Chương 6: API qua TanStack Query\"] -.->|\"chỉ đổi nguồn\"| A",
+    "  T -.->|\"Chương 2: gọi hàm mà cha đưa xuống\"| A",
+  ),
+};
+
 export default {
   title: 'Chapter 1 — Components and props|||Chương 1 — Component và props',
   description: 'Chia giao diện thành component: component là hàm thuần, props có kiểu TypeScript, children, danh sách với key ổn định, tư duy từ mock-up tới cây component — và dựng trang chủ phòng khám An Tâm có test.',
@@ -170,6 +390,7 @@ ${slide('rx-01', 6, 'React calls your function in the Render phase, maybe many t
 <li><strong>Paint</strong> — the browser draws the pixels.</li>
 </ol>
 <p>"Render" in React therefore means "call the component function", not "draw on screen". That is why the word appears so often: <em>re-render</em> (render again) means React calls your function again. And in development, inside <code>&lt;StrictMode&gt;</code> — which the Vite template puts in <code>main.tsx</code> — React deliberately calls each component <strong>twice</strong> per render and keeps only one result. It costs nothing in production (Strict Mode has no effect there) and it exposes a whole class of bugs, as the next section shows.</p>
+${SD.phaRenderEn}
 
 <h3>Components must be pure: measured with Strict Mode</h3>
 ${slide('rx-01', 7, 'A pure component: the impure version prints #2, #4, #6')}
@@ -202,6 +423,7 @@ StrictMode + KhachDung → [ 'Khách số #1', 'Khách số #2', 'Khách số #3
 <li>calling an API, writing to <code>localStorage</code>, changing <code>document.title</code>, starting a timer.</li>
 </ul>
 <p>The last group is not forbidden in React — it is just not allowed <em>in the body of the component</em>. It belongs in an event handler (Chapter 2: "when the user clicks, save the booking") or in an Effect (Chapter 4: "while this page is open, keep the tab title in sync"). Creating and changing <em>local</em> variables inside the component is fine: an array you build inside the function with <code>const ketQua = []</code> and fill in a loop belongs to that call alone.</p>
+${SD.thuanKhietEn}
 <div class="callout"><p><strong>Is <code>new Date()</code> in a component pure?</strong> Strictly, no: two calls can return different values. A footer that prints <code>new Date().getFullYear()</code> is harmless in practice (the year changes once a year), but a component that prints the current time down to the second would show different values in the two Strict Mode calls. When you need "now" in a way that matters, pass it in as a prop or keep it in state (Chapter 4 builds a clock that way). This project&#39;s <code>Footer</code> simply writes "© 2026".</p></div>
 
 <h3>Never define a component inside another component</h3>
@@ -248,6 +470,7 @@ FormDung: sau khi bấm "đau đầu"
  ✓ src/vi-du/LongDinhNghia.test.tsx &gt; component định nghĩa bên trong: chữ đang gõ BIẾN MẤT sau khi cha vẽ lại
  ✓ src/vi-du/LongDinhNghia.test.tsx &gt; component định nghĩa bên ngoài: chữ còn nguyên</div>
 <p>Why: when <code>FormSai</code> runs again, the line <code>function ONhap() {…}</code> runs again too and creates a <em>brand-new</em> function. The JSX <code>&lt;ONhap /&gt;</code> now points to a different function than last time. React identifies a component by the function it points to, so to React this is a different component at the same place: it throws away the old one — including its DOM <code>&lt;input&gt;</code> and whatever the user typed — and builds a new, empty one. In a real app this shows up as "the form clears itself", "the input loses focus after every key press", or "the modal flickers", and it is maddening to find because the code looks fine.</p>
+${SD.longTrongEn}
 <div class="pitfall co-tieu-de"><strong>Trap — the input that loses focus after every letter.</strong> A student defines <code>function TruongNhap()</code> inside <code>FormDatLich</code> to avoid repeating the label and input markup five times. Each key press updates the form&#39;s state (Chapter 3), the form re-renders, <code>TruongNhap</code> is a new function, React unmounts the old input and mounts a new one — and the cursor disappears after every letter. The fix is not "add a key" or "add memo": move <code>TruongNhap</code> to the top level of the file and pass the label and value in as props. React&#39;s documentation states the rule plainly: never nest component definitions.</div>
 
 <h3>Class components: what FER202 slides show, and why you still need to read them</h3>
@@ -447,6 +670,7 @@ ${slide('rx-01', 6, 'React tự gọi hàm của bạn ở pha Render, có thể
 <li><strong>Paint</strong> (vẽ điểm ảnh) — trình duyệt vẽ lên màn hình.</li>
 </ol>
 <p>Vì thế "render" trong React nghĩa là "gọi hàm component", không phải "vẽ lên màn hình". Chữ này xuất hiện rất nhiều: <em>re-render</em> (render lại) là React gọi lại hàm của bạn. Và trong lúc phát triển, bên trong <code>&lt;StrictMode&gt;</code> — thứ template Vite đã đặt sẵn trong <code>main.tsx</code> — React CỐ Ý gọi mỗi component <strong>hai lần</strong> mỗi lượt render và chỉ giữ một kết quả. Ở production nó không tốn gì (Strict Mode không có tác dụng ở đó), còn lúc dev nó phơi ra cả một loại bug, như phần sau cho thấy.</p>
+${SD.phaRenderVi}
 
 <h3>Component phải thuần khiết: đo bằng Strict Mode</h3>
 ${slide('rx-01', 7, 'Component phải thuần: bản sửa biến ngoài ra #2, #4, #6')}
@@ -479,6 +703,7 @@ StrictMode + KhachDung → [ 'Khách số #1', 'Khách số #2', 'Khách số #3
 <li>gọi API, ghi <code>localStorage</code>, đổi <code>document.title</code>, bật một bộ hẹn giờ.</li>
 </ul>
 <p>Nhóm cuối không bị React cấm — chỉ là không được đặt <em>trong thân component</em>. Chỗ của nó là handler sự kiện (Chương 2: "khi người dùng bấm thì lưu lịch hẹn") hoặc Effect (Chương 4: "trong lúc trang này mở, giữ tiêu đề tab khớp với bác sĩ"). Tạo và sửa biến <em>cục bộ</em> bên trong component thì hoàn toàn được: một mảng bạn tạo trong hàm bằng <code>const ketQua = []</code> rồi đổ dữ liệu vào bằng vòng lặp là của riêng lần gọi đó.</p>
+${SD.thuanKhietVi}
 <div class="callout"><p><strong><code>new Date()</code> trong component có thuần không?</strong> Nói chặt thì không: hai lần gọi có thể ra hai giá trị. Chân trang in <code>new Date().getFullYear()</code> thì vô hại trong thực tế (năm chỉ đổi mỗi năm một lần), nhưng component in giờ hiện tại tới từng giây sẽ ra hai giá trị khác nhau ở hai lần gọi của Strict Mode. Khi cần "bây giờ" một cách nghiêm túc, hãy đưa nó vào qua props hoặc giữ trong state (Chương 4 dựng đồng hồ theo cách đó). <code>Footer</code> của dự án này chỉ viết thẳng "© 2026".</p></div>
 
 <h3>Đừng bao giờ định nghĩa component bên trong component khác</h3>
@@ -525,6 +750,7 @@ FormDung: sau khi bấm "đau đầu"
  ✓ src/vi-du/LongDinhNghia.test.tsx &gt; component định nghĩa bên trong: chữ đang gõ BIẾN MẤT sau khi cha vẽ lại
  ✓ src/vi-du/LongDinhNghia.test.tsx &gt; component định nghĩa bên ngoài: chữ còn nguyên</div>
 <p>Vì sao: khi <code>FormSai</code> chạy lại, dòng <code>function ONhap() {…}</code> cũng chạy lại và tạo ra một hàm <em>mới tinh</em>. JSX <code>&lt;ONhap /&gt;</code> giờ trỏ tới một hàm khác lần trước. React nhận mặt component bằng chính hàm mà nó trỏ tới, nên với React đây là một component KHÁC ở cùng chỗ: nó vứt cái cũ — kèm thẻ <code>&lt;input&gt;</code> trong DOM và mọi chữ người dùng đã gõ — rồi dựng một cái mới, trống trơn. Trong app thật, bug này hiện ra thành "form tự xoá", "ô nhập mất con trỏ sau mỗi phím", hay "hộp thoại nhấp nháy", và rất khó tìm vì code trông chẳng có gì sai.</p>
+${SD.longTrongVi}
 <div class="pitfall co-tieu-de"><strong>Bẫy — ô nhập mất con trỏ sau mỗi chữ.</strong> Một bạn sinh viên định nghĩa <code>function TruongNhap()</code> bên trong <code>FormDatLich</code> để khỏi lặp lại nhãn và ô nhập năm lần. Mỗi lần gõ phím, state của form đổi (Chương 3), form render lại, <code>TruongNhap</code> là một hàm mới, React gỡ ô nhập cũ và gắn ô nhập mới — và con trỏ biến mất sau mỗi chữ cái. Cách sửa không phải "thêm key" hay "thêm memo": chuyển <code>TruongNhap</code> ra cấp cao nhất của file, và đưa nhãn với giá trị vào qua props. Tài liệu React nói thẳng luật này: không bao giờ lồng định nghĩa component.</div>
 
 <h3>Class component: thứ slide FER202 cho xem, và vì sao bạn vẫn cần đọc được</h3>
@@ -653,6 +879,7 @@ ${slide('rx-01', 9, 'Props are one object that the parent passes to the child')}
 <li><strong>Everything else goes in braces</strong>: numbers <code>namKinhNghiem={12}</code>, booleans <code>noiBat={true}</code>, objects <code>bacSi={bs}</code>, expressions <code>noiBat={bs.namKinhNghiem &gt;= 15}</code>. <code>namKinhNghiem="12"</code> passes the <em>string</em> "12", not the number — TypeScript will catch it below.</li>
 <li><strong>A bare name means <code>true</code></strong>: <code>&lt;TheBacSi bacSi={bs} noiBat /&gt;</code> equals <code>noiBat={true}</code>. Leave it out and the value is <code>undefined</code>.</li>
 </ul>
+${SD.propsEn}
 
 <h3>Typing props: interface, the question mark, and default values</h3>
 ${slide('rx-01', 10, 'Typing props: interface, the question mark and default values')}
@@ -753,6 +980,7 @@ export function Khung({ tieuDe, children }: KhungProps) {
   &lt;p&gt;Chủ nhật: nghỉ&lt;/p&gt;
 &lt;/Khung&gt;</code></pre>
 <p>The two <code>&lt;p&gt;</code> elements arrive as <code>children</code> and are placed exactly where <code>{children}</code> appears. The test checks both the title and the nested text (✓ <code>Khung vẽ tiêu đề và mọi thứ nằm giữa thẻ mở và thẻ đóng</code>).</p>
+${SD.childrenEn}
 <ul>
 <li><strong><code>ReactNode</code></strong> is the broad type for "anything React can render": JSX, strings, numbers, arrays of those, <code>null</code>, <code>undefined</code>, booleans. It is the right type for <code>children</code> almost always.</li>
 <li><strong><code>ReactElement</code></strong> is narrower — JSX elements only, no plain text. React&#39;s TypeScript page notes that you cannot use types to require "only <code>&lt;li&gt;</code> children"; do not try.</li>
@@ -802,6 +1030,7 @@ toSorted, sau render: bs-1 bs-2 bs-3 bs-4 bs-5 bs-6
  ✓ src/vi-du/SapXep.test.tsx &gt; .sort() trong component làm đổi thứ tự mảng của CHA
  ✓ src/vi-du/SapXep.test.tsx &gt; .toSorted() để nguyên mảng của cha</div>
 <p>After merely <em>displaying</em> a sorted list, the parent&#39;s list is sorted too. Any other component that uses the same array — the home page grid, a filter from Chapter 2 — now shows doctors in a different order, and nobody touched their code. This is also a purity violation from Lesson 1.1: render changed something that existed before it.</p>
+${SD.sortEn}
 <div class="callout"><p><strong>JS quick reminder: methods that change an array vs methods that return a new one.</strong> <code>sort</code>, <code>reverse</code>, <code>splice</code>, <code>push</code>, <code>pop</code> change the array they are called on. <code>toSorted</code>, <code>toReversed</code>, <code>toSpliced</code> (ES2023, available in the project&#39;s <code>lib: ["ES2023"]</code>) and <code>map</code>, <code>filter</code>, <code>slice</code>, <code>concat</code> return a new array and leave the original alone. The spread syntax <code>[...danhSach]</code> copies an array into a new one, so <code>[...danhSach].sort(…)</code> is the pre-2023 way to write the same fix. Chapter 2 builds on this when state arrays must be updated without mutation.</p></div>
 <p>A related shortcut is spreading an object into props: <code>&lt;TheBacSi {...{ bacSi: bs, noiBat: true }} /&gt;</code> passes every field as a separate prop. It is handy when a wrapper forwards props it does not care about, but it hides what a component receives; prefer explicit props in application code.</p>
 
@@ -901,6 +1130,7 @@ ${slide('rx-01', 9, 'Props là MỘT object cha đưa xuống con')}
 <li><strong>Mọi thứ khác trong ngoặc nhọn</strong>: số <code>namKinhNghiem={12}</code>, boolean <code>noiBat={true}</code>, object <code>bacSi={bs}</code>, biểu thức <code>noiBat={bs.namKinhNghiem &gt;= 15}</code>. <code>namKinhNghiem="12"</code> truyền <em>chuỗi</em> "12", không phải số — TypeScript sẽ bắt ở dưới.</li>
 <li><strong>Chỉ ghi tên nghĩa là <code>true</code></strong>: <code>&lt;TheBacSi bacSi={bs} noiBat /&gt;</code> bằng <code>noiBat={true}</code>. Bỏ hẳn đi thì giá trị là <code>undefined</code>.</li>
 </ul>
+${SD.propsVi}
 
 <h3>Kiểu props: interface, dấu hỏi và giá trị mặc định</h3>
 ${slide('rx-01', 10, 'Kiểu props: interface, dấu ? và giá trị mặc định')}
@@ -1001,6 +1231,7 @@ export function Khung({ tieuDe, children }: KhungProps) {
   &lt;p&gt;Chủ nhật: nghỉ&lt;/p&gt;
 &lt;/Khung&gt;</code></pre>
 <p>Hai thẻ <code>&lt;p&gt;</code> đi vào dưới tên <code>children</code> và được đặt đúng chỗ <code>{children}</code> xuất hiện. Test kiểm cả tiêu đề lẫn chữ lồng bên trong (✓ <code>Khung vẽ tiêu đề và mọi thứ nằm giữa thẻ mở và thẻ đóng</code>).</p>
+${SD.childrenVi}
 <ul>
 <li><strong><code>ReactNode</code></strong> là kiểu rộng cho "mọi thứ React vẽ được": JSX, chuỗi, số, mảng những thứ đó, <code>null</code>, <code>undefined</code>, boolean. Gần như luôn là kiểu đúng cho <code>children</code>.</li>
 <li><strong><code>ReactElement</code></strong> hẹp hơn — chỉ phần tử JSX, không nhận chữ trơn. Trang TypeScript của React lưu ý bạn không thể dùng kiểu để đòi "chỉ nhận con là <code>&lt;li&gt;</code>"; đừng cố.</li>
@@ -1050,6 +1281,7 @@ toSorted, sau render: bs-1 bs-2 bs-3 bs-4 bs-5 bs-6
  ✓ src/vi-du/SapXep.test.tsx &gt; .sort() trong component làm đổi thứ tự mảng của CHA
  ✓ src/vi-du/SapXep.test.tsx &gt; .toSorted() để nguyên mảng của cha</div>
 <p>Chỉ mới <em>hiển thị</em> một danh sách đã sắp xếp, danh sách của cha cũng bị sắp xếp theo. Mọi component khác dùng chung mảng đó — lưới bác sĩ ở trang chủ, bộ lọc ở Chương 2 — giờ hiện bác sĩ theo thứ tự khác, dù chẳng ai đụng vào code của chúng. Đây cũng là vi phạm tính thuần ở Bài 1.1: render đã sửa một thứ có từ trước.</p>
+${SD.sortVi}
 <div class="callout"><p><strong>JS nhắc nhanh: hàm sửa mảng tại chỗ và hàm trả mảng mới.</strong> <code>sort</code>, <code>reverse</code>, <code>splice</code>, <code>push</code>, <code>pop</code> sửa chính mảng mà bạn gọi chúng. <code>toSorted</code>, <code>toReversed</code>, <code>toSpliced</code> (ES2023, có sẵn nhờ <code>lib: ["ES2023"]</code> của dự án) cùng <code>map</code>, <code>filter</code>, <code>slice</code>, <code>concat</code> trả về mảng mới và để nguyên mảng gốc. Cú pháp spread (trải) <code>[...danhSach]</code> chép mảng sang một mảng mới, nên <code>[...danhSach].sort(…)</code> là cách viết cùng bản sửa trước năm 2023. Chương 2 dựa vào đúng chuyện này khi phải cập nhật mảng trong state mà không sửa tại chỗ.</p></div>
 <p>Một lối tắt liên quan là trải object vào props: <code>&lt;TheBacSi {...{ bacSi: bs, noiBat: true }} /&gt;</code> truyền mỗi trường thành một prop riêng. Tiện khi một component bọc chuyển tiếp props mà nó không quan tâm, nhưng nó giấu mất component nhận những gì; trong code ứng dụng, ưu tiên ghi props rõ ràng.</p>
 
@@ -1179,6 +1411,7 @@ export function DanhSachBacSi({ danhSach }: DanhSachBacSiProps) {
 <li><strong><code>aria-labelledby</code></strong> links the <code>&lt;section&gt;</code> to its heading, so screen readers announce "Đội ngũ bác sĩ" as the region&#39;s name (Chapter 8 covers accessibility).</li>
 <li><strong>The derived value <code>noiBat={bs.namKinhNghiem &gt;= 15}</code></strong> is computed while rendering, not stored — the data file does not need a "featured" field that could disagree with the years.</li>
 </ul>
+${SD.mapEn}
 
 <h3>Forget the key: everything renders, and React warns</h3>
 ${slide('rx-01', 16, 'Forget the key: all six rows render, React warns in the console')}
@@ -1246,6 +1479,7 @@ ${slide('rx-01', 18, 'React matches old and new items by key, not by position')}
 <li><strong>With <code>key={index}</code>:</strong> before the insert, keys 0, 1, 2 were An, Hà, Bảo. After, keys 0, 1, 2, 3 are Tâm, An, Hà, Bảo. React matches key 0 with key 0: "same element, the name text changed" — it updates the <code>&lt;span&gt;</code> to "Đỗ Thanh Tâm" and <em>keeps</em> the <code>&lt;input&gt;</code>, whose typed text lives in the DOM. Keys 1 and 2 get new names too. Only key 3 is new.</li>
 <li><strong>With <code>key={bs.id}</code>:</strong> keys bs-1, bs-2, bs-3 exist before and after; <code>bs-7</code> is new. React creates one new row at the top and <em>moves</em> the other three, each with its own input. The note stays with bs-1.</li>
 </ul>
+${SD.ghepKeyEn}
 <p>So an index key is not "wrong" in itself; it is <em>a claim that position is identity</em>. That claim is true for a list that never reorders, inserts or deletes — and false otherwise. React&#39;s documentation adds that if you do not give a key at all, React uses the index; the warning is React asking you to confirm that claim or give it a real identity.</p>
 <p>A third wrong key is worse than both: <code>key={Math.random()}</code>. Every render produces new keys, so nothing ever matches and React rebuilds every row. The practice project measures it with one button that just re-renders the list:</p>
 <div class="out">stdout | src/vi-du/KeyNgauNhien.test.tsx &gt; key ngẫu nhiên: vẽ lại một lần là mất chữ, và thẻ &lt;li&gt; là thẻ MỚI
@@ -1265,6 +1499,7 @@ ${slide('rx-01', 19, 'The best key is an id that already exists in the data')}
 DOM có 3 dòng</div>
 <p>React warns that duplicates "may cause children to be duplicated and/or omitted" and calls the behaviour unsupported. It rendered three rows this time; do not rely on it.</p>
 <p><strong>When the index is acceptable:</strong> the list is static (never reordered, filtered, inserted into or deleted from) and its rows hold no state — for example, the lines of a fixed address, or the steps of a printed instruction. React&#39;s own example is the lines of a poem. If you are unsure whether the list will ever change, it will; use an id.</p>
+${SD.chonKeyEn}
 
 <h3>Where the key goes — and why a component never sees it</h3>
 ${slide('rx-01', 20, 'The key goes where map is called, and never reaches props')}
@@ -1397,6 +1632,7 @@ export function DanhSachBacSi({ danhSach }: DanhSachBacSiProps) {
 <li><strong><code>aria-labelledby</code></strong> nối <code>&lt;section&gt;</code> với tiêu đề của nó, để trình đọc màn hình đọc "Đội ngũ bác sĩ" làm tên vùng (Chương 8 dạy về khả năng tiếp cận).</li>
 <li><strong>Giá trị dẫn xuất <code>noiBat={bs.namKinhNghiem &gt;= 15}</code></strong> được tính trong lúc render chứ không lưu sẵn — file dữ liệu không cần trường "nổi bật" có thể mâu thuẫn với số năm.</li>
 </ul>
+${SD.mapVi}
 
 <h3>Quên key: vẫn vẽ đủ, và React cảnh báo</h3>
 ${slide('rx-01', 16, 'Quên key: vẫn vẽ đủ 6 dòng, React cảnh báo trên console')}
@@ -1464,6 +1700,7 @@ ${slide('rx-01', 18, 'React ghép phần tử cũ và mới theo key, không the
 <li><strong>Với <code>key={index}</code>:</strong> trước khi chèn, key 0, 1, 2 là An, Hà, Bảo. Sau khi chèn, key 0, 1, 2, 3 là Tâm, An, Hà, Bảo. React ghép key 0 với key 0: "cùng phần tử, chữ tên đổi" — nó sửa <code>&lt;span&gt;</code> thành "Đỗ Thanh Tâm" và <em>giữ nguyên</em> <code>&lt;input&gt;</code>, mà chữ đã gõ thì nằm trong DOM của input. Key 1 và 2 cũng được đổi tên. Chỉ key 3 là mới.</li>
 <li><strong>Với <code>key={bs.id}</code>:</strong> key bs-1, bs-2, bs-3 có ở cả trước lẫn sau; <code>bs-7</code> là mới. React tạo một dòng mới ở trên cùng và <em>dời</em> ba dòng kia xuống, mỗi dòng mang theo ô nhập của mình. Ghi chú ở lại với bs-1.</li>
 </ul>
+${SD.ghepKeyVi}
 <p>Vậy key bằng index tự nó không "sai"; nó là <em>một lời khẳng định rằng vị trí là danh tính</em>. Khẳng định đó đúng với danh sách không bao giờ đổi thứ tự, không chèn, không xoá — và sai trong mọi trường hợp còn lại. Tài liệu React nói thêm: nếu bạn không đưa key nào, React dùng chính index; cảnh báo là React đang nhờ bạn xác nhận lời khẳng định đó, hoặc đưa cho nó một danh tính thật.</p>
 <p>Kiểu key sai thứ ba còn tệ hơn cả hai: <code>key={Math.random()}</code>. Mỗi lần render ra key mới, nên không bao giờ có gì khớp và React dựng lại mọi dòng. Dự án thực hành đo bằng một nút chỉ làm danh sách render lại:</p>
 <div class="out">stdout | src/vi-du/KeyNgauNhien.test.tsx &gt; key ngẫu nhiên: vẽ lại một lần là mất chữ, và thẻ &lt;li&gt; là thẻ MỚI
@@ -1483,6 +1720,7 @@ ${slide('rx-01', 19, 'Key tốt nhất là id có sẵn trong dữ liệu')}
 DOM có 3 dòng</div>
 <p>React cảnh báo key trùng "có thể làm phần tử con bị nhân đôi và/hoặc bị bỏ sót", và gọi hành vi này là không được hỗ trợ. Lần này nó vẽ đủ ba dòng; đừng trông cậy vào điều đó.</p>
 <p><strong>Khi nào index chấp nhận được:</strong> danh sách tĩnh (không bao giờ sắp xếp, lọc, chèn, xoá) và các dòng không giữ state — ví dụ các dòng của một địa chỉ cố định, hay các bước của một hướng dẫn in sẵn. Ví dụ của chính React là các câu trong một bài thơ. Nếu bạn không chắc danh sách có bao giờ thay đổi không, thì nó sẽ thay đổi; dùng id.</p>
+${SD.chonKeyVi}
 
 <h3>Key đặt ở đâu — và vì sao component không bao giờ thấy nó</h3>
 ${slide('rx-01', 20, 'key đặt ở chỗ gọi map, và KHÔNG đi vào props')}
@@ -1606,6 +1844,7 @@ ${slide('rx-01', 22, 'The home page component tree: data enters at the root')}
 │   └── TheBacSi         # bacSi = bs-6, noiBat = true
 └── Footer               # no props</code></pre>
 <p>This is the <strong>render tree</strong> — what React builds when it renders. It is different from the <em>module</em> tree (which file imports which, slide 5): <code>TheBacSi.tsx</code> is imported once but appears six times in the render tree. React DevTools (Section 0) shows exactly this render tree in its Components tab, and you will use it in every later chapter: Chapter 2 marks which component <em>holds state</em>, Chapter 8 which ones <em>re-render</em> and which are skipped. Today the tree only answers two questions — who contains whom, and which path the data takes.</p>
+${SD.cayEn}
 
 <h3>Split when a piece has a job of its own — not to have more files</h3>
 ${slide('rx-01', 23, 'Split when a piece has its own job, not to have more files')}
@@ -1623,6 +1862,7 @@ ${slide('rx-01', 23, 'Split when a piece has its own job, not to have more files
 <li>Names by shape (<code>BoxXanh</code>, <code>Cot2</code>) instead of meaning. When the design changes colour, the name lies.</li>
 </ul>
 <p>When in doubt, start with fewer, larger components and extract when one of the reasons above appears. Extracting later is a cut-and-paste plus an import; merging over-split components means untangling props.</p>
+${SD.tachEn}
 
 <h3>Data flows one way: the parent passes it down, children only read</h3>
 ${slide('rx-01', 24, 'Data flows one way: the parent passes down, children only read')}
@@ -1633,6 +1873,7 @@ ${slide('rx-01', 24, 'Data flows one way: the parent passes down, children only 
 <li><strong>Reuse.</strong> Chapter 2 filters the list by specialty. The filtered array goes into the same component.</li>
 </ul>
 <p>This is React&#39;s <strong>one-way data flow</strong>: data enters at the top and moves down through props; children never reach up and change it (Lesson 1.2). When a child needs to <em>cause</em> a change — "the user picked this doctor" — the parent passes it a function to call; that is Chapter 2.</p>
+${SD.motChieuEn}
 <p>React&#39;s guide also recommends building a <strong>static version first</strong>: props only, no state, no interactivity. It is the version you have after this chapter. You can build it top-down (start at <code>App</code>, stub the children) or bottom-up (start at <code>TheBacSi</code> with a test, then the list, then the page). For a first project, bottom-up with a test at each step is less confusing: each piece works before the next one needs it.</p>
 
 <h3>Testing a component: render it with fake data, query it like a user</h3>
@@ -2038,6 +2279,7 @@ ${slide('rx-01', 22, 'Cây component trang chủ: dữ liệu đi từ gốc xu�
 │   └── TheBacSi         # bacSi = bs-6, noiBat = true
 └── Footer               # không props</code></pre>
 <p>Đây là <strong>cây render</strong> (render tree) — thứ React dựng ra khi render. Nó khác cây <em>module</em> (file nào import file nào, slide 5): <code>TheBacSi.tsx</code> được import một lần nhưng xuất hiện sáu lần trong cây render. React DevTools (Mục 0) hiện đúng cây render này ở tab Components, và bạn sẽ dùng nó ở mọi chương sau: Chương 2 đánh dấu component nào <em>giữ state</em>, Chương 8 đánh dấu cái nào <em>render lại</em> và cái nào được bỏ qua. Hôm nay cây chỉ trả lời hai câu hỏi — ai chứa ai, và dữ liệu đi đường nào.</p>
+${SD.cayVi}
 
 <h3>Tách khi một mảnh có việc riêng — không tách để có nhiều file</h3>
 ${slide('rx-01', 23, 'Tách khi có một việc riêng, không tách cho nhiều file')}
@@ -2055,6 +2297,7 @@ ${slide('rx-01', 23, 'Tách khi có một việc riêng, không tách cho nhiề
 <li>Đặt tên theo hình dạng (<code>BoxXanh</code>, <code>Cot2</code>) thay vì ý nghĩa. Khi thiết kế đổi màu, cái tên nói dối.</li>
 </ul>
 <p>Khi phân vân, bắt đầu với ít component, to hơn, rồi tách khi một trong các lý do trên xuất hiện. Tách về sau chỉ là cắt-dán cộng một dòng import; gộp những component tách quá tay nghĩa là gỡ rối cả mớ props.</p>
+${SD.tachVi}
 
 <h3>Dữ liệu đi một chiều: cha đưa xuống, con chỉ đọc</h3>
 ${slide('rx-01', 24, 'Dữ liệu đi MỘT chiều: cha đưa xuống, con chỉ đọc')}
@@ -2065,6 +2308,7 @@ ${slide('rx-01', 24, 'Dữ liệu đi MỘT chiều: cha đưa xuống, con ch�
 <li><strong>Dùng lại.</strong> Chương 2 lọc danh sách theo chuyên khoa. Mảng đã lọc đi vào đúng component này.</li>
 </ul>
 <p>Đây là <strong>luồng dữ liệu một chiều</strong> (one-way data flow) của React: dữ liệu đi vào ở trên cùng và chảy xuống qua props; con không bao giờ vươn lên sửa nó (Bài 1.2). Khi con cần <em>gây ra</em> một thay đổi — "người dùng vừa chọn bác sĩ này" — cha đưa cho nó một hàm để gọi; đó là Chương 2.</p>
+${SD.motChieuVi}
 <p>Hướng dẫn của React còn khuyên dựng <strong>bản tĩnh trước</strong>: chỉ props, không state, không tương tác. Đó chính là bản bạn có sau chương này. Bạn có thể dựng từ trên xuống (bắt đầu từ <code>App</code>, để tạm các con rỗng) hoặc từ dưới lên (bắt đầu từ <code>TheBacSi</code> kèm test, rồi danh sách, rồi cả trang). Với dự án đầu tay, từ dưới lên và có test ở mỗi bước ít rối hơn: mỗi mảnh chạy được trước khi mảnh sau cần tới nó.</p>
 
 <h3>Test một component: vẽ với dữ liệu giả, tìm như người dùng</h3>

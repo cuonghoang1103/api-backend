@@ -149,6 +149,307 @@ const OUT = {
   buildSoSanh: "# trước Chương 7 (một trang, chưa có router)\ndist/assets/index-D0V9EEDn.js    391.80 kB │ gzip: 121.97 kB\n✓ built in 603ms\n\n# sau Chương 7 (react-router 8.4.0, 7 route)\ndist/assets/index-BYnmmUn6.js    491.08 kB │ gzip: 153.74 kB\n✓ built in 709ms",
 };
 
+/* ─── Sơ đồ mermaid trong bài (≤ 10 nút, nhãn ngắn; khối EN nhãn tiếng Anh, khối VI nhãn tiếng Việt) ─── */
+/** Sơ đồ mermaid: trang học đọc textContent của <code class="language-mermaid"> rồi vẽ (LearnPageClient → mermaidRuntime). */
+const MM = (src) => '<pre><code class="language-mermaid">' + H(src.trim()) + '</code></pre>';
+const LM = (...dong) => MM(dong.join('\n'));
+const SD = {
+  /* 7.1 */
+  linkVi: LM(
+    'flowchart TB',
+    '  A{"Bấm vào loại link nào?"} -->|"Link"| B["preventDefault: không tải tài liệu mới"]',
+    '  B --> C["history.pushState: đổi URL, thêm mục lịch sử"]',
+    '  C --> D["Router khớp bảng route, React vẽ phần đổi"]',
+    '  D --> E["0 request · bộ đếm vẫn 3 · store, cache còn nguyên"]',
+    '  A -->|"a href"| F["Trình duyệt tải lại: HTML, JS 313 kB, CSS"]',
+    '  F --> G["3 request · bộ đếm về 0 · mọi state mất"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class E tot',
+    '  class G xau',
+  ),
+  linkEn: LM(
+    'flowchart TB',
+    '  A{"Which kind of link was clicked?"} -->|"Link"| B["preventDefault: no new document"]',
+    '  B --> C["history.pushState: new URL, new history entry"]',
+    '  C --> D["Router matches the route table, React draws what changed"]',
+    '  D --> E["0 requests · counter still 3 · stores, caches intact"]',
+    '  A -->|"a href"| F["Browser reloads: HTML, 313 kB JS, CSS"]',
+    '  F --> G["3 requests · counter back to 0 · all state lost"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class E tot',
+    '  class G xau',
+  ),
+  khopVi: LM(
+    'flowchart TB',
+    '  U["URL mới"] --> R{"Khớp route nào trong bảng?"}',
+    '  R -->|"/bac-si/:id"| T["TrangChiTiet: useParams() cho id, kiểu string hoặc undefined"]',
+    '  T --> F{"find(id) thấy bác sĩ?"}',
+    '  F -->|"thấy"| OK["Hồ sơ bác sĩ"]',
+    '  F -->|"không · /bac-si/bs-99"| NF["Trang tự báo: Không có bác sĩ …"]',
+    '  R -->|"không route nào · /khong-co/trang/nay"| S["* → TrangKhongThay: 404 của router"]',
+  ),
+  khopEn: LM(
+    'flowchart TB',
+    '  U["New URL"] --> R{"Which route in the table matches?"}',
+    '  R -->|"/bac-si/:id"| T["TrangChiTiet: useParams() gives id, a string or undefined"]',
+    '  T --> F{"Does find(id) find a doctor?"}',
+    '  F -->|"yes"| OK["Doctor profile"]',
+    '  F -->|"no · /bac-si/bs-99"| NF["The page says: Không có bác sĩ …"]',
+    '  R -->|"no route · /khong-co/trang/nay"| S["* → TrangKhongThay: the router 404"]',
+  ),
+  f5Vi: LM(
+    'sequenceDiagram',
+    '  participant B as Trình duyệt',
+    '  participant S as Máy chủ sau vite build',
+    '  participant R as React Router',
+    '  B->>S: F5 hoặc mở link: GET /bac-si/bs-2',
+    '  alt Máy chủ tĩnh, không có fallback',
+    '    S-->>B: 404 của máy chủ, app không hề tải',
+    '  else Có fallback về index.html (vite preview làm sẵn)',
+    '    S-->>B: 200 index.html + JS',
+    '    B->>R: app chạy, router đọc /bac-si/bs-2',
+    '    R-->>B: vẽ trang chi tiết',
+    '  end',
+  ),
+  f5En: LM(
+    'sequenceDiagram',
+    '  participant B as Browser',
+    '  participant S as Server after vite build',
+    '  participant R as React Router',
+    '  B->>S: F5 or a shared link: GET /bac-si/bs-2',
+    '  alt Plain static server, no fallback',
+    '    S-->>B: the server 404, the app never loads',
+    '  else Falls back to index.html (vite preview does)',
+    '    S-->>B: 200 index.html + JS',
+    '    B->>R: app runs, router reads /bac-si/bs-2',
+    '    R-->>B: draws the detail page',
+    '  end',
+  ),
+  /* 7.2 */
+  cayVi: LM(
+    'flowchart LR',
+    '  R["/ · KhungChinh + Outlet"] --> I["index · TrangChu"]',
+    '  R --> B["bac-si · KhungBacSi + Outlet"]',
+    '  B --> BI["index · ChuaChonBacSi"]',
+    '  B --> BD[":id · ChiTietBacSi, loader, ErrorBoundary"]',
+    '  R --> G["không path · YeuCauDangNhap"]',
+    '  G --> LH["lich-hen · TrangLichHen"]',
+    '  R --> DN["dang-nhap · NGOÀI cổng"]',
+    '  R --> NF["* · TrangKhongThay, vẫn có menu"]',
+  ),
+  cayEn: LM(
+    'flowchart LR',
+    '  R["/ · KhungChinh + Outlet"] --> I["index · TrangChu"]',
+    '  R --> B["bac-si · KhungBacSi + Outlet"]',
+    '  B --> BI["index · ChuaChonBacSi"]',
+    '  B --> BD[":id · ChiTietBacSi, loader, ErrorBoundary"]',
+    '  R --> G["no path · YeuCauDangNhap"]',
+    '  G --> LH["lich-hen · TrangLichHen"]',
+    '  R --> DN["dang-nhap · OUTSIDE the gate"]',
+    '  R --> NF["* · TrangKhongThay, menu still there"]',
+  ),
+  gacVi: LM(
+    'flowchart TB',
+    '  A["Mở /lich-hen"] --> G{"YeuCauDangNhap: đã đăng nhập?"}',
+    '  G -->|"rồi"| O["Outlet: vẽ TrangLichHen"]',
+    '  G -->|"chưa"| N["Navigate tới /dang-nhap, replace, state.tu = /lich-hen"]',
+    '  N --> D["TrangDangNhap: điền form"]',
+    '  D --> S["Store có nguoiDung: Navigate tới state.tu, replace"]',
+    '  S --> A',
+    '  O --> K["Lịch sử chỉ còn / rồi /lich-hen: Back 1 lần là về"]',
+  ),
+  gacEn: LM(
+    'flowchart TB',
+    '  A["Open /lich-hen"] --> G{"YeuCauDangNhap: logged in?"}',
+    '  G -->|"yes"| O["Outlet: draws TrangLichHen"]',
+    '  G -->|"no"| N["Navigate to /dang-nhap, replace, state.tu = /lich-hen"]',
+    '  N --> D["TrangDangNhap: fill in the form"]',
+    '  D --> S["Store has nguoiDung: Navigate to state.tu, replace"]',
+    '  S --> A',
+    '  O --> K["History is just / then /lich-hen: one Back goes home"]',
+  ),
+  middlewareVi: LM(
+    'flowchart TB',
+    '  A["Mở /lich-hen khi chưa đăng nhập"] --> B["Router khớp nhánh route"]',
+    '  B --> M{"Nhánh có middleware canDangNhap?"}',
+    '  M -->|"có"| X["throw redirect /dang-nhap?tu=/lich-hen · loader chạy 0 lần"]',
+    '  M -->|"không, dùng cổng component"| L["Chạy mọi loader của nhánh · loader lịch hẹn chạy 1 lần"]',
+    '  L --> R["Vẽ: lúc này YeuCauDangNhap mới thấy chưa đăng nhập"]',
+    '  R --> N["Navigate tới /dang-nhap"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a2a0a,stroke:#ffc233,color:#fff',
+    '  class X tot',
+    '  class L xau',
+  ),
+  middlewareEn: LM(
+    'flowchart TB',
+    '  A["Open /lich-hen while logged out"] --> B["Router matches the route branch"]',
+    '  B --> M{"Does the branch have middleware canDangNhap?"}',
+    '  M -->|"yes"| X["throw redirect /dang-nhap?tu=/lich-hen · loader ran 0 times"]',
+    '  M -->|"no, component guard"| L["Run every loader of the branch · appointments loader ran 1 time"]',
+    '  L --> R["Render: only now does YeuCauDangNhap see no login"]',
+    '  R --> N["Navigate to /dang-nhap"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a2a0a,stroke:#ffc233,color:#fff',
+    '  class X tot',
+    '  class L xau',
+  ),
+  /* 7.3 */
+  tangVi: LM(
+    'flowchart TB',
+    '  APP["app/ · router, layout, QueryClient"] --> P["pages/ · mỗi route một trang, ghép tính năng"]',
+    '  subgraph FT["features/ · KHÔNG import lẫn nhau"]',
+    '    F1["features/bac-si"]',
+    '    F2["features/dat-lich"]',
+    '    F3["features/lich-hen"]',
+    '  end',
+    '  P --> FT',
+    '  FT --> SH["shared/ · API client, UI chung, hook chung · không import gì phía trên"]',
+  ),
+  tangEn: LM(
+    'flowchart TB',
+    '  APP["app/ · router, layout, QueryClient"] --> P["pages/ · one page per route, composes features"]',
+    '  subgraph FT["features/ · NEVER import each other"]',
+    '    F1["features/bac-si"]',
+    '    F2["features/dat-lich"]',
+    '    F3["features/lich-hen"]',
+    '  end',
+    '  P --> FT',
+    '  FT --> SH["shared/ · API client, generic UI, generic hooks · imports nothing above"]',
+  ),
+  dauVi: LM(
+    'flowchart TB',
+    '  A{"① Chỉ một tính năng dùng?"} -->|"có"| F["features/tên-tính-năng/"]',
+    '  A -->|"không"| B{"② Ghép hai tính năng trên một màn?"}',
+    '  B -->|"có"| P["pages/"]',
+    '  B -->|"không"| C{"③ Vẫn có nghĩa ở một app khác hẳn?"}',
+    '  C -->|"có"| S["shared/"]',
+    '  C -->|"không"| D{"④ Nối dây cả app: router, provider, layout?"}',
+    '  D -->|"có"| APP["app/"]',
+  ),
+  dauEn: LM(
+    'flowchart TB',
+    '  A{"① Used by exactly one feature?"} -->|"yes"| F["features/feature-name/"]',
+    '  A -->|"no"| B{"② Combines two features on one screen?"}',
+    '  B -->|"yes"| P["pages/"]',
+    '  B -->|"no"| C{"③ Would it make sense in a totally different app?"}',
+    '  C -->|"yes"| S["shared/"]',
+    '  C -->|"no"| D{"④ Wiring for the whole app: router, providers, layout?"}',
+    '  D -->|"yes"| APP["app/"]',
+  ),
+  vongVi: LM(
+    'flowchart TB',
+    '  subgraph truoc["Trước: vòng import"]',
+    '    direction TB',
+    '    A1["features/dat-lich"] -->|"useLichHen"| B1["features/lich-hen"]',
+    '    B1 -->|"benhNhanSchema"| A1',
+    '    B1 -.- N["tsc, Vitest: im lặng · dev Chromium: trắng trang · oxlint no-cycle: báo lỗi"]',
+    '  end',
+    '  subgraph sau["Sau: dời thứ dùng chung xuống"]',
+    '    direction TB',
+    '    A2["features/dat-lich"] --> S2["shared/ · benhNhanSchema"]',
+    '    B2["features/lich-hen"] --> S2',
+    '  end',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class N xau',
+  ),
+  vongEn: LM(
+    'flowchart TB',
+    '  subgraph truoc["Before: an import cycle"]',
+    '    direction TB',
+    '    A1["features/dat-lich"] -->|"useLichHen"| B1["features/lich-hen"]',
+    '    B1 -->|"benhNhanSchema"| A1',
+    '    B1 -.- N["tsc, Vitest: silent · dev Chromium: blank page · oxlint no-cycle: errors"]',
+    '  end',
+    '  subgraph sau["After: shared code moves down"]',
+    '    direction TB',
+    '    A2["features/dat-lich"] --> S2["shared/ · benhNhanSchema"]',
+    '    B2["features/lich-hen"] --> S2',
+    '  end',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class N xau',
+  ),
+  /* 7.4 */
+  csrVi: LM(
+    'flowchart TB',
+    '  subgraph csr["SPA Vite · CSR"]',
+    '    direction TB',
+    '    C1["Máy chủ gửi HTML rỗng: một div root"] --> C2["Tải và chạy JS 313 kB"]',
+    '    C2 --> C3["React vẽ: lúc này mới có tên bác sĩ"]',
+    '  end',
+    '  subgraph ssg["Next.js · SSG"]',
+    '    direction TB',
+    '    N0["next build dựng sẵn 6 trang bác sĩ"] --> N1["Gửi HTML đã có h1 tên bác sĩ"]',
+    '    N1 --> N2["Hydrate: gắn sự kiện, trang thành tương tác"]',
+    '  end',
+  ),
+  csrEn: LM(
+    'flowchart TB',
+    '  subgraph csr["Vite SPA · CSR"]',
+    '    direction TB',
+    '    C1["Server sends empty HTML: one root div"] --> C2["Download and run 313 kB of JS"]',
+    '    C2 --> C3["React renders: only now the doctor name exists"]',
+    '  end',
+    '  subgraph ssg["Next.js · SSG"]',
+    '    direction TB',
+    '    N0["next build pre-renders 6 doctor pages"] --> N1["Sends HTML that already has the h1 name"]',
+    '    N1 --> N2["Hydrate: attach events, page becomes interactive"]',
+    '  end',
+  ),
+  serverVi: LM(
+    'flowchart TB',
+    '  P["app/bac-si/[id]/page.tsx · Server Component"] --> D["Đọc dữ liệu thẳng: danhSachBacSi.find"]',
+    '  P --> H["Ra HTML, mã của trang KHÔNG gửi xuống"]',
+    '  P --> N["NutYeuThich · file mở đầu bằng use client"]',
+    '  N --> J["Chỉ mã của nút gửi xuống trình duyệt: useState, onClick"]',
+    '  Q{"Component dùng useState, effect, onClick, store, window?"} -->|"có"| C["Phải nằm dưới ranh giới use client"]',
+    '  Q -->|"không"| S["Để là Server Component"]',
+  ),
+  serverEn: LM(
+    'flowchart TB',
+    '  P["app/bac-si/[id]/page.tsx · Server Component"] --> D["Reads data directly: danhSachBacSi.find"]',
+    '  P --> H["Becomes HTML, the page code is NOT sent"]',
+    '  P --> N["NutYeuThich · file starts with use client"]',
+    '  N --> J["Only the button code goes to the browser: useState, onClick"]',
+    '  Q{"Uses useState, effects, onClick, stores, window?"} -->|"yes"| C["Must live below a use client boundary"]',
+    '  Q -->|"no"| S["Keep it a Server Component"]',
+  ),
+  /* 7.5 */
+  oDauVi: LM(
+    'flowchart TB',
+    '  A{"Trang cần nó để chạy được khi F5, Back, gửi link?"} -->|"có"| U["URL: :id bác sĩ · ?ngay= ngày · :khungGioId giờ"]',
+    '  A -->|"không"| B{"Dữ liệu của máy chủ?"}',
+    '  B -->|"có"| Q["TanStack Query"]',
+    '  B -->|"không"| C{"Của riêng người dùng, giữ lâu?"}',
+    '  C -->|"có"| Z["Zustand + persist: yêu thích"]',
+    '  C -->|"không"| S["location.state: thông báo vừa đặt lh-1"]',
+  ),
+  oDauEn: LM(
+    'flowchart TB',
+    '  A{"Does the page need it to work after F5, Back, a shared link?"} -->|"yes"| U["URL: :id doctor · ?ngay= day · :khungGioId slot"]',
+    '  A -->|"no"| B{"Server data?"}',
+    '  B -->|"yes"| Q["TanStack Query"]',
+    '  B -->|"no"| C{"Personal to the user, kept long?"}',
+    '  C -->|"yes"| Z["Zustand + persist: favourites"]',
+    '  C -->|"no"| S["location.state: the just-booked lh-1 message"]',
+  ),
+  luongVi: LM(
+    'flowchart TB',
+    '  A["/bac-si/bs-2 · bấm 14:00, chưa đăng nhập"] -->|"cổng: Navigate replace"| B["/dang-nhap"]',
+    '  B -->|"đăng nhập xong: Navigate replace"| C["/dat-lich/bs-2-2026-10-01-1400?bacSi=bs-2&ngay=2026-10-01"]',
+    '  C -->|"gửi form, POST /api/lich-hen, replace"| D["/lich-hen"]',
+    '  D -->|"Back 1 lần"| E["/bac-si/bs-2"]',
+  ),
+  luongEn: LM(
+    'flowchart TB',
+    '  A["/bac-si/bs-2 · click 14:00, logged out"] -->|"gate: Navigate replace"| B["/dang-nhap"]',
+    '  B -->|"after login: Navigate replace"| C["/dat-lich/bs-2-2026-10-01-1400?bacSi=bs-2&ngay=2026-10-01"]',
+    '  C -->|"send the form, POST /api/lich-hen, replace"| D["/lich-hen"]',
+    '  D -->|"Back once"| E["/bac-si/bs-2"]',
+  ),
+};
 export default {
   title: 'Chapter 7 — Routing and structure|||Chương 7 — Định tuyến và cấu trúc',
   description: 'Nhiều trang và tổ chức dự án: React Router 8 (Data Mode) với route, link, tham số, layout lồng nhau, ErrorBoundary theo route, chặn trang cần đăng nhập bằng layout route hoặc middleware; cấu trúc thư mục theo tính năng với luật phụ thuộc kiểm bằng lint; và khi nào nên sang Next.js — mọi hành vi đo thật bằng Vitest, Chromium và next build.',
@@ -292,6 +593,7 @@ ${out(OUT.linkVsA)}
 <li><strong><code>Link</code>: 0 requests</strong>. Same document (page loads still 1), and the counter is still 3 — every <code>useState</code>, Zustand store and TanStack Query cache survived.</li>
 <li><strong><code>&lt;a href&gt;</code>: 3 requests</strong> — the HTML document, the 313 kB JavaScript bundle and the CSS, all over again. Page loads went to 2 and the counter is back to 0. On this tiny app it is fast on localhost; on a phone on 4G with a real app it is a white flash and a second or two of nothing, and any unsaved form is gone.</li>
 </ul>
+${SD.linkEn}
 <p>Plain <code>&lt;a&gt;</code> is still right for links that <em>leave</em> the SPA: another website, a PDF to download, a page served by a different app on the same domain. For every link <em>inside</em> your app, use <code>Link</code>. Because a <code>Link</code> renders a real <code>&lt;a href&gt;</code>, the user keeps everything they expect from a link: Ctrl/⌘-click to open in a new tab, "Copy link address", hover to see the URL.</p>
 
 <h3><code>useParams</code>: parameters are strings — and may be missing</h3>
@@ -306,6 +608,7 @@ ${out(OUT.tscUseParams)}
 <li><code>/bac-si/bs-99</code> <strong>matches</strong> the route <code>/bac-si/:id</code> — the URL shape is fine, the <em>data</em> does not exist. The page itself must say so (in Lesson 7.2 a <code>loader</code> will throw a proper 404 for it).</li>
 <li><code>/khong-co/trang/nay</code> matches <strong>no</strong> route except <code>*</code> — the router's 404.</li>
 </ul>
+${SD.khopEn}
 <p>Parameters are always strings. <code>/lich-hen/42</code> gives you <code>'42'</code>; convert and validate yourself (<code>Number(id)</code>, then <code>Number.isInteger</code>) — the URL is user input, exactly like the query string in Lesson 5.4.</p>
 
 <h3><code>NavLink</code>: a link that knows it is the current page</h3>
@@ -360,6 +663,7 @@ ${slide('rx-07', 8, 'F5 ở /bac-si/bs-2: máy chủ tĩnh trả 404 nếu khôn
 ${out(OUT.preview)}
 ${out(OUT.staticF5)}
 <p><code>vite preview</code> answers 200 for every path because it knows it is serving an SPA and falls back to <code>index.html</code> (even <code>/khong-co</code> gets 200 — the <em>router</em> shows the 404 page afterwards). A plain static server looks for a file named <code>bac-si</code>, finds none, and returns its own 404 page: your app never even loads. This is the most common "it worked on my machine" bug when a student first deploys an SPA.</p>
+${SD.f5En}
 <div class="pitfall co-tieu-de"><strong>Trap — deep links break only after deployment.</strong> Everything works in <code>npm run dev</code> and <code>vite preview</code>, and clicking through the deployed site works too (those are client-side navigations). Only F5 or opening a shared link on a sub-page returns 404. Fix it on the <strong>server</strong>: every path that is not a real file must return <code>index.html</code>. nginx: <code>try_files $uri /index.html;</code> · Netlify: a <code>_redirects</code> file with <code>/* /index.html 200</code> · Vercel/Cloudflare Pages: SPA mode or a rewrite rule. Test it after every deploy by opening a sub-page URL directly.</div>
 <p>⏳ Not run for real here: deploying to an actual host (nginx, Netlify, Vercel) — this machine only ran <code>vite preview</code> and a local static server. <!-- CHAY-O-MAY: deploy dist/ của dự án lên một host tĩnh thật (Netlify/nginx), mở thẳng /bac-si/bs-2 trước và sau khi thêm fallback, chụp màn hình 404 và 200 --> The course's GitHub Actions deploy is in <a href="/courses/github-actions">/courses/github-actions</a>.</p>
 
@@ -479,6 +783,7 @@ ${out(OUT.linkVsA)}
 <li><strong><code>Link</code>: 0 request</strong>. Vẫn tài liệu cũ (số lần tải trang vẫn 1), bộ đếm vẫn 3 — mọi <code>useState</code>, store Zustand và cache TanStack Query còn nguyên.</li>
 <li><strong><code>&lt;a href&gt;</code>: 3 request</strong> — tài liệu HTML, gói JavaScript 313 kB và CSS, tải lại từ đầu. Số lần tải trang lên 2, bộ đếm về 0. App bé tí trên localhost thì nhanh; trên điện thoại dùng 4G với một app thật thì là một cú chớp trắng, một hai giây trống trơn, và form gõ dở biến mất.</li>
 </ul>
+${SD.linkVi}
 <p><code>&lt;a&gt;</code> trần vẫn đúng cho link <em>rời khỏi</em> SPA: sang website khác, tải một file PDF, sang một trang do app khác phục vụ trên cùng tên miền. Mọi link <em>bên trong</em> app thì dùng <code>Link</code>. Vì <code>Link</code> vẽ ra một <code>&lt;a href&gt;</code> thật, người dùng vẫn có mọi thứ họ chờ đợi ở một đường link: Ctrl/⌘-click mở tab mới, "Sao chép địa chỉ liên kết", rê chuột xem URL.</p>
 
 <h3><code>useParams</code>: tham số là chuỗi — và có thể không có</h3>
@@ -493,6 +798,7 @@ ${out(OUT.tscUseParams)}
 <li><code>/bac-si/bs-99</code> <strong>khớp</strong> route <code>/bac-si/:id</code> — hình dạng URL đúng, chỉ là <em>dữ liệu</em> không tồn tại. Chính trang đó phải nói ra (Bài 7.2 sẽ cho một <code>loader</code> ném 404 đàng hoàng).</li>
 <li><code>/khong-co/trang/nay</code> <strong>không</strong> khớp route nào ngoài <code>*</code> — 404 của router.</li>
 </ul>
+${SD.khopVi}
 <p>Tham số luôn là chuỗi. <code>/lich-hen/42</code> cho bạn <code>'42'</code>; tự đổi kiểu và tự kiểm (<code>Number(id)</code>, rồi <code>Number.isInteger</code>) — URL là dữ liệu người dùng nhập, y như chuỗi truy vấn ở Bài 5.4.</p>
 
 <h3><code>NavLink</code>: link biết mình là trang hiện tại</h3>
@@ -547,6 +853,7 @@ ${slide('rx-07', 8, 'F5 ở /bac-si/bs-2: máy chủ tĩnh trả 404 nếu khôn
 ${out(OUT.preview)}
 ${out(OUT.staticF5)}
 <p><code>vite preview</code> trả 200 cho mọi đường dẫn vì nó biết mình đang phục vụ một SPA và lùi về <code>index.html</code> (kể cả <code>/khong-co</code> cũng được 200 — <em>router</em> vẽ trang 404 sau đó). Máy chủ tĩnh trần đi tìm một file tên <code>bac-si</code>, không thấy, và trả trang 404 của chính nó: app của bạn còn chưa kịp tải. Đây là lỗi "máy em chạy được mà" phổ biến nhất khi sinh viên deploy SPA lần đầu.</p>
+${SD.f5Vi}
 <div class="pitfall co-tieu-de"><strong>Bẫy — link sâu chỉ hỏng sau khi deploy.</strong> Mọi thứ chạy trong <code>npm run dev</code> và <code>vite preview</code>, bấm qua lại trên site đã deploy cũng chạy (đó là điều hướng phía trình duyệt). Chỉ F5 hoặc mở link chia sẻ tới một trang con là ra 404. Chữa ở <strong>máy chủ</strong>: mọi đường dẫn không phải file thật phải trả về <code>index.html</code>. nginx: <code>try_files $uri /index.html;</code> · Netlify: file <code>_redirects</code> với dòng <code>/* /index.html 200</code> · Vercel/Cloudflare Pages: chế độ SPA hoặc một luật rewrite. Kiểm sau mỗi lần deploy bằng cách mở thẳng URL một trang con.</div>
 <p>⏳ Chưa chạy thật: deploy lên một host thật (nginx, Netlify, Vercel) — máy dựng bài chỉ chạy <code>vite preview</code> và một máy chủ tĩnh cục bộ. <!-- CHAY-O-MAY: deploy dist/ của dự án lên một host tĩnh thật (Netlify/nginx), mở thẳng /bac-si/bs-2 trước và sau khi thêm fallback, chụp màn hình 404 và 200 --> Phần deploy bằng GitHub Actions nằm ở khoá <a href="/courses/github-actions">/courses/github-actions</a>.</p>
 
@@ -621,6 +928,7 @@ ${out(OUT.layout)}
 <li>A route with a component but <strong>no <code>path</code></strong> is a <em>pathless layout</em>: it wraps its children without adding anything to the URL. The login guard later in this lesson is exactly that.</li>
 <li>The 404 route <code>*</code> sits <em>inside</em> the layout, so a wrong URL still shows the menu and a way home. Put it outside and a typo gives the user a bare page with no navigation.</li>
 </ul>
+${SD.cayEn}
 
 <h3>Nested routes = nested screens: list on the left, detail on the right</h3>
 ${slide('rx-07', 10, 'Cây route lồng nhau = cây giao diện lồng nhau')}
@@ -662,6 +970,7 @@ ${pre('tsx', SN.yeuCau)}
 ${pre('tsx', SN.trangDangNhap)}
 <div class="callout"><p><strong>JS quick reminder — <code>(location.state as { tu?: string } | null)?.tu ?? sp.get('tu') ?? '/'</code>.</strong> Read it left to right. <code>as …</code> tells TypeScript the shape we expect, because <code>location.state</code> is typed <code>any</code>. <code>?.</code> is <em>optional chaining</em>: if the thing on the left is <code>null</code> or <code>undefined</code>, stop and give <code>undefined</code> instead of crashing on <code>.tu</code>. Each <code>??</code> then says "if that is still nothing, try the next option". Result: the page the user wanted, or <code>/</code>.</p></div>
 <p>Wrapping any group of routes in <code>{ element: &lt;YeuCauDangNhap /&gt;, children: [...] }</code> protects all of them. The guard does not care which pages are inside — adding a protected page is adding a child.</p>
+${SD.gacEn}
 
 <h3>The <code>replace</code> that saves the Back button — measured</h3>
 ${slide('rx-07', 13, 'Quên replace: đăng nhập xong phải bấm Back ba lần')}
@@ -689,6 +998,7 @@ ${out(OUT.middleware)}
 <tr><td>Works in Declarative Mode</td><td>yes</td><td>no (Data/Framework Mode only)</td></tr>
 </tbody>
 </table>
+${SD.middlewareEn}
 <p>Both are used in industry. If your pages fetch in components with TanStack Query — as this project does — the protected component is never rendered for a logged-out user, so nothing is fetched and the component guard is enough; the project uses it, and logs out with a <code>navigate</code>. If your routes use loaders, use middleware so that protected data is never requested.</p>
 <div class="callout"><p><strong>Common interview question.</strong> "How do you protect a route in React? Is that secure?"</p>
 <p>Wrap the protected routes in a layout route that checks the auth state and renders <code>&lt;Navigate to="/login" replace state={{ from }} /&gt;</code> or the <code>&lt;Outlet /&gt;</code>; in React Router's Data Mode, a route middleware that throws <code>redirect()</code> does it before any loader runs. Use <code>replace</code> so Back does not return to the blocked page, and send the user back to where they were after login. But it is <strong>not security</strong>: all frontend code is downloaded and can be read or changed in DevTools. The guard is UX; the real protection is the API refusing requests without a valid token (401/403). A good answer says both halves.</p></div>
@@ -750,6 +1060,7 @@ ${out(OUT.layout)}
 <li>Route có component nhưng <strong>không có <code>path</code></strong> là một <em>layout không đường dẫn</em>: nó bọc các con mà không thêm gì vào URL. Cái cổng đăng nhập ở phần sau chính là loại này.</li>
 <li>Route 404 <code>*</code> nằm <em>bên trong</em> layout, nên gõ sai URL vẫn thấy menu và đường về trang chủ. Đặt nó ra ngoài thì gõ nhầm một chữ là người dùng gặp một trang trơn trọi không có đường đi đâu.</li>
 </ul>
+${SD.cayVi}
 
 <h3>Route lồng = màn hình lồng: danh sách bên trái, chi tiết bên phải</h3>
 ${slide('rx-07', 10, 'Cây route lồng nhau = cây giao diện lồng nhau')}
@@ -791,6 +1102,7 @@ ${pre('tsx', SN.yeuCau)}
 ${pre('tsx', SN.trangDangNhap)}
 <div class="callout"><p><strong>JS nhắc nhanh — <code>(location.state as { tu?: string } | null)?.tu ?? sp.get('tu') ?? '/'</code>.</strong> Đọc từ trái sang phải. <code>as …</code> báo TypeScript hình dạng ta chờ, vì <code>location.state</code> có kiểu <code>any</code>. <code>?.</code> là <em>optional chaining</em>: thứ bên trái là <code>null</code> hay <code>undefined</code> thì dừng và cho <code>undefined</code>, thay vì sập khi đọc <code>.tu</code>. Mỗi <code>??</code> sau đó nói "vẫn chưa có gì thì thử phương án kế". Kết quả: trang người dùng định tới, hoặc <code>/</code>.</p></div>
 <p>Bọc bất kỳ nhóm route nào trong <code>{ element: &lt;YeuCauDangNhap /&gt;, children: [...] }</code> là bảo vệ cả nhóm. Cổng không quan tâm bên trong có những trang nào — thêm một trang cần đăng nhập là thêm một con.</p>
+${SD.gacVi}
 
 <h3>Chữ <code>replace</code> cứu nút Back — đo thật</h3>
 ${slide('rx-07', 13, 'Quên replace: đăng nhập xong phải bấm Back ba lần')}
@@ -818,6 +1130,7 @@ ${out(OUT.middleware)}
 <tr><td>Dùng được ở Declarative Mode</td><td>có</td><td>không (chỉ Data/Framework Mode)</td></tr>
 </tbody>
 </table>
+${SD.middlewareVi}
 <p>Ngoài công ty người ta dùng cả hai. Nếu trang lấy dữ liệu trong component bằng TanStack Query — như dự án này — thì component được bảo vệ không bao giờ được vẽ cho người chưa đăng nhập, nên chẳng có gì bị tải và cổng bằng component là đủ; dự án dùng nó, và đăng xuất kèm một lần <code>navigate</code>. Nếu route dùng loader thì dùng middleware, để dữ liệu được bảo vệ không bao giờ bị gọi tới.</p>
 <div class="callout"><p><strong>Câu hỏi phỏng vấn hay gặp.</strong> "Bạn bảo vệ một route trong React thế nào? Như vậy có an toàn không?"</p>
 <p>Bọc các route cần bảo vệ trong một layout route kiểm trạng thái đăng nhập, vẽ <code>&lt;Navigate to="/login" replace state={{ from }} /&gt;</code> hoặc <code>&lt;Outlet /&gt;</code>; ở Data Mode của React Router, một middleware của route ném <code>redirect()</code> làm việc đó trước khi loader nào chạy. Dùng <code>replace</code> để Back không quay lại trang bị chặn, và đăng nhập xong thì đưa người dùng về chỗ cũ. Nhưng đó <strong>không phải bảo mật</strong>: mọi mã frontend đều bị tải về và đọc hay sửa được trong DevTools. Cổng là trải nghiệm người dùng; bảo vệ thật là API từ chối request không có token hợp lệ (401/403). Câu trả lời tốt nói đủ cả hai nửa.</p></div>
@@ -893,6 +1206,7 @@ ${slide('rx-07', 16, 'Luật phụ thuộc một chiều: app → pages → feat
 </tbody>
 </table>
 <p>The contract files of the course keep their places (<code>src/types.ts</code>, <code>src/du-lieu/</code>, <code>src/mocks/</code>) and count as shared. The one rule that matters most: <strong>dependencies point one way — down</strong>. <code>app → pages → features → shared</code>. This is the "unidirectional codebase" that the widely used Bulletproof React guide recommends too.</p>
+${SD.tangEn}
 <p><strong>Try it step by step</strong> — where does a new file go? Ask in this order:</p>
 <ol>
 <li>Is it used by exactly one feature? → inside that feature's folder.</li>
@@ -900,6 +1214,7 @@ ${slide('rx-07', 16, 'Luật phụ thuộc một chiều: app → pages → feat
 <li>Would it still make sense in a completely different app (a date formatter, a <code>useDebounce</code>, an error box)? → <code>shared/</code>.</li>
 <li>Is it wiring for the whole app (router, providers, layout)? → <code>app/</code>.</li>
 </ol>
+${SD.dauEn}
 <p>The rule "features never import each other" forces one small design change in the project. "My appointments" needs doctors' <em>names</em>, which belong to the doctor feature. Before, <code>LichHenCuaToi</code> called <code>useBacSi()</code> itself. Now the appointments component asks for what it needs as a prop, and the <em>page</em> — which is allowed to see both features — provides it:</p>
 ${pre('tsx', SN.danhSachLichHenProps)}
 ${pre('tsx', SN.trangLichHen)}
@@ -959,6 +1274,7 @@ ${out(OUT.oxlintVong)}
 </ul>
 <div class="callout"><p><strong>JS quick reminder — why "before initialization"?</strong> ES modules run their top-level code once, in dependency order: a module's imports run first. In a cycle, one module must start before the other has finished. Here the browser started <code>dat-lich/index.ts</code>, which (first line) imported <code>useDatLich</code>, which imported <code>lich-hen</code>, whose <code>schema.ts</code> ran <code>z.object({ benhNhan: benhNhanSchema })</code> <em>immediately</em> — while <code>dat-lich/schema.ts</code>, which declares <code>benhNhanSchema</code> with <code>const</code>, had not run yet. A <code>const</code> that exists but has not been initialised is in the <strong>temporal dead zone (TDZ)</strong>; touching it throws a <code>ReferenceError</code>. Functions declared with <code>function</code> are hoisted and survive this; top-level <code>const</code> values (schemas, stores, objects) do not.</p></div>
 <p>The fix is structural, not a reordering trick: code both features need — here the patient schema — moves <em>down</em> to <code>shared/</code>, and the two features stop knowing about each other.</p>
+${SD.vongEn}
 
 <h3><code>shared/</code>: only code that knows no feature exists</h3>
 <p><code>shared/</code> is the easiest folder to ruin: "I'll just put it in shared" until it holds half the app. The test is the one from the step list: would this file make sense in a different app? The project's <code>shared/</code> holds the API client (<code>http.ts</code>, the query keys, the typed calls), generic UI (<code>LoiTaiDuLieu</code>, skeletons, <code>RanhGioiLoi</code>, <code>VungThongBao</code>, <code>TrangThaiMoCua</code>), generic hooks (<code>useDebounce</code>, <code>useLocalStorage</code>, <code>useTieuDeTrang</code>) — and one new file, every URL of the app in one place:</p>
@@ -1029,6 +1345,7 @@ ${slide('rx-07', 16, 'Luật phụ thuộc một chiều: app → pages → feat
 </tbody>
 </table>
 <p>Các file cố định theo hợp đồng của khoá giữ nguyên chỗ (<code>src/types.ts</code>, <code>src/du-lieu/</code>, <code>src/mocks/</code>) và tính là tầng dùng chung. Luật quan trọng nhất: <strong>phụ thuộc chỉ đi một chiều — đi xuống</strong>. <code>app → pages → features → shared</code>. Đây cũng là "codebase một chiều" mà hướng dẫn Bulletproof React (được dùng rất rộng) khuyên.</p>
+${SD.tangVi}
 <p><strong>Chạy thử từng bước</strong> — một file mới nằm ở đâu? Hỏi theo thứ tự:</p>
 <ol>
 <li>Chỉ đúng một tính năng dùng nó? → trong thư mục của tính năng đó.</li>
@@ -1036,6 +1353,7 @@ ${slide('rx-07', 16, 'Luật phụ thuộc một chiều: app → pages → feat
 <li>Nó vẫn có nghĩa trong một app khác hẳn (hàm định dạng ngày, <code>useDebounce</code>, hộp báo lỗi)? → <code>shared/</code>.</li>
 <li>Nó là dây nối cho cả app (router, provider, layout)? → <code>app/</code>.</li>
 </ol>
+${SD.dauVi}
 <p>Luật "tính năng không import nhau" buộc dự án đổi một chỗ thiết kế nhỏ. "Lịch hẹn của tôi" cần <em>tên</em> bác sĩ, mà tên thuộc về tính năng bác sĩ. Trước đây <code>LichHenCuaToi</code> tự gọi <code>useBacSi()</code>. Giờ component lịch hẹn xin thứ nó cần qua prop, và <em>trang</em> — nơi được thấy cả hai tính năng — đưa cho nó:</p>
 ${pre('tsx', SN.danhSachLichHenProps)}
 ${pre('tsx', SN.trangLichHen)}
@@ -1095,6 +1413,7 @@ ${out(OUT.oxlintVong)}
 </ul>
 <div class="callout"><p><strong>JS nhắc nhanh — vì sao "before initialization"?</strong> ES module chạy mã cấp cao nhất của nó đúng một lần, theo thứ tự phụ thuộc: import của một module chạy trước. Trong một vòng, buộc có một module phải bắt đầu trước khi module kia chạy xong. Ở đây trình duyệt bắt đầu <code>dat-lich/index.ts</code>, dòng đầu import <code>useDatLich</code>, file đó import <code>lich-hen</code>, và <code>schema.ts</code> của nó chạy <code>z.object({ benhNhan: benhNhanSchema })</code> <em>ngay lập tức</em> — trong khi <code>dat-lich/schema.ts</code>, nơi khai <code>benhNhanSchema</code> bằng <code>const</code>, còn chưa chạy. Một <code>const</code> đã tồn tại mà chưa được gán giá trị nằm trong <strong>vùng chết tạm thời (TDZ — temporal dead zone)</strong>; đụng vào nó là ném <code>ReferenceError</code>. Hàm khai bằng <code>function</code> được "kéo lên" (hoisting) nên sống sót; giá trị <code>const</code> cấp cao nhất (schema, store, object) thì không.</p></div>
 <p>Cách chữa nằm ở cấu trúc, không phải mẹo đổi thứ tự: thứ cả hai tính năng cùng cần — ở đây là schema bệnh nhân — chuyển <em>xuống</em> <code>shared/</code>, và hai tính năng thôi biết về nhau.</p>
+${SD.vongVi}
 
 <h3><code>shared/</code>: chỉ chứa mã không biết tính năng nào tồn tại</h3>
 <p><code>shared/</code> là thư mục dễ bị làm hỏng nhất: "cứ bỏ vào shared" cho tới khi nó chứa nửa cái app. Phép thử là câu hỏi trong danh sách bước: file này có còn nghĩa trong một app khác không? <code>shared/</code> của dự án chứa API client (<code>http.ts</code>, query key, các lời gọi có kiểu), UI chung (<code>LoiTaiDuLieu</code>, khung xương, <code>RanhGioiLoi</code>, <code>VungThongBao</code>, <code>TrangThaiMoCua</code>), hook chung (<code>useDebounce</code>, <code>useLocalStorage</code>, <code>useTieuDeTrang</code>) — và một file mới, mọi URL của app ở một chỗ:</p>
@@ -1172,6 +1491,7 @@ ${out(OUT.nextCurl)}
 <li><strong>SSR — server-side rendering (vẽ ở máy chủ mỗi request)</strong>: the server runs your React components for each request and sends finished HTML; the browser then <em>hydrates</em> it (attaches event handlers) to make it interactive.</li>
 <li><strong>SSG — static site generation (dựng sẵn lúc build)</strong>: the same as SSR, but done once at build time, producing HTML files — which is what the next section shows.</li>
 </ul>
+${SD.csrEn}
 <p>Why companies care: pages people find through search or share on social apps (a clinic's doctor profiles, a shop's products, a blog) want content in the HTML; phones on slow networks see text before the JavaScript arrives. Pages behind a login (a dashboard, "my appointments") mostly do not care — nobody searches for them.</p>
 
 <h3>Our routes, as folders</h3>
@@ -1218,6 +1538,7 @@ ${pre('tsx', SN.nextNut)}
 ${out(OUT.nextLoi)}
 <div class="pitfall co-tieu-de"><strong>Trap — porting a Vite component and forgetting it ran in the browser.</strong> Every component of this course's app uses at least one of <code>useState</code>, <code>useEffect</code>, <code>onClick</code>, TanStack Query hooks, Zustand stores, <code>localStorage</code> or <code>window</code>. In Next.js each of those must live below a <code>'use client'</code> boundary, or the build fails as above (hooks) or crashes on the server (<code>window is not defined</code>). The fix is not to put <code>'use client'</code> on every file — that throws away what Next.js gives you — but to push interactivity to the leaves: the page and the list stay on the server, the heart button, the filter chips and the booking form become client components.</div>
 <p>For the clinic app, the split would be roughly: doctor list, doctor profile, specialty pages → Server Components (pre-rendered, SEO); filter chips + search box, time-slot picker, booking form (React Hook Form), "my appointments" with cancel → Client Components; TanStack Query stays for the client parts that fetch after interaction.</p>
+${SD.serverEn}
 
 <h3>When you need Next.js — and when a Vite SPA is enough</h3>
 ${slide('rx-07', 24, 'Khi nào cần Next.js — khi nào Vite SPA là đủ')}
@@ -1293,6 +1614,7 @@ ${out(OUT.nextCurl)}
 <li><strong>SSR — server-side rendering (vẽ ở máy chủ mỗi request)</strong>: máy chủ chạy component React cho từng request và gửi HTML hoàn chỉnh; trình duyệt sau đó <em>hydrate</em> (gắn hàm xử lý sự kiện) để trang tương tác được.</li>
 <li><strong>SSG — static site generation (dựng sẵn lúc build)</strong>: giống SSR, nhưng làm một lần lúc build, ra các file HTML — đúng như phần sau cho thấy.</li>
 </ul>
+${SD.csrVi}
 <p>Vì sao công ty quan tâm: những trang người ta tìm qua công cụ tìm kiếm hay chia sẻ trên mạng xã hội (hồ sơ bác sĩ của phòng khám, trang sản phẩm, blog) cần nội dung nằm sẵn trong HTML; điện thoại mạng yếu thấy chữ trước khi JavaScript về tới. Những trang sau đăng nhập (bảng điều khiển, "lịch hẹn của tôi") phần lớn không cần — chẳng ai tìm kiếm chúng.</p>
 
 <h3>Route của ta, dưới dạng thư mục</h3>
@@ -1339,6 +1661,7 @@ ${pre('tsx', SN.nextNut)}
 ${out(OUT.nextLoi)}
 <div class="pitfall co-tieu-de"><strong>Bẫy — chép component Vite sang mà quên rằng nó từng chạy trong trình duyệt.</strong> Component nào của app trong khoá này cũng dùng ít nhất một trong: <code>useState</code>, <code>useEffect</code>, <code>onClick</code>, hook TanStack Query, store Zustand, <code>localStorage</code> hay <code>window</code>. Ở Next.js, mỗi thứ đó phải nằm dưới một ranh giới <code>'use client'</code>, không thì build hỏng như trên (hook) hoặc sập ở máy chủ (<code>window is not defined</code>). Cách chữa không phải là gắn <code>'use client'</code> lên mọi file — làm vậy là vứt đi thứ Next.js cho bạn — mà là đẩy phần tương tác xuống lá: trang và danh sách ở lại máy chủ, nút trái tim, chip lọc và form đặt lịch thành client component.</div>
 <p>Với app phòng khám, cách chia đại khái là: danh sách bác sĩ, hồ sơ bác sĩ, trang chuyên khoa → Server Component (dựng sẵn, tốt cho SEO); chip lọc + ô tìm, bộ chọn giờ khám, form đặt lịch (React Hook Form), "lịch hẹn của tôi" có nút huỷ → Client Component; TanStack Query ở lại cho các phần client lấy dữ liệu sau khi người dùng tương tác.</p>
+${SD.serverVi}
 
 <h3>Khi nào cần Next.js — và khi nào một SPA Vite là đủ</h3>
 ${slide('rx-07', 24, 'Khi nào cần Next.js — khi nào Vite SPA là đủ')}
@@ -1435,8 +1758,10 @@ ${slide('rx-07', 26, 'Đặt lịch đi theo URL: chọn giờ → đăng nhập
 <li><strong>Which pages need a login?</strong> "My appointments", obviously. And the booking form: an appointment belongs to someone. Putting <code>/dat-lich</code> behind the gate has a second benefit measured below — the "just booked" message survives.</li>
 <li><strong>Which folder does each file go to?</strong> Lesson 7.3's four questions. The one real design change: <code>DanhSachLichHen</code> (was <code>LichHenCuaToi</code>) receives <code>tenBacSi</code> as a prop instead of calling the doctor feature.</li>
 </ol>
+${SD.oDauEn}
 ${out(OUT.chup)}
 <p>That is the whole flow driven in a real Chromium (<code>vite preview</code>): clicking 14:00 while logged out lands on <code>/dang-nhap</code>; logging in returns to the <em>exact</em> booking URL including <code>?bacSi=bs-2&amp;ngay=2026-10-01</code>; after sending, <strong>one</strong> Back goes to the doctor page — the login page and the sent form were replaced, not stacked. F5 on <code>/bac-si/bs-4?ngay=2026-10-02</code> keeps 02/10 selected.</p>
+${SD.luongEn}
 
 <h3>🛠 Keep building the project</h3>
 ${slide('rx-07', 29, 'Tự gõ tiếp dự án: route, layout, cổng và thư mục theo tính năng')}
@@ -1573,8 +1898,10 @@ ${slide('rx-07', 26, 'Đặt lịch đi theo URL: chọn giờ → đăng nhập
 <li><strong>Trang nào cần đăng nhập?</strong> "Lịch hẹn của tôi", hiển nhiên. Và form đặt lịch: lịch hẹn là của một ai đó. Đặt <code>/dat-lich</code> sau cổng còn có một cái lợi thứ hai, đo ở dưới — dòng "vừa đặt" không bị mất.</li>
 <li><strong>Mỗi file vào thư mục nào?</strong> Bốn câu hỏi của Bài 7.3. Chỗ thiết kế thật sự đổi: <code>DanhSachLichHen</code> (trước là <code>LichHenCuaToi</code>) nhận <code>tenBacSi</code> qua prop thay vì gọi sang tính năng bác sĩ.</li>
 </ol>
+${SD.oDauVi}
 ${out(OUT.chup)}
 <p>Đó là cả luồng chạy trên Chromium thật (<code>vite preview</code>): chưa đăng nhập mà bấm 14:00 thì tới <code>/dang-nhap</code>; đăng nhập xong quay về <em>đúng</em> URL đặt lịch, kể cả <code>?bacSi=bs-2&amp;ngay=2026-10-01</code>; gửi xong, <strong>một</strong> lần Back là về trang bác sĩ — trang đăng nhập và form đã gửi bị thay, không chồng lên nhau. F5 ở <code>/bac-si/bs-4?ngay=2026-10-02</code> vẫn giữ ngày 02/10.</p>
+${SD.luongVi}
 
 <h3>🛠 Tự gõ tiếp dự án</h3>
 ${slide('rx-07', 29, 'Tự gõ tiếp dự án: route, layout, cổng và thư mục theo tính năng')}

@@ -5,6 +5,352 @@
  * Deck: scripts/slides-src/rx-05.mjs (27 slide).
  */
 import { gallery, slide } from './_slides.mjs';
+/* ─── Sơ đồ mermaid trong bài (≤ 10 nút, nhãn ngắn; khối EN nhãn tiếng Anh, khối VI nhãn tiếng Việt) ─── */
+const H = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/`/g, '&#96;').replace(/\$\{/g, '&#36;{');
+/** Sơ đồ mermaid: trang học đọc textContent của <code class="language-mermaid"> rồi vẽ (LearnPageClient → mermaidRuntime). */
+const MM = (src) => '<pre><code class="language-mermaid">' + H(src.trim()) + '</code></pre>';
+const LM = (...dong) => MM(dong.join('\n'));
+const SD = {
+  /* 5.1 */
+  ctxVi: LM(
+    'flowchart TB',
+    '  subgraph K["Prop drilling"]',
+    '    direction TB',
+    '    A1["AppKhoan: useState"] -->|"yeuThich, onDoi"| A2["KhuKhoan: chỉ chuyển tiếp"]',
+    '    A2 -->|"yeuThich, onDoi"| A3["LuoiKhoan: chỉ chuyển tiếp"]',
+    '    A3 -->|"yeuThich, onDoi"| A4["TheKhoan: dùng"]',
+    '  end',
+    '  subgraph C["Context"]',
+    '    direction TB',
+    '    P["YeuThichProvider: useState"] --> D["DemYeuThich: useYeuThich()"]',
+    '    P --> S["section, div: không biết gì"]',
+    '    S --> T["TheContext: useYeuThich()"]',
+    '    P -. "value, không qua props" .-> T',
+    '  end',
+    '  classDef trung fill:#3a2a0a,stroke:#ffc233,color:#fff',
+    '  class A2,A3 trung',
+  ),
+  ctxEn: LM(
+    'flowchart TB',
+    '  subgraph K["Prop drilling"]',
+    '    direction TB',
+    '    A1["AppKhoan: useState"] -->|"yeuThich, onDoi"| A2["KhuKhoan: only passes it on"]',
+    '    A2 -->|"yeuThich, onDoi"| A3["LuoiKhoan: only passes it on"]',
+    '    A3 -->|"yeuThich, onDoi"| A4["TheKhoan: uses it"]',
+    '  end',
+    '  subgraph C["Context"]',
+    '    direction TB',
+    '    P["YeuThichProvider: useState"] --> D["DemYeuThich: useYeuThich()"]',
+    '    P --> S["section, div: know nothing"]',
+    '    S --> T["TheContext: useYeuThich()"]',
+    '    P -. "value, no props" .-> T',
+    '  end',
+    '  classDef trung fill:#3a2a0a,stroke:#ffc233,color:#fff',
+    '  class A2,A3 trung',
+  ),
+  baoVi: LM(
+    'flowchart TB',
+    '  A["Gõ 1 phím vào ô tìm"] --> B["KhuDo render lại"]',
+    '  B --> C{"value của Provider?"}',
+    '  C -->|"viết inline"| D["Object mới: Object.is(cũ, mới) = false"]',
+    '  D --> E["6 thẻ đọc context render lại, memo của LuoiDo không chặn được"]',
+    '  C -->|"bọc useMemo"| F["Vẫn object cũ: Object.is = true"]',
+    '  F --> G["0 thẻ render lại"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class E xau',
+    '  class G tot',
+  ),
+  baoEn: LM(
+    'flowchart TB',
+    '  A["Type 1 key into the search box"] --> B["KhuDo re-renders"]',
+    '  B --> C{"Provider value?"}',
+    '  C -->|"written inline"| D["New object: Object.is(old, new) = false"]',
+    '  D --> E["6 cards reading the context re-render, memo on LuoiDo cannot stop it"]',
+    '  C -->|"wrapped in useMemo"| F["Same object: Object.is = true"]',
+    '  F --> G["0 cards re-render"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class E xau',
+    '  class G tot',
+  ),
+  tachVi: LM(
+    'flowchart TB',
+    '  P["KhuTach: useState + doi (useCallback, không đổi)"] --> A["DoiYeuThichContext: doi, không bao giờ đổi"]',
+    '  P --> B["DsYeuThichContext: yeuThich, đổi mỗi lần bấm ♡"]',
+    '  A --> N["ThanhCongCuChiHanhDong: NutXoaHet render 1 lần"]',
+    '  A --> T["TheTach: render lại khi danh sách đổi"]',
+    '  B --> T',
+    '  B -. "lỡ đọc thêm" .-> X["ThanhCongCuTach: NutXoaHet render 3 lần"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class N tot',
+    '  class X xau',
+  ),
+  tachEn: LM(
+    'flowchart TB',
+    '  P["KhuTach: useState + doi (useCallback, stable)"] --> A["DoiYeuThichContext: doi, never changes"]',
+    '  P --> B["DsYeuThichContext: yeuThich, changes on every ♡"]',
+    '  A --> N["ThanhCongCuChiHanhDong: NutXoaHet renders 1 time"]',
+    '  A --> T["TheTach: re-renders when the list changes"]',
+    '  B --> T',
+    '  B -. "one leftover read" .-> X["ThanhCongCuTach: NutXoaHet renders 3 times"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class N tot',
+    '  class X xau',
+  ),
+  /* 5.2 */
+  dispatchVi: LM(
+    'flowchart TB',
+    '  A["Handler gọi dispatch(action)"] --> B["React xếp action vào hàng đợi"]',
+    '  A -. "ngay sau dispatch" .-> S["state trong handler vẫn là bản chụp cũ: buoc = 1"]',
+    '  B --> C["React gọi chonLichReducer(state, action)"]',
+    '  C --> D{"Trả về object khác? (Object.is)"}',
+    '  D -->|"khác"| E["Render lại với state mới"]',
+    '  D -->|"cùng object"| F["Bỏ qua, không render"]',
+    '  E --> G["Giao diện mới, người dùng bấm tiếp"]',
+    '  G --> A',
+  ),
+  dispatchEn: LM(
+    'flowchart TB',
+    '  A["Handler calls dispatch(action)"] --> B["React queues the action"]',
+    '  A -. "right after dispatch" .-> S["state in the handler is still the old snapshot: buoc = 1"]',
+    '  B --> C["React calls chonLichReducer(state, action)"]',
+    '  C --> D{"Different object returned? (Object.is)"}',
+    '  D -->|"different"| E["Re-render with the new state"]',
+    '  D -->|"same object"| F["Skip, no render"]',
+    '  E --> G["New UI, the user clicks again"]',
+    '  G --> A',
+  ),
+  luongVi: LM(
+    'stateDiagram-v2',
+    '  B1: Bước 1 · chọn bác sĩ',
+    '  B2: Bước 2 · chọn giờ',
+    '  B3: Bước 3 · thông tin bệnh nhân',
+    '  B4: Bước 4 · xác nhận',
+    '  G: Đang gửi · khoá luồng',
+    '  X: Đã đặt · daDat khác null',
+    '  [*] --> B1',
+    '  B1 --> B2: chon-bac-si',
+    '  B2 --> B3: chon-khung-gio',
+    '  B3 --> B4: nhap-thong-tin',
+    '  B4 --> B3: quay-lai',
+    '  B4 --> G: bat-dau-gui',
+    '  G --> B4: gui-loi · hiện loiGui',
+    '  G --> X: gui-xong',
+    '  X --> B1: lam-lai',
+  ),
+  luongEn: LM(
+    'stateDiagram-v2',
+    '  B1: Step 1 · pick a doctor',
+    '  B2: Step 2 · pick a time',
+    '  B3: Step 3 · patient details',
+    '  B4: Step 4 · confirm',
+    '  G: Sending · flow locked',
+    '  X: Booked · daDat not null',
+    '  [*] --> B1',
+    '  B1 --> B2: chon-bac-si',
+    '  B2 --> B3: chon-khung-gio',
+    '  B3 --> B4: nhap-thong-tin',
+    '  B4 --> B3: quay-lai',
+    '  B4 --> G: bat-dau-gui',
+    '  G --> B4: gui-loi · shows loiGui',
+    '  G --> X: gui-xong',
+    '  X --> B1: lam-lai',
+  ),
+  chonVi: LM(
+    'flowchart TB',
+    '  A{"Một sự kiện phải đổi nhiều giá trị theo luật?"} -->|"không: ô chữ, bật/tắt, bộ đếm"| B["useState"]',
+    '  A -->|"có: luồng nhiều bước, tải/lỗi/xong"| C["useReducer"]',
+    '  C --> D{"Component ở sâu cũng cần dispatch?"}',
+    '  D -->|"không"| E["Giữ reducer trong một component"]',
+    '  D -->|"có"| F["Đưa dispatch vào context: nó không bao giờ đổi"]',
+  ),
+  chonEn: LM(
+    'flowchart TB',
+    '  A{"Must one event change several values by a rule?"} -->|"no: text box, toggle, counter"| B["useState"]',
+    '  A -->|"yes: multi-step flow, loading/error/done"| C["useReducer"]',
+    '  C --> D{"Do deep components need to dispatch too?"}',
+    '  D -->|"no"| E["Keep the reducer in one component"]',
+    '  D -->|"yes"| F["Put dispatch in a context: it never changes"]',
+  ),
+  /* 5.3 */
+  khoVi: LM(
+    'flowchart TB',
+    '  S[("useYeuThichStore: biến của module, NGOÀI cây")]',
+    '  subgraph cay["Cây component, không có Provider"]',
+    '    direction TB',
+    '    L["LuoiZustand"] --> T["6 × TheChon"]',
+    '    L --> D["DemYeuThich"]',
+    '  end',
+    '  S -. "selector: yeuThich.includes(id)" .-> T',
+    '  S -. "selector: yeuThich.length" .-> D',
+    '  X["Test, hàm tiện ích: getState()"] -. "đọc và gọi hành động" .-> S',
+  ),
+  khoEn: LM(
+    'flowchart TB',
+    '  S[("useYeuThichStore: a module variable, OUTSIDE the tree")]',
+    '  subgraph cay["Component tree, no Provider"]',
+    '    direction TB',
+    '    L["LuoiZustand"] --> T["6 × TheChon"]',
+    '    L --> D["DemYeuThich"]',
+    '  end',
+    '  S -. "selector: yeuThich.includes(id)" .-> T',
+    '  S -. "selector: yeuThich.length" .-> D',
+    '  X["A test, a utility: getState()"] -. "read and call actions" .-> S',
+  ),
+  selectorVi: LM(
+    'flowchart TB',
+    '  A["Bấm ♡ BS. Hà: set() đổi yeuThich"] --> B["Zustand chạy lại selector của từng component"]',
+    '  B --> C{"Kết quả khác lần trước? (Object.is)"}',
+    '  C -->|"thẻ BS. Hà: false thành true"| D["Render lại: +1"]',
+    '  C -->|"5 thẻ còn lại: false vẫn false"| E["Bỏ qua"]',
+    '  C -->|"useYeuThichStore() không selector: object mới"| F["Cả 6 thẻ render lại: +6"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class E tot',
+    '  class F xau',
+  ),
+  selectorEn: LM(
+    'flowchart TB',
+    '  A["Click ♡ on BS. Hà: set() changes yeuThich"] --> B["Zustand re-runs every component selector"]',
+    '  B --> C{"Result differs from last time? (Object.is)"}',
+    '  C -->|"card of BS. Hà: false becomes true"| D["Re-render: +1"]',
+    '  C -->|"other 5 cards: still false"| E["Skipped"]',
+    '  C -->|"useYeuThichStore() with no selector: new object"| F["All 6 cards re-render: +6"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class E tot',
+    '  class F xau',
+  ),
+  persistVi: LM(
+    'flowchart TB',
+    '  A["doi(id): set() đổi state"] --> B["persist ghi phần partialize chọn"]',
+    '  B --> C[("localStorage: key = name, kèm version")]',
+    '  D["F5: tải lại file, tạo store mới"] --> E["Hydrate: đọc lại localStorage, đồng bộ"]',
+    '  C --> E',
+    '  E --> F["yeuThich còn nguyên, lanCuoiXem về null vì không lưu"]',
+  ),
+  persistEn: LM(
+    'flowchart TB',
+    '  A["doi(id): set() changes state"] --> B["persist saves what partialize picks"]',
+    '  B --> C[("localStorage: key = name, plus version")]',
+    '  D["F5: file loaded again, new store"] --> E["Hydrate: read localStorage back, synchronously"]',
+    '  C --> E',
+    '  E --> F["yeuThich is back, lanCuoiXem is null because it was not saved"]',
+  ),
+  /* 5.4 */
+  urlVi: LM(
+    'flowchart TB',
+    '  A["Bấm chip Nhi"] --> B["datBoLoc: chuyenKhoa = nhi"]',
+    '  B --> C["taoSearch trả ?ck=nhi"]',
+    '  C --> D["pushState: thanh địa chỉ /?ck=nhi, thêm một mục lịch sử"]',
+    '  D --> E["setSearch(search mới): render lại"]',
+    '  E --> F["docBoLoc(search): lọc danh sách, chip sáng"]',
+    '  G["Bấm Back"] --> H["Trình duyệt đổi URL, bắn popstate"]',
+    '  H -->|"listener của effect"| E',
+  ),
+  urlEn: LM(
+    'flowchart TB',
+    '  A["Click the Nhi chip"] --> B["datBoLoc: chuyenKhoa = nhi"]',
+    '  B --> C["taoSearch returns ?ck=nhi"]',
+    '  C --> D["pushState: address bar /?ck=nhi, one new history entry"]',
+    '  D --> E["setSearch(new search): re-render"]',
+    '  E --> F["docBoLoc(search): list filtered, chip pressed"]',
+    '  G["Press Back"] --> H["Browser changes the URL, fires popstate"]',
+    '  H -->|"the effect listener"| E',
+  ),
+  pushVi: LM(
+    'flowchart TB',
+    '  A{"Người dùng vừa làm gì?"} -->|"chọn có chủ ý: bấm chip"| B["pushState: +1 mục lịch sử"]',
+    '  B --> C["Back hoàn tác đúng lựa chọn đó"]',
+    '  A -->|"gõ phím trong ô tìm"| D["replaceState: +0 mục"]',
+    '  D --> E["Gõ thao vy: 0 mục mới, push sẽ là +7"]',
+  ),
+  pushEn: LM(
+    'flowchart TB',
+    '  A{"What did the user just do?"} -->|"a deliberate choice: chip click"| B["pushState: +1 history entry"]',
+    '  B --> C["Back undoes exactly that choice"]',
+    '  A -->|"a keystroke in the search box"| D["replaceState: +0 entries"]',
+    '  D --> E["Typing thao vy: 0 new entries, push would add 7"]',
+  ),
+  nhaVi: LM(
+    'flowchart TB',
+    '  A{"Dữ liệu của máy chủ?"} -->|"có"| Q["TanStack Query · Chương 6"]',
+    '  A -->|"không"| B{"Cần gửi được bằng link, Back hoàn tác?"}',
+    '  B -->|"có"| U["URL · Bài 5.4"]',
+    '  B -->|"không"| C{"Của người dùng, cần ở nơi xa, sống qua F5?"}',
+    '  C -->|"có"| Z["Zustand + persist · Bài 5.3"]',
+    '  C -->|"không"| D{"Hiếm đổi, cả cây cần?"}',
+    '  D -->|"có"| X["Context · Bài 5.1"]',
+    '  D -->|"không"| L["Cục bộ: useState, hoặc useReducer nếu có luật · 5.2"]',
+  ),
+  nhaEn: LM(
+    'flowchart TB',
+    '  A{"Does the server own it?"} -->|"yes"| Q["TanStack Query · Chapter 6"]',
+    '  A -->|"no"| B{"Share it by link, undo with Back?"}',
+    '  B -->|"yes"| U["The URL · Lesson 5.4"]',
+    '  B -->|"no"| C{"The user data, needed far apart, must survive F5?"}',
+    '  C -->|"yes"| Z["Zustand + persist · Lesson 5.3"]',
+    '  C -->|"no"| D{"Rarely changes, the whole tree needs it?"}',
+    '  D -->|"yes"| X["Context · Lesson 5.1"]',
+    '  D -->|"no"| L["Local: useState, or useReducer if there are rules · 5.2"]',
+  ),
+  /* 5.5 */
+  xacNhanVi: LM(
+    'sequenceDiagram',
+    '  participant N as Người dùng',
+    '  participant L as LuongDatLich (useReducer)',
+    '  participant M as Máy chủ giả (800 ms)',
+    '  participant S as useDatLichStore (persist)',
+    '  participant H as Header',
+    '  N->>L: bấm Xác nhận đặt lịch',
+    '  L->>L: dispatch bat-dau-gui, nút thành Đang gửi…',
+    '  L->>M: guiYeuCauDatLich(bác sĩ, thông tin, khung giờ)',
+    '  M-->>L: lichHen (mã lh-…)',
+    '  L->>S: themLichHen(lichHen)',
+    '  S-->>H: Lịch hẹn của tôi: 1',
+    '  L->>L: dispatch gui-xong, hiện Đã đặt lịch',
+    '  Note over S,H: F5 vẫn còn 1 nhờ localStorage',
+  ),
+  xacNhanEn: LM(
+    'sequenceDiagram',
+    '  participant N as User',
+    '  participant L as LuongDatLich (useReducer)',
+    '  participant M as Fake server (800 ms)',
+    '  participant S as useDatLichStore (persist)',
+    '  participant H as Header',
+    '  N->>L: click Xác nhận đặt lịch',
+    '  L->>L: dispatch bat-dau-gui, button says Đang gửi…',
+    '  L->>M: guiYeuCauDatLich(doctor, details, slot)',
+    '  M-->>L: lichHen (code lh-…)',
+    '  L->>S: themLichHen(lichHen)',
+    '  S-->>H: Lịch hẹn của tôi: 1',
+    '  L->>L: dispatch gui-xong, success message',
+    '  Note over S,H: still 1 after F5, thanks to localStorage',
+  ),
+  keHoachVi: LM(
+    'flowchart TB',
+    '  App["App"] --> K["KhuBacSi"]',
+    '  App --> L["LuongDatLich"]',
+    '  K <-->|"useBoLocUrl"| U["URL ?ck=…&q=… · Phần C"]',
+    '  K -->|"yêu thích"| S[("useDatLichStore + persist · Phần B")]',
+    '  L -->|"themLichHen"| S',
+    '  L --> R["useReducer: 4 bước · Phần A"]',
+    '  S -->|"lichHen"| H["Header, LichHenCuaToi"]',
+  ),
+  keHoachEn: LM(
+    'flowchart TB',
+    '  App["App"] --> K["KhuBacSi"]',
+    '  App --> L["LuongDatLich"]',
+    '  K <-->|"useBoLocUrl"| U["URL ?ck=…&q=… · Part C"]',
+    '  K -->|"favourites"| S[("useDatLichStore + persist · Part B")]',
+    '  L -->|"themLichHen"| S',
+    '  L --> R["useReducer: 4 steps · Part A"]',
+    '  S -->|"lichHen"| H["Header, LichHenCuaToi"]',
+  ),
+};
 
 export default {
   title: 'Chapter 5 — Sharing state|||Chương 5 — Chia sẻ state',
@@ -129,6 +475,7 @@ export function AppContext() {
 <li><strong>Read.</strong> Any component inside calls <code>useContext(YeuThichContext)</code> — here wrapped in a custom hook <code>useYeuThich()</code>. React looks <em>up</em> the tree for the nearest provider of that context and returns its <code>value</code>.</li>
 </ol>
 <p>The middle components are now plain: <code>section</code> and <code>div</code> know nothing about favourites. The test gives the same result as with props (<code>Yêu thích: 1</code> after one click).</p>
+${SD.ctxEn}
 <div class="callout"><p><strong>JS quick reminder — <code>children</code> and <code>ReactNode</code>.</strong> Whatever you write between a component&#39;s opening and closing tags arrives as a prop called <code>children</code>. <code>ReactNode</code> is the TypeScript type for "anything React can render": elements, strings, numbers, arrays of those, <code>null</code>. So <code>{ children }: { children: ReactNode }</code> means "this component wraps other JSX".</p></div>
 <p><strong>Try it step by step</strong> — what happens when you click the heart on BS. Trần Thu Hà:</p>
 <ol>
@@ -222,6 +569,7 @@ export function KhuDo({ cach }: { cach: 'inline' | 'memo' }) {
 <li><strong><code>memo</code> did not help the cards.</strong> <code>LuoiDo</code> rendered once: <code>memo</code> saw no props change and skipped it. But the cards <em>below</em> it still re-rendered. react.dev says it plainly: skipping re-renders with <code>memo</code> does not prevent children from receiving fresh context values. A context update travels straight to every component that reads it, through any memo on the way.</li>
 <li><strong>With <code>useMemo</code>: +0 for typing, but still +6 for one heart.</strong> Wrapping the value in <code>useMemo</code> (and the function in <code>useCallback</code>) keeps the <em>same</em> object until <code>yeuThich</code> really changes, so typing no longer touches the cards. But when one favourite changes, all six cards re-render, because each of them reads the whole array. Context has no way to say "tell me only when <em>my</em> doctor changes".</li>
 </ul>
+${SD.baoEn}
 <div class="callout"><p><strong>JS quick reminder — <code>useMemo</code> and <code>useCallback</code>.</strong> <code>useMemo(() =&gt; tinh(), [a, b])</code> runs <code>tinh()</code> on the first render and then reuses the previous result until <code>a</code> or <code>b</code> changes (compared with <code>Object.is</code>). <code>useCallback(fn, [deps])</code> is the same idea for a function: <code>useMemo(() =&gt; fn, [deps])</code>. Both are performance tools: code must still be correct without them. Chapter 8 measures when they pay off, and Chapter 12 shows the React Compiler, which inserts this memoisation for you.</p></div>
 <p>Six cards re-rendering is nothing — you would never notice it. The numbers matter because they <strong>scale</strong>: the same pattern with 200 rows, a context read by the header, the sidebar and every row, and a provider that holds the text of a search box, is how a real app ends up redrawing half the page on every key.</p>
 
@@ -293,6 +641,7 @@ export function KhuTach({ docCaDanhSach = false }: { docCaDanhSach?: boolean }) 
 <li><strong>Split, but the toolbar still reads both:</strong> 3 renders. Splitting only helps if the component really stops reading the value that changes. One leftover <code>useContext(DsYeuThichContext)</code> — even one whose result is thrown away with <code>void ds</code> — cancels the whole benefit.</li>
 <li><strong>Split, toolbar reads only the action:</strong> 1 render — the mount. Clicks do not reach it.</li>
 </ul>
+${SD.tachEn}
 <p>Why is <code>doi</code> stable? Because <code>setYeuThich</code> from <code>useState</code> never changes identity, and <code>useCallback(…, [])</code> keeps the same function forever. The same is true of <code>dispatch</code> from <code>useReducer</code> (next lesson), which is why "state in one context, dispatch in another" is the pattern react.dev recommends for scaling up.</p>
 
 <h3>When Context is enough — and when it is not</h3>
@@ -440,6 +789,7 @@ export function AppContext() {
 <li><strong>Đọc.</strong> Component nào bên trong cũng gọi được <code>useContext(YeuThichContext)</code> — ở đây bọc trong hook tự viết <code>useYeuThich()</code>. React đi <em>ngược lên</em> cây tìm provider gần nhất của context đó và trả về <code>value</code> của nó.</li>
 </ol>
 <p>Hai component ở giữa giờ trơn tru: <code>section</code> và <code>div</code> không biết gì về yêu thích. Test cho cùng kết quả như bản props (<code>Yêu thích: 1</code> sau một cú bấm).</p>
+${SD.ctxVi}
 <div class="callout"><p><strong>JS nhắc nhanh — <code>children</code> và <code>ReactNode</code>.</strong> Mọi thứ bạn viết giữa thẻ mở và thẻ đóng của một component đến tay nó qua prop tên <code>children</code>. <code>ReactNode</code> là kiểu TypeScript cho "mọi thứ React vẽ được": element, chuỗi, số, mảng của chúng, <code>null</code>. Nên <code>{ children }: { children: ReactNode }</code> nghĩa là "component này bọc JSX khác".</p></div>
 <p><strong>Chạy thử từng bước</strong> — chuyện gì xảy ra khi bạn bấm trái tim trên BS. Trần Thu Hà:</p>
 <ol>
@@ -533,6 +883,7 @@ export function KhuDo({ cach }: { cach: 'inline' | 'memo' }) {
 <li><strong><code>memo</code> không cứu được các thẻ.</strong> <code>LuoiDo</code> render đúng một lần: <code>memo</code> thấy props không đổi và bỏ qua nó. Nhưng các thẻ <em>bên dưới</em> vẫn render lại. react.dev nói thẳng: bỏ qua render bằng <code>memo</code> không ngăn được con nhận giá trị context mới. Cập nhật context đi thẳng tới mọi component đọc nó, xuyên qua mọi memo trên đường.</li>
 <li><strong>Có <code>useMemo</code>: +0 khi gõ, nhưng vẫn +6 cho một trái tim.</strong> Bọc value trong <code>useMemo</code> (và hàm trong <code>useCallback</code>) giữ <em>cùng một</em> object cho tới khi <code>yeuThich</code> thật sự đổi, nên gõ phím không còn đụng tới thẻ. Nhưng khi một mục yêu thích đổi, cả sáu thẻ render lại, vì thẻ nào cũng đọc cả mảng. Context không có cách nào nói "chỉ báo tôi khi bác sĩ <em>của tôi</em> đổi".</li>
 </ul>
+${SD.baoVi}
 <div class="callout"><p><strong>JS nhắc nhanh — <code>useMemo</code> và <code>useCallback</code>.</strong> <code>useMemo(() =&gt; tinh(), [a, b])</code> chạy <code>tinh()</code> ở lần render đầu rồi dùng lại kết quả cũ cho tới khi <code>a</code> hoặc <code>b</code> đổi (so bằng <code>Object.is</code>). <code>useCallback(fn, [deps])</code> là cùng ý tưởng cho một hàm: <code>useMemo(() =&gt; fn, [deps])</code>. Cả hai là công cụ hiệu năng: bỏ chúng đi mã vẫn phải đúng. Chương 8 đo khi nào chúng đáng dùng, Chương 12 giới thiệu React Compiler — thứ tự chèn phần ghi nhớ này cho bạn.</p></div>
 <p>Sáu thẻ render lại thì chẳng đáng gì — bạn sẽ không bao giờ nhận ra. Con số quan trọng vì nó <strong>nhân lên</strong>: cùng mẫu đó với 200 dòng, một context được header, sidebar và từng dòng đọc, và một provider giữ luôn chữ của ô tìm kiếm — đó là cách một app thật vẽ lại nửa trang theo từng phím.</p>
 
@@ -604,6 +955,7 @@ export function KhuTach({ docCaDanhSach = false }: { docCaDanhSach?: boolean }) 
 <li><strong>Tách, nhưng thanh công cụ vẫn đọc cả hai:</strong> 3 lần. Tách chỉ có ích khi component thật sự thôi đọc giá trị hay đổi. Sót lại một dòng <code>useContext(DsYeuThichContext)</code> — kể cả khi kết quả bị vứt đi bằng <code>void ds</code> — là mất sạch cái lợi.</li>
 <li><strong>Tách, thanh công cụ chỉ đọc hành động:</strong> 1 lần — lúc mount. Các cú bấm không chạm tới nó.</li>
 </ul>
+${SD.tachVi}
 <p>Vì sao <code>doi</code> ổn định? Vì <code>setYeuThich</code> của <code>useState</code> không bao giờ đổi danh tính, và <code>useCallback(…, [])</code> giữ nguyên một hàm mãi mãi. <code>dispatch</code> của <code>useReducer</code> (bài sau) cũng vậy — đó là lý do mẫu "state một context, dispatch một context" là cách react.dev khuyên dùng khi app lớn dần.</p>
 
 <h3>Khi nào Context là đủ — và khi nào không</h3>
@@ -792,6 +1144,7 @@ export function chonLichReducer(state: ChonLich, action: HanhDong): ChonLich {
 </ol>
 <div class="out">[reducer ui] Xác nhận: BS. Trần Thu Hà — khung bs-2-kg-3 (14:00 · 01/10/2026) | log: [ 'ngay sau dispatch: buoc = 1', 'ngay sau dispatch: buoc = 1' ]</div>
 <p>Both clicks logged <code>buoc = 1</code>: the same snapshot rule as <code>useState</code>. If you need the next value inside the handler, compute it yourself (<code>chonLichReducer(state, action)</code> is a plain function — you can call it).</p>
+${SD.dispatchEn}
 <div class="callout"><p><strong>JS quick reminder — why "reducer"?</strong> The name comes from the array method <code>reduce</code>: <code>[1, 2, 3].reduce((tong, x) =&gt; tong + x, 0)</code> walks the array and "reduces" it to one value, carrying an accumulator along. A React reducer has the same shape — <code>(stateSoFar, nextAction) =&gt; newState</code> — and the project&#39;s tests use exactly that: <code>danhSachHanhDong.reduce(luongDatLichReducer, LUONG_BAN_DAU)</code> replays a list of actions to get the final state.</p></div>
 
 <h3>A union of actions plus <code>never</code>: forget a case and tsc tells you</h3>
@@ -935,6 +1288,7 @@ export function luongDatLichReducer(state: LuongDatLich, action: HanhDongDatLich
       dispatch({ type: 'gui-loi', thongBao: loi instanceof Error ? loi.message : 'Gửi không thành công' });
     }
   }</code></pre>
+${SD.luongEn}
 <p>(<code>useDatLichStore</code> is the Zustand store from the next lesson; ignore it for now.) The tests replay action lists through the reducer with <code>reduce</code>:</p>
 <pre><code class="language-ts">import { describe, expect, test } from 'vitest';
 import type { DatLich } from '../schema/dat-lich';
@@ -999,6 +1353,7 @@ ${slide('rx-05', 12, 'useState or useReducer: count rules, not variables')}
 // trong component giữ reducer:
 &lt;DispatchDatLich value={dispatch}&gt;{children}&lt;/DispatchDatLich&gt;</code></pre>
 <p>react.dev calls this "scaling up with reducer and context". This project does not need it — the flow lives in one component — but you will see it in codebases that predate Zustand.</p>
+${SD.chonEn}
 
 <div class="callout"><p><strong>🎓 At FER202 you do it this way — 💼 at work they do it that way.</strong></p>
 <p>FER202 teaches reducers through Redux: <code>const ADD_TODO = 'ADD_TODO'</code> constants, action creator functions, a <code>switch</code> in a reducer, a global store created once, <code>connect</code> or <code>useSelector</code>/<code>useDispatch</code>, and thunk for async. → At work, the reducer idea is the same, but where it lives depends on scope: a complex flow inside one screen uses <code>useReducer</code> right in the component (no store, no boilerplate); actions are typed as a TypeScript union instead of string constants; async work stays in handlers or in TanStack Query; app-wide client state goes to Zustand. Existing Redux projects use Redux Toolkit&#39;s <code>createSlice</code>, which generates actions for you and lets you "mutate" thanks to Immer (Lesson 2.3). · <em>Why:</em> a booking flow that one screen owns has no reason to live in a global store where every other screen can dispatch into it. What you learned about reducers in FER202 is not wasted: reading a <code>createSlice</code> or writing <code>useReducer</code> is the same skill.</p></div>
@@ -1162,6 +1517,7 @@ export function chonLichReducer(state: ChonLich, action: HanhDong): ChonLich {
 </ol>
 <div class="out">[reducer ui] Xác nhận: BS. Trần Thu Hà — khung bs-2-kg-3 (14:00 · 01/10/2026) | log: [ 'ngay sau dispatch: buoc = 1', 'ngay sau dispatch: buoc = 1' ]</div>
 <p>Cả hai cú bấm đều ghi <code>buoc = 1</code>: cùng luật ảnh chụp như <code>useState</code>. Cần giá trị mới ngay trong handler thì tự tính (<code>chonLichReducer(state, action)</code> là hàm thường — gọi được).</p>
+${SD.dispatchVi}
 <div class="callout"><p><strong>JS nhắc nhanh — vì sao gọi là "reducer"?</strong> Tên lấy từ phương thức mảng <code>reduce</code>: <code>[1, 2, 3].reduce((tong, x) =&gt; tong + x, 0)</code> đi qua mảng và "rút gọn" nó thành một giá trị, mang theo một biến tích luỹ. Reducer của React có đúng hình dạng đó — <code>(stateTớiGiờ, hànhĐộngTiếp) =&gt; stateMới</code> — và test của dự án dùng đúng như vậy: <code>danhSachHanhDong.reduce(luongDatLichReducer, LUONG_BAN_DAU)</code> phát lại một chuỗi hành động để ra state cuối.</p></div>
 
 <h3>Union hành động cộng <code>never</code>: quên một case là tsc báo</h3>
@@ -1305,6 +1661,7 @@ export function luongDatLichReducer(state: LuongDatLich, action: HanhDongDatLich
       dispatch({ type: 'gui-loi', thongBao: loi instanceof Error ? loi.message : 'Gửi không thành công' });
     }
   }</code></pre>
+${SD.luongVi}
 <p>(<code>useDatLichStore</code> là store Zustand của bài sau; tạm bỏ qua.) Test phát lại các chuỗi hành động qua reducer bằng <code>reduce</code>:</p>
 <pre><code class="language-ts">import { describe, expect, test } from 'vitest';
 import type { DatLich } from '../schema/dat-lich';
@@ -1369,6 +1726,7 @@ ${slide('rx-05', 12, 'useState hay useReducer: đếm luật, không đếm số
 // trong component giữ reducer:
 &lt;DispatchDatLich value={dispatch}&gt;{children}&lt;/DispatchDatLich&gt;</code></pre>
 <p>react.dev gọi cách này là "scaling up with reducer and context". Dự án này không cần — luồng sống trong một component — nhưng bạn sẽ gặp nó trong những codebase có từ trước khi Zustand phổ biến.</p>
+${SD.chonVi}
 
 <div class="callout"><p><strong>🎓 Ở FER202 bạn làm thế này — 💼 đi làm người ta làm thế kia.</strong></p>
 <p>FER202 dạy reducer qua Redux: hằng <code>const ADD_TODO = 'ADD_TODO'</code>, hàm action creator, một <code>switch</code> trong reducer, một store toàn cục tạo một lần, <code>connect</code> hoặc <code>useSelector</code>/<code>useDispatch</code>, và thunk cho việc bất đồng bộ. → Đi làm, ý tưởng reducer y nguyên, nhưng nó sống ở đâu tuỳ phạm vi: một luồng phức tạp trong một màn hình dùng <code>useReducer</code> ngay trong component (không store, không mã khuôn mẫu); hành động được khai kiểu bằng union TypeScript thay cho hằng chuỗi; việc bất đồng bộ nằm trong handler hoặc TanStack Query; state client toàn app vào Zustand. Dự án Redux có sẵn dùng <code>createSlice</code> của Redux Toolkit, tự sinh action cho bạn và cho phép "sửa thẳng" nhờ Immer (Bài 2.3). · <em>Vì sao:</em> một luồng đặt lịch do một màn hình sở hữu chẳng có lý do gì phải sống trong store toàn cục nơi mọi màn hình khác đều dispatch vào được. Những gì bạn học về reducer ở FER202 không phí: đọc một <code>createSlice</code> hay viết <code>useReducer</code> là cùng một kỹ năng.</p></div>
@@ -1429,6 +1787,7 @@ ${slide('rx-05', 12, 'useState hay useReducer: đếm luật, không đếm số
 <h3>A store lives outside the component tree</h3>
 ${slide('rx-05', 13, 'A Zustand store sits outside the component tree; whoever needs it takes it')}
 <p>Context state lives <em>inside</em> a provider component, so it exists only below that provider. A Zustand store is created at module level — a variable in a <code>.ts</code> file — and any component that imports it can read it. There is no provider to wrap and no tree position to worry about: in the clinic app, <code>Header</code> (top of the page), <code>KhuBacSi</code> (the list), <code>LuongDatLich</code> (the booking flow) and <code>LichHenCuaToi</code> (my appointments) are siblings or cousins, and all four use the same store.</p>
+${SD.khoEn}
 <p>Installing it is one command. The trial project already had it, so npm had nothing to add:</p>
 <div class="out">$ npm install zustand
 up to date, audited 173 packages in 879ms
@@ -1505,6 +1864,7 @@ export function LuoiZustand({ caStore = false }: { caStore?: boolean }) {
 <li><strong>The counter <code>DemYeuThich</code>: 2 renders</strong> (mount + one) in both runs. It selects <code>s.yeuThich.length</code>, a number that did change.</li>
 </ul>
 <p>Actions are selected too: <code>useYeuThichStore((s) =&gt; s.doi)</code>. A function stored in the store never changes, so a component that selects only actions never re-renders because of state changes — the same effect that took two contexts in 5.1, for free.</p>
+${SD.selectorEn}
 <p>And because the store is a plain object outside React, you can use it from anywhere — a utility function, a test, a WebSocket handler — through <code>getState()</code>:</p>
 <pre><code class="language-tsx">test('gọi hành động NGOÀI React bằng getState()', () =&gt; {
   render(&lt;LuoiZustand /&gt;);
@@ -1586,6 +1946,7 @@ export const useGhiNhoStore = create&lt;GhiNhoState&gt;()(
 <li><code>version</code> is stored next to the data. When you change the shape of the saved state, bump the number and give <code>persist</code> a <code>migrate</code> function; otherwise old data from users&#39; browsers is loaded into the new shape.</li>
 <li><strong>Hydration</strong> (loading the saved state back) is synchronous with <code>localStorage</code>: <code>hasHydrated()</code> is already <code>true</code> right after import.</li>
 </ul>
+${SD.persistEn}
 <p>The project&#39;s real store is the same pattern with the two things the clinic app needs to keep:</p>
 <pre><code class="language-ts">import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -1714,6 +2075,7 @@ afterEach(() =&gt; {
 <h3>Store sống ngoài cây component</h3>
 ${slide('rx-05', 13, 'Store Zustand nằm ngoài cây component — ai cần thì tự lấy')}
 <p>State của context sống <em>bên trong</em> một component provider, nên nó chỉ tồn tại bên dưới provider đó. Store Zustand được tạo ở cấp module — một biến trong file <code>.ts</code> — và component nào import nó cũng đọc được. Không có provider nào phải bọc, không phải lo vị trí trong cây: trong app phòng khám, <code>Header</code> (đầu trang), <code>KhuBacSi</code> (danh sách), <code>LuongDatLich</code> (luồng đặt lịch) và <code>LichHenCuaToi</code> (lịch hẹn của tôi) là anh em hoặc họ hàng xa, và cả bốn dùng chung một store.</p>
+${SD.khoVi}
 <p>Cài đặt là một lệnh. Dự án thử đã có sẵn, nên npm không có gì để thêm:</p>
 <div class="out">$ npm install zustand
 up to date, audited 173 packages in 879ms
@@ -1790,6 +2152,7 @@ export function LuoiZustand({ caStore = false }: { caStore?: boolean }) {
 <li><strong>Bộ đếm <code>DemYeuThich</code>: 2 lần</strong> (mount + một) ở cả hai lượt. Nó chọn <code>s.yeuThich.length</code>, một con số thật sự đã đổi.</li>
 </ul>
 <p>Hành động cũng được chọn qua selector: <code>useYeuThichStore((s) =&gt; s.doi)</code>. Một hàm cất trong store không bao giờ đổi, nên component chỉ chọn hành động không bao giờ render lại vì state đổi — cùng hiệu quả mà ở 5.1 phải tốn hai context, ở đây miễn phí.</p>
+${SD.selectorVi}
 <p>Và vì store là một object bình thường bên ngoài React, bạn dùng được nó từ bất cứ đâu — một hàm tiện ích, một test, một handler WebSocket — qua <code>getState()</code>:</p>
 <pre><code class="language-tsx">test('gọi hành động NGOÀI React bằng getState()', () =&gt; {
   render(&lt;LuoiZustand /&gt;);
@@ -1871,6 +2234,7 @@ export const useGhiNhoStore = create&lt;GhiNhoState&gt;()(
 <li><code>version</code> được lưu cạnh dữ liệu. Khi đổi hình dạng state được lưu, tăng số và đưa cho <code>persist</code> một hàm <code>migrate</code>; không thì dữ liệu cũ trong trình duyệt người dùng bị nạp vào hình dạng mới.</li>
 <li><strong>Hydration</strong> (nạp lại state đã lưu) là đồng bộ với <code>localStorage</code>: <code>hasHydrated()</code> đã là <code>true</code> ngay sau khi import.</li>
 </ul>
+${SD.persistVi}
 <p>Store thật của dự án cùng mẫu đó, với hai thứ app phòng khám cần giữ:</p>
 <pre><code class="language-ts">import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -2237,6 +2601,7 @@ export function KhuBacSi() {
 <li><code>setSearch('?ck=nhi')</code> triggers a render. <code>docBoLoc</code> computes <code>{ chuyenKhoa: 'nhi', tuKhoa: '' }</code>; the list filters; the chip is pressed.</li>
 <li>Later, Back: the browser shows <code>/</code> and fires <code>popstate</code>; the listener calls <code>setSearch('')</code>; the list shows all six again.</li>
 </ol>
+${SD.urlEn}
 
 <h3>pushState for choices, replaceState for typing</h3>
 ${slide('rx-05', 22, 'Chip click ⇒ pushState, keystroke ⇒ replaceState')}
@@ -2274,6 +2639,7 @@ test('gõ "thao vy": pushState mỗi phím vs replaceState', async () =&gt; {
 });</code></pre>
 <div class="out">[lich su] pushState: +7 muc lich su, URL = ?q=thao%20vy | replaceState: +0 muc lich su, URL = ?q=thao%20vy</div>
 <p>Seven history entries for one search. A user who presses Back to return to the previous page would have to press it seven times, watching the search text disappear letter by letter. So the rule in <code>KhuBacSi</code>: the chip (a deliberate choice) uses push; the search box uses <code>'replace'</code>. In the real browser, Back walks through the chip choices exactly:</p>
+${SD.pushEn}
 <div class="out">[sau] bam Nhi roi Da lieu: URL = /?ck=da-lieu | Đội ngũ bác sĩ (1)
 [sau] nut Back:           URL = /?ck=nhi | Đội ngũ bác sĩ (2)
 [sau] Back lan nua:       URL = / | Đội ngũ bác sĩ (6)</div>
@@ -2331,6 +2697,7 @@ ${slide('rx-05', 23, 'Every kind of state has a home')}
 <tr><td>A form being filled in</td><td>name, phone</td><td>React Hook Form (Chapter 3)</td></tr>
 </tbody>
 </table>
+${SD.nhaEn}
 <p>The hand-written hook is the right tool for learning, and for a small app with no router. From Chapter 7 the project uses React Router, whose <code>useSearchParams()</code> does what <code>useBoLocUrl</code> does — read the query string, write it with push or replace, react to Back — so the hook shrinks to a few lines around <code>docBoLoc</code>/<code>taoSearch</code>, which you keep. In Next.js the page receives <code>searchParams</code> directly (see <a href="/courses/nextjs">/courses/nextjs</a>). If you ever need to subscribe to a browser value yourself without a router, React&#39;s official tool is <code>useSyncExternalStore</code>; the <code>useState</code> + effect version here is easier to read and is enough for one hook.</p>
 
 <div class="callout"><p><strong>🎓 At FER202 you do it this way — 💼 at work they do it that way.</strong></p>
@@ -2611,6 +2978,7 @@ export function KhuBacSi() {
 <li><code>setSearch('?ck=nhi')</code> kích một lần render. <code>docBoLoc</code> tính ra <code>{ chuyenKhoa: 'nhi', tuKhoa: '' }</code>; danh sách lọc lại; chip được đánh dấu.</li>
 <li>Lát sau, bấm Back: trình duyệt hiện <code>/</code> và bắn <code>popstate</code>; listener gọi <code>setSearch('')</code>; danh sách hiện lại đủ sáu.</li>
 </ol>
+${SD.urlVi}
 
 <h3>Bấm chọn thì pushState, gõ phím thì replaceState</h3>
 ${slide('rx-05', 22, 'Bấm chip thì pushState, gõ phím thì replaceState')}
@@ -2648,6 +3016,7 @@ test('gõ "thao vy": pushState mỗi phím vs replaceState', async () =&gt; {
 });</code></pre>
 <div class="out">[lich su] pushState: +7 muc lich su, URL = ?q=thao%20vy | replaceState: +0 muc lich su, URL = ?q=thao%20vy</div>
 <p>Bảy mục lịch sử cho một lần tìm. Người dùng bấm Back để về trang trước sẽ phải bấm bảy lần, nhìn chữ tìm kiếm biến mất từng ký tự. Nên luật trong <code>KhuBacSi</code>: chip (một lựa chọn có chủ ý) dùng push; ô tìm dùng <code>'replace'</code>. Trên trình duyệt thật, Back đi qua đúng các lựa chọn chip:</p>
+${SD.pushVi}
 <div class="out">[sau] bam Nhi roi Da lieu: URL = /?ck=da-lieu | Đội ngũ bác sĩ (1)
 [sau] nut Back:           URL = /?ck=nhi | Đội ngũ bác sĩ (2)
 [sau] Back lan nua:       URL = / | Đội ngũ bác sĩ (6)</div>
@@ -2705,6 +3074,7 @@ ${slide('rx-05', 23, 'Mỗi loại state một chỗ ở')}
 <tr><td>Form đang điền</td><td>họ tên, số điện thoại</td><td>React Hook Form (Chương 3)</td></tr>
 </tbody>
 </table>
+${SD.nhaVi}
 <p>Hook tự viết là công cụ đúng để học, và đủ cho một app nhỏ không có router. Từ Chương 7 dự án dùng React Router, và <code>useSearchParams()</code> của nó làm đúng việc <code>useBoLocUrl</code> làm — đọc chuỗi truy vấn, ghi bằng push hoặc replace, phản ứng với Back — nên hook co lại còn vài dòng quanh <code>docBoLoc</code>/<code>taoSearch</code>, hai hàm bạn giữ nguyên. Trong Next.js, trang nhận thẳng <code>searchParams</code> (xem <a href="/courses/nextjs">/courses/nextjs</a>). Nếu có lúc cần tự đăng ký nghe một giá trị của trình duyệt mà không có router, công cụ chính thức của React là <code>useSyncExternalStore</code>; bản <code>useState</code> + effect ở đây dễ đọc hơn và đủ cho một hook.</p>
 
 <div class="callout"><p><strong>🎓 Ở FER202 bạn làm thế này — 💼 đi làm người ta làm thế kia.</strong></p>
@@ -2767,6 +3137,7 @@ ${slide('rx-05', 24, 'Chapter result: the four-step booking flow on one reducer'
 [sau] xong: Đã đặt lịch với BS. Nguyễn Minh An lúc 14:00 · 01/10/2026. Mã lịch hẹn: lh-1790303755862.
 [sau] header: Lịch hẹn của tôi: 1
 [sau] F5 roi: Lịch hẹn của tôi: 1 | Lịch hẹn của tôi (1)</div>
+${SD.xacNhanEn}
 
 <h3>Plan before typing</h3>
 <table>
@@ -2784,6 +3155,7 @@ ${slide('rx-05', 24, 'Chapter result: the four-step booking flow on one reducer'
 </tbody>
 </table>
 <p>Order matters a little: build A first and test it on its own (the reducer tests need nothing else), then B (the flow&#39;s "Xác nhận" needs <code>themLichHen</code>), then C.</p>
+${SD.keHoachEn}
 
 <h3>🛠 Keep building the project</h3>
 <p><strong>Starting point:</strong> your project after Chapter 4 — the files this chapter relies on are <code>src/types.ts</code>, <code>src/du-lieu/bac-si.ts</code> and <code>chuyen-khoa.ts</code>, <code>src/logic/loc-bac-si.ts</code> and <code>yeu-thich.ts</code> (Chapter 2), <code>KhuBacSi</code>, <code>ChipChuyenKhoa</code>, <code>OTimBacSi</code>, <code>DanhSachBacSi</code>, <code>TheBacSi</code>, <code>ChiTietBacSi</code> (Chapters 1–2), and <code>FormDatLich</code>, <code>src/schema/dat-lich.ts</code>, <code>src/logic/gui-dat-lich.ts</code> (Chapter 3). The Chapter 4 hooks are not touched: if your <code>KhuBacSi</code> debounces the search with <code>useDebounce</code>, keep that line — only the <em>source</em> of <code>tuKhoa</code> changes, from <code>useState</code> to the URL.</p>
@@ -3369,6 +3741,7 @@ ${slide('rx-05', 24, 'Kết quả chương: luồng đặt lịch 4 bước bằ
 [sau] xong: Đã đặt lịch với BS. Nguyễn Minh An lúc 14:00 · 01/10/2026. Mã lịch hẹn: lh-1790303755862.
 [sau] header: Lịch hẹn của tôi: 1
 [sau] F5 roi: Lịch hẹn của tôi: 1 | Lịch hẹn của tôi (1)</div>
+${SD.xacNhanVi}
 
 <h3>Lên kế hoạch trước khi gõ</h3>
 <table>
@@ -3386,6 +3759,7 @@ ${slide('rx-05', 24, 'Kết quả chương: luồng đặt lịch 4 bước bằ
 </tbody>
 </table>
 <p>Thứ tự có ý nghĩa một chút: dựng A trước và test riêng nó (test reducer không cần gì khác), rồi B ("Xác nhận" của luồng cần <code>themLichHen</code>), rồi C.</p>
+${SD.keHoachVi}
 
 <h3>🛠 Tự gõ tiếp dự án</h3>
 <p><strong>Điểm xuất phát:</strong> dự án của bạn sau Chương 4 — những file chương này dựa vào là <code>src/types.ts</code>, <code>src/du-lieu/bac-si.ts</code> và <code>chuyen-khoa.ts</code>, <code>src/logic/loc-bac-si.ts</code> và <code>yeu-thich.ts</code> (Chương 2), <code>KhuBacSi</code>, <code>ChipChuyenKhoa</code>, <code>OTimBacSi</code>, <code>DanhSachBacSi</code>, <code>TheBacSi</code>, <code>ChiTietBacSi</code> (Chương 1–2), và <code>FormDatLich</code>, <code>src/schema/dat-lich.ts</code>, <code>src/logic/gui-dat-lich.ts</code> (Chương 3). Các hook của Chương 4 không bị đụng tới: nếu <code>KhuBacSi</code> của bạn làm trễ ô tìm bằng <code>useDebounce</code>, giữ dòng đó — chỉ <em>nguồn</em> của <code>tuKhoa</code> đổi, từ <code>useState</code> sang URL.</p>

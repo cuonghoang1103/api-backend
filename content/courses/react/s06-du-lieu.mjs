@@ -105,6 +105,262 @@ const OUT = {
  "bai4Tom": "$ npx vitest run src/vi-du/bai4.test.tsx --reporter=verbose\n ✓ … > mặc định của TanStack: 3 lần thử lại, chờ 1 s → 2 s → 4 s 7071ms\n ✓ … > nenThuLai của dự án: 404 không thử lại, 500 thì có 123ms\n ✓ … > bốn trạng thái của KhuBacSi > đang tải: skeleton có aria-busy 197ms\n ✓ … > bốn trạng thái của KhuBacSi > lỗi ⇒ hộp lỗi; Thử lại ⇒ có dữ liệu 84ms\n ✓ … > bốn trạng thái của KhuBacSi > rỗng ⇒ câu thông báo, không phải lưới trống 17ms\n ✓ … > bốn trạng thái của KhuBacSi > đã có dữ liệu mà làm mới lỗi ⇒ GIỮ danh sách + dải cảnh báo 57ms\n ✓ … > ranh giới lỗi > bug lúc render trong MỘT khu ⇒ chỉ khu đó hiện màn dự phòng 11ms\n ✓ … > ranh giới lỗi > throwOnError + QueryErrorResetBoundary: lỗi lên ranh giới, bấm tải lại ⇒ gọi API lần nữa 30ms\n Test Files  1 passed (1)\n      Tests  8 passed (8)"
 };
 
+/* ─── Sơ đồ mermaid trong bài (≤ 10 nút, nhãn ngắn; khối EN nhãn tiếng Anh, khối VI nhãn tiếng Việt) ─── */
+/** Sơ đồ mermaid: trang học đọc textContent của <code class="language-mermaid"> rồi vẽ (LearnPageClient → mermaidRuntime). */
+const MM = (src) => '<pre><code class="language-mermaid">' + H(src.trim()) + '</code></pre>';
+const LM = (...dong) => MM(dong.join('\n'));
+const SD = {
+  /* 6.1 */
+  mswVi: LM(
+    'flowchart TB',
+    '  C["Component gọi fetch /api/bac-si"] --> F{"App đang chạy ở đâu?"}',
+    '  F -->|"trình duyệt"| W["Service Worker: public/mockServiceWorker.js"]',
+    '  F -->|"Node · Vitest"| N["setupServer vá mạng của Node"]',
+    '  W --> HD["CÙNG một bộ handlers"]',
+    '  N --> HD',
+    '  HD --> DB[("CSDL trong bộ nhớ: 201, 404, 409 thật")]',
+    '  N -. "request không có handler" .-> X["onUnhandledRequest: error, test hỏng"]',
+  ),
+  mswEn: LM(
+    'flowchart TB',
+    '  C["Component calls fetch /api/bac-si"] --> F{"Where is the app running?"}',
+    '  F -->|"browser"| W["Service Worker: public/mockServiceWorker.js"]',
+    '  F -->|"Node · Vitest"| N["setupServer patches Node networking"]',
+    '  W --> HD["The SAME handlers"]',
+    '  N --> HD',
+    '  HD --> DB[("In-memory database: real 201, 404, 409")]',
+    '  N -. "request with no handler" .-> X["onUnhandledRequest: error, test fails"]',
+  ),
+  suaDuaVi: LM(
+    'sequenceDiagram',
+    '  participant U as Người dùng',
+    '  participant E as Effect của hồ sơ',
+    '  participant S as API',
+    '  U->>E: mở bs-1',
+    '  E->>S: GET bs-1 (chậm 900 ms)',
+    '  U->>E: 50 ms sau đổi sang bs-2',
+    '  E->>E: dọn lần chạy bs-1: boQua = true, abort()',
+    '  E->>S: GET bs-2 (100 ms)',
+    '  S-->>E: bs-2 về trước: setBacSi(Trần Thu Hà)',
+    '  S--xE: bs-1 về sau: bị bỏ qua (cờ) hoặc đã huỷ (abort)',
+    '  Note over U,S: Không dọn thì bs-1 ghi đè: hiện Nguyễn Minh An',
+  ),
+  suaDuaEn: LM(
+    'sequenceDiagram',
+    '  participant U as User',
+    '  participant E as Profile effect',
+    '  participant S as API',
+    '  U->>E: open bs-1',
+    '  E->>S: GET bs-1 (slow, 900 ms)',
+    '  U->>E: 50 ms later, switch to bs-2',
+    '  E->>E: clean up the bs-1 run: boQua = true, abort()',
+    '  E->>S: GET bs-2 (100 ms)',
+    '  S-->>E: bs-2 first: setBacSi(Trần Thu Hà)',
+    '  S--xE: bs-1 later: ignored (flag) or cancelled (abort)',
+    '  Note over U,S: With no cleanup, bs-1 overwrites it: Nguyễn Minh An',
+  ),
+  strictVi: LM(
+    'sequenceDiagram',
+    '  participant R as React dev + StrictMode',
+    '  participant E as Effect tải hồ sơ',
+    '  participant S as MSW',
+    '  R->>E: mount, effect chạy lần 1',
+    '  E->>S: GET bs-1 (request 1)',
+    '  R->>E: thử unmount: cleanup (boQua / abort)',
+    '  R->>E: mount lại, effect chạy lần 2',
+    '  E->>S: GET bs-1 (request 2)',
+    '  S-->>E: chỉ câu trả lời của lần 2 được setState',
+    '  Note over R,S: Production chỉ 1 request. Chữa bằng cleanup, đừng xoá StrictMode',
+  ),
+  strictEn: LM(
+    'sequenceDiagram',
+    '  participant R as React dev + StrictMode',
+    '  participant E as Profile-loading effect',
+    '  participant S as MSW',
+    '  R->>E: mount, effect runs (1st)',
+    '  E->>S: GET bs-1 (request 1)',
+    '  R->>E: test unmount: cleanup (boQua / abort)',
+    '  R->>E: mount again, effect runs (2nd)',
+    '  E->>S: GET bs-1 (request 2)',
+    '  S-->>E: only the 2nd answer reaches setState',
+    '  Note over R,S: Production sends 1 request. Fix with cleanup, never remove StrictMode',
+  ),
+  /* 6.2 */
+  khoaVi: LM(
+    'flowchart TB',
+    '  R["[bac-si] · danh sách bác sĩ"] --> B1["[bac-si, bs-1] · một bác sĩ"]',
+    '  R --> B2["[bac-si, bs-2] · một bác sĩ"]',
+    '  B1 --> K1["[bac-si, bs-1, khung-gio, ngày]"]',
+    '  B2 --> K2["[bac-si, bs-2, khung-gio, ngày]"]',
+    '  I1["invalidate [bac-si]"] -. "làm cũ CẢ nhánh" .-> R',
+    '  I2["invalidate [bac-si, bs-1]"] -. "chỉ nhánh bs-1" .-> B1',
+  ),
+  khoaEn: LM(
+    'flowchart TB',
+    '  R["[bac-si] · doctor list"] --> B1["[bac-si, bs-1] · one doctor"]',
+    '  R --> B2["[bac-si, bs-2] · one doctor"]',
+    '  B1 --> K1["[bac-si, bs-1, khung-gio, date]"]',
+    '  B2 --> K2["[bac-si, bs-2, khung-gio, date]"]',
+    '  I1["invalidate [bac-si]"] -. "stales the WHOLE branch" .-> R',
+    '  I2["invalidate [bac-si, bs-1]"] -. "only the bs-1 branch" .-> B1',
+  ),
+  vongDoiVi: LM(
+    'flowchart TB',
+    '  A["Component mount với key K"] --> B{"Cache đã có K?"}',
+    '  B -->|"chưa"| C["isPending: skeleton, gọi queryFn"]',
+    '  B -->|"có"| D["Vẽ NGAY dữ liệu trong cache"]',
+    '  D --> E{"Còn trong staleTime?"}',
+    '  E -->|"tươi"| F["Không gửi request nào"]',
+    '  E -->|"cũ"| G["Refetch nền: isFetching (cả khi focus lại tab, có mạng lại)"]',
+    '  H["Component cuối dùng K unmount"] --> I["Giữ thêm gcTime, mặc định 5 phút, rồi xoá"]',
+  ),
+  vongDoiEn: LM(
+    'flowchart TB',
+    '  A["A component mounts with key K"] --> B{"Is K in the cache?"}',
+    '  B -->|"no"| C["isPending: skeleton, call queryFn"]',
+    '  B -->|"yes"| D["Draw the cached data IMMEDIATELY"]',
+    '  D --> E{"Still within staleTime?"}',
+    '  E -->|"fresh"| F["No request at all"]',
+    '  E -->|"stale"| G["Background refetch: isFetching (also on tab focus, reconnect)"]',
+    '  H["Last component using K unmounts"] --> I["Kept for gcTime, 5 minutes by default, then removed"]',
+  ),
+  gopVi: LM(
+    'flowchart TB',
+    '  A["KhuBacSi: useBacSi()"] --> K["key [bac-si]"]',
+    '  B["Bước 1 luồng đặt lịch: useBacSi()"] --> K',
+    '  C["Danh sách lịch hẹn, lấy tên: useBacSi()"] --> K',
+    '  K --> R["1 request GET /api/bac-si"]',
+    '  R --> X[("Một mục cache, ba component cùng đọc")]',
+  ),
+  gopEn: LM(
+    'flowchart TB',
+    '  A["KhuBacSi: useBacSi()"] --> K["key [bac-si]"]',
+    '  B["Booking flow step 1: useBacSi()"] --> K',
+    '  C["Appointment list, for names: useBacSi()"] --> K',
+    '  K --> R["1 request GET /api/bac-si"]',
+    '  R --> X[("One cache entry, read by three components")]',
+  ),
+  /* 6.3 */
+  mutationVi: LM(
+    'sequenceDiagram',
+    '  participant N as Người dùng',
+    '  participant M as useDatLich (mutation)',
+    '  participant S as API giả',
+    '  participant C as Cache',
+    '  N->>M: mutate(bác sĩ, khung 14:00, thông tin)',
+    '  Note over M: idle → pending',
+    '  M->>S: POST /api/lich-hen',
+    '  S-->>M: 201 (hoặc 409: đã có người đặt)',
+    '  M->>C: onSettled: invalidate khung giờ của bác sĩ + lich-hen',
+    '  C->>S: GET khung giờ (chỉ query đang hiện)',
+    '  S-->>C: 14:00 conTrong = false',
+    '  Note over M: success khi dữ liệu mới đã về (onSettled trả Promise)',
+  ),
+  mutationEn: LM(
+    'sequenceDiagram',
+    '  participant N as User',
+    '  participant M as useDatLich (mutation)',
+    '  participant S as Fake API',
+    '  participant C as Cache',
+    '  N->>M: mutate(doctor, 14:00 slot, details)',
+    '  Note over M: idle → pending',
+    '  M->>S: POST /api/lich-hen',
+    '  S-->>M: 201 (or 409: already taken)',
+    '  M->>C: onSettled: invalidate the doctor slots + lich-hen',
+    '  C->>S: GET slots (only queries on screen)',
+    '  S-->>C: 14:00 conTrong = false',
+    '  Note over M: success once fresh data is in (onSettled returns a Promise)',
+  ),
+  lacQuanVi: LM(
+    'flowchart TB',
+    '  A["Bấm Huỷ"] --> B["onMutate ① cancelQueries [lich-hen]"]',
+    '  B --> C["② getQueryData: chụp danh sách cũ"]',
+    '  C --> D["③ setQueryData: hiện Đã huỷ NGAY"]',
+    '  D --> E["④ return bản chụp, rồi gửi request huỷ"]',
+    '  E --> F{"Máy chủ trả lời?"}',
+    '  F -->|"lỗi"| G["onError: đặt lại bản chụp"]',
+    '  F -->|"thành công"| H["Giữ Đã huỷ"]',
+    '  G --> I["⑤ onSettled: invalidate, lấy sự thật từ máy chủ"]',
+    '  H --> I',
+  ),
+  lacQuanEn: LM(
+    'flowchart TB',
+    '  A["Click Huỷ"] --> B["onMutate ① cancelQueries [lich-hen]"]',
+    '  B --> C["② getQueryData: snapshot the old list"]',
+    '  C --> D["③ setQueryData: show Đã huỷ AT ONCE"]',
+    '  D --> E["④ return the snapshot, then send the cancel request"]',
+    '  E --> F{"Server answer?"}',
+    '  F -->|"error"| G["onError: put the snapshot back"]',
+    '  F -->|"success"| H["Keep Đã huỷ"]',
+    '  G --> I["⑤ onSettled: invalidate, fetch the truth"]',
+    '  H --> I',
+  ),
+  /* 6.4 */
+  thuTuVi: LM(
+    'flowchart TB',
+    '  A{"① isPending?"} -->|"có"| S["Skeleton đúng hình"]',
+    '  A -->|"không"| B{"② Không có dữ liệu nào?"}',
+    '  B -->|"đúng: hỏng, chưa từng có"| E["Hộp lỗi + nút Thử lại"]',
+    '  B -->|"có dữ liệu"| C{"③ length === 0?"}',
+    '  C -->|"có"| R["Câu báo rỗng, không tô đỏ"]',
+    '  C -->|"không"| D["④ Danh sách, thêm dải vàng nếu isError"]',
+  ),
+  thuTuEn: LM(
+    'flowchart TB',
+    '  A{"① isPending?"} -->|"yes"| S["Skeleton in the right shape"]',
+    '  A -->|"no"| B{"② No data at all?"}',
+    '  B -->|"true: failed, never had any"| E["Error box + Thử lại button"]',
+    '  B -->|"has data"| C{"③ length === 0?"}',
+    '  C -->|"yes"| R["Empty sentence, no red"]',
+    '  C -->|"no"| D["④ The list, plus a yellow strip if isError"]',
+  ),
+  thuLaiVi: LM(
+    'flowchart TB',
+    '  A["queryFn ném lỗi"] --> B{"nenThuLai: LoiApi 4xx?"}',
+    '  B -->|"có: 404, 400"| X["Không thử lại: error ngay, 1 lần gọi"]',
+    '  B -->|"không: mất mạng, 5xx"| C{"Mới hỏng dưới 3 lần?"}',
+    '  C -->|"có"| D["Chờ 1 s, rồi 2 s, rồi 4 s, gọi lại"]',
+    '  D --> A',
+    '  C -->|"không"| E["status = error sau 4 lần gọi, khoảng 7 s"]',
+  ),
+  thuLaiEn: LM(
+    'flowchart TB',
+    '  A["queryFn throws"] --> B{"nenThuLai: LoiApi 4xx?"}',
+    '  B -->|"yes: 404, 400"| X["No retry: error at once, 1 call"]',
+    '  B -->|"no: network, 5xx"| C{"Failed fewer than 3 times?"}',
+    '  C -->|"yes"| D["Wait 1 s, then 2 s, then 4 s, call again"]',
+    '  D --> A',
+    '  C -->|"no"| E["status = error after 4 calls, about 7 s"]',
+  ),
+  ranhGioiVi: LM(
+    'flowchart TB',
+    '  App["App"] --> R1["RanhGioiLoi"]',
+    '  App --> R2["RanhGioiLoi"]',
+    '  App --> R3["RanhGioiLoi"]',
+    '  R1 --> K["KhuBacSi"]',
+    '  R2 --> L["LuongDatLich: vẫn chạy"]',
+    '  R3 --> LH["LichHenCuaToi: vẫn chạy"]',
+    '  K -->|"một thẻ ném lỗi lúc render"| F["RanhGioiLoi gần nhất vẽ thay: Phần này gặp sự cố"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class F xau',
+    '  class L,LH tot',
+  ),
+  ranhGioiEn: LM(
+    'flowchart TB',
+    '  App["App"] --> R1["RanhGioiLoi"]',
+    '  App --> R2["RanhGioiLoi"]',
+    '  App --> R3["RanhGioiLoi"]',
+    '  R1 --> K["KhuBacSi"]',
+    '  R2 --> L["LuongDatLich: still works"]',
+    '  R3 --> LH["LichHenCuaToi: still works"]',
+    '  K -->|"one card throws while rendering"| F["The nearest RanhGioiLoi draws instead: Phần này gặp sự cố"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class F xau',
+    '  class L,LH tot',
+  ),
+};
 
 const L0 = {
   slug: 'rx-6-0-slides',
@@ -219,6 +475,7 @@ ${pre('ts', SN.node)}
 ${pre('tsx', SN.mainMsw)}
 ${pre('ts', SN.setupMsw)}
 <p><code>onUnhandledRequest: 'error'</code> in tests is a safety net: a request with no handler fails the test instead of silently going out to the internet. In the browser the app uses <code>'bypass'</code> so Vite's own requests pass through untouched. This app has no real backend until Chapter 14, so it always starts the fake API; a project with a real server starts it only in development (<code>if (import.meta.env.DEV)</code>).</p>
+${SD.mswEn}
 
 <h3>fetch has two steps — and it does not throw on 404</h3>
 ${S6(5, 'fetch không ném lỗi với 404: tự kiểm res.ok')}
@@ -249,6 +506,7 @@ ${out(OUT.duaTest)}
 <div class="callout"><p><strong>JS quick reminder — why each run has its own flag (closure).</strong> A function remembers the variables that existed where it was created. The <code>.then</code> callback and the cleanup were both created inside the same effect run, so they share <em>that run's</em> <code>boQua</code>. The next run creates a brand-new <code>boQua</code>. That is a <em>closure</em>, and it is the whole trick; Lesson 4.3 went through it step by step.</p></div>
 <p><strong>③ AbortController</strong> goes one step further and actually cancels the request. <code>new AbortController()</code> gives you a <code>signal</code> to pass to <code>fetch</code> and an <code>abort()</code> method; calling <code>abort()</code> in the cleanup stops the download (the browser's Network tab shows the request as "canceled") and makes the <code>fetch</code> Promise reject with an <code>AbortError</code>. You catch that one and ignore it — it is not a real error, you caused it. In the test above, the log line "bị huỷ: bs-1" is MSW seeing the request's signal abort.</p>
 <p>Which one? react.dev's own advice is to prefer the flag as the baseline, because an abort signal only protects the <code>fetch</code> itself — if more asynchronous steps are chained after it, only a flag checked right before <code>setState</code> covers them. In practice you combine both: abort to save bandwidth, check before setting state.</p>
+${SD.suaDuaEn}
 <div class="pitfall co-tieu-de"><p><strong>Trap — <code>instanceof DOMException</code> works in the browser and fails in the test.</strong> The first version of <code>HoSoCoHuy</code> ignored the cancellation with <code>if (loi instanceof DOMException &amp;&amp; loi.name === 'AbortError') return;</code>. In Chromium that works. In Vitest the error comes from Node's <code>AbortController</code>, whose <code>DOMException</code> is a different class from the one jsdom puts on <code>window</code> — <code>instanceof</code> says <code>false</code>, the code re-throws, and the run ends with:</p>
 ${out(OUT.abortRealm)}
 <p>Ask the question you actually care about: <code>if (boHuy.signal.aborted) return;</code> — "did <em>I</em> cancel this?". It is true in every environment.</p></div>
@@ -257,6 +515,7 @@ ${out(OUT.abortRealm)}
 <p>Open the Network tab while developing and every effect-based fetch appears twice. That is not a bug in your code: in development, <code>&lt;StrictMode&gt;</code> mounts every component, immediately unmounts it, and mounts it again, precisely to expose effects that forget to clean up. Measured in Chromium with the example page, drawing one box at a time:</p>
 ${out(OUT.strict)}
 <p>Two things to take from this. First, versions ②③ are correct <em>despite</em> the double request — the first run is cleaned up, so its answer is ignored or aborted. Do not "fix" the double request by removing <code>StrictMode</code> or by adding a "have I fetched already?" ref; you would only hide the missing cleanup. StrictMode only does this in development (react.dev: <em>StrictMode</em> reference). Second, even <code>useQuery</code> sent two requests here. TanStack Query's documentation explains why: when your query function <em>consumes</em> the <code>signal</code>, the library is allowed to cancel the query when its last component unmounts — and StrictMode's unmount does exactly that. Without the signal (⑤), the second mount finds the request already in flight and joins it: one request.</p>
+${SD.strictEn}
 
 <h3>Doing it properly by hand: a useFetch hook — and what it still lacks</h3>
 ${S6(8, 'useFetch tự viết vẫn thiếu năm thứ · StrictMode')}
@@ -385,6 +644,7 @@ ${pre('ts', SN.node)}
 ${pre('tsx', SN.mainMsw)}
 ${pre('ts', SN.setupMsw)}
 <p><code>onUnhandledRequest: 'error'</code> trong test là lưới an toàn: request nào không có handler thì test hỏng ngay, thay vì lặng lẽ gọi ra Internet. Trên trình duyệt app dùng <code>'bypass'</code> để request của chính Vite đi qua bình thường. App này chưa có backend thật cho tới Chương 14 nên luôn bật API giả; dự án có máy chủ thật thì chỉ bật khi dev (<code>if (import.meta.env.DEV)</code>).</p>
+${SD.mswVi}
 
 <h3>fetch có hai bước — và nó không ném lỗi với 404</h3>
 ${S6(5, 'fetch không ném lỗi với 404: tự kiểm res.ok')}
@@ -415,6 +675,7 @@ ${out(OUT.duaTest)}
 <div class="callout"><p><strong>JS nhắc nhanh — vì sao mỗi lượt có một cờ riêng (closure).</strong> Một hàm nhớ các biến tồn tại ở nơi nó được tạo ra. Hàm trong <code>.then</code> và hàm cleanup đều được tạo trong cùng một lượt chạy effect, nên chúng dùng chung <code>boQua</code> <em>của lượt đó</em>. Lượt sau tạo một <code>boQua</code> hoàn toàn mới. Đó là <em>closure</em> (bao đóng), và đó là toàn bộ mánh; Bài 4.3 đã đi qua từng bước.</p></div>
 <p><strong>③ AbortController</strong> đi thêm một bước: huỷ hẳn request. <code>new AbortController()</code> cho bạn một <code>signal</code> để đưa vào <code>fetch</code> và một hàm <code>abort()</code>; gọi <code>abort()</code> trong cleanup sẽ dừng việc tải (tab Network của trình duyệt ghi request là "canceled") và làm Promise của <code>fetch</code> reject với lỗi <code>AbortError</code>. Bạn bắt lỗi đó và lờ đi — nó không phải lỗi thật, chính bạn gây ra nó. Trong test ở trên, dòng log "bị huỷ: bs-1" là MSW thấy signal của request bị abort.</p>
 <p>Chọn cái nào? react.dev khuyên lấy cờ làm mức nền, vì signal chỉ bảo vệ bản thân <code>fetch</code> — nếu sau đó còn chuỗi bước bất đồng bộ khác, chỉ một cờ kiểm ngay trước <code>setState</code> mới che được hết. Thực tế người ta kết hợp: abort để đỡ tốn băng thông, kiểm cờ trước khi đặt state.</p>
+${SD.suaDuaVi}
 <div class="pitfall co-tieu-de"><p><strong>Bẫy — <code>instanceof DOMException</code> chạy trên trình duyệt, hỏng trong test.</strong> Phiên bản đầu của <code>HoSoCoHuy</code> lờ việc huỷ bằng <code>if (loi instanceof DOMException &amp;&amp; loi.name === 'AbortError') return;</code>. Trong Chromium thì chạy. Trong Vitest, lỗi đến từ <code>AbortController</code> của Node, mà <code>DOMException</code> của Node là một class KHÁC với class jsdom gắn lên <code>window</code> — <code>instanceof</code> trả <code>false</code>, code ném lại lỗi, và lượt chạy kết thúc bằng:</p>
 ${out(OUT.abortRealm)}
 <p>Hãy hỏi đúng câu bạn cần: <code>if (boHuy.signal.aborted) return;</code> — "có phải <em>chính mình</em> huỷ không?". Câu đó đúng ở mọi môi trường.</p></div>
@@ -423,6 +684,7 @@ ${out(OUT.abortRealm)}
 <p>Mở tab Network lúc đang dev, mọi fetch trong effect đều hiện hai lần. Không phải bug trong code của bạn: khi dev, <code>&lt;StrictMode&gt;</code> gắn mọi component, tháo ngay, rồi gắn lại — chính để lộ những effect quên dọn dẹp. Đo trong Chromium với trang ví dụ, mỗi lần chỉ vẽ một ô:</p>
 ${out(OUT.strict)}
 <p>Hai điều rút ra. Một, phiên bản ②③ đúng <em>dù</em> có hai request — lượt đầu đã được dọn, nên câu trả lời của nó bị lờ hoặc bị huỷ. Đừng "sửa" hai request bằng cách bỏ <code>StrictMode</code> hay thêm một ref "đã tải chưa?"; bạn chỉ giấu đi chỗ thiếu dọn dẹp. StrictMode chỉ làm việc này khi dev (react.dev, trang tham khảo <em>StrictMode</em>). Hai, ngay cả <code>useQuery</code> cũng gửi hai request ở đây. Tài liệu TanStack Query giải thích: khi hàm tải của bạn <em>dùng</em> <code>signal</code>, thư viện được phép huỷ query khi component cuối cùng tháo ra — và lần tháo của StrictMode làm đúng điều đó. Không dùng signal (⑤), lần gắn thứ hai thấy request đang bay và nhập vào nó: một request.</p>
+${SD.strictVi}
 
 <h3>Tự viết cho tử tế: hook useFetch — và những gì nó vẫn thiếu</h3>
 ${S6(8, 'useFetch tự viết vẫn thiếu năm thứ · StrictMode')}
@@ -547,6 +809,7 @@ ${S6(10, 'Query key là địa chỉ trong cache')}
 ${pre('ts', SN.khoa)}
 ${out(LOC(OUT.cacheLog, (d) => d.startsWith('$') || d.startsWith('[invalidate')))}
 <p>Invalidating <code>['bac-si', 'bs-1']</code> refreshed only that doctor's slots; invalidating <code>['bac-si']</code> refreshed the list <em>and</em> every doctor's slots. Lesson 6.3 relies on this: after a booking, "everything under this doctor's time slots is stale".</p>
+${SD.khoaEn}
 <p>The rule that matters most: <strong>everything the query function uses must be in the key.</strong> The key is also the dependency list — when it changes, TanStack fetches. Leave a variable out and the cache cannot tell the requests apart:</p>
 ${out(OUT.keyThieu)}
 <div class="pitfall co-tieu-de"><p><strong>Trap — every doctor shows the first doctor's time slots.</strong> A time-slot query written as <code>queryKey: ['khung-gio']</code> with <code>bacSiId</code> used only inside <code>queryFn</code>. The first doctor loads correctly. Switch to another doctor: the key did not change, so there is nothing to fetch — the measured test above still shows <code>bs-1</code>'s slots while viewing <code>bs-2</code>, with a single request in the log. The fix is the key <code>['bac-si', bacSiId, 'khung-gio', ngay]</code>. Keeping every key in one file (<code>api/khoa.ts</code>, a "query key factory") makes this mistake visible in review.</p></div>
@@ -561,6 +824,7 @@ ${S6(11, 'Vòng đời một mục cache: tươi, cũ, xoá')}
 <p>Measured in the lesson's tests:</p>
 ${out(LOC(OUT.cacheLog, (d) => ['staleTime', 'focus', 'gcTime'].some((k) => d.includes(k))))}
 <p>Read it slowly. With <code>staleTime</code> of five minutes, mounting the list again rendered six doctors on the <em>first</em> render and sent no request. With the default <code>0</code>, it also rendered six doctors immediately — "(đang làm mới)" shows a background refetch was running — and sent a second request. Returning to the tab refetched only the query that was stale. With <code>gcTime</code> set to 100 ms for the test, the entry survived unmounting and was gone 150 ms later.</p>
+${SD.vongDoiEn}
 <p>So <code>staleTime</code> is a product decision about each kind of data. The clinic app sets:</p>
 <table>
 <thead><tr><th>Data</th><th>staleTime</th><th>Why</th></tr></thead>
@@ -590,6 +854,7 @@ ${S6(13, 'Gộp request trùng, staleTime, focus, gcTime — đo thật')}
 <p>After this lesson, three places in the app need the doctors: the doctor area, step 1 of the booking flow and the appointments list (for names). They all call <code>useBacSi()</code>. Measured:</p>
 ${out(LOC(OUT.cacheLog, (d) => d.startsWith('[gộp')))}
 <p>This is <em>deduplication</em>: while a request for a key is in flight, every other component asking for that key joins it. It is also why the header's appointment counter and the "My appointments" list can both call <code>useLichHen()</code> without doubling traffic. Chapter 5 made the appointment list a Zustand store; now it is server data, so it moved to the cache, and the store keeps only favourites (a client preference). Two copies of the same server data — one in a store, one in the cache — is how you get "this screen says 2, that one says 3".</p>
+${SD.gopEn}
 
 <h3>DevTools: look at the cache instead of guessing</h3>
 ${S6(14, 'DevTools của TanStack Query — ảnh chụp thật')}
@@ -704,6 +969,7 @@ ${S6(10, 'Query key là địa chỉ trong cache')}
 ${pre('ts', SN.khoa)}
 ${out(LOC(OUT.cacheLog, (d) => d.startsWith('$') || d.startsWith('[invalidate')))}
 <p>Invalidate <code>['bac-si', 'bs-1']</code> chỉ làm mới khung giờ của bác sĩ đó; invalidate <code>['bac-si']</code> làm mới danh sách <em>và</em> khung giờ của mọi bác sĩ. Bài 6.3 dựa vào điều này: đặt lịch xong thì "mọi thứ dưới khung giờ của bác sĩ này đã cũ".</p>
+${SD.khoaVi}
 <p>Luật quan trọng nhất: <strong>mọi thứ hàm tải dùng phải nằm trong key.</strong> Key cũng chính là danh sách phụ thuộc — key đổi thì TanStack tải. Bỏ sót một biến là cache không phân biệt được các request:</p>
 ${out(OUT.keyThieu)}
 <div class="pitfall co-tieu-de"><p><strong>Bẫy — bác sĩ nào cũng hiện khung giờ của bác sĩ đầu tiên.</strong> Một query khung giờ viết <code>queryKey: ['khung-gio']</code>, còn <code>bacSiId</code> chỉ dùng bên trong <code>queryFn</code>. Bác sĩ đầu tiên tải đúng. Chuyển sang bác sĩ khác: key không đổi, nên chẳng có gì để tải — test đo ở trên vẫn hiện khung giờ của <code>bs-1</code> khi đang xem <code>bs-2</code>, với đúng một request trong log. Cách sửa là key <code>['bac-si', bacSiId, 'khung-gio', ngay]</code>. Gom mọi key vào một file (<code>api/khoa.ts</code>, một "query key factory") giúp lỗi này lộ ra khi review.</p></div>
@@ -718,6 +984,7 @@ ${S6(11, 'Vòng đời một mục cache: tươi, cũ, xoá')}
 <p>Đo trong test của bài:</p>
 ${out(LOC(OUT.cacheLog, (d) => ['staleTime', 'focus', 'gcTime'].some((k) => d.includes(k))))}
 <p>Đọc chậm. Với <code>staleTime</code> năm phút, gắn lại danh sách hiện sáu bác sĩ ngay lần render <em>đầu tiên</em> và không gửi request nào. Với mặc định <code>0</code>, nó cũng hiện sáu bác sĩ ngay — "(đang làm mới)" cho thấy một lần tải nền đang chạy — và gửi request thứ hai. Quay lại tab thì chỉ query đã cũ được tải lại. Với <code>gcTime</code> đặt 100 ms cho test, mục cache sống qua lần tháo và biến mất 150 ms sau.</p>
+${SD.vongDoiVi}
 <p>Vậy <code>staleTime</code> là quyết định sản phẩm cho từng loại dữ liệu. App phòng khám đặt:</p>
 <table>
 <thead><tr><th>Dữ liệu</th><th>staleTime</th><th>Vì sao</th></tr></thead>
@@ -747,6 +1014,7 @@ ${S6(13, 'Gộp request trùng, staleTime, focus, gcTime — đo thật')}
 <p>Sau bài này, ba chỗ trong app cần danh sách bác sĩ: khu bác sĩ, bước 1 của luồng đặt lịch và danh sách lịch hẹn (để lấy tên). Cả ba gọi <code>useBacSi()</code>. Đo thật:</p>
 ${out(LOC(OUT.cacheLog, (d) => d.startsWith('[gộp')))}
 <p>Đó là <em>gộp request trùng</em> (deduplication): trong lúc request của một key đang bay, component nào xin cùng key đó thì nhập vào nó. Cũng vì vậy mà bộ đếm lịch hẹn trên Header và danh sách "Lịch hẹn của tôi" cùng gọi <code>useLichHen()</code> mà không gấp đôi lưu lượng. Chương 5 để danh sách lịch hẹn trong store Zustand; giờ nó là dữ liệu máy chủ nên chuyển sang cache, còn store chỉ giữ yêu thích (một lựa chọn phía client). Hai bản chép của cùng dữ liệu máy chủ — một trong store, một trong cache — chính là cách bạn nhận được "màn này nói 2, màn kia nói 3".</p>
+${SD.gopVi}
 
 <h3>DevTools: nhìn cache thay vì đoán</h3>
 ${S6(14, 'DevTools của TanStack Query — ảnh chụp thật')}
@@ -854,6 +1122,7 @@ ${pre('ts', SN.useDatLich)}
 <p>Measured in the lesson's test — a component that shows the slots and books 14:00:</p>
 ${out(DAU(OUT.mutateLog, 0, 3))}
 <p>The status went <code>idle → pending → success</code>, the POST sat between two GETs of the same slots, and after the second GET the 14:00 slot is <code>conTrong=false</code> in the cache — nobody had to update it by hand.</p>
+${SD.mutationEn}
 <p>The booking flow of Chapter 5 kept <code>dangGui</code>, <code>loiGui</code> and <code>daDat</code> in its reducer. Those three are exactly the state of one write to the server, and the mutation now owns them (<code>isPending</code>, <code>error</code>, <code>data</code>). Keeping both would be two sources of truth for the same thing, so the reducer shrinks to the user's choices:</p>
 ${pre('ts', SN.reducerDau)}
 ${pre('tsx', SN.luongDau)}
@@ -893,6 +1162,7 @@ ${pre('ts', SN.useLichHen)}
 <li><strong>Return the snapshot</strong> — whatever <code>onMutate</code> returns arrives as the third argument of <code>onError</code> and <code>onSettled</code>.</li>
 <li><strong><code>onError</code> restores it, <code>onSettled</code> invalidates</strong> — after success or failure, fetch the truth from the server.</li>
 </ol>
+${SD.lacQuanEn}
 ${pre('tsx', SN.lichHenDs)}
 ${out(DAU(OUT.lacQuan, 0, 4))}
 <p>"Đã huỷ" appeared 2 ms after the click, while the server still said <code>cho-xac-nhan</code>; the server caught up about 400 ms later. When the fake server returned 500 instead, the list went back to "Chờ xác nhận" and a toast said so (Lesson 6.4 builds the toast). The screenshot on slide 25 is the same scenario in Chromium, with <code>?loi=huy</code>.</p>
@@ -988,6 +1258,7 @@ ${pre('ts', SN.useDatLich)}
 <p>Đo trong test của bài — một component hiện khung giờ và đặt 14:00:</p>
 ${out(DAU(OUT.mutateLog, 0, 3))}
 <p>Status đi <code>idle → pending → success</code>, POST nằm giữa hai lần GET cùng khung giờ, và sau lần GET thứ hai khung 14:00 trong cache là <code>conTrong=false</code> — không ai phải tự tay sửa nó.</p>
+${SD.mutationVi}
 <p>Luồng đặt lịch của Chương 5 giữ <code>dangGui</code>, <code>loiGui</code> và <code>daDat</code> trong reducer. Ba thứ đó chính là trạng thái của một lần ghi lên máy chủ, và giờ mutation giữ chúng (<code>isPending</code>, <code>error</code>, <code>data</code>). Giữ cả hai là hai nguồn sự thật cho cùng một thứ, nên reducer co lại chỉ còn lựa chọn của người dùng:</p>
 ${pre('ts', SN.reducerDau)}
 ${pre('tsx', SN.luongDau)}
@@ -1027,6 +1298,7 @@ ${pre('ts', SN.useLichHen)}
 <li><strong>Trả bản chụp về</strong> — thứ <code>onMutate</code> trả về sẽ tới làm tham số thứ ba của <code>onError</code> và <code>onSettled</code>.</li>
 <li><strong><code>onError</code> trả lại, <code>onSettled</code> invalidate</strong> — dù được hay hỏng, lấy sự thật từ máy chủ về.</li>
 </ol>
+${SD.lacQuanVi}
 ${pre('tsx', SN.lichHenDs)}
 ${out(DAU(OUT.lacQuan, 0, 4))}
 <p>"Đã huỷ" hiện 2 ms sau cú bấm, trong khi máy chủ vẫn ghi <code>cho-xac-nhan</code>; khoảng 400 ms sau máy chủ mới theo kịp. Khi máy chủ giả trả 500, danh sách quay về "Chờ xác nhận" và một thông báo nổi báo điều đó (Bài 6.4 dựng thông báo). Ảnh chụp ở slide 25 là đúng kịch bản đó trong Chromium, với <code>?loi=huy</code>.</p>
@@ -1129,6 +1401,7 @@ ${pre('tsx', SN.khuBacSiTrangThai)}
 </tbody>
 </table>
 <p>Step 2 asks "is there <em>no data</em>?", not "is there an error?". The difference matters as soon as a background refresh fails — section 5 below measures it. <code>error!</code> is the non-null assertion from Lesson 6.2: once the query is not pending and has no data, TanStack guarantees an error exists.</p>
+${SD.thuTuEn}
 
 <h3>Loading: a skeleton in the right shape</h3>
 ${S6(20, 'Skeleton đúng hình — ảnh chụp thật')}
@@ -1157,6 +1430,7 @@ ${out(OUT.retryLog)}
 <p>Four calls at 31, 1042, 3047 and 7050 ms; <code>failureCount</code> climbed from 0 to 4; only then did the query become <code>error</code>. For a network blip that is exactly right — the user never sees an error. For a 404 it is seven seconds of pointless waiting: the doctor does not exist and will not exist on the fourth try. The project's client therefore retries only what can recover:</p>
 ${pre('ts', SN.queryClient)}
 <p>Measured: 404 → one call, 500 → four. While retries are running, the query exposes <code>failureCount</code> and <code>failureReason</code> if you want to show "Đang thử lại lần 2…". In tests set <code>retry: false</code> (Lesson 6.2), or every error test waits seven seconds.</p>
+${SD.thuLaiEn}
 <div class="callout"><p><strong>JS quick reminder — <code>instanceof</code> with a class.</strong> <code>loi instanceof LoiApi</code> is <code>true</code> only for errors created with <code>new LoiApi(…)</code> — the ones that carry an HTTP status. A <code>TypeError</code> from a dropped connection is not a <code>LoiApi</code>, so it falls through to "retry". (The cross-realm trap of Lesson 6.1 does not apply here: <code>LoiApi</code> is your own class, defined once.)</p></div>
 
 <h3>A refresh failed? Keep the data you have</h3>
@@ -1175,6 +1449,7 @@ ${pre('tsx', SN.app)}
 ${pre('tsx', SN.bai4)}
 ${out(OUT.ranhGioiLog)}
 <p>What a boundary does <strong>not</strong> catch: errors in event handlers, in <code>setTimeout</code>, in Promises — those do not happen during rendering. That is why data errors are shown inline from <code>isError</code>, and why a query can opt in with <code>throwOnError: true</code> when you <em>want</em> its error to go to the nearest boundary. Pair it with <code>QueryErrorResetBoundary</code>: its <code>reset</code> clears the query's error, so "Tải lại phần này" really fetches again instead of re-throwing the cached error — measured above: two calls to the API.</p>
+${SD.ranhGioiEn}
 
 <h3>Toasts for failed writes — registered once for the whole app</h3>
 ${S6(25, 'Thông báo nổi cho lỗi của mutation')}
@@ -1287,6 +1562,7 @@ ${pre('tsx', SN.khuBacSiTrangThai)}
 </tbody>
 </table>
 <p>Bước 2 hỏi "có phải <em>không có dữ liệu</em>?", chứ không hỏi "có lỗi không?". Khác biệt đó lộ ra ngay khi một lần làm mới nền thất bại — mục 5 dưới đây đo nó. <code>error!</code> là non-null assertion của Bài 6.2: khi query không còn pending mà không có dữ liệu, TanStack bảo đảm có một lỗi.</p>
+${SD.thuTuVi}
 
 <h3>Đang tải: skeleton đúng hình</h3>
 ${S6(20, 'Skeleton đúng hình — ảnh chụp thật')}
@@ -1315,6 +1591,7 @@ ${out(OUT.retryLog)}
 <p>Bốn lần gọi lúc 31, 1042, 3047 và 7050 ms; <code>failureCount</code> tăng từ 0 lên 4; lúc đó query mới thành <code>error</code>. Với mạng chập chờn thì đúng hệt điều cần — người dùng không bao giờ thấy lỗi. Với 404 thì là bảy giây chờ vô ích: bác sĩ không tồn tại và lần thứ tư cũng không tồn tại. Vì vậy client của dự án chỉ thử lại thứ có thể tự khỏi:</p>
 ${pre('ts', SN.queryClient)}
 <p>Đo thật: 404 → một lần gọi, 500 → bốn. Trong lúc đang thử lại, query có <code>failureCount</code> và <code>failureReason</code> nếu bạn muốn hiện "Đang thử lại lần 2…". Trong test đặt <code>retry: false</code> (Bài 6.2), không thì mỗi test lỗi đợi bảy giây.</p>
+${SD.thuLaiVi}
 <div class="callout"><p><strong>JS nhắc nhanh — <code>instanceof</code> với class.</strong> <code>loi instanceof LoiApi</code> chỉ <code>true</code> với lỗi tạo bằng <code>new LoiApi(…)</code> — loại mang mã HTTP. Một <code>TypeError</code> do rớt kết nối không phải <code>LoiApi</code>, nên nó rơi xuống nhánh "thử lại". (Bẫy "khác môi trường" của Bài 6.1 không áp dụng ở đây: <code>LoiApi</code> là class của chính bạn, định nghĩa một lần.)</p></div>
 
 <h3>Làm mới hỏng? Giữ dữ liệu đang có</h3>
@@ -1333,6 +1610,7 @@ ${pre('tsx', SN.app)}
 ${pre('tsx', SN.bai4)}
 ${out(OUT.ranhGioiLog)}
 <p>Thứ ranh giới lỗi <strong>không</strong> bắt: lỗi trong event handler, trong <code>setTimeout</code>, trong Promise — chúng không xảy ra lúc render. Vì vậy lỗi dữ liệu được hiện tại chỗ từ <code>isError</code>, và một query có thể chủ động bật <code>throwOnError: true</code> khi bạn <em>muốn</em> lỗi của nó lên ranh giới gần nhất. Đi kèm <code>QueryErrorResetBoundary</code>: <code>reset</code> của nó xoá lỗi của query, nên "Tải lại phần này" tải lại thật thay vì ném lại lỗi đang cache — đo ở trên: hai lần gọi API.</p>
+${SD.ranhGioiVi}
 
 <h3>Thông báo nổi cho lần ghi hỏng — đăng ký một lần cho cả app</h3>
 ${S6(25, 'Thông báo nổi cho lỗi của mutation')}

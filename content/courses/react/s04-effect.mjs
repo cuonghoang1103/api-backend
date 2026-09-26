@@ -10,6 +10,260 @@ import { gallery, slide } from './_slides.mjs';
  * Deck: scripts/slides-src/rx-04.mjs (29 slide). Ảnh chụp giao diện: scripts/slides-src/rx-anh/rx-04/.
  */
 
+/* ─── Sơ đồ mermaid trong bài (≤ 10 nút, nhãn ngắn; khối EN nhãn tiếng Anh, khối VI nhãn tiếng Việt) ─── */
+const H = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/`/g, '&#96;').replace(/\$\{/g, '&#36;{');
+/** Sơ đồ mermaid: trang học đọc textContent của <code class="language-mermaid"> rồi vẽ (LearnPageClient → mermaidRuntime). */
+const MM = (src) => '<pre><code class="language-mermaid">' + H(src.trim()) + '</code></pre>';
+const L = (...dong) => MM(dong.join('\n'));
+const SD = {
+  thoiGianEn: L(
+    "flowchart TB",
+    "  T[\"Trigger: first display, or a setState\"] --> R[\"Render: React calls your components, the DOM is untouched\"]",
+    "  R --> C[\"Commit: React changes the real DOM\"]",
+    "  C --> P[\"Paint: the browser draws\"]",
+    "  P --> E[\"useEffect setup runs: the DOM exists, it can read 07:30\"]",
+    "  C -.->|\"rare case, before paint\"| L[\"useLayoutEffect (Chapter 11)\"]",
+  ),
+  thoiGianVi: L(
+    "flowchart TB",
+    "  T[\"Trigger: lần hiện đầu, hoặc một setState\"] --> R[\"Render: React gọi các component, DOM chưa bị đụng\"]",
+    "  R --> C[\"Commit: React sửa DOM thật\"]",
+    "  C --> P[\"Paint: trình duyệt vẽ\"]",
+    "  P --> E[\"setup của useEffect chạy: DOM đã có, đọc được 07:30\"]",
+    "  C -.->|\"trường hợp hiếm, trước khi vẽ\"| L[\"useLayoutEffect (Chương 11)\"]",
+  ),
+  phuThuocEn: L(
+    "flowchart TB",
+    "  R[\"A render has been committed\"] --> Q{{\"Dependency array?\"}}",
+    "  Q -->|\"no array\"| RUN[\"Run the effect again\"]",
+    "  Q -->|\"empty array\"| ONCE[\"Only after the first display\"]",
+    "  Q -->|\"a list, e.g. bacSiId\"| CMP{{\"Object.is equal, every item?\"}}",
+    "  CMP -->|\"all equal\"| SKIP[\"Skip this time\"]",
+    "  CMP -->|\"one differs\"| RUN",
+    "  RUN --> CL[\"The OLD cleanup runs first, then the new setup\"]",
+    "  U[\"Component removed from the screen\"] --> LAST[\"The last cleanup runs\"]",
+  ),
+  phuThuocVi: L(
+    "flowchart TB",
+    "  R[\"Một lần render đã commit\"] --> Q{{\"Mảng dependency?\"}}",
+    "  Q -->|\"không có mảng\"| RUN[\"Chạy lại effect\"]",
+    "  Q -->|\"mảng rỗng\"| ONCE[\"Chỉ sau lần hiện đầu tiên\"]",
+    "  Q -->|\"có danh sách, vd bacSiId\"| CMP{{\"Object.is bằng, mọi phần tử?\"}}",
+    "  CMP -->|\"đều bằng\"| SKIP[\"Lần này bỏ qua\"]",
+    "  CMP -->|\"có cái khác\"| RUN",
+    "  RUN --> CL[\"Cleanup CŨ chạy trước, rồi mới tới setup mới\"]",
+    "  U[\"Component bị gỡ khỏi màn hình\"] --> LAST[\"Cleanup cuối cùng chạy\"]",
+  ),
+  strictEn: L(
+    "sequenceDiagram",
+    "  participant R as React (development, StrictMode)",
+    "  participant E as TieuDeBacSi effect",
+    "  R->>E: setup: set the title to BS. Nguyễn Minh An",
+    "  R->>E: cleanup: as if the component were removed",
+    "  R->>E: setup again",
+    "  Note over R,E: Production: setup once. With a correct cleanup, both end in the same state.",
+  ),
+  strictVi: L(
+    "sequenceDiagram",
+    "  participant R as React (lúc phát triển, StrictMode)",
+    "  participant E as effect của TieuDeBacSi",
+    "  R->>E: setup: đặt tiêu đề BS. Nguyễn Minh An",
+    "  R->>E: cleanup: như thể component bị gỡ",
+    "  R->>E: setup lần nữa",
+    "  Note over R,E: Production: setup một lần. Cleanup đúng thì hai bên kết thúc giống nhau.",
+  ),
+  danXuatEn: L(
+    "sequenceDiagram",
+    "  participant U as User",
+    "  participant C as LocBangEffect",
+    "  participant E as Its effect",
+    "  U->>C: types l: setTuKhoa(l)",
+    "  C->>C: render: input shows l, list still 6 ✗ (committed)",
+    "  C->>E: after the commit the effect runs",
+    "  E->>C: setKetQua(2 doctors)",
+    "  C->>C: another render: list 2",
+    "  Note over U,C: LocTrongRender: one render per key, the list computed from tuKhoa right there",
+  ),
+  danXuatVi: L(
+    "sequenceDiagram",
+    "  participant U as Người dùng",
+    "  participant C as LocBangEffect",
+    "  participant E as Effect của nó",
+    "  U->>C: gõ l: setTuKhoa(l)",
+    "  C->>C: render: ô hiện l, danh sách vẫn 6 ✗ (đã commit)",
+    "  C->>E: sau commit effect mới chạy",
+    "  E->>C: setKetQua(2 bác sĩ)",
+    "  C->>C: thêm một lần render: danh sách 2",
+    "  Note over U,C: LocTrongRender: mỗi phím một render, danh sách tính ngay từ tuKhoa",
+  ),
+  duaNhauEn: L(
+    "sequenceDiagram",
+    "  participant U as Receptionist",
+    "  participant C as GioiThieuDua",
+    "  participant S as Server",
+    "  U->>C: open bs-1",
+    "  C->>S: taiGioiThieu(bs-1), takes 900 ms",
+    "  U->>C: switch to bs-2 at once",
+    "  C->>S: taiGioiThieu(bs-2), takes 100 ms",
+    "  S-->>C: bs-2 answers: Trần Thu Hà",
+    "  S-->>C: bs-1 answers last: Nguyễn Minh An overwrites it ✗",
+    "  Note over C,S: GioiThieuCoBoQua: bs-1 run's cleanup set boQua = true, its late answer is ignored ✓",
+  ),
+  duaNhauVi: L(
+    "sequenceDiagram",
+    "  participant U as Lễ tân",
+    "  participant C as GioiThieuDua",
+    "  participant S as Máy chủ",
+    "  U->>C: mở bs-1",
+    "  C->>S: taiGioiThieu(bs-1), mất 900 ms",
+    "  U->>C: đổi ngay sang bs-2",
+    "  C->>S: taiGioiThieu(bs-2), mất 100 ms",
+    "  S-->>C: bs-2 trả lời: Trần Thu Hà",
+    "  S-->>C: bs-1 trả lời sau cùng: Nguyễn Minh An đè lên ✗",
+    "  Note over C,S: GioiThieuCoBoQua: cleanup của lượt bs-1 đã đặt boQua = true, câu trả lời muộn bị bỏ ✓",
+  ),
+  baCauEn: L(
+    "flowchart TB",
+    "  Q1{{\"Calculable from props or state?\"}} -->|\"yes\"| A[\"Calculate during render, useMemo only if measured slow\"]",
+    "  Q1 -->|\"no\"| Q2{{\"Caused by a user action?\"}}",
+    "  Q2 -->|\"yes\"| B[\"Do it in the event handler\"]",
+    "  Q2 -->|\"no\"| Q3{{\"Syncs with something outside React?\"}}",
+    "  Q3 -->|\"yes\"| C[\"An effect with cleanup, or a custom hook around it\"]",
+    "  C -.->|\"special case: loading server data\"| D[\"From Chapter 6: a data library, not a hand-written effect\"]",
+  ),
+  baCauVi: L(
+    "flowchart TB",
+    "  Q1{{\"Tính được từ props, state?\"}} -->|\"được\"| A[\"Tính trong lúc render, useMemo chỉ khi đo thấy chậm\"]",
+    "  Q1 -->|\"không\"| Q2{{\"Do người dùng gây ra?\"}}",
+    "  Q2 -->|\"đúng\"| B[\"Làm trong handler sự kiện\"]",
+    "  Q2 -->|\"không\"| Q3{{\"Đồng bộ với thứ ngoài React?\"}}",
+    "  Q3 -->|\"đúng\"| C[\"Effect có cleanup, hoặc custom hook bọc nó\"]",
+    "  C -.->|\"trường hợp riêng: tải dữ liệu máy chủ\"| D[\"Từ Chương 6: thư viện dữ liệu, không tự viết effect\"]",
+  ),
+  vongLapEn: L(
+    "flowchart TB",
+    "  R[\"Render\"] --> E{{\"Effect runs again?\"}}",
+    "  E -->|\"no dependency array\"| S[\"The effect calls setState\"]",
+    "  E -->|\"a dependency is a new object or function every render\"| S",
+    "  E -->|\"dependencies unchanged\"| STOP[\"The loop stops\"]",
+    "  S --> R",
+    "  S -.-> M[\"Maximum update depth exceeded, thousands of renders\"]",
+  ),
+  vongLapVi: L(
+    "flowchart TB",
+    "  R[\"Render\"] --> E{{\"Effect chạy lại?\"}}",
+    "  E -->|\"không có mảng dependency\"| S[\"Effect gọi setState\"]",
+    "  E -->|\"một dependency là object hoặc hàm mới mỗi lần render\"| S",
+    "  E -->|\"dependency không đổi\"| STOP[\"Vòng lặp dừng\"]",
+    "  S --> R",
+    "  S -.-> M[\"Maximum update depth exceeded, hàng nghìn lần render\"]",
+  ),
+  closureEn: L(
+    "sequenceDiagram",
+    "  participant R1 as Render 1 (giay = 0)",
+    "  participant T as The setInterval callback",
+    "  participant R as Later renders",
+    "  R1->>T: effect with an empty array creates it: it remembers giay = 0",
+    "  T->>R: after 1 s: setGiay(0 + 1)",
+    "  R->>R: giay = 1",
+    "  T->>R: after 2 s: setGiay(0 + 1) again",
+    "  R->>R: still 1 ✗",
+    "  Note over T,R: setGiay(g → g + 1): React passes the latest value, 5 s later it shows 5 ✓",
+  ),
+  closureVi: L(
+    "sequenceDiagram",
+    "  participant R1 as Render 1 (giay = 0)",
+    "  participant T as Hàm của setInterval",
+    "  participant R as Các lần render sau",
+    "  R1->>T: effect với mảng rỗng tạo ra nó: nó nhớ giay = 0",
+    "  T->>R: sau 1 giây: setGiay(0 + 1)",
+    "  R->>R: giay = 1",
+    "  T->>R: sau 2 giây: lại setGiay(0 + 1)",
+    "  R->>R: vẫn 1 ✗",
+    "  Note over T,R: setGiay(g → g + 1): React đưa giá trị mới nhất, 5 giây sau hiện 5 ✓",
+  ),
+  congCuEn: L(
+    "flowchart TB",
+    "  Q1{{\"Calculable?\"}} -->|\"yes\"| F[\"No effect at all\"]",
+    "  Q1 -->|\"no\"| Q2{{\"New state from old state?\"}}",
+    "  Q2 -->|\"yes\"| A[\"Function update setX(cu → …), in effects, timers, callbacks\"]",
+    "  Q2 -->|\"no\"| Q3{{\"Object or function in deps?\"}}",
+    "  Q3 -->|\"yes\"| B[\"Depend on primitives, move the function into the effect; useMemo or useCallback only if it must stay the same\"]",
+    "  Q3 -->|\"no\"| Q4{{\"Latest value, no restart?\"}}",
+    "  Q4 -->|\"yes\"| E[\"useEffectEvent\"]",
+    "  Q4 -->|\"no\"| L[\"List exactly what the effect reads, as the linter says\"]",
+  ),
+  congCuVi: L(
+    "flowchart TB",
+    "  Q1{{\"Tính được?\"}} -->|\"được\"| F[\"Không cần effect\"]",
+    "  Q1 -->|\"không\"| Q2{{\"State mới từ state cũ?\"}}",
+    "  Q2 -->|\"đúng\"| A[\"Cập nhật theo hàm setX(cu → …), trong effect, hẹn giờ, callback\"]",
+    "  Q2 -->|\"không\"| Q3{{\"Object hay hàm trong deps?\"}}",
+    "  Q3 -->|\"có\"| B[\"Phụ thuộc giá trị nguyên thuỷ, đưa hàm vào trong effect; useMemo hay useCallback chỉ khi nó phải giữ nguyên\"]",
+    "  Q3 -->|\"không\"| Q4{{\"Mới nhất, không chạy lại?\"}}",
+    "  Q4 -->|\"đúng\"| E[\"useEffectEvent\"]",
+    "  Q4 -->|\"không\"| L[\"Liệt kê đúng những gì effect đọc, như linter bảo\"]",
+  ),
+  debounceEn: L(
+    "sequenceDiagram",
+    "  participant U as User",
+    "  participant I as tuKhoa (the input)",
+    "  participant H as useDebounce(tuKhoa, 300)",
+    "  participant L as The list (tuKhoaCham)",
+    "  U->>I: n, ng, ngu … nguyen, 100 ms apart",
+    "  I-->>U: every letter appears at once",
+    "  I->>H: each change: cleanup clears the old timer, a new one starts",
+    "  H->>L: 300 ms after the last key: nguyen",
+    "  L->>L: locBacSi filters once, not six times",
+  ),
+  debounceVi: L(
+    "sequenceDiagram",
+    "  participant U as Người dùng",
+    "  participant I as tuKhoa (ô nhập)",
+    "  participant H as useDebounce(tuKhoa, 300)",
+    "  participant L as Danh sách (tuKhoaCham)",
+    "  U->>I: n, ng, ngu … nguyen, cách nhau 100 ms",
+    "  I-->>U: chữ nào cũng hiện ngay",
+    "  I->>H: mỗi lần đổi: cleanup huỷ hẹn giờ cũ, đặt hẹn giờ mới",
+    "  H->>L: 300 ms sau phím cuối: nguyen",
+    "  L->>L: locBacSi lọc một lần, không phải sáu",
+  ),
+  luuNhapEn: L(
+    "flowchart TB",
+    "  O[\"Open FormDatLich for a doctor (key = bacSi.id)\"] --> R[\"useState lazy: read ban-nhap-dat-lich plus the id from localStorage once\"]",
+    "  R --> D[\"The draft becomes defaultValues\"]",
+    "  D --> T[\"The user types: the subscribe callback calls setBanNhap\"]",
+    "  T --> W[\"Effect with khoa, giaTri: localStorage.setItem\"]",
+    "  W -.->|\"reload the page\"| O",
+    "  T --> S[\"Successful submit: xoaBanNhap removes the draft\"]",
+  ),
+  luuNhapVi: L(
+    "flowchart TB",
+    "  O[\"Mở FormDatLich của một bác sĩ (key = bacSi.id)\"] --> R[\"useState lười: đọc ban-nhap-dat-lich kèm id từ localStorage một lần\"]",
+    "  R --> D[\"Bản nháp thành defaultValues\"]",
+    "  D --> T[\"Người dùng gõ: callback của subscribe gọi setBanNhap\"]",
+    "  T --> W[\"Effect theo khoa, giaTri: localStorage.setItem\"]",
+    "  W -.->|\"tải lại trang\"| O",
+    "  T --> S[\"Gửi thành công: xoaBanNhap xoá bản nháp\"]",
+  ),
+  moCuaEn: L(
+    "flowchart TB",
+    "  H[\"useGioHienTai(): useState plus an effect with setInterval\"] -->|\"bayGio, a Date\"| C[\"TrangThaiMoCua\"]",
+    "  C --> P[\"dangMoCua(bayGio): pure, tested with plain dates\"]",
+    "  P --> V[\"Đang mở cửa · 07:30, or Đang đóng cửa\"]",
+    "  H -.->|\"every 30 s: setBayGio(new Date())\"| C",
+    "  U[\"Unmount\"] --> CL[\"cleanup: clearInterval, timer count 0\"]",
+  ),
+  moCuaVi: L(
+    "flowchart TB",
+    "  H[\"useGioHienTai(): useState cộng một effect có setInterval\"] -->|\"bayGio, một Date\"| C[\"TrangThaiMoCua\"]",
+    "  C --> P[\"dangMoCua(bayGio): hàm thuần, test bằng ngày giờ thường\"]",
+    "  P --> V[\"Đang mở cửa · 07:30, hoặc Đang đóng cửa\"]",
+    "  H -.->|\"mỗi 30 giây: setBayGio(new Date())\"| C",
+    "  U[\"Gỡ component\"] --> CL[\"cleanup: clearInterval, còn 0 hẹn giờ\"]",
+  ),
+};
+
 export default {
   title: 'Chapter 4 — Effects|||Chương 4 — Effect',
   description: 'Đồng bộ với thế giới bên ngoài React — và dùng ít effect hơn: useEffect chạy khi nào, dependency, cleanup, Strict Mode chạy hai lần; những chỗ không cần effect; vòng lặp vô hạn và closure cũ; và bốn hook tự viết cho phòng khám An Tâm (debounce ô tìm, bản nháp form, tiêu đề tab, đồng hồ mở cửa).',
@@ -92,6 +346,7 @@ function TieuDeBacSi({ ten }: { ten: string }) {
 <h3>An effect runs after React has updated the DOM and the browser has painted</h3>
 ${slide('rx-04', 4, 'An effect runs after React has updated the DOM and the browser has painted')}
 <p>React&#39;s work on each update has phases: something <strong>triggers</strong> it (the first display, or a <code>setState</code>); React <strong>renders</strong> (calls your component functions); React <strong>commits</strong> (changes the real DOM to match); the browser <strong>paints</strong> the pixels. Effects run at the end, after the commit — normally after the paint too, so a slow effect never delays what the user sees first.</p>
+${SD.thoiGianEn}
 <p>A small component shows the difference. It looks for its own paragraph in the DOM twice: once while rendering, once inside an effect.</p>
 <pre><code class="language-tsx">// src/vi-du/b1.tsx
 export function DocDom() {
@@ -138,6 +393,7 @@ không mảng: 4 lần · [] : 1 lần · [bacSiId]: 2 lần
  ✓ src/vi-du/b1.test.tsx &gt; ba dạng dependency sau 1 lần hiện + 3 lần vẽ lại (bacSiId đổi 1 lần)</div>
 <p>No array: 4 runs, one per render. Empty array: 1 run, at the first display. <code>[bacSiId]</code>: 2 runs — the first display, and the render where bs-1 became bs-2. Renders where <code>bacSiId</code> stayed the same were skipped even though <code>soLanBam</code> changed, because <code>soLanBam</code> is not in the list — and the effect does not read it.</p>
 <p>That last clause is the real rule. <strong>The dependency list is not a setting you choose; it is a description of what the effect reads.</strong> Every "reactive value" the setup uses — props, state, and variables calculated from them inside the component — must be in the list. If you leave one out, the effect keeps using an old value (Lesson 4.3 shows the bug); if you add one it does not read, it re-runs for nothing. Lesson 4.3 also shows a linter that checks the list for you.</p>
+${SD.phuThuocEn}
 <div class="callout"><p><strong>JS quick reminder: how React compares.</strong> React compares each dependency with <code>Object.is(old, new)</code>. For strings, numbers and booleans that means "same value": <code>Object.is('bs-1', 'bs-1')</code> is <code>true</code>. For objects, arrays and functions it means "the very same object in memory": <code>Object.is({ a: 1 }, { a: 1 })</code> is <code>false</code>, because each <code>{ … }</code> creates a new object. Keep that in mind — it is the cause of most infinite loops in Lesson 4.3.</p></div>
 
 <h3>Cleanup runs before the next setup, and when the component is removed</h3>
@@ -209,6 +465,7 @@ effect: đặt tiêu đề "BS. Nguyễn Minh An"
 cleanup: dọn tiêu đề "BS. Nguyễn Minh An"
 effect: đặt tiêu đề "BS. Nguyễn Minh An"</div>
 <p>Why would React do this on purpose? Because in a real app a component is often removed and shown again — a tab switched away and back, a route left and revisited — and each time its effect must stop and start cleanly. Strict Mode simulates that immediately, so that if your cleanup is missing or wrong you see <em>two</em> connections, two timers or two subscriptions while you are still developing, not in production a month later. The correct response to "my effect runs twice" is almost always <strong>write or fix the cleanup</strong> so that setup → cleanup → setup behaves exactly like one setup. The production build (<code>vite build</code>) does not do the extra run.</p>
+${SD.strictEn}
 <div class="pitfall co-tieu-de"><strong>Trap — "fixing" the double run with a ref flag.</strong> A common answer on forums is <code>const daChay = useRef(false); useEffect(() =&gt; { if (daChay.current) return; daChay.current = true; ketNoi(); }, []);</code>. The console shows one "connect" and the developer moves on. But the effect now has no cleanup at all, so in production, the day the user leaves the page and comes back, the old connection is still open next to the new one — exactly the bug Strict Mode was pointing at. React&#39;s documentation says it plainly: do not try to prevent the effect from running twice; implement the cleanup. Turning off <code>&lt;StrictMode&gt;</code> hides the warning in the same way.</div>
 
 <h3>Missing cleanup: a clock that ticks twice and outlives its component</h3>
@@ -357,6 +614,7 @@ function TieuDeBacSi({ ten }: { ten: string }) {
 <h3>Effect chạy SAU khi React đã sửa DOM và trình duyệt đã vẽ</h3>
 ${slide('rx-04', 4, 'Effect chạy SAU khi React đã sửa DOM và trình duyệt đã vẽ')}
 <p>Mỗi lần cập nhật, React làm việc theo từng pha: có thứ <strong>kích hoạt</strong> (trigger — lần hiện đầu tiên, hoặc một lần <code>setState</code>); React <strong>render</strong> (gọi các hàm component của bạn); React <strong>commit</strong> (sửa DOM thật cho khớp); trình duyệt <strong>paint</strong> (vẽ điểm ảnh). Effect chạy ở cuối cùng, sau commit — thường là sau cả paint, nên một effect chậm không bao giờ làm trễ thứ người dùng nhìn thấy đầu tiên.</p>
+${SD.thoiGianVi}
 <p>Một component nhỏ cho thấy khác biệt. Nó tìm đoạn văn của chính nó trong DOM hai lần: một lần lúc render, một lần trong effect.</p>
 <pre><code class="language-tsx">// src/vi-du/b1.tsx
 export function DocDom() {
@@ -403,6 +661,7 @@ không mảng: 4 lần · [] : 1 lần · [bacSiId]: 2 lần
  ✓ src/vi-du/b1.test.tsx &gt; ba dạng dependency sau 1 lần hiện + 3 lần vẽ lại (bacSiId đổi 1 lần)</div>
 <p>Không mảng: 4 lần, mỗi lượt render một lần. Mảng rỗng: 1 lần, lúc hiện đầu tiên. <code>[bacSiId]</code>: 2 lần — lần hiện đầu, và lượt render mà bs-1 thành bs-2. Những lượt <code>bacSiId</code> giữ nguyên bị bỏ qua dù <code>soLanBam</code> đã đổi, vì <code>soLanBam</code> không có trong danh sách — và effect cũng không đọc nó.</p>
 <p>Vế cuối đó mới là luật thật. <strong>Danh sách dependency không phải một tuỳ chọn bạn chọn; nó là bản mô tả những gì effect đọc.</strong> Mọi "giá trị phản ứng" (reactive value) mà setup dùng — props, state, và biến tính từ chúng bên trong component — đều phải có mặt. Bỏ sót một cái, effect cứ dùng giá trị cũ (Bài 4.3 cho thấy bug); thêm một cái nó không đọc, nó chạy lại vô ích. Bài 4.3 cũng giới thiệu linter kiểm danh sách hộ bạn.</p>
+${SD.phuThuocVi}
 <div class="callout"><p><strong>JS nhắc nhanh: React so sánh thế nào.</strong> React so từng dependency bằng <code>Object.is(cũ, mới)</code>. Với chuỗi, số, boolean, nghĩa là "cùng giá trị": <code>Object.is('bs-1', 'bs-1')</code> là <code>true</code>. Với object, mảng và hàm, nghĩa là "đúng cùng một object trong bộ nhớ": <code>Object.is({ a: 1 }, { a: 1 })</code> là <code>false</code>, vì mỗi lần viết <code>{ … }</code> là tạo một object mới. Nhớ điều này — nó là thủ phạm của hầu hết các vòng lặp vô hạn ở Bài 4.3.</p></div>
 
 <h3>Cleanup chạy trước lần setup kế tiếp, và khi gỡ component</h3>
@@ -474,6 +733,7 @@ effect: đặt tiêu đề "BS. Nguyễn Minh An"
 cleanup: dọn tiêu đề "BS. Nguyễn Minh An"
 effect: đặt tiêu đề "BS. Nguyễn Minh An"</div>
 <p>Vì sao React cố ý làm vậy? Vì trong app thật, component thường bị gỡ rồi hiện lại — chuyển tab đi rồi quay về, rời một trang rồi vào lại — và mỗi lần như thế effect phải dừng và khởi động sạch sẽ. Strict Mode mô phỏng điều đó ngay lập tức, để nếu cleanup của bạn thiếu hoặc sai thì bạn thấy <em>hai</em> kết nối, hai hẹn giờ, hai đăng ký nghe ngay lúc đang phát triển, chứ không phải trên production một tháng sau. Câu trả lời đúng cho "effect của tôi chạy hai lần" gần như luôn là <strong>viết hoặc sửa cleanup</strong> sao cho setup → cleanup → setup cho kết quả y như một lần setup. Bản build production (<code>vite build</code>) không chạy thêm lần đó.</p>
+${SD.strictVi}
 <div class="pitfall co-tieu-de"><strong>Bẫy — "chữa" lần chạy thứ hai bằng một cờ useRef.</strong> Câu trả lời hay gặp trên diễn đàn là <code>const daChay = useRef(false); useEffect(() =&gt; { if (daChay.current) return; daChay.current = true; ketNoi(); }, []);</code>. Console chỉ còn một dòng "kết nối" và lập trình viên đi tiếp. Nhưng giờ effect không có cleanup nào cả, nên trên production, hôm người dùng rời trang rồi quay lại, kết nối cũ vẫn mở bên cạnh kết nối mới — đúng cái bug Strict Mode đã chỉ tay vào. Tài liệu React nói thẳng: đừng cố chặn effect chạy hai lần; hãy viết cleanup. Tắt <code>&lt;StrictMode&gt;</code> cũng chỉ là giấu cảnh báo theo cùng một cách.</div>
 
 <h3>Thiếu cleanup: đồng hồ chạy gấp đôi và sống cả sau khi bị gỡ</h3>
@@ -658,6 +918,7 @@ số lượt render: effect 6 · tính trong render 3
 <li><strong>A render with the wrong data.</strong> <code>tuKhoa="l" → hiện 6 bác sĩ</code>: the input already says "l", but the list still has all six doctors. React commits that render to the DOM before the effect runs. On a fast computer you rarely see it; on a slow phone, or with a heavier list, users see the wrong count flash.</li>
 <li><strong>Even the first display renders twice</strong> in the effect version — the effect runs after mount and sets state to a value equal in content but a new array.</li>
 </ul>
+${SD.danXuatEn}
 <p>The calculated version has none of these, and there is only one source of truth: the search text. Nothing can ever disagree with it. That is the "derived state" rule of Chapter 2 seen from the effect side: <strong>if a value can be computed from props or state, do not store it in state, and do not use an effect to keep it updated.</strong></p>
 <p>What if the calculation is slow — thousands of doctors, a complicated sort? Then wrap it in <code>useMemo</code> so it re-runs only when its inputs change: <code>const ketQua = useMemo(() =&gt; locBacSi(ds, chuyenKhoa, tuKhoa), [ds, chuyenKhoa, tuKhoa]);</code>. That is still a calculation during render, just cached. Chapter 8 measures when it actually pays off; with six doctors it does not.</p>
 <p>oxlint 1.85 — the linter in Vite&#39;s template — recognises this pattern. Run on the example file, it says:</p>
@@ -754,6 +1015,7 @@ export function GioiThieuCoBoQua({ id }: { id: string }) {
 id hiện tại = bs-2 · không cờ bỏ qua: "Đang xem: BS. Nguyễn Minh An" · có cờ bỏ qua: "Đang xem: BS. Trần Thu Hà"
  ✓ src/vi-du/b2.test.tsx &gt; cuộc đua: mở bs-1 (chậm 900ms) rồi đổi ngay sang bs-2 (100ms)</div>
 <p>This is a <strong>race condition</strong>. The receptionist is looking at bs-2, the fast answer showed "Trần Thu Hà" correctly, and then the slow answer for bs-1 arrived and overwrote it. The screen now shows the wrong doctor, with no error anywhere. The cleanup flag fixes it: when <code>id</code> changes, React runs the old cleanup, which sets that run&#39;s <code>boQua</code> to <code>true</code>, so its late answer is ignored.</p>
+${SD.duaNhauEn}
 <p>The flag is the minimum you must write if you fetch in an effect. A real app also needs a loading state, errors, retries, caching so the same doctor is not downloaded twice, and cancelling with <code>AbortController</code>. That is why company code uses a data library — Chapter 6 replaces all of this with TanStack Query&#39;s <code>useQuery</code>, which has no race by design. (React 19 also offers <code>use()</code> with Suspense for data — Chapter 12.)</p>
 <div class="pitfall co-tieu-de"><strong>Trap — the doctor profile that "sometimes" shows the wrong person.</strong> A bug report says: "When I click through doctors quickly, the profile sometimes shows the previous one." Nobody can reproduce it on the office Wi-Fi. The code is <code>useEffect(() =&gt; { fetch(url).then(r =&gt; r.json()).then(setBacSi); }, [id]);</code> — no cleanup. On a slow mobile network, answers come back out of order, and the last one to arrive wins. Any effect that starts something asynchronous and later calls <code>setState</code> needs a cleanup that ignores or cancels the old run; better, use a data library.</div>
 
@@ -765,6 +1027,7 @@ ${slide('rx-04', 14, 'Do you need an effect? Ask three questions before writing 
 <li><strong>Does it keep something outside React in sync with what is on screen?</strong> That is an effect — with a cleanup — or better, a custom hook that wraps it (Lesson 4.4).</li>
 </ol>
 <p>And a special case of 3: <strong>loading server data</strong> — in this course, from Chapter 6 on, a data library rather than a hand-written effect.</p>
+${SD.baCauEn}
 
 <div class="callout"><p><strong>🎓 At FER202 you do it this way — 💼 at work they do it that way.</strong></p>
 <p>FER202 examples copy props into state in the constructor or with <code>componentDidUpdate(prevProps)</code> ("if the id changed, reset the form"), and fetch data in <code>componentDidMount</code> with <code>fetch(...).then(data =&gt; this.setState({ data }))</code>; when those students move to hooks, the same habits become <code>useEffect(() =&gt; setX(...), [y])</code>. → At work, reviewers ask you to delete such effects: derived values are calculated in render, resets use a <code>key</code>, user-caused work happens in handlers, and server data comes from TanStack Query. · <em>Why:</em> every removed effect is one render fewer, one moment of wrong UI fewer (measured above), and one less place for a race. The FER202 way is not wrong in a small lab — the lab list has six items and a fast local server — but the same code breaks on a slow phone, and linters in 2026 flag it (<code>set-state-in-effect</code>).</p></div>
@@ -884,6 +1147,7 @@ số lượt render: effect 6 · tính trong render 3
 <li><strong>Một lượt render với dữ liệu sai.</strong> <code>tuKhoa="l" → hiện 6 bác sĩ</code>: ô input đã ghi "l", nhưng danh sách vẫn đủ sáu bác sĩ. React commit lượt render đó vào DOM trước khi effect chạy. Trên máy nhanh hiếm khi thấy; trên điện thoại chậm, hay với danh sách nặng hơn, người dùng thấy con số sai nháy lên.</li>
 <li><strong>Ngay lần hiện đầu tiên cũng render hai lần</strong> ở bản effect — effect chạy sau mount và đặt state thành một mảng có nội dung y hệt nhưng là mảng mới.</li>
 </ul>
+${SD.danXuatVi}
 <p>Bản tính trong render không dính điều nào, và chỉ có một nguồn sự thật: chữ tìm kiếm. Không gì có thể lệch khỏi nó. Đó là luật "state dẫn xuất" của Chương 2 nhìn từ phía effect: <strong>giá trị nào tính được từ props hoặc state thì đừng cất vào state, và đừng dùng effect để giữ nó cập nhật.</strong></p>
 <p>Nếu phép tính chậm thì sao — hàng nghìn bác sĩ, một kiểu sắp xếp phức tạp? Khi đó bọc nó trong <code>useMemo</code> để nó chỉ chạy lại khi đầu vào đổi: <code>const ketQua = useMemo(() =&gt; locBacSi(ds, chuyenKhoa, tuKhoa), [ds, chuyenKhoa, tuKhoa]);</code>. Đó vẫn là tính trong lúc render, chỉ là có nhớ kết quả. Chương 8 đo xem khi nào nó thật sự đáng; với sáu bác sĩ thì không.</p>
 <p>oxlint 1.85 — linter có sẵn trong template Vite — nhận ra khuôn này. Chạy trên file ví dụ, nó nói:</p>
@@ -980,6 +1244,7 @@ export function GioiThieuCoBoQua({ id }: { id: string }) {
 id hiện tại = bs-2 · không cờ bỏ qua: "Đang xem: BS. Nguyễn Minh An" · có cờ bỏ qua: "Đang xem: BS. Trần Thu Hà"
  ✓ src/vi-du/b2.test.tsx &gt; cuộc đua: mở bs-1 (chậm 900ms) rồi đổi ngay sang bs-2 (100ms)</div>
 <p>Đây là một <strong>race condition (cuộc đua dữ liệu)</strong>. Lễ tân đang xem bs-2, câu trả lời nhanh đã hiện đúng "Trần Thu Hà", rồi câu trả lời chậm của bs-1 về tới và đè lên. Màn hình giờ hiện sai bác sĩ, không có lỗi nào ở đâu cả. Cờ trong cleanup sửa được: khi <code>id</code> đổi, React chạy cleanup cũ, đặt <code>boQua</code> của lượt đó thành <code>true</code>, nên câu trả lời về muộn của nó bị bỏ qua.</p>
+${SD.duaNhauVi}
 <p>Cờ bỏ qua là mức tối thiểu bắt buộc nếu bạn fetch trong effect. App thật còn cần trạng thái đang tải, lỗi, thử lại, cache để cùng một bác sĩ không bị tải hai lần, và huỷ yêu cầu bằng <code>AbortController</code>. Vì vậy code công ty dùng thư viện dữ liệu — Chương 6 thay toàn bộ phần này bằng <code>useQuery</code> của TanStack Query, thứ không có cuộc đua ngay từ thiết kế. (React 19 còn có <code>use()</code> cùng Suspense cho dữ liệu — Chương 12.)</p>
 <div class="pitfall co-tieu-de"><strong>Bẫy — trang hồ sơ bác sĩ "thỉnh thoảng" hiện nhầm người.</strong> Báo lỗi viết: "Khi tôi bấm qua các bác sĩ thật nhanh, hồ sơ thỉnh thoảng hiện người trước đó." Không ai tái hiện được trên Wi-Fi văn phòng. Code là <code>useEffect(() =&gt; { fetch(url).then(r =&gt; r.json()).then(setBacSi); }, [id]);</code> — không có cleanup. Trên mạng di động chậm, các câu trả lời về không theo thứ tự, và câu về cuối cùng thắng. Mọi effect khởi động một việc bất đồng bộ rồi sau đó gọi <code>setState</code> đều cần cleanup bỏ qua hoặc huỷ lượt cũ; tốt hơn nữa, dùng thư viện dữ liệu.</div>
 
@@ -991,6 +1256,7 @@ ${slide('rx-04', 14, 'Có cần effect không? Hỏi ba câu trước khi viết
 <li><strong>Có phải để giữ một thứ bên ngoài React khớp với màn hình không?</strong> Đó là effect — có cleanup — hoặc tốt hơn, một hook tự viết bọc nó lại (Bài 4.4).</li>
 </ol>
 <p>Và một trường hợp đặc biệt của câu 3: <strong>tải dữ liệu từ server</strong> — trong khoá này, từ Chương 6 trở đi, dùng thư viện dữ liệu thay vì tự viết effect.</p>
+${SD.baCauVi}
 
 <div class="callout"><p><strong>🎓 Ở FER202 bạn làm thế này — 💼 đi làm người ta làm thế kia.</strong></p>
 <p>Ví dụ FER202 chép props vào state trong constructor hoặc bằng <code>componentDidUpdate(prevProps)</code> ("nếu id đổi thì reset form"), và tải dữ liệu trong <code>componentDidMount</code> bằng <code>fetch(...).then(data =&gt; this.setState({ data }))</code>; khi chuyển sang hook, các thói quen đó biến thành <code>useEffect(() =&gt; setX(...), [y])</code>. → Đi làm, người review sẽ bảo bạn xoá những effect như vậy: giá trị dẫn xuất tính trong render, reset dùng <code>key</code>, việc do người dùng gây ra làm trong handler, dữ liệu server lấy qua TanStack Query. · <em>Vì sao:</em> mỗi effect bị xoá là bớt một lượt render, bớt một khoảnh khắc giao diện sai (đo ở trên), và bớt một chỗ có thể xảy ra cuộc đua. Cách FER202 không sai trong một bài lab nhỏ — danh sách trong lab có sáu phần tử và server chạy ngay trên máy — nhưng cùng đoạn code đó hỏng trên điện thoại chậm, và linter năm 2026 đánh dấu nó (<code>set-state-in-effect</code>).</p></div>
@@ -1093,6 +1359,7 @@ lỗi đầu tiên: Maximum update depth exceeded. This can happen when a compon
 <li>"Count when the doctor changes": <code>[bacSiId]</code>.</li>
 <li>Often the real answer is Lesson 4.2: the value can be calculated, so there should be no state and no effect.</li>
 </ul>
+${SD.vongLapEn}
 
 <h3>An object or array created during render is new every time, so the effect always runs</h3>
 ${slide('rx-04', 16, 'An object or array created during render is new every time, so the effect always runs')}
@@ -1211,6 +1478,7 @@ Cũ: 1 giây | Mới: 5 giây
 <li><strong>List the dependency</strong> (<code>[giay]</code>): the effect re-runs every second, clearing the old interval and creating a new one that reads the new value. Correct, but it tears down and rebuilds the timer each tick. This is what the linter will suggest, because it only sees that <code>giay</code> is read.</li>
 </ul>
 <p>Stale closures appear anywhere a function created in one render is called later: in <code>setTimeout</code>, in an event listener added in an effect, in a <code>.then</code> after a request. The question is always "which render&#39;s values does this function see?"</p>
+${SD.closureEn}
 
 <h3>useEffectEvent: read the latest values without re-running the effect</h3>
 ${slide('rx-04', 19, 'useEffectEvent: read the latest value without re-running the effect')}
@@ -1274,6 +1542,7 @@ src/vi-du/b3.tsx:10:5: warning react(set-state-in-effect): Calling setState sync
 <li><strong><code>useEffectEvent</code></strong>: when the effect must read the latest value of something whose changes should not restart it.</li>
 <li><strong>No effect</strong>: when it turns out the value is calculable (Lesson 4.2) — the most common "fix" of all.</li>
 </ul>
+${SD.congCuEn}
 
 <div class="callout"><p><strong>Common interview question.</strong></p>
 <p><strong>Q: What causes an infinite loop with <code>useEffect</code>?</strong><br>A: The effect sets state and runs again after the resulting render: either there is no dependency array, or a dependency is a new object/array/function every render (compared with <code>Object.is</code>), so it always "changed". Fix by depending on primitives, moving functions into the effect, memoizing with <code>useMemo</code>/<code>useCallback</code>, or removing the effect if the value is derivable.</p>
@@ -1349,6 +1618,7 @@ lỗi đầu tiên: Maximum update depth exceeded. This can happen when a compon
 <li>"Đếm khi đổi bác sĩ": <code>[bacSiId]</code>.</li>
 <li>Thường thì câu trả lời thật là Bài 4.2: giá trị tính được, nên không cần state cũng không cần effect.</li>
 </ul>
+${SD.vongLapVi}
 
 <h3>Object hay mảng tạo trong render là MỚI mỗi lần, nên effect luôn chạy</h3>
 ${slide('rx-04', 16, 'Object/mảng tạo trong render là MỚI mỗi lần: effect luôn chạy')}
@@ -1467,6 +1737,7 @@ Cũ: 1 giây | Mới: 5 giây
 <li><strong>Khai dependency</strong> (<code>[giay]</code>): effect chạy lại mỗi giây, xoá interval cũ và tạo interval mới đọc giá trị mới. Đúng, nhưng dỡ rồi dựng lại bộ hẹn giờ mỗi lần tích. Đây là thứ linter sẽ gợi ý, vì nó chỉ thấy <code>giay</code> được đọc.</li>
 </ul>
 <p>Closure cũ xuất hiện ở bất cứ đâu một hàm tạo ra trong lượt render này được gọi vào lúc sau: trong <code>setTimeout</code>, trong một event listener gắn trong effect, trong <code>.then</code> sau một yêu cầu mạng. Câu hỏi luôn là "hàm này nhìn thấy giá trị của lượt render nào?"</p>
+${SD.closureVi}
 
 <h3>useEffectEvent: đọc giá trị mới nhất mà không chạy lại effect</h3>
 ${slide('rx-04', 19, 'useEffectEvent: đọc giá trị mới mà không chạy lại effect')}
@@ -1530,6 +1801,7 @@ src/vi-du/b3.tsx:10:5: warning react(set-state-in-effect): Calling setState sync
 <li><strong><code>useEffectEvent</code></strong>: khi effect phải đọc giá trị mới nhất của một thứ mà việc nó đổi không được khởi động lại effect.</li>
 <li><strong>Bỏ effect</strong>: khi hoá ra giá trị tính được (Bài 4.2) — "cách sửa" phổ biến nhất.</li>
 </ul>
+${SD.congCuVi}
 
 <div class="callout"><p><strong>Câu hỏi phỏng vấn hay gặp.</strong></p>
 <p><strong>Hỏi: Điều gì gây vòng lặp vô hạn với <code>useEffect</code>?</strong><br>Đáp: Effect đặt state rồi chạy lại sau lượt render do chính nó gây ra: hoặc không có mảng dependency, hoặc một dependency là object/mảng/hàm mới mỗi lượt render (so bằng <code>Object.is</code>) nên luôn "đã đổi". Sửa bằng cách phụ thuộc giá trị nguyên thuỷ, đưa hàm vào trong effect, ghi nhớ bằng <code>useMemo</code>/<code>useCallback</code>, hoặc bỏ effect nếu giá trị suy ra được.</p>
@@ -1687,6 +1959,7 @@ thêm 200 ms  : "nguyen"
 const tuKhoaCham = useDebounce(tuKhoa, 300);
 const danhSachLoc = locBacSi(danhSachBacSi, chuyenKhoa, tuKhoaCham);</code></pre>
 <p>The slide&#39;s screenshot was taken in Chromium after typing "huy" and waiting for "Đang hiện 1/6 bác sĩ". Note what the filter still is: a calculation during render (Lesson 4.2). The effect is only inside the hook, where it synchronises with the one outside system involved — a timer.</p>
+${SD.debounceEn}
 
 <h3>useLocalStorage: a form draft that survives a page reload</h3>
 ${slide('rx-04', 23, 'useLocalStorage: a form draft that survives a page reload')}
@@ -1759,6 +2032,7 @@ const [daKhoiPhuc] = useState(() =&gt; banNhap.benhNhan.hoTen !== '' || banNhap.
 4. tải lại trang  → document.title = "Phòng khám An Tâm"
 5. mở lại → ô Họ và tên = "Nguyễn Thị Mai"</div>
 <p>The same run also proves <code>useTieuDeTrang</code> in a real tab: the title names the doctor while open and returns to "Phòng khám An Tâm" after the reload. The slide shows the restored form.</p>
+${SD.luuNhapEn}
 <div class="callout warn"><p><strong>Privacy note.</strong> A booking draft contains a name, a phone number, a date of birth and a medical reason. <code>localStorage</code> is readable by any script on the page and stays on a shared computer until cleared. That is why the draft is deleted after a successful submit, and why a real clinic might keep only the "reason" field, or use <code>sessionStorage</code> (cleared when the tab closes). Decide with the product owner; do not store health data "because it was easy".</p></div>
 
 <h3>A live "open now?" badge: pure logic plus a timer hook</h3>
@@ -1837,6 +2111,7 @@ test('gỡ component ⇒ không còn hẹn giờ nào chạy', () =&gt; {
  ✓ src/components/TrangThaiMoCua.test.tsx &gt; 07:29 Thứ 2 đang đóng; 60 giây sau tự chuyển sang mở, không cần tải lại
  ✓ src/components/TrangThaiMoCua.test.tsx &gt; gỡ component ⇒ không còn hẹn giờ nào chạy</div>
 <p>The last test is Lesson 4.1&#39;s cleanup made measurable: <code>vi.getTimerCount()</code> is 1 while the badge is on screen and 0 after unmount. The screenshot on the slide was taken with the machine&#39;s time zone set to Vietnam (the build machine runs on UTC; <code>getHours()</code> uses the browser&#39;s local time — a real clinic app shown abroad would need an explicit time zone, a topic for Chapter 14).</p>
+${SD.moCuaEn}
 
 <h3>The rules of hooks: call them at the top level of a component or another hook</h3>
 ${slide('rx-04', 25, 'The rules of hooks: top level, inside components or other hooks')}
@@ -2425,6 +2700,7 @@ thêm 200 ms  : "nguyen"
 const tuKhoaCham = useDebounce(tuKhoa, 300);
 const danhSachLoc = locBacSi(danhSachBacSi, chuyenKhoa, tuKhoaCham);</code></pre>
 <p>Ảnh chụp trên slide được chụp trong Chromium sau khi gõ "huy" và chờ "Đang hiện 1/6 bác sĩ". Để ý bộ lọc vẫn là gì: một phép tính trong lúc render (Bài 4.2). Effect chỉ nằm trong hook, nơi nó đồng bộ với hệ thống bên ngoài duy nhất có liên quan — một bộ hẹn giờ.</p>
+${SD.debounceVi}
 
 <h3>useLocalStorage: bản nháp form sống sót qua lần tải lại trang</h3>
 ${slide('rx-04', 23, 'useLocalStorage: bản nháp form sống qua lần tải lại trang')}
@@ -2497,6 +2773,7 @@ const [daKhoiPhuc] = useState(() =&gt; banNhap.benhNhan.hoTen !== '' || banNhap.
 4. tải lại trang  → document.title = "Phòng khám An Tâm"
 5. mở lại → ô Họ và tên = "Nguyễn Thị Mai"</div>
 <p>Cùng lần chạy đó cũng chứng minh <code>useTieuDeTrang</code> trên một tab thật: tiêu đề ghi tên bác sĩ khi đang mở, và trở về "Phòng khám An Tâm" sau khi tải lại. Slide cho thấy form đã được khôi phục.</p>
+${SD.luuNhapVi}
 <div class="callout warn"><p><strong>Lưu ý quyền riêng tư.</strong> Bản nháp đặt lịch chứa họ tên, số điện thoại, ngày sinh và lý do khám bệnh. <code>localStorage</code> đọc được bởi mọi script trên trang và nằm lại trên máy dùng chung cho tới khi bị xoá. Vì vậy bản nháp bị xoá sau khi gửi thành công, và một phòng khám thật có thể chỉ giữ ô "lý do", hoặc dùng <code>sessionStorage</code> (mất khi đóng tab). Hãy quyết cùng người phụ trách sản phẩm; đừng lưu dữ liệu sức khoẻ "vì làm cho dễ".</p></div>
 
 <h3>Nhãn "đang mở cửa?" tự cập nhật: logic thuần cộng một hook hẹn giờ</h3>
@@ -2575,6 +2852,7 @@ test('gỡ component ⇒ không còn hẹn giờ nào chạy', () =&gt; {
  ✓ src/components/TrangThaiMoCua.test.tsx &gt; 07:29 Thứ 2 đang đóng; 60 giây sau tự chuyển sang mở, không cần tải lại
  ✓ src/components/TrangThaiMoCua.test.tsx &gt; gỡ component ⇒ không còn hẹn giờ nào chạy</div>
 <p>Test cuối là cleanup của Bài 4.1 được biến thành thứ đo được: <code>vi.getTimerCount()</code> là 1 khi nhãn đang hiện và 0 sau unmount. Ảnh chụp trên slide được chụp với múi giờ của máy đặt về Việt Nam (máy dựng bài chạy giờ UTC; <code>getHours()</code> dùng giờ địa phương của trình duyệt — app phòng khám thật mà hiển thị ở nước ngoài sẽ cần chỉ rõ múi giờ, chuyện của Chương 14).</p>
+${SD.moCuaVi}
 
 <h3>Quy tắc hook: gọi ở cấp cao nhất của component hoặc của một hook khác</h3>
 ${slide('rx-04', 25, 'Quy tắc hook: gọi ở cấp cao nhất, trong component hoặc hook')}

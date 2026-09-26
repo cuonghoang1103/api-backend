@@ -109,6 +109,299 @@ const OUT = {
   build: 'dist/index.html                   0.46 kB │ gzip:  0.29 kB\ndist/assets/index-BEITAmqT.css    2.69 kB │ gzip:  0.90 kB\ndist/assets/index-LWc-2jCn.js   225.20 kB │ gzip: 70.86 kB\n\n✓ built in 319ms',
 };
 
+/* ─── Sơ đồ mermaid trong bài (≤ 10 nút, nhãn ngắn; khối EN nhãn tiếng Anh, khối VI nhãn tiếng Việt) ─── */
+/** Sơ đồ mermaid: trang học đọc textContent của <code class="language-mermaid"> rồi vẽ (LearnPageClient → mermaidRuntime). */
+const MM = (src) => '<pre><code class="language-mermaid">' + H(src.trim()) + '</code></pre>';
+const L = (...dong) => MM(dong.join('\n'));
+const SD = {
+  vongStateEn: L(
+    "flowchart TB",
+    "  C[\"Click the button\"] --> S[\"setSoLuot(soLuot + 1)\"]",
+    "  S --> K[\"React stores the new value in this component's slot\"]",
+    "  K --> R[\"React calls BoDemState again\"]",
+    "  R --> U[\"useState(0) ignores the 0 and returns the stored value\"]",
+    "  U --> J[\"JSX: Đã đặt 1 lượt\"]",
+    "  J --> D[\"Commit: only that text node changes\"]",
+    "  D -.->|\"next click\"| C",
+    "  X[\"A plain let soLuot = 0: reset on every call, and React is never told\"]",
+  ),
+  vongStateVi: L(
+    "flowchart TB",
+    "  C[\"Bấm nút\"] --> S[\"setSoLuot(soLuot + 1)\"]",
+    "  S --> K[\"React cất giá trị mới vào ô nhớ của component này\"]",
+    "  K --> R[\"React gọi lại BoDemState\"]",
+    "  R --> U[\"useState(0) bỏ qua số 0, trả giá trị đang cất\"]",
+    "  U --> J[\"JSX: Đã đặt 1 lượt\"]",
+    "  J --> D[\"Commit: chỉ nút chữ đó đổi\"]",
+    "  D -.->|\"lần bấm sau\"| C",
+    "  X[\"Biến thường let soLuot = 0: về 0 mỗi lần gọi, và React không hề biết\"]",
+  ),
+  snapshotEn: L(
+    "sequenceDiagram",
+    "  participant H as Handler from render 1 (soLuot = 0)",
+    "  participant Q as React's update queue",
+    "  participant R2 as Render 2",
+    "  H->>Q: setSoLuot(0 + 1)",
+    "  H->>Q: setSoLuot(0 + 1)",
+    "  H->>Q: setSoLuot(0 + 1)",
+    "  H->>H: console.log prints 0",
+    "  Q->>R2: handler finished: \"use 1\" three times",
+    "  R2->>R2: soLuot = 1 on screen, not 3",
+    "  Note over Q,R2: Updater form n → n + 1 three times: 0 → 1 → 2 → 3",
+  ),
+  snapshotVi: L(
+    "sequenceDiagram",
+    "  participant H as Handler của render 1 (soLuot = 0)",
+    "  participant Q as Hàng đợi cập nhật của React",
+    "  participant R2 as Render 2",
+    "  H->>Q: setSoLuot(0 + 1)",
+    "  H->>Q: setSoLuot(0 + 1)",
+    "  H->>Q: setSoLuot(0 + 1)",
+    "  H->>H: console.log in ra 0",
+    "  Q->>R2: handler xong: ba lần \"dùng 1\"",
+    "  R2->>R2: màn hình soLuot = 1, không phải 3",
+    "  Note over Q,R2: Dạng hàm n → n + 1 ba lần: 0 → 1 → 2 → 3",
+  ),
+  batchingEn: L(
+    "sequenceDiagram",
+    "  participant U as User",
+    "  participant H as onClick of đồng bộ",
+    "  participant R as React",
+    "  participant P as Profiler onRender",
+    "  U->>H: click",
+    "  H->>R: setA(a + 1): queued",
+    "  H->>R: setB(b + 1): queued",
+    "  H-->>R: handler finished",
+    "  R->>R: ONE render with both updates",
+    "  R->>P: ONE commit (total 2)",
+    "  Note over H,R: Since React 18 the same inside setTimeout and promises",
+  ),
+  batchingVi: L(
+    "sequenceDiagram",
+    "  participant U as Người dùng",
+    "  participant H as onClick của nút đồng bộ",
+    "  participant R as React",
+    "  participant P as Profiler onRender",
+    "  U->>H: bấm",
+    "  H->>R: setA(a + 1): vào hàng đợi",
+    "  H->>R: setB(b + 1): vào hàng đợi",
+    "  H-->>R: handler chạy xong",
+    "  R->>R: MỘT lần render với cả hai cập nhật",
+    "  R->>P: MỘT lần commit (tổng 2)",
+    "  Note over H,R: Từ React 18, trong setTimeout và promise cũng vậy",
+  ),
+  goiNgayEn: L(
+    "flowchart TB",
+    "  R[\"Render NutGoiNgay\"] --> C[\"onClick={tang()}: tang runs NOW, during render\"]",
+    "  C --> S[\"setDem(dem + 1)\"]",
+    "  S --> N[\"React schedules another render\"]",
+    "  N --> R",
+    "  N -.->|\"React cuts the loop\"| E[\"Too many re-renders\"]",
+    "  OK[\"onClick={tang}: React keeps the function and calls it only on click\"]",
+  ),
+  goiNgayVi: L(
+    "flowchart TB",
+    "  R[\"Render NutGoiNgay\"] --> C[\"onClick={tang()}: tang chạy NGAY trong lúc render\"]",
+    "  C --> S[\"setDem(dem + 1)\"]",
+    "  S --> N[\"React hẹn một lần render nữa\"]",
+    "  N --> R",
+    "  N -.->|\"React cắt vòng lặp\"| E[\"Too many re-renders\"]",
+    "  OK[\"onClick={tang}: React giữ hàm, chỉ gọi khi bấm\"]",
+  ),
+  handlerPropEn: L(
+    "flowchart TB",
+    "  P[\"Parent: owns bacSiDangChonId\"] -->|\"prop onXemChiTiet = setBacSiDangChonId\"| T[\"TheBacSi\"]",
+    "  T -->|\"click Xem chi tiết: onXemChiTiet(bacSi.id)\"| P",
+    "  P --> R[\"State changes, the parent renders again, the panel shows that doctor\"]",
+  ),
+  handlerPropVi: L(
+    "flowchart TB",
+    "  P[\"Cha: giữ bacSiDangChonId\"] -->|\"prop onXemChiTiet = setBacSiDangChonId\"| T[\"TheBacSi\"]",
+    "  T -->|\"bấm Xem chi tiết: onXemChiTiet(bacSi.id)\"| P",
+    "  P --> R[\"State đổi, cha render lại, khung chi tiết hiện bác sĩ đó\"]",
+  ),
+  noiBotEn: L(
+    "flowchart TB",
+    "  C[\"Click on ♡\"] --> B[\"Button onClick: add to favourites\"]",
+    "  B --> Q{{\"e.stopPropagation() called?\"}}",
+    "  Q -->|\"no\"| A[\"The event bubbles to the card: its onClick opens the details too ✗\"]",
+    "  Q -->|\"yes\"| S[\"The event stops at the button ✓\"]",
+  ),
+  noiBotVi: L(
+    "flowchart TB",
+    "  C[\"Bấm ♡\"] --> B[\"onClick của nút: thêm yêu thích\"]",
+    "  B --> Q{{\"Có gọi e.stopPropagation()?\"}}",
+    "  Q -->|\"không\"| A[\"Sự kiện nổi lên thẻ cha: onClick của thẻ mở luôn chi tiết ✗\"]",
+    "  Q -->|\"có\"| S[\"Sự kiện dừng ở nút ✓\"]",
+  ),
+  objectIsEn: L(
+    "flowchart TB",
+    "  M[\"bn.hoTen = 'Trần Thị B', then setBn(bn)\"] -->|\"the same reference\"| Q{{\"Object.is(old state, new state)?\"}}",
+    "  N[\"setBn({ ...bn, hoTen: 'Trần Thị B' })\"] -->|\"a new object\"| Q",
+    "  Q -->|\"true\"| K[\"Nothing changed: React skips the render, the screen stays old\"]",
+    "  Q -->|\"false\"| R[\"React renders the new value\"]",
+  ),
+  objectIsVi: L(
+    "flowchart TB",
+    "  M[\"bn.hoTen = 'Trần Thị B', rồi setBn(bn)\"] -->|\"cùng tham chiếu\"| Q{{\"Object.is(state cũ, state mới)?\"}}",
+    "  N[\"setBn({ ...bn, hoTen: 'Trần Thị B' })\"] -->|\"object mới\"| Q",
+    "  Q -->|\"true\"| K[\"Không đổi gì: React bỏ qua render, màn hình giữ bản cũ\"]",
+    "  Q -->|\"false\"| R[\"React render giá trị mới\"]",
+  ),
+  bongMaEn: L(
+    "sequenceDiagram",
+    "  participant U as User",
+    "  participant S as SuaTrucTiep",
+    "  participant R as React",
+    "  U->>S: click Đổi tên (sai)",
+    "  S->>S: bn.hoTen = 'Trần Thị B' (mutation)",
+    "  S->>R: setBn(bn): the same object",
+    "  R-->>U: render skipped, screen still Nguyễn Văn A",
+    "  U->>S: click Việc khác",
+    "  S->>R: setDem(dem + 1)",
+    "  R-->>U: this render reads bn.hoTen: suddenly Trần Thị B",
+  ),
+  bongMaVi: L(
+    "sequenceDiagram",
+    "  participant U as Người dùng",
+    "  participant S as SuaTrucTiep",
+    "  participant R as React",
+    "  U->>S: bấm Đổi tên (sai)",
+    "  S->>S: bn.hoTen = 'Trần Thị B' (đột biến)",
+    "  S->>R: setBn(bn): vẫn object cũ",
+    "  R-->>U: bỏ qua render, màn hình vẫn Nguyễn Văn A",
+    "  U->>S: bấm Việc khác",
+    "  S->>R: setDem(dem + 1)",
+    "  R-->>U: lần render này đọc bn.hoTen: bỗng thành Trần Thị B",
+  ),
+  longNhauEn: L(
+    "flowchart TB",
+    "  F[\"doiSoDienThoai: spread lh, then spread lh.benhNhan\"] --> MOI",
+    "  CU[\"cu: LichHen\"] --> BC[\"cu.benhNhan: 0901234567\"]",
+    "  MOI[\"moi: a NEW LichHen\"] --> BM[\"moi.benhNhan: a NEW object, 0987654321\"]",
+    "  CU -.->|\"id, lyDo copied\"| MOI",
+    "  BC -.->|\"hoTen copied\"| BM",
+  ),
+  longNhauVi: L(
+    "flowchart TB",
+    "  F[\"doiSoDienThoai: spread lh, rồi spread lh.benhNhan\"] --> MOI",
+    "  CU[\"cu: LichHen\"] --> BC[\"cu.benhNhan: 0901234567\"]",
+    "  MOI[\"moi: LichHen MỚI\"] --> BM[\"moi.benhNhan: object MỚI, 0987654321\"]",
+    "  CU -.->|\"chép id, lyDo\"| MOI",
+    "  BC -.->|\"chép hoTen\"| BM",
+  ),
+  nangLenEn: L(
+    "flowchart TB",
+    "  subgraph TRUOC[\"Before: each component has its own ck\"]",
+    "    direction LR",
+    "    A1[\"ThanhLocRieng: ck = nhi, chip lit\"] ~~~ A2[\"DanhSachRieng: ck = tat-ca, still 6 doctors\"]",
+    "  end",
+    "  subgraph SAU[\"After: ck lives in the closest common parent\"]",
+    "    direction TB",
+    "    P[\"NangStateLen: owns ck\"] -->|\"giaTri, onDoi\"| C[\"ChipChuyenKhoa: no state of its own\"]",
+    "    C -.->|\"onDoi(nhi)\"| P",
+    "    P --> L[\"Đang hiện 2 bác sĩ, computed from ck\"]",
+    "  end",
+    "  TRUOC -->|\"lift the state up\"| SAU",
+  ),
+  nangLenVi: L(
+    "flowchart TB",
+    "  subgraph TRUOC[\"Trước: mỗi component một ck riêng\"]",
+    "    direction LR",
+    "    A1[\"ThanhLocRieng: ck = nhi, chip sáng\"] ~~~ A2[\"DanhSachRieng: ck = tat-ca, vẫn 6 bác sĩ\"]",
+    "  end",
+    "  subgraph SAU[\"Sau: ck nằm ở cha chung gần nhất\"]",
+    "    direction TB",
+    "    P[\"NangStateLen: giữ ck\"] -->|\"giaTri, onDoi\"| C[\"ChipChuyenKhoa: không có state riêng\"]",
+    "    C -.->|\"onDoi(nhi)\"| P",
+    "    P --> L[\"Đang hiện 2 bác sĩ, tính từ ck\"]",
+    "  end",
+    "  TRUOC -->|\"nâng state lên\"| SAU",
+  ),
+  khuBacSiEn: L(
+    "flowchart TB",
+    "  K[\"KhuBacSi: 4 states, 3 derived values\"] -->|\"giaTri, onDoi\"| C[\"ChipChuyenKhoa\"]",
+    "  K -->|\"tuKhoa, onDoi\"| O[\"OTimBacSi\"]",
+    "  K -->|\"danhSachLoc, yeuThich, onXemChiTiet\"| D[\"DanhSachBacSi\"]",
+    "  D --> T[\"TheBacSi × N\"]",
+    "  K -->|\"bacSiDangChon, onDong\"| CT[\"ChiTietBacSi\"]",
+    "  C -.-> K",
+    "  T -.-> K",
+    "  CT -.-> K",
+    "  UP[\"Dotted arrows: children never set state themselves, they call onDoi, onXemChiTiet, onDoiYeuThich, onDong\"]",
+  ),
+  khuBacSiVi: L(
+    "flowchart TB",
+    "  K[\"KhuBacSi: 4 state, 3 giá trị dẫn xuất\"] -->|\"giaTri, onDoi\"| C[\"ChipChuyenKhoa\"]",
+    "  K -->|\"tuKhoa, onDoi\"| O[\"OTimBacSi\"]",
+    "  K -->|\"danhSachLoc, yeuThich, onXemChiTiet\"| D[\"DanhSachBacSi\"]",
+    "  D --> T[\"TheBacSi × N\"]",
+    "  K -->|\"bacSiDangChon, onDong\"| CT[\"ChiTietBacSi\"]",
+    "  C -.-> K",
+    "  T -.-> K",
+    "  CT -.-> K",
+    "  UP[\"Mũi tên chấm: con không tự đổi state, chúng gọi onDoi, onXemChiTiet, onDoiYeuThich, onDong\"]",
+  ),
+  laStateEn: L(
+    "flowchart TB",
+    "  Q1{{\"Does the user or the server change it?\"}} -->|\"no\"| V[\"Not state: a constant\"]",
+    "  Q1 -->|\"yes\"| Q2{{\"Can it be computed from what you already have?\"}}",
+    "  Q2 -->|\"yes\"| V2[\"Compute during render: danhSachLoc, bacSiDangChon\"]",
+    "  Q2 -->|\"no\"| S[\"State, with exactly ONE owner\"]",
+    "  S --> W[\"Owner: the closest common parent of everyone who needs it, and no higher\"]",
+  ),
+  laStateVi: L(
+    "flowchart TB",
+    "  Q1{{\"Người dùng hay máy chủ có đổi nó không?\"}} -->|\"không\"| V[\"Không phải state: một hằng số\"]",
+    "  Q1 -->|\"có\"| Q2{{\"Tính được từ thứ đã có không?\"}}",
+    "  Q2 -->|\"được\"| V2[\"Tính trong lúc render: danhSachLoc, bacSiDangChon\"]",
+    "  Q2 -->|\"không\"| S[\"State, đúng MỘT chủ\"]",
+    "  S --> W[\"Chủ: cha chung gần nhất của mọi nơi cần nó, không cao hơn\"]",
+  ),
+  luongGoEn: L(
+    "sequenceDiagram",
+    "  participant U as User",
+    "  participant O as OTimBacSi",
+    "  participant K as KhuBacSi",
+    "  participant D as DanhSachBacSi",
+    "  U->>O: types l, a, n",
+    "  O->>K: onDoi(text) = setTuKhoa, once per letter",
+    "  K->>K: re-render: locBacSi(danhSachBacSi, chuyenKhoa, tuKhoa)",
+    "  K->>D: danhSach = only BS. Phạm Ngọc Lan",
+    "  D-->>U: Đội ngũ bác sĩ (1)",
+  ),
+  luongGoVi: L(
+    "sequenceDiagram",
+    "  participant U as Người dùng",
+    "  participant O as OTimBacSi",
+    "  participant K as KhuBacSi",
+    "  participant D as DanhSachBacSi",
+    "  U->>O: gõ l, a, n",
+    "  O->>K: onDoi(chữ) = setTuKhoa, mỗi chữ một lần",
+    "  K->>K: render lại: locBacSi(danhSachBacSi, chuyenKhoa, tuKhoa)",
+    "  K->>D: danhSach = chỉ BS. Phạm Ngọc Lan",
+    "  D-->>U: Đội ngũ bác sĩ (1)",
+  ),
+  thuTuEn: L(
+    "flowchart TB",
+    "  A[\"1. setup.ts calls cleanup after each test\"] --> B[\"2. Pure logic + tests: boDau, locBacSi, yeu-thich\"]",
+    "  B --> C[\"3. Controlled inputs: ChipChuyenKhoa, OTimBacSi\"]",
+    "  C --> D[\"4. TheBacSi: four optional props\"]",
+    "  D --> E[\"5. ChiTietBacSi: the detail panel\"]",
+    "  E --> F[\"6. KhuBacSi: four states, the rest computed\"]",
+    "  F --> G[\"7. Test like a user: KhuBacSi.test.tsx\"]",
+  ),
+  thuTuVi: L(
+    "flowchart TB",
+    "  A[\"1. setup.ts gọi cleanup sau mỗi test\"] --> B[\"2. Logic thuần + test: boDau, locBacSi, yeu-thich\"]",
+    "  B --> C[\"3. Ô kiểm soát: ChipChuyenKhoa, OTimBacSi\"]",
+    "  C --> D[\"4. TheBacSi: bốn prop tuỳ chọn\"]",
+    "  D --> E[\"5. ChiTietBacSi: khung chi tiết\"]",
+    "  E --> F[\"6. KhuBacSi: bốn state, còn lại tính ra\"]",
+    "  F --> G[\"7. Test như người dùng: KhuBacSi.test.tsx\"]",
+  ),
+};
+
 export default {
   title: 'Chapter 2 — State and events|||Chương 2 — State và sự kiện',
   description: 'Dữ liệu thay đổi và React render lại: useState và ảnh chụp state, cập nhật theo hàm, batching, xử lý sự kiện, cập nhật object/mảng bất biến, và chọn chỗ đặt state — mọi hành vi đo thật bằng Vitest, Profiler và Chromium.',
@@ -176,6 +469,7 @@ ${out(OUT.bienThuong)}
 <li><strong>Even if React did call it again, the value would be lost.</strong> Every call of <code>BoDemBienThuong</code> runs <code>let soLuot = 0</code> from the top. A local variable lives for one call of the function and then disappears.</li>
 </ol>
 <p>State solves both problems at once: React <strong>keeps</strong> the value for you between calls, and calling the setter <strong>tells</strong> React to call your component again.</p>
+${SD.vongStateEn}
 ${pre('tsx', SN.boDemState)}
 <p>Same clicks, and now the button reads "Đã đặt 3 lượt". The test <code>state: bấm 3 lần ⇒ 3</code> is green.</p>
 
@@ -214,6 +508,7 @@ ${out(OUT.snapshot)}
 <p>The reason is in the name of this section. When React renders <code>BaLanCong</code>, it calls the function with <code>soLuot = 0</code>. The click handler created during that render "sees" <code>soLuot</code> as 0 and nothing can change that — it is a <code>const</code> in that call. So the three lines are really:</p>
 ${pre('ts', OUT.snapEn)}
 <p>Calling the setter does not change the variable you are holding; it asks React for a <em>future</em> render in which <code>soLuot</code> has the new value. The react.dev docs describe the state value as a snapshot: fixed for the render it belongs to, including inside handlers and timeouts created by that render.</p>
+${SD.snapshotEn}
 <div class="callout"><p><strong>JS quick reminder — closures.</strong> A function "remembers" the variables that existed where it was created. The arrow function <code>() =&gt; { … }</code> passed to <code>onClick</code> is created during a render, so it remembers that render&#39;s <code>soLuot</code>. A click one minute later still uses that value. This is not a React rule; it is how JavaScript functions work.</p></div>
 
 <h3>Updater functions: when the next value depends on the previous one</h3>
@@ -244,6 +539,7 @@ ${out(OUT.batching)}
 <li>Two setters inside a <code>setTimeout</code> also add <strong>one</strong> (total 3). Before React 18 this case rendered twice; since React 18, batching is automatic everywhere — timeouts, promises, native events.</li>
 <li>"set giá trị cũ" calls <code>setA(a)</code> with the value it already has. The react.dev reference says React skips re-rendering when <code>Object.is</code> finds the new value identical, but adds: "in some cases React may still need to call your component before skipping the children". That is what we measured: the <strong>first</strong> identical set still produced a commit (total 4); the next two produced <strong>none</strong>. The practical rule is unchanged — setting the same value is cheap and harmless — but do not write code that depends on "zero renders".</li>
 </ul>
+${SD.batchingEn}
 <p><strong>Lazy initialisation.</strong> The same test file measures one more detail. If the initial value is expensive to build, <code>useState(taoDanhSach())</code> calls the function on <em>every</em> render and throws the result away after the first. Pass the function itself and React calls it once:</p>
 ${pre('tsx', SN.khoiTao)}
 ${out(OUT.lazy)}
@@ -333,6 +629,7 @@ ${out(OUT.bienThuong)}
 <li><strong>Kể cả React có gọi lại, giá trị cũng mất.</strong> Mỗi lần gọi <code>BoDemBienThuong</code> đều chạy <code>let soLuot = 0</code> từ đầu. Biến cục bộ chỉ sống trong một lần gọi hàm rồi biến mất.</li>
 </ol>
 <p>State giải cả hai cùng lúc: React <strong>giữ</strong> giá trị hộ bạn giữa các lần gọi, và gọi hàm set là <strong>báo</strong> React gọi lại component.</p>
+${SD.vongStateVi}
 ${pre('tsx', SN.boDemState)}
 <p>Cùng ba cú bấm, giờ nút ghi "Đã đặt 3 lượt". Test <code>state: bấm 3 lần ⇒ 3</code> xanh.</p>
 
@@ -371,6 +668,7 @@ ${out(OUT.snapshot)}
 <p>Lý do nằm ngay trong tên mục. Khi React render <code>BaLanCong</code>, nó gọi hàm với <code>soLuot = 0</code>. Handler được tạo trong lần render đó "nhìn thấy" <code>soLuot</code> là 0 và không gì đổi được điều ấy — trong lần gọi đó nó là một <code>const</code>. Nên ba dòng kia thực chất là:</p>
 ${pre('ts', OUT.snapVi)}
 <p>Gọi hàm set không đổi biến bạn đang cầm; nó xin React một lần render <em>trong tương lai</em>, ở đó <code>soLuot</code> mang giá trị mới. Tài liệu react.dev gọi giá trị state là một ảnh chụp (snapshot): cố định cho lần render nó thuộc về, kể cả bên trong handler và timeout do lần render đó tạo ra.</p>
+${SD.snapshotVi}
 <div class="callout"><p><strong>JS nhắc nhanh — closure (bao đóng).</strong> Một hàm "nhớ" các biến tồn tại ở chỗ nó được tạo ra. Arrow function <code>() =&gt; { … }</code> truyền cho <code>onClick</code> được tạo trong một lần render, nên nó nhớ <code>soLuot</code> của lần render đó. Bấm sau một phút nó vẫn dùng giá trị ấy. Đây không phải luật của React; JavaScript vốn chạy như vậy.</p></div>
 
 <h3>Cập nhật theo hàm: khi giá trị sau phụ thuộc giá trị trước</h3>
@@ -401,6 +699,7 @@ ${out(OUT.batching)}
 <li>Hai lời gọi set bên trong <code>setTimeout</code> cũng thêm <strong>một</strong> (tổng 3). Trước React 18 trường hợp này render hai lần; từ React 18 việc gộp là tự động ở mọi nơi — timeout, promise, sự kiện gốc của trình duyệt.</li>
 <li>"set giá trị cũ" gọi <code>setA(a)</code> với đúng giá trị đang có. Tài liệu tham khảo của react.dev nói React bỏ qua render khi <code>Object.is</code> thấy giá trị mới y hệt, nhưng thêm: "trong một số trường hợp React có thể vẫn phải gọi component của bạn trước khi bỏ qua các con". Đó đúng là điều đo được: lần set trùng <strong>đầu tiên</strong> vẫn sinh một commit (tổng 4); hai lần sau <strong>không</strong> sinh commit nào. Quy tắc thực tế không đổi — đặt lại cùng giá trị là rẻ và vô hại — nhưng đừng viết mã dựa vào "không render lần nào".</li>
 </ul>
+${SD.batchingVi}
 <p><strong>Khởi tạo lười (lazy initializer).</strong> Cùng file test đo thêm một chi tiết. Nếu giá trị ban đầu tốn công tạo, <code>useState(taoDanhSach())</code> gọi hàm ở <em>mọi</em> lần render rồi vứt kết quả đi từ lần thứ hai. Đưa chính cái hàm thì React chỉ gọi một lần:</p>
 ${pre('tsx', SN.khoiTao)}
 ${out(OUT.lazy)}
@@ -498,6 +797,7 @@ ${out(OUT.tsVoid)}
 <p>"<code>void</code> is not assignable to <code>MouseEventHandler</code>" is TypeScript&#39;s way of saying "you gave me the <em>result</em> of a function that returns nothing, and I wanted a <em>function</em>". If you silence TypeScript and run it anyway, React stops the program:</p>
 ${out(OUT.tooMany)}
 <p>The chain is: render calls <code>tang()</code> → <code>tang</code> calls <code>setDem</code> → React schedules a render → that render calls <code>tang()</code> again → … React cuts the loop and throws. If the handler does not set state (say <code>onClick={console.log('bấm')}</code>), there is no crash, just a quieter bug: the log appears once when the page loads and never when you click.</p>
+${SD.goiNgayEn}
 <div class="callout"><p><strong>JS quick reminder — arrow functions.</strong> <code>() =&gt; tang()</code> is a short way to write <code>function () { return tang(); }</code>. It creates a new function that, <em>when called</em>, calls <code>tang</code>. So <code>onClick={() =&gt; tang()}</code> passes a function (correct), while <code>onClick={tang()}</code> passes a result (wrong). If there is no parameter, the parentheses stay empty: <code>() =&gt; …</code>; with one parameter you may write <code>(e) =&gt; …</code> or <code>e =&gt; …</code>.</p></div>
 
 <h3>Three ways to write a handler, and how to pass arguments</h3>
@@ -512,6 +812,7 @@ ${pre('tsx', SN.baCachDung)}
 <li>The <strong>function</strong> that handles it inside a component is conventionally <code>handleSomething</code>; this course writes it in Vietnamese, <code>xuLySomething</code> (<code>xuLyDoiYeuThich</code>, <code>xuLyGui</code>).</li>
 </ul>
 <p>And when the parent&#39;s handler is simply "set this state", you can pass the setter itself — <code>onXemChiTiet={setBacSiDangChonId}</code> — because it already has the right shape: it takes an id and stores it.</p>
+${SD.handlerPropEn}
 <p>One more difference from the component body: <strong>handlers do not need to be pure</strong>. They are exactly the place for side effects — setting state, sending a request, writing a log. React never calls your event handlers twice, even in StrictMode.</p>
 
 <h3>Events bubble up</h3>
@@ -525,6 +826,7 @@ ${out(OUT.lanTruyen)}
 <li>If you ever need to see every click <em>before</em> the children handle it (analytics, closing a menu), React offers the capture phase: <code>onClickCapture</code> runs top-down before the normal handlers, even when a child stops propagation.</li>
 <li>In the finished project the card itself is <em>not</em> clickable — it has two separate buttons. That is the simpler design: no propagation to manage, and both actions are real <code>&lt;button&gt;</code>s that keyboard users can reach. Reach for <code>stopPropagation</code> when the design really needs nested clickable areas.</li>
 </ul>
+${SD.noiBotEn}
 
 <h3>Default behaviour: a form reloads the page</h3>
 ${slide('rx-02', 12, 'Submit reloads the page by default — preventDefault stops it')}
@@ -636,6 +938,7 @@ ${out(OUT.tsVoid)}
 <p>"<code>void</code> không gán được cho <code>MouseEventHandler</code>" là cách TypeScript nói "bạn đưa tôi <em>kết quả</em> của một hàm không trả gì, trong khi tôi cần một <em>hàm</em>". Bịt miệng TypeScript rồi vẫn chạy, React dừng chương trình:</p>
 ${out(OUT.tooMany)}
 <p>Chuỗi sự việc: render gọi <code>tang()</code> → <code>tang</code> gọi <code>setDem</code> → React lên lịch render → lần render đó lại gọi <code>tang()</code> → … React cắt vòng lặp và ném lỗi. Nếu handler không đặt state (ví dụ <code>onClick={console.log('bấm')}</code>) thì không sập, chỉ là một bug lặng lẽ hơn: dòng log hiện một lần lúc trang tải và không bao giờ hiện khi bạn bấm.</p>
+${SD.goiNgayVi}
 <div class="callout"><p><strong>JS nhắc nhanh — arrow function (hàm mũi tên).</strong> <code>() =&gt; tang()</code> là cách viết gọn của <code>function () { return tang(); }</code>. Nó tạo một hàm MỚI, hàm này <em>khi được gọi</em> thì mới gọi <code>tang</code>. Vậy <code>onClick={() =&gt; tang()}</code> đưa một hàm (đúng), còn <code>onClick={tang()}</code> đưa một kết quả (sai). Không có tham số thì để ngoặc trống: <code>() =&gt; …</code>; một tham số thì viết <code>(e) =&gt; …</code> hoặc <code>e =&gt; …</code>.</p></div>
 
 <h3>Ba cách viết handler, và cách truyền tham số</h3>
@@ -650,6 +953,7 @@ ${pre('tsx', SN.baCachDung)}
 <li><strong>Hàm</strong> xử lý bên trong component theo quy ước là <code>handleXxx</code>; khoá này viết bằng tiếng Việt, <code>xuLyXxx</code> (<code>xuLyDoiYeuThich</code>, <code>xuLyGui</code>).</li>
 </ul>
 <p>Và khi handler của cha chỉ là "đặt state này", bạn đưa thẳng hàm set — <code>onXemChiTiet={setBacSiDangChonId}</code> — vì nó đã đúng hình dạng: nhận một id và cất lại.</p>
+${SD.handlerPropVi}
 <p>Thêm một khác biệt với thân component: <strong>handler không cần thuần</strong>. Nó chính là chỗ dành cho tác dụng phụ — đặt state, gửi request, ghi log. React không bao giờ gọi handler của bạn hai lần, kể cả trong StrictMode.</p>
 
 <h3>Sự kiện nổi bọt</h3>
@@ -663,6 +967,7 @@ ${out(OUT.lanTruyen)}
 <li>Khi cần thấy mọi cú bấm <em>trước</em> khi con xử lý (thống kê, đóng menu), React có pha bắt (capture): <code>onClickCapture</code> chạy từ trên xuống trước các handler thường, kể cả khi con đã chặn nổi bọt.</li>
 <li>Trong dự án hoàn chỉnh, bản thân thẻ <em>không</em> bấm được — nó có hai nút riêng. Thiết kế đó đơn giản hơn: không có nổi bọt nào phải quản, và cả hai hành động đều là <code>&lt;button&gt;</code> thật mà người dùng bàn phím tới được. Chỉ dùng <code>stopPropagation</code> khi thiết kế thật sự cần vùng bấm lồng nhau.</li>
 </ul>
+${SD.noiBotVi}
 
 <h3>Hành vi mặc định: form tải lại trang</h3>
 ${slide('rx-02', 12, 'Submit mặc định tải lại trang — preventDefault chặn')}
@@ -786,6 +1091,7 @@ ${pre('js', OUT.objectIsCode)}
 ${out(OUT.objectIs)}
 <p>Numbers and strings compare by value (3 is 3). Objects compare by identity: <code>a</code> and <code>b</code> are the <em>same</em> object — changing <code>b.hoTen</code> changed <code>a.hoTen</code> too — while <code>c</code>, built with spread, is a <em>different</em> object even though its fields look identical. Two empty objects are two different objects.</p>
 <p><strong>React: it compares state with <code>Object.is</code>.</strong> When you call <code>setBn(x)</code>, React checks <code>Object.is(oldState, x)</code>. In the buggy handler, <code>bn</code> was changed in place and then passed back — the old state and the "new" state are the same object, so the answer is <code>true</code>, "nothing changed", and React skips the render (the bail-out you measured in 2.1). React is not being lazy; it is doing exactly what you asked, cheaply. Comparing by identity is what lets React decide in one step whether anything changed, instead of walking through every field of every object.</p>
+${SD.objectIsEn}
 
 <h3>The ghost: a bug that shows up somewhere else</h3>
 ${slide('rx-02', 15, 'The ghost bug: mutate now, and a DIFFERENT state change reveals it')}
@@ -793,6 +1099,7 @@ ${slide('rx-02', 15, 'The ghost bug: mutate now, and a DIFFERENT state change re
 ${out(OUT.suaThang)}
 <p>After the first click the screen still says Nguyễn Văn A. After the unrelated click it suddenly says Trần Thị B — the old change "arrived" with somebody else&#39;s render. In a real app that "somebody else" might be a timer, a notification or a network response, minutes later, in a different component. That is why mutation bugs are so expensive to find: the symptom appears at a different place and time from the cause. The second line of the output is the same disease with an array: <code>ds.push(x); setDs(ds)</code> — two clicks, still "1 yêu thích", because it is still the same array.</p>
 ${pre('tsx', SN.themSai)}
+${SD.bongMaEn}
 
 <h3>Copying objects with spread</h3>
 <p>The fix is to never touch the object in state and instead build a new one that has the change:</p>
@@ -806,6 +1113,7 @@ ${slide('rx-02', 16, 'Nested objects: spread EVERY LEVEL down to what changes')}
 ${pre('ts', SN.doiSdt)}
 ${out(OUT.spread)}
 <p>Both levels are new (<code>false</code>, <code>false</code>), and the old appointment still has the old number. Fields that did not change — <code>id</code>, <code>lyDo</code>, <code>hoTen</code> — are simply copied; their values are shared, which is fine because nobody will change them in place.</p>
+${SD.longNhauEn}
 <p>The classic trap is to think one spread copies everything. It does not: spread is a <strong>shallow copy (sao chép nông)</strong>. The outer object is new, but <code>benhNhan</code> inside it is the same object as before:</p>
 ${pre('ts', SN.testMotTang)}
 ${out(OUT.motTang)}
@@ -924,6 +1232,7 @@ ${pre('js', OUT.objectIsCode)}
 ${out(OUT.objectIs)}
 <p>Số và chuỗi so theo giá trị (3 là 3). Object so theo danh tính: <code>a</code> và <code>b</code> là <em>cùng một</em> object — sửa <code>b.hoTen</code> là sửa luôn <code>a.hoTen</code> — còn <code>c</code>, tạo bằng spread, là một object <em>khác</em> dù các field trông y hệt. Hai object rỗng là hai object khác nhau.</p>
 <p><strong>React: nó so state bằng <code>Object.is</code>.</strong> Khi bạn gọi <code>setBn(x)</code>, React kiểm <code>Object.is(stateCu, x)</code>. Trong handler lỗi, <code>bn</code> bị sửa tại chỗ rồi được đưa lại — state cũ và state "mới" là cùng một object, nên câu trả lời là <code>true</code>, "không có gì đổi", và React bỏ qua lần render (chính cơ chế bỏ qua bạn đã đo ở 2.1). React không lười; nó làm đúng điều bạn yêu cầu, một cách rẻ. So theo danh tính là cách React quyết định trong một bước có gì đổi hay không, thay vì đi qua từng field của từng object.</p>
+${SD.objectIsVi}
 
 <h3>Bóng ma: bug hiện ra ở chỗ khác</h3>
 ${slide('rx-02', 15, 'Bug ma: sửa thẳng, rồi một state KHÁC làm giá trị sai hiện ra')}
@@ -931,6 +1240,7 @@ ${slide('rx-02', 15, 'Bug ma: sửa thẳng, rồi một state KHÁC làm giá t
 ${out(OUT.suaThang)}
 <p>Sau cú bấm đầu, màn hình vẫn ghi Nguyễn Văn A. Sau cú bấm chẳng liên quan, nó bỗng ghi Trần Thị B — thay đổi cũ "tới nơi" nhờ lần render của người khác. Trong ứng dụng thật, "người khác" đó có thể là một bộ hẹn giờ, một thông báo hay một phản hồi mạng, vài phút sau, ở một component khác. Đó là lý do bug đột biến rất đắt để tìm: triệu chứng xuất hiện ở chỗ khác và lúc khác với nguyên nhân. Dòng thứ hai của output là cùng căn bệnh với mảng: <code>ds.push(x); setDs(ds)</code> — bấm hai lần, vẫn "1 yêu thích", vì vẫn là mảng cũ.</p>
 ${pre('tsx', SN.themSai)}
+${SD.bongMaVi}
 
 <h3>Chép object bằng spread</h3>
 <p>Cách sửa là không bao giờ đụng vào object trong state, mà dựng một object mới mang thay đổi:</p>
@@ -944,6 +1254,7 @@ ${slide('rx-02', 16, 'Object lồng nhau: spread TỪNG TẦNG tới chỗ cần
 ${pre('ts', SN.doiSdt)}
 ${out(OUT.spread)}
 <p>Cả hai tầng đều mới (<code>false</code>, <code>false</code>), và lịch hẹn cũ vẫn giữ số cũ. Những field không đổi — <code>id</code>, <code>lyDo</code>, <code>hoTen</code> — chỉ được chép sang; giá trị của chúng được dùng chung, và điều đó ổn vì không ai sửa chúng tại chỗ.</p>
+${SD.longNhauVi}
 <p>Bẫy kinh điển là nghĩ một lần spread chép được mọi thứ. Không: spread là <strong>sao chép nông (shallow copy)</strong>. Object ngoài là mới, nhưng <code>benhNhan</code> bên trong vẫn là object cũ:</p>
 ${pre('ts', SN.testMotTang)}
 ${out(OUT.motTang)}
@@ -1074,6 +1385,7 @@ ${out(OUT.rieng)}
 <li><strong>Pass</strong> the value down from the closest common parent as a prop, plus a function to change it.</li>
 <li><strong>Add</strong> the state to that parent.</li>
 </ol>
+${SD.nangLenEn}
 ${pre('tsx', SN.nangStateLen)}
 <p>Now <code>ChipChuyenKhoa</code> receives <code>giaTri</code> and <code>onDoi</code> and has no state of its own. A component like that is called <strong>controlled (được điều khiển)</strong>: what it shows is decided entirely by its props. One that keeps its own state (like <code>ThanhLocRieng</code>) is <strong>uncontrolled</strong>. Neither is better in general — an uncontrolled accordion that nobody else cares about is perfectly fine — but the moment someone else needs to know or change the value, it must become controlled. The test <code>nâng state lên: chip Nhi ⇒ 2</code> passes.</p>
 <div class="callout"><p><strong>JS quick reminder — destructuring props and type annotations.</strong> <code>function ChipChuyenKhoa({ giaTri, onDoi }: ChipChuyenKhoaProps)</code> takes the single props object and pulls out two fields by name (object destructuring, the cousin of 2.1&#39;s array destructuring). <code>onDoi: (moi: BoLocChuyenKhoa) =&gt; void</code> in the props interface reads "a function that takes one specialty filter and returns nothing". Because <code>setChuyenKhoa</code> has exactly that shape, the parent can pass it directly.</p></div>
@@ -1083,6 +1395,7 @@ ${slide('rx-02', 21, 'KhuBacSi owns four pieces of state; every child only recei
 <p>Apply the same reasoning to the whole screen. Which components need the selected specialty? The chips (to highlight) and the list (to filter). The search text? The input and the list. The selected doctor? The cards (to highlight "đang chọn") and the detail panel. The favourites? The cards, the detail panel and the favourites box. The closest common parent of all of them is one component, <code>KhuBacSi</code> — so it owns all four:</p>
 ${pre('tsx', SN.khuBacSi)}
 <p>Read it top to bottom and notice the three layers. First, <strong>four pieces of state</strong> — each one something the user changes and that cannot be computed from anything else. Second, <strong>three derived values</strong> computed during render: the filtered list, the selected doctor object, the favourite doctors. Third, JSX that hands every child exactly what it needs. This is what react.dev calls a <strong>single source of truth (một nguồn sự thật)</strong>: each piece of state has one owner; everyone else reads it through props and asks for changes through <code>onXxx</code> callbacks. When a bug report says "the chip says Nhi but the list shows a dermatologist", there is exactly one place to look.</p>
+${SD.khuBacSiEn}
 <p><code>Header</code> and <code>Footer</code> sit outside <code>KhuBacSi</code>. That placement is deliberate, and measured below.</p>
 
 <h3>Do not store what you can compute</h3>
@@ -1121,6 +1434,7 @@ ${slide('rx-02', 24, 'Five principles for structuring state + one source of trut
 <tr><td>Avoid deep nesting</td><td>a tree of objects five levels deep</td><td>flat objects that refer to each other by id</td></tr>
 </tbody></table>
 <p>Behind all five is the question you should ask of every <code>useState</code> you are about to write: <em>is this something the user (or the server) changes, which cannot be computed from anything I already have?</em> If yes, it is state, and it gets exactly one owner. If no, it is a value you compute.</p>
+${SD.laStateEn}
 
 <div class="callout"><p><strong>🎓 At FER202 you do it this way — 💼 at work they do it that way.</strong></p>
 <p>FER202 introduces Redux early, and many student projects end up putting <em>everything</em> in the store — the text of a search box, whether a modal is open, the selected tab — with an action type, an action creator and a reducer case for each. → At work, the default is the opposite: <strong>local state first</strong>, lifted only as high as needed; values that can be computed are computed; data that comes from a server lives in TanStack Query (Chapter 6); and only genuinely global client state (the logged-in user, a cart, a theme) goes into a store — usually Zustand, sometimes Redux Toolkit (Chapter 5). · <em>Why:</em> a search box&#39;s text in a global store means every keystroke goes through the whole Redux machinery and any connected component may re-render; it also makes the component impossible to reuse or test alone. Redux is not wrong — large existing codebases use it, and you will meet it — but "where should this state live?" is answered by who needs it, not by "we have a store".</p></div>
@@ -1183,6 +1497,7 @@ ${out(OUT.rieng)}
 <li><strong>Truyền</strong> giá trị xuống từ cha chung gần nhất bằng prop, kèm một hàm để đổi nó.</li>
 <li><strong>Thêm</strong> state vào cha đó.</li>
 </ol>
+${SD.nangLenVi}
 ${pre('tsx', SN.nangStateLen)}
 <p>Giờ <code>ChipChuyenKhoa</code> nhận <code>giaTri</code> và <code>onDoi</code>, không có state riêng. Component như vậy gọi là <strong>được điều khiển (controlled)</strong>: nó hiện gì hoàn toàn do props quyết định. Component tự giữ state (như <code>ThanhLocRieng</code>) là <strong>không được điều khiển (uncontrolled)</strong>. Không cái nào tốt hơn một cách chung chung — một accordion tự đóng mở mà chẳng ai khác quan tâm thì để uncontrolled là ổn — nhưng khi có ai khác cần biết hay đổi giá trị, nó phải thành controlled. Test <code>nâng state lên: chip Nhi ⇒ 2</code> xanh.</p>
 <div class="callout"><p><strong>JS nhắc nhanh — tách props và chú thích kiểu.</strong> <code>function ChipChuyenKhoa({ giaTri, onDoi }: ChipChuyenKhoaProps)</code> nhận MỘT object props và rút ra hai field theo tên (destructuring object, anh em với destructuring mảng ở 2.1). <code>onDoi: (moi: BoLocChuyenKhoa) =&gt; void</code> trong interface props đọc là "một hàm nhận một bộ lọc chuyên khoa và không trả gì". Vì <code>setChuyenKhoa</code> có đúng hình dạng đó, cha đưa thẳng nó xuống được.</p></div>
@@ -1192,6 +1507,7 @@ ${slide('rx-02', 21, 'KhuBacSi giữ bốn mẩu state; mọi con chỉ nhận p
 <p>Áp cùng cách nghĩ cho cả màn hình. Component nào cần chuyên khoa đang chọn? Hàng chip (để tô sáng) và danh sách (để lọc). Chữ đang tìm? Ô nhập và danh sách. Bác sĩ đang chọn? Các thẻ (để tô "đang chọn") và khung chi tiết. Danh sách yêu thích? Các thẻ, khung chi tiết và hộp yêu thích. Cha chung gần nhất của tất cả là một component, <code>KhuBacSi</code> — nên nó sở hữu cả bốn:</p>
 ${pre('tsx', SN.khuBacSi)}
 <p>Đọc từ trên xuống và để ý ba lớp. Thứ nhất, <strong>bốn mẩu state</strong> — mỗi mẩu là thứ người dùng đổi và không tính được từ thứ gì khác. Thứ hai, <strong>ba giá trị dẫn xuất</strong> tính trong lúc render: danh sách đã lọc, object bác sĩ đang chọn, các bác sĩ yêu thích. Thứ ba, JSX đưa cho mỗi con đúng thứ nó cần. Đó là điều react.dev gọi là <strong>một nguồn sự thật (single source of truth)</strong>: mỗi mẩu state có đúng một chủ; mọi nơi khác đọc qua props và xin thay đổi qua các callback <code>onXxx</code>. Khi có báo lỗi "chip ghi Nhi mà danh sách hiện bác sĩ da liễu", chỉ có đúng một chỗ để nhìn.</p>
+${SD.khuBacSiVi}
 <p><code>Header</code> và <code>Footer</code> nằm ngoài <code>KhuBacSi</code>. Vị trí đó là cố ý, và được đo ở dưới.</p>
 
 <h3>Đừng cất thứ tính được</h3>
@@ -1230,6 +1546,7 @@ ${slide('rx-02', 24, 'Năm nguyên tắc cấu trúc state + một nguồn sự 
 <tr><td>Tránh lồng sâu</td><td>một cây object sâu năm tầng</td><td>các object phẳng trỏ tới nhau bằng id</td></tr>
 </tbody></table>
 <p>Đằng sau cả năm là câu hỏi bạn nên hỏi trước mỗi <code>useState</code> sắp viết: <em>đây có phải thứ người dùng (hoặc server) đổi, và không tính được từ thứ tôi đã có?</em> Nếu có, nó là state, và nó có đúng một chủ. Nếu không, nó là giá trị bạn tính ra.</p>
+${SD.laStateVi}
 
 <div class="callout"><p><strong>🎓 Ở FER202 bạn làm thế này — 💼 đi làm người ta làm thế kia.</strong></p>
 <p>FER202 giới thiệu Redux khá sớm, và nhiều đồ án sinh viên cuối cùng bỏ <em>mọi thứ</em> vào store — chữ trong ô tìm kiếm, modal đang mở hay đóng, tab đang chọn — mỗi thứ một action type, một action creator và một nhánh reducer. → Đi làm, mặc định là ngược lại: <strong>state cục bộ trước</strong>, chỉ nâng lên vừa đủ cao; giá trị tính được thì tính; dữ liệu đến từ server nằm trong TanStack Query (Chương 6); và chỉ state phía client thật sự toàn cục (người dùng đăng nhập, giỏ hàng, giao diện sáng/tối) mới vào store — thường là Zustand, đôi khi Redux Toolkit (Chương 5). · <em>Vì sao:</em> chữ của ô tìm kiếm nằm trong store toàn cục nghĩa là mỗi phím gõ chạy qua cả bộ máy Redux và component nào nối vào store cũng có thể render lại; nó còn làm component không dùng lại hay test riêng được. Redux không sai — nhiều dự án lớn đang chạy dùng nó, và bạn sẽ gặp — nhưng "state này nên ở đâu?" được trả lời bằng ai cần nó, không phải bằng "mình có sẵn store".</p></div>
@@ -1310,11 +1627,13 @@ ${out(OUT.build)}
 <tr><td>selected doctor object, favourite doctors</td><td>—</td><td>panel, favourites box</td><td>derived: <code>find</code>, <code>filter</code></td></tr>
 </tbody></table>
 <p>Everything else — how a card looks, how a chip is highlighted — is props. The only new pure logic is two functions, and they get tested before any component exists.</p>
+${SD.luongGoEn}
 
 <h3>🛠 Keep building the project</h3>
 <p><strong>Starting point: the project after Chapter 1</strong> — <code>src/types.ts</code> (the fixed types), <code>src/du-lieu/bac-si.ts</code> (<code>danhSachBacSi</code>, the six doctors), <code>src/du-lieu/chuyen-khoa.ts</code> (<code>TEN_CHUYEN_KHOA</code>), <code>src/components/Header.tsx</code>, <code>Footer.tsx</code>, <code>TheBacSi.tsx</code> (props <code>bacSi</code>, optional <code>noiBat</code>), <code>DanhSachBacSi.tsx</code> (a section with the heading "Đội ngũ bác sĩ (N)", <code>key={bs.id}</code>, and "Chưa có bác sĩ nào." when empty), <code>App.tsx</code>, their tests, and <code>src/test/setup.ts</code> with <code>cleanup</code>. The screenshot on slide 28 is that project, running.</p>
 ${slide('rx-02', 28, 'Keep building: from a static list to a list that listens')}
 <p><strong>Goal:</strong> the screen on slide 25 — specialty chips, an accent-insensitive name search, a heading that counts the matches ("Đội ngũ bác sĩ (N)"), a detail panel, and favourites that survive filtering.</p>
+${SD.thuTuEn}
 <ol>
 <li><strong>Check your test setup first.</strong> The Vite template does not enable Vitest globals, and in that case Testing Library does not clean the DOM between tests by itself. When this chapter&#39;s demo was first built on the bare template, two tests that both rendered <code>&lt;App /&gt;</code> saw each other&#39;s output:
 ${out(OUT.cleanup)}
@@ -1438,11 +1757,13 @@ ${out(OUT.build)}
 <tr><td>object bác sĩ đang chọn, các bác sĩ yêu thích</td><td>—</td><td>khung, hộp yêu thích</td><td>dẫn xuất: <code>find</code>, <code>filter</code></td></tr>
 </tbody></table>
 <p>Mọi thứ còn lại — thẻ trông ra sao, chip tô sáng thế nào — là props. Logic thuần mới chỉ có hai hàm, và chúng được test trước khi có component nào.</p>
+${SD.luongGoVi}
 
 <h3>🛠 Tự gõ tiếp dự án</h3>
 <p><strong>Điểm xuất phát: dự án sau Chương 1</strong> — <code>src/types.ts</code> (các kiểu cố định), <code>src/du-lieu/bac-si.ts</code> (<code>danhSachBacSi</code>, sáu bác sĩ), <code>src/du-lieu/chuyen-khoa.ts</code> (<code>TEN_CHUYEN_KHOA</code>), <code>src/components/Header.tsx</code>, <code>Footer.tsx</code>, <code>TheBacSi.tsx</code> (props <code>bacSi</code>, <code>noiBat</code> không bắt buộc), <code>DanhSachBacSi.tsx</code> (một section có tiêu đề "Đội ngũ bác sĩ (N)", <code>key={bs.id}</code>, và "Chưa có bác sĩ nào." khi rỗng), <code>App.tsx</code>, các test của chúng, và <code>src/test/setup.ts</code> có <code>cleanup</code>. Ảnh trên slide 28 chính là dự án đó đang chạy.</p>
 ${slide('rx-02', 28, 'Tự gõ tiếp dự án: từ danh sách tĩnh tới danh sách biết nghe')}
 <p><strong>Mục tiêu:</strong> màn hình ở slide 25 — chip chuyên khoa, ô tìm tên không phân biệt dấu, tiêu đề đếm số bác sĩ khớp ("Đội ngũ bác sĩ (N)"), khung chi tiết, và danh sách yêu thích không mất khi lọc.</p>
+${SD.thuTuVi}
 <ol>
 <li><strong>Kiểm phần cài đặt test trước.</strong> Template Vite không bật globals của Vitest, và khi đó Testing Library không tự dọn DOM giữa các test. Lần đầu dựng ví dụ của chương trên template trần, hai test cùng render <code>&lt;App /&gt;</code> nhìn thấy output của nhau:
 ${out(OUT.cleanup)}

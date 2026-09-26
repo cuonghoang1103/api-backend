@@ -6,6 +6,364 @@
  * Điểm xuất phát của 🛠: dự án sau Chương 10 (dựng lại từ sau-ch05 + phần Ch6/Ch7 cần thiết — xem bài 11.4).
  */
 import { gallery, slide } from './_slides.mjs';
+/* ─── Sơ đồ mermaid trong bài (≤ 10 nút, nhãn ngắn; khối EN nhãn tiếng Anh, khối VI nhãn tiếng Việt) ─── */
+const H = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/`/g, '&#96;').replace(/\$\{/g, '&#36;{');
+/** Sơ đồ mermaid: trang học đọc textContent của <code class="language-mermaid"> rồi vẽ (LearnPageClient → mermaidRuntime). */
+const MM = (src) => '<pre><code class="language-mermaid">' + H(src.trim()) + '</code></pre>';
+const LM = (...dong) => MM(dong.join('\n'));
+const SD = {
+  /* 11.1 */
+  phaVi: LM(
+    'flowchart TB',
+    '  A["① Trigger: bấm +1, setSoLuot(1) chỉ xếp hàng"] --> B["② Render: gọi BangDem, rồi cả 6 TheNho · 7 lần gọi hàm"]',
+    '  B --> C["So cây mới với cây cũ: chỉ chữ trong p đổi 0 → 1"]',
+    '  C --> D["③ Commit: đúng 1 thao tác DOM · li cũ vẫn là nút cũ"]',
+    '  D --> E["④ Paint: trình duyệt vẽ lại con số"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class D tot',
+  ),
+  phaEn: LM(
+    'flowchart TB',
+    '  A["① Trigger: click +1, setSoLuot(1) only queues"] --> B["② Render: call BangDem, then all 6 TheNho · 7 function calls"]',
+    '  B --> C["Compare new tree with old: only the text in p changes 0 → 1"]',
+    '  C --> D["③ Commit: exactly 1 DOM operation · the old li is the same node"]',
+    '  D --> E["④ Paint: the browser redraws the number"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class D tot',
+  ),
+  soSanhVi: LM(
+    'flowchart TB',
+    '  A["Render mới, cùng một vị trí trong cây"] --> B{"type giống lần trước?"}',
+    '  B -->|"giống: div vẫn là div"| C["Giữ nút DOM và component, chỉ sửa prop đổi"]',
+    '  C --> D["State bên trong còn: chữ đã gõ vẫn còn"]',
+    '  B -->|"khác: div thành section"| E["Gỡ cả nhánh cũ: effect dọn, state mất"]',
+    '  E --> F["Dựng nhánh mới từ đầu: ô ghi chú trống, nút DOM mới"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class F xau',
+  ),
+  soSanhEn: LM(
+    'flowchart TB',
+    '  A["New render, same spot in the tree"] --> B{"Same type as last time?"}',
+    '  B -->|"same: div is still div"| C["Keep the DOM node and component, update changed props"]',
+    '  C --> D["State inside survives: typed text is still there"]',
+    '  B -->|"different: div becomes section"| E["Unmount the old branch: effects clean up, state lost"]',
+    '  E --> F["Mount a new branch: empty note box, new DOM node"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class F xau',
+  ),
+  fiberVi: LM(
+    'flowchart TB',
+    '  BD["BangDem · memoizedState: soLuot = 0"] -->|"child"| S["section"]',
+    '  S -->|"child"| P["p"]',
+    '  P -->|"sibling"| BT["button"]',
+    '  BT -->|"sibling"| U["ul"]',
+    '  U -->|"child"| T1["TheNho key=bs-1"]',
+    '  T1 -->|"sibling"| T2["TheNho key=bs-2 …"]',
+    '  T1 -->|"child"| LI["li"]',
+    '  LI -. "return (lên cha)" .-> T1',
+    '  BD -. "alternate" .- BD2["Bản work-in-progress của BangDem · soLuot = 1"]',
+  ),
+  fiberEn: LM(
+    'flowchart TB',
+    '  BD["BangDem · memoizedState: soLuot = 0"] -->|"child"| S["section"]',
+    '  S -->|"child"| P["p"]',
+    '  P -->|"sibling"| BT["button"]',
+    '  BT -->|"sibling"| U["ul"]',
+    '  U -->|"child"| T1["TheNho key=bs-1"]',
+    '  T1 -->|"sibling"| T2["TheNho key=bs-2 …"]',
+    '  T1 -->|"child"| LI["li"]',
+    '  LI -. "return (to parent)" .-> T1',
+    '  BD -. "alternate" .- BD2["Work-in-progress copy of BangDem · soLuot = 1"]',
+  ),
+  /* 11.2 */
+  danhTinhVi: LM(
+    'flowchart TB',
+    '  A["Render mới ở cùng chỗ"] --> B{"Cùng type, cùng vị trí, cùng key?"}',
+    '  B -->|"cả ba giống"| C["Vẫn là component cũ: giữ state, chỉ đổi props"]',
+    '  C --> C2["Không key: ô của Huy vẫn chứa ghi chú của An"]',
+    '  B -->|"key đổi: bs-1 thành bs-5"| D["Gỡ GhiChu của An: state mất, effect dọn"]',
+    '  D --> E["Dựng GhiChu mới cho Huy: ô trống"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class C2 xau',
+    '  class E tot',
+  ),
+  danhTinhEn: LM(
+    'flowchart TB',
+    '  A["New render in the same spot"] --> B{"Same type, same position, same key?"}',
+    '  B -->|"all three the same"| C["Still the old component: keep state, update props"]',
+    '  C --> C2["No key: Huy box still holds the note for An"]',
+    '  B -->|"key changes: bs-1 to bs-5"| D["Unmount the GhiChu of An: state lost, effect cleaned up"]',
+    '  D --> E["Mount a new GhiChu for Huy: empty box"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class C2 xau',
+    '  class E tot',
+  ),
+  indexVi: LM(
+    'flowchart TB',
+    '  subgraph truoc["Trước khi xoá An"]',
+    '    direction TB',
+    '    K0["key 0 · An · tái khám"] ~~~ K1["key 1 · Hà · bé sốt"] ~~~ K2["key 2 · Bảo"]',
+    '  end',
+    '  subgraph sau["key = index, sau khi xoá"]',
+    '    direction TB',
+    '    N0["key 0 · props Hà · state tái khám"] ~~~ N1["key 1 · props Bảo · state bé sốt"] ~~~ N2["key 2 · bị gỡ"]',
+    '  end',
+    '  truoc -->|"key = index"| sau',
+    '  truoc -->|"key = id"| ID["Chỉ gỡ đúng hàng bs-1 · Hà, Bảo giữ ghi chú của mình"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class N0,N1 xau',
+    '  class ID tot',
+  ),
+  indexEn: LM(
+    'flowchart TB',
+    '  subgraph truoc["Before deleting An"]',
+    '    direction TB',
+    '    K0["key 0 · An · tái khám"] ~~~ K1["key 1 · Hà · bé sốt"] ~~~ K2["key 2 · Bảo"]',
+    '  end',
+    '  subgraph sau["key = index, after deleting"]',
+    '    direction TB',
+    '    N0["key 0 · props Hà · state tái khám"] ~~~ N1["key 1 · props Bảo · state bé sốt"] ~~~ N2["key 2 · unmounted"]',
+    '  end',
+    '  truoc -->|"key = index"| sau',
+    '  truoc -->|"key = id"| ID["Only the bs-1 row is removed · Hà, Bảo keep their own notes"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class N0,N1 xau',
+    '  class ID tot',
+  ),
+  resetVi: LM(
+    'flowchart TB',
+    '  subgraph ef["Reset bằng useEffect"]',
+    '    direction TB',
+    '    E1["Đổi sang bs-5"] --> E2["Render 1: bs-5 với chữ cũ ab · SAI một nhịp"]',
+    '    E2 --> E3["Commit, effect gọi setChu rỗng"]',
+    '    E3 --> E4["Render 2: bs-5 trống"]',
+    '  end',
+    '  subgraph ky["Reset bằng key"]',
+    '    direction TB',
+    '    K1["Đổi key sang bs-5"] --> K2["Gỡ cái cũ, mount cái mới"]',
+    '    K2 --> K3["Render 1: bs-5 trống · ĐÚNG ngay"]',
+    '  end',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class E2 xau',
+    '  class K3 tot',
+  ),
+  resetEn: LM(
+    'flowchart TB',
+    '  subgraph ef["Reset with useEffect"]',
+    '    direction TB',
+    '    E1["Switch to bs-5"] --> E2["Render 1: bs-5 with old text ab · WRONG for one beat"]',
+    '    E2 --> E3["Commit, effect calls setChu empty"]',
+    '    E3 --> E4["Render 2: bs-5 empty"]',
+    '  end',
+    '  subgraph ky["Reset with key"]',
+    '    direction TB',
+    '    K1["Key changes to bs-5"] --> K2["Unmount the old, mount a new one"]',
+    '    K2 --> K3["Render 1: bs-5 empty · RIGHT at once"]',
+    '  end',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class E2 xau',
+    '  class K3 tot',
+  ),
+  /* 11.3 */
+  strictVi: LM(
+    'flowchart TB',
+    '  subgraph dev["Dev + StrictMode, lúc mount"]',
+    '    direction TB',
+    '    D1["Thân component chạy 2 lần, khởi tạo useState 2 lần"] --> D2["effect: chạy"]',
+    '    D2 --> D3["effect: dọn"]',
+    '    D3 --> D4["effect: chạy lại"]',
+    '  end',
+    '  subgraph prod["Production · vite build"]',
+    '    direction TB',
+    '    P1["render 1 lần"] --> P2["effect: chạy 1 lần"]',
+    '  end',
+  ),
+  strictEn: LM(
+    'flowchart TB',
+    '  subgraph dev["Dev + StrictMode, at mount"]',
+    '    direction TB',
+    '    D1["Component body runs twice, useState initialiser twice"] --> D2["effect: run"]',
+    '    D2 --> D3["effect: clean up"]',
+    '    D3 --> D4["effect: run again"]',
+    '  end',
+    '  subgraph prod["Production · vite build"]',
+    '    direction TB',
+    '    P1["render once"] --> P2["effect: runs once"]',
+    '  end',
+  ),
+  refVi: LM(
+    'flowchart TB',
+    '  A{"Giá trị có hiện trên màn hình?"} -->|"có"| S["useState: đổi là render lại · bấm 3 lần: 4 render, màn hình đúng"]',
+    '  A -->|"không, chỉ cần nhớ giữa các lần render"| R["useRef: đổi ref.current KHÔNG render · id hẹn giờ, cờ đang gửi, nút DOM"]',
+    '  R --> W["Đọc, ghi ref trong handler và effect · không trong lúc render"]',
+  ),
+  refEn: LM(
+    'flowchart TB',
+    '  A{"Is the value shown on screen?"} -->|"yes"| S["useState: changing it re-renders · 3 clicks: 4 renders, screen right"]',
+    '  A -->|"no, only remembered between renders"| R["useRef: changing ref.current does NOT render · timer id, sending flag, DOM node"]',
+    '  R --> W["Read and write refs in handlers and effects · not during render"]',
+  ),
+  layoutVi: LM(
+    'flowchart TB',
+    '  A["Rê chuột: setMo(true), render chậm 100 ms, top = 0"] --> B["Commit: tooltip vào DOM"]',
+    '  B --> C{"Đo vị trí bằng hook nào?"}',
+    '  C -->|"useLayoutEffect"| D["Đo ngay, setTop(117), render + commit lại, vẫn trước khi vẽ"]',
+    '  D --> E["Paint lần đầu: đã ở top 117"]',
+    '  C -->|"useEffect"| F["Trình duyệt vẽ trước: tooltip ở top 0, sai chỗ"]',
+    '  F --> G["Effect đo, setTop(117), vẽ lại: nháy"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class E tot',
+    '  class F xau',
+  ),
+  layoutEn: LM(
+    'flowchart TB',
+    '  A["Hover: setMo(true), 100 ms slow render, top = 0"] --> B["Commit: tooltip in the DOM"]',
+    '  B --> C{"Which hook measures it?"}',
+    '  C -->|"useLayoutEffect"| D["Measure now, setTop(117), render + commit again, still before paint"]',
+    '  D --> E["First paint: already at top 117"]',
+    '  C -->|"useEffect"| F["Browser paints first: tooltip at top 0, wrong place"]',
+    '  F --> G["Effect measures, setTop(117), repaint: a flicker"]',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  class E tot',
+    '  class F xau',
+  ),
+  /* 11.4 */
+  portalVi: LM(
+    'flowchart TB',
+    '  subgraph rt["Cây React"]',
+    '    direction TB',
+    '    R1["TheCoHop"] --> R2["article.the-bi-cat"]',
+    '    R2 --> R3["Hop · qua createPortal"]',
+    '  end',
+    '  subgraph dt["Cây DOM"]',
+    '    direction TB',
+    '    D0["body"] --> D1["div root"]',
+    '    D1 --> D2["article.the-bi-cat · overflow hidden"]',
+    '    D0 --> D3["div role=dialog · con trực tiếp của body"]',
+    '  end',
+    '  R3 -. "vẽ vào" .-> D3',
+  ),
+  portalEn: LM(
+    'flowchart TB',
+    '  subgraph rt["React tree"]',
+    '    direction TB',
+    '    R1["TheCoHop"] --> R2["article.the-bi-cat"]',
+    '    R2 --> R3["Hop · via createPortal"]',
+    '  end',
+    '  subgraph dt["DOM tree"]',
+    '    direction TB',
+    '    D0["body"] --> D1["div root"]',
+    '    D1 --> D2["article.the-bi-cat · overflow hidden"]',
+    '    D0 --> D3["div role=dialog · direct child of body"]',
+    '  end',
+    '  R3 -. "drawn into" .-> D3',
+  ),
+  noiBotVi: LM(
+    'flowchart TB',
+    '  A["Bấm OK trong hộp mở qua portal"] --> B["onClick của nút OK: hộp: bấm OK"]',
+    '  B --> C{"Div của hộp có stopPropagation?"}',
+    '  C -->|"không"| D["Nổi bọt theo CÂY REACT lên div của thẻ"]',
+    '  D --> E["thẻ: onClick (chọn thẻ) · dù trong DOM hộp nằm dưới body"]',
+    '  C -->|"có"| F["Dừng ở hộp, thẻ không nhận gì"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class E xau',
+    '  class F tot',
+  ),
+  noiBotEn: LM(
+    'flowchart TB',
+    '  A["Click OK in a dialog opened through a portal"] --> B["OK button onClick: hộp: bấm OK"]',
+    '  B --> C{"Does the dialog div call stopPropagation?"}',
+    '  C -->|"no"| D["Bubbles through the REACT tree up to the card div"]',
+    '  D --> E["thẻ: onClick (chọn thẻ) · although in the DOM the dialog is under body"]',
+    '  C -->|"yes"| F["Stops at the dialog, the card gets nothing"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class E xau',
+    '  class F tot',
+  ),
+  batLoiVi: LM(
+    'flowchart TB',
+    '  A["Một component ném lỗi"] --> B{"Ném lúc nào?"}',
+    '  B -->|"lúc render, lifecycle, effect"| C{"Có ranh giới lỗi phía trên?"}',
+    '  C -->|"có"| D["Ranh giới gần nhất vẽ: Phần này gặp sự cố · phần khác vẫn chạy"]',
+    '  C -->|"không"| E["React gỡ cả cây: trang trắng"]',
+    '  B -->|"trong onClick, setTimeout, Promise"| F["Không qua pha render: ranh giới KHÔNG bắt"]',
+    '  F --> G["Lỗi ra window, giao diện đứng yên · xử lý tại chỗ trong handler"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class E xau',
+    '  class D tot',
+  ),
+  batLoiEn: LM(
+    'flowchart TB',
+    '  A["A component throws"] --> B{"When?"}',
+    '  B -->|"while rendering, lifecycle, effect"| C{"Is there an error boundary above?"}',
+    '  C -->|"yes"| D["Nearest boundary draws: Phần này gặp sự cố · the rest still works"]',
+    '  C -->|"no"| E["React unmounts the whole tree: blank page"]',
+    '  B -->|"in onClick, setTimeout, a Promise"| F["No render phase: the boundary does NOT catch it"]',
+    '  F --> G["Error goes to window, UI unchanged · handle it in the handler"]',
+    '  classDef xau fill:#3a0d0d,stroke:#f85149,color:#fff',
+    '  classDef tot fill:#0d2a1a,stroke:#3fb950,color:#fff',
+    '  class E xau',
+    '  class D tot',
+  ),
+  /* 11.5 */
+  nhiemVuVi: LM(
+    'flowchart TB',
+    '  BC["BoCuc · RanhGioiLoi resetKeys = pathname, onThuLai = reset · ④"] --> O["Outlet"]',
+    '  O --> CT["TrangChiTietBacSi"]',
+    '  CT --> H2["h2 tên bác sĩ: useRef + focus · ②"]',
+    '  CT --> DL["DatLichVoiBacSi key = bacSi.id · ①"]',
+    '  DL --> CTH["ChuThich: portal + useLayoutEffect · ⑤"]',
+    '  O --> LH["LichHenCuaToi"]',
+    '  LH --> HX["HopXacNhan: portal vào body · ③"]',
+  ),
+  nhiemVuEn: LM(
+    'flowchart TB',
+    '  BC["BoCuc · RanhGioiLoi resetKeys = pathname, onThuLai = reset · ④"] --> O["Outlet"]',
+    '  O --> CT["TrangChiTietBacSi"]',
+    '  CT --> H2["doctor-name h2: useRef + focus · ②"]',
+    '  CT --> DL["DatLichVoiBacSi key = bacSi.id · ①"]',
+    '  DL --> CTH["ChuThich: portal + useLayoutEffect · ⑤"]',
+    '  O --> LH["LichHenCuaToi"]',
+    '  LH --> HX["HopXacNhan: portal into body · ③"]',
+  ),
+  loi500Vi: LM(
+    'sequenceDiagram',
+    '  participant U as Người dùng',
+    '  participant Q as useChiTietBacSi',
+    '  participant R as RanhGioiLoi trong BoCuc',
+    '  U->>Q: mở /bac-si/bs-1?loi=chi-tiet',
+    '  Q->>Q: API trả 500, TanStack thử lại 3 lần (khoảng 8,5 s)',
+    '  Q->>R: throwOnError (mọi lỗi trừ 404): ném lúc render',
+    '  R-->>U: Phần này gặp sự cố · header, menu vẫn chạy',
+    '  U->>R: bấm Tải lại phần này',
+    '  R->>Q: reset() của useQueryErrorResetBoundary, gọi API lại',
+    '  Note over U,R: Bấm sang trang khác: resetKeys = pathname tự xoá lỗi',
+  ),
+  loi500En: LM(
+    'sequenceDiagram',
+    '  participant U as User',
+    '  participant Q as useChiTietBacSi',
+    '  participant R as RanhGioiLoi in BoCuc',
+    '  U->>Q: open /bac-si/bs-1?loi=chi-tiet',
+    '  Q->>Q: API returns 500, TanStack retries 3 times (about 8.5 s)',
+    '  Q->>R: throwOnError (every error but 404): throws while rendering',
+    '  R-->>U: Phần này gặp sự cố · header, menu still work',
+    '  U->>R: click Tải lại phần này',
+    '  R->>Q: reset() from useQueryErrorResetBoundary, API called again',
+    '  Note over U,R: Navigate to another page: resetKeys = pathname clears the error',
+  ),
+};
 
 export default {
   title: 'Chapter 11 — React under the hood|||Chương 11 — React bên trong',
@@ -153,6 +511,7 @@ export function BangDem() {
 <li><em>Commit:</em> exactly <strong>one</strong> DOM operation — the text node <code>"0"</code> becomes <code>"1"</code>. The first <code>&lt;li&gt;</code> is still <strong>the very same DOM node</strong> (<code>true</code>), not a new node that looks identical.</li>
 <li><em>Paint:</em> the browser redraws the number.</li>
 </ol>
+${SD.phaEn}
 <p>The two numbers in the grey box tell different stories. <code>TheNho: 6</code> is the <strong>render</strong> cost — six JavaScript function calls. <code>số thay đổi: 1</code> ("changes: 1") is the <strong>commit</strong> cost — one DOM edit. DOM edits are far more expensive (they trigger layout and repaint), so that is where React saves. The six function calls React does <em>not</em> save by itself; for six small cards that is not worth a thought, for six hundred heavy cards Chapter 8 (<code>memo</code>) and Chapter 12 (React Compiler) are the tools. Measured on the same machine: wrap <code>TheNho</code> in <code>memo</code>, click three times, and <code>TheNho</code> renders exactly 0 times.</p>
 
 <div class="callout"><p><strong>🎓 At FER202 you do it this way — 💼 at work they do it that way.</strong></p>
@@ -210,6 +569,7 @@ export function DoiClass() {
 <p>The test types "đau đầu" (headache) into the box, then ticks "Nổi bật" (highlight). In <code>DoiVoBoc</code>, the wrapper changes from <code>&lt;div&gt;</code> to <code>&lt;section&gt;</code>: same spot, <strong>different type</strong> ⇒ React discards the <code>&lt;div&gt;</code> and everything inside, including <code>ONhap</code> and its <code>chu</code> state, then mounts a new <code>&lt;section&gt;</code> with a brand-new <code>ONhap</code> — the text is gone and the input is a different DOM node (<code>false</code>, "same DOM node? false"). In <code>DoiClass</code>, the wrapper stays a <code>&lt;div&gt;</code> and only <code>className</code> changes ⇒ React edits that attribute and keeps everything else (<code>true</code>).</p>
 <div class="pitfall co-tieu-de"><strong>Trap — switching the wrapper tag conditionally wipes what the user is typing.</strong> A pattern common in course projects: <code>{isPhone ? &lt;div className="col"&gt;&lt;Form /&gt;&lt;/div&gt; : &lt;section className="grid"&gt;&lt;Form /&gt;&lt;/section&gt;}</code>, or wrapping a form in a <code>&lt;Link&gt;</code> only when logged in. The user rotates the phone or logs in halfway through and the form is blank — no error, no warning. Fix: keep <strong>the same tag</strong> and only change <code>className</code>/attributes, or lift the state to the parent (Lesson 2.4) so it does not depend on the wrapper.</div>
 <p>The rule "same type, same spot ⇒ keep" sounds obvious, but it is the root of a whole family of bugs that Lesson 11.2 measures: it also means React <em>keeps</em> state when you wanted it <em>thrown away</em>.</p>
+${SD.soSanhEn}
 
 <h3>"Virtual DOM" — the name everyone uses, and why it misleads</h3>
 <p>What people call the <strong>virtual DOM</strong> is what you just saw: the element tree (JavaScript objects) describing the UI, recreated on each render and compared with the previous one. The Fiber architecture notes written by Andrew Clark (React team) say it directly: reconciliation is the algorithm behind what is popularly understood as the "virtual DOM". Today's react.dev barely uses the term, for good reasons:</p>
@@ -259,6 +619,7 @@ ${slide('rx-11', 7, 'Fiber: one node per component, linked by child, sibling, re
 <li><strong>Hooks are an ordered list.</strong> Each hook in a component is a link in a list hanging off <code>memoizedState</code>; React recognises "the second hook" purely by <em>call order</em>. Calling a hook inside an <code>if</code> shifts the order ⇒ one hook reads another hook's state. That is where the "only call hooks at the top level" rule comes from.</li>
 <li><strong>A pair of fibers.</strong> At mount, <code>alternate</code> is <code>null</code>. After the click, the old fiber still holds <code>0</code> and its <code>alternate</code> holds <code>1</code>. React keeps at most two versions per component: the <em>current</em> one matching the screen and the <em>work-in-progress</em> one being built. After rendering, commit "flips" them — like a game drawing the next frame in a back buffer and then swapping. That is why React can build half of a new tree and throw it away without the screen noticing — the foundation of <code>useTransition</code> in Chapter 12.</li>
 </ul>
+${SD.fiberEn}
 <div class="pitfall co-tieu-de"><strong>Trap — relying on <code>__reactFiber$…</code> or <code>_owner</code> in real code.</strong> The property name ends in a random suffix that changes on every page load, the fiber structure changes between versions, and none of it is publicly documented. The test above exists so you <em>see</em> the mechanism once; everything you need in an app has an official API (refs, context, DevTools).</div>
 
 <h3>Batching: three <code>setState</code> calls in one event, one render</h3>
@@ -455,6 +816,7 @@ export function BangDem() {
 <li><em>Commit:</em> đúng <strong>một</strong> thao tác DOM — đổi nội dung nút chữ <code>"0"</code> thành <code>"1"</code>. Thẻ <code>&lt;li&gt;</code> đầu tiên vẫn là <strong>chính nút DOM cũ</strong> (<code>true</code>), không phải một nút mới trông giống hệt.</li>
 <li><em>Paint:</em> trình duyệt vẽ lại con số.</li>
 </ol>
+${SD.phaVi}
 <p>Hai con số trong khung xám kể hai câu chuyện khác nhau. <code>TheNho: 6</code> là chi phí <strong>render</strong> — sáu lần gọi hàm JavaScript. <code>số thay đổi: 1</code> là chi phí <strong>commit</strong> — một lần sửa DOM. Sửa DOM đắt hơn nhiều (nó kéo theo tính lại bố cục, vẽ lại), nên đây là chỗ React tiết kiệm. Còn sáu lần gọi hàm thì React <em>không</em> tự tiết kiệm; với sáu thẻ nhỏ thì chẳng đáng bận tâm, với sáu trăm thẻ nặng thì Chương 8 (<code>memo</code>) và Chương 12 (React Compiler) là chỗ xử lý. Đo trên cùng máy: bọc <code>TheNho</code> bằng <code>memo</code> thì bấm ba lần, <code>TheNho</code> render đúng 0 lần.</p>
 
 <div class="callout"><p><strong>🎓 Ở FER202 bạn làm thế này — 💼 đi làm người ta làm thế kia.</strong></p>
@@ -512,6 +874,7 @@ export function DoiClass() {
 <p>Test gõ "đau đầu" vào ô rồi tick "Nổi bật". Với <code>DoiVoBoc</code>, vỏ bọc đổi từ <code>&lt;div&gt;</code> sang <code>&lt;section&gt;</code>: cùng vị trí, <strong>khác loại</strong> ⇒ React vứt <code>&lt;div&gt;</code> cùng mọi thứ bên trong, kể cả <code>ONhap</code> và state <code>chu</code> của nó, rồi dựng <code>&lt;section&gt;</code> mới với một <code>ONhap</code> mới tinh — chữ mất, ô nhập là một nút DOM khác (<code>false</code>). Với <code>DoiClass</code>, vỏ bọc vẫn là <code>&lt;div&gt;</code>, chỉ thuộc tính <code>className</code> đổi ⇒ React sửa đúng thuộc tính đó, giữ nguyên phần còn lại (<code>true</code>).</p>
 <div class="pitfall co-tieu-de"><strong>Bẫy — đổi thẻ bọc theo điều kiện làm mất dữ liệu người dùng đang gõ.</strong> Mẫu hay gặp trong đồ án: <code>{laDienThoai ? &lt;div className="cot"&gt;&lt;Form /&gt;&lt;/div&gt; : &lt;section className="luoi"&gt;&lt;Form /&gt;&lt;/section&gt;}</code>, hoặc bọc form trong <code>&lt;Link&gt;</code> chỉ khi đã đăng nhập. Người dùng xoay điện thoại hay đăng nhập giữa chừng là form trắng trơn — không lỗi nào, không cảnh báo nào. Cách chữa: giữ <strong>cùng một loại thẻ</strong> và chỉ đổi <code>className</code>/thuộc tính, hoặc đưa state lên cha (Bài 2.4) để nó không phụ thuộc vào vỏ bọc.</div>
 <p>Luật "cùng loại, cùng vị trí thì giữ" nghe hiển nhiên, nhưng nó là gốc của cả một họ bug mà Bài 11.2 sẽ đo: nó cũng có nghĩa là React <em>giữ</em> state khi bạn mong nó <em>vứt</em>.</p>
+${SD.soSanhVi}
 
 <h3>"Virtual DOM" — cái tên ai cũng dùng, và vì sao nó dễ gây hiểu lầm</h3>
 <p>Cái người ta quen gọi là <strong>virtual DOM</strong> chính là thứ bạn vừa thấy: cây element (object JavaScript) mô tả giao diện, được tạo lại mỗi lần render rồi so với cây trước. Tài liệu kiến trúc Fiber do Andrew Clark (nhóm React) viết nói thẳng: reconciliation là thuật toán đứng sau cái mà mọi người vẫn hiểu là "virtual DOM". Tài liệu react.dev hiện nay gần như không dùng từ này, và có lý do:</p>
@@ -561,6 +924,7 @@ ${slide('rx-11', 7, 'Fiber: mỗi component một nút, nối bằng child, sibl
 <li><strong>Hook là một danh sách theo thứ tự.</strong> Mỗi hook trong một component là một mắt xích trong danh sách nối từ <code>memoizedState</code>; React nhận ra "hook thứ hai" chỉ bằng <em>thứ tự gọi</em>. Gọi hook trong <code>if</code> làm lệch thứ tự ⇒ hook này đọc nhầm state của hook kia. Đó là nguồn gốc của luật "chỉ gọi hook ở cấp cao nhất".</li>
 <li><strong>Cặp fiber.</strong> Lúc mount, <code>alternate</code> là <code>null</code>. Sau lần bấm, fiber cũ vẫn giữ <code>0</code> còn bản kia (<code>alternate</code>) giữ <code>1</code>. React luôn có tối đa hai bản cho mỗi component: bản <em>current</em> đang ứng với màn hình và bản <em>work-in-progress</em> đang được dựng. Render xong, commit "lật" hai bản — giống cách game vẽ khung hình mới ở bộ đệm sau rồi mới đổi ra trước. Nhờ vậy React có thể dựng dở một cây mới rồi bỏ nó đi mà màn hình không hề hấn gì — nền móng của <code>useTransition</code> ở Chương 12.</li>
 </ul>
+${SD.fiberVi}
 <div class="pitfall co-tieu-de"><strong>Bẫy — dựa vào <code>__reactFiber$…</code> hay <code>_owner</code> trong code thật.</strong> Tên thuộc tính có một đuôi ngẫu nhiên đổi mỗi lần tải trang, cấu trúc fiber đổi theo phiên bản và không có trong bất kỳ tài liệu công khai nào. Test ở trên tồn tại để bạn <em>thấy</em> cơ chế một lần; mọi thứ bạn cần trong app đều có API chính thức (ref, context, DevTools).</div>
 
 <h3>Batching: ba lần <code>setState</code> trong một sự kiện, một lần render</h3>
@@ -713,6 +1077,7 @@ ${slide('rx-11', 10, 'key is not just for lists: a new key means unmount old, mo
 <div class="out">[co key] ô của Huy: "" | quay lại An: ""
 [co key] nhật ký: mount (tạo cho bs-1) · unmount (tạo cho bs-1) · mount (tạo cho bs-5) · unmount (tạo cho bs-5) · mount (tạo cho bs-1)</div>
 <p>Click "Huy": the key goes from <code>bs-1</code> to <code>bs-5</code> ⇒ React <strong>unmounts</strong> An's <code>GhiChu</code> (state lost, effect cleaned up) and <strong>mounts</strong> a new <code>GhiChu</code> for Huy — an empty box. Click "An" again ("quay lại" = go back): unmount and mount again, so An's old note does <em>not come back either</em>. That is exactly what "reset" means: a new key starts from scratch. If you want to remember <em>each</em> doctor's note while switching back and forth, key is not the tool — lift the state into an object <code>{ [bacSiId]: note }</code> in the parent, or keep it in a store/the URL (Chapter 5).</p>
+${SD.danhTinhEn}
 <div class="callout"><p><strong>JS quick reminder — <code>key</code> is not a prop.</strong> <code>key</code> (like <code>ref</code> before React 19) is read by React to manage elements; the component <strong>does not receive</strong> it in props. If you need the id inside, pass a normal prop as well (<code>bacSi</code> above already carries <code>id</code>). A key only needs to be <strong>unique among siblings</strong> under the same parent, not across the app.</p></div>
 
 <h3>A real bug in the app: Dr Huy's page says "sent" although nothing was booked</h3>
@@ -824,6 +1189,7 @@ export function DanhSachGhiChu({ keyLa }: { keyLa: 'index' | 'id' }) {
 <li><strong>key = index.</strong> Before: key 0 (An), 1 (Hà), 2 (Bảo). After: key 0 (Hà), 1 (Bảo). React matches by key: key 0 still exists ⇒ keep the component at key 0 <em>with its "tái khám" state</em>, just change props to Hà; key 1 keeps "bé sốt", props become Bảo; key 2 disappeared ⇒ unmount the <strong>last</strong> row. State follows the key, props follow the data ⇒ they drift apart: An's "tái khám" now sits under Hà's name.</li>
 <li><strong>key = id.</strong> <code>bs-1</code> disappeared ⇒ unmount exactly An's row; <code>bs-2</code>, <code>bs-3</code> stay with their state.</li>
 </ul>
+${SD.indexEn}
 <p>Index is only safe when the list <strong>never</strong> adds, removes or reorders <em>and</em> rows hold no state (no inputs, no stateful components inside). Server data comes with ids — use them. Data created on the user's machine (a new note row) gets an id at creation time, e.g. <code>crypto.randomUUID()</code>, stored with the data.</p>
 <div class="pitfall co-tieu-de"><strong>Trap — <code>key={Math.random()}</code> to "silence the warning".</strong> The "Each child in a list should have a unique key" warning goes away, but a new key on every render means every row is unmounted and remounted <em>every time</em> the parent renders: lost focus, lost typing, and slow. Worse than the index. <code>crypto.randomUUID()</code> is only right when called <strong>once, when the data is created</strong>, never in JSX.</div>
 
@@ -900,6 +1266,7 @@ export function SoSanhReset({ cach }: { cach: 'effect' | 'key' }) {
 <div class="out">[reset effect] các lần render sau khi đổi: bs-5:"ab" → bs-5:""
 [reset key]    các lần render sau khi đổi: bs-5:""</div>
 <p>With the effect, the first render after switching is <code>bs-5:"ab"</code> — the NEW doctor with the OLD text. React commits it, the effect runs, calls <code>setChu('')</code>, and only then does a second, correct render happen. So there is always one beat of wrong UI (which can flash on screen), every child renders twice, and if a child has an effect calling an API with that text, it calls with the wrong data. With the key: one render, right the first time. This is also react.dev's recommendation in "You Might Not Need an Effect" (<em>Resetting all state when a prop changes</em>).</p>
+${SD.resetEn}
 <p>The opposite direction has a tool too. Sometimes you want to <strong>hide</strong> part of the UI but <strong>keep</strong> its state — a half-written "Notes" tab, switch to the "Schedule" tab and back. Hiding with <code>&amp;&amp;</code> unmounts the component (state lost). Since React 19.2 there is <code>&lt;Activity&gt;</code>:</p>
 <pre><code class="language-tsx">/* ───────── 5. Ẩn mà vẫn GIỮ state: &lt;Activity&gt; (React 19.2+) ───────── */
 function GhiChuTab() {
@@ -1030,6 +1397,7 @@ ${slide('rx-11', 10, 'key không chỉ cho danh sách: đổi key là gỡ cũ, 
 <div class="out">[co key] ô của Huy: "" | quay lại An: ""
 [co key] nhật ký: mount (tạo cho bs-1) · unmount (tạo cho bs-1) · mount (tạo cho bs-5) · unmount (tạo cho bs-5) · mount (tạo cho bs-1)</div>
 <p>Bấm "Huy": key đổi từ <code>bs-1</code> sang <code>bs-5</code> ⇒ React <strong>gỡ</strong> <code>GhiChu</code> của An (state mất, effect dọn) và <strong>dựng</strong> một <code>GhiChu</code> mới cho Huy — ô trắng. Bấm lại "An": lại gỡ và dựng, nên ghi chú cũ của An <em>cũng không quay lại</em>. Đó là đúng nghĩa "reset": key đổi là làm lại từ đầu. Nếu bạn muốn nhớ ghi chú của <em>từng</em> bác sĩ khi chuyển qua lại, key không phải công cụ — hãy nâng state lên thành một object <code>{ [bacSiId]: ghiChu }</code> ở cha, hoặc lưu vào store/URL (Chương 5).</p>
+${SD.danhTinhVi}
 <div class="callout"><p><strong>JS nhắc nhanh — <code>key</code> không phải một prop.</strong> <code>key</code> (cũng như <code>ref</code> trước React 19) là thuộc tính React đọc để quản lý element; component <strong>không nhận được</strong> nó qua props. Cần id bên trong thì truyền thêm một prop bình thường (<code>bacSi</code> ở trên đã mang <code>id</code>). key chỉ cần <strong>duy nhất giữa các anh em</strong> trong cùng một cha, không cần duy nhất toàn app.</p></div>
 
 <h3>Bug thật trong app: trang BS. Huy báo "đã gửi" dù chưa đặt gì</h3>
@@ -1141,6 +1509,7 @@ export function DanhSachGhiChu({ keyLa }: { keyLa: 'index' | 'id' }) {
 <li><strong>key = index.</strong> Trước: key 0 (An), 1 (Hà), 2 (Bảo). Sau: key 0 (Hà), 1 (Bảo). React so theo key: key 0 vẫn còn ⇒ giữ component ở key 0 <em>cùng state "tái khám"</em>, chỉ đổi props thành Hà; key 1 giữ state "bé sốt", props thành Bảo; key 2 biến mất ⇒ gỡ dòng <strong>cuối</strong>. State đi theo key, props đi theo dữ liệu ⇒ chúng lệch nhau: ghi chú "tái khám" của An giờ nằm dưới tên Hà.</li>
 <li><strong>key = id.</strong> <code>bs-1</code> biến mất ⇒ gỡ đúng dòng An; <code>bs-2</code>, <code>bs-3</code> còn nguyên với state của chúng.</li>
 </ul>
+${SD.indexVi}
 <p>Index chỉ an toàn khi danh sách <strong>không bao giờ</strong> thêm, xoá, sắp xếp lại <em>và</em> dòng không có state (không ô nhập, không component có state bên trong). Dữ liệu từ máy chủ có id sẵn — dùng nó. Dữ liệu tạo trên máy người dùng (một dòng ghi chú mới) thì cấp id lúc tạo, ví dụ <code>crypto.randomUUID()</code>, và lưu id đó cùng dữ liệu.</p>
 <div class="pitfall co-tieu-de"><strong>Bẫy — <code>key={Math.random()}</code> để "tắt cảnh báo".</strong> Cảnh báo "Each child in a list should have a unique key" biến mất, nhưng key mới mỗi lần render nghĩa là mọi dòng bị gỡ và dựng lại <em>mỗi lần</em> cha render: mất focus, mất chữ đang gõ, và chậm. Tệ hơn cả index. <code>crypto.randomUUID()</code> chỉ đúng khi gọi <strong>một lần lúc tạo dữ liệu</strong>, không phải trong JSX.</div>
 
@@ -1217,6 +1586,7 @@ export function SoSanhReset({ cach }: { cach: 'effect' | 'key' }) {
 <div class="out">[reset effect] các lần render sau khi đổi: bs-5:"ab" → bs-5:""
 [reset key]    các lần render sau khi đổi: bs-5:""</div>
 <p>Với effect: lần render đầu tiên sau khi đổi là <code>bs-5:"ab"</code> — bác sĩ MỚI với chữ CŨ. React commit bản đó, effect chạy, gọi <code>setChu('')</code>, rồi mới có lần render thứ hai đúng. Tức là luôn có một nhịp giao diện sai (có thể nháy lên màn hình), mọi component con cũng render hai lần, và nếu con có effect gọi API theo chữ đó thì nó gọi với dữ liệu sai. Với key: một lần render, đúng ngay. Đây cũng chính là khuyến nghị của react.dev trong "You Might Not Need an Effect" (mục <em>Resetting all state when a prop changes</em>).</p>
+${SD.resetVi}
 <p>Chiều ngược lại cũng có công cụ. Đôi khi bạn muốn <strong>ẩn</strong> một phần giao diện mà <strong>giữ</strong> state của nó — tab "Ghi chú" đang viết dở, chuyển sang tab "Lịch" rồi quay lại. Ẩn bằng <code>&amp;&amp;</code> là gỡ component (state mất). Từ React 19.2 có <code>&lt;Activity&gt;</code>:</p>
 <pre><code class="language-tsx">/* ───────── 5. Ẩn mà vẫn GIỮ state: &lt;Activity&gt; (React 19.2+) ───────── */
 function GhiChuTab() {
@@ -1332,6 +1702,7 @@ export function DemLuotXem() {
 strict=0 (dev):  [log] [DemLuotXem] render | [log] [DemLuotXem] effect chạy
 strict=1 (vite build + preview): [log] [DemLuotXem] render | [log] [DemLuotXem] effect chạy</div>
 <p>The last line matters most: the <strong>production</strong> build (StrictMode still in the code, but built with <code>vite build</code>) runs everything <strong>once</strong>. StrictMode is a development tool; it does not slow the real app down and does not call real APIs twice for your users.</p>
+${SD.strictEn}
 <p>Per the <code>&lt;StrictMode&gt;</code> reference on react.dev, in development it:</p>
 <ul>
 <li>calls twice the functions that <strong>must be pure</strong>: component bodies, initialisers and updaters passed to <code>useState</code>/<code>useReducer</code>, <code>useMemo</code> functions (since React 19 the second call reuses the memoised result of the first);</li>
@@ -1421,6 +1792,7 @@ export function DemBangState() {
 <li>Anything you only need to <strong>remember between renders</strong> without affecting what is drawn ⇒ a ref: a <code>setTimeout</code>/<code>setInterval</code> id to cancel later, an "is submitting" flag to block double submits (Chapter 3's <code>FormDatLich</code> uses <code>dangGui = useRef(false)</code>), the previous value to compare with, and — most commonly — a <strong>DOM node</strong>.</li>
 <li><strong>Do not read or write <code>ref.current</code> during render</strong> (except lazy initialisation). Render must be pure; a value React does not track makes render output unpredictable. Read and write refs in event handlers and effects.</li>
 </ul>
+${SD.refEn}
 <p>A React 19 change in the TypeScript types: <code>useRef</code> now <strong>requires</strong> an initial value. Old code writing <code>useRef&lt;number&gt;()</code> now fails:</p>
 <div class="out">src/vi-du/loi-co-y.tsx(5,15): error TS2554: Expected 1 arguments, but got 0.</div>
 <p>Write <code>useRef&lt;number | null&gt;(null)</code> or <code>useRef&lt;number | undefined&gt;(undefined)</code>. For DOM nodes, <code>useRef&lt;HTMLInputElement&gt;(null)</code> gives <code>RefObject&lt;HTMLInputElement | null&gt;</code> — because on the first render the node does not exist yet.</p>
@@ -1548,6 +1920,7 @@ tooltip-layout cham=100ms: 20 lần rê chuột, khung hình đầu tiên đư�
 <li>The browser paints for the first time — the tooltip is already at <code>top: 117</code>.</li>
 </ol>
 <p>With <code>useEffect</code>, step 3 runs <em>after</em> the browser has had a chance to paint — and after a 100 ms render a frame is overdue, so it paints the wrong version right away. The price of <code>useLayoutEffect</code>: it <strong>blocks</strong> the browser from painting until it finishes; heavy code inside freezes the whole page. That is why react.dev recommends <code>useEffect</code> by default and <code>useLayoutEffect</code> only for <strong>measuring layout and immediately fixing what is drawn</strong>: positioning tooltips/popovers, scrolling to an element, measuring size to choose a layout. (It also does not run during server rendering — worth knowing when you move to Next.js.)</p>
+${SD.layoutEn}
 <p>The app's real component, <code>ChuThich</code>, next to "Giờ khám" (appointment times) on the doctor page (screenshot on the slide above), uses exactly this mechanism, plus flipping above/below and staying inside the horizontal edges:</p>
 <pre><code class="language-tsx">/**
  * Chú thích nổi (tooltip) cạnh một nút ⓘ. Mặc định nằm TRÊN nút; không đủ chỗ phía trên thì lật XUỐNG DƯỚI.
@@ -1653,6 +2026,7 @@ export function DemLuotXem() {
 strict=0 (dev):  [log] [DemLuotXem] render | [log] [DemLuotXem] effect chạy
 strict=1 (vite build + preview): [log] [DemLuotXem] render | [log] [DemLuotXem] effect chạy</div>
 <p>Dòng cuối là điều quan trọng nhất: bản <strong>production</strong> (có StrictMode trong code, nhưng build bằng <code>vite build</code>) chạy mỗi thứ <strong>một lần</strong>. StrictMode là công cụ của lúc phát triển; nó không làm app thật chậm đi và không gọi API thật hai lần cho người dùng.</p>
+${SD.strictVi}
 <p>Theo tài liệu tra cứu <code>&lt;StrictMode&gt;</code> trên react.dev, ở dev nó:</p>
 <ul>
 <li>gọi hai lần những hàm <strong>phải thuần</strong>: thân component, hàm khởi tạo và hàm cập nhật truyền cho <code>useState</code>/<code>useReducer</code>, hàm của <code>useMemo</code> (từ React 19, lần gọi thứ hai dùng lại kết quả ghi nhớ của lần đầu);</li>
@@ -1742,6 +2116,7 @@ export function DemBangState() {
 <li>Thứ gì chỉ cần <strong>nhớ giữa các lần render</strong> mà không ảnh hưởng thứ được vẽ ⇒ ref: id của <code>setTimeout</code>/<code>setInterval</code> để huỷ sau, cờ "đang gửi" chặn gửi hai lần (chính <code>FormDatLich</code> Chương 3 dùng <code>dangGui = useRef(false)</code>), giá trị lần trước để so sánh, và — phổ biến nhất — <strong>nút DOM</strong>.</li>
 <li><strong>Đừng đọc hay ghi <code>ref.current</code> trong lúc render</strong> (trừ khởi tạo lười). Render phải thuần; một giá trị React không theo dõi làm output của render không đoán được. Đọc/ghi ref trong handler sự kiện và effect.</li>
 </ul>
+${SD.refVi}
 <p>Một thay đổi của React 19 trong kiểu TypeScript: <code>useRef</code> <strong>bắt buộc</strong> có giá trị đầu. Code cũ viết <code>useRef&lt;number&gt;()</code> giờ báo lỗi:</p>
 <div class="out">src/vi-du/loi-co-y.tsx(5,15): error TS2554: Expected 1 arguments, but got 0.</div>
 <p>Viết <code>useRef&lt;number | null&gt;(null)</code> hoặc <code>useRef&lt;number | undefined&gt;(undefined)</code>. Với nút DOM, <code>useRef&lt;HTMLInputElement&gt;(null)</code> cho kiểu <code>RefObject&lt;HTMLInputElement | null&gt;</code> — vì lúc render đầu tiên, nút chưa tồn tại.</p>
@@ -1869,6 +2244,7 @@ tooltip-layout cham=100ms: 20 lần rê chuột, khung hình đầu tiên đư�
 <li>Trình duyệt vẽ lần đầu tiên — tooltip đã ở <code>top: 117</code>.</li>
 </ol>
 <p>Với <code>useEffect</code>, bước 3 chạy <em>sau</em> khi trình duyệt có cơ hội vẽ — và sau 100 ms render, trình duyệt đã tới hạn vẽ một khung, nên nó vẽ luôn bản sai. Cái giá của <code>useLayoutEffect</code>: nó <strong>chặn</strong> trình duyệt vẽ cho tới khi xong; code nặng trong đó làm cả trang khựng. Vì vậy react.dev khuyên dùng <code>useEffect</code> mặc định, chỉ đổi sang <code>useLayoutEffect</code> cho việc <strong>đo bố cục rồi sửa ngay thứ được vẽ</strong>: vị trí tooltip/menu nổi, tự cuộn tới phần tử, đo kích thước để chọn bố cục. (Nó cũng không chạy khi render trên máy chủ — một điểm cần biết khi sang Next.js.)</p>
+${SD.layoutVi}
 <p>Component thật của app, <code>ChuThich</code>, cạnh chữ "Giờ khám" trên trang bác sĩ (chụp ở slide trên), dùng đúng cơ chế này, cộng thêm lật trên/dưới và không tràn mép ngang:</p>
 <pre><code class="language-tsx">/**
  * Chú thích nổi (tooltip) cạnh một nút ⓘ. Mặc định nằm TRÊN nút; không đủ chỗ phía trên thì lật XUỐNG DƯỚI.
@@ -1986,6 +2362,7 @@ export function TheCoHop({ quaPortal }: { quaPortal: boolean }) {
 }</code></pre>
 <div class="out">[vi tri] không portal: cha của hộp = the-bi-cat | qua portal: cha của hộp = BODY</div>
 <p>("cha của hộp" = the dialog's parent.) <code>createPortal(jsx, domNode)</code> (imported from <code>react-dom</code>) takes two things: <strong>what to draw</strong> and <strong>which DOM node to draw into</strong>. It returns something you place in JSX like any element. In the DOM the dialog is a direct child of <code>&lt;body&gt;</code>; in the React tree it is still a child of <code>TheCoHop</code> — it can read the <code>mo</code> state, call <code>setMo</code>, and is unmounted when <code>TheCoHop</code> is.</p>
+${SD.portalEn}
 
 <h3>Events inside a portal bubble through the REACT tree, not the DOM tree</h3>
 ${slide('rx-11', 21, 'The DOM sits in body, but events bubble through the React tree')}
@@ -2035,6 +2412,7 @@ export function ContextXuyenPortal() {
 [noi bot] có chặn: hộp: bấm OK
 [context] hộp trong &lt;body&gt; đọc được ngôn ngữ: Cancel this appointment?</div>
 <p>("không chặn" = not stopped, "có chặn" = stopped, "thẻ" = card, "hộp" = dialog.) In the DOM, the OK button sits under <code>&lt;body&gt;</code>, unrelated to the card. Yet clicking OK also runs the <strong>card's</strong> <code>onClick</code>. The <code>createPortal</code> reference on react.dev says it plainly: events from portals propagate according to the <em>React tree</em>, not the DOM tree. Likewise context passes through portals — the dialog in <code>&lt;body&gt;</code> reads the <code>'en'</code> language from the Provider around the card. That is exactly what you want for context (the dialog in the right language and theme), and usually what you do <em>not</em> want for events.</p>
+${SD.noiBotEn}
 <div class="pitfall co-tieu-de"><strong>Trap — clicking inside the dialog selects or navigates the card underneath.</strong> A list of appointments where clicking a row opens its details, with a "Cancel" button on the row opening a portal dialog: click "Không, giữ lại" (no, keep it) in the dialog ⇒ the event bubbles to the row ⇒ the page jumps to the appointment's details. No error; just "the app keeps navigating by itself". Fix: stop propagation at the <strong>dialog's root</strong> (<code>onClick={(e) =&gt; e.stopPropagation()}</code>), as the app's <code>HopXacNhan</code> does; or place the portal higher in the React tree (outside the row).</div>
 <div class="callout"><p><strong>JS quick reminder — event bubbling and <code>e.stopPropagation()</code>.</strong> When you click a button, the <code>click</code> event does not stop at the button: it "bubbles" up through each ancestor, and every ancestor with an <code>onClick</code> is called. <code>e.stopPropagation()</code> says "stop here, don't bubble further". It does not cancel the default behaviour (that is <code>e.preventDefault()</code>, e.g. stopping a form from submitting itself).</p></div>
 
@@ -2302,6 +2680,7 @@ export function NemTrongHandlerCoBat() {
 <div class="out">[handler] có hộp lỗi? false | lỗi đi đâu: Lỗi trong onClick
 [chuyen loi] hộp: Phần này gặp sự cố.Lỗi trong onClickTải lại phần này</div>
 <p>("có hộp lỗi? false" = any error box? no; "lỗi đi đâu" = where did the error go.) An error thrown in <code>onClick</code> goes through no render phase, so React has no chance to hand it to a boundary: the UI stays as if nothing happened and the error goes straight to <code>window</code> (the test catches it with an <code>error</code> listener). If you want that error to show as a fallback, catch it in the handler, store it in state, and <strong>throw it again during render</strong> — the <code>NemTrongHandlerCoBat</code> pattern. Most of the time you do not need to: errors in handlers should be handled on the spot (show a message, offer a retry) — exactly what <code>FormDatLich</code> does with <code>setError('root.server', …)</code> in Chapter 3.</p>
+${SD.batLoiEn}
 <p>What about API errors? <code>fetch</code> is asynchronous, so they do not reach a boundary on their own either. TanStack Query has a <code>throwOnError</code> option: when the query fails, it <strong>throws during the render</strong> of the component using the query — and the boundary catches it. The app uses it selectively for the doctor page:</p>
 <pre><code class="language-ts">export function useChiTietBacSi(id: string) {
   const queryClient = useQueryClient();
@@ -2456,6 +2835,7 @@ export function TheCoHop({ quaPortal }: { quaPortal: boolean }) {
 }</code></pre>
 <div class="out">[vi tri] không portal: cha của hộp = the-bi-cat | qua portal: cha của hộp = BODY</div>
 <p><code>createPortal(jsx, nutDom)</code> (import từ <code>react-dom</code>) nhận hai thứ: <strong>vẽ cái gì</strong> và <strong>vẽ vào nút DOM nào</strong>. Nó trả về một thứ bạn đặt vào JSX như mọi element khác. Trong DOM, hộp là con trực tiếp của <code>&lt;body&gt;</code>; trong cây React, nó vẫn là con của <code>TheCoHop</code> — đọc được state <code>mo</code>, gọi được <code>setMo</code>, và bị gỡ khi <code>TheCoHop</code> bị gỡ.</p>
+${SD.portalVi}
 
 <h3>Sự kiện trong portal nổi bọt theo CÂY REACT, không theo cây DOM</h3>
 ${slide('rx-11', 21, 'DOM nằm trong body, nhưng sự kiện nổi bọt theo cây React')}
@@ -2505,6 +2885,7 @@ export function ContextXuyenPortal() {
 [noi bot] có chặn: hộp: bấm OK
 [context] hộp trong &lt;body&gt; đọc được ngôn ngữ: Cancel this appointment?</div>
 <p>Trong DOM, nút OK nằm dưới <code>&lt;body&gt;</code>, chẳng liên quan gì tới thẻ. Vậy mà bấm OK thì <code>onClick</code> của <strong>thẻ</strong> cũng chạy. Tài liệu <code>createPortal</code> trên react.dev nói rõ: sự kiện từ portal lan theo <em>cây React</em>, không theo cây DOM. Tương tự, context đi xuyên portal — hộp trong <code>&lt;body&gt;</code> đọc được ngôn ngữ <code>'en'</code> mà Provider bọc ngoài thẻ cung cấp. Đó chính là điều ta muốn cho context (hộp dịch đúng ngôn ngữ, đúng theme), và thường là điều ta <em>không</em> muốn cho sự kiện.</p>
+${SD.noiBotVi}
 <div class="pitfall co-tieu-de"><strong>Bẫy — bấm trong hộp mà thẻ bên dưới bị chọn/điều hướng.</strong> Danh sách lịch hẹn mà mỗi dòng bấm vào là mở chi tiết, và nút "Huỷ" trên dòng mở hộp qua portal: bấm "Không, giữ lại" trong hộp ⇒ sự kiện nổi lên tới dòng ⇒ trang nhảy sang chi tiết lịch hẹn. Không có lỗi nào; chỉ là "app cứ tự nhảy trang". Chữa: chặn nổi bọt ở <strong>gốc hộp</strong> (<code>onClick={(e) =&gt; e.stopPropagation()}</code>), như <code>HopXacNhan</code> của app làm; hoặc đặt portal ở chỗ cao hơn trong cây React (ngoài dòng).</div>
 <div class="callout"><p><strong>JS nhắc nhanh — nổi bọt sự kiện và <code>e.stopPropagation()</code>.</strong> Khi bạn bấm một nút, sự kiện <code>click</code> không dừng ở nút: nó "nổi bọt" lên từng tổ tiên, và tổ tiên nào có <code>onClick</code> cũng được gọi. <code>e.stopPropagation()</code> bảo "dừng ở đây, đừng nổi tiếp". Nó không huỷ hành vi mặc định (việc đó là <code>e.preventDefault()</code>, ví dụ chặn form tự gửi).</p></div>
 
@@ -2771,6 +3152,7 @@ export function NemTrongHandlerCoBat() {
 <div class="out">[handler] có hộp lỗi? false | lỗi đi đâu: Lỗi trong onClick
 [chuyen loi] hộp: Phần này gặp sự cố.Lỗi trong onClickTải lại phần này</div>
 <p>Lỗi ném trong <code>onClick</code> không qua pha render nào, nên React không có cơ hội đưa nó cho ranh giới: giao diện đứng yên như chưa có gì, lỗi đi thẳng ra <code>window</code> (test bắt nó bằng listener <code>error</code>). Nếu muốn lỗi đó hiện thành màn dự phòng, bắt nó trong handler, cất vào state, rồi <strong>ném lại trong lúc render</strong> — mẫu <code>NemTrongHandlerCoBat</code>. Phần lớn thời gian thì không cần: lỗi trong handler nên được xử lý tại chỗ (hiện thông báo, cho thử lại) — chính là việc <code>FormDatLich</code> làm với <code>setError('root.server', …)</code> ở Chương 3.</p>
+${SD.batLoiVi}
 <p>Lỗi từ API thì sao? <code>fetch</code> chạy bất đồng bộ nên cũng không tự tới ranh giới. TanStack Query có tuỳ chọn <code>throwOnError</code>: khi query lỗi, nó <strong>ném lỗi trong lúc render</strong> của component dùng query — và ranh giới bắt được. App dùng nó có chọn lọc cho trang chi tiết bác sĩ:</p>
 <pre><code class="language-ts">export function useChiTietBacSi(id: string) {
   const queryClient = useQueryClient();
@@ -2910,6 +3292,7 @@ ${slide('rx-11', 27, 'Keep building the project: five tasks, fourteen tests must
 <li><strong>A decent error boundary.</strong> Add <code>resetKeys</code> to <code>RanhGioiLoi</code>; in <code>BoCuc</code> pass <code>resetKeys={[pathname]}</code> and <code>onThuLai={reset}</code> from <code>useQueryErrorResetBoundary</code>; give <code>useChiTietBacSi</code> <code>throwOnError</code> for every error except 404; add <code>onCaughtError</code>/<code>onUncaughtError</code> to <code>createRoot</code>.</li>
 <li><strong>Appointment-time tooltip.</strong> Write <code>src/components/ChuThich.tsx</code>: an ⓘ button; hover or Tab shows the tooltip (portal, <code>role="tooltip"</code>, the button <code>aria-describedby</code> it), above the button, flipping below when there is no room; measured with <code>useLayoutEffect</code>. Put it next to "Giờ khám".</li>
 </ol>
+${SD.nhiemVuEn}
 <p><strong>Done when:</strong></p>
 <ul>
 <li>Copy the four test files below into the project. At the starting point, <code>npx vitest run src/features --reporter=verbose</code> must be red (measured on the lesson machine: <code>Tests  7 failed | 1 passed (8)</code> — the other two files cannot run yet because the components do not exist). After the five tasks: <code>npx vitest run src/features src/components/LichHenCuaToi.test.tsx src/components/ChuThich.test.tsx</code> gives <code>Test Files  4 passed (4)</code> · <code>Tests  14 passed (14)</code>.</li>
@@ -3573,6 +3956,7 @@ ${slide('rx-11', 22, 'The cancel dialog: portal, focus on the safe button, Escap
 <p><strong>Scene 2 — cancelling.</strong> Go to "Lịch hẹn của tôi", click "Huỷ". Expected: the "Huỷ lịch hẹn này?" dialog centred on a dark backdrop, focus on "Không, giữ lại"; Escape closes it and focus returns to the exact "Huỷ" button you clicked; open it again, click "Huỷ lịch", and the row turns "Đã huỷ" immediately (optimistic update).</p>
 ${slide('rx-11', 24, 'Error boundaries only catch render-time errors — not onClick')}
 <p><strong>Scene 3 — server error.</strong> Open <code>/bac-si/bs-1?loi=chi-tiet</code>. Expected: a few seconds of "Đang tải…" (TanStack retries three times — on the lesson machine the fallback appeared after 8.5 seconds), then "Phần này gặp sự cố." under a header and menu that still work; the console has one line <code>[da-bat] Máy chủ đang bận, thử lại sau</code>; clicking "Lịch hẹn của tôi" makes the error box disappear.</p>
+${SD.loi500En}
 <p><strong>Scene 4 — the tooltip.</strong> Hover the ⓘ next to "Giờ khám": the tooltip appears just above it, without flashing in the corner. For the flickering version to compare with, re-read the 20/20 measurement in Lesson 11.3.</p>
 
 <h3>The chapter's common mistakes</h3>
@@ -3642,6 +4026,7 @@ ${slide('rx-11', 27, 'Tự gõ tiếp dự án: năm việc, mười bốn test 
 <li><strong>Ranh giới lỗi tử tế.</strong> Thêm <code>resetKeys</code> cho <code>RanhGioiLoi</code>; trong <code>BoCuc</code> truyền <code>resetKeys={[pathname]}</code> và <code>onThuLai={reset}</code> của <code>useQueryErrorResetBoundary</code>; cho <code>useChiTietBacSi</code> <code>throwOnError</code> với mọi lỗi trừ 404; thêm <code>onCaughtError</code>/<code>onUncaughtError</code> vào <code>createRoot</code>.</li>
 <li><strong>Chú thích giờ khám.</strong> Viết <code>src/components/ChuThich.tsx</code>: nút ⓘ, rê chuột hoặc Tab tới thì hiện chú thích (portal, <code>role="tooltip"</code>, nút được <code>aria-describedby</code> tới nó), nằm trên nút, không đủ chỗ thì lật xuống; đo bằng <code>useLayoutEffect</code>. Đặt cạnh chữ "Giờ khám".</li>
 </ol>
+${SD.nhiemVuVi}
 <p><strong>Tiêu chí đạt:</strong></p>
 <ul>
 <li>Chép bốn file test trong khung dưới vào dự án. Ở điểm xuất phát, chạy <code>npx vitest run src/features --reporter=verbose</code> phải thấy đỏ (đo trên máy dựng bài: <code>Tests  7 failed | 1 passed (8)</code> — hai file kia chưa chạy được vì chưa có component). Làm xong năm việc: <code>npx vitest run src/features src/components/LichHenCuaToi.test.tsx src/components/ChuThich.test.tsx</code> ra <code>Test Files  4 passed (4)</code> · <code>Tests  14 passed (14)</code>.</li>
@@ -4305,6 +4690,7 @@ ${slide('rx-11', 22, 'Hộp xác nhận huỷ lịch: portal, focus vào nút an
 <p><strong>Cảnh 2 — huỷ lịch.</strong> Sang "Lịch hẹn của tôi", bấm "Huỷ". Mong đợi: hộp "Huỷ lịch hẹn này?" giữa màn hình trên lớp nền tối, focus ở "Không, giữ lại"; nhấn Escape thì hộp đóng và focus về đúng nút "Huỷ" vừa bấm; mở lại, bấm "Huỷ lịch" thì dòng thành "Đã huỷ" ngay (cập nhật lạc quan).</p>
 ${slide('rx-11', 24, 'Ranh giới lỗi chỉ bắt lỗi lúc render — không bắt onClick')}
 <p><strong>Cảnh 3 — máy chủ lỗi.</strong> Mở <code>/bac-si/bs-1?loi=chi-tiet</code>. Mong đợi: vài giây "Đang tải…" (TanStack thử lại ba lần — trên máy dựng bài màn dự phòng hiện sau 8,5 giây), rồi "Phần này gặp sự cố." dưới đầu trang và menu vẫn bấm được; console có một dòng <code>[da-bat] Máy chủ đang bận, thử lại sau</code>; bấm "Lịch hẹn của tôi" thì hộp lỗi biến mất.</p>
+${SD.loi500Vi}
 <p><strong>Cảnh 4 — chú thích.</strong> Rê chuột vào ⓘ cạnh "Giờ khám": chú thích hiện ngay phía trên, không nháy ở góc màn hình. Muốn thấy phiên bản nháy để so, đọc lại phép đo 20/20 ở Bài 11.3.</p>
 
 <h3>Sai lầm hay gặp của cả chương</h3>

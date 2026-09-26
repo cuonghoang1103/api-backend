@@ -95,6 +95,7 @@ function mucNoLucHienTai(): MucNoLuc {
 const MODEL_HOP_LE = new Set<string>([
   'sonnet-5', 'opus-4-8', 'gpt-sol',
   'haiku-4-5', 'sonnet-4-6', 'opus-4-6', 'opus-4-7',
+  'opus-5', 'fable-5',
 ]);
 
 function modelHienTai(): ModelAgent {

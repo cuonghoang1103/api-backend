@@ -279,7 +279,7 @@ export default function InterviewRoomPage() {
         <div className="max-w-md text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-amber-400" />
           <p className="text-slate-100 font-semibold mb-2">{displayLang === 'EN' ? 'Preparing your interview…' : 'Đang chuẩn bị buổi phỏng vấn…'}</p>
-          <p className="text-sm text-slate-400">{displayLang === 'EN' ? 'Opus 4.8 is reading your CV/project and writing tailored questions. This can take a minute — no need to reload.' : 'Opus 4.8 đang đọc CV/project và soạn câu hỏi riêng cho bạn. Có thể mất khoảng một phút — không cần tải lại.'}</p>
+          <p className="text-sm text-slate-400">{displayLang === 'EN' ? 'Opus 5 is reading your CV/project and writing tailored questions. This can take a minute — no need to reload.' : 'Opus 5 đang đọc CV/project và soạn câu hỏi riêng cho bạn. Có thể mất khoảng một phút — không cần tải lại.'}</p>
         </div>
       </div>
     );

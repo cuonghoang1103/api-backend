@@ -372,15 +372,16 @@ model User {
   // ─── Ví điểm · gói Pro trả phí (13/09/2026) ──────────────────────
   // pointAccount là 1-1 (một ví cho mỗi người, tạo lười); phần còn lại
   // là lịch sử. Xem mục 30 cuối file.
-  pointAccount      PointAccount?
-  pointTransactions PointTransaction[]
-  topupOrders       TopupOrder[]
-  proOrders         ProOrder[]
-  keyReplacements   KeyReplacementRequest[]
-  llmKeyRequests    LlmKeyRequest[]
+  pointAccount       PointAccount?
+  pointTransactions  PointTransaction[]
+  topupOrders        TopupOrder[]
+  proOrders          ProOrder[]
+  keyReplacements    KeyReplacementRequest[]
+  llmKeyRequests     LlmKeyRequest[]
+  fableQuotaRequests FableQuotaRequest[]
   /// Video người dùng tự thêm vào màn "Học bằng video".
-  videoTuThem       VideoNguoiDung[]        @relation("VideoNguoiDungChuSoHuu")
-  videoYeuThich     VideoYeuThich[]         @relation("VideoYeuThichChuSoHuu")
+  videoTuThem        VideoNguoiDung[]        @relation("VideoNguoiDungChuSoHuu")
+  videoYeuThich      VideoYeuThich[]         @relation("VideoYeuThichChuSoHuu")
 
   // ─── CT Work — quản lý dự án kiểu Jira (23/09/2026) ─────────────
   // Xem mục "CT WORK" cuối file và docs/work-hub-plan.md.
@@ -9416,6 +9417,38 @@ model LlmKeyRequest {
   @@index([userId], name: "idx_llm_key_req_user")
   @@index([keyValue], map: "idx_llm_key_req_key")
   @@map("llm_key_requests")
+}
+
+/// Xin thêm hạn mức model Cuong Fable 5 (`claude-fable-5`) trong AI Code.
+///
+/// Fable tốn token gấp 3,5 lần nên Pro có một hạn mức riêng mỗi 30 ngày
+/// (`services/agent/fable.ts`). Dùng hết ⇒ người dùng bấm "Xin thêm" ⇒ admin
+/// duyệt ở /admin/commerce?tab=fable ⇒ được cộng `soToken` trong cửa sổ đó.
+/// Admin tự dùng thì không bị giới hạn nên không cần bảng này.
+model FableQuotaRequest {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+
+  /// Người dùng tự khai cần thêm để làm gì.
+  reason String @db.Text
+
+  /// PENDING | APPROVED | REJECTED
+  status String @default("PENDING") @db.VarChar(20)
+
+  /// Số token được CỘNG khi duyệt (admin chọn). Null khi chưa duyệt.
+  soToken Int? @map("so_token")
+
+  adminNote  String?   @map("admin_note") @db.VarChar(500)
+  resolvedBy Int?      @map("resolved_by")
+  resolvedAt DateTime? @map("resolved_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt(sort: Desc)], name: "idx_fable_req_status_created")
+  @@index([userId, resolvedAt], name: "idx_fable_req_user_resolved")
+  @@map("fable_quota_requests")
 }
 
 // ============================================================

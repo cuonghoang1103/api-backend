@@ -154,8 +154,9 @@ test('Phòng Lab đi cổng rambo, và KHÔNG lùi sang modelapi khi cầu dao m
     // nên đường đúng bắt buộc mang `/api/claude`.
     assert.match(ep.root, /\/api\/claude$/, 'đường rambo mất phần /api/claude');
 
-    // Người dùng chốt "dùng opus 4.8 max, đừng giới hạn nó" cho Phòng Lab.
-    assert.equal(modelFor('lab_room'), 'claude-opus-4-8');
+    // Người dùng chốt "dùng model mạnh nhất, đừng giới hạn nó" cho Phòng Lab —
+    // 26/09/2026 đổi từ opus-4-8 sang opus-5 ("rẻ hơn và tốt hơn").
+    assert.equal(modelFor('lab_room'), 'claude-opus-5');
 
     // ─── phần đáng kiểm nhất: CẦU DAO ĐANG MỞ ───
     baoRamboHong();

@@ -36,6 +36,7 @@ import { BangLenh } from './BangLenh';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
 import { NutOpenCode } from './NutOpenCode';
+import { ID_FABLE, XinThemFable, moTaHanMuc, useHanMucFable } from './HanMucFable';
 import { GoiYFile, docTokenFile, type TokenFile } from './GoiYFile';
 import { BangHook } from './BangHook';
 import { ghepThamSo } from '../../../shared/lenhDuAn';
@@ -1023,6 +1024,8 @@ export function AgentMode({
                 m.ma === 'HOAN_TAC' ? 'warn' : m.ma === 'KHOI_PHUC' ? 'info' : 'err'
               }>
                 <span>{m.text}</span>
+                {/* Hết hạn mức Cuong Fable ⇒ xin thêm ngay tại chỗ (26/09/2026). */}
+                {m.ma === 'FABLE_QUOTA_EXCEEDED' && <XinThemFable />}
               </div>
             );
           }
@@ -1469,7 +1472,8 @@ export function doiTenModel(ten: string): string {
   return ten
     .replace(/^Claude Haiku\b/, 'Cuong Haiku')
     .replace(/^Claude Sonnet\b/, 'Cuong Sonnet')
-    .replace(/^Claude Opus\b/, 'CuongMini Max');
+    .replace(/^Claude Opus\b/, 'CuongMini Max')
+    .replace(/^Claude Fable\b/, 'Cuong Fable');
 }
 
 const DS_MODEL: Array<{ id: ModelAgent; ten: string; mo: string }> = [
@@ -1500,6 +1504,11 @@ function ChonModelVaMuc({
   /* Không lấy `dong`: chọn model xong bảng CỐ Ý ở lại, vì đa số người đổi
      model rồi đổi luôn mức nỗ lực ngay bên dưới. */
   const { mo, bat, boc } = useMoRieng('agent:model');
+  /* Cuong Fable 5 tốn gấp 3,5 lần ⇒ bấm chọn phải XÁC NHẬN, và menu nói rõ
+     còn bao nhiêu hạn mức. Chỉ hỏi máy chủ khi menu đang mở. */
+  const { h: hanMucFable } = useHanMucFable(mo);
+  const [hoiFable, datHoiFable] = useState(false);
+  useEffect(() => { if (!mo) datHoiFable(false); }, [mo]);
 
   // Bảng của MÁY CHỦ thắng bảng chép cứng ở trên. Con số bước là thứ máy chủ
   // áp đặt, nên app tự khai "60 bước" trong khi máy chủ đã đổi thành 100 là
@@ -1516,8 +1525,11 @@ function ChonModelVaMuc({
       })
     : DS_MUC;
   const dsModel = info.models?.length
-    ? info.models.map((m) => ({ id: m.id as ModelAgent, ten: doiTenModel(m.ten), mo: m.mo, dungDuoc: m.dungDuoc }))
-    : DS_MODEL.map((m) => ({ ...m, dungDuoc: true }));
+    ? info.models.map((m) => ({
+        id: m.id as ModelAgent, ten: doiTenModel(m.ten), mo: m.mo, dungDuoc: m.dungDuoc,
+        dat: m.dat === true || m.id === ID_FABLE,
+      }))
+    : DS_MODEL.map((m) => ({ ...m, dungDuoc: true, dat: false }));
 
   const mucNay = dsMuc.find((m) => m.id === muc) ?? dsMuc[1] ?? DS_MUC[1]!;
   const modelNay = dsModel.find((m) => m.id === model) ?? dsModel[0] ?? { ...DS_MODEL[0]!, dungDuoc: true };
@@ -1555,16 +1567,37 @@ function ChonModelVaMuc({
                   type="button"
                   data-chon-model={m.id}
                   data-chon={m.id === model}
+                  data-dat={m.dat}
                   disabled={!m.dungDuoc}
                   title={m.dungDuoc ? m.mo : 'Máy chủ chưa cắm khoá cho nhà cung cấp này'}
-                  onClick={() => onChonModel(m.id)}
+                  onClick={() => {
+                    if (m.dat && m.id !== model) { datHoiFable(true); return; }
+                    onChonModel(m.id);
+                  }}
                 >
                   {m.id === model ? <Check size={12} aria-hidden /> : <span className="ct-chonmm-o" />}
                   <span>
-                    <strong>{m.ten}</strong>
+                    <strong>{m.ten}{m.dat && <b className="ct-chonmm-dat">×3,5</b>}</strong>
                     <em>{m.dungDuoc ? m.mo : 'chưa cắm khoá trên máy chủ'}</em>
+                    {m.dat && moTaHanMuc(hanMucFable) && <em className="ct-chonmm-hanmuc">{moTaHanMuc(hanMucFable)}</em>}
                   </span>
                 </button>
+                {m.dat && hoiFable && (
+                  <div className="ct-chonmm-xacnhan" role="alertdialog" aria-label="Xác nhận dùng Cuong Fable">
+                    <p>
+                      ⚠ <strong>Cuong Fable tốn token gấp 3,5 lần</strong> — một việc thường có thể ăn cả trăm nghìn
+                      token. Chỉ nên dùng cho việc thật sự khó; việc thường hãy dùng CuongMini Max 5.
+                    </p>
+                    <div>
+                      <button type="button" className="ct-btn" onClick={() => { datHoiFable(false); onChonModel(m.id); }}>
+                        Vẫn dùng Fable
+                      </button>
+                      <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datHoiFable(false)}>
+                        Thôi
+                      </button>
+                    </div>
+                  </div>
+                )}
               </li>
             ))}
           </ul>

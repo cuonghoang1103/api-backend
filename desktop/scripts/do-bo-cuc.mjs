@@ -1330,6 +1330,46 @@ const CHUAN_BI = {
     // Huỷ — KHÔNG để chế độ đó bật trong ảnh chụp của các bước sau.
     await p.keyboard.press('Escape').catch(() => {});
     await p.waitForTimeout(200);
+
+    /* ─── Nhóm dự án gập/mở ở thanh bên (26/09/2026) ───
+       BẮT BUỘC như cửa cảnh báo ở trên: gập/mở chỉ lộ ra sau cú bấm, ảnh tĩnh
+       không thấy được nó có chạy hay không. Kiểm bốn điều: mặc định gập · bấm
+       chuột mở · phím Enter/Space đảo · gõ tìm tự mở rồi xoá tìm thì gập lại.
+       `inert` phải đi cùng `aria-expanded`: nhóm gập mà thân không `inert` thì
+       phím Tab vẫn chui vào những nút không nhìn thấy. */
+    const nhomTB = async (ten) => p.evaluate((t) => {
+      const nut = [...document.querySelectorAll('.ct-tb-nhom-nut')]
+        .find((n) => n.querySelector('.ct-tb-nhom-ten')?.textContent === t);
+      const than = nut && document.getElementById(nut.getAttribute('aria-controls') ?? '');
+      return nut ? { mo: nut.getAttribute('aria-expanded'), inert: than?.inert ?? null } : null;
+    }, ten);
+    const nutTB = (ten) => p.locator('.ct-tb-nhom-nut').filter({
+      has: p.locator('.ct-tb-nhom-ten', { hasText: new RegExp(`^${ten}$`) }),
+    }).first();
+    const kiemTB = async (buoc, ten, mong) => {
+      const s = await nhomTB(ten);
+      if (!s || s.mo !== String(mong) || s.inert !== !mong) {
+        throw new Error(`Thanh bên — ${buoc}: nhóm "${ten}" mong ${mong ? 'MỞ' : 'GẬP'}, thấy ${JSON.stringify(s)}`);
+      }
+    };
+    await kiemTB('mặc định', 'ett1', false);
+    await nutTB('ett1').click({ timeout: 2000 });
+    await p.waitForTimeout(300);
+    await kiemTB('bấm chuột', 'ett1', true);
+    await nutTB('ett1').focus();
+    await p.keyboard.press('Enter');
+    await p.waitForTimeout(150);
+    await kiemTB('phím Enter', 'ett1', false);
+    await p.keyboard.press('Space');
+    await p.waitForTimeout(150);
+    await kiemTB('phím Space', 'ett1', true);
+    await p.fill('.ct-tb-tim input', 'IELTS');
+    await p.waitForTimeout(200);
+    await kiemTB('đang tìm', 'ielts', true);
+    await p.fill('.ct-tb-tim input', '');
+    await p.waitForTimeout(350);
+    await kiemTB('xoá tìm', 'ielts', false);
+    await kiemTB('xoá tìm (giữ lựa chọn đã nhớ)', 'ett1', true);
   },
   '/notes': async (p) => {
     const demHang = () => p.evaluate(() =>

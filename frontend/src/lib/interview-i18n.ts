@@ -179,8 +179,8 @@ const STR = {
   noTracks: { vi: 'Lĩnh vực này chưa có track.', en: 'This field has no tracks yet.' },
   tracksSelected: { vi: 'Đã chọn {n} vị trí ({names}) · tổng {q} câu hỏi.', en: 'Selected {n} position(s) ({names}) · {q} questions total.' },
   tracksNoQuestions: {
-    vi: 'Các vị trí đã chọn chưa có câu hỏi. Admin vào <b>/admin/interview</b> → chọn topic → <b>AI sinh câu hỏi</b> (Opus 4.8), hoặc chọn vị trí đã có câu hỏi.',
-    en: 'The selected positions have no questions yet. Admin: open <b>/admin/interview</b> → pick a topic → <b>AI-generate questions</b> (Opus 4.8), or pick positions that already have questions.',
+    vi: 'Các vị trí đã chọn chưa có câu hỏi. Admin vào <b>/admin/interview</b> → chọn topic → <b>AI sinh câu hỏi</b> (Opus 5), hoặc chọn vị trí đã có câu hỏi.',
+    en: 'The selected positions have no questions yet. Admin: open <b>/admin/interview</b> → pick a topic → <b>AI-generate questions</b> (Opus 5), or pick positions that already have questions.',
   },
   companyDefault: { vi: 'Mặc định', en: 'Default' },
   numQuestions: { vi: 'Số câu', en: 'Questions' },
@@ -214,7 +214,7 @@ const STR = {
   cvPlaceholder: { vi: 'Dán nội dung CV (kinh nghiệm, kỹ năng, dự án)…', en: 'Paste your CV (experience, skills, projects)…' },
   jdLabel: { vi: 'Mô tả công việc — JD', en: 'Job description — JD' },
   jdPlaceholder: { vi: 'Dán JD của vị trí bạn ứng tuyển…', en: 'Paste the JD of the role you are applying for…' },
-  projectToggle: { vi: 'AI đọc cả file .md dự án của bạn và hỏi chuyên sâu (model Opus 4.8)', en: 'AI reads your whole project .md and asks deep questions (Opus 4.8 model)' },
+  projectToggle: { vi: 'AI đọc cả file .md dự án của bạn và hỏi chuyên sâu (model Opus 5)', en: 'AI reads your whole project .md and asks deep questions (Opus 5 model)' },
   projectHint: {
     vi: '<b>Vòng 1</b>: lý thuyết + hiểu code trong dự án. <b>Vòng 2</b>: chỉ code — implement/mở rộng/tối ưu/gỡ lỗi trong chính dự án. File .md càng chi tiết, câu hỏi càng sâu. Nội dung không lưu lâu dài · tạo có thể mất ~30–90s.',
     en: '<b>Round 1</b>: theory + understanding the project code. <b>Round 2</b>: code only — implement/extend/optimize/debug inside your own project. The more detailed the .md, the deeper the questions. Not stored long-term · may take ~30–90s.',

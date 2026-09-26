@@ -210,10 +210,13 @@ export const MODEL_CATALOG: Record<string, ModelInfo> = {
   //    đúng nếu sau này mở kênh, và để `llm:check` so sánh. ──
   'gpt-5.6-luna': { vendor: 'openai', in: 0.25, out: 2, vision: true, note: '⚠ chưa mua được' },
   // ── Anthropic — ⚠ CHƯA MUA ĐƯỢC (kênh chưa mở trong nhóm của khoá) ──
-  'claude-opus-5': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: '⚠ chưa mua được — suy luận sâu nhất + đọc PDF gốc' },
+  'claude-opus-5': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: 'Qua cổng rambo: model MẶC ĐỊNH của mọi việc AI từ 26/09/2026' },
   'claude-sonnet-5': { vendor: 'anthropic', in: 3, out: 15, vision: true, note: '⚠ chưa mua được — giỏi code, giá vừa' },
   'claude-sonnet-4-6': { vendor: 'anthropic', in: 3, out: 15, vision: true, note: '⚠ chưa mua được' },
-  'claude-fable-5': { vendor: 'anthropic', in: 10, out: 50, vision: true, note: '⚠ chưa mua được — đắt nhất, gấp đôi opus-5' },
+  /* Người dùng 26/09/2026: Fable "tốn token gấp 3,5 lần bình thường" trên cổng
+     rambo ⇒ giá ước lượng = 3,5 × opus-5. Chỉ dùng trong AI Code, có hạn mức
+     riêng (`services/agent/fable.ts`). */
+  'claude-fable-5': { vendor: 'anthropic', in: 17.5, out: 87.5, vision: true, note: 'Qua cổng rambo: ĐẮT NHẤT (×3,5) — chỉ AI Code, có hạn mức riêng' },
   'claude-opus-4-8': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: '⚠ chưa mua được' },
   'claude-opus-4-7': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: '⚠ chưa mua được' },
   'claude-opus-4-6': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: '⚠ chưa mua được' },
@@ -994,7 +997,14 @@ function modelCong(purpose: LlmPurpose): string {
  * chênh lệch đó là nhiều giờ đồng hồ, mà chất lượng phân loại một câu hỏi vào
  * chương thì sonnet-5 đã thừa sức.
  */
-const RAMBO_MODEL_MANH = 'claude-opus-4-8';
+/*
+ * ⚠️ 26/09/2026: `claude-opus-4-8` → `claude-opus-5`. Cổng rambo mở thêm
+ * opus-5 và người dùng chốt: *"cứ opus 5 thay vì 4.8 như cũ, do opus 5 rẻ hơn
+ * và tốt hơn"* — áp cho MỌI tính năng AI trên web đi đường này (CT Work, gia
+ * sư bài học, Code Lab, phòng thi, phòng Lab…). Đã gọi thật bằng khoá mới:
+ * trả 200, đúng tên model. Muốn quay lại từng việc: `LLM_MODEL_<VIỆC>=…`.
+ */
+const RAMBO_MODEL_MANH = 'claude-opus-5';
 const RAMBO_MODEL_HANG_LOAT = 'claude-sonnet-5';
 /**
  * ⚠️ THU HẸP 14/09/2026. Trước đây danh sách này gồm cả `codelab_bulk`,

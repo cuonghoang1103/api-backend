@@ -61,9 +61,19 @@ function gia() {
           const Ctx = createContext(null);
           export function AppStateProvider({ children, tuyenBanDau }) {
             const [route, datRoute] = useState(tuyenBanDau ?? '/dashboard');
+            /* settings phai GHI DUOC nhu ban that (26/09/2026). Ban dau
+               setSetting la ham rong, nen moi thu nho qua setting (gap/mo nhom
+               du an o thanh ben AI Code, thanh ben gap...) bam vao KHONG DOI
+               GI, va phep kiem bam-de-mo do sai cho mot ma trang hoan toan
+               dung. setSetting giu THAM CHIEU CO DINH nhu useCallback that. */
+            const [settings, datSettings] = useState(S.settings);
+            const setSetting = useMemo(
+              () => (k, gt) => datSettings((c) => ({ ...c, [k]: gt })),
+              [],
+            );
             const v = useMemo(
-              () => ({ ...S, route, navigate: (p) => datRoute(p) }),
-              [route],
+              () => ({ ...S, settings, setSetting, route, navigate: (p) => datRoute(p) }),
+              [route, settings, setSetting],
             );
             return createElement(Ctx.Provider, { value: v }, children);
           }

@@ -2,7 +2,7 @@
 
 // CuongMini — AI đồng hành khi thi (Pro only). Nút nổi mở panel trượt từ phải:
 // 3 gợi ý dựng sẵn + chat tự do về ĐÚNG câu đang thi + nút "Hiện đáp án".
-// Model chính đi cổng rambo riêng (claude-opus-4-8), tự lùi sang gpt-5.6-sol
+// Model chính đi cổng rambo riêng (claude-opus-5), tự lùi sang gpt-5.6-sol
 // (modelapi.vn) nếu rambo lỗi; có công tắc chọn tay. Reset chat mỗi khi đổi câu
 // (key={questionId} ở component cha).
 
@@ -185,7 +185,7 @@ export default function CuongMiniPanel({ examId, attemptId, questionId, question
                     background: provider === p ? 'rgba(139,92,246,.12)' : 'transparent',
                     color: provider === p ? '#8b5cf6' : 'var(--text-secondary)',
                   }}>
-                  {p === undefined ? (isVi ? 'Tự động' : 'Auto') : p === 'opus' ? 'Opus 4.8' : 'GPT-5.6-Sol'}
+                  {p === undefined ? (isVi ? 'Tự động' : 'Auto') : p === 'opus' ? 'Opus 5' : 'GPT-5.6-Sol'}
                 </button>
               ))}
             </div>

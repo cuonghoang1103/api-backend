@@ -8,7 +8,7 @@
  *   NopBai         nộp .zip, AI chấm thay thầy và hỏi vặn
  *   HuongDanReview sau khi đạt: cách trình bày với thầy
  *
- * Cả bốn đều gọi Opus 4.8 qua cổng riêng, tức MỘT LƯỢT MẤT HÀNG CHỤC GIÂY. Nên
+ * Cả bốn đều gọi Opus 5 qua cổng riêng, tức MỘT LƯỢT MẤT HÀNG CHỤC GIÂY. Nên
  * mỗi tấm phải nói rõ nó đang chạy và đang chạy CÁI GÌ — một spinner câm trong
  * 90 giây thì người dùng bấm lại, và lượt thứ hai vừa tốn tiền vừa không nhanh
  * hơn.

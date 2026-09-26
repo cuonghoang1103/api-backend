@@ -19,7 +19,7 @@ import {
 } from 'recharts';
 import {
   TrendingUp, Wallet, ShoppingBag, Crown, Loader2, RefreshCw, AlertCircle,
-  Landmark, KeyRound, Clock, Check, X, Settings, ArrowLeft, Info, Terminal,
+  Landmark, KeyRound, Clock, Check, X, Settings, ArrowLeft, Info, Terminal, Sparkles,
 } from 'lucide-react';
 import {
   commerceAdminApi,
@@ -30,7 +30,7 @@ const dongVN = (n: number) => `${Math.round(n).toLocaleString('vi-VN')} đ`;
 const gonVN = (n: number) =>
   n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}tr` : n >= 1_000 ? `${Math.round(n / 1_000)}k` : String(n);
 
-type Tab = 'doanhthu' | 'chuyenkhoan' | 'doikey' | 'llmkey' | 'caidat';
+type Tab = 'doanhthu' | 'chuyenkhoan' | 'doikey' | 'llmkey' | 'fable' | 'caidat';
 
 export default function AdminCommercePage() {
   // Mở đúng tab theo `?tab=` trên URL.
@@ -44,7 +44,7 @@ export default function AdminCommercePage() {
   const [tab, setTab] = useState<Tab>(() => {
     if (typeof window === 'undefined') return 'doanhthu';
     const t = new URLSearchParams(window.location.search).get('tab');
-    const hopLe: Tab[] = ['doanhthu', 'chuyenkhoan', 'doikey', 'llmkey', 'caidat'];
+    const hopLe: Tab[] = ['doanhthu', 'chuyenkhoan', 'doikey', 'llmkey', 'fable', 'caidat'];
     return hopLe.includes(t as Tab) ? (t as Tab) : 'doanhthu';
   });
   const [soNgay, setSoNgay] = useState(30);
@@ -122,6 +122,7 @@ export default function AdminCommercePage() {
             { id: 'chuyenkhoan' as const, ten: 'Chuyển khoản', Icon: Landmark, badge: canXuLy?.chuyenKhoanChoDuyet ?? 0 },
             { id: 'doikey' as const, ten: 'Đổi key', Icon: KeyRound, badge: canXuLy?.yeuCauDoiKey ?? 0 },
             { id: 'llmkey' as const, ten: 'Key OpenCode', Icon: Terminal, badge: 0 },
+            { id: 'fable' as const, ten: 'Cuong Fable', Icon: Sparkles, badge: 0 },
             { id: 'caidat' as const, ten: 'Cài đặt', Icon: Settings, badge: 0 },
           ]).map((t) => (
             <button
@@ -143,6 +144,7 @@ export default function AdminCommercePage() {
         {tab === 'chuyenkhoan' && <TabChuyenKhoan onXong={nap} />}
         {tab === 'doikey' && <TabDoiKey onXong={nap} />}
         {tab === 'llmkey' && <TabKeyOpenCode />}
+        {tab === 'fable' && <TabFable />}
         {tab === 'caidat' && <TabCaiDat />}
       </div>
     </div>
@@ -523,6 +525,155 @@ function TabDoiKey({ onXong }: { onXong: () => void }) {
 }
 
 // ═══════════════════ KEY OPENCODE (cổng key con LLM) ═══════════════════
+
+// ═══════════════════ CUONG FABLE 5 — xin thêm hạn mức (26/09/2026) ═══════════════════
+//
+// Pro dùng hết hạn mức Fable trong AI Code (model tốn gấp 3,5 lần) thì bấm "Xin
+// thêm" trong app; yêu cầu hiện ở đây. Duyệt = cộng số token vào hạn mức của họ
+// trong 30 ngày kể từ lúc duyệt. Admin tự dùng thì không giới hạn.
+
+interface DonFable {
+  id: number;
+  userId: number;
+  user: { id: number; username: string; fullName: string | null; email: string } | null;
+  reason: string;
+  status: string;
+  soToken: number | null;
+  adminNote: string | null;
+  createdAt: string;
+  resolvedAt: string | null;
+  hanMuc: { daDung: number; tran: number; conLai: number } | null;
+}
+
+const k = (n: number) => `${Math.round(n / 1000).toLocaleString('vi-VN')}k`;
+
+function TabFable() {
+  const [rows, setRows] = useState<DonFable[]>([]);
+  const [tranGoc, setTranGoc] = useState(0);
+  const [loc, setLoc] = useState('PENDING');
+  const [dangTai, setDangTai] = useState(true);
+  const [dangLam, setDangLam] = useState<number | null>(null);
+  const [soThem, setSoThem] = useState<Record<number, string>>({});
+  const [themMacDinh, setThemMacDinh] = useState(200_000);
+
+  const nap = useCallback(async () => {
+    setDangTai(true);
+    try {
+      const r = await fetch(`/api/v1/admin/fable${loc ? `?status=${loc}` : ''}`, { credentials: 'include' });
+      const j = await r.json();
+      setRows(j.data?.rows ?? []);
+      setTranGoc(j.data?.tranGoc ?? 0);
+      setThemMacDinh(j.data?.themMacDinh ?? 200_000);
+    } catch { toast.error('Không tải được danh sách.'); }
+    finally { setDangTai(false); }
+  }, [loc]);
+
+  useEffect(() => { nap(); }, [nap]);
+
+  const xuLy = async (d: DonFable, viec: 'approve' | 'reject') => {
+    let body: Record<string, unknown> = {};
+    if (viec === 'approve') {
+      body = { soToken: Number(soThem[d.id] || themMacDinh) };
+    } else {
+      const note = window.prompt('Lý do từ chối (người dùng đọc được):', 'Đã dùng nhiều trong tháng này');
+      if (note === null) return;
+      body = { note };
+    }
+    setDangLam(d.id);
+    try {
+      const r = await fetch(`/api/v1/admin/fable/${d.id}/${viec}`, {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.message ?? 'Lỗi');
+      toast.success(viec === 'approve' ? `Đã cộng ${k(Number(body.soToken))} token Fable.` : 'Đã từ chối.');
+      await nap();
+    } catch (e) { toast.error(e instanceof Error ? e.message : 'Không xử lý được.'); }
+    finally { setDangLam(null); }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="p-4 rounded-xl border border-darkborder bg-darkcard text-sm text-text-muted flex gap-3">
+        <Info className="w-4 h-4 mt-0.5 shrink-0 text-neon-violet" />
+        <p>
+          Cuong Fable 5 tốn token <b className="text-text-primary">gấp 3,5 lần</b>. Tài khoản Pro có
+          {' '}<b className="text-text-primary">{k(tranGoc)} token</b> mỗi 30 ngày (đổi bằng env
+          {' '}<code>FABLE_TOKEN_PRO</code>). Duyệt một yêu cầu là cộng thêm số token bạn nhập, có hiệu lực 30 ngày.
+          Admin không bị giới hạn.
+        </p>
+      </div>
+
+      <div className="flex gap-2">
+        {[['PENDING', 'Chờ duyệt'], ['APPROVED', 'Đã duyệt'], ['REJECTED', 'Từ chối'], ['', 'Tất cả']].map(([v, t]) => (
+          <button
+            key={v}
+            onClick={() => setLoc(v!)}
+            className={`px-3 py-1.5 rounded-lg text-xs border ${loc === v ? 'border-neon-violet text-neon-violet' : 'border-darkborder text-text-muted'}`}
+          >{t}</button>
+        ))}
+        <button onClick={nap} className="ml-auto px-3 py-1.5 rounded-lg text-xs border border-darkborder text-text-muted flex items-center gap-1">
+          <RefreshCw className="w-3 h-3" /> Tải lại
+        </button>
+      </div>
+
+      {dangTai ? (
+        <div className="flex items-center gap-2 text-text-muted text-sm"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>
+      ) : rows.length === 0 ? (
+        <p className="text-sm text-text-muted">Không có yêu cầu nào.</p>
+      ) : (
+        <div className="space-y-3">
+          {rows.map((d) => (
+            <div key={d.id} className="p-4 rounded-xl border border-darkborder bg-darkcard">
+              <div className="flex flex-wrap items-center gap-2 text-sm">
+                <b className="text-text-primary">{d.user?.fullName || d.user?.username || `#${d.userId}`}</b>
+                <span className="text-text-muted">{d.user?.email}</span>
+                <span className="ml-auto text-xs text-text-muted">{new Date(d.createdAt).toLocaleString('vi-VN')}</span>
+              </div>
+              <p className="mt-2 text-sm text-text-primary whitespace-pre-wrap">{d.reason}</p>
+              {d.hanMuc && (
+                <p className="mt-1 text-xs text-text-muted">
+                  Đang dùng {k(d.hanMuc.daDung)} / {k(d.hanMuc.tran)} token (30 ngày qua)
+                </p>
+              )}
+              {d.status === 'PENDING' ? (
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <input
+                    type="number"
+                    min={1}
+                    step={50000}
+                    placeholder={String(themMacDinh)}
+                    value={soThem[d.id] ?? ''}
+                    onChange={(e) => setSoThem((c) => ({ ...c, [d.id]: e.target.value }))}
+                    className="w-36 px-2 py-1.5 rounded-lg bg-darkbg border border-darkborder text-sm"
+                  />
+                  <span className="text-xs text-text-muted">token cộng thêm</span>
+                  <button
+                    disabled={dangLam === d.id}
+                    onClick={() => xuLy(d, 'approve')}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs flex items-center gap-1 disabled:opacity-50"
+                  ><Check className="w-3 h-3" /> Duyệt</button>
+                  <button
+                    disabled={dangLam === d.id}
+                    onClick={() => xuLy(d, 'reject')}
+                    className="px-3 py-1.5 rounded-lg border border-red-500/50 text-red-400 text-xs flex items-center gap-1 disabled:opacity-50"
+                  ><X className="w-3 h-3" /> Từ chối</button>
+                </div>
+              ) : (
+                <p className="mt-2 text-xs text-text-muted">
+                  {d.status === 'APPROVED' ? `✓ Đã cộng ${k(d.soToken ?? 0)} token` : `✗ Từ chối${d.adminNote ? ` — ${d.adminNote}` : ''}`}
+                  {d.resolvedAt && ` · ${new Date(d.resolvedAt).toLocaleString('vi-VN')}`}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface DonKeyAdmin {
   id: number;

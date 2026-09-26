@@ -1012,6 +1012,7 @@ for route in \
     payments/bank-transfer/config \
     llm-keys/info \
     admin/thong-bao/dem \
+    admin/fable \
     cv/profile \
     tech-trends/articles \
     voice \

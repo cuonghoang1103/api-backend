@@ -13704,3 +13704,203 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 @media (prefers-reduced-motion: reduce) {
   .ct-ai-term .ct-panel-full > .ct-page-head h1::after { animation: none; }
 }
+
+/* ============================================================
+   THANH BÊN AI CODE — NHÓM DỰ ÁN GẬP/MỞ ĐƯỢC (26/09/2026)
+   ============================================================
+   Người dùng: "ẩn mấy cái task đi cho gọn … nó show all ra trông rất nhiều và
+   rối". Mỗi nhóm dự án giờ là một khối gập/mở; logic ở `nhomThanhBen.ts`.
+
+   Chỉ dùng biến `--ct-*` nên tự hợp cả theme sáng/tối lẫn giao diện terminal
+   `.ct-ai-term` (nền đen, nhấn xanh lục) — khối này không viết màu riêng nào
+   cho terminal cả. Màu dự án (`--mau-duan`) lấy từ bảng có sẵn ở trên.
+
+   ⚠️ Viết đè bằng `.ct-tb-nhom > h3` (cùng độ đặc hiệu với `.ct-tb-nhom h3`,
+   đứng SAU nên thắng) thay vì sửa khối gốc: có phiên khác đang sửa file này
+   song song, và sửa giữa file là chỗ dễ giẫm nhau nhất. */
+
+.ct-tb-nhom { margin-bottom: 2px; }
+.ct-tb-nhom[data-mo='true'] { margin-bottom: 8px; }
+
+/* Tiêu đề nhóm: `h3` giữ vạch màu + nền dính khi cuộn; toàn bộ vùng bấm là
+   cái nút bên trong, nên phải bỏ padding của `h3` cho nút lấp kín. */
+.ct-tb-nhom > h3 {
+  padding: 0;
+  margin: 0 0 2px;
+}
+.ct-tb-nhom-nut {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; min-width: 0;
+  padding: 6px 6px 6px 6px;
+  border: none; border-radius: 0 6px 6px 0;
+  background: none;
+  font: inherit; letter-spacing: inherit; text-transform: inherit;
+  color: inherit; text-align: left;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease), color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tb-nhom-nut:hover {
+  background: color-mix(in srgb, var(--mau-duan, var(--ct-text-faint)) 10%, var(--ct-hover));
+  color: color-mix(in srgb, var(--mau-duan, var(--ct-text)) 70%, var(--ct-text));
+}
+.ct-tb-nhom-nut:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: -2px;
+}
+/* Nhóm gập: chữ dịu đi một nấc để nhóm MỞ nổi lên — nhưng vạch + icon vẫn
+   giữ nguyên màu dự án, liếc vẫn nhận ra nhóm nào là nhóm nào. */
+.ct-tb-nhom[data-mo='false'] .ct-tb-nhom-nut {
+  color: color-mix(in srgb, var(--mau-duan, var(--ct-text-faint)) 45%, var(--ct-text-faint));
+}
+.ct-tb-nhom[data-mo='false'] .ct-tb-nhom-nut:hover {
+  color: color-mix(in srgb, var(--mau-duan, var(--ct-text)) 70%, var(--ct-text));
+}
+
+.ct-tb-nhom-mui {
+  flex: none;
+  color: var(--ct-text-faint) !important;   /* thắng `.ct-tb-nhom h3 svg` — mũi tên không mang màu dự án */
+  transition: transform var(--ct-motion) var(--ct-ease);
+}
+.ct-tb-nhom[data-mo='true'] .ct-tb-nhom-mui { transform: rotate(90deg); }
+
+.ct-tb-nhom-ten {
+  flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Số việc trong nhóm. Chữ số đều bề ngang (`tabular-nums`) để cột huy hiệu
+   thẳng hàng giữa các nhóm. */
+.ct-tb-nhom-dem {
+  flex: none;
+  min-width: 18px; padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 10px; font-weight: 600; line-height: 14px;
+  text-align: center; text-transform: none; letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--ct-text-muted);
+  background: color-mix(in srgb, var(--mau-duan, var(--ct-text-faint)) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mau-duan, var(--ct-border)) 28%, transparent);
+}
+
+/* Thân nhóm: trượt bằng `grid-template-rows` 0fr ↔ 1fr — không cần JS đo
+   chiều cao. `--ct-motion` về 0ms khi bật giảm chuyển động (đầu file). */
+.ct-tb-nhom-than {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--ct-motion) var(--ct-ease),
+    opacity var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tb-nhom-than[data-mo='true'] { grid-template-rows: 1fr; opacity: 1; }
+.ct-tb-nhom-ruot {
+  min-height: 0;
+  overflow: hidden;
+  /* Thụt vào dưới mũi tên + một vạch dẫn mảnh: nhìn là biết các việc này
+     thuộc nhóm ở trên, kể cả khi nhiều nhóm cùng mở. (Màu dự án `--mau-duan`
+     chỉ khai trên `h3`, nên vạch này dùng màu viền chung.) */
+  margin-left: 11px;
+  padding-left: 5px;
+  border-left: 1px solid var(--ct-border);
+}
+.ct-tb-nhom[data-mo='true'] .ct-tb-nhom-ruot { padding-top: 1px; padding-bottom: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-tb-nhom-than,
+  .ct-tb-nhom-mui,
+  .ct-tb-nhom-nut { transition: none; }
+}
+
+/* Việc đang hiện ở tab đang xem: một chấm nhấn bên trái. (Nền đã có sẵn ở
+   `.ct-tb-muc[data-dangmo='true']` phía trên.) */
+.ct-tb-muc[data-dangmo='true'] > .ct-tb-muc-mo {
+  box-shadow: inset 2px 0 0 var(--ct-accent);
+}
+
+/* Dòng tóm tắt + nút gập/mở tất cả, đầu danh sách. */
+.ct-tb-tongquan {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  margin: 0 2px 6px 4px;
+  font-size: 10.5px;
+  color: var(--ct-text-faint);
+}
+.ct-tb-tongquan > span {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ct-tb-tatca {
+  display: inline-flex; align-items: center; gap: 4px; flex: none;
+  padding: 2px 7px;
+  border: 1px solid var(--ct-border); border-radius: 6px;
+  background: none;
+  font: inherit; font-size: 10.5px;
+  color: var(--ct-text-muted);
+  cursor: pointer;
+  transition: color var(--ct-motion-fast) var(--ct-ease), border-color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tb-tatca:hover { color: var(--ct-accent-text, var(--ct-text)); border-color: var(--ct-accent); }
+.ct-tb-tatca:focus-visible { outline: 2px solid var(--ct-accent); outline-offset: 1px; }
+
+/* ══ CUONG FABLE 5 — cảnh báo ×3,5 + hạn mức + xin thêm (26/09/2026) ══════
+   Màu vàng cảnh báo (`--ct-warn`), không đỏ: đây là "đắt, cân nhắc", không
+   phải "lỗi". Dùng biến `--ct-*` nên tự hợp giao diện terminal của trang AI. */
+.ct-chonmm-ds button[data-dat='true'] strong { color: var(--ct-warn); }
+.ct-chonmm-dat {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--ct-warn) 55%, transparent);
+  color: var(--ct-warn);
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  vertical-align: 1px;
+}
+.ct-chonmm-ds em.ct-chonmm-hanmuc { display: block; color: var(--ct-warn); opacity: 0.85; }
+
+.ct-chonmm-xacnhan {
+  margin: 4px 6px 8px 26px;
+  padding: 9px 11px;
+  border: 1px solid color-mix(in srgb, var(--ct-warn) 45%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ct-warn) 8%, transparent);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ct-text);
+}
+.ct-chonmm-xacnhan p { margin: 0 0 8px; }
+.ct-chonmm-xacnhan > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.ct-chonmm-xacnhan .ct-btn { padding: 4px 10px; font-size: 11.5px; }
+
+.ct-fable-xin {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: 8px;
+  background: var(--ct-surface);
+  font-size: 12px;
+  color: var(--ct-text);
+}
+.ct-fable-xin[data-trang-thai='cho'] { flex-direction: row; align-items: flex-start; color: var(--ct-text-muted); }
+.ct-fable-xin-dau { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; }
+.ct-fable-xin-dau em { font-style: normal; color: var(--ct-text-faint); font-size: 11px; }
+.ct-fable-xin-tuchoi { margin: 0; color: var(--ct-text-muted); font-size: 11px; }
+.ct-fable-xin-loi { margin: 0; color: var(--ct-err); font-size: 11px; }
+.ct-fable-xin textarea {
+  width: 100%;
+  min-width: 0;
+  resize: vertical;
+  padding: 7px 9px;
+  border: 1px solid var(--ct-border);
+  border-radius: 6px;
+  background: var(--ct-bg);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 12px;
+}
+.ct-fable-xin textarea:focus { outline: none; border-color: var(--ct-accent); }
+.ct-fable-xin .ct-btn { align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; }

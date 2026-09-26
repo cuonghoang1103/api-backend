@@ -48,6 +48,11 @@ export interface ModelAgent {
   ten: string;
   /** Một dòng cho giao diện — nói bằng thứ đo được, không bằng tính từ. */
   mo: string;
+  /**
+   * Model ĐẮT bất thường ⇒ app hiện cảnh báo trước khi dùng, và máy chủ áp hạn
+   * mức riêng (`fable.ts`). Chỉ `claude-fable-5` có cờ này (26/09/2026).
+   */
+  dat?: boolean;
 }
 
 export const MODEL_AGENT: readonly ModelAgent[] = Object.freeze([
@@ -120,7 +125,20 @@ const MODEL_AGENT_RIENG: readonly ModelAgent[] = Object.freeze([
     id: 'opus-4-8',
     model: 'claude-opus-4-8',
     ten: 'CuongMini Max 4.8',
-    mo: 'Nặng nhất (4,7s tới chữ đầu) — để dành việc khó nhất',
+    mo: 'Thế hệ trước (4,7s tới chữ đầu) — nay Max 5 rẻ và tốt hơn',
+  },
+  {
+    id: 'opus-5',
+    model: 'claude-opus-5',
+    ten: 'CuongMini Max 5',
+    mo: 'MỚI — mạnh nhất cho việc thường, rẻ và tốt hơn Max 4.8',
+  },
+  {
+    id: 'fable-5',
+    model: 'claude-fable-5',
+    ten: 'Cuong Fable 5',
+    mo: '⚠ Tốn token GẤP 3,5 LẦN — chỉ dùng cho việc cực khó. Có hạn mức riêng',
+    dat: true,
   },
 ]);
 

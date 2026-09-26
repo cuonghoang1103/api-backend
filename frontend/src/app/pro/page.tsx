@@ -160,7 +160,7 @@ const NHOM_QUYEN: Array<{ ten: string; mo: string; mau: string; items: Quyen[] }
       {
         icon: Bot,
         title: 'Chọn model theo việc',
-        desc: 'Sonnet 5 (mặc định, rẻ nhất), Opus 4.8 cho việc khó, hoặc GPT khi cần ý kiến thứ hai. Nhãn ghi rõ giá đo thật của từng model.',
+        desc: 'Sonnet 5 (mặc định, rẻ nhất), CuongMini Max 5 (Opus 5) cho việc khó, hoặc GPT khi cần ý kiến thứ hai. Nhãn ghi rõ giá đo thật của từng model.',
       },
     ],
   },

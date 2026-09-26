@@ -1015,7 +1015,7 @@ function NotesPageInner() {
             <button onClick={() => setDrawerOpen(true)} className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05] md:hidden" aria-label="Mở danh sách">
               <Menu className="h-5 w-5" />
             </button>
-            <button onClick={() => setPaletteOpen(true)} className="flex min-h-[36px] min-w-0 shrink items-center gap-2 rounded-lg border border-slate-200 bg-black/[0.03] px-3 py-1.5 text-[13px] text-slate-500 hover:bg-black/[0.06] hover:text-slate-800 dark:border-white/[0.08] dark:bg-white/[0.03] dark:text-slate-400 dark:hover:bg-white/[0.05] dark:hover:text-slate-200">
+            <button onClick={() => setPaletteOpen(true)} className="flex min-h-[36px] min-w-0 shrink items-center gap-2 rounded-lg border border-slate-200 bg-black/[0.03] dark:bg-white/[0.03] px-3 py-1.5 text-[13px] text-slate-500 hover:bg-black/[0.06] hover:text-slate-800 dark:border-white/[0.08] dark:text-slate-400 dark:hover:bg-white/[0.05] dark:hover:text-slate-200">
               <Search className="h-4 w-4" /> <span className="hidden sm:inline">Tìm kiếm</span>
               <kbd className="ml-1 hidden rounded bg-slate-200 px-1.5 text-[10px] text-slate-500 dark:bg-white/[0.06] md:inline">⌘K</kbd>
             </button>

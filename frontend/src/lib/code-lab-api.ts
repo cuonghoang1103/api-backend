@@ -109,7 +109,7 @@ export const codeLabApi = {
   },
 
   // ─── Phòng Lab ────────────────────────────────────────────────
-  // Mọi lời gọi AI ở đây chạy Opus 4.8 qua cổng riêng, nên timeout rộng: một
+  // Mọi lời gọi AI ở đây chạy Opus 5 qua cổng riêng, nên timeout rộng: một
   // lượt chấm .zip đọc cả project rồi soạn 6-10 câu hỏi vặn, và 30s mặc định
   // của client dùng chung sẽ bỏ dở đúng lúc server đang làm việc có ích.
   labRooms: () => api.get<Ok<LabRoomSummary[]>>(`${BASE}/lab-rooms`),

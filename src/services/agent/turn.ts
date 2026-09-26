@@ -45,6 +45,7 @@ import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import { modelAgentTu } from './models.js';
 import { loiHetHan, xemHanMuc, type HanMuc } from './quota.js';
+import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.js';
 import { loiCanViTien, xemViTien } from './viTien.js';
 import { runServerTool } from './serverTools.js';
 import { buildSystemPrompt, catGhiChu, type WorkspaceHint } from './prompt.js';
@@ -649,6 +650,20 @@ export async function runAgentTurn(
     );
   }
   const model = chon?.model ?? modelFor('agent_code', ep);
+
+  /* 5. HẠN MỨC RIÊNG của Cuong Fable 5 — model tốn gấp 3,5 lần (26/09/2026).
+     Kiểm SAU khi biết model thật, và kiểm ở MỌI lượt kể cả lượt của việc phụ:
+     một việc dài chạy hàng chục lượt, chặn ở lượt đầu thôi là thủng. Admin
+     không bị chặn (xem `fable.ts`). */
+  if (model === MODEL_FABLE) {
+    const hf = await xemHanMucFable(input.userId);
+    if (hf.hetHan) {
+      tra();
+      emit({ type: 'error', error: loiHetFable(hf), code: 'FABLE_QUOTA_EXCEEDED' });
+      return;
+    }
+  }
+
   emit({ type: 'start', model, buoc: buocDaDi + 1, tranBuoc: MAX_AGENT_STEPS });
 
   const append: AgentMessage[] = [];
@@ -668,7 +683,10 @@ export async function runAgentTurn(
     append,
     stop,
     usage: { inputTokens: inTong, outputTokens: outTong, costUsd: costUsd(model, inTong, outTong) },
-    quota: goiHanMuc({ ...hanMuc, daDung: hanMuc.daDung + inTong + outTong }),
+    quota: goiHanMuc({
+      ...hanMuc,
+      daDung: hanMuc.daDung + Math.round((inTong + outTong) * (model === MODEL_FABLE ? HE_SO_FABLE : 1)),
+    }),
     nguCanh: goiNguCanh([...messages, ...append], boLuot.soLuotDaBo),
     ...(daLuoc > 0 ? { compact: { soDaLuoc: daLuoc, kyTuDaCat: daCat } } : {}),
   });
@@ -941,7 +959,7 @@ interface KetQuaCong {
 function modelDuPhong(chinh: string): string | null {
   const dat = process.env.LLM_MODEL_AGENT_BACKUP?.trim();
   if (dat) return dat === chinh ? null : dat;
-  const macDinh = chinh.startsWith('claude') ? 'claude-opus-4-8' : 'claude-sonnet-5';
+  const macDinh = chinh.startsWith('claude') ? 'claude-opus-5' : 'claude-sonnet-5';
   return macDinh === chinh ? 'claude-sonnet-4-6' : macDinh;
 }
 

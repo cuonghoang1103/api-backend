@@ -33,6 +33,7 @@
  */
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
+import { HE_SO_FABLE, MODEL_FABLE } from './fable.js';
 
 /** Mặc định. Đổi bằng env, không sửa mã. `AGENT_TOKEN_CAP=0` = tắt trần (có chủ ý). */
 const MAC_DINH_TRAN = 4_000_000;
@@ -110,9 +111,13 @@ export async function xemHanMuc(userId: number): Promise<HanMuc> {
 
   const tu = new Date(Date.now() - soGio * 3_600_000);
   try {
-    const [tong, cuNhat, moiNhat] = await Promise.all([
+    const [tong, fable, cuNhat, moiNhat] = await Promise.all([
       prisma.interviewLLMCallLog.aggregate({
         where: { userId, feature: 'agent', createdAt: { gte: tu } },
+        _sum: { inputTokens: true, outputTokens: true },
+      }),
+      prisma.interviewLLMCallLog.aggregate({
+        where: { userId, feature: 'agent', model: MODEL_FABLE, createdAt: { gte: tu } },
         _sum: { inputTokens: true, outputTokens: true },
       }),
       prisma.interviewLLMCallLog.findFirst({
@@ -130,7 +135,13 @@ export async function xemHanMuc(userId: number): Promise<HanMuc> {
     // Cộng cả lượt HỎNG: token vào đã gửi đi rồi thì đã tiêu rồi, dù câu trả
     // lời không bao giờ về. Chỉ đếm lượt thành công là mở đúng một đường cho
     // một vòng lặp hỏng chạy vô hạn mà không bao giờ chạm trần.
-    const daDung = (tong._sum.inputTokens ?? 0) + (tong._sum.outputTokens ?? 0);
+    /* Token của Cuong Fable 5 tính NHÂN 3,5 (26/09/2026): cổng tính nó đắt gấp
+       chừng ấy, nên một triệu token Fable phải ăn bể 5 giờ như 3,5 triệu token
+       thường — nếu không, chọn Fable là cách "lách" để tiêu gấp 3,5 lần. */
+    const tokFable = (fable._sum.inputTokens ?? 0) + (fable._sum.outputTokens ?? 0);
+    const daDung = Math.round(
+      (tong._sum.inputTokens ?? 0) + (tong._sum.outputTokens ?? 0) + tokFable * (HE_SO_FABLE - 1),
+    );
     const ms = soGio * 3_600_000;
     return {
       daDung,

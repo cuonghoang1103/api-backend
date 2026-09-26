@@ -144,6 +144,15 @@ export const settingKeySchema = z.enum([
   'aiThanhBenGap',
   'aiThanhBenRong',
   /**
+   * Nhóm dự án nào ở thanh bên AI Code đang GẬP/MỞ — chuỗi JSON
+   * `{ "<tên dự án>": true|false }`, chỉ chứa nhóm người dùng đã TỰ bấm.
+   *
+   * Chuỗi chứ không phải object vì `settingValueSchema` chỉ nhận
+   * chuỗi/số/boolean; và `maHoaBangNho` tự cắt cho vừa trần 512 ký tự (bỏ lựa
+   * chọn cũ nhất trước). Xem `renderer/features/chat/nhomThanhBen.ts`.
+   */
+  'aiThanhBenNhomMo',
+  /**
    * Thanh bên của chế độ TRÒ CHUYỆN — khoá RIÊNG, không dùng chung với
    * `aiThanhBen*` của chế độ Lập trình.
    *
@@ -876,6 +885,8 @@ export const modelAgentSchema = z.enum([
   'sonnet-5', 'opus-4-8', 'gpt-sol',
   // cổng riêng (rambo)
   'haiku-4-5', 'sonnet-4-6', 'opus-4-6', 'opus-4-7',
+  // 26/09/2026: cổng rambo mở thêm opus-5 (mặc định mới) + fable-5 (đắt ×3,5, có hạn mức)
+  'opus-5', 'fable-5',
 ]);
 export type ModelAgent = z.infer<typeof modelAgentSchema>;
 export const agentModelSchema = z.object({ model: modelAgentSchema });
@@ -1254,7 +1265,8 @@ export interface AgentInfo {
    * khoá trên máy chủ. Phải hiện ra chứ không được lọc đi: người dùng chọn nó,
    * nhận về lỗi, rồi không hiểu vì sao — còn tệ hơn thấy nó xám và biết lý do.
    */
-  models?: Array<{ id: string; ten: string; mo: string; dungDuoc: boolean }>;
+  /** `dat` = model đắt bất thường (Cuong Fable ×3,5) ⇒ app xác nhận trước khi chọn. */
+  models?: Array<{ id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean }>;
   /**
    * Bảng mức nỗ lực + SỐ BƯỚC, cũng do máy chủ khai.
    *

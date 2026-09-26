@@ -229,6 +229,8 @@ export const TU_DIEN: Record<string, string> = {
   'Bắt đầu việc mới (xoá hội thoại, KHÔNG hoàn lại hạn mức)':
     'Start a new task (clears the transcript — does NOT refund quota)',
   'Tìm việc cũ…': 'Search past tasks…',
+  'Thu gọn tất cả': 'Collapse all',
+  'Mở tất cả': 'Expand all',
   'Tìm cuộc cũ…': 'Search past chats…',
   'Chưa có việc nào được lưu.': 'No saved tasks yet.',
   'Chưa có việc nào được lưu. Mỗi việc bạn hỏi sẽ tự lưu lại sau khi agent chạy xong.':

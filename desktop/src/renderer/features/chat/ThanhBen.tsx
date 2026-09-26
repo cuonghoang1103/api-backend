@@ -15,23 +15,43 @@
  * ("General coding session"), và người dùng phải mở từng cái mới biết nó
  * thuộc repo nào. `TomTatPhien.duAn` đã có sẵn từ lâu — chỉ là chưa ai dùng
  * để gom.
+ *
+ * ─── VÌ SAO MỖI NHÓM GẬP ĐƯỢC (26/09/2026) ───
+ * Gom theo dự án rồi vẫn xổ HẾT mọi nhóm thì người có năm dự án vẫn thấy một
+ * bức tường vài chục dòng. Nay mỗi nhóm là một khối gập/mở, mặc định gập (trừ
+ * nhóm ghim và nhóm chứa việc đang xem), và lựa chọn được nhớ qua lần mở app
+ * sau. Luật chọn nhóm nào mở nằm ở `nhomThanhBen.ts` — tách ra để kiểm được.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Archive, ArchiveRestore, ChevronLeft, FolderGit2, GitBranch, Loader2, MessageSquarePlus,
-  Pencil, Pin, PinOff, Search, SquarePlus, Trash2,
+  Archive, ArchiveRestore, ChevronLeft, ChevronRight, ChevronsDownUp, ChevronsUpDown, FolderGit2,
+  GitBranch, Loader2, MessageSquarePlus, Pencil, Pin, PinOff, Search, SquarePlus, Trash2,
 } from 'lucide-react';
 
 import { useAppState } from '../../app-state';
 import type { AgentPhien } from '../../../shared/ipc';
 import { MenuChamDoc, type MucMenu } from './MenuChamDoc';
 import { mauDuAn } from './mauDuAn';
+import {
+  KHOA_GHIM, boNho, datMo, giaiMaBangNho, maHoaBangNho, nhomDangMo, type BangNho,
+} from './nhomThanhBen';
 import { useDich } from '../../i18n';
 
 /** Kéo hẹp hơn thì tiêu đề cụt tới mức vô dụng; rộng hơn thì lấn hội thoại. */
 const RONG_MIN = 190;
 const RONG_MAX = 460;
 const RONG_MAC_DINH = 260;
+
+/** Nhãn nhóm của việc không gắn thư mục nào. Cũng là KHOÁ nhớ gập/mở của nó. */
+const KHONG_DU_AN = 'Không có dự án';
+
+/** Một nhóm để vẽ. `khoa` là thứ được nhớ gập/mở; `ten` là thứ hiện ra. */
+interface Nhom {
+  khoa: string;
+  ten: string;
+  ps: AgentPhien[];
+  laGhim: boolean;
+}
 
 export function ThanhBen({
   cuocId, onMoPhien, onMoPhienTabMoi, onTaoTab,
@@ -60,6 +80,19 @@ export function ThanhBen({
   const [suaTen, datSuaTen] = useState<{ id: string; ten: string } | null>(null);
   /** Đang xem kho lưu trữ thay vì danh sách thường. */
   const [xemLuuTru, datXemLuuTru] = useState(false);
+  /**
+   * Việc người dùng vừa bấm mở TỪ thanh bên, và vào tab nào.
+   *
+   * Cần vì `cuocId` là id của TAB, không phải của việc: mở một việc cũ vào tab
+   * đang xem thì tab giữ nguyên id (xem `moPhien` ở shared/ipc), nên chỉ nhìn
+   * `cuocId` là không biết tab đó đang hiện việc nào. Tab mới tinh thì hai id
+   * trùng nhau — đó là đường lùi ở `idDangXem` bên dưới.
+   *
+   * `cuoc: null` = mở vào TAB MỚI, chưa biết id tab — gắn vào `cuocId` kế tiếp.
+   */
+  const [phienDaMo, datPhienDaMo] = useState<{ cuoc: string | null; id: string } | null>(null);
+  /** Nhóm gập/mở tay TRONG lúc tìm. Sống tạm — xoá ô tìm là bỏ. */
+  const [bangKhiTim, datBangKhiTim] = useState<BangNho>({});
 
   const gap = settings.aiThanhBenGap === true;
   const rong = typeof settings.aiThanhBenRong === 'number'
@@ -74,6 +107,14 @@ export function ThanhBen({
   useEffect(() => { void nap(); }, [nap]);
   // Nạp lại khi đổi tab: phiên vừa chạy xong ở tab kia phải xuất hiện.
   useEffect(() => { void nap(); }, [cuocId, nap]);
+  useEffect(() => {
+    datPhienDaMo((c) => (c && c.cuoc === null && cuocId ? { ...c, cuoc: cuocId } : c));
+  }, [cuocId]);
+
+  const bangNho = useMemo(() => giaiMaBangNho(settings.aiThanhBenNhomMo), [settings.aiThanhBenNhomMo]);
+  const ghiBangNho = useCallback((b: BangNho): void => {
+    setSetting('aiThanhBenNhomMo', maHoaBangNho(b));
+  }, [setSetting]);
 
   /**
    * Kéo để đổi bề rộng.
@@ -113,7 +154,7 @@ export function ThanhBen({
    * Ghim tách thành nhóm riêng chứ không nổi lên trong nhóm dự án của nó: cả
    * lý do người ta ghim là để không phải nhớ việc đó thuộc repo nào.
    */
-  const nhom = useMemo(() => {
+  const nhom = useMemo((): Nhom[] => {
     const loc = tim.trim().toLowerCase();
     const co = (ds ?? [])
       .filter((p) => (p.luuTru === true) === xemLuuTru)
@@ -123,13 +164,62 @@ export function ThanhBen({
     const m = new Map<string, AgentPhien[]>();
     for (const p of co) {
       if (p.ghim === true) continue;
-      const k = p.duAn ?? 'Không có dự án';
+      const k = p.duAn ?? KHONG_DU_AN;
       const cu = m.get(k);
       if (cu) cu.push(p); else m.set(k, [p]);
     }
-    const ra: Array<[string, AgentPhien[], boolean]> = [...m.entries()].map(([k, v]) => [k, v, false]);
-    return daGhim.length > 0 ? [['Đã ghim', daGhim, true] as [string, AgentPhien[], boolean], ...ra] : ra;
+    const ra: Nhom[] = [...m.entries()].map(([k, v]) => ({ khoa: k, ten: k, ps: v, laGhim: false }));
+    return daGhim.length > 0 ? [{ khoa: KHOA_GHIM, ten: 'Đã ghim', ps: daGhim, laGhim: true }, ...ra] : ra;
   }, [ds, tim, xemLuuTru]);
+
+  /** Việc đang hiện ở tab đang xem — xem chú thích `phienDaMo`. */
+  const idDangXem = phienDaMo && phienDaMo.cuoc === cuocId ? phienDaMo.id : cuocId;
+  /** Nhóm chứa việc đó. Việc chưa lưu lần nào thì chưa có trong `ds` ⇒ `null`. */
+  const khoaDangXem = useMemo(() => {
+    const p = ds?.find((x) => x.id === idDangXem);
+    if (!p) return null;
+    return p.ghim === true ? KHOA_GHIM : (p.duAn ?? KHONG_DU_AN);
+  }, [ds, idDangXem]);
+
+  /**
+   * Việc đang xem chuyển sang một nhóm người dùng đã GẬP ⇒ bỏ cái gập đó.
+   *
+   * Chỉ chạy khi NHÓM đổi, không chạy khi bảng nhớ đổi: người dùng cố ý gập
+   * chính nhóm đang làm thì phải gập được, không thì nút gập của nhóm đó chết.
+   * Đọc bảng nhớ qua ref vì cùng lý do.
+   */
+  const bangNhoRef = useRef(bangNho);
+  bangNhoRef.current = bangNho;
+  useEffect(() => {
+    if (khoaDangXem && bangNhoRef.current[khoaDangXem] === false) {
+      ghiBangNho(boNho(bangNhoRef.current, khoaDangXem));
+    }
+  }, [khoaDangXem, ghiBangNho]);
+
+  const dangTim = tim.trim() !== '';
+  const laMo = (khoa: string): boolean => nhomDangMo({ khoa, khoaDangXem, dangTim, bangNho, bangKhiTim });
+
+  const batNhom = (khoa: string): void => {
+    const moi = !laMo(khoa);
+    if (dangTim) datBangKhiTim((b) => ({ ...b, [khoa]: moi }));
+    else ghiBangNho(datMo(bangNho, khoa, moi));
+  };
+
+  /** Còn nhóm nào mở ⇒ nút đầu danh sách là "Thu gọn tất cả", hết thì "Mở tất cả". */
+  const coNhomMo = nhom.some((n) => laMo(n.khoa));
+  const batTatCa = (): void => {
+    const moi = !coNhomMo;
+    if (dangTim) {
+      datBangKhiTim(Object.fromEntries(nhom.map((n) => [n.khoa, moi])));
+      return;
+    }
+    ghiBangNho(nhom.reduce((b, n) => datMo(b, n.khoa, moi), bangNho));
+  };
+
+  const moPhien = (id: string): void => {
+    datPhienDaMo({ cuoc: cuocId, id });
+    onMoPhien(id);
+  };
 
   const xoa = async (id: string): Promise<void> => {
     await window.cuongthai?.agent.xoaPhien(id);
@@ -175,7 +265,7 @@ export function ThanhBen({
   const tachNhanh = async (id: string): Promise<void> => {
     const ban = await window.cuongthai?.agent.nhanBanPhien(id);
     await nap();
-    if (ban) onMoPhien(ban.id);
+    if (ban) moPhien(ban.id);
   };
 
   const mucMenu = (p: AgentPhien): MucMenu[] => [
@@ -184,7 +274,7 @@ export function ThanhBen({
          cầu thường xuyên hơn hẳn ghim hay đổi tên. */
       nhan: 'Mở vào tab mới',
       icon: <SquarePlus size={13} aria-hidden />,
-      onChon: () => onMoPhienTabMoi(p.id),
+      onChon: () => { datPhienDaMo({ cuoc: null, id: p.id }); onMoPhienTabMoi(p.id); },
     },
     {
       nhan: p.ghim === true ? 'Bỏ ghim' : 'Ghim lên đầu',
@@ -241,7 +331,11 @@ export function ThanhBen({
           <input
             value={tim}
             placeholder={dich('Tìm việc cũ…')}
-            onChange={(e) => datTim(e.target.value)}
+            onChange={(e) => {
+              datTim(e.target.value);
+              // Xoá ô tìm ⇒ bỏ mọi gập/mở tạm, trở về đúng trạng thái đã nhớ.
+              if (e.target.value.trim() === '') datBangKhiTim({});
+            }}
           />
         </div>
         <button
@@ -268,58 +362,104 @@ export function ThanhBen({
           </p>
         )}
 
-        {nhom.map(([ten, ps, laGhim]) => (
-          <section key={ten} className="ct-tb-nhom">
+        {nhom.length > 1 && (
+          /* Dòng tóm tắt + nút gập/mở TẤT CẢ. Chỉ hiện khi có từ hai nhóm: một
+             nhóm thì nút của chính nhóm đó đã làm đúng việc này. */
+          <div className="ct-tb-tongquan">
+            <span>
+              {nhom.reduce((t, n) => t + n.ps.length, 0)} việc · {nhom.filter((n) => !n.laGhim).length} dự án
+            </span>
+            <button type="button" className="ct-tb-tatca" onClick={batTatCa}>
+              {coNhomMo
+                ? <><ChevronsDownUp size={11} aria-hidden /> {dich('Thu gọn tất cả')}</>
+                : <><ChevronsUpDown size={11} aria-hidden /> {dich('Mở tất cả')}</>}
+            </button>
+          </div>
+        )}
+
+        {nhom.map(({ khoa, ten, ps, laGhim }) => {
+          const mo = laMo(khoa);
+          const idThan = `ct-tb-than-${encodeURIComponent(khoa)}`;
+          return (
+          <section key={khoa} className="ct-tb-nhom" data-mo={mo}>
             {/* `data-mau` suy từ TÊN dự án — xem `mauDuAn.ts`. Nhóm ghim giữ
                 màu riêng, vì "đã ghim" là trạng thái chứ không phải dự án. */}
             <h3 data-mau={laGhim ? 'ghim' : mauDuAn(ten)}>
-              {laGhim ? <Pin size={11} aria-hidden /> : <FolderGit2 size={11} aria-hidden />}
-              {' '}{ten}
+              {/* Nút gốc (`<button>`) nên Enter/Space, Tab, và trình đọc màn
+                  hình đều có sẵn — không tự bắt phím. */}
+              <button
+                type="button"
+                className="ct-tb-nhom-nut"
+                aria-expanded={mo}
+                aria-controls={idThan}
+                onClick={() => batNhom(khoa)}
+                title={mo ? `Thu gọn ${ten}` : `Mở ${ps.length} việc của ${ten}`}
+              >
+                <ChevronRight size={12} className="ct-tb-nhom-mui" aria-hidden />
+                {laGhim ? <Pin size={11} aria-hidden /> : <FolderGit2 size={11} aria-hidden />}
+                <span className="ct-tb-nhom-ten">{ten}</span>
+                <span className="ct-tb-nhom-dem" aria-label={`${ps.length} việc`}>{ps.length}</span>
+              </button>
             </h3>
-            {ps.map((p) => (
-              <div key={p.id} className="ct-tb-muc">
-                {suaTen?.id === p.id ? (
-                  /* `autoFocus` cố ý: mở ô đổi tên ra là để gõ ngay. Dự án không
-                     cài plugin jsx-a11y nên đừng thêm chỉ thị tắt rule của nó —
-                     eslint báo lỗi "rule not found" cho chính dòng chỉ thị đó. */
-                  <input
-                    className="ct-tb-doiten"
-                    autoFocus
-                    value={suaTen.ten}
-                    maxLength={90}
-                    onChange={(e) => datSuaTen({ id: p.id, ten: e.target.value })}
-                    /* Rời ô = lưu. Bấm ra ngoài rồi mất chữ vừa gõ là kiểu hỏng
-                       khiến người ta không dám dùng tính năng đổi tên nữa. */
-                    onBlur={() => void luuTen()}
-                    onKeyDown={(e) => {
-                      // Nhường phím cho bộ gõ tiếng Việt — Enter lúc đang ghép
-                      // dấu là Enter CHỌN CHỮ, không phải Enter xác nhận.
-                      if (e.nativeEvent.isComposing) return;
-                      if (e.key === 'Enter') { e.preventDefault(); void luuTen(); }
-                      if (e.key === 'Escape') { e.preventDefault(); datSuaTen(null); }
-                    }}
-                  />
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      className="ct-tb-muc-mo"
-                      onClick={() => onMoPhien(p.id)}
-                      onDoubleClick={() => datSuaTen({ id: p.id, ten: p.tieuDe })}
-                      title={`${p.tieuDe}\n(bấm đúp để đổi tên)`}
-                    >
-                      {p.ghim === true && !laGhim && (
-                        <span className="ct-tb-ghim"><Pin size={10} aria-hidden /></span>
-                      )}
-                      {p.tieuDe || 'Việc chưa đặt tên'}
-                    </button>
-                    <MenuChamDoc muc={mucMenu(p)} nhan={`Thao tác với ${p.tieuDe}`} />
-                  </>
-                )}
+            {/* Hai lớp để trượt mượt: lớp ngoài chuyển `grid-template-rows`
+                0fr ↔ 1fr, lớp trong `min-height: 0` + `overflow: hidden`. Cách
+                này KHÔNG cần đo chiều cao bằng JS như kiểu `max-height`.
+                ⚠️ `inert` lúc gập: mục bị ẩn bằng CSS vẫn nằm trong thứ tự Tab,
+                và người dùng bàn phím sẽ nhảy vào những nút không nhìn thấy. */}
+            <div
+              id={idThan}
+              className="ct-tb-nhom-than"
+              data-mo={mo}
+              ref={(el) => { if (el) el.inert = !mo; }}
+            >
+              <div className="ct-tb-nhom-ruot">
+                {ps.map((p) => (
+                  <div key={p.id} className="ct-tb-muc" data-dangmo={p.id === idDangXem}>
+                    {suaTen?.id === p.id ? (
+                      /* `autoFocus` cố ý: mở ô đổi tên ra là để gõ ngay. Dự án không
+                         cài plugin jsx-a11y nên đừng thêm chỉ thị tắt rule của nó —
+                         eslint báo lỗi "rule not found" cho chính dòng chỉ thị đó. */
+                      <input
+                        className="ct-tb-doiten"
+                        autoFocus
+                        value={suaTen.ten}
+                        maxLength={90}
+                        onChange={(e) => datSuaTen({ id: p.id, ten: e.target.value })}
+                        /* Rời ô = lưu. Bấm ra ngoài rồi mất chữ vừa gõ là kiểu hỏng
+                           khiến người ta không dám dùng tính năng đổi tên nữa. */
+                        onBlur={() => void luuTen()}
+                        onKeyDown={(e) => {
+                          // Nhường phím cho bộ gõ tiếng Việt — Enter lúc đang ghép
+                          // dấu là Enter CHỌN CHỮ, không phải Enter xác nhận.
+                          if (e.nativeEvent.isComposing) return;
+                          if (e.key === 'Enter') { e.preventDefault(); void luuTen(); }
+                          if (e.key === 'Escape') { e.preventDefault(); datSuaTen(null); }
+                        }}
+                      />
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          className="ct-tb-muc-mo"
+                          onClick={() => moPhien(p.id)}
+                          onDoubleClick={() => datSuaTen({ id: p.id, ten: p.tieuDe })}
+                          title={`${p.tieuDe}\n(bấm đúp để đổi tên)`}
+                        >
+                          {p.ghim === true && !laGhim && (
+                            <span className="ct-tb-ghim"><Pin size={10} aria-hidden /></span>
+                          )}
+                          {p.tieuDe || 'Việc chưa đặt tên'}
+                        </button>
+                        <MenuChamDoc muc={mucMenu(p)} nhan={`Thao tác với ${p.tieuDe}`} />
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </section>
-        ))}
+          );
+        })}
       </div>
 
       {/* Lối vào kho lưu trữ. Đặt ở CHÂN thanh bên chứ không phải trong menu:

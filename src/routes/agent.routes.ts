@@ -30,6 +30,9 @@ import { gatewayConfigured, modelFor } from '../services/llm/gateway.js';
 import { dsModelAgent } from '../services/agent/models.js';
 import { datTenViec } from '../services/agent/datTen.js';
 import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
+import { xemHanMucFable } from '../services/agent/fable.js';
+import { prisma } from '../config/database.js';
+import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -121,6 +124,47 @@ router.post('/dat-ten', chiPro, async (req: any, res: Response<ApiResponse>, nex
   } catch (error) {
     next(error);
   }
+});
+
+/**
+ * ============================================================
+ * CUONG FABLE 5 — hạn mức riêng + xin thêm (26/09/2026)
+ * ============================================================
+ *
+ * GET  /fable      — còn bao nhiêu (app hiện trong menu model + khi bị chặn)
+ * POST /fable/xin  — gửi yêu cầu xin thêm cho admin. Body: { lyDo }
+ *
+ * Duyệt ở `/api/v1/admin/fable` (cuối file) — trang /admin/commerce?tab=fable.
+ */
+router.get('/fable', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await xemHanMucFable(req.userId) });
+  } catch (err) { next(err); }
+});
+
+router.post('/fable/xin', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const lyDo = String((req.body as { lyDo?: unknown })?.lyDo ?? '').trim();
+    if (lyDo.length < 10) throw new AppError('Hãy viết ngắn gọn bạn cần thêm để làm gì (ít nhất 10 ký tự).', 400, 'BAD_INPUT');
+    if (lyDo.length > 1000) throw new AppError('Lý do quá dài (tối đa 1000 ký tự).', 400, 'BAD_INPUT');
+    const h = await xemHanMucFable(req.userId);
+    if (h.khongGioiHan) throw new AppError('Tài khoản admin dùng Fable không giới hạn.', 400, 'KHONG_CAN');
+    /* Một yêu cầu chờ một lúc: bấm năm lần không được năm lần cộng. */
+    if (h.dangChoDuyet) throw new AppError('Bạn đã có một yêu cầu đang chờ admin duyệt.', 409, 'DANG_CHO');
+    const don = await prisma.fableQuotaRequest.create({ data: { userId: req.userId, reason: lyDo } });
+    logger.info('[fable] xin thêm hạn mức', { id: don.id, userId: req.userId, daDung: h.daDung, tran: h.tran });
+    void baoAdmin({
+      loai: 'KHAC',
+      mucDo: 'can_xu_ly',
+      tieuDe: 'Có người xin thêm hạn mức Cuong Fable 5',
+      noiDung: `Đã dùng ${h.daDung.toLocaleString('vi-VN')}/${h.tran.toLocaleString('vi-VN')} token. Lý do: ${lyDo.slice(0, 300)}`,
+      duongDan: '/admin/commerce?tab=fable',
+      userId: req.userId ?? null,
+      entityId: don.id,
+      khoaChongTrung: `XIN_FABLE:${don.id}`,
+    });
+    res.status(201).json({ success: true, data: await xemHanMucFable(req.userId) });
+  } catch (err) { next(err); }
 });
 
 router.get('/usage', async (req: any, res: Response<ApiResponse>, next) => {

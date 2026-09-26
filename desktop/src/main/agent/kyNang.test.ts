@@ -9,7 +9,7 @@ import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { dsKyNang, docThanKyNang, docDauKyNang } from './kyNang';
+import { dsKyNang, dsKyNangDuAn, docThanKyNang, docDauKyNang, kyNangSan } from './kyNang';
 
 async function duAn(kn: Record<string, string>): Promise<string> {
   const goc = await mkdtemp(join(tmpdir(), 'ct-kn-'));
@@ -24,7 +24,7 @@ const DU = '---\nname: ra-de\ndescription: Soạn đề thi 50 câu\n---\nBướ
 
 describe('đọc kỹ năng', () => {
   it('lấy tên + mô tả, KHÔNG kèm thân', async () => {
-    const ds = await dsKyNang(await duAn({ 'ra-de': DU }));
+    const ds = await dsKyNangDuAn(await duAn({ 'ra-de': DU }));
     expect(ds).toEqual([{ ten: 'ra-de', moTa: 'Soạn đề thi 50 câu' }]);
     /* Kèm thân là 30k token nhét vào mọi lượt, kể cả câu hỏi chẳng liên quan —
        đó là cả lý do kỹ năng là một TOOL chứ không phải một khối prompt. */
@@ -32,7 +32,7 @@ describe('đọc kỹ năng', () => {
   });
 
   it('BỎ kỹ năng không có description; không khai `name` thì lấy TÊN THƯ MỤC', async () => {
-    const ds = await dsKyNang(await duAn({
+    const ds = await dsKyNangDuAn(await duAn({
       'co-mo-ta': '---\ndescription: Có mô tả\n---\nthân',
       'khong-mo-ta': '---\nname: x\n---\nnội dung',
       'khong-co-dau': '# Chỉ có tiêu đề\nnội dung',
@@ -43,18 +43,18 @@ describe('đọc kỹ năng', () => {
   });
 
   it('BỎ thư mục tên không gọi lại được', async () => {
-    const ds = await dsKyNang(await duAn({ 'Kỹ Năng (mới)': DU, 'hop-le': DU }));
+    const ds = await dsKyNangDuAn(await duAn({ 'Kỹ Năng (mới)': DU, 'hop-le': DU }));
     expect(ds.map((k) => k.ten)).toEqual(['ra-de']); // 'hop-le' khai name: ra-de
   });
 
   it('thiếu SKILL.md ⇒ bỏ qua, không ném', async () => {
     const goc = await mkdtemp(join(tmpdir(), 'ct-kn-'));
     await mkdir(join(goc, '.claude/skills/rong'), { recursive: true });
-    await expect(dsKyNang(goc)).resolves.toEqual([]);
+    await expect(dsKyNangDuAn(goc)).resolves.toEqual([]);
   });
 
   it('dự án không có thư mục skills ⇒ mảng rỗng', async () => {
-    await expect(dsKyNang(await mkdtemp(join(tmpdir(), 'ct-kn-')))).resolves.toEqual([]);
+    await expect(dsKyNangDuAn(await mkdtemp(join(tmpdir(), 'ct-kn-')))).resolves.toEqual([]);
   });
 });
 
@@ -98,3 +98,39 @@ describe('tách phần đầu', () => {
     expect(docDauKyNang('# X\nY')).toEqual({ ten: null, moTa: null, than: '# X\nY' });
   });
 });
+
+describe('kỹ năng CÀI SẴN trong app (26/09/2026)', () => {
+  it('có đủ bốn kỹ năng, mỗi cái có mô tả và thân', () => {
+    const ds = kyNangSan();
+    expect(ds.map((k) => k.ten).sort()).toEqual(['deploy', 'lam-viec-chuan', 'may-chu-ssh', 'phat-hanh-app']);
+    for (const k of ds) {
+      expect(k.moTa.length).toBeGreaterThan(40);
+      expect(k.than.length).toBeGreaterThan(1000);
+      // Phần đầu YAML đã được tách — thân không được mở đầu bằng `---`.
+      expect(k.than.startsWith('---')).toBe(false);
+    }
+  });
+
+  it('CHƯA mở dự án vẫn có kỹ năng cài sẵn, và đọc được thân', async () => {
+    const ds = await dsKyNang(null);
+    expect(ds.map((k) => k.ten)).toContain('deploy');
+    expect(await docThanKyNang(null, 'deploy')).toContain('KỸ NĂNG: DEPLOY');
+  });
+
+  it('dự án khai TRÙNG TÊN ⇒ bản của dự án thắng, không lặp tên', async () => {
+    const goc = await duAn({ deploy: '---\nname: deploy\ndescription: Quy trình deploy riêng của dự án này\n---\nDùng deploy.sh của dự án.' });
+    const ds = await dsKyNang(goc);
+    expect(ds.filter((k) => k.ten === 'deploy')).toHaveLength(1);
+    expect(ds.find((k) => k.ten === 'deploy')!.moTa).toBe('Quy trình deploy riêng của dự án này');
+    expect(await docThanKyNang(goc, 'deploy')).toBe('Dùng deploy.sh của dự án.');
+    // Các kỹ năng cài sẵn khác vẫn còn.
+    expect(ds.map((k) => k.ten)).toContain('may-chu-ssh');
+  });
+
+  it('kỹ năng deploy dạy lệnh KHÔNG tương tác (agent không gõ được mật khẩu)', () => {
+    const than = kyNangSan().find((k) => k.ten === 'deploy')!.than;
+    expect(than).toContain('BatchMode=yes');
+    expect(than).toContain('SQL Server');
+  });
+});
+

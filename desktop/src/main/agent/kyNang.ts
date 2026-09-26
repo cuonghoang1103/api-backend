@@ -25,6 +25,8 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
+import { KY_NANG_SAN_THO } from './kyNangSan';
+
 const THU_MUC = ['.claude/skills', '.agent/skills'] as const;
 /** Trần số kỹ năng. Danh sách dài hơn thế thì model chọn bừa. */
 const MAX_KY_NANG = 40;
@@ -99,9 +101,37 @@ async function duyet(goc: string): Promise<Array<{ ten: string; moTa: string; du
   return ra;
 }
 
-/** Danh sách gửi lên máy chủ — CHỈ tên + mô tả. */
-export async function dsKyNang(goc: string): Promise<TomTatKyNang[]> {
+/**
+ * Kỹ năng CÀI SẴN trong app (xem `kyNangSan/index.ts`) — tách phần đầu một
+ * lần. Hàm chứ không hằng: bộ kiểm cần gọi lại, và chi phí chỉ là vài chuỗi.
+ */
+export function kyNangSan(): Array<{ ten: string; moTa: string; than: string }> {
+  const ra: Array<{ ten: string; moTa: string; than: string }> = [];
+  for (const tho of KY_NANG_SAN_THO) {
+    const { ten, moTa, than } = docDauKyNang(tho);
+    if (!ten || !moTa || !tenHopLe(ten) || !than.trim()) continue;
+    ra.push({ ten, moTa: moTa.trim().slice(0, 300), than: than.trim() });
+  }
+  return ra;
+}
+
+/**
+ * Danh sách gửi lên máy chủ — CHỈ tên + mô tả.
+ *
+ * Gộp kỹ năng của DỰ ÁN (nếu đã mở dự án) với kỹ năng CÀI SẴN. Trùng tên ⇒
+ * bản của dự án thắng. Chưa mở dự án ⇒ vẫn có bộ cài sẵn (hỏi "deploy thế nào"
+ * không cần mở thư mục nào).
+ */
+/** Chỉ kỹ năng của DỰ ÁN (`.claude/skills`, `.agent/skills`). */
+export async function dsKyNangDuAn(goc: string): Promise<TomTatKyNang[]> {
   return (await duyet(goc)).map(({ ten, moTa }) => ({ ten, moTa }));
+}
+
+export async function dsKyNang(goc: string | null): Promise<TomTatKyNang[]> {
+  const cuaDuAn = goc ? await dsKyNangDuAn(goc) : [];
+  const daCo = new Set(cuaDuAn.map((k) => k.ten));
+  const san = kyNangSan().filter((k) => !daCo.has(k.ten)).map(({ ten, moTa }) => ({ ten, moTa }));
+  return [...cuaDuAn, ...san].slice(0, MAX_KY_NANG);
 }
 
 /**
@@ -128,10 +158,14 @@ async function fileKemTheo(goc: string, thuMucKyNang: string): Promise<string[]>
 }
 
 /** Thân một kỹ năng, để trả về làm kết quả tool `dung_ky_nang`. */
-export async function docThanKyNang(goc: string, ten: string): Promise<string | null> {
+export async function docThanKyNang(goc: string | null, ten: string): Promise<string | null> {
   const t = ten.trim().toLowerCase();
-  const co = (await duyet(goc)).find((k) => k.ten === t);
-  if (!co) return null;
+  const co = goc ? (await duyet(goc)).find((k) => k.ten === t) : undefined;
+  if (!co || !goc) {
+    /* Không có trong dự án ⇒ thử bộ cài sẵn. Không có file đi kèm: nội dung
+       tự đủ, và đường dẫn trong app đóng gói không đọc được bằng `read_file`. */
+    return kyNangSan().find((k) => k.ten === t)?.than ?? null;
+  }
   const noiDung = await fs.readFile(co.duong, 'utf8').catch(() => null);
   if (noiDung === null) return null;
   const than = docDauKyNang(noiDung).than.trim();

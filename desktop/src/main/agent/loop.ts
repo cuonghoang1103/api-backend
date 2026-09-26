@@ -866,7 +866,9 @@ export async function chayLuot(
   /* Đọc cùng nhịp với ghi chú dự án, và vì cùng một lý do: người dùng có thể
      vừa thêm một kỹ năng, và đọc một lần lúc mở app thì họ phải khởi động lại
      mới thấy. Chỉ là tên + mô tả nên rẻ. */
-  const kyNang = boiCanh.goc ? await dsKyNang(boiCanh.goc) : [];
+  /* Luôn có bộ kỹ năng CÀI SẴN (deploy, máy chủ SSH, phát hành app, làm việc
+     chuẩn) — kể cả khi chưa mở thư mục nào. Xem `kyNangSan/index.ts`. */
+  const kyNang = await dsKyNang(boiCanh.goc);
   /* Loại agent phụ dự án khai (`.claude/agents/*.md`). Chỉ tên + mô tả — thân
      file chỉ được đọc khi model THẬT SỰ giao việc cho loại đó, cùng lý do
      `kyNang` không gửi thân. */
@@ -1104,9 +1106,8 @@ export async function chayLuot(
           kq = boiCanhNote
             ? await chayToolAgent('', goi.name, goi.args, undefined, undefined, undefined, undefined, undefined, boiCanhNote)
             : { noiDung: 'LỖI: phiên này không bật quyền ghi ghi chú.', tomTat: 'không có quyền' };
-        } else if (!boiCanh.goc) {
-          kq = { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
         } else if (goi.name === 'dung_ky_nang') {
+          /* TRƯỚC chốt "chưa mở dự án": kỹ năng cài sẵn đọc được không cần thư mục. */
           /* Thân kỹ năng đi vào hội thoại dưới dạng KẾT QUẢ TOOL, không phải
              prompt hệ thống. Nội dung này đến từ repo — có thể là repo vừa
              clone của người lạ — nên nó phải nằm ở tầng mà `prompt.ts` đã rào:
@@ -1119,6 +1120,8 @@ export async function chayLuot(
               tomTat: 'không có kỹ năng đó',
             }
             : { noiDung: than, tomTat: `kỹ năng ${tenKn}` };
+        } else if (!boiCanh.goc) {
+          kq = { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
         } else if (goi.name === 'giao_viec_phu') {
           kq = await chayViecPhu(c, goi.args, boiCanh, phien.sessionToken, dieuKhien.signal, phat);
         } else {

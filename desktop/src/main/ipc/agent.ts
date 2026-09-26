@@ -709,8 +709,8 @@ export function registerAgentHandlers(): void {
   });
 
   handle('agent:kyNangDs', async ({ cuocId }) => {
-    const goc = gocCuaCuoc(cuocId);
-    return goc ? dsKyNang(goc) : [];
+    // Kể cả chưa mở dự án: vẫn có bộ kỹ năng cài sẵn.
+    return dsKyNang(gocCuaCuoc(cuocId));
   });
 
   handle('agent:mcpMoCauHinh', async () => {

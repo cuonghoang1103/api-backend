@@ -101,7 +101,8 @@ export default function Markdown({
  'tabindex', 'role', 'aria-hidden',
  ],
  });
- if (!cancelled) setSafeHtml(cleaned);
+ // Bọc mỗi bảng trong khung cuộn ngang riêng (.table-scroll) — xem globals.css.
+ if (!cancelled) setSafeHtml(cleaned.replace(/<table\b/g, '<div class="table-scroll"><table').replace(/<\/table>/g, '</table></div>'));
  })();
  return () => { cancelled = true; };
  }, [html]);
@@ -187,6 +188,8 @@ export default function Markdown({
  // react-markdown's surrounding <pre> to avoid invalid
  // <pre><div> nesting. Inline code never reaches here.
  pre: ({ children }) => <>{children}</>,
+ // Bảng rộng cuộn ngang trong khung riêng thay vì bóp cột — xem .table-scroll trong globals.css.
+ table: ({ node, ...props }) => <div className="table-scroll"><table {...props} /></div>,
  h1: ({ id, children, ...props }) => <h1 id={id} {...props}>{children}</h1>,
  h2: ({ id, children, ...props }) => <h2 id={id} {...props}>{children}</h2>,
  h3: ({ id, children, ...props }) => <h3 id={id} {...props}>{children}</h3>,

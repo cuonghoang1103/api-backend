@@ -557,6 +557,142 @@ flowchart TB
 
 ---
 
+## Use case và phân quyền màn hình
+
+Mỗi actor một nhóm use case. Đây là khung để vẽ UC diagram trong SRS §1 — khi bảo vệ, **mỗi người chỉ trình bày UC đã làm xong**.
+
+```mermaid
+flowchart LR
+    G(["Guest"])
+    S(["Student"])
+    L(["Lecturer"])
+    ST(["Lab Staff"])
+    M(["Lab Manager"])
+    A(["Admin"])
+
+    subgraph wf0["WF0 — Xác thực"]
+        UC1["Đăng ký / xác minh email"]
+        UC2["Đăng nhập / đăng xuất"]
+        UC3["Quên & đặt lại mật khẩu"]
+    end
+    subgraph wf2["WF2 — Giao dịch lõi"]
+        UC4["Tìm lab trống"]
+        UC5["Đặt lab / thiết bị"]
+        UC6["Huỷ / đổi lịch"]
+        UC7["Vào waitlist, nhận slot"]
+        UC8["Duyệt yêu cầu đặt"]
+        UC9["Check-in QR / đánh no-show"]
+        UC10["Cho mượn / nhận trả"]
+        UC11["Báo hỏng / xử lý bảo trì"]
+    end
+    subgraph wf1["WF1 — Danh mục"]
+        UC12["Quản lý lab, thiết bị, lịch mở cửa"]
+        UC13["Quản lý user, role, cấu hình"]
+    end
+    subgraph wf3["WF3 — Báo cáo"]
+        UC14["Dashboard & báo cáo sử dụng"]
+        UC15["Xem audit log"]
+    end
+
+    G --> UC1
+    S --> UC2
+    S --> UC4
+    S --> UC5
+    S --> UC6
+    S --> UC7
+    S --> UC11
+    L --> UC5
+    L --> UC8
+    ST --> UC9
+    ST --> UC10
+    ST --> UC11
+    M --> UC8
+    M --> UC12
+    M --> UC14
+    A --> UC13
+    A --> UC15
+    G --> UC3
+```
+
+**Bảng phân quyền màn hình (Screen Authorization — SRS §1):** ✓ = dùng được · — = không.
+
+| Nhóm màn | Guest | Student | Lecturer | Lab Staff | Lab Manager | Admin |
+|---|---|---|---|---|---|---|
+| Register, Home (S01, S08) | ✓ | — | — | — | — | — |
+| Login, Profile, Đổi mật khẩu (S03–S07) | ✓ (login) | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Tìm & đặt lab, My reservations (S20–S24) | — | ✓ | ✓ | — | ✓ | — |
+| Approval queue (S25) | — | — | ✓ (nhóm mình) | — | ✓ | — |
+| Waitlist của tôi (S26) / quản lý hàng đợi (S27) | — | ✓ / — | ✓ / — | — | — / ✓ | — |
+| QR check-in, buổi hôm nay (S28, S29) | — | — | — | ✓ | ✓ | — |
+| Loan desk, trả, quá hạn (S30, S31, S33) | — | — | — | ✓ | ✓ | — |
+| My loans (S32), Báo hỏng (S34) | — | ✓ | ✓ | ✓ (báo hỏng) | — | — |
+| Maintenance board, ticket (S35, S36) | — | — | — | ✓ | ✓ | — |
+| Lab, thiết bị, lịch mở cửa (S13–S18) | — | — | — | xem | ✓ | — |
+| User, role, settings, audit, admin dashboard (S10–S12, S19, S45, S46) | — | — | — | — | — | ✓ |
+| Dashboard cá nhân, thông báo (S37, S40) | — | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Dashboard & báo cáo quản lý (S41–S43, S47) | — | — | xem S47 | — | ✓ | — |
+
+⚠️ Bảng này là **đề xuất** — chốt lại trong SRS §1 sau khi hỏi giảng viên. Mọi ô "—" phải bị chặn ở **backend** (403), không chỉ ẩn menu.
+
+## Screen flow
+
+```mermaid
+flowchart TB
+    HOME["Home S08"] --> LOGIN["Login S03"]
+    HOME --> REG["Register S01"]
+    LOGIN --> FORGOT["Forgot / Reset S04"]
+    LOGIN --> DASH{"Menu theo role (S07)"}
+
+    DASH -->|"Student / Lecturer"| MYDASH["Dashboard cá nhân S40"]
+    MYDASH --> SEARCH["Catalog & availability S20"]
+    SEARCH --> DETAIL["Lab detail + lịch tuần S21"]
+    DETAIL --> WIZ["Create reservation S22"]
+    WIZ -->|"409 trùng"| WAIT["My waitlist S26"]
+    WIZ --> MYRES["My reservations S23"]
+    MYRES --> RESD["Reservation detail S24"]
+    MYDASH --> MYLOAN["My loans S32"]
+
+    DASH -->|"Lab Staff"| TODAY["Today's sessions S29"]
+    TODAY --> QR["QR scanner S28"]
+    TODAY --> LOAN["Loan desk S30"]
+    LOAN --> RET["Return S31"]
+    RET --> ISSUE["Report issue S34"]
+    ISSUE --> MB["Maintenance board S35"]
+    MB --> TK["Ticket detail S36"]
+
+    DASH -->|"Lab Manager"| MGR["Manager dashboard S41"]
+    MGR --> APPR["Approval queue S25"]
+    MGR --> LABS["Labs S13 / S14"]
+    MGR --> EQ["Equipment S16 / S17"]
+    MGR --> REP["Utilization report S42"]
+
+    DASH -->|"Admin"| ADM["Admin dashboard S46"]
+    ADM --> USERS["Users S10 / S11"]
+    ADM --> SET["Settings S19"]
+    ADM --> AUD["Audit log S45"]
+```
+
+## Business rules chính (đề xuất — chốt trong SRS §5)
+
+Mỗi unhappy case trong Req đều bám vào một rule ở đây. Con số là **đề xuất ban đầu**; hỏi giảng viên (issue Q&A) rồi ghi thành BR-xx chính thức và cấu hình ở màn Settings S19 — **không hard-code trong code**.
+
+| Mã | Luật | Giá trị đề xuất | Màn / job liên quan |
+|---|---|---|---|
+| BR‑01 | Email đăng ký phải thuộc tên miền trường, duy nhất | `@fpt.edu.vn` | S01 |
+| BR‑02 | Sai mật khẩu liên tiếp thì khoá tạm | 5 lần → khoá 15 phút | S03 |
+| BR‑03 | Link đặt lại mật khẩu dùng một lần, có hạn | 30 phút | S04 |
+| BR‑04 | Khung giờ đặt nửa mở `[start, end)`, bội số 30 phút, trong giờ mở cửa, không trùng blackout | — | S18, S20, S22 |
+| BR‑05 | Quota mỗi sinh viên | tối đa 6 giờ/tuần, đặt trước tối đa 14 ngày | S19, S22 |
+| BR‑06 | Cần duyệt khi | lab > 30 chỗ hoặc thiết bị gắn cờ "requires approval" | S22, S25 |
+| BR‑07 | Huỷ miễn phí khi | trước giờ bắt đầu ≥ 2 giờ | S24 |
+| BR‑08 | Cửa sổ check-in | từ 15 phút trước đến 15 phút sau giờ bắt đầu | S28, S29 |
+| BR‑09 | Quá cửa sổ không check-in ⇒ NO_SHOW, giải phóng slot, +1 điểm phạt | 3 điểm phạt/tháng ⇒ khoá đặt 7 ngày | N1 |
+| BR‑10 | Waitlist FIFO; người được đôn giữ chỗ | 10 phút, hết hạn đôn người kế | S26, N2 |
+| BR‑11 | Thiết bị MAINTENANCE / ON_LOAN / RETIRED không đặt, không mượn được | — | S22, S30 |
+| BR‑12 | Hạn trả thiết bị; quá hạn ⇒ OVERDUE + nhắc mỗi ngày | mặc định 3 ngày | S30, N3 |
+| BR‑13 | Ticket chỉ CLOSED sau khi người KHÁC người sửa VERIFIED | — | S35, S36 |
+| BR‑14 | Audit log chỉ ghi thêm, không ai sửa/xoá | — | N6, S45 |
+
 ## API chính (hợp đồng v1)
 
 Mọi response có cùng một vỏ: `{ "success": true, "data": … }` hoặc `{ "success": false, "error": { "code", "message", "fields" } }`. Danh sách luôn có `page`, `size`, `sort`, `q` — server-side.
@@ -674,6 +810,84 @@ Làm solo nhưng chia **5 vai** theo miền nghiệp vụ (vertical slice) — v
 
 ---
 
+## Luật chấm SWP391 cần nhớ
+
+| Mốc | Tuần | Trọng số | Chấm gì |
+|---|---|---|---|
+| **SWP-M1** — Requirement Analysis & Design | 3 (25/10) | 15% | SRS §1 + SDS §1–2, wireframe được duyệt, WF0 + layout chung chạy, màn đầu của mỗi người |
+| **SWP-M2** — WF1 & WF2 | 8 (29/11) | 20% | CRUD danh mục + giao dịch lõi (success + exception) chạy tích hợp |
+| **SWP-M3** — Full system & testing | 10 (12/12) | 25% | WF3, deploy, UAT, System Test đủ 3 vòng, Final Release Document |
+| **Final Presentation** | sau T10 | 40% | Hội đồng 2 GV (không phải GV lớp): Team 20 · Product 40 · Requirement 20 · Design 20 |
+
+**LOC — điểm của TỪNG người, tính theo màn hình mình làm:**
+- Độ phức tạp của màn: **S = 60 · M = 120 · C = 240** LOC.
+- Nhân với chất lượng: **L1 = 50%** (chỉ happy path) · **L2 = 75%** (có unhappy case) · **L3 = 100%** (đầy đủ, sạch).
+- So với trần mỗi iteration (MaxLOC — hỏi GV bảng nào: 180/240/660 hay 240/240/720) để ra điểm.
+- ⇒ Luật vàng: **mọi màn phải tới L2 rồi mới làm màn mới.** Dừng ở L1 là mất một nửa điểm.
+- Không có commit bằng **tài khoản của chính mình** ⇒ không có LOC. Không ai code hộ ai.
+
+**Qua môn:** Final ≥ 5/10 (syllabus 2026 ghi min 4 — cứ nhắm 5), đủ các mốc, đi học đủ.
+
+## Quy trình làm việc nhóm
+
+**Vai (vertical slice — mỗi người full-stack một miền, KHÔNG chia backend/frontend/tester):**
+
+| Vai | Màn hình | Việc chung phụ trách |
+|---|---|---|
+| **C1 Leader** | Đăng nhập, layout chung, tạo booking, audit writer, no-show job | Maintainer repo (merge, tag, CI), SDS §1 kiến trúc/package |
+| **C2** | Lab, lịch mở cửa, availability, approval, email outbox, báo cáo | SRS §1 (context, swimlane, screen flow, phân quyền), DB script + seed |
+| **C3** | Register/quên mật khẩu, huỷ/đổi lịch, waitlist, QR check-in | System Test (Template3) tổng hợp + UAT |
+| **C4** | Thiết bị, mượn/trả, quá hạn, báo cáo no-show | Project Tracking, Weekly Report, deploy (Docker, README) |
+| **C5** | User/role/settings, bảo trì, audit viewer, admin dashboard | AI Usage Report tổng, Final Release Document |
+
+**Git:**
+- `main` được bảo vệ — **chỉ Maintainer (C1) merge**; mọi người push nhánh riêng.
+- Nhánh: `feature/lf-22-reservation-wizard` · Commit: `LF-22 Validate slot overlap` (có mã thẻ ⇒ CT Work tự gắn commit vào thẻ).
+- **Merge vào main mỗi ngày** làm xong; không để nhánh sống quá 2–3 ngày.
+- Mỗi mốc nộp: tag `iter1` / `iter2` / `iter3` — DB script và config phải nằm TRONG code đã tag.
+- Không bao giờ `push --force` lên main; conflict thì pull → sửa tay → commit.
+
+**Nhãn issue (giống GitLab của lớp):** `Req` (một màn/chức năng, đúng một người) · `Task` (việc của một người) · `Q&A` (câu hỏi cho GV — câu trả lời chép thành BR) · `Defect` (lỗi nhóm tự tìm) · `Leakage` (lỗi GV tìm sau khi nộp — sửa đầu tiên ở iteration sau).
+
+**Trạng thái:** To Do = `1_To Do` · In Progress = `2_Doing` · In Review = `3_Done` (chờ người khác kiểm) · Done = Closed.
+
+**Nhịp:** daily log mỗi ngày (bình luận vào thẻ "Daily log tuần N") · Weekly Report (Template6) mỗi Chủ nhật · AI Usage Report mỗi tuần · review + retro ngày 7.
+
+## Bộ tài liệu phải nộp
+
+| Tài liệu | Mẫu | Ai lo | Hạn |
+|---|---|---|---|
+| Project Tracking (sheet Use Cases + Product) | PT26 | C4 + mỗi người dòng của mình | Trước iter1, T3, T8, T10 — **CT Work → Settings → Export** tạo sẵn |
+| SRS | Template1 | C2 (chung) + mỗi người spec màn của mình | T3 (đủ §1), T8, T10 |
+| SDS | Template2 | C1 (chung) + mỗi người design màn của mình | T3 (§1–2), T8, T10 |
+| System Test (sheet WF0–WF3, 3 vòng) | Template3 | C3 + mỗi người test case màn của mình | Vòng 1 T7–8, vòng 2 T9, vòng 3 T10 |
+| Weekly Report | Template6 | C4 | Mỗi Chủ nhật |
+| AI Usage Report | Template5 | C5 + mọi người tự ghi | Mỗi tuần |
+| Wireframe (GV xác nhận trước khi code) | MockFlow/Figma | Mỗi người | Trước mỗi iteration |
+| File link (URL tag + video 3–5′ mỗi người) | — | C1 | T3, T8, T10 |
+| Final Release Document (package, cài đặt, hướng dẫn dùng) | FRD22 | C5 | T10 |
+| Slide Final | Template7 (≤ 15 slide) | C1 + mọi người | Trước bảo vệ |
+
+## Definition of Done
+
+Một thẻ chỉ được kéo sang Done khi đủ — CT Work **tự chặn Done nếu thiếu Evidence** (Settings → Details → Done rules):
+
+- [ ] Acceptance criteria đạt, demo được bằng dữ liệu tái lập
+- [ ] Backend có authorization, validation, audit và error path
+- [ ] Migration chạy được trên database sạch
+- [ ] Test phù hợp rủi ro — không chỉ happy path
+- [ ] CI xanh, không lộ secret, không còn lỗi P0/P1
+- [ ] Evidence: link PR / test report / video điền vào thẻ
+
+Thêm cho mỗi **Req** (màn hình):
+
+- [ ] Wireframe đã được GV xác nhận
+- [ ] Mọi input validate cả hai phía: bắt buộc, độ dài, định dạng (email, ngày, số điện thoại, ảnh jpg/png)
+- [ ] Mọi bảng có search + filter + sort + paging ở server
+- [ ] Dùng layout/menu chung; Create/Update/View chung một form
+- [ ] Đã merge main trong ngày; SRS/SDS/test case cập nhật; Record of Changes ghi tên
+- [ ] Tự demo và sửa nhỏ được trong 30 phút
+
 ## Lộ trình 20 tuần
 
 Mỗi tuần là một sprint: 6 ngày làm + ngày 7 review/nghỉ. Mỗi ngày là một thẻ trên CT Work có **Cần học trước → Các bước gợi ý → Tự kiểm tra → Bẫy thường gặp → Hỏi mentor khi**.
@@ -758,6 +972,68 @@ Mọi con số của v2 (độ chính xác, recall@k, tỉ lệ trả lời đú
 
 ---
 
+## Rủi ro và cách ứng phó
+
+| Rủi ro | Mức | Ứng phó |
+|---|---|---|
+| Scope phình | Cao | Khoá P0/P1/P2; feature freeze tuần 9; tính năng AI bị hạ về read-only / cắt đầu tiên |
+| Học Spring chậm | Cao | Spike tuần 1–2; gate G0 không đạt thì kéo dài foundation và giảm phần bonus |
+| Một người kiệt sức | Cao | 6 ngày làm, ngày 7 review/nghỉ; tối đa 2 việc đang làm; không bù tiến độ bằng hai đêm liền — cắt P2 trước khi cắt ngủ |
+| Tuần 11–20 trùng OJT (từ 01/2027) | Cao | Chốt v1 đúng 13/12/2026; sau đó ưu tiên SEP-M4 → M5 → M6; tuần dưới 20 giờ thì cắt scope, dời ngày trong CT Work |
+| Lộ quyền (API, QR, RAG) | Cao | Scope resolver ở backend, lọc quyền ở tầng truy vấn, bộ test leakage + threat review trước demo |
+| Rủi ro học thuật | Cao | Xin duyệt đề tài/kế thừa; công khai nguồn; không giả Git, không giả teamwork |
+| Thiếu dữ liệu cho anomaly/usage | Cao | Rule baseline + simulator + dataset công khai; ghi limitation, không bịa hiệu quả |
+| IoT không ổn định | Trung bình | Simulator là nguồn test tái lập; ESP32 chỉ để chứng minh vật lý |
+| AI / GPU nhà mất mạng | Trung bình | Timeout, circuit breaker, fallback read-only, feature flag — core booking vẫn chạy |
+| Viết lại khi có nhóm thật | Trung bình | Prototype là tài liệu tham chiếu; repo nhóm mới; onboarding và ownership thật |
+
+## Chuẩn bị bảo vệ
+
+**Hội đồng chấm 40%** theo bốn phần — chuẩn bị đúng tỷ trọng:
+
+| Phần | % | Hội đồng muốn thấy | Chuẩn bị |
+|---|---|---|---|
+| Team | 20 | Ai làm gì, phối hợp ra sao | Bảng vai C1–C5, biểu đồ commit từng người, board CT Work thật |
+| Product | 40 | Hệ thống chạy, xử lý được tình huống xấu | 3 luồng demo bên dưới, dữ liệu seed tái lập, có kịch bản dự phòng (video) |
+| Requirement | 20 | Hiểu bài toán, rule rõ ràng | Use case, screen flow, bảng BR, Q&A đã hỏi GV |
+| Design | 20 | Thiết kế có lý do | Kiến trúc, ERD, constraint chống trùng, state machine |
+
+**Ba luồng demo (mỗi người trình bày màn của mình):**
+1. **Đặt lab và chống trùng** — Student tìm lab trống → đặt → mở tab thứ hai đặt cùng giờ ⇒ 409 → vào waitlist → huỷ ở tab đầu ⇒ người waitlist được đôn.
+2. **Vận hành một buổi** — Lecturer đặt lab cần duyệt → Manager duyệt → Staff quét QR check-in → buổi khác quá giờ không check-in ⇒ job đánh NO_SHOW, slot được giải phóng.
+3. **Thiết bị và bảo trì** — Staff cho mượn → trả kèm báo hỏng ⇒ thiết bị sang MAINTENANCE, không đặt được → sửa → người khác verify → đóng ticket → dashboard + audit log thấy toàn bộ.
+
+**Slide (Template7, ≤ 15 slide):** vấn đề → actor & use case → kiến trúc → ERD → điểm kỹ thuật chính (constraint, state machine, job) → demo → kiểm thử (số test case, số lỗi theo vòng) → phân công & LOC từng người → hạn chế và hướng phát triển.
+
+**Tổng dượt:** R1 tuần 9 (cả nhóm, bấm giờ) · R2 tuần 10 (nhờ nhóm khác hỏi vặn) · R3 trước ngày bảo vệ (chạy trên máy/ mạng sẽ dùng thật).
+
+**Câu hỏi hay gặp** — 36 câu có đáp án mẫu nằm trong epic "Chuẩn bị bảo vệ hội đồng" trên CT Work, và trợ lý AI ở đó có chế độ **Practice the defense** (hỏi từng câu, chấm câu trả lời). Tám câu phải trả lời trôi chảy:
+- Tại sao Spring Boot, PostgreSQL và modular monolith?
+- Database constraint và transaction nào bảo đảm không double-booking?
+- Điều gì xảy ra khi job đôn waitlist chạy hai lần?
+- Vì sao Redis lock không phải nguồn sự thật?
+- Một request không có quyền bị chặn ở đâu — frontend hay backend?
+- Khi AI / máy GPU chết, hệ thống lõi còn chạy ra sao?
+- Phần nào kế thừa từ prototype cá nhân, phần nào là đóng góp của nhóm?
+- Màn hình của bạn xử lý những unhappy case nào?
+
+## Thuật ngữ
+
+| Từ | Nghĩa trong dự án |
+|---|---|
+| **Req** | Một yêu cầu = một màn hình/chức năng, gán đúng một người; đơn vị để tính LOC |
+| **WF0–WF3** | Nhóm luồng: WF0 xác thực · WF1 danh mục (CRUD) · WF2 giao dịch lõi · WF3 báo cáo/quản trị |
+| **LOC (điểm)** | Không phải số dòng code thật — là điểm quy đổi từ độ phức tạp S/M/C × chất lượng L1/L2/L3 |
+| **Happy / unhappy case** | Đi đúng đường / các tình huống lỗi, dữ liệu sai, không có quyền, trùng lịch |
+| **Leakage** | Lỗi giảng viên tìm ra sau khi nộp — bị trừ điểm, phải sửa đầu tiên |
+| **Iteration** | Một vòng làm–nộp (iter1 T3, iter2 T8, iter3 T10), gắn với một Git tag |
+| **Overlap / `tstzrange`** | Hai khoảng thời gian giao nhau; PostgreSQL lưu khoảng thời gian bằng kiểu range và chặn giao nhau bằng `EXCLUDE USING gist` |
+| **Idempotent** | Chạy hai lần cho cùng kết quả như chạy một lần (job, webhook, check-in) |
+| **Outbox** | Ghi "việc cần gửi email" vào bảng trong cùng transaction, job gửi sau — không mất email khi mail server lỗi |
+| **Audit log** | Nhật ký ai làm gì, lúc nào — chỉ thêm, không sửa |
+| **DoD** | Definition of Done — danh sách điều kiện để một thẻ được coi là xong |
+| **SRS / SDS** | Tài liệu đặc tả yêu cầu / tài liệu thiết kế |
+
 ## Tra cứu nhanh — không hiểu thì xem đâu
 
 | Đang bí ở… | Xem mục |
@@ -768,4 +1044,12 @@ Mọi con số của v2 (độ chính xác, recall@k, tỉ lệ trả lời đú
 | Bảng nào nối với bảng nào | Mô hình dữ liệu (ERD) |
 | Màn này của vai nào, iteration nào | 46 màn hình |
 | Tuần này phải xong gì | Lộ trình 20 tuần + dự án `LF` trên CT Work |
-| Hội đồng sẽ hỏi gì | Epic "Chuẩn bị bảo vệ hội đồng" trên CT Work (36 câu có đáp án mẫu) |
+| Màn này ai được vào | Use case và phân quyền màn hình |
+| Con số giới hạn (quota, hạn trả, cửa sổ check-in…) | Business rules chính |
+| Điểm của mình được tính thế nào | Luật chấm SWP391 cần nhớ |
+| Đặt tên nhánh/commit, ai được merge | Quy trình làm việc nhóm |
+| Tuần này phải nộp tài liệu gì | Bộ tài liệu phải nộp |
+| Thẻ đã được coi là xong chưa | Definition of Done |
+| Sắp trễ / quá tải thì cắt gì | Rủi ro và cách ứng phó |
+| Hội đồng sẽ hỏi gì | Chuẩn bị bảo vệ + epic "Chuẩn bị bảo vệ hội đồng" trên CT Work (36 câu có đáp án mẫu, AI luyện hỏi đáp) |
+| Không hiểu một từ | Thuật ngữ |

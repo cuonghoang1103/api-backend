@@ -2211,16 +2211,33 @@ aside ::-webkit-scrollbar-thumb:hover {
 .case-study-body .callout-danger .callout-title { color: rgb(248, 113, 113); }
 
 /* ── Tables (GFM) ───────────────────────────────────── */
+.case-study-body .table-scroll {
+ /* Bảng nhiều cột (vd 46 màn hình × 7 cột) rộng hơn cột đọc 768px: CUỘN NGANG trong
+    khung riêng, không bóp cột. Trước đây `word-break: break-word` của thân bài cho
+    phép ngắt ở mọi ký tự ⇒ trên iPad "S01" / "WF0" / "iter1" bị dựng đứng từng chữ.
+    Khung là <div> bọc ngoài (Markdown.tsx) chứ không `display: block` trên chính
+    <table>: làm thế Chrome dựng bảng theo độ rộng TỐI ĐA của chữ ⇒ bảng 2 cột chữ dài
+    cũng không xuống dòng mà phải cuộn. */
+ max-width: 100%;
+ overflow-x: auto;
+ -webkit-overflow-scrolling: touch;
+ margin: 1.25rem 0;
+}
 .case-study-body table {
  width: 100%;
  border-collapse: collapse;
  font-size: 0.9rem;
+ margin: 0;
 }
 .case-study-body th,
 .case-study-body td {
  border: 1px solid rgba(255, 255, 255, 0.1);
  padding: 0.5rem 0.75rem;
  text-align: left;
+ /* Chỉ ngắt ở khoảng trắng: mã ngắn (S01, WF0, iter1, C3) không bao giờ bị cắt giữa chữ. */
+ word-break: normal;
+ overflow-wrap: normal;
+ min-width: 3.5rem;
 }
 .case-study-body th {
  background: rgba(255, 255, 255, 0.04);

@@ -1,0 +1,364 @@
+/*
+ * Trang chủ một ngôn ngữ (/language/[code]).
+ *
+ * Bộ màu RIÊNG, cố ý không dùng --cat-* của cả module: bản cũ tô mỗi kỹ năng
+ * một màu nền và cho chữ cùng họ màu ở độ mờ 70% — kết quả là 12 ô cầu vồng
+ * với chữ mô tả gần như chìm vào nền. Ở đây chỉ có MỘT màu nhấn (xanh mực),
+ * còn lại là mực và giấy; thứ bậc đến từ cỡ chữ và độ đậm, không từ màu.
+ *
+ * Chữ: tiêu đề Fraunces (có chân — cái "chất sách giáo khoa"), thân Inter.
+ * Mọi chữ phụ ≥ 13px và đạt tương phản AA trên nền của nó ở cả hai theme.
+ */
+
+.root {
+  --lh-bg: #f6f5f1;
+  --lh-surface: #ffffff;
+  --lh-surface-2: #f1efe9;
+  --lh-ink: #16181d;
+  --lh-ink-2: #454b55;
+  --lh-ink-3: #636a75;
+  --lh-line: #e3e0d8;
+  --lh-accent: #1d4f91;
+  --lh-accent-ink: #ffffff;
+  --lh-accent-soft: #e7eef8;
+  --lh-shadow: 0 1px 2px rgba(22, 24, 29, 0.04), 0 1px 1px rgba(22, 24, 29, 0.03);
+
+  min-height: 100vh;
+  background: var(--lh-bg);
+  color: var(--lh-ink);
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+  padding-top: 4rem;
+}
+
+:global(html.theme-dark) .root {
+  --lh-bg: #121316;
+  --lh-surface: #1a1c20;
+  --lh-surface-2: #212328;
+  --lh-ink: #eef0f3;
+  --lh-ink-2: #bcc2cb;
+  --lh-ink-3: #959ca7;
+  --lh-line: #2b2e34;
+  --lh-accent: #8fb3e6;
+  --lh-accent-ink: #0f1a2b;
+  --lh-accent-soft: rgba(143, 179, 230, 0.1);
+  --lh-shadow: none;
+}
+
+/* ── Thanh trên cùng ─────────────────────────────── */
+.bar {
+  position: sticky;
+  top: var(--app-nav-h);
+  z-index: 20;
+  border-bottom: 1px solid var(--lh-line);
+  background: color-mix(in srgb, var(--lh-bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+.barInner {
+  max-width: 64rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+}
+.back {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: var(--lh-ink-2);
+}
+.back:hover { background: var(--lh-surface-2); color: var(--lh-ink); }
+.barTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--lh-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.barLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--lh-ink-2);
+}
+.barLink:hover { background: var(--lh-surface-2); color: var(--lh-ink); }
+@media (max-width: 480px) {
+  .barLinkText { display: none; }
+}
+
+/* ── Khung nội dung ─────────────────────────────── */
+.wrap {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 40px 16px 80px;
+}
+@media (min-width: 640px) {
+  .wrap { padding: 48px 24px 96px; }
+}
+
+/* ── Đầu trang ──────────────────────────────────── */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--lh-line);
+}
+@media (min-width: 768px) {
+  .head { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+}
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lh-accent);
+}
+.h1 {
+  margin-top: 10px;
+  font-family: var(--font-fraunces), 'Fraunces Variable', Georgia, serif;
+  font-size: clamp(30px, 5vw, 42px);
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--lh-ink);
+}
+.lede {
+  margin-top: 10px;
+  max-width: 34rem;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--lh-ink-2);
+}
+
+.stats {
+  display: flex;
+  flex-shrink: 0;
+  border: 1px solid var(--lh-line);
+  border-radius: 12px;
+  background: var(--lh-surface);
+  box-shadow: var(--lh-shadow);
+}
+.stat {
+  min-width: 88px;
+  padding: 12px 18px;
+}
+.stat + .stat { border-left: 1px solid var(--lh-line); }
+.statValue {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--lh-ink);
+}
+.statLabel {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--lh-ink-3);
+}
+@media (max-width: 480px) {
+  .stats { width: 100%; }
+  .stat { flex: 1; min-width: 0; padding: 12px 14px; }
+}
+
+/* ── Tiêu đề mục ────────────────────────────────── */
+.section { margin-top: 40px; }
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.h2 {
+  font-family: var(--font-fraunces), 'Fraunces Variable', Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--lh-ink);
+}
+.sectionNote {
+  font-size: 14px;
+  color: var(--lh-ink-3);
+}
+
+/* ── Hàng "Bắt đầu" ─────────────────────────────── */
+.startGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .startGrid { grid-template-columns: 1fr 1fr; }
+}
+
+.review {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding: 20px 22px;
+  border-radius: 14px;
+  background: var(--lh-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--lh-accent) 22%, transparent);
+}
+.reviewTitle {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--lh-ink);
+}
+.reviewDesc {
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--lh-ink-2);
+}
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: var(--lh-accent);
+  color: var(--lh-accent-ink);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: filter 0.15s ease;
+}
+.primaryBtn:hover { filter: brightness(1.08); }
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 22px;
+  border-radius: 14px;
+  background: var(--lh-surface);
+  border: 1px solid var(--lh-line);
+  box-shadow: var(--lh-shadow);
+  transition: border-color 0.15s ease;
+}
+.card:hover { border-color: var(--lh-accent); }
+.cardIcon {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--lh-accent-soft);
+  color: var(--lh-accent);
+}
+.cardTitle {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--lh-ink);
+}
+.cardDesc {
+  margin-top: 3px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--lh-ink-2);
+}
+.chev {
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--lh-ink-3);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+.card:hover .chev,
+.row:hover .chev { color: var(--lh-accent); transform: translateX(2px); }
+
+/* ── Danh sách kỹ năng: một bảng mục lục, không phải bức tường ô màu ── */
+.list {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid var(--lh-line);
+  border-radius: 14px;
+  background: var(--lh-surface);
+  box-shadow: var(--lh-shadow);
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .list { grid-template-columns: 1fr 1fr; }
+  /* Kẻ dọc giữa hai cột. */
+  .row:nth-child(odd) { border-right: 1px solid var(--lh-line); }
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--lh-line);
+  transition: background 0.15s ease;
+}
+.row:hover { background: var(--lh-surface-2); }
+.rowIcon {
+  display: inline-flex;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  border: 1px solid var(--lh-line);
+  color: var(--lh-ink-2);
+}
+.row:hover .rowIcon { color: var(--lh-accent); border-color: color-mix(in srgb, var(--lh-accent) 40%, transparent); }
+.rowBody { min-width: 0; flex: 1; }
+.rowTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--lh-ink);
+}
+.rowDesc {
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--lh-ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowMeta {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--lh-ink-3);
+}
+.proTag {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--lh-line);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--lh-ink-2);
+}
+
+.notFound {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 64px 16px;
+  text-align: center;
+}
+.notFoundLink { color: var(--lh-accent); font-weight: 500; }
+.notFoundLink:hover { text-decoration: underline; }
+.row:last-child { border-bottom: none; }
+@media (min-width: 768px) {
+  .row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+}

@@ -1,6 +1,6 @@
 ---
 name: phat-hanh-app
-description: Build và phát hành ỨNG DỤNG (không phải web) — Android (APK/AAB, Google Play), iOS (TestFlight/App Store), Flutter, React Native/Expo, app desktop Electron/Tauri (macOS/Windows/Linux, tự cập nhật), ký số, tăng phiên bản, CI build trên GitHub Actions. Dùng khi người dùng muốn đóng gói app để cài hoặc đưa lên cửa hàng.
+description: Build/phát hành app: Android, iOS/TestFlight, Flutter, React Native/Expo, Electron/Tauri, ký số, phiên bản.
 ---
 
 # KỸ NĂNG: PHÁT HÀNH APP

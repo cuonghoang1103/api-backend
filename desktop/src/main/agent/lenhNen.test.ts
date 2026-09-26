@@ -6,7 +6,7 @@
  * không, đầu ra có tới nơi không. Một bản giả lập sẽ "đạt" cả khi mã sai.
  */
 import { afterEach, describe, expect, it } from 'vitest';
-import { batLenhNen, docDauRaNen, dsLenhNen, dungLenhNen, dungMoiLenhNen } from './lenhNen';
+import { batLenhNen, docDauRaNen, dsLenhNen, dungLenhNen, dungMoiLenhNen, TRAN_DOC } from './lenhNen';
 
 const CUOC = 'kiem';
 
@@ -97,6 +97,24 @@ describe('lệnh chạy nền', () => {
     const qua = batLenhNen({ lenh: 'sleep 30', cwd: process.cwd(), cuocId: CUOC });
     expect(qua.ok).toBe(false);
     expect(qua.loi).toMatch(/dừng bớt/i);
+  });
+
+  it('đầu ra quá trần 12k: giữ phần MỚI NHẤT, nói rõ bỏ bao nhiêu (26/09/2026)', async () => {
+    expect(TRAN_DOC).toBe(12_000);
+    // 3000 dòng × ~12 ký tự ≈ 36k, dòng cuối là thứ agent cần thấy.
+    const kq = batLenhNen({
+      lenh: `node -e "for(let i=0;i<3000;i++)console.log('dong-'+String(i).padStart(5,'0'));console.log('CUOI-CUNG')"`,
+      cwd: process.cwd(), cuocId: CUOC,
+    });
+    await cho(() => trangThai(kq.id!)?.dangChay === false, 8000);
+    const r = docDauRaNen(kq.id!);
+    expect(r.moi!.trimEnd().endsWith('CUOI-CUNG')).toBe(true);
+    expect(r.moi).not.toContain('dong-00000');
+    const m = /^\[… ĐÃ BỎ (\d+) ký tự CŨ hơn ở đầu phần mới — chỉ giữ (\d+) ký tự mới nhất …\]\n/.exec(r.moi!);
+    expect(m).not.toBeNull();
+    expect(Number(m![2])).toBeLessThanOrEqual(TRAN_DOC);
+    // Bắt đầu ở đầu dòng — không có nửa dòng "ng-01234" lơ lửng.
+    expect(r.moi!.split('\n')[1]).toMatch(/^dong-\d{5}$/);
   });
 
   it('đọc một mã không tồn tại thì báo lỗi, không ném', () => {

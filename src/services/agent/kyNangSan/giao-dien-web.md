@@ -1,6 +1,6 @@
 ---
 name: giao-dien-web
-description: Làm giao diện web đẹp, nhất quán, chạy tốt trên điện thoại — responsive, màu/chữ/khoảng cách, chế độ tối, form, trạng thái tải/rỗng/lỗi, accessibility, Tailwind/shadcn, React/Next — và TỰ KIỂM bằng trình duyệt: chụp nhiều bề rộng, đọc console. Dùng khi làm/sửa UI, trang vỡ bố cục, "làm đẹp lại".
+description: Làm/sửa giao diện web đẹp, responsive, chế độ tối, accessibility — và tự kiểm bằng trình duyệt + ảnh chụp.
 ---
 
 # KỸ NĂNG: GIAO DIỆN WEB — đẹp, nhất quán, dùng được, và ĐÃ NHÌN tận mắt

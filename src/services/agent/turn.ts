@@ -40,7 +40,7 @@ import {
   xinDiemCuoi,
 } from '../llm/gateway.js';
 import { checkBudget, budgetMessage } from '../llm/budget.js';
-import { nenNguCanh } from './compact.js';
+import { nenNguCanh, tinhMoc } from './compact.js';
 import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import { modelAgentTu } from './models.js';
@@ -326,6 +326,8 @@ export interface AgentTurnInput {
    * người dùng cập nhật app.
    */
   ghiChuDuAn?: { ten: string; noiDung: string };
+  /** Mục lục bộ nhớ app gửi lên (chuỗi đã cắt trần phía app). */
+  boNho?: string;
   kyNang?: Array<{ ten: string; moTa: string }>;
   /** Loại agent phụ dự án khai — tên + mô tả, để model biết gọi `loai` nào. */
   agentPhu?: Array<{ ten: string; moTa: string }>;
@@ -515,6 +517,264 @@ export function demBuocViecNay(messages: AgentMessage[]): number {
     .length;
 }
 
+// ─── Chống lặp (26/09/2026) ────────────────────────────────────────
+//
+// Đo thật: agent hay đọc lại đúng file vừa đọc, hoặc quay vòng "sửa → chạy →
+// hỏng → sửa y hệt". Mỗi vòng như thế chở theo 17k–57k token vào. Máy chủ KHÔNG
+// giữ trạng thái, nên mọi phát hiện ở đây tính lại từ chính hội thoại app gửi
+// lên — cùng nguyên tắc với `demBuocViecNay`.
+
+/**
+ * Tool CHỈ ĐỌC: gọi lại cùng tham số mà giữa hai lần không có thao tác ghi
+ * nào thì kết quả KHÔNG đổi.
+ *
+ * ⚠️ `doc_dau_ra_nen` và `terminal_doc` CỐ Ý không nằm đây dù chúng chỉ đọc:
+ * chúng trả phần đầu ra MỚI kể từ lần đọc trước, nên gọi lại cùng tham số là
+ * cách CHÍNH ĐÁNG để theo dõi một lệnh build đang chạy. Chặn chúng là giết
+ * đúng vòng chờ build.
+ */
+const TOOL_CHI_DOC = new Set([
+  'read_file', 'grep', 'glob', 'list_dir', 'git_status', 'git_diff', 'web_doc',
+  'notes_read', 'notes_search', 'notes_tree', 'doc_web', 'tim_web',
+]);
+
+/** Đọc trạng thái TRÔI — lặp lại là bình thường (theo dõi lệnh nền/terminal). */
+const TOOL_DOC_TROI = new Set(['doc_dau_ra_nen', 'terminal_doc']);
+
+/** Không đọc cũng không đổi thứ gì agent đọc lại được. */
+const TOOL_TRUNG_TINH = new Set(['cap_nhat_ke_hoach', 'dung_ky_nang', 'giao_viec_phu']);
+
+/**
+ * Có coi là thao tác GHI không. Ngoài danh sách tường minh (edit_file,
+ * create_file, sua_nhieu_cho, xoa_file, doi_ten_file, run_command,
+ * chay_lenh_nen, terminal_mo, terminal_gui, sua_anh, git_commit,
+ * ghi_file_ngoai), mọi tool LẠ cũng tính là ghi: `web_bam` đổi trang mà
+ * `web_doc` đọc, tool MCP làm gì thì máy chủ không biết. Coi nhầm là ghi chỉ
+ * làm mất một lần tiết kiệm; coi nhầm là đọc thì trả kết quả CŨ cho một trạng
+ * thái đã đổi — sai hẳn.
+ */
+function laGhi(ten: string): boolean {
+  return !TOOL_CHI_DOC.has(ten) && !TOOL_DOC_TROI.has(ten) && !TOOL_TRUNG_TINH.has(ten);
+}
+
+/** Câu trả thay cho lời gọi đọc trùng. Cũng dùng để nhận ra kết quả tổng hợp. */
+export const CAU_TRUNG_DOC =
+  'Trùng lời gọi ở bước trước; chưa có thao tác ghi nào nên kết quả không đổi — dùng lại kết quả đó (đang còn trong hội thoại).';
+
+/** JSON với khoá SẮP XẾP — `{"a":1,"b":2}` và `{"b":2,"a":1}` là cùng một lời gọi. */
+function jsonSapKhoa(v: unknown): string {
+  if (Array.isArray(v)) return `[${v.map(jsonSapKhoa).join(',')}]`;
+  if (v && typeof v === 'object') {
+    return `{${Object.keys(v as Record<string, unknown>).sort()
+      .map((k) => `${JSON.stringify(k)}:${jsonSapKhoa((v as Record<string, unknown>)[k])}`).join(',')}}`;
+  }
+  return JSON.stringify(v) ?? 'null';
+}
+
+function chuKy(c: ToolCall): string {
+  let args: string;
+  try { args = jsonSapKhoa(JSON.parse(c.function.arguments || '{}')); } catch { args = c.function.arguments; }
+  return `${c.function.name} ${args}`;
+}
+
+const rutMoTa = (ck: string): string => (ck.length > 140 ? `${ck.slice(0, 140)}…` : ck);
+
+export interface KetQuaLap {
+  /** Lời gọi CHỈ ĐỌC trong tin assistant CUỐI trùng một lời gọi trước — máy chủ tự trả. */
+  trungDoc: Array<{ id: string; idCu: string; ten: string }>;
+  /** Lặp đáng nhắc: cùng chữ ký ≥ 3 lần, hoặc một chuỗi k lời gọi lặp lại. */
+  lap: { moTa: string; soLan: number } | null;
+}
+
+/**
+ * Phát hiện lặp trong VIỆC ĐANG LÀM (từ tin `user` gần nhất). Hàm thuần.
+ *
+ * (a) `trungDoc` — chỉ xét tin cuối nếu nó là tin assistant đang đòi tool
+ *     (chưa có kết quả). Một lời gọi chỉ đọc được trả thay khi: có lời gọi cùng
+ *     chữ ký TRƯỚC ĐÓ đã có kết quả thật; giữa hai lần không có lời gọi ghi
+ *     nào (kể cả trong chính tin cuối); và kết quả cũ SẼ còn nguyên văn ở lượt
+ *     gửi kế tiếp (chưa rơi vào vùng lược của `compact.ts`) — nói "dùng lại kết
+ *     quả trong hội thoại" khi nó đã bị lược là nói dối model.
+ *
+ * (b) `lap` — tính trên chuỗi mọi lời gọi của việc này (trừ đọc trạng thái
+ *     trôi). Chuỗi k lời gọi cuối (k = 2..4) lặp lại đúng chuỗi k trước đó;
+ *     với k = 1 đòi 3 lần liền (2 lần liền còn có thể là "chạy lại cho chắc").
+ *     Không có chuỗi thì xét lời gọi CUỐI đã xuất hiện ≥ 3 lần kể cả khi có
+ *     ghi xen giữa. Chỉ nhìn lời gọi cuối để lời nhắc không bám mãi cả việc
+ *     sau khi agent đã đổi hướng.
+ */
+export function phatHienLap(messages: readonly AgentMessage[]): KetQuaLap {
+  let dau = -1;
+  for (let i = messages.length - 1; i >= 0; i -= 1) {
+    if (messages[i]?.role === 'user') { dau = i; break; }
+  }
+
+  const ketQua = new Map<string, string>();
+  const doDaiTool: number[] = [];
+  const thuTuTool = new Map<string, number>();
+  for (const m of messages) {
+    if (m.role !== 'tool') continue;
+    thuTuTool.set(m.tool_call_id, doDaiTool.length);
+    doDaiTool.push(m.content.length);
+    ketQua.set(m.tool_call_id, m.content);
+  }
+
+  const goi: Array<{ c: ToolCall; ck: string; iTin: number }> = [];
+  for (let i = dau + 1; i < messages.length; i += 1) {
+    const m = messages[i]!;
+    if (m.role === 'assistant' && m.tool_calls) {
+      for (const c of m.tool_calls) goi.push({ c, ck: chuKy(c), iTin: i });
+    }
+  }
+
+  // ── (a) đọc trùng ──
+  const trungDoc: KetQuaLap['trungDoc'] = [];
+  const cuoi = messages[messages.length - 1];
+  if (cuoi && cuoi.role === 'assistant' && cuoi.tool_calls?.length && messages.length - 1 > dau) {
+    const ungVien = cuoi.tool_calls;
+    const coGhi = ungVien.some((c) => laGhi(c.function.name));
+    // Mốc lược của lượt gửi KẾ TIẾP: mỗi lời gọi đang chờ sẽ thêm một kết quả.
+    const mocSau = tinhMoc([...doDaiTool, ...ungVien.map(() => 0)]);
+    const truoc = goi.filter((g) => g.iTin < messages.length - 1);
+    if (!coGhi) {
+      for (const c of ungVien) {
+        if (!TOOL_CHI_DOC.has(c.function.name)) continue;
+        const ck = chuKy(c);
+        for (let k = truoc.length - 1; k >= 0; k -= 1) {
+          const p = truoc[k]!;
+          if (laGhi(p.c.function.name)) break;
+          if (p.ck !== ck) continue;
+          const kq = ketQua.get(p.c.id);
+          if (kq === undefined || kq.startsWith(CAU_TRUNG_DOC)) continue; // tìm tiếp lần đọc THẬT
+          if ((thuTuTool.get(p.c.id) ?? -1) >= mocSau) {
+            trungDoc.push({ id: c.id, idCu: p.c.id, ten: c.function.name });
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  // ── (b) lặp ──
+  const chuoi = goi.filter((g) => !TOOL_DOC_TROI.has(g.c.function.name)).map((g) => g.ck);
+  let lap: KetQuaLap['lap'] = null;
+  for (let k = 1; k <= 4 && !lap; k += 1) {
+    const canKhoi = k === 1 ? 3 : 2;
+    if (chuoi.length < k * canKhoi) continue;
+    const mau = chuoi.slice(-k);
+    let soKhoi = 1;
+    while (chuoi.length >= k * (soKhoi + 1)) {
+      const khoi = chuoi.slice(chuoi.length - k * (soKhoi + 1), chuoi.length - k * soKhoi);
+      if (khoi.every((x, j) => x === mau[j])) soKhoi += 1; else break;
+    }
+    if (soKhoi >= canKhoi) {
+      lap = {
+        moTa: k === 1 ? rutMoTa(mau[0]!) : `chuỗi ${k} lời gọi ${mau.map((x) => x.split(' ')[0]).join(' → ')}`,
+        soLan: soKhoi,
+      };
+    }
+  }
+  if (!lap && chuoi.length) {
+    const ckCuoi = chuoi[chuoi.length - 1]!;
+    const soLan = chuoi.filter((x) => x === ckCuoi).length;
+    if (soLan >= 3) lap = { moTa: rutMoTa(ckCuoi), soLan };
+  }
+
+  return { trungDoc, lap };
+}
+
+/** Câu nhắc khi phát hiện lặp. */
+export function loiNhacLap(l: { moTa: string; soLan: number }): string {
+  return `⚠️ Bạn đang lặp: ${l.moTa} (${l.soLan} lần). `
+    + "Theo luật 'KHI MỘT CÁCH KHÔNG ĂN': đổi hướng hoặc dừng lại hỏi người dùng.";
+}
+
+export const NHAC_BUOC_CUOI = 'Đây là bước CUỐI: KHÔNG gọi tool nữa, viết tóm tắt đầy đủ các phát hiện.';
+
+/**
+ * Gắn lời nhắc vào ĐUÔI bản gửi cổng — tin `user`/`tool` cuối cùng.
+ *
+ * Trả BẢN SAO, không sửa mảng gốc: lời nhắc không được lưu vào hội thoại. Lưu
+ * vào thì nó nằm lại giữa tiền tố ở mọi lượt sau (làm bẩn đệm) và nhắc mãi một
+ * chuyện đã qua. Ở đuôi thì nó chỉ đổi đúng phần vốn đã đổi mỗi bước.
+ */
+export function ganNhacDuoi(messages: readonly AgentMessage[], nhac: string): AgentMessage[] {
+  const ra = [...messages];
+  for (let i = ra.length - 1; i >= 0; i -= 1) {
+    const m = ra[i]!;
+    if (m.role === 'tool') { ra[i] = { ...m, content: `${m.content}\n\n[Hệ thống] ${nhac}` }; return ra; }
+    if (m.role === 'user') {
+      ra[i] = typeof m.content === 'string'
+        ? { role: 'user', content: `${m.content}\n\n[Hệ thống] ${nhac}` }
+        : { role: 'user', content: [...m.content, { type: 'text', text: `[Hệ thống] ${nhac}` }] };
+      return ra;
+    }
+  }
+  return ra;
+}
+
+/**
+ * Nội dung trả về khi VIỆC PHỤ chạm trần bước: gom mọi đoạn chữ nó đã viết.
+ *
+ * Trước 26/09/2026 chỉ là câu cố định "Việc phụ đã chạm trần N bước." — app
+ * lấy đúng câu đó làm "kết quả việc phụ", nên agent chính mất sạch những gì
+ * việc phụ đã tìm ra trong 10 bước (mà người dùng đã trả tiền cho cả 10).
+ */
+export function gomPhatHienViecPhu(messages: readonly AgentMessage[], tran: number): string {
+  let dau = -1;
+  for (let i = messages.length - 1; i >= 0; i -= 1) {
+    if (messages[i]?.role === 'user') { dau = i; break; }
+  }
+  const viec = messages.slice(dau + 1);
+  const doan = viec
+    .filter((m): m is Extract<AgentMessage, { role: 'assistant' }> => m.role === 'assistant')
+    .map((m) => (m.content ?? '').trim())
+    .filter(Boolean);
+  const daGoi: string[] = [];
+  for (const m of viec) {
+    if (m.role !== 'assistant' || !m.tool_calls) continue;
+    for (const c of m.tool_calls) {
+      let a: Record<string, unknown> = {};
+      try { a = JSON.parse(c.function.arguments || '{}') ?? {}; } catch { /* bỏ */ }
+      const chu = [a.path, a.pattern, a.command, a.lenh, a.url, a.query].find((x) => typeof x === 'string') as string | undefined;
+      const dong = chu ? `${c.function.name} ${chu.slice(0, 100)}` : c.function.name;
+      if (!daGoi.includes(dong)) daGoi.push(dong);
+    }
+  }
+  let than = doan.join('\n\n');
+  // Trần 12k: giữ phần CUỐI — kết luận thường nằm ở những đoạn sau.
+  if (than.length > 12_000) than = `…\n${than.slice(-12_000)}`;
+  return `Việc phụ đã chạm trần ${tran} bước trước khi kịp tự tóm tắt. `
+    + 'Dưới đây là MỌI điều nó đã ghi nhận được — dùng làm phát hiện, phần còn thiếu thì tự kiểm lại.\n\n'
+    + (than || '(việc phụ không viết đoạn chữ nào)')
+    + (daGoi.length ? `\n\nĐã gọi: ${daGoi.slice(0, 20).join(' · ')}` : '');
+}
+
+/**
+ * Phân loại lỗi cổng thành mã cho app (26/09/2026).
+ *
+ * Trước đây mọi lỗi cổng là `LLM_ERROR`, và app THỬ LẠI `LLM_ERROR` tới 4 lần
+ * — kể cả `HTTP 400 prompt is too long` hay `401` sai khoá, những lỗi mà gửi
+ * lại y hệt thì trả về y hệt. Mỗi lần thử lại chở 17k–94k token vào.
+ *
+ *   LLM_NO_PROVIDER — cổng không có kênh cho model (xem ghi chú ở chỗ phát).
+ *   LLM_ERROR_4XX   — lỗi TẤT ĐỊNH (400/401/403/404/413/422, hoặc lỗi luồng
+ *                     kiểu invalid_request/authentication/permission…).
+ *                     App KHÔNG được thử lại.
+ *   CONNECTION_LOST — kết nối đứt giữa chừng.
+ *   LLM_ERROR       — còn lại: 429/5xx/mạng — lỗi TẠM, thử lại là đúng.
+ */
+export function maLoiCong(message: string): 'LLM_NO_PROVIDER' | 'LLM_ERROR_4XX' | 'CONNECTION_LOST' | 'LLM_ERROR' {
+  if (/unknown provider for model|No available channel/i.test(message)) return 'LLM_NO_PROVIDER';
+  const ma = /HTTP (\d{3})/.exec(message)?.[1];
+  if (ma && ['400', '401', '403', '404', '413', '422'].includes(ma)) return 'LLM_ERROR_4XX';
+  if (/invalid_request_error|authentication_error|permission_error|not_found_error|request_too_large/.test(message)) {
+    return 'LLM_ERROR_4XX';
+  }
+  if (/aborted|ECONNRESET|socket hang up|terminated|fetch failed|ETIMEDOUT/i.test(message)) return 'CONNECTION_LOST';
+  return 'LLM_ERROR';
+}
+
 /** Cổng đôi khi rò token dừng nội bộ ra câu trả lời — xem ghi chú `agent_code` trong gateway.ts. */
 function catRacCong(s: string): string {
   return s.replace(/<CPA_DONE>/g, '').replace(/<\|[a-z_]+\|>/gi, '');
@@ -571,7 +831,9 @@ export async function runAgentTurn(
            thứ chặn thật là một lựa chọn người dùng đổi được trong hai giây.
            Ở mức Thấp (8 bước) lời khuyên đó còn dẫn sai hẳn hướng. */
         content: laPhu
-          ? `Việc phụ đã chạm trần ${MAX_AGENT_STEPS} bước.`
+          /* Việc phụ: gom các phát hiện nó đã viết (26/09/2026) — xem
+             `gomPhatHienViecPhu`. App lấy tin assistant cuối làm kết quả. */
+          ? gomPhatHienViecPhu(messages, MAX_AGENT_STEPS)
           : `Đã chạm trần ${MAX_AGENT_STEPS} bước cho việc này (mức "${TEN_MUC[mucNoLuc]}"). `
             + 'Nâng mức nỗ lực ở thanh trên để agent đi được xa hơn, hoặc hỏi lại câu hẹp hơn.',
       }],
@@ -627,6 +889,7 @@ export async function runAgentTurn(
     soToolMcp: toolMcp.length,
     ...(input.workspace ? { workspace: input.workspace } : {}),
     ...(ghiChu ? { ghiChu } : {}),
+    ...(input.boNho ? { boNho: input.boNho } : {}),
     ...(input.kyNang?.length ? { kyNang: input.kyNang } : {}),
     ...(input.agentPhu?.length ? { agentPhu: input.agentPhu } : {}),
     ...(input.promptPhu ? { promptPhu: input.promptPhu } : {}),
@@ -672,6 +935,14 @@ export async function runAgentTurn(
   let thanhCong = false;
   let daLuoc = 0;
   let daCat = 0;
+  /** Token đọc từ đệm tiền tố cổng trả về, cộng dồn cả lượt — chỉ để ghi log. */
+  let cacheDocTong = 0;
+  /**
+   * Ước lượng token VÀO của lời gọi ĐANG bay. Lời gọi hỏng giữa chừng không
+   * trả `usage`, nên trước 26/09/2026 nó được ghi sổ bằng 0 — mà một lượt hỏng
+   * ở bước 30 đã chở ~60k token lên cổng. Về 0 sau mỗi lời gọi thành công.
+   */
+  let uocLuongDangBay = 0;
 
   /**
    * Dựng khung `done`. Gom về một chỗ vì có BỐN lối ra khỏi vòng lặp, và một
@@ -702,8 +973,21 @@ export async function runAgentTurn(
     for (let hop = 0; hop <= MAX_SERVER_HOPS + MAX_VIET_TIEP; hop++) {
       // Nén NGAY TRƯỚC mỗi lời gọi, tính lại từ đầu mỗi lần: hop này vừa thêm
       // kết quả mới, nên cái "gần nhất" đã khác so với hop trước.
-      const nen = nenNguCanh([...messages, ...append]);
+      const tatCa = [...messages, ...append];
+      const nen = nenNguCanh(tatCa);
       if (nen.soDaLuoc > daLuoc) { daLuoc = nen.soDaLuoc; daCat = nen.kyTuDaCat; }
+
+      /* Lời nhắc ĐUÔI — chỉ gắn vào bản gửi cổng, không lưu vào hội thoại
+         (26/09/2026). Hai loại: agent đang lặp, và việc phụ ở bước cuối. */
+      const nhac: string[] = [];
+      const lap = phatHienLap(tatCa).lap;
+      if (lap) nhac.push(loiNhacLap(lap));
+      /* Việc phụ ở bước CUỐI được phép: bảo nó viết tóm tắt NGAY. Không có câu
+         này thì nó gọi tool ở bước 10 như mọi bước khác, rồi lượt sau chạm
+         trần và phát hiện của nó chỉ còn là những mẩu chữ rời rạc. */
+      if (laPhu && demBuocViecNay(tatCa) >= MAX_AGENT_STEPS - 1) nhac.push(NHAC_BUOC_CUOI);
+      const guiDi = nhac.length ? ganNhacDuoi(nen.messages, nhac.join('\n')) : nen.messages;
+      uocLuongDangBay = uocLuongVao(system, guiDi);
 
       const ketQua = await goiCongCoLuoiDo({
         url: chatUrlOf(ep),
@@ -711,14 +995,16 @@ export async function runAgentTurn(
         ...(ep.giaoThuc ? { giaoThuc: ep.giaoThuc } : {}),
         model,
         system,
-        messages: nen.messages,
+        messages: guiDi,
         tools,
         signal,
         onText: (delta) => emit({ type: 'text', delta }),
       });
 
+      uocLuongDangBay = 0;
       inTong += ketQua.inputTokens;
       outTong += ketQua.outputTokens;
+      cacheDocTong += ketQua.cacheDocTokens;
 
       const noiDung = catRacCong(ketQua.text);
       const calls = ketQua.toolCalls;
@@ -762,9 +1048,21 @@ export async function runAgentTurn(
 
       append.push({ role: 'assistant', content: noiDung || null, tool_calls: calls });
 
+      /* ── Đọc TRÙNG ⇒ máy chủ tự trả, không phát xuống app (26/09/2026) ──
+         Cùng cách với tool vòng 2: nối tin `role:'tool'` ngay tại đây, nên
+         mỗi tool_call vẫn có đúng một tin trả lời. Hết lời gọi cho app thì
+         vòng lặp tự đi tiếp như chỉ có tool vòng 2. */
+      const trung = new Set<string>();
+      for (const t of phatHienLap([...messages, ...append]).trungDoc) {
+        trung.add(t.id);
+        append.push({ role: 'tool', tool_call_id: t.id, content: CAU_TRUNG_DOC });
+        emit({ type: 'server_tool', name: t.ten, summary: 'trùng lời gọi trước — dùng lại kết quả cũ' });
+      }
+
       // ── Chia hai vòng ──
-      const vongServer = calls.filter((c) => toolByName(c.function.name)?.ring === 'server');
-      const vongClient = calls.filter((c) => toolByName(c.function.name)?.ring !== 'server');
+      const conLai = calls.filter((c) => !trung.has(c.id));
+      const vongServer = conLai.filter((c) => toolByName(c.function.name)?.ring === 'server');
+      const vongClient = conLai.filter((c) => toolByName(c.function.name)?.ring !== 'server');
 
       for (const c of vongServer) {
         const args = docArgs(c.function.arguments);
@@ -816,7 +1114,7 @@ export async function runAgentTurn(
     // một lượt: SSE chết, và người dùng nhận đúng dòng chữ "Cổng AI lỗi: This
     // operation was aborted" — vừa sai (cổng không lỗi) vừa không nói được
     // phải làm gì. Cùng chuyện đó xảy ra trên production mỗi lần deploy.
-    const dutKetNoi = /aborted|ECONNRESET|socket hang up|terminated|fetch failed|ETIMEDOUT/i.test(message);
+    const ma = maLoiCong(message);
 
     /**
      * Cổng KHÔNG CÓ nhà cung cấp cho model — sự cố phía cổng, không phải phía
@@ -831,7 +1129,7 @@ export async function runAgentTurn(
      * `No available channel` là cùng một chuyện, chỉ khác mã lỗi (503) —
      * kênh có tồn tại nhưng không cái nào đang bật cho nhóm của khoá.
      */
-    const congThieuKenh = /unknown provider for model|No available channel/i.test(message);
+    const congThieuKenh = ma === 'LLM_NO_PROVIDER';
     const tenModel = /unknown provider for model ([\w.-]+)/i.exec(message)?.[1] ?? model;
 
     emit(
@@ -843,7 +1141,15 @@ export async function runAgentTurn(
               + '(nhà cung cấp chưa gắn kênh cho model này) — KHÔNG phải do máy bạn hay bản app bạn đang dùng, '
               + 'và mọi người đều đang gặp. Hỏi lại cũng không khác; hãy báo cho chủ web để bật lại kênh model ở Console của cổng.',
           }
-        : dutKetNoi
+        : ma === 'LLM_ERROR_4XX'
+        ? {
+            /* Lỗi TẤT ĐỊNH — mã riêng để app KHÔNG thử lại (26/09/2026). */
+            type: 'error',
+            code: 'LLM_ERROR_4XX',
+            error: `Cổng AI từ chối yêu cầu: ${message}. Đây là lỗi cố định chứ không phải cổng đang bận — `
+              + 'gửi lại y hệt sẽ nhận lại y hệt. Nếu hội thoại đã rất dài, hãy bắt đầu phiên mới.',
+          }
+        : ma === 'CONNECTION_LOST'
         ? {
             type: 'error',
             code: 'CONNECTION_LOST',
@@ -855,7 +1161,15 @@ export async function runAgentTurn(
     tra();
     // Ghi sổ dù thành công hay không: một lượt hỏng GIỮA CHỪNG vẫn đã tiêu
     // token vào rồi, và đó chính là loại chi phí mà biểu đồ cần nhìn thấy.
-    void ghiSo({ userId: input.userId, model, inTong, outTong, thanhCong });
+    void ghiSo({
+      userId: input.userId,
+      model,
+      // Lời gọi hỏng giữa chừng: cộng ước lượng token vào của nó (26/09/2026).
+      inTong: inTong + (thanhCong ? 0 : uocLuongDangBay),
+      outTong,
+      thanhCong,
+      cacheDoc: cacheDocTong,
+    });
   }
 }
 
@@ -904,8 +1218,20 @@ async function ghiSo(d: {
   inTong: number;
   outTong: number;
   thanhCong: boolean;
+  /** Token đọc từ đệm tiền tố (`cache_read_input_tokens`). */
+  cacheDoc: number;
 }): Promise<void> {
   if (d.inTong === 0 && d.outTong === 0) return;
+  /* Sổ `interview_llm_call_logs` KHÔNG có cột cho phần đọc đệm, và thêm cột là
+     một migration cho một con số chỉ để quan sát — nên ghi log (26/09/2026).
+     ⚠️ `input_tokens` của rambo ĐÃ GỒM phần đọc đệm, nên tỉ lệ = đọc / vào. */
+  logger.info('agent: đệm tiền tố', {
+    model: d.model,
+    inTong: d.inTong,
+    cacheDoc: d.cacheDoc,
+    tiLeTrungDem: d.inTong > 0 ? Math.round((d.cacheDoc / d.inTong) * 1000) / 1000 : 0,
+    thanhCong: d.thanhCong,
+  });
   try {
     await prisma.interviewLLMCallLog.create({
       data: {
@@ -938,6 +1264,18 @@ interface KetQuaCong {
   finishReason: string | null;
   inputTokens: number;
   outputTokens: number;
+  /**
+   * Token đọc từ đệm tiền tố (Anthropic `cache_read_input_tokens`, OpenAI
+   * `prompt_tokens_details.cached_tokens`). 0 nếu cổng không báo.
+   */
+  cacheDocTokens: number;
+}
+
+/** Ước lượng thô token vào của một lời gọi, BỎ dữ liệu ảnh base64. */
+function uocLuongVao(system: string, msgs: readonly AgentMessage[]): number {
+  const chu = JSON.stringify(msgs, (k, v) =>
+    (typeof v === 'string' && v.length > 20_000 && (k === 'data' || k === 'url') ? '' : v));
+  return Math.ceil((system.length + chu.length) / 4);
 }
 
 /**
@@ -959,8 +1297,12 @@ interface KetQuaCong {
 function modelDuPhong(chinh: string): string | null {
   const dat = process.env.LLM_MODEL_AGENT_BACKUP?.trim();
   if (dat) return dat === chinh ? null : dat;
-  const macDinh = chinh.startsWith('claude') ? 'claude-opus-5' : 'claude-sonnet-5';
-  return macDinh === chinh ? 'claude-sonnet-4-6' : macDinh;
+  /* Họ claude ⇒ `claude-sonnet-4-6` (26/09/2026, trước là `claude-opus-5`):
+     dự phòng chỉ chạy khi model chính CHẾT, và lúc đó thứ cần là "vẫn làm
+     được việc" chứ không phải model đắt nhất — opus đốt gấp nhiều lần tiền
+     cho đúng những lượt người dùng đang gặp sự cố. */
+  const macDinh = chinh.startsWith('claude') ? 'claude-sonnet-4-6' : 'claude-sonnet-5';
+  return macDinh === chinh ? 'claude-sonnet-5' : macDinh;
 }
 
 /**
@@ -1097,6 +1439,7 @@ async function goiCong(o: {
     const mangTool = new Map<number, { id: string; name: string; args: string }>();
     let inputTokens = 0;
     let outputTokens = 0;
+    let cacheDocTokens = 0;
 
     const reader = res.body.getReader();
     const dec = new TextDecoder();
@@ -1128,6 +1471,7 @@ async function goiCong(o: {
         if (laAnthropic) {
           if (j.type === 'message_start') {
             inputTokens = j.message?.usage?.input_tokens ?? inputTokens;
+            cacheDocTokens = j.message?.usage?.cache_read_input_tokens ?? cacheDocTokens;
           } else if (j.type === 'content_block_start' && j.content_block?.type === 'tool_use') {
             mangTool.set(j.index ?? mangTool.size, {
               id: String(j.content_block.id ?? ''),
@@ -1146,6 +1490,7 @@ async function goiCong(o: {
           } else if (j.type === 'message_delta') {
             if (j.delta?.stop_reason) finishReason = stopSangFinish(j.delta.stop_reason);
             if (j.usage?.output_tokens) outputTokens = j.usage.output_tokens;
+            if (j.usage?.cache_read_input_tokens) cacheDocTokens = j.usage.cache_read_input_tokens;
           } else if (j.type === 'error') {
             throw new Error(`Cổng trả lỗi: ${JSON.stringify(j.error ?? j).slice(0, 200)}`);
           }
@@ -1155,6 +1500,7 @@ async function goiCong(o: {
         if (j.usage) {
           inputTokens = j.usage.prompt_tokens ?? inputTokens;
           outputTokens = j.usage.completion_tokens ?? outputTokens;
+          cacheDocTokens = j.usage.prompt_tokens_details?.cached_tokens ?? cacheDocTokens;
         }
 
         // ⚠️ `finish_reason` nằm ở CHÍNH gói cuối, KHÔNG nằm trong `delta` —
@@ -1207,7 +1553,7 @@ async function goiCong(o: {
       inputTokens = Math.ceil((o.system.length + JSON.stringify(o.messages).length) / 4);
     }
 
-    return { text, toolCalls, finishReason, inputTokens, outputTokens };
+    return { text, toolCalls, finishReason, inputTokens, outputTokens, cacheDocTokens };
   } finally {
     clearTimeout(timer);
     o.signal.removeEventListener('abort', huy);

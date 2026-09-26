@@ -17,6 +17,7 @@ import type {
   AgentInfo,
   TerminalKetQua,
   PhienPty,
+  AgentBaiHoc,
   TerminalDauRa,
   AgentCuocDangMo,
   AgentMcpTrangThai,
@@ -455,6 +456,8 @@ const bridge: DesktopBridge = {
         Promise<{ chan: boolean; ra: string; goc: string | null; soKhop: number }>,
     kyNangDs: (cuocId: string) =>
       ipcRenderer.invoke('agent:kyNangDs', { cuocId }) as Promise<Array<{ ten: string; moTa: string }>>,
+    boNhoDs: (cuocId: string) => ipcRenderer.invoke('agent:boNhoDs', { cuocId }) as Promise<AgentBaiHoc[]>,
+    boNhoXoa: (cuocId: string, id: string) => ipcRenderer.invoke('agent:boNhoXoa', { cuocId, id }) as Promise<boolean>,
   },
 
   robot: {

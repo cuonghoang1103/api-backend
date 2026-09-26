@@ -14163,3 +14163,23 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-tt-o .xterm { height: 100%; }
 .ct-tt-o .xterm-viewport { background: transparent !important; }
 .ct-tt-trong { margin: 12px; color: #5f766b; font-size: 12px; }
+
+/* ══ BỘ NHỚ CỦA AGENT (26/09/2026) — xem `BangBoNho.tsx` ════════════════ */
+.ct-bn-bang { width: min(460px, 86vw); }
+.ct-bn-ds { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; max-height: 360px; overflow-y: auto; }
+.ct-bn-ds > li { border: 1px solid var(--ct-border); border-radius: 8px; background: var(--ct-surface); }
+.ct-bn-ds > li[data-mo='true'] { border-color: color-mix(in srgb, var(--ct-accent) 40%, transparent); }
+.ct-bn-dau {
+  display: flex; align-items: center; gap: 7px; width: 100%; min-width: 0;
+  padding: 6px 8px; border: 0; background: none; color: var(--ct-text); cursor: pointer; text-align: left; font: inherit; font-size: 12px;
+}
+.ct-bn-ten { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ct-bn-dau > em { flex: none; font-style: normal; font-size: 10.5px; color: var(--ct-text-faint); }
+.ct-bn-loai { flex: none; padding: 0 6px; border-radius: 4px; font-size: 10px; font-weight: 600; background: var(--ct-hover); color: var(--ct-text-muted); }
+.ct-bn-loai[data-loai='loi'] { color: var(--ct-err); background: color-mix(in srgb, var(--ct-err) 14%, transparent); }
+.ct-bn-loai[data-loai='quy_uoc'] { color: var(--ct-accent-text); background: var(--ct-active); }
+.ct-bn-loai[data-loai='moi_truong'] { color: var(--ct-warn); background: color-mix(in srgb, var(--ct-warn) 14%, transparent); }
+.ct-bn-than { padding: 0 10px 8px; font-size: 12px; line-height: 1.5; color: var(--ct-text); }
+.ct-bn-than p { margin: 4px 0; }
+.ct-bn-than code { font-size: 11px; word-break: break-word; }
+.ct-bn-phu { color: var(--ct-text-faint); font-size: 10.5px; }

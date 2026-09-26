@@ -49,6 +49,7 @@ import { timFileGoiY } from '../agent/timFileNhanh';
 import { docLenhDuAn } from '../agent/lenhTuTao';
 import { chayHook, docHook, docNhatKy, quenDemHook, duongDanCauHinh as duongHook, dsHookChoDuyet, duyetHookDuAn} from '../agent/hook';
 import { dsKyNang } from '../agent/kyNang';
+import { dsDeGiaoDien, quenBaiHoc } from '../agent/boNho';
 import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
 import { handle } from './index';
@@ -707,6 +708,9 @@ export function registerAgentHandlers(): void {
       clearTimeout(hetGio);
     }
   });
+
+  handle('agent:boNhoDs', async ({ cuocId }) => dsDeGiaoDien(gocCuaCuoc(cuocId)));
+  handle('agent:boNhoXoa', async ({ cuocId, id }) => quenBaiHoc(gocCuaCuoc(cuocId), id, 'người dùng xoá ở tab Bộ nhớ'));
 
   handle('agent:kyNangDs', async ({ cuocId }) => {
     // Kể cả chưa mở dự án: vẫn có bộ kỹ năng cài sẵn.

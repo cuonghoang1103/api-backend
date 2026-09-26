@@ -19,7 +19,7 @@
  * → mở B (click). Nếu nghe `click` thì thứ tự đảo lại và B mở rồi bị chính
  * mình đóng ngay.
  */
-import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useId, useRef, useSyncExternalStore } from 'react';
 
 let dangMo: string | null = null;
 const nguoiNghe = new Set<() => void>();
@@ -75,7 +75,19 @@ export interface TamMo {
  *               phép kiểm `contains` ở đây sẽ đóng nhầm chính nó). Lúc đó hook
  *               chỉ còn giữ vai trò "mỗi lúc một tấm".
  */
-export function useMoRieng(id: string, tuDong = true): TamMo {
+export function useMoRieng(idGoc: string, tuDong = true): TamMo {
+  /*
+   * ⚠️ MÃ RIÊNG CHO TỪNG LẦN DỰNG (26/09/2026).
+   *
+   * AI Code dựng MỘT `AgentMode` cho MỖI tab (ẩn bằng CSS), nên nút Hook/Model/
+   * MCP/Bộ nhớ… có mặt N lần với CÙNG `id`. Cả N bản cùng tưởng mình "đang mở";
+   * bấm vào trong tấm ở tab đang xem thì N−1 bản ẩn thấy cú bấm nằm NGOÀI `boc`
+   * của chúng và gọi `dong()` — đóng luôn tấm người dùng đang dùng. Lộ ra khi bộ
+   * đo bấm vào một bài học trong bảng Bộ nhớ: bảng đóng sập thay vì mở bài.
+   * Trộn `useId()` vào đây sửa MỘT lần cho mọi chỗ, kể cả chỗ viết sau này.
+   */
+  const rieng = useId();
+  const id = `${idGoc}#${rieng}`;
   const dangMoId = useSyncExternalStore(dangKy, doc, doc);
   const mo = dangMoId === id;
   /* `useRef<HTMLDivElement>(null)` chứ KHÔNG `useRef<HTMLDivElement | null>`:

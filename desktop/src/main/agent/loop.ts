@@ -29,6 +29,8 @@ import { docGhiChuDuAn } from './ghiChu';
 import { chayHook } from './hook';
 import { cauImLang, docCoHanIm, TRAN_MOT_LUOT_MS } from './hanImLang';
 import { dsKyNang, docThanKyNang, napKyNangMayChu } from './kyNang';
+import { docBoNho, docTatCa as docTatCaBoNho, mucLuc as mucLucBoNho, nhoBaiHoc, quenBaiHoc, tangLanKhop } from './boNho';
+import { BoDemLoiLap, dauHieuLoi, khopBoNho } from './dauHieuLoi';
 import { dsAgentPhu, docThanAgentPhu } from './agentPhu';
 import {
   datTokenChoDatTen, docPhien, dungLaiHienThi, luuPhien, taoPhienNhanh,
@@ -882,6 +884,16 @@ export async function chayLuot(
      `dung_ky_nang` xuống, model gọi, và mọi lời gọi đều trả "không có kỹ năng
      nào" — nó sẽ thử vài lần trước khi bỏ cuộc, mỗi lần một vòng tính tiền. */
   if (kyNang.length > 0) capabilities.push('ky_nang');
+  /* BỘ NHỚ (26/09/2026): mục lục bài học từ các việc trước — chỉ tiêu đề, thân
+     đọc khi cần. Bài loại "lỗi" có dấu hiệu KHÔNG vào đây: app tự khớp chúng
+     với đầu ra lệnh hỏng (xem chỗ chạy tool), không tốn token cho tới lúc
+     đúng lỗi đó xuất hiện. Luôn bật: bộ nhớ "chung" dùng được cả khi chưa mở
+     dự án. */
+  const boNhoMucLuc = await mucLucBoNho(boiCanh.goc).catch(() => '');
+  capabilities.push('bo_nho');
+  /** Lỗi lặp trong CHÍNH việc này — sống ở app nên nén ngữ cảnh không xoá được. */
+  const boDemLoi = new BoDemLoiLap();
+  let buocLenh = 0;
   if (ghiChuDuAn) {
     phat({ loai: 'tool', ten: ghiChuDuAn.ten, tomTat: 'quy ước dự án', vong: 'may' });
   }
@@ -950,6 +962,7 @@ export async function chayLuot(
             }
           : {}),
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
+        ...(boNhoMucLuc ? { boNho: boNhoMucLuc } : {}),
         ...(kyNang.length > 0 ? { kyNang } : {}),
         ...(agentPhu.length > 0 ? { agentPhu } : {}),
         ...(boiCanh.mucNoLuc ? { mucNoLuc: boiCanh.mucNoLuc } : {}),
@@ -1157,6 +1170,27 @@ export async function chayLuot(
           kq = boiCanhNote
             ? await chayToolAgent('', goi.name, goi.args, undefined, undefined, undefined, undefined, undefined, boiCanhNote)
             : { noiDung: 'LỖI: phiên này không bật quyền ghi ghi chú.', tomTat: 'không có quyền' };
+        } else if (goi.name === 'nho_bai_hoc' || goi.name === 'doc_bo_nho' || goi.name === 'quen_bai_hoc') {
+          /* BỘ NHỚ — trước chốt "chưa mở dự án": phạm vi "chung" không cần thư mục.
+             Không qua thẻ duyệt: ghi vào kho RIÊNG của app (userData), không chạm
+             dự án; người dùng xem/xoá được ở tab Bộ nhớ. Kho tự quét bí mật và
+             từ chối câu kiểu "luôn cho phép / bỏ qua duyệt". */
+          const a = goi.args ?? {};
+          if (goi.name === 'nho_bai_hoc') {
+            const r = await nhoBaiHoc(boiCanh.goc, a);
+            kq = r.ok
+              ? { noiDung: `Đã ${r.gop ? 'CẬP NHẬT' : 'lưu'} bài học #${r.id}. Lần sau gặp đúng việc/lỗi này sẽ dùng được.`, tomTat: `🧠 ${r.gop ? 'cập nhật' : 'nhớ'} #${r.id}` }
+              : { noiDung: `KHÔNG lưu được: ${r.loi}`, tomTat: 'không lưu được' };
+          } else if (goi.name === 'doc_bo_nho') {
+            const q: { id?: string; tim?: string } = {};
+            if (typeof a.id === 'string') q.id = a.id.replace(/^#/, '');
+            if (typeof a.tim === 'string') q.tim = a.tim;
+            kq = { noiDung: await docBoNho(boiCanh.goc, q), tomTat: '🧠 đọc bộ nhớ' };
+          } else {
+            const id = typeof a.id === 'string' ? a.id.replace(/^#/, '') : '';
+            const ok = id ? await quenBaiHoc(boiCanh.goc, id, typeof a.ly_do === 'string' ? a.ly_do : '') : false;
+            kq = ok ? { noiDung: `Đã quên bài học #${id}.`, tomTat: `🧠 quên #${id}` } : { noiDung: `Không có bài học #${id}.`, tomTat: 'không có' };
+          }
         } else if (goi.name === 'dung_ky_nang') {
           /* TRƯỚC chốt "chưa mở dự án": kỹ năng cài sẵn đọc được không cần thư mục. */
           /* Thân kỹ năng đi vào hội thoại dưới dạng KẾT QUẢ TOOL, không phải
@@ -1188,6 +1222,40 @@ export async function chayLuot(
          * thay vì bạn phát hiện sau ba bước nữa. Đẩy ra màn hình mà không đưa
          * vào hội thoại thì model không bao giờ biết.
          */
+        /*
+         * ── BỘ NHỚ + LỖI LẶP (26/09/2026) ──
+         * Lệnh HỎNG ⇒ rút "dấu hiệu" ổn định của lỗi (bỏ đường dẫn/số dòng):
+         *   1. Khớp một bài học đã lưu ⇒ chèn NGAY cách sửa đã biết vào kết quả.
+         *      Model khỏi phải mò lại con đường đã tốn tiền ở việc trước.
+         *   2. Lỗi này đã gặp ở bước trước TRONG CHÍNH việc này ⇒ nhắc đừng thử
+         *      biến thể. Bộ đếm sống ở app nên nén ngữ cảnh không xoá được.
+         * Chạy ở app, không tốn token nào cho tới đúng lúc lỗi xuất hiện.
+         */
+        if (kq && (goi.name === 'run_command' || goi.name === 'terminal_doc' || goi.name === 'terminal_gui' || goi.name === 'terminal_mo')) {
+          const maThoat = /Lệnh HỎNG, mã thoát (-?\d+)/.exec(kq.noiDung);
+          const hong = maThoat !== null || /LỆNH BỊ DỪNG/.test(kq.noiDung);
+          if (hong || goi.name !== 'run_command') {
+            const lenhGoc = String(goi.args?.command ?? goi.args?.lenh ?? goi.args?.chu ?? '');
+            const dh = dauHieuLoi(lenhGoc, kq.noiDung, maThoat ? Number(maThoat[1]) : (hong ? 1 : null));
+            if (dh) {
+              buocLenh += 1;
+              const khop = khopBoNho(dh, await docTatCaBoNho(boiCanh.goc).catch(() => []));
+              let them = '';
+              if (khop) {
+                void tangLanKhop(boiCanh.goc, khop.id).catch(() => {});
+                them += `\n\n⚡ BỘ NHỚ #${khop.id} khớp lỗi này — ${khop.tieuDe}\nÁp dụng: ${khop.apDung.slice(0, 400)}`;
+                phat({ loai: 'tool', ten: 'bộ nhớ', tomTat: `khớp #${khop.id}`, vong: 'may' });
+              }
+              const lap = boDemLoi.ghi(dh, buocLenh);
+              if (lap.lanThu >= 2) {
+                them += `\n\n⚠️ Lỗi này ĐÃ gặp ở lần chạy lệnh thứ ${lap.buocDau} của việc này (đây là lần ${lap.lanThu}). `
+                  + 'Đừng thử biến thể của cách cũ — xem lại chẩn đoán. Sửa được rồi thì gọi nho_bai_hoc để lần sau khỏi mò lại.';
+              }
+              if (them) kq = { ...kq, noiDung: `${kq.noiDung}${them}` };
+            }
+          }
+        }
+
         const hookSau = boiCanh.goc
           ? await chayHook({ moc: 'sauTool', goc: boiCanh.goc, tenTool: goi.name, signal: dieuKhien.signal })
           : { chan: false, ra: '', soKhop: 0 };
@@ -1490,6 +1558,8 @@ async function mgoiMotLuot(o: {
   capabilities: string[];
   workspace?: { name: string; platform: string; branch?: string };
   ghiChuDuAn?: { ten: string; noiDung: string };
+  /** Mục lục bộ nhớ (bài học từ các việc trước) — xem `boNho.ts`. */
+  boNho?: string;
   /** Tên + mô tả kỹ năng của dự án. KHÔNG kèm thân — xem `kyNang.ts`. */
   kyNang?: Array<{ ten: string; moTa: string }>;
   /** Loại agent phụ dự án khai (`.claude/agents/*.md`). Tên + mô tả, KHÔNG kèm thân. */
@@ -1560,6 +1630,8 @@ async function mgoiMotLuotThat(o: {
   capabilities: string[];
   workspace?: { name: string; platform: string; branch?: string };
   ghiChuDuAn?: { ten: string; noiDung: string };
+  /** Mục lục bộ nhớ (bài học từ các việc trước) — xem `boNho.ts`. */
+  boNho?: string;
   /** Tên + mô tả kỹ năng của dự án. KHÔNG kèm thân — xem `kyNang.ts`. */
   kyNang?: Array<{ ten: string; moTa: string }>;
   /** Loại agent phụ dự án khai (`.claude/agents/*.md`). Tên + mô tả, KHÔNG kèm thân. */
@@ -1601,6 +1673,15 @@ async function mgoiMotLuotThat(o: {
       capabilities: o.capabilities,
       workspace: o.workspace,
       ghiChuDuAn: o.ghiChuDuAn,
+      /* ⚠️⚠️ 26/09/2026: BA trường dưới TRƯỚC ĐÂY KHÔNG ĐƯỢC GỬI. Interface
+         khai đủ, lời gọi truyền đủ, máy chủ đọc đủ — chỉ riêng thân yêu cầu
+         này quên chúng. Hậu quả: model CHƯA TỪNG thấy danh sách kỹ năng hay
+         agent phụ của dự án, dù app vẫn bật khả năng `ky_nang`. Typecheck
+         không bắt được: bỏ sót một khoá trong object literal là hợp lệ. */
+      kyNang: o.kyNang,
+      agentPhu: o.agentPhu,
+      promptPhu: o.promptPhu,
+      boNho: o.boNho,
       mucNoLuc: o.mucNoLuc,
       model: o.model,
       laPhu: o.laPhu,

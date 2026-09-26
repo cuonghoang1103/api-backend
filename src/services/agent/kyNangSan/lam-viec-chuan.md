@@ -1,6 +1,6 @@
 ---
 name: lam-viec-chuan
-description: Quy trình làm việc của một kỹ sư giỏi cho MỌI việc lập trình khó hoặc nhiều bước — hiểu đúng yêu cầu, đọc mã trước khi sửa, lập kế hoạch, sửa nhỏ và kiểm bằng chạy thật, gỡ lỗi có hệ thống tới nguyên nhân gốc, không đoán, báo cáo trung thực. Dùng khi việc lớn, lỗi khó tìm, hoặc khi đã thử sửa một lần mà chưa được.
+description: Việc khó/nhiều bước hoặc đã sửa một lần không ăn: kế hoạch, sửa nhỏ, kiểm bằng chạy thật, gỡ lỗi tận gốc.
 ---
 
 # KỸ NĂNG: LÀM VIỆC CHUẨN

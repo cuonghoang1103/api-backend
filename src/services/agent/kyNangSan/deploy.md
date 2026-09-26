@@ -1,6 +1,6 @@
 ---
 name: deploy
-description: Triển khai (deploy) web/backend/API của MỌI ngôn ngữ lên VPS bằng Docker, hoặc lên Vercel/Netlify/Cloudflare/Render/Railway/Fly — dockerize, database, domain + HTTPS, CI/CD GitHub Actions, kiểm tra sau deploy. Dùng khi người dùng muốn đưa dự án lên mạng, dựng server chạy app, viết Dockerfile/docker-compose, hay sửa một lần deploy hỏng.
+description: Deploy web/API mọi ngôn ngữ: Dockerfile, compose, VPS + HTTPS, Vercel/Netlify/Cloudflare/Render, CI/CD GitHub Actions.
 ---
 
 # KỸ NĂNG: DEPLOY — đưa dự án lên chạy thật

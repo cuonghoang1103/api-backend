@@ -1,6 +1,6 @@
 ---
 name: bao-mat
-description: Rà và sửa lỗ hổng bảo mật web/API theo OWASP Top 10 — injection, XSS, CSRF, đăng nhập/JWT/cookie/mật khẩu, phân quyền và IDOR, CORS, upload, SSRF, lộ .env/API key, rate limit, CSP/HSTS, thư viện có lỗ hổng. Dùng khi được nhờ kiểm tra bảo mật/audit, làm đăng nhập/phân quyền, hay nghi lộ key.
+description: Rà/sửa bảo mật web/API theo OWASP: injection, XSS, CSRF, JWT/cookie, phân quyền/IDOR, lộ key, CORS, upload.
 ---
 
 # KỸ NĂNG: BẢO MẬT — tìm lỗ hổng theo luồng dữ liệu, sửa tận gốc, chứng minh được

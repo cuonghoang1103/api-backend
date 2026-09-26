@@ -234,7 +234,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   const body = req.body as {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
     ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
-    model?: unknown; agentPhu?: unknown; promptPhu?: unknown;
+    model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -298,6 +298,9 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
      đi kèm đúng lượt chạy việc phụ đó chứ không lặp ở mọi lượt. */
   const pp = body.promptPhu;
   const promptPhu = typeof pp === 'string' && pp.trim() ? pp.slice(0, 20_000) : undefined;
+  /* Mục lục BỘ NHỚ (26/09/2026) — ⚠️ phải thêm ở CẢ kiểu `body` lẫn chỗ dựng
+     đầu vào dưới đây (bẫy "vứt trường im lặng" đã ghi ở trên). */
+  const boNho = typeof body.boNho === 'string' && body.boNho.trim() ? body.boNho.slice(0, 2200) : undefined;
 
   // ─── 2. Mở SSE ───────────────────────────────────────────────
   res.setHeader('Content-Type', 'text/event-stream');
@@ -335,6 +338,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         ...(kyNang?.length ? { kyNang } : {}),
         ...(agentPhu?.length ? { agentPhu } : {}),
         ...(promptPhu ? { promptPhu } : {}),
+        ...(boNho ? { boNho } : {}),
         mucNoLuc: body.mucNoLuc,
         model: body.model,
         laPhu: body.laPhu,

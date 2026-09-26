@@ -1,6 +1,6 @@
 ---
 name: kiem-thu
-description: Viết và chạy test — unit/integration/e2e với Jest, Vitest, React Testing Library, Playwright, JUnit5+Mockito, pytest, xUnit; mock, DB test, coverage, TDD, test hồi quy; thiết kế test case (phân vùng tương đương, giá trị biên, bảng quyết định) cho SWT301. Dùng khi viết test, test đỏ/flaky, làm bài kiểm thử.
+description: Viết/chạy test (Jest, Vitest, Playwright, JUnit, pytest, xUnit), test đỏ/flaky, thiết kế test case (SWT301).
 ---
 
 # KỸ NĂNG: KIỂM THỬ — test bắt được lỗi thật, chạy xong tự dừng

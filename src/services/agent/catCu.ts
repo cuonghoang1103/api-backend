@@ -36,11 +36,20 @@ export interface KetQuaCat {
 function doDai(m: AgentMessage): number {
   // Ảnh KHÔNG tính: một tấm 2MB là ~2,7 triệu ký tự base64, tự nó vượt mọi
   // trần. Ảnh có đường quản lý riêng (nén ngữ cảnh gỡ ảnh cũ).
-  if (typeof m.content === 'string') return m.content.length;
+  //
+  // THAM SỐ tool_call CÓ tính (26/09/2026). Trước đó phép đo bỏ qua chúng, mà
+  // một `create_file` chở nguyên nội dung file mới trong `arguments` — một việc
+  // viết 10 file là hàng trăm nghìn ký tự đi lên cổng mỗi lượt trong khi vòng
+  // "ngữ cảnh đã dùng" trên giao diện vẫn báo thấp và `catLuotCu` không bao giờ
+  // thấy cần cắt.
+  const thamSo = m.role === 'assistant' && m.tool_calls
+    ? m.tool_calls.reduce((n, c) => n + c.function.name.length + c.function.arguments.length, 0)
+    : 0;
+  if (typeof m.content === 'string') return m.content.length + thamSo;
   if (Array.isArray(m.content)) {
     return m.content.reduce((n, k) => n + (k.type === 'text' ? k.text.length : 0), 0);
   }
-  return 0;
+  return thamSo;
 }
 
 export function tongKyTu(messages: readonly AgentMessage[]): number {

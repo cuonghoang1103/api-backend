@@ -1,6 +1,6 @@
 ---
 name: git-github
-description: Dùng Git/GitHub an toàn — nhánh, commit rõ nghĩa, pull/push, rebase hay merge, giải xung đột (conflict), stash, cherry-pick, cứu commit bằng reflog, .gitignore, LFS, lỡ đẩy key, gh CLI tạo PR/issue/release, xem CI đỏ. Dùng khi người dùng nhắc git, commit, push, nhánh, PR, conflict.
+description: Git/GitHub an toàn: nhánh, commit, rebase/merge, giải conflict, reflog, lỡ đẩy key, gh tạo PR, xem CI đỏ.
 ---
 
 # KỸ NĂNG: GIT & GITHUB — làm nhanh mà không bao giờ mất mã

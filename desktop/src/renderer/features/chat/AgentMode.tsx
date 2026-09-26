@@ -39,6 +39,7 @@ import { NutOpenCode } from './NutOpenCode';
 import { ID_FABLE, XinThemFable, moTaHanMuc, useHanMucFable } from './HanMucFable';
 import { GoiYFile, docTokenFile, type TokenFile } from './GoiYFile';
 import { BangHook } from './BangHook';
+import { BangBoNho } from './BangBoNho';
 import { ghepThamSo } from '../../../shared/lenhDuAn';
 import type {
   AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, CheDoQuyen, ModelAgent, MucNoLuc,
@@ -862,6 +863,7 @@ export function AgentMode({
         <NutMcp cuocId={cuocId} khoa={trangThai.dangChay} />
 
         <BangHook cuocId={cuocId} khoa={trangThai.dangChay} />
+        <BangBoNho cuocId={cuocId} khoa={trangThai.dangChay} />
 
         <button
           type="button"

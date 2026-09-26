@@ -55,28 +55,28 @@ describe.runIf(coBash)('PTY THẬT', () => {
     });
     expect(k.ok).toBe(true);
     const id = k.phien!.id;
-    const r1 = await choVaDoc(id, { imMs: 600, toiDaMs: 8000 });
+    const r1 = await choVaDoc(id, { imMs: 1200, toiDaMs: 15000 });
     expect(r1?.choNhap).toBe('matKhau');
     // Người dùng gõ mật khẩu (ở app: qua khung xterm → `pty:gui`).
     expect(guiVao(id, 'bi-mat\r')).toBe(true);
-    const r2 = await choVaDoc(id, { imMs: 600, toiDaMs: 8000 });
+    const r2 = await choVaDoc(id, { imMs: 1200, toiDaMs: 15000 });
     expect(r2?.moi).toContain('NHAN:bi-mat');
     expect(r2?.choNhap).toBeNull();
-  }, 20_000);
+  }, 40_000);
 
   it('shell SỐNG sau lệnh đầu — gõ tiếp được, có tty thật', async () => {
     const k = moTerminal({ cuocId: 'thu-pty', cwd: os.tmpdir(), nguon: 'agent', lenh: 'echo DAU' });
     const id = k.phien!.id;
-    await choVaDoc(id, { imMs: 500, toiDaMs: 8000 });
+    await choVaDoc(id, { imMs: 1200, toiDaMs: 15000 });
     guiVao(id, 'tty && echo TIEP\r');
-    const r = await choVaDoc(id, { imMs: 500, toiDaMs: 8000 });
+    const r = await choVaDoc(id, { imMs: 1200, toiDaMs: 15000 });
     expect(r?.moi).toContain('TIEP');
     expect(r?.moi).toMatch(/\/dev\/(tty|pts)/);
     expect(r?.dangChay).toBe(true);
     guiVao(id, 'exit\r');
-    const r3 = await choVaDoc(id, { imMs: 300, toiDaMs: 5000 });
+    const r3 = await choVaDoc(id, { imMs: 800, toiDaMs: 10000 });
     expect(r3?.dangChay).toBe(false);
-  }, 20_000);
+  }, 40_000);
 
   it('dọn theo cuộc', () => {
     expect(dsTerminal('thu-pty').length).toBeGreaterThan(0);

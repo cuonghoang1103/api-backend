@@ -1,6 +1,6 @@
 ---
 name: database
-description: Cơ sở dữ liệu PostgreSQL/MySQL/SQL Server/MongoDB — thiết kế bảng/khoá/quan hệ, migration AN TOÀN không mất dữ liệu (Prisma, EF Core, Flyway, Alembic, Django, Laravel), index + EXPLAIN, query chậm, N+1, transaction, backup/restore, seed, SQL injection. Dùng khi đụng schema, migration, truy vấn hay DB lỗi.
+description: CSDL PostgreSQL/MySQL/SQL Server/MongoDB: thiết kế bảng, migration an toàn, index/EXPLAIN, query chậm, backup.
 ---
 
 # KỸ NĂNG: DATABASE — schema đúng, migration không mất dữ liệu, truy vấn nhanh

@@ -890,6 +890,20 @@ export const modelAgentSchema = z.enum([
 ]);
 export type ModelAgent = z.infer<typeof modelAgentSchema>;
 
+/** Một bài học trong bộ nhớ agent — khớp `BaiHoc` ở `main/agent/boNho.ts`. */
+export interface AgentBaiHoc {
+  id: string;
+  phamVi: 'du_an' | 'chung';
+  loai: 'loi' | 'quy_uoc' | 'moi_truong' | 'so_thich';
+  tieuDe: string;
+  dauHieu?: string;
+  viSao: string;
+  apDung: string;
+  tao: string;
+  sua: string;
+  lanKhop: number;
+}
+
 /** Một phiên terminal thật — khớp `PhienTerminal` ở `main/terminal/phienTerminal.ts`. */
 export interface PhienPty {
   id: string;
@@ -1873,6 +1887,9 @@ export const INVOKE_CHANNELS = {
     tenTool: z.string().max(64),
   }),
   'agent:kyNangDs': agentCuocSchema,
+  /** Bộ nhớ bài học của agent (26/09/2026) — xem `main/agent/boNho.ts`. */
+  'agent:boNhoDs': agentCuocSchema,
+  'agent:boNhoXoa': z.object({ cuocId: z.string().min(1).max(64), id: z.string().min(1).max(80).regex(/^[a-z0-9-]+$/) }),
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -2531,6 +2548,9 @@ export interface DesktopBridge {
       Promise<{ chan: boolean; ra: string; goc: string | null; soKhop: number }>;
     /** Danh sách kỹ năng ĐÚNG NHƯ model sẽ nhận — tên + mô tả, không thân. */
     kyNangDs(cuocId: string): Promise<Array<{ ten: string; moTa: string }>>;
+    /** Bài học agent đã lưu (dự án của tab này + chung). */
+    boNhoDs(cuocId: string): Promise<AgentBaiHoc[]>;
+    boNhoXoa(cuocId: string, id: string): Promise<boolean>;
     /** Danh sách khoá đã "Luôn cho phép" ở dự án của cuộc này. */
     dsQuyenLau(cuocId: string): Promise<{ goc: string | null; khoa: string[] }>;
     /** Tìm trong kho AI Templates (skill/agent/command). */

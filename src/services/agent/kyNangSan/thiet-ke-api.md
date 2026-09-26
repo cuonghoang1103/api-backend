@@ -1,6 +1,6 @@
 ---
 name: thiet-ke-api
-description: Thiết kế REST API chuẩn (Express/Nest, Spring, FastAPI, ASP.NET) — đường dẫn, mã trạng thái, định dạng lỗi, validate, phân trang/lọc, phân quyền chống IDOR, rate limit, CORS, upload, Swagger/OpenAPI, SSE/WebSocket. Dùng khi tạo endpoint/route/controller, sửa API trả sai hay viết tài liệu API.
+description: Thiết kế REST API: route, mã trạng thái, định dạng lỗi, validate, phân trang, chống IDOR, Swagger/OpenAPI.
 ---
 
 # KỸ NĂNG: THIẾT KẾ API — đoán được, an toàn, tự kiểm được

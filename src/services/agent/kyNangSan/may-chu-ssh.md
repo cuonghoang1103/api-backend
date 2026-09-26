@@ -1,6 +1,6 @@
 ---
 name: may-chu-ssh
-description: Kết nối và quản trị server Linux (VPS, máy chủ ở nhà, máy ảo) qua SSH mà không bao giờ bị treo chờ mật khẩu — nạp SSH key, tạo user, cài Docker/Nginx/DB, tường lửa, bảo mật, xem log, backup, dọn đĩa, gỡ lỗi server. Dùng khi việc cần chạy lệnh trên một máy khác.
+description: Làm việc trên server Linux qua SSH không bị treo: nạp key, cài Docker/Nginx/DB, bảo mật, log, backup.
 ---
 
 # KỸ NĂNG: MÁY CHỦ QUA SSH — không tương tác, an toàn

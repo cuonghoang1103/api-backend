@@ -855,6 +855,12 @@ await ctx.addInitScript((nn) => {
       { id: 'p8', tieuDe: 'Việc đã ghim', duAn: 'api-backend', luucLuc: 1757000700000, soTinNhan: 9, ghim: true },
     ],
     phien: [], dsWorktree: [],
+    /* Bộ nhớ agent (26/09/2026): có dữ liệu để bảng Bộ nhớ vẽ ra thật. */
+    boNhoDs: [
+      { id: 'npm-peer-deps-eresolve', phamVi: 'du_an', loai: 'loi', tieuDe: 'npm install ERESOLVE → dùng --legacy-peer-deps', dauHieu: 'npm install :: npm err! code eresolve', viSao: 'react-day-picker@8 khai peer react<19, dự án dùng react 19.', apDung: 'npm install --legacy-peer-deps; đừng hạ react.', tao: '2026-09-26', sua: '2026-09-26', lanKhop: 3 },
+      { id: 'test-dung-vitest-run', phamVi: 'du_an', loai: 'quy_uoc', tieuDe: 'Chạy test bằng npx vitest run (không watch)', viSao: 'npm test mở watch mode và treo.', apDung: 'npx vitest run <file>', tao: '2026-09-26', sua: '2026-09-26', lanKhop: 0 },
+      { id: 'may-windows-powershell', phamVi: 'chung', loai: 'moi_truong', tieuDe: 'Máy Windows: lệnh chạy qua cmd.exe, dùng npm.cmd', viSao: 'PowerShell chặn script .ps1.', apDung: 'Gọi npm.cmd / npx.cmd.', tao: '2026-09-26', sua: '2026-09-26', lanKhop: 1 },
+    ],
     mcpTrangThai: { soTool: 0, server: [], daDung: 0, tran: 200 },
     getStatus: { state: 'idle' },
     /* HÀM, không phải hằng — mỗi tab một id, đúng như `taoCuoc()` thật.
@@ -1407,6 +1413,15 @@ const CHUAN_BI = {
     if (!/password/.test(chuTerm)) {
       throw new Error(`Khung Terminal mở nhưng xterm KHÔNG vẽ nội dung phiên (đọc được: "${chuTerm.slice(0, 80)}").`);
     }
+
+    /* ─── BỘ NHỚ (26/09/2026): mở bảng, ĐÒI thấy đủ bài học mẫu. ─── */
+    await tabHien.locator('.ct-agent-bar button', { hasText: 'Bộ nhớ' }).first().click();
+    await p.waitForTimeout(300);
+    const soBai = await tabHien.locator('.ct-bn-ds > li').count();
+    if (soBai !== 3) throw new Error(`Bảng Bộ nhớ không vẽ đủ bài học mẫu (thấy ${soBai}/3).`);
+    await tabHien.locator('.ct-bn-dau').first().click();
+    await p.waitForTimeout(200);
+    if (!(await tabHien.locator('.ct-bn-than').count())) throw new Error('Bấm một bài học mà không mở ra phần thân.');
   },
   '/notes': async (p) => {
     const demHang = () => p.evaluate(() =>

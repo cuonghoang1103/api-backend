@@ -1,6 +1,6 @@
 ---
 name: tinh-nang-ai
-description: Gắn AI/LLM vào app (Node hoặc FastAPI) — gọi OpenAI-compatible/Anthropic từ backend, stream SSE, prompt, JSON có cấu trúc, tool/agent, RAG với embedding + pgvector/Chroma, trần chi phí token, retry, bộ câu hỏi đánh giá. Dùng khi thêm chatbot, trợ lý AI, tóm tắt, hỏi đáp tài liệu.
+description: Gắn AI/LLM vào app: gọi API từ backend, stream, JSON có cấu trúc, tool calling, RAG + vector, trần chi phí.
 ---
 
 # KỸ NĂNG: TÍNH NĂNG AI — gắn LLM vào app mà không lộ key, không đốt tiền, không bịa

@@ -32,7 +32,7 @@ import { dinhDangTheoTen, napAnh, suaAnh } from './anh';
 import { hienKhoangTrang, timGanDung } from './ganDung';
 import { kiemDuongDanNgoai } from './ghiNgoai';
 import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
-import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
+import { catGiua, chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
 import { chayQuyenCao, hopSeHien, type Nen } from './quyenCao';
 import { goiYKhiThieuQuyen } from './npmQuyen';
 import { batLenhNen, docDauRaNen, dungLenhNen } from './lenhNen';
@@ -195,12 +195,32 @@ export function demFileSeLui(so: SoCuoc, k: number): number {
 }
 
 // ─── Trần ──────────────────────────────────────────────────────────
-const MAX_MUC_THU_MUC = 300;
-const MAX_DONG_DOC = 800;
+/*
+ * ⚠️ HẠ TRẦN 26/09/2026 — đo thật trên vòng lặp agent:
+ *
+ *  1. MỖI BƯỚC GỬI LẠI CẢ HỘI THOẠI. Một lần read_file 800 dòng (30–60k ký tự)
+ *     hay grep 200 × 300 ký tự (~60k) không tốn tiền một lần, nó bị chở theo
+ *     ở MỌI bước còn lại của việc đó. Trần thấp hơn = rẻ hơn theo cấp số bước.
+ *  2. NGHI CỔNG CẮT NGẦM mỗi khối nội dung dài ở ~6–8k ký tự. Dòng chân
+ *     "[… còn N dòng, gọi lại với offset=…]" nằm ở CUỐI nên bị cắt mất trước
+ *     tiên ⇒ model không biết mình chỉ thấy một phần ⇒ đọc đi đọc lại cùng
+ *     một đoạn. Vì thế mọi tool đọc giờ đặt DÒNG TIÊU ĐỀ Ở ĐẦU kết quả: tổng
+ *     bao nhiêu, đang xem khúc nào, còn tiếp không, gọi lại thế nào.
+ */
+const MAX_MUC_THU_MUC = 200;
+const MAX_DONG_DOC = 300;
 const MAX_DONG_DOC_TRAN = 2000;
-const MAX_KET_QUA_GREP = 200;
+/** Trần ký tự một lần read_file — cắt ở ranh giới dòng, kể cả khi `limit` cho nhiều hơn. */
+const TRAN_KY_TU_DOC = 16_000;
+/** Một dòng dài hơn thế gần như chắc là file minified/sinh máy — đọc hết là trả tiền cho rác. */
+const TRAN_KY_TU_MOT_DONG = 500;
+const MAX_KET_QUA_GREP = 100;
+const MAX_KET_QUA_GREP_TRAN = 300;
+const TRAN_KY_TU_DONG_GREP = 200;
+/** Đếm tổng số khớp tới đây thì thôi — đủ để nói "hơn N", khỏi quét cả ổ. */
+const TRAN_DEM_GREP = 10_000;
 const MAX_FILE_GLOB = 200;
-const MAX_DONG_DIFF = 1500;
+const MAX_DONG_DIFF = 400;
 /** Trần thời gian cho một lệnh git. Kho khổng lồ vẫn phải trả lời, hoặc chịu thua nhanh. */
 const TRAN_GIT_MS = 15_000;
 
@@ -429,10 +449,14 @@ async function toolListDir(goc: string, args: Record<string, unknown>): Promise<
   file.sort();
 
   const tatCa = [...thuMuc, ...file];
+  if (tatCa.length === 0) return { noiDung: `[${tuongDoi} — thư mục rỗng]`, tomTat: '0 mục' };
   const hien = tatCa.slice(0, MAX_MUC_THU_MUC);
   const con = tatCa.length - hien.length;
+  // Tiêu đề Ở ĐẦU (26/09/2026): xem chú thích "HẠ TRẦN" ở khối trần phía trên.
+  const tieuDe = `[${tuongDoi} — ${thuMuc.length} thư mục, ${file.length} file`
+    + (con > 0 ? `; CHỈ HIỆN ${hien.length}/${tatCa.length} mục đầu — dùng glob để lọc hẹp hơn]` : ']');
   return {
-    noiDung: hien.join('\n') + (con > 0 ? `\n[… còn ${con} mục nữa]` : '') || '(thư mục rỗng)',
+    noiDung: `${tieuDe}\n${hien.join('\n')}${con > 0 ? `\n[… còn ${con} mục nữa]` : ''}`,
     tomTat: `${thuMuc.length} thư mục, ${file.length} file`,
   };
 }
@@ -547,19 +571,62 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
     return { noiDung: `LỖI: "${args.path}" là file nhị phân, không đọc thành chữ được.`, tomTat: 'nhị phân' };
   }
 
+  return docLatChu(String(args.path ?? ''), tho, args);
+}
+
+/** Cắt một dòng dài, nói rõ đã bỏ bao nhiêu ký tự. */
+function catDongDai(d: string, tran: number): string {
+  return d.length > tran ? `${d.slice(0, tran)}…(+${d.length - tran} ký tự)` : d;
+}
+
+/**
+ * Cắt một lát file chữ để đưa cho model — tách khỏi `toolReadFile` để kiểm
+ * được mà không cần dựng file (26/09/2026).
+ *
+ * BA trần chồng nhau, cái nào chạm trước thì dừng ở đó:
+ *   - số dòng (`limit`, mặc định 300, tối đa 2000);
+ *   - số ký tự cả lát (16k) — cắt ở RANH GIỚI DÒNG, không bao giờ giữa dòng;
+ *   - số ký tự một dòng (500) — file minified một dòng 200k ký tự.
+ *
+ * Và TIÊU ĐỀ Ở ĐẦU: nếu cổng có cắt ngầm đuôi khối thì model vẫn biết mình
+ * đang ở dòng nào trên tổng bao nhiêu, và gọi tiếp bằng offset nào.
+ */
+export function docLatChu(nhan: string, tho: string, args: Record<string, unknown>): KetQuaTool {
   const dong = tho.split('\n');
+  // File kết thúc bằng '\n' ⇒ `split` đẻ thêm một phần tử rỗng không phải dòng thật.
+  if (dong.length > 1 && dong[dong.length - 1] === '') dong.pop();
+  const tong = dong.length;
   const tu = Math.max(1, Math.floor(Number(args.offset) || 1));
   const soLuong = Math.min(MAX_DONG_DOC_TRAN, Math.max(1, Math.floor(Number(args.limit) || MAX_DONG_DOC)));
-  const lat = dong.slice(tu - 1, tu - 1 + soLuong);
-  if (lat.length === 0) {
-    return { noiDung: `File chỉ có ${dong.length} dòng, không có dòng ${tu}.`, tomTat: 'ngoài phạm vi' };
+  if (tu > tong) {
+    return { noiDung: `[${nhan} — file chỉ có ${tong} dòng, không có dòng ${tu}.]`, tomTat: 'ngoài phạm vi' };
   }
 
-  const danhSo = lat.map((d, i) => `${tu + i}\t${d}`).join('\n');
-  const con = dong.length - (tu - 1 + lat.length);
+  const ra: string[] = [];
+  let kyTu = 0;
+  let soDongCat = 0;
+  let chamTranKyTu = false;
+  for (let i = tu - 1; i < Math.min(tong, tu - 1 + soLuong); i++) {
+    const goc = dong[i] ?? '';
+    const d = `${i + 1}\t${catDongDai(goc, TRAN_KY_TU_MOT_DONG)}`;
+    // Luôn nhận ít nhất MỘT dòng, kẻo lát rỗng và model gọi lại mãi cùng offset.
+    if (ra.length > 0 && kyTu + d.length + 1 > TRAN_KY_TU_DOC) { chamTranKyTu = true; break; }
+    if (goc.length > TRAN_KY_TU_MOT_DONG) soDongCat++;
+    ra.push(d);
+    kyTu += d.length + 1;
+  }
+
+  const den = tu + ra.length - 1;
+  const con = tong - den;
+  const tieuDe = `[${nhan} — dòng ${tu}–${den} / tổng ${tong} dòng`
+    + (con > 0 ? `, CÒN TIẾP: gọi read_file offset=${den + 1} để đọc tiếp` : ', đã hết file')
+    + (chamTranKyTu ? ` (dừng sớm vì chạm trần ${TRAN_KY_TU_DOC / 1000}k ký tự một lần đọc)` : '')
+    + (soDongCat > 0 ? `; ${soDongCat} dòng dài quá ${TRAN_KY_TU_MOT_DONG} ký tự đã bị cắt — dùng grep nếu cần phần sau của chúng` : '')
+    + ']';
   return {
-    noiDung: danhSo + (con > 0 ? `\n[… còn ${con} dòng nữa. Gọi lại read_file với offset=${tu + lat.length} để đọc tiếp.]` : ''),
-    tomTat: `${lat.length}/${dong.length} dòng`,
+    noiDung: `${tieuDe}\n${ra.join('\n')}`
+      + (con > 0 ? `\n[… còn ${con} dòng nữa. Gọi lại read_file với offset=${den + 1} để đọc tiếp.]` : ''),
+    tomTat: `${ra.length}/${tong} dòng`,
   };
 }
 
@@ -1229,8 +1296,11 @@ async function toolRunCommand(
          chỉ đọc lại được sau khi console đó đóng. Đẩy trọn một lần để màn
          hình vẫn thấy kết quả thay vì im lặng suốt lúc chạy. */
       if (q.ra !== '') boiCanh.onRa?.(q.ra);
+      /* Đường này trước KHÔNG có trần nào (26/09/2026): màn hình vẫn nhận trọn
+         ở trên, còn phần đưa vào hội thoại cắt giữa như lệnh thường. */
+      const catQ = catGiua(q.ra);
       return {
-        ma: q.ma, ra: q.ra, catBot: false, hetGio: false, giay: 0,
+        ma: q.ma, ra: catQ.ra, catBot: catQ.catBot, hetGio: false, giay: 0,
         nguoiDungHuy: q.nguoiDungHuy,
       };
     })()
@@ -1300,9 +1370,18 @@ async function toolGrep(goc: string, args: Record<string, unknown>): Promise<Ket
   const mauTho = String(args.pattern ?? '');
   if (!mauTho) return { noiDung: 'LỖI: thiếu "pattern".', tomTat: 'thiếu mẫu' };
 
+  /* Tham số MỚI 26/09/2026 (đều tuỳ chọn, thiếu thì hành xử như cũ):
+     - `max`            số dòng khớp tối đa được hiện (mặc định 100, trần 300);
+     - `chi_ten_file`   chỉ liệt kê file có khớp + số lần — rẻ nhất để định vị;
+     - `phan_biet_hoa`  phân biệt hoa/thường. Trước đây LUÔN 'i', nên tìm
+                        `User` (tên lớp) ra lẫn cả `user` (biến) khắp nơi. */
+  const max = Math.min(MAX_KET_QUA_GREP_TRAN, Math.max(1, Math.floor(Number(args.max) || MAX_KET_QUA_GREP)));
+  const chiTenFile = args.chi_ten_file === true;
+  const phanBietHoa = args.phan_biet_hoa === true;
+
   let re: RegExp;
   try {
-    re = new RegExp(mauTho, 'i');
+    re = new RegExp(mauTho, phanBietHoa ? '' : 'i');
   } catch (err) {
     return { noiDung: `LỖI: biểu thức chính quy sai — ${(err as Error).message}`, tomTat: 'regex sai' };
   }
@@ -1310,12 +1389,20 @@ async function toolGrep(goc: string, args: Record<string, unknown>): Promise<Ket
   const batDau = args.path ? await moTrongNguc(goc, String(args.path), { phaiCoThat: true }) : goc;
   const locTen = mauGlobThanhRegex(typeof args.glob === 'string' ? args.glob : undefined);
 
-  const ra: string[] = [];
+  /* GOM THEO FILE: đường dẫn in MỘT lần rồi tới các dòng `số: nội dung`.
+     Bản cũ lặp lại cả đường dẫn trên mỗi dòng — 100 dòng khớp trong cùng một
+     file `src/services/.../ten-rat-dai.ts` là vài nghìn ký tự chỉ để nhắc lại
+     một chuỗi. Và vẫn ĐẾM TIẾP sau khi đầy trần (tới `TRAN_DEM_GREP`) để tiêu
+     đề nói được tổng thật — "đã cắt" mà không nói cắt bao nhiêu thì model
+     không biết nên thu hẹp tới đâu. */
+  const theoFile: Array<{ file: string; dong: string[]; soKhop: number }> = [];
+  let soHien = 0;
+  let tongKhop = 0;
   let soFile = 0;
-  let dayTran = false;
+  let ngungDem = false;
 
   const di = async (thuMuc: string): Promise<void> => {
-    if (dayTran) return;
+    if (ngungDem) return;
     let muc: Dirent[];
     try {
       muc = await fs.readdir(thuMuc, { withFileTypes: true });
@@ -1323,7 +1410,7 @@ async function toolGrep(goc: string, args: Record<string, unknown>): Promise<Ket
       return; // không đọc được thư mục (quyền) — bỏ qua, không làm hỏng cả lượt
     }
     for (const m of muc) {
-      if (dayTran) return;
+      if (ngungDem) return;
       if (m.isDirectory()) {
         if (!thuMucBiCam(m.name)) await di(path.join(thuMuc, m.name));
         continue;
@@ -1340,26 +1427,60 @@ async function toolGrep(goc: string, args: Record<string, unknown>): Promise<Ket
       if (noi === null || noi.includes('\u0000')) continue;
       soFile++;
 
+      let nhom: { file: string; dong: string[]; soKhop: number } | null = null;
       const cacDong = noi.split('\n');
       for (let i = 0; i < cacDong.length; i++) {
         const dongNay = cacDong[i] ?? '';
         if (!re.test(dongNay)) continue;
-        ra.push(`${path.relative(goc, p)}:${i + 1}:${dongNay.trim().slice(0, 300)}`);
-        if (ra.length >= MAX_KET_QUA_GREP) { dayTran = true; return; }
+        tongKhop++;
+        if (!nhom) {
+          nhom = { file: path.relative(goc, p).split(path.sep).join('/'), dong: [], soKhop: 0 };
+          theoFile.push(nhom);
+        }
+        nhom.soKhop++;
+        if (!chiTenFile && soHien < max) {
+          nhom.dong.push(`  ${i + 1}: ${catDongDai(dongNay.trim(), TRAN_KY_TU_DONG_GREP)}`);
+          soHien++;
+        }
+        if (tongKhop >= TRAN_DEM_GREP) { ngungDem = true; break; }
       }
     }
   };
   await di(batDau);
 
-  if (ra.length === 0) {
+  if (tongKhop === 0) {
     return {
-      noiDung: `Không dòng nào khớp /${mauTho}/ (đã quét ${soFile} file).`,
+      noiDung: `[grep /${mauTho}/${phanBietHoa ? '' : 'i'} — KHÔNG dòng nào khớp (đã quét ${soFile} file)]`,
       tomTat: 'không khớp',
     };
   }
+
+  const tongStr = `${ngungDem ? 'HƠN ' : ''}${tongKhop}`;
+  if (chiTenFile) {
+    const hienFile = theoFile.slice(0, max);
+    const catFile = theoFile.length > hienFile.length || ngungDem;
+    const tieuDe = `[grep /${mauTho}/${phanBietHoa ? '' : 'i'} — ${tongStr} dòng khớp trong ${theoFile.length}${ngungDem ? '+' : ''} file`
+      + (catFile ? `; CHỈ HIỆN ${hienFile.length} file đầu — thu hẹp path/glob` : '; đủ, không cắt')
+      + ']';
+    return {
+      noiDung: `${tieuDe}\n${hienFile.map((f) => `${f.file} (${f.soKhop})`).join('\n')}`,
+      tomTat: `${theoFile.length} file`,
+    };
+  }
+
+  const daCat = soHien < tongKhop;
+  const tieuDe = `[grep /${mauTho}/${phanBietHoa ? '' : 'i'} — ${tongStr} dòng khớp trong ${theoFile.length}${ngungDem ? '+' : ''} file`
+    + (daCat
+      ? `; ĐÃ CẮT, chỉ hiện ${soHien} dòng đầu — thu hẹp path/glob, dùng chi_ten_file=true để xem file nào khớp, hoặc max (≤${MAX_KET_QUA_GREP_TRAN})`
+      : '; đủ, không cắt')
+    + ']';
+  const than = theoFile
+    .filter((f) => f.dong.length > 0)
+    .map((f) => `${f.file}${f.dong.length < f.soKhop ? ` (hiện ${f.dong.length}/${f.soKhop})` : ''}\n${f.dong.join('\n')}`)
+    .join('\n');
   return {
-    noiDung: ra.join('\n') + (dayTran ? `\n[… đã đạt trần ${MAX_KET_QUA_GREP} kết quả — hãy tìm hẹp hơn]` : ''),
-    tomTat: `${ra.length} kết quả${dayTran ? ' (đầy trần)' : ''}`,
+    noiDung: `${tieuDe}\n${than}`,
+    tomTat: `${tongStr} kết quả${daCat ? ' (cắt)' : ''}`,
   };
 }
 
@@ -1398,9 +1519,15 @@ async function toolGlob(goc: string, args: Record<string, unknown>): Promise<Ket
   // được sửa gần như luôn là file liên quan tới câu hỏi.
   thay.sort((a, b) => b.luc - a.luc);
   const hien = thay.slice(0, MAX_FILE_GLOB);
-  if (hien.length === 0) return { noiDung: `Không file nào khớp "${mau}".`, tomTat: 'không khớp' };
+  if (hien.length === 0) return { noiDung: `[glob "${mau}" — KHÔNG file nào khớp]`, tomTat: 'không khớp' };
+  // Tiêu đề Ở ĐẦU (26/09/2026): tổng thật + đã cắt chưa, phòng đuôi bị cổng cắt ngầm.
+  const tieuDe = `[glob "${mau}" — ${thay.length} file khớp`
+    + (thay.length > hien.length
+      ? `; CHỈ HIỆN ${hien.length} file sửa gần nhất — viết mẫu hẹp hơn để thấy phần còn lại]`
+      : ', xếp theo lần sửa gần nhất]');
   return {
-    noiDung: hien.map((t) => t.p).join('\n') + (thay.length > hien.length ? `\n[… còn ${thay.length - hien.length} file nữa]` : ''),
+    noiDung: `${tieuDe}\n${hien.map((t) => t.p).join('\n')}`
+      + (thay.length > hien.length ? `\n[… còn ${thay.length - hien.length} file nữa]` : ''),
     tomTat: `${thay.length} file`,
   };
 }
@@ -1485,8 +1612,13 @@ async function toolGitStatus(goc: string): Promise<KetQuaTool> {
 }
 
 async function toolGitDiff(goc: string, args: Record<string, unknown>): Promise<KetQuaTool> {
+  /* `stat: true` (26/09/2026) ⇒ `git diff --stat`: file nào đổi, bao nhiêu
+     dòng — vài trăm ký tự thay vì cả diff. Đúng bước đầu khi diff to: xem
+     bản đồ trước, rồi mới `path` vào từng file. */
+  const stat = args.stat === true;
   const thamSo = ['diff'];
   if (args.staged === true) thamSo.push('--staged');
+  if (stat) thamSo.push('--stat=200');
   if (typeof args.path === 'string' && args.path.trim()) {
     // Qua ngục để một `path` kiểu `../../` không biến git thành cửa sau đọc cả
     // ổ đĩa. `--` chặn git hiểu nhầm đường dẫn thành tên nhánh.
@@ -1498,11 +1630,19 @@ async function toolGitDiff(goc: string, args: Record<string, unknown>): Promise<
   if (loi) return { noiDung: `LỖI: ${loi}`, tomTat: 'không có git' };
   if (!ra.trim()) return { noiDung: '(không có thay đổi nào chưa commit)', tomTat: 'sạch' };
 
-  const dong = ra.split('\n');
+  const dong = ra.replace(/\n$/, '').split('\n');
   const cat = dong.length > MAX_DONG_DIFF;
+  const nhan = `git diff${args.staged === true ? ' --staged' : ''}${stat ? ' --stat' : ''}`;
+  // Tiêu đề Ở ĐẦU: model phải biết NGAY là mình chỉ thấy một phần.
+  const tieuDe = `[${nhan} — ${dong.length} dòng`
+    + (cat
+      ? `; ĐÃ CẮT, chỉ hiện ${MAX_DONG_DIFF} dòng đầu — gọi stat=true để xem danh sách file, rồi path=<file> để xem từng file]`
+      : ', đủ]');
+  // Dòng diff của file minified cũng cắt như read_file — một dòng 200k ký tự là 200k ký tự.
+  const than = dong.slice(0, MAX_DONG_DIFF).map((d) => catDongDai(d, TRAN_KY_TU_MOT_DONG)).join('\n');
   return {
-    noiDung: dong.slice(0, MAX_DONG_DIFF).join('\n') + (cat ? `\n[… diff bị cắt, còn ${dong.length - MAX_DONG_DIFF} dòng. Truyền "path" để xem hẹp hơn.]` : ''),
-    tomTat: `${Math.min(dong.length, MAX_DONG_DIFF)} dòng diff${cat ? ' (cắt)' : ''}`,
+    noiDung: `${tieuDe}\n${than}` + (cat ? `\n[… diff bị cắt, còn ${dong.length - MAX_DONG_DIFF} dòng. Truyền "path" để xem hẹp hơn.]` : ''),
+    tomTat: `${Math.min(dong.length, MAX_DONG_DIFF)} dòng ${stat ? 'stat' : 'diff'}${cat ? ' (cắt)' : ''}`,
   };
 }
 

@@ -27,8 +27,14 @@ import { spawn, type ChildProcess } from 'node:child_process';
 const MAX_NEN = 4;
 /** Giữ bấy nhiêu ký tự đầu ra gần nhất cho mỗi lệnh. */
 const TRAN_DEM = 200_000;
-/** Trả tối đa bấy nhiêu ký tự cho mỗi lần agent đọc. */
-const TRAN_DOC = 20_000;
+/**
+ * Trả tối đa bấy nhiêu ký tự cho mỗi lần agent đọc.
+ *
+ * Hạ 20k → 12k (26/09/2026): kết quả tool bị chở theo mọi bước sau của cuộc,
+ * và với lệnh nền thì phần đáng đọc là phần MỚI NHẤT (server lên chưa, vừa
+ * báo lỗi gì) — nên cắt thì bỏ phần CŨ ở đầu, giữ đuôi.
+ */
+export const TRAN_DOC = 12_000;
 /** Hạn giờ một lệnh nền — xem chú thích ở chỗ đặt hẹn giờ. */
 const TRAN_GIO_MS = 20 * 60_000;
 
@@ -187,9 +193,21 @@ export function docDauRaNen(id: string): DauRa {
     dangChay: muc.dangChay,
     ma: muc.ma,
     giay: Math.round((Date.now() - muc.batDau) / 1000),
-    moi: catBot ? `[… cắt bớt phần đầu …]\n${moi.slice(-TRAN_DOC)}` : moi,
+    moi: catBot ? catGiuDuoi(moi) : moi,
     coGiMoi: moi.length > 0,
   };
+}
+
+/**
+ * Giữ `TRAN_DOC` ký tự MỚI NHẤT, bắt đầu ở đầu một dòng nếu có dòng đủ gần,
+ * và NÓI RÕ đã bỏ bao nhiêu — "cắt bớt" trơn không cho model biết mình mất
+ * một dòng hay mất cả trăm nghìn ký tự log khởi động.
+ */
+function catGiuDuoi(moi: string): string {
+  let tu = moi.length - TRAN_DOC;
+  const nl = moi.indexOf('\n', tu);
+  if (nl >= 0 && nl - tu <= 400) tu = nl + 1;
+  return `[… ĐÃ BỎ ${tu} ký tự CŨ hơn ở đầu phần mới — chỉ giữ ${moi.length - tu} ký tự mới nhất …]\n${moi.slice(tu)}`;
 }
 
 export function dungLenhNen(id: string): { ok: boolean; loi?: string } {

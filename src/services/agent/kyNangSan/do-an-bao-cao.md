@@ -1,6 +1,6 @@
 ---
 name: do-an-bao-cao
-description: Viết tài liệu đồ án/môn học/dự án — README, SRS (use case, user story), sơ đồ Mermaid (use case, sequence, class, ERD, state, kiến trúc), tài liệu API, báo cáo kiểm thử, báo cáo đồ án, dàn ý slide bảo vệ, changelog, xuất Word. Dùng khi cần viết báo cáo, tài liệu, vẽ sơ đồ, làm README.
+description: Viết README, SRS, sơ đồ Mermaid (use case, ERD, sequence…), tài liệu API, báo cáo đồ án/kiểm thử.
 ---
 
 # KỸ NĂNG: TÀI LIỆU ĐỒ ÁN & BÁO CÁO — viết từ mã thật, đọc được, nộp được

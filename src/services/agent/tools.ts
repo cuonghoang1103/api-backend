@@ -49,6 +49,8 @@ export type AgentCapability =
    * gửi khả năng này, nên model không bao giờ được mời một tool nó không chạy.
    */
   | 'terminal'
+  /** BỘ NHỚ bài học qua các việc (26/09/2026) — app cũ không gửi ⇒ không thấy tool. */
+  | 'bo_nho'
   /**
    * Dự án CÓ kỹ năng (`.claude/skills/…`). App chỉ gửi khả năng này khi thật
    * sự tìm thấy ít nhất một cái — không thì model nhận một tool mà mọi lời gọi
@@ -128,14 +130,11 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     ring: 'client',
     capability: 'fs_read',
     description:
-      'Đọc nội dung một file, trả về kèm số dòng ở đầu mỗi dòng. ' +
-      'MẶC ĐỊNH chỉ đọc 800 dòng đầu — file dài hơn sẽ bị CẮT và cuối kết quả có ghi rõ còn bao nhiêu dòng. ' +
-      'Cần phần sau thì gọi lại với offset. Đừng đoán nội dung phần bị cắt. ' +
-      'ĐỌC ĐƯỢC CẢ ẢNH (.png .jpg .jpeg .gif .webp) — trả về tấm ảnh để bạn NHÌN, không phải mô tả. ' +
-      'Nhờ vậy bạn chụp được màn hình bất cứ thứ gì chạy được lệnh: ' +
-      'điện thoại Android qua cáp (`adb exec-out screencap -p > /tmp/man.png` rồi read_file nó), ' +
-      'máy ảo iOS (`xcrun simctl io booted screenshot /tmp/man.png`), ' +
-      'màn hình máy (`screencapture -x /tmp/man.png` trên macOS). Trần 1.4MB mỗi ảnh. ' +
+      'Đọc nội dung một file, kèm số dòng. DÒNG ĐẦU kết quả cho biết đang xem dòng nào / tổng bao nhiêu dòng '
+      + 'và offset để đọc tiếp. MẶC ĐỊNH 300 dòng. Đã biết dòng cần (từ grep) thì đọc HẸP bằng offset/limit '
+      + '(~60–120 dòng) — rẻ hơn nhiều. Đừng đoán nội dung phần chưa đọc. ' +
+      'ĐỌC ĐƯỢC CẢ ẢNH (.png .jpg .jpeg .gif .webp) — trả về tấm ảnh để bạn NHÌN (trần 1.4MB); chụp màn hình bằng lệnh '
+      + '(`screencapture -x`, `adb exec-out screencap -p`, `xcrun simctl io booted screenshot`) rồi read_file ảnh. ' +
       // Từ app desktop 0.5.45: `read_file` tự rút chữ khỏi PDF (xem
       // `desktop/src/main/agent/docPdf.ts`). Phải nói ra ở ĐÂY, vì đây là thứ
       // model đọc — không có dòng này thì nó vẫn tin PDF là file nhị phân và
@@ -160,7 +159,8 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     description:
       'Tìm một BIỂU THỨC CHÍNH QUY trong nội dung file, trả về dạng đường-dẫn:số-dòng:nội-dung. ' +
       'Đây là cách nhanh nhất để tìm nơi định nghĩa một hàm/biến — nhanh hơn nhiều so với đọc lần lượt từng file. ' +
-      'Kết quả cắt ở 200 dòng. ' +
+      'Kết quả gom theo file, mặc định tối đa 100 dòng khớp; dòng đầu kết quả nói tổng số khớp. MẶC ĐỊNH KHÔNG phân biệt hoa thường. ' +
+      'Chỉ cần biết file nào có ⇒ chi_ten_file: true (rẻ nhất). ' +
       'LƯU Ý tiếng Việt: \\b không khớp chữ có dấu, nên tìm từ tiếng Việt thì đừng dùng \\b.',
     parameters: {
       type: 'object',
@@ -168,6 +168,9 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
         pattern: { type: 'string', description: 'Biểu thức chính quy.' },
         path: { type: 'string', description: 'Chỉ tìm trong thư mục con này. Bỏ trống = cả dự án.' },
         glob: { type: 'string', description: 'Chỉ tìm trong file khớp mẫu, ví dụ "*.ts".' },
+        max: { type: 'integer', description: 'Tối đa bấy nhiêu dòng khớp (mặc định 100, trần 300).' },
+        chi_ten_file: { type: 'boolean', description: 'true = chỉ liệt kê file có khớp + số lần khớp.' },
+        phan_biet_hoa: { type: 'boolean', description: 'true = phân biệt hoa thường. Mặc định false.' },
       },
       required: ['pattern'],
     },
@@ -199,12 +202,13 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     ring: 'client',
     capability: 'git_read',
     description:
-      'Nội dung thay đổi chưa commit, dạng unified diff. Kết quả cắt ở 1500 dòng — diff to thì truyền path để thu hẹp.',
+      'Nội dung thay đổi chưa commit, dạng unified diff. Mặc định cắt ở 400 dòng — diff to thì xem stat trước rồi truyền path để thu hẹp.',
     parameters: {
       type: 'object',
       properties: {
         path: { type: 'string', description: 'Chỉ xem diff của đường dẫn này. Bỏ trống = tất cả.' },
         staged: { type: 'boolean', description: 'true = phần đã git add. Mặc định false.' },
+        stat: { type: 'boolean', description: 'true = chỉ tóm tắt file nào đổi bao nhiêu dòng (git diff --stat).' },
       },
     },
   },
@@ -225,10 +229,11 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     capability: 'fs_write',
     description:
       'Sửa một đoạn trong file có sẵn: thay old_text bằng new_text. ' +
-      'old_text phải khớp CHÍNH XÁC từng ký tự, kể cả thụt lề và xuống dòng — hãy đọc file bằng read_file ngay trước khi sửa, đừng dựa vào trí nhớ. ' +
+      'old_text phải khớp CHÍNH XÁC từng ký tự, kể cả thụt lề và xuống dòng — chép từ kết quả read_file còn trong hội thoại; '
+      + 'chỉ đọc lại (HẸP, đúng đoạn đó) khi file có thể đã đổi hoặc edit báo không khớp. ' +
       'old_text cũng phải DUY NHẤT trong file; nếu đoạn đó xuất hiện nhiều lần, lấy thêm dòng phía trên/dưới cho đủ riêng biệt. ' +
       'Người dùng phải DUYỆT thì mới ghi. Bị từ chối là chuyện bình thường: đừng gọi lại y hệt, hãy hỏi họ muốn khác chỗ nào. ' +
-      'Mỗi lần gọi sửa MỘT chỗ — nhiều chỗ thì gọi nhiều lần để người dùng duyệt từng cái.',
+      'Mỗi lần gọi sửa MỘT chỗ. NHIỀU chỗ trong cùng file ⇒ dùng sua_nhieu_cho (một lời gọi, một thẻ duyệt).',
     parameters: {
       type: 'object',
       properties: {
@@ -425,22 +430,17 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Chạy một lệnh shell trong thư mục dự án và trả về đầu ra kèm mã thoát. ' +
       'Dùng để CHẠY BỘ KIỂM và tự xác nhận việc mình vừa sửa: `npm test`, `npx tsc --noEmit`, `npm run build`, `pytest`. ' +
       'Người dùng phải DUYỆT từng lệnh, và họ nhìn thấy nguyên văn chuỗi lệnh — nên hãy viết lệnh ngắn, rõ, làm ĐÚNG MỘT việc. ' +
-      'KHÔNG chạy lệnh xoá, git commit/push: người dùng sẽ từ chối và bạn mất một lượt. '
-      + 'CÀI GÓI THÌ ĐƯỢC, và khi nó hỏng vì thiếu quyền thì ĐỪNG bảo người dùng tự mở cửa sổ quyền quản trị '
+      'Không TỰ Ý xoá/cài/commit/push khi chưa được nhờ; được nhờ thì cứ gọi tool (commit dùng git_commit, xoá file dùng xoa_file). '
+      + 'Cài gói hỏng vì thiếu quyền thì ĐỪNG bảo người dùng tự mở cửa sổ quyền quản trị '
       + 'rồi gõ tay — đó là quy trình họ làm mãi không xong. Đọc phần gợi ý ở cuối đầu ra: với `npm -g` thì '
       + 'đổi `prefix`, còn lại thì gọi lại chính tool này với `quyen_cao: true`. ' +
       '⛔ TUYỆT ĐỐI KHÔNG GHI FILE BẰNG LỆNH (Out-File, >, Set-Content, WriteAllText, sed -i): PowerShell ghi UTF-16 '
-      + 'và lớp thoát của shell nuốt dấu ngoặc kép — đã làm hỏng mã của người dùng thật. Dùng edit_file/create_file. ' +
-      'RA MẠNG ĐƯỢC: `curl`, `ping`, `dig`, `ssh`, `scp`, `rsync` chạy được — chỉ luôn phải xin duyệt và không được nhớ. '
-      + 'Việc nào CẦN mạng (đo tốc độ một trang, gọi thử một API, xem log trên VPS của người dùng) thì cứ gọi tool để họ bấm duyệt, '
-      + 'đừng trả lời rằng bạn không có công cụ. ' +
-      'KHÔNG dùng lệnh để đọc file — đã có read_file, và những file bị chặn thì chặn là có lý do. ' +
-      'Lệnh chạy KHÔNG có bàn phím: thứ gì hỏi lại người dùng sẽ treo tới khi hết giờ. Thêm cờ không-hỏi (ví dụ `--yes`) nếu cần. ' +
-      'Đầu ra bị cắt ở khoảng 24.000 ký tự (giữ đầu và đuôi, bỏ khúc giữa). '
-      + '📱 DI ĐỘNG: máy ảo/giả lập KHÔNG BAO GIỜ tự dừng — `xcrun simctl boot`, `emulator -avd`, '
-      + '`flutter run`, `npx expo start`, `adb logcat` phải chạy bằng chay_lenh_nen, dùng run_command là treo tới hết giờ. '
-      + 'Còn build và test (`xcodebuild test`, `./gradlew assembleDebug`, `flutter test`, `pod install`) thì dùng '
-      + 'run_command NHƯNG nhớ khai timeout_seconds 900-1800.',
+      + 'và lớp thoát của shell nuốt dấu ngoặc kép. Dùng edit_file/create_file. ' +
+      'RA MẠNG ĐƯỢC (`curl`, `ssh`, `scp`, `rsync`) — luôn xin duyệt. KHÔNG dùng lệnh để đọc file (đã có read_file). ' +
+      'KHÔNG có bàn phím: lệnh hỏi lại sẽ treo ⇒ thêm cờ không-hỏi (`--yes`, `-y`); cần hỏi-đáp thật thì dùng terminal_mo. ' +
+      'Đầu ra dài bị cắt giữa (giữ đầu + đuôi) — tự lọc bằng `| tail -n 60`, `--silent`, `-q`. '
+      + 'Thứ không bao giờ tự dừng (dev server, `flutter run`, `emulator`, `adb logcat`) ⇒ chay_lenh_nen. '
+      + 'Build/test di động lâu (`xcodebuild`, `./gradlew`, `pod install`) ⇒ khai timeout_seconds 900-1800.',
     parameters: {
       type: 'object',
       properties: {
@@ -448,10 +448,8 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
         timeout_seconds: {
           type: 'integer',
           description:
-            'Trần thời gian tính bằng giây. Mặc định 120, tối đa 1800. '
-            + 'HÃY KHAI CAO khi biết việc sẽ lâu — build di động là ví dụ điển hình: '
-            + '`xcodebuild`, `./gradlew`, `flutter build`, `pod install` lần đầu thường 5-20 phút. '
-            + 'Để mặc định 120 thì lệnh bị cắt giữa chừng và bạn sẽ tưởng nó HỎNG, rồi báo sai nguyên nhân.',
+            'Trần thời gian (giây). Mặc định 120, tối đa 1800. Việc lâu (build, cài lần đầu) thì khai cao — '
+            + 'để 120 thì lệnh bị cắt giữa chừng và bạn sẽ tưởng nó HỎNG.',
         },
         quyen_cao: {
           type: 'boolean',
@@ -612,6 +610,57 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       type: 'object',
       properties: { id: { type: 'string', description: 'Mã do chay_lenh_nen trả về.' } },
       required: ['id'],
+    },
+  },
+
+  // ─── BỘ NHỚ bài học (26/09/2026) ────────────────────────────────
+  {
+    name: 'nho_bai_hoc',
+    ring: 'client',
+    capability: 'bo_nho',
+    description:
+      'Lưu MỘT bài học để các việc SAU không lặp lại sai lầm: lỗi đã sửa được sau nhiều lần thử, điều người dùng vừa sửa lưng, '
+      + 'quy ước/lệnh của dự án không đoán ra từ mã, đặc thù môi trường máy. Ngắn, cụ thể, đã kiểm bằng chạy thật. '
+      + 'Trùng bài cũ thì tự gộp. Không ghi bí mật (app từ chối). Không cần duyệt — người dùng xem/xoá ở tab Bộ nhớ.',
+    parameters: {
+      type: 'object',
+      properties: {
+        pham_vi: { type: 'string', enum: ['du_an', 'chung'], description: 'du_an = chỉ dự án này (mặc định); chung = mọi dự án trên máy này (môi trường, sở thích).' },
+        loai: { type: 'string', enum: ['loi', 'quy_uoc', 'moi_truong', 'so_thich'], description: 'Loại bài học.' },
+        tieu_de: { type: 'string', description: '≤80 ký tự, vd "npm install ERESOLVE → dùng --legacy-peer-deps".' },
+        dau_hieu: { type: 'string', description: 'Loại loi: dòng lỗi đặc trưng (vd "npm ERR! code ERESOLVE") để app tự khớp lần sau.' },
+        vi_sao: { type: 'string', description: '≤500 ký tự: nguyên nhân gốc.' },
+        ap_dung: { type: 'string', description: '≤700 ký tự: làm gì cho đúng (lệnh, bước), và điều KHÔNG nên làm.' },
+        thay_id: { type: 'string', description: 'Sửa bài cũ có id này thay vì tạo mới.' },
+      },
+      required: ['loai', 'tieu_de', 'vi_sao', 'ap_dung'],
+    },
+  },
+  {
+    name: 'doc_bo_nho',
+    ring: 'client',
+    capability: 'bo_nho',
+    description: 'Đọc thân bài học theo id (từ mục lục BỘ NHỚ) hoặc tìm theo chữ. Đọc khi việc đang làm khớp một tiêu đề trong mục lục.',
+    parameters: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'Id bài học, vd "npm-peer-deps-eresolve".' },
+        tim: { type: 'string', description: 'Tìm bài học chứa chữ này.' },
+      },
+    },
+  },
+  {
+    name: 'quen_bai_hoc',
+    ring: 'client',
+    capability: 'bo_nho',
+    description: 'Xoá một bài học đã SAI hoặc lỗi thời (bài học sai có hại hơn không có).',
+    parameters: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'Id bài học.' },
+        ly_do: { type: 'string', description: 'Vì sao nó sai/lỗi thời.' },
+      },
+      required: ['id', 'ly_do'],
     },
   },
 
@@ -1171,7 +1220,7 @@ export function laToolMcp(name: string): boolean {
  */
 export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
-  'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal',
+  'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal', 'bo_nho',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

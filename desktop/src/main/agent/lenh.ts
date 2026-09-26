@@ -231,8 +231,16 @@ export const TRAN_GIAY_TOI_DA = 1800;
  * `npm test` của một dự án lớn in ra hàng megabyte. Nhét cả vào hội thoại thì
  * nó được chở theo trong MỌI lượt gọi cổng sau đó — một lần chạy test đắt hơn
  * cả việc đọc mười file.
+ *
+ * Hạ 24k → 12k (26/09/2026): đo thật, mỗi bước agent gửi lại toàn bộ hội thoại,
+ * nên 24k đầu ra của một lần `npm test` bị trả tiền lại ở mọi bước sau. Phần có
+ * giá trị (lệnh gì, hỏng ở đâu, tổng kết) gần như luôn nằm gọn trong 12k.
  */
-const TRAN_KY_TU_RA = 24_000;
+export const TRAN_KY_TU_RA = 12_000;
+/** Tỉ lệ giữ ở ĐẦU; phần còn lại giữ ở CUỐI — lỗi và tổng kết thường ở cuối. */
+const TI_LE_DAU = 0.35;
+/** Lùi tối đa bấy nhiêu ký tự để cắt đúng ranh giới dòng thay vì giữa dòng. */
+const LUI_RANH_GIOI = 400;
 
 export interface KetQuaLenh {
   /** Mã thoát. `null` khi bị giết (hết giờ hoặc người dùng dừng). */
@@ -244,18 +252,27 @@ export interface KetQuaLenh {
 }
 
 /**
- * Cắt phần GIỮA, giữ cả đầu lẫn đuôi.
+ * Cắt phần GIỮA, giữ 35% ĐẦU + 65% CUỐI.
  *
  * Đầu có bối cảnh (lệnh nào đang chạy, cấu hình gì), đuôi có kết luận (bao
  * nhiêu test hỏng, lỗi ở đâu). Cắt đuôi thì mất kết luận; cắt đầu thì mất bối
  * cảnh. Chỗ ít giá trị nhất luôn là khúc giữa — hàng nghìn dòng "✓ passed".
+ * Đuôi được phần to hơn vì stack trace và "N failed" nằm ở đó.
+ *
+ * Cắt ở RANH GIỚI DÒNG khi có một dấu xuống dòng đủ gần (26/09/2026): nửa dòng
+ * "Error: Cannot find mod" ở mép cắt làm model đoán bừa phần còn lại.
  */
-function catGiua(s: string): { ra: string; catBot: boolean } {
-  if (s.length <= TRAN_KY_TU_RA) return { ra: s, catBot: false };
-  const dau = Math.floor(TRAN_KY_TU_RA * 0.35);
-  const duoi = TRAN_KY_TU_RA - dau;
+export function catGiua(s: string, tran: number = TRAN_KY_TU_RA): { ra: string; catBot: boolean } {
+  if (s.length <= tran) return { ra: s, catBot: false };
+  let hetDau = Math.floor(tran * TI_LE_DAU);
+  let tuDuoi = s.length - (tran - hetDau);
+  const nlDau = s.lastIndexOf('\n', hetDau);
+  if (nlDau > 0 && hetDau - nlDau <= LUI_RANH_GIOI) hetDau = nlDau;
+  const nlDuoi = s.indexOf('\n', tuDuoi);
+  if (nlDuoi >= 0 && nlDuoi - tuDuoi <= LUI_RANH_GIOI) tuDuoi = nlDuoi + 1;
+  const bo = tuDuoi - hetDau;
   return {
-    ra: `${s.slice(0, dau)}\n\n[… đã cắt ${s.length - TRAN_KY_TU_RA} ký tự ở giữa …]\n\n${s.slice(-duoi)}`,
+    ra: `${s.slice(0, hetDau)}\n\n[… ĐÃ BỎ ${bo} ký tự ở GIỮA đầu ra (giữ ${hetDau} ký tự đầu + ${s.length - tuDuoi} ký tự cuối) …]\n\n${s.slice(tuDuoi)}`,
     catBot: true,
   };
 }

@@ -23,6 +23,7 @@ import {
   SpellCheck,
   PenTool,
   ChevronRight,
+  Target,
 } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import type { LanguageOverview } from '@/types/language';
@@ -279,6 +280,15 @@ export default function LanguageHomePage() {
               title="Luyện tập"
               desc="Bài tập ngắn mỗi ngày, tính XP và chuỗi ngày"
             />
+            {/* IELTS sống ở đây, không ở /tech-trends nữa: một chỗ học tiếng Anh. */}
+            {code === 'en' && (
+              <StartCard
+                href="/language/en/ielts"
+                icon={<Target size={22} strokeWidth={1.75} />}
+                title="IELTS nền tảng"
+                desc="15 ngày từ con số 0, có gia sư AI giảng từng trang"
+              />
+            )}
           </div>
         </motion.section>
 

@@ -21,7 +21,16 @@ const DAN_THEO_Y: Record<string, string> = {
   dich: 'Dịch sang tiếng Việt tự nhiên, không dịch từng từ. Chỉ trả về bản dịch, không giải thích.',
   day: 'Giảng phần này cho người Việt đang luyện IELTS: ý chính, từ đáng học, và một mẹo nhớ. Tối đa 6 câu.',
   dethi: 'Phần này hay ra ở dạng câu hỏi IELTS nào? Nói dạng đề và một mẹo làm đúng dạng đó. Tối đa 4 câu.',
+  // Bốn nút của gia sư trên trang /language/en/ielts: người học hỏi về CẢ
+  // TRANG (bối cảnh = chữ của bài), không phải một chữ vừa tô.
+  giang: 'Giảng lại phần này cho người mới bắt đầu, như gia sư ngồi cạnh: đi từng bước, câu ngắn, có ví dụ đời thường, chỉ ra lỗi người Việt hay mắc. Tối đa 12 câu.',
+  huongdan: 'Hướng dẫn cách HỌC phần này: làm gì trước, làm gì sau, mỗi bước bao lâu, và cách tự kiểm tra xem đã hiểu chưa. Danh sách đánh số, tối đa 7 bước.',
+  vidu: 'Cho 5 ví dụ MỚI (không lặp lại ví dụ trong bối cảnh), đúng chủ điểm của phần này, mỗi ví dụ kèm bản dịch tiếng Việt.',
+  kiemtra: 'Ra 3 câu hỏi ngắn để kiểm tra người học đã hiểu phần này chưa. Đưa câu hỏi trước; đáp án để riêng ở cuối dưới dòng "**Đáp án**".',
 };
+
+/** Các ý giảng cả trang cần câu trả lời dài hơn một ý hỏi về một chữ. */
+const Y_DAI = new Set(['giang', 'huongdan', 'vidu', 'kiemtra']);
 
 export const CAC_Y = Object.keys(DAN_THEO_Y);
 
@@ -50,9 +59,9 @@ export async function hoiVeChu(
     purpose: 'language_tutor',
     feature: 'chat',
     userId,
-    maxTokens: 500,
+    maxTokens: Y_DAI.has(y) || (!dan && tuHoi) ? 1100 : 500,
     system: 'Bạn là gia sư IELTS, trả lời bằng TIẾNG VIỆT, ngắn và thẳng.\n'
-      + `${dan ?? 'Trả lời đúng câu người học hỏi, tối đa 6 câu.'}\n`
+      + `${dan ?? 'Trả lời đúng câu người học hỏi, rõ ràng, tối đa 10 câu.'}\n`
       + 'Không mở bài, không chúc, không nhắc lại câu hỏi.\n'
       // Từ 19/09/2026 app DỰNG markdown thật (`NoiDungMarkdown`), nên ở đây
       // KHÔNG cấm nữa — chữ đậm ở từ khoá và danh sách gạch đầu dòng làm câu

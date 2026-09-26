@@ -19,6 +19,17 @@ export const PHAN_CUA_CHANG = [
 ] as const;
 export const PHAN_DUNG_CHUNG = ['roadmap', 'life', 'exam', 'typing'] as const;
 
+/**
+ * Khoá IELTS 15 ngày trên web (/language/en/ielts, 26/09/2026) — nội dung
+ * tĩnh trong frontend, chỉ TIẾN ĐỘ đi qua đây để laptop và iPad thấy cùng một
+ * chỗ đang học. Không phải một "chặng" nên đứng ngoài CAC_CHANG.
+ *   bai     — muc = id bài, xong = đã học xong
+ *   baitap  — muc = id bài tập, diem = % đúng lần làm gần nhất
+ *   kehoach — muc = 'ke-hoach', ghiChu = JSON kế hoạch học (ngày bắt đầu, lịch…)
+ */
+export const SACH = 'sach1';
+export const PHAN_SACH = ['bai', 'baitap', 'kehoach'] as const;
+
 type Chang = (typeof CAC_CHANG)[number];
 
 function chuanChang(v: string): Chang {
@@ -120,10 +131,11 @@ export async function phanDungChung(kind: string) {
 // ─── Tiến độ ──────────────────────────────────────────────────────────────
 
 export async function layTienDo(userId: number, stage?: string) {
-  const where = stage ? { userId, stage: chuanChang(stage) } : { userId };
+  const where = stage ? { userId, stage: stage === SACH ? SACH : chuanChang(stage) } : { userId };
   const ds = await prisma.ieltsProgress.findMany({
     where,
-    select: { stage: true, kind: true, muc: true, xong: true, diem: true, updatedAt: true },
+    // ghiChu chỉ cần cho kế hoạch học của khoá sách — các chặng cũ không dùng.
+    select: { stage: true, kind: true, muc: true, xong: true, diem: true, updatedAt: true, ...(stage === SACH ? { ghiChu: true } : {}) },
     orderBy: { updatedAt: 'desc' },
     take: 5000,
   });
@@ -143,11 +155,13 @@ export async function ghiTienDo(
 
   let ghi = 0;
   for (const m of ds) {
-    const stage = chuanChang(String(m.stage));
+    const laSach = String(m.stage) === SACH;
+    const stage: string = laSach ? SACH : chuanChang(String(m.stage));
     const kind = String(m.kind);
     const muc = String(m.muc).slice(0, 120);
     if (!muc) continue;
-    if (![...PHAN_CUA_CHANG, ...PHAN_DUNG_CHUNG].includes(kind as never)) {
+    const hopLe: readonly string[] = laSach ? PHAN_SACH : [...PHAN_CUA_CHANG, ...PHAN_DUNG_CHUNG];
+    if (!hopLe.includes(kind)) {
       throw new BadRequestError(`Phần không hợp lệ: ${kind}`);
     }
     const xong = m.xong !== false;
@@ -163,7 +177,7 @@ export async function ghiTienDo(
 }
 
 export async function xoaTienDo(userId: number, stage: string, kind: string, muc: string) {
-  const s = chuanChang(stage);
+  const s = stage === SACH ? SACH : chuanChang(stage);
   const { count } = await prisma.ieltsProgress.deleteMany({
     where: { userId, stage: s, kind, muc },
   });

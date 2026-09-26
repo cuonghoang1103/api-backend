@@ -199,7 +199,8 @@
   gap: 12px;
 }
 @media (min-width: 768px) {
-  .startGrid { grid-template-columns: 1fr 1fr; }
+  /* 2 thẻ (mọi ngôn ngữ) hoặc 3 thẻ (Tiếng Anh có thêm IELTS) — tự chia cột. */
+  .startGrid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 }
 
 .review {

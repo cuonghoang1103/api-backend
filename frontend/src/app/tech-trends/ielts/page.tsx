@@ -1,28 +1,15 @@
-import type { Metadata } from 'next';
-import IeltsClient from './IeltsClient';
+import { permanentRedirect } from 'next/navigation';
 
 /**
- * Route TĨNH cạnh route động /tech-trends/[slug] — Next ưu tiên segment tĩnh
- * nên bài viết trùng slug cũng không nuốt được trang này. Dữ liệu tĩnh nên
- * trang prerender được và mở nhanh trên điện thoại.
+ * IELTS đã chuyển vào My Language → Tiếng Anh (26/09/2026): người dùng không
+ * muốn hai chỗ học IELTS tách rời. Giữ route này để link cũ và kết quả tìm
+ * kiếm vẫn tới được trang mới.
+ *
+ * Các file giao diện cũ trong thư mục này (IeltsClient, *View.tsx, data/) KHÔNG
+ * còn được trang nào dùng, nhưng CHƯA xoá: `data/**` vẫn là nguồn để
+ * `scripts/ielts-dung-json.mts` dựng nội dung IELTS cho app iOS, và
+ * `src/services/ielts/nguon.test.ts` đối chiếu với nó.
  */
-
-export const metadata: Metadata = {
-  title: 'Lộ trình IELTS 0 → 7.5 — 4 chặng band, đủ 4 kỹ năng',
-  description:
-    'Lộ trình IELTS từ số 0 lên 7.5 chia 4 chặng band: mỗi chặng ghi rõ mỗi ngày làm gì cho Nghe, '
-    + 'Đọc, Viết, Nói, mốc phải đạt để lên chặng sau, và những sai lầm hay mắc ở đúng chặng đó.',
-  openGraph: {
-    title: 'Lộ trình IELTS 0 → 7.5 | CuongThai',
-    description:
-      '4 chặng band, kế hoạch hằng ngày cho từng kỹ năng, mốc kiểm tra và bẫy thường gặp.',
-    url: 'https://cuongthai.com/tech-trends/ielts',
-    type: 'article',
-    images: ['/opengraph-image'],
-  },
-  alternates: { canonical: 'https://cuongthai.com/tech-trends/ielts' },
-};
-
-export default function IeltsPage() {
-  return <IeltsClient />;
+export default function IeltsMovedPage() {
+  permanentRedirect('/language/en/ielts');
 }

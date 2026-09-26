@@ -70,6 +70,8 @@ function SortableCard({ issue, lk, onOpen, disabled, subtasks, inDone, showParen
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn('rounded-[7px] outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)]', isDragging && 'opacity-40')}
       {...attributes}
+      // Không kéo được (chỉ xem / đang khoá chỉnh sửa) vẫn MỞ thẻ được ⇒ không phải "disabled".
+      aria-disabled={undefined}
       {...listeners}
       onClick={() => onOpen(issue.number)}
       onKeyDown={(e) => {

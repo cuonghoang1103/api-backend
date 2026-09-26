@@ -75,7 +75,10 @@ export function EditLockButton({ config }: { config: ProjectConfig }) {
   useEffect(() => {
     const onChange = (e: Event) => {
       const d = (e as CustomEvent<{ pid: number; locked: boolean }>).detail;
-      if (d?.pid === pid) qc.setQueryData(lockKey(pid), { locked: d.locked, since: d.locked ? new Date().toISOString() : null });
+      if (d?.pid === pid) {
+        qc.setQueryData(lockKey(pid), { locked: d.locked, since: d.locked ? new Date().toISOString() : null });
+        void qc.invalidateQueries({ queryKey: ['work', 'project', pid] }); // cấu hình dự án ⇒ bật/tắt quyền sửa trên mọi màn
+      }
     };
     window.addEventListener('ctwork:edit-lock', onChange);
     return () => window.removeEventListener('ctwork:edit-lock', onChange);
@@ -85,6 +88,7 @@ export function EditLockButton({ config }: { config: ProjectConfig }) {
     mutationFn: (next: boolean) => workApi.setEditLock(pid, next),
     onSuccess: (r) => {
       qc.setQueryData(lockKey(pid), r);
+      void qc.invalidateQueries({ queryKey: ['work', 'project', pid] });
       toast.success(r.locked ? 'Editing locked — browse freely, nothing will change by accident' : 'Editing unlocked', { id: TOAST_ID });
     },
     onError: (err) => toast.error(workError(err, 'Could not change the edit lock')),
@@ -109,3 +113,37 @@ export function EditLockButton({ config }: { config: ProjectConfig }) {
     </button>
   );
 }
+
+/**
+ * Dải thông báo dưới header khi đang khoá: người dùng luôn biết vì sao không sửa
+ * được, và mở khoá ngay tại chỗ (không phải đi tìm nút trên header).
+ */
+export function EditLockBanner({ config }: { config: ProjectConfig }) {
+  if (!config.editLocked) return null;
+  return (
+    <div role="status" className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1 border-b border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_10%,transparent)] px-3 py-1.5 text-[12.5px] text-[var(--w-text)] md:px-5">
+      <Lock size={13} className="shrink-0 text-[var(--w-orange)]" />
+      <span className="min-w-0 flex-1"><span className="font-semibold">Editing is locked.</span> You’re viewing this project read-only so nothing changes by accident. Comments and the AI assistant still work.</span>
+      <button type="button" className="w-btn w-btn-sm shrink-0" onClick={() => { void unlock(config.id); }}>
+        <LockOpen size={12} /> Unlock to edit
+      </button>
+    </div>
+  );
+}
+
+/** Nhãn "Locked" trong ô chi tiết thẻ (ô này trượt ra che mất header + dải thông báo). Bấm = mở khoá. */
+export function EditLockPill({ config }: { config: ProjectConfig }) {
+  if (!config.editLocked) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => { void unlock(config.id); }}
+      title="Editing is locked — you can read, comment and ask the AI. Click to unlock."
+      aria-label="Editing is locked — click to unlock"
+      className="w-btn w-btn-sm shrink-0 border-[color-mix(in_srgb,var(--w-orange)_55%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_14%,transparent)] text-[var(--w-orange)]"
+    >
+      <Lock size={12} /> Locked
+    </button>
+  );
+}
+

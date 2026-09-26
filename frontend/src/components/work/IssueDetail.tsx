@@ -24,6 +24,7 @@ import {
 import CreateIssueDialog from './CreateIssueDialog';
 import CustomFieldsGroup from './CustomFields';
 import AiIssueMenu from './ai/AiIssueMenu';
+import { EditLockPill } from './editLock';
 import { ConfirmDialog } from './settings/shared';
 import {
   AssigneePicker, ComponentsPicker, DateInput, FixVersionPicker, LabelsPicker, NumberInput, ParentPicker, PriorityPicker, SprintPicker,
@@ -513,6 +514,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           <span className="font-mono text-[var(--w-text-2)]">{lk.issueKey(issue.number)}</span>
         </div>
         <div className="ml-auto flex items-center gap-1">
+          <EditLockPill config={config} />
           {type && <AiIssueMenu config={config} issueNumber={issue.number} typeKey={type.key} />}
           <button
             type="button"

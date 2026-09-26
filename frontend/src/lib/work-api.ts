@@ -107,6 +107,10 @@ export interface ProjectConfig {
   role: ProjectRole;
   workspaceRole: WorkspaceRole;
   permissions: ProjectPermissions;
+  /** Người xem đang BẬT khoá chỉnh sửa dự án này ⇒ `permissions` đã bị tắt các quyền sửa (chỉ xem). */
+  editLocked?: boolean;
+  /** Quyền thật của vai trò (trước khi khoá) — để biết mở khoá xong sẽ sửa được gì. */
+  rolePermissions?: ProjectPermissions;
   boardColumns: BoardColumn[];
   members: ProjectMember[];
   customFields: CustomField[];
@@ -671,7 +675,20 @@ export const workApi = {
   createProject: (wsId: number, body: { key: string; name: string; description?: string | null; type: ProjectType; template: ProjectTemplate; visibility?: 'WORKSPACE' | 'PRIVATE' }) =>
     d<{ id: number; key: string; name: string }>(api.post(`${B}/workspaces/${wsId}/projects`, body)),
   resolve: (slug: string, key: string) => d<{ projectId: number }>(api.get(`${B}/resolve/${encodeURIComponent(slug)}/${encodeURIComponent(key)}`)),
-  project: (pid: number) => d<ProjectConfig>(api.get(`${B}/projects/${pid}`)),
+  /**
+   * Cấu hình dự án. Khi người xem đang BẬT khoá chỉnh sửa, các quyền SỬA bị tắt ngay
+   * tại đây ⇒ mọi màn (board, chi tiết thẻ, trình soạn mô tả, backlog, cài đặt…) tự
+   * chuyển sang chỉ xem. Bình luận và AI giữ nguyên. Server vẫn chặn riêng (423).
+   */
+  project: async (pid: number): Promise<ProjectConfig> => {
+    const [cfg, lock] = await Promise.all([
+      d<ProjectConfig>(api.get(`${B}/projects/${pid}`)),
+      d<{ locked: boolean }>(api.get(`${B}/projects/${pid}/edit-lock`)).catch(() => ({ locked: false })),
+    ]);
+    if (!lock.locked) return { ...cfg, editLocked: false, rolePermissions: cfg.permissions };
+    const off = Object.fromEntries(Object.keys(cfg.permissions).map((k) => [k, k === 'comment' || k === 'useAi' || k === 'viewProject' ? (cfg.permissions as unknown as Record<string, boolean>)[k] : false]));
+    return { ...cfg, editLocked: true, rolePermissions: cfg.permissions, permissions: off as unknown as ProjectPermissions };
+  },
   updateProject: (pid: number, body: { name?: string; description?: string | null; visibility?: 'WORKSPACE' | 'PRIVATE'; leadId?: number | null; settings?: Record<string, unknown> }) =>
     d(api.patch(`${B}/projects/${pid}`, body)),
   archiveProject: (pid: number, archived: boolean) => d(api.post(`${B}/projects/${pid}/archive`, { archived })),

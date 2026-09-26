@@ -11,7 +11,7 @@ import type { ReactNode } from 'react';
 import { ChevronRight } from 'lucide-react';
 import type { ProjectConfig } from '@/lib/work-api';
 import AiButton from './ai/AiButton';
-import { EditLockButton } from './editLock';
+import { EditLockBanner, EditLockButton } from './editLock';
 import HelpButton from './help/HelpButton';
 import { MobileNavButton } from './shell/mobileNav';
 
@@ -29,6 +29,7 @@ export const CrumbSep = ({ className }: { className?: string }) => (
 
 export default function ProjectHeader({ config, title, children }: { config: ProjectConfig; title: string; children?: ReactNode }) {
   return (
+    <>
     <header className="w-header flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:gap-3 md:px-5">
       <MobileNavButton />
       <nav aria-label="Breadcrumb" className="flex min-w-0 flex-1 items-center gap-1.5 text-[14px]">
@@ -51,5 +52,7 @@ export default function ProjectHeader({ config, title, children }: { config: Pro
         {children}
       </div>
     </header>
+    <EditLockBanner config={config} />
+    </>
   );
 }

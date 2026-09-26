@@ -26,6 +26,8 @@
 import { Suspense, lazy, useEffect, useLayoutEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import WebNotesPage from '@/app/notes/page';
+// Khung/nền bảng của Notes (Sổ lệnh…) — CẮT từ globals.css của web, xem vite.noi-dung-bai.ts.
+import 'virtual:bang-ghi-chu.css';
 import { useAuthStore } from '@/store/authStore';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';

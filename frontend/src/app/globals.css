@@ -3407,6 +3407,8 @@ html[data-notes-theme='brown'] .note-bubble__btn:hover { background: rgba(67, 54
 .note-prose [data-type="math-inline"] { font-size: 0.95em; }
 .note-prose [data-type="math-block"] { display: block; }
 
+/* ct-desktop:bat-dau bang-ghi-chu — app desktop CẮT vùng này lúc dựng (desktop/vite.noi-dung-bai.ts).
+   Xoá/đổi tên mốc là bản dựng app hỏng — cố ý. Chỉ dùng currentColor, không biến màu của web. */
 /* Table — màu khung/nền tính theo MÀU CHỮ (currentColor), không theo một
    màu cứng. Trước 26/09/2026 khung là rgba(0,0,0,.14): trên nền tối (theme
    tối của Notes lẫn chế độ tối ép của trình duyệt như Cốc Cốc) nó tàng hình —
@@ -3445,6 +3447,7 @@ html[data-notes-theme='brown'] .note-bubble__btn:hover { background: rgba(67, 54
 .note-prose .note-table th.selectedCell {
   background: rgba(13, 148, 136, 0.18) !important;
 }
+/* ct-desktop:ket-thuc bang-ghi-chu */
 
 /* ─── Phase 4 perf follow-up: post card frame ─────────────────
    Phase 4 perf dropped the inline `backdrop-filter: blur(20px)` +

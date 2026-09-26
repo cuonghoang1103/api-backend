@@ -690,3 +690,278 @@
 @media (prefers-reduced-motion: reduce) {
   .dayBadge, .gbox { animation: none; }
 }
+
+/* ═══════════ Nội dung bài học có màu (26/09, bản 3) ═══════════
+ * "Chữ tô đậm, đánh dấu, màu" như sách in màu — nhưng mỗi màu mang MỘT nghĩa
+ * cố định để người học đọc được bằng mắt: xanh = chủ ngữ, đỏ = động từ, dạ
+ * quang = từ đang học. Tô màu tuỳ hứng thì màu thành nhiễu.
+ */
+
+/* dạ quang: từ đang học, điểm cần nhớ */
+.hl {
+  padding: 0 3px;
+  border-radius: 4px;
+  background: linear-gradient(transparent 38%, #fde68a 38%);
+  color: inherit;
+  font-weight: 650;
+}
+:global(html.theme-dark) .hl { background: linear-gradient(transparent 30%, rgba(250, 204, 21, 0.55) 30%); color: #fffbeb; }
+
+/* chữ đậm trong bài mang màu của loại bài, đậm hơn chữ thường */
+.p b, .cell b, .noteItem b, .exEn b { color: color-mix(in srgb, var(--k) 75%, var(--lh-ink)); font-weight: 700; }
+.p s, .noteItem s, .cell s { color: var(--lh-bad); text-decoration-thickness: 2px; }
+.p { font-size: 17px; }
+
+/* thành phần câu */
+.role {
+  display: inline-block;
+  margin: 1px 1px;
+  padding: 1px 7px;
+  border-radius: 6px;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.rS { background: rgba(37, 99, 235, 0.14); color: #1d4ed8; }
+.rV { background: rgba(220, 38, 38, 0.13); color: #b91c1c; }
+.rO { background: rgba(147, 51, 234, 0.14); color: #7e22ce; }
+.rC { background: rgba(5, 150, 105, 0.14); color: #047857; }
+.rA { background: rgba(217, 119, 6, 0.16); color: #b45309; }
+.rAux { background: rgba(100, 116, 139, 0.16); color: #475569; }
+:global(html.theme-dark) .rS { background: rgba(96, 165, 250, 0.16); color: #93c5fd; }
+:global(html.theme-dark) .rV { background: rgba(248, 113, 113, 0.16); color: #fca5a5; }
+:global(html.theme-dark) .rO { background: rgba(192, 132, 252, 0.16); color: #d8b4fe; }
+:global(html.theme-dark) .rC { background: rgba(52, 211, 153, 0.16); color: #6ee7b7; }
+:global(html.theme-dark) .rA { background: rgba(251, 191, 36, 0.16); color: #fcd34d; }
+:global(html.theme-dark) .rAux { background: rgba(148, 163, 184, 0.16); color: #cbd5e1; }
+.formula { color: var(--lh-ink-2); }
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--lh-line);
+  font-size: 13px;
+  color: var(--lh-ink-3);
+}
+.legend .role { margin-left: 8px; font-size: 12px; }
+.legend .role:first-child { margin-left: 0; }
+
+/* bảng: đầu bảng tô màu, dòng xen kẽ */
+.table th { background: color-mix(in srgb, var(--k) 12%, var(--lh-surface)); color: color-mix(in srgb, var(--k) 70%, var(--lh-ink)); }
+.table tbody tr:nth-child(even) .cell { background: color-mix(in srgb, var(--k) 4%, transparent); }
+.caption { color: color-mix(in srgb, var(--k) 70%, var(--lh-ink)); }
+
+/* ví dụ: tiếng Anh đậm, tiếng Việt nghiêng */
+.exEn { font-weight: 550; }
+.exVi { font-style: italic; }
+.examples, .pattern { border-left: 3px solid var(--k); }
+
+/* nhãn từ loại */
+.wordPos {
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+}
+.posN { background: rgba(37, 99, 235, 0.13); color: #1d4ed8; }
+.posV { background: rgba(220, 38, 38, 0.12); color: #b91c1c; }
+.posAdj { background: rgba(234, 88, 12, 0.14); color: #c2410c; }
+.posAdv { background: rgba(147, 51, 234, 0.13); color: #7e22ce; }
+.posPhr { background: rgba(13, 148, 136, 0.14); color: #0f766e; }
+:global(html.theme-dark) .posN { color: #93c5fd; }
+:global(html.theme-dark) .posV { color: #fca5a5; }
+:global(html.theme-dark) .posAdj { color: #fdba74; }
+:global(html.theme-dark) .posAdv { color: #d8b4fe; }
+:global(html.theme-dark) .posPhr { color: #5eead4; }
+.wordW { font-size: 18px; }
+.wordVi { font-weight: 600; }
+.word:nth-child(even) { background: color-mix(in srgb, var(--k) 3%, transparent); }
+.wordEx { font-size: 15.5px; color: var(--lh-ink); }
+.wordExVi { font-style: italic; }
+
+/* ô ghi chú 3 loại */
+.note_warn { background: color-mix(in srgb, #f59e0b 9%, var(--lh-surface)); border-color: color-mix(in srgb, #f59e0b 35%, transparent); }
+.note_tip { background: color-mix(in srgb, #10b981 9%, var(--lh-surface)); border-color: color-mix(in srgb, #10b981 35%, transparent); }
+.note_info { background: color-mix(in srgb, #3b82f6 8%, var(--lh-surface)); border-color: color-mix(in srgb, #3b82f6 32%, transparent); }
+.note_tip .noteTitle { color: #047857; }
+.note_info .noteTitle { color: #1d4ed8; }
+.note_warn .noteTitle { color: #b45309; }
+:global(html.theme-dark) .note_tip .noteTitle { color: #6ee7b7; }
+:global(html.theme-dark) .note_info .noteTitle { color: #93c5fd; }
+:global(html.theme-dark) .note_warn .noteTitle { color: #fcd34d; }
+.noteIcon {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--lh-surface);
+  font-size: 22px;
+  box-shadow: var(--lh-shadow);
+}
+.noteTitle { font-size: 15px; }
+.noteItem { margin-top: 8px; }
+
+/* bài tập */
+.qNum {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  margin-right: 10px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--k) 15%, transparent);
+  color: color-mix(in srgb, var(--k) 75%, var(--lh-ink));
+  font-size: 13px;
+  font-weight: 700;
+  vertical-align: 1px;
+}
+.quizTitle { font-size: 17px; color: color-mix(in srgb, var(--k) 70%, var(--lh-ink)); }
+.qText { font-size: 16px; }
+.inputGood { box-shadow: 0 0 0 3px color-mix(in srgb, var(--lh-good) 20%, transparent); }
+.inputBad { box-shadow: 0 0 0 3px color-mix(in srgb, var(--lh-bad) 18%, transparent); }
+.feedback .good, .feedback .bad { font-weight: 650; }
+.optGood { font-weight: 650; }
+.score { padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--lh-good) 14%, transparent); color: var(--lh-good); }
+
+/* đầu trang kế hoạch & tổng quan dùng màu chàm (--k mặc định) */
+.statBig { color: color-mix(in srgb, var(--k) 60%, var(--lh-ink)); }
+
+/* ═══════════ Bố cục rộng (26/09, bản 4) ═══════════
+ * Người dùng: "cứ chen nhau ở giữa". Bỏ trần 88rem — mục lục sát mép trái,
+ * gia sư sát mép phải, bài học chiếm phần giữa (cột chữ vẫn giới hạn ~60rem
+ * để một dòng không dài quá 90 ký tự, dài hơn là mắt lạc dòng).
+ *   ≥1440  : mục lục 280 · bài · gia sư 440
+ *   1280–1439: 260 · bài · 380
+ *   1024–1279 (iPad ngang): mục lục · bài; gia sư là ngăn kéo bên phải
+ *   <1024 (iPad dọc, điện thoại): một cột; mục lục & gia sư là ngăn kéo
+ */
+.barInner { max-width: none; padding: 10px 24px; }
+.layout { max-width: none; gap: 28px; padding: 24px 16px 96px; }
+.article { width: 100%; max-width: 60rem; margin: 0 auto; }
+@media (min-width: 1024px) {
+  .layout { grid-template-columns: 260px minmax(0, 1fr); padding: 28px 24px 96px; }
+}
+@media (min-width: 1280px) {
+  .layout { grid-template-columns: 260px minmax(0, 1fr) 380px; gap: 32px; }
+}
+@media (min-width: 1440px) {
+  .layout { grid-template-columns: 280px minmax(0, 1fr) 440px; gap: 40px; padding: 28px 28px 96px; }
+}
+/* Ngăn kéo gia sư: điện thoại = tấm dưới đáy; iPad/laptop hẹp = cột phải cao hết màn. */
+.tutorSheet { height: min(86vh, 760px); }
+@media (min-width: 640px) {
+  .tutorSheet {
+    inset: calc(var(--app-nav-h) + 12px) 12px 12px auto;
+    width: min(460px, calc(100vw - 24px));
+    height: auto;
+  }
+}
+.tutorCol { height: calc(100vh - var(--app-nav-h) - 84px); }
+
+/* ═══════════ Khung gia sư dạng chat (26/09, bản 4) ═══════════ */
+.tutorHead { background: linear-gradient(120deg, color-mix(in srgb, #6366f1 12%, var(--lh-surface)), color-mix(in srgb, #d946ef 10%, var(--lh-surface))); }
+.turn { margin-top: 18px; }
+.turnQWrap { display: flex; justify-content: flex-end; }
+.turnQ {
+  max-width: 85%;
+  padding: 9px 14px;
+  border-radius: 16px 16px 4px 16px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 14px;
+}
+.turnARow { display: flex; align-items: flex-start; gap: 10px; margin-top: 10px; }
+.turnAvatar { flex-shrink: 0; margin-top: 2px; }
+.turnA {
+  min-width: 0;
+  flex: 1;
+  margin-top: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--lh-line);
+  border-radius: 4px 16px 16px 16px;
+  background: var(--lh-bg);
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.turnA :global(h1), .turnA :global(h2), .turnA :global(h3), .turnA :global(h4) {
+  margin: 14px 0 6px;
+  padding-left: 8px;
+  border-left: 3px solid #6366f1;
+  font-size: 15px;
+  font-weight: 700;
+  color: #4338ca !important;
+}
+:global(html.theme-dark) .turnA :global(h1),
+:global(html.theme-dark) .turnA :global(h2),
+:global(html.theme-dark) .turnA :global(h3),
+:global(html.theme-dark) .turnA :global(h4) { color: #a5b4fc !important; }
+.turnA :global(h3:first-child), .turnA :global(p:first-child) { margin-top: 0; }
+.turnA :global(strong) { color: #b45309 !important; }
+:global(html.theme-dark) .turnA :global(strong) { color: #fcd34d !important; }
+.turnA :global(em) { color: var(--lh-ink) !important; font-style: italic; font-weight: 550; }
+.turnA :global(code) {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: rgba(220, 38, 38, 0.1);
+  color: #b91c1c !important;
+  font-size: 13px;
+}
+:global(html.theme-dark) .turnA :global(code) { color: #fca5a5 !important; background: rgba(248, 113, 113, 0.14); }
+.turnA :global(blockquote) {
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-left: 3px solid #10b981;
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, #10b981 9%, transparent);
+}
+.turnA :global(table) { width: 100%; margin: 10px 0; border-collapse: collapse; font-size: 13.5px; }
+.turnA :global(th) { padding: 6px 8px; background: color-mix(in srgb, #6366f1 12%, transparent); text-align: left; font-weight: 700; }
+.turnA :global(td) { padding: 6px 8px; border-top: 1px solid var(--lh-line); vertical-align: top; }
+.turnA :global(ul), .turnA :global(ol) { margin: 4px 0; padding-left: 20px; }
+.turnA :global(li) { margin: 3px 0; }
+.turnA :global(li::marker) { color: #6366f1; }
+.ansTools { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--lh-line); }
+.ansTool {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--lh-line);
+  font-size: 12.5px;
+  color: var(--lh-ink-2);
+}
+.ansTool:hover { border-color: #6366f1; color: #6366f1; }
+.chipSoft { background: color-mix(in srgb, #6366f1 8%, var(--lh-bg)); font-size: 13px; }
+.chip { transition: transform 0.15s ease, border-color 0.15s ease; }
+.chip:hover:not(:disabled) { transform: translateY(-1px); }
+.typing { display: inline-flex; gap: 4px; padding: 4px 0; }
+.typing i { width: 7px; height: 7px; border-radius: 999px; background: #8b5cf6; animation: typing 1.2s infinite ease-in-out; }
+.typing i:nth-child(2) { animation-delay: 0.15s; }
+.typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typing { 0%, 80%, 100% { opacity: 0.25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-4px); } }
+
+/* Điện thoại: thanh trên chỉ còn icon — chữ nhãn làm nút xuống dòng hai tầng. */
+.iconBtn, .tutorBtn { white-space: nowrap; }
+@media (max-width: 560px) {
+  .btnLabel { display: none; }
+  .barInner { gap: 4px; padding: 8px 12px; }
+  .tutorBtn { padding: 5px 8px; }
+}
+
+/* Bảng công thức trên điện thoại: xếp dọc (công thức trên, ví dụ dưới) —
+   hai cột ở 390px bóp cột ví dụ còn 1–2 chữ mỗi dòng. */
+@media (max-width: 560px) {
+  .stackTable thead { display: none; }
+  .stackTable tr, .stackTable td { display: block; width: 100% !important; }
+  .stackTable td.formulaCell { padding-bottom: 4px; border-bottom: none; }
+}

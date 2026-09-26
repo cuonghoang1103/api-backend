@@ -55,16 +55,81 @@ function SpeakBtn({ text, label }: { text: string; label?: string }) {
 
 /** **đậm** và ~~gạch (câu sai)~~ — đủ cho nội dung soạn tay, không cần markdown đầy đủ. */
 export function Inline({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|~~[^~]+~~)/g);
+  const parts = text.split(/(\*\*[^*]+\*\*|~~[^~]+~~|==[^=]+==)/g);
   return (
     <>
       {parts.map((p, i) =>
         p.startsWith('**') ? <b key={i}>{p.slice(2, -2)}</b>
           : p.startsWith('~~') ? <s key={i}>{p.slice(2, -2)}</s>
+            : p.startsWith('==') ? <mark key={i} className={s.hl}>{p.slice(2, -2)}</mark>
             : <Fragment key={i}>{p}</Fragment>,
       )}
     </>
   );
+}
+
+/**
+ * Công thức tô màu theo thành phần câu, như sách ngữ pháp in màu:
+ * S chủ ngữ · V động từ · O tân ngữ · C bổ ngữ · A trạng ngữ · do/does trợ động từ.
+ * Chỉ tô các KÝ HIỆU; phần còn lại (dấu +, ngoặc, chữ Việt) giữ nguyên.
+ */
+const ROLE: Record<string, string> = { S: s.rS, V: s.rV, O: s.rO, C: s.rC, A: s.rA, Wh: s.rA };
+const AUX = /^(do|does|don't|doesn't|am|is|are|not)$/i;
+export function Formula({ text }: { text: string }) {
+  const parts = text.split(/(\bWh-|\b[SVOCA]\b(?:\([^)]*\))?|\b(?:[Dd]o|[Dd]oes|[Dd]on't|[Dd]oesn't)\b)/g);
+  return (
+    <>
+      {parts.map((p, i) => {
+        if (!p) return null;
+        const head = p.startsWith('Wh') ? 'Wh' : p[0];
+        if (/^(Wh-|[SVOCA](\(|$))/.test(p) && ROLE[head]) return <span key={i} className={`${s.role} ${ROLE[head]}`}>{p}</span>;
+        if (AUX.test(p)) return <span key={i} className={`${s.role} ${s.rAux}`}>{p}</span>;
+        return <Fragment key={i}>{p}</Fragment>;
+      })}
+    </>
+  );
+}
+// Chỉ ô MỞ ĐẦU bằng ký hiệu thành phần câu mới là công thức ('bỏ y, + ies' thì không).
+const looksLikeFormula = (c: string) => (/^(S|V|Do|Does)\b/.test(c) || c.startsWith("Wh-")) && / \+ /.test(c) && c.length < 48;
+
+function FormulaLegend() {
+  return (
+    <div className={s.legend}>
+      <span className={`${s.role} ${s.rS}`}>S</span> chủ ngữ
+      <span className={`${s.role} ${s.rV}`}>V</span> động từ
+      <span className={`${s.role} ${s.rO}`}>O</span> tân ngữ
+      <span className={`${s.role} ${s.rC}`}>C</span> bổ ngữ
+      <span className={`${s.role} ${s.rA}`}>A</span> trạng ngữ
+      <span className={`${s.role} ${s.rAux}`}>do</span> trợ động từ
+    </div>
+  );
+}
+
+/** Tô dạ quang chính từ đang học trong câu ví dụ (cả dạng chia: post → posts, posted). */
+function HighlightWord({ sentence, word }: { sentence: string; word: string }) {
+  const toks = word.split(/\s+/).map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  // Bỏ -e/-y cuối để khớp create → created, study → studies.
+  const stem = (t: string) => (t.length > 3 ? t.replace(/(e|y)$/i, '') : t);
+  const re = new RegExp(`\\b(${toks.map((t) => `${stem(t)}\\w*`).join('\\s+')})\\b`, 'i');
+  const m = sentence.match(re);
+  if (!m || m.index == null) return <>{sentence}</>;
+  return (
+    <>
+      {sentence.slice(0, m.index)}
+      <mark className={s.hl}>{m[0]}</mark>
+      {sentence.slice(m.index + m[0].length)}
+    </>
+  );
+}
+
+const POS_CLASS = (pos: string) =>
+  pos.startsWith('phr') ? s.posPhr : pos.startsWith('adj') ? s.posAdj : pos.startsWith('adv') ? s.posAdv : pos.startsWith('v') ? s.posV : s.posN;
+
+/** Ba loại ô ghi chú: cảnh báo lỗi, mẹo, ghi nhớ — mỗi loại một màu và một nhãn. */
+function noteTone(title: string): 'warn' | 'tip' | 'info' {
+  if (/sai|nhầm|cẩn thận|lỗi/i.test(title)) return 'warn';
+  if (/mẹo|cách học|tips?/i.test(title)) return 'tip';
+  return 'info';
 }
 
 /* ── So đáp án ── */
@@ -128,7 +193,7 @@ function Quiz({ b }: { b: Extract<Block, { t: 'quiz' }> }) {
         return (
           <div key={i} className={s.qItem}>
             <div className={s.qText}>
-              <span className={s.qNum}>{i + 1}.</span>
+              <span className={s.qNum}>{i + 1}</span>
               {it.q}
               {b.kind === 'fill' && it.hint && <span className={s.qHint}> ({it.hint})</span>}
               {(b.kind === 'translate' || b.grammar) && (it.hint || b.grammar) && (
@@ -235,7 +300,7 @@ function Mcq({ b }: { b: Extract<Block, { t: 'mcq' }> }) {
         const chosen = pick[i];
         return (
           <div key={i} className={s.qItem}>
-            <div className={s.qText}><span className={s.qNum}>{i + 1}.</span>{it.q}</div>
+            <div className={s.qText}><span className={s.qNum}>{i + 1}</span>{it.q}</div>
             {it.options.map((o, j) => {
               const cls = chosen === undefined ? '' : j === it.correct ? s.optGood : j === chosen ? s.optBad : '';
               return (
@@ -340,13 +405,14 @@ function renderBlock(b: Block, i: number) {
             // công thức bên trái luôn nằm cạnh đúng ví dụ của nó.
             return (
               <div key={i} className={s.tableWrap}>
-                <table className={s.table}>
+                <FormulaLegend />
+                <table className={`${s.table} ${s.stackTable}`}>
                   <thead><tr><th>Công thức (Formula)</th><th>Ví dụ</th></tr></thead>
                   <tbody>
                     {b.rows.map((r) => (
                       <tr key={r.formula}>
                         <td className={`${s.cell} ${s.formulaCell}`}>
-                          <span className={s.formula}>{r.formula}</span>
+                          <span className={s.formula}><Formula text={r.formula} /></span>
                           <span className={s.formulaVi}>{r.vi}</span>
                         </td>
                         <td className={s.cell}>
@@ -376,7 +442,9 @@ function renderBlock(b: Block, i: number) {
                     {b.rows.map((r, ri) => (
                       <tr key={ri}>
                         {r.map((c, ci) => (
-                          <td key={ci} className={`${s.cell} ${ci === 0 ? s.cellFirst : ''}`}><Inline text={c} /></td>
+                          <td key={ci} className={`${s.cell} ${ci === 0 ? s.cellFirst : ''}`}>
+                            {looksLikeFormula(c) ? <span className={s.formula}><Formula text={c} /></span> : <Inline text={c} />}
+                          </td>
                         ))}
                       </tr>
                     ))}
@@ -386,8 +454,12 @@ function renderBlock(b: Block, i: number) {
             );
           case 'note':
             return (
-              <div key={i} className={s.note}>
-                <span className={s.watch} aria-hidden>Watch<br />out!</span>
+              <div key={i} className={`${s.note} ${s[`note_${noteTone(b.title)}`]}`}>
+                {noteTone(b.title) === 'warn' ? (
+                  <span className={s.watch} aria-hidden>Watch<br />out!</span>
+                ) : (
+                  <span className={s.noteIcon} aria-hidden>{noteTone(b.title) === 'tip' ? '💡' : '📌'}</span>
+                )}
                 <div className="min-w-0">
                 <div className={s.noteTitle}>{b.title}</div>
                 <ul className={s.noteList}>
@@ -419,13 +491,13 @@ function renderBlock(b: Block, i: number) {
                     <div className="min-w-0">
                       <div className={s.wordHead}>
                         <span className={s.wordW}>{v.w}</span>
-                        <span className={s.wordPos}>{v.pos}</span>
+                        <span className={`${s.wordPos} ${POS_CLASS(v.pos)}`}>{v.pos}</span>
                         <span className={s.wordIpa}>{v.ipa}</span>
                         <span className={s.wordVi}>{v.vi}</span>
                       </div>
                       <div className={s.wordEx}>
                         <button type="button" className={s.linkBtn} style={{ fontWeight: 400, color: 'inherit', textAlign: 'left' }} onClick={() => speak(v.ex)}>
-                          {v.ex}
+                          <HighlightWord sentence={v.ex} word={v.w} />
                         </button>
                       </div>
                       <div className={s.wordExVi}>{v.exVi}</div>

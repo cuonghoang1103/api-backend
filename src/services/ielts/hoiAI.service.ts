@@ -36,7 +36,7 @@ export const CAC_Y = Object.keys(DAN_THEO_Y);
 
 export async function hoiVeChu(
   userId: number,
-  b: { chu?: string; y?: string; cauHoi?: string; boiCanh?: string },
+  b: { chu?: string; y?: string; cauHoi?: string; boiCanh?: string; lichSu?: unknown },
 ) {
   const chu = String(b.chu ?? '').trim().slice(0, 2000);
   if (chu.length < 1) throw new BadRequestError('Chưa chọn chữ nào để hỏi');
@@ -54,26 +54,52 @@ export async function hoiVeChu(
   }
 
   const boiCanh = String(b.boiCanh ?? '').trim().slice(0, 4000);
+  // Vài lượt vừa hỏi — để "giải thích thêm câu 2" hay "ví dụ khác" còn biết
+  // đang nói về cái gì. Cắt ngắn từng lượt: bối cảnh bài đã đủ dài.
+  const lichSu = (Array.isArray(b.lichSu) ? b.lichSu : [])
+    .slice(-3)
+    .map((t) => ({ q: String((t as { q?: unknown })?.q ?? '').slice(0, 300), a: String((t as { a?: unknown })?.a ?? '').slice(0, 900) }))
+    .filter((t) => t.q && t.a);
+  const dai = Y_DAI.has(y) || (!dan && !!tuHoi);
   const kq = await llmComplete({
     step: 'generation',
     purpose: 'language_tutor',
     feature: 'chat',
     userId,
-    maxTokens: Y_DAI.has(y) || (!dan && tuHoi) ? 1100 : 500,
+    maxTokens: dai ? 1400 : 500,
     system: 'Bạn là gia sư IELTS, trả lời bằng TIẾNG VIỆT, ngắn và thẳng.\n'
       + `${dan ?? 'Trả lời đúng câu người học hỏi, rõ ràng, tối đa 10 câu.'}\n`
       + 'Không mở bài, không chúc, không nhắc lại câu hỏi.\n'
       // Từ 19/09/2026 app DỰNG markdown thật (`NoiDungMarkdown`), nên ở đây
       // KHÔNG cấm nữa — chữ đậm ở từ khoá và danh sách gạch đầu dòng làm câu
       // trả lời dễ đọc hơn hẳn một khối chữ phẳng.
-      + 'Được dùng **đậm** cho từ khoá và gạch đầu dòng. Không dùng bảng.\n'
+      + (dai
+        // Câu trả lời dài hiện trong khung gia sư của web (ChatMarkdown có
+        // bảng GFM). Một khuôn CỐ ĐỊNH để mọi câu trả lời trông cùng một kiểu:
+        // người học quen mắt thì đọc nhanh hơn.
+        ? [
+          'Định dạng markdown, theo khuôn:',
+          '- Chia ý bằng tiêu đề nhỏ `### ` (tối đa 3 tiêu đề), dưới mỗi tiêu đề là gạch đầu dòng ngắn.',
+          '- **Đậm** từ khoá và cấu trúc ngữ pháp; công thức viết trong `code`, ví dụ `S + V(s/es) + O`.',
+          '- Ví dụ tiếng Anh viết đúng dạng: `- *English sentence.* → nghĩa tiếng Việt`.',
+          '- So sánh hai thứ (do/does, a/an, thì này/thì kia) thì dùng BẢNG markdown 2–3 cột.',
+          '- Mẹo nhớ hoặc lỗi hay sai đặt trong trích dẫn: `> 💡 ...` hoặc `> ⚠️ ...` (tối đa 2).',
+          '- Không viết đoạn văn dài quá 3 câu.',
+        ].join('\n') + '\n'
+        : 'Được dùng **đậm** cho từ khoá và gạch đầu dòng. Không dùng bảng.\n')
       + 'Giữ nguyên từ tiếng Anh khi trích dẫn, đừng phiên âm kiểu Việt hoá.',
-    messages: [{
-      role: 'user',
-      content: (boiCanh ? `Bối cảnh (bài đọc):\n${boiCanh}\n\n` : '')
-        + `Phần mình chọn: "${chu}"`
-        + (tuHoi ? `\n\nCâu hỏi: ${tuHoi}` : ''),
-    }],
+    messages: [
+      ...lichSu.flatMap((t) => [
+        { role: 'user' as const, content: t.q },
+        { role: 'assistant' as const, content: t.a },
+      ]),
+      {
+        role: 'user' as const,
+        content: (boiCanh ? `Bối cảnh (bài đang học):\n${boiCanh}\n\n` : '')
+          + `Phần mình chọn: "${chu}"`
+          + (tuHoi ? `\n\nCâu hỏi: ${tuHoi}` : ''),
+      },
+    ],
   });
 
   return { traLoi: kq?.text?.trim() || null };

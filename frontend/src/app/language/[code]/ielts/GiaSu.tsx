@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Send, X, Trash2 } from 'lucide-react';
+import { Send, X, Trash2, Volume2, Copy, Check } from 'lucide-react';
+import { speak } from './Blocks';
 import RobotAI from '@/components/academy/RobotAI';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { TutorAsk } from './tutorContext';
@@ -17,6 +18,46 @@ const CHIPS: TutorAsk[] = [
   { label: 'Cho thêm ví dụ', y: 'vidu' },
   { label: 'Kiểm tra nhanh tôi 3 câu', y: 'kiemtra' },
 ];
+
+/** Câu hỏi tiếp sau một câu trả lời — hỏi tiếp dựa trên chính câu vừa trả lời. */
+const FOLLOW: TutorAsk[] = [
+  { label: 'Giải thích dễ hơn nữa', cauHoi: 'Giải thích lại câu trả lời vừa rồi dễ hơn nữa, như cho người mới bắt đầu hoàn toàn.' },
+  { label: 'Thêm ví dụ khác', cauHoi: 'Cho thêm 3 ví dụ khác cho ý vừa giải thích, kèm nghĩa tiếng Việt.' },
+  { label: 'Ra bài tập cho tôi', cauHoi: 'Ra 3 câu bài tập ngắn (dịch Việt → Anh) về đúng ý vừa giải thích. Đáp án để cuối dưới dòng **Đáp án**.' },
+];
+
+/** Câu tiếng Anh in nghiêng trong câu trả lời (`*...*`) — để bấm nghe cả loạt. */
+function englishExamples(md: string): string[] {
+  return [...md.matchAll(/(?<![*\w])\*([^*\n]{3,160})\*(?!\*)/g)]
+    .map((m) => m[1].trim())
+    .filter((t) => /^[A-Za-z0-9 ,.'’?!:;()\-]+$/.test(t) && /[a-z]/i.test(t));
+}
+
+function AnswerTools({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const ex = englishExamples(text);
+  return (
+    <div className={s.ansTools}>
+      {ex.length > 0 && (
+        <button type="button" className={s.ansTool} onClick={() => speak(ex, 0.9)}>
+          <Volume2 size={13} /> Nghe {ex.length} ví dụ
+        </button>
+      )}
+      <button
+        type="button"
+        className={s.ansTool}
+        onClick={() => {
+          navigator.clipboard?.writeText(text).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+          }).catch(() => {});
+        }}
+      >
+        {copied ? <Check size={13} /> : <Copy size={13} />} {copied ? 'Đã chép' : 'Chép'}
+      </button>
+    </div>
+  );
+}
 
 export function GiaSu({
   lessonTitle, turns, asking, loggedIn, selection, onAsk, onClear, onClose,
@@ -89,12 +130,28 @@ export function GiaSu({
 
         {turns.map((t, i) => (
           <div key={i} className={s.turn}>
-            <div className={s.turnQ}>{t.q}</div>
-            <div className={s.turnA}>
-              {t.err ? <span className={s.bad}>{t.err}</span>
-                : t.a === null ? <span className={s.muted}>Gia sư đang soạn câu trả lời…</span>
-                  : <ChatMarkdown content={t.a} renderMath={false} />}
+            <div className={s.turnQWrap}><div className={s.turnQ}>{t.q}</div></div>
+            <div className={s.turnARow}>
+              <span className={s.turnAvatar}><RobotAI size={26} dangNghi={t.a === null && !t.err} /></span>
+              <div className={s.turnA}>
+                {t.err ? <span className={s.bad}>{t.err}</span>
+                  : t.a === null ? (
+                    <span className={s.typing} aria-label="Gia sư đang soạn câu trả lời"><i /><i /><i /></span>
+                  ) : (
+                    <>
+                      <ChatMarkdown content={t.a} renderMath={false} />
+                      <AnswerTools text={t.a} />
+                    </>
+                  )}
+              </div>
             </div>
+            {i === turns.length - 1 && t.a && !asking && (
+              <div className={s.chips} style={{ marginTop: 10, paddingLeft: 36 }}>
+                {FOLLOW.map((c) => (
+                  <button key={c.label} type="button" className={`${s.chip} ${s.chipSoft}`} onClick={() => onAsk(c)}>{c.label}</button>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>

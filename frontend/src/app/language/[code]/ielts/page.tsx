@@ -109,6 +109,8 @@ export default function IeltsPage() {
         ...(a.y ? { y: a.y } : {}),
         ...(a.cauHoi ? { cauHoi: a.cauHoi.slice(0, 500) } : {}),
         boiCanh: contextText,
+        // Ba lượt đã trả lời gần nhất — cho câu hỏi tiếp "dễ hơn nữa", "ví dụ khác".
+        lichSu: turns.filter((x) => x.a).slice(-3).map((x) => ({ q: x.q, a: x.a })),
       });
       const d = res.data?.data as { traLoi: string | null; lyDo?: string } | undefined;
       if (d?.traLoi) finish({ a: d.traLoi });
@@ -120,7 +122,7 @@ export default function IeltsPage() {
       setAsking(false);
       setSelection('');
     }
-  }, [isAuthenticated, selection, viewTitle, contextText]);
+  }, [isAuthenticated, selection, viewTitle, contextText, turns]);
 
   const ctx = useMemo(() => ({ ask, report: tien.report }), [ask, tien.report]);
 
@@ -179,13 +181,13 @@ export default function IeltsPage() {
             </Link>
             <span className={s.barTitle}>IELTS 4 kỹ năng · Tập 1</span>
             <button type="button" className={`${s.iconBtn} ${s.barProgress}`} onClick={() => go({ t: 'plan' })}>
-              <CalendarDays size={15} /> {doneDays}/{DAYS.length} buổi
+              <CalendarDays size={15} /> {doneDays}/{DAYS.length}<span className={s.btnLabel}>&nbsp;buổi</span>
             </button>
             <button type="button" className={`${s.iconBtn} ${s.tocBtn}`} onClick={() => setTocOpen(true)}>
-              <List size={17} /> Mục lục
+              <List size={17} /><span className={s.btnLabel}>Mục lục</span>
             </button>
             <button type="button" className={s.tutorBtn} onClick={() => setSheetOpen(true)}>
-              <RobotAI size={22} /> Gia sư
+              <RobotAI size={22} /><span className={s.btnLabel}>Gia sư</span>
             </button>
           </div>
         </div>

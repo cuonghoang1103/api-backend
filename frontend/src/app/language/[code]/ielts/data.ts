@@ -217,6 +217,15 @@ const D1_GRAMMAR: Lesson = {
       text: 'Chủ ngữ là **he / she / it** hoặc một danh từ số ít (my mother, the app...) thì động từ khẳng định thêm **-s/-es**, phủ định và câu hỏi dùng **does**. Các chủ ngữ còn lại (I, you, we, they, danh từ số nhiều) dùng động từ nguyên mẫu và **do**.',
     },
     {
+      t: 'note',
+      title: 'Ghi nhớ nhanh',
+      items: [
+        '==I / you / we / they== (và danh từ số nhiều) + **động từ nguyên mẫu** · phủ định & câu hỏi dùng **do / don\'t**',
+        '==he / she / it== (và danh từ số ít) + **động từ thêm -s/-es** · phủ định & câu hỏi dùng **does / doesn\'t**',
+        'Sau **do / does / don\'t / doesn\'t** → động từ ==luôn về nguyên mẫu== (không thêm -s nữa).',
+      ],
+    },
+    {
       t: 'table',
       caption: 'Quy tắc thêm -s / -es',
       head: ['Động từ kết thúc bằng', 'Cách thêm', 'Ví dụ'],
@@ -251,6 +260,15 @@ const D1_GRAMMAR: Lesson = {
     {
       t: 'p',
       text: 'Bài luận Task 2 viết **phần lớn ở thì hiện tại đơn**, vì bạn đang bàn về những điều đúng chung, không phải kể chuyện đã qua. Học thuộc 6 kiểu câu dưới đây là đã viết được khung của một bài luận.',
+    },
+    {
+      t: 'note',
+      title: 'Mẹo làm bài',
+      items: [
+        'Mở bài và kết bài gần như luôn ở ==thì hiện tại đơn==: nêu vấn đề, nêu ý kiến, tóm lại.',
+        'Mỗi đoạn thân bài theo nhịp **Mở ý chính → Giải thích → Ví dụ**: ba loại câu ở giữa bảng dưới đây.',
+        'Giám khảo chấm cả **độ chính xác ngữ pháp**: một lỗi quên -s ở he/she/it lặp lại cả bài có thể kéo điểm xuống rõ rệt.',
+      ],
     },
     {
       t: 'table',

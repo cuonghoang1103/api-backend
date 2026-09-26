@@ -53,6 +53,18 @@ export const KIND_LABEL: Record<Lesson['kind'], string> = {
   homework: 'Bài tập',
 };
 
+/** Màu của từng loại bài — cùng một màu ở mục lục, khối Day và khung bài. */
+export const KIND_HUE: Record<Lesson['kind'], string> = {
+  intro: '#6366f1',
+  grammar: '#f59e0b',
+  vocab: '#10b981',
+  listening: '#0ea5e9',
+  reading: '#f97316',
+  writing: '#8b5cf6',
+  speaking: '#ec4899',
+  homework: '#4f46e5',
+};
+
 /** Nhãn tiếng Anh ở đầu bài, như trang sách: "Day 01 · Basic Grammar". */
 export const KIND_EN: Record<Lesson['kind'], string> = {
   intro: 'Start Here',

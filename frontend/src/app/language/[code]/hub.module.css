@@ -363,3 +363,127 @@
 @media (min-width: 768px) {
   .row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
 }
+
+/* ═══════════ Màu & chuyển động (26/09, bản 2) ═══════════
+ * Người dùng thấy bản chỉ đen–trắng "tối giản quá, khó nhìn". Màu vào ĐÚNG
+ * những chỗ giúp định hướng — ô icon mỗi kỹ năng một màu, lối vào có gradient,
+ * số liệu có icon màu — còn chữ vẫn là mực đậm để đọc được. Mỗi màu đi qua
+ * một biến `--c` đặt inline, nên sáng/tối dùng chung một giá trị: nền ô là
+ * color-mix 14% của nó, đủ nhạt ở cả hai theme.
+ */
+
+/* số liệu */
+.statValue { display: flex; align-items: center; gap: 8px; }
+.statIcon {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--c) 16%, transparent);
+  color: var(--c);
+}
+.stat:first-child .statIcon svg { animation: flicker 2.4s ease-in-out infinite; transform-origin: 50% 90%; }
+
+/* thẻ lối vào */
+.card { position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -40% -30% auto auto;
+  width: 180px;
+  height: 180px;
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--c2) 22%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--c1) 55%, transparent);
+  box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--c1) 45%, transparent);
+}
+.card .cardIcon {
+  position: relative;
+  background: linear-gradient(135deg, var(--c1), var(--c2));
+  color: #fff;
+  box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c1) 70%, transparent);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.card:hover .cardIcon { transform: scale(1.1) rotate(-4deg); }
+.card:hover .chev { color: var(--c1); }
+
+/* khối ôn tập: ấm, có lửa */
+.review {
+  background: linear-gradient(120deg, color-mix(in srgb, #f97316 16%, var(--lh-surface)), color-mix(in srgb, #ec4899 12%, var(--lh-surface)));
+  border-color: color-mix(in srgb, #f97316 30%, transparent);
+}
+.reviewFlame {
+  display: inline-flex;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f97316, #ef4444);
+  color: #fff;
+  box-shadow: 0 8px 18px -8px #f97316;
+}
+.reviewFlame svg { animation: flicker 2.4s ease-in-out infinite; transform-origin: 50% 90%; }
+.review .primaryBtn { background: linear-gradient(135deg, #f97316, #ec4899); color: #fff; box-shadow: 0 8px 18px -10px #ec4899; }
+
+/* hàng kỹ năng */
+.row { position: relative; animation: rowIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--i, 0) * 45ms + 120ms); }
+.row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--c);
+  transform: scaleY(0);
+  transition: transform 0.2s ease;
+}
+.row:hover::before { transform: scaleY(1); }
+.row:hover { background: color-mix(in srgb, var(--c) 6%, var(--lh-surface)); }
+.rowIcon {
+  border: none;
+  background: color-mix(in srgb, var(--c) 15%, transparent);
+  color: var(--c);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.row:hover .rowIcon { color: var(--c); transform: scale(1.12); border-color: transparent; }
+.row:hover .chev { color: var(--c); }
+.proTag {
+  border: none;
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+  color: #fff;
+}
+
+/* tiêu đề mục có vạch màu nhỏ */
+.h2::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #6366f1, #ec4899);
+}
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes flicker {
+  0%, 100% { transform: scale(1) rotate(0); }
+  30% { transform: scale(1.08, 1.12) rotate(-3deg); }
+  60% { transform: scale(0.96, 1.02) rotate(2deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .row, .reviewFlame svg, .stat:first-child .statIcon svg { animation: none; }
+  .card:hover, .card:hover .cardIcon, .row:hover .rowIcon { transform: none; }
+}

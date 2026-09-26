@@ -1,13 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, List, X, Clock, CalendarDays } from 'lucide-react';
 import api from '@/lib/api';
 import RobotAI from '@/components/academy/RobotAI';
 import { useLangUser } from '@/components/language/primitives';
-import { DAYS, INTRO, ALL_LESSONS, READY_LESSONS, KIND_LABEL, KIND_EN, lessonText, dayOf, type Lesson } from './data';
+import { DAYS, INTRO, ALL_LESSONS, READY_LESSONS, KIND_LABEL, KIND_EN, KIND_HUE, lessonText, dayOf, type Lesson } from './data';
 import { Blocks } from './Blocks';
 import { GiaSu, type Turn } from './GiaSu';
 import { TutorCtx, type TutorAsk } from './tutorContext';
@@ -156,6 +156,7 @@ export default function IeltsPage() {
         disabled={!ready}
         onClick={() => open(l)}
         className={`${s.tocItem} ${lesson?.id === l.id ? s.tocActive : ''}`}
+        style={{ '--k': KIND_HUE[l.kind] } as CSSProperties}
       >
         <span className={`${s.tocDot} ${isDone ? s.tocDotDone : ''}`}>{isDone && <Check size={11} strokeWidth={3} />}</span>
         <span className="min-w-0">
@@ -218,7 +219,11 @@ export default function IeltsPage() {
             })}
           </nav>
 
-          <article ref={articleRef} className={s.article}>
+          <article
+            ref={articleRef}
+            className={s.article}
+            style={{ '--k': lesson ? KIND_HUE[lesson.kind] : '#6366f1' } as CSSProperties}
+          >
             {view.t === 'plan' && (
               <KeHoach
                 done={tien.done}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -23,6 +23,9 @@ import {
   SpellCheck,
   PenTool,
   ChevronRight,
+  Flame,
+  Zap,
+  Heart,
   Target,
 } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
@@ -43,18 +46,18 @@ import s from './hub.module.css';
  * corner: a number that answered a question nobody asked.
  */
 const SECTIONS = [
-  { key: 'alphabet', label: 'Bảng chữ cái', desc: 'Chữ cái & phát âm', icon: Type },
-  { key: 'hanzi', label: 'Luyện viết chữ Hán', desc: 'Nét mẫu, tô theo & viết', icon: PenTool },
-  { key: 'vocab', label: 'Từ vựng', desc: 'Học từ theo chủ đề', icon: BookOpen },
-  { key: 'grammar', label: 'Ngữ pháp', desc: 'Cấu trúc câu', icon: GraduationCap },
-  { key: 'listening', label: 'Nghe', desc: 'Luyện nghe & shadowing', icon: Headphones },
-  { key: 'conversation', label: 'Giao tiếp', desc: 'Hội thoại hằng ngày', icon: MessagesSquare },
-  { key: 'reading', label: 'Đọc', desc: 'Bài đọc & báo', icon: Newspaper },
-  { key: 'qna', label: 'Q&A', desc: 'Câu hỏi thường gặp', icon: HelpCircle },
-  { key: 'writing', label: 'Luyện viết', desc: 'AI chữa bài & chấm điểm', icon: PenLine },
-  { key: 'roleplay', label: 'Hội thoại AI', desc: 'Nhập vai tình huống', icon: Bot },
-  { key: 'translate', label: 'Dịch văn bản', desc: 'Dịch 2 chiều & giải thích', icon: Languages },
-  { key: 'grammar-check', label: 'Kiểm tra ngữ pháp', desc: 'Soi lỗi, chấm & sửa', icon: SpellCheck },
+  { key: 'alphabet', label: 'Bảng chữ cái', desc: 'Chữ cái & phát âm', icon: Type, hue: '#6366f1' },
+  { key: 'hanzi', label: 'Luyện viết chữ Hán', desc: 'Nét mẫu, tô theo & viết', icon: PenTool, hue: '#e11d48' },
+  { key: 'vocab', label: 'Từ vựng', desc: 'Học từ theo chủ đề', icon: BookOpen, hue: '#10b981' },
+  { key: 'grammar', label: 'Ngữ pháp', desc: 'Cấu trúc câu', icon: GraduationCap, hue: '#f59e0b' },
+  { key: 'listening', label: 'Nghe', desc: 'Luyện nghe & shadowing', icon: Headphones, hue: '#0ea5e9' },
+  { key: 'conversation', label: 'Giao tiếp', desc: 'Hội thoại hằng ngày', icon: MessagesSquare, hue: '#ec4899' },
+  { key: 'reading', label: 'Đọc', desc: 'Bài đọc & báo', icon: Newspaper, hue: '#f97316' },
+  { key: 'qna', label: 'Q&A', desc: 'Câu hỏi thường gặp', icon: HelpCircle, hue: '#14b8a6' },
+  { key: 'writing', label: 'Luyện viết', desc: 'AI chữa bài & chấm điểm', icon: PenLine, hue: '#8b5cf6' },
+  { key: 'roleplay', label: 'Hội thoại AI', desc: 'Nhập vai tình huống', icon: Bot, hue: '#d946ef' },
+  { key: 'translate', label: 'Dịch văn bản', desc: 'Dịch 2 chiều & giải thích', icon: Languages, hue: '#3b82f6' },
+  { key: 'grammar-check', label: 'Kiểm tra ngữ pháp', desc: 'Soi lỗi, chấm & sửa', icon: SpellCheck, hue: '#22c55e' },
 ] as const;
 
 // Kanji/hanzi only exist in Japanese and Chinese — showing the tile on English
@@ -65,20 +68,24 @@ const CJK_CODES = new Set(['ja', 'zh']);
 const AI_SECTIONS = new Set(['writing', 'roleplay', 'translate', 'grammar-check']);
 
 /** One stat, counted up on mount. Plain numbers — no emoji bubbles. */
-function Stat({ value, label }: { value: number; label: string }) {
+function Stat({ value, label, icon, hue }: { value: number; label: string; icon: React.ReactNode; hue: string }) {
   const n = useCountUp(value);
   return (
-    <div className={s.stat}>
-      <div className={s.statValue}>{n}</div>
+    <div className={s.stat} style={{ '--c': hue } as CSSProperties}>
+      <div className={s.statValue}><span className={s.statIcon}>{icon}</span>{n}</div>
       <div className={s.statLabel}>{label}</div>
     </div>
   );
 }
 
 /** Roadmap / Practice — the two primary entries. */
-function StartCard({ href, icon, title, desc }: { href: string; icon: React.ReactNode; title: string; desc: string }) {
+function StartCard({ href, icon, title, desc, from, to }: {
+  href: string; icon: React.ReactNode; title: string; desc: string;
+  /** Hai đầu gradient của ô icon — mỗi lối vào một màu để nhận ra từ xa. */
+  from: string; to: string;
+}) {
   return (
-    <Link href={href} className={s.card}>
+    <Link href={href} className={s.card} style={{ '--c1': from, '--c2': to } as CSSProperties}>
       <span className={s.cardIcon}>{icon}</span>
       <div className="min-w-0">
         <h3 className={s.cardTitle}>{title}</h3>
@@ -108,11 +115,16 @@ function SkillSection({ title, note, items, code, counts, loading, m, isAi }: {
         {note && <span className={s.sectionNote}>{note}</span>}
       </div>
       <div className={s.list}>
-        {items.map((sec) => {
+        {items.map((sec, i) => {
           const Icon = sec.icon;
           const count = counts?.[sec.key] ?? 0;
           return (
-            <Link key={sec.key} href={`/language/${code}/${sec.key}`} className={s.row}>
+            <Link
+              key={sec.key}
+              href={`/language/${code}/${sec.key}`}
+              className={s.row}
+              style={{ '--c': sec.hue, '--i': i } as CSSProperties}
+            >
               <span className={s.rowIcon}>
                 <Icon size={19} strokeWidth={1.75} />
               </span>
@@ -243,9 +255,9 @@ export default function LanguageHomePage() {
           </div>
           {isAuthenticated && st && (
             <div className={s.stats}>
-              <Stat value={st.streak} label="ngày liên tiếp" />
-              <Stat value={st.xp} label="điểm XP" />
-              <Stat value={st.hearts} label="tim còn lại" />
+              <Stat value={st.streak} label="ngày liên tiếp" hue="#f97316" icon={<Flame size={18} />} />
+              <Stat value={st.xp} label="điểm XP" hue="#eab308" icon={<Zap size={18} />} />
+              <Stat value={st.hearts} label="tim còn lại" hue="#ef4444" icon={<Heart size={17} />} />
             </div>
           )}
         </motion.header>
@@ -258,7 +270,8 @@ export default function LanguageHomePage() {
           </div>
           {isAuthenticated && due > 0 && (
             <div className={s.review}>
-              <div className="min-w-0">
+              <span className={s.reviewFlame} aria-hidden><Flame size={24} /></span>
+              <div className="min-w-0 flex-1">
                 <p className={s.reviewTitle}>{due} thẻ đến hạn ôn tập</p>
                 <p className={s.reviewDesc}>Lặp lại ngắt quãng — ôn đúng lúc sắp quên để nhớ lâu.</p>
               </div>
@@ -273,12 +286,16 @@ export default function LanguageHomePage() {
               icon={<Route size={22} strokeWidth={1.75} />}
               title="Lộ trình học"
               desc="Đi từng chặng từ cơ bản đến nâng cao"
+              from="#6366f1"
+              to="#8b5cf6"
             />
             <StartCard
               href={`/language/${code}/practice`}
               icon={<Dumbbell size={22} strokeWidth={1.75} />}
               title="Luyện tập"
               desc="Bài tập ngắn mỗi ngày, tính XP và chuỗi ngày"
+              from="#10b981"
+              to="#14b8a6"
             />
             {/* IELTS sống ở đây, không ở /tech-trends nữa: một chỗ học tiếng Anh. */}
             {code === 'en' && (
@@ -287,6 +304,8 @@ export default function LanguageHomePage() {
                 icon={<Target size={22} strokeWidth={1.75} />}
                 title="IELTS nền tảng"
                 desc="15 ngày từ con số 0, có gia sư AI giảng từng trang"
+                from="#f97316"
+                to="#ef4444"
               />
             )}
           </div>

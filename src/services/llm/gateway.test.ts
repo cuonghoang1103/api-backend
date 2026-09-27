@@ -101,10 +101,10 @@ test('có khoá của nhóm thì dùng ĐÚNG model đã phân, không lùi', ()
   try {
     // `chat_max` là việc đã cố ý chuyển sang GPT. Có khoá mà vẫn ra Claude
     // nghĩa là lưới đỡ đang nuốt luôn cấu hình thật.
-    assert.equal(modelFor('chat_max'), 'gpt-5.6-sol');
+    assert.equal(modelFor('chat_max'), 'gpt-6-sol');
     // `cv_parse` nâng gpt-5.4-mini → gpt-5.6-sol (14/09): nó không bao giờ tới
     // được rambo, mà đọc sai CV thì hỏng mọi thứ phía sau.
-    assert.equal(modelFor('cv_parse'), 'gpt-5.6-sol');
+    assert.equal(modelFor('cv_parse'), 'gpt-6-sol');
   } finally {
     if (cu === undefined) delete process.env.LLM_GATEWAY_API_KEY_GPT;
     else process.env.LLM_GATEWAY_API_KEY_GPT = cu;
@@ -208,7 +208,7 @@ test('lùi về modelapi: KHOÁ đi theo model lùi, không theo bản đồ', (
   baoRamboHong();
   try {
     assert.ok(ramboDangNghi(), 'cầu dao đáng lẽ đang mở — mọi phép kiểm dưới vô nghĩa');
-    assert.equal(modelFor('chat_pro'), 'gpt-5.6-sol', 'đường lùi không còn là gpt-5.6-sol');
+    assert.equal(modelFor('chat_pro'), 'gpt-6-sol', 'đường lùi không còn là gpt-6-sol');
 
     const ep = endpointFor('chat_pro');
     assert.equal(ep.label, 'cong', 'chat_pro phải lùi về modelapi khi cầu dao mở');

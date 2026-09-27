@@ -2,7 +2,7 @@
 
 // CuongMini — AI đồng hành khi thi (Pro only). Nút nổi mở panel trượt từ phải:
 // 3 gợi ý dựng sẵn + chat tự do về ĐÚNG câu đang thi + nút "Hiện đáp án".
-// Model chính đi cổng rambo riêng (claude-opus-5), tự lùi sang gpt-5.6-sol
+// Model chính đi cổng rambo riêng (claude-opus-5), tự lùi sang gpt-6-sol
 // (modelapi.vn) nếu rambo lỗi; có công tắc chọn tay. Reset chat mỗi khi đổi câu
 // (key={questionId} ở component cha).
 

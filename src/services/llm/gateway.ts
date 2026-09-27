@@ -109,6 +109,7 @@ const MODEL_LUI: Record<string, string> = {
   'gpt-5.6-terra': 'claude-sonnet-4-6',  // 0,484 → 0,597
   'gpt-5.5': 'claude-sonnet-5',          // 1,144 → 0,801 (rẻ đi, nhưng vẫn là lùi)
   'gpt-5.6-sol': 'claude-opus-4-8',      // 1,222 → 2,003 (đắt gấp 1,6)
+  'gpt-6-sol': 'claude-opus-4-8',
 };
 
 /** Đã cắm khoá cho nhóm của model này chưa. */
@@ -198,7 +199,14 @@ export interface ModelInfo {
 export const MODEL_CATALOG: Record<string, ModelInfo> = {
   // ── OpenAI — TÁM model khoá này thật sự mua được (đo 11/08/2026) ──
   // Độ trễ trong ghi chú là thời gian thật cho một lượt 10 token vào / 5 ra.
-  'gpt-5.6-sol': { vendor: 'openai', in: 1.25, out: 10, vision: true, note: 'Mạnh nhất; ĐỌC ẢNH ĐÚNG (~4,7s). Việc quan trọng + mọi lượt có ảnh' },
+  /* 27/09/2026 — gpt-6-sol THAY gpt-5.6-sol ở mọi chỗ. Đo cùng bộ việc (đọc CV
+     ra JSON, chấm CV không bịa số, suy luận, chép đề toán có vectơ từ ảnh):
+     đúng NGANG NHAU từng việc, sổ cổng trừ ~4 lần ít hơn (0,91 vs 3,73 phần
+     chữ; 0,81 vs 3,12 phần ảnh), nhanh ~3–6 lần. Giá niêm yết: vào như nhau,
+     ra 9 vs 27. Trên vòng lặp AI Code: 16,4 vs 66,9 cho cùng một việc. */
+  'gpt-6-sol': { vendor: 'openai', in: 1.25, out: 3.3, vision: true, note: 'Mạnh + ĐỌC ẢNH ĐÚNG (chép đề toán có vectơ chuẩn). Thay 5.6-sol từ 27/09: rẻ ~4×, nhanh ~3×' },
+  'gpt-6-astra': { vendor: 'openai', in: 2.5, out: 16.5, vision: true, note: 'Đắt nhất nhóm GPT; trên vòng lặp AI Code tốn gấp 6 lần 6-sol mà không hơn' },
+  'gpt-5.6-sol': { vendor: 'openai', in: 1.25, out: 10, vision: true, note: 'Thế hệ trước — đã thay bằng gpt-6-sol (27/09/2026)' },
   'gpt-5.5': { vendor: 'openai', in: 1.25, out: 10, vision: true, note: 'Mạnh, nhanh hơn sol (~2,4s). Ngựa thồ cho việc tương tác' },
   'gpt-5.6-terra': { vendor: 'openai', in: 0.6, out: 4, vision: true, note: 'Rẻ hơn, chậm (~4,2s). Việc chạy nền' },
   'gpt-5.4': { vendor: 'openai', in: 1, out: 8, vision: true, note: 'Thế hệ trước (~1,4s)' },
@@ -379,7 +387,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // 39% (1,486 so với 2,419 mỗi 1k token ra); gpt-5.5 chỉ "rẻ hơn mỗi lượt"
   // vì nó viết câu trả lời NGẮN HƠN, mà ngắn hơn không phải là rẻ hơn.
   chat_pro: 'claude-sonnet-5',
-  chat_max: 'gpt-5.6-sol',
+  chat_max: 'gpt-6-sol',
   // Lượt có ảnh lấy model mạnh nhất. Bài học cũ vẫn nguyên giá trị: model yếu
   // NHẬN được ảnh, không báo lỗi, và BỊA nội dung — sai mà trôi chảy thì tệ
   // hơn hẳn một lỗi. Chưa đo lại khả năng nhìn của bộ Claude này.
@@ -387,7 +395,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   chat_free_fallback: 'claude-sonnet-4-6',
 
   interview_grade: 'claude-sonnet-5',
-  interview_report: 'gpt-5.6-sol',
+  interview_report: 'gpt-6-sol',
   interview_generate: 'claude-sonnet-5',
 
   language_tutor: 'claude-sonnet-5',
@@ -445,9 +453,9 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    */
   note_format: 'claude-sonnet-4-6',
 
-  cv_critique: 'gpt-5.6-sol',
-  cv_writing: 'gpt-5.6-sol',
-  cv_parse: 'gpt-5.6-sol',
+  cv_critique: 'gpt-6-sol',
+  cv_writing: 'gpt-6-sol',
+  cv_parse: 'gpt-6-sol',
 
   exam_grade: 'claude-sonnet-5',
   exphub_doc: 'gpt-5.4-mini',
@@ -458,7 +466,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * một ký hiệu sai là hỏng cả bài toán. Ở đây tiết kiệm vài xu đổi lấy một đề
    * thi sai là lỗ.
    */
-  doc_ocr: 'gpt-5.6-sol',
+  doc_ocr: 'gpt-6-sol',
   news_bulletin: 'gpt-5.4-mini',
   /**
    * Xem lại kế hoạch trong ngày. Model RẺ NHẤT, có chủ ý.
@@ -1073,7 +1081,7 @@ const RAMBO_VIEC_HANG_LOAT = new Set<LlmPurpose>(['news_bulletin']);
  * hay từ bảng giá của hãng — nó là hệ số của từng cổng bán lại. Muốn đổi model
  * ở đây thì phải biết hệ số, đừng suy từ "model nào mạnh hơn".
  */
-const MODELAPI_DU_PHONG = process.env.LLM_MODELAPI_DU_PHONG?.trim() || 'gpt-5.6-sol';
+const MODELAPI_DU_PHONG = process.env.LLM_MODELAPI_DU_PHONG?.trim() || 'gpt-6-sol';
 
 export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`]?.trim();

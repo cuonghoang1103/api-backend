@@ -70,9 +70,9 @@ export const MODEL_AGENT: readonly ModelAgent[] = Object.freeze([
   },
   {
     id: 'gpt-sol',
-    model: 'gpt-5.6-sol',
-    ten: 'GPT 5.6 Sol',
-    mo: 'Nhà khác — ĐẮT GẤP 7,3 LẦN (12,77/việc). Chỉ khi cần ý kiến thứ hai',
+    model: 'gpt-6-sol',
+    ten: 'GPT 6 Sol',
+    mo: 'Nhà khác — rẻ hơn GPT 5.6 Sol cũ ~4 lần (đo 27/09). Khi cần ý kiến thứ hai',
   },
 ]);
 

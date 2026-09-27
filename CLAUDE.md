@@ -488,6 +488,18 @@ opus 39%). Việc tương tác (`chat_pro`, `exam_grade`, `language_tutor`,
 ⛔ **`doc_ocr` KHÔNG hạ xuống model RẺ.** Model rẻ rụng mũi tên vector
 `AB` → `|AB|`, và một ký hiệu sai là hỏng cả bài toán.
 
+**Cập nhật 27/09/2026 — MỌI chỗ `gpt-5.6-sol` đã chuyển sang `gpt-6-sol`**
+(`chat_max`, `interview_report`, `cv_*`, `doc_ocr`, `MODELAPI_DU_PHONG`, mục GPT
+của AI Code). Đo cùng bộ việc: đúng ngang nhau (kể cả chép đề toán có vectơ
+từ ảnh), sổ cổng trừ ít hơn ~4 lần, nhanh ~3–6 lần. Chi tiết số đo ở
+`MODEL_CATALOG` trong `gateway.ts`. Muốn quay lại: `LLM_MODEL_<VIỆC>=gpt-5.6-sol`.
+
+**Cổng dự phòng AI Code (27/09/2026):** rambo sập ⇒ app hỏi, người dùng nhập
+mật khẩu (admin đặt ở `/admin/commerce?tab=fable`) ⇒ chạy `gpt-6-sol` trên
+modelapi; rambo sống lại tự về. Xem `src/services/agent/congDuPhong.ts`.
+⛔ Đừng đặt Claude làm model dự phòng: modelapi tính phần đọc-từ-đệm giá đầy
+đủ ×2 — một việc AI Code 227 đơn vị sổ, `gpt-6-sol` 16,4.
+
 **Cập nhật 14/09/2026 — `doc_ocr` = `gpt-5.6-sol`, KHÔNG còn `claude-opus-4-8`.**
 Đây KHÔNG mâu thuẫn với dòng trên: `gpt-5.6-sol` không phải model rẻ, và nó là
 **model GPT DUY NHẤT của cổng thật sự NHÌN được ảnh** (đo bằng ảnh 1×1 px:

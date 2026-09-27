@@ -1491,7 +1491,7 @@ export function doiTenModel(ten: string): string {
 const DS_MODEL: Array<{ id: ModelAgent; ten: string; mo: string }> = [
   { id: 'sonnet-5', ten: 'Cuong Sonnet 5', mo: 'rẻ nhất — mặc định (1,76/việc)' },
   { id: 'opus-4-8', ten: 'CuongMini Max 4.8', mo: 'mạnh nhất — đắt gấp 2,3 lần (4,07/việc)' },
-  { id: 'gpt-sol', ten: 'GPT 5.6 Sol', mo: 'nhà khác — ĐẮT GẤP 7,3 LẦN (12,77/việc)' },
+  { id: 'gpt-sol', ten: 'GPT 6 Sol', mo: 'nhà khác — ý kiến thứ hai' },
 ];
 
 const DS_MUC: Array<{ id: MucNoLuc; ten: string; mo: string }> = [

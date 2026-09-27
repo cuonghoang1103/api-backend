@@ -20,6 +20,7 @@ import * as svc from '../services/ielts/ielts.service.js';
 import { hoiVeChu, chamBaiViet, CAC_Y } from '../services/ielts/hoiAI.service.js';
 import { dungDe, nopDe, lichSuThi } from '../services/ielts/deThi.service.js';
 import { chamBaiNoi } from '../services/ielts/chamNoi.service.js';
+import { docTo } from '../services/ielts/docTo.service.js';
 import multer from 'multer';
 
 const router = Router();
@@ -45,6 +46,16 @@ router.get('/chung/:kind', async (req, res: Response<ApiResponse>, next) => {
 router.get('/chang/:stage/:kind', async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, await svc.phanCuaChang(String(req.params.stage), String(req.params.kind))); } catch (e) { next(e); }
 });
+
+// ─── Đọc to (giọng Anh WaveNet, cache trên R2) ───────────────
+// Trả `{ url }` của file mp3; `{ url: null, lyDo }` khi chưa có khoá TTS hoặc
+// hết hạn mức ngày — web lùi về giọng trình duyệt. Xem docTo.service.ts.
+router.post('/doc',
+  body('text').isString().isLength({ min: 1, max: 1500 }),
+  validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await docTo(uid(req), req.body)); } catch (e) { next(e); }
+  });
 
 // ─── Hỏi AI về một mẩu chữ trong bài ─────────────────────────
 //

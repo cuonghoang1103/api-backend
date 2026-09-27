@@ -4,37 +4,12 @@ import { Fragment, useState } from 'react';
 import { Volume2, Check, X, RotateCcw, Sparkles, Lightbulb } from 'lucide-react';
 import { VOCAB_INDEX, type Block } from './data';
 import { useTutor } from './tutorContext';
+import { play } from './audio';
+import { renderBlock2 } from './Blocks2';
 import s from './ielts.module.css';
 
-/* ── Đọc to ─────────────────────────────────────────────────────────────
- * Không dùng useSpeak của khoá cũ: đánh vần cần XẾP HÀNG nhiều câu ngắn
- * ("W", "A", "L"...). Gộp thành một chuỗi "W, A, L" thì giọng máy đọc chữ
- * "A" như mạo từ /ə/ — đúng cái bẫy mà bài nghe đang dạy tránh. Mỗi chữ một
- * utterance riêng thì nó đọc tên chữ cái.
- */
-function enVoice(): SpeechSynthesisVoice | undefined {
-  const v = window.speechSynthesis.getVoices();
-  return v.find((x) => x.lang === 'en-GB') || v.find((x) => x.lang === 'en-US') || v.find((x) => x.lang?.startsWith('en'));
-}
-
-export function speak(parts: string | string[], rate = 0.9, onEnd?: () => void) {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-  const synth = window.speechSynthesis;
-  synth.cancel();
-  const list = Array.isArray(parts) ? parts : [parts];
-  const voice = enVoice();
-  list.forEach((text, i) => {
-    const u = new SpeechSynthesisUtterance(text);
-    if (voice) u.voice = voice;
-    u.lang = voice?.lang || 'en-GB';
-    u.rate = rate;
-    if (i === list.length - 1 && onEnd) {
-      u.onend = onEnd;
-      u.onerror = onEnd;
-    }
-    synth.speak(u);
-  });
-}
+/* ── Đọc to: xem audio.ts (mp3 giọng Anh từ máy chủ, lùi về giọng trình duyệt). ── */
+export { play } from './audio';
 
 function SpeakBtn({ text, label }: { text: string; label?: string }) {
   const [on, setOn] = useState(false);
@@ -45,7 +20,7 @@ function SpeakBtn({ text, label }: { text: string; label?: string }) {
       aria-label={label ?? `Nghe: ${text}`}
       onClick={() => {
         setOn(true);
-        speak(text, 0.9, () => setOn(false));
+        play({ text }, () => setOn(false));
       }}
     >
       <Volume2 size={15} />
@@ -358,7 +333,7 @@ function Dictation({ b }: { b: Extract<Block, { t: 'dictation' }> }) {
                   const p = [...plays];
                   p[i] += 1;
                   setPlays(p);
-                  speak(it.spell.split(/\s*,\s*/), 0.8);
+                  play({ text: it.spell, kieu: 'danhvan', toc: 0.85 });
                 }}
               >
                 <Volume2 size={15} /> Nghe{plays[i] > 0 ? ` (${plays[i]})` : ''}
@@ -496,7 +471,7 @@ function renderBlock(b: Block, i: number) {
                         <span className={s.wordVi}>{v.vi}</span>
                       </div>
                       <div className={s.wordEx}>
-                        <button type="button" className={s.linkBtn} style={{ fontWeight: 400, color: 'inherit', textAlign: 'left' }} onClick={() => speak(v.ex)}>
+                        <button type="button" className={s.linkBtn} style={{ fontWeight: 400, color: 'inherit', textAlign: 'left' }} onClick={() => play({ text: v.ex })}>
                           <HighlightWord sentence={v.ex} word={v.w} />
                         </button>
                       </div>
@@ -513,7 +488,7 @@ function renderBlock(b: Block, i: number) {
                   <div key={g.sound} className={s.abcRow}>
                     <span className={s.abcSound}>{g.sound}</span>
                     {g.letters.map((x) => (
-                      <button key={x.l} type="button" className={s.letter} onClick={() => speak(x.l, 0.8)} aria-label={`Nghe chữ ${x.l}`}>
+                      <button key={x.l} type="button" className={s.letter} onClick={() => play({ text: x.l, kieu: 'danhvan' })} aria-label={`Nghe chữ ${x.l}`}>
                         <span className={s.letterL}>{x.l}</span>
                         <span className={s.letterIpa}>{x.ipa}</span>
                       </button>
@@ -528,10 +503,12 @@ function renderBlock(b: Block, i: number) {
             return <Quiz key={b.id} b={b} />;
           case 'mcq':
             return <Mcq key={b.id} b={b} />;
+          default:
+            return renderBlock2(b, i);
         }
 }
 
-const IS_EXERCISE = new Set(['quiz', 'mcq', 'dictation']);
+const IS_EXERCISE = new Set(['quiz', 'mcq', 'dictation', 'listen', 'essay', 'speak', 'passage']);
 
 /**
  * `framed` (bài ngữ pháp): mỗi mục bắt đầu bằng tiêu đề được ĐÓNG KHUNG cùng

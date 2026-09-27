@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Send, X, Trash2, Volume2, Copy, Check } from 'lucide-react';
-import { speak } from './Blocks';
+import { play } from './audio';
 import RobotAI from '@/components/academy/RobotAI';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { TutorAsk } from './tutorContext';
@@ -39,7 +39,7 @@ function AnswerTools({ text }: { text: string }) {
   return (
     <div className={s.ansTools}>
       {ex.length > 0 && (
-        <button type="button" className={s.ansTool} onClick={() => speak(ex, 0.9)}>
+        <button type="button" className={s.ansTool} onClick={() => play(ex.map((text) => ({ text })))}>
           <Volume2 size={13} /> Nghe {ex.length} ví dụ
         </button>
       )}

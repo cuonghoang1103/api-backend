@@ -10,6 +10,8 @@
  * Dữ liệu tĩnh, không qua DB: đây là nội dung soạn tay, đổi theo deploy là đủ.
  */
 
+import { WRITTEN } from './ngay';
+
 export type Ex = { en: string; vi: string };
 
 export type Block =
@@ -28,7 +30,24 @@ export type Block =
       grammar?: string;
       items: { q: string; answers: string[]; hint?: string }[];
     }
-  | { t: 'mcq'; id: string; title: string; items: { q: string; options: string[]; correct: number; why: string }[] };
+  | { t: 'mcq'; id: string; title: string; items: { q: string; options: string[]; correct: number; why: string }[] }
+  /* ── Khối cho các kỹ năng (Blocks2.tsx) ── */
+  /** Bài đọc: đoạn có nhãn A, B, C… như đề Reading thật. */
+  | { t: 'passage'; title: string; intro?: string; paras: { label?: string; text: string }[] }
+  /** Bài nghe: file giọng Anh (máy chủ sinh), lời thoại ẩn cho tới khi người học muốn xem. */
+  | { t: 'listen'; id: string; title: string; note?: string; lines: { who?: string; voice?: Voice; text: string }[] }
+  /** Hội thoại mẫu có nhân vật (Speaking): mỗi dòng một người, bấm nghe từng câu hoặc cả bài. */
+  | { t: 'dialogue'; title?: string; lines: { who: string; role: Role; text: string; vi?: string }[] }
+  /** Ô viết bài + AI chấm theo 4 tiêu chí (POST /ielts/ai/cham-viet). */
+  | { t: 'essay'; id: string; task: 'Task 1' | 'Task 2'; prompt: string; minWords: number; tips?: string[] }
+  /** Biểu đồ cho Writing Task 1 (vẽ SVG, không dùng ảnh). */
+  | { t: 'chart'; kind: 'line' | 'bar'; title: string; unit?: string; labels: string[]; series: { name: string; values: number[] }[] }
+  /** Luyện nói: nghe câu hỏi → ghi âm → nghe lại → AI chấm (POST /ielts/ai/cham-noi). */
+  | { t: 'speak'; id: string; part: '1' | '2' | '3'; questions: string[] };
+
+export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam';
+/** Nhân vật trong hội thoại — mỗi vai một hình và một giọng cố định. */
+export type Role = 'examiner' | 'candidate' | 'a' | 'b' | 'c';
 
 export type Lesson = {
   id: string;
@@ -599,7 +618,7 @@ const LATER: Stub[][] = [
 
 export const DAYS: Day[] = [
   { n: 1, lessons: [D1_GRAMMAR, D1_VOCAB, D1_LISTENING, D1_HOMEWORK] },
-  ...LATER.map((ls, i) => ({ n: i + 2, lessons: ls.map((s, j) => stub(i + 2, j + 1, s)) })),
+  ...LATER.map((ls, i) => ({ n: i + 2, lessons: WRITTEN[i + 2] ?? ls.map((s, j) => stub(i + 2, j + 1, s)) })),
 ];
 
 export { INTRO };
@@ -623,6 +642,12 @@ export function lessonText(l: Lesson): string {
       case 'dictation': out.push(`Bài nghe chép ${b.items.length} câu đánh vần.`); break;
       case 'quiz': out.push(`${b.title}: ${b.items.map((q) => q.q).join(' / ')}`); break;
       case 'mcq': out.push(`${b.title}: ${b.items.map((q) => q.q).join(' / ')}`); break;
+      case 'passage': out.push(`${b.title}\n${b.paras.map((x) => `${x.label ? `${x.label}. ` : ''}${x.text}`).join('\n')}`); break;
+      case 'listen': out.push(`Bài nghe "${b.title}": ${b.lines.map((x) => `${x.who ? `${x.who}: ` : ''}${x.text}`).join(' ')}`); break;
+      case 'dialogue': out.push(b.lines.map((x) => `${x.who}: ${x.text}`).join('\n')); break;
+      case 'essay': out.push(`Đề viết ${b.task}: ${b.prompt}`); break;
+      case 'chart': out.push(`Biểu đồ: ${b.title} (${b.labels.join(', ')})`); break;
+      case 'speak': out.push(`Câu hỏi Speaking Part ${b.part}: ${b.questions.join(' / ')}`); break;
     }
   }
   return out.join('\n').slice(0, 3900);

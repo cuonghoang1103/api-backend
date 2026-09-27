@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Check, CalendarPlus, Volume2, PlayCircle } from 'lucide-react';
 import { DAYS, INTRO, KIND_LABEL, daySummary, type Day, type Lesson } from './data';
 import { buildIcs, fmtDate, schedule, todayIso, WEEKDAYS, type Plan } from './useTienDo';
-import { speak } from './Blocks';
+import { play } from './audio';
 import s from './ielts.module.css';
 
 type Common = {
@@ -98,7 +98,7 @@ export function TongQuanBuoi({ day, done, scores, plan, onOpen, onAskDay }: Comm
               <p className={s.quizSub} style={{ marginBottom: 10 }}>Bấm một từ để nghe. Che nghĩa tiếng Việt đi và tự nhớ lại là cách ôn nhanh nhất.</p>
               <div className={s.wordGrid}>
                 {sum.vocab.map((v) => (
-                  <button key={v.w} type="button" className={s.wordChip} onClick={() => speak(v.w)}>
+                  <button key={v.w} type="button" className={s.wordChip} onClick={() => play({ text: v.w })}>
                     <Volume2 size={13} className={s.muted} />
                     <b>{v.w}</b>
                     <span className={s.muted}>{v.vi}</span>

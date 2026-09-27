@@ -80,4 +80,5 @@ lỗi trang · commit theo pathspec · `deploy-nha.sh` (tự push).
 | 3 | ✅ ポイント 16–23, 80/80 từ, bảng giờ/ngày/tháng, ます-form (27/09) |
 | 4 | ✅ ポイント 24–36, 72/72 từ, bảng chia tính từ (27/09) — danh sách cô dịch nhầm #68 (không nóng ≠ không lạnh) |
 | 5 | ✅ ポイント 37–47, 61/61 từ, bảng quá khứ (27/09) |
-| 6 | ⏳ đang soạn · mục 📖 Theo sách (bai/sach.ts) đang soạn |
+| 6 | ✅ ポイント 48–60, 55/55 từ (27/09) — danh sách cô dịch nhầm #27 (日曜日 = CN, không phải thứ 7) |
+| 📖 Theo sách | ⏳ Bài 1–3 đang soạn (bai/sach.ts); Bài 4–6 chưa |

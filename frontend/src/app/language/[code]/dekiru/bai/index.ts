@@ -9,6 +9,7 @@ import { BAI_2 } from './bai2';
 import { BAI_3 } from './bai3';
 import { BAI_4 } from './bai4';
 import { BAI_5 } from './bai5';
+import { BAI_6 } from './bai6';
 
 export const WRITTEN: Record<number, Day['lessons']> = {
   0: BAI_0,
@@ -17,4 +18,5 @@ export const WRITTEN: Record<number, Day['lessons']> = {
   3: BAI_3,
   4: BAI_4,
   5: BAI_5,
+  6: BAI_6,
 };

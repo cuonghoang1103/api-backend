@@ -398,8 +398,9 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       + 'trên cùng một file — mỗi lời gọi tool chở theo TOÀN BỘ hội thoại, nên đổi tên một biến ở 20 chỗ '
       + 'bằng 20 lượt tốn gấp hàng chục lần một lượt. '
       + 'Các phép thay chạy TUẦN TỰ theo thứ tự bạn đưa, và AI PHẢI ĐẢM BẢO mỗi `cu` là DUY NHẤT tại '
-      + 'thời điểm nó chạy. Chỉ cần MỘT phép trượt là CẢ LÔ bị huỷ và file giữ nguyên — không có chuyện '
-      + 'sửa được một nửa. Người dùng duyệt MỘT lần cho cả lô, thấy diff gộp.',
+      + 'thời điểm nó chạy. Phép nào không khớp thì BỎ QUA và được liệt kê trong kết quả (kèm đoạn thật '
+      + 'trên đĩa) — các phép khớp VẪN được áp. Đọc kết quả: nếu có phép chưa áp, chỉ gửi lại ĐÚNG những '
+      + 'phép đó. Người dùng duyệt MỘT lần cho cả lô, thấy diff gộp.',
     parameters: {
       type: 'object',
       properties: {

@@ -32,7 +32,7 @@ import { dinhDangTheoTen, napAnh, suaAnh } from './anh';
 import { hienKhoangTrang, timGanDung } from './ganDung';
 import { kiemDuongDanNgoai } from './ghiNgoai';
 import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
-import { catGiua, chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
+import { catGiua, chayLenh, giayMacDinhCho, phanLoaiLenh, type PhanLoaiLenh } from './lenh';
 import { chayQuyenCao, hopSeHien, type Nen } from './quyenCao';
 import { goiYKhiThieuQuyen } from './npmQuyen';
 import { batLenhNen, docDauRaNen, dungLenhNen } from './lenhNen';
@@ -888,46 +888,44 @@ async function toolSuaNhieuCho(goc: string, args: Record<string, unknown>, ghi: 
 
   const goc0 = await fs.readFile(dich, 'utf8');
   let hienTai = goc0;
+  /*
+   * ÁP PHẦN KHỚP, BÁO PHẦN HỎNG (27/09/2026). Bản cũ gặp một phép trượt là
+   * huỷ CẢ LÔ: bài thử GPT 6 Sol gửi 9–11 phép, phép cuối lệch, cả lô bỏ ⇒
+   * đọc lại file ⇒ gửi lại nguyên lô ⇒ lại trượt — mất 3 lượt, mỗi lượt chở
+   * cả ngữ cảnh lên cổng. Nay các phép khớp vẫn được áp (người dùng vẫn duyệt
+   * MỘT diff gộp như cũ); phép hỏng được liệt kê kèm đoạn thật trên đĩa để
+   * model chỉ gửi lại ĐÚNG những phép đó. Không phép nào khớp thì vẫn là lỗi.
+   */
+  const hong: string[] = [];
+  let soDaAp = 0;
   for (let i = 0; i < sua.length; i += 1) {
     const { cu, moi } = sua[i] as { cu: string; moi: string };
     const soLan = demSoLan(hienTai, cu);
     if (soLan === 0) {
-      /*
-       * Chẩn đoán khoảng trắng như `edit_file` — và ở ĐÂY nó còn đáng hơn:
-       * một phép trượt là huỷ CẢ LÔ, nên "chép lại cho chính xác" mà không nói
-       * chính xác chỗ nào lệch thì model gửi lại nguyên lô và trượt lại y hệt.
-       * Lưu ý so trên `hienTai` (đã áp ${i} phép trước), không phải `goc0`.
-       */
+      // So trên `hienTai` (đã áp các phép khớp trước nó), không phải `goc0`.
       const gan = timGanDung(hienTai, cu);
-      if (gan) {
-        return {
-          noiDung:
-            `LỖI: phép thứ ${i + 1} không khớp CHÍNH XÁC (đã áp ${i} phép trước đó), nhưng có đúng một `
-            + `đoạn khớp nếu bỏ qua khoảng trắng — ${gan.lyDo}. CẢ LÔ BỊ HUỶ, file giữ nguyên.\n\n`
-            + 'Đoạn THẬT trên đĩa (chép NGUYÊN VĂN vào "cu" của phép đó rồi gọi lại CẢ LÔ):\n'
-            + '```\n' + gan.doanThat + '\n```\n\n'
-            + '(Hiện khoảng trắng vô hình — → là tab, · là dấu cách thừa cuối dòng:)\n'
-            + '```\n' + hienKhoangTrang(gan.doanThat) + '\n```',
-          tomTat: `phép ${i + 1} lệch khoảng trắng — huỷ cả lô`,
-        };
-      }
-      return {
-        noiDung:
-          `LỖI: phép thứ ${i + 1} không tìm thấy "cu" trong ${tuongDoi} (đã áp ${i} phép trước đó). `
-          + 'CẢ LÔ BỊ HUỶ, file giữ nguyên. Gọi read_file đọc lại rồi chép chính xác, kể cả thụt lề. '
-          + 'ĐỪNG dùng xxd/od để dò từng byte — read_file đã trả đúng nội dung trên đĩa.',
-        tomTat: `phép ${i + 1} không khớp — huỷ cả lô`,
-      };
+      hong.push(gan
+        ? `• Phép ${i + 1}: không khớp CHÍNH XÁC nhưng có đúng một đoạn khớp nếu bỏ qua khoảng trắng — ${gan.lyDo}.\n`
+          + '  Đoạn THẬT trên đĩa (chép nguyên văn vào "cu"):\n```\n' + gan.doanThat + '\n```\n'
+          + '  (→ là tab, · là dấu cách thừa cuối dòng:)\n```\n' + hienKhoangTrang(gan.doanThat) + '\n```'
+        : `• Phép ${i + 1}: không tìm thấy "cu". Có thể phép trước đã đổi đoạn đó, hoặc chép sai thụt lề — `
+          + 'đọc lại đúng dải dòng đó bằng read_file (đừng đọc cả file).');
+      continue;
     }
     if (soLan > 1) {
-      return {
-        noiDung:
-          `LỖI: phép thứ ${i + 1} khớp ${soLan} chỗ nên không biết sửa chỗ nào. CẢ LÔ BỊ HUỶ. `
-          + 'Lấy thêm vài dòng quanh đoạn đó cho nó đủ riêng biệt.',
-        tomTat: `phép ${i + 1} trùng ${soLan} chỗ — huỷ cả lô`,
-      };
+      hong.push(`• Phép ${i + 1}: khớp ${soLan} chỗ nên không biết sửa chỗ nào — thêm vài dòng quanh đoạn cho đủ riêng biệt.`);
+      continue;
     }
     hienTai = hienTai.replace(cu, moi);
+    soDaAp += 1;
+  }
+
+  if (soDaAp === 0) {
+    return {
+      noiDung: `LỖI: không phép nào áp được vào ${tuongDoi}, file giữ nguyên.\n\n${hong.join('\n\n')}`
+        + '\n\nĐỪNG dùng xxd/od để dò từng byte — read_file đã trả đúng nội dung trên đĩa.',
+      tomTat: `0/${sua.length} phép khớp`,
+    };
   }
 
   if (hienTai === goc0) return { noiDung: 'LỖI: sau khi áp hết, file không đổi gì.', tomTat: 'không đổi' };
@@ -944,12 +942,16 @@ async function toolSuaNhieuCho(goc: string, args: Record<string, unknown>, ghi: 
     ghi.signal,
     ghi.so,
   );
-  if (quyet === 'tuChoi') return loiTuChoi(`sửa ${sua.length} chỗ trong ${tuongDoi}`);
+  if (quyet === 'tuChoi') return loiTuChoi(`sửa ${soDaAp} chỗ trong ${tuongDoi}`);
 
   await ghiVaNhoDeHoanTac(ghi.so, dich, hienTai, goc0);
+  const phanHong = hong.length
+    ? `\n\n⚠️ ${hong.length}/${sua.length} phép CHƯA áp (các phép còn lại đã ghi vào file). Chỉ gửi lại ĐÚNG những phép này, `
+      + `viết "cu" theo nội dung file SAU khi đã áp các phép trên:\n\n${hong.join('\n\n')}`
+    : '';
   return {
-    noiDung: `Đã áp ${sua.length} phép sửa vào ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
-    tomTat: `${sua.length} chỗ · +${diff.soThem} −${diff.soBo}${tuDong ? ' (tự duyệt)' : ''}`,
+    noiDung: `Đã áp ${soDaAp}/${sua.length} phép sửa vào ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.${phanHong}`,
+    tomTat: `${soDaAp}/${sua.length} chỗ · +${diff.soThem} −${diff.soBo}${tuDong ? ' (tự duyệt)' : ''}`,
     diff,
   };
 }
@@ -1289,7 +1291,7 @@ async function toolRunCommand(
       const q = await chayQuyenCao({
         lenh,
         cwd: goc,
-        giay: Number(args.timeout_seconds) || TRAN_GIAY_MAC_DINH,
+        giay: Number(args.timeout_seconds) || giayMacDinhCho(lenh),
         signal: boiCanh.signal,
       });
       /* Đường quyền cao KHÔNG chảy dần được: Windows mở một console riêng và
@@ -1308,7 +1310,7 @@ async function toolRunCommand(
       ...await chayLenh({
         lenh,
         cwd: goc,
-        giay: Number(args.timeout_seconds) || TRAN_GIAY_MAC_DINH,
+        giay: Number(args.timeout_seconds) || giayMacDinhCho(lenh),
         signal: boiCanh.signal,
         onRa: boiCanh.onRa,
       }),

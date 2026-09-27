@@ -18,6 +18,15 @@ bàn phím — và bạn đã MỞ NÓ LÊN NHÌN sau khi sửa, không phải �
 3. **Mobile-first.** Viết cho màn hẹp trước, mở rộng bằng `sm: md: lg:` / `@media (min-width: ...)`. Kiểm tối thiểu 3 bề rộng:
    **375px** (điện thoại), **768px** (máy tính bảng), **1280px** (máy tính).
 4. **Sửa nhỏ, nhìn lại, sửa tiếp.** Mỗi vòng: sửa → tải lại → chụp → so với mong muốn. Đừng dồn 10 thay đổi rồi mới nhìn.
+5. **Giữ nhận diện đang có.** Tên thương hiệu/tiêu đề trang, logo, bảng màu, kiểu chữ tiêu đề của dự án là thứ người dùng
+   nhận ra — nâng cấp là làm chúng ĐẸP HƠN, không thay bằng khẩu hiệu hay font khác. Đọc chú thích cạnh chỗ khai font/màu
+   (`layout.tsx`, `globals.css`): nhiều dự án ghi rõ font nào chỉ dành cho trang nào.
+6. **Không số liệu giả, không trang trí đội lốt dữ liệu.** Mọi con số, thanh tiến độ, biểu đồ trên màn hình phải lấy từ dữ
+   liệu thật. Thanh tiến độ cố định 68% "cho đẹp" là nói dối người dùng — họ sẽ tưởng đó là tiến độ của họ.
+7. **Làm đủ phạm vi được giao.** Được giao hai trang thì cả hai trang phải có thay đổi NHÌN THẤY được; chỉnh vài khoảng
+   cách không ai nhận ra không phải là "nâng cấp".
+8. **Báo cáo chỉ nói điều có thật trong `git diff`.** Trước khi báo xong, đọc lại diff và đối chiếu từng câu mình định viết.
+   Không có trong diff thì không được nói là đã làm.
 
 ## 1. Vòng tự kiểm bằng trình duyệt (làm MỖI lần sửa giao diện)
 

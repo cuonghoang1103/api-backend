@@ -210,6 +210,20 @@ import { spawn } from 'node:child_process';
 
 /** Trần mặc định và trần tuyệt đối cho một lệnh. */
 export const TRAN_GIAY_MAC_DINH = 120;
+
+/**
+ * Lệnh mà ai cũng biết là LÂU ⇒ mặc định chờ 15 phút thay vì 2 phút
+ * (27/09/2026). Bài thử GPT 6 Sol: `npm run build` của Next.js (4–5 phút) bị
+ * cắt ở 120s đúng lúc đang kiểm kiểu, model mất một lượt chạy lại với
+ * `timeout_seconds` — và nhiều model không nghĩ ra việc đó, cứ chạy lại y hệt.
+ * Model tự khai `timeout_seconds` thì vẫn thắng.
+ */
+const LENH_LAU = /\b(?:(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?(?:build|test|e2e)|next\s+build|vite\s+build|nuxt\s+build|tsc\b|docker\s+(?:build|compose\s+(?:build|up))|docker-compose\s+(?:build|up)|gradle\s|xcodebuild|flutter\s+build|cargo\s+(?:build|test)|mvn\s|dotnet\s+(?:build|test|publish)|go\s+(?:build|test)|pytest|playwright\s+test)|\.\/gradlew/i;
+export const TRAN_GIAY_LENH_LAU = 900;
+
+export function giayMacDinhCho(lenh: string): number {
+  return LENH_LAU.test(lenh) ? TRAN_GIAY_LENH_LAU : TRAN_GIAY_MAC_DINH;
+}
 /**
  * Trần thời gian TỐI ĐA cho một lệnh chạy trước mặt.
  *

@@ -1044,7 +1044,8 @@ export async function runAgentTurn(
          này thì nó gọi tool ở bước 10 như mọi bước khác, rồi lượt sau chạm
          trần và phát hiện của nó chỉ còn là những mẩu chữ rời rạc. */
       if (laPhu && demBuocViecNay(tatCa) >= MAX_AGENT_STEPS - 1) nhac.push(NHAC_BUOC_CUOI);
-      const guiDi = nhac.length ? ganNhacDuoi(nen.messages, nhac.join('\n')) : nen.messages;
+      const khongLap = boKetQuaLap(nen.messages);
+      const guiDi = nhac.length ? ganNhacDuoi(khongLap, nhac.join('\n')) : khongLap;
       uocLuongDangBay = uocLuongVao(system, guiDi);
 
       const goiMotLan = () => goiCongCoLuoiDo({
@@ -1269,6 +1270,98 @@ export async function runAgentTurn(
       cacheDoc: cacheDocTong,
     });
   }
+}
+
+/**
+ * Model GPT nào NHÌN được ảnh thật (đo 27/09/2026: gpt-6-sol, gpt-5.6-sol chép
+ * đúng đề toán từ ảnh; các model rẻ hơn nhận ảnh rồi BỊA). Đổi bằng env
+ * `AGENT_MODEL_NHIN_ANH` (danh sách phẩy) nếu đo thêm được model khác.
+ */
+function nhinDuocAnh(model: string): boolean {
+  const ds = (process.env.AGENT_MODEL_NHIN_ANH || 'gpt-6-sol,gpt-6-astra,gpt-5.6-sol')
+    .split(',').map((x) => x.trim()).filter(Boolean);
+  return ds.includes(model);
+}
+
+/**
+ * Hội thoại agent → khung OpenAI, KÈM ẢNH khi model nhìn được (27/09/2026).
+ *
+ * Giao thức OpenAI KHÔNG có chỗ cho ảnh trong `role:'tool'` (gửi kèm thì cổng bỏ
+ * im lặng hoặc từ chối cả lượt). Trước đây ta bỏ ảnh và dặn "bạn chưa nhìn thấy
+ * trang" ⇒ GPT làm giao diện mà KHÔNG BAO GIỜ nhìn được kết quả: bài thử
+ * 27/09 để lọt nhãn vỡ dòng và thanh tiến độ giả mà nó không thể thấy.
+ *
+ * Nay: ảnh của MỘT DÃY tool liền nhau được gom vào một tin `role:'user'` đặt
+ * NGAY SAU dãy đó — không chen giữa các tin tool của cùng một lượt gọi (OpenAI
+ * đòi mọi `tool_call_id` phải được trả lời liền sau tin assistant, chen tin
+ * khác vào là 400). Model không nhìn được ảnh thì giữ cách cũ.
+ */
+function tinNhanOpenAi(messages: AgentMessage[], coAnh: boolean): unknown[] {
+  const ra: unknown[] = [];
+  let anhCho: Array<{ media_type: string; data: string }> = [];
+  const xaAnh = () => {
+    if (!anhCho.length) return;
+    ra.push({
+      role: 'user',
+      content: [
+        { type: 'text', text: `[Ảnh chụp từ kết quả tool ở trên — ${anhCho.length} ảnh. Hãy NHÌN kỹ để kiểm giao diện.]` },
+        ...anhCho.map((a) => ({ type: 'image_url', image_url: { url: `data:${a.media_type};base64,${a.data}` } })),
+      ],
+    });
+    anhCho = [];
+  };
+  for (const m of messages) {
+    if (m.role !== 'tool') xaAnh();
+    if (m.role === 'tool' && m.anh?.length) {
+      if (coAnh) {
+        ra.push({ role: 'tool', tool_call_id: m.tool_call_id, content: `${m.content}\n[Ảnh chụp đính kèm ngay sau các kết quả tool.]` });
+        anhCho.push(...m.anh);
+      } else {
+        ra.push({
+          role: 'tool',
+          tool_call_id: m.tool_call_id,
+          content: `${m.content}\n[Ảnh chụp KHÔNG gửi được với model này — bạn chưa nhìn thấy trang. Dùng web_doc để đọc chữ.]`,
+        });
+      }
+      continue;
+    }
+    ra.push(m.role === 'tool' ? { role: 'tool', tool_call_id: m.tool_call_id, content: m.content } : m);
+  }
+  xaAnh();
+  return ra;
+}
+
+/**
+ * KẾT QUẢ TOOL GIỐNG HỆT MỘT KẾT QUẢ TRƯỚC ĐÓ ⇒ không gửi lại lần hai (27/09/2026).
+ *
+ * Bài thử GPT 6 Sol đọc lại cùng một file ba lần; mỗi lần vài nghìn token đi
+ * lên cổng, rồi cả ba bản cùng được gửi lại ở MỌI bước sau. Nội dung giống hệt
+ * TỪNG KÝ TỰ ⇒ file chưa đổi (hoặc lệnh ra đúng như cũ) ⇒ bản cũ vẫn nằm ngay
+ * trên trong ngữ cảnh, thay bản mới bằng một dòng trỏ về nó là không mất gì.
+ *
+ * Chạy SAU `nenNguCanh`: bản cũ đã bị lược thì không còn giống hệt ⇒ bản mới
+ * giữ nguyên, và đó là bản đầy đủ duy nhất còn lại — đúng như phải thế. Chỉ
+ * áp cho kết quả dài (≥ 800 ký tự) và không kèm ảnh. Tất định (cùng vào ⇒ cùng
+ * ra) nên không phá đệm tiền tố của cổng.
+ */
+export function boKetQuaLap(messages: AgentMessage[]): AgentMessage[] {
+  const daThay = new Map<string, number>();
+  let soTool = 0;
+  return messages.map((m) => {
+    if (m.role !== 'tool') return m;
+    soTool++;
+    if (m.anh?.length || m.content.length < 800) return m;
+    const truoc = daThay.get(m.content);
+    if (truoc === undefined) {
+      daThay.set(m.content, soTool);
+      return m;
+    }
+    return {
+      ...m,
+      content: `[Kết quả này GIỐNG HỆT kết quả tool thứ ${truoc} ở trên (${m.content.length.toLocaleString('vi-VN')} ký tự) — `
+        + 'nội dung chưa đổi nên không gửi lại. Dùng bản ở trên; đừng đọc lại lần nữa.]',
+    };
+  });
 }
 
 /** Rambo hỏng và không có vé dự phòng — xem nhánh bắt lỗi của `runAgentTurn`. */
@@ -1512,13 +1605,7 @@ async function goiCong(o: {
                ra bố cục thì tệ hơn hẳn việc nó biết mình chưa xem. */
             messages: [
               { role: 'system', content: o.system },
-              ...o.messages.map((m) => (m.role === 'tool' && m.anh?.length
-                ? {
-                    role: 'tool' as const,
-                    tool_call_id: m.tool_call_id,
-                    content: `${m.content}\n[Ảnh chụp KHÔNG gửi được qua cổng này — bạn chưa nhìn thấy trang. Dùng web_doc để đọc chữ.]`,
-                  }
-                : m)),
+              ...tinNhanOpenAi(o.messages, nhinDuocAnh(o.model)),
             ],
             tools: o.tools,
             tool_choice: 'auto',

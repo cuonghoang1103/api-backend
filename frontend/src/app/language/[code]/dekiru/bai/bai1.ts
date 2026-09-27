@@ -1146,6 +1146,13 @@ const KANJI: Lesson = {
         { q: '20日', answers: ['はつか'], hint: 'ngày 20' },
       ],
     },
+    {
+      t: 'write',
+      id: 'b1-viet-kanji',
+      title: 'Tập viết tay 42 chữ Hán của Bài 1',
+      note: 'Mỗi nhóm 10 chữ (bấm dải chữ để chuyển nhóm). Bấm ▶ Thứ tự nét trước khi viết — chữ Hán viết đúng thứ tự (trên → dưới, trái → phải, ngang trước sổ sau) thì cân và đẹp. Viết xong nhờ ✨ AI xem chữ.',
+      chars: ['私', '名', '前', '国', '日', '本', '韓', '中', '人', '何', '高', '校', '大', '学', '語', '仕', '事', '生', '先', '教', '師', '会', '社', '員', '誕', '月', '歳', '趣', '味', '水', '泳', '映', '画', '音', '楽', '読', '書', '旅', '行', '料', '理', '願'],
+    },
   ],
 };
 

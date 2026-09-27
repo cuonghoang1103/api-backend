@@ -1402,6 +1402,13 @@ const KANJI: Lesson = {
         { q: '焼き肉', options: ['やきにく', 'しょうにく', 'やきじく', 'やにく'], correct: 0, why: '**やきにく** — thịt nướng.' },
       ],
     },
+    {
+      t: 'write',
+      id: 'b6-viet-kanji',
+      title: 'Tập viết tay 48 chữ Hán của Bài 6',
+      note: 'Mỗi nhóm 10 chữ (bấm dải chữ để chuyển nhóm). Bấm ▶ Thứ tự nét trước khi viết — chữ Hán viết đúng thứ tự (trên → dưới, trái → phải, ngang trước sổ sau) thì cân và đẹp. Viết xong nhờ ✨ AI xem chữ.',
+      chars: ['今', '来', '週', '月', '約', '束', '用', '事', '季', '節', '試', '合', '野', '球', '歌', '手', '枚', '地', '図', '水', '着', '食', '飲', '物', '焼', '肉', '放', '題', '好', '居', '酒', '屋', '映', '画', '館', '下', '鉄', '近', '遠', '早', '広', '残', '念', '全', '部', '一', '緒', '遊'],
+    },
   ],
 };
 

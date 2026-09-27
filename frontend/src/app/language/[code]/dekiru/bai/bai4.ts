@@ -1504,6 +1504,13 @@ const KANJI: Lesson = {
         { q: 'Súp ấm — chữ đúng là:', options: ['暖かいスープ', '温かいスープ', '暑いスープ', '涼しいスープ'], correct: 1, why: 'Đồ ăn uống ấm: **温かい** (bộ 氵 nước).' },
       ],
     },
+    {
+      t: 'write',
+      id: 'b4-viet-kanji',
+      title: 'Tập viết tay 58 chữ Hán của Bài 4',
+      note: 'Mỗi nhóm 10 chữ (bấm dải chữ để chuyển nhóm). Bấm ▶ Thứ tự nét trước khi viết — chữ Hán viết đúng thứ tự (trên → dưới, trái → phải, ngang trước sổ sau) thì cân và đẹp. Viết xong nhờ ✨ AI xem chữ.',
+      chars: ['北', '南', '東', '西', '真', '中', '車', '電', '新', '幹', '線', '飛', '行', '機', '駅', '町', '時', '間', '半', '分', '歩', '温', '泉', '川', '山', '教', '会', '城', '神', '社', '寺', '人', '緑', '有', '名', '古', '多', '少', '大', '小', '高', '低', '静', '雨', '雪', '日', '天', '気', '暖', '涼', '暑', '寒', '熱', '冷', '甘', '辛', '苦', '年'],
+    },
   ],
 };
 

@@ -45,7 +45,12 @@ export type Block =
    * đúng thứ tự để dựng câu. `answer` là thứ tự đúng (có thể nhiều cách đúng
    * qua `alt`); `chips` = các mảnh (đúng + vài mảnh gây nhiễu nếu muốn).
    */
-  | { t: 'build'; id: string; title: string; items: { vi: string; chips: string[]; answer: string[]; alt?: string[][]; ro?: string }[] };
+  | { t: 'build'; id: string; title: string; items: { vi: string; chips: string[]; answer: string[]; alt?: string[][]; ro?: string }[] }
+  /**
+   * Tập viết tay (Apple Pencil / chuột): mỗi chữ một hàng — ô mẫu chạy thứ tự
+   * nét (KanjiVG) + ba ô luyện, rồi ✨ AI xem chữ (POST /ielts/ai/xem-chu-viet).
+   */
+  | { t: 'write'; id: string; title: string; chars: string[]; note?: string };
 
 export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam';
 /** Nhân vật trong hội thoại — mỗi vai một hình và một giọng cố định. */

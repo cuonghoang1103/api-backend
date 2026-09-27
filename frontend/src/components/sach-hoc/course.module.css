@@ -1093,3 +1093,105 @@
 .chipJa:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--k); }
 .chipJa:disabled { opacity: 0.3; }
 .chipOn { background: color-mix(in srgb, var(--k) 12%, var(--lh-surface)); border-color: var(--k); }
+
+/* ══ Viết tay (HandCanvas · khối write · giấy IELTS) ══════════════════════ */
+.inkWrap { position: relative; width: 100%; line-height: 0; }
+.inkCanvas {
+  display: block;
+  touch-action: none; /* bút không kéo trang; ngón tay tự cuộn trong HandCanvas */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: crosshair;
+  border-radius: 12px;
+}
+.inkErase { cursor: cell; }
+
+.inkTools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 12px 0 10px; }
+.inkTool {
+  display: inline-flex; align-items: center; gap: 5px;
+  min-height: 38px; padding: 6px 11px;
+  border: 1px solid var(--lh-line); border-radius: 10px;
+  background: var(--lh-surface); color: var(--lh-ink-2);
+  font-size: 13.5px; font-weight: 550;
+}
+.inkTool:hover { border-color: var(--k, var(--lh-accent)); color: var(--lh-ink); }
+.inkToolOn { border-color: var(--k, var(--lh-accent)); background: color-mix(in srgb, var(--k, var(--lh-accent)) 12%, var(--lh-surface)); color: var(--lh-ink); }
+.inkSep { width: 1px; height: 22px; background: var(--lh-line); margin: 0 2px; }
+.inkSwatch {
+  width: 30px; height: 30px; border-radius: 999px;
+  background: var(--sw); border: 3px solid var(--lh-surface);
+  box-shadow: 0 0 0 1px var(--lh-line);
+}
+:global(html.theme-dark) .inkSwatch[aria-label='Mực đen'] { background: #eef0f3; }
+.inkSwatchOn { box-shadow: 0 0 0 2px var(--k, var(--lh-accent)); }
+@media (max-width: 480px) { .inkTool span { display: none; } .inkTool { padding: 6px 9px; } }
+
+/* khối write */
+.wBox { margin: 24px 0; padding: 18px; border: 1px solid var(--lh-line); border-top: 3px solid var(--k, var(--lh-accent)); border-radius: 14px; background: var(--lh-surface); }
+.wPager { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; }
+.wChip {
+  min-height: 34px; padding: 5px 11px; border-radius: 999px;
+  border: 1px solid var(--lh-line); background: var(--lh-surface-2); color: var(--lh-ink-2);
+  font-size: 14px; font-weight: 550; letter-spacing: 0.04em;
+}
+.wChip:hover { border-color: var(--k, var(--lh-accent)); }
+.wChipOn { border-color: var(--k, var(--lh-accent)); background: color-mix(in srgb, var(--k, var(--lh-accent)) 14%, var(--lh-surface)); color: var(--lh-ink); }
+.wRows { display: flex; flex-direction: column; gap: 14px; }
+.wRow { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; }
+.wModel { flex: 0 0 auto; width: 112px; }
+.wModelSvg {
+  display: block; width: 112px; height: 112px;
+  border: 1.5px solid var(--lh-line); border-radius: 12px; background: var(--lh-bg);
+}
+.wGuide { stroke: var(--lh-line); stroke-width: 0.8; stroke-dasharray: 3 3; fill: none; }
+.wStroke { fill: none; stroke: var(--lh-ink); stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }
+.wStrokeGhost { fill: none; stroke: var(--lh-line); stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }
+.wStrokeAnim { stroke: var(--k, var(--lh-accent)); stroke-dasharray: 1; stroke-dashoffset: 1; animation: wDraw 0.6s ease-in-out forwards; }
+@keyframes wDraw { to { stroke-dashoffset: 0; } }
+.wNum { font-size: 8.5px; font-weight: 700; fill: #dc2626; font-family: system-ui, sans-serif; }
+:global(html.theme-dark) .wNum { fill: #fca5a5; }
+.wFallback { font-size: 78px; fill: var(--lh-ink); font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif; }
+.wModelFoot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin-top: 6px; }
+.wModelCh { font-size: 15px; font-weight: 700; color: var(--lh-ink); }
+.wCount { font-size: 12px; color: var(--lh-ink-3); }
+.wPlay {
+  display: inline-flex; align-items: center; gap: 3px;
+  min-height: 30px; padding: 3px 9px; border-radius: 8px;
+  background: color-mix(in srgb, var(--k, var(--lh-accent)) 13%, transparent); color: var(--k, var(--lh-accent));
+  font-size: 12.5px; font-weight: 650;
+}
+.wPlay:disabled { opacity: 0.55; }
+.wPractice { flex: 1 1 300px; min-width: 288px; max-width: 480px; display: flex; gap: 6px; align-items: flex-start; }
+.wPractice > .inkWrap { flex: 1; min-width: 0; }
+.wPractice .inkCanvas { box-shadow: var(--lh-shadow); }
+.wRowTools { display: flex; flex-direction: column; gap: 6px; }
+.wMini {
+  display: inline-grid; place-items: center; width: 34px; height: 34px;
+  border: 1px solid var(--lh-line); border-radius: 9px; background: var(--lh-surface); color: var(--lh-ink-2);
+}
+.wMini:hover:not(:disabled) { border-color: var(--k, var(--lh-accent)); color: var(--lh-ink); }
+.wMini:disabled { opacity: 0.4; }
+.wScore { display: inline-block; margin-bottom: 8px; padding: 4px 10px; border-radius: 999px; background: var(--lh-good-soft); color: var(--lh-good); font-size: 14px; }
+.wCredit { margin-top: 12px; font-size: 11.5px; color: var(--lh-ink-3); }
+.wCredit a { text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 420px) {
+  .wModel { width: 100%; display: flex; gap: 10px; align-items: center; }
+  .wModelSvg { width: 96px; height: 96px; flex: 0 0 auto; }
+  .wModelFoot { flex-direction: column; align-items: flex-start; margin-top: 0; }
+  .wPractice { min-width: 0; flex-basis: 100%; }
+}
+
+/* giấy viết tay IELTS */
+.modeSwitch { display: inline-flex; padding: 3px; margin-bottom: 10px; border: 1px solid var(--lh-line); border-radius: 12px; background: var(--lh-surface-2); }
+.modeBtn { min-height: 36px; padding: 6px 14px; border-radius: 9px; font-size: 14px; font-weight: 600; color: var(--lh-ink-3); }
+.modeBtnOn { background: var(--lh-surface); color: var(--lh-ink); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); }
+.hPaperBox { scroll-margin-top: calc(var(--app-nav-h, 64px) + 64px); }
+.hTabs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; }
+.hPaper { border: 1px solid var(--lh-line); border-radius: 12px; box-shadow: 0 6px 18px -12px rgba(0, 0, 0, 0.25); }
+.hChep { margin-top: 12px; border: 1px solid var(--lh-line); border-radius: 12px; background: var(--lh-surface-2); }
+.hChep summary { cursor: pointer; padding: 10px 14px; font-size: 14px; font-weight: 600; color: var(--lh-ink-2); list-style: none; }
+.hChep summary::-webkit-details-marker { display: none; }
+.hChep pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; word-break: break-word; font-family: Georgia, serif; font-size: 15px; line-height: 1.7; color: var(--lh-ink); }
+.wPlaceholder { border-radius: 12px; background: var(--lh-surface-2); }

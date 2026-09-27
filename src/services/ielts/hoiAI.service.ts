@@ -112,6 +112,24 @@ export async function hoiVeChu(
 }
 
 /**
+ * Bộ chấm 4 tiêu chí IELTS Writing — DÙNG CHUNG cho bài gõ phím (chamBaiViet)
+ * và bài viết tay (vietTay.service.ts), để hai đường ra cùng một thang điểm.
+ */
+export const IELTS_WRITING_RUBRIC = [
+  'Bạn là giám khảo IELTS Writing. Trả lời bằng TIẾNG VIỆT.',
+  'Chấm theo ĐÚNG bốn tiêu chí, mỗi tiêu chí một band (dùng thang 0.5):',
+  '  1. Task Response — trả lời đúng và đủ yêu cầu của đề chưa',
+  '  2. Coherence & Cohesion — bố cục, liên kết ý',
+  '  3. Lexical Resource — vốn từ, dùng từ chính xác',
+  '  4. Grammatical Range & Accuracy — đa dạng và đúng ngữ pháp',
+  'Với MỖI tiêu chí: cho band, nói MỘT điểm mạnh và MỘT việc cần sửa, trích',
+  'đúng câu trong bài làm dẫn chứng. Không khen chung chung.',
+  'Sau đó: band tổng (trung bình cộng bốn tiêu chí, làm tròn 0.5),',
+  'rồi mục "SỬA NGAY" liệt kê tối đa 5 câu sai kèm bản sửa.',
+  'Kết thúc bằng đúng một dòng: "⚠️ Band này do AI ước lượng, không phải điểm thi thật."',
+].join('\n');
+
+/**
  * Chấm bài viết theo BỐN tiêu chí thật của IELTS Writing.
  *
  * Không dùng lại bộ chấm của My Language: cái đó chấm "bài viết tiếng nước
@@ -141,19 +159,7 @@ export async function chamBaiViet(
     feature: 'chat',
     userId,
     maxTokens: 1400,
-    system: [
-      'Bạn là giám khảo IELTS Writing. Trả lời bằng TIẾNG VIỆT.',
-      'Chấm theo ĐÚNG bốn tiêu chí, mỗi tiêu chí một band (dùng thang 0.5):',
-      '  1. Task Response — trả lời đúng và đủ yêu cầu của đề chưa',
-      '  2. Coherence & Cohesion — bố cục, liên kết ý',
-      '  3. Lexical Resource — vốn từ, dùng từ chính xác',
-      '  4. Grammatical Range & Accuracy — đa dạng và đúng ngữ pháp',
-      'Với MỖI tiêu chí: cho band, nói MỘT điểm mạnh và MỘT việc cần sửa, trích',
-      'đúng câu trong bài làm dẫn chứng. Không khen chung chung.',
-      'Sau đó: band tổng (trung bình cộng bốn tiêu chí, làm tròn 0.5),',
-      'rồi mục "SỬA NGAY" liệt kê tối đa 5 câu sai kèm bản sửa.',
-      'Kết thúc bằng đúng một dòng: "⚠️ Band này do AI ước lượng, không phải điểm thi thật."',
-    ].join('\n'),
+    system: IELTS_WRITING_RUBRIC,
     messages: [{
       role: 'user',
       content: `Đề (${b.task ?? 'Task 2'}): ${String(b.de ?? '(không có đề)').slice(0, 1500)}\n\nBài của học viên:\n${bai}`,

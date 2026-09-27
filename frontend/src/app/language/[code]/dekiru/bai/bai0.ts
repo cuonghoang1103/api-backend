@@ -204,6 +204,16 @@ const HIRAGANA: Lesson = {
         { q: 'ほん', hint: 'quyển sách', answers: ['hon'] },
       ],
     },
+    { t: 'h', text: '4. Tập viết tay hiragana (Apple Pencil / chuột)' },
+    {
+      t: 'p',
+      text: 'Bấm **▶ Thứ tự nét** để xem từng nét chạy theo đúng thứ tự, rồi tô theo chữ mờ ở ô đầu và tự viết ở hai ô sau. Viết xong nhờ **✨ AI xem chữ** chỉ ra chữ nào lệch hình, nét nào thiếu. Thứ tự nét quan trọng: viết đúng thứ tự thì chữ tự cân và viết nhanh hơn.',
+    },
+    { t: 'write', id: 'b0-viet-hira-1', title: 'Viết hiragana: hàng あ・か', chars: ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ'] },
+    { t: 'write', id: 'b0-viet-hira-2', title: 'Viết hiragana: hàng さ・た', chars: ['さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と'] },
+    { t: 'write', id: 'b0-viet-hira-3', title: 'Viết hiragana: hàng な・は', chars: ['な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ'] },
+    { t: 'write', id: 'b0-viet-hira-4', title: 'Viết hiragana: hàng ま・や', chars: ['ま', 'み', 'む', 'め', 'も', 'や', 'ゆ', 'よ'] },
+    { t: 'write', id: 'b0-viet-hira-5', title: 'Viết hiragana: hàng ら・わ + ん', chars: ['ら', 'り', 'る', 'れ', 'ろ', 'わ', 'を', 'ん'] },
   ],
 };
 
@@ -541,6 +551,16 @@ const KATAKANA: Lesson = {
         { q: 'ケーキ', hint: 'bánh ngọt', answers: ['keeki', 'kēki'] },
       ],
     },
+    { t: 'h', text: '4. Tập viết tay katakana (Apple Pencil / chuột)' },
+    {
+      t: 'p',
+      text: 'Katakana nét thẳng và gắt — cẩn thận các cặp **シ/ツ**, **ソ/ン** (khác nhau ở HƯỚNG nét cuối: シ, ン kéo từ dưới lên; ツ, ソ kéo từ trên xuống), **ク/ケ/タ**, **ウ/ワ/フ**. Xem thứ tự nét trước rồi mới viết.',
+    },
+    { t: 'write', id: 'b0-viet-kata-1', title: 'Viết katakana: hàng ア・カ', chars: ['ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ'] },
+    { t: 'write', id: 'b0-viet-kata-2', title: 'Viết katakana: hàng サ・タ', chars: ['サ', 'シ', 'ス', 'セ', 'ソ', 'タ', 'チ', 'ツ', 'テ', 'ト'] },
+    { t: 'write', id: 'b0-viet-kata-3', title: 'Viết katakana: hàng ナ・ハ', chars: ['ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ'] },
+    { t: 'write', id: 'b0-viet-kata-4', title: 'Viết katakana: hàng マ・ヤ', chars: ['マ', 'ミ', 'ム', 'メ', 'モ', 'ヤ', 'ユ', 'ヨ'] },
+    { t: 'write', id: 'b0-viet-kata-5', title: 'Viết katakana: hàng ラ・ワ + ン', chars: ['ラ', 'リ', 'ル', 'レ', 'ロ', 'ワ', 'ヲ', 'ン'] },
   ],
 };
 

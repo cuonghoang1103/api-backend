@@ -13,6 +13,8 @@ import type { Block, Role, Voice } from './types';
 import { play, stopAudio } from './audio';
 import { Inline } from './Blocks';
 import { useCourse, useTutor } from './tutorContext';
+import HandEssay from './HandEssay';
+import WriteBlock from './WriteBlock';
 import s from './course.module.css';
 
 /* ── Nhân vật ────────────────────────────────────────────────────────── */
@@ -214,6 +216,11 @@ function Essay({ b }: { b: Extract<Block, { t: 'essay' }> }) {
   const [err, setErr] = useState('');
   useEffect(() => { try { setTxt(localStorage.getItem(key) ?? ''); } catch { /* bỏ qua */ } }, [key]);
   const words = txt.trim() ? txt.trim().split(/\s+/).length : 0;
+  // ⌨️ gõ phím / ✍️ viết tay — nhớ lựa chọn trên máy này (iPad thì hay viết tay).
+  const modeKey = `${key}:mode`;
+  const [hand, setHand] = useState(false);
+  useEffect(() => { try { setHand(localStorage.getItem(modeKey) === 'hand'); } catch { /* bỏ qua */ } }, [modeKey]);
+  const pickMode = (h: boolean) => { setHand(h); try { localStorage.setItem(modeKey, h ? 'hand' : 'type'); } catch { /* bỏ qua */ } };
 
   const grade = async () => {
     setBusy(true); setErr(''); setRes(null);
@@ -239,6 +246,11 @@ function Essay({ b }: { b: Extract<Block, { t: 'essay' }> }) {
           {b.tips.map((t) => <li key={t} className={s.noteItem}><Inline text={t} /></li>)}
         </ul>
       )}
+      <div className={s.modeSwitch} role="tablist" aria-label="Cách viết bài">
+        <button type="button" role="tab" aria-selected={!hand} className={`${s.modeBtn} ${!hand ? s.modeBtnOn : ''}`} onClick={() => pickMode(false)}>⌨️ Gõ phím</button>
+        <button type="button" role="tab" aria-selected={hand} className={`${s.modeBtn} ${hand ? s.modeBtnOn : ''}`} onClick={() => pickMode(true)}>✍️ Viết tay</button>
+      </div>
+      {hand ? <HandEssay id={b.id} de={b.prompt} task={b.task} /> : <>
       <textarea
         className={s.essayInput}
         value={txt}
@@ -256,6 +268,7 @@ function Essay({ b }: { b: Extract<Block, { t: 'essay' }> }) {
       </div>
       {err && <div className={`${s.feedback} ${s.bad}`}>{err}</div>}
       {res && <div className={`${s.turnA} ${s.essayResult}`}><ChatMarkdown content={res} renderMath={false} /></div>}
+      </>}
     </div>
   );
 }
@@ -501,6 +514,7 @@ export function renderBlock2(b: Block, i: number) {
     case 'chart': return <Chart key={i} b={b} />;
     case 'speak': return <Speak key={b.id} b={b} />;
     case 'build': return <Build key={b.id} b={b} />;
+    case 'write': return <WriteBlock key={b.id} b={b} />;
     default: return null;
   }
 }

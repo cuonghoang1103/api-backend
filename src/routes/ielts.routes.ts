@@ -21,6 +21,7 @@ import { hoiVeChu, chamBaiViet, CAC_Y } from '../services/ielts/hoiAI.service.js
 import { dungDe, nopDe, lichSuThi } from '../services/ielts/deThi.service.js';
 import { chamBaiNoi } from '../services/ielts/chamNoi.service.js';
 import { docTo } from '../services/ielts/docTo.service.js';
+import { xemChuViet, chamVietTay, MAX_TRANG } from '../services/ielts/vietTay.service.js';
 import multer from 'multer';
 
 const router = Router();
@@ -75,6 +76,27 @@ router.post('/ai/cham-viet',
   validate,
   async (req, res: Response<ApiResponse>, next) => {
     try { ok(res, await chamBaiViet(uid(req), req.body)); } catch (e) { next(e); }
+  });
+
+// ─── Viết TAY (Apple Pencil) — AI nhìn ảnh nét chữ ────────────
+// Ảnh base64 trong thân JSON (express.json 10mb), không lưu lại ở đâu.
+
+/** Tập viết kana/kanji: một ảnh ghép các hàng + danh sách chữ mục tiêu. */
+router.post('/ai/xem-chu-viet',
+  body('image').isString().isLength({ min: 100, max: 2_200_000 }).withMessage('Ảnh thiếu hoặc quá lớn'),
+  body('chars').isArray({ min: 1, max: 20 }).withMessage('chars phải là mảng 1–20 chữ'),
+  validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await xemChuViet(uid(req), req.body)); } catch (e) { next(e); }
+  });
+
+/** Bài IELTS viết tay: 1–4 trang ảnh → chép nguyên văn → chấm 4 tiêu chí. */
+router.post('/ai/cham-viet-tay',
+  body('pages').isArray({ min: 1, max: MAX_TRANG }).withMessage(`pages phải là mảng 1–${MAX_TRANG} ảnh`),
+  body('pages.*').isString().isLength({ min: 100, max: 2_200_000 }).withMessage('Mỗi trang tối đa ~1,5MB'),
+  validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await chamVietTay(uid(req), req.body)); } catch (e) { next(e); }
   });
 
 /**

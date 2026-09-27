@@ -1,0 +1,131 @@
+/*
+ * Trang danh sách ngôn ngữ (/language).
+ * Màu chữ/nền đi theo biến theme (--text-*, --bg-*) để đúng cả sáng lẫn tối;
+ * màu riêng từng ngôn ngữ (--c) chỉ làm điểm nhấn. Không dùng tiền tố `dark:`.
+ */
+.root {
+  min-height: 100vh;
+  overflow-x: clip;
+  /* 5rem: thanh điều hướng cao 4rem và trong suốt khi chưa cuộn — sát 4rem là
+     hàng đầu tiên hiện xuyên qua nó. */
+  padding-top: 5rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.wrap { width: min(100%, 64rem); margin: 0 auto; padding: 2rem 1rem 5rem; }
+
+/* ── Đầu trang ── */
+.hero { text-align: center; margin-bottom: 2rem; }
+.subtitle { margin: .75rem auto 0; max-width: 42rem; text-wrap: balance; color: var(--text-secondary); line-height: 1.6; }
+.stats {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem;
+  margin: 1.25rem 0 0; padding: 0; list-style: none;
+}
+.stats li {
+  padding: .35rem .8rem; border-radius: 999px; border: 1px solid var(--border-color);
+  background: var(--bg-card); color: var(--text-secondary); font-size: .8rem;
+}
+.stats strong { color: var(--text-primary); font-weight: 800; margin-right: .15rem; }
+.actions { display: flex; justify-content: center; margin-top: 1rem; }
+.action {
+  display: inline-flex; align-items: center; gap: .4rem; border-radius: 999px; padding: .5rem 1rem;
+  background: color-mix(in srgb, #8b5cf6 14%, transparent); color: #a78bfa; font-size: .875rem; font-weight: 600;
+  border: 1px solid color-mix(in srgb, #8b5cf6 30%, transparent); transition: background .18s ease;
+}
+.action:hover { background: color-mix(in srgb, #8b5cf6 24%, transparent); }
+:global(html:not(.theme-dark)) .action { color: #6d28d9; }
+
+/* ── Học tiếp ── */
+.tiep {
+  display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem 1.15rem;
+  border-radius: 1.25rem; border: 1px solid color-mix(in srgb, var(--c) 40%, var(--border-color));
+  background: linear-gradient(120deg, color-mix(in srgb, var(--c) 14%, var(--bg-card)), var(--bg-card) 70%);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.tiep:hover { transform: translateY(-2px); box-shadow: 0 10px 28px color-mix(in srgb, var(--c) 22%, transparent); }
+.tiepFlag {
+  display: grid; place-items: center; flex: 0 0 3.25rem; height: 3.25rem; border-radius: 1rem;
+  background: color-mix(in srgb, var(--c) 18%, var(--bg-surface)); font-size: 1.8rem;
+}
+.tiepBody { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.tiepNhan { font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+.tiepTen { font-size: 1.15rem; font-weight: 800; color: var(--text-primary); }
+.tiepMo { display: inline-flex; align-items: center; gap: .3rem; font-size: .82rem; color: var(--text-secondary); }
+.tiepMo svg { color: #f97316; }
+.tiepNut {
+  display: inline-flex; align-items: center; gap: .35rem; flex-shrink: 0; padding: .55rem .95rem; border-radius: 999px;
+  background: var(--c); color: #fff; font-size: .85rem; font-weight: 700;
+}
+
+.wotd { margin-bottom: 2rem; }
+
+/* ── Lưới ngôn ngữ ── */
+.sectionHead { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .85rem; }
+.sectionTitle { font-size: 1.25rem; font-weight: 800; }
+.sectionHint { display: inline-flex; align-items: center; gap: .3rem; color: #f97316; font-size: .82rem; font-weight: 700; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+
+.card {
+  position: relative; display: flex; min-width: 0; height: 100%; align-items: center; gap: 1rem; padding: 1.1rem 1.15rem;
+  border: 1px solid var(--border-color); border-radius: 1.25rem; background: var(--bg-card); overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+/* Vạch màu ngôn ngữ bên trái — nhận ra ngôn ngữ trước cả khi đọc tên. */
+.card::before {
+  content: ''; position: absolute; left: 0; top: 18%; bottom: 18%; width: 3px; border-radius: 0 3px 3px 0;
+  background: var(--c); opacity: .85;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--c) 55%, var(--border-color));
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--c) 18%, transparent);
+}
+.card[data-sap-co] { opacity: .62; }
+.card[data-sap-co]:hover { opacity: .9; }
+
+.flag {
+  display: grid; flex: 0 0 3.4rem; place-items: center; height: 3.4rem; border-radius: 1rem;
+  background: color-mix(in srgb, var(--c) 14%, var(--bg-surface)); font-size: 1.9rem;
+}
+.cardBody { min-width: 0; flex: 1; }
+.cardHead { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.cardTitle { overflow: hidden; color: var(--text-primary); font-size: 1.1rem; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.cardSub { margin-top: .1rem; color: var(--text-muted); font-size: .8rem; }
+.sapCo {
+  display: inline-flex; align-items: center; gap: .2rem; flex-shrink: 0; padding: .1rem .45rem; border-radius: 999px;
+  background: var(--bg-surface); color: var(--text-muted); font-size: .68rem; font-weight: 700;
+}
+
+/* Nhãn số liệu: biểu tượng và chữ CÙNG MỘT DÒNG, không bao giờ xuống hàng. */
+.badges { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .6rem; }
+.badge {
+  display: inline-flex; align-items: center; gap: .3rem; white-space: nowrap;
+  border-radius: 999px; padding: .22rem .55rem; background: var(--bg-surface);
+  color: var(--text-secondary); font-size: .72rem; font-weight: 600;
+}
+.badge svg { flex-shrink: 0; color: var(--c); }
+.due {
+  display: inline-flex; align-items: center; gap: .3rem; margin-top: .5rem; padding: .22rem .55rem; border-radius: 999px;
+  background: color-mix(in srgb, #f97316 14%, transparent); color: #f97316; font-size: .72rem; font-weight: 700;
+}
+.progress { flex: 0 0 auto; color: var(--c); }
+
+@media (max-width: 640px) {
+  .root { padding-top: 4.75rem; }
+  .wrap { padding: 1.5rem .85rem 4rem; }
+  .grid { grid-template-columns: 1fr; gap: .75rem; }
+  .card { padding: .95rem 1rem; gap: .75rem; }
+  /* Màn hẹp: cờ và vòng tiến độ nhỏ lại để nhãn số liệu còn chỗ đứng hai cái
+     một hàng — bản đầu để nguyên cỡ, mỗi nhãn rớt xuống một dòng riêng. */
+  .flag { flex-basis: 2.75rem; height: 2.75rem; font-size: 1.5rem; border-radius: .8rem; }
+  /* `ProgressRing` vẽ SVG cỡ cố định không có viewBox ⇒ thu bằng `zoom` (ảnh
+     hưởng cả bố cục, khác `transform`). Safari/Chrome/Firefox 126+ đều hiểu. */
+  .progress { zoom: .78; }
+  .tiep { flex-wrap: wrap; }
+  .tiepNut { width: 100%; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .tiep, .action { transition: none; }
+  .card:hover, .tiep:hover { transform: none; }
+}

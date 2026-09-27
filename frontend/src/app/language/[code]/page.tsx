@@ -118,11 +118,16 @@ function SkillSection({ title, note, items, code, counts, loading, m, isAi }: {
         {items.map((sec, i) => {
           const Icon = sec.icon;
           const count = counts?.[sec.key] ?? 0;
+          // Kỹ năng chưa có nội dung: vẫn bấm vào được (trang con tự giải thích),
+          // nhưng mờ đi và ghi "Sắp có" thay cho "0 mục" — một hàng "0 mục" trông
+          // như trang hỏng, còn "Sắp có" nói đúng sự thật.
+          const trong = !isAi && !loading && count === 0;
           return (
             <Link
               key={sec.key}
               href={`/language/${code}/${sec.key}`}
               className={s.row}
+              data-trong={trong || undefined}
               style={{ '--c': sec.hue, '--i': i } as CSSProperties}
             >
               <span className={s.rowIcon}>
@@ -135,7 +140,7 @@ function SkillSection({ title, note, items, code, counts, loading, m, isAi }: {
               {isAi ? (
                 <span className={s.proTag}>PRO</span>
               ) : (
-                <span className={s.rowMeta}>{loading ? '…' : `${count.toLocaleString('vi-VN')} mục`}</span>
+                <span className={s.rowMeta}>{loading ? '…' : trong ? 'Sắp có' : `${count.toLocaleString('vi-VN')} mục`}</span>
               )}
               <ChevronRight size={16} className={s.chev} />
             </Link>

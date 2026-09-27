@@ -494,3 +494,13 @@
   .row, .reviewFlame svg, .stat:first-child .statIcon svg { animation: none; }
   .card:hover, .card:hover .cardIcon, .row:hover .rowIcon { transform: none; }
 }
+
+/* Kỹ năng chưa có nội dung — xem `trong` trong page.tsx. Làm mờ các CON chứ
+   không làm mờ chính hàng: `.row` chạy hoạt ảnh `rowIn` (fill both) kết thúc ở
+   `opacity: 1`, và hoạt ảnh thắng mọi `opacity` đặt thẳng lên phần tử. */
+.row[data-trong] .rowIcon,
+.row[data-trong] .rowBody,
+.row[data-trong] .rowMeta { opacity: .5; transition: opacity .15s ease; }
+.row[data-trong]:hover .rowIcon,
+.row[data-trong]:hover .rowBody,
+.row[data-trong]:hover .rowMeta { opacity: .85; }

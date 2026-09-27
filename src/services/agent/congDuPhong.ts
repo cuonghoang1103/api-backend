@@ -25,6 +25,19 @@
  * và nhân hệ số nhóm `claude` ×2; vòng lặp gọi tool thì gửi lại toàn bộ ngữ
  * cảnh ở mỗi bước, nên đó đúng là phần to nhất. Admin cổng cũng xác nhận
  * "Claude trên này đắt gấp 2–3 lần GPT".
+ *
+ * Cùng việc đó, đo qua ĐÚNG đường dự phòng (rambo 502 thật, vé thật), sổ khoá:
+ *
+ *   model            sổ trừ   bước   ghi chú
+ *   claude-opus-5    227,4     11    tuyến Anthropic, đệm tính giá đầy đủ ×2
+ *   gpt-6-astra       98,4     41
+ *   gpt-5.6-sol       66,9     38
+ *   gpt-6-sol         16,4     22    ⇐ MẶC ĐỊNH: rẻ hơn opus-5 ~14 lần, trả lời
+ *                                     đúng, trích file:dòng như các model kia
+ *
+ * ⚠️ Số bước của GPT dao động mạnh: lượt thử đầu của gpt-6-sol đi 63 bước
+ * (~327k token) cho cùng câu hỏi. Nếu thấy nó lan man trên việc thật thì đó
+ * là chỗ đầu tiên cần nhìn, trước khi đổi model.
  */
 import crypto from 'node:crypto';
 import bcrypt from 'bcryptjs';

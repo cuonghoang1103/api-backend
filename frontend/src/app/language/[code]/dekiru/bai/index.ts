@@ -10,8 +10,9 @@ import { BAI_3 } from './bai3';
 import { BAI_4 } from './bai4';
 import { BAI_5 } from './bai5';
 import { BAI_6 } from './bai6';
+import { SACH } from './sach';
 
-export const WRITTEN: Record<number, Day['lessons']> = {
+const BAI: Record<number, Day['lessons']> = {
   0: BAI_0,
   1: BAI_1,
   2: BAI_2,
@@ -20,3 +21,8 @@ export const WRITTEN: Record<number, Day['lessons']> = {
   5: BAI_5,
   6: BAI_6,
 };
+
+/** Mỗi bài: các bài soạn + mục 📖 Theo sách (đi theo từng trang sách) ở cuối. */
+export const WRITTEN: Record<number, Day['lessons']> = Object.fromEntries(
+  Object.entries(BAI).map(([n, ls]) => [n, SACH[Number(n)] ? [...ls, SACH[Number(n)]] : ls]),
+);

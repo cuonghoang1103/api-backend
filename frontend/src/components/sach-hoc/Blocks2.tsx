@@ -31,7 +31,12 @@ const CAST: Record<Role, { voice: Voice; skin: string; hair: string; shirt: stri
  */
 function useVoiceFor() {
   const ja = useCourse()?.voice.startsWith('ja');
-  return (role: Role): Voice => (ja ? (role === 'examiner' || role === 'b' ? 'ja-nam' : 'ja-nu') : CAST[role].voice);
+  // "Cô giáo" / "Cô" là giáo viên nữ dù vai là examiner — giọng theo tên hiển thị.
+  return (role: Role, who?: string): Voice => {
+    if (!ja) return CAST[role].voice;
+    if (who && /^(Cô|cô)/.test(who)) return 'ja-nu';
+    return role === 'examiner' || role === 'b' ? 'ja-nam' : 'ja-nu';
+  };
 }
 
 /** Nhân vật hoạt hình vẽ bằng SVG — không tải ảnh, sáng/tối đều rõ. */
@@ -161,7 +166,7 @@ function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
     // Phát từng câu để tô sáng đúng người đang nói.
     for (let i = 0; i < b.lines.length && !stopRef.current; i++) {
       setOn(i);
-      await new Promise<void>((r) => play({ text: b.lines[i].text, voice: voiceFor(b.lines[i].role) }, r));
+      await new Promise<void>((r) => play({ text: b.lines[i].text, voice: voiceFor(b.lines[i].role, b.lines[i].who) }, r));
     }
     setAll(false);
     setOn(null);
@@ -185,7 +190,7 @@ function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
               <button
                 type="button"
                 className={s.dText}
-                onClick={() => { setOn(i); play({ text: l.text, voice: voiceFor(l.role) }, () => setOn(null)); }}
+                onClick={() => { setOn(i); play({ text: l.text, voice: voiceFor(l.role, l.who) }, () => setOn(null)); }}
               >
                 <Inline text={l.text} />
               </button>

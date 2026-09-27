@@ -49,8 +49,10 @@ const DOC_TYPE_BY_EXT: Record<string, string> = {
   md: 'text/markdown',
   markdown: 'text/markdown',
   csv: 'text/csv',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 };
-const DOC_ACCEPT = '.pdf,.docx,.txt,.md,.csv,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/csv';
+const DOC_ACCEPT = '.pdf,.docx,.xlsx,.pptx,.txt,.md,.csv,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/plain,text/markdown,text/csv';
 const FILE_ACCEPT = `image/png,image/jpeg,image/webp,image/gif,${DOC_ACCEPT}`;
 
 /** Media type chuẩn của một file tài liệu, hoặc null nếu không đọc được. */
@@ -151,7 +153,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
       .filter((x): x is { file: File; media: string } => x.media !== null);
     const rejected = files.length - imageFiles.length - docFiles.length;
     if (rejected > 0) {
-      toast.error('Chỉ nhận ảnh, PDF, Word (.docx) hoặc file văn bản (.txt/.md/.csv)');
+      toast.error('Chỉ nhận ảnh, PDF, Word (.docx), Excel (.xlsx), PowerPoint (.pptx) hoặc file văn bản (.txt/.md/.csv)');
     }
     if (imageFiles.length === 0 && docFiles.length === 0) return;
     setProcessing(true);
@@ -379,7 +381,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isDisabled || (images.length >= MAX_IMAGES && docs.length >= MAX_DOCS)}
-                    title={images.length >= MAX_IMAGES && docs.length >= MAX_DOCS ? 'Đã đạt tối đa tệp đính kèm' : 'Đính kèm ảnh, PDF, Word (.docx) hoặc file văn bản'}
+                    title={images.length >= MAX_IMAGES && docs.length >= MAX_DOCS ? 'Đã đạt tối đa tệp đính kèm' : 'Đính kèm ảnh, PDF, Word, Excel, PowerPoint hoặc file văn bản'}
                     className="flex h-8 w-8 items-center justify-center rounded-full text-[color:var(--studio-text-soft)] transition-colors hover:bg-[var(--studio-panel-soft)] hover:text-[color:var(--studio-text)] disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
                   >
                     <Paperclip className="h-4 w-4" />
@@ -470,7 +472,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isDisabled || (images.length >= MAX_IMAGES && docs.length >= MAX_DOCS)}
-                title={images.length >= MAX_IMAGES && docs.length >= MAX_DOCS ? 'Đã đạt tối đa tệp đính kèm' : 'Đính kèm ảnh, PDF, Word (.docx) hoặc file văn bản'}
+                title={images.length >= MAX_IMAGES && docs.length >= MAX_DOCS ? 'Đã đạt tối đa tệp đính kèm' : 'Đính kèm ảnh, PDF, Word, Excel, PowerPoint hoặc file văn bản'}
                 className="w-10 h-10 rounded-xl flex items-center justify-center text-[#22d3ee] hover:bg-[#22d3ee]/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Paperclip className="w-4 h-4" />

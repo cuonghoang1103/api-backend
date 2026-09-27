@@ -47,13 +47,20 @@ test('AI Chat: prompt phải nói cho model biết hộp cát Python tạo đư�
    * (`desktop/src/renderer/public/pyodide/*.whl`). Hứa một gói không có nghĩa là
    * người dùng bấm Chạy rồi nhận `ModuleNotFoundError` — tệ hơn là không hứa.
    */
-  for (const co of ['numpy', 'pandas', 'matplotlib', 'pillow']) {
+  for (const co of ['numpy', 'pandas', 'matplotlib', 'pillow', 'openpyxl', 'xlsxwriter', 'python-docx', 'python-pptx', 'fpdf2']) {
     assert.match(src, new RegExp(co), `prompt nên nêu gói có sẵn: ${co}`);
   }
-  for (const khong of ['reportlab', 'openpyxl']) {
-    assert.match(src, new RegExp(`KHÔNG có[^\\n]*${khong}|${khong}`),
-      `prompt phải nói RÕ là KHÔNG có ${khong}`);
+  assert.match(src, /KHÔNG có `reportlab`/, 'prompt phải nói RÕ là KHÔNG có reportlab');
+  /* PDF tiếng Việt: font mặc định của fpdf KHÔNG có dấu ⇒ phải chỉ font
+     DejaVu của matplotlib (đo thật 27/09/2026: ra PDF đủ dấu). */
+  assert.match(src, /DejaVuSans\.ttf/, 'phải chỉ font DejaVu cho PDF tiếng Việt');
+
+  /* Gói VĂN PHÒNG hứa trong prompt ⇒ wheel phải THẬT SỰ có ở cả hai nơi tự
+     phục vụ (xem desktop/scripts/tai-goi-office.mjs). */
+  for (const noi of ['../../../desktop/src/renderer/public/pyodide/office.json', '../../../frontend/public/pyodide-them/office.json']) {
+    const ds: string[] = JSON.parse(readFileSync(new URL(noi, import.meta.url), 'utf8')).wheels;
+    for (const goi of ['openpyxl', 'xlsxwriter', 'python_docx', 'python_pptx', 'fpdf2', 'et_xmlfile', 'defusedxml']) {
+      assert.ok(ds.some((f) => f.startsWith(`${goi}-`)), `${noi} thiếu wheel ${goi}`);
+    }
   }
-  assert.match(src, /savefig\("\/xuat\//,
-    'phải chỉ đúng cách xuất PDF bằng matplotlib — đo thật ngày 20/08/2026 là ra file 8KB');
 });

@@ -331,8 +331,10 @@ function luatNgonNgu(ngonNgu?: 'vi' | 'en'): string {
  * Chạy hộp cát 20/08/2026 và xem kết quả: `.txt` ✔ · `.csv` qua pandas ✔ ·
  * `.pdf` 8KB qua matplotlib ✔ · biểu đồ `.png` tự bắt ✔.
  * Bản dựng chỉ đóng gói numpy · pandas · matplotlib · pillow (+ phụ thuộc).
- * KHÔNG có reportlab, KHÔNG có openpyxl — hứa chúng là hứa hão, và người dùng
- * nhận về `ModuleNotFoundError` sau khi đã tin.
+ * Từ 27/09/2026 thêm gói VĂN PHÒNG tự phục vụ (openpyxl · xlsxwriter ·
+ * python-docx · python-pptx · fpdf2) — đo thật trong Pyodide: tạo .xlsx giữ
+ * công thức, .docx, .pptx, PDF đủ dấu tiếng Việt với font DejaVu của
+ * matplotlib. Vẫn KHÔNG có reportlab — hứa nó là hứa hão.
  */
 function luatTaoFile(): string {
   return (
@@ -341,12 +343,17 @@ function luatTaoFile(): string {
     + 'và MỌI file mã ghi vào thư mục `/xuat/` sẽ hiện ra thành nút "Lưu" để họ tải xuống.\n'
     + '- Khi người dùng nhờ "tạo file", "xuất PDF", "cho tôi file Word/Excel/CSV" — hãy VIẾT MÃ PYTHON '
     + 'ghi vào `/xuat/`, đừng bảo họ tự copy-paste. Nhắc họ bấm "Chạy" rồi "Lưu".\n'
-    + '- Có sẵn: `numpy`, `pandas`, `matplotlib`, `pillow` và thư viện chuẩn của Python. '
-    + 'KHÔNG có `reportlab`, `fpdf`, `openpyxl`, `python-docx` — đừng import chúng.\n'
-    + '- PDF: dùng `matplotlib` (`fig.savefig("/xuat/ten.pdf")`). Với tài liệu nhiều trang thì dùng '
-    + '`matplotlib.backends.backend_pdf.PdfPages`.\n'
-    + '- Excel: KHÔNG làm được `.xlsx`; xuất `.csv` bằng pandas và nói rõ đó là CSV.\n'
-    + '- Word: KHÔNG làm được `.docx`; xuất `.md` hoặc `.txt` và nói rõ.\n'
+    + '- Có sẵn: `numpy`, `pandas`, `matplotlib`, `pillow`, thư viện chuẩn, và các gói VĂN PHÒNG '
+    + '(tự nạp khi bạn import, lần đầu ~1 giây): `openpyxl`, `xlsxwriter`, `docx` (python-docx), '
+    + '`pptx` (python-pptx), `fpdf` (fpdf2). KHÔNG có `reportlab`.\n'
+    + '- Excel `.xlsx`: dùng `openpyxl` (giữ được công thức như `=SUM(B2:B31)`, định dạng tiền, độ rộng cột, '
+    + 'in đậm dòng tiêu đề). Dữ liệu bảng lớn thì dựng bằng pandas rồi `df.to_excel(path, engine="openpyxl")`.\n'
+    + '- Word `.docx`: dùng `docx` (tiêu đề, đoạn, bảng, in đậm). Đơn từ/báo cáo/kế hoạch cần in thì làm .docx.\n'
+    + '- PowerPoint `.pptx`: dùng `pptx` (mỗi slide một tiêu đề + ý chính ngắn).\n'
+    + '- PDF có TIẾNG VIỆT: dùng `fpdf` với font DejaVu có sẵn trong matplotlib — '
+    + '`f = os.path.join(matplotlib.get_data_path(), "fonts/ttf/DejaVuSans.ttf")`, `pdf.add_font("DejaVu", "", f)`, '
+    + '`pdf.set_font("DejaVu", size=12)` (bản đậm: `DejaVuSans-Bold.ttf`). Font mặc định của fpdf KHÔNG có dấu tiếng Việt.\n'
+    + '- Luôn ghi vào `/xuat/<tên-có-nghĩa>.<đuôi>` và đặt tên tiếng Việt không dấu (vd `ke_hoach_hoc_react.docx`).\n'
     + '- Biểu đồ matplotlib được tự lưu thành `.png`, không cần `savefig`.\n'
     + '- Hộp cát KHÔNG có mạng và KHÔNG đọc được file trên máy họ. Cần dữ liệu thì đặt thẳng trong mã.\n'
   );
@@ -424,7 +431,18 @@ function buildSystemPrompt(
       : '- Nếu tính năng người dùng cần thuộc gói Pro, cho biết điều đó một cách thân thiện và chỉ tới trang /pro.\n')
     + '- Công thức toán viết bằng LaTeX trong `$...$` (trong dòng) hoặc `$$...$$` (đứng riêng), không bọc trong khối code.\n'
     + luatTaoFile()
-    + '- Cần hình minh hoạ (hình học, sơ đồ) thì vẽ bằng khối ```svg — thẻ `<svg>` có `viewBox`, nét `stroke="currentColor" fill="none"`, tính toạ độ cho đúng chứ đừng vẽ áng chừng.\n'
+    + (appIos
+      // Khung chat iOS KHÔNG dựng mermaid (chỉ Phòng thi/Code Lab có) ⇒ giữ SVG.
+      ? '- Cần hình minh hoạ (hình học, sơ đồ) thì vẽ bằng khối ```svg — thẻ `<svg>` có `viewBox`, nét `stroke="currentColor" fill="none"`, tính toạ độ cho đúng chứ đừng vẽ áng chừng.\n'
+      /* Web + app desktop DỰNG ĐƯỢC mermaid (ChatMarkdown / markdown.tsx).
+         Đo 27/09/2026: bảo model vẽ sơ đồ luồng bằng SVG tay ⇒ 6k ký tự toạ độ,
+         137 giây, mũi tên lệch. Mermaid để trình vẽ tự bố trí. */
+      : '- SƠ ĐỒ (luồng xử lý, quy trình, trình tự gọi API, quan hệ bảng DB, sơ đồ tư duy, lộ trình/lịch, cây thư mục ý tưởng): '
+        + 'dùng khối ```mermaid (`flowchart TD`, `sequenceDiagram`, `erDiagram`, `mindmap`, `gantt`, `timeline`, `classDiagram`, `stateDiagram-v2`). '
+        + 'Nhãn có dấu cách/ký tự đặc biệt thì bọc nháy kép: `A["Đăng nhập (JWT)"]`. Mỗi sơ đồ gọn, ≤ 25 nút.\n'
+        + '- HÌNH HỌC, tranh minh hoạ, biểu tượng: vẽ bằng khối ```svg — thẻ `<svg>` có `viewBox`, tính toạ độ cho đúng chứ đừng vẽ áng chừng. '
+        + 'Biểu đồ số liệu: dùng Python/matplotlib (hộp cát tự lưu .png).\n'
+        + '- KHÔNG tạo được ẢNH CHỤP/ẢNH THẬT (không có model sinh ảnh). Người dùng xin "tạo ảnh" thì nói rõ điều đó rồi vẽ minh hoạ SVG.\n')
     + (deep && !voice ? MATH_CODE_RULES : '')
     + (voice ? VOICE_RULES : '')
     + (ragContext
@@ -575,7 +593,9 @@ async function documentsAsText(documents: ChatDocumentInput[], budgetChars: numb
     const type = (doc.media_type || '').toLowerCase();
     const isPdf = type === 'application/pdf';
     const isDocx = type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    const label = safeDocLabel(doc.name, i, isPdf ? 'pdf' : isDocx ? 'docx' : 'txt');
+    const isXlsx = type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    const isPptx = type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+    const label = safeDocLabel(doc.name, i, isPdf ? 'pdf' : isDocx ? 'docx' : isXlsx ? 'xlsx' : isPptx ? 'pptx' : 'txt');
     try {
       const buf = Buffer.from(doc.data, 'base64');
       let text = '';
@@ -586,6 +606,9 @@ async function documentsAsText(documents: ChatDocumentInput[], budgetChars: numb
         ({ text, pages, imageOnly } = await extractPdf(buf));
       } else if (isDocx) {
         ({ text, pages } = await extractDocx(buf));
+      } else if (isXlsx || isPptx) {
+        const { extractXlsx, extractPptx } = await import('./chatFileText.js');
+        ({ text, pages } = await (isXlsx ? extractXlsx(buf) : extractPptx(buf)));
       } else {
         // text/plain, text/markdown, text/csv — đọc thẳng, không cần thư viện.
         text = buf.toString('utf8');

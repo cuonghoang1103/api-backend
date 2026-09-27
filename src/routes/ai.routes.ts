@@ -160,6 +160,9 @@ const ALLOWED_DOC_TYPES = new Set([
   'text/plain',
   'text/markdown',
   'text/csv',
+  // Excel + PowerPoint (27/09/2026) — rút chữ bằng `services/chatFileText.ts`.
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 ]);
 
 interface ParsedDoc { media_type: string; data: string; name?: string }
@@ -195,7 +198,9 @@ function parseChatDocuments(raw: unknown, names?: unknown): ParsedDoc[] {
     if (!ALLOWED_DOC_TYPES.has(mediaType)) {
       const hint = mediaType === 'application/msword'
         ? 'Word đời cũ (.doc) chưa đọc được — hãy lưu lại thành .docx hoặc PDF.'
-        : 'Chỉ nhận PDF, Word (.docx) hoặc file văn bản (.txt/.md/.csv).';
+        : mediaType === 'application/vnd.ms-excel' || mediaType === 'application/vnd.ms-powerpoint'
+          ? 'Excel/PowerPoint đời cũ (.xls/.ppt) chưa đọc được — hãy lưu lại thành .xlsx/.pptx.'
+          : 'Chỉ nhận PDF, Word (.docx), Excel (.xlsx), PowerPoint (.pptx) hoặc file văn bản (.txt/.md/.csv).';
       throw new AppError(hint, 400, 'UNSUPPORTED_DOCUMENT_TYPE');
     }
     const data = match[2];

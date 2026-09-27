@@ -98,12 +98,49 @@ async function nap(): Promise<unknown> {
   return dangNap;
 }
 
+
+/**
+ * GÓI VĂN PHÒNG (27/09/2026): Excel `.xlsx` · Word `.docx` · PowerPoint `.pptx`
+ * · PDF có tiếng Việt. Bản Pyodide KHÔNG có các gói này (đo: `import openpyxl`
+ * ⇒ ModuleNotFoundError) nên trước đây AI Chat chỉ xuất được CSV/TXT. Chúng là
+ * wheel thuần Python ⇒ `micropip` cài được từ file TỰ PHỤC VỤ (xem
+ * `desktop/scripts/tai-goi-office.mjs`, danh sách trong `office.json`).
+ * Chỉ cài khi mã THẬT SỰ import một trong số chúng, và chỉ lần đầu (~1,5 MB).
+ */
+const IMPORT_OFFICE = new Set(['openpyxl', 'xlsxwriter', 'docx', 'pptx', 'fpdf']);
+let daCaiOffice: Promise<void> | null = null;
+
+function canOffice(ma: string): boolean {
+  for (const m of ma.matchAll(/^\s*(?:from|import)\s+([A-Za-z_]\w*)/gm)) {
+    if (IMPORT_OFFICE.has(m[1]!)) return true;
+  }
+  return false;
+}
+
+async function caiOffice(
+  py: { loadPackage: (p: string[]) => Promise<unknown>; runPythonAsync: (s: string) => Promise<unknown> },
+  goc: string,
+  id: number,
+): Promise<void> {
+  if (!daCaiOffice) {
+    daCaiOffice = (async () => {
+      self.postMessage({ id, loai: 'nap', thongDiep: 'Đang nạp thư viện Excel/Word/PowerPoint/PDF (lần đầu)…' } satisfies PhanHoi);
+      await py.loadPackage(['micropip', 'lxml', 'typing-extensions', 'pillow', 'fonttools']);
+      const ds = ((await (await fetch(`${goc}office.json`)).json()) as { wheels: string[] }).wheels;
+      const urls = ds.map((f) => new URL(f, new URL(goc, self.location.href)).href);
+      await py.runPythonAsync(`import micropip\nawait micropip.install(${JSON.stringify(urls)}, deps=False)`);
+    })().catch((e) => { daCaiOffice = null; throw e; });
+  }
+  return daCaiOffice;
+}
+
 self.onmessage = async (e: MessageEvent<YeuCau>) => {
   const { id, ma } = e.data;
   try {
     const py = (await nap()) as {
       runPythonAsync: (s: string) => Promise<unknown>;
       loadPackagesFromImports: (s: string) => Promise<unknown>;
+      loadPackage: (p: string[]) => Promise<unknown>;
       globals: { get: (k: string) => unknown };
       FS: {
         readdir: (p: string) => string[];
@@ -123,6 +160,7 @@ self.onmessage = async (e: MessageEvent<YeuCau>) => {
      * cần mạng — xem `scripts/tai-goi-python.mjs`.
      */
     try {
+      if (canOffice(ma)) await caiOffice(py, '/pyodide/', id);
       await py.loadPackagesFromImports(ma);
     } catch (e) {
       // Import một gói không có trong bộ ⇒ báo rõ, đừng để mã chạy tiếp rồi

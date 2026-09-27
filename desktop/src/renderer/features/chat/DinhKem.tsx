@@ -42,6 +42,8 @@ const TAILIEU_MIME = new Set([
   'text/plain',
   'text/markdown',
   'text/csv',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 ]);
 const MAX_TAILIEU = 3;
 const MAX_TAILIEU_BYTES = 6 * 1024 * 1024;
@@ -55,13 +57,23 @@ const MAX_TAILIEU_BYTES = 6 * 1024 * 1024;
  * toàn hợp lệ, và người dùng không hiểu vì sao.
  */
 function doanMime(f: File): string {
-  if (f.type) return f.type;
   const duoi = f.name.toLowerCase().split('.').pop() ?? '';
+  /* Tài liệu: tin ĐUÔI trước `f.type` — Windows báo `.csv` là
+     'application/vnd.ms-excel' ⇒ bị từ chối nhầm. Ảnh vẫn tin `f.type`. */
+  const theoDuoi: Record<string, string> = {
+    pdf: 'application/pdf', csv: 'text/csv', md: 'text/markdown', markdown: 'text/markdown', txt: 'text/plain',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  };
+  if (theoDuoi[duoi]) return theoDuoi[duoi]!;
+  if (f.type) return f.type;
   const bang: Record<string, string> = {
     png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp', gif: 'image/gif',
     pdf: 'application/pdf',
     docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     txt: 'text/plain', md: 'text/markdown', markdown: 'text/markdown', csv: 'text/csv',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   };
   return bang[duoi] ?? '';
 }
@@ -198,7 +210,7 @@ export function ODinhKem({
       type="file"
       multiple
       hidden
-      accept=".png,.jpg,.jpeg,.webp,.gif,.pdf,.docx,.txt,.md,.csv,image/*,application/pdf"
+      accept=".png,.jpg,.jpeg,.webp,.gif,.pdf,.docx,.xlsx,.pptx,.txt,.md,.csv,image/*,application/pdf"
       onChange={nhanTuO}
     />
   );

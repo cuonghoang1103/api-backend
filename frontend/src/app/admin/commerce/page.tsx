@@ -547,6 +547,90 @@ interface DonFable {
 
 const k = (n: number) => `${Math.round(n / 1000).toLocaleString('vi-VN')}k`;
 
+/**
+ * CỔNG DỰ PHÒNG AI CODE (27/09/2026) — admin đặt mật khẩu. Người dùng nhập
+ * đúng mật khẩu trong app mới được đi modelapi (tính phí thật), và CHỈ khi
+ * rambo hỏng. Đổi mật khẩu = thu hồi mọi vé cũ. Backend: `/api/v1/admin/du-phong`.
+ */
+function CongDuPhongAdmin() {
+  const [t, setT] = useState<{ daBat: boolean; ten: string; model: string; coKhoa: boolean; congChinhDangHong: boolean } | null>(null);
+  const [mk, setMk] = useState('');
+  const [dangLuu, setDangLuu] = useState(false);
+
+  const nap = useCallback(async () => {
+    try {
+      const r = await fetch('/api/v1/admin/du-phong', { credentials: 'include' });
+      const j = await r.json();
+      setT(j.data ?? null);
+    } catch { setT(null); }
+  }, []);
+  useEffect(() => { nap(); }, [nap]);
+
+  const luu = async (matKhau: string | null) => {
+    if (matKhau !== null && matKhau.length < 6) { toast.error('Mật khẩu tối thiểu 6 ký tự.'); return; }
+    if (matKhau === null && !window.confirm('Tắt cổng dự phòng? Mọi máy đang giữ vé sẽ không dùng được nữa.')) return;
+    setDangLuu(true);
+    try {
+      const r = await fetch('/api/v1/admin/du-phong', {
+        method: 'PUT', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ matKhau }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.message ?? 'Lỗi');
+      toast.success(matKhau === null ? 'Đã tắt cổng dự phòng.' : 'Đã đặt mật khẩu — vé cũ (nếu có) đã hết hiệu lực.');
+      setMk('');
+      nap();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Không lưu được.');
+    } finally { setDangLuu(false); }
+  };
+
+  return (
+    <div className="p-4 rounded-xl border border-darkborder bg-darkcard text-sm space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <b className="text-text-primary">🛟 Cổng dự phòng AI Code</b>
+        {t && (
+          <span className={`px-2 py-0.5 rounded-full text-xs border ${t.daBat ? 'border-green-500/50 text-green-400' : 'border-darkborder text-text-muted'}`}>
+            {t.daBat ? 'Đang bật' : 'Đang tắt'}
+          </span>
+        )}
+        {t?.congChinhDangHong && (
+          <span className="px-2 py-0.5 rounded-full text-xs border border-amber-500/50 text-amber-400">Cổng chính đang hỏng</span>
+        )}
+      </div>
+      <p className="text-text-muted">
+        Khi cổng chính (rambo) bảo trì, người dùng nhập mật khẩu này trong AI Code để chạy tạm qua modelapi
+        {t ? <> bằng <b className="text-text-primary">{t.ten}</b></> : null} — <b className="text-text-primary">tính phí thật</b>.
+        Cổng chính sống lại là tự quay về. Đổi model bằng env <code>AGENT_DU_PHONG_MODEL</code>.
+        {t && !t.coKhoa && <span className="text-amber-400"> ⚠ Máy chủ chưa có khoá cho model này.</span>}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <input
+          type="password"
+          value={mk}
+          onChange={(e) => setMk(e.target.value)}
+          placeholder={t?.daBat ? 'Mật khẩu mới (đổi = thu hồi vé cũ)' : 'Đặt mật khẩu để bật'}
+          autoComplete="new-password"
+          className="flex-1 min-w-[200px] px-3 py-1.5 rounded-lg bg-darkbg border border-darkborder text-text-primary text-sm"
+        />
+        <button
+          onClick={() => luu(mk)}
+          disabled={dangLuu || !mk}
+          className="px-3 py-1.5 rounded-lg text-xs border border-neon-violet text-neon-violet disabled:opacity-50"
+        >{t?.daBat ? 'Đổi mật khẩu' : 'Bật cổng dự phòng'}</button>
+        {t?.daBat && (
+          <button
+            onClick={() => luu(null)}
+            disabled={dangLuu}
+            className="px-3 py-1.5 rounded-lg text-xs border border-darkborder text-text-muted"
+          >Tắt</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function TabFable() {
   const [rows, setRows] = useState<DonFable[]>([]);
   const [tranGoc, setTranGoc] = useState(0);
@@ -596,6 +680,8 @@ function TabFable() {
 
   return (
     <div className="space-y-4">
+      <CongDuPhongAdmin />
+
       <div className="p-4 rounded-xl border border-darkborder bg-darkcard text-sm text-text-muted flex gap-3">
         <Info className="w-4 h-4 mt-0.5 shrink-0 text-neon-violet" />
         <p>

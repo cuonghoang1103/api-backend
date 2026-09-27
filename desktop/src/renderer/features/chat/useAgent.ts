@@ -301,7 +301,9 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           datSoFileDaSua(e.soFileDaSua);
           break;
         case 'loi':
-          datDangNghi(false);
+          /* `DOI_CONG` chỉ là dòng báo giữa lượt (đổi rambo ↔ dự phòng) — lượt
+             vẫn đang chạy, đừng tắt chỉ báo "đang nghĩ". */
+          if (e.ma !== 'DOI_CONG') datDangNghi(false);
           datMuc((truoc) => [...truoc, { kieu: 'loi', text: e.thongDiep, ...(e.ma ? { ma: e.ma } : {}) }]);
           break;
         case 'daXoa':

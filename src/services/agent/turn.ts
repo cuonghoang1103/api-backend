@@ -33,10 +33,12 @@
  *   lời trước lượt sau, không đòi thứ tự.
  */
 import {
+  baoRamboHong,
   chatUrlOf,
   costUsd,
   gatewayConfigured,
   modelFor,
+  ramboDangNghi,
   xinDiemCuoi,
 } from '../llm/gateway.js';
 import { checkBudget, budgetMessage } from '../llm/budget.js';
@@ -44,6 +46,7 @@ import { nenNguCanh, tinhMoc } from './compact.js';
 import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import { modelAgentTu } from './models.js';
+import { congDuPhong, modelDuPhongAgent, veDuPhongHopLe } from './congDuPhong.js';
 import { loiHetHan, xemHanMuc, type HanMuc } from './quota.js';
 import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.js';
 import { loiCanViTien, xemViTien } from './viTien.js';
@@ -268,7 +271,9 @@ export type AgentEvent =
    * lần gọi là một khoảng lặng dài không phân biệt được với treo. Biết mình
    * đang ở "bước 7/8" vừa giải thích được sự chờ, vừa báo trước sắp chạm trần.
    */
-  | { type: 'start'; model: string; buoc: number; tranBuoc: number }
+  | { type: 'start'; model: string; buoc: number; tranBuoc: number; cong?: 'chinh' | 'du-phong' }
+  /** Giữa lượt: rambo vừa hỏng và máy chủ đã chuyển sang cổng dự phòng (có vé). */
+  | { type: 'cong'; cong: 'du-phong'; model: string }
   | { type: 'text'; delta: string }
   /** Máy chủ ĐÃ chạy xong một tool vòng 2 — chỉ để hiện tiến trình. */
   | { type: 'server_tool'; name: string; summary: string }
@@ -316,6 +321,11 @@ export interface AgentTurnInput {
   mucNoLuc?: unknown;
   /** Mã model người dùng chọn — đối chiếu danh sách trắng ở `models.ts`. */
   model?: unknown;
+  /**
+   * Vé cổng dự phòng (modelapi) — app nhận khi người dùng nhập đúng mật khẩu.
+   * Chỉ có tác dụng lúc rambo HỎNG; rambo khoẻ thì bị bỏ qua. Xem `congDuPhong.ts`.
+   */
+  duPhongVe?: unknown;
   /** Lượt này thuộc một AGENT PHỤ — prompt gọn hơn, trần bước riêng. */
   laPhu?: unknown;
   /**
@@ -896,7 +906,9 @@ export async function runAgentTurn(
   });
   const tools = toolsForGateway(capabilities, toolMcp);
 
-  const { ep, tra } = await xinDiemCuoi('agent_code');
+  const xin = await xinDiemCuoi('agent_code');
+  const tra = xin.tra;
+  let ep = xin.ep;
   // Người dùng chọn model ⇒ lấy model đó; không chọn (hoặc app cũ không gửi)
   // ⇒ về đúng `PURPOSE_MODEL.agent_code` như trước.
   //
@@ -912,13 +924,43 @@ export async function runAgentTurn(
       'MODEL_CHUA_CO_KHOA',
     );
   }
-  const model = chon?.model ?? modelFor('agent_code', ep);
+  let model = chon?.model ?? modelFor('agent_code', ep);
+
+  /* CỔNG DỰ PHÒNG (27/09/2026). Chỉ đổi đường khi CẢ HAI: đang đi rambo mà
+     rambo đang hỏng, VÀ app cầm vé hợp lệ (người dùng đã nhập mật khẩu).
+     Rambo khoẻ ⇒ đi rambo như cũ, vé nằm im — tự quay về, không ai chỉnh tay. */
+  const coVeDuPhong = input.duPhongVe && input.userId
+    ? await veDuPhongHopLe(input.userId, input.duPhongVe)
+    : false;
+  let dangDuPhong = false;
+  const chuyenDuPhong = (): boolean => {
+    if (dangDuPhong || !coVeDuPhong) return false;
+    const m = modelDuPhongAgent();
+    const e = congDuPhong(m);
+    if (!e) return false;
+    ep = e;
+    model = m;
+    dangDuPhong = true;
+    return true;
+  };
+  if (ep.label === 'cong-agent' && ramboDangNghi() && !chuyenDuPhong() && !coVeDuPhong) {
+    /* Rambo đang được đánh dấu hỏng (mũi dò gõ cửa mỗi 30s, sống lại là đóng
+       cầu dao ngay) và người dùng chưa có vé ⇒ hỏi luôn, đừng bắt họ chờ thêm
+       một lần kết nối hỏng nữa mới thấy hộp thoại. */
+    tra();
+    emit({
+      type: 'error',
+      code: 'RAMBO_BAO_TRI',
+      error: 'AI CuongMini đang bảo trì (cổng chính không phản hồi). Bạn có thể dùng cổng dự phòng — cần mật khẩu do quản trị cấp.',
+    });
+    return;
+  }
 
   /* 5. HẠN MỨC RIÊNG của Cuong Fable 5 — model tốn gấp 3,5 lần (26/09/2026).
      Kiểm SAU khi biết model thật, và kiểm ở MỌI lượt kể cả lượt của việc phụ:
      một việc dài chạy hàng chục lượt, chặn ở lượt đầu thôi là thủng. Admin
      không bị chặn (xem `fable.ts`). */
-  if (model === MODEL_FABLE) {
+  if (model === MODEL_FABLE && !dangDuPhong) {
     const hf = await xemHanMucFable(input.userId);
     if (hf.hetHan) {
       tra();
@@ -927,7 +969,7 @@ export async function runAgentTurn(
     }
   }
 
-  emit({ type: 'start', model, buoc: buocDaDi + 1, tranBuoc: MAX_AGENT_STEPS });
+  emit({ type: 'start', model, buoc: buocDaDi + 1, tranBuoc: MAX_AGENT_STEPS, cong: dangDuPhong ? 'du-phong' : 'chinh' });
 
   const append: AgentMessage[] = [];
   let inTong = 0;
@@ -989,7 +1031,7 @@ export async function runAgentTurn(
       const guiDi = nhac.length ? ganNhacDuoi(nen.messages, nhac.join('\n')) : nen.messages;
       uocLuongDangBay = uocLuongVao(system, guiDi);
 
-      const ketQua = await goiCongCoLuoiDo({
+      const goiMotLan = () => goiCongCoLuoiDo({
         url: chatUrlOf(ep),
         key: ep.key,
         ...(ep.giaoThuc ? { giaoThuc: ep.giaoThuc } : {}),
@@ -1000,6 +1042,23 @@ export async function runAgentTurn(
         signal,
         onText: (delta) => emit({ type: 'text', delta }),
       });
+      let ketQua: Awaited<ReturnType<typeof goiMotLan>>;
+      try {
+        ketQua = await goiMotLan();
+      } catch (err) {
+        /* RAMBO HỎNG GIỮA LƯỢT. Mở cầu dao (để lượt sau khỏi đâm đầu vào tường
+           và mũi dò tự gõ cửa lại), rồi: có vé ⇒ chuyển sang dự phòng và gọi
+           lại ĐÚNG bước này; không vé ⇒ báo mã riêng để app hỏi người dùng.
+           Lỗi 4xx (tất định) và người dùng bấm dừng thì không đụng tới. */
+        const thong = (err as Error).message || '';
+        const laRambo = ep.label === 'cong-agent';
+        if (!laRambo || signal.aborted || maLoiCong(thong) === 'LLM_ERROR_4XX') throw err;
+        baoRamboHong();
+        if (!chuyenDuPhong()) throw new RamboBaoTri(thong);
+        logger.warn('agent: rambo hỏng giữa lượt — chuyển sang cổng dự phòng', { model, loi: thong.slice(0, 120) });
+        emit({ type: 'cong', cong: 'du-phong', model });
+        ketQua = await goiMotLan();
+      }
 
       uocLuongDangBay = 0;
       inTong += ketQua.inputTokens;
@@ -1106,6 +1165,17 @@ export async function runAgentTurn(
     if (signal.aborted) return; // người dùng bấm dừng — không phải lỗi
     logger.warn('agent: lượt hỏng', { message, model });
 
+    /* Rambo sập và người dùng chưa có vé dự phòng ⇒ mã RIÊNG để app hiện hộp
+       "CuongMini đang bảo trì — dùng cổng dự phòng?" thay vì một dòng lỗi đỏ. */
+    if (err instanceof RamboBaoTri) {
+      emit({
+        type: 'error',
+        code: 'RAMBO_BAO_TRI',
+        error: 'AI CuongMini đang bảo trì (cổng chính không phản hồi). Bạn có thể dùng cổng dự phòng — cần mật khẩu do quản trị cấp.',
+      });
+      return;
+    }
+
     // Kết nối ĐỨT giữa chừng ≠ cổng AI trả về lỗi. Hai chuyện này cần hai câu
     // khác nhau, vì người dùng làm hai việc khác nhau: đứt thì hỏi lại là
     // xong, còn cổng lỗi thì hỏi lại cũng thế.
@@ -1172,6 +1242,9 @@ export async function runAgentTurn(
     });
   }
 }
+
+/** Rambo hỏng và không có vé dự phòng — xem nhánh bắt lỗi của `runAgentTurn`. */
+class RamboBaoTri extends Error {}
 
 /** Gói hạn mức cho app. `Date` phải thành chuỗi vì nó đi qua JSON. */
 function goiNguCanh(

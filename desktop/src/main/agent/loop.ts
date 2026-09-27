@@ -1624,6 +1624,31 @@ async function mgoiMotLuot(o: {
   }
 }
 
+/**
+ * Báo MỘT dòng khi đường đi đổi giữa cổng chính (rambo) và cổng dự phòng —
+ * cả hai chiều, để người dùng biết lúc nào mình đang tiêu tiền thật và lúc nào
+ * đã tự về lại CuongMini. Nhớ ở mức mô-đun: một việc có nhiều lượt, chỉ báo lúc
+ * ĐỔI chứ không báo mỗi lượt.
+ */
+let congTruoc: 'chinh' | 'du-phong' = 'chinh';
+function baoDoiCong(cong: 'chinh' | 'du-phong', model: string, phat: (e: SuKienAgent) => void): void {
+  if (cong === congTruoc) return;
+  congTruoc = cong;
+  phat({
+    loai: 'loi',
+    ma: 'DOI_CONG',
+    thongDiep: cong === 'du-phong'
+      ? `CuongMini đang bảo trì — đang dùng cổng dự phòng (${model}, tính phí). Cổng chính sống lại là tự quay về.`
+      : 'Cổng chính CuongMini đã hoạt động lại — đã tự quay về, không còn dùng cổng dự phòng.',
+  });
+}
+
+/** Vé cổng dự phòng đang giữ (chuỗi rỗng/không có ⇒ `undefined`, không gửi). */
+function veDuPhong(): string | undefined {
+  const v = getSettings().agentDuPhongVe;
+  return typeof v === 'string' && v ? v : undefined;
+}
+
 async function mgoiMotLuotThat(o: {
   token: string;
   messages: TinNhan[];
@@ -1686,6 +1711,10 @@ async function mgoiMotLuotThat(o: {
       model: o.model,
       laPhu: o.laPhu,
       toolMcp: o.toolMcp,
+      /* Vé cổng dự phòng — đọc thẳng thiết đặt ở ĐÂY (chỗ duy nhất dựng thân
+         yêu cầu) để cả lượt chính lẫn việc phụ đều mang theo. Máy chủ chỉ dùng
+         khi rambo hỏng. Xem `services/agent/congDuPhong.ts` bên backend. */
+      duPhongVe: veDuPhong(),
     }),
   });
 
@@ -1752,6 +1781,10 @@ async function mgoiMotLuotThat(o: {
       switch (e.type) {
         case 'start':
           o.phat({ loai: 'batDau', model: e.model, ...(typeof e.buoc === 'number' ? { buoc: e.buoc } : {}), ...(typeof e.tranBuoc === 'number' ? { tranBuoc: e.tranBuoc } : {}) });
+          if (e.cong === 'chinh' || e.cong === 'du-phong') baoDoiCong(e.cong, e.model, o.phat);
+          break;
+        case 'cong':
+          baoDoiCong('du-phong', e.model, o.phat);
           break;
         case 'text':
           o.phat({ loai: 'chu', delta: e.delta });

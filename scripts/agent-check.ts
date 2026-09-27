@@ -170,7 +170,7 @@ async function hoi(cauHoi: string, goc: string | null, userId: number): Promise<
     let goiLaiNgay = false;
 
     await runAgentTurn(
-      { messages, capabilities, workspace: goc ? { name: path.basename(goc), platform: process.platform } : undefined, userId },
+      { messages, capabilities, workspace: goc ? { name: path.basename(goc), platform: process.platform } : undefined, userId, ...(process.env.AGENT_CHECK_MODEL ? { model: process.env.AGENT_CHECK_MODEL } : {}) },
       (e: AgentEvent) => {
         if (e.type === 'tool_call') { canChay.push({ id: e.id, name: e.name, args: e.args }); soBuoc++; }
         else if (e.type === 'server_tool') { console.log(`    ⏺ ${e.name} → ${e.summary}`); soBuoc++; }

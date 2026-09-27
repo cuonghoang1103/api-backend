@@ -14183,3 +14183,25 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-bn-than p { margin: 4px 0; }
 .ct-bn-than code { font-size: 11px; word-break: break-word; }
 .ct-bn-phu { color: var(--ct-text-faint); font-size: 10.5px; }
+
+/* ─── Cổng dự phòng AI Code (27/09/2026) — xem CongDuPhong.tsx ─── */
+.ct-duphong { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+.ct-duphong-chu { margin: 0; font-size: 12px; line-height: 1.5; color: var(--ct-text); }
+.ct-duphong-chu svg { vertical-align: -2px; margin-right: 4px; }
+.ct-duphong-hang { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.ct-duphong-hang .ct-btn { padding: 4px 10px; font-size: 11.5px; }
+.ct-duphong-o {
+  flex: 1 1 160px;
+  min-width: 0;
+  padding: 5px 8px;
+  border: 1px solid var(--ct-border);
+  border-radius: 6px;
+  background: var(--ct-bg);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 12px;
+}
+.ct-duphong-o:focus { outline: none; border-color: var(--ct-accent); }
+.ct-duphong-loi { margin: 0; font-size: 11.5px; color: var(--ct-danger, #e5484d); }
+.ct-duphong[data-xong='true'] .ct-duphong-chu { color: var(--ct-success, #30a46c); }
+.ct-chonmm-ds button[data-chon-duphong] > svg { flex-shrink: 0; margin-top: 2px; color: var(--ct-warn); }

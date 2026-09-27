@@ -26,7 +26,7 @@ import {
   Link2,
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
-  ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus, PanelRight,
+  ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus, PanelRight, LifeBuoy,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
@@ -37,6 +37,7 @@ import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
 import { NutOpenCode } from './NutOpenCode';
 import { ID_FABLE, XinThemFable, moTaHanMuc, useHanMucFable } from './HanMucFable';
+import { MoCongDuPhong, moTaDuPhong, useCongDuPhong } from './CongDuPhong';
 import { GoiYFile, docTokenFile, type TokenFile } from './GoiYFile';
 import { BangHook } from './BangHook';
 import { BangBoNho } from './BangBoNho';
@@ -1030,11 +1031,13 @@ export function AgentMode({
           if (m.kieu === 'loi') {
             return (
               <div key={i} className="ct-notice" data-tone={
-                m.ma === 'HOAN_TAC' ? 'warn' : m.ma === 'KHOI_PHUC' ? 'info' : 'err'
+                m.ma === 'HOAN_TAC' || m.ma === 'RAMBO_BAO_TRI' ? 'warn' : m.ma === 'KHOI_PHUC' || m.ma === 'DOI_CONG' ? 'info' : 'err'
               }>
                 <span>{m.text}</span>
                 {/* Hết hạn mức Cuong Fable ⇒ xin thêm ngay tại chỗ (26/09/2026). */}
                 {m.ma === 'FABLE_QUOTA_EXCEEDED' && <XinThemFable />}
+                {/* Cổng chính (rambo) sập ⇒ hỏi có dùng cổng dự phòng không (27/09/2026). */}
+                {m.ma === 'RAMBO_BAO_TRI' && <MoCongDuPhong baoTri />}
               </div>
             );
           }
@@ -1518,6 +1521,10 @@ function ChonModelVaMuc({
   const { h: hanMucFable } = useHanMucFable(mo);
   const [hoiFable, datHoiFable] = useState(false);
   useEffect(() => { if (!mo) datHoiFable(false); }, [mo]);
+  /* Cổng dự phòng (modelapi, cần mật khẩu) — một mục riêng dưới danh sách model. */
+  const { t: duPhong } = useCongDuPhong(mo);
+  const [moDuPhong, datMoDuPhong] = useState(false);
+  useEffect(() => { if (!mo) datMoDuPhong(false); }, [mo]);
 
   // Bảng của MÁY CHỦ thắng bảng chép cứng ở trên. Con số bước là thứ máy chủ
   // áp đặt, nên app tự khai "60 bước" trong khi máy chủ đã đổi thành 100 là
@@ -1610,6 +1617,30 @@ function ChonModelVaMuc({
               </li>
             ))}
           </ul>
+
+          {duPhong?.coCongChinh && duPhong.daBat && (
+            <ul className="ct-chonmm-ds">
+              <li>
+                <button
+                  type="button"
+                  data-chon-duphong
+                  data-chon={duPhong.veHopLe && duPhong.congChinhDangHong}
+                  onClick={() => datMoDuPhong((v) => !v)}
+                >
+                  <LifeBuoy size={12} aria-hidden />
+                  <span>
+                    <strong>Dùng cổng dự phòng</strong>
+                    <em>{moTaDuPhong(duPhong)}</em>
+                  </span>
+                </button>
+                {moDuPhong && (
+                  <div className="ct-chonmm-xacnhan">
+                    <MoCongDuPhong />
+                  </div>
+                )}
+              </li>
+            </ul>
+          )}
 
           <p className="ct-chonmm-nhan">{dich('Mức nỗ lực')}</p>
           <ul className="ct-chonmm-ds">

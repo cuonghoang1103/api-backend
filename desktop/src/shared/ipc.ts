@@ -90,6 +90,12 @@ export const settingKeySchema = z.enum([
   'agentMucNoLuc',
   'agentModel',
   /**
+   * Vé CỔNG DỰ PHÒNG (modelapi) — máy chủ cấp khi người dùng nhập đúng mật
+   * khẩu admin đặt. Gửi kèm mỗi lượt AI Code; máy chủ CHỈ dùng nó khi cổng
+   * chính (rambo) hỏng, nên để nguyên cũng không tốn tiền lúc rambo khoẻ.
+   */
+  'agentDuPhongVe',
+  /**
    * Chế độ đang mở ở /chat: 'chat' (trò chuyện) hay 'code' (lập trình).
    *
    * Lưu vì cùng lý do với `agentMucNoLuc`: đây là SỞ THÍCH, không phải quyền.

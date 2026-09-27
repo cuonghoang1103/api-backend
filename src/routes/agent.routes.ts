@@ -26,7 +26,8 @@ import type { ApiResponse } from '../types/index.js';
 import { AGENT_TOOLS, ALL_CAPABILITIES } from '../services/agent/tools.js';
 import { soGioCuaSo, tranToken, xemHanMuc } from '../services/agent/quota.js';
 import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agent/turn.js';
-import { gatewayConfigured, modelFor } from '../services/llm/gateway.js';
+import { congAgent, gatewayConfigured, modelFor, ramboDangNghi } from '../services/llm/gateway.js';
+import { MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
 import { dsModelAgent } from '../services/agent/models.js';
 import { datTenViec } from '../services/agent/datTen.js';
 import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
@@ -169,6 +170,49 @@ router.post('/fable/xin', chiPro, async (req: any, res: Response<ApiResponse>, n
 });
 
 /**
+ * CỔNG DỰ PHÒNG (27/09/2026) — modelapi, tính tiền thật, cần mật khẩu admin.
+ *
+ * GET  /du-phong           — trạng thái: rambo có đang hỏng không, dự phòng đã
+ *                            bật chưa, model gì. App gửi kèm `?ve=` để biết vé
+ *                            còn dùng được không (đổi mật khẩu là vé chết).
+ * POST /du-phong/mo-khoa   — { matKhau } ⇒ { ve, hetHan }. App giữ vé và gửi
+ *                            kèm mỗi lượt (`duPhongVe`); vé CHỈ có tác dụng lúc
+ *                            rambo hỏng — rambo sống lại là tự về rambo.
+ */
+router.get('/du-phong', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const model = modelDuPhongAgent();
+    res.json({
+      success: true,
+      data: {
+        coCongChinh: Boolean(congAgent()),
+        congChinhDangHong: ramboDangNghi(),
+        daBat: await daCoMatKhau(),
+        coKhoa: Boolean(congDuPhong(model)),
+        model,
+        ten: tenDuPhong(model),
+        veHopLe: req.query.ve ? await veDuPhongHopLe(req.userId, String(req.query.ve)) : false,
+      },
+    });
+  } catch (err) { next(err); }
+});
+
+router.post('/du-phong/mo-khoa', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const matKhau = String((req.body as { matKhau?: unknown })?.matKhau ?? '');
+    const kq = await moKhoaDuPhong(req.userId, matKhau.slice(0, 200));
+    logger.info('[du-phong] mở khoá cổng dự phòng', { userId: req.userId });
+    res.json({ success: true, data: { ...kq, model: modelDuPhongAgent(), ten: tenDuPhong() } });
+  } catch (err) {
+    if (err instanceof MoKhoaLoi) {
+      next(new AppError(err.message, err.code === 'THU_QUA_NHIEU' ? 429 : err.code === 'CHUA_BAT' ? 409 : 403, err.code));
+      return;
+    }
+    next(err);
+  }
+});
+
+/**
  * GET /ky-nang — kho kỹ năng cài sẵn của AI Code (deploy, máy chủ SSH,
  * database, kiểm thử, bảo mật…). App tải mỗi lượt, đệm 10 phút; sửa file
  * `.md` + deploy backend là mọi người có bản mới, không cần phát hành app.
@@ -234,7 +278,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   const body = req.body as {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
     ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
-    model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown;
+    model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; duPhongVe?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -341,6 +385,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         ...(boNho ? { boNho } : {}),
         mucNoLuc: body.mucNoLuc,
         model: body.model,
+        duPhongVe: body.duPhongVe,
         laPhu: body.laPhu,
         toolMcp: body.toolMcp,
         userId: req.userId,

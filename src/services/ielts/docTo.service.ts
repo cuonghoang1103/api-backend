@@ -19,6 +19,7 @@
 import crypto from 'node:crypto';
 import { BadRequestError } from '../../middleware/errorHandler.js';
 import { objectExists, putObject, buildPublicUrl } from '../../config/r2.js';
+import { synthesizeGoogle } from '../makerlab/tts.js';
 
 /** Giọng cho phép — danh sách trắng, để không ai đốt hạn mức bằng giọng lạ. */
 export const GIONG = {
@@ -76,9 +77,20 @@ export async function docTo(userId: number, b: { text?: unknown; giong?: unknown
   if (await objectExists(key)) return { url: buildPublicUrl(key) };
 
   const apiKey = process.env.GOOGLE_TTS_API_KEY;
-  // Không có khoá: nói rõ lý do, web tự đọc bằng giọng trình duyệt.
-  if (!apiKey) return { url: null, lyDo: 'no_tts_key' as const };
   if (!demSinh(userId)) return { url: null, lyDo: 'quota' as const };
+  // Chưa có khoá Google Cloud (đo 28/09: production KHÔNG có) → giọng của Google
+  // Dịch: miễn phí, không khoá, rõ hơn hẳn giọng hệ thống mà Cốc Cốc/Chrome trên
+  // Mac đang đọc. Đổi lại: chỉ MỘT giọng mỗi thứ tiếng (không nam/nữ) và không
+  // có SSML — web tự chỉnh tốc độ bằng playbackRate. Có khoá thì đi WaveNet ở dưới.
+  if (!apiKey) {
+    const keyGt = `ielts/audio/gt-${giong.slice(0, 2)}/${bam}.mp3`;
+    if (await objectExists(keyGt)) return { url: buildPublicUrl(keyGt) };
+    const tl = giong.startsWith('ja') ? 'ja' : giong.startsWith('us') ? 'en-US' : 'en-GB';
+    const doc = danhVan ? text.split(/\s*,\s*/).join('. ') : text;
+    const mp3 = await synthesizeGoogle(doc, tl);
+    const { url } = await putObject(keyGt, mp3, 'audio/mpeg');
+    return { url, giongDon: true };
+  }
 
   const name = GIONG[giong];
   const res = await fetch(

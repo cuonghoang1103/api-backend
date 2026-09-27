@@ -1199,3 +1199,10 @@
 /* đọc chữ Hán không furigana — chữ to như trên đề */
 .rkText { margin: 10px 0 6px; font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif; font-size: 26px; line-height: 2.1; color: var(--lh-ink); }
 @media (max-width: 480px) { .rkText { font-size: 22px; } }
+
+/* tốc độ nghe */
+.rateGroup { display: inline-flex; align-items: center; gap: 2px; padding: 2px; border: 1px solid var(--lh-line); border-radius: 9px; }
+.rateBtn { padding: 3px 7px; border-radius: 7px; font-size: 12.5px; font-weight: 600; color: var(--lh-ink-2); font-variant-numeric: tabular-nums; }
+.rateBtn:hover { background: var(--lh-surface-2); }
+.rateOn { background: var(--lh-accent); color: var(--lh-accent-ink); }
+.rateOn:hover { background: var(--lh-accent); }

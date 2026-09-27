@@ -57,6 +57,10 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/language/:code/translate', nap: () => import('@/app/language/[code]/translate/page') },
   { mau: '/language/:code/vocab', nap: () => import('@/app/language/[code]/vocab/page') },
   { mau: '/language/:code/writing', nap: () => import('@/app/language/[code]/writing/page') },
+  // Khoá học kiểu sách (28/09/2026): IELTS 4 kỹ năng và tiếng Nhật できる日本語 —
+  // cùng bộ khung components/sach-hoc, tải nội dung từng buổi theo import().
+  { mau: '/language/:code/ielts', nap: () => import('@/app/language/[code]/ielts/page') },
+  { mau: '/language/:code/dekiru', nap: () => import('@/app/language/[code]/dekiru/page') },
 
   /* ── Lộ trình ── */
   { mau: '/roadmap', nap: () => import('@/components/roadmap/RoadmapLanding') },

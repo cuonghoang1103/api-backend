@@ -11,7 +11,7 @@ import type { Lesson } from './types';
 import { Blocks } from './Blocks';
 import { GiaSu, type Turn } from './GiaSu';
 import { TutorCtx, CourseCtx, type TutorAsk } from './tutorContext';
-import { setDefaultVoice, AI_TIMEOUT } from './audio';
+import { setDefaultVoice, AI_TIMEOUT, getRate, setRate, onRate } from './audio';
 import { useTienDo } from './useTienDo';
 import { TongQuanBuoi, KeHoach, dayDone } from './TongQuan';
 import s from './course.module.css';
@@ -58,6 +58,8 @@ export default function CoursePage({ course }: { course: Course }) {
   const isJa = course.voice.startsWith('ja');
   const [furi, setFuri] = useState(true);
   const [roma, setRoma] = useState(true);
+  const [rate, setRateState] = useState(1);
+  useEffect(() => { setRateState(getRate()); return onRate(setRateState); }, []);
   const articleRef = useRef<HTMLElement>(null);
 
   // Đọc URL trong effect thay vì useSearchParams: hook đó bắt trang bọc
@@ -225,6 +227,15 @@ export default function CoursePage({ course }: { course: Course }) {
                 <span style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', fontSize: 13 }}>Aa</span><span className={s.btnLabel}>{roma ? 'Ẩn romaji' : 'Hiện romaji'}</span>
               </button>
             )}
+            {/* Tốc độ đọc cho mọi nút 🔊 — nhớ trên máy. */}
+            <div className={s.rateGroup} role="group" aria-label="Tốc độ nghe">
+              <span className={s.btnLabel}>🔊</span>
+              {[0.75, 1, 1.25].map((r) => (
+                <button key={r} type="button" className={`${s.rateBtn} ${rate === r ? s.rateOn : ''}`} onClick={() => setRate(r)}>
+                  {r}×
+                </button>
+              ))}
+            </div>
             <button type="button" className={`${s.iconBtn} ${s.tocBtn}`} onClick={() => setTocOpen(true)}>
               <List size={17} /><span className={s.btnLabel}>Mục lục</span>
             </button>

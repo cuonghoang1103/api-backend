@@ -26,12 +26,19 @@ import { AI_TIMEOUT } from './audio';
 type StrokeMap = Record<string, string[]>;
 let strokesPromise: Promise<StrokeMap> | null = null;
 function loadStrokes(): Promise<StrokeMap> {
-  strokesPromise ??= fetch('/kanjivg/strokes.json')
-    .then((r) => (r.ok ? r.json() : {}))
-    .catch(() => {
-      strokesPromise = null; // lỗi mạng: lần sau thử lại
-      return {};
-    });
+  // Web: tải file tĩnh /kanjivg/strokes.json (nhẹ, trình duyệt cache).
+  // App desktop (origin app://): file đó ở cuongthai.com KHÔNG có header CORS nên
+  // fetch bị chặn — lùi về import() chính file JSON, gói thành chunk riêng chỉ
+  // tải khi cần (web không bao giờ đi nhánh này trừ khi mạng hỏng).
+  const qua = () => import('../../../public/kanjivg/strokes.json').then((m) => (m.default ?? m) as unknown as StrokeMap);
+  strokesPromise ??= (
+    typeof window !== 'undefined' && window.location.protocol.startsWith('http')
+      ? fetch('/kanjivg/strokes.json').then((r) => (r.ok ? r.json() : qua())).catch(qua)
+      : qua()
+  ).catch(() => {
+    strokesPromise = null; // lỗi: lần sau thử lại
+    return {} as StrokeMap;
+  });
   return strokesPromise;
 }
 function useStrokeData() {

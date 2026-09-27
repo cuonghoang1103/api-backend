@@ -52,6 +52,8 @@ describe('khopTuyenWeb', () => {
     // `/language/:code` dài 2 đoạn, `/language/:code/vocab` dài 3 — nhưng nếu
     // ai đó thêm `/language/:code/:muc` thì thứ tự mảng là thứ giữ đúng.
     expect(khopTuyenWeb('/language/ja/vocab')?.tuyen.mau).toBe('/language/:code/vocab');
+    expect(khopTuyenWeb('/language/ja/dekiru')?.tuyen.mau).toBe('/language/:code/dekiru');
+    expect(khopTuyenWeb('/language/en/ielts')?.tuyen.mau).toBe('/language/:code/ielts');
   });
 
   /*
@@ -223,7 +225,8 @@ describe('khopTuyenWeb', () => {
        hai trang tư vấn của Học viện (`/academy/tu-van-nganh`,
        `/academy/so-do-mon-hoc`) — app trước đó không có chúng. 75 → 94 ngày
        23/09/2026: cây CT Work (`/work`, 19 trang). 24/09: `/work/search` ⇒ 95. */
-    expect(thay.size).toBe(95);
+    // 28/09/2026: +2 khoá học kiểu sách (/language/:code/ielts, /language/:code/dekiru).
+    expect(thay.size).toBe(97);
   });
 });
 

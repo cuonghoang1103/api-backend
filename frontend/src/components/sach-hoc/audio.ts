@@ -29,7 +29,32 @@ export type Clip = {
   kieu?: 'danhvan';
 };
 
-const cache = new Map<string, string | null>();
+/**
+ * Tốc độ nghe người học chọn (0,75 / 1 / 1,25) — nhớ trên máy. Áp bằng
+ * `playbackRate` nên đổi tốc độ KHÔNG phải sinh lại file.
+ */
+const RATE_KEY = 'sachhoc:toc-do';
+let userRate = 1;
+try { const v = Number(localStorage.getItem(RATE_KEY)); if (v >= 0.5 && v <= 1.5) userRate = v; } catch { /* SSR / chế độ riêng tư */ }
+const rateSubs = new Set<(r: number) => void>();
+export function getRate() { return userRate; }
+export function setRate(r: number) {
+  userRate = r;
+  try { localStorage.setItem(RATE_KEY, String(r)); } catch { /* bỏ qua */ }
+  if (audio) audio.playbackRate = r * (audio.dataset.nam === '1' ? NAM_RATE : 1);
+  rateSubs.forEach((f) => f(r));
+}
+export function onRate(f: (r: number) => void) { rateSubs.add(f); return () => { rateSubs.delete(f); }; }
+
+/**
+ * Giọng Google Dịch chỉ có MỘT giọng mỗi thứ tiếng. Để hai người trong hội
+ * thoại nghe khác nhau, câu của vai NAM phát chậm lại một chút và KHÔNG giữ
+ * cao độ (preservesPitch = false) — giọng trầm xuống rõ rệt. Có khoá WaveNet
+ * thì máy chủ trả giọng nam thật và mẹo này tự tắt.
+ */
+const NAM_RATE = 0.86;
+
+const cache = new Map<string, { url: string | null; don: boolean }>();
 let audio: HTMLAudioElement | null = null;
 let run = 0;
 /** Kết thúc lời chờ của đoạn đang phát — dừng giữa chừng thì `ended` không bao giờ bắn. */
@@ -43,27 +68,37 @@ export function setDefaultVoice(v: Voice) { defaultVoice = v; }
 
 const keyOf = (c: Clip) => `${c.voice ?? defaultVoice}|${c.toc ?? 0.95}|${c.kieu ?? ''}|${c.text}`;
 
-async function urlFor(c: Clip): Promise<string | null> {
-  if (serverOff) return null;
+async function urlFor(c: Clip): Promise<{ url: string | null; don: boolean }> {
+  if (serverOff) return { url: null, don: false };
   const k = keyOf(c);
   if (cache.has(k)) return cache.get(k)!;
   try {
     const res = await api.post('/ielts/doc', { text: c.text, giong: c.voice ?? defaultVoice, toc: c.toc, kieu: c.kieu });
-    const d = res.data?.data as { url: string | null; lyDo?: string } | undefined;
+    const d = res.data?.data as { url: string | null; lyDo?: string; giongDon?: boolean } | undefined;
     if (d?.lyDo === 'no_tts_key') serverOff = true;
-    cache.set(k, d?.url ?? null);
-    return d?.url ?? null;
+    const v = { url: d?.url ?? null, don: !!d?.giongDon };
+    cache.set(k, v);
+    return v;
   } catch {
-    return null; // 401 (chưa đăng nhập) hay mất mạng: lần này đọc bằng trình duyệt
+    return { url: null, don: false }; // 401 (chưa đăng nhập) hay mất mạng: lần này đọc bằng trình duyệt
   }
 }
 
 function browserVoice(v?: Voice): SpeechSynthesisVoice | undefined {
   const all = window.speechSynthesis.getVoices();
   const vv = v ?? defaultVoice;
-  if (vv.startsWith('ja')) return all.find((x) => x.lang === 'ja-JP') || all.find((x) => x.lang?.startsWith('ja'));
-  const want = vv.startsWith('us') ? 'en-US' : 'en-GB';
-  return all.find((x) => x.lang === want) || all.find((x) => x.lang?.startsWith('en'));
+  const nam = vv.endsWith('nam');
+  const lang = vv.startsWith('ja') ? 'ja' : 'en';
+  const want = vv.startsWith('ja') ? 'ja-JP' : vv.startsWith('us') ? 'en-US' : 'en-GB';
+  const pool = all.filter((x) => x.lang?.replace('_', '-').startsWith(lang));
+  // Giọng hệ thống không ghi giới tính — đoán theo tên quen thuộc của macOS/Windows/Chrome.
+  const MALE = /(daniel|alex|fred|tom|oliver|arthur|aaron|rishi|david|mark|george|guy|ryan|otoya|hattori|ichiro|keita|male|男)/i;
+  const FEMALE = /(samantha|karen|serena|kate|moira|tessa|victoria|susan|zira|hazel|libby|sonia|kyoko|o-ren|haruka|ayumi|nanami|female|女)/i;
+  // Ưu tiên giọng chất lượng cao (Premium/Enhanced/Natural/Google) hơn giọng "compact".
+  const score = (x: SpeechSynthesisVoice) =>
+    (x.lang?.replace('_', '-') === want ? 4 : 0) + (/premium|enhanced|natural|neural|google/i.test(x.name) ? 3 : 0)
+    + ((nam ? MALE : FEMALE).test(x.name) ? 5 : 0) - ((nam ? FEMALE : MALE).test(x.name) ? 5 : 0);
+  return pool.sort((a, b) => score(b) - score(a))[0];
 }
 
 function browserSay(c: Clip): Promise<void> {
@@ -76,7 +111,8 @@ function browserSay(c: Clip): Promise<void> {
       const u = new SpeechSynthesisUtterance(t);
       if (voice) u.voice = voice;
       u.lang = voice?.lang || ((c.voice ?? defaultVoice).startsWith('ja') ? 'ja-JP' : 'en-GB');
-      u.rate = (c.toc ?? 0.95) * (c.kieu === 'danhvan' ? 0.85 : 0.95);
+      u.rate = (c.toc ?? 0.95) * (c.kieu === 'danhvan' ? 0.85 : 0.95) * userRate;
+      if ((c.voice ?? defaultVoice).endsWith('nam')) u.pitch = 0.8;
       if (i === parts.length - 1) { u.onend = () => resolve(); u.onerror = () => resolve(); }
       window.speechSynthesis.speak(u);
     });
@@ -102,11 +138,16 @@ export async function play(clips: Clip | Clip[], onEnd?: () => void) {
   try {
     for (const c of list) {
       if (my !== run) return;
-      const url = await urlFor(c);
+      const { url, don } = await urlFor(c);
       if (my !== run) return;
       if (url) {
         await new Promise<void>((resolve) => {
           const a = new Audio(url);
+          const nam = don && (c.voice ?? defaultVoice).endsWith('nam');
+          a.dataset.nam = nam ? '1' : '0';
+          a.preservesPitch = !nam;
+          a.defaultPlaybackRate = userRate * (nam ? NAM_RATE : 1);
+          a.playbackRate = a.defaultPlaybackRate;
           audio = a;
           cancelCur = resolve;
           a.onended = () => resolve();

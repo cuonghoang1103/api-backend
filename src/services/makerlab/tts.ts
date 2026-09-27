@@ -934,7 +934,7 @@ function clampInt(n: number, lo: number, hi: number): number {
  * concatenated. Frame-level concatenation is legal MP3 and every
  * decoder (including the ESP32's) plays it back seamlessly.
  */
-async function synthesizeGoogle(text: string, lang: string): Promise<Buffer> {
+export async function synthesizeGoogle(text: string, lang: string): Promise<Buffer> {
   const parts = chunkText(text, 190);
   const out: Buffer[] = [];
   for (const part of parts) {

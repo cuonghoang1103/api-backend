@@ -90,4 +90,8 @@ lỗi trang · commit theo pathspec · `deploy-nha.sh` (tự push).
 | 5 | ✅ ポイント 37–47, 61/61 từ, bảng quá khứ (27/09) |
 | 6 | ✅ ポイント 48–60, 55/55 từ (27/09) — danh sách cô dịch nhầm #27 (日曜日 = CN, không phải thứ 7) |
 | 📖 Theo sách | ✅ Bài 1–3 (bai/sach.ts) + Bài 4–6 (bai/sach2.ts) |
-| 7–15 | ⏳ đang trích & soạn (27/09) |
+| 7 | ✅ ポイント 61–71 + thể て, 71/71 từ của cô (27/09) — list cô ghi 洗います 'tắm' là sai |
+| 8 | ✅ ポイント 72–80, 84 từ (27/09) |
+| 9 | ✅ ポイント 81–87 + thể từ điển, 61 từ (27/09) |
+| 10 | ✅ ポイント 88–97 + thể ない, 70 từ (27/09) |
+| 11–15 | ⏳ đang trích & soạn |

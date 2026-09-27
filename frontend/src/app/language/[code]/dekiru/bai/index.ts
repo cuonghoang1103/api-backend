@@ -12,8 +12,12 @@ import { BAI_5 } from './bai5';
 import { BAI_6 } from './bai6';
 import { SACH as SACH_1 } from './sach';
 import { SACH_2 } from './sach2';
+import { BAI_7, SACH_7 } from './bai7';
+import { BAI_8, SACH_8 } from './bai8';
+import { BAI_9, SACH_9 } from './bai9';
+import { BAI_10, SACH_10 } from './bai10';
 
-const SACH = { ...SACH_1, ...SACH_2 };
+const SACH: Record<number, Day['lessons'][number]> = { ...SACH_1, ...SACH_2, 7: SACH_7, 8: SACH_8, 9: SACH_9, 10: SACH_10 };
 
 const BAI: Record<number, Day['lessons']> = {
   0: BAI_0,
@@ -23,6 +27,10 @@ const BAI: Record<number, Day['lessons']> = {
   4: BAI_4,
   5: BAI_5,
   6: BAI_6,
+  7: BAI_7,
+  8: BAI_8,
+  9: BAI_9,
+  10: BAI_10,
 };
 
 /** Mỗi bài: các bài soạn + mục 📖 Theo sách (đi theo từng trang sách) ở cuối. */

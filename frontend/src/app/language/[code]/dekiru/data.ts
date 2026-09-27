@@ -79,11 +79,12 @@ export const DEKIRU = defineCourse({
   badgeWord: 'Bài',
   intro: INTRO,
   days: DAYS,
-  kindLabel: {},
+  // `review` dùng cho mục 📖 Theo sách: đi theo từng trang sách, câu cô hay hỏi + cách trả lời.
+  kindLabel: { review: 'Theo sách' },
   kindEn: {
     intro: 'はじめに', kana: 'ひらがな・カタカナ', conversation: '会話 · Hội thoại', vocab: 'ことば · Từ vựng',
     grammar: '文法 · Ngữ pháp', kanji: '漢字 · Chữ Hán', listening: '聞く · Nghe', speaking: '話す · Nói',
-    reading: '読む · Đọc', homework: '練習 · Bài tập', review: 'まとめ · Ôn tập',
+    reading: '読む · Đọc', homework: '練習 · Bài tập', review: '教科書 · Theo sách',
   },
   kindHue: {},
   voice: 'ja-nu',

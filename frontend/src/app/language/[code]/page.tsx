@@ -303,6 +303,17 @@ export default function LanguageHomePage() {
               to="#14b8a6"
             />
             {/* IELTS sống ở đây, không ở /tech-trends nữa: một chỗ học tiếng Anh. */}
+            {/* Khoá theo giáo trình của trường: Dekiru Nihongo (JPD113/JPD123). */}
+            {code === 'ja' && (
+              <StartCard
+                href="/language/ja/dekiru"
+                icon={<BookOpen size={22} strokeWidth={1.75} />}
+                title="できる日本語 · Bài 0–6"
+                desc="Học từ con số 0 theo sách trên lớp: kana, ngữ pháp, từ vựng, nói, nghe"
+                from="#e11d48"
+                to="#f97316"
+              />
+            )}
             {code === 'en' && (
               <StartCard
                 href="/language/en/ielts"

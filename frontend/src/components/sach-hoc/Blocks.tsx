@@ -2,11 +2,11 @@
 
 import { Fragment, useState } from 'react';
 import { Volume2, Check, X, RotateCcw, Sparkles, Lightbulb } from 'lucide-react';
-import { VOCAB_INDEX, type Block } from './data';
-import { useTutor } from './tutorContext';
+import type { Block } from './types';
+import { useTutor, useCourse } from './tutorContext';
 import { play } from './audio';
 import { renderBlock2 } from './Blocks2';
-import s from './ielts.module.css';
+import s from './course.module.css';
 
 /* ── Đọc to: xem audio.ts (mp3 giọng Anh từ máy chủ, lùi về giọng trình duyệt). ── */
 export { play } from './audio';
@@ -30,13 +30,18 @@ function SpeakBtn({ text, label }: { text: string; label?: string }) {
 
 /** **đậm** và ~~gạch (câu sai)~~ — đủ cho nội dung soạn tay, không cần markdown đầy đủ. */
 export function Inline({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|~~[^~]+~~|==[^=]+==)/g);
+  const parts = text.split(/(\*\*[^*]+\*\*|~~[^~]+~~|==[^=]+==|\{[^|}]+\|[^}]+\})/g);
   return (
     <>
       {parts.map((p, i) =>
-        p.startsWith('**') ? <b key={i}>{p.slice(2, -2)}</b>
-          : p.startsWith('~~') ? <s key={i}>{p.slice(2, -2)}</s>
-            : p.startsWith('==') ? <mark key={i} className={s.hl}>{p.slice(2, -2)}</mark>
+        // Đệ quy: **đậm** hay ==dạ quang== có thể chứa {漢字|かな} bên trong.
+        p.startsWith('**') ? <b key={i}><Inline text={p.slice(2, -2)} /></b>
+          : p.startsWith('~~') ? <s key={i}><Inline text={p.slice(2, -2)} /></s>
+            : p.startsWith('==') ? <mark key={i} className={s.hl}><Inline text={p.slice(2, -2)} /></mark>
+              // {漢字|かな}: chữ Hán có furigana (ẩn/hiện theo nút của trang).
+              : p.startsWith('{') && p.includes('|') ? (
+                <ruby key={i} className={s.ruby}>{p.slice(1, p.indexOf('|'))}<rt>{p.slice(p.indexOf('|') + 1, -1)}</rt></ruby>
+              )
             : <Fragment key={i}>{p}</Fragment>,
       )}
     </>
@@ -68,6 +73,9 @@ export function Formula({ text }: { text: string }) {
 const looksLikeFormula = (c: string) => (/^(S|V|Do|Does)\b/.test(c) || c.startsWith("Wh-")) && / \+ /.test(c) && c.length < 48;
 
 function FormulaLegend() {
+  // Chú thích S/V/O là của ngữ pháp tiếng Anh — khoá tiếng Nhật không dùng.
+  const ja = useCourse()?.voice.startsWith('ja');
+  if (ja) return null;
   return (
     <div className={s.legend}>
       <span className={`${s.role} ${s.rS}`}>S</span> chủ ngữ
@@ -108,7 +116,15 @@ function noteTone(title: string): 'warn' | 'tip' | 'info' {
 }
 
 /* ── So đáp án ── */
-const norm = (x: string) =>
+const JA = /[\u3040-\u30ff\u3400-\u9fff]/;
+const norm = (x: string) => {
+  // Tiếng Nhật: không có khoảng trắng giữa từ và kết câu bằng 。 — bỏ hết dấu
+  // câu/khoảng trắng, đổi số & chữ toàn khổ (１２, ｋｇ) về nửa khổ.
+  const t = x.normalize('NFKC');
+  if (JA.test(t)) return t.replace(/[\s。、，．,.!?！？「」]/g, '').toLowerCase();
+  return normEn(t);
+};
+const normEn = (x: string) =>
   x
     .toLowerCase()
     .replace(/[’‘]/g, "'")
@@ -124,6 +140,7 @@ const isRight = (given: string, answers: string[]) => answers.some((a) => norm(a
  * phải soạn một lần.
  */
 function Hint({ hint, grammar }: { hint?: string; grammar?: string }) {
+  const index = useCourse()?.vocabIndex;
   const words = (hint ?? '').split(/\s*[,/]\s*/).map((w) => w.trim()).filter(Boolean);
   return (
     <div className={s.hintBox}>
@@ -131,12 +148,12 @@ function Hint({ hint, grammar }: { hint?: string; grammar?: string }) {
         <div>
           <b>Từ vựng:</b>{' '}
           {words.map((w, i) => {
-            const v = VOCAB_INDEX.get(w.toLowerCase());
+            const v = index?.get(w.toLowerCase());
             return (
               <span key={w}>
                 {i > 0 && ' · '}
-                <b className={s.hintWord}>{w}</b>
-                {v ? <> ({v.pos}) {v.ipa} = {v.vi}</> : null}
+                <b className={s.hintWord}><Inline text={v?.w ?? w} /></b>
+                {v ? <> ({v.pos}) {v.ipa} = <Inline text={v.vi} /></> : null}
               </span>
             );
           })}
@@ -150,6 +167,7 @@ function Hint({ hint, grammar }: { hint?: string; grammar?: string }) {
 /* ── Bài điền / dịch ── */
 function Quiz({ b }: { b: Extract<Block, { t: 'quiz' }> }) {
   const tutor = useTutor();
+  const ja = useCourse()?.voice.startsWith('ja');
   const [vals, setVals] = useState<string[]>(() => b.items.map(() => ''));
   const [checked, setChecked] = useState(false);
   const [shown, setShown] = useState<Record<number, boolean>>({});
@@ -161,7 +179,9 @@ function Quiz({ b }: { b: Extract<Block, { t: 'quiz' }> }) {
     <div className={s.quiz}>
       <div className={s.quizTitle}>{b.title}</div>
       <div className={s.quizSub}>
-        {b.kind === 'translate' ? 'Gõ câu tiếng Anh. Dịch khác đáp án mẫu mà vẫn đúng? Bấm "Nhờ gia sư chấm".' : 'Gõ đáp án vào ô trống rồi bấm Kiểm tra.'}
+        {b.kind === 'translate'
+          ? `Gõ câu tiếng ${ja ? 'Nhật (kana hoặc kanji đều được)' : 'Anh'}. Dịch khác đáp án mẫu mà vẫn đúng? Bấm "Nhờ gia sư chấm".`
+          : 'Gõ đáp án vào ô trống rồi bấm Kiểm tra.'}
       </div>
       {b.items.map((it, i) => {
         const state = !checked || !vals[i].trim() ? '' : results[i] ? s.inputGood : s.inputBad;
@@ -169,7 +189,7 @@ function Quiz({ b }: { b: Extract<Block, { t: 'quiz' }> }) {
           <div key={i} className={s.qItem}>
             <div className={s.qText}>
               <span className={s.qNum}>{i + 1}</span>
-              {it.q}
+              <Inline text={it.q} />
               {b.kind === 'fill' && it.hint && <span className={s.qHint}> ({it.hint})</span>}
               {(b.kind === 'translate' || b.grammar) && (it.hint || b.grammar) && (
                 <button type="button" className={s.hintBtn} onClick={() => setHints({ ...hints, [i]: !hints[i] })}>
@@ -187,7 +207,7 @@ function Quiz({ b }: { b: Extract<Block, { t: 'quiz' }> }) {
                   v[i] = e.target.value;
                   setVals(v);
                 }}
-                placeholder={b.kind === 'translate' ? 'Câu tiếng Anh của bạn…' : 'Đáp án…'}
+                placeholder={b.kind === 'translate' ? `Câu tiếng ${ja ? 'Nhật' : 'Anh'} của bạn…` : 'Đáp án…'}
                 autoCapitalize="off"
                 autoCorrect="off"
                 spellCheck={false}
@@ -275,12 +295,12 @@ function Mcq({ b }: { b: Extract<Block, { t: 'mcq' }> }) {
         const chosen = pick[i];
         return (
           <div key={i} className={s.qItem}>
-            <div className={s.qText}><span className={s.qNum}>{i + 1}</span>{it.q}</div>
+            <div className={s.qText}><span className={s.qNum}>{i + 1}</span><Inline text={it.q} /></div>
             {it.options.map((o, j) => {
               const cls = chosen === undefined ? '' : j === it.correct ? s.optGood : j === chosen ? s.optBad : '';
               return (
                 <button key={j} type="button" disabled={chosen !== undefined} className={`${s.option} ${cls}`} onClick={() => choose(i, j)}>
-                  {String.fromCharCode(97 + j)}) {o}
+                  {String.fromCharCode(97 + j)}) <Inline text={o} />
                 </button>
               );
             })}
@@ -395,8 +415,9 @@ function renderBlock(b: Block, i: number) {
                             <div key={e.en} className={s.exRow} style={j === 0 ? { marginTop: 0 } : undefined}>
                               <SpeakBtn text={e.en} />
                               <div>
-                                <div className={s.exEn}>{e.en}</div>
-                                <div className={s.exVi}>{e.vi}</div>
+                                <div className={s.exEn}><Inline text={e.en} /></div>
+                                {e.ro && <div className={s.ro}>{e.ro}</div>}
+                                <div className={s.exVi}><Inline text={e.vi} /></div>
                               </div>
                             </div>
                           ))}
@@ -450,8 +471,9 @@ function renderBlock(b: Block, i: number) {
                   <div key={e.en} className={s.exRow} style={j === 0 ? { marginTop: 0 } : undefined}>
                     <SpeakBtn text={e.en} />
                     <div>
-                      <div className={s.exEn}>{e.en}</div>
-                      <div className={s.exVi}>{e.vi}</div>
+                      <div className={s.exEn}><Inline text={e.en} /></div>
+                      {e.ro && <div className={s.ro}>{e.ro}</div>}
+                      <div className={s.exVi}><Inline text={e.vi} /></div>
                     </div>
                   </div>
                 ))}
@@ -465,17 +487,18 @@ function renderBlock(b: Block, i: number) {
                     <SpeakBtn text={v.w} />
                     <div className="min-w-0">
                       <div className={s.wordHead}>
-                        <span className={s.wordW}>{v.w}</span>
+                        <span className={s.wordW}><Inline text={v.w} /></span>
                         <span className={`${s.wordPos} ${POS_CLASS(v.pos)}`}>{v.pos}</span>
                         <span className={s.wordIpa}>{v.ipa}</span>
-                        <span className={s.wordVi}>{v.vi}</span>
+                        <span className={s.wordVi}><Inline text={v.vi} /></span>
                       </div>
                       <div className={s.wordEx}>
                         <button type="button" className={s.linkBtn} style={{ fontWeight: 400, color: 'inherit', textAlign: 'left' }} onClick={() => play({ text: v.ex })}>
-                          <HighlightWord sentence={v.ex} word={v.w} />
+                          {v.ex.includes('{') ? <Inline text={v.ex} /> : <HighlightWord sentence={v.ex} word={v.w} />}
                         </button>
                       </div>
-                      <div className={s.wordExVi}>{v.exVi}</div>
+                      {v.exRo && <div className={s.ro}>{v.exRo}</div>}
+                      <div className={s.wordExVi}><Inline text={v.exVi} /></div>
                     </div>
                   </div>
                 ))}
@@ -508,7 +531,7 @@ function renderBlock(b: Block, i: number) {
         }
 }
 
-const IS_EXERCISE = new Set(['quiz', 'mcq', 'dictation', 'listen', 'essay', 'speak', 'passage']);
+const IS_EXERCISE = new Set(['quiz', 'mcq', 'dictation', 'listen', 'essay', 'speak', 'passage', 'build']);
 
 /**
  * `framed` (bài ngữ pháp): mỗi mục bắt đầu bằng tiêu đề được ĐÓNG KHUNG cùng

@@ -9,10 +9,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Play, Square, Eye, EyeOff, Mic, Volume2, Sparkles, RotateCcw } from 'lucide-react';
 import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
-import type { Block, Role, Voice } from './data';
+import type { Block, Role, Voice } from './types';
 import { play, stopAudio } from './audio';
 import { Inline } from './Blocks';
-import s from './ielts.module.css';
+import { useCourse, useTutor } from './tutorContext';
+import s from './course.module.css';
 
 /* ── Nhân vật ────────────────────────────────────────────────────────── */
 
@@ -23,6 +24,15 @@ const CAST: Record<Role, { voice: Voice; skin: string; hair: string; shirt: stri
   b: { voice: 'us-nam', skin: '#c68a5e', hair: '#111827', shirt: '#ea580c' },
   c: { voice: 'uk-nu', skin: '#f5cfa8', hair: '#a16207', shirt: '#7c3aed', long: true },
 };
+
+/**
+ * Giọng của một vai theo NGÔN NGỮ của khoá: khoá tiếng Nhật đọc bằng giọng
+ * Nhật (vai nữ → ja-nu, vai nam → ja-nam), khoá tiếng Anh dùng giọng của vai.
+ */
+function useVoiceFor() {
+  const ja = useCourse()?.voice.startsWith('ja');
+  return (role: Role): Voice => (ja ? (role === 'examiner' || role === 'b' ? 'ja-nam' : 'ja-nu') : CAST[role].voice);
+}
 
 /** Nhân vật hoạt hình vẽ bằng SVG — không tải ảnh, sáng/tối đều rõ. */
 export function Avatar({ role, size = 40, talking = false }: { role: Role; size?: number; talking?: boolean }) {
@@ -120,7 +130,11 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
               >
                 <Volume2 size={14} />
               </button>
-              <div>{l.who && <b className={s.tWho}>{l.who}: </b>}{l.text}</div>
+              <div>
+                {l.who && <b className={s.tWho}><Inline text={l.who} />: </b>}<Inline text={l.text} />
+                {l.ro && <div className={s.ro}>{l.ro}</div>}
+                {l.vi && <div className={s.dVi}><Inline text={l.vi} /></div>}
+              </div>
             </div>
           ))}
         </div>
@@ -132,6 +146,7 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
 /* ── Hội thoại có nhân vật ───────────────────────────────────────────── */
 
 function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
+  const voiceFor = useVoiceFor();
   const [on, setOn] = useState<number | null>(null);
   const [all, setAll] = useState(false);
   // Cờ dừng bằng ref: vòng lặp async cần đọc giá trị MỚI NHẤT giữa hai câu,
@@ -146,7 +161,7 @@ function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
     // Phát từng câu để tô sáng đúng người đang nói.
     for (let i = 0; i < b.lines.length && !stopRef.current; i++) {
       setOn(i);
-      await new Promise<void>((r) => play({ text: b.lines[i].text, voice: CAST[b.lines[i].role].voice }, r));
+      await new Promise<void>((r) => play({ text: b.lines[i].text, voice: voiceFor(b.lines[i].role) }, r));
     }
     setAll(false);
     setOn(null);
@@ -166,15 +181,16 @@ function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
           <div key={i} className={`${s.dLine} ${right ? s.dRight : ''}`}>
             <Avatar role={l.role} size={42} talking={on === i} />
             <div className={`${s.dBubble} ${on === i ? s.dBubbleOn : ''}`}>
-              <div className={s.dWho}>{l.who}</div>
+              <div className={s.dWho}><Inline text={l.who} /></div>
               <button
                 type="button"
                 className={s.dText}
-                onClick={() => { setOn(i); play({ text: l.text, voice: CAST[l.role].voice }, () => setOn(null)); }}
+                onClick={() => { setOn(i); play({ text: l.text, voice: voiceFor(l.role) }, () => setOn(null)); }}
               >
                 <Inline text={l.text} />
               </button>
-              {l.vi && <div className={s.dVi}>{l.vi}</div>}
+              {l.ro && <div className={s.ro}>{l.ro}</div>}
+              {l.vi && <div className={s.dVi}><Inline text={l.vi} /></div>}
             </div>
           </div>
         );
@@ -298,6 +314,9 @@ function Chart({ b }: { b: Extract<Block, { t: 'chart' }> }) {
 /* ── Luyện nói: ghi âm + AI chấm ─────────────────────────────────────── */
 
 function SpeakQ({ q, part }: { q: string; part: string }) {
+  // Máy chấm nói hiện chỉ hiểu tiếng Anh (Whisper 'en' + tiêu chí IELTS) — khoá
+  // tiếng Nhật chỉ ghi âm & nghe lại, không gửi đi chấm sai ngôn ngữ.
+  const ja = useCourse()?.voice.startsWith('ja');
   const [rec, setRec] = useState(false);
   const [blob, setBlob] = useState<Blob | null>(null);
   const [busy, setBusy] = useState(false);
@@ -352,7 +371,7 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
     <div className={s.speakQ}>
       <div className={s.speakRow}>
         <Avatar role="examiner" size={34} />
-        <button type="button" className={s.dText} style={{ flex: 1 }} onClick={() => play({ text: q, voice: 'uk-nam' })}>
+        <button type="button" className={s.dText} style={{ flex: 1 }} onClick={() => play({ text: q, voice: ja ? 'ja-nam' : 'uk-nam' })}>
           <Volume2 size={14} className="inline" style={{ marginRight: 6, opacity: 0.6 }} />{q}
         </button>
       </div>
@@ -361,7 +380,7 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
           <Mic size={15} /> {rec ? 'Dừng ghi' : blob ? 'Ghi lại' : 'Trả lời (ghi âm)'}
         </button>
         {url && <audio src={url} controls className={s.recAudio} />}
-        {blob && (
+        {blob && !ja && (
           <button type="button" className={s.btn} disabled={busy} onClick={grade}>
             <Sparkles size={14} /> {busy ? 'Đang chấm…' : 'AI chấm'}
           </button>
@@ -379,16 +398,91 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
 }
 
 function Speak({ b }: { b: Extract<Block, { t: 'speak' }> }) {
+  const ja = useCourse()?.voice.startsWith('ja');
   const [k, setK] = useState(0);
   return (
     <div className={s.quiz} key={k}>
-      <div className={s.quizTitle}>🎤 Luyện nói — Speaking Part {b.part}</div>
-      <div className={s.quizSub}>Bấm câu hỏi để nghe giám khảo hỏi → bấm ghi âm và trả lời → nghe lại → nhờ AI chấm.</div>
+      <div className={s.quizTitle}>🎤 Luyện nói{ja ? '' : ` — Speaking Part ${b.part}`}</div>
+      <div className={s.quizSub}>{ja ? 'Bấm câu hỏi để nghe → ghi âm câu trả lời → nghe lại và so với câu mẫu.' : 'Bấm câu hỏi để nghe giám khảo hỏi → bấm ghi âm và trả lời → nghe lại → nhờ AI chấm.'}</div>
       {b.questions.map((q) => <SpeakQ key={q} q={q} part={b.part} />)}
       <div className={s.quizFoot}>
         <span />
         <button type="button" className={s.btnGhost} onClick={() => setK(k + 1)}><RotateCcw size={14} /> Làm lại cả bài</button>
       </div>
+    </div>
+  );
+}
+
+/* ── Ghép câu ─────────────────────────────────────────────────────────── */
+
+function BuildItem({ it, n, onDone }: { it: Extract<Block, { t: 'build' }>['items'][number]; n: number; onDone: (ok: boolean) => void }) {
+  // Xáo một lần theo chữ của câu — ổn định giữa các lần vẽ, khác nhau giữa các câu.
+  const [order] = useState(() => it.chips.map((c, i) => ({ c, i, k: Math.sin((i + 1) * (n + 3) * 7.13) })).sort((a, b) => a.k - b.k));
+  const [picked, setPicked] = useState<number[]>([]);
+  const [res, setRes] = useState<boolean | null>(null);
+  const text = picked.map((i) => it.chips[i]);
+  const joined = (a: string[]) => a.join('').replace(/\s+/g, '');
+  const check = () => {
+    const ok = [it.answer, ...(it.alt ?? [])].some((a) => joined(a) === joined(text));
+    setRes(ok);
+    onDone(ok);
+    if (ok) play({ text: it.answer.join('') });
+  };
+  return (
+    <div className={s.qItem}>
+      <div className={s.qText}><span className={s.qNum}>{n}</span>{it.vi}</div>
+      <div className={s.buildLine} aria-label="Câu bạn ghép">
+        {picked.length ? picked.map((i, k) => (
+          <button key={k} type="button" className={`${s.chipJa} ${s.chipOn}`} onClick={() => { setPicked(picked.filter((_, x) => x !== k)); setRes(null); }}>
+            <Inline text={it.chips[i]} />
+          </button>
+        )) : <span className={s.muted} style={{ fontSize: 14 }}>Bấm các mảnh bên dưới theo đúng thứ tự…</span>}
+      </div>
+      <div className={s.buildBank}>
+        {order.map(({ c, i }) => (
+          <button key={i} type="button" className={s.chipJa} disabled={picked.includes(i)} onClick={() => { setPicked([...picked, i]); setRes(null); }}>
+            <Inline text={c} />
+          </button>
+        ))}
+      </div>
+      <div className={s.qRow}>
+        <button type="button" className={s.btn} disabled={!picked.length} onClick={check}>Kiểm tra</button>
+        <button type="button" className={s.btnGhost} onClick={() => { setPicked([]); setRes(null); }}><RotateCcw size={14} /> Xếp lại</button>
+      </div>
+      {res !== null && (
+        <div className={`${s.feedback} ${res ? s.good : s.bad}`}>
+          {res ? 'Đúng rồi! ' : 'Chưa đúng. Câu đúng: '}
+          {!res && <b><Inline text={it.answer.join(' ')} /></b>}
+          {it.ro && <div className={s.ro}>{it.ro}</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Build({ b }: { b: Extract<Block, { t: 'build' }> }) {
+  const tutor = useTutor();
+  const [done, setDone] = useState<Record<number, boolean>>({});
+  const right = Object.values(done).filter(Boolean).length;
+  return (
+    <div className={s.quiz}>
+      <div className={s.quizTitle}>🧩 {b.title}</div>
+      <div className={s.quizSub}>Đọc nghĩa tiếng Việt, bấm các mảnh theo đúng thứ tự để ghép thành câu. Bấm mảnh đã chọn để gỡ ra.</div>
+      {b.items.map((it, i) => (
+        <BuildItem
+          key={i}
+          it={it}
+          n={i + 1}
+          onDone={(ok) => setDone((d) => {
+            const next = { ...d, [i]: ok };
+            if (Object.keys(next).length === b.items.length) {
+              tutor.report(b.id, Math.round((Object.values(next).filter(Boolean).length / b.items.length) * 100));
+            }
+            return next;
+          })}
+        />
+      ))}
+      {Object.keys(done).length > 0 && <div className={s.quizFoot}><span className={s.score}>Đúng {right}/{Object.keys(done).length} câu đã làm</span></div>}
     </div>
   );
 }
@@ -401,6 +495,7 @@ export function renderBlock2(b: Block, i: number) {
     case 'essay': return <Essay key={b.id} b={b} />;
     case 'chart': return <Chart key={i} b={b} />;
     case 'speak': return <Speak key={b.id} b={b} />;
+    case 'build': return <Build key={b.id} b={b} />;
     default: return null;
   }
 }

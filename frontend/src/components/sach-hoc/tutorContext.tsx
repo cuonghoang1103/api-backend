@@ -21,3 +21,8 @@ export const TutorCtx = createContext<{
   report: (quizId: string, pct: number) => void;
 }>({ ask: () => {}, report: () => {} });
 export const useTutor = () => useContext(TutorCtx);
+
+/** Khoá đang mở — để các khối tra từ vựng của ĐÚNG khoá (ô 💡 Gợi ý), v.v. */
+import type { Course } from './course';
+export const CourseCtx = createContext<Course | null>(null);
+export const useCourse = () => useContext(CourseCtx);

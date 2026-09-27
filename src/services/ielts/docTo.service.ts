@@ -26,6 +26,9 @@ export const GIONG = {
   'uk-nam': 'en-GB-Wavenet-B',
   'us-nu': 'en-US-Wavenet-F',
   'us-nam': 'en-US-Wavenet-D',
+  // Khoá tiếng Nhật (Dekiru, JPD113/123) dùng chung đường này.
+  'ja-nu': 'ja-JP-Wavenet-A',
+  'ja-nam': 'ja-JP-Wavenet-C',
 } as const;
 export type Giong = keyof typeof GIONG;
 

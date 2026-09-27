@@ -12,89 +12,11 @@
 
 import { WRITTEN } from './ngay';
 
-export type Ex = { en: string; vi: string };
+import { defineCourse } from '@/components/sach-hoc/course';
+import type { Lesson, Day } from '@/components/sach-hoc/types';
 
-export type Block =
-  | { t: 'h'; text: string }
-  | { t: 'p'; text: string }
-  | { t: 'patterns'; rows: { formula: string; vi: string; examples: Ex[] }[] }
-  | { t: 'table'; head: string[]; rows: string[][]; caption?: string }
-  | { t: 'note'; title: string; items: string[] }
-  | { t: 'examples'; items: Ex[] }
-  | { t: 'vocab'; items: { w: string; pos: string; ipa: string; vi: string; ex: string; exVi: string }[] }
-  | { t: 'alphabet'; groups: { sound: string; letters: { l: string; ipa: string }[] }[] }
-  | { t: 'dictation'; id: string; title?: string; items: { label: string; spell: string; answer: string }[] }
-  | {
-      t: 'quiz'; id: string; title: string; kind: 'fill' | 'translate';
-      /** Cấu trúc ngữ pháp dùng cho cả bài — hiện trong ô 💡 Gợi ý của từng câu. */
-      grammar?: string;
-      items: { q: string; answers: string[]; hint?: string }[];
-    }
-  | { t: 'mcq'; id: string; title: string; items: { q: string; options: string[]; correct: number; why: string }[] }
-  /* ── Khối cho các kỹ năng (Blocks2.tsx) ── */
-  /** Bài đọc: đoạn có nhãn A, B, C… như đề Reading thật. */
-  | { t: 'passage'; title: string; intro?: string; paras: { label?: string; text: string }[] }
-  /** Bài nghe: file giọng Anh (máy chủ sinh), lời thoại ẩn cho tới khi người học muốn xem. */
-  | { t: 'listen'; id: string; title: string; note?: string; lines: { who?: string; voice?: Voice; text: string }[] }
-  /** Hội thoại mẫu có nhân vật (Speaking): mỗi dòng một người, bấm nghe từng câu hoặc cả bài. */
-  | { t: 'dialogue'; title?: string; lines: { who: string; role: Role; text: string; vi?: string }[] }
-  /** Ô viết bài + AI chấm theo 4 tiêu chí (POST /ielts/ai/cham-viet). */
-  | { t: 'essay'; id: string; task: 'Task 1' | 'Task 2'; prompt: string; minWords: number; tips?: string[] }
-  /** Biểu đồ cho Writing Task 1 (vẽ SVG, không dùng ảnh). */
-  | { t: 'chart'; kind: 'line' | 'bar'; title: string; unit?: string; labels: string[]; series: { name: string; values: number[] }[] }
-  /** Luyện nói: nghe câu hỏi → ghi âm → nghe lại → AI chấm (POST /ielts/ai/cham-noi). */
-  | { t: 'speak'; id: string; part: '1' | '2' | '3'; questions: string[] };
-
-export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam';
-/** Nhân vật trong hội thoại — mỗi vai một hình và một giọng cố định. */
-export type Role = 'examiner' | 'candidate' | 'a' | 'b' | 'c';
-
-export type Lesson = {
-  id: string;
-  kind: 'intro' | 'grammar' | 'vocab' | 'listening' | 'reading' | 'writing' | 'speaking' | 'homework';
-  title: string;
-  /** Một câu: học xong bài này thì làm được gì. */
-  goal: string;
-  minutes: number;
-  blocks?: Block[];
-};
-
-export type Day = { n: number; lessons: Lesson[] };
-
-export const KIND_LABEL: Record<Lesson['kind'], string> = {
-  intro: 'Bắt đầu',
-  grammar: 'Ngữ pháp',
-  vocab: 'Từ vựng',
-  listening: 'Nghe',
-  reading: 'Đọc',
-  writing: 'Viết',
-  speaking: 'Nói',
-  homework: 'Bài tập',
-};
-
-/** Màu của từng loại bài — cùng một màu ở mục lục, khối Day và khung bài. */
-export const KIND_HUE: Record<Lesson['kind'], string> = {
-  intro: '#6366f1',
-  grammar: '#f59e0b',
-  vocab: '#10b981',
-  listening: '#0ea5e9',
-  reading: '#f97316',
-  writing: '#8b5cf6',
-  speaking: '#ec4899',
-  homework: '#4f46e5',
-};
-
-/** Nhãn tiếng Anh ở đầu bài, như trang sách: "Day 01 · Basic Grammar". */
-export const KIND_EN: Record<Lesson['kind'], string> = {
-  intro: 'Start Here',
-  grammar: 'Basic Grammar',
-  vocab: 'Basic Vocabulary',
-  listening: 'Listening Skills',
-  reading: 'Reading Skills',
-  writing: 'Writing Skills',
-  speaking: 'Speaking Skills',
-  homework: 'Homework',
-};
+// Các tệp ngay/ngayN.ts lấy kiểu từ đây — giữ đường import cũ cho chúng.
+export type { Ex, Block, Voice, Role, Kind, Lesson, Day } from '@/components/sach-hoc/types';
 
 /* ───────────────────────── Bắt đầu tại đây ───────────────────────── */
 
@@ -623,64 +545,23 @@ export const DAYS: Day[] = [
 
 export { INTRO };
 
-export const ALL_LESSONS: Lesson[] = [INTRO, ...DAYS.flatMap((d) => d.lessons)];
-export const READY_LESSONS: Lesson[] = ALL_LESSONS.filter((l) => l.blocks?.length);
-
-/** Chữ thuần của một bài — làm bối cảnh cho gia sư (backend cắt ở 4000 ký tự). */
-export function lessonText(l: Lesson): string {
-  const out: string[] = [`Bài: ${l.title}. Mục tiêu: ${l.goal}`];
-  const strip = (s: string) => s.replace(/\*\*|~~/g, '');
-  for (const b of l.blocks ?? []) {
-    switch (b.t) {
-      case 'h': case 'p': out.push(strip(b.text)); break;
-      case 'patterns': for (const r of b.rows) out.push(`${r.formula} (${r.vi}): ${r.examples.map((e) => e.en).join(' / ')}`); break;
-      case 'table': out.push([b.caption, b.head.join(' | '), ...b.rows.map((r) => strip(r.join(' | ')))].filter(Boolean).join('\n')); break;
-      case 'note': out.push(`${b.title}: ${b.items.map(strip).join(' ')}`); break;
-      case 'examples': out.push(b.items.map((e) => e.en).join(' ')); break;
-      case 'vocab': out.push(b.items.map((v) => `${v.w} (${v.pos}) = ${v.vi}`).join('; ')); break;
-      case 'alphabet': out.push(b.groups.map((g) => `${g.sound}: ${g.letters.map((x) => x.l).join(' ')}`).join('; ')); break;
-      case 'dictation': out.push(`Bài nghe chép ${b.items.length} câu đánh vần.`); break;
-      case 'quiz': out.push(`${b.title}: ${b.items.map((q) => q.q).join(' / ')}`); break;
-      case 'mcq': out.push(`${b.title}: ${b.items.map((q) => q.q).join(' / ')}`); break;
-      case 'passage': out.push(`${b.title}\n${b.paras.map((x) => `${x.label ? `${x.label}. ` : ''}${x.text}`).join('\n')}`); break;
-      case 'listen': out.push(`Bài nghe "${b.title}": ${b.lines.map((x) => `${x.who ? `${x.who}: ` : ''}${x.text}`).join(' ')}`); break;
-      case 'dialogue': out.push(b.lines.map((x) => `${x.who}: ${x.text}`).join('\n')); break;
-      case 'essay': out.push(`Đề viết ${b.task}: ${b.prompt}`); break;
-      case 'chart': out.push(`Biểu đồ: ${b.title} (${b.labels.join(', ')})`); break;
-      case 'speak': out.push(`Câu hỏi Speaking Part ${b.part}: ${b.questions.join(' / ')}`); break;
-    }
-  }
-  return out.join('\n').slice(0, 3900);
-}
-
-/* ── Tổng hợp theo buổi ──────────────────────────────────────────────── */
-
-type VocabItem = Extract<Block, { t: 'vocab' }>['items'][number];
-
-/** Mọi từ của cả khoá, tra theo chữ thường — cho ô 💡 Gợi ý của bài dịch. */
-export const VOCAB_INDEX: Map<string, VocabItem> = new Map(
-  ALL_LESSONS.flatMap((l) => (l.blocks ?? []).flatMap((b) => (b.t === 'vocab' ? b.items : [])))
-    .map((v) => [v.w.toLowerCase(), v] as const),
-);
-
-export function dayOf(lessonId: string): Day | undefined {
-  return DAYS.find((d) => d.lessons.some((l) => l.id === lessonId));
-}
-
-/** Những gì một buổi gói gọn: điểm ngữ pháp, từ vựng, kỹ năng, bài tập. */
-export function daySummary(d: Day) {
-  const grammar: string[] = [];
-  const vocab: VocabItem[] = [];
-  const quizzes: { id: string; title: string; lessonId: string; count: number }[] = [];
-  for (const l of d.lessons) {
-    for (const b of l.blocks ?? []) {
-      if (l.kind === 'grammar' && b.t === 'h') grammar.push(b.text.replace(/^\d+\.\s*/, ''));
-      if (b.t === 'vocab') vocab.push(...b.items);
-      if (b.t === 'quiz' || b.t === 'mcq') quizzes.push({ id: b.id, title: b.title, lessonId: l.id, count: b.items.length });
-      if (b.t === 'dictation') quizzes.push({ id: b.id, title: b.title ?? 'Nghe chép đánh vần', lessonId: l.id, count: b.items.length });
-    }
-  }
-  const skills = d.lessons.filter((l) => ['listening', 'reading', 'writing', 'speaking'].includes(l.kind));
-  const minutes = d.lessons.reduce((n, l) => n + l.minutes, 0);
-  return { grammar, vocab, quizzes, skills, minutes, ready: d.lessons.some((l) => l.blocks?.length) };
-}
+/** Khoá IELTS — mọi thứ bộ khung dùng chung (components/sach-hoc) cần biết. */
+export const IELTS = defineCourse({
+  stage: 'sach1',
+  storageKey: 'ielts-v2',
+  title: 'IELTS 4 kỹ năng · Tập 1',
+  backHref: '/language/en',
+  unit: 'Ngày',
+  badgeWord: 'Day',
+  intro: INTRO,
+  days: DAYS,
+  kindLabel: {},
+  kindEn: {
+    intro: 'Start Here', grammar: 'Basic Grammar', vocab: 'Basic Vocabulary', listening: 'Listening Skills',
+    reading: 'Reading Skills', writing: 'Writing Skills', speaking: 'Speaking Skills', homework: 'Homework',
+  },
+  kindHue: {},
+  voice: 'uk-nu',
+  tutor: { name: 'Gia sư IELTS', mon: 'ielts' },
+  planContext: 'Trang kế hoạch học IELTS 15 buổi theo sách IELTS 4 kỹ năng cho người bắt đầu từ con số âm – Tập 1.',
+});

@@ -10,7 +10,8 @@
  */
 import api from '@/lib/api';
 
-export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam';
+import type { Voice } from './types';
+export type { Voice };
 export type Clip = {
   text: string;
   voice?: Voice;
@@ -28,14 +29,18 @@ let cancelCur: (() => void) | null = null;
 /** Máy chủ nói không có khoá TTS → khỏi hỏi lại cho mỗi câu. */
 let serverOff = false;
 
-const keyOf = (c: Clip) => `${c.voice ?? 'uk-nu'}|${c.toc ?? 0.95}|${c.kieu ?? ''}|${c.text}`;
+/** Giọng mặc định của khoá đang mở (IELTS: uk-nu, tiếng Nhật: ja-nu) — CoursePage đặt. */
+let defaultVoice: Voice = 'uk-nu';
+export function setDefaultVoice(v: Voice) { defaultVoice = v; }
+
+const keyOf = (c: Clip) => `${c.voice ?? defaultVoice}|${c.toc ?? 0.95}|${c.kieu ?? ''}|${c.text}`;
 
 async function urlFor(c: Clip): Promise<string | null> {
   if (serverOff) return null;
   const k = keyOf(c);
   if (cache.has(k)) return cache.get(k)!;
   try {
-    const res = await api.post('/ielts/doc', { text: c.text, giong: c.voice ?? 'uk-nu', toc: c.toc, kieu: c.kieu });
+    const res = await api.post('/ielts/doc', { text: c.text, giong: c.voice ?? defaultVoice, toc: c.toc, kieu: c.kieu });
     const d = res.data?.data as { url: string | null; lyDo?: string } | undefined;
     if (d?.lyDo === 'no_tts_key') serverOff = true;
     cache.set(k, d?.url ?? null);
@@ -47,7 +52,9 @@ async function urlFor(c: Clip): Promise<string | null> {
 
 function browserVoice(v?: Voice): SpeechSynthesisVoice | undefined {
   const all = window.speechSynthesis.getVoices();
-  const want = v?.startsWith('us') ? 'en-US' : 'en-GB';
+  const vv = v ?? defaultVoice;
+  if (vv.startsWith('ja')) return all.find((x) => x.lang === 'ja-JP') || all.find((x) => x.lang?.startsWith('ja'));
+  const want = vv.startsWith('us') ? 'en-US' : 'en-GB';
   return all.find((x) => x.lang === want) || all.find((x) => x.lang?.startsWith('en'));
 }
 
@@ -60,7 +67,7 @@ function browserSay(c: Clip): Promise<void> {
     parts.forEach((t, i) => {
       const u = new SpeechSynthesisUtterance(t);
       if (voice) u.voice = voice;
-      u.lang = voice?.lang || 'en-GB';
+      u.lang = voice?.lang || ((c.voice ?? defaultVoice).startsWith('ja') ? 'ja-JP' : 'en-GB');
       u.rate = (c.toc ?? 0.95) * (c.kieu === 'danhvan' ? 0.85 : 0.95);
       if (i === parts.length - 1) { u.onend = () => resolve(); u.onerror = () => resolve(); }
       window.speechSynthesis.speak(u);
@@ -81,7 +88,9 @@ export function stopAudio() {
 export async function play(clips: Clip | Clip[], onEnd?: () => void) {
   stopAudio();
   const my = run;
-  const list = Array.isArray(clips) ? clips : [clips];
+  // Bỏ markup trước khi đọc: {漢字|かな} → 漢字, **đậm** → đậm.
+  const clean = (t: string) => t.replace(/\{([^|}]+)\|[^}]+\}/g, '$1').replace(/\*\*|==|~~/g, '');
+  const list = (Array.isArray(clips) ? clips : [clips]).map((c) => ({ ...c, text: clean(c.text) }));
   try {
     for (const c of list) {
       if (my !== run) return;

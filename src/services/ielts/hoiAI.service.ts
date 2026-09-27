@@ -36,7 +36,7 @@ export const CAC_Y = Object.keys(DAN_THEO_Y);
 
 export async function hoiVeChu(
   userId: number,
-  b: { chu?: string; y?: string; cauHoi?: string; boiCanh?: string; lichSu?: unknown },
+  b: { chu?: string; y?: string; cauHoi?: string; boiCanh?: string; lichSu?: unknown; mon?: unknown },
 ) {
   const chu = String(b.chu ?? '').trim().slice(0, 2000);
   if (chu.length < 1) throw new BadRequestError('Chưa chọn chữ nào để hỏi');
@@ -67,7 +67,13 @@ export async function hoiVeChu(
     feature: 'chat',
     userId,
     maxTokens: dai ? 1400 : 500,
-    system: 'Bạn là gia sư IELTS, trả lời bằng TIẾNG VIỆT, ngắn và thẳng.\n'
+    // Cùng một khung khoá học phục vụ cả IELTS lẫn tiếng Nhật (Dekiru, JPD113/123):
+    // `mon` đổi vai và vài quy tắc riêng của từng môn.
+    system: (b.mon === 'nhat'
+      ? 'Bạn là gia sư TIẾNG NHẬT cho sinh viên Việt Nam học giáo trình できる日本語 (Dekiru Nihongo, môn JPD113/JPD123), trình độ mới bắt đầu. Trả lời bằng TIẾNG VIỆT, ngắn và thẳng.\n'
+        + 'Mọi chữ Hán trong câu tiếng Nhật phải kèm cách đọc ngay sau, dạng 漢字(かんじ). Câu ví dụ viết: `- *câu tiếng Nhật* (romaji) → nghĩa tiếng Việt`.\n'
+        + 'Giải thích ngữ pháp bằng công thức rõ ràng (vd. `N1 は N2 です`), chỉ dùng từ vựng sơ cấp, nói rõ trợ từ và lỗi người Việt hay mắc. Không dùng IPA.\n'
+      : 'Bạn là gia sư IELTS, trả lời bằng TIẾNG VIỆT, ngắn và thẳng.\n')
       + `${dan ?? 'Trả lời đúng câu người học hỏi, rõ ràng, tối đa 10 câu.'}\n`
       + 'Không mở bài, không chúc, không nhắc lại câu hỏi.\n'
       // Từ 19/09/2026 app DỰNG markdown thật (`NoiDungMarkdown`), nên ở đây

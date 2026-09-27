@@ -1071,3 +1071,25 @@
 @media (prefers-reduced-motion: reduce) {
   .wave i, .avatarTalk, .avatarTalk .mouth, .recOn { animation: none; }
 }
+
+/* ═══════════ Tiếng Nhật (khoá Dekiru) ═══════════ */
+.ja { font-family: var(--font-inter), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', system-ui, sans-serif; }
+.ja .exEn, .ja .wordW, .ja .dText, .ja .qText { font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', var(--font-inter), sans-serif; }
+.ja .wordW { font-size: 20px; }
+.ja .exEn, .ja .dText { font-size: 17px; line-height: 2; }
+.ruby rt { font-size: 0.55em; font-weight: 500; color: var(--lh-ink-3); letter-spacing: 0; }
+.noFuri .ruby rt { visibility: hidden; }
+/* romaji dưới câu tiếng Nhật; ẩn được bằng nút "romaji" */
+.ro { margin-top: 2px; font-family: var(--font-jetbrains-mono), ui-monospace, monospace; font-size: 13px; color: #0d9488; letter-spacing: 0.01em; }
+:global(html.theme-dark) .ro { color: #5eead4; }
+.noRo .ro { display: none; }
+/* ghép câu */
+.buildLine { display: flex; flex-wrap: wrap; gap: 6px; min-height: 48px; margin-top: 10px; padding: 8px; border: 2px dashed var(--lh-line); border-radius: 12px; background: var(--lh-bg); align-items: center; }
+.buildBank { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chipJa {
+  padding: 8px 12px; border: 1px solid var(--lh-line); border-radius: 10px; background: var(--lh-surface);
+  font-size: 17px; line-height: 1.8; color: var(--lh-ink); box-shadow: 0 2px 0 var(--lh-line); transition: transform 0.1s ease;
+}
+.chipJa:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--k); }
+.chipJa:disabled { opacity: 0.3; }
+.chipOn { background: color-mix(in srgb, var(--k) 12%, var(--lh-surface)); border-color: var(--k); }

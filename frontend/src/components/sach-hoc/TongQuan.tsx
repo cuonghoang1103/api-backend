@@ -2,12 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Check, CalendarPlus, Volume2, PlayCircle } from 'lucide-react';
-import { DAYS, INTRO, KIND_LABEL, daySummary, type Day, type Lesson } from './data';
+import { daySummary, type Course } from './course';
+import type { Day, Lesson } from './types';
+import { Inline } from './Blocks';
 import { buildIcs, fmtDate, schedule, todayIso, WEEKDAYS, type Plan } from './useTienDo';
 import { play } from './audio';
-import s from './ielts.module.css';
+import s from './course.module.css';
 
 type Common = {
+  course: Course;
   done: string[];
   scores: Record<string, number>;
   plan: Plan | null;
@@ -22,7 +25,9 @@ export function dayDone(d: Day, done: string[]) {
 
 /* ─────────────────────────── Tổng quan một buổi ─────────────────────────── */
 
-export function TongQuanBuoi({ day, done, scores, plan, onOpen, onAskDay }: Common & { day: Day; onAskDay: () => void }) {
+export function TongQuanBuoi({ course, day, done, scores, plan, onOpen, onAskDay }: Common & { day: Day; onAskDay: () => void }) {
+  const DAYS = course.days;
+  const INTRO = course.intro;
   const sum = daySummary(day);
   const date = plan ? schedule(plan, DAYS.length)[day.n - 1] : null;
   const lessons = day.n === 1 ? [INTRO, ...day.lessons] : day.lessons;
@@ -32,12 +37,12 @@ export function TongQuanBuoi({ day, done, scores, plan, onOpen, onAskDay }: Comm
     <>
       <header className={s.dayHead}>
         <div className={s.dayBadge}>
-          <span className={s.dayWord}>Day</span>
-          <span className={s.dayNum}>{String(day.n).padStart(2, '0')}</span>
+          <span className={s.dayWord}>{course.badgeWord}</span>
+          <span className={s.dayNum}>{course.dayNum(day.n)}</span>
         </div>
         <div className="min-w-0">
-          <div className={s.dayKind}>Tổng quan buổi · Session overview</div>
-          <h1 className={s.h1}>Buổi {day.n}</h1>
+          <div className={s.dayKind}>Tổng quan · Overview</div>
+          <h1 className={s.h1}>{course.dayName(day.n)}</h1>
         </div>
       </header>
       <div className={s.goal}>
@@ -49,7 +54,7 @@ export function TongQuanBuoi({ day, done, scores, plan, onOpen, onAskDay }: Comm
 
       {!sum.ready ? (
         <div className={s.soonBox}>
-          Buổi này đang được soạn theo sách. Chụp tiếp các trang của Ngày {day.n} vào thư mục <b>Ielts</b> là bài sẽ có ở đây.
+          Buổi này đang được soạn theo sách. Bài sẽ hiện ở đây khi soạn xong.
         </div>
       ) : (
         <>
@@ -57,7 +62,7 @@ export function TongQuanBuoi({ day, done, scores, plan, onOpen, onAskDay }: Comm
             <div className={s.nextBox}>
               <div className="min-w-0">
                 <div className={s.nextLabel}>Học tiếp</div>
-                <div className={s.nextTitle}>{KIND_LABEL[firstTodo.kind]}: {firstTodo.title}</div>
+                <div className={s.nextTitle}>{course.label(firstTodo.kind)}: {firstTodo.title}</div>
               </div>
               <button type="button" className={s.btn} onClick={() => onOpen(firstTodo)}>
                 <PlayCircle size={16} /> Vào học
@@ -74,7 +79,7 @@ export function TongQuanBuoi({ day, done, scores, plan, onOpen, onAskDay }: Comm
                   <button key={l.id} type="button" className={s.checkRow} onClick={() => onOpen(l)} disabled={!l.blocks?.length}>
                     <span className={`${s.tocDot} ${isDone ? s.tocDotDone : ''}`}>{isDone && <Check size={11} strokeWidth={3} />}</span>
                     <span className="min-w-0 flex-1 text-left">
-                      <span className={s.tocKind}>{KIND_LABEL[l.kind]} · ~{l.minutes} phút</span>
+                      <span className={s.tocKind}>{course.label(l.kind)} · ~{l.minutes} phút</span>
                       {l.title}
                     </span>
                   </button>
@@ -100,7 +105,7 @@ export function TongQuanBuoi({ day, done, scores, plan, onOpen, onAskDay }: Comm
                 {sum.vocab.map((v) => (
                   <button key={v.w} type="button" className={s.wordChip} onClick={() => play({ text: v.w })}>
                     <Volume2 size={13} className={s.muted} />
-                    <b>{v.w}</b>
+                    <b><Inline text={v.w} /></b>
                     <span className={s.muted}>{v.vi}</span>
                   </button>
                 ))}
@@ -147,11 +152,13 @@ export function TongQuanBuoi({ day, done, scores, plan, onOpen, onAskDay }: Comm
 
 /* ─────────────────────────── Kế hoạch & tiến độ ─────────────────────────── */
 
-export function KeHoach({ done, scores, plan, onOpen, onOpenDay, savePlan, loggedIn }: Common & {
+export function KeHoach({ course, done, scores, plan, onOpen, onOpenDay, savePlan, loggedIn }: Common & {
   onOpenDay: (n: number) => void;
   savePlan: (p: Plan | null) => void;
   loggedIn: boolean;
 }) {
+  const DAYS = course.days;
+  const INTRO = course.intro;
   const [draft, setDraft] = useState<Plan>(plan ?? { start: todayIso(), days: [1, 2, 3, 4, 5], time: '20:00' });
   const [editing, setEditing] = useState(!plan);
   // Kế hoạch về SAU lần vẽ đầu (localStorage đọc trong effect, server còn
@@ -185,11 +192,13 @@ export function KeHoach({ done, scores, plan, onOpen, onOpenDay, savePlan, logge
     const ics = buildIcs(
       plan,
       DAYS.map((d) => ({ n: d.n, title: d.lessons.map((l) => l.title).join(' · ') })),
-      `${window.location.origin}/language/en/ielts`,
+      `${window.location.origin}${window.location.pathname}`,
+      course.title,
+      course.stage,
     );
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
-    a.download = 'lich-hoc-ielts.ics';
+    a.download = `lich-hoc-${course.stage}.ics`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   };
@@ -202,8 +211,8 @@ export function KeHoach({ done, scores, plan, onOpen, onOpenDay, savePlan, logge
           <span className={s.dayNum}>{doneDays}</span>
         </div>
         <div className="min-w-0">
-          <div className={s.dayKind}>Kế hoạch & tiến độ</div>
-          <h1 className={s.h1}>Quản lý việc học IELTS</h1>
+          <div className={s.dayKind}>Kế hoạch & tiến độ · {course.title}</div>
+          <h1 className={s.h1}>Quản lý việc học</h1>
         </div>
       </header>
 
@@ -222,11 +231,11 @@ export function KeHoach({ done, scores, plan, onOpen, onOpenDay, savePlan, logge
         <div className="min-w-0">
           <div className={s.nextLabel}>{late ? 'Bạn đang trễ lịch' : 'Buổi tiếp theo'}</div>
           <div className={s.nextTitle}>
-            Buổi {current.n}{due ? ` · ${fmtDate(due)}${due === today ? ' (hôm nay)' : ''}` : ''}
+            {course.dayName(current.n)}{due ? ` · ${fmtDate(due)}${due === today ? ' (hôm nay)' : ''}` : ''}
           </div>
           {late && <div className={s.quizSub}>Không sao cả — học tiếp buổi này hôm nay, lịch các buổi sau giữ nguyên nhịp.</div>}
         </div>
-        <button type="button" className={s.btn} onClick={() => onOpenDay(current.n)}>Mở buổi {current.n}</button>
+        <button type="button" className={s.btn} onClick={() => onOpenDay(current.n)}>Mở {course.dayName(current.n).toLowerCase()}</button>
       </div>
 
       <section className={s.gbox}>
@@ -290,7 +299,7 @@ export function KeHoach({ done, scores, plan, onOpen, onOpenDay, savePlan, logge
             </p>
             <div className={s.tableWrap} style={{ margin: 0 }}>
               <table className={s.table}>
-                <thead><tr><th>Buổi</th><th>Ngày</th><th>Nội dung</th><th>Trạng thái</th></tr></thead>
+                <thead><tr><th>{course.unit}</th><th>Ngày</th><th>Nội dung</th><th>Trạng thái</th></tr></thead>
                 <tbody>
                   {DAYS.map((d, i) => {
                     const isDone = dayDone(d, done);
@@ -298,7 +307,7 @@ export function KeHoach({ done, scores, plan, onOpen, onOpenDay, savePlan, logge
                     const st = isDone ? 'Xong' : date < today ? 'Trễ' : date === today ? 'Hôm nay' : '';
                     return (
                       <tr key={d.n} className={s.schedRow} onClick={() => onOpenDay(d.n)}>
-                        <td className={`${s.cell} ${s.cellFirst}`}>{d.n}</td>
+                        <td className={`${s.cell} ${s.cellFirst}`}>{course.shownNum ? course.shownNum(d.n) : d.n}</td>
                         <td className={s.cell} style={{ whiteSpace: 'nowrap' }}>{fmtDate(date)}</td>
                         <td className={s.cell}>{d.lessons.map((l) => l.title).join(' · ')}</td>
                         <td className={s.cell} style={{ whiteSpace: 'nowrap' }}>

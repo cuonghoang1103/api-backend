@@ -28,6 +28,9 @@ export const PHAN_DUNG_CHUNG = ['roadmap', 'life', 'exam', 'typing'] as const;
  *   kehoach — muc = 'ke-hoach', ghiChu = JSON kế hoạch học (ngày bắt đầu, lịch…)
  */
 export const SACH = 'sach1';
+/** Mọi khoá kiểu sách dùng chung bảng tiến độ này: IELTS (sach1), tiếng Nhật Dekiru (dekiru1). */
+export const CAC_SACH = [SACH, 'dekiru1'] as const;
+const laMaSach = (v: string): boolean => (CAC_SACH as readonly string[]).includes(v);
 export const PHAN_SACH = ['bai', 'baitap', 'kehoach'] as const;
 
 type Chang = (typeof CAC_CHANG)[number];
@@ -131,11 +134,11 @@ export async function phanDungChung(kind: string) {
 // ─── Tiến độ ──────────────────────────────────────────────────────────────
 
 export async function layTienDo(userId: number, stage?: string) {
-  const where = stage ? { userId, stage: stage === SACH ? SACH : chuanChang(stage) } : { userId };
+  const where = stage ? { userId, stage: laMaSach(stage) ? stage : chuanChang(stage) } : { userId };
   const ds = await prisma.ieltsProgress.findMany({
     where,
     // ghiChu chỉ cần cho kế hoạch học của khoá sách — các chặng cũ không dùng.
-    select: { stage: true, kind: true, muc: true, xong: true, diem: true, updatedAt: true, ...(stage === SACH ? { ghiChu: true } : {}) },
+    select: { stage: true, kind: true, muc: true, xong: true, diem: true, updatedAt: true, ...(stage && laMaSach(stage) ? { ghiChu: true } : {}) },
     orderBy: { updatedAt: 'desc' },
     take: 5000,
   });
@@ -155,8 +158,8 @@ export async function ghiTienDo(
 
   let ghi = 0;
   for (const m of ds) {
-    const laSach = String(m.stage) === SACH;
-    const stage: string = laSach ? SACH : chuanChang(String(m.stage));
+    const laSach = laMaSach(String(m.stage));
+    const stage: string = laSach ? String(m.stage) : chuanChang(String(m.stage));
     const kind = String(m.kind);
     const muc = String(m.muc).slice(0, 120);
     if (!muc) continue;
@@ -177,7 +180,7 @@ export async function ghiTienDo(
 }
 
 export async function xoaTienDo(userId: number, stage: string, kind: string, muc: string) {
-  const s = stage === SACH ? SACH : chuanChang(stage);
+  const s = laMaSach(stage) ? stage : chuanChang(stage);
   const { count } = await prisma.ieltsProgress.deleteMany({
     where: { userId, stage: s, kind, muc },
   });

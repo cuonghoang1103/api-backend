@@ -7,7 +7,7 @@ import { play } from './audio';
 import RobotAI from '@/components/academy/RobotAI';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { TutorAsk } from './tutorContext';
-import s from './ielts.module.css';
+import s from './course.module.css';
 
 export type Turn = { q: string; a: string | null; err?: string };
 
@@ -60,8 +60,10 @@ function AnswerTools({ text }: { text: string }) {
 }
 
 export function GiaSu({
-  lessonTitle, turns, asking, loggedIn, selection, onAsk, onClear, onClose,
+  name, lessonTitle, turns, asking, loggedIn, selection, onAsk, onClear, onClose,
 }: {
+  /** Tên gia sư hiển thị ("Gia sư IELTS", "Gia sư tiếng Nhật"). */
+  name: string;
   lessonTitle: string;
   turns: Turn[];
   asking: boolean;
@@ -91,7 +93,7 @@ export function GiaSu({
       <div className={s.tutorHead}>
         <RobotAI size={34} dangNghi={asking} />
         <div className="min-w-0 flex-1">
-          <div className={s.tutorName}>Gia sư IELTS</div>
+          <div className={s.tutorName}>{name}</div>
           <div className={s.tutorSub}>Đang học: {lessonTitle}</div>
         </div>
         {turns.length > 0 && (

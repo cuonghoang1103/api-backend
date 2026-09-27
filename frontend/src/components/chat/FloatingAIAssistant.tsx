@@ -76,7 +76,7 @@ export default function FloatingAIAssistant() {
    // Sổ tay có nút "Hỏi ghi chú" riêng ở đúng góc này; robot đè lên nó (26/09).
    || pathname === '/notes' || pathname?.startsWith('/notes/')
    // IELTS có gia sư riêng neo đúng góc phải; robot nổi che nút Gửi của nó.
-   || pathname?.endsWith('/ielts')
+   || pathname?.endsWith('/ielts') || pathname?.endsWith('/dekiru')
    || hiddenOnMobile,
  );
 

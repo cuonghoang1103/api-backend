@@ -77,4 +77,5 @@ lỗi trang · commit theo pathspec · `deploy-nha.sh` (tự push).
 | 0 | ✅ kana trọn bộ + âm đặc biệt + chào hỏi/thi (27/09) |
 | 1 | ✅ ポイント 1–6, 52/52 từ của cô, đủ 10 câu hỏi thi Bài 1 (27/09) |
 | 2 | ✅ ポイント 7–15, 82/82 từ (27/09) — danh sách của cô đảo nghĩa そこ/あそこ, đã dùng nghĩa đúng |
-| 3–6 | ⏳ đang soạn (27/09) — bản trích sách ở scratchpad `jp/extract_L3..6.md`, `extract_points.md` |
+| 3 | ✅ ポイント 16–23, 80/80 từ, bảng giờ/ngày/tháng, ます-form (27/09) |
+| 4–6 | ⏳ đang soạn (27/09) — bản trích sách ở scratchpad `jp/extract_L4..6.md`, `extract_points.md` |

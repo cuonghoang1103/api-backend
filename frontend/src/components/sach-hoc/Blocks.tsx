@@ -407,7 +407,7 @@ function renderBlock(b: Block, i: number) {
                     {b.rows.map((r) => (
                       <tr key={r.formula}>
                         <td className={`${s.cell} ${s.formulaCell}`}>
-                          <span className={s.formula}><Formula text={r.formula} /></span>
+                          <span className={s.formula}>{JA.test(r.formula) || r.formula.includes('{') ? <Inline text={r.formula} /> : <Formula text={r.formula} />}</span>
                           <span className={s.formulaVi}>{r.vi}</span>
                         </td>
                         <td className={s.cell}>

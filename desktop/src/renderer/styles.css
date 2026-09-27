@@ -14205,3 +14205,14 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-duphong-loi { margin: 0; font-size: 11.5px; color: var(--ct-danger, #e5484d); }
 .ct-duphong[data-xong='true'] .ct-duphong-chu { color: var(--ct-success, #30a46c); }
 .ct-chonmm-ds button[data-chon-duphong] > svg { flex-shrink: 0; margin-top: 2px; color: var(--ct-warn); }
+.ct-duphong-model { display: flex; flex-direction: column; gap: 4px; }
+.ct-duphong-model button {
+  display: flex; align-items: flex-start; gap: 7px; width: 100%;
+  padding: 6px 8px; border: 1px solid var(--ct-border); border-radius: 7px;
+  background: transparent; color: var(--ct-text); text-align: left; cursor: pointer; font: inherit;
+}
+.ct-duphong-model button[data-chon='true'] { border-color: var(--ct-accent); background: color-mix(in srgb, var(--ct-accent) 10%, transparent); }
+.ct-duphong-model button:disabled { opacity: 0.5; cursor: not-allowed; }
+.ct-duphong-model button > svg { margin-top: 3px; flex-shrink: 0; }
+.ct-duphong-model strong { display: block; font-size: 12px; }
+.ct-duphong-model em { display: block; font-style: normal; font-size: 11px; opacity: 0.75; }

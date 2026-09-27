@@ -1231,7 +1231,10 @@ export class AIService {
         // Lượt có ảnh luôn dùng model nhìn được thật, kể cả khi người dùng chọn
         // bậc Pro — xem `visionModel()` để biết vì sao (các model kia đoán ảnh
         // rất tự tin và rất sai).
-        const gwModel = hasImage(claudeMessages) ? visionModel() : tierModel;
+        // Trừ bậc Pro: nó cố định ở modelapi bằng `gpt-6-sol` — model đó TỰ
+        // nhìn được ảnh (đo 27/09), còn `visionModel()` là Claude ⇒ sẽ bị lái
+        // sang rambo, trái với chốt "Pro luôn ở modelapi".
+        const gwModel = hasImage(claudeMessages) && selected.id !== 'cuongmini-pro' ? visionModel() : tierModel;
         const outTokens = selected.maxTokens ? selected.maxTokens() : 8192;
         // 1) Try REAL streaming — tokens flow immediately (no idle-out, no long
         //    blank spinner). If it fails BEFORE any token, fall through to the

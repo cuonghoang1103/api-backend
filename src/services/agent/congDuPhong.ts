@@ -49,13 +49,27 @@ const KHOA_MAT_KHAU = 'agent_du_phong_mat_khau';
 /** Vé sống 30 ngày — đủ dài để không phải gõ lại mỗi lần rambo chập chờn. */
 const HAN_VE_MS = 30 * 24 * 60 * 60 * 1000;
 
-/** Model dự phòng mặc định. Đổi bằng env, không cần deploy. */
-export function modelDuPhongAgent(): string {
+/**
+ * HAI model người dùng CHỌN được ở cổng dự phòng (27/09/2026): "mặc định là
+ * 6 Sol, còn 6 Astra khi gặp vấn đề khó tôi sẽ tự đổi". Danh sách trắng — app
+ * chỉ gửi `id`; thứ gì khác rơi về mặc định. Không có Claude ở đây: trên
+ * modelapi nó đắt ~14 lần (xem số đo ở đầu file).
+ */
+export const MODEL_DU_PHONG = Object.freeze([
+  { id: 'gpt-6-sol', ten: 'GPT 6 Sol', mo: 'Mặc định — rẻ, nhanh. Đo 16,4/việc trên vòng lặp' },
+  { id: 'gpt-6-astra', ten: 'GPT 6 Astra', mo: 'Việc khó — đắt gấp ~6 lần 6 Sol (98,4/việc)' },
+] as const);
+
+/** Model dự phòng: lựa chọn của app nếu hợp lệ, không thì env, không thì 6 Sol. */
+export function modelDuPhongAgent(chon?: unknown): string {
+  if (typeof chon === 'string' && MODEL_DU_PHONG.some((m) => m.id === chon)) return chon;
   return process.env.AGENT_DU_PHONG_MODEL?.trim() || 'gpt-6-sol';
 }
 
 /** Tên hiện trong app — nói rõ là cổng tính tiền, không giả làm CuongMini. */
 export function tenDuPhong(model = modelDuPhongAgent()): string {
+  const coSan = MODEL_DU_PHONG.find((m) => m.id === model);
+  if (coSan) return `${coSan.ten} (cổng dự phòng)`;
   const ten = model
     .replace(/^gpt-/i, 'GPT ')
     .replace(/^claude-/i, 'Claude ')

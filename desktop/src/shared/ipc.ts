@@ -95,6 +95,8 @@ export const settingKeySchema = z.enum([
    * chính (rambo) hỏng, nên để nguyên cũng không tốn tiền lúc rambo khoẻ.
    */
   'agentDuPhongVe',
+  /** Model ở cổng dự phòng: 'gpt-6-sol' (mặc định) | 'gpt-6-astra' (việc khó). */
+  'agentDuPhongModel',
   /**
    * Chế độ đang mở ở /chat: 'chat' (trò chuyện) hay 'code' (lập trình).
    *

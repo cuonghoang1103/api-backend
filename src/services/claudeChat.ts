@@ -27,7 +27,7 @@
  * Độ dài câu trả lời: hai bậc này được đặt `max_tokens` CAO (10k/15k) — đó
  * chính là lý do tồn tại của chúng, câu trả lời không bị cụt như bậc nhanh.
  */
-import { chatCompletionsUrl, congAnthropic, gatewayConfigured, gatewayKey, gatewayKeyFor, messagesUrl, modelFor } from './llm/gateway.js';
+import { chatCompletionsUrl, congAnthropic, gatewayConfigured, gatewayKey, gatewayKeyFor, messagesUrl, modelFor, modelGoiDuoc } from './llm/gateway.js';
 
 /** A text block inside a multi-part message. */
 export interface ClaudeTextBlock {
@@ -57,9 +57,19 @@ export function claudeChatAvailable(): boolean {
   return gatewayConfigured();
 }
 
-/** Model của bậc "Pro". Đổi bằng `LLM_MODEL_CHAT_PRO`, không sửa mã. */
+/**
+ * Model của bậc "Pro". Đổi bằng `LLM_MODEL_CHAT_PRO`, không sửa mã.
+ *
+ * ⚠️ LUÔN Ở CỔNG MODELAPI, kể cả khi rambo khoẻ (người dùng chốt 27/09/2026:
+ * "CuongMini Pro ở AI chat vẫn giữ nguyên ở cổng modelapi"). Không đi qua
+ * `modelFor('chat_pro')` vì hàm đó trả model rambo (`claude-opus-5`) mỗi khi
+ * rambo sống, và `congAnthropic()` lái mọi model `claude-*` sang rambo. Một
+ * model GPT thì không bao giờ bị lái ⇒ ở lại modelapi, khoá nhóm GPT.
+ * `gpt-6-sol`: đo 27/09 ngang 5.6-sol mà rẻ ~4 lần, và NHÌN ẢNH THẬT.
+ */
 export function proModel(): string {
-  return process.env.AI_CHAT_MODEL_PRO || modelFor('chat_pro');
+  return process.env.AI_CHAT_MODEL_PRO
+    || modelGoiDuoc(process.env.LLM_MODEL_CHAT_PRO?.trim() || 'gpt-6-sol');
 }
 /** Model của bậc "Max". Đổi bằng `LLM_MODEL_CHAT_MAX`. */
 export function maxModel(): string {

@@ -47,6 +47,7 @@ import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import { modelAgentTu } from './models.js';
 import { congDuPhong, modelDuPhongAgent, veDuPhongHopLe } from './congDuPhong.js';
+import { LOI_LAM_VIEC_GPT } from './prompt.js';
 import { loiHetHan, xemHanMuc, type HanMuc } from './quota.js';
 import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.js';
 import { loiCanViTien, xemViTien } from './viTien.js';
@@ -326,6 +327,8 @@ export interface AgentTurnInput {
    * Chỉ có tác dụng lúc rambo HỎNG; rambo khoẻ thì bị bỏ qua. Xem `congDuPhong.ts`.
    */
   duPhongVe?: unknown;
+  /** Model người dùng chọn cho cổng dự phòng (`gpt-6-sol` | `gpt-6-astra`). */
+  duPhongModel?: unknown;
   /** Lượt này thuộc một AGENT PHỤ — prompt gọn hơn, trần bước riêng. */
   laPhu?: unknown;
   /**
@@ -886,7 +889,7 @@ export async function runAgentTurn(
   const ghiChu = input.ghiChuDuAn?.noiDung
     ? catGhiChu(input.ghiChuDuAn.ten, input.ghiChuDuAn.noiDung)
     : undefined;
-  const system = buildSystemPrompt({
+  let system = buildSystemPrompt({
     capabilities,
     mucNoLuc,
     /* Con số ĐI THEO prompt, không chép tay vào đó. Chính file này đã cảnh báo
@@ -935,12 +938,16 @@ export async function runAgentTurn(
   let dangDuPhong = false;
   const chuyenDuPhong = (): boolean => {
     if (dangDuPhong || !coVeDuPhong) return false;
-    const m = modelDuPhongAgent();
+    const m = modelDuPhongAgent(input.duPhongModel);
     const e = congDuPhong(m);
     if (!e) return false;
     ep = e;
     model = m;
     dangDuPhong = true;
+    /* Prompt, kỹ năng, bộ nhớ, tool: DÙNG CHUNG y nguyên với rambo. Chỉ nối
+       thêm một mục cách-làm-việc cho model GPT — đo 27/09: cùng câu hỏi, Opus
+       11 bước còn GPT 22–63 bước vì đọc từng file một và đọc lại thứ đã đọc. */
+    if (!/^claude-/i.test(m)) system = `${system}\n\n${LOI_LAM_VIEC_GPT}`;
     return true;
   };
   if (ep.label === 'cong-agent' && ramboDangNghi() && !chuyenDuPhong() && !coVeDuPhong) {
@@ -1494,6 +1501,9 @@ async function goiCong(o: {
             ],
             tools: o.tools,
             tool_choice: 'auto',
+            /* Cho GPT gọi NHIỀU tool trong một lượt — thiếu nó, nó đọc từng file
+               một và số bước (= số lần gửi lại cả ngữ cảnh) nhân lên. */
+            parallel_tool_calls: true,
             stream: true,
             // Không có dòng này thì gói cuối KHÔNG mang `usage`, và cả cầu dao
             // ngân sách lẫn đồng hồ chi phí trên giao diện đều đếm bằng 0.

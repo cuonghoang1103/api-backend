@@ -192,6 +192,9 @@ async function hoi(cauHoi: string, goc: string | null, userId: number): Promise<
       new AbortController().signal,
     );
 
+    if (process.env.AGENT_CHECK_VERBOSE) {
+      console.log(`    [lượt ${luot + 1}] ${canChay.map((c) => `${c.name}(${JSON.stringify(c.args).slice(0, 90)})`).join(' | ') || '(không tool)'}`);
+    }
     if (xong) break;
 
     for (const c of canChay) {

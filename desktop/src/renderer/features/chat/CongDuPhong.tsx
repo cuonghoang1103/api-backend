@@ -28,6 +28,53 @@ export interface TrangThaiDuPhong {
   model: string;
   ten: string;
   veHopLe: boolean;
+  /** Model chọn được ở cổng dự phòng (máy chủ cũ không trả ⇒ không hiện chọn). */
+  models?: Array<{ id: string; ten: string; mo: string; dungDuoc: boolean }>;
+  macDinh?: string;
+}
+
+async function docModelChon(): Promise<string> {
+  try {
+    const s = await window.cuongthai?.settings.getAll();
+    const v = s?.agentDuPhongModel;
+    return typeof v === 'string' ? v : '';
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Chọn model ở cổng dự phòng: 6 Sol (mặc định) hoặc 6 Astra cho việc khó.
+ * Người dùng chốt 27/09/2026 — chỉ hai lựa chọn này, không có Claude (trên
+ * modelapi Claude đắt ~14 lần).
+ */
+export function ChonModelDuPhong({ t }: { t: TrangThaiDuPhong }) {
+  const [chon, datChon] = useState('');
+  useEffect(() => { void docModelChon().then(datChon); }, []);
+  if (!t.models?.length) return null;
+  const hienTai = chon || t.macDinh || t.models[0]!.id;
+  return (
+    <div className="ct-duphong-model" role="radiogroup" aria-label="Model ở cổng dự phòng">
+      {t.models.map((m) => (
+        <button
+          key={m.id}
+          type="button"
+          role="radio"
+          aria-checked={m.id === hienTai}
+          data-chon={m.id === hienTai}
+          disabled={!m.dungDuoc}
+          title={m.dungDuoc ? m.mo : 'Máy chủ chưa cắm khoá cho model này'}
+          onClick={() => {
+            datChon(m.id);
+            void window.cuongthai?.settings.set('agentDuPhongModel', m.id);
+          }}
+        >
+          {m.id === hienTai ? <Check size={11} aria-hidden /> : <span className="ct-chonmm-o" />}
+          <span><strong>{m.ten}</strong><em>{m.mo}</em></span>
+        </button>
+      ))}
+    </div>
+  );
 }
 
 async function docVe(): Promise<string> {
@@ -123,6 +170,7 @@ export function MoCongDuPhong({ baoTri = false, onXong }: { baoTri?: boolean; on
           {baoTri ? ' Gửi lại câu hỏi (hoặc gõ "tiếp tục") để làm tiếp.' : ''} Cổng chính sống lại là
           tự quay về, không phải chỉnh gì.
         </p>
+        {t && <ChonModelDuPhong t={t} />}
         {!baoTri && (
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void tat()}>
             Thu hồi trên máy này

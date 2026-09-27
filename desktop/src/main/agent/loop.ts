@@ -1649,6 +1649,12 @@ function veDuPhong(): string | undefined {
   return typeof v === 'string' && v ? v : undefined;
 }
 
+/** Model người dùng chọn cho cổng dự phòng — máy chủ tự kiểm danh sách trắng. */
+function modelDuPhong(): string | undefined {
+  const v = getSettings().agentDuPhongModel;
+  return typeof v === 'string' && v ? v : undefined;
+}
+
 async function mgoiMotLuotThat(o: {
   token: string;
   messages: TinNhan[];
@@ -1715,6 +1721,7 @@ async function mgoiMotLuotThat(o: {
          yêu cầu) để cả lượt chính lẫn việc phụ đều mang theo. Máy chủ chỉ dùng
          khi rambo hỏng. Xem `services/agent/congDuPhong.ts` bên backend. */
       duPhongVe: veDuPhong(),
+      duPhongModel: modelDuPhong(),
     }),
   });
 

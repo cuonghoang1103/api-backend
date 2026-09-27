@@ -27,7 +27,7 @@ import { AGENT_TOOLS, ALL_CAPABILITIES } from '../services/agent/tools.js';
 import { soGioCuaSo, tranToken, xemHanMuc } from '../services/agent/quota.js';
 import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agent/turn.js';
 import { congAgent, gatewayConfigured, modelFor, ramboDangNghi } from '../services/llm/gateway.js';
-import { MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
+import { MODEL_DU_PHONG, MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
 import { dsModelAgent } from '../services/agent/models.js';
 import { datTenViec } from '../services/agent/datTen.js';
 import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
@@ -192,6 +192,10 @@ router.get('/du-phong', chiPro, async (req: any, res: Response<ApiResponse>, nex
         model,
         ten: tenDuPhong(model),
         veHopLe: req.query.ve ? await veDuPhongHopLe(req.userId, String(req.query.ve)) : false,
+        /* Hai model chọn được (6 Sol mặc định, 6 Astra cho việc khó) + model
+           nào gọi được với khoá đang cắm. */
+        models: MODEL_DU_PHONG.map((x) => ({ ...x, dungDuoc: Boolean(congDuPhong(x.id)) })),
+        macDinh: modelDuPhongAgent(),
       },
     });
   } catch (err) { next(err); }
@@ -278,7 +282,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   const body = req.body as {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
     ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
-    model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; duPhongVe?: unknown;
+    model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; duPhongVe?: unknown; duPhongModel?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -386,6 +390,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         mucNoLuc: body.mucNoLuc,
         model: body.model,
         duPhongVe: body.duPhongVe,
+        duPhongModel: body.duPhongModel,
         laPhu: body.laPhu,
         toolMcp: body.toolMcp,
         userId: req.userId,

@@ -784,3 +784,46 @@ ${mucLuc}` : '(chưa có bài học nào)'}
 ${hoanCanh.length ? '\n' + hoanCanh.join('\n') + '\n' : ''}
 ${muc.map((m, i) => `${i + 1}. ${m}`).join('\n\n')}`;
 }
+
+/**
+ * ============================================================
+ * CÁCH LÀM VIỆC cho model GPT ở cổng dự phòng (27/09/2026)
+ * ============================================================
+ *
+ * Nối vào CUỐI prompt hệ thống khi AI Code chạy GPT (xem `chuyenDuPhong` trong
+ * `turn.ts`). Mọi thứ khác — kỹ năng, bộ nhớ, kế hoạch, luật an toàn — đã có
+ * sẵn trong prompt chung và GPT đọc y như Claude; mục này chỉ sửa đúng những
+ * thói quen ĐO ĐƯỢC làm GPT tốn gấp nhiều lần: cùng một câu hỏi tra mã, Opus 5
+ * đi 11 bước, gpt-6-sol đi 22–63 bước — đọc từng file một mỗi lượt, đọc lại
+ * file đã đọc, và tiếp tục tìm sau khi đã đủ bằng chứng.
+ *
+ * Viết thành luật cụ thể, có con số, vì GPT làm theo chỉ dẫn rõ ràng tốt hơn
+ * lời khuyên chung chung.
+ *
+ * ĐO LẠI sau khi thêm mục này + `parallel_tool_calls` (cùng việc, 27/09):
+ *   gpt-6-sol   trước 217k · 327k token   ⇒ sau 135k · 183k · 423k
+ *   gpt-6-astra trước 211k / 41 lời gọi   ⇒ sau 179k / 22 lời gọi
+ * Vết từng lượt: nay GPT gọi 3–6 tool MỘT LƯỢT (9 lượt cho 23 lời gọi) thay vì
+ * mỗi lượt một tool. Còn dao động (lượt 423k) — số LƯỢT mới là thứ tốn tiền,
+ * vì mỗi lượt gửi lại cả ngữ cảnh; đọc `agent-check -- --do` với
+ * `AGENT_CHECK_VERBOSE=1` để xem nó đi lượt nào.
+ */
+export const LOI_LAM_VIEC_GPT = `CÁCH LÀM VIỆC HIỆU QUẢ (bắt buộc — mỗi bước đều tốn tiền thật của người dùng)
+   1. GỘP LỜI GỌI TOOL: các việc đọc/tìm ĐỘC LẬP nhau thì gọi CÙNG MỘT LƯỢT
+      (ví dụ đọc 3 file một lúc, grep 2 mẫu một lúc) — đừng mỗi lượt một tool.
+   2. TÌM TRƯỚC, ĐỌC SAU: grep/glob khoanh đúng chỗ rồi read_file đúng dải dòng
+      cần. Không đọc cả file dài để tìm một hàm.
+   3. KHÔNG ĐỌC LẠI thứ đã có trong hội thoại. Kết quả tool cũ vẫn còn ở trên —
+      cuộn lên dùng lại. Chỉ đọc lại khi CHÍNH BẠN vừa sửa file đó.
+   4. DỪNG KHI ĐỦ: đã có bằng chứng (file:dòng) trả lời được câu hỏi thì trả lời
+      NGAY. Câu hỏi tra cứu thường xong trong 5–10 bước; quá 15 bước mà chưa
+      xong thì dừng lại, tóm tắt đã biết gì, còn thiếu gì, rồi mới đi tiếp.
+   5. VIỆC SỬA MÃ: cap_nhat_ke_hoach trước (việc ≥3 bước) → đọc đúng chỗ → sửa
+      một lần cho gọn (không sửa lắt nhắt từng dòng) → CHẠY build/test để kiểm →
+      lỗi thì đọc thông báo lỗi và sửa đúng nguyên nhân, đừng thử bừa.
+   6. LỆNH HỎNG 2 LẦN cùng một kiểu thì ĐỔI CÁCH (đọc tài liệu, xem bộ nhớ,
+      hỏi người dùng) thay vì chạy lại lần thứ ba. Sửa được thì ghi nho_bai_hoc.
+   7. Dùng KỸ NĂNG có sẵn (deploy, docker, database, kiểm thử…) khi việc khớp
+      tên kỹ năng: gọi dung_ky_nang để đọc thân kỹ năng trước khi tự mày mò.
+   8. Trả lời cuối: ngắn, có file:dòng, nói rõ đã KIỂM bằng chạy thật hay chỉ
+      đọc mã.`;

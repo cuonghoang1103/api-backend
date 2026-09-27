@@ -13,6 +13,8 @@ export function loadNgay(n: number): Promise<Lesson[]> | null {
     case 2: return import('./ngay2').then((m) => m.NGAY_2);
     case 3: return import('./ngay3').then((m) => m.NGAY_3);
     case 4: return import('./ngay4').then((m) => m.NGAY_4);
+    case 5: return import('./ngay5').then((m) => m.NGAY_5);
+    case 6: return import('./ngay6').then((m) => m.NGAY_6);
     default: return null;
   }
 }

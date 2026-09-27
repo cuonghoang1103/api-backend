@@ -63,4 +63,6 @@ iCloud `~/Ielts` (ảnh HEIC, hay bị xoay ngang) để soạn từng đợt.
 |---|---|
 | 1 | ✅ đủ (trang 8–19) |
 | 2–4 | ✅ đủ (trang 20–75, soạn 27/09/2026; sách không in đáp án Day 2–4 → đáp án tự soạn & kiểm) |
-| 5–15 | chờ ảnh |
+| 5 | ✅ trang 75–90 (28/09): danh từ đếm/không đếm được, Remote Work, Dictation 2, homework 12+10 |
+| 6 | ✅ trang 91–110 (28/09): Flow-chart Completion, Opinion intro 5 bước, Speaking Wh- (Daily Routine 6 câu, Family 2), 8 nguyên âm đôi, homework 6 chỗ trống |
+| 7–15 | chờ ảnh (ảnh mới bắt đầu từ trang 111) |

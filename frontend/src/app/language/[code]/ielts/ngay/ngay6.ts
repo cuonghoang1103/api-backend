@@ -1,0 +1,883 @@
+/**
+ * Ngày 6 — sách trang 91–110:
+ *   Reading Skills: Flow-chart Completion 1 · Writing Skills: Opinion Essays 1
+ *   (mở bài Task 2) · Speaking Skills: Wh-Questions (Part 1, Daily Routine +
+ *   Family, nhị trùng âm) · Homework (3 đề điền mở bài, 6 chỗ trống).
+ *
+ * Giữ đủ kiến thức, thứ tự, dạng bài và số câu của sách; bài đọc, ví dụ, câu
+ * trả lời mẫu và câu bài tập đều VIẾT MỚI (xem ../SOAN-BAI.md). Bài đọc là phần
+ * tiếp theo (đoạn D–F) của bài đọc Ngày 4 (đoạn A–C).
+ */
+import type { Lesson } from '../data';
+
+/* ─────────────────────────── Reading ─────────────────────────── */
+
+const D6_READING: Lesson = {
+  id: "d6-doc",
+  kind: "reading",
+  title: "Đọc: Flow-chart Completion 1 (hoàn thành sơ đồ quy trình)",
+  goal: "Làm được dạng Flow-chart Completion theo 6 bước: đoán loại thông tin cần điền, bám theo trình tự bài đọc, dò từ khoá và từ đồng nghĩa, điền đúng từ trong bài và đúng giới hạn số từ.",
+  minutes: 45,
+  blocks: [
+    {
+      t: "p",
+      text: "**Flow-chart** (sơ đồ quy trình, lưu đồ) là một chuỗi ô nối với nhau bằng **mũi tên ↓**. Mỗi ô là **một bước** hoặc **một giai đoạn** của một quá trình: làm sản phẩm, tiến hành nghiên cứu, lịch sử một phát minh… Một số ô có **chỗ trống**. Bạn phải lấy **đúng từ trong bài đọc** để điền vào.",
+    },
+    {
+      t: "note",
+      title: "Ghi nhớ về dạng bài",
+      items: [
+        "Flow-chart gần như luôn đi **theo thứ tự thời gian** của bài đọc: ô trên xảy ra trước, ô dưới xảy ra sau. Đáp án câu sau nằm **sau** đáp án câu trước trong bài.",
+        "Nội dung trong ô được viết **rất gọn**, như ghi chú: hay dùng **danh từ** thay cho câu đầy đủ (**Presentation of…**, **Collection of…**, **Testing of…**). Vì thế chỗ trống thường cần **danh từ**.",
+        "Giống Sentence Completion (Ngày 4): chép **đúng từ trong bài**, **đúng chính tả**, **không quá số từ** đề cho.",
+        "Phần này sách chưa có: có một kiểu flow-chart khác cho sẵn **khung đáp án A–H**, bạn chỉ chọn chữ cái. Cách làm vẫn y như vậy, chỉ khác bước cuối là chọn chữ thay vì chép từ.",
+      ],
+    },
+
+    { t: "h", text: "1. Cách làm: 6 bước" },
+    {
+      t: "p",
+      text: "Sách đưa ra 6 bước. Bảng dưới đây giữ đúng 6 bước đó và thêm cột **giải thích** cho người mới.",
+    },
+    {
+      t: "table",
+      head: ["Bước", "Làm gì", "Giải thích thêm"],
+      rows: [
+        ["1. Đọc kỹ đề bài", "Xác định **chủ đề** của sơ đồ (đọc tiêu đề) và **loại thông tin** cần điền vào từng ô: danh từ, động từ, ngày tháng, con số…", "Khoanh ngay **giới hạn số từ** (ONE WORD ONLY, NO MORE THAN TWO WORDS…). Nhìn chữ đứng trước chỗ trống: sau **of / a / the / specialist** → danh từ."],
+        ["2. Xác định vị trí đoạn văn", "Sơ đồ đi **theo trình tự** bài đọc. Đọc lướt để tìm đoạn nói về quá trình trong sơ đồ.", "Tiêu đề sơ đồ thường chỉ ngay đoạn cần đọc. Tìm được ô đầu tiên rồi thì các ô sau cứ **đi tiếp xuống dưới**, không cần dò lại từ đầu bài."],
+        ["3. Đọc kỹ thông tin trong sơ đồ", "Chú ý **từ nối, từ chỉ sự kiện** trong từng ô để biết ô đó nói về bước nào.", "Các chữ như **then, after, once, finally, testing, presentation** cho biết thứ tự. Đọc cả ô **trước** và **sau** chỗ trống để hiểu ngữ cảnh."],
+        ["4. Tìm từ khoá", "Gạch chân từ khoá trong ô, đối chiếu với bài đọc để tìm **thông tin chính xác**.", "Như Ngày 4: từ khoá trong sơ đồ thường **đã bị đổi** sang từ đồng nghĩa hoặc dạng khác (collected → **Collection**, a dozen → **twelve**)."],
+        ["5. Điền đúng dạng từ", "Kiểm tra **số từ** và đảm bảo điền đúng **loại từ** (danh từ, động từ, số…).", "Chép nguyên dạng trong bài: bài viết **comments** (số nhiều) thì không chép ~~comment~~."],
+        ["6. Kiểm tra lại", "Đọc lại cả sơ đồ và đoạn văn: câu trả lời phải **logic** và **đúng**.", "Đọc liền mạch từ ô đầu đến ô cuối: các bước có nối nhau hợp lý không? Có ô nào bạn điền một thứ xảy ra **sai thứ tự** không?"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Người Việt hay sai ở dạng bài này",
+      items: [
+        "Điền **động từ** vào chỗ cần **danh từ**: ô viết “Collection of ___” mà điền ~~collected~~ là sai. Sau **of** luôn cần danh từ (hoặc V-ing).",
+        "Điền **từ đứng gần nhất** với từ khoá mà không kiểm tra nghĩa. Bài hay đặt **hai danh từ gần nhau** (ví dụ “agency” và “firm” trong bài dưới); chỉ một cái khớp với ô.",
+        "Bỏ qua thứ tự: đáp án câu 8 lại lấy ở đoạn trước đáp án câu 7. Nếu thấy vậy, gần như chắc chắn bạn đã **nhầm chỗ**.",
+        "Viết thêm mạo từ hay giới từ cho “đủ ý”: ~~the finished version~~ (3 từ) là **sai** với đề NO MORE THAN TWO WORDS.",
+      ],
+    },
+
+    { t: "h", text: "2. Ví dụ ngắn: áp dụng 6 bước (phần thêm)" },
+    {
+      t: "examples",
+      items: [
+        { en: "Flow-chart: Rice is harvested → The grains are dried in the ______ → Husks are removed", vi: "Sơ đồ: Lúa được gặt → Hạt được phơi ở ______ → Vỏ trấu được bóc đi" },
+        { en: "Passage: After the harvest, farmers spread the grains across the village yard, where the sun dries them for two or three days. Only then are the husks taken off in a small mill.", vi: "Bài đọc: Sau khi gặt, nông dân rải thóc khắp sân làng, nơi nắng phơi khô chúng trong hai ba ngày. Sau đó vỏ trấu mới được bóc ở một cối xay nhỏ." },
+      ],
+    },
+    {
+      t: "table",
+      head: ["Bước", "Áp dụng vào ví dụ (ONE WORD ONLY)"],
+      rows: [
+        ["1. Đọc đề", "Chủ đề: chế biến lúa. Sau **in the** → cần **danh từ chỉ nơi chốn**, một từ."],
+        ["2. Vị trí", "Ô đứng giữa **harvested** và **husks removed** → tìm câu nằm giữa hai việc đó trong bài."],
+        ["3. Đọc ô", "Ô trước: gặt xong. Ô sau: bóc vỏ. Ô cần điền: **phơi khô ở đâu**."],
+        ["4. Từ khoá", "**dried** ↔ bài viết “the sun **dries** them” (đổi dạng từ). Nơi phơi: “the village **yard**”."],
+        ["5. Điền", "**yard** (một từ). Không điền ~~village yard~~ vì đề chỉ cho ONE WORD; không điền ~~mill~~ vì cối xay là nơi **bóc vỏ**, bước sau."],
+        ["6. Kiểm tra", "“The grains are dried in the yard” → đúng ngữ pháp, đúng thứ tự: gặt → phơi → bóc vỏ. ✓"],
+      ],
+    },
+
+    { t: "h", text: "3. Bài đọc luyện tập" },
+    {
+      t: "p",
+      text: "Bài đọc dưới đây được soạn riêng cho khoá học, là **phần tiếp theo** của bài đọc Ngày 4 (đoạn A–C: công ty phần mềm tìm hiểu trẻ mẫu giáo trước khi làm ứng dụng). Đoạn D–F kể nhóm nghiên cứu **dùng kết quả** đó thế nào. Hãy đọc sơ đồ ở Questions 6–9 **trước**, rồi mới đọc bài.",
+    },
+    {
+      t: "passage",
+      title: "Designing a Tablet App for Young Children: From Research to Product",
+      intro: "Phần tiếp theo của bài đọc Ngày 4 — gồm 3 đoạn D, E, F. Câu hỏi 6–9 ở ngay bên dưới.",
+      paras: [
+        {
+          label: "D",
+          text: "The findings from this initial round of home visits were extensive, and several of them surprised the team. In one short experiment, children were handed a tablet with no instructions at all, and most of them tried to drag pictures around the screen before they ever tried to tap them. After reviewing these outcomes and discussing their implications for the design with the company's internal production team, the researchers outlined the needs of the project in a single document. At the top of that full list was simplicity: every screen should give the child one clear task. Rather than create the artwork themselves, the team presented the list to an agency specialising in picture books and animation for pre-school children. Its experts, most of whom had spent years at a large toy firm, then worked side by side with the programmers to fix the look of the two apps under development, using everything the home visits had revealed.",
+        },
+        {
+          label: "E",
+          text: "As the two apps moved through the development process, a formative research routine was put in place, which meant that children tested the product while it was still being built, not just at the end. Whenever the programmers created a new game mechanic, such as shaking the tablet to make apples fall from a tree, five or six children were invited into the company's utility lab, a spare meeting room fitted with two cameras and child-sized chairs. There the team evaluated two things: the clarity of each mechanic, and whether it could engage a four-year-old for more than a few seconds. Early versions of separate elements, like the menus and the sound effects, were tried out in the same way, and the overall structure of each app was checked too. Anything that confused the children was adjusted before the next session.",
+        },
+        {
+          label: "F",
+          text: "When a finished version of each app was ready, the researchers went back into the field and visited a dozen children in their own homes. Their objective was to make sure that every part of the app worked for its young users, that the aim of each game was understandable without adult help, and that the whole experience was enjoyable from start to finish. Finally, the team gathered comments from parents and grandparents about whether the apps were appropriate for small children, easy to trust and worth the price.",
+        },
+      ],
+    },
+
+    { t: "h", text: "Questions 6–9" },
+    {
+      t: "p",
+      text: "Complete the flow-chart below. Choose **NO MORE THAN TWO WORDS** from the passage for each answer. — *Hoàn thành sơ đồ dưới đây. Chọn **KHÔNG QUÁ HAI TỪ** trong bài đọc cho mỗi câu trả lời.*",
+    },
+    {
+      t: "table",
+      caption: "Using the Results of the Home Visits — Sử dụng kết quả của các lần đến thăm tại nhà",
+      head: ["", "Bước (đọc từ trên xuống)"],
+      rows: [
+        ["1", "Design needs presented to a specialist **(6) ______** — *Trình bày nhu cầu thiết kế cho một (6) ______ chuyên môn*"],
+        ["↓", ""],
+        ["2", "Testing of new mechanics in the company's own lab (assessing **(7) ______** and interest) — *Thử các cơ chế mới trong phòng thí nghiệm của công ty (đánh giá (7) ______ và mức độ hứng thú)*"],
+        ["↓", ""],
+        ["3", "A field test of the **(8) ______** involving twelve children — *Thử nghiệm thực địa (8) ______ với mười hai trẻ*"],
+        ["↓", ""],
+        ["4", "Collection of **(9) ______** from adults in the family — *Thu thập (9) ______ từ người lớn trong gia đình*"],
+      ],
+    },
+    {
+      t: "quiz",
+      id: "d6-doc-cau",
+      title: "Questions 6–9 — NO MORE THAN TWO WORDS",
+      kind: "fill",
+      items: [
+        { q: "(6) Design needs presented to a specialist ___", answers: ["agency"] },
+        { q: "(7) Testing of new mechanics in the company's own lab (assessing ___ and interest)", answers: ["clarity"] },
+        { q: "(8) A field test of the ___ involving twelve children", answers: ["finished version"] },
+        { q: "(9) Collection of ___ from adults in the family", answers: ["comments"] },
+      ],
+    },
+
+    { t: "h", text: "4. Giải thích đáp án" },
+    {
+      t: "note",
+      title: "Giải thích đáp án câu 6: agency",
+      items: [
+        "**Dạng câu hỏi:** Flow-chart Completion · **Vị trí:** đoạn D, câu 5.",
+        "Bài viết: “Rather than create the artwork themselves, the team **presented the list** to an **agency specialising in** picture books and animation for pre-school children.” — *Thay vì tự vẽ hình, nhóm trình bày danh sách đó cho một công ty dịch vụ chuyên về sách tranh và hoạt hình cho trẻ mẫu giáo.*",
+        "Paraphrase: **the list** (ở câu 3: the needs of the project) = **Design needs**; **presented… to** giữ nguyên; **specialising in** (động từ) → **specialist** (danh từ đứng trước chỗ trống, dùng như tính từ). Sau “a specialist” cần **một danh từ** → **agency**.",
+        "Bẫy: ~~firm~~ ở câu ngay sau. Nhưng “a large toy firm” là **nơi các chuyên gia từng làm việc trước đây** (had spent years at), không phải nơi nhóm nghiên cứu trình bày danh sách. Đọc đúng **ai làm gì với ai** thì loại được.",
+      ],
+    },
+    {
+      t: "note",
+      title: "Giải thích đáp án câu 7: clarity",
+      items: [
+        "**Dạng câu hỏi:** Flow-chart Completion · **Vị trí:** đoạn E, câu 3.",
+        "Bài viết: “There the team **evaluated two things**: the **clarity** of each mechanic, and whether it could **engage** a four-year-old for more than a few seconds.” — *Ở đó nhóm đánh giá hai điều: độ rõ ràng, dễ hiểu của mỗi cơ chế, và liệu nó có thu hút được một đứa trẻ bốn tuổi lâu hơn vài giây hay không.*",
+        "Paraphrase: **evaluated** = **assessing**; **whether it could engage** (có thu hút không) = **interest**; **the company's utility lab** = **the company's own lab**. Ô đánh giá **hai thứ**, “interest” đã có sẵn → thứ còn lại là **clarity**.",
+        "Bẫy: ~~simplicity~~ nằm ở đoạn D. Đó là **nhu cầu thiết kế** đứng đầu danh sách, không phải thứ được **đánh giá trong phòng lab**. Nhớ quy tắc thứ tự: ô 2 nằm sau ô 1, nên đáp án phải ở **sau** câu có “agency”.",
+      ],
+    },
+    {
+      t: "note",
+      title: "Giải thích đáp án câu 8: finished version",
+      items: [
+        "**Dạng câu hỏi:** Flow-chart Completion · **Vị trí:** đoạn F, câu 1.",
+        "Bài viết: “When a **finished version** of each app was ready, the researchers **went back into the field** and visited **a dozen children** in their own homes.” — *Khi bản hoàn chỉnh của mỗi ứng dụng đã sẵn sàng, các nhà nghiên cứu quay lại thực địa và đến thăm mười hai đứa trẻ tại nhà các em.*",
+        "Paraphrase: **went back into the field** = **A field test**; **a dozen** (một tá = 12) = **twelve**; **visited… children** = **involving… children**. Sau **the** cần cụm danh từ → **finished version** (2 từ, đúng giới hạn).",
+        "Bẫy: ~~early versions~~ ở đoạn E là bản thử **từng phần** (menu, âm thanh) trong lab, không phải bản đem đi thử thực địa. Và ~~version~~ một mình thì thiếu nghĩa: phải là bản **đã hoàn chỉnh**.",
+      ],
+    },
+    {
+      t: "note",
+      title: "Giải thích đáp án câu 9: comments",
+      items: [
+        "**Dạng câu hỏi:** Flow-chart Completion · **Vị trí:** đoạn F, câu 3 (câu cuối bài).",
+        "Bài viết: “Finally, the team **gathered comments from parents and grandparents** about whether the apps were appropriate for small children, easy to trust and worth the price.” — *Cuối cùng, nhóm thu thập ý kiến nhận xét của bố mẹ và ông bà về việc các ứng dụng có phù hợp với trẻ nhỏ, đáng tin cậy và đáng đồng tiền hay không.*",
+        "Paraphrase: **gathered** (động từ) → **Collection** (danh từ); **parents and grandparents** = **adults in the family**; **Finally** khớp với **ô cuối cùng** của sơ đồ.",
+        "Chép đúng **comments** (có -s) như trong bài. Không đổi sang ~~feedback~~ hay ~~opinions~~: nghĩa giống nhưng **không phải từ trong bài** nên bị chấm sai.",
+      ],
+    },
+
+    { t: "h", text: "5. Từ vựng hữu ích (37 từ)" },
+    {
+      t: "p",
+      text: "Đủ 37 từ của sách, tất cả đều có mặt trong đoạn D–F ở trên (có khi ở dạng khác: reviewing, outlined, specialising, adjusted…). Bấm 🔊 để nghe, tìm lại từ đó trong bài, rồi tự đặt một câu.",
+    },
+    {
+      t: "vocab",
+      items: [
+        { w: "finding", pos: "n", ipa: "/ˈfaɪndɪŋ/", vi: "phát hiện, kết quả tìm ra (thường dùng số nhiều: findings)", ex: "The main finding of the survey is that students sleep too little.", exVi: "Phát hiện chính của cuộc khảo sát là học sinh ngủ quá ít." },
+        { w: "initial", pos: "adj", ipa: "/ɪˈnɪʃl/", vi: "ban đầu, đầu tiên", ex: "My initial plan was to study medicine.", exVi: "Kế hoạch ban đầu của tôi là học y." },
+        { w: "experiment", pos: "n", ipa: "/ɪkˈsperɪmənt/", vi: "thí nghiệm, cuộc thử nghiệm", ex: "In today's experiment, we will heat water to 100 degrees.", exVi: "Trong thí nghiệm hôm nay, chúng ta sẽ đun nước tới 100 độ." },
+        { w: "extensive", pos: "adj", ipa: "/ɪkˈstensɪv/", vi: "rộng, nhiều, bao quát", ex: "The storm caused extensive damage to the rice fields.", exVi: "Cơn bão gây thiệt hại trên diện rộng cho các cánh đồng lúa." },
+        { w: "review", pos: "v", ipa: "/rɪˈvjuː/", vi: "xem xét lại, ôn lại", ex: "Review your notes for ten minutes before bed.", exVi: "Hãy xem lại ghi chép của bạn mười phút trước khi ngủ." },
+        { w: "outcome", pos: "n", ipa: "/ˈaʊtkʌm/", vi: "kết quả (cuối cùng)", ex: "Nobody could predict the outcome of the final match.", exVi: "Không ai đoán được kết quả trận chung kết." },
+        { w: "discuss", pos: "v", ipa: "/dɪˈskʌs/", vi: "thảo luận, bàn bạc", ex: "We discussed the plan for our class trip.", exVi: "Chúng tôi đã bàn kế hoạch cho chuyến đi của lớp." },
+        { w: "implication", pos: "n", ipa: "/ˌɪmplɪˈkeɪʃn/", vi: "hệ quả, ảnh hưởng có thể xảy ra", ex: "Think about the implications of quitting your job.", exVi: "Hãy nghĩ về các hệ quả của việc bỏ việc." },
+        { w: "design", pos: "n", ipa: "/dɪˈzaɪn/", vi: "thiết kế, bản thiết kế", ex: "I love the simple design of this backpack.", exVi: "Tôi thích thiết kế đơn giản của chiếc ba lô này." },
+        { w: "internal", pos: "adj", ipa: "/ɪnˈtɜːnl/", vi: "nội bộ, bên trong", ex: "The company sent an internal email to all staff.", exVi: "Công ty gửi một email nội bộ cho toàn bộ nhân viên." },
+        { w: "production", pos: "n", ipa: "/prəˈdʌkʃn/", vi: "sự sản xuất; khâu sản xuất", ex: "Coffee production in Vietnam rose last year.", exVi: "Sản lượng cà phê ở Việt Nam đã tăng năm ngoái." },
+        { w: "outline", pos: "v", ipa: "/ˈaʊtlaɪn/", vi: "phác thảo, nêu những ý chính", ex: "The teacher outlined the three parts of the essay.", exVi: "Cô giáo phác thảo ba phần của bài luận." },
+        { w: "need", pos: "n", ipa: "/niːd/", vi: "nhu cầu, điều cần có", ex: "The new hospital will meet the needs of the whole district.", exVi: "Bệnh viện mới sẽ đáp ứng nhu cầu của cả huyện." },
+        { w: "present", pos: "v", ipa: "/prɪˈzent/", vi: "trình bày; trao tặng", ex: "Each group will present its project on Friday.", exVi: "Mỗi nhóm sẽ trình bày dự án của mình vào thứ Sáu." },
+        { w: "firm", pos: "n", ipa: "/fɜːm/", vi: "công ty, hãng", ex: "My uncle works for a small law firm in Da Nang.", exVi: "Chú tôi làm cho một công ty luật nhỏ ở Đà Nẵng." },
+        { w: "specialise", pos: "v", ipa: "/ˈspeʃəlaɪz/", vi: "chuyên về (specialise in + N/V-ing); Mỹ viết specialize", ex: "This restaurant specialises in seafood from Nha Trang.", exVi: "Nhà hàng này chuyên về hải sản Nha Trang." },
+        { w: "expert", pos: "n", ipa: "/ˈekspɜːt/", vi: "chuyên gia", ex: "Health experts advise walking 30 minutes a day.", exVi: "Các chuyên gia sức khoẻ khuyên đi bộ 30 phút mỗi ngày." },
+        { w: "development", pos: "n", ipa: "/dɪˈveləpmənt/", vi: "sự phát triển; under development = đang được phát triển", ex: "A new vaccine is under development.", exVi: "Một loại vắc-xin mới đang được phát triển." },
+        { w: "mechanic", pos: "n", ipa: "/məˈkænɪk/", vi: "(trong game) một cơ chế chơi; nghĩa phổ biến hơn: thợ máy", ex: "Jumping is the main mechanic in this game. / The mechanic fixed my motorbike.", exVi: "Nhảy là cơ chế chính của trò này. / Người thợ máy đã sửa xe máy của tôi." },
+        { w: "utility", pos: "n", ipa: "/juːˈtɪləti/", vi: "sự hữu dụng; (đứng trước danh từ) đa năng, dùng cho nhiều việc: utility room/lab", ex: "We keep the washing machine in the utility room.", exVi: "Chúng tôi để máy giặt trong phòng tiện ích." },
+        { w: "lab", pos: "n", ipa: "/læb/", vi: "phòng thí nghiệm (viết tắt của laboratory)", ex: "Students must wear glasses in the chemistry lab.", exVi: "Học sinh phải đeo kính trong phòng thí nghiệm hoá." },
+        { w: "evaluate", pos: "v", ipa: "/ɪˈvæljueɪt/", vi: "đánh giá", ex: "Teachers evaluate students by their homework and tests.", exVi: "Giáo viên đánh giá học sinh qua bài tập về nhà và bài kiểm tra." },
+        { w: "simplicity", pos: "n", ipa: "/sɪmˈplɪsəti/", vi: "sự đơn giản", ex: "People love this phone for its simplicity.", exVi: "Mọi người thích chiếc điện thoại này vì sự đơn giản của nó." },
+        { w: "gather", pos: "v", ipa: "/ˈɡæðə(r)/", vi: "thu thập; tụ họp", ex: "Scientists gathered data from 500 schools.", exVi: "Các nhà khoa học đã thu thập dữ liệu từ 500 trường học." },
+        { w: "adjust", pos: "v", ipa: "/əˈdʒʌst/", vi: "điều chỉnh", ex: "You can adjust the height of this chair.", exVi: "Bạn có thể điều chỉnh độ cao của chiếc ghế này." },
+        { w: "formative", pos: "adj", ipa: "/ˈfɔːmətɪv/", vi: "(nghiên cứu, đánh giá) diễn ra trong lúc làm để góp ý sửa dần; (thời kỳ) hình thành", ex: "Weekly quizzes are a kind of formative assessment.", exVi: "Bài kiểm tra nhanh hằng tuần là một kiểu đánh giá trong quá trình học." },
+        { w: "element", pos: "n", ipa: "/ˈelɪmənt/", vi: "yếu tố, thành phần", ex: "Good sleep is a key element of a healthy life.", exVi: "Ngủ ngon là một yếu tố then chốt của cuộc sống khoẻ mạnh." },
+        { w: "structure", pos: "n", ipa: "/ˈstrʌktʃə(r)/", vi: "cấu trúc", ex: "An essay needs a clear structure: introduction, body and conclusion.", exVi: "Một bài luận cần cấu trúc rõ ràng: mở bài, thân bài và kết bài." },
+        { w: "full", pos: "adj", ipa: "/fʊl/", vi: "đầy đủ, trọn vẹn; đầy", ex: "Please write your full name on the form.", exVi: "Vui lòng ghi họ tên đầy đủ vào tờ khai." },
+        { w: "field", pos: "n", ipa: "/fiːld/", vi: "thực địa (in the field = tại hiện trường, ngoài đời thật); cánh đồng; lĩnh vực", ex: "The students collected plant samples in the field.", exVi: "Các sinh viên thu thập mẫu cây ngoài thực địa." },
+        { w: "engage", pos: "v", ipa: "/ɪnˈɡeɪdʒ/", vi: "thu hút (sự chú ý, sự tham gia)", ex: "Good stories engage even the youngest listeners.", exVi: "Những câu chuyện hay thu hút cả những người nghe nhỏ tuổi nhất." },
+        { w: "dozen", pos: "n", ipa: "/ˈdʌzn/", vi: "một tá, mười hai", ex: "I bought a dozen eggs at the market.", exVi: "Tôi đã mua một tá trứng ở chợ." },
+        { w: "objective", pos: "n", ipa: "/əbˈdʒektɪv/", vi: "mục tiêu (cụ thể)", ex: "The objective of this lesson is to write a clear introduction.", exVi: "Mục tiêu của bài học này là viết một mở bài rõ ràng." },
+        { w: "understandable", pos: "adj", ipa: "/ˌʌndəˈstændəbl/", vi: "dễ hiểu; có thể hiểu được", ex: "The doctor gave an understandable explanation.", exVi: "Bác sĩ đưa ra lời giải thích dễ hiểu." },
+        { w: "process", pos: "n", ipa: "/ˈprəʊses/", vi: "quá trình, quy trình", ex: "Learning a language is a slow process.", exVi: "Học một ngôn ngữ là một quá trình chậm." },
+        { w: "enjoyable", pos: "adj", ipa: "/ɪnˈdʒɔɪəbl/", vi: "thú vị, mang lại niềm vui", ex: "We had an enjoyable weekend in Da Lat.", exVi: "Chúng tôi đã có một cuối tuần vui vẻ ở Đà Lạt." },
+        { w: "appropriate", pos: "adj", ipa: "/əˈprəʊpriət/", vi: "phù hợp, thích hợp (appropriate for + người/việc)", ex: "This film is not appropriate for young children.", exVi: "Bộ phim này không phù hợp với trẻ nhỏ." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: những chỗ sách ghi quá gọn",
+      items: [
+        "Sách ghi **extensive = rộng lớn**. Với kết quả, nghiên cứu thì nên hiểu là **nhiều, bao quát**: extensive findings = rất nhiều phát hiện. “Rộng lớn” chỉ hợp khi nói diện tích, thiệt hại.",
+        "Sách ghi **mechanic (n) = cơ chế**. Nghĩa thường gặp nhất của **a mechanic** là **thợ máy**. Nghĩa “cơ chế” chỉ dùng trong ngành game (**a game mechanic**); ngoài game dùng **mechanics** có -s (the mechanics of a clock), xem Ngày 4.",
+        "Sách ghi **utility = tiện ích**. Trong bài, **utility lab / utility room** là phòng **dùng cho nhiều việc**, không phải “phòng thí nghiệm tiện ích”. Số nhiều **utilities** lại là **điện, nước, gas** (tiền điện nước = utility bills).",
+        "Sách ghi **formative = hình thành**. Trong nghiên cứu và giáo dục, **formative** nghĩa là **làm trong lúc đang xây dựng để sửa dần** (khác **summative** = đánh giá tổng kết ở cuối).",
+        "**present** động từ (trình bày) nhấn âm **sau**: /prɪˈzent/. Danh từ/tính từ **present** (món quà, hiện tại) nhấn âm **đầu**: /ˈpreznt/.",
+        "**engage** thu hút ai: **engage children** (không có giới từ). **engaging** (tính từ) = hấp dẫn, lôi cuốn: an engaging game.",
+      ],
+    },
+  ],
+};
+
+/* ─────────────────────────── Writing ─────────────────────────── */
+
+const D6_WRITING: Lesson = {
+  id: "d6-viet",
+  kind: "writing",
+  title: "Viết: Opinion Essay 1 — viết mở bài Task 2",
+  goal: "Viết được mở bài 2 câu cho bài luận nêu quan điểm (Opinion Essay) Task 2: đọc đề, viết lại đề (paraphrase), nêu quan điểm kèm lý do (thesis), ghép lại và tự rà lỗi.",
+  minutes: 45,
+  blocks: [
+    { t: "h", text: "1. Writing Task 2 và dạng Opinion" },
+    {
+      t: "p",
+      text: "**Writing Task 2** là bài luận (essay) trả lời một câu hỏi về một vấn đề xã hội: giáo dục, công việc, công nghệ, môi trường… Bạn viết **ít nhất 250 từ** trong khoảng **40 phút**. Task 2 được tính điểm **gấp đôi** Task 1, nên đây là phần quan trọng nhất của bài Writing.",
+    },
+    {
+      t: "p",
+      text: "**Opinion Essay** (bài luận nêu quan điểm, còn gọi là Agree/Disagree) là dạng hay gặp nhất. Đề đưa ra một ý kiến rồi hỏi **bạn đồng ý hay không đồng ý**. Nhận ra dạng này qua câu hỏi cuối đề:",
+    },
+    {
+      t: "table",
+      head: ["Câu hỏi cuối đề", "Nghĩa", "Bạn được chọn"],
+      rows: [
+        ["**Do you agree or disagree?**", "Bạn đồng ý hay không đồng ý?", "Đồng ý, không đồng ý, hoặc đồng ý một phần. Người mới nên chọn **một phía rõ ràng**."],
+        ["**To what extent do you agree or disagree?**", "Bạn đồng ý hay không đồng ý **đến mức độ nào**?", "Như trên, nhưng đề **mời bạn nói mức độ**: hoàn toàn đồng ý (completely agree), đồng ý một phần (partly agree)…"],
+        ["**What is your opinion?** / **What do you think?**", "Ý kiến của bạn là gì?", "Thường đi sau đề nêu **hai quan điểm** (Some people… while others…): bạn nói mình nghiêng về bên nào."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Ghi nhớ: mở bài làm hai việc",
+      items: [
+        "**Câu 1 — Paraphrase:** viết lại đề bằng lời của bạn, để giám khảo thấy bạn **hiểu đúng đề**.",
+        "**Câu 2 — Thesis statement** (câu luận điểm): nói rõ **bạn đứng về phía nào** và **vì sao** (1–2 lý do ngắn).",
+        "Mở bài chỉ cần **2 câu, khoảng 40–50 từ**. Không cần câu dẫn dắt dài dòng.",
+      ],
+    },
+
+    { t: "h", text: "2. Các bước viết mở bài" },
+    {
+      t: "p",
+      text: "Sách đưa ra các bước theo mục tiêu band 4.0, ở hai trang liền nhau: một bảng 4 bước (Paraphrase → Thesis → Ghép → Rà soát) và một bảng 5 bước có thêm **bước đọc đề** ở đầu. Bảng dưới gộp cả hai thành **5 bước**; ví dụ đều viết mới.",
+    },
+    {
+      t: "table",
+      head: ["Bước", "Làm gì", "Giải thích thêm"],
+      rows: [
+        ["1. Đọc kỹ đề bài", "Xác định **chủ đề** và **yêu cầu** của đề. Quyết định rõ quan điểm: đồng ý hay không đồng ý.", "Gạch chân 3 thứ: **chủ đề** (smartphones), **đối tượng** (teenagers), **ý kiến đề đưa ra** (negative effect on concentration). Quyết định quan điểm **trước khi viết**, không vừa viết vừa nghĩ."],
+        ["2. Paraphrase đề bài", "Viết lại đề bằng **từ đồng nghĩa** và **cấu trúc câu khác**, nhưng **giữ nguyên nghĩa**.", "Không chép nguyên đề: phần chép lại **không được tính** vào số từ và không cho giám khảo thấy vốn từ của bạn."],
+        ["3. Viết thesis statement", "Nêu rõ quan điểm (**agree** hoặc **disagree**) và **một hoặc hai lý do** chính, đơn giản.", "Hai lý do này sẽ là **hai đoạn thân bài**. Chọn lý do mà bạn **có đủ từ vựng** để viết tiếp."],
+        ["4. Ghép mở bài", "Nối câu paraphrase và câu thesis thành **một đoạn** hoàn chỉnh.", "Paraphrase đứng trước, thesis đứng sau. Hai câu, không xuống dòng giữa chúng."],
+        ["5. Rà soát", "Kiểm tra **ngữ pháp, dấu câu, từ vựng**; câu văn phải **ngắn gọn, dễ hiểu**, không lỗi chính tả.", "Danh sách soát ở mục 5 bên dưới. Mất 1 phút nhưng cứu được nhiều lỗi mất điểm."],
+      ],
+    },
+
+    { t: "h", text: "3. Ví dụ 1 (đề hai quan điểm, “To what extent”)" },
+    {
+      t: "p",
+      text: "**Đề:** Some people believe that studying online is more beneficial for university students, while others think it only brings disadvantages. To what extent do you agree or disagree? — *Một số người tin rằng học trực tuyến mang lại nhiều lợi ích hơn cho sinh viên đại học, trong khi những người khác cho rằng nó chỉ mang lại bất lợi. Bạn đồng ý hay không đồng ý đến mức độ nào?*",
+    },
+    {
+      t: "table",
+      head: ["Bước", "Ví dụ minh hoạ"],
+      rows: [
+        ["1. Đọc đề", "Chủ đề: **học trực tuyến**. Đối tượng: **sinh viên đại học**. Hai quan điểm: nhiều lợi ích hơn ↔ chỉ có bất lợi. Quyết định: **đồng ý** rằng nó có lợi hơn."],
+        ["2. Paraphrase", "Some people **argue** that **learning over the internet offers** university students **more advantages**, **whereas** others **feel** that it **does more harm than good**. — *Một số người lập luận rằng học qua internet mang lại cho sinh viên nhiều lợi thế hơn, trong khi những người khác cảm thấy nó gây hại nhiều hơn lợi.*"],
+        ["3. Thesis", "I believe that online study is more beneficial **because** it **saves travel time** and **lets students learn at their own pace**. — *Tôi tin rằng học trực tuyến có lợi hơn vì nó tiết kiệm thời gian đi lại và cho phép sinh viên học theo tốc độ của riêng mình.*"],
+        ["4. Ghép", "Some people argue that learning over the internet offers university students more advantages, whereas others feel that it does more harm than good. I believe that online study is more beneficial because it saves travel time and lets students learn at their own pace."],
+        ["5. Rà soát", "✓ **offers** (chủ ngữ số ít “learning”) · ✓ **lets students learn** (let + O + V nguyên mẫu) · ✓ không lặp “studying online” ba lần · ✓ 2 câu, 48 từ."],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Paraphrase đã đổi những gì?",
+      head: ["Trong đề", "Trong bài", "Cách đổi"],
+      rows: [
+        ["believe", "argue", "Từ đồng nghĩa"],
+        ["studying online", "learning over the internet", "Từ đồng nghĩa + đổi cụm"],
+        ["is more beneficial for university students", "offers university students more advantages", "Đổi cấu trúc: tính từ (beneficial) → động từ + danh từ (offers… advantages)"],
+        ["while", "whereas", "Từ nối đồng nghĩa"],
+        ["think", "feel", "Từ đồng nghĩa"],
+        ["only brings disadvantages", "does more harm than good", "Diễn đạt bằng một thành ngữ"],
+      ],
+    },
+
+    { t: "h", text: "4. Ví dụ 2 (đề một ý kiến, “Do you agree or disagree?”)" },
+    {
+      t: "p",
+      text: "**Đề:** Smartphones have a negative effect on teenagers' ability to concentrate. Do you agree or disagree? — *Điện thoại thông minh có ảnh hưởng tiêu cực đến khả năng tập trung của thanh thiếu niên. Bạn đồng ý hay không đồng ý?*",
+    },
+    {
+      t: "table",
+      head: ["Bước", "Ví dụ minh hoạ"],
+      rows: [
+        ["1. Đọc đề", "Chủ đề: **điện thoại thông minh**. Đối tượng: **thanh thiếu niên**. Ý kiến: làm **giảm khả năng tập trung**. Quyết định: **hoàn toàn đồng ý**."],
+        ["2. Paraphrase", "Many people **claim** that **mobile phones make it harder for young people to focus**. — *Nhiều người cho rằng điện thoại di động khiến người trẻ khó tập trung hơn.*"],
+        ["3. Thesis", "I **completely agree** because **constant notifications interrupt study time** and **short videos train the brain to expect quick rewards**. — *Tôi hoàn toàn đồng ý vì thông báo liên tục làm gián đoạn giờ học và video ngắn khiến não quen với việc đòi phần thưởng tức thì.*"],
+        ["4. Ghép", "Many people claim that mobile phones make it harder for young people to focus. I completely agree because constant notifications interrupt study time and short videos train the brain to expect quick rewards."],
+        ["5. Rà soát", "✓ **make it harder for sb to V** (cấu trúc đúng) · ✓ **notifications interrupt** (chủ ngữ số nhiều, động từ không -s) · ✓ hai lý do rõ ràng = hai đoạn thân bài."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: 3 cách paraphrase cho người mới (phần sách chưa có)",
+      items: [
+        "**Đổi từ đồng nghĩa:** believe → **argue / claim / feel / are of the opinion that**; beneficial → **advantageous / useful**; disadvantages → **drawbacks**; children → **young people / kids**.",
+        "**Đổi dạng từ:** beneficial (adj) → **benefit** (n/v): “it is beneficial” → “it **benefits** students”; negative effect → “**negatively affects**”.",
+        "**Đổi cấu trúc:** “X has a negative effect on Y” → “**X makes it harder for Y to…**”; “A is more beneficial than B” → “**A offers more advantages than B**”.",
+        "**Không đổi** những từ không có đồng nghĩa chuẩn (university, government, public transport). Đổi sai nghĩa còn tệ hơn giữ nguyên.",
+      ],
+    },
+    {
+      t: "patterns",
+      rows: [
+        {
+          formula: "I completely agree / I strongly believe that + S + V + because + lý do 1 + and + lý do 2.",
+          vi: "Hoàn toàn đồng ý (một phía rõ ràng) — dễ viết nhất cho người mới.",
+          examples: [
+            { en: "I completely agree because regular exercise improves both physical and mental health.", vi: "Tôi hoàn toàn đồng ý vì tập thể dục đều đặn cải thiện cả sức khoẻ thể chất lẫn tinh thần." },
+          ],
+        },
+        {
+          formula: "I completely disagree with this view because + lý do 1 + and + lý do 2.",
+          vi: "Hoàn toàn không đồng ý.",
+          examples: [
+            { en: "I completely disagree with this view because homework helps students remember lessons and builds good habits.", vi: "Tôi hoàn toàn không đồng ý với quan điểm này vì bài tập về nhà giúp học sinh nhớ bài và hình thành thói quen tốt." },
+          ],
+        },
+        {
+          formula: "I partly agree because while + S + V (mặt đồng ý), + S + V (mặt không đồng ý).",
+          vi: "Đồng ý một phần — hợp với đề “To what extent”, nhưng cần ý rõ ràng cho cả hai mặt.",
+          examples: [
+            { en: "I partly agree because while online shopping saves time, it can also encourage people to buy things they do not need.", vi: "Tôi đồng ý một phần vì dù mua sắm trực tuyến tiết kiệm thời gian, nó cũng có thể khuyến khích người ta mua những thứ không cần." },
+          ],
+        },
+      ],
+    },
+
+    { t: "h", text: "5. Lỗi hay gặp và danh sách rà soát" },
+    {
+      t: "note",
+      title: "Người Việt hay sai khi viết mở bài",
+      items: [
+        "~~I am agree.~~ → **I agree.** (agree là động từ, không dùng với am/is/are).",
+        "~~In my opinion, I think…~~ → chọn **một**: “In my opinion, …” **hoặc** “I think…”. Viết cả hai là lặp ý.",
+        "~~According to me,…~~ → **In my view,…** (according to dùng cho người/nguồn khác: according to experts).",
+        "Mở bài bằng câu chung chung học thuộc: ~~Nowadays, with the development of society, this is a hot topic.~~ Câu này không nói gì về đề và giám khảo nhận ra ngay là câu học thuộc.",
+        "**Không nêu quan điểm** (“There are many different opinions about this issue.”) hoặc nêu nhưng **thân bài lại nói ngược**. Đề Opinion mà thiếu quan điểm rõ ràng thì tiêu chí Task Response khó vượt band 5.",
+        "Paraphrase **đổi mất nghĩa**: đề nói “teenagers” mà viết ~~children~~ (trẻ em nhỏ) là đổi đối tượng; đề nói “only brings disadvantages” mà viết ~~has some disadvantages~~ là làm yếu ý.",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Bước 5 — danh sách rà soát 1 phút",
+      head: ["Kiểm tra", "Câu hỏi tự đặt"],
+      rows: [
+        ["Nghĩa", "Câu paraphrase có **giữ đúng** chủ đề, đối tượng và ý kiến của đề không?"],
+        ["Quan điểm", "Người đọc có biết ngay tôi **đồng ý hay không** sau câu 2 không?"],
+        ["Lý do", "Tôi có nêu **1–2 lý do** và chúng có khớp với **hai đoạn thân bài** định viết không?"],
+        ["Ngữ pháp", "Chủ ngữ số ít → động từ thêm **-s**? Sau **because** là một **mệnh đề** (S + V)? Sau **let / make / help + O** là **V nguyên mẫu**?"],
+        ["Dấu câu, chính tả", "Mỗi câu một dấu chấm; có dấu phẩy trước **whereas / while** khi nối hai vế? Không sai chính tả từ lấy từ đề?"],
+      ],
+    },
+
+    { t: "h", text: "6. Mở bài mẫu và dàn ý cả bài (phần thêm)" },
+    {
+      t: "p",
+      text: "Sách mới dạy mở bài. Để bạn thấy mở bài **dẫn đường** cho cả bài ra sao, đây là dàn ý và bài mẫu khoảng 270 từ cho đề ở **Ví dụ 1**. Để ý: **hai lý do trong thesis = hai đoạn thân bài**.",
+    },
+    {
+      t: "table",
+      caption: "Dàn ý bài Opinion 4 đoạn",
+      head: ["Đoạn", "Nội dung", "Câu chủ đề / câu khung"],
+      rows: [
+        ["Introduction", "Paraphrase + thesis (2 lý do)", "Some people argue that… I believe that online study is more beneficial because it saves travel time and lets students learn at their own pace."],
+        ["Body 1", "Lý do 1: tiết kiệm thời gian đi lại → giải thích → ví dụ", "**Firstly**, studying online saves students a great deal of time."],
+        ["Body 2", "Lý do 2: tự học theo tốc độ của mình → giải thích → ví dụ", "**Secondly**, online courses allow learners to study at their own speed."],
+        ["Conclusion", "Nhắc lại quan điểm + 2 lý do (bằng lời khác), có thể thêm một ý nhượng bộ ngắn", "**In conclusion**, although online learning is not perfect, I believe its advantages outweigh its drawbacks…"],
+      ],
+    },
+    {
+      t: "examples",
+      items: [
+        { en: "[Introduction] Some people argue that learning over the internet offers university students more advantages, whereas others feel that it does more harm than good. I believe that online study is more beneficial because it saves travel time and lets students learn at their own pace.", vi: "[Mở bài] Một số người lập luận rằng học qua internet mang lại cho sinh viên nhiều lợi thế hơn, trong khi những người khác cảm thấy nó hại nhiều hơn lợi. Tôi tin rằng học trực tuyến có lợi hơn vì nó tiết kiệm thời gian đi lại và cho phép sinh viên học theo tốc độ của riêng mình." },
+        { en: "[Body 1] Firstly, studying online saves students a great deal of time. In big cities such as Hanoi, a trip to campus can take more than an hour because of traffic jams. When lectures are online, students can use this time to review their notes, do a part-time job or simply rest. As a result, they often feel less tired and can concentrate better in class.", vi: "[Thân bài 1] Thứ nhất, học trực tuyến giúp sinh viên tiết kiệm rất nhiều thời gian. Ở các thành phố lớn như Hà Nội, một chuyến đến trường có thể mất hơn một giờ vì tắc đường. Khi bài giảng diễn ra trực tuyến, sinh viên có thể dùng thời gian này để ôn bài, làm thêm hoặc đơn giản là nghỉ ngơi. Nhờ vậy, họ thường bớt mệt và tập trung tốt hơn trong giờ học." },
+        { en: "[Body 2] Secondly, online courses allow learners to study at their own speed. A recorded lecture can be paused, replayed or watched again before an exam, which is especially helpful for students who find a subject difficult. For example, a first-year student who struggles with mathematics can watch the same explanation three times until it makes sense, something that is impossible in a crowded lecture hall.", vi: "[Thân bài 2] Thứ hai, các khoá học trực tuyến cho phép người học học theo tốc độ riêng. Một bài giảng ghi hình có thể tạm dừng, tua lại hoặc xem lại trước kỳ thi, điều này đặc biệt có ích với sinh viên thấy môn học khó. Ví dụ, một sinh viên năm nhất gặp khó với môn toán có thể xem lại cùng một phần giảng ba lần cho đến khi hiểu, điều không thể làm trong một giảng đường đông đúc." },
+        { en: "[Conclusion] In conclusion, although studying online can feel lonely at times, I believe its advantages clearly outweigh its drawbacks. It saves students valuable time and gives them control over how fast they learn, so universities should continue to offer it.", vi: "[Kết bài] Tóm lại, dù học trực tuyến đôi khi khiến người học thấy cô đơn, tôi tin rằng lợi ích của nó rõ ràng lớn hơn bất lợi. Nó giúp sinh viên tiết kiệm thời gian quý báu và cho họ quyền kiểm soát tốc độ học, vì vậy các trường đại học nên tiếp tục cung cấp hình thức này." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Ghi nhớ: vì sao bài mẫu mạch lạc",
+      items: [
+        "Mỗi đoạn thân bài mở bằng **câu chủ đề** lặp lại đúng **một lý do** trong thesis (**Firstly… / Secondly…**).",
+        "Mỗi đoạn có đủ 3 phần: **ý chính → giải thích → ví dụ** (Hanoi traffic, a first-year student).",
+        "Kết bài **không đưa ý mới**, chỉ nhắc lại quan điểm và hai lý do bằng từ khác (saves time → saves valuable time; own pace → control over how fast they learn).",
+      ],
+    },
+    {
+      t: "mcq",
+      id: "d6-viet-nhanh",
+      title: "Kiểm tra nhanh — mở bài Opinion (4 câu)",
+      items: [
+        {
+          q: "Đề: “Children should learn a foreign language at primary school. Do you agree or disagree?” Câu nào là **paraphrase** tốt nhất?",
+          options: [
+            "Children should learn a foreign language at primary school.",
+            "Many people think that young pupils ought to study a second language from an early age.",
+            "Nowadays, learning languages is a hot topic in society.",
+          ],
+          correct: 1,
+          why: "Câu 2 giữ đúng nghĩa và đổi từ (children → young pupils, should → ought to, foreign → second). Câu 1 chép nguyên đề; câu 3 là câu chung chung học thuộc, không nói gì về đề.",
+        },
+        {
+          q: "Câu nào là **thesis statement** đúng?",
+          options: [
+            "There are many different opinions about this issue.",
+            "I am agree because it is good.",
+            "I agree because young children pick up pronunciation easily and it opens more opportunities later.",
+          ],
+          correct: 2,
+          why: "Thesis phải có **quan điểm rõ** + **lý do cụ thể**. Câu 1 không có quan điểm; câu 2 sai ngữ pháp (~~am agree~~) và lý do quá chung (“it is good”).",
+        },
+        {
+          q: "Trong mở bài, câu paraphrase và câu thesis sắp xếp thế nào?",
+          options: ["Thesis trước, paraphrase sau", "Paraphrase trước, thesis sau", "Chỉ cần thesis"],
+          correct: 1,
+          why: "Bước 4 (Ghép): **paraphrase trước** để giới thiệu vấn đề, **thesis sau** để nêu quan điểm.",
+        },
+        {
+          q: "Hai lý do trong thesis sẽ trở thành gì trong bài?",
+          options: ["Kết bài", "Hai đoạn thân bài", "Không dùng lại nữa"],
+          correct: 1,
+          why: "Mỗi lý do được phát triển thành **một đoạn thân bài**. Vì thế hãy chọn lý do mà bạn viết tiếp được.",
+        },
+      ],
+    },
+
+    { t: "h", text: "7. Tự viết" },
+    {
+      t: "essay",
+      id: "d6-viet-bai",
+      task: "Task 2",
+      prompt: "Some people believe that having a part-time job while at university is more beneficial for students, while others think it only harms their studies. To what extent do you agree or disagree? Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.",
+      minWords: 250,
+      tips: [
+        "Làm đủ 5 bước cho mở bài: đọc đề → paraphrase → thesis → ghép → rà soát. Viết mở bài trước, soát xong rồi mới viết thân bài.",
+        "Paraphrase gợi ý: part-time job → **working a few hours a week**; beneficial → **offers more advantages**; only harms their studies → **does more harm than good to their education**.",
+        "Thesis: chọn một phía và **2 lý do** (ví dụ: kinh nghiệm làm việc, tự lo chi phí / hoặc mất thời gian học, mệt mỏi).",
+        "Theo dàn ý 4 đoạn ở mục 6: Body 1 = lý do 1, Body 2 = lý do 2, mỗi đoạn có ví dụ.",
+        "Kết bài bắt đầu bằng **In conclusion,** và nhắc lại quan điểm bằng từ khác.",
+      ],
+    },
+  ],
+};
+
+/* ─────────────────────────── Speaking ─────────────────────────── */
+
+const D6_SPEAKING: Lesson = {
+  id: "d6-noi",
+  kind: "speaking",
+  title: "Nói: Trả lời câu hỏi Wh- (Part 1 · Thói quen hằng ngày, Gia đình)",
+  goal: "Trả lời câu hỏi What/Where/When/Why/Who/How ở Speaking Part 1 bằng 2–3 câu theo công thức (trả lời thẳng + chi tiết + lợi ích/cảm xúc) về thói quen hằng ngày và gia đình, và phát âm đúng 8 nhị trùng âm.",
+  minutes: 45,
+  blocks: [
+    { t: "h", text: "1. Câu hỏi Wh- là gì?" },
+    {
+      t: "p",
+      text: "Ở Ngày 4 bạn đã học câu hỏi **Yes/No**. Hôm nay là câu hỏi **Wh-**: câu hỏi bắt đầu bằng **What, Where, When, Why, Who, How**. Loại câu này **không trả lời Yes/No được**; giám khảo muốn bạn đưa **thông tin**: làm gì, ở đâu, khi nào, vì sao, với ai, bằng cách nào.",
+    },
+    {
+      t: "table",
+      head: ["Từ hỏi", "Hỏi về", "Câu trả lời cần có", "Ví dụ mở đầu"],
+      rows: [
+        ["**What**", "cái gì, việc gì", "một **hoạt động / sự vật**", "I usually **do some stretching**."],
+        ["**Where**", "ở đâu", "một **nơi chốn** (in / at / to…)", "I usually study **at the library**."],
+        ["**When**", "khi nào", "một **thời điểm** (at 7 a.m. / on Sundays / in the evening)", "I go to bed **at around eleven**."],
+        ["**Why**", "vì sao", "một **lý do** (because / since / it helps me…)", "**Because** it helps me relax."],
+        ["**Who**", "ai", "một **người** (with my…)", "I spend most of my time **with my mum**."],
+        ["**How**", "bằng cách nào, thế nào", "một **cách thức** (by + V-ing) hoặc mức độ", "I stay healthy **by cycling to school**."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: nhận ra các biến thể của How (phần thêm)",
+      items: [
+        "**How often…?** → hỏi **mức độ thường xuyên**: every day, twice a week, once a month.",
+        "**How long…?** → hỏi **bao lâu**: for two hours, for about three years.",
+        "**How do you spend…?** → hỏi bạn **dùng thời gian làm gì**: I spend my weekends + V-ing…",
+      ],
+    },
+
+    { t: "h", text: "2. Cách trả lời: 5 bước" },
+    {
+      t: "p",
+      text: "Sách đưa ra 5 bước cho mục tiêu band 4.0. Bảng dưới giữ đủ 5 bước, ví dụ viết mới.",
+    },
+    {
+      t: "table",
+      head: ["Bước", "Làm gì", "Ví dụ"],
+      rows: [
+        ["1. Hiểu câu hỏi", "Nghe ra **từ Wh-** và **nội dung** câu hỏi.", "“**Where** do you usually **study**?” → hỏi **nơi chốn**, về việc **học**."],
+        ["2. Trả lời ngắn gọn", "Bắt đầu bằng **một câu trả lời đơn giản, trực tiếp**.", "What: “I like **cooking**.” · Where: “I usually study **in my bedroom**.”"],
+        ["3. Thêm một chút chi tiết", "Nói thêm **1–2 câu** để giải thích hoặc cho thêm thông tin.", "“Cooking helps me **forget about stress** and I can make food for my family.”"],
+        ["4. Dùng ngữ pháp, từ vựng đơn giản", "Tránh cấu trúc phức tạp. Dùng **hiện tại đơn** cho thói quen và sự thật.", "“**On Sundays, I visit** my grandparents.”"],
+        ["5. Luyện phát âm", "Nói **to, rõ**. Ghi âm rồi nghe lại để sửa.", "Dùng khối 🎙️ **Luyện nói** ở cuối bài: ghi âm → nghe lại → AI chấm."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Người Việt hay sai khi trả lời câu hỏi Wh-",
+      items: [
+        "Nghe nhầm từ hỏi: câu hỏi **When** (khi nào) mà trả lời nơi chốn. Nghe không rõ thì hỏi lại: **“Sorry, could you repeat the question?”** — không bị trừ điểm.",
+        "Quên **-s** với ngôi thứ ba: ~~My mother live in Hue.~~ → **My mother lives in Hue.**",
+        "Dùng sai thì: ~~I usually waking up at six.~~ / ~~I usually woke up…~~ → **I usually wake up at six.** (usually + hiện tại đơn).",
+        "Sai giới từ thời gian: **at** + giờ (at 6 a.m.), **on** + thứ (on Sundays), **in** + buổi (in the morning). Nhưng: **at night**, **at the weekend** (Anh) / **on the weekend** (Mỹ).",
+        "~~I spend time for my family.~~ → **I spend time with my family.** · ~~They live at Hanoi.~~ → **They live in Hanoi.** (thành phố, quốc gia dùng **in**).",
+        "Chỉ nói một câu cụt ~~Because it's fun.~~ rồi dừng. Câu Why vẫn cần thêm **chi tiết** (bước 3).",
+      ],
+    },
+
+    { t: "h", text: "3. Chủ đề Daily Routine — công thức trả lời" },
+    {
+      t: "p",
+      text: "Hai câu hỏi mở đầu chủ đề trong sách: **“What do you usually do in the morning?”** và **“How do you spend your weekends?”**. Bảng dưới là **công thức 3 câu** cho từng câu hỏi Wh- của chủ đề này. Câu trả lời mẫu (viết mới) ở phần hội thoại ngay sau bảng — bấm 🔊 để nghe.",
+    },
+    {
+      t: "table",
+      head: ["Câu hỏi", "Công thức trả lời"],
+      rows: [
+        ["**What** do you usually do in the morning?", "1. I [thói quen / hoạt động]. · 2. I usually [thêm chi tiết]. · 3. This helps me [lợi ích]."],
+        ["**How** do you stay healthy?", "1. I [hoạt động giữ sức khoẻ]. · 2. I usually [thêm chi tiết]. · 3. This helps me [lợi ích]."],
+        ["**Where** do you like to go on holiday?", "1. I like to go to [địa điểm]. · 2. I usually [thêm chi tiết]. · 3. I enjoy [lợi ích]."],
+        ["**When** do you usually go to bed?", "1. I usually go to bed at [thời gian]. · 2. I [thêm chi tiết]. · 3. This helps me [lợi ích]."],
+        ["**Why** do you like your favourite hobby?", "1. I love [sở thích]. · 2. I usually [thêm chi tiết]. · 3. This helps me [lợi ích]."],
+        ["**Who** do you spend time with at the weekend?", "1. I spend time with [người]. · 2. We usually [thêm chi tiết]. · 3. This makes me feel [cảm xúc]."],
+      ],
+    },
+    {
+      t: "dialogue",
+      title: "Daily Routine — câu trả lời mẫu band 4.0",
+      lines: [
+        { who: "Examiner", role: "examiner", text: "What do you usually do in the morning?" },
+        { who: "Candidate", role: "candidate", text: "I get up at half past five. I usually water the plants on the balcony and then cook some noodles for breakfast. This helps me feel calm before school.", vi: "Tôi dậy lúc năm rưỡi. Tôi thường tưới cây ngoài ban công rồi nấu mì ăn sáng. Việc này giúp tôi thấy bình tĩnh trước khi đi học." },
+        { who: "Examiner", role: "examiner", text: "How do you stay healthy?" },
+        { who: "Candidate", role: "candidate", text: "I stay healthy by cycling to school. I usually ride about four kilometres every day, and I drink a lot of water. This helps me keep fit without paying for a gym.", vi: "Tôi giữ sức khoẻ bằng cách đạp xe đi học. Tôi thường đạp khoảng bốn cây số mỗi ngày và uống nhiều nước. Việc này giúp tôi khoẻ mà không phải trả tiền phòng tập." },
+        { who: "Examiner", role: "examiner", text: "Where do you like to go on holiday?" },
+        { who: "Candidate", role: "candidate", text: "I like to go to the mountains, for example Sa Pa. I usually walk around the villages and take photos of the rice terraces. I enjoy the cool air and the quiet.", vi: "Tôi thích lên vùng núi, ví dụ Sa Pa. Tôi thường đi dạo quanh các bản làng và chụp ảnh ruộng bậc thang. Tôi thích không khí mát và sự yên tĩnh." },
+        { who: "Examiner", role: "examiner", text: "When do you usually go to bed?" },
+        { who: "Candidate", role: "candidate", text: "I usually go to bed at about eleven. I listen to some soft music for a few minutes first. This helps me fall asleep quickly.", vi: "Tôi thường đi ngủ khoảng mười một giờ. Tôi nghe nhạc nhẹ vài phút trước đã. Việc này giúp tôi ngủ nhanh." },
+        { who: "Examiner", role: "examiner", text: "Why do you like your favourite hobby?" },
+        { who: "Candidate", role: "candidate", text: "I love drawing because it is relaxing. I usually draw cartoon characters in a small notebook. This helps me forget about my exams for a while.", vi: "Tôi thích vẽ vì nó giúp thư giãn. Tôi thường vẽ nhân vật hoạt hình vào một cuốn sổ nhỏ. Việc này giúp tôi quên chuyện thi cử một lúc." },
+        { who: "Examiner", role: "examiner", text: "Who do you spend time with at the weekend?" },
+        { who: "Candidate", role: "candidate", text: "At the weekend, I spend time with my best friend, Lan. We usually play badminton in the park and then eat banh mi. This makes me feel happy and relaxed.", vi: "Cuối tuần, tôi dành thời gian với bạn thân tên Lan. Chúng tôi thường chơi cầu lông ở công viên rồi ăn bánh mì. Điều đó khiến tôi thấy vui và thoải mái." },
+      ],
+    },
+
+    { t: "h", text: "4. Chủ đề Family — công thức trả lời" },
+    {
+      t: "p",
+      text: "Hai câu hỏi của chủ đề trong sách: **“Who do you spend most of your time with?”** và **“Where do your family members live?”**.",
+    },
+    {
+      t: "table",
+      head: ["Câu hỏi", "Công thức trả lời"],
+      rows: [
+        ["**Who** do you spend most of your time with?", "1. I spend most of my time with [người]. · 2. We usually [thêm chi tiết]. · 3. This makes me feel [cảm xúc]."],
+        ["**Where** do your family members live?", "1. My family members live in [địa điểm]. · 2. I usually [thêm chi tiết]. · 3. I enjoy [lợi ích]."],
+      ],
+    },
+    {
+      t: "dialogue",
+      title: "Family — câu trả lời mẫu band 4.0",
+      lines: [
+        { who: "Examiner", role: "examiner", text: "Who do you spend most of your time with?" },
+        { who: "Candidate", role: "candidate", text: "I spend most of my time with my grandmother. We usually cook dinner together and watch the news in the evening. This makes me feel safe and loved.", vi: "Tôi dành phần lớn thời gian với bà. Chúng tôi thường cùng nấu bữa tối và xem thời sự buổi tối. Điều đó khiến tôi thấy an toàn và được yêu thương." },
+        { who: "Examiner", role: "examiner", text: "Where do your family members live?" },
+        { who: "Candidate", role: "candidate", text: "My family members live in Can Tho, in the Mekong Delta. I usually go back there during the summer holiday. I enjoy eating my mother's food and visiting the floating market.", vi: "Gia đình tôi sống ở Cần Thơ, miền Tây. Tôi thường về đó vào kỳ nghỉ hè. Tôi thích ăn đồ mẹ nấu và đi chợ nổi." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: vài chỗ trong công thức",
+      items: [
+        "Sách có câu hỏi “Why do you like your **favorite** hobby?” (chính tả Mỹ). Chính tả Anh là **favourite**; trong thi viết kiểu nào cũng được, miễn **nhất quán**.",
+        "Câu “**Where** do you like to go on holiday?” → “I like to go **to** the mountains” (**go to** + nơi chốn). Nhưng **go home**, **go abroad**, **go shopping** không có to.",
+        "**This helps me + V nguyên mẫu** (helps me **sleep**), không phải ~~helps me sleeping~~. **This makes me feel + tính từ** (makes me feel **happy**), không phải ~~makes me to feel~~.",
+        "“**I enjoy** + danh từ / V-ing”: I enjoy **the cool air** / I enjoy **eating**… — không phải ~~I enjoy to eat~~.",
+      ],
+    },
+
+    { t: "h", text: "5. Nâng lên band 6 (phần sách chưa có)" },
+    {
+      t: "p",
+      text: "Công thức 3 câu giúp bạn **không bị cứng họng**, nhưng nếu câu nào cũng “This helps me…” thì giám khảo sẽ thấy bạn **nói theo khuôn**. Muốn lên band 6, giữ đúng khung nhưng: **đổi cách mở đầu**, thêm **chi tiết cụ thể** (con số, tên riêng), dùng **từ nối** và vài **cụm từ tự nhiên**.",
+    },
+    {
+      t: "dialogue",
+      title: "Hai câu trả lời nâng cấp band 6",
+      lines: [
+        { who: "Examiner", role: "examiner", text: "What do you usually do in the morning?" },
+        { who: "Candidate", role: "candidate", text: "Well, I'm definitely an early bird, so I'm up by half past five most days. The first thing I do is water the plants on our balcony, and then I make myself a quick bowl of noodles. Having a slow start like that puts me in a good mood before the rush of school.", vi: "À, tôi đúng là người dậy sớm, nên hầu như ngày nào năm rưỡi tôi cũng dậy rồi. Việc đầu tiên tôi làm là tưới cây ngoài ban công, rồi tự nấu nhanh một bát mì. Bắt đầu ngày chậm rãi như vậy giúp tôi có tâm trạng tốt trước khi lao vào nhịp học vội vã." },
+        { who: "Examiner", role: "examiner", text: "Who do you spend most of your time with?" },
+        { who: "Candidate", role: "candidate", text: "That would be my grandmother, since my parents often work late. We're really close — we cook dinner together almost every evening, and she tells me stories about what our town was like when she was young. I think those evenings are the best part of my day.", vi: "Chắc là bà tôi, vì bố mẹ tôi hay làm về muộn. Hai bà cháu rất thân — gần như tối nào cũng cùng nấu cơm, và bà kể cho tôi nghe thị trấn mình ngày xưa thế nào khi bà còn trẻ. Tôi nghĩ những buổi tối đó là khoảng thời gian tuyệt nhất trong ngày." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Ghi nhớ: vì sao hai câu trên lên được band 6",
+      items: [
+        "**Mở đầu tự nhiên**: Well, … / That would be… thay cho lặp lại nguyên câu hỏi.",
+        "**Cụm từ tự nhiên**: an early bird (người dậy sớm), be up (đã dậy), put me in a good mood (làm tôi vui), the rush of school, we're really close (rất thân).",
+        "**Từ nối và câu phức**: so, since, and then, when she was young — nhưng vẫn chỉ **3 câu, khoảng 20–25 giây**.",
+        "Lợi ích/cảm xúc được nói **bằng cách khác** thay cho “This helps me / This makes me feel” lặp đi lặp lại.",
+      ],
+    },
+
+    { t: "h", text: "6. Phát âm: 8 nhị trùng âm (diphthongs)" },
+    {
+      t: "p",
+      text: "**Nhị trùng âm** (diphthong) là nguyên âm **ghép từ hai âm**, đọc **trong cùng một âm tiết**: miệng bắt đầu ở âm thứ nhất rồi **trượt liền** sang âm thứ hai, không ngắt. Ví dụ **boy** /bɔɪ/: bắt đầu bằng /ɔ/ (gần âm trong **saw**) rồi trượt sang /ɪ/ (âm trong **sit**). Âm đầu **dài và rõ hơn**, âm sau **nhẹ và ngắn**.",
+    },
+    {
+      t: "table",
+      head: ["Âm", "Trượt từ → tới", "Gần giống tiếng Việt", "Ví dụ"],
+      rows: [
+        ["/eɪ/", "/e/ → /ɪ/", "“ây” (đầu âm mở như “ê”)", "day (ngày), rain (mưa), table (cái bàn)"],
+        ["/aɪ/", "/a/ → /ɪ/", "“ai”", "time (thời gian), light (ánh sáng), buy (mua)"],
+        ["/ɔɪ/", "/ɔ/ → /ɪ/", "“oi”", "boy (cậu bé), coin (đồng xu), noise (tiếng ồn)"],
+        ["/aʊ/", "/a/ → /ʊ/", "“ao”", "house (ngôi nhà), town (thị trấn), loud (to, ồn)"],
+        ["/əʊ/", "/ə/ → /ʊ/", "“âu” (giọng Anh); giọng Mỹ /oʊ/ gần “ôu”", "home (nhà), road (con đường), phone (điện thoại)"],
+        ["/ɪə/", "/ɪ/ → /ə/", "“ia” (như trong “kia”)", "ear (tai), idea (ý tưởng), beer (bia)"],
+        ["/eə/", "/e/ → /ə/", "“e-ơ” đọc liền (gần “ea”)", "chair (cái ghế), where (ở đâu), bear (con gấu)"],
+        ["/ʊə/", "/ʊ/ → /ə/", "“ua” (như trong “cua”)", "tour (chuyến tham quan), pure (tinh khiết), cure (chữa khỏi)"],
+      ],
+    },
+    {
+      t: "p",
+      text: "Bấm 🔊 để nghe từng nhóm và đọc to theo 3 lần. Ba từ trong cùng một dòng có **cùng một nhị trùng âm**. Riêng **say, pay** trong sách cũng là /eɪ/: nghe thử và so với **day**.",
+    },
+    {
+      t: "examples",
+      items: [
+        { en: "day, rain, table", vi: "/eɪ/" },
+        { en: "time, light, buy", vi: "/aɪ/" },
+        { en: "boy, coin, noise", vi: "/ɔɪ/" },
+        { en: "house, town, loud", vi: "/aʊ/" },
+        { en: "home, road, phone", vi: "/əʊ/" },
+        { en: "ear, idea, beer", vi: "/ɪə/" },
+        { en: "chair, where, bear", vi: "/eə/" },
+        { en: "tour, pure, cure", vi: "/ʊə/" },
+      ],
+    },
+    {
+      t: "note",
+      title: "Những lỗi người Việt hay mắc với nhị trùng âm (phần thêm)",
+      items: [
+        "Đọc thành **nguyên âm đơn**, bỏ mất phần trượt: **home** đọc ~~“hôm”~~, **phone** đọc ~~“phôn”~~ → phải trượt /həʊm/, /fəʊn/. **late** đọc ~~“lét”~~ → /leɪt/ (có “i” nhẹ ở cuối).",
+        "**Nuốt phụ âm cuối** sau nhị trùng âm: **time** /taɪm/ phải khép môi ở /m/, **light** /laɪt/ phải chặn lưỡi ở /t/. Bỏ phụ âm cuối thì **time**, **tie**, **Thai** nghe giống nhau.",
+        "Cặp dễ nhầm: **/eɪ/ – /e/**: late – let, pain – pen, sale – sell. **/əʊ/ – /ɒ/**: coat – cot, road – rod.",
+        "**sure** và **tour**: sách xếp vào /ʊə/, nhưng nhiều người Anh ngày nay đọc /ʃɔː/, /tɔː/. Cả hai cách đều được chấp nhận trong thi. **where** và **wear** đọc giống nhau /weə/.",
+      ],
+    },
+    {
+      t: "examples",
+      items: [
+        { en: "late — let", vi: "/eɪ/ · /e/" },
+        { en: "coat — cot", vi: "/əʊ/ · /ɒ/" },
+        { en: "time — tie", vi: "/aɪm/ · /aɪ/ — giữ âm /m/ cuối" },
+        { en: "here — hair", vi: "/ɪə/ · /eə/" },
+      ],
+    },
+
+    { t: "h", text: "7. Luyện nói" },
+    {
+      t: "p",
+      text: "Nghe từng câu hỏi Wh-, ghi âm câu trả lời theo công thức **trả lời thẳng + chi tiết + lợi ích/cảm xúc**, rồi để AI chấm. Nói 2–3 câu cho mỗi câu hỏi; chú ý đọc rõ các từ có nhị trùng âm (**home, day, time, house**).",
+    },
+    {
+      t: "speak",
+      id: "d6-noi-luyen",
+      part: "1",
+      questions: [
+        "What do you usually do in the morning?",
+        "How do you spend your weekends?",
+        "When do you usually go to bed?",
+        "Why do you like your favourite hobby?",
+        "Who do you spend most of your time with?",
+        "Where do your family members live?",
+      ],
+    },
+  ],
+};
+
+/* ─────────────────────────── Homework ─────────────────────────── */
+
+const D6_HOMEWORK: Lesson = {
+  id: "d6-bai-tap",
+  kind: "homework",
+  title: "Bài tập Ngày 6",
+  goal: "Hoàn thành mở bài cho 3 đề Opinion (điền 6 chỗ trống theo các bước paraphrase → thesis → ghép), rồi tự ghép câu thesis statement đúng thứ tự.",
+  minutes: 30,
+  blocks: [
+    {
+      t: "p",
+      text: "Hãy điền vào chỗ trống để hoàn thành mở bài cho các đề sau. Chữ **in đậm** trong phần dịch tiếng Việt là **gợi ý nghĩa** của từ cần điền. Mỗi đề có **2 chỗ trống**, cả bài **6 chỗ trống**.",
+    },
+
+    { t: "h", text: "Đề 1" },
+    {
+      t: "p",
+      text: "**Đề:** Some people think that cooking should be a compulsory subject at secondary school. Do you agree or disagree? — *Một số người cho rằng nấu ăn nên là môn học bắt buộc ở trường trung học. Bạn đồng ý hay không đồng ý?*",
+    },
+    {
+      t: "table",
+      head: ["Bước", "Ví dụ minh hoạ"],
+      rows: [
+        ["1. Paraphrase đề bài", "Some individuals believe that **(1) ______** should be required for all secondary school students. — *Một số cá nhân tin rằng **các giờ học nấu ăn** nên là bắt buộc với mọi học sinh trung học.*"],
+        ["2. Viết thesis statement", "I agree with this opinion because cooking is an essential **(2) ______** and it helps teenagers eat more healthily. — *Tôi đồng ý với ý kiến này vì nấu ăn là một **kỹ năng sống** thiết yếu và nó giúp thanh thiếu niên ăn uống lành mạnh hơn.*"],
+        ["3. Ghép mở bài", "(Ghép câu 1 và câu 2 sau khi điền — xem đáp án bên dưới.)"],
+      ],
+    },
+    {
+      t: "quiz",
+      id: "d6-de-1",
+      title: "Đề 1 — điền 2 chỗ trống (tối đa 2 từ mỗi chỗ)",
+      kind: "fill",
+      items: [
+        { q: "(1) Some individuals believe that ___ should be required for all secondary school students.", answers: ["cooking lessons", "cooking classes"], hint: "các giờ học nấu ăn — cụm danh từ 2 từ, đứng làm chủ ngữ sau “that”" },
+        { q: "(2) I agree with this opinion because cooking is an essential ___ and it helps teenagers eat more healthily.", answers: ["life skill"], hint: "kỹ năng sống — sau “an essential” cần danh từ số ít" },
+      ],
+    },
+
+    { t: "h", text: "Đề 2" },
+    {
+      t: "p",
+      text: "**Đề:** Many people believe that reading books is the best way to improve your vocabulary. To what extent do you agree or disagree? — *Nhiều người tin rằng đọc sách là cách tốt nhất để cải thiện vốn từ. Bạn đồng ý hay không đồng ý đến mức độ nào?*",
+    },
+    {
+      t: "table",
+      head: ["Bước", "Ví dụ minh hoạ"],
+      rows: [
+        ["1. Paraphrase đề bài", "Many individuals think that reading is the most effective way to **(3) ______** one's range of words. — *Nhiều cá nhân cho rằng đọc là cách hiệu quả nhất để **mở rộng** vốn từ của một người.*"],
+        ["2. Viết thesis statement", "I partly agree because while reading is **(4) ______**, watching films and talking with others can also teach many new words. — *Tôi đồng ý một phần vì dù đọc sách rất **hữu ích**, xem phim và trò chuyện với người khác cũng có thể dạy nhiều từ mới.*"],
+        ["3. Ghép mở bài", "(Ghép câu 1 và câu 2 sau khi điền — xem đáp án bên dưới.)"],
+      ],
+    },
+    {
+      t: "quiz",
+      id: "d6-de-2",
+      title: "Đề 2 — điền 2 chỗ trống (1 từ mỗi chỗ)",
+      kind: "fill",
+      items: [
+        { q: "(3) Many individuals think that reading is the most effective way to ___ one's range of words.", answers: ["expand", "widen", "broaden"], hint: "mở rộng — sau “way to” cần động từ nguyên mẫu" },
+        { q: "(4) I partly agree because while reading is ___, watching films and talking with others can also teach many new words.", answers: ["useful", "helpful"], hint: "hữu ích — sau “is” cần tính từ" },
+      ],
+    },
+
+    { t: "h", text: "Đề 3" },
+    {
+      t: "p",
+      text: "**Đề:** Some people believe that cities should build more parks instead of shopping centres. Do you agree or disagree? — *Một số người cho rằng các thành phố nên xây thêm công viên thay vì trung tâm mua sắm. Bạn đồng ý hay không đồng ý?*",
+    },
+    {
+      t: "table",
+      head: ["Bước", "Ví dụ minh hoạ"],
+      rows: [
+        ["1. Paraphrase đề bài", "Some individuals argue that local authorities need to **(5) ______** more green spaces rather than new malls. — *Một số cá nhân lập luận rằng chính quyền địa phương cần **tạo ra** thêm không gian xanh thay vì các trung tâm thương mại mới.*"],
+        ["2. Viết thesis statement", "I agree because parks improve **(6) ______** and give people a free place to relax. — *Tôi đồng ý vì công viên cải thiện **chất lượng không khí** và cho mọi người một nơi thư giãn miễn phí.*"],
+        ["3. Ghép mở bài", "(Ghép câu 1 và câu 2 sau khi điền — xem đáp án bên dưới.)"],
+      ],
+    },
+    {
+      t: "quiz",
+      id: "d6-de-3",
+      title: "Đề 3 — điền 2 chỗ trống (tối đa 2 từ mỗi chỗ)",
+      kind: "fill",
+      items: [
+        { q: "(5) Some individuals argue that local authorities need to ___ more green spaces rather than new malls.", answers: ["create", "build", "provide"], hint: "tạo ra — sau “need to” cần động từ nguyên mẫu" },
+        { q: "(6) I agree because parks improve ___ and give people a free place to relax.", answers: ["air quality", "the air quality"], hint: "chất lượng không khí — cụm danh từ 2 từ" },
+      ],
+    },
+    {
+      t: "note",
+      title: "Bước 3 — mở bài hoàn chỉnh (xem sau khi làm)",
+      items: [
+        "**Đề 1:** Some individuals believe that cooking lessons should be required for all secondary school students. I agree with this opinion because cooking is an essential life skill and it helps teenagers eat more healthily.",
+        "**Đề 2:** Many individuals think that reading is the most effective way to expand one's range of words. I partly agree because while reading is useful, watching films and talking with others can also teach many new words.",
+        "**Đề 3:** Some individuals argue that local authorities need to create more green spaces rather than new malls. I agree because parks improve air quality and give people a free place to relax.",
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: đoán từ loại trước khi điền",
+      items: [
+        "Sau **to** (way to, need to) → **động từ nguyên mẫu**: expand, create.",
+        "Sau **is / are** và không có danh từ theo sau → **tính từ**: useful.",
+        "Sau **an essential / improve** → **danh từ** (hoặc cụm danh từ): life skill, air quality.",
+        "Để ý cách từng mở bài **paraphrase** đề: cooking → **cooking lessons**, compulsory → **required**, improve your vocabulary → **expand one's range of words**, cities → **local authorities**, parks → **green spaces**, shopping centres → **malls**.",
+      ],
+    },
+
+    { t: "h", text: "Bài thêm: ghép câu thesis statement (phần sách chưa có)" },
+    {
+      t: "p",
+      text: "Bấm các mảnh theo đúng thứ tự để dựng câu thesis. Mỗi câu có **1–2 mảnh gây nhiễu** chứa lỗi người Việt hay mắc (am agree, because of + mệnh đề…). Đừng chọn chúng.",
+    },
+    {
+      t: "build",
+      id: "d6-ghep-thesis",
+      title: "Ghép câu thesis statement (4 câu)",
+      items: [
+        {
+          vi: "Tôi hoàn toàn đồng ý vì nấu ăn là một kỹ năng sống thiết yếu.",
+          chips: ["I ", "completely agree ", "am completely agree ", "because ", "cooking is ", "an essential life skill."],
+          answer: ["I ", "completely agree ", "because ", "cooking is ", "an essential life skill."],
+        },
+        {
+          vi: "Tôi tin rằng học trực tuyến có lợi hơn vì nó tiết kiệm thời gian đi lại.",
+          chips: ["I believe that ", "online study ", "is more beneficial ", "because ", "because of ", "it saves travel time."],
+          answer: ["I believe that ", "online study ", "is more beneficial ", "because ", "it saves travel time."],
+        },
+        {
+          vi: "Tôi hoàn toàn không đồng ý với quan điểm này vì bài tập về nhà giúp học sinh nhớ bài.",
+          chips: ["I ", "completely disagree ", "with this view ", "because ", "homework helps ", "homework help ", "students remember lessons."],
+          answer: ["I ", "completely disagree ", "with this view ", "because ", "homework helps ", "students remember lessons."],
+        },
+        {
+          vi: "Tôi đồng ý một phần vì dù đọc sách hữu ích, xem phim cũng có thể dạy từ mới.",
+          chips: ["I partly agree ", "because ", "while reading ", "is useful, ", "watching films ", "can also teach ", "can also teaches ", "new words."],
+          answer: ["I partly agree ", "because ", "while reading ", "is useful, ", "watching films ", "can also teach ", "new words."],
+        },
+      ],
+    },
+  ],
+};
+
+export const NGAY_6: Lesson[] = [D6_READING, D6_WRITING, D6_SPEAKING, D6_HOMEWORK];

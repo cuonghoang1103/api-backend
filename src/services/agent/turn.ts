@@ -47,7 +47,7 @@ import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import { modelAgentTu } from './models.js';
 import { congDuPhong, modelDuPhongAgent, veDuPhongHopLe } from './congDuPhong.js';
-import { LOI_LAM_VIEC_GPT } from './prompt.js';
+import { LOI_LAM_VIEC } from './prompt.js';
 import { loiHetHan, xemHanMuc, type HanMuc } from './quota.js';
 import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.js';
 import { loiCanViTien, xemViTien } from './viTien.js';
@@ -895,7 +895,10 @@ export async function runAgentTurn(
   const ghiChu = input.ghiChuDuAn?.noiDung
     ? catGhiChu(input.ghiChuDuAn.ten, input.ghiChuDuAn.noiDung)
     : undefined;
-  let system = buildSystemPrompt({
+  /* `LOI_LAM_VIEC` nối cho MỌI model (27/09/2026) — Opus và GPT nhận cùng một
+     bộ luật làm việc. Đặt ở cuối để phần đầu prompt giữ nguyên, đệm tiền tố
+     của cổng vẫn trúng. */
+  const system = buildSystemPrompt({
     capabilities,
     mucNoLuc,
     /* Con số ĐI THEO prompt, không chép tay vào đó. Chính file này đã cảnh báo
@@ -912,7 +915,7 @@ export async function runAgentTurn(
     ...(input.kyNang?.length ? { kyNang: input.kyNang } : {}),
     ...(input.agentPhu?.length ? { agentPhu: input.agentPhu } : {}),
     ...(input.promptPhu ? { promptPhu: input.promptPhu } : {}),
-  });
+  }) + `\n\n${LOI_LAM_VIEC}`;
   const tools = toolsForGateway(capabilities, toolMcp);
 
   const xin = await xinDiemCuoi('agent_code');
@@ -950,10 +953,8 @@ export async function runAgentTurn(
     ep = e;
     model = m;
     dangDuPhong = true;
-    /* Prompt, kỹ năng, bộ nhớ, tool: DÙNG CHUNG y nguyên với rambo. Chỉ nối
-       thêm một mục cách-làm-việc cho model GPT — đo 27/09: cùng câu hỏi, Opus
-       11 bước còn GPT 22–63 bước vì đọc từng file một và đọc lại thứ đã đọc. */
-    if (!/^claude-/i.test(m)) system = `${system}\n\n${LOI_LAM_VIEC_GPT}`;
+    /* Prompt, kỹ năng, bộ nhớ, tool, mục cách-làm-việc: DÙNG CHUNG y nguyên
+       với rambo — không còn phần nào riêng cho một nhà cung cấp. */
     return true;
   };
   if (ep.label === 'cong-agent' && input.duPhongGiu === true) chuyenDuPhong();

@@ -97,7 +97,10 @@ const NGUY_HIEM: ReadonlyArray<{ re: RegExp; lyDo: string }> = [
   // `bash -c "…"` chạy được bất cứ thứ gì; không mẫu nào ở trên nhìn vào
   // trong chuỗi đó. Xếp nguy hiểm theo CÁCH GỌI, không theo nội dung.
   { re: L(String.raw`(bash|sh|zsh|dash|ksh|fish|cmd)\s+(-c|/c|/k)\b`), lyDo: 'chạy chuỗi lệnh qua shell khác — nội dung không kiểm được' },
-  { re: L(String.raw`(powershell|pwsh)\b`), lyDo: 'chạy PowerShell — nội dung không kiểm được' },
+  /* PowerShell: KHÔNG còn chặn theo tên (27/09/2026) — xem `phanLoaiPowerShell`
+     bên dưới, nơi phần lệnh BÊN TRONG `-Command "…"` được tách ra và xếp loại
+     đúng. Còn lại ở đây chỉ những cách gọi mà nội dung KHÔNG đọc được. */
+  { re: L(String.raw`(powershell|pwsh)(\.exe)?\s[^"']*-(e|ec|enc|encodedcommand|f|file)\s`), lyDo: 'PowerShell chạy mã mã hoá/file .ps1 — nội dung không kiểm được' },
   { re: L(String.raw`(node|deno|bun)\s+-(e|p|-eval)\b`), lyDo: 'chạy mã ngay trên dòng lệnh' },
   { re: L(String.raw`(perl|ruby|php)\s+-(e|r)\b`), lyDo: 'chạy mã ngay trên dòng lệnh' },
   { re: L(String.raw`python[0-9.]*\s+-c\b`), lyDo: 'chạy mã ngay trên dòng lệnh' },
@@ -160,13 +163,95 @@ const LUONG_DUNG: ReadonlyArray<{ re: RegExp; lyDo: string }> = [
  * `cat .env` không nằm trong danh sách nguy hiểm nào ở trên — nó chỉ đọc. Đó
  * chính là chỗ đáng sợ: nó vô hại với ĐĨA và tai hại với BÍ MẬT.
  */
-const FILE_NHAY_CAM = /(^|[\s/'"=])\.?env(\.|[\s'"]|$)|\.(pem|key|p12|pfx|jks)\b|id_(rsa|dsa|ecdsa|ed25519)|\.npmrc|\.netrc|credentials|secret|token|password/i;
+/* ⚠️ `\\` trong lớp ký tự đứng trước (27/09/2026): đường dẫn Windows `.\.env`
+   trước đây LỌT vì chỉ có `/` — `type .\.env` trong cmd.exe xếp 'thường'. */
+const FILE_NHAY_CAM = /(^|[\s/\\'"=])\.?env(\.|[\s'"]|$)|\.(pem|key|p12|pfx|jks)\b|id_(rsa|dsa|ecdsa|ed25519)|\.npmrc|\.netrc|credentials|secret|token|password/i;
 
 /** Ký tự khiến một chuỗi lệnh thành NHIỀU lệnh, hoặc đọc/ghi ra ngoài. */
 const META = /[;&|><`]|\$\(|\bnewline\b|\n/;
 
+// ─── PowerShell (27/09/2026) ───────────────────────────────────────
+//
+// Trên Windows lệnh chạy qua cmd.exe, nên dùng PowerShell nghĩa là gọi
+// `powershell -NoProfile -Command "…"`. Bản trước xếp MỌI lệnh như vậy là
+// 'nguy hiểm' + không cho nhớ ⇒ `Get-Service` để XEM cũng phải bấm duyệt mỗi
+// lần, và DevOps trên Windows gần như không làm nổi. Tệ hơn: mẫu ranh giới
+// `RANH` không nhìn qua dấu nháy, nên `Remove-Item` nằm trong chuỗi chỉ bị
+// bắt nhờ luật "cấm PowerShell" chung chung — bỏ luật đó là thủng.
+//
+// Nay: tách phần script BÊN TRONG rồi xếp loại chính nó.
+//   • Chỉ gồm cmdlet ĐỌC (Get-/Test-/Select-/…)       ⇒ 'thuong'
+//   • Có cmdlet đổi HỆ THỐNG (tường lửa, dịch vụ, registry,
+//     execution policy, Defender, tính năng Windows…) hoặc
+//     cách chạy mã không đọc được (iex, &, Start-Process…) ⇒ 'nguyhiem'
+//   • Còn lại (ghi file trong dự án, chạy build…)        ⇒ 'cankiem', cho nhớ
+// Không tách được (nối thêm lệnh cmd sau chuỗi, nháy lồng lạ) ⇒ 'nguyhiem'.
+
+/** `powershell [cờ…] -Command "script"` ⇒ script; không đúng khuôn ⇒ null. */
+export function tachPowerShell(lenh: string): string | null {
+  const m = /^\s*(?:powershell|pwsh)(?:\.exe)?((?:\s+-(?:NoProfile|NonInteractive|NoLogo|ExecutionPolicy\s+\w+|InputFormat\s+\w+|OutputFormat\s+\w+))*)\s+-(?:Command|c)\s+([\s\S]+)$/i.exec(lenh);
+  if (!m) return null;
+  const phan = m[2]!.trim();
+  const q = phan[0];
+  if ((q === '"' || q === "'") && phan.endsWith(q) && phan.length >= 2) {
+    const trong = phan.slice(1, -1);
+    // Nháy cùng loại lọt ở giữa ⇒ có thể đã đóng chuỗi rồi nối lệnh cmd khác.
+    if (trong.includes(q)) return null;
+    return trong;
+  }
+  // Không bọc nháy: chỉ chấp nhận khi không có ký tự nối lệnh của cmd.
+  return /[&|<>^]/.test(phan) ? null : phan;
+}
+
+/** Cmdlet/cú pháp ĐỔI HỆ THỐNG hoặc chạy mã không đọc được — luôn hỏi, không nhớ. */
+const PS_NGUY_HIEM: ReadonlyArray<{ re: RegExp; lyDo: string }> = [
+  { re: /\b(invoke-expression|iex|invoke-command|icm|start-process|saps|start-job|add-type)\b/i, lyDo: 'chạy mã/tiến trình khác — nội dung không kiểm được' },
+  { re: /(^|[\s;|(])&\s*[$({"'.\w]/, lyDo: 'toán tử & gọi một lệnh/script khác' },
+  { re: /\[scriptblock\]|downloadstring|downloadfile|frombase64string/i, lyDo: 'dựng/tải mã rồi chạy' },
+  { re: /(^|[\s;(])\.[\\/][^\s]*\.ps1\b|\.ps1\b/i, lyDo: 'chạy file .ps1 — nội dung không kiểm được' },
+  { re: /\b(remove-item|ri|rm|rmdir|del|erase|clear-content|clear-item)\b/i, lyDo: 'xoá — không hoàn tác được' },
+  { re: /\b(set-executionpolicy)\b/i, lyDo: 'đổi chính sách chạy script của máy' },
+  { re: /\b(new|set|remove|enable|disable)-netfirewall\w*|\bnetsh\b/i, lyDo: 'đổi tường lửa/mạng của máy' },
+  { re: /\b(new|set|remove|start|stop|restart|suspend|resume)-service\b/i, lyDo: 'đổi dịch vụ chạy nền của máy' },
+  { re: /\b(register|unregister|set|enable|disable|start|stop)-scheduledtask\b/i, lyDo: 'đổi tác vụ tự chạy của máy' },
+  { re: /\b(enable|disable)-windowsoptionalfeature|\b(install|uninstall)-windowsfeature|\bdism\b/i, lyDo: 'bật/tắt tính năng Windows' },
+  { re: /\b(set|add|remove)-mppreference\b/i, lyDo: 'đổi Windows Defender' },
+  { re: /\b(new|set|remove|rename)-itemproperty\b|\bhk(lm|cu|cr|u|cc):/i, lyDo: 'sửa registry của Windows' },
+  { re: /setenvironmentvariable\s*\([^)]*['"](machine|user)['"]/i, lyDo: 'đổi biến môi trường cố định của máy' },
+  { re: /\b(stop|restart)-computer\b|\b(stop-process|spps|kill)\b/i, lyDo: 'tắt máy / giết tiến trình' },
+  { re: /\b(new|set|remove|add)-local(user|group\w*)\b/i, lyDo: 'đổi tài khoản/nhóm của máy' },
+  { re: /\b(set-acl|icacls|takeown)\b/i, lyDo: 'đổi quyền file' },
+  { re: /\b(invoke-webrequest|invoke-restmethod|iwr|irm|curl|wget|start-bitstransfer)\b/i, lyDo: 'gọi ra Internet — có thể tải mã lạ về' },
+  { re: /\b(install-module|install-package|install-script|winget|choco|scoop)\b/i, lyDo: 'cài phần mềm/mô-đun cho máy' },
+  { re: /\b(enter-pssession|new-pssession)\b|\bssh\b/i, lyDo: 'nối tới máy khác' },
+  { re: /\b(wsl|docker|kubectl)\b/i, lyDo: 'điều khiển Linux con / container' },
+  { re: /\b(format-volume|clear-disk|initialize-disk|new-partition|remove-partition)\b/i, lyDo: 'thao tác đĩa ở mức thấp' },
+];
+
+/** Động từ PowerShell chỉ ĐỌC (không đổi gì trên máy). */
+const PS_DOC = /^(?:(?:get|test|resolve|measure|select|where|sort|format|group|compare|convertto|convertfrom|join|split|out-string|write-output|write-host|foreach-object)\b|[%?]\s*\{|\$[\w:]+(?:\.[\w]+)*\s*$|\$psversiontable\b|\[(?:system\.)?environment\]::(?:osversion|machinename|getenvironmentvariable)\b)/i;
+
+export function phanLoaiPowerShell(script: string): PhanLoaiLenh {
+  const lyDo = PS_NGUY_HIEM.filter(({ re }) => re.test(script)).map((x) => x.lyDo);
+  if (FILE_NHAY_CAM.test(script)) lyDo.push('nhắc tới file có thể chứa khoá/mật khẩu');
+  if (lyDo.length) return { muc: 'nguyhiem', lyDo: [...new Set(lyDo)], choNho: false };
+  // Ghi ra file (>, Out-File, Set-Content…) hoặc gán biến rồi dùng: không còn là "chỉ đọc".
+  const coGhi = />|\b(out-file|set-content|add-content|new-item|copy-item|move-item|rename-item|tee-object)\b/i.test(script);
+  const doan = script.split(/[;|\n]/).map((x) => x.trim()).filter(Boolean);
+  if (!coGhi && doan.length > 0 && doan.every((d) => PS_DOC.test(d))) {
+    return { muc: 'thuong', lyDo: [], choNho: true };
+  }
+  return { muc: 'cankiem', lyDo: ['PowerShell có ghi/thay đổi trong phạm vi dự án'], choNho: true };
+}
+
 export function phanLoaiLenh(lenh: string): PhanLoaiLenh {
   const s = lenh.trim();
+  const ps = tachPowerShell(s);
+  if (ps !== null) return phanLoaiPowerShell(ps);
+  // Gọi PowerShell mà KHÔNG đúng khuôn tách được ⇒ không đọc được nội dung ⇒ như cũ.
+  if (/^\s*(?:powershell|pwsh)(?:\.exe)?\b/i.test(s)) {
+    return { muc: 'nguyhiem', lyDo: ['PowerShell không đúng khuôn `-Command "…"` — nội dung không kiểm được'], choNho: false };
+  }
   const lyDo: string[] = [];
   let nguyHiem = false;
 

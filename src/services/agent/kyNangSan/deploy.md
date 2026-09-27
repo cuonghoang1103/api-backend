@@ -1,6 +1,6 @@
 ---
 name: deploy
-description: Deploy web/API mọi ngôn ngữ: Dockerfile, compose, VPS + HTTPS, Vercel/Netlify/Cloudflare/Render, CI/CD GitHub Actions.
+description: Deploy web/API mọi ngôn ngữ lên VPS Linux, máy Windows, máy nhà hoặc nền tảng mây: Dockerfile, compose, HTTPS, CI/CD GitHub Actions, kiểm trước/sau, lùi phiên bản.
 ---
 
 # KỸ NĂNG: DEPLOY — đưa dự án lên chạy thật
@@ -29,6 +29,36 @@ deploy lại được bằng MỘT lệnh, và bạn đã TỰ KIỂM rằng nó
 5. **Kiểm bằng CHẠY, không bằng đọc.** Build xanh ≠ ảnh chạy được. Xong mỗi chặng phải có bằng chứng:
    `docker ps` thấy `Up` (không phải `Restarting`), `docker logs` không lỗi, `curl -sS -o /dev/null -w '%{http_code}'`
    ra 200/301/401 đúng như mong đợi, trang mở được qua HTTPS.
+
+## 0b. Danh sách kiểm TRƯỚC và SAU mỗi lần deploy (mọi hệ điều hành)
+
+Trước:
+- [ ] Biết máy đích: hệ điều hành + kiến trúc (`uname -sm` / `[Environment]::OSVersion`, x64 hay ARM), còn bao nhiêu
+      đĩa/RAM (`df -h`, `free -h` / `Get-PSDrive C`), cổng định dùng có trống không.
+- [ ] Bản đang chạy hiện tại là bản nào (tag/commit/thư mục) ⇒ đó là đích để LÙI về.
+- [ ] Có migration DB ⇒ **sao lưu DB trước**. Migration không lùi cùng mã.
+- [ ] Bí mật đã có trên máy đích (`.env` quyền hẹp / GitHub Secrets / biến dịch vụ), không nằm trong repo.
+- [ ] Build + test xanh ở máy dựng; ảnh/gói đúng kiến trúc máy đích.
+
+Sau:
+- [ ] Tiến trình/container ĐANG CHẠY đúng bản mới (so tag/mã băm, không tin log "thành công").
+- [ ] Kiểm sức khoẻ bằng HTTP thật (mã 200/301/401 như mong đợi) từ CHÍNH máy đích và từ bên ngoài.
+- [ ] Log vài chục dòng cuối không có lỗi mới.
+- [ ] Khởi động lại được: dịch vụ đặt tự khởi động (systemd `enable`, Docker `restart: unless-stopped`, Windows
+      `AUTO_START`).
+- [ ] Ghi lại: bản đã deploy, lệnh lùi, nơi xem log.
+
+## 0c. Máy đích không phải VPS Linux
+
+| Máy đích | Đọc thêm | Khác biệt chính |
+|---|---|---|
+| **Windows** (máy thật, Windows Server) | kỹ năng `devops-windows` | cmd.exe/PowerShell, dịch vụ qua NSSM/WinSW, tường lửa Windows, IIS/Caddy, WSL2/Docker Desktop, CRLF |
+| **Máy nhà** (Windows/Linux/macOS) làm server | kỹ năng `server-may-nha` | tách biệt bằng Docker/VM, không mở cổng router, Tailscale/Cloudflare Tunnel, máy có thể ngủ/tắt |
+| **macOS** | kỹ năng `server-may-nha` mục macOS | Docker Desktop/OrbStack, `launchd` thay systemd, `pmset` chống ngủ |
+| **Linux không phải Ubuntu** (Fedora/RHEL) | mục 7 bên dưới | `dnf`, `firewalld`, **SELinux** (bind-mount cần `:Z`) |
+
+Ảnh Docker dựng trên Mac Apple Silicon là **ARM64** — máy đích x64 phải dựng `--platform linux/amd64` (hoặc
+`docker buildx build --platform linux/amd64,linux/arm64`). Sai kiến trúc ⇒ `exec format error`.
 
 ## 1. Chọn đích deploy
 
@@ -229,6 +259,12 @@ Nhắc người dùng thêm secrets (`VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`) — 
 - Firewall/nhà cung cấp chặn cổng 80/443 ⇒ `curl` từ ngoài server để kiểm, không chỉ từ trong.
 - Migration hỏng giữa chừng ⇒ DỪNG, báo người dùng lỗi nguyên văn; không tự "resolve" hay xoá dữ liệu.
 - Không bao giờ `docker compose down -v`, `DROP`, `rm -rf` dữ liệu trên server khi chưa được đồng ý rõ ràng — volume DB là dữ liệu thật.
+- Fedora/RHEL có **SELinux**: bind-mount báo `permission denied` dù quyền file đúng ⇒ thêm `:Z` vào volume
+  (`./data:/data:Z`); tường lửa là `firewalld` (`firewall-cmd --add-port=3000/tcp --permanent && firewall-cmd --reload`).
+- Script `.sh` soạn trên Windows mang **CRLF** ⇒ trong container báo `bad interpreter`/`exec format error` dù file đúng.
+  `.gitattributes`: `*.sh text eol=lf`.
+- Dịch vụ không lên lại sau khi máy khởi động lại ⇒ quên `systemctl enable` / `restart:` / Windows `AUTO_START`.
+  Luôn thử khởi động lại dịch vụ (hoặc máy, nếu được phép) một lần trước khi báo xong.
 
 ## 8. Báo cáo cuối
 

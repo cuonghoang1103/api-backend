@@ -211,7 +211,10 @@ export function buildSystemPrompt(opts: {
       hoanCanh.push(
         'Lệnh chạy qua **cmd.exe**, KHÔNG phải PowerShell hay bash. Dùng cú pháp cmd '
           + '(`dir`, `type`, `copy`, `%VAR%`, `&&`), không dùng nháy đơn, `$(...)`, `ls`, `rm`. '
-          + 'Cần PowerShell thì gọi rõ: `powershell -NoProfile -Command "..."`. '
+          + 'Cần PowerShell thì gọi rõ: `powershell -NoProfile -NonInteractive -Command "..."` — lệnh '
+          + 'CHỈ ĐỌC (Get-*, Test-*, Select-*…) chạy thẳng không cần duyệt; lệnh đổi hệ thống '
+          + '(dịch vụ, tường lửa, registry, cài phần mềm) luôn cần người dùng duyệt. Việc DevOps '
+          + 'trên máy này: đọc kỹ năng `devops-windows` trước. '
           + 'Đường dẫn dùng `\\`, và có dấu cách thì bọc trong nháy kép.',
       );
     }
@@ -790,8 +793,9 @@ ${muc.map((m, i) => `${i + 1}. ${m}`).join('\n\n')}`;
  * CÁCH LÀM VIỆC cho model GPT ở cổng dự phòng (27/09/2026)
  * ============================================================
  *
- * Nối vào CUỐI prompt hệ thống khi AI Code chạy GPT (xem `chuyenDuPhong` trong
- * `turn.ts`). Mọi thứ khác — kỹ năng, bộ nhớ, kế hoạch, luật an toàn — đã có
+ * Nối vào CUỐI prompt hệ thống cho MỌI model từ 27/09/2026 (trước đó chỉ GPT ở
+ * cổng dự phòng). Người dùng chốt: *"những gì GPT có thì Opus cũng có, và ngược
+ * lại"* — luật làm việc tốt không phụ thuộc nhà cung cấp. Mọi thứ khác — kỹ năng, bộ nhớ, kế hoạch, luật an toàn — đã có
  * sẵn trong prompt chung và GPT đọc y như Claude; mục này chỉ sửa đúng những
  * thói quen ĐO ĐƯỢC làm GPT tốn gấp nhiều lần: cùng một câu hỏi tra mã, Opus 5
  * đi 11 bước, gpt-6-sol đi 22–63 bước — đọc từng file một mỗi lượt, đọc lại
@@ -808,7 +812,7 @@ ${muc.map((m, i) => `${i + 1}. ${m}`).join('\n\n')}`;
  * vì mỗi lượt gửi lại cả ngữ cảnh; đọc `agent-check -- --do` với
  * `AGENT_CHECK_VERBOSE=1` để xem nó đi lượt nào.
  */
-export const LOI_LAM_VIEC_GPT = `CÁCH LÀM VIỆC HIỆU QUẢ (bắt buộc — mỗi bước đều tốn tiền thật của người dùng)
+export const LOI_LAM_VIEC = `CÁCH LÀM VIỆC HIỆU QUẢ (bắt buộc — mỗi bước đều tốn hạn mức/tiền thật của người dùng)
    1. GỘP LỜI GỌI TOOL: các việc đọc/tìm ĐỘC LẬP nhau thì gọi CÙNG MỘT LƯỢT
       (ví dụ đọc 3 file một lúc, grep 2 mẫu một lúc) — đừng mỗi lượt một tool.
    2. TÌM TRƯỚC, ĐỌC SAU: grep/glob khoanh đúng chỗ rồi read_file đúng dải dòng
@@ -826,4 +830,13 @@ export const LOI_LAM_VIEC_GPT = `CÁCH LÀM VIỆC HIỆU QUẢ (bắt buộc �
    7. Dùng KỸ NĂNG có sẵn (deploy, docker, database, kiểm thử…) khi việc khớp
       tên kỹ năng: gọi dung_ky_nang để đọc thân kỹ năng trước khi tự mày mò.
    8. Trả lời cuối: ngắn, có file:dòng, nói rõ đã KIỂM bằng chạy thật hay chỉ
-      đọc mã.`;
+      đọc mã. Chỉ kể những gì THẬT SỰ có trong thay đổi (đối chiếu git diff) —
+      không kể việc định làm mà chưa làm.
+   9. VIỆC GIAO DIỆN: chụp màn hình và NHÌN ở bề rộng điện thoại lẫn máy tính
+      trước khi báo xong; giữ nhận diện sẵn có; không bịa số liệu cho đẹp.
+  10. VIỆC CHẠM MÁY THẬT (deploy, dịch vụ, tường lửa, máy chủ): có kế hoạch lùi
+      trước khi làm, kiểm sức khoẻ sau khi làm, và hỏi người dùng trước bước
+      không đảo ngược được.`;
+
+/** Tên cũ — giữ để mã/thử nghiệm cũ còn chạy. */
+export const LOI_LAM_VIEC_GPT = LOI_LAM_VIEC;

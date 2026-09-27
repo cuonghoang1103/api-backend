@@ -22,7 +22,8 @@ const dung = (platform: string, capabilities: string[]): string =>
 test('Windows + quyền chạy lệnh ⇒ prompt nói rõ là cmd.exe', () => {
   const p = dung('win32', ['fs_read', 'shell']);
   assert.match(p, /cmd\.exe/, 'không nhắc cmd.exe — model sẽ viết cú pháp POSIX');
-  assert.match(p, /powershell -NoProfile -Command/, 'không chỉ đường sang PowerShell');
+  assert.match(p, /powershell -NoProfile -NonInteractive -Command/, 'không chỉ đường sang PowerShell');
+  assert.match(p, /devops-windows/, 'không trỏ tới kỹ năng DevOps Windows');
 });
 
 test('KHÔNG có quyền chạy lệnh ⇒ không nhồi luật shell vào prompt', () => {

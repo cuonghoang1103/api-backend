@@ -29,10 +29,15 @@ import gitGithub from '../../../../../src/services/agent/kyNangSan/git-github.md
 import thietKeApi from '../../../../../src/services/agent/kyNangSan/thiet-ke-api.md?raw';
 import tinhNangAi from '../../../../../src/services/agent/kyNangSan/tinh-nang-ai.md?raw';
 import doAnBaoCao from '../../../../../src/services/agent/kyNangSan/do-an-bao-cao.md?raw';
+import devopsWindows from '../../../../../src/services/agent/kyNangSan/devops-windows.md?raw';
+import serverMayNha from '../../../../../src/services/agent/kyNangSan/server-may-nha.md?raw';
+import webgl3d from '../../../../../src/services/agent/kyNangSan/3d-webgl.md?raw';
+import lamGame from '../../../../../src/services/agent/kyNangSan/lam-game.md?raw';
 
 /** Nội dung thô (có phần đầu YAML) của từng kỹ năng — bản đóng gói. */
 export const KY_NANG_SAN_THO: readonly string[] = [
   lamViecChuan, deploy, mayChuSsh, phatHanhApp,
   database, kiemThu, baoMat, giaoDienWeb,
   gitGithub, thietKeApi, tinhNangAi, doAnBaoCao,
+  devopsWindows, serverMayNha, webgl3d, lamGame,
 ];

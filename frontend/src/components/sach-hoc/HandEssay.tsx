@@ -15,6 +15,7 @@ import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import HandCanvas, { InkTools, b64, loadInk, renderInk, useInkSaver, type HandCanvasHandle, type InkColor, type Painter, type Stroke, type Tool } from './HandCanvas';
 import { useCourse } from './tutorContext';
 import s from './course.module.css';
+import { AI_TIMEOUT } from './audio';
 
 const ASPECT = 1.36;
 const MAX_PAGES = 4;
@@ -98,7 +99,7 @@ export default function HandEssay({ id, de, task }: { id: string; de: string; ta
     try {
       // 1600px, JPEG 0.85 — một trang chữ viết ~150–400KB, đủ nét cho model đọc.
       const imgs = filled.map((p) => b64(renderInk(p, 1600, ASPECT, paper).toDataURL('image/jpeg', 0.85)));
-      const r = await api.post('/ielts/ai/cham-viet-tay', { pages: imgs, de, task });
+      const r = await api.post('/ielts/ai/cham-viet-tay', { pages: imgs, de, task }, AI_TIMEOUT);
       const d = r.data?.data as { chep?: string; ketQua: string | null; lyDo?: string };
       if (d?.chep || d?.ketQua) setOut({ chep: d.chep ?? '', ketQua: d.ketQua });
       if (!d?.ketQua) {

@@ -10,7 +10,7 @@ import { Play, Square, Eye, EyeOff, Mic, Volume2, Sparkles, RotateCcw } from 'lu
 import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { Block, Role, Voice } from './types';
-import { play, stopAudio } from './audio';
+import { play, stopAudio, AI_TIMEOUT } from './audio';
 import { Inline } from './Blocks';
 import { useCourse, useTutor } from './tutorContext';
 import HandEssay from './HandEssay';
@@ -225,7 +225,7 @@ function Essay({ b }: { b: Extract<Block, { t: 'essay' }> }) {
   const grade = async () => {
     setBusy(true); setErr(''); setRes(null);
     try {
-      const r = await api.post('/ielts/ai/cham-viet', { bai: txt, de: b.prompt, task: b.task });
+      const r = await api.post('/ielts/ai/cham-viet', { bai: txt, de: b.prompt, task: b.task }, AI_TIMEOUT);
       const d = r.data?.data as { ketQua: string | null; lyDo?: string };
       if (d?.ketQua) setRes(d.ketQua);
       else setErr(d?.lyDo === 'ai_unavailable' ? 'AI chấm bài đang tạm tắt.' : 'Chưa chấm được, thử lại nhé.');
@@ -374,7 +374,7 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
       fd.append('audio', blob, `noi.${ext}`);
       fd.append('cauHoi', q);
       fd.append('part', part);
-      const r = await api.post('/ielts/ai/cham-noi', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+      const r = await api.post('/ielts/ai/cham-noi', fd, { headers: { 'Content-Type': 'multipart/form-data' }, ...AI_TIMEOUT });
       const d = r.data?.data as { chu: string | null; ketQua: string | null; lyDo?: string };
       setOut(d?.ketQua ? d : { chu: d?.chu, err: d?.lyDo === 'khong_nghe_thay' ? 'Chưa nghe thấy bạn nói — thử nói to và gần micro hơn.' : 'Chưa chấm được, thử lại nhé.' });
     } catch (e) {
@@ -505,6 +505,71 @@ function Build({ b }: { b: Extract<Block, { t: 'build' }> }) {
   );
 }
 
+/* ── Đọc chữ Hán không furigana ─────────────────────────────────────────── */
+
+const bare = (t: string) => t.replace(/\{([^|}]+)\|[^}]+\}/g, '$1');
+
+function ReadKanji({ b }: { b: Extract<Block, { t: 'readkanji' }> }) {
+  const tutor = useTutor();
+  // Hàng đợi: câu "chưa đọc được" quay lại cuối lượt cho tới khi đọc được.
+  const [queue, setQueue] = useState<number[]>(() => b.items.map((_, i) => i));
+  const [shown, setShown] = useState(false);
+  const [first, setFirst] = useState<Record<number, boolean>>({});
+  const cur = queue[0];
+  const doneAll = queue.length === 0;
+  const mark = (ok: boolean) => {
+    const f = first[cur] === undefined ? { ...first, [cur]: ok } : first;
+    setFirst(f);
+    const rest = queue.slice(1);
+    const next = ok ? rest : [...rest, cur];
+    setQueue(next);
+    setShown(false);
+    if (!next.length) {
+      const right = Object.values(f).filter(Boolean).length;
+      tutor.report(b.id, Math.round((right / b.items.length) * 100));
+    }
+  };
+  const right = Object.values(first).filter(Boolean).length;
+  return (
+    <div className={s.quiz}>
+      <div className={s.quizTitle}>🈶 {b.title}</div>
+      <div className={s.quizSub}>{b.note ?? 'Giống đề thi: chữ Hán KHÔNG có furigana. Đọc to trước, rồi bấm "Xem cách đọc" để kiểm tra. Câu chưa đọc được sẽ quay lại cuối lượt.'}</div>
+      {doneAll ? (
+        <div className={s.qItem}>
+          <div className={s.score} style={{ display: 'inline-block' }}>Lần đầu đọc đúng {right}/{b.items.length} câu</div>
+          <div className={s.qRow}>
+            <button type="button" className={s.btnGhost} onClick={() => { setQueue(b.items.map((_, i) => i)); setFirst({}); }}><RotateCcw size={14} /> Làm lại</button>
+          </div>
+        </div>
+      ) : (
+        <div className={s.qItem}>
+          <div className={s.quizSub}>Còn {queue.length} câu · câu {cur + 1}/{b.items.length}</div>
+          <div className={s.rkText}>{shown ? <Inline text={b.items[cur].text} /> : bare(b.items[cur].text)}</div>
+          {shown && (
+            <>
+              <div className={s.ro}>{b.items[cur].ro}</div>
+              <div className={s.dVi}>{b.items[cur].vi}</div>
+            </>
+          )}
+          <div className={s.qRow}>
+            {!shown ? (
+              <button type="button" className={s.btn} onClick={() => { setShown(true); play({ text: b.items[cur].text }); }}>
+                <Eye size={15} /> Xem cách đọc + nghe
+              </button>
+            ) : (
+              <>
+                <button type="button" className={s.btn} onClick={() => mark(true)}>✓ Mình đọc được</button>
+                <button type="button" className={s.btnGhost} onClick={() => mark(false)}>✗ Chưa đọc được</button>
+                <button type="button" className={s.btnGhost} onClick={() => play({ text: b.items[cur].text })}><Volume2 size={14} /> Nghe lại</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function renderBlock2(b: Block, i: number) {
   switch (b.t) {
     case 'passage': return <Passage key={i} b={b} />;
@@ -514,6 +579,7 @@ export function renderBlock2(b: Block, i: number) {
     case 'chart': return <Chart key={i} b={b} />;
     case 'speak': return <Speak key={b.id} b={b} />;
     case 'build': return <Build key={b.id} b={b} />;
+    case 'readkanji': return <ReadKanji key={b.id} b={b} />;
     case 'write': return <WriteBlock key={b.id} b={b} />;
     default: return null;
   }

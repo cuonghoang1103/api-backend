@@ -19,6 +19,7 @@ import HandCanvas, { InkTools, b64, loadInk, renderInk, useInkSaver, type HandCa
 import type { Block } from './types';
 import { useCourse, useTutor } from './tutorContext';
 import s from './course.module.css';
+import { AI_TIMEOUT } from './audio';
 
 /* ── Dữ liệu thứ tự nét (tải một lần cho cả trang) ─────────────────────── */
 
@@ -288,7 +289,7 @@ export default function WriteBlock({ b }: { b: Extract<Block, { t: 'write' }> })
     if (!img) return;
     setBusy(true); setErr(''); setRes(null);
     try {
-      const r = await api.post('/ielts/ai/xem-chu-viet', { image: b64(img.url), chars: img.rows, lang: 'ja' });
+      const r = await api.post('/ielts/ai/xem-chu-viet', { image: b64(img.url), chars: img.rows, lang: 'ja' }, AI_TIMEOUT);
       const d = r.data?.data as { ketQua: string | null; diem?: number | null; lyDo?: string };
       if (d?.ketQua) {
         setRes({ text: d.ketQua, diem: d.diem ?? null });

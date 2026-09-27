@@ -11,7 +11,7 @@ import type { Lesson } from './types';
 import { Blocks } from './Blocks';
 import { GiaSu, type Turn } from './GiaSu';
 import { TutorCtx, CourseCtx, type TutorAsk } from './tutorContext';
-import { setDefaultVoice } from './audio';
+import { setDefaultVoice, AI_TIMEOUT } from './audio';
 import { useTienDo } from './useTienDo';
 import { TongQuanBuoi, KeHoach, dayDone } from './TongQuan';
 import s from './course.module.css';
@@ -125,7 +125,7 @@ export default function CoursePage({ course }: { course: Course }) {
         mon: course.tutor.mon,
         // Ba lượt đã trả lời gần nhất — cho câu hỏi tiếp "dễ hơn nữa", "ví dụ khác".
         lichSu: turns.filter((x) => x.a).slice(-3).map((x) => ({ q: x.q, a: x.a })),
-      });
+      }, AI_TIMEOUT);
       const d = res.data?.data as { traLoi: string | null; lyDo?: string } | undefined;
       if (d?.traLoi) finish({ a: d.traLoi });
       else finish({ err: d?.lyDo === 'ai_unavailable' ? 'Gia sư AI đang tạm tắt. Bạn thử lại sau nhé.' : 'Gia sư chưa trả lời được. Thử hỏi lại nhé.' });

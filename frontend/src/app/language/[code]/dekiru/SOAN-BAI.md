@@ -13,7 +13,8 @@ là chuẩn từ vựng), "Âm ghép, trường âm", "Luyện nói", "bài đ�
 "Hướng dẫn ôn thi". Dữ liệu thi JPD113 có sẵn trong web:
 `app/tech-trends/on-thi-jpd113/data/{speaking,personalQA,readaloud,listening}.ts`.
 
-ポイント theo bài: B1 = 1–6 · B2 = 7–15 · B3 = 16–23 · B4 = 24–36 · B5 = 37–47 · B6 = 48–60.
+ポイント theo bài: B1 = 1–6 · B2 = 7–15 · B3 = 16–23 · B4 = 24–36 · B5 = 37–47 · B6 = 48–60 · B7 = 61–71 · B8 = 72–80 · B9 = 81–87 · B10 = 88–97 · B11 = 98–103 · B12 = 104–107 · B13 = 108–112 · B14 = 113–118 · B15 = 119–124.
+Trang bắt đầu: B7 p.117 · B8 p.137 · B9 p.153 · B10 p.169 · B11 p.185 · B12 p.205 · B13 p.221 · B14 p.237 · B15 p.253 (hết p.269). Người học cần TRỌN sách (27/09: "học hết sách mới đủ thi JPD113 + JPD123"). Từ mới của cô chỉ có đến Bài 7 — Bài 8–15 lấy trang ことば của sách làm chuẩn.
 
 ## 1. Nội dung
 
@@ -50,6 +51,13 @@ id bài `bN-<slug>`, id bài tập `bN-<slug>` duy nhất (tiến độ lưu the
    + `quiz`/`mcq` ngắn.
 4. `bN-kanji` kind `kanji` — chữ Hán xuất hiện trong từ vựng bài: `table` (chữ,
    âm On/Kun, nghĩa Hán Việt, từ ví dụ) + `mcq` đọc chữ.
+   + (27/09, người học trượt phần Đọc vì đề KHÔNG có furigana) mục "Đứng riêng
+   hay đứng chung" (bảng: chữ | kun đứng riêng | on trong từ ghép) + `readkanji`
+   `bN-doc-kanji` (≥15 câu) + `readkanji` `bN-doc-doan` (3–4 đoạn đọc kiểu đề) +
+   `write` `bN-viet-kanji` ở cuối.
+   Bảng chữ Hán có cột **Mức**: 👁 nhận mặt (đọc + hiểu nghĩa — phần lớn chữ, ưu
+   tiên cho thi Đọc) / ✍ nên viết (chữ ít nét, tần suất cao: số, 日月人山川大小…).
+   Học chữ Hán THEO TỪ (学生 = gakusei), không bắt thuộc âm từng chữ rời.
 5. `bN-nghe` kind `listening` — `listen` kịch bản mới dạng やってみよう /
    もう一度聞こう (voice ja-nu/ja-nam theo người nói) + câu hỏi `mcq`/`quiz`.
 6. `bN-noi` kind `speaking` — dạng thi JPD: câu hỏi của giám thị liên quan bài
@@ -82,3 +90,4 @@ lỗi trang · commit theo pathspec · `deploy-nha.sh` (tự push).
 | 5 | ✅ ポイント 37–47, 61/61 từ, bảng quá khứ (27/09) |
 | 6 | ✅ ポイント 48–60, 55/55 từ (27/09) — danh sách cô dịch nhầm #27 (日曜日 = CN, không phải thứ 7) |
 | 📖 Theo sách | ✅ Bài 1–3 (bai/sach.ts) + Bài 4–6 (bai/sach2.ts) |
+| 7–15 | ⏳ đang trích & soạn (27/09) |

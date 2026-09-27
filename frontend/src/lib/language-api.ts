@@ -28,6 +28,12 @@ import type {
 } from '@/types/language';
 
 type Res<T> = Promise<{ data: ApiResponse<T> & { pagination?: PaginationMeta } }>;
+/**
+ * Lời gọi AI chờ tối đa 150s thay vì 30s mặc định: khi cổng rambo treo, máy chủ
+ * mất ~60–90s mới lùi sang cổng dự phòng (đo 27/09) — chờ 30s là báo lỗi oan.
+ */
+const AI_LAU = { timeout: 150_000 };
+
 export interface PaginationMeta { page: number; limit: number; total: number; totalPages: number }
 
 // ─── Public reads ────────────────────────────────────────────────
@@ -82,7 +88,7 @@ export const languageApi = {
 
   // ─── AI tutor (Pro/Max) ──────────────────────────────────────
   explain: (body: { languageCode: string; kind: 'grammar' | 'vocab'; itemId: number }): Res<AiExplanation> =>
-    api.post('/my-language/ai/explain', body),
+    api.post('/my-language/ai/explain', body, AI_LAU),
   aiStatus: (): Res<{ available: boolean; isPro: boolean }> => api.get('/my-language/ai/status'),
   pronounce: (body: { audio: Blob; languageCode: string; target: string; reading?: string }): Res<PronunciationResult> => {
     const fd = new FormData();
@@ -91,21 +97,21 @@ export const languageApi = {
     fd.append('target', body.target);
     if (body.reading) fd.append('reading', body.reading);
     // Override the axios default application/json or multer sees no file.
-    return api.post('/my-language/ai/pronounce', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
+    return api.post('/my-language/ai/pronounce', fd, { timeout: 150_000, headers: { 'Content-Type': 'multipart/form-data' } });
   },
   generateQuiz: (body: { languageCode: string; categoryId?: number; count?: number }): Res<AiQuiz> =>
-    api.post('/my-language/ai/quiz', body),
+    api.post('/my-language/ai/quiz', body, AI_LAU),
   gradeAnswer: (body: { languageCode: string; prompt: string; answer: string; sampleAnswer?: string }): Res<AiGradeResult> =>
-    api.post('/my-language/ai/grade', body),
+    api.post('/my-language/ai/grade', body, AI_LAU),
   gradeWriting: (body: { languageCode: string; text: string; prompt?: string }): Res<WritingFeedback> =>
-    api.post('/my-language/ai/writing', body),
+    api.post('/my-language/ai/writing', body, AI_LAU),
   rolePlayTurn: (body: { languageCode: string; scenario: string; history: { role: 'user' | 'assistant'; content: string }[]; message: string }): Res<RolePlayReply> =>
-    api.post('/my-language/ai/roleplay', body),
+    api.post('/my-language/ai/roleplay', body, AI_LAU),
   transcribe: (body: { audio: Blob; languageCode: string }): Res<{ text: string }> => {
     const fd = new FormData();
     fd.append('audio', body.audio, 'clip.webm');
     fd.append('languageCode', body.languageCode);
-    return api.post('/my-language/ai/stt', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
+    return api.post('/my-language/ai/stt', fd, { timeout: 150_000, headers: { 'Content-Type': 'multipart/form-data' } });
   },
   // ─── Hán tự (kanji / hanzi) ──────────────────────────────────
   hanziList: (code: string, level?: string): Res<{ levels: string[]; chars: HanziChar[] }> =>
@@ -118,14 +124,14 @@ export const languageApi = {
   hanziReview: (code: string): Res<{ count: number; chars: HanziChar[] }> =>
     api.get(`/my-language/${code}/hanzi/review`),
   kanaTip: (body: { char: string; romaji?: string }): Res<KanaTip> =>
-    api.post('/my-language/ai/kana-tip', body),
+    api.post('/my-language/ai/kana-tip', body, AI_LAU),
   kanaConfusable: (char: string): Res<{ items: KanaConfusable[] }> =>
     api.get(`/my-language/kana/${encodeURIComponent(char)}/confusable`),
 
   translate: (body: { languageCode: string; text: string; direction: 'to' | 'from'; tone?: string }): Res<TranslateResult> =>
-    api.post('/my-language/ai/translate', body),
+    api.post('/my-language/ai/translate', body, AI_LAU),
   grammarCheck: (body: { languageCode: string; text: string }): Res<GrammarCheckResult> =>
-    api.post('/my-language/ai/grammar-check', body),
+    api.post('/my-language/ai/grammar-check', body, AI_LAU),
 
   // ─── Roadmap (lộ trình học) ──────────────────────────────────
   roadmap: (code: string): Res<Roadmap> => api.get(`/my-language/${code}/roadmap`),

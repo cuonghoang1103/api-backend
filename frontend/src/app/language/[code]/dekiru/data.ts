@@ -24,7 +24,7 @@ const INTRO: Lesson = {
     { t: 'h', text: 'Khoá này dạy gì?' },
     {
       t: 'p',
-      text: 'Khoá đi theo đúng giáo trình **できる日本語 初級** (Dekiru Nihongo – Sơ cấp) mà lớp đang học, từ **Bài 0** (bảng chữ hiragana, katakana) đến **Bài 6**. Mỗi bài có: **hội thoại** theo tình huống, **từ vựng** (đúng danh sách từ mới cô phát), **ngữ pháp** đóng khung kèm mẫu câu hỏi–đáp, **chữ Hán**, **luyện nghe**, **luyện nói** theo dạng thi, và **bài tập có đáp án**.',
+      text: 'Khoá đi theo đúng giáo trình **できる日本語 初級** (Dekiru Nihongo – Sơ cấp) mà lớp đang học, từ **Bài 0** (bảng chữ hiragana, katakana) đến **Bài 15** — trọn cuốn sách (124 điểm ngữ pháp). Mỗi bài có: **hội thoại** theo tình huống, **từ vựng** (đúng danh sách từ mới cô phát), **ngữ pháp** đóng khung kèm mẫu câu hỏi–đáp, **chữ Hán**, **luyện nghe**, **luyện nói** theo dạng thi, và **bài tập có đáp án**.',
     },
     {
       t: 'note',
@@ -61,6 +61,15 @@ const OUTLINE: { n: number; title: string }[] = [
   { n: 4, title: '私の国・町 — Đất nước, thành phố của tôi' },
   { n: 5, title: '休みの日 — Ngày nghỉ' },
   { n: 6, title: '一緒に！ — Cùng nhau nhé!' },
+  { n: 7, title: '友達の家で — Ở nhà bạn' },
+  { n: 8, title: '大切な人 — Người quan trọng' },
+  { n: 9, title: '好きなこと — Điều mình thích' },
+  { n: 10, title: 'バスツアー — Tour xe buýt' },
+  { n: 11, title: '私の生活 — Cuộc sống của tôi' },
+  { n: 12, title: '病気・けが — Ốm đau, chấn thương' },
+  { n: 13, title: '私のおすすめ — Gợi ý của tôi' },
+  { n: 14, title: '国の習慣 — Phong tục nước tôi' },
+  { n: 15, title: 'テレビ・雑誌から — Từ TV, tạp chí' },
 ];
 
 export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({
@@ -72,7 +81,7 @@ export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({
 export const DEKIRU = defineCourse({
   stage: 'dekiru1',
   storageKey: 'dekiru-v1',
-  title: 'Tiếng Nhật できる日本語 · Bài 0–6',
+  title: 'Tiếng Nhật できる日本語 初級 · Bài 0–15',
   backHref: '/language/ja',
   unit: 'Bài',
   shownNum: (n) => n - 1,
@@ -89,5 +98,5 @@ export const DEKIRU = defineCourse({
   kindHue: {},
   voice: 'ja-nu',
   tutor: { name: 'Gia sư tiếng Nhật', mon: 'nhat' },
-  planContext: 'Trang kế hoạch học tiếng Nhật theo giáo trình できる日本語 初級, Bài 0–6 (môn JPD113/JPD123).',
+  planContext: 'Trang kế hoạch học tiếng Nhật theo giáo trình できる日本語 初級, Bài 0–15 (môn JPD113/JPD123).',
 });

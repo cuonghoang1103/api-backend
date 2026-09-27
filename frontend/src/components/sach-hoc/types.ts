@@ -45,6 +45,11 @@ export type Block =
    * đúng thứ tự để dựng câu. `answer` là thứ tự đúng (có thể nhiều cách đúng
    * qua `alt`); `chips` = các mảnh (đúng + vài mảnh gây nhiễu nếu muốn).
    */
+  /**
+   * Đọc chữ Hán KHÔNG furigana (như đề thi): câu viết `{漢字|かな}` nhưng hiện
+   * chữ trần; người học tự đọc to → bấm hiện cách đọc + nghe → tự chấm.
+   */
+  | { t: 'readkanji'; id: string; title: string; note?: string; items: { text: string; ro: string; vi: string }[] }
   | { t: 'build'; id: string; title: string; items: { vi: string; chips: string[]; answer: string[]; alt?: string[][]; ro?: string }[] }
   /**
    * Tập viết tay (Apple Pencil / chuột): mỗi chữ một hàng — ô mẫu chạy thứ tự

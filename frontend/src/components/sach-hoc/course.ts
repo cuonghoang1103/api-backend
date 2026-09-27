@@ -96,6 +96,7 @@ export function lessonText(l: Lesson): string {
       case 'chart': out.push(`Biểu đồ: ${b.title} (${b.labels.join(', ')})`); break;
       case 'speak': out.push(`Câu hỏi Speaking Part ${b.part}: ${b.questions.join(' / ')}`); break;
       case 'write': out.push(`${b.title} — tập viết tay: ${b.chars.join(' ')}`); break;
+      case 'readkanji': out.push(`${b.title}: ${b.items.map((x) => strip(x.text)).join(' / ')}`); break;
       case 'build': out.push(`${b.title}: ${b.items.map((x) => `${x.vi} → ${x.answer.join('')}`).join(' / ')}`); break;
     }
   }
@@ -113,7 +114,7 @@ export function daySummary(d: Day) {
     for (const b of l.blocks ?? []) {
       if (l.kind === 'grammar' && b.t === 'h') grammar.push(b.text.replace(/^\d+\.\s*/, ''));
       if (b.t === 'vocab') vocab.push(...b.items);
-      if (b.t === 'quiz' || b.t === 'mcq' || b.t === 'build') quizzes.push({ id: b.id, title: b.title, lessonId: l.id, count: b.items.length });
+      if (b.t === 'quiz' || b.t === 'mcq' || b.t === 'build' || b.t === 'readkanji') quizzes.push({ id: b.id, title: b.title, lessonId: l.id, count: b.items.length });
       if (b.t === 'dictation') quizzes.push({ id: b.id, title: b.title ?? 'Nghe chép đánh vần', lessonId: l.id, count: b.items.length });
     }
   }

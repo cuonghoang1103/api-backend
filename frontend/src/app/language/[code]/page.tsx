@@ -308,7 +308,7 @@ export default function LanguageHomePage() {
               <StartCard
                 href="/language/ja/dekiru"
                 icon={<BookOpen size={22} strokeWidth={1.75} />}
-                title="できる日本語 · Bài 0–6"
+                title="できる日本語 · Bài 0–15"
                 desc="Học từ con số 0 theo sách trên lớp: kana, ngữ pháp, từ vựng, nói, nghe"
                 from="#e11d48"
                 to="#f97316"

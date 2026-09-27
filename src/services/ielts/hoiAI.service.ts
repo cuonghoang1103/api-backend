@@ -66,7 +66,9 @@ export async function hoiVeChu(
     purpose: 'language_tutor',
     feature: 'chat',
     userId,
-    maxTokens: dai ? 1400 : 500,
+    // 2400: câu giảng có bảng + ví dụ tiếng Nhật kèm furigana/romaji dài hơn
+    // tiếng Anh nhiều — 1400 đã bị cắt giữa chừng (log 27/09).
+    maxTokens: dai ? 2400 : 600,
     // Cùng một khung khoá học phục vụ cả IELTS lẫn tiếng Nhật (Dekiru, JPD113/123):
     // `mon` đổi vai và vài quy tắc riêng của từng môn.
     system: (b.mon === 'nhat'

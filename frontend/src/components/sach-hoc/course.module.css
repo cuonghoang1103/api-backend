@@ -1195,3 +1195,7 @@
 .hChep summary::-webkit-details-marker { display: none; }
 .hChep pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; word-break: break-word; font-family: Georgia, serif; font-size: 15px; line-height: 1.7; color: var(--lh-ink); }
 .wPlaceholder { border-radius: 12px; background: var(--lh-surface-2); }
+
+/* đọc chữ Hán không furigana — chữ to như trên đề */
+.rkText { margin: 10px 0 6px; font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif; font-size: 26px; line-height: 2.1; color: var(--lh-ink); }
+@media (max-width: 480px) { .rkText { font-size: 22px; } }

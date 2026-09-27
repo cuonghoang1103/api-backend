@@ -12,6 +12,14 @@ import api from '@/lib/api';
 
 import type { Voice } from './types';
 export type { Voice };
+
+/**
+ * Thời gian chờ cho mọi lời gọi AI của khoá học (gia sư, chấm viết/nói/chữ).
+ * Mặc định của axios là 30 giây — đúng bằng lúc cổng rambo treo mới bị coi là
+ * hỏng, nên trang bỏ cuộc NGAY trước khi máy chủ kịp chuyển sang cổng dự phòng
+ * (đo thật 27/09: rambo treo 2×30s rồi mới lùi sang modelapi).
+ */
+export const AI_TIMEOUT = { timeout: 150_000 };
 export type Clip = {
   text: string;
   voice?: Voice;

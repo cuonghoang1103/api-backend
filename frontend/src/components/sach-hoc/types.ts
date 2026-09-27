@@ -78,6 +78,11 @@ export type Lesson = {
   goal: string;
   minutes: number;
   blocks?: Block[];
+  /**
+   * Chỉ có ở mục lục (manifest.ts sinh tự động): bài đã soạn nhưng nội dung
+   * chưa tải. Không có thì "đã soạn" = có blocks. Đọc qua `isReady()`.
+   */
+  ready?: boolean;
 };
 
 export type Day = { n: number; lessons: Lesson[] };

@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run course:manifest",
     "build": "next build --no-lint",
+    "course:manifest": "node --experimental-strip-types --no-warnings scripts/course-manifest.mts",
+    "course:manifest:check": "node --experimental-strip-types --no-warnings scripts/course-manifest.mts --check",
     "start": "next start",
     "lint": "next lint"
   },

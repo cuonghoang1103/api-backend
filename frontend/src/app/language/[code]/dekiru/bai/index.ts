@@ -1,49 +1,35 @@
 /**
- * Các bài đã soạn, mỗi bài một tệp `baiN.ts` (xem ../SOAN-BAI.md).
+ * Bộ nạp nội dung các bài đã soạn — mỗi bài một tệp `baiN.ts` (xem ../SOAN-BAI.md).
+ *
+ * Mỗi `case` một `import('./baiN')` với chuỗi TĨNH để webpack tách mỗi bài
+ * thành một chunk riêng: trang chỉ mang mục lục (manifest.ts, sinh tự động),
+ * mở bài nào thì tải chunk của bài đó. Mỗi bài = các bài soạn + mục
+ * 📖 Theo sách (đi theo từng trang sách) ở cuối.
+ *
+ * Thêm bài mới: tạo baiN.ts, thêm một `case` ở đây, rồi `npm run course:manifest`
+ * (script kiểm cả việc thiếu `case` — và cùng luật ghép Theo sách như ở đây).
  * Bài chưa có ở đây thì data.ts dựng khung "sắp có" theo mục lục sách.
  */
-import type { Day } from '@/components/sach-hoc/types';
-import { BAI_0 } from './bai0';
-import { BAI_1 } from './bai1';
-import { BAI_2 } from './bai2';
-import { BAI_3 } from './bai3';
-import { BAI_4 } from './bai4';
-import { BAI_5 } from './bai5';
-import { BAI_6 } from './bai6';
-import { SACH as SACH_1 } from './sach';
-import { SACH_2 } from './sach2';
-import { BAI_7, SACH_7 } from './bai7';
-import { BAI_8, SACH_8 } from './bai8';
-import { BAI_9, SACH_9 } from './bai9';
-import { BAI_10, SACH_10 } from './bai10';
-import { BAI_11, SACH_11 } from './bai11';
-import { BAI_12, SACH_12 } from './bai12';
-import { BAI_13, SACH_13 } from './bai13';
-import { BAI_14, SACH_14 } from './bai14';
-import { BAI_15, SACH_15 } from './bai15';
+import type { Lesson } from '@/components/sach-hoc/types';
 
-const SACH: Record<number, Day['lessons'][number]> = { ...SACH_1, ...SACH_2, 7: SACH_7, 8: SACH_8, 9: SACH_9, 10: SACH_10, 11: SACH_11, 12: SACH_12, 13: SACH_13, 14: SACH_14, 15: SACH_15 };
-
-const BAI: Record<number, Day['lessons']> = {
-  0: BAI_0,
-  1: BAI_1,
-  2: BAI_2,
-  3: BAI_3,
-  4: BAI_4,
-  5: BAI_5,
-  6: BAI_6,
-  7: BAI_7,
-  8: BAI_8,
-  9: BAI_9,
-  10: BAI_10,
-  11: BAI_11,
-  12: BAI_12,
-  13: BAI_13,
-  14: BAI_14,
-  15: BAI_15,
-};
-
-/** Mỗi bài: các bài soạn + mục 📖 Theo sách (đi theo từng trang sách) ở cuối. */
-export const WRITTEN: Record<number, Day['lessons']> = Object.fromEntries(
-  Object.entries(BAI).map(([n, ls]) => [n, SACH[Number(n)] ? [...ls, SACH[Number(n)]] : ls]),
-);
+export function loadBai(n: number): Promise<Lesson[]> | null {
+  switch (n) {
+    case 0: return import('./bai0').then((m) => m.BAI_0);
+    case 1: return Promise.all([import('./bai1'), import('./sach')]).then(([m, s]) => [...m.BAI_1, s.SACH[1]]);
+    case 2: return Promise.all([import('./bai2'), import('./sach')]).then(([m, s]) => [...m.BAI_2, s.SACH[2]]);
+    case 3: return Promise.all([import('./bai3'), import('./sach')]).then(([m, s]) => [...m.BAI_3, s.SACH[3]]);
+    case 4: return Promise.all([import('./bai4'), import('./sach2')]).then(([m, s]) => [...m.BAI_4, s.SACH_2[4]]);
+    case 5: return Promise.all([import('./bai5'), import('./sach2')]).then(([m, s]) => [...m.BAI_5, s.SACH_2[5]]);
+    case 6: return Promise.all([import('./bai6'), import('./sach2')]).then(([m, s]) => [...m.BAI_6, s.SACH_2[6]]);
+    case 7: return import('./bai7').then((m) => [...m.BAI_7, m.SACH_7]);
+    case 8: return import('./bai8').then((m) => [...m.BAI_8, m.SACH_8]);
+    case 9: return import('./bai9').then((m) => [...m.BAI_9, m.SACH_9]);
+    case 10: return import('./bai10').then((m) => [...m.BAI_10, m.SACH_10]);
+    case 11: return import('./bai11').then((m) => [...m.BAI_11, m.SACH_11]);
+    case 12: return import('./bai12').then((m) => [...m.BAI_12, m.SACH_12]);
+    case 13: return import('./bai13').then((m) => [...m.BAI_13, m.SACH_13]);
+    case 14: return import('./bai14').then((m) => [...m.BAI_14, m.SACH_14]);
+    case 15: return import('./bai15').then((m) => [...m.BAI_15, m.SACH_15]);
+    default: return null;
+  }
+}

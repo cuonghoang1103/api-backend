@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Check, CalendarPlus, Volume2, PlayCircle } from 'lucide-react';
-import { daySummary, type Course } from './course';
+import { isReady, type Course } from './course';
 import type { Day, Lesson } from './types';
 import { Inline } from './Blocks';
 import { buildIcs, fmtDate, schedule, todayIso, WEEKDAYS, type Plan } from './useTienDo';
@@ -19,7 +19,7 @@ type Common = {
 
 /** Buổi n đã học xong khi mọi bài CÓ NỘI DUNG của nó đã đánh dấu xong. */
 export function dayDone(d: Day, done: string[]) {
-  const ready = d.lessons.filter((l) => l.blocks?.length);
+  const ready = d.lessons.filter(isReady);
   return ready.length > 0 && ready.every((l) => done.includes(l.id));
 }
 
@@ -28,10 +28,11 @@ export function dayDone(d: Day, done: string[]) {
 export function TongQuanBuoi({ course, day, done, scores, plan, onOpen, onAskDay }: Common & { day: Day; onAskDay: () => void }) {
   const DAYS = course.days;
   const INTRO = course.intro;
-  const sum = daySummary(day);
+  // Tóm tắt lấy từ mục lục (manifest) — không cần tải nội dung buổi.
+  const sum = course.summary(day);
   const date = plan ? schedule(plan, DAYS.length)[day.n - 1] : null;
   const lessons = day.n === 1 ? [INTRO, ...day.lessons] : day.lessons;
-  const firstTodo = lessons.find((l) => l.blocks?.length && !done.includes(l.id));
+  const firstTodo = lessons.find((l) => isReady(l) && !done.includes(l.id));
 
   return (
     <>
@@ -76,7 +77,7 @@ export function TongQuanBuoi({ course, day, done, scores, plan, onOpen, onAskDay
               {lessons.map((l) => {
                 const isDone = done.includes(l.id);
                 return (
-                  <button key={l.id} type="button" className={s.checkRow} onClick={() => onOpen(l)} disabled={!l.blocks?.length}>
+                  <button key={l.id} type="button" className={s.checkRow} onClick={() => onOpen(l)} disabled={!isReady(l)}>
                     <span className={`${s.tocDot} ${isDone ? s.tocDotDone : ''}`}>{isDone && <Check size={11} strokeWidth={3} />}</span>
                     <span className="min-w-0 flex-1 text-left">
                       <span className={s.tocKind}>{course.label(l.kind)} · ~{l.minutes} phút</span>
@@ -175,9 +176,9 @@ export function KeHoach({ course, done, scores, plan, onOpen, onOpenDay, savePla
   const dates = plan ? schedule(plan, DAYS.length) : [];
   const today = todayIso();
 
-  const readyDays = DAYS.filter((d) => daySummary(d).ready);
+  const readyDays = DAYS.filter((d) => course.summary(d).ready);
   const doneDays = DAYS.filter((d) => dayDone(d, done)).length;
-  const lessonsReady = DAYS.flatMap((d) => d.lessons).filter((l) => l.blocks?.length);
+  const lessonsReady = DAYS.flatMap((d) => d.lessons).filter(isReady);
   const lessonsDone = lessonsReady.filter((l) => done.includes(l.id)).length;
   const scoreVals = Object.values(scores);
   const avg = scoreVals.length ? Math.round(scoreVals.reduce((a, b) => a + b, 0) / scoreVals.length) : null;

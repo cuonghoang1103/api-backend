@@ -1,8 +1,16 @@
 /**
  * Một khoá học: mô tả + các hàm tổng hợp dựng từ danh sách ngày.
  * Mỗi khoá tạo một `Course` bằng `defineCourse` (vd. ielts/data.ts).
+ *
+ * Tải theo buổi: `days` chỉ là MỤC LỤC (bài không kèm blocks, cờ `ready`),
+ * tóm tắt từng buổi nằm ở `manifest` (sinh bởi scripts/course-manifest.mts),
+ * còn nội dung một buổi tải qua `loadDay` khi mở — mỗi buổi một chunk JS.
+ * Buổi viết thẳng trong data.ts (Mở đầu, IELTS Ngày 1) thì không cần tải.
  */
-import type { Block, Day, Kind, Lesson, Voice } from './types';
+import type { Day, Kind, Lesson, Voice } from './types';
+import { dayMeta, isReady, type CourseManifest, type DayMeta, type VocabMeta } from './manifest';
+
+export { isReady };
 
 export type CourseDef = {
   /** Khoá lưu tiến độ trên máy chủ (`/ielts/tien-do` stage) — đổi là mất tiến độ cũ. */
@@ -20,7 +28,15 @@ export type CourseDef = {
   /** Số hiển thị của buổi n (mặc định n). Khoá Nhật có Bài 0 nên hiện n − 1. */
   shownNum?: (n: number) => number;
   intro: Lesson;
+  /** Mục lục các buổi. Buổi tải chậm: bài chỉ có metadata + `ready`, không có blocks. */
   days: Day[];
+  /** Tóm tắt các buổi tải chậm, khoá theo `Day.n` (từ manifest.ts sinh tự động). */
+  manifest?: CourseManifest;
+  /**
+   * Nạp nội dung đầy đủ của buổi n (dynamic import → một chunk). Trả `null`
+   * khi buổi đó không có tệp nội dung (viết thẳng trong data.ts / chưa soạn).
+   */
+  loadDay?: (n: number) => Promise<Lesson[]> | null;
   kindLabel: Partial<Record<Kind, string>>;
   kindEn: Partial<Record<Kind, string>>;
   kindHue: Partial<Record<Kind, string>>;
@@ -43,24 +59,102 @@ const DEFAULT_HUE: Record<Kind, string> = {
   kana: '#0d9488', review: '#64748b',
 };
 
-type VocabItem = Extract<Block, { t: 'vocab' }>['items'][number];
+const SKILLS: Kind[] = ['listening', 'reading', 'writing', 'speaking'];
+
+/** Chờ lúc trình duyệt rảnh (Safari chưa có requestIdleCallback). */
+function whenIdle(f: () => void) {
+  if (typeof window === 'undefined') return;
+  const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+  if (w.requestIdleCallback) w.requestIdleCallback(f, { timeout: 4000 });
+  else setTimeout(f, 1500);
+}
 
 export function defineCourse(def: CourseDef) {
   const allLessons: Lesson[] = [def.intro, ...def.days.flatMap((d) => d.lessons)];
-  const readyLessons = allLessons.filter((l) => l.blocks?.length);
-  // Tra từ cho ô 💡 Gợi ý. Từ tiếng Nhật viết `{学生|がくせい}` nên đăng ký CẢ ba
-  // khoá: nguyên văn, dạng chữ Hán (学生) và dạng đọc (がくせい).
-  const vocabIndex: Map<string, VocabItem> = new Map();
-  for (const v of allLessons.flatMap((l) => (l.blocks ?? []).flatMap((b) => (b.t === 'vocab' ? b.items : [])))) {
+  const readyLessons = allLessons.filter(isReady);
+
+  // Tóm tắt từng buổi: buổi tải chậm lấy từ manifest, buổi viết thẳng thì tính từ nội dung.
+  const metas = new Map<number, DayMeta>(def.days.map((d) => [d.n, def.manifest?.[d.n] ?? dayMeta(d.lessons)]));
+
+  // Tra từ cho ô 💡 Gợi ý — dựng từ manifest nên không phải tải mọi buổi.
+  // Từ tiếng Nhật viết `{学生|がくせい}` nên đăng ký CẢ ba khoá: nguyên văn,
+  // dạng chữ Hán (学生) và dạng đọc (がくせい). Từ gặp trước thắng (thứ tự bài).
+  const vocabIndex: Map<string, VocabMeta> = new Map();
+  for (const v of [...dayMeta([def.intro]).vocab, ...def.days.flatMap((d) => metas.get(d.n)!.vocab)]) {
     const base = v.w.replace(/\{([^|}]+)\|[^}]+\}/g, '$1');
     const kana = v.w.replace(/\{[^|}]+\|([^}]+)\}/g, '$1');
     for (const k of [v.w, base, kana]) if (!vocabIndex.has(k.toLowerCase())) vocabIndex.set(k.toLowerCase(), v);
   }
+
+  /* ── Nội dung theo buổi: tải một lần, giữ trong bộ nhớ suốt phiên ── */
+  const loaded = new Map<number, Lesson[]>();
+  const pending = new Map<number, Promise<Lesson[]>>();
+  const dayByN = (n: number) => def.days.find((d) => d.n === n);
+
+  /** Nội dung đầy đủ của buổi n nếu đã có sẵn (đã tải, hoặc viết thẳng) — không thì undefined. */
+  function contentOf(n: number): Lesson[] | undefined {
+    const d = dayByN(n);
+    if (!d) return undefined;
+    if (loaded.has(n)) return loaded.get(n);
+    return d.lessons.some((l) => isReady(l) && !l.blocks?.length) ? undefined : d.lessons;
+  }
+
+  /** Tải nội dung buổi n (gộp các lời gọi trùng; lỗi thì lần sau thử lại). */
+  function load(n: number): Promise<Lesson[]> {
+    const have = contentOf(n);
+    if (have) return Promise.resolve(have);
+    const p0 = pending.get(n);
+    if (p0) return p0;
+    const src = def.loadDay?.(n);
+    if (!src) return Promise.resolve(dayByN(n)?.lessons ?? []);
+    const p = src.then(
+      (ls) => {
+        pending.delete(n);
+        // Mục lục (manifest.ts) phải khớp nội dung — lệch là quên `npm run course:manifest`.
+        const want = dayByN(n)?.lessons.map((l) => l.id).join(',');
+        const got = ls.map((l) => l.id).join(',');
+        if (want !== got) console.error(`[sach-hoc] ${def.stage}: mục lục buổi ${n} lệch nội dung (${want} ≠ ${got}) — chạy npm run course:manifest`);
+        loaded.set(n, ls);
+        return ls;
+      },
+      (e) => {
+        pending.delete(n);
+        throw e;
+      },
+    );
+    pending.set(n, p);
+    return p;
+  }
+
   return {
     ...def,
     allLessons,
     readyLessons,
     vocabIndex,
+    contentOf,
+    load,
+    /** Tải trước buổi n khi trình duyệt rảnh — mở "Bài tiếp" là có ngay. */
+    prefetch: (n: number) => {
+      if (dayByN(n) && !contentOf(n)) whenIdle(() => { load(n).catch(() => {}); });
+    },
+    /** Bài đầy đủ (có blocks) theo id — undefined nếu buổi của nó chưa tải. */
+    fullLesson: (l: Lesson): Lesson | undefined => {
+      if (l.blocks?.length || !isReady(l)) return l;
+      const d = def.days.find((x) => x.lessons.some((y) => y.id === l.id));
+      return d ? contentOf(d.n)?.find((y) => y.id === l.id) : undefined;
+    },
+    /** Những gì một buổi gói gọn: điểm ngữ pháp, từ vựng, kỹ năng, bài tập — không cần tải nội dung. */
+    summary: (d: Day) => {
+      const m = metas.get(d.n) ?? dayMeta(d.lessons);
+      return {
+        grammar: m.grammar,
+        vocab: m.vocab,
+        quizzes: m.quizzes,
+        skills: d.lessons.filter((l) => SKILLS.includes(l.kind)),
+        minutes: m.minutes,
+        ready: d.lessons.some(isReady),
+      };
+    },
     label: (k: Kind) => def.kindLabel[k] ?? DEFAULT_LABEL[k],
     en: (k: Kind) => def.kindEn[k] ?? DEFAULT_LABEL[k],
     hue: (k: Kind) => def.kindHue[k] ?? DEFAULT_HUE[k],
@@ -101,24 +195,4 @@ export function lessonText(l: Lesson): string {
     }
   }
   return out.join('\n').slice(0, 3900);
-}
-
-/* ── Tổng hợp theo buổi ──────────────────────────────────────────────── */
-
-/** Những gì một buổi gói gọn: điểm ngữ pháp, từ vựng, kỹ năng, bài tập. */
-export function daySummary(d: Day) {
-  const grammar: string[] = [];
-  const vocab: VocabItem[] = [];
-  const quizzes: { id: string; title: string; lessonId: string; count: number }[] = [];
-  for (const l of d.lessons) {
-    for (const b of l.blocks ?? []) {
-      if (l.kind === 'grammar' && b.t === 'h') grammar.push(b.text.replace(/^\d+\.\s*/, ''));
-      if (b.t === 'vocab') vocab.push(...b.items);
-      if (b.t === 'quiz' || b.t === 'mcq' || b.t === 'build' || b.t === 'readkanji') quizzes.push({ id: b.id, title: b.title, lessonId: l.id, count: b.items.length });
-      if (b.t === 'dictation') quizzes.push({ id: b.id, title: b.title ?? 'Nghe chép đánh vần', lessonId: l.id, count: b.items.length });
-    }
-  }
-  const skills = d.lessons.filter((l) => ['listening', 'reading', 'writing', 'speaking'].includes(l.kind));
-  const minutes = d.lessons.reduce((n, l) => n + l.minutes, 0);
-  return { grammar, vocab, quizzes, skills, minutes, ready: d.lessons.some((l) => l.blocks?.length) };
 }

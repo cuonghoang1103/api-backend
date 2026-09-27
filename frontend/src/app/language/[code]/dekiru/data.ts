@@ -10,7 +10,8 @@
  */
 import { defineCourse } from '@/components/sach-hoc/course';
 import type { Day, Lesson } from '@/components/sach-hoc/types';
-import { WRITTEN } from './bai';
+import { loadBai } from './bai';
+import { MANIFEST } from './bai/manifest';
 
 export type { Ex, Block, Voice, Role, Kind, Lesson, Day } from '@/components/sach-hoc/types';
 
@@ -75,7 +76,8 @@ const OUTLINE: { n: number; title: string }[] = [
 export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({
   // Bài 0 hiện là "Bài 0" nhưng lịch học vẫn đánh số từ 1 — n ở đây là số thứ tự buổi.
   n: n + 1,
-  lessons: WRITTEN[n] ?? [stub(n, 1, [n === 0 ? 'kana' : 'conversation', title])],
+  // Chỉ MỤC LỤC (manifest.ts, sinh tự động) — nội dung bài tải khi mở, qua loadDay.
+  lessons: MANIFEST[n]?.lessons ?? [stub(n, 1, [n === 0 ? 'kana' : 'conversation', title])],
 }));
 
 export const DEKIRU = defineCourse({
@@ -88,6 +90,9 @@ export const DEKIRU = defineCourse({
   badgeWord: 'Bài',
   intro: INTRO,
   days: DAYS,
+  // Manifest khoá theo số tệp baiN; buổi n = Bài n − 1.
+  manifest: Object.fromEntries(Object.entries(MANIFEST).map(([k, v]) => [Number(k) + 1, v])),
+  loadDay: (n) => loadBai(n - 1),
   // `review` dùng cho mục 📖 Theo sách: đi theo từng trang sách, câu cô hay hỏi + cách trả lời.
   kindLabel: { review: 'Theo sách' },
   kindEn: {

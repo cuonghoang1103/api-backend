@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, Check, List, X, Clock, CalendarDays } from 'luci
 import api from '@/lib/api';
 import RobotAI from '@/components/academy/RobotAI';
 import { useLangUser } from '@/components/language/primitives';
-import { lessonText, type Course } from './course';
+import { isReady, lessonText, type Course } from './course';
 import type { Lesson } from './types';
 import { Blocks } from './Blocks';
 import { GiaSu, type Turn } from './GiaSu';
@@ -80,21 +80,47 @@ export default function CoursePage({ course }: { course: Course }) {
     window.scrollTo({ top: 0 });
   }, []);
   const open = useCallback((l: Lesson) => {
-    if (l.blocks?.length) go({ t: 'lesson', id: l.id });
+    if (isReady(l)) go({ t: 'lesson', id: l.id });
   }, [go]);
 
   const lesson = view.t === 'lesson' ? course.allLessons.find((l) => l.id === view.id) ?? INTRO : null;
   const day = view.t === 'day' ? DAYS[view.n - 1] : lesson ? course.dayOf(lesson.id) : undefined;
+  // Nội dung của buổi đang mở tải theo yêu cầu (một chunk mỗi buổi): `tick`
+  // vẽ lại khi nó về, `loadErr` giữ buổi tải hỏng để hiện nút thử lại.
+  const [tick, setTick] = useState(0);
+  const [loadErr, setLoadErr] = useState<number | null>(null);
+  const [retry, setRetry] = useState(0);
+  const dayN = day?.n;
+  useEffect(() => {
+    if (!dayN) return;
+    let live = true;
+    setLoadErr(null);
+    course.load(dayN).then(
+      () => {
+        if (!live) return;
+        setTick((t) => t + 1);
+        course.prefetch(dayN + 1);
+      },
+      () => { if (live) setLoadErr(dayN); },
+    );
+    return () => { live = false; };
+  }, [course, dayN, retry]);
+  // Bài đầy đủ (có blocks); undefined = buổi của nó đang tải.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const full = useMemo(() => (lesson ? course.fullLesson(lesson) : undefined), [course, lesson, tick]);
+
   const idx = lesson ? READY_LESSONS.findIndex((l) => l.id === lesson.id) : -1;
   const prev = idx > 0 ? READY_LESSONS[idx - 1] : null;
   const next = idx >= 0 && idx < READY_LESSONS.length - 1 ? READY_LESSONS[idx + 1] : null;
 
   const viewTitle = lesson ? lesson.title : view.t === 'day' ? `Tổng quan buổi ${view.n}` : 'Kế hoạch & tiến độ';
   const contextText = useMemo(() => {
-    if (lesson) return lessonText(lesson);
-    if (view.t === 'day') return DAYS[view.n - 1].lessons.map(lessonText).join('\n').slice(0, 3900);
+    // Chưa tải xong thì gia sư chỉ có tên + mục tiêu bài.
+    if (lesson) return lessonText(full ?? lesson);
+    if (view.t === 'day') return (course.contentOf(view.n) ?? DAYS[view.n - 1].lessons).map(lessonText).join('\n').slice(0, 3900);
     return course.planContext;
-  }, [lesson, view, DAYS, course.planContext]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lesson, full, view, DAYS, course, tick]);
 
   // Chữ người học bôi đen TRONG BÀI — để hỏi gia sư đúng chỗ đó.
   useEffect(() => {
@@ -154,7 +180,7 @@ export default function CoursePage({ course }: { course: Course }) {
   };
 
   const tocItem = (l: Lesson, sub?: string) => {
-    const ready = !!l.blocks?.length;
+    const ready = isReady(l);
     const isDone = tien.done.includes(l.id);
     return (
       <button
@@ -218,7 +244,7 @@ export default function CoursePage({ course }: { course: Course }) {
             </button>
             <div className={s.tocDay}>{tocItem(INTRO, 'Mở đầu')}</div>
             {DAYS.map((d) => {
-              const ready = d.lessons.some((l) => l.blocks?.length);
+              const ready = d.lessons.some(isReady);
               const isDone = dayDone(d, tien.done);
               return (
                 <div key={d.n} className={s.tocDay}>
@@ -287,7 +313,16 @@ export default function CoursePage({ course }: { course: Course }) {
                   </span>
                 </div>
 
-                <Blocks key={lesson.id} blocks={lesson.blocks ?? []} framed={lesson.kind === 'grammar'} />
+                {full ? (
+                  <Blocks key={lesson.id} blocks={full.blocks ?? []} framed={lesson.kind === 'grammar'} />
+                ) : loadErr === day?.n ? (
+                  <div className={s.soonBox} role="alert">
+                    Không tải được nội dung bài (mạng chập chờn hoặc web vừa cập nhật).{' '}
+                    <button type="button" className={s.linkBtn} onClick={() => setRetry((r) => r + 1)}>Thử lại</button>
+                  </div>
+                ) : (
+                  <div className={s.soonBox} aria-busy="true">Đang tải bài…</div>
+                )}
 
                 <div className={s.pager}>
                   {prev ? (

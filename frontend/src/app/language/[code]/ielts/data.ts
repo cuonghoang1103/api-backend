@@ -10,7 +10,8 @@
  * Dữ liệu tĩnh, không qua DB: đây là nội dung soạn tay, đổi theo deploy là đủ.
  */
 
-import { WRITTEN } from './ngay';
+import { loadNgay } from './ngay';
+import { MANIFEST } from './ngay/manifest';
 
 import { defineCourse } from '@/components/sach-hoc/course';
 import type { Lesson, Day } from '@/components/sach-hoc/types';
@@ -540,7 +541,7 @@ const LATER: Stub[][] = [
 
 export const DAYS: Day[] = [
   { n: 1, lessons: [D1_GRAMMAR, D1_VOCAB, D1_LISTENING, D1_HOMEWORK] },
-  ...LATER.map((ls, i) => ({ n: i + 2, lessons: WRITTEN[i + 2] ?? ls.map((s, j) => stub(i + 2, j + 1, s)) })),
+  ...LATER.map((ls, i) => ({ n: i + 2, lessons: MANIFEST[i + 2]?.lessons ?? ls.map((s, j) => stub(i + 2, j + 1, s)) })),
 ];
 
 export { INTRO };
@@ -555,6 +556,9 @@ export const IELTS = defineCourse({
   badgeWord: 'Day',
   intro: INTRO,
   days: DAYS,
+  // Ngày 1 viết thẳng ở trên; Ngày 2+ chỉ có mục lục (ngay/manifest.ts), nội dung tải khi mở.
+  manifest: MANIFEST,
+  loadDay: loadNgay,
   kindLabel: {},
   kindEn: {
     intro: 'Start Here', grammar: 'Basic Grammar', vocab: 'Basic Vocabulary', listening: 'Listening Skills',

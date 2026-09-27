@@ -378,6 +378,8 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:datMucNoLuc', { muc }) as Promise<void>,
     datModel: (model: ModelAgent) =>
       ipcRenderer.invoke('agent:datModel', { model }) as Promise<void>,
+    veCongChinh: (cuocId: string) =>
+      ipcRenderer.invoke('agent:veCongChinh', { cuocId }) as Promise<void>,
     hoanTac: (cuocId: string) =>
       ipcRenderer.invoke('agent:hoanTac', { cuocId }) as Promise<{ soFile: number; loi: string[] }>,
     dsPhien: () => ipcRenderer.invoke('agent:dsPhien') as Promise<AgentPhien[]>,

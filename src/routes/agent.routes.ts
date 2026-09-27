@@ -26,7 +26,7 @@ import type { ApiResponse } from '../types/index.js';
 import { AGENT_TOOLS, ALL_CAPABILITIES } from '../services/agent/tools.js';
 import { soGioCuaSo, tranToken, xemHanMuc } from '../services/agent/quota.js';
 import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agent/turn.js';
-import { congAgent, gatewayConfigured, modelFor, ramboDangNghi } from '../services/llm/gateway.js';
+import { congAgent, gatewayConfigured, kiemRamboSong, modelFor, ramboDangNghi } from '../services/llm/gateway.js';
 import { MODEL_DU_PHONG, MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
 import { dsModelAgent } from '../services/agent/models.js';
 import { datTenViec } from '../services/agent/datTen.js';
@@ -187,6 +187,9 @@ router.get('/du-phong', chiPro, async (req: any, res: Response<ApiResponse>, nex
       data: {
         coCongChinh: Boolean(congAgent()),
         congChinhDangHong: ramboDangNghi(),
+        /* `?kiem=1`: gõ cửa rambo THẬT (nhớ 30s) — app hỏi sau mỗi việc chạy ở
+           dự phòng để biết có nên mời người dùng quay về không. */
+        ...(req.query.kiem ? { congChinhSong: congAgent() ? await kiemRamboSong() : false } : {}),
         daBat: await daCoMatKhau(),
         coKhoa: Boolean(congDuPhong(model)),
         model,
@@ -282,7 +285,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   const body = req.body as {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
     ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
-    model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; duPhongVe?: unknown; duPhongModel?: unknown;
+    model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; duPhongVe?: unknown; duPhongModel?: unknown; duPhongGiu?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -391,6 +394,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         model: body.model,
         duPhongVe: body.duPhongVe,
         duPhongModel: body.duPhongModel,
+        duPhongGiu: body.duPhongGiu,
         laPhu: body.laPhu,
         toolMcp: body.toolMcp,
         userId: req.userId,

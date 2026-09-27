@@ -720,6 +720,22 @@ async function goCuaRambo(): Promise<boolean> {
   }
 }
 
+/**
+ * Rambo có sống THẬT không — gõ cửa bằng một lời gọi thật, nhớ kết quả 30s để
+ * nhiều app hỏi cùng lúc không thành nhiều lời gọi. App gọi cái này SAU khi một
+ * việc chạy ở cổng dự phòng đã xong, để hỏi người dùng có muốn quay về không
+ * (27/09/2026). Đọc `ramboDangNghi()` là SAI cho câu hỏi này: cầu dao tự hết hạn
+ * sau `RAMBO_NGHI_MS` dù rambo vẫn chết.
+ */
+let kiemGanNhat: { luc: number; song: boolean } | null = null;
+export async function kiemRamboSong(): Promise<boolean> {
+  if (kiemGanNhat && Date.now() - kiemGanNhat.luc < 30_000) return kiemGanNhat.song;
+  const song = await goCuaRambo();
+  kiemGanNhat = { luc: Date.now(), song };
+  if (song) baoRamboOk();
+  return song;
+}
+
 function batDauDo(): void {
   if (dangDo) return;
   dangDo = true;

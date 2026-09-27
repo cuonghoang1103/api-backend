@@ -218,3 +218,28 @@ export function MoCongDuPhong({ baoTri = false, onXong }: { baoTri?: boolean; on
     </div>
   );
 }
+
+/**
+ * Hỏi "quay về cổng chính?" — hiện dưới thông báo `RAMBO_SONG_LAI`, tức SAU
+ * khi việc đang làm ở dự phòng đã xong và máy chủ gõ cửa rambo thật thấy sống.
+ * Không bấm gì thì tab vẫn ở lại dự phòng; tab mới luôn tự đi cổng chính.
+ */
+export function HoiQuayVeCongChinh({ cuocId }: { cuocId: string }) {
+  const [chon, datChon] = useState<'ve' | 'o' | null>(null);
+  if (chon === 've') return <p className="ct-duphong-chu"><Check size={12} aria-hidden /> Đã quay về cổng chính — từ câu hỏi tiếp theo tab này dùng CuongMini.</p>;
+  if (chon === 'o') return <p className="ct-duphong-chu">Ở lại cổng dự phòng cho tab này. Mở tab mới là tự dùng cổng chính.</p>;
+  return (
+    <div className="ct-duphong-hang">
+      <button
+        type="button"
+        className="ct-btn"
+        onClick={() => { void window.cuongthai?.agent.veCongChinh(cuocId); datChon('ve'); }}
+      >
+        Quay về cổng chính
+      </button>
+      <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datChon('o')}>
+        Ở lại cổng dự phòng
+      </button>
+    </div>
+  );
+}

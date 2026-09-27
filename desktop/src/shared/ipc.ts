@@ -1779,6 +1779,8 @@ export const INVOKE_CHANNELS = {
   'agent:datMucNoLuc': agentMucNoLucSchema,
   'agent:datModel': agentModelSchema,
   'agent:hoanTac': agentCuocSchema,
+  /** Tab bám cổng dự phòng ⇒ người dùng bấm "Quay về cổng chính". */
+  'agent:veCongChinh': agentCuocSchema,
   'agent:dsPhien': null,
   'agent:moPhien': agentMoPhienSchema,
   'agent:xoaPhien': agentPhienSchema,
@@ -2421,6 +2423,7 @@ export interface DesktopBridge {
     datModel(model: ModelAgent): Promise<void>;
     /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */
     hoanTac(cuocId: string): Promise<{ soFile: number; loi: string[] }>;
+    veCongChinh(cuocId: string): Promise<void>;
     /** Các việc đã lưu, mới nhất trước. */
     dsPhien(): Promise<AgentPhien[]>;
     /**

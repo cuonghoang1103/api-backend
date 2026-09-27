@@ -329,6 +329,12 @@ export interface AgentTurnInput {
   duPhongVe?: unknown;
   /** Model người dùng chọn cho cổng dự phòng (`gpt-6-sol` | `gpt-6-astra`). */
   duPhongModel?: unknown;
+  /**
+   * Tab này đang BÁM cổng dự phòng (app giữ tới khi người dùng bấm quay về) ⇒
+   * đi thẳng dự phòng, không gõ cửa rambo giữa một việc — tránh đổi model giữa
+   * chừng và tránh thông báo đổi cổng nhấp nháy mỗi phút.
+   */
+  duPhongGiu?: unknown;
   /** Lượt này thuộc một AGENT PHỤ — prompt gọn hơn, trần bước riêng. */
   laPhu?: unknown;
   /**
@@ -950,6 +956,7 @@ export async function runAgentTurn(
     if (!/^claude-/i.test(m)) system = `${system}\n\n${LOI_LAM_VIEC_GPT}`;
     return true;
   };
+  if (ep.label === 'cong-agent' && input.duPhongGiu === true) chuyenDuPhong();
   if (ep.label === 'cong-agent' && ramboDangNghi() && !chuyenDuPhong() && !coVeDuPhong) {
     /* Rambo đang được đánh dấu hỏng (mũi dò gõ cửa mỗi 30s, sống lại là đóng
        cầu dao ngay) và người dùng chưa có vé ⇒ hỏi luôn, đừng bắt họ chờ thêm
@@ -1015,6 +1022,8 @@ export async function runAgentTurn(
      tin nhắn assistant dở nằm trong `append` — giữ lại để THAY nó, không đẩy
      thêm cái mới. */
   let soLanVietTiep = 0;
+  /** Số lần đã gọi lại vì cổng trả rỗng — xem chốt "CỔNG TRẢ RỖNG" trong vòng lặp. */
+  let soLanRong = 0;
   let dangViet = '';
   let viTriPrefill = -1;
 
@@ -1075,6 +1084,18 @@ export async function runAgentTurn(
       const noiDung = catRacCong(ketQua.text);
       const calls = ketQua.toolCalls;
       const finishReason = ketQua.finishReason;
+
+      /* CỔNG TRẢ RỖNG ⇒ gọi lại ĐÚNG bước này một lần (27/09/2026). Đo thật trên
+         modelapi lúc quá tải: `finish_reason: stop`, không chữ, không tool — và
+         agent kết thúc với câu trả lời trống, không báo gì. Cùng lúc đó API gốc
+         còn trả thẳng "servers are currently overloaded". Rỗng hoàn toàn không
+         bao giờ là câu trả lời thật. */
+      if (calls.length === 0 && !noiDung.trim() && !dangViet && soLanRong < 1 && !signal.aborted) {
+        soLanRong++;
+        logger.warn('agent: cổng trả về RỖNG — gọi lại bước này một lần', { model, cong: ep.label });
+        hop--;
+        continue;
+      }
 
       // ── Model không đòi tool nữa ⇒ xong lượt, TRỪ KHI nó bị cắt ──
       if (calls.length === 0) {

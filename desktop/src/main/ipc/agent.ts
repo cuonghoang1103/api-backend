@@ -32,7 +32,7 @@ import {
   daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quayLui, quyenCuaCuoc, soCuaCuoc,
   datCheDoQuyen, tachNhanhCuoc, taoCuoc,
   xoaHoiThoai, type SuKienAgent,
-  dsQuyenLauCua, xoaQuyenLauCua,
+  dsQuyenLauCua, xoaQuyenLauCua, veCongChinh,
 } from '../agent/loop';
 import { dungLenhNenCua } from '../agent/lenhNen';
 import { duongDanCauHinh, duyetDuAn, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
@@ -544,6 +544,10 @@ export function registerAgentHandlers(): void {
 
   handle('agent:datModel', ({ model }) => {
     setSetting('agentModel', model);
+  });
+
+  handle('agent:veCongChinh', ({ cuocId }) => {
+    veCongChinh(cuocId);
   });
 
   handle('agent:hoanTac', async ({ cuocId }) => {

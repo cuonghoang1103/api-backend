@@ -949,6 +949,7 @@ export async function chayLuot(
       chuVong = '';
 
       const phanHoi = await mgoiMotLuot({
+        cuocId: c.id,
         token: phien.sessionToken,
         messages: c.hoiThoai,
         capabilities,
@@ -1297,6 +1298,7 @@ export async function chayLuot(
     else phat({ loai: 'loi', thongDiep: (err as Error).message || 'Lỗi không rõ.' });
   } finally {
     if (c.dangChay === dieuKhien) c.dangChay = null;
+    if (!dieuKhien.signal.aborted) void hoiQuayVeNeuRamboSong(c.id, phien.sessionToken, phat);
     // Lưu ở `finally`, KHÔNG ở nhánh thành công. Lượt hỏng giữa chừng hay bị
     // người dùng bấm Dừng vẫn chứa những bước agent đã đi và đã trả tiền —
     // mất chúng chỉ vì lượt không kết thúc đẹp là mất đúng thứ đáng giữ nhất.
@@ -1436,6 +1438,7 @@ async function chayViecPhu(
     if (signal.aborted) return { noiDung: 'Việc phụ bị dừng.', tomTat: 'đã dừng' };
 
     const ph = await mgoiMotLuot({
+      cuocId: c.id,
       token,
       messages: phu,
       capabilities: ['fs_read', 'git_read'],
@@ -1576,6 +1579,8 @@ async function mgoiMotLuot(o: {
   model?: string;
   laPhu?: boolean;
   toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
+  /** Tab nào — để cổng dự phòng BÁM theo tab (xem `giuDuPhong`). */
+  cuocId?: string;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
@@ -1625,22 +1630,65 @@ async function mgoiMotLuot(o: {
 }
 
 /**
- * Báo MỘT dòng khi đường đi đổi giữa cổng chính (rambo) và cổng dự phòng —
- * cả hai chiều, để người dùng biết lúc nào mình đang tiêu tiền thật và lúc nào
- * đã tự về lại CuongMini. Nhớ ở mức mô-đun: một việc có nhiều lượt, chỉ báo lúc
- * ĐỔI chứ không báo mỗi lượt.
+ * CỔNG DỰ PHÒNG BÁM THEO TAB (27/09/2026).
+ *
+ * Bản đầu báo "đã quay về cổng chính" mỗi khi một lượt BẮT ĐẦU ở rambo — mà
+ * máy chủ chỉ đánh dấu rambo hỏng trong 60 giây, nên cứ mỗi phút app lại báo
+ * "đã quay về" rồi ngay sau đó "đang bảo trì", dù rambo chưa hề sống lại. Tệ
+ * hơn: nếu rambo sống lại THẬT giữa chừng, một việc đang làm dở sẽ đổi model
+ * giữa chừng. Người dùng chốt: *"phải đợi nó làm xong đã rồi có nút hỏi bạn có
+ * muốn trở về cổng rambo không để làm tiếp, đỡ lộn nhau gián đoạn"*.
+ *
+ * Nên: tab nào đã sang dự phòng thì Ở LẠI dự phòng (`duPhongGiu` gửi lên, máy
+ * chủ không thử rambo nữa) cho tới khi người dùng bấm "Quay về cổng chính".
+ * Hết mỗi việc, app hỏi máy chủ rambo có sống THẬT không (gõ cửa thật, không
+ * đọc đồng hồ) — sống thì hiện nút hỏi. Tab mới vẫn tự đi rambo như cũ.
  */
-let congTruoc: 'chinh' | 'du-phong' = 'chinh';
-function baoDoiCong(cong: 'chinh' | 'du-phong', model: string, phat: (e: SuKienAgent) => void): void {
-  if (cong === congTruoc) return;
-  congTruoc = cong;
+const giuDuPhong = new Set<string>();
+/** Đã hỏi "quay về không?" cho tab này trong lần rambo sống lại hiện tại. */
+const daHoiSongLai = new Set<string>();
+
+function danhDauDuPhong(cuocId: string | undefined, model: string, phat: (e: SuKienAgent) => void): void {
+  if (!cuocId || giuDuPhong.has(cuocId)) return;
+  giuDuPhong.add(cuocId);
+  daHoiSongLai.delete(cuocId);
   phat({
     loai: 'loi',
     ma: 'DOI_CONG',
-    thongDiep: cong === 'du-phong'
-      ? `CuongMini đang bảo trì — đang dùng cổng dự phòng (${model}, tính phí). Cổng chính sống lại là tự quay về.`
-      : 'Cổng chính CuongMini đã hoạt động lại — đã tự quay về, không còn dùng cổng dự phòng.',
+    thongDiep: `CuongMini đang bảo trì — tab này chuyển sang cổng dự phòng (${model}, tính phí) và sẽ Ở LẠI đó cho tới khi bạn chọn quay về. Hết việc, nếu cổng chính đã sống lại, app sẽ hỏi bạn.`,
   });
+}
+
+/** Người dùng bấm "Quay về cổng chính" — lượt sau của tab này đi rambo. */
+export function veCongChinh(cuocId: string): void {
+  giuDuPhong.delete(cuocId);
+  daHoiSongLai.delete(cuocId);
+}
+
+/**
+ * Hết một việc chạy ở dự phòng ⇒ hỏi máy chủ rambo có sống THẬT không. Sống thì
+ * hiện câu hỏi kèm nút (mã `RAMBO_SONG_LAI`, giao diện vẽ nút). Chỉ hỏi một lần
+ * cho mỗi lần sống lại; lỗi mạng thì im — lần sau hết việc sẽ hỏi lại.
+ */
+async function hoiQuayVeNeuRamboSong(cuocId: string, token: string, phat: (e: SuKienAgent) => void): Promise<void> {
+  if (!giuDuPhong.has(cuocId) || daHoiSongLai.has(cuocId)) return;
+  try {
+    const r = await fetch(`${API_ORIGIN}/api/v1/agent/du-phong?kiem=1`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(25_000),
+    });
+    if (!r.ok) return;
+    const j = await r.json() as { data?: { congChinhSong?: boolean } };
+    if (j.data?.congChinhSong !== true || !giuDuPhong.has(cuocId)) return;
+    daHoiSongLai.add(cuocId);
+    phat({
+      loai: 'loi',
+      ma: 'RAMBO_SONG_LAI',
+      thongDiep: 'Cổng chính CuongMini đã hoạt động lại. Bạn muốn làm tiếp ở cổng chính (không tính phí) hay ở lại cổng dự phòng?',
+    });
+  } catch {
+    /* mạng chập — không sao, hết việc sau sẽ hỏi lại */
+  }
 }
 
 /** Vé cổng dự phòng đang giữ (chuỗi rỗng/không có ⇒ `undefined`, không gửi). */
@@ -1679,6 +1727,8 @@ async function mgoiMotLuotThat(o: {
   model?: string;
   laPhu?: boolean;
   toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
+  /** Tab nào — để cổng dự phòng BÁM theo tab (xem `giuDuPhong`). */
+  cuocId?: string;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
@@ -1722,6 +1772,9 @@ async function mgoiMotLuotThat(o: {
          khi rambo hỏng. Xem `services/agent/congDuPhong.ts` bên backend. */
       duPhongVe: veDuPhong(),
       duPhongModel: modelDuPhong(),
+      /* Tab đang bám dự phòng ⇒ máy chủ đi thẳng dự phòng, KHÔNG gõ cửa rambo
+         giữa chừng (tránh đổi model giữa một việc). */
+      duPhongGiu: o.cuocId ? giuDuPhong.has(o.cuocId) : false,
     }),
   });
 
@@ -1788,10 +1841,10 @@ async function mgoiMotLuotThat(o: {
       switch (e.type) {
         case 'start':
           o.phat({ loai: 'batDau', model: e.model, ...(typeof e.buoc === 'number' ? { buoc: e.buoc } : {}), ...(typeof e.tranBuoc === 'number' ? { tranBuoc: e.tranBuoc } : {}) });
-          if (e.cong === 'chinh' || e.cong === 'du-phong') baoDoiCong(e.cong, e.model, o.phat);
+          if (e.cong === 'du-phong') danhDauDuPhong(o.cuocId, e.model, o.phat);
           break;
         case 'cong':
-          baoDoiCong('du-phong', e.model, o.phat);
+          danhDauDuPhong(o.cuocId, e.model, o.phat);
           break;
         case 'text':
           o.phat({ loai: 'chu', delta: e.delta });

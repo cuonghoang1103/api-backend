@@ -23,6 +23,7 @@
  * Ảnh KHÔNG được lưu: nhận base64 trong thân JSON, gửi thẳng cho cổng, xong.
  * Model: `vo_viet_lai` = `gpt-6-sol` (model GPT duy nhất của cổng nhìn ảnh thật).
  */
+import crypto from 'node:crypto';
 import { AppError, BadRequestError } from '../middleware/errorHandler.js';
 import { checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
 import { visionComplete, type VisionImage } from './docTools/vision.js';
@@ -287,4 +288,47 @@ export async function vietLaiTrang(userId: number, b: {
   }
 
   return { khoi, sua, chuThuan, canhBao, soKhongDoc, model };
+}
+
+// ── Chạy nền ───────────────────────────────────────────────────────────
+//
+// ⚠️ Cloudflare đứng trước máy chủ và CẮT mọi yêu cầu chờ quá 100 giây (524).
+// Một trang dày chạy 20–90 giây (đo 28/09: 39s), sát trần. Nên app gửi việc
+// rồi hỏi lại mỗi vài giây — cùng mẫu với `batDauVe` (voVe.service.ts). Giữ
+// trong bộ nhớ là đủ: một tiến trình backend, kết quả sống 15 phút.
+
+type ViecVietLai = {
+  userId: number; luc: number; ketQua?: unknown;
+  loi?: { thongDiep: string; ma: string; status: number };
+};
+const cacViec = new Map<string, ViecVietLai>();
+const SONG_MS = 15 * 60_000;
+
+export function batDauVietLai(userId: number, b: { anh?: unknown; goiY?: unknown; giay?: unknown }) {
+  const bay = Date.now() - SONG_MS;
+  for (const [id, v] of cacViec) if (v.luc < bay) cacViec.delete(id);
+  // Ảnh hỏng thì báo NGAY bằng mã, không bắt app chờ một vòng hỏi lại.
+  docAnh(b.anh);
+  const dangChay = [...cacViec.values()].filter((v) => v.userId === userId && !v.ketQua && !v.loi).length;
+  if (dangChay >= 2) throw new AppError('Đang viết lại 2 trang rồi — đợi xong đã nhé.', 429, 'VIET_LAI_BAN');
+  const id = crypto.randomUUID();
+  const viec: ViecVietLai = { userId, luc: Date.now() };
+  cacViec.set(id, viec);
+  vietLaiTrang(userId, b).then(
+    (kq) => { viec.ketQua = kq; },
+    (e: { message?: string; code?: string; statusCode?: number }) => {
+      viec.loi = { thongDiep: e?.message || 'AI chưa chép được trang này', ma: e?.code || 'AI_LOI', status: e?.statusCode || 502 };
+    },
+  );
+  return { viec: id };
+}
+
+export function xemViecVietLai(userId: number, id: string) {
+  const v = cacViec.get(id);
+  if (!v || v.userId !== userId) {
+    throw new AppError('Không tìm thấy lượt viết lại này (có thể đã quá 15 phút).', 404, 'VIET_LAI_KHONG_CO');
+  }
+  if (v.loi) throw new AppError(v.loi.thongDiep, v.loi.status, v.loi.ma);
+  if (!v.ketQua) return { xong: false, giay: Math.round((Date.now() - v.luc) / 1000) };
+  return { xong: true, ...(v.ketQua as object) };
 }

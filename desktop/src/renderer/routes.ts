@@ -54,6 +54,7 @@ import {
   Users,
   Wallet,
   Wand2,
+  Wifi,
 } from 'lucide-react';
 import { nativePageFor } from './page-registry';
 
@@ -197,6 +198,8 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['profile', 'ca nhan', 'trang ca nhan'] },
   { path: '/pro', label: 'Pro', icon: Sparkles, group: 'khac',
     keywords: ['pro', 'nâng cấp', 'gói', 'nang cap'] },
+  { path: '/toc-do-mang', label: 'Mạng nhà', icon: Wifi, group: 'khac',
+    keywords: ['mang', 'wifi', 'toc do', 'speedtest', 'thiet bi', 'quet mang', 'internet'] },
 ];
 
 export const GROUP_LABELS: Record<RouteGroup, string> = {

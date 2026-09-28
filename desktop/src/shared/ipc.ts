@@ -1162,6 +1162,27 @@ export type AgentMucKhoiPhuc =
  * import ngược từ `main/` sang đây, vì `shared/` bị cả preload nạp vào — kéo
  * theo `node:child_process` là phá đúng ranh giới mà preload sinh ra để giữ.
  */
+/** Thông tin card mạng LAN của máy này. Xem main/mangNha/quet.ts. */
+export interface ThongTinMangBridge {
+  ipMinh: string | null;
+  macMinh: string | null;
+  tenCard: string | null;
+  /** Ba octet đầu của dải /24, ví dụ "192.168.1". */
+  dai: string | null;
+}
+
+/** Một thiết bị trong LAN (payload sự kiện `mangNha:thietBi`). */
+export interface ThietBiMangBridge {
+  ip: string;
+  mac: string;
+  hang: string;
+  ten: string | null;
+  song: boolean;
+  macAn: boolean;
+  laMinh: boolean;
+  laRouter: boolean;
+}
+
 export type AiCucBoMa = 'nho' | 'vua' | 'anh';
 
 export interface AiCucBoTinhTrang {
@@ -1688,6 +1709,24 @@ export const INVOKE_CHANNELS = {
   'manHinh:moCaiDatQuyen': null,
 
   /**
+   * ── MẠNG NHÀ ─────────────────────────────────────────────
+   *
+   * Quét thiết bị trong LAN + đo tốc độ. Quét chạy ở tiến trình chính (cần
+   * Node để ping + đọc bảng ARP — renderer không có). Kết quả từng thiết bị
+   * chảy về qua sự kiện `mangNha:thietBi`, KHÔNG qua giá trị trả về: quét cả
+   * dải /24 mất nhiều giây, hiện dần thì người dùng thấy nó đang chạy.
+   */
+  'mangNha:quet': z
+    .object({
+      soLo: z.number().int().min(1).max(64).optional(),
+      hanPingMs: z.number().int().min(100).max(5000).optional(),
+    })
+    .nullable()
+    .optional(),
+  'mangNha:dung': null,
+  'mangNha:thongTin': null,
+
+  /**
    * ── AI NGOẠI TUYẾN ───────────────────────────────────────
    *
    * AI chạy THẲNG trên máy người dùng qua llama.cpp, dùng được khi mất mạng.
@@ -2002,6 +2041,12 @@ export const EVENT_CHANNELS = [
   'pty:trangThai',
   /** Tiến độ cài OpenCode Terminal: tải (%), giải nén, kiểm, thêm PATH. */
   'opencode:tienDo',
+  /** Một thiết bị vừa phát hiện trong LAN (bắn dần trong lúc quét). */
+  'mangNha:thietBi',
+  /** Tiến độ quét: đã dò bao nhiêu / tổng địa chỉ. */
+  'mangNha:tienDo',
+  /** Quét xong một lượt. */
+  'mangNha:xong',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];
@@ -2342,6 +2387,19 @@ export interface DesktopBridge {
     chup(id: string): Promise<{ ok: boolean; anh?: string; rong?: number; cao?: number; loi?: string }>;
     /** Mở trang cấp quyền Ghi màn hình (macOS). Nơi khác thì không làm gì. */
     moCaiDatQuyen(): Promise<{ ok: boolean }>;
+  };
+
+  mangNha: {
+    /**
+     * Bắt đầu quét LAN. Trả về ngay (không đợi xong); thiết bị chảy về qua
+     * sự kiện `mangNha:thietBi`, tiến độ qua `mangNha:tienDo`, kết thúc qua
+     * `mangNha:xong`. Gọi lúc đang quét thì bỏ qua (một lượt một lúc).
+     */
+    quet(tuyChon?: { soLo?: number; hanPingMs?: number } | null): Promise<{ dangChay: boolean; dai: string | null }>;
+    /** Dừng lượt quét đang chạy. */
+    dung(): Promise<{ ok: boolean }>;
+    /** Thông tin card mạng của máy này (IP, MAC, dải) — không cần quét. */
+    thongTin(): Promise<ThongTinMangBridge>;
   };
 
   aiCucBo: {

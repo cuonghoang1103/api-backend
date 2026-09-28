@@ -47,6 +47,7 @@ import { LoTrinhPage } from './features/roadmap/LoTrinhPage';
 import { NgoaiNguPage } from './features/language/NgoaiNguPage';
 import { PhongVanPage } from './features/interview/PhongVanPage';
 import { CtWorkPage } from './features/work/CtWorkPage';
+import { MangNhaPage } from './features/mang/MangNhaPage';
 import { thuocCayWeb } from './features/web/dinhTuyenWeb';
 
 export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
@@ -81,6 +82,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/saved': DaLuuPage,
   '/profile': TrangCaNhanPage,
   '/work': CtWorkPage,
+  '/toc-do-mang': MangNhaPage,
 };
 
 /**

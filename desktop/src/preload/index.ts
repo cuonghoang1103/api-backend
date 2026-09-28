@@ -58,6 +58,7 @@ import type {
   StorageUsage,
   StoredSession,
   UpdateStatus,
+  ThongTinMangBridge,
 } from '../shared/ipc';
 import type { CaiXuat } from '../shared/dinhDangXuat';
 
@@ -88,6 +89,9 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'pty:du',
   'pty:trangThai',
   'agent:phienDoi',
+  'mangNha:thietBi',
+  'mangNha:tienDo',
+  'mangNha:xong',
 ];
 
 const bridge: DesktopBridge = {
@@ -304,6 +308,12 @@ const bridge: DesktopBridge = {
       }>,
     moCaiDatQuyen: () =>
       ipcRenderer.invoke('manHinh:moCaiDatQuyen') as Promise<{ ok: boolean }>,
+  },
+  mangNha: {
+    quet: (tuyChon) =>
+      ipcRenderer.invoke('mangNha:quet', tuyChon ?? null) as Promise<{ dangChay: boolean; dai: string | null }>,
+    dung: () => ipcRenderer.invoke('mangNha:dung') as Promise<{ ok: boolean }>,
+    thongTin: () => ipcRenderer.invoke('mangNha:thongTin') as Promise<ThongTinMangBridge>,
   },
   aiCucBo: {
     tinhTrang: () => ipcRenderer.invoke('aiCucBo:tinhTrang'),

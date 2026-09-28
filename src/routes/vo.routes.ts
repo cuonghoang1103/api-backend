@@ -20,6 +20,7 @@ import {
   dongBoCay, xinDuongDayNet, xacNhanNet, layCayVo, xoaTrangVo, xoaCuonVo,
   xinDuongNen,
 } from '../services/voInk.service.js';
+import { veBangNet } from '../services/voVe.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -93,6 +94,16 @@ router.post('/trang/xoa', async (req, res: Response<ApiResponse>, next) => {
 router.post('/cuon/xoa', async (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await xoaCuonVo(req.userId!, req.body?.clientId) });
+  } catch (e) { next(e); }
+});
+
+/**
+ * AI vẽ bằng nét: `{ de, kieu: 'hinh' | 'sodo' }` → `{ net: [[[x,y]…]…], rong, cao, nhan }`.
+ * Toạ độ đã co về khung 1000 theo cạnh dài; app tự đặt và co vào trang.
+ */
+router.post('/ve', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await veBangNet(req.userId!, req.body ?? {}) });
   } catch (e) { next(e); }
 });
 

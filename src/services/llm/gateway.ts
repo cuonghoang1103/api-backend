@@ -334,7 +334,8 @@ export type LlmPurpose =
   | 'finance_advisor'     // MoneyFlow — đọc số liệu tiền nong của CHÍNH người dùng rồi khuyên
   | 'work_assistant'      // CT Work — trợ lý trong dự án: viết story, tách việc, sinh test, trả lời về dự án
   | 'work_digest'         // CT Work — diễn đạt lại số liệu mã đã tính (báo cáo tuần, bản tin)
-  | 'note_format';        // Notes — "✨ Sắp xếp lại trang": sửa chính tả + dựng mục/bảng/khối code, KHÔNG thêm ý
+  | 'note_format'         // Notes — "✨ Sắp xếp lại trang": sửa chính tả + dựng mục/bảng/khối code, KHÔNG thêm ý
+  | 've_net';             // Vở iPad — "AI vẽ bằng nét": viết SVG nét đơn, máy chủ đổi ra điểm cho PKStroke
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -452,6 +453,13 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * Trang dài mà thấy chậm thì ghim: `LLM_MODEL_NOTE_FORMAT=claude-sonnet-5`.
    */
   note_format: 'claude-sonnet-4-6',
+  /**
+   * Vở iPad — "AI vẽ bằng nét" (28/09/2026). Đo cùng đề ("con mèo ngồi",
+   * "chu trình nước"): `gpt-6-sol` vẽ cân đối, dễ thương, ~30s; `claude-sonnet-5`
+   * vẽ mèo thành cái hộp, sơ đồ rời rạc. Nằm trong `VIEC_CHI_OPENAI` để rambo
+   * (mặc định Claude) không cướp việc này.
+   */
+  ve_net: 'gpt-6-sol',
 
   cv_critique: 'gpt-6-sol',
   cv_writing: 'gpt-6-sol',
@@ -770,7 +778,10 @@ function batDauDo(): void {
  * giao thức Anthropic trước (xem cách `interview/llm/index.ts` chọn provider
  * theo `ep.giaoThuc`), rồi mới bỏ tên khỏi danh sách này.
  */
-const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr']);
+// `ve_net` có mặt vì lý do KHÁC: nó gọi qua `llmComplete` (hiểu cả hai giao
+// thức), nhưng chất lượng nét vẽ đo được chỉ tốt trên `gpt-6-sol` — đi rambo là
+// ra model Claude vẽ kém hơn hẳn.
+const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net']);
 
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó

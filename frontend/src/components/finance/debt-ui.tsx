@@ -9,15 +9,15 @@ import { toast } from 'sonner';
 import { CreditCard, AlertTriangle, CheckCircle2, Upload } from 'lucide-react';
 import { fileApi } from '@/lib/api';
 import {
-  financeApi, interestLabel, LENDER_TYPE_LABELS, INTEREST_TYPE_LABELS,
+  financeApi, interestLabel, LENDER_TYPE_LABELS, INTEREST_TYPE_LABELS, INTEREST_TYPE_HINTS,
   type Debt, type ScheduleItem, type Wallet, type DebtComputation,
 } from '@/lib/finance-api';
-import { cn, formatVnd } from '@/lib/utils';
+import { cn, formatVnd, formatMoney } from '@/lib/utils';
 import { Sheet, Button, Field, inputCls, Pill, ProgressBar } from './primitives';
 
 // ─── Tick-to-pay ─────────────────────────────────────────────
-export function PayScheduleSheet({ open, onClose, debtId, item, onPaid }: {
-  open: boolean; onClose: () => void; debtId: number;
+export function PayScheduleSheet({ open, onClose, debtId, item, onPaid, currency }: {
+  open: boolean; onClose: () => void; debtId: number; currency?: string;
   item: Pick<ScheduleItem, 'id' | 'installmentNo' | 'amountDue' | 'dueDate'> | null;
   onPaid: (debt: Debt) => void;
 }) {
@@ -28,7 +28,7 @@ export function PayScheduleSheet({ open, onClose, debtId, item, onPaid }: {
 
   useEffect(() => {
     if (!open || !item) return;
-    setAmount(String(Math.round(Number(item.amountDue))));
+    setAmount(currency === 'USD' ? String(Number(item.amountDue)) : String(Math.round(Number(item.amountDue))));
     financeApi.listWallets().then((w) => { setWallets(w); setWalletId(w[0]?.id ?? null); }).catch(() => undefined);
   }, [open, item]);
 
@@ -54,11 +54,12 @@ export function PayScheduleSheet({ open, onClose, debtId, item, onPaid }: {
         <div className="space-y-4">
           <div className="rounded-xl bg-[var(--border-color)]/40 p-3 text-sm">
             <div className="flex justify-between"><span className="text-text-muted">Đến hạn</span><span className="text-text-primary">{item.dueDate.slice(0, 10)}</span></div>
-            <div className="mt-1 flex justify-between"><span className="text-text-muted">Cần trả</span><span className="font-semibold text-text-primary">{formatVnd(item.amountDue)}</span></div>
+            <div className="mt-1 flex justify-between"><span className="text-text-muted">Cần trả</span><span className="font-semibold text-text-primary">{formatMoney(item.amountDue, currency)}</span></div>
           </div>
           <Field label="Số tiền thực trả">
-            <input inputMode="numeric" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} />
+            <input inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(currency === 'USD' ? /[^\d.]/g : /[^\d]/g, ''))} className={inputCls} />
           </Field>
+          {currency === 'USD' && <div className="-mt-2 text-xs text-text-muted">Khoản nợ bằng $. Trừ từ ví ₫ sẽ quy đổi theo tỷ giá bạn đã đặt.</div>}
           <div>
             <div className="mb-1.5 text-xs font-medium text-text-secondary">Trừ từ ví</div>
             <div className="flex flex-wrap gap-1.5">
@@ -133,8 +134,11 @@ export function DebtForm({ initial, onSaved, onCancel }: { initial?: Debt; onSav
     lenderName: initial?.lenderName ?? '',
     lenderType: initial?.lenderType ?? 'LOAN_APP',
     principal: initial ? String(Math.round(Number(initial.principal))) : '',
-    interestType: initial?.interestType ?? 'DAILY_PERCENT',
-    interestRate: initial ? String(initial.interestRate) : '',
+    interestType: initial?.interestType ?? 'REDUCING_BALANCE',
+    interestRate: initial ? String(Number(initial.interestRate)) : '',
+    rateUnit: initial?.rateUnit ?? (initial?.interestType === 'DAILY_PERCENT' ? 'DAY' : 'MONTH'),
+    currency: initial?.currency ?? 'VND',
+    prepayFeePct: initial?.prepayFeePct != null ? String(Number(initial.prepayFeePct)) : '',
     startDate: initial?.startDate?.slice(0, 10) ?? new Date().toISOString().slice(0, 10),
     termMonths: initial?.termMonths ? String(initial.termMonths) : '',
     paymentDay: initial?.paymentDay ? String(initial.paymentDay) : '',
@@ -147,6 +151,9 @@ export function DebtForm({ initial, onSaved, onCancel }: { initial?: Debt; onSav
   const debounce = useRef<ReturnType<typeof setTimeout>>();
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
   const needsTerm = form.interestType !== 'DAILY_PERCENT';
+  const laiNgay = form.interestType === 'DAILY_PERCENT';
+  const donVi = laiNgay ? 'DAY' : form.rateUnit === 'YEAR' ? 'YEAR' : 'MONTH';
+  const kyHieu = form.currency === 'USD' ? '$' : '₫';
 
   useEffect(() => {
     if (!form.principal || !form.interestType) { setPreview(null); return; }
@@ -154,13 +161,13 @@ export function DebtForm({ initial, onSaved, onCancel }: { initial?: Debt; onSav
     debounce.current = setTimeout(() => {
       financeApi.previewDebt({
         principal: Number(form.principal), interestType: form.interestType,
-        interestRate: Number(form.interestRate) || 0, startDate: form.startDate,
+        interestRate: Number(form.interestRate) || 0, rateUnit: donVi, startDate: form.startDate,
         termMonths: form.termMonths ? Number(form.termMonths) : null,
         paymentDay: form.paymentDay ? Number(form.paymentDay) : null,
       }).then(setPreview).catch(() => setPreview(null));
     }, 350);
     return () => { if (debounce.current) clearTimeout(debounce.current); };
-  }, [form.principal, form.interestType, form.interestRate, form.startDate, form.termMonths, form.paymentDay]);
+  }, [form.principal, form.interestType, form.interestRate, form.startDate, form.termMonths, form.paymentDay, donVi]);
 
   const upload = async (file: File) => {
     setUploading(true);
@@ -180,11 +187,18 @@ export function DebtForm({ initial, onSaved, onCancel }: { initial?: Debt; onSav
       const body = {
         lenderName: form.lenderName.trim(), lenderType: form.lenderType,
         principal: Number(form.principal), interestType: form.interestType,
-        interestRate: Number(form.interestRate) || 0, startDate: form.startDate,
+        interestRate: Number(form.interestRate) || 0, rateUnit: donVi, currency: form.currency, startDate: form.startDate,
         termMonths: form.termMonths ? Number(form.termMonths) : null,
         paymentDay: form.paymentDay ? Number(form.paymentDay) : null,
+        prepayFeePct: form.prepayFeePct === '' ? null : Number(form.prepayFeePct),
         note: form.note || undefined, attachmentUrl: form.attachmentUrl || undefined,
       };
+      // Khoản đã có kỳ đã trả: máy chủ KHÔNG cho đổi điều khoản — chỉ gửi
+      // những trường sửa được, kẻo cả lượt lưu bị từ chối.
+      const daTra = !!initial && ((initial.payments?.length ?? 0) > 0 || (initial.schedule ?? []).some((k) => k.isPaid));
+      if (daTra) {
+        for (const k of ['principal', 'interestType', 'interestRate', 'rateUnit', 'currency', 'startDate', 'termMonths', 'paymentDay'] as const) delete (body as Record<string, unknown>)[k];
+      }
       const debt = initial ? await financeApi.updateDebt(initial.id, body) : await financeApi.createDebt(body);
       toast.success(initial ? 'Đã cập nhật' : 'Đã tạo khoản nợ');
       onSaved(debt);
@@ -200,18 +214,33 @@ export function DebtForm({ initial, onSaved, onCancel }: { initial?: Debt; onSav
         <Field label="Bên cho vay"><input value={form.lenderName} onChange={(e) => set('lenderName', e.target.value)} className={inputCls} placeholder="App X / Bank Y" /></Field>
         <Field label="Loại"><select value={form.lenderType} onChange={(e) => set('lenderType', e.target.value)} className={inputCls}>{LENDER_TYPES.map((t) => <option key={t} value={t}>{LENDER_TYPE_LABELS[t]}</option>)}</select></Field>
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        <Field label="Số tiền vay (₫)"><input inputMode="numeric" value={form.principal} onChange={(e) => set('principal', e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>
-        <Field label="Kiểu lãi"><select value={form.interestType} onChange={(e) => set('interestType', e.target.value)} className={inputCls}>{INTEREST_TYPES.map((t) => <option key={t} value={t}>{INTEREST_TYPE_LABELS[t]}</option>)}</select></Field>
+      {!!initial && ((initial.payments?.length ?? 0) > 0 || (initial.schedule ?? []).some((k) => k.isPaid)) && (
+        <div className="rounded-xl bg-neon-orange/10 px-3 py-2 text-xs text-neon-orange">Khoản này đã có kỳ đã trả nên không đổi được số tiền, lãi, kỳ hạn (lịch đã trả sẽ sai). Vẫn sửa được tên, ghi chú, phí trả trước.</div>
+      )}
+      <div className="grid grid-cols-[1fr_auto] gap-3">
+        <Field label={`Số tiền vay (${kyHieu})`}><input inputMode="decimal" value={form.principal} onChange={(e) => set('principal', e.target.value.replace(form.currency === 'USD' ? /[^\d.]/g : /[^\d]/g, ''))} className={inputCls} /></Field>
+        <Field label="Tiền tệ"><select value={form.currency} onChange={(e) => set('currency', e.target.value)} className={inputCls}><option value="VND">VND ₫</option><option value="USD">USD $</option></select></Field>
       </div>
+      <Field label="Kiểu lãi (theo hợp đồng)"><select value={form.interestType} onChange={(e) => set('interestType', e.target.value)} className={inputCls}>{INTEREST_TYPES.map((t) => <option key={t} value={t}>{INTEREST_TYPE_LABELS[t]}</option>)}</select></Field>
+      {INTEREST_TYPE_HINTS[form.interestType] && <div className="-mt-1.5 text-xs text-text-muted">{INTEREST_TYPE_HINTS[form.interestType]}</div>}
       <div className="grid grid-cols-3 gap-3">
-        <Field label={form.interestType === 'DAILY_PERCENT' ? 'Lãi %/ngày' : 'Lãi %/tháng'}>
-          <input inputMode="decimal" value={form.interestRate} onChange={(e) => set('interestRate', e.target.value.replace(/[^\d.]/g, ''))} className={inputCls} disabled={form.interestType === 'NO_INTEREST'} />
+        <Field label="Lãi suất">
+          <div className="flex gap-1">
+            <input inputMode="decimal" value={form.interestRate} onChange={(e) => set('interestRate', e.target.value.replace(',', '.').replace(/[^\d.]/g, ''))} className={cn(inputCls, 'min-w-0')} disabled={form.interestType === 'NO_INTEREST'} placeholder="%" />
+            {laiNgay ? <span className="self-center whitespace-nowrap text-xs text-text-muted">%/ngày</span> : (
+              <select value={form.rateUnit === 'YEAR' ? 'YEAR' : 'MONTH'} onChange={(e) => set('rateUnit', e.target.value)} className={cn(inputCls, 'w-auto px-1.5')} disabled={form.interestType === 'NO_INTEREST'}>
+                <option value="MONTH">%/tháng</option><option value="YEAR">%/năm</option>
+              </select>
+            )}
+          </div>
         </Field>
         <Field label={`Kỳ hạn (tháng)${needsTerm ? '' : ' *tuỳ chọn'}`}><input inputMode="numeric" value={form.termMonths} onChange={(e) => set('termMonths', e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>
         <Field label="Ngày trả hàng tháng"><input inputMode="numeric" value={form.paymentDay} onChange={(e) => set('paymentDay', e.target.value.replace(/[^\d]/g, ''))} className={inputCls} placeholder="1-31" /></Field>
       </div>
-      <Field label="Ngày bắt đầu"><input type="date" value={form.startDate} onChange={(e) => set('startDate', e.target.value)} className={inputCls} /></Field>
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Ngày bắt đầu (ngày giải ngân)"><input type="date" value={form.startDate} onChange={(e) => set('startDate', e.target.value)} className={inputCls} /></Field>
+        <Field label="Phí trả trước hạn (% gốc trả trước)"><input inputMode="decimal" value={form.prepayFeePct} onChange={(e) => set('prepayFeePct', e.target.value.replace(',', '.').replace(/[^\d.]/g, ''))} className={inputCls} placeholder="để trống nếu chưa rõ" /></Field>
+      </div>
       <Field label="Ghi chú"><textarea value={form.note} onChange={(e) => set('note', e.target.value)} className={cn(inputCls, 'min-h-[60px]')} /></Field>
 
       <div>
@@ -227,9 +256,9 @@ export function DebtForm({ initial, onSaved, onCancel }: { initial?: Debt; onSav
         <div className="rounded-xl border border-neon-violet/30 bg-neon-violet/5 p-3">
           <div className="mb-2 text-xs font-semibold text-neon-violet">Xem trước lịch trả</div>
           <div className="grid grid-cols-3 gap-2 text-center text-xs">
-            <div><div className="text-text-muted">Gốc</div><div className="font-semibold text-text-primary">{formatVnd(preview.totalPrincipal)}</div></div>
-            <div><div className="text-text-muted">Tổng lãi</div><div className="font-semibold text-neon-orange">{formatVnd(preview.totalInterest)}</div></div>
-            <div><div className="text-text-muted">Tổng phải trả</div><div className="font-semibold text-text-primary">{formatVnd(preview.totalPayable)}</div></div>
+            <div><div className="text-text-muted">Gốc</div><div className="font-semibold text-text-primary">{formatMoney(preview.totalPrincipal, form.currency)}</div></div>
+            <div><div className="text-text-muted">Tổng lãi</div><div className="font-semibold text-neon-orange">{formatMoney(preview.totalInterest, form.currency)}</div></div>
+            <div><div className="text-text-muted">Tổng phải trả</div><div className="font-semibold text-text-primary">{formatMoney(preview.totalPayable, form.currency)}</div></div>
           </div>
           {preview.interestPerDay && <div className="mt-2 text-center text-xs text-text-muted">≈ {formatVnd(preview.interestPerDay)}/ngày</div>}
           {preview.schedule.length > 0 && (
@@ -237,7 +266,7 @@ export function DebtForm({ initial, onSaved, onCancel }: { initial?: Debt; onSav
               {preview.schedule.slice(0, 4).map((s) => (
                 <div key={s.installmentNo} className="flex justify-between border-t border-[var(--border-color)] py-1">
                   <span className="text-text-muted">Kỳ {s.installmentNo} · {s.dueDate.slice(0, 10)}</span>
-                  <span className="text-text-primary">{formatVnd(s.amountDue)}</span>
+                  <span className="text-text-primary">{formatMoney(s.amountDue, form.currency)} <span className="text-text-muted">(lãi {formatMoney(s.interestPart, form.currency)})</span></span>
                 </div>
               ))}
               {preview.schedule.length > 4 && <div className="pt-1 text-center text-text-muted">… {preview.schedule.length} kỳ</div>}

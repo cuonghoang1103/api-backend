@@ -11,8 +11,10 @@ import { prisma } from '../../config/database.js';
 import { Prisma } from '@prisma/client';
 import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
 import { D, round2, sum, isPositive, clampZero } from './money.js';
-import { assertId, assertOneOf, toDateOnly, monthWindow, todayUtc } from './helpers.js';
+import { assertId, assertOneOf, toDateOnly, monthWindow, todayUtc, ngayVN } from './helpers.js';
 import { applyWalletDelta } from './wallet.service.js';
+import { getCurrentFxRate, vndToUsd, toVnd } from './fx.service.js';
+import { phanTichKhoan, moPhongTatToan, type NoVao } from './phanTichNo.js';
 import {
   computeDebt,
   type InterestType,
@@ -20,7 +22,9 @@ import {
 } from './debtCalculator.js';
 
 export const LENDER_TYPES = ['LOAN_APP', 'BANK', 'PERSON', 'CREDIT_CARD', 'OTHER'] as const;
-export const INTEREST_TYPES = ['FLAT_MONTHLY', 'REDUCING_BALANCE', 'DAILY_PERCENT', 'NO_INTEREST'] as const;
+export const INTEREST_TYPES = ['FLAT_MONTHLY', 'REDUCING_BALANCE', 'EQUAL_PRINCIPAL', 'INTEREST_ONLY', 'DAILY_PERCENT', 'NO_INTEREST'] as const;
+export const RATE_UNITS = ['DAY', 'MONTH', 'YEAR'] as const;
+export const DEBT_CURRENCIES = ['VND', 'USD'] as const;
 
 type DebtRow = Prisma.DebtGetPayload<{ include: { schedule: true; payments: true } }>;
 
@@ -28,6 +32,7 @@ function toCalcInput(d: {
   principal: Prisma.Decimal | number | string;
   interestType: string;
   interestRate: Prisma.Decimal | number | string;
+  rateUnit?: string | null;
   startDate: Date;
   termMonths: number | null;
   paymentDay: number | null;
@@ -36,6 +41,7 @@ function toCalcInput(d: {
     principal: d.principal,
     interestType: d.interestType as InterestType,
     interestRate: d.interestRate,
+    rateUnit: d.rateUnit ?? null,
     startDate: d.startDate,
     termMonths: d.termMonths,
     paymentDay: d.paymentDay,
@@ -48,16 +54,19 @@ export function previewSchedule(input: {
   principal: number | string;
   interestType: string;
   interestRate: number | string;
+  rateUnit?: string | null;
   startDate?: string;
   termMonths?: number | null;
   paymentDay?: number | null;
 }) {
   assertOneOf(input.interestType, INTEREST_TYPES, 'Loại lãi');
+  const rateUnit = input.rateUnit ? assertOneOf(input.rateUnit, RATE_UNITS, 'Đơn vị lãi suất') : null;
   const start = input.startDate ? toDateOnly(input.startDate) : todayUtc();
   const comp = computeDebt(toCalcInput({
     principal: input.principal,
     interestType: input.interestType,
     interestRate: input.interestRate,
+    rateUnit,
     startDate: start,
     termMonths: input.termMonths ?? null,
     paymentDay: input.paymentDay ?? null,
@@ -81,7 +90,19 @@ function validateDebtCore(data: Record<string, unknown>) {
     throw new BadRequestError('Kỳ hạn (số tháng) là bắt buộc với loại lãi này');
   }
   const paymentDay = data.paymentDay != null ? Math.min(31, Math.max(1, Math.floor(Number(data.paymentDay)))) : null;
-  return { lenderName, lenderType, interestType, principal, interestRate, termMonths, paymentDay };
+  const rateUnit = data.rateUnit != null && data.rateUnit !== '' ? assertOneOf(data.rateUnit, RATE_UNITS, 'Đơn vị lãi suất') : null;
+  if (rateUnit === 'DAY' && interestType !== 'DAILY_PERCENT') {
+    throw new BadRequestError('Lãi theo ngày thì chọn kiểu lãi "Lãi theo ngày"');
+  }
+  const currency = assertOneOf(data.currency ?? 'VND', DEBT_CURRENCIES, 'Tiền tệ');
+  return { lenderName, lenderType, interestType, principal, interestRate, rateUnit, termMonths, paymentDay, currency };
+}
+
+function parsePrepayFee(v: unknown): Prisma.Decimal | null {
+  if (v === undefined || v === null || v === '') return null;
+  const f = D(v as string | number);
+  if (f.isNaN() || f.isNegative() || f.greaterThan(100)) throw new BadRequestError('Phí trả trước hạn phải từ 0 đến 100 (%)');
+  return f.toDecimalPlaces(3);
 }
 
 async function persistSchedule(tx: Prisma.TransactionClient, userId: number, debtId: number, comp: ReturnType<typeof computeDebt>) {
@@ -111,8 +132,11 @@ export async function createDebt(userId: number, data: Record<string, unknown>) 
         lenderName: core.lenderName,
         lenderType: core.lenderType,
         principal: core.principal,
+        currency: core.currency,
         interestType: core.interestType,
         interestRate: core.interestRate,
+        rateUnit: core.rateUnit,
+        prepayFeePct: parsePrepayFee(data.prepayFeePct),
         startDate,
         termMonths: core.termMonths,
         paymentDay: core.paymentDay,
@@ -136,7 +160,7 @@ export async function updateDebt(userId: number, id: number, data: Record<string
   const existing = await prisma.debt.findFirst({ where: { id, userId }, include: { schedule: true, payments: true } });
   if (!existing) throw new NotFoundError('Không tìm thấy khoản nợ');
 
-  const termFields = ['principal', 'interestType', 'interestRate', 'startDate', 'termMonths', 'paymentDay'];
+  const termFields = ['principal', 'interestType', 'interestRate', 'rateUnit', 'startDate', 'termMonths', 'paymentDay', 'currency'];
   const changingTerms = termFields.some((f) => data[f] !== undefined);
   const hasPaid = existing.schedule.some((s) => s.isPaid) || existing.payments.length > 0;
 
@@ -151,12 +175,16 @@ export async function updateDebt(userId: number, id: number, data: Record<string
     if (data.status !== undefined) patch.status = assertOneOf(data.status, ['ACTIVE', 'PAID_OFF', 'OVERDUE'] as const, 'Trạng thái');
     if (data.note !== undefined) patch.note = (data.note as string)?.toString().slice(0, 2000) || null;
     if (data.attachmentUrl !== undefined) patch.attachmentUrl = (data.attachmentUrl as string)?.toString().slice(0, 500) || null;
+    // Phí trả trước hạn không đổi lịch ⇒ sửa lúc nào cũng được.
+    if (data.prepayFeePct !== undefined) patch.prepayFeePct = parsePrepayFee(data.prepayFeePct);
 
     if (changingTerms) {
       const merged = {
         principal: data.principal ?? existing.principal,
         interestType: data.interestType ?? existing.interestType,
         interestRate: data.interestRate ?? existing.interestRate,
+        rateUnit: data.rateUnit !== undefined ? data.rateUnit : existing.rateUnit,
+        currency: data.currency ?? existing.currency,
         termMonths: data.termMonths ?? existing.termMonths,
         paymentDay: data.paymentDay ?? existing.paymentDay,
         lenderName: existing.lenderName,
@@ -167,6 +195,8 @@ export async function updateDebt(userId: number, id: number, data: Record<string
       patch.principal = core.principal;
       patch.interestType = core.interestType;
       patch.interestRate = core.interestRate;
+      patch.rateUnit = core.rateUnit;
+      patch.currency = core.currency;
       patch.termMonths = core.termMonths;
       patch.paymentDay = core.paymentDay;
       patch.startDate = startDate;
@@ -190,7 +220,29 @@ export async function deleteDebt(userId: number, id: number) {
 
 // ─── Read (with computed remaining / interest wording) ───────
 
-function decorate(debt: DebtRow) {
+/** Hàng Prisma → đầu vào của bộ tính thuần. */
+export function noVaoTu(debt: DebtRow): NoVao {
+  return {
+    id: debt.id,
+    lenderName: debt.lenderName,
+    lenderType: debt.lenderType,
+    principal: debt.principal,
+    currency: debt.currency,
+    interestType: debt.interestType,
+    interestRate: debt.interestRate,
+    rateUnit: debt.rateUnit,
+    startDate: debt.startDate,
+    termMonths: debt.termMonths,
+    paymentDay: debt.paymentDay,
+    status: debt.status,
+    prepayFeePct: debt.prepayFeePct,
+    schedule: debt.schedule,
+    payments: debt.payments,
+  };
+}
+
+function decorate(debt: DebtRow, opts: { kemLich?: boolean } = {}) {
+  const pt = phanTichKhoan(noVaoTu(debt), ngayVN());
   const principal = D(debt.principal);
   const paidPrincipal = sum(debt.schedule.filter((s) => s.isPaid).map((s) => s.principalPart));
   const remaining = clampZero(round2(principal.minus(paidPrincipal)));
@@ -217,6 +269,9 @@ function decorate(debt: DebtRow) {
       nextDueAmount: nextDue?.amountDue ?? null,
       interestPerDay,
     },
+    // Bảng số do `phanTichNo.ts` tính (28/09/2026). `lich` (từng kỳ + dư nợ
+    // sau kỳ) chỉ gửi ở màn chi tiết cho gọn danh sách.
+    phanTich: { ...pt, lich: opts.kemLich ? pt.lich : undefined },
   };
 }
 
@@ -229,7 +284,7 @@ export async function listDebts(userId: number, status?: string) {
     include: { schedule: true, payments: true },
     orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
   });
-  return debts.map(decorate);
+  return debts.map((d) => decorate(d));
 }
 
 export async function getDebt(userId: number, id: number) {
@@ -240,10 +295,28 @@ export async function getDebt(userId: number, id: number) {
     include: { schedule: { orderBy: { installmentNo: 'asc' } }, payments: { orderBy: { date: 'desc' } } },
   });
   if (!debt) throw new NotFoundError('Không tìm thấy khoản nợ');
-  return decorate(debt);
+  return decorate(debt, { kemLich: true });
 }
 
 // ─── Tick-to-pay ─────────────────────────────────────────────
+
+/**
+ * Số tiền cần trừ khỏi VÍ khi trả `amount` (tính theo tiền tệ của KHOẢN NỢ).
+ * Trước 28/09/2026 trừ thẳng con số — trả kỳ 5.000.000 ₫ từ ví $ là trừ
+ * 5.000.000 $. Giờ quy đổi theo tỷ giá hiện hành như chuyển ví chéo tệ; chưa
+ * đặt tỷ giá thì từ chối thay vì trừ sai.
+ */
+async function soTienTruVi(tx: Prisma.TransactionClient, userId: number, walletId: number, debtCurrency: string, amount: Prisma.Decimal) {
+  const vi = await tx.wallet.findFirst({ where: { id: walletId, userId }, select: { currency: true } });
+  if (!vi) throw new NotFoundError('Không tìm thấy ví');
+  const noTe = debtCurrency || 'VND';
+  if (vi.currency === noTe) return { soTien: amount, ghiChu: '' };
+  const fx = await getCurrentFxRate(userId);
+  if (!fx) throw new BadRequestError('Ví và khoản nợ khác loại tiền — hãy đặt tỷ giá ở mục Tỷ giá trước.');
+  const rate = D(fx.vndPerUsd);
+  const soTien = noTe === 'USD' ? round2(amount.times(rate)) : vndToUsd(amount, rate);
+  return { soTien, ghiChu: `trừ ví ${soTien.toString()} ${vi.currency} theo tỷ giá ${rate.toString()} ₫/$` };
+}
 
 export async function payScheduleItem(
   userId: number,
@@ -267,14 +340,17 @@ export async function payScheduleItem(
 
     // optional wallet deduction (verifies ownership inside applyWalletDelta)
     let walletId: number | null = null;
+    let ghiChuQuyDoi = '';
     if (input.walletId) {
       assertId(input.walletId, 'walletId');
-      await applyWalletDelta(tx, userId, input.walletId, amount.negated());
+      const tru = await soTienTruVi(tx, userId, input.walletId, debt.currency, amount);
+      await applyWalletDelta(tx, userId, input.walletId, tru.soTien.negated());
       walletId = input.walletId;
+      ghiChuQuyDoi = tru.ghiChu;
     }
 
     const payment = await tx.debtPayment.create({
-      data: { userId, debtId, walletId, amount, date, note: input.note?.toString().slice(0, 1000) || null },
+      data: { userId, debtId, walletId, amount, date, note: [input.note?.toString().slice(0, 900), ghiChuQuyDoi].filter(Boolean).join(' · ') || null },
     });
     await tx.debtScheduleItem.update({
       where: { id: itemId },
@@ -289,7 +365,7 @@ export async function payScheduleItem(
     return tx.debt.findUnique({
       where: { id: debtId },
       include: { schedule: { orderBy: { installmentNo: 'asc' } }, payments: { orderBy: { date: 'desc' } } },
-    }).then((d) => decorate(d as DebtRow));
+    }).then((d) => decorate(d as DebtRow, { kemLich: true }));
   });
 }
 
@@ -303,12 +379,93 @@ export async function unpayScheduleItem(userId: number, debtId: number, itemId: 
     if (!item.isPaid) throw new BadRequestError('Kỳ này chưa thanh toán');
     if (item.paymentId) {
       const payment = await tx.debtPayment.findFirst({ where: { id: item.paymentId, userId } });
-      if (payment?.walletId) await applyWalletDelta(tx, userId, payment.walletId, D(payment.amount)); // refund wallet
+      if (payment?.walletId) {
+        const debtRow = await tx.debt.findFirst({ where: { id: debtId, userId }, select: { currency: true } });
+        const hoan = await soTienTruVi(tx, userId, payment.walletId, debtRow?.currency ?? 'VND', D(payment.amount));
+        await applyWalletDelta(tx, userId, payment.walletId, hoan.soTien); // refund wallet
+      }
       if (payment) await tx.debtPayment.delete({ where: { id: payment.id } });
     }
     await tx.debtScheduleItem.update({ where: { id: itemId }, data: { isPaid: false, paidAt: null, paymentId: null } });
     await tx.debt.update({ where: { id: debtId }, data: { status: 'ACTIVE' } });
-    return tx.debt.findUnique({ where: { id: debtId }, include: { schedule: { orderBy: { installmentNo: 'asc' } }, payments: { orderBy: { date: 'desc' } } } }).then((d) => decorate(d as DebtRow));
+    return tx.debt.findUnique({ where: { id: debtId }, include: { schedule: { orderBy: { installmentNo: 'asc' } }, payments: { orderBy: { date: 'desc' } } } }).then((d) => decorate(d as DebtRow, { kemLich: true }));
+  });
+}
+
+// ─── Tất toán sớm ────────────────────────────────────────────
+
+/** Mô phỏng (không ghi gì): tất toán vào ngày `ngay` (mặc định hôm nay, giờ VN). */
+export async function xemTatToan(userId: number, id: number, ngay?: string) {
+  assertId(id, 'debtId');
+  const debt = await prisma.debt.findFirst({ where: { id, userId }, include: { schedule: true, payments: true } });
+  if (!debt) throw new NotFoundError('Không tìm thấy khoản nợ');
+  const d = ngay && /^\d{4}-\d{2}-\d{2}$/.test(ngay) ? ngay : ngayVN();
+  const vao = noVaoTu(debt);
+  const pt = phanTichKhoan(vao, ngayVN());
+  const kq = moPhongTatToan(vao, pt, d);
+  if (!kq) throw new BadRequestError(pt.daTatToan ? 'Khoản này đã tất toán' : 'Khoản này chưa có lịch trả để tính tất toán');
+  return { debtId: id, tienTe: pt.tienTe, ...kq };
+}
+
+/**
+ * GHI tất toán: các kỳ còn lại (chưa tới hạn tính tới `ngay`) được THAY bằng
+ * một kỳ "Tất toán" duy nhất: gốc = gốc còn lại, lãi = lãi dồn kỳ đang chạy +
+ * phí trả trước. Nhờ vậy mọi tổng (lãi đã trả, gốc đã trả) vẫn đúng mà không
+ * phải đổi cấu trúc bảng. Các kỳ ĐÃ TỚI HẠN mà chưa trả thì phải tích trả
+ * trước — chúng là nghĩa vụ riêng, không gộp lặng lẽ vào đây.
+ */
+export async function ghiTatToan(
+  userId: number,
+  id: number,
+  input: { ngay?: string; walletId?: number | null; actualAmount?: number | string; note?: string },
+) {
+  assertId(id, 'debtId');
+  const d = input.ngay && /^\d{4}-\d{2}-\d{2}$/.test(input.ngay) ? input.ngay : ngayVN();
+  return prisma.$transaction(async (tx) => {
+    const debt = await tx.debt.findFirst({ where: { id, userId }, include: { schedule: true, payments: true } });
+    if (!debt) throw new NotFoundError('Không tìm thấy khoản nợ');
+    const vao = noVaoTu(debt);
+    const pt = phanTichKhoan(vao, ngayVN());
+    const kq = moPhongTatToan(vao, pt, d);
+    if (!kq) throw new BadRequestError(pt.daTatToan ? 'Khoản này đã tất toán' : 'Khoản này chưa có lịch trả để tất toán');
+    if (kq.kyDenHanPhaiTra.soKy > 0) {
+      throw new BadRequestError(`Còn ${kq.kyDenHanPhaiTra.soKy} kỳ đã tới hạn chưa tích trả — hãy tích trả các kỳ đó trước rồi mới tất toán.`);
+    }
+    if (kq.soKyBoQua === 0) throw new BadRequestError('Không còn kỳ nào để tất toán');
+
+    const conLai = debt.schedule.filter((k) => !k.isPaid).sort((a, b) => a.installmentNo - b.installmentNo);
+    const amount = input.actualAmount !== undefined && input.actualAmount !== '' ? round2(D(input.actualAmount)) : kq.chiPhiTatToan;
+    if (!isPositive(amount)) throw new BadRequestError('Số tiền tất toán phải lớn hơn 0');
+    // Lãi ghi nhận = số thực trả − gốc (trả dư = phí/lãi thật bên cho vay thu).
+    const lai = round2(Prisma.Decimal.max(new Prisma.Decimal(0), amount.minus(kq.gocTatToan)));
+    const date = toDateOnly(d);
+
+    let walletId: number | null = null;
+    let ghiChuQuyDoi = '';
+    if (input.walletId) {
+      assertId(input.walletId, 'walletId');
+      const tru = await soTienTruVi(tx, userId, input.walletId, debt.currency, amount);
+      await applyWalletDelta(tx, userId, input.walletId, tru.soTien.negated());
+      walletId = input.walletId;
+      ghiChuQuyDoi = tru.ghiChu;
+    }
+    const payment = await tx.debtPayment.create({
+      data: {
+        userId, debtId: id, walletId, amount, date,
+        note: [`Tất toán sớm (bỏ ${kq.soKyBoQua} kỳ)`, input.note?.toString().slice(0, 800), ghiChuQuyDoi].filter(Boolean).join(' · '),
+      },
+    });
+    await tx.debtScheduleItem.deleteMany({ where: { id: { in: conLai.map((k) => k.id) }, userId } });
+    await tx.debtScheduleItem.create({
+      data: {
+        userId, debtId: id, installmentNo: conLai[0].installmentNo, dueDate: date,
+        amountDue: amount, principalPart: kq.gocTatToan, interestPart: lai,
+        isPaid: true, paidAt: new Date(), paymentId: payment.id,
+      },
+    });
+    await tx.debt.update({ where: { id }, data: { status: 'PAID_OFF' } });
+    const full = await tx.debt.findUnique({ where: { id }, include: { schedule: { orderBy: { installmentNo: 'asc' } }, payments: { orderBy: { date: 'desc' } } } });
+    return decorate(full as DebtRow, { kemLich: true });
   });
 }
 
@@ -333,23 +490,33 @@ export async function sweepOverdue(userId: number, debtId?: number) {
 export async function debtSummary(userId: number, month?: string) {
   await sweepOverdue(userId);
   const { start, end } = monthWindow(month);
-  const debts = await prisma.debt.findMany({ where: { userId }, include: { schedule: true, payments: true } });
-  const active = debts.filter((d) => d.status !== 'PAID_OFF');
+  const [debts, fxRow] = await Promise.all([
+    prisma.debt.findMany({ where: { userId }, include: { schedule: true, payments: true } }),
+    getCurrentFxRate(userId),
+  ]);
+  // Mọi tổng quy VND theo tỷ giá người dùng (28/09/2026) — trước đây cộng
+  // thẳng khoản $ với khoản ₫.
+  const rate = fxRow ? D(fxRow.vndPerUsd) : null;
+  const cur = new Map(debts.map((d) => [d.id, d.currency]));
+  const q = (v: Prisma.Decimal.Value, c: string | null | undefined) => toVnd(v, c, rate);
 
-  const decorated = debts.map(decorate);
-  const totalRemaining = sum(decorated.filter((d) => d.status !== 'PAID_OFF').map((d) => d.computed.remaining));
-  const totalInterestPaid = sum(decorated.map((d) => d.computed.interestPaid));
-  const projectedTotalInterest = sum(decorated.map((d) => d.computed.projectedInterest));
+  const decorated = debts.map((d) => decorate(d));
+  const active = decorated.filter((d) => d.status !== 'PAID_OFF');
+  const totalRemaining = round2(sum(active.map((d) => q(d.computed.remaining, d.currency))));
+  const totalInterestPaid = round2(sum(decorated.map((d) => q(d.computed.interestPaid, d.currency))));
+  const projectedTotalInterest = round2(sum(decorated.map((d) => q(d.computed.projectedInterest, d.currency))));
+  const remainingInterest = round2(sum(active.map((d) => q(d.phanTich.laiConPhaiTra, d.currency))));
 
   const dueThisMonthItems = await prisma.debtScheduleItem.findMany({
-    where: { userId, isPaid: false, dueDate: { gte: start, lt: end } },
-    include: { debt: { select: { id: true, lenderName: true, lenderType: true } } },
+    where: { userId, isPaid: false, dueDate: { gte: start, lt: end }, debt: { status: { not: 'PAID_OFF' } } },
+    include: { debt: { select: { id: true, lenderName: true, lenderType: true, currency: true } } },
     orderBy: { dueDate: 'asc' },
   });
-  const dueThisMonth = sum(dueThisMonthItems.map((i) => i.amountDue));
+  const dueThisMonth = round2(sum(dueThisMonthItems.map((i) => q(i.amountDue, cur.get(i.debtId)))));
 
   return {
     totalRemaining,
+    remainingInterest,
     dueThisMonth,
     dueThisMonthItems,
     activeLenders: active.length,
@@ -361,6 +528,7 @@ export async function debtSummary(userId: number, month?: string) {
       lenderType: d.lenderType,
       interestType: d.interestType,
       status: d.status,
+      currency: d.currency,
       remaining: d.computed.remaining,
       nextDueDate: d.computed.nextDueDate,
       nextDueAmount: d.computed.nextDueAmount,

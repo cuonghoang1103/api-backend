@@ -27,9 +27,9 @@ import * as savingsService from '../services/finance/savings.service.js';
 import * as reportsService from '../services/finance/reports.service.js';
 import * as fxService from '../services/finance/fx.service.js';
 import { getDashboard } from '../services/finance/dashboard.service.js';
-import { comparePayoff, type PayoffDebt } from '../services/finance/payoffStrategy.js';
+import { layPhanTich, chienLuocTraNo } from '../services/finance/phanTich.service.js';
 import { layMucTieu, datMucTieu, nhacNoToiHan, chotChiTieuCuoiNgay } from '../services/finance/nhacNhiem.service.js';
-import { tomTatCoVan, hoiCoVan } from '../services/finance/coVan.service.js';
+import { tomTatCoVan, hoiCoVan, GOI_Y_CAU_HOI } from '../services/finance/coVan.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -44,6 +44,13 @@ const idParam = (name: string) => param(name).isInt({ gt: 0 }).withMessage(`${na
 // ─── Dashboard ───────────────────────────────────────────────
 router.get('/dashboard', async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, await getDashboard(uid(req), req.query.month as string | undefined)); } catch (e) { next(e); }
+});
+
+// ─── Phân tích tổng hợp (28/09/2026) ─────────────────────────
+// Một gói số đã tính: nợ, dòng tiền 6 tháng, chi theo nhóm, chỉ số, đầu tư,
+// cảnh báo. Xem `phanTich.service.ts`.
+router.get('/phan-tich', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await layPhanTich(uid(req))); } catch (e) { next(e); }
 });
 
 // ─── Wallets ─────────────────────────────────────────────────
@@ -193,6 +200,11 @@ router.get('/debts/calendar', async (req, res: Response<ApiResponse>, next) => {
 router.post('/debts/preview', amount('principal'), body('interestType').notEmpty(), validate, async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, debtService.previewSchedule(req.body)); } catch (e) { next(e); }
 });
+// Chiến lược trả nợ: theo lịch / Avalanche / Snowball / thứ tự rẻ nhất, với
+// `traThem` mỗi tháng; `motLan` = xếp hạng nên dồn một khoản tiền vào đâu.
+router.get('/debts/chien-luoc', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await chienLuocTraNo(uid(req), Number(req.query.traThem ?? 0), Number(req.query.motLan ?? 0))); } catch (e) { next(e); }
+});
 router.get('/debts', async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, await debtService.listDebts(uid(req), req.query.status as string)); } catch (e) { next(e); }
 });
@@ -207,6 +219,13 @@ router.put('/debts/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => 
 });
 router.delete('/debts/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, await debtService.deleteDebt(uid(req), Number(req.params.id))); } catch (e) { next(e); }
+});
+// Tất toán sớm: GET = mô phỏng (không ghi), POST = ghi nhận đã tất toán.
+router.get('/debts/:id(\\d+)/tat-toan', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await debtService.xemTatToan(uid(req), Number(req.params.id), req.query.ngay as string | undefined)); } catch (e) { next(e); }
+});
+router.post('/debts/:id(\\d+)/tat-toan', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await debtService.ghiTatToan(uid(req), Number(req.params.id), req.body ?? {})); } catch (e) { next(e); }
 });
 router.post('/debts/:id(\\d+)/schedule/:itemId(\\d+)/pay', async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, await debtService.payScheduleItem(uid(req), Number(req.params.id), Number(req.params.itemId), req.body)); } catch (e) { next(e); }
@@ -344,6 +363,7 @@ router.put('/goals',
 // Cả hai route đều trả `so` (bảng số liệu do MÃ tính) kèm phần chữ của model.
 // Thiếu khoá AI thì `nhanXet`/`traLoi` về null và `lyDo: 'ai_unavailable'` —
 // client vẫn dựng được màn hình từ `so`.
+router.get('/ai/goi-y', (_req, res: Response<ApiResponse>) => { ok(res, GOI_Y_CAU_HOI); });
 router.get('/ai/tom-tat', async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, await tomTatCoVan(uid(req))); } catch (e) { next(e); }
 });
@@ -370,20 +390,29 @@ router.post('/dev/chay-nhac', async (req, res: Response<ApiResponse>, next) => {
   } catch (e) { next(e); }
 });
 
-// ─── Payoff strategy (snowball vs avalanche) ─────────────────
+// ─── Payoff strategy (snowball vs avalanche) — hình dạng CŨ ─────
+// Giữ cho client cũ (app iOS có sẵn case gọi route này). Tính bằng bộ mô
+// phỏng mới (`phanTichNo.ts`) — bản cũ coi lãi phẳng như lãi trên dư nợ và
+// dùng số thực JS. Client mới dùng `/debts/chien-luoc`.
 router.get('/debts/payoff-strategy', async (req, res: Response<ApiResponse>, next) => {
   try {
-    const debts = await debtService.listDebts(uid(req));
-    const active = debts.filter((d) => d.status !== 'PAID_OFF' && Number(d.computed.remaining) > 0);
-    const inputs: PayoffDebt[] = active.map((d) => {
-      const rate = Number(d.interestRate);
-      const monthlyRatePct = d.interestType === 'DAILY_PERCENT' ? rate * 30 : d.interestType === 'NO_INTEREST' ? 0 : rate;
-      const unpaid = (d.schedule ?? []).filter((s) => !s.isPaid);
-      const minPayment = unpaid.length ? Number(unpaid[0].amountDue) : Number(d.computed.remaining) * 0.1;
-      return { id: d.id, name: d.lenderName, balance: Number(d.computed.remaining), monthlyRatePct, minPayment };
-    });
     const extra = req.query.extraMonthly ? Number(req.query.extraMonthly) : 0;
-    ok(res, comparePayoff(inputs, extra));
+    const kq = await chienLuocTraNo(uid(req), extra, 0);
+    const ss = kq.soSanh;
+    if (!ss) { ok(res, null); return; }
+    const cu = (k: typeof ss.avalanche, strategy: 'SNOWBALL' | 'AVALANCHE') => ({
+      strategy, order: k.thuTu.map((t) => ({ id: t.id, name: t.ten })), months: k.soThang,
+      totalInterest: k.tongLai.plus(k.tongPhi), totalPaid: k.tongTra,
+    });
+    ok(res, {
+      monthlyBudget: null,
+      minimumsSum: null,
+      extraMonthly: ss.traThemMoiThang,
+      snowball: cu(ss.snowball, 'SNOWBALL'),
+      avalanche: cu(ss.avalanche, 'AVALANCHE'),
+      avalancheInterestSaved: ss.avalancheHonSnowball,
+      recommendationNote: 'Công cụ tính toán tham khảo theo lịch trả đã lưu. Xem thêm "thứ tự rẻ nhất" ở mục Nợ.',
+    });
   } catch (e) { next(e); }
 });
 

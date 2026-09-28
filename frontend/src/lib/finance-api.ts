@@ -33,12 +33,89 @@ export interface ScheduleItem {
 export interface DebtPayment { id: number; debtId: number; walletId: number | null; amount: Money; date: string; note: string | null; }
 export interface Debt {
   id: number; lenderName: string; lenderType: string; principal: Money; interestType: string; interestRate: Money;
+  currency?: string; rateUnit?: string | null; prepayFeePct?: Money | null;
   startDate: string; termMonths: number | null; paymentDay: number | null; status: string; note: string | null;
   attachmentUrl: string | null; schedule?: ScheduleItem[]; payments?: DebtPayment[];
   computed?: {
     remaining: Money; paidPrincipal: Money; interestPaid: Money; projectedInterest: Money; progressPct: number;
     nextDueDate: string | null; nextDueAmount: Money | null; interestPerDay: Money | null;
   };
+  phanTich?: PhanTichKhoan;
+}
+
+// ─── Phân tích (28/09/2026) — mọi số do máy chủ tính ─────────
+export type TrangThaiKy = 'DA_TRA' | 'QUA_HAN' | 'HOM_NAY' | 'CHUA_DEN';
+export interface DongLich {
+  id?: number; ky: number; ngay: string; goc: Money; lai: Money; tong: Money; duNoTruoc: Money; duNoSau: Money;
+  trangThai: TrangThaiKy; soNgayQuaHan: number;
+}
+export interface PhanTichKhoan {
+  id: number; ten: string; loaiChoVay?: string; kieuLai: string; tienTe: string; trangThai: string; daTatToan: boolean;
+  gocBanDau: Money; gocDaTra: Money; gocConLai: Money; laiDaTra: Money; laiConPhaiTra: Money; tongConPhaiTra: Money;
+  tongLaiCaKhoan: Money; tongPhaiTraCaKhoan: Money; daTraThucTe: Money; chenhLechThucTra: Money;
+  soKy: number; soKyDaTra: number; soKyConLai: number; kyToi: DongLich | null; ngayTatToanDuKien: string | null;
+  quaHan: { soKy: number; soTien: Money; goc: Money; lai: Money; lauNhatNgay: number };
+  sapDenHan: DongLich[];
+  laiSuat: { danhNghiaThang: Money; danhNghiaNam: Money; thucThang: Money | null; thucNam: Money | null; donVi: string };
+  laiMoiNgay: Money | null; laiDonTuNgayVay: Money | null; phiTraTruocPct: Money | null;
+  lich?: DongLich[]; thieuDuLieu: string[];
+}
+export interface CanhBao { muc: 'nguy' | 'canh' | 'tin'; ma: string; tieuDe: string; chiTiet?: string; lienKet?: string }
+export interface KyCanhBao { debtId: number; ten: string; tienTe: string; ky: number; ngay: string; soTien: Money; soTienVnd: Money; kyId?: number; soNgayQuaHan?: number; conNgay?: number }
+export interface GoiPhanTich {
+  homNay: string; thang: string; tyGia: { vndPerUsd: Money; capNhat: string } | null; coUsdChuaQuyDoi: boolean;
+  no: {
+    tong: { gocBanDau: Money; gocConLai: Money; laiConPhaiTra: Money; tongConPhaiTra: Money; laiDaTra: Money; tongLaiCaKhoan: Money; soKhoanDangNo: number; ngayHetNo: string | null };
+    thangNay: { conPhaiTra: Money; laiTrongDo: Money; daTra: Money; tongNghiaVu: Money; quaHanThangTruoc: { soKy: number; tong: Money; goc: Money; lai: Money } };
+    lichTheoThang: Array<{ thang: string; goc: Money; lai: Money; tong: Money; soKy: number; daTraTrongThang: Money }>;
+    quaHan: KyCanhBao[]; sapDenHan: KyCanhBao[];
+    tatToanHomNay: Array<{ debtId: number; ten: string; tienTe: string; chiPhiTatToan: Money; tietKiem: Money; kyDenHanPhaiTra: Money; chiPhiTatToanVnd: Money; tietKiemVnd: Money; chuaKhaiPhi: boolean; soKyBoQua: number }>;
+    cacKhoan: PhanTichKhoan[]; moPhongDuoc: number; loaiKhoiMoPhong: string[]; khoanChuaKhaiPhi: string[];
+  };
+  dongTien: {
+    thangNay: DongTienThang; thangTruoc: DongTienThang; xuHuong: DongTienThang[];
+  };
+  chiTieu: {
+    thangNay: Money; thangTruoc: Money; cungKyThangTruoc: Money; soVoiCungKyPct: number | null; ngayTrongThang: number; soNgayThang: number;
+    duBaoCuoiThang: Money | null;
+    nhom: Array<{ nhomId: number; ten: string; icon: string | null; mau: string | null; thangNay: Money; thangTruoc: Money; cungKyThangTruoc: Money; chenh: Money; chenhCungKyPct: number | null; nganSach: Money | null; tiLeNganSach: number | null; tiTrong: number | null }>;
+    mucTieu: Array<{ ky: string; soTien: Money }>;
+  };
+  chiSo: { thuBinhQuan3Thang: Money | null; chiBinhQuan3Thang: Money | null; traNoBinhQuan3Thang: Money | null; soThangLamBinhQuan: number; nghiaVuNoThangNay: Money; tyLeNoTrenThu: number | null; tyLeTietKiemThangTruoc: number | null; tyLeChiTrenThuThangNay: number | null };
+  quyKhanCap: { tienMat: Money; tietKiemGui: Money; chiMoiThang: Money | null; soThang: number | null; soThangKeCaTietKiem: number | null; coSo: string };
+  dauTu: {
+    tong: { vonDangGiu: Money; giaTriDangGiu: Money; laiLoTamTinh: Money; tySuatTamTinh: number | null; laiLoDaChot: Money; dauTuBanThan: Money };
+    cacKhoan: Array<{ id: number; ten: string; loai: string; trangThai: string; tienTe: string; ngay: string; von: Money; giaTri: Money | null; laiLo: Money | null; tySuat: number | null; daChot: boolean; chuaCapNhatGia: boolean }>;
+  };
+  soTietKiem: Array<{ id: number; nganHang: string; tienTe: string; soTien: Money; laiSuatNam: Money; kyHanThang: number; ngayDaoHan: string; conNgay: number; laiKhiDaoHan: Money }>;
+  thuTheoNguon: Array<{ ten: string; loai: string; tong: Money }>;
+  canhBao: CanhBao[];
+  thieuDuLieu: string[];
+}
+export interface DongTienThang { thang: string; thu: Money; chi: Money; traNo: Money; rong: Money; coDuLieu: boolean }
+export interface KetQuaMoPhong {
+  chienLuoc: string; thuTu: Array<{ id: number; ten: string }>; soThang: number; thangHetNo: string | null;
+  tongLai: Money; tongPhi: Money; tongTra: Money; tietKiemSoVoiLich?: Money; somHonThang?: number;
+  tungKhoan: Array<{ id: number; ten: string; thangTatToan: string | null; lai: Money; phi: Money }>;
+  theoThang: Array<{ thang: string; tra: Money; lai: Money; duNo: Money }>;
+}
+export interface ChienLuocTraNo {
+  thang: string;
+  soSanh: null | {
+    traThemMoiThang: Money; theoLich: KetQuaMoPhong; avalanche: KetQuaMoPhong; snowball: KetQuaMoPhong; toiUu: KetQuaMoPhong;
+    deXuat: string | null; avalancheHonSnowball: Money; giaDinh: string[];
+  };
+  traMotLan: null | { soTien: Money; xepHang: Array<{ id: number; ten: string; tienDungDuoc: Money; tietKiem: Money; dongKhoanLuon: boolean; thangTatToanMoi: string | null; thangTatToanCu: string | null }> };
+  loaiKhoiMoPhong: string[]; khoanChuaKhaiPhi: string[]; thieuDuLieu: string[];
+}
+export interface KetQuaTatToan {
+  debtId: number; tienTe: string; ngay: string; kyDenHanPhaiTra: { soKy: number; soTien: Money };
+  gocTatToan: Money; laiDonKyDangChay: Money; soNgayDaQuaTrongKy: number; soNgayCuaKy: number; phiTraTruoc: Money; chuaKhaiPhi: boolean;
+  chiPhiTatToan: Money; tongCanChi: Money; neuTraTheoLich: Money; laiTranhDuoc: Money; tietKiem: Money; soKyBoQua: number; giaDinh: string[];
+}
+export interface TraLoiCoVan {
+  nhanXet?: string | null; traLoi?: string | null; lyDo?: string; goiY?: string[]; canhBao?: CanhBao[];
+  kiemSo?: { hopLe: boolean; soKhongKhop: string[]; soDaKiem: number } | null;
 }
 export interface RecurringTxn {
   id: number; kind: string; amount: Money; categoryId: number | null; walletId: number; description: string;
@@ -52,7 +129,7 @@ export interface DebtComputation {
 export interface FxRate { id: number; userId: number; vndPerUsd: Money; note: string | null; createdAt: string; }
 export interface DashboardData {
   month: string; totalBalance: Money; netWorth: Money; totalRemainingDebt: Money; incomeThisMonth: Money;
-  expenseThisMonth: Money; savingsThisMonth: Money; spendingVsIncomePct: number | null; wallets: Wallet[];
+  expenseThisMonth: Money; savingsThisMonth: Money; debtPaidThisMonth?: Money; spendingVsIncomePct: number | null; wallets: Wallet[];
   fx: { rate: Money; updatedAt: string } | null;
   hasUnconvertedUsd: boolean;
   budgets: Array<{ category: { id: number; name: string; icon: string | null; color: string | null }; budget: Money; used: Money; ratio: number; status: string }>;
@@ -98,6 +175,12 @@ const unwrap = <T,>(p: Res<T>): Promise<T> => p.then((r) => r.data.data);
 export const financeApi = {
   // Dashboard
   dashboard: (month?: string) => unwrap<DashboardData>(api.get('/finance/dashboard', { params: { month } })),
+  phanTich: () => unwrap<GoiPhanTich>(api.get('/finance/phan-tich')),
+  chienLuoc: (traThem: number, motLan: number) => unwrap<ChienLuocTraNo>(api.get('/finance/debts/chien-luoc', { params: { traThem, motLan } })),
+  xemTatToan: (id: number, ngay?: string) => unwrap<KetQuaTatToan>(api.get(`/finance/debts/${id}/tat-toan`, { params: { ngay } })),
+  ghiTatToan: (id: number, body: { ngay?: string; walletId?: number | null; actualAmount?: number; note?: string }) => unwrap<Debt>(api.post(`/finance/debts/${id}/tat-toan`, body)),
+  aiTomTat: () => unwrap<TraLoiCoVan>(api.get('/finance/ai/tom-tat', { timeout: 120_000 })),
+  aiHoi: (cauHoi: string) => unwrap<TraLoiCoVan>(api.post('/finance/ai/hoi', { cauHoi }, { timeout: 120_000 })),
 
   // Exchange rate (VND↔USD, user-entered)
   fxCurrent: () => unwrap<FxRate | null>(api.get('/finance/fx/current')),
@@ -200,7 +283,21 @@ export const LENDER_TYPE_LABELS: Record<string, string> = {
   LOAN_APP: 'App vay', BANK: 'Ngân hàng', PERSON: 'Cá nhân', CREDIT_CARD: 'Thẻ tín dụng', OTHER: 'Khác',
 };
 export const INTEREST_TYPE_LABELS: Record<string, string> = {
-  FLAT_MONTHLY: 'Lãi phẳng/tháng', REDUCING_BALANCE: 'Lãi giảm dần', DAILY_PERCENT: 'Lãi theo ngày', NO_INTEREST: 'Không lãi',
+  REDUCING_BALANCE: 'Trả góp đều (lãi trên dư nợ giảm dần)',
+  EQUAL_PRINCIPAL: 'Gốc đều, lãi trên dư nợ giảm dần',
+  FLAT_MONTHLY: 'Lãi phẳng (trên gốc ban đầu)',
+  INTEREST_ONLY: 'Trả lãi hằng tháng, gốc cuối kỳ',
+  DAILY_PERCENT: 'Lãi theo ngày',
+  NO_INTEREST: 'Không lãi',
+};
+/** Giải thích ngắn cho từng kiểu lãi — hiện dưới ô chọn để người dùng chọn đúng như hợp đồng. */
+export const INTEREST_TYPE_HINTS: Record<string, string> = {
+  REDUCING_BALANCE: 'Mỗi kỳ trả CÙNG một số tiền; lãi tính trên dư nợ còn lại (vay mua nhà/xe, thẻ trả góp).',
+  EQUAL_PRINCIPAL: 'Gốc chia đều mỗi kỳ, lãi tính trên dư nợ còn lại ⇒ tiền trả giảm dần (vay ngân hàng phổ biến ở VN).',
+  FLAT_MONTHLY: 'Lãi mỗi kỳ = gốc BAN ĐẦU × lãi suất, không giảm dù đã trả bớt (app vay, công ty tài chính). Đắt hơn nhiều so với cùng mức %.',
+  INTEREST_ONLY: 'Hằng tháng chỉ trả lãi; toàn bộ gốc trả ở kỳ cuối.',
+  DAILY_PERCENT: 'Lãi tính theo ngày trên dư nợ (app vay nhanh).',
+  NO_INTEREST: 'Vay người quen, không lãi — gốc chia đều.',
 };
 export const WALLET_TYPE_LABELS: Record<string, string> = { CASH: 'Tiền mặt', BANK: 'Ngân hàng', EWALLET: 'Ví điện tử', OTHER: 'Khác' };
 
@@ -214,8 +311,10 @@ export function interestLabel(debt: Pick<Debt, 'interestType' | 'interestRate'> 
       const rateStr = `${rate.toString().replace('.', ',')}%/ngày`;
       return perDay ? `${rateStr} ≈ ${Math.round(Number(perDay)).toLocaleString('vi-VN')} ₫/ngày` : rateStr;
     }
-    case 'FLAT_MONTHLY': return `${rate.toString().replace('.', ',')}%/tháng (lãi phẳng)`;
-    case 'REDUCING_BALANCE': return `${rate.toString().replace('.', ',')}%/tháng (giảm dần)`;
-    default: return '';
+    default: {
+      const donVi = (debt as { rateUnit?: string | null }).rateUnit === 'YEAR' ? 'năm' : 'tháng';
+      const ten = { FLAT_MONTHLY: 'lãi phẳng', REDUCING_BALANCE: 'trả góp đều', EQUAL_PRINCIPAL: 'gốc đều', INTEREST_ONLY: 'chỉ trả lãi' }[debt.interestType] ?? '';
+      return `${rate.toString().replace('.', ',')}%/${donVi}${ten ? ` (${ten})` : ''}`;
+    }
   }
 }

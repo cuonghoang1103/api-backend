@@ -137,7 +137,9 @@ export async function runDue(userId: number, now: Date = new Date()): Promise<{ 
       while (cursor.getTime() <= now.getTime() && guard < 60) {
         const dateOnly = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth(), cursor.getUTCDate()));
         if (r.kind === 'EXPENSE') {
-          await applyWalletDelta(tx, userId, r.walletId, D(r.amount).negated());
+          // Khoản chi THỪA HƯỞNG tiền tệ của ví (như createExpense) — trước
+          // 28/09/2026 chỗ này bỏ quên nên chi định kỳ từ ví $ bị lưu là ₫.
+          const vi = await applyWalletDelta(tx, userId, r.walletId, D(r.amount).negated());
           // a recurring expense needs a category; skip if it was deleted
           if (r.categoryId) {
             await tx.expense.create({
@@ -146,6 +148,7 @@ export async function runDue(userId: number, now: Date = new Date()): Promise<{ 
                 categoryId: r.categoryId,
                 walletId: r.walletId,
                 amount: r.amount,
+                currency: vi.currency,
                 date: dateOnly,
                 description: r.description,
                 isRecurring: true,
@@ -155,9 +158,9 @@ export async function runDue(userId: number, now: Date = new Date()): Promise<{ 
             created++;
           }
         } else {
-          await applyWalletDelta(tx, userId, r.walletId, D(r.amount));
+          const vi = await applyWalletDelta(tx, userId, r.walletId, D(r.amount));
           await tx.incomeEntry.create({
-            data: { userId, walletId: r.walletId, amount: r.amount, date: dateOnly, type: 'OTHER', note: r.description },
+            data: { userId, walletId: r.walletId, amount: r.amount, currency: vi.currency, date: dateOnly, type: 'OTHER', note: r.description },
           });
           created++;
         }

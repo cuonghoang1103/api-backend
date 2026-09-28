@@ -14,6 +14,7 @@ import { D, round2, sum, isPositive } from './money.js';
 import { assertId, toDateOnly, todayUtc } from './helpers.js';
 import { savingsMaturityInterest } from './debtCalculator.js';
 import { applyWalletDelta } from './wallet.service.js';
+import { getCurrentFxRate, toVnd } from './fx.service.js';
 
 function addMonths(base: Date, months: number): Date {
   const y = base.getUTCFullYear();
@@ -67,13 +68,17 @@ export async function createSavingsAccount(
   const maturityDate = addMonths(startDate, termMonths);
 
   return prisma.$transaction(async (tx) => {
+    // Sổ THỪA HƯỞNG tiền tệ của ví nguồn (28/09/2026) — trước đây luôn lưu
+    // 'VND' nên gửi 1.000$ từ ví $ thành sổ "1.000 ₫".
+    let currency = (data as { currency?: string }).currency === 'USD' ? 'USD' : 'VND';
     if (data.walletId) {
       assertId(data.walletId, 'walletId');
       const updated = await applyWalletDelta(tx, userId, data.walletId, amount.negated());
+      currency = updated.currency;
       await tx.walletAdjustment.create({ data: { userId, walletId: data.walletId, kind: 'SAVINGS', amount: amount.negated(), balanceAfter: updated.balance, reason: `Gửi tiết kiệm: ${bankName}` } });
     }
     const created = await tx.savingsAccount.create({
-      data: { userId, bankName, amount, interestRatePerYear: rate, termMonths, startDate, maturityDate, autoRenew: Boolean(data.autoRenew), walletId: data.walletId ?? null, note: data.note?.toString().slice(0, 1000) || null },
+      data: { userId, bankName, amount, currency, interestRatePerYear: rate, termMonths, startDate, maturityDate, autoRenew: Boolean(data.autoRenew), walletId: data.walletId ?? null, note: data.note?.toString().slice(0, 1000) || null },
     });
     return decorateAccount(created);
   });
@@ -186,11 +191,13 @@ export async function deleteSavingsGoal(userId: number, id: number) {
 }
 
 export async function savingsSummary(userId: number) {
-  const [accounts, goals] = await Promise.all([listSavingsAccounts(userId), listSavingsGoals(userId)]);
+  const [accounts, goals, fxRow] = await Promise.all([listSavingsAccounts(userId), listSavingsGoals(userId), getCurrentFxRate(userId)]);
   const activeAccounts = accounts.filter((a) => a.status !== 'WITHDRAWN');
+  // Quy về VND (28/09/2026) — trước đây cộng thẳng sổ $ với sổ ₫.
+  const rate = fxRow ? D(fxRow.vndPerUsd) : null;
   return {
-    totalSaved: sum(activeAccounts.map((a) => a.amount)),
-    projectedInterest: sum(activeAccounts.map((a) => a.computed.projectedInterest)),
+    totalSaved: sum(activeAccounts.map((a) => toVnd(a.amount, a.currency, rate))),
+    projectedInterest: sum(activeAccounts.map((a) => toVnd(a.computed.projectedInterest, a.currency, rate))),
     accountsCount: activeAccounts.length,
     goalsSaved: sum(goals.map((g) => g.currentAmount)),
     goalsCount: goals.length,

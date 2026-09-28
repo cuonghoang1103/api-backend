@@ -27,14 +27,28 @@ import { D, round2, pct, type Dec, type DecInput } from './money.js';
 export type InterestType =
   | 'FLAT_MONTHLY'
   | 'REDUCING_BALANCE'
+  | 'EQUAL_PRINCIPAL'
+  | 'INTEREST_ONLY'
   | 'DAILY_PERCENT'
   | 'NO_INTEREST';
+
+/**
+ * Đơn vị của `interestRate` (28/09/2026). `null` = cách hiểu CŨ, giữ nguyên
+ * cho mọi khoản đã có: %/ngày với DAILY_PERCENT, %/tháng với mọi kiểu khác.
+ *
+ * Có trường này vì ngân hàng báo lãi theo NĂM ("12%/năm") mà ô nhập cũ chỉ
+ * nhận %/tháng — người dùng phải tự chia 12, và 10%/năm thành 0,8333%/tháng
+ * là đã tròn mất một phần (cột Decimal(8,4)). Lưu nguyên số người dùng nhập +
+ * đơn vị, rồi chia ở ĐÂY bằng Decimal đủ độ chính xác.
+ */
+export type RateUnit = 'DAY' | 'MONTH' | 'YEAR';
 
 export interface DebtCalcInput {
   principal: DecInput;
   interestType: InterestType;
-  /** %/month for FLAT_MONTHLY & REDUCING_BALANCE, %/day for DAILY_PERCENT. */
+  /** %/month (or %/year when rateUnit = YEAR); %/day for DAILY_PERCENT. */
   interestRate: DecInput;
+  rateUnit?: RateUnit | string | null;
   startDate: Date;
   termMonths?: number | null;
   /** Day of month the payment is due (1-31); defaults to startDate's day. */
@@ -93,6 +107,10 @@ export function computeDebt(input: DebtCalcInput): DebtComputation {
       return flatMonthly(input, principal);
     case 'REDUCING_BALANCE':
       return reducingBalance(input, principal);
+    case 'EQUAL_PRINCIPAL':
+      return equalPrincipal(input, principal);
+    case 'INTEREST_ONLY':
+      return interestOnly(input, principal);
     case 'DAILY_PERCENT':
       return dailyPercent(input, principal);
     case 'NO_INTEREST':
@@ -127,11 +145,29 @@ export function savingsMaturityInterest(
   );
 }
 
+/**
+ * Lãi suất THÁNG dưới dạng phân số (1% → 0.01) cho mọi kiểu trừ DAILY_PERCENT.
+ * `YEAR` chia 12 bằng Decimal (không làm tròn) — 10%/năm cho đúng
+ * 0.00833333…, không phải 0.008333.
+ */
+export function monthlyRateFraction(interestRate: DecInput, rateUnit?: string | null): Dec {
+  const r = pct(interestRate);
+  return rateUnit === 'YEAR' ? r.dividedBy(12) : r;
+}
+
+/** Lãi suất NGÀY (phân số) cho DAILY_PERCENT. */
+export function dailyRateFraction(interestRate: DecInput, rateUnit?: string | null): Dec {
+  const r = pct(interestRate);
+  if (rateUnit === 'YEAR') return r.dividedBy(365);
+  if (rateUnit === 'MONTH') return r.dividedBy(30);
+  return r;
+}
+
 // ─── Per-type implementations ───────────────────────────────────────────────
 
 function flatMonthly(input: DebtCalcInput, principal: Dec): DebtComputation {
   const n = normalizeTerm(input.termMonths);
-  const rate = pct(input.interestRate); // fraction / month
+  const rate = monthlyRateFraction(input.interestRate, input.rateUnit); // fraction / month
   const monthlyInterest = round2(principal.times(rate));
   const basePrincipal = round2(principal.dividedBy(n));
 
@@ -161,7 +197,7 @@ function noInterest(input: DebtCalcInput, principal: Dec): DebtComputation {
 
 function reducingBalance(input: DebtCalcInput, principal: Dec): DebtComputation {
   const n = normalizeTerm(input.termMonths);
-  const r = pct(input.interestRate); // fraction / month
+  const r = monthlyRateFraction(input.interestRate, input.rateUnit); // fraction / month
   if (r.isZero()) {
     // No interest → identical to an even principal split.
     return { ...noInterest(input, principal), interestType: 'REDUCING_BALANCE' };
@@ -190,8 +226,43 @@ function reducingBalance(input: DebtCalcInput, principal: Dec): DebtComputation 
   return finalize('REDUCING_BALANCE', principal, round2(totalInterest), schedule);
 }
 
+/**
+ * Dư nợ giảm dần — GỐC ĐỀU (kiểu phổ biến nhất của vay ngân hàng ở VN):
+ * mỗi kỳ trả gốc/n, lãi = dư nợ đầu kỳ × lãi tháng. Tiền trả giảm dần.
+ */
+function equalPrincipal(input: DebtCalcInput, principal: Dec): DebtComputation {
+  const n = normalizeTerm(input.termMonths);
+  const r = monthlyRateFraction(input.interestRate, input.rateUnit);
+  const basePrincipal = round2(principal.dividedBy(n));
+  const schedule: ScheduleItem[] = [];
+  let balance = principal;
+  let allocated = new Prisma.Decimal(0);
+  let totalInterest = new Prisma.Decimal(0);
+  for (let i = 1; i <= n; i++) {
+    const interestPart = round2(balance.times(r));
+    const principalPart = i === n ? round2(principal.minus(allocated)) : basePrincipal;
+    allocated = allocated.plus(principalPart);
+    balance = balance.minus(principalPart);
+    totalInterest = totalInterest.plus(interestPart);
+    schedule.push(makeItem(input, i, principalPart, interestPart));
+  }
+  return finalize('EQUAL_PRINCIPAL', principal, round2(totalInterest), schedule);
+}
+
+/** Chỉ trả LÃI hằng tháng, gốc trả một lần ở kỳ cuối. */
+function interestOnly(input: DebtCalcInput, principal: Dec): DebtComputation {
+  const n = normalizeTerm(input.termMonths);
+  const r = monthlyRateFraction(input.interestRate, input.rateUnit);
+  const monthlyInterest = round2(principal.times(r));
+  const schedule: ScheduleItem[] = [];
+  for (let i = 1; i <= n; i++) {
+    schedule.push(makeItem(input, i, i === n ? principal : new Prisma.Decimal(0), monthlyInterest));
+  }
+  return finalize('INTEREST_ONLY', principal, round2(monthlyInterest.times(n)), schedule);
+}
+
 function dailyPercent(input: DebtCalcInput, principal: Dec): DebtComputation {
-  const dr = pct(input.interestRate); // fraction / day
+  const dr = dailyRateFraction(input.interestRate, input.rateUnit); // fraction / day
   const interestPerDay = round2(principal.times(dr));
 
   // Open-ended (no term): no fixed schedule, but expose the per-day rate so the

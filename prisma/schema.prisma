@@ -6394,8 +6394,15 @@ model Debt {
   lenderType    String   @map("lender_type") @db.VarChar(20) // LOAN_APP | BANK | PERSON | CREDIT_CARD | OTHER
   principal     Decimal  @db.Decimal(18, 2) // original amount borrowed
   currency      String   @default("VND") @db.VarChar(8)
-  interestType  String   @map("interest_type") @db.VarChar(20) // FLAT_MONTHLY | REDUCING_BALANCE | DAILY_PERCENT | NO_INTEREST
-  interestRate  Decimal  @map("interest_rate") @db.Decimal(8, 4) // %/month (FLAT/REDUCING) or %/day (DAILY_PERCENT)
+  interestType  String   @map("interest_type") @db.VarChar(20) // FLAT_MONTHLY | REDUCING_BALANCE | EQUAL_PRINCIPAL | INTEREST_ONLY | DAILY_PERCENT | NO_INTEREST
+  interestRate  Decimal  @map("interest_rate") @db.Decimal(8, 4) // %/month (FLAT/REDUCING) or %/day (DAILY_PERCENT) — or per `rateUnit`
+  /// Đơn vị của `interestRate` (28/09/2026): DAY | MONTH | YEAR. NULL = cách
+  /// hiểu cũ (%/ngày cho DAILY_PERCENT, %/tháng cho mọi kiểu khác) — mọi khoản
+  /// đã có giữ nguyên nghĩa, không phải đổi dữ liệu.
+  rateUnit      String?  @map("rate_unit") @db.VarChar(8)
+  /// Phí trả nợ trước hạn, % trên số gốc trả trước. NULL = chưa khai (tính
+  /// như 0 và nói rõ là chưa khai), 0 = hợp đồng không thu phí.
+  prepayFeePct  Decimal? @map("prepay_fee_pct") @db.Decimal(6, 3)
   startDate     DateTime @map("start_date") @db.Date
   termMonths    Int?     @map("term_months")
   paymentDay    Int?     @map("payment_day") // day of month due (1-31)

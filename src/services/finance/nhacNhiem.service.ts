@@ -17,11 +17,20 @@ import { prisma } from '../../config/database.js';
 import { guiThongBao } from '../push/apns.js';
 import { logger } from '../../utils/logger.js';
 
-const MUI_GIO_VN = 7 * 60 * 60 * 1000;
+// `ngayVN` sống ở helpers.ts (thuần, kiểm thử được); xuất lại ở đây cho
+// những chỗ đã import từ file này.
+import { ngayVN } from './helpers.js';
+import { getCurrentFxRate, toVnd } from './fx.service.js';
+export { ngayVN };
 
-/** Ngày hôm nay theo lịch Việt Nam, dạng `YYYY-MM-DD`. */
-export function ngayVN(luc: Date = new Date()): string {
-  return new Date(luc.getTime() + MUI_GIO_VN).toISOString().slice(0, 10);
+/** Tổng chi (VND) trong [tu, den) — quy khoản $ theo tỷ giá người dùng. */
+async function tongChiVND(userId: number, tu: Date, den: Date): Promise<number> {
+  const [nhom, fx] = await Promise.all([
+    prisma.expense.groupBy({ by: ['currency'], where: { userId, date: { gte: tu, lt: den } }, _sum: { amount: true } }),
+    getCurrentFxRate(userId),
+  ]);
+  const rate = fx ? fx.vndPerUsd : null;
+  return nhom.reduce((s, g) => s + Number(toVnd(g._sum.amount ?? 0, g.currency, rate)), 0);
 }
 
 /** Cộng/trừ ngày trên chuỗi `YYYY-MM-DD`, vẫn theo lịch VN. */
@@ -141,18 +150,14 @@ export async function chotChiTieuCuoiNgay(): Promise<{ nguoi: number }> {
 
   let soNguoi = 0;
   for (const { userId } of coVi) {
-    const [daTieu, mucTieu] = await Promise.all([
-      prisma.expense.aggregate({
-        where: { userId, date: { gte: dau, lt: cuoi } },
-        _sum: { amount: true },
-      }),
+    const [tieu, mucTieu] = await Promise.all([
+      tongChiVND(userId, dau, cuoi),
       prisma.financeSpendingGoal.findFirst({
         where: { userId, period: 'DAY', isActive: true },
         select: { amount: true },
       }),
     ]);
 
-    const tieu = Number(daTieu._sum?.amount ?? 0);
     let than: string;
     if (tieu === 0) {
       than = 'Chưa ghi khoản nào hôm nay. Chạm để ghi nhanh.';
@@ -219,11 +224,7 @@ export async function layMucTieu(userId: number) {
     // Chặn CẢ HAI đầu. Không chặn đầu trên thì một khoản ghi ngày mai (app cho
     // chọn ngày) bị cộng vào mục tiêu HÔM NAY, và người dùng thấy mình vượt
     // mục tiêu vì một khoản chưa tiêu.
-    const tieu = await prisma.expense.aggregate({
-      where: { userId, date: { gte: tu, lt: den } },
-      _sum: { amount: true },
-    });
-    const daTieu = Number(tieu._sum?.amount ?? 0);
+    const daTieu = await tongChiVND(userId, tu, den);
     const muc = Number(m.amount);
     return {
       id: m.id,

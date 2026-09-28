@@ -12,6 +12,7 @@ import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js
 import { D, round2, sum, isPositive } from './money.js';
 import { assertId, assertOneOf, toDateOnly, yearWindow } from './helpers.js';
 import { applyWalletDelta } from './wallet.service.js';
+import { getCurrentFxRate, toVnd } from './fx.service.js';
 
 export const INVESTMENT_TYPES = ['SELF', 'ASSET'] as const;
 
@@ -36,14 +37,17 @@ export async function createInvestment(
   const date = data.date ? toDateOnly(data.date) : toDateOnly(new Date());
 
   return prisma.$transaction(async (tx) => {
+    // Khoản đầu tư THỪA HƯỞNG tiền tệ của ví nguồn (28/09/2026).
+    let currency = (data as { currency?: string }).currency === 'USD' ? 'USD' : 'VND';
     if (data.walletId) {
       assertId(data.walletId, 'walletId');
       const updated = await applyWalletDelta(tx, userId, data.walletId, amount.negated());
+      currency = updated.currency;
       await tx.walletAdjustment.create({ data: { userId, walletId: data.walletId, kind: 'INVESTMENT', amount: amount.negated(), balanceAfter: updated.balance, reason: `Đầu tư: ${name}` } });
     }
     return tx.investment.create({
       data: {
-        userId, type, name, amount, date, walletId: data.walletId ?? null,
+        userId, type, name, amount, currency, date, walletId: data.walletId ?? null,
         expectedOutcome: type === 'SELF' ? (data.expectedOutcome?.toString().slice(0, 2000) || null) : null,
         currentValue: type === 'ASSET' && data.currentValue != null ? round2(D(data.currentValue)) : (type === 'ASSET' ? amount : null),
         note: data.note?.toString().slice(0, 2000) || null,
@@ -96,9 +100,20 @@ export async function deleteInvestment(userId: number, id: number) {
 }
 
 export async function investmentSummary(userId: number) {
-  const all = await prisma.investment.findMany({ where: { userId } });
+  // Quy mọi khoản về VND theo tỷ giá người dùng (28/09/2026) — trước đây cộng
+  // thẳng $ với ₫. Các con số bên dưới đều là VND.
+  const [raw, fxRow] = await Promise.all([prisma.investment.findMany({ where: { userId } }), getCurrentFxRate(userId)]);
+  const rate = fxRow ? D(fxRow.vndPerUsd) : null;
+  const all = raw.map((i) => ({
+    ...i,
+    amount: toVnd(i.amount, i.currency, rate),
+    currentValue: i.currentValue == null ? null : toVnd(i.currentValue, i.currency, rate),
+  }));
   const self = all.filter((i) => i.type === 'SELF');
-  const assets = all.filter((i) => i.type === 'ASSET');
+  // Tài sản ĐÃ BÁN không còn giá trị đang nắm — trước đây vẫn cộng vào
+  // "giá trị hiện tại" và lãi/lỗ tạm tính.
+  const assets = all.filter((i) => i.type === 'ASSET' && i.status !== 'SOLD');
+  const sold = all.filter((i) => i.type === 'ASSET' && i.status === 'SOLD');
   const totalInvested = sum(all.map((i) => i.amount));
   const currentAssetValue = sum(assets.map((i) => i.currentValue ?? i.amount));
   const assetCost = sum(assets.map((i) => i.amount));
@@ -115,6 +130,8 @@ export async function investmentSummary(userId: number) {
     currentAssetValue,
     unrealizedGain,
     unrealizedGainPct: assetCost.isZero() ? 0 : round2(unrealizedGain.dividedBy(assetCost).times(100)).toNumber(),
+    realizedGain: round2(sum(sold.map((i) => D(i.currentValue ?? i.amount).minus(i.amount)))),
+    hasUnconvertedUsd: !rate && raw.some((i) => i.currency === 'USD'),
     counts: { self: self.length, asset: assets.length },
   };
 }

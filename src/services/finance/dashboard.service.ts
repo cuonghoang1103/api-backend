@@ -24,7 +24,7 @@ export async function getDashboard(userId: number, month?: string) {
   const today = todayUtc();
   const in14 = addDaysUtc(today, 14);
 
-  const [fxRow, wallets, incomeByCur, expenseByCur, budgetCats, debts, upcomingItems, cashflowRows, savingsAccounts, assetInvestments] =
+  const [fxRow, wallets, incomeByCur, expenseByCur, budgetCats, debts, upcomingItems, cashflowRows, savingsAccounts, assetInvestments, debtPaymentsMonth] =
     await Promise.all([
       getCurrentFxRate(userId),
       prisma.wallet.findMany({ where: { userId, isArchived: false }, orderBy: [{ order: 'asc' }] }),
@@ -40,6 +40,7 @@ export async function getDashboard(userId: number, month?: string) {
       prisma.expense.findMany({ where: { userId, date: { gte: start, lt: end } }, select: { amount: true, date: true, currency: true } }),
       prisma.savingsAccount.findMany({ where: { userId, status: { not: 'WITHDRAWN' } }, select: { amount: true, currency: true } }),
       prisma.investment.findMany({ where: { userId, type: 'ASSET', status: { not: 'SOLD' } }, select: { amount: true, currentValue: true, currency: true } }),
+      prisma.debtPayment.findMany({ where: { userId, date: { gte: start, lt: end } }, select: { amount: true, debtId: true } }),
     ]);
 
   // Every aggregate below is expressed in VND: USD amounts convert through
@@ -107,6 +108,11 @@ export async function getDashboard(userId: number, month?: string) {
     .map(([categoryId, total]) => ({ category: catMap.get(categoryId) ?? null, total }))
     .sort((a, b) => b.total.minus(a.total).toNumber());
 
+  // Trả nợ KHÔNG nằm trong Expense ⇒ phải trừ riêng (sửa 28/09/2026: trước đây
+  // "Để dành tháng này" = thu − chi, báo dư ảo đúng bằng số tiền trả nợ).
+  const debtCurrency = new Map(debts.map((d) => [d.id, d.currency]));
+  const debtPaidThisMonth = round2(sum(debtPaymentsMonth.map((p) => conv(p.amount, debtCurrency.get(p.debtId) ?? 'VND'))));
+
   const spendingVsIncomePct = incomeThisMonth.isZero() ? null : round2(expenseThisMonth.dividedBy(incomeThisMonth).times(100)).toNumber();
 
   return {
@@ -122,7 +128,8 @@ export async function getDashboard(userId: number, month?: string) {
     totalAssetValue,
     incomeThisMonth,
     expenseThisMonth,
-    savingsThisMonth: round2(incomeThisMonth.minus(expenseThisMonth)),
+    debtPaidThisMonth,
+    savingsThisMonth: round2(incomeThisMonth.minus(expenseThisMonth).minus(debtPaidThisMonth)),
     spendingVsIncomePct,
     wallets,
     budgets,

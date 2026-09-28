@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Banknote, CreditCard, Receipt, Wallet as WalletIcon,
-  TrendingUp, PiggyBank, BarChart3, Plus, LogIn, ArrowLeftRight,
+  TrendingUp, PiggyBank, BarChart3, Plus, LogIn, ArrowLeftRight, Activity,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
@@ -22,6 +22,7 @@ import { QuickAddSheet } from './QuickAddSheet';
 interface NavItem { href: string; label: string; icon: React.ElementType; soon?: boolean }
 const NAV: NavItem[] = [
   { href: '/finance', label: 'Tổng quan', icon: LayoutDashboard },
+  { href: '/finance/phan-tich', label: 'Phân tích', icon: Activity },
   { href: '/finance/income', label: 'Thu nhập', icon: Banknote },
   { href: '/finance/debts', label: 'Khoản nợ', icon: CreditCard },
   { href: '/finance/expenses', label: 'Chi tiêu', icon: Receipt },
@@ -35,7 +36,7 @@ function isActive(pathname: string, href: string) {
   return href === '/finance' ? pathname === '/finance' : pathname.startsWith(href);
 }
 
-export function FinanceShell({ children, onQuickAddSuccess }: { children: ReactNode; onQuickAddSuccess?: () => void }) {
+export function FinanceShell({ children, onQuickAddSuccess, rong }: { children: ReactNode; onQuickAddSuccess?: () => void; /** Trang nhiều bảng (Phân tích, Tổng quan) cần khung rộng hơn 6xl. */ rong?: boolean }) {
   const pathname = usePathname();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isHydrated = useAuthStore((s) => s.isHydrated);
@@ -56,7 +57,7 @@ export function FinanceShell({ children, onQuickAddSuccess }: { children: ReactN
 
   return (
     <div className="pt-16 min-h-[calc(100dvh-var(--app-chrome-bottom))]">
-      <div className="mx-auto flex max-w-6xl gap-6 px-3 pb-24 sm:px-4 sm:pb-8">
+      <div className={cn('mx-auto flex gap-6 px-3 pb-24 sm:px-4 sm:pb-8', rong ? 'max-w-[1600px]' : 'max-w-6xl')}>
         {/* Desktop sidebar */}
         <aside className="hidden md:block w-52 shrink-0 pt-4">
           <div className="sticky top-20">

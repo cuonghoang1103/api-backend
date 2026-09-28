@@ -8,7 +8,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, ArrowRight, CheckCircle2, AlarmClock } from 'lucide-react';
-import { financeApi, type DashboardData, type ScheduleItem } from '@/lib/finance-api';
+import { financeApi, type DashboardData, type ScheduleItem, type GoiPhanTich } from '@/lib/finance-api';
+import { DanhSachCanhBao, SucKhoeTaiChinh, CoVanAI } from '@/components/finance/phan-tich-ui';
 import { formatVnd, formatMoney } from '@/lib/utils';
 import { FinanceShell } from '@/components/finance/FinanceShell';
 import { Card, StatCard, ProgressBar, Spinner, EmptyState, Pill } from '@/components/finance/primitives';
@@ -18,15 +19,17 @@ import { PayScheduleSheet } from '@/components/finance/debt-ui';
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [payTarget, setPayTarget] = useState<{ debtId: number; item: Pick<ScheduleItem, 'id' | 'installmentNo' | 'amountDue' | 'dueDate'> } | null>(null);
+  const [payTarget, setPayTarget] = useState<{ debtId: number; currency?: string; item: Pick<ScheduleItem, 'id' | 'installmentNo' | 'amountDue' | 'dueDate'> } | null>(null);
+  const [pt, setPt] = useState<GoiPhanTich | null>(null);
 
   const load = useCallback(() => {
     financeApi.dashboard().then(setData).catch(() => undefined).finally(() => setLoading(false));
+    financeApi.phanTich().then(setPt).catch(() => undefined);
   }, []);
   useEffect(() => { load(); }, [load]);
 
   return (
-    <FinanceShell onQuickAddSuccess={load}>
+    <FinanceShell onQuickAddSuccess={load} rong>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <h1 className="font-heading text-2xl font-bold text-text-primary">MoneyFlow</h1>
         <div className="flex items-center gap-3">
@@ -47,7 +50,7 @@ export default function DashboardPage() {
             <StatCard label="Thu tháng này" value={data.incomeThisMonth} accent="income" />
             <StatCard label="Chi tháng này" value={data.expenseThisMonth} accent="expense" />
             <StatCard label="Giá trị ròng" value={data.netWorth} accent="savings"
-              sub={<span className="text-text-muted">Ví − nợ còn lại</span>} />
+              sub={<span className="text-text-muted">Ví + tiết kiệm + tài sản − nợ gốc còn lại</span>} />
           </div>
 
           {/* FX context: applied rate note / missing-rate nudge */}
@@ -63,12 +66,24 @@ export default function DashboardPage() {
             </div>
           )}
 
+          {/* Cảnh báo + sức khoẻ tài chính (số do máy chủ tính) */}
+          {pt && (
+            <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
+              <div className="min-w-0 space-y-3">
+                <DanhSachCanhBao ds={pt.canhBao} toiDa={4} />
+                <SucKhoeTaiChinh g={pt} />
+                <Link href="/finance/phan-tich" className="inline-flex items-center gap-1 text-sm font-medium text-neon-violet hover:underline">Xem phân tích đầy đủ: nợ theo tháng, chi theo nhóm, đầu tư <ArrowRight size={14} /></Link>
+              </div>
+              <div className="min-w-0"><CoVanAI gon /></div>
+            </div>
+          )}
+
           {/* Spending vs income */}
           {data.spendingVsIncomePct != null && (
             <Card>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-text-secondary">Bạn đã tiêu <b className="text-neon-orange">{data.spendingVsIncomePct}%</b> thu nhập tháng này</span>
-                <span className="text-text-muted">Để dành: {formatVnd(data.savingsThisMonth)}</span>
+                <span className="text-text-muted" title="Thu − chi − tiền trả nợ trong tháng">Còn lại sau chi & trả nợ: <b className={Number(data.savingsThisMonth) < 0 ? 'text-neon-red' : 'text-text-primary'}>{formatVnd(data.savingsThisMonth)}</b></span>
               </div>
               <div className="mt-2"><ProgressBar ratio={data.spendingVsIncomePct} status={data.spendingVsIncomePct > 100 ? 'over' : data.spendingVsIncomePct >= 70 ? 'warn' : 'ok'} /></div>
             </Card>
@@ -111,7 +126,7 @@ export default function DashboardPage() {
                       <div className="text-xs text-text-muted">{p.dueDate.slice(0, 10)} · {formatMoney(p.amountDue, p.currency)} · <span className={daysUntilVn(p.dueDate) < 0 ? 'text-neon-red' : daysUntilVn(p.dueDate) <= 3 ? 'text-neon-orange' : ''}>{rowCountdownText(daysUntilVn(p.dueDate))}</span></div>
                     </div>
                     <button
-                      onClick={() => setPayTarget({ debtId: p.debtId, item: { id: p.id, installmentNo: 0, amountDue: p.amountDue, dueDate: p.dueDate } })}
+                      onClick={() => setPayTarget({ debtId: p.debtId, currency: p.currency, item: { id: p.id, installmentNo: 0, amountDue: p.amountDue, dueDate: p.dueDate } })}
                       className="inline-flex items-center gap-1 rounded-lg bg-neon-green/15 px-2.5 py-1.5 text-xs font-medium text-neon-green hover:bg-neon-green/25">
                       <CheckCircle2 size={13} /> Trả
                     </button>
@@ -153,7 +168,7 @@ export default function DashboardPage() {
 
       <PayScheduleSheet
         open={!!payTarget} onClose={() => setPayTarget(null)}
-        debtId={payTarget?.debtId ?? 0} item={payTarget?.item ?? null}
+        debtId={payTarget?.debtId ?? 0} item={payTarget?.item ?? null} currency={payTarget?.currency}
         onPaid={() => { setPayTarget(null); load(); }}
       />
     </FinanceShell>

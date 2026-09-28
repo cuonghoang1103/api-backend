@@ -1,6 +1,6 @@
 /**
  * Linux & Bash — khoá học CuongThai (Courses, academyType=GENERAL, KHÔNG thuộc kỳ Academy).
- * Giáo trình tự soạn: 13 chương, từ lệnh cd đầu tiên tới vận hành một máy chủ thật, song ngữ EN/VI.
+ * Giáo trình tự soạn: 17 phần (Mục 0 + Chương 1–16), từ lệnh cd đầu tiên tới vận hành một máy chủ thật, Bash nâng cao, Linux chuyên sâu, macOS/Windows và dự án cuối khoá, song ngữ EN/VI.
  * Sections tách theo file trong ./linux-bash/ cho dễ soạn; seeder chỉ đọc file này.
  *
  * Kiểm trước khi seed:
@@ -21,6 +21,10 @@ import s09 from './linux-bash/s09-mang-may-tu-xa.mjs';
 import s10 from './linux-bash/s10-dia-goi-log.mjs';
 import s11 from './linux-bash/s11-systemd-cron.mjs';
 import s12 from './linux-bash/s12-chan-doan-may-chu.mjs';
+import s13 from './linux-bash/s13-bash-nang-cao.mjs';
+import s14 from './linux-bash/s14-linux-chuyen-sau.mjs';
+import s15 from './linux-bash/s15-macos-windows.mjs';
+import s16 from './linux-bash/s16-du-an-cuoi-khoa.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -39,7 +43,7 @@ export default {
     //     --slug linux-bash --icon linux --color FCC624 --title "Linux & Bash" --subtitle "Terminal → Server"
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/linux-bash.png?v=3',
     shortDescription: 'Go from pasting commands you do not understand to reading any command, writing scripts that fail loudly, and diagnosing a server you have never seen — using nothing but a terminal.|||Đi từ chỗ dán những lệnh không hiểu tới chỗ đọc được mọi lệnh, viết script hỏng thì kêu to, và chẩn đoán một máy chủ chưa từng thấy — chỉ bằng một cái terminal.',
-    description: 'Khoá Linux & Bash từ số 0 tới vận hành máy chủ, do CuongThai tự biên soạn. 13 chương đi từ shell và hệ thống file, qua thao tác file, xử lý văn bản bằng ống dẫn, quyền và người dùng, tiến trình và tín hiệu, shell như một ngôn ngữ lập trình, viết script cho production, môi trường và PATH, mạng và máy từ xa, đĩa/gói/log, systemd và cron, cho tới một sách công thức chẩn đoán máy chủ thật. Mọi ví dụ là output terminal chạy thật.',
+    description: 'Khoá Linux & Bash từ số 0 tới vận hành máy chủ, do CuongThai tự biên soạn. 17 phần đi từ shell và hệ thống file, qua thao tác file, xử lý văn bản bằng ống dẫn, quyền và người dùng, tiến trình và tín hiệu, shell như một ngôn ngữ lập trình, viết script cho production, môi trường và PATH, mạng và máy từ xa, đĩa/gói/log, systemd và cron, cho tới một sách công thức chẩn đoán máy chủ thật; rồi Bash nâng cao (mảng, luồng, chạy song song, script chuyên nghiệp), Linux chuyên sâu (namespaces/cgroups, hiệu năng, LVM, nftables/SELinux), dùng kỹ năng này trên macOS và Windows (zsh, Homebrew, launchd, WSL2, PowerShell), và một dự án cuối khoá dựng–deploy–vận hành một máy chủ thật kèm bài thi 20 câu. Mỗi chương có bộ slide riêng, code tô màu, bài tập, thuật ngữ và quiz có giải thích. Mọi ví dụ là output terminal chạy thật.',
     whatYouLearn: 'Đọc một lệnh lạ và đoán trước nó làm gì, kể cả khi có ống dẫn và dấu nháy; tìm mọi file theo tên/kích thước/tuổi/nội dung và tác động lên tất cả trong một dòng; hiểu quyền đủ để sửa "Permission denied" thay vì vớ lấy sudo; nhìn ra tiến trình nào ngốn CPU, cái gì giữ một cổng, vì sao đĩa đầy; viết script shell có kiểm tham số và dọn dẹp khi thoát; chạy ứng dụng dưới systemd, hẹn giờ công việc, đọc log; và chẩn đoán một máy chủ chưa từng thấy.',
     requirements: 'Biết mở một cửa sổ terminal. KHÔNG cần biết Linux trước — Mục 0 dựng cho bạn một môi trường thí nghiệm trên Windows (WSL2), macOS hoặc Linux. KHÔNG cần biết lập trình; Chương 6 dạy shell như một ngôn ngữ từ đầu. Có Docker thì tốt (dùng làm sân tập vứt đi) nhưng không bắt buộc.',
     documentsNote: 'Tài liệu tham chiếu chính: gnu.org/software/bash/manual (sách Bash chuẩn mực) • man7.org/linux/man-pages (trang man trực tuyến) • explainshell.com để mổ xẻ một lệnh lạ • tldr.sh cho ví dụ thực dụng • linuxjourney.com đọc kèm. Phần thực hành đi kèm: track "Linux & Bash" trên Code Lab.',
@@ -58,5 +62,9 @@ export default {
     s10,
     s11,
     s12,
+    s13,
+    s14,
+    s15,
+    s16,
   ],
 };

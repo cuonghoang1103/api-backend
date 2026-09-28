@@ -121,5 +121,33 @@ export default {
     'lnx-12-3-no-cham': { yt: 'FJW8nGV4jxY', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 1 of 2' },      // Linux Performance Tools, Brendan Gregg, part 1 of 2
     'lnx-12-4-no-la': { yt: 'zrr2nUln9Kk', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 2 of 2' },        // Linux Performance Tools, Brendan Gregg, part 2 of 2
     'lnx-12-5-tong-ket': { yt: 'JNbt2YuB2lo', credit: 'Red Hat Enterprise Linux — Skills every sysadmin should learn beyond the basics' },   // Skills every sysadmin should learn beyond the basics
+
+    /* ── Chương 13 — Bash nâng cao (MỚI 28/09/2026) ── */
+    'lnx-13-0-slides': { yt: 'uqHjc7hlqd0', credit: "James Pannacciulli — Introduction to Advanced Bash Usage - James Pannacciulli @ OSCON 2014" },
+    'lnx-13-1-mang-mang-ket-hop': { yt: 'asHJ-xfuyno', credit: "You Suck at Programming — Arrays in Bash Explained in 7 Minutes! - Indexed, Associative, and Nested / Multi-Dimensional" },
+    'lnx-13-2-luong-nang-cao': { yt: 'f3eIK5xk4vg', credit: "You Suck at Programming — Command vs. Process substitution in Bash - explaining the difference. You Suck at Programming #073" },
+    'lnx-13-3-song-song-toc-do': { yt: 'OpaiGYxkSuQ', credit: "Ole Tange — Part 1: GNU Parallel script processing and execution" },
+    'lnx-13-4-script-chuyen-nghiep': { yt: '28Ygo05cLmo', credit: "Nick Janetakis — Linting and Improving Your Bash Scripts with ShellCheck" },
+
+    /* ── Chương 14 — Linux chuyên sâu (MỚI 29/09/2026) ── */
+    'lnx-14-0-slides': { yt: 'ZdVpKx6Wmc8', credit: "Brendan Gregg — Linux Performance Analysis in 60 seconds" },
+    'lnx-14-1-ben-trong-nhan': { yt: 'x1npPrzyKfs', credit: "linuxfestnorthwest — Linux Container Primitives: cgroups, namespaces, and more!" },
+    'lnx-14-2-hieu-nang': { yt: 'bj3qdEDbCD4', credit: "Brendan Gregg — Velocity 2017: Performance Analysis Superpowers with Linux eBPF" },
+    'lnx-14-3-luu-tru': { yt: 'MeltFN-bXrQ', credit: "Learn Linux TV — Linux Logical Volume Manager (LVM) Deep Dive Tutorial" },
+    'lnx-14-4-bao-mat-sau': { yt: '_WOKRaM-HI4', credit: "Red Hat Summit — Security-Enhanced Linux for mere mortals" },
+
+    /* ── Chương 15 — macOS & Windows (MỚI 29/09/2026) ── */
+    'lnx-15-0-slides': { yt: 'nahtw_csB5w', credit: "Microsoft Developer — What is the difference between Cmd, PowerShell, and Bash? | One Dev Question" },
+    'lnx-15-1-macos-zsh-bsd': { yt: 'dRdGq8khTJc', credit: "Eric Murphy — Bash vs ZSH vs Fish: What's the Difference?" },
+    'lnx-15-2-macos-cong-cu': { yt: 'SELYgZvAZbU', credit: "Corey Schafer — Homebrew Tutorial: Simplify Software Installation on Mac Using This Package Manager" },
+    'lnx-15-3-windows-wsl2': { yt: 'vxTW22y8zV8', credit: "NetworkChuck — Linux on Windows......Windows on Linux" },
+    'lnx-15-4-powershell-cho-nguoi-biet-bash': { yt: 'BOZBg3W58dI', credit: "BlueMonkey 4n6 — Powershell tutorial for Linux users – (1) getting around the filesystem" },
+
+    /* ── Chương 16 — Dự án cuối khoá (MỚI 29/09/2026) ── */
+    'lnx-16-0-slides': { yt: '2Btkx9toufg', credit: "Byte My Pi — Ubuntu Server: Getting started with a Linux Server" },
+    'lnx-16-1-dung-may': { yt: 'ZhMw53Ud2tY', credit: "NetworkChuck — 5 Steps to Secure Linux (protect from hackers)" },
+    'lnx-16-2-deploy-script': { yt: 'BiuQ-sVbWGU', credit: "Web Dev Cody — How do software systems achieve zero downtime on new deploys?" },
+    'lnx-16-3-tu-dong-hoa-giam-sat': { yt: 'n6BuUgkZ5T0', credit: "Learn Linux TV — Automate Your Tasks with systemd Timers: A Step-by-Step Guide" },
+    'lnx-16-4-su-co-tuan-dau': { yt: '9YFjQdkz9iM', credit: "DevLinux — How to Find Logs and Troubleshoot Common Problems on a Linux Server" },
   },
 };

@@ -15,6 +15,7 @@
  * Máy chủ đổi SVG ra MẢNG ĐIỂM: app iPad chỉ việc nối điểm thành nét, không
  * phải mang theo bộ đọc SVG (cung tròn, Bézier, toạ độ tương đối…).
  */
+import crypto from 'node:crypto';
 import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
 import { AppError, BadRequestError } from '../middleware/errorHandler.js';
 
@@ -26,13 +27,32 @@ const KIEU = {
 } as const;
 export type KieuVe = keyof typeof KIEU;
 
-const SYSTEM = (kieu: KieuVe) => [
+/**
+ * Mức "Chi tiết" (28/09/2026, người dùng hỏi "vẽ đẹp và chi tiết hơn được
+ * không"). Đo cùng đề "con mèo ngồi": bản thường 28 nét ~30s; bản chi tiết
+ * ~100 nét ~100–150s — mắt có tròng + đốm sáng, lông, nét gạch bóng, nền.
+ * `claude-opus-4-8` với cùng hướng dẫn vẽ KÉM hơn (mèo thân ống, chó như gấu)
+ * nên vẫn ghim `gpt-6-sol`. Đây gần là trần của cách vẽ bằng mã: muốn đẹp như
+ * tranh thật phải có kênh sinh ẢNH, mà khoá của cổng không có.
+ */
+const CHI_TIET = [
+  'Vẽ theo trình tự của hoạ sĩ: 1) phác khối lớn đúng tỉ lệ, 2) đường viền chính mềm mại bằng Bézier (C/S/Q), viền ngoài có thể 2 lớp hơi lệch cho có lực,',
+  '3) chi tiết đặc trưng (mắt có tròng + đốm sáng, mũi, lông/vảy/vân, ngón, nếp gấp; sơ đồ thì có chi tiết cấu trúc bên trong), 4) tạo khối bằng NÉT GẠCH BÓNG (các nét song song ngắn) ở vùng tối và bóng đổ, 5) vài nét nền nhẹ nếu hợp.',
+  'Dùng 60–140 nét. Bố cục cân đối, chiếm ~80% khung. Phong cách minh hoạ sách giáo khoa đẹp, sạch sẽ.',
+].join('\n');
+
+const SYSTEM = (kieu: KieuVe, chiTiet: boolean) => [
   'Bạn là họa sĩ vẽ NÉT (line art) bằng bút mực trong vở học sinh.',
   'Trả về DUY NHẤT một thẻ <svg viewBox="0 0 1000 1000"> chỉ gồm <path d>, <circle>, <ellipse>, <line>, <polyline>, <polygon>, <rect>.',
   'Không fill, không màu, không <text>, không gradient, không transform, không <g> lồng transform.',
-  'Mỗi phần tử là MỘT nét bút liền. 15–70 nét. Dùng Bézier (C, Q) cho đường cong mềm.',
+  'Mỗi phần tử là MỘT nét bút liền. Dùng Bézier (C, Q) cho đường cong mềm.',
+  chiTiet ? CHI_TIET : '15–70 nét.',
   KIEU[kieu],
-  'Sau thẻ </svg>, viết MỘT dòng bắt đầu bằng "NHAN:" liệt kê các bộ phận nên ghi nhãn (tiếng Việt, cách nhau dấu ·), hoặc "NHAN:" trống nếu là tranh.',
+  kieu === 'sodo'
+    // Vị trí nhãn là BẮT BUỘC: người dùng 28/09 nhận danh sách nhãn mà không
+    // biết viết vào chỗ nào trên hình.
+    ? 'Sau thẻ </svg>, liệt kê các bộ phận cần ghi nhãn, MỖI DÒNG một nhãn đúng dạng `NHAN: <số thứ tự>|<tên tiếng Việt>|<x>,<y>` — (x,y) theo toạ độ viewBox là CHỖ TRỐNG sát bộ phận đó (đầu mũi tên chỉ ra ngoài, hoặc khoảng trống cạnh nó), nơi người học sẽ viết số và tên nhãn; không đè lên nét. Tối đa 12 nhãn.'
+    : 'Sau thẻ </svg>, viết một dòng "NHAN:" để trống.',
 ].join('\n');
 
 // ── Đọc SVG ────────────────────────────────────────────────────────────
@@ -235,15 +255,18 @@ export function hauXuLy(svg: string) {
   const net = cacNet.map((n) => gon(n.map(([x, y]) => [(x - x0) * tl, (y - y0) * tl] as Diem))
     .map(([x, y]) => [lam(x), lam(y)] as Diem));
 
-  return { net, rong: lam(rong * tl), cao: lam(cao * tl) };
+  /** Đổi một điểm theo toạ độ viewBox sang toạ độ của `net` (co cùng một phép). */
+  const doiDiem = (x: number, y: number): Diem => [lam((x - x0) * tl), lam((y - y0) * tl)];
+  return { net, rong: lam(rong * tl), cao: lam(cao * tl), doiDiem };
 }
 
 // ── Việc chính ─────────────────────────────────────────────────────────
 
-export async function veBangNet(userId: number, b: { de?: unknown; kieu?: unknown }) {
+export async function veBangNet(userId: number, b: { de?: unknown; kieu?: unknown; chiTiet?: unknown }) {
   const de = String(b.de ?? '').trim().slice(0, 300);
   if (de.length < 2) throw new BadRequestError('Bạn muốn vẽ gì?');
   const kieu: KieuVe = b.kieu === 'sodo' ? 'sodo' : 'hinh';
+  const chiTiet = b.chiTiet === true || b.chiTiet === 'true';
 
   if (!isAiAvailable()) throw new BadRequestError('Tính năng AI chưa được cấu hình hoặc đang tạm ngắt.', 'AI_UNAVAILABLE');
   if (!(await checkTokenQuota(userId))) {
@@ -255,29 +278,87 @@ export async function veBangNet(userId: number, b: { de?: unknown; kieu?: unknow
     feature: 'chat',
     purpose: 've_net',
     userId,
-    system: SYSTEM(kieu),
+    system: SYSTEM(kieu, chiTiet),
     messages: [{ role: 'user', content: `Vẽ: ${de}` }],
     // Đo 28/09: một bức 20–35 nét ≈ 1.200–2.200 token ra. 7.000 đủ cho bức
     // dày nhất mà không để một lượt lạc đề đốt vô hạn.
-    maxTokens: 7000,
+    // Chi tiết: ~100 nét ≈ 2.200–2.900 token ra nhưng model nghĩ lâu (đo 100–150s).
+    maxTokens: chiTiet ? 14_000 : 7000,
     maxRetries: 1,
-    timeoutMs: 120_000,
+    timeoutMs: chiTiet ? 240_000 : 120_000,
   });
   const chu = kq?.text ?? '';
   const svg = chu.match(/<svg[\s\S]*?<\/svg>/i)?.[0];
   if (!svg) throw new AppError('AI chưa vẽ được hình này — thử mô tả khác một chút.', 502, 'VE_RONG');
 
-  const hinh = hauXuLy(svg);
-  if (!hinh) throw new AppError('AI chưa vẽ được hình này — thử mô tả khác một chút.', 502, 'VE_RONG');
+  const xuLy = hauXuLy(svg);
+  if (!xuLy) throw new AppError('AI chưa vẽ được hình này — thử mô tả khác một chút.', 502, 'VE_RONG');
 
   // Tranh thì không cần nhãn. Sơ đồ thì lọc ký tự lạ: đo 28/09 có lượt model
   // dán đuôi chữ Kirin vào nhãn ("chânацарт").
-  const nhan = kieu === 'hinh' ? [] : (chu.match(/NHAN:\s*(.*)/)?.[1] ?? '')
-    .split('·')
-    .map((s) => s.replace(/[^\p{Script=Latin}\p{N}\s()\-–,/]/gu, '').trim())
-    .filter((s) => s.length > 1)
-    .slice(0, 12);
+  const sach = (s: string) => s.replace(/[^\p{Script=Latin}\p{N}\s()\-–,/]/gu, '').trim();
+  const { doiDiem, ...hinh } = xuLy;
+  const nhanViTri: { so: number; ten: string; x: number; y: number }[] = [];
+  if (kieu === 'sodo') {
+    for (const m of chu.matchAll(/NHAN:\s*(\d+)\s*\|\s*([^|\n]+?)\s*\|\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)/g)) {
+      const ten = sach(m[2]);
+      if (ten.length < 2) continue;
+      // Kẹp vào khung hình (nới 8%): model đôi khi đặt nhãn sát mép viewBox.
+      const [x, y] = doiDiem(Number(m[3]), Number(m[4]));
+      nhanViTri.push({
+        so: nhanViTri.length + 1, ten,
+        x: Math.min(Math.max(x, -0.08 * hinh.rong), 1.08 * hinh.rong),
+        y: Math.min(Math.max(y, -0.08 * hinh.cao), 1.08 * hinh.cao),
+      });
+      if (nhanViTri.length >= 12) break;
+    }
+  }
+  // `nhan` (chuỗi) giữ cho app bản cũ; app mới đọc `nhanViTri` để vẽ số lên hình.
+  const nhan = nhanViTri.length ? nhanViTri.map((n) => n.ten)
+    : kieu === 'hinh' ? [] : (chu.match(/NHAN:\s*(.*)/)?.[1] ?? '')
+      .split('·').map(sach).filter((s) => s.length > 1).slice(0, 12);
 
-  return { ...hinh, nhan, model: kq.model,
+  return { ...hinh, nhan, nhanViTri, model: kq.model,
     ...(process.env.VO_VE_DEBUG ? { svg } : {}) };
+}
+
+// ── Chạy nền ───────────────────────────────────────────────────────────
+//
+// ⚠️ Cloudflare đứng trước máy chủ và CẮT mọi yêu cầu chờ quá 100 giây (524).
+// Bản thường ~30–100s đã sát trần, bản "Chi tiết" 100–150s thì chắc chắn bị
+// cắt. Nên app gửi việc rồi hỏi lại mỗi vài giây — yêu cầu nào cũng ngắn.
+// Giữ trong bộ nhớ là đủ: một tiến trình backend, kết quả sống 15 phút.
+
+type Viec = { userId: number; luc: number; ketQua?: unknown; loi?: { thongDiep: string; ma: string; status: number } };
+const cacViec = new Map<string, Viec>();
+const SONG_MS = 15 * 60_000;
+
+function donViec() {
+  const bay = Date.now() - SONG_MS;
+  for (const [id, v] of cacViec) if (v.luc < bay) cacViec.delete(id);
+}
+
+export function batDauVe(userId: number, b: { de?: unknown; kieu?: unknown; chiTiet?: unknown }) {
+  donViec();
+  // Một người tối đa 3 việc đang chạy — bấm liên tục không đốt tiền vô hạn.
+  const dangChay = [...cacViec.values()].filter((v) => v.userId === userId && !v.ketQua && !v.loi).length;
+  if (dangChay >= 3) throw new AppError('Đang vẽ 3 hình rồi — đợi xong đã nhé.', 429, 'VE_BAN');
+  const id = crypto.randomUUID();
+  const viec: Viec = { userId, luc: Date.now() };
+  cacViec.set(id, viec);
+  veBangNet(userId, b).then(
+    (kq) => { viec.ketQua = kq; },
+    (e: { message?: string; code?: string; statusCode?: number }) => {
+      viec.loi = { thongDiep: e?.message || 'AI chưa vẽ được hình này', ma: e?.code || 'VE_LOI', status: e?.statusCode || 502 };
+    },
+  );
+  return { viec: id };
+}
+
+export function xemViecVe(userId: number, id: string) {
+  const v = cacViec.get(id);
+  if (!v || v.userId !== userId) throw new AppError('Không tìm thấy lượt vẽ này (có thể đã quá 15 phút).', 404, 'VE_KHONG_CO');
+  if (v.loi) throw new AppError(v.loi.thongDiep, v.loi.status, v.loi.ma);
+  if (!v.ketQua) return { xong: false, giay: Math.round((Date.now() - v.luc) / 1000) };
+  return { xong: true, ...(v.ketQua as object) };
 }

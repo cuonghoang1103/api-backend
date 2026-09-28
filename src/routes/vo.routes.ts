@@ -20,7 +20,7 @@ import {
   dongBoCay, xinDuongDayNet, xacNhanNet, layCayVo, xoaTrangVo, xoaCuonVo,
   xinDuongNen,
 } from '../services/voInk.service.js';
-import { veBangNet } from '../services/voVe.service.js';
+import { veBangNet, batDauVe, xemViecVe } from '../services/voVe.service.js';
 import { vietLaiTrang } from '../services/voVietLai.service.js';
 
 const router = Router();
@@ -102,6 +102,20 @@ router.post('/cuon/xoa', async (req, res: Response<ApiResponse>, next) => {
  * AI vẽ bằng nét: `{ de, kieu: 'hinh' | 'sodo' }` → `{ net: [[[x,y]…]…], rong, cao, nhan }`.
  * Toạ độ đã co về khung 1000 theo cạnh dài; app tự đặt và co vào trang.
  */
+router.post('/ve/viec', (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: batDauVe(req.userId!, req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+/** Hỏi kết quả lượt vẽ chạy nền: `{ xong: false, giay }` hoặc `{ xong: true, net, … }`. */
+router.get('/ve/viec/:id', (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: xemViecVe(req.userId!, String(req.params.id)) });
+  } catch (e) { next(e); }
+});
+
+/** Bản đồng bộ cũ (app ≤ build hiện tại). Dễ chạm trần 100s của Cloudflare — app mới dùng `/ve/viec`. */
 router.post('/ve', async (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await veBangNet(req.userId!, req.body ?? {}) });

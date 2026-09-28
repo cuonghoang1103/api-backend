@@ -14,7 +14,7 @@
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { budgetMessage, checkBudget } from '../llm/budget.js';
-import { chatUrlOf, costUsd, endpointFor, modelFor } from '../llm/gateway.js';
+import { chatUrlOf, costUsd, endpointFor, modelFor, type LlmPurpose } from '../llm/gateway.js';
 import { checkTokenQuota } from '../interview/llm/index.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
 
@@ -48,6 +48,12 @@ export async function visionComplete(opts: {
   maxTokens?: number;
   userId?: number | null;
   maxRetries?: number;
+  /** Việc (bảng model trong gateway). Mặc định `doc_ocr`. Phải là việc CÓ MẮT
+   *  và chỉ nói giao thức OpenAI — tức nằm trong cả `VISION_PURPOSES` lẫn
+   *  `VIEC_CHI_OPENAI`, không thì bị đẩy sang cổng/máy không đọc được body này. */
+  purpose?: Extract<LlmPurpose, 'doc_ocr' | 'vo_viet_lai'>;
+  /** Trần thời gian MỘT lượt (ms). Mặc định `DOCTOOL_TIMEOUT_MS` / 120 giây. */
+  timeoutMs?: number;
 }): Promise<VisionResult> {
   const verdict = await checkBudget('interactive');
   if (!verdict.allowed) throw new BadRequestError(budgetMessage(verdict));
@@ -56,15 +62,17 @@ export async function visionComplete(opts: {
     throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
   }
 
-  const ep = endpointFor('doc_ocr');
+  const purpose = opts.purpose ?? 'doc_ocr';
+  const ep = endpointFor(purpose);
   if (!ep.key) throw new BadRequestError('Chưa cấu hình khoá cổng LLM (LLM_GATEWAY_API_KEY).');
-  const model = modelFor('doc_ocr', ep);
+  const model = modelFor(purpose, ep);
+  const timeoutMs = opts.timeoutMs ?? TIMEOUT_MS;
   const maxRetries = opts.maxRetries ?? 2;
 
   let lastErr: unknown;
   for (let lan = 0; lan <= maxRetries; lan++) {
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
     try {
       const res = await fetch(chatUrlOf(ep), {
         method: 'POST',

@@ -21,6 +21,7 @@ import {
   xinDuongNen,
 } from '../services/voInk.service.js';
 import { veBangNet } from '../services/voVe.service.js';
+import { vietLaiTrang } from '../services/voVietLai.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -104,6 +105,18 @@ router.post('/cuon/xoa', async (req, res: Response<ApiResponse>, next) => {
 router.post('/ve', async (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await veBangNet(req.userId!, req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+/**
+ * ✍️ AI viết lại trang: `{ anh: base64 JPEG, goiY?: chữ Vision đọc trên máy, giay?: loại giấy }`
+ * → `{ khoi: [...], sua: [...], chuThuan, canhBao: string[], soKhongDoc, model }`.
+ * Chạy 20–90 giây (model thị giác). Lỗi có mã: THIEU_ANH · ANH_QUA_LON · ANH_HONG ·
+ * AI_UNAVAILABLE (503) · QUOTA_EXCEEDED (429) · AI_LOI / VIET_LAI_HONG (502) · TRANG_TRONG (422).
+ */
+router.post('/viet-lai', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await vietLaiTrang(req.userId!, req.body ?? {}) });
   } catch (e) { next(e); }
 });
 

@@ -335,7 +335,8 @@ export type LlmPurpose =
   | 'work_assistant'      // CT Work — trợ lý trong dự án: viết story, tách việc, sinh test, trả lời về dự án
   | 'work_digest'         // CT Work — diễn đạt lại số liệu mã đã tính (báo cáo tuần, bản tin)
   | 'note_format'         // Notes — "✨ Sắp xếp lại trang": sửa chính tả + dựng mục/bảng/khối code, KHÔNG thêm ý
-  | 've_net';             // Vở iPad — "AI vẽ bằng nét": viết SVG nét đơn, máy chủ đổi ra điểm cho PKStroke
+  | 've_net'              // Vở iPad — "AI vẽ bằng nét": viết SVG nét đơn, máy chủ đổi ra điểm cho PKStroke
+  | 'vo_viet_lai';        // Vở iPad — "AI viết lại trang": đọc ẢNH trang viết tay → khối có cấu trúc, sửa chính tả, KHÔNG thêm ý
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -460,6 +461,14 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * (mặc định Claude) không cướp việc này.
    */
   ve_net: 'gpt-6-sol',
+  /**
+   * Vở iPad — "✍️ AI viết lại trang" (28/09/2026). Việc phải NHÌN ảnh trang
+   * viết tay ⇒ `gpt-6-sol`, model GPT DUY NHẤT của cổng nhìn ảnh thật (các
+   * model rẻ nhận ảnh rồi bịa — xem ghi chú `doc_ocr`). Gọi qua
+   * `visionComplete` (tuyến OpenAI `image_url`) nên nằm trong
+   * `VIEC_CHI_OPENAI` + `VISION_PURPOSES`.
+   */
+  vo_viet_lai: 'gpt-6-sol',
 
   cv_critique: 'gpt-6-sol',
   cv_writing: 'gpt-6-sol',
@@ -620,7 +629,7 @@ export interface LlmEndpoint {
  * chưa từng thấy tấm ảnh nào, và người dùng nhận về một bản chép bịa. Nên chặn
  * ở đây, chứ không trông vào việc nhớ đừng ghi tên nó vào `LLM_LOCAL_PURPOSES`.
  */
-const VISION_PURPOSES = new Set<LlmPurpose>(['chat_vision', 'doc_ocr']);
+const VISION_PURPOSES = new Set<LlmPurpose>(['chat_vision', 'doc_ocr', 'vo_viet_lai']);
 
 /**
  * Việc PHẢI GỌI TOOL nhiều lượt. Chặn khỏi máy nhà vì cùng một lý do như ảnh:
@@ -767,7 +776,7 @@ function batDauDo(): void {
  * Rambo CHỈ mở tuyến Anthropic (`/v1/messages`). Ba chỗ dưới đây nhận điểm cuối
  * rồi `fetch` thẳng bằng body kiểu OpenAI và KHÔNG hề đọc `ep.giaoThuc`:
  *   • `src/services/cv/llm/index.ts`   → cv_parse · cv_critique · cv_writing
- *   • `src/services/docTools/vision.ts` → doc_ocr
+ *   • `src/services/docTools/vision.ts` → doc_ocr · vo_viet_lai
  *   • `src/services/agent/datTen.ts`    → cv_parse
  * Đẩy chúng sang rambo thì `chatUrlOf()` gọi ĐÚNG URL nhưng BODY sai khung ⇒
  * hỏng CÂM, không báo lỗi rõ ràng — đúng cái bẫy đã ghi ngày 04/09/2026 với
@@ -781,7 +790,7 @@ function batDauDo(): void {
 // `ve_net` có mặt vì lý do KHÁC: nó gọi qua `llmComplete` (hiểu cả hai giao
 // thức), nhưng chất lượng nét vẽ đo được chỉ tốt trên `gpt-6-sol` — đi rambo là
 // ra model Claude vẽ kém hơn hẳn.
-const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net']);
+const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai']);
 
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó

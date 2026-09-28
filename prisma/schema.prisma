@@ -4639,19 +4639,22 @@ model NoteSubjectShareRecipient {
 }
 
 model NoteChapter {
-  id         Int      @id @default(autoincrement())
-  userId     Int      @map("user_id")
-  subjectId  Int      @map("subject_id")
-  title      String   @db.VarChar(200)
-  isPinned   Boolean  @default(false) @map("is_pinned")
-  sortOrder  Int      @default(0) @map("sort_order")
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  subjectId   Int      @map("subject_id")
+  title       String   @db.VarChar(200)
+  isPinned    Boolean  @default(false) @map("is_pinned")
+  sortOrder   Int      @default(0) @map("sort_order")
   /// UUID do máy sinh — khoá chống trùng khi đồng bộ Vở. Xem `Note.clientId`.
-  clientId   String?  @map("client_id") @db.VarChar(64)
+  clientId    String?  @map("client_id") @db.VarChar(64)
   /// Bìa vở + giấy mặc định, do app iPad đặt. Web bỏ qua.
-  coverColor String?  @map("cover_color") @db.VarChar(20)
-  paperKind  String?  @map("paper_kind") @db.VarChar(24)
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  coverColor  String?  @map("cover_color") @db.VarChar(20)
+  paperKind   String?  @map("paper_kind") @db.VarChar(24)
+  /// Khổ giấy của cả cuốn vở (app iPad, 28/09/2026): a5|b5|a4|letter|b4|a3|rong169|bangLon.
+  /// NULL = A4 (mọi cuốn trước đó). Web bỏ qua.
+  inkPageSize String?  @map("ink_page_size") @db.VarChar(16)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   subject     NoteSubject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
@@ -4741,6 +4744,12 @@ model Note {
   // chương nên cài lại app là MỌI trang thành một mục trong mục lục.
   inkTitle   String? @map("ink_title") @db.VarChar(300)
   inkSection String? @map("ink_section") @db.VarChar(300)
+
+  // Khổ trang (28/09/2026): phần NỐI DÀI dưới đáy (point, 0 = đúng khổ cuốn)
+  // và khổ RIÊNG của trang khi nó giữ khổ cũ lúc cả cuốn đổi sang khổ hẹp
+  // hơn (NULL = theo cuốn). Toạ độ nét không đổi — chỉ thêm giấy.
+  inkExtraHeight Int     @default(0) @map("ink_extra_height")
+  inkPageSize    String? @map("ink_page_size") @db.VarChar(16)
 
   // UUID do MÁY sinh ra, là khoá chống trùng khi đồng bộ. Không có nó thì
   // một lượt đẩy bị mạng cắt giữa chừng rồi thử lại sẽ tạo ra trang thứ

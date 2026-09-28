@@ -40,6 +40,28 @@ const GIAY_HOP_LE = new Set([
   'bonDong', 'luoiCode',
 ]);
 const HUONG_HOP_LE = new Set(['doc', 'ngang']);
+/** Khổ giấy (28/09/2026). Giá trị lạ ⇒ NULL (= A4), không ném lỗi: máy mới
+ *  hơn máy chủ có thể gửi khổ máy chủ chưa biết. */
+const KHO_HOP_LE = new Set(['a5', 'b5', 'a4', 'letter', 'b4', 'a3', 'rong169', 'bangLon']);
+/** Trần phần nối dài: 3× cạnh dài nhất của khổ lớn nhất (Bảng lớn 2263pt). */
+const TRAN_NOI_DAI = 2263 * 3;
+
+/** Khổ của CUỐN: 'a4' lưu NULL (mặc định). Khổ RIÊNG của trang thì 'a4' có
+ *  nghĩa (trang giữ A4 trong cuốn A3) ⇒ `giuA4 = true`. */
+function khoSach(v: unknown, giuA4 = false): string | null {
+  if (typeof v !== 'string' || !KHO_HOP_LE.has(v)) return null;
+  return v === 'a4' && !giuA4 ? null : v;
+}
+
+function noiDaiSach(v: unknown): number {
+  const n = Math.round(Number(v));
+  return Number.isFinite(n) && n > 0 ? Math.min(n, TRAN_NOI_DAI) : 0;
+}
+
+/** Có khoá trong object không (phân biệt "máy mới gửi null" với "máy cũ không gửi"). */
+function coKhoa(o: object, k: string): boolean {
+  return Object.prototype.hasOwnProperty.call(o, k);
+}
 
 // UUID do máy sinh. Ràng đúng hình dạng vì nó đi thẳng vào khoá R2.
 const UUID_RE = /^[0-9a-fA-F-]{16,64}$/;
@@ -60,6 +82,8 @@ export interface CuonVao {
   ten: string;
   mauBiaHex?: number | null;
   giayMacDinh?: string | null;
+  /** Khổ giấy cả cuốn. Máy CŨ không gửi ⇒ không đụng cột. */
+  khoGiay?: string | null;
   thuTu?: number;
   ghim?: boolean;
   trangs: TrangVao[];
@@ -73,6 +97,9 @@ export interface TrangVao {
   tieuDe?: string | null;
   giay?: string | null;
   huong?: string | null;
+  /** Phần nối dài (point) + khổ riêng. Máy CŨ không gửi ⇒ không đụng cột. */
+  chieuCaoThem?: number | null;
+  khoGiayRieng?: string | null;
   /** Phiên bản nét vẽ mà MÁY đang dựa trên. Máy chủ so với `inkVersion`
    *  của nó để biết có ai ghi chen vào giữa không. */
   phienBanNet?: number;
@@ -233,6 +260,7 @@ export async function dongBoCay(
       const cuonClient = uuidSach(cuon.clientId, 'clientId của cuốn vở');
       const giayCuon = typeof cuon.giayMacDinh === 'string' && GIAY_HOP_LE.has(cuon.giayMacDinh)
         ? cuon.giayMacDinh : null;
+      const cotKhoCuon = coKhoa(cuon, 'khoGiay') ? { inkPageSize: khoSach(cuon.khoGiay) } : {};
       const cuonRow = await prisma.noteChapter.upsert({
         where: { uk_note_chapter_client: { userId, clientId: cuonClient } },
         create: {
@@ -240,6 +268,7 @@ export async function dongBoCay(
           title: chuoiSach(cuon.ten, 200, 'Tên cuốn vở'),
           coverColor: mauSangHex(cuon.mauBiaHex),
           paperKind: giayCuon,
+          ...cotKhoCuon,
           sortOrder: Number.isInteger(cuon.thuTu) ? cuon.thuTu! : 0,
           isPinned: cuon.ghim === true,
         },
@@ -250,6 +279,7 @@ export async function dongBoCay(
           title: chuoiSach(cuon.ten, 200, 'Tên cuốn vở'),
           coverColor: mauSangHex(cuon.mauBiaHex),
           paperKind: giayCuon,
+          ...cotKhoCuon,
           sortOrder: Number.isInteger(cuon.thuTu) ? cuon.thuTu! : 0,
           isPinned: cuon.ghim === true,
         },
@@ -269,6 +299,12 @@ export async function dongBoCay(
         const cotTen = coTieuDe
           ? { inkTitle: tenTrang, inkSection: nhanChuong }
           : { inkSection: nhanChuong };
+        // Khổ trang: chỉ ghi khoá máy gửi — máy cũ không gửi thì giữ nguyên
+        // phần nối dài máy mới đã đặt.
+        const cotKhoTrang = {
+          ...(coKhoa(trang, 'chieuCaoThem') ? { inkExtraHeight: noiDaiSach(trang.chieuCaoThem) } : {}),
+          ...(coKhoa(trang, 'khoGiayRieng') ? { inkPageSize: khoSach(trang.khoGiayRieng, true) } : {}),
+        };
 
         const trangRow = await prisma.note.upsert({
           where: { uk_note_client: { userId, clientId: trangClient } },
@@ -276,6 +312,7 @@ export async function dongBoCay(
             userId, subjectId: monRow.id, chapterId: cuonRow.id, clientId: trangClient,
             title: tieuDe,
             ...cotTen,
+            ...cotKhoTrang,
             sortOrder: Number.isInteger(trang.thuTu) ? trang.thuTu! : 0,
             paperKind: giay, paperOrient: huong,
             ...nenGhi(trang, userId),
@@ -284,6 +321,7 @@ export async function dongBoCay(
             subjectId: monRow.id, chapterId: cuonRow.id,
             title: tieuDe,
             ...cotTen,
+            ...cotKhoTrang,
             sortOrder: Number.isInteger(trang.thuTu) ? trang.thuTu! : 0,
             paperKind: giay, paperOrient: huong,
             ...nenGhi(trang, userId),
@@ -601,7 +639,7 @@ export async function layCayVo(userId: number) {
         orderBy: [{ isPinned: 'desc' }, { sortOrder: 'asc' }],
         select: {
           id: true, clientId: true, title: true, coverColor: true,
-          paperKind: true, sortOrder: true, isPinned: true, updatedAt: true,
+          paperKind: true, inkPageSize: true, sortOrder: true, isPinned: true, updatedAt: true,
         },
       },
     },
@@ -618,6 +656,7 @@ export async function layCayVo(userId: number) {
       paperKind: true, paperOrient: true, inkKey: true, inkPreviewKey: true,
       inkVersion: true, inkStrokeCount: true, inkUpdatedAt: true,
       bgKey: true, bgKind: true, bgPage: true, inkTitle: true, inkSection: true,
+      inkExtraHeight: true, inkPageSize: true,
     },
   });
 
@@ -644,6 +683,7 @@ export async function layCayVo(userId: number) {
         ten: c.title,
         mauBiaHex: c.coverColor,
         giayMacDinh: c.paperKind,
+        khoGiay: c.inkPageSize,
         thuTu: c.sortOrder,
         ghim: c.isPinned,
         suaLuc: c.updatedAt.toISOString(),
@@ -654,6 +694,8 @@ export async function layCayVo(userId: number) {
           ...tenVaChuong(t),
           giay: t.paperKind,
           huong: t.paperOrient,
+          chieuCaoThem: t.inkExtraHeight,
+          khoGiayRieng: t.inkPageSize,
           inkVersion: t.inkVersion,
           inkStrokeCount: t.inkStrokeCount,
           inkUrl: t.inkKey ? buildPublicUrl(t.inkKey) : null,
@@ -699,4 +741,4 @@ export async function xoaCuonVo(userId: number, clientId: string): Promise<{ daX
   return { daXoa: r.count };
 }
 
-export const _chiDeKiemThu = { khoaNet, khoaCuaNguoiNay, mauSangHex, tenVaChuong };
+export const _chiDeKiemThu = { khoaNet, khoaCuaNguoiNay, mauSangHex, tenVaChuong, khoSach, noiDaiSach };

@@ -2,15 +2,58 @@
  * Linux & Bash — Chương 6: Biến, dấu nháy & khai triển.
  * Biến và khai triển · dấu nháy · khai triển tham số · mã thoát và rẽ nhánh · vòng lặp · quiz.
  * Output CHẠY THẬT Ubuntu 24.04. LUẬT: backtick → &#96;; ${ → \${;
+ * Nâng cấp 28/09/2026: bài 6.0 slide (deck lx-06, 32 slide) + slide/🧪/🗂/📌 trong 6.1–6.5; đào sâu: bảng cờ declare/read
+ * (6.1), TOÀN BỘ thứ tự khai triển của bash + chỗ được bỏ nháy / chỗ nháy đổi nghĩa + $'…' (6.2), bảng unset/rỗng/có giá
+ * trị, @Q @U @A, bẫy & của patsub_replacement (bash 5.2) và độ dài theo locale (6.3), mã thoát đo thật + PIPESTATUS, bảng
+ * toán tử phép thử, bẫy [[ $a -gt x ]], ;& ;;& (6.4), ba bẫy của vòng đọc dòng (ống dẫn, dòng cuối, CRLF), bảng khoảng
+ * ngoặc nhọn/mapfile (6.5); "Chạy thử từng bước" và "macOS/WSL khác gì" (bash 3.2, zsh, dash) mỗi bài; quiz 10 câu.
+ * Sửa chỗ SAI cũ: chú thích ${s^} bên VI nói "viết hoa mỗi chữ cái đầu" — thật ra chỉ ký tự đầu của chuỗi.
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import { gallery, slide } from './_slides.mjs';
+
 const REF = '?ref=%2Fcourses%2Flinux-bash%2Flearn&reflabel=Linux%20%26%20Bash';
 
 export default {
   title: 'Chapter 6 — Variables, quoting & expansion|||Chương 6 — Biến, dấu nháy & khai triển',
   description: 'Chương làm cho lệnh của bạn thôi vỡ vì một dấu cách trong tên file. Biến và thay thế lệnh, ba loại dấu nháy và luật duy nhất cần nhớ, khai triển tham số, mã thoát và rẽ nhánh, vòng lặp — đủ để đọc một script lạ thay vì tin nó.',
   lessons: [
+    /* ─────────────────────────── 6.0 ─────────────────────────── */
+    {
+      title: '6.0 — Chapter 6 slides: variables, quoting and expansion in pictures|||6.0 — Slide Chương 6: biến, dấu nháy và khai triển bằng hình',
+      slug: 'lnx-6-0-slides',
+      type: 'DOCUMENT',
+      isFreePreview: true,
+      description: 'Bộ 32 slide của Chương 6: thứ tự khai triển của bash, một biến không nháy biến thành bốn tham số, ba loại nháy soi bằng printf, ${var…} xén/thay/mặc định, mã thoát và [[ ]], vòng lặp đọc dòng và hàm — output thật trên Ubuntu, bash 3.2 và zsh của macOS.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 6 · Slides</span>
+<h2>The whole chapter in 32 slides</h2>
+<p class="lead">This is the chapter where the shell becomes a language, and almost every bug in it comes from one fact: bash rewrites your command line in a fixed order before running it. The slides draw that order as a picture you can follow step by step, then show each rule with a real terminal next to it — usually <code>printf '[%s]\\n'</code>, which prints every argument a command really received on its own line.</p>
+<p>Slides 3–7 belong to Lesson 6.1 (assignment, <code>$( )</code>, arithmetic, <code>export</code>, special variables), 8–13 to 6.2 (the expansion order, word splitting, the kinds of quotes, <code>"$@"</code>, arrays, IFS and zsh), 14–18 to 6.3 (defaults, trimming, substitution, slicing, speed and bash 3.2), 19–23 to 6.4 (exit codes, <code>&amp;&amp;</code>/<code>||</code>, <code>[</code> versus <code>[[</code>, string versus number, file tests and <code>case</code>) and 24–28 to 6.5 (loops, <code>$(ls)</code>, <code>while read</code>, subshells and CRLF, functions). The last four are the common mistakes, a two-page cheat sheet and a 40-minute practice session. Every terminal is real output recorded on 28/09/2026 in an Ubuntu 24.04 container (bash 5.2), and on a Mac M1 with <code>/bin/bash</code> 3.2 and zsh 5.9.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 6 · Slide</span>
+<h2>Cả chương trong 32 slide</h2>
+<p class="lead">Đây là chương shell trở thành một ngôn ngữ, và gần như mọi lỗi trong đó đến từ một sự thật: bash VIẾT LẠI dòng lệnh của bạn theo một thứ tự cố định trước khi chạy nó. Bộ slide vẽ thứ tự đó thành một bức hình đi theo được từng bước, rồi minh hoạ mỗi luật bằng một terminal thật đặt ngay bên cạnh — thường là <code>printf '[%s]\\n'</code>, lệnh in từng tham số mà một lệnh THẬT SỰ nhận được trên một dòng riêng.</p>
+<p>Slide 3–7 thuộc Bài 6.1 (gán biến, <code>$( )</code>, số học, <code>export</code>, biến đặc biệt), 8–13 thuộc 6.2 (thứ tự khai triển, cắt từ, các loại nháy, <code>"$@"</code>, mảng, IFS và zsh), 14–18 thuộc 6.3 (giá trị mặc định, xén, thay thế, cắt lát, tốc độ và bash 3.2), 19–23 thuộc 6.4 (mã thoát, <code>&amp;&amp;</code>/<code>||</code>, <code>[</code> so với <code>[[</code>, chuỗi so với số, phép thử file và <code>case</code>) và 24–28 thuộc 6.5 (vòng lặp, <code>$(ls)</code>, <code>while read</code>, shell con và CRLF, hàm). Bốn slide cuối là những sai lầm hay gặp, bảng tra nhanh hai trang và một buổi thực hành 40 phút. Mọi terminal là output THẬT, ghi ngày 28/09/2026 trong container Ubuntu 24.04 (bash 5.2), và trên Mac M1 với <code>/bin/bash</code> 3.2 cùng zsh 5.9.</p>
+</div>
+${gallery('lx-06', [
+  [1, 'Bìa'], [2, 'Bản đồ chương'], [3, 'Dấu cách quanh ='],
+  [4, '$(lệnh) và shell con'], [5, 'Số học nguyên, 08 là hệ tám'], [6, 'export sang tiến trình con'],
+  [7, 'Biến đặc biệt'], [8, 'Thứ tự khai triển của bash'], [9, 'Một biến thành bốn tham số'],
+  [10, 'Ba loại nháy'], [11, '"$@" so với $@ và "$*"'], [12, 'Mảng và "${a[@]}"'],
+  [13, 'IFS và zsh'], [14, 'Toán tử mặc định'], [15, '# ## % %%'],
+  [16, '/ // và dấu &amp;'], [17, 'Độ dài, cắt lát, hoa thường'], [18, 'Tốc độ và bash 3.2'],
+  [19, 'Mã thoát'], [20, 'a &amp;&amp; b || c'], [21, '[ và [['],
+  [22, 'So chuỗi, so số'], [23, 'Phép thử file và case'], [24, 'for và khoảng ngoặc nhọn'],
+  [25, 'Đừng lặp trên $(ls)'], [26, 'while IFS= read -r'], [27, 'Shell con và CRLF'],
+  [28, 'Hàm'], [29, 'Sai lầm hay gặp'], [30, 'Bảng tra nhanh (1/2)'],
+  [31, 'Bảng tra nhanh (2/2)'], [32, 'Thực hành chương 6'],
+])}
+`,
+    },
     /* ─────────────────────────── 6.1 ─────────────────────────── */
     {
       title: '6.1 — Variables, command substitution and arithmetic|||6.1 — Biến, thay thế lệnh và số học',
@@ -25,6 +68,7 @@ export default {
 <p class="lead">This chapter is where the shell stops being a command launcher and becomes a programming language. It is also where most people's scripts start breaking on filenames with spaces — so the goal is not just "how do I store a value", but "why does <em>this</em> exact syntax matter". Everything here is one idea: the shell rewrites your command line before running it, and you are choosing what it rewrites.</p>
 
 <h3>Assignment: no spaces</h3>
+${slide('lx-06', 3, 'Dấu cách quanh = biến phép gán thành một lệnh')}
 <pre><code>name="Binh"              <span class="tok-comment"># correct</span>
 name = "Binh"            <span class="tok-comment"># WRONG</span>
 name= "Binh"             <span class="tok-comment"># WRONG, differently</span></code></pre>
@@ -51,6 +95,7 @@ Binh_backup.txt
 <div class="callout ok"><strong>Use <code>"\${var}"</code> — braces and double quotes — as your default.</strong> The braces prevent the boundary problem above; the quotes prevent word splitting and glob expansion (Lesson 6.2). Neither costs anything, both prevent a whole class of bug, and consistency means you never have to stop and decide.</div>
 
 <h3>Command substitution: capturing output</h3>
+${slide('lx-06', 4, '$(lệnh) chạy shell con, bắt stdout, bỏ \\n cuối')}
 <pre><code>today=\$(date +%F)
 files=\$(ls | wc -l)
 branch=\$(git rev-parse --abbrev-ref HEAD)
@@ -75,6 +120,7 @@ fi</code></pre>
 <div class="callout warn"><strong>Always quote a command substitution: <code>"\$(cmd)"</code>.</strong> Unquoted, its output goes through word splitting and globbing like any other expansion. <code>rm \$(cat filelist.txt)</code> breaks the moment a filename contains a space — and <code>files=\$(ls)</code> then <code>for f in \$files</code> is the classic broken pattern that Lesson 6.5 replaces properly.</div>
 
 <h3>Arithmetic</h3>
+${slide('lx-06', 5, 'Số học chỉ số nguyên, 08 là hệ tám')}
 <pre><code>count=5
 echo \$((count + 1))
 echo \$((count * 2))
@@ -96,6 +142,7 @@ big</div>
 <div class="callout">One more sharp edge: a leading zero means <strong>octal</strong>. <code>\$((08))</code> is a syntax error ("value too great for base") because 8 is not a valid octal digit — which bites when you build a number from a zero-padded date field like <code>08</code> for August. Force base 10 with <code>\$((10#\$month))</code>.</div>
 
 <h3>Shell variables versus environment variables</h3>
+${slide('lx-06', 6, 'Chỉ biến đã export mới sang tiến trình con')}
 <pre><code>myvar="local value"        <span class="tok-comment"># shell variable: this shell only</span>
 export MYVAR="exported"    <span class="tok-comment"># environment variable: inherited by children</span>
 
@@ -123,6 +170,7 @@ declare -p myvar           <span class="tok-comment"># show one variable with it
   </div>
 </div>
 <h3>The built-in variables worth knowing</h3>
+${slide('lx-06', 7, 'Biến đặc biệt shell tự điền')}
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>\$?</code></span><span class="v">Exit code of the last command. 0 = success. Lesson 6.4.</span></div>
   <div class="kv"><span class="k"><code>\$0</code></span><span class="v">The script's own name, as invoked.</span></div>
@@ -145,6 +193,79 @@ read -r -s -p "Password: " pass; echo      <span class="tok-comment"># -s: do no
 read -r -t 10 -p "Continue? [y/N] " answer <span class="tok-comment"># -t: timeout in seconds</span></code></pre>
 <div class="callout ok"><strong>Always <code>read -r</code>.</strong> Without <code>-r</code>, <code>read</code> treats backslashes as escape characters and silently mangles any input containing one — Windows paths, regexes, escaped quotes. There is no case where you want that behaviour, so make <code>-r</code> automatic. ShellCheck (Chapter 7) flags every <code>read</code> that lacks it.</div>
 
+<h3>declare and read: the flags worth knowing</h3>
+<p>Two builtins do most of the work of "a variable with rules attached". Their flags are short and easy to misread, so here they are with what each one really did in an Ubuntu 24.04 container (bash 5.2.21):</p>
+<table>
+<tr><th>Flag</th><th>Meaning</th><th>Tested example → result</th></tr>
+<tr><td><code>declare -p v</code></td><td>Print the variable exactly as bash stores it, attributes included</td><td><code>declare -- myvar="cuc bo"</code> · <code>declare -x MYVAR="da xuat"</code> (<code>-x</code> = exported)</td></tr>
+<tr><td><code>declare -i n</code></td><td>Integer: every assignment is evaluated as arithmetic</td><td><code>declare -i n=5; n+=3; n="n*2"; echo $n</code> → <code>16</code></td></tr>
+<tr><td><code>declare -r</code> / <code>readonly</code></td><td>Constant; any later assignment is an error</td><td><code>R=2</code> → <code>R: readonly variable</code></td></tr>
+<tr><td><code>declare -l</code> · <code>-u</code></td><td>Lower-/upper-case the value on every assignment (bash 4+)</td><td><code>declare -l low="HeLLo"</code> → <code>hello</code></td></tr>
+<tr><td><code>declare -x</code> / <code>export</code></td><td>Put the variable into the environment of children</td><td><code>export -p</code> lists them</td></tr>
+<tr><td><code>read -r</code></td><td>Backslashes are data, not escapes</td><td>always</td></tr>
+<tr><td><code>read -p "…"</code> · <code>-s</code></td><td>Show a prompt · do not echo what is typed</td><td>asking for a password</td></tr>
+<tr><td><code>read -t 1</code></td><td>Give up after N seconds; exit code &gt; 128</td><td>measured: <code>142</code></td></tr>
+<tr><td><code>read -n 3</code> · <code>-a arr</code> · <code>-d ,</code></td><td>Read N characters · split into an array · stop at a custom delimiter</td><td><code>abcdef</code> → <code>abc</code> · <code>"x y  z"</code> → 3 elements · <code>one,two</code> → <code>one</code></td></tr>
+</table>
+<p>Associative arrays (<code>declare -A</code>) and namerefs (<code>declare -n</code>) are a different kind of tool and have their own lesson in Chapter 13.</p>
+
+<h3>Run it step by step</h3>
+<p>Type these in your practice directory, one line at a time, and predict each output before pressing Enter. The output below is real (Ubuntu 24.04 container, user <code>an</code>, 28/09/2026; bash prints <code>bash:</code> instead of a script name when you type interactively).</p>
+<pre><code>mkdir -p ~/thu-linux/ch6 &amp;&amp; cd ~/thu-linux/ch6
+name = "Binh"
+name="Binh"; echo "[$name_backup.txt] [\${name}_backup.txt]"
+x=$(printf 'a\\n\\n\\n'); printf '[%s]\\n' "$x"
+y=$(ls /khong-co); echo "rc=$? y=[$y]"
+echo $((10 / 3)) $((1 / 2)) $((-7 / 2)) $((2**10))
+month=08; echo $((10#$month))
+myvar="cuc bo"; export MYVAR="da xuat"; bash -c 'echo "[$myvar] [$MYVAR]"'</code></pre>
+<div class="out">bash: name: command not found
+[.txt] [Binh_backup.txt]
+[a]
+ls: cannot access '/khong-co': No such file or directory
+rc=2 y=[]
+3 0 -3 1024
+8
+[] [da xuat]</div>
+<p>Read the results: the space turned an assignment into a command; the missing braces made bash look up <code>name_backup</code>; <code>$( )</code> dropped all three trailing newlines; stderr escaped the capture and went straight to the screen while <code>$?</code> still reported the command's exit code (2); integer division truncates towards zero (<code>-7/2</code> is <code>-3</code>, not <code>-4</code>); <code>10#</code> rescues August; and only the exported variable reached the child.</p>
+
+<h3>On macOS and WSL</h3>
+<table>
+<tr><th>Thing</th><th>Ubuntu (bash 5.2)</th><th>Mac: <code>/bin/bash</code> 3.2</th><th>Mac: zsh 5.9 (the default)</th></tr>
+<tr><td><code>echo $((08))</code></td><td>error: value too great for base</td><td>same error</td><td><code>8</code> — zsh reads leading zeros as decimal unless <code>OCTAL_ZEROES</code> is set</td></tr>
+<tr><td><code>declare -l x=AB</code></td><td><code>ab</code></td><td><code>declare: -l: invalid option</code></td><td>use <code>typeset -l</code></td></tr>
+<tr><td><code>read -p "Prompt: " x</code></td><td>prints the prompt</td><td>prints the prompt</td><td><code>zsh:read:1: -p: no coprocess</code> — zsh writes it <code>read "x?Prompt: "</code></td></tr>
+</table>
+<p>The lesson: a line that works when you paste it into your Mac terminal (zsh) proves nothing about the same line inside a <code>#!/usr/bin/env bash</code> script, and vice versa. <strong>WSL</strong> runs a real Ubuntu, so everything above behaves exactly as in the Ubuntu column; the only WSL-specific surprise in this chapter is Windows line endings, covered in Lesson 6.5.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p><strong>Scenario:</strong> your team's <code>deploy.sh</code> prints the wrong release name and a percentage of "0%" for a half-finished upload. Rebuild the three bugs in your practice directory and fix each one.</p><ol>
+<li>In <code>~/thu-linux/ch6</code>, write <code>ban.sh</code> containing <code>app="web"</code>, <code>echo "release: $app_v2"</code>, <code>done=37; total=80; echo "progress: $((done / total * 100))%"</code>. Run it with <code>bash ban.sh</code>.</li>
+<li>Fix the name with braces so it prints <code>release: web_v2</code>, and fix the percentage by multiplying first: <code>$((done * 100 / total))</code>.</li>
+<li>Add <code>today=08</code> (what <code>date +%m</code> returns in August) and <code>echo "next month: $((today + 1))"</code>, and watch it break. Fix it with <code>10#</code>.</li>
+<li>Add <code>STAGE=prod</code> (not exported) and <code>bash -c 'echo "stage=[$STAGE]"'</code>. Make the child see it in two different ways.</li>
+</ol>
+<p><strong>Done when:</strong> <code>bash ban.sh</code> prints <code>release: web_v2</code>, <code>progress: 46%</code>, <code>next month: 9</code>, and <code>stage=[prod]</code> — once via <code>export STAGE</code>, once via <code>STAGE=prod bash -c …</code>.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Variable assignment</span><span class="v"><code>name=value</code> with no space around <code>=</code>; with a space, bash sees a command.</span></div>
+  <div class="kv"><span class="k">Parameter expansion</span><span class="v">Replacing <code>$name</code> / <code>\${name}</code> by its value before the command runs.</span></div>
+  <div class="kv"><span class="k">Command substitution</span><span class="v"><code>$(cmd)</code>: run cmd in a subshell, paste its stdout (trailing newlines removed).</span></div>
+  <div class="kv"><span class="k">Arithmetic expansion</span><span class="v"><code>$(( ))</code>: 64-bit integer maths; <code>(( ))</code> alone only sets an exit code.</span></div>
+  <div class="kv"><span class="k">Environment variable</span><span class="v">A variable marked with <code>export</code>, copied into every child process.</span></div>
+  <div class="kv"><span class="k">Special parameters</span><span class="v"><code>$? $# $@ $0 $$ $!</code> — filled in by the shell itself.</span></div>
+  <div class="kv"><span class="k">Subshell</span><span class="v">A forked copy of the shell; nothing it changes comes back to the parent.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>No spaces around <code>=</code>; write <code>"\${var}"</code> by default so the name boundary and word splitting are both handled.</li>
+<li><code>$(cmd)</code> captures stdout only, drops trailing newlines, and keeps the command's exit code in <code>$?</code>.</li>
+<li>Bash arithmetic is integer-only and truncates; use <code>bc</code> or <code>awk</code> for decimals and <code>10#</code> for zero-padded numbers.</li>
+<li>Only exported variables reach child processes, and nothing a child sets ever comes back.</li>
+<li><code>declare -p</code> shows what a variable really is; <code>read -r</code> is the only safe way to read input.</li>
+<li>zsh and bash 3.2 on a Mac differ on octal, <code>declare -l</code> and <code>read -p</code> — test in the shell your shebang names.</li>
+</ul>
 <a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameters.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Bash Manual — Shell Parameters</span><span class="lc-sub">Assignment rules, positional parameters and the full list of special variables. The reference for everything in this lesson.</span></span>
@@ -171,6 +292,7 @@ read -r -t 10 -p "Continue? [y/N] " answer <span class="tok-comment"># -t: timeo
 <p class="lead">Chương này là chỗ shell thôi làm một cỗ máy khởi chạy lệnh và trở thành một ngôn ngữ lập trình. Nó cũng là chỗ script của phần lớn mọi người bắt đầu vỡ vì tên file có dấu cách — nên mục tiêu không chỉ là "lưu một giá trị thế nào", mà là "vì sao ĐÚNG cú pháp NÀY mới quan trọng". Mọi thứ ở đây chỉ là một ý: shell VIẾT LẠI dòng lệnh của bạn trước khi chạy nó, và bạn đang chọn xem nó viết lại cái gì.</p>
 
 <h3>Gán biến: không có dấu cách</h3>
+${slide('lx-06', 3, 'Dấu cách quanh = biến phép gán thành một lệnh')}
 <pre><code>name="Binh"              <span class="tok-comment"># đúng</span>
 name = "Binh"            <span class="tok-comment"># SAI</span>
 name= "Binh"             <span class="tok-comment"># SAI, theo một kiểu khác</span></code></pre>
@@ -197,6 +319,7 @@ Binh_backup.txt
 <div class="callout ok"><strong>Hãy lấy <code>"\${var}"</code> — có ngoặc nhọn và nháy kép — làm mặc định của bạn.</strong> Ngoặc nhọn chặn vấn đề ranh giới ở trên; nháy kép chặn việc cắt từ và khai triển glob (Bài 6.2). Cả hai đều không tốn gì, cả hai đều ngăn được cả một lớp lỗi, và sự nhất quán nghĩa là bạn không bao giờ phải dừng lại để cân nhắc.</div>
 
 <h3>Thay thế lệnh: bắt lấy output</h3>
+${slide('lx-06', 4, '$(lệnh) chạy shell con, bắt stdout, bỏ \\n cuối')}
 <pre><code>today=\$(date +%F)
 files=\$(ls | wc -l)
 branch=\$(git rev-parse --abbrev-ref HEAD)
@@ -221,6 +344,7 @@ fi</code></pre>
 <div class="callout warn"><strong>Luôn đặt phép thay thế lệnh trong nháy: <code>"\$(cmd)"</code>.</strong> Không có nháy, output của nó đi qua phép cắt từ và khai triển glob như mọi phép khai triển khác. <code>rm \$(cat filelist.txt)</code> vỡ ngay khoảnh khắc một tên file có dấu cách — và cặp <code>files=\$(ls)</code> rồi <code>for f in \$files</code> chính là khuôn mẫu hỏng kinh điển mà Bài 6.5 sẽ thay thế cho tử tế.</div>
 
 <h3>Số học</h3>
+${slide('lx-06', 5, 'Số học chỉ số nguyên, 08 là hệ tám')}
 <pre><code>count=5
 echo \$((count + 1))
 echo \$((count * 2))
@@ -242,6 +366,7 @@ lớn</div>
 <div class="callout">Còn một cạnh sắc nữa: một số 0 đứng đầu nghĩa là <strong>HỆ TÁM</strong>. <code>\$((08))</code> là một lỗi cú pháp ("value too great for base") vì 8 không phải chữ số hệ tám hợp lệ — và nó cắn khi bạn dựng một con số từ một trường ngày tháng có đệm số 0 như <code>08</code> cho tháng Tám. Hãy ép về hệ mười bằng <code>\$((10#\$month))</code>.</div>
 
 <h3>Biến shell so với biến môi trường</h3>
+${slide('lx-06', 6, 'Chỉ biến đã export mới sang tiến trình con')}
 <pre><code>myvar="giá trị cục bộ"     <span class="tok-comment"># biến shell: chỉ trong shell này</span>
 export MYVAR="đã xuất"     <span class="tok-comment"># biến môi trường: tiến trình con thừa kế</span>
 
@@ -269,6 +394,7 @@ declare -p myvar           <span class="tok-comment"># hiện một biến kèm 
   </div>
 </div>
 <h3>Những biến dựng sẵn đáng biết</h3>
+${slide('lx-06', 7, 'Biến đặc biệt shell tự điền')}
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>\$?</code></span><span class="v">Mã thoát của lệnh vừa rồi. 0 = thành công. Bài 6.4.</span></div>
   <div class="kv"><span class="k"><code>\$0</code></span><span class="v">Tên của chính script, đúng như lúc được gọi.</span></div>
@@ -291,6 +417,79 @@ read -r -s -p "Mật khẩu: " pass; echo      <span class="tok-comment"># -s: k
 read -r -t 10 -p "Tiếp tục? [y/N] " answer <span class="tok-comment"># -t: hết giờ sau bao nhiêu giây</span></code></pre>
 <div class="callout ok"><strong>Luôn <code>read -r</code>.</strong> Không có <code>-r</code>, <code>read</code> coi gạch chéo ngược là ký tự thoát và âm thầm làm méo mọi đầu vào có chứa nó — đường dẫn Windows, regex, dấu nháy đã thoát. Không có trường hợp nào bạn MUỐN hành vi đó cả, nên hãy để <code>-r</code> thành phản xạ. ShellCheck (Chương 7) đánh dấu mọi lệnh <code>read</code> thiếu nó.</div>
 
+<h3>declare và read: những cờ đáng biết</h3>
+<p>Hai lệnh dựng sẵn này làm phần lớn việc "một biến có kèm luật". Cờ của chúng ngắn và dễ đọc nhầm, nên đây là từng cờ cùng thứ nó THẬT SỰ làm trong container Ubuntu 24.04 (bash 5.2.21):</p>
+<table>
+<tr><th>Cờ</th><th>Nghĩa</th><th>Ví dụ đã chạy → kết quả</th></tr>
+<tr><td><code>declare -p v</code></td><td>In biến đúng như bash đang cất, kèm thuộc tính</td><td><code>declare -- myvar="cuc bo"</code> · <code>declare -x MYVAR="da xuat"</code> (<code>-x</code> = đã export)</td></tr>
+<tr><td><code>declare -i n</code></td><td>Số nguyên (integer): mọi phép gán đều được TÍNH như số học</td><td><code>declare -i n=5; n+=3; n="n*2"; echo $n</code> → <code>16</code></td></tr>
+<tr><td><code>declare -r</code> / <code>readonly</code></td><td>Hằng: gán lại về sau là lỗi</td><td><code>R=2</code> → <code>R: readonly variable</code></td></tr>
+<tr><td><code>declare -l</code> · <code>-u</code></td><td>Tự đổi giá trị sang chữ thường / HOA mỗi lần gán (bash 4+)</td><td><code>declare -l low="HeLLo"</code> → <code>hello</code></td></tr>
+<tr><td><code>declare -x</code> / <code>export</code></td><td>Đưa biến vào môi trường (environment) của tiến trình con</td><td><code>export -p</code> liệt kê chúng</td></tr>
+<tr><td><code>read -r</code></td><td>Gạch chéo ngược là DỮ LIỆU, không phải ký tự thoát</td><td>luôn luôn</td></tr>
+<tr><td><code>read -p "…"</code> · <code>-s</code></td><td>In dấu nhắc (prompt) · không hiện chữ đang gõ</td><td>hỏi mật khẩu</td></tr>
+<tr><td><code>read -t 1</code></td><td>Bỏ cuộc sau N giây; mã thoát &gt; 128</td><td>đo thật: <code>142</code></td></tr>
+<tr><td><code>read -n 3</code> · <code>-a arr</code> · <code>-d ,</code></td><td>Đọc N ký tự · tách vào một mảng · dừng ở dấu phân cách tự chọn</td><td><code>abcdef</code> → <code>abc</code> · <code>"x y  z"</code> → 3 phần tử · <code>one,two</code> → <code>one</code></td></tr>
+</table>
+<p>Mảng kết hợp (<code>declare -A</code>) và nameref (<code>declare -n</code>) là một loại công cụ khác hẳn và có bài riêng ở Chương 13.</p>
+
+<h3>Chạy thử từng bước</h3>
+<p>Gõ từng dòng trong thư mục sân tập, đoán trước output của mỗi dòng rồi mới bấm Enter. Output bên dưới là THẬT (container Ubuntu 24.04, người dùng <code>an</code>, 28/09/2026; khi gõ tay, bash in <code>bash:</code> thay cho tên script).</p>
+<pre><code>mkdir -p ~/thu-linux/ch6 &amp;&amp; cd ~/thu-linux/ch6
+name = "Binh"
+name="Binh"; echo "[$name_backup.txt] [\${name}_backup.txt]"
+x=$(printf 'a\\n\\n\\n'); printf '[%s]\\n' "$x"
+y=$(ls /khong-co); echo "rc=$? y=[$y]"
+echo $((10 / 3)) $((1 / 2)) $((-7 / 2)) $((2**10))
+month=08; echo $((10#$month))
+myvar="cuc bo"; export MYVAR="da xuat"; bash -c 'echo "[$myvar] [$MYVAR]"'</code></pre>
+<div class="out">bash: name: command not found
+[.txt] [Binh_backup.txt]
+[a]
+ls: cannot access '/khong-co': No such file or directory
+rc=2 y=[]
+3 0 -3 1024
+8
+[] [da xuat]</div>
+<p>Đọc kết quả: dấu cách biến phép gán thành một lệnh; thiếu ngoặc nhọn làm bash đi tìm biến <code>name_backup</code>; <code>$( )</code> cắt cả ba ký tự xuống dòng ở cuối; stderr thoát khỏi phép bắt và đi thẳng ra màn hình, trong khi <code>$?</code> vẫn báo đúng mã thoát của lệnh (2); phép chia nguyên cắt về phía số 0 (<code>-7/2</code> là <code>-3</code>, không phải <code>-4</code>); <code>10#</code> cứu tháng Tám; và chỉ biến đã export mới tới được tiến trình con.</p>
+
+<h3>Trên macOS và WSL khác gì</h3>
+<table>
+<tr><th>Thứ</th><th>Ubuntu (bash 5.2)</th><th>Mac: <code>/bin/bash</code> 3.2</th><th>Mac: zsh 5.9 (mặc định)</th></tr>
+<tr><td><code>echo $((08))</code></td><td>lỗi: value too great for base</td><td>cùng lỗi đó</td><td><code>8</code> — zsh đọc số 0 đứng đầu là hệ mười, trừ khi bật <code>OCTAL_ZEROES</code></td></tr>
+<tr><td><code>declare -l x=AB</code></td><td><code>ab</code></td><td><code>declare: -l: invalid option</code></td><td>dùng <code>typeset -l</code></td></tr>
+<tr><td><code>read -p "Hỏi: " x</code></td><td>in dấu nhắc</td><td>in dấu nhắc</td><td><code>zsh:read:1: -p: no coprocess</code> — zsh viết là <code>read "x?Hỏi: "</code></td></tr>
+</table>
+<p>Bài học: một dòng chạy được khi bạn dán vào terminal Mac (zsh) chẳng chứng minh được gì cho chính dòng đó bên trong một script <code>#!/usr/bin/env bash</code>, và ngược lại. <strong>WSL</strong> chạy một Ubuntu thật, nên mọi thứ ở trên hành xử y như cột Ubuntu; bất ngờ riêng của WSL trong chương này là ký tự xuống dòng kiểu Windows, nói ở Bài 6.5.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p><strong>Tình huống:</strong> <code>deploy.sh</code> của nhóm in sai tên bản phát hành và báo tiến độ "0%" cho một lần tải lên mới được một nửa. Dựng lại ba lỗi đó trong sân tập rồi sửa từng cái.</p><ol>
+<li>Trong <code>~/thu-linux/ch6</code>, viết <code>ban.sh</code> gồm <code>app="web"</code>, <code>echo "release: $app_v2"</code>, <code>done=37; total=80; echo "progress: $((done / total * 100))%"</code>. Chạy bằng <code>bash ban.sh</code>.</li>
+<li>Sửa tên bằng ngoặc nhọn để nó in <code>release: web_v2</code>, và sửa phần trăm bằng cách nhân TRƯỚC: <code>$((done * 100 / total))</code>.</li>
+<li>Thêm <code>today=08</code> (đúng thứ <code>date +%m</code> trả về trong tháng Tám) và <code>echo "next month: $((today + 1))"</code>, rồi xem nó vỡ. Sửa bằng <code>10#</code>.</li>
+<li>Thêm <code>STAGE=prod</code> (không export) và <code>bash -c 'echo "stage=[$STAGE]"'</code>. Làm cho tiến trình con thấy được nó bằng hai cách khác nhau.</li>
+</ol>
+<p><strong>Đạt khi:</strong> <code>bash ban.sh</code> in <code>release: web_v2</code>, <code>progress: 46%</code>, <code>next month: 9</code>, và <code>stage=[prod]</code> — một lần nhờ <code>export STAGE</code>, một lần nhờ <code>STAGE=prod bash -c …</code>.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Variable assignment (phép gán biến)</span><span class="v"><code>ten=giatri</code>, không dấu cách quanh <code>=</code>; có dấu cách thì bash thấy một LỆNH.</span></div>
+  <div class="kv"><span class="k">Parameter expansion (khai triển tham số)</span><span class="v">Thay <code>$ten</code> / <code>\${ten}</code> bằng giá trị của nó trước khi lệnh chạy.</span></div>
+  <div class="kv"><span class="k">Command substitution (thay thế lệnh)</span><span class="v"><code>$(lệnh)</code>: chạy lệnh trong shell con, dán stdout của nó vào (bỏ các \\n cuối).</span></div>
+  <div class="kv"><span class="k">Arithmetic expansion (khai triển số học)</span><span class="v"><code>$(( ))</code>: tính số nguyên 64 bit; <code>(( ))</code> đứng riêng chỉ đặt mã thoát.</span></div>
+  <div class="kv"><span class="k">Environment variable (biến môi trường)</span><span class="v">Biến đã <code>export</code>, được CHÉP sang mọi tiến trình con.</span></div>
+  <div class="kv"><span class="k">Special parameters (tham số đặc biệt)</span><span class="v"><code>$? $# $@ $0 $$ $!</code> — do chính shell điền vào.</span></div>
+  <div class="kv"><span class="k">Subshell (shell con)</span><span class="v">Bản sao của shell tạo bằng fork; nó đổi gì cũng không quay về shell cha.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Không dấu cách quanh <code>=</code>; mặc định viết <code>"\${var}"</code> để lo cả ranh giới tên lẫn phép cắt từ.</li>
+<li><code>$(lệnh)</code> chỉ bắt stdout, bỏ các \\n ở cuối, và giữ mã thoát của lệnh trong <code>$?</code>.</li>
+<li>Số học bash chỉ có số nguyên và cắt phần lẻ; số thập phân dùng <code>bc</code>/<code>awk</code>, số có 0 đứng đầu dùng <code>10#</code>.</li>
+<li>Chỉ biến đã export mới tới được tiến trình con, và thứ con đặt ra không bao giờ quay về.</li>
+<li><code>declare -p</code> cho thấy biến thật sự là gì; <code>read -r</code> là cách an toàn duy nhất để đọc đầu vào.</li>
+<li>zsh và bash 3.2 trên Mac khác nhau ở hệ tám, <code>declare -l</code> và <code>read -p</code> — hãy thử bằng đúng shell mà shebang gọi.</li>
+</ul>
 <a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameters.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Bash Manual — Shell Parameters</span><span class="lc-sub">Luật gán biến, tham số vị trí và danh sách đầy đủ các biến đặc biệt. Trang tra cứu cho mọi thứ trong bài này.</span></span>
@@ -326,6 +525,7 @@ read -r -t 10 -p "Tiếp tục? [y/N] " answer <span class="tok-comment"># -t: h
 <p class="lead">If you take one thing from this entire course, take this: <strong>put double quotes around every variable expansion.</strong> Not for style — because without them the shell splits the value into words and expands globs in it, and that is the single largest source of bugs in shell scripts. This lesson explains exactly what happens so the rule stops feeling arbitrary.</p>
 
 <h3>The mechanism: word splitting</h3>
+${slide('lx-06', 9, 'Không nháy: một biến thành bốn tham số')}
 <pre><code>file="my report.txt"
 touch "\$file"
 ls -l \$file          <span class="tok-comment"># unquoted</span>
@@ -342,7 +542,31 @@ ls: cannot access 'report.txt': No such file or directory
 </div>
 <div class="callout warn">Step 4 is the dangerous one. A variable containing <code>*</code> — from user input, a config file, an API response — expands to every file in the current directory when unquoted. <code>rm \$userinput</code> with <code>userinput="*"</code> deletes everything, and the script looks completely innocent in review.</div>
 
+<h3>The full expansion order — the one picture behind this chapter</h3>
+${slide('lx-06', 8, 'Thứ tự khai triển của bash')}
+<p>The four steps above are a simplification. The bash manual (bash(1), section EXPANSION) gives the real order: <em>"brace expansion; tilde expansion, parameter and variable expansion, arithmetic expansion, and command substitution (done in a left-to-right fashion); word splitting; pathname expansion; and quote removal."</em> Every surprising thing in this chapter falls out of that sentence. Here is one command line going through all of it, run for real (<code>ext=txt</code>, <code>v='x *.md'</code>, a directory holding <code>README.md</code> and <code>notes.md</code>):</p>
+<pre><code>ext=txt; v='x *.md'
+printf '[%s]\\n' {a,b}.$ext ~ $((6*7)) $v '*'</code></pre>
+<div class="out">[a.txt]
+[b.txt]
+[/home/an]
+[42]
+[x]
+[README.md]
+[notes.md]
+[*]</div>
+<table>
+<tr><th>Step</th><th>What happens to the example</th><th>Consequence you will meet</th></tr>
+<tr><td>1 · Brace <code>{a,b}</code> <code>{1..5}</code></td><td><code>{a,b}.$ext</code> → <code>a.$ext b.$ext</code> — pure text, variables not yet known</td><td><code>n=3; echo {1..$n}</code> prints <code>{1..3}</code>: the range was needed before <code>$n</code> existed</td></tr>
+<tr><td>2 · Tilde <code>~</code></td><td><code>~</code> → <code>/home/an</code></td><td>only unquoted: <code>"~/x"</code> stays literally <code>~/x</code> (tested)</td></tr>
+<tr><td>3 · <code>$var</code> <code>$(cmd)</code> <code>$((…))</code></td><td><code>$ext</code> → <code>txt</code>, <code>$((6*7))</code> → <code>42</code>, <code>$v</code> → one piece <code>x *.md</code></td><td>results are NOT brace- or tilde-expanded again: <code>b='{1,2}'; echo $b</code> prints <code>{1,2}</code></td></tr>
+<tr><td>4 · Word splitting</td><td>only the unquoted RESULT of step 3 is cut on IFS: <code>x</code> + <code>*.md</code></td><td>the whole of Lesson 6.2; quotes switch it off</td></tr>
+<tr><td>5 · Pathname (glob)</td><td><code>*.md</code> → <code>README.md notes.md</code>; <code>'*'</code> is quoted, so it is left alone</td><td>a value containing <code>*</code> can expand to every file (Lesson 2.2)</td></tr>
+<tr><td>6 · Quote removal</td><td><code>'*'</code> → <code>*</code></td><td>the program never sees your quotes; they only told bash what not to do</td></tr>
+</table>
+<p>Process substitution <code>&lt;(…)</code> happens at the same time as step 3 (Chapter 13). To see the result of all six steps for any line, turn on tracing: <code>set -x</code> printed <code>+ printf '[%s]\\n' a.txt b.txt /home/an 42 x README.md notes.md '*'</code> for the example — xtrace adds quotes back only so that you can read it. The other tool you will use all chapter is <code>printf '[%s]\\n' …</code>: it prints each argument it received on its own line inside brackets, so you can count arguments and see leading or trailing spaces.</p>
 <h3>The three kinds of quoting</h3>
+${slide('lx-06', 10, 'Ba loại nháy soi bằng printf "[%s]"')}
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>"double"</code></span><span class="v">Expands <code>\$var</code>, <code>\$(cmd)</code> and <code>\$((math))</code>; suppresses word splitting and globbing. <strong>Your default.</strong></span></div>
   <div class="kv"><span class="k"><code>'single'</code></span><span class="v">Expands <strong>nothing</strong> — every character is literal, including <code>\$</code> and <code>\\</code>. The only thing it cannot contain is another single quote. Use for awk/sed programs, regexes, and anything with a literal <code>\$</code>.</span></div>
@@ -362,6 +586,7 @@ awk -v n="\$name" '{print n, \$1}' file.txt    <span class="tok-comment"># singl
 <div class="callout ok">Adjacent quoted strings join with no separator, which is how you build a string that is partly literal and partly expanded. This is also the answer to "how do I put a single quote inside single quotes": you cannot, so you close, add <code>"'"</code>, and reopen — <code>'it'"'"'s'</code>. Ugly, and the reason to reach for a double-quoted string with an escaped <code>\$</code> instead when you can.</div>
 
 <h3>"\$@" versus "\$*" versus \$@</h3>
+${slide('lx-06', 11, '"$@" giữ nguyên từng tham số')}
 <p>Three spellings, three different behaviours, and only one of them is usually right:</p>
 <pre><code><span class="tok-comment"># show-args.sh</span>
 for arg in "\$@"; do echo "[\$arg]"; done
@@ -379,6 +604,7 @@ exec docker run --rm -v "\$PWD:/work" myimage "\$@"</code></pre>
 <p>That line forwards every argument exactly as received, including ones with spaces and quotes. Written as <code>\$@</code> or <code>"\$*"</code> it would corrupt them, and the failure would only appear for the one user who passes a path with a space in it.</p>
 
 <h3>Arrays: the right way to hold a list</h3>
+${slide('lx-06', 12, 'Mảng: "${a[@]}" là cách mở đúng duy nhất')}
 <pre><code>files=("report one.txt" "report two.txt" "notes.md")
 echo "\${#files[@]}"           <span class="tok-comment"># how many elements: 3</span>
 echo "\${files[0]}"            <span class="tok-comment"># first element (index from 0)</span>
@@ -402,6 +628,7 @@ mycommand "\${args[@]}"</code></pre>
 <p>The alternative — building a command in a plain string and hoping the shell re-splits it correctly — is the classic mistake this replaces. A string cannot represent "an argument containing a space"; an array can.</p>
 
 <h3>IFS: what "whitespace" actually means</h3>
+${slide('lx-06', 13, 'IFS quyết định cắt ở đâu — zsh không cắt $var')}
 <pre><code>echo "\$IFS" | cat -A          <span class="tok-comment"># default: space, tab, newline</span>
 
 line="alice:x:1001:1001::/home/alice:/bin/bash"
@@ -445,6 +672,61 @@ echo hi &gt; \$out               →  echo hi &gt; "\$out"
 if [ "\$a" -gt "\$b" ]        →  if (( a &gt; b ))</code></pre>
 <div class="callout ok">Number 10 is the exception worth naming: inside <code>(( ))</code> and <code>[[ ]]</code>, bash does not word-split, so quotes are optional there. Everywhere else — <code>[ ]</code>, command arguments, redirections, assignments from substitutions — quote. When in doubt, quote; there is no case where correct quoting breaks something that unquoted would have handled.</div>
 
+<h3>Where quotes may be left off — and where they change the meaning</h3>
+<p>"Quote everything" is the right default, but reading other people's scripts requires knowing the handful of places where bash does not split anyway, and the two places where adding quotes silently changes what the code does. All rows tested in bash 5.2:</p>
+<table>
+<tr><th>Place</th><th>Unquoted is…</th><th>Tested</th></tr>
+<tr><td>Assignment <code>b=$a</code>, <code>c=$(cmd)</code></td><td>safe — no splitting, no glob</td><td><code>a="x   y"; b=$a</code> keeps three spaces</td></tr>
+<tr><td>Inside <code>[[ ]]</code>, left side</td><td>safe</td><td><code>[[ $var == yes ]]</code> with <code>var</code> empty is just false</td></tr>
+<tr><td>Inside <code>(( ))</code>, <code>case $x in</code></td><td>safe</td><td>—</td></tr>
+<tr><td>Right side of <code>==</code> in <code>[[ ]]</code></td><td>a <strong>pattern</strong>; quoted = literal text</td><td><code>[[ app.log == *.log ]]</code> true · <code>[[ app.log == "*.log" ]]</code> false</td></tr>
+<tr><td>Right side of <code>=~</code></td><td>a <strong>regex</strong>; quoted = literal text</td><td><code>re='^[0-9]+$'; [[ 42 =~ $re ]]</code> true · <code>[[ 42 =~ "$re" ]]</code> false</td></tr>
+<tr><td>Everything else</td><td>split + glob — quote it</td><td>—</td></tr>
+</table>
+<p>The fourth kind of quote is <code>$'…'</code> (ANSI-C quoting): inside it <code>\\t</code>, <code>\\n</code> and <code>\\'</code> become a real tab, newline and single quote. That is how you write <code>IFS=$'\\n\\t'</code> or <code>$'it\\'s'</code>, and how you strip a Windows carriage return with <code>\${line%$'\\r'}</code> (Lesson 6.5).</p>
+
+<h3>On macOS and WSL</h3>
+<p>This is where the Mac surprises most people, because the Mac's default shell is zsh, and zsh deliberately does not do step 4 on plain variables. Run on a Mac M1 with zsh 5.9 (<code>-f</code> = no config files):</p>
+<pre><code>zsh -f -c 'v="a b *.txt"; printf "[%s]\\n" $v'
+zsh -f -c 'v="a b *.txt"; printf "[%s]\\n" \${=v}'
+zsh -f -c 'n=3; echo {1..$n}'
+zsh -f -c 'a=(x y z); echo "a[1]=$a[1] a[0]=[$a[0]]"'</code></pre>
+<div class="out">[a b *.txt]
+[a]
+[b]
+[*.txt]
+1 2 3
+a[1]=x a[0]=[]</div>
+<p>So in zsh an unquoted <code>$v</code> stays one word (<code>\${=v}</code> asks for splitting), <code>{1..$n}</code> works because zsh expands braces after variables, and arrays start at index 1. A script you "tested" by pasting lines into the Mac terminal can therefore pass there and break under bash — always run it through the interpreter its shebang names. <code>/bin/bash</code> on the Mac (3.2) splits exactly like Linux. <strong>WSL</strong>: identical to Ubuntu, with one addition — a script saved from a Windows editor with CRLF line endings fails with <code>$'\\r': command not found</code>, because the <code>\\r</code> becomes part of the last word of every line.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p><strong>Scenario:</strong> a teammate's wrapper script "loses" the file <code>bao cao Q3.pdf</code> that the lecturer uploaded, and once printed the whole directory when someone passed <code>*</code>. Reproduce it with hostile file names and fix it.</p><ol>
+<li><code>mkdir -p ~/thu-linux/ch6/q2 &amp;&amp; cd ~/thu-linux/ch6/q2 &amp;&amp; touch -- 'bao cao Q3.pdf' '*' -n notes.txt</code></li>
+<li>Write <code>~/thu-linux/ch6/dem.sh</code> containing one line: <code>for a in $@; do printf "[%s]\\n" "$a"; done</code>. Run <code>bash ../dem.sh * | wc -l</code> and explain every extra line using the expansion-order table.</li>
+<li>Run <code>bash -x ../dem.sh 'a b'</code> to watch the arguments bash really passes, then fix the script with a single pair of quotes.</li>
+<li>Inside the script, build <code>args=(--label "bao cao")</code> and print <code>printf '[%s]\\n' "\${args[@]}"</code> versus <code>\${args[*]}</code> unquoted.</li>
+</ol>
+<p><strong>Done when:</strong> before the fix <code>bash ../dem.sh * | wc -l</code> prints <code>9</code> (four names, but <code>*</code> globs to all four again and <code>bao cao Q3.pdf</code> splits into three); after it prints <code>4</code>; and the array prints <code>[--label]</code> <code>[bao cao]</code> quoted but three lines unquoted.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Word splitting</span><span class="v">Cutting the unquoted result of an expansion into several arguments at IFS characters.</span></div>
+  <div class="kv"><span class="k">IFS (Internal Field Separator)</span><span class="v">The characters that split: by default space, tab, newline.</span></div>
+  <div class="kv"><span class="k">Globbing / pathname expansion</span><span class="v">Turning <code>*</code>, <code>?</code>, <code>[…]</code> into matching file names.</span></div>
+  <div class="kv"><span class="k">Quote removal</span><span class="v">The last step: quote characters are stripped before the program runs.</span></div>
+  <div class="kv"><span class="k">ANSI-C quoting <code>$'…'</code></span><span class="v">Quotes where <code>\\n</code>, <code>\\t</code> become real control characters.</span></div>
+  <div class="kv"><span class="k"><code>"$@"</code></span><span class="v">All positional arguments, each exactly one word.</span></div>
+  <div class="kv"><span class="k">xtrace (<code>set -x</code>)</span><span class="v">Prints each command after expansion, prefixed with <code>+</code>.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>Bash expands in a fixed order: brace → tilde/variable/arithmetic/command (left to right) → word splitting → glob → quote removal.</li>
+<li>Braces run before variables, so <code>{1..$n}</code> does not work in bash; results of step 3 are never brace-expanded again.</li>
+<li>Double quotes keep <code>$</code> expansions but stop splitting and globbing; single quotes stop everything; <code>$'…'</code> gives real control characters.</li>
+<li><code>"$@"</code> and <code>"\${arr[@]}"</code> are the only forms that keep every argument or element intact.</li>
+<li>Assignments, <code>[[ ]]</code> and <code>(( ))</code> do not split — but quoting the right side of <code>==</code> or <code>=~</code> turns a pattern into plain text.</li>
+<li>zsh does not split <code>$var</code> and expands <code>{1..$n}</code>; test bash scripts with bash, and see real arguments with <code>printf '[%s]\\n'</code> or <code>set -x</code>.</li>
+</ul>
 <a class="link-card" href="https://mywiki.wooledge.org/Quotes" target="_blank" rel="noopener">
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">Greg's Wiki — Quotes</span><span class="lc-sub">The definitive explanation of when and why, with the exact expansion order. If any part of this lesson felt hand-wavy, this page fills it in.</span></span>
@@ -471,6 +753,7 @@ if [ "\$a" -gt "\$b" ]        →  if (( a &gt; b ))</code></pre>
 <p class="lead">Nếu bạn chỉ lấy đi một thứ từ cả khoá học này, hãy lấy điều này: <strong>đặt nháy kép quanh MỌI phép khai triển biến.</strong> Không phải vì thẩm mỹ — mà vì thiếu chúng thì shell CẮT giá trị đó thành nhiều từ và khai triển glob bên trong nó, và đó là nguồn lỗi lớn nhất của script shell. Bài này giải thích chính xác chuyện gì xảy ra, để cái luật kia thôi có vẻ tuỳ tiện.</p>
 
 <h3>Cơ chế: cắt từ</h3>
+${slide('lx-06', 9, 'Không nháy: một biến thành bốn tham số')}
 <pre><code>file="my report.txt"
 touch "\$file"
 ls -l \$file          <span class="tok-comment"># không nháy</span>
@@ -487,7 +770,31 @@ ls: cannot access 'report.txt': No such file or directory
 </div>
 <div class="callout warn">Bước 4 mới là bước nguy hiểm. Một biến chứa <code>*</code> — từ đầu vào người dùng, từ một file cấu hình, từ một hồi đáp API — sẽ khai triển thành mọi file trong thư mục hiện tại nếu không có nháy. <code>rm \$userinput</code> với <code>userinput="*"</code> xoá sạch mọi thứ, mà script thì trông hoàn toàn vô hại khi soát mã.</div>
 
+<h3>Toàn bộ thứ tự khai triển — bức hình đứng sau cả chương này</h3>
+${slide('lx-06', 8, 'Thứ tự khai triển của bash')}
+<p>Bốn bước ở trên là bản rút gọn. Sổ tay bash (bash(1), mục EXPANSION) cho thứ tự THẬT: <em>"brace expansion; tilde expansion, parameter and variable expansion, arithmetic expansion, and command substitution (done in a left-to-right fashion); word splitting; pathname expansion; and quote removal"</em> — khai triển ngoặc nhọn; khai triển dấu ngã, biến, số học và thay thế lệnh (làm cùng một lượt, từ trái sang phải); cắt từ; khai triển tên file; bỏ dấu nháy. Mọi điều bất ngờ trong chương này đều rơi ra từ câu đó. Đây là một dòng lệnh đi qua đủ các bước, chạy thật (<code>ext=txt</code>, <code>v='x *.md'</code>, thư mục có <code>README.md</code> và <code>notes.md</code>):</p>
+<pre><code>ext=txt; v='x *.md'
+printf '[%s]\\n' {a,b}.$ext ~ $((6*7)) $v '*'</code></pre>
+<div class="out">[a.txt]
+[b.txt]
+[/home/an]
+[42]
+[x]
+[README.md]
+[notes.md]
+[*]</div>
+<table>
+<tr><th>Bước</th><th>Ví dụ biến thành gì</th><th>Hệ quả bạn sẽ gặp</th></tr>
+<tr><td>1 · Ngoặc nhọn <code>{a,b}</code> <code>{1..5}</code></td><td><code>{a,b}.$ext</code> → <code>a.$ext b.$ext</code> — chỉ là chữ, biến chưa được biết</td><td><code>n=3; echo {1..$n}</code> in <code>{1..3}</code>: khoảng cần có TRƯỚC khi <code>$n</code> tồn tại</td></tr>
+<tr><td>2 · Dấu ngã <code>~</code></td><td><code>~</code> → <code>/home/an</code></td><td>chỉ khi không nháy: <code>"~/x"</code> vẫn là chữ <code>~/x</code> (đã thử)</td></tr>
+<tr><td>3 · <code>$biến</code> <code>$(lệnh)</code> <code>$((…))</code></td><td><code>$ext</code> → <code>txt</code>, <code>$((6*7))</code> → <code>42</code>, <code>$v</code> → MỘT mẩu <code>x *.md</code></td><td>kết quả KHÔNG được khai triển ngoặc nhọn hay dấu ngã lần nữa: <code>b='{1,2}'; echo $b</code> in <code>{1,2}</code></td></tr>
+<tr><td>4 · Cắt từ (word splitting)</td><td>chỉ KẾT QUẢ không nháy của bước 3 bị cắt theo IFS: <code>x</code> + <code>*.md</code></td><td>toàn bộ Bài 6.2; dấu nháy tắt nó đi</td></tr>
+<tr><td>5 · Glob (tên file)</td><td><code>*.md</code> → <code>README.md notes.md</code>; <code>'*'</code> có nháy nên để yên</td><td>một giá trị chứa <code>*</code> có thể nở thành mọi file (Bài 2.2)</td></tr>
+<tr><td>6 · Bỏ dấu nháy (quote removal)</td><td><code>'*'</code> → <code>*</code></td><td>chương trình không bao giờ thấy dấu nháy của bạn; chúng chỉ dặn bash đừng làm gì</td></tr>
+</table>
+<p>Thay thế tiến trình <code>&lt;(…)</code> diễn ra cùng lúc với bước 3 (Chương 13). Muốn xem kết quả của cả sáu bước với bất kỳ dòng nào, bật chế độ vết (xtrace): <code>set -x</code> in <code>+ printf '[%s]\\n' a.txt b.txt /home/an 42 x README.md notes.md '*'</code> cho ví dụ trên — xtrace thêm lại dấu nháy chỉ để bạn đọc được. Công cụ còn lại mà bạn sẽ dùng suốt chương là <code>printf '[%s]\\n' …</code>: nó in từng tham số nhận được trên một dòng riêng, trong ngoặc vuông, để bạn đếm được số tham số và thấy cả dấu cách ở đầu hay cuối.</p>
 <h3>Ba loại dấu nháy</h3>
+${slide('lx-06', 10, 'Ba loại nháy soi bằng printf "[%s]"')}
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>"nháy kép"</code></span><span class="v">Khai triển <code>\$var</code>, <code>\$(lệnh)</code> và <code>\$((số học))</code>; dập việc cắt từ và khai triển glob. <strong>Mặc định của bạn.</strong></span></div>
   <div class="kv"><span class="k"><code>'nháy đơn'</code></span><span class="v">KHÔNG khai triển <strong>gì cả</strong> — mọi ký tự đều nguyên văn, kể cả <code>\$</code> và <code>\\</code>. Thứ duy nhất nó không chứa được là một dấu nháy đơn khác. Dùng cho chương trình awk/sed, cho regex, và cho mọi thứ có dấu <code>\$</code> nguyên văn.</span></div>
@@ -507,6 +814,7 @@ awk -v n="\$name" '{print n, \$1}' file.txt    <span class="tok-comment"># nháy
 <div class="callout ok">Hai chuỗi có nháy đứng cạnh nhau sẽ nối lại không có dấu ngăn, và đó là cách bạn dựng một chuỗi vừa có phần nguyên văn vừa có phần được khai triển. Đây cũng là câu trả lời cho "làm sao đặt một dấu nháy đơn bên trong nháy đơn": không được, nên bạn đóng lại, thêm <code>"'"</code>, rồi mở ra tiếp — <code>'it'"'"'s'</code>. Xấu, và là lý do nên với tay lấy một chuỗi nháy kép với dấu <code>\$</code> đã thoát khi có thể.</div>
 
 <h3>"\$@" so với "\$*" so với \$@</h3>
+${slide('lx-06', 11, '"$@" giữ nguyên từng tham số')}
 <p>Ba cách viết, ba hành vi khác nhau, và thường chỉ một cái là đúng:</p>
 <pre><code><span class="tok-comment"># show-args.sh</span>
 for arg in "\$@"; do echo "[\$arg]"; done
@@ -524,6 +832,7 @@ exec docker run --rm -v "\$PWD:/work" myimage "\$@"</code></pre>
 <p>Dòng đó chuyển tiếp mọi tham số đúng như nó nhận được, kể cả những cái có dấu cách và dấu nháy. Viết thành <code>\$@</code> hay <code>"\$*"</code> thì nó sẽ làm hỏng chúng, và chỗ hỏng chỉ lộ ra với đúng một người dùng nào đó truyền vào một đường dẫn có dấu cách.</p>
 
 <h3>Mảng: cách đúng để giữ một danh sách</h3>
+${slide('lx-06', 12, 'Mảng: "${a[@]}" là cách mở đúng duy nhất')}
 <pre><code>files=("report one.txt" "report two.txt" "notes.md")
 echo "\${#files[@]}"           <span class="tok-comment"># có bao nhiêu phần tử: 3</span>
 echo "\${files[0]}"            <span class="tok-comment"># phần tử đầu (đánh chỉ số từ 0)</span>
@@ -547,6 +856,7 @@ mycommand "\${args[@]}"</code></pre>
 <p>Phương án kia — dựng một lệnh trong một chuỗi thường rồi mong shell cắt lại cho đúng — chính là sai lầm kinh điển mà cách này thay thế. Một chuỗi KHÔNG biểu diễn được khái niệm "một tham số có chứa dấu cách"; một mảng thì được.</p>
 
 <h3>IFS: "khoảng trắng" thật ra nghĩa là gì</h3>
+${slide('lx-06', 13, 'IFS quyết định cắt ở đâu — zsh không cắt $var')}
 <pre><code>echo "\$IFS" | cat -A          <span class="tok-comment"># mặc định: dấu cách, tab, xuống dòng</span>
 
 line="alice:x:1001:1001::/home/alice:/bin/bash"
@@ -590,6 +900,61 @@ echo hi &gt; \$out               →  echo hi &gt; "\$out"
 if [ "\$a" -gt "\$b" ]        →  if (( a &gt; b ))</code></pre>
 <div class="callout ok">Số 10 là ngoại lệ đáng gọi tên: bên trong <code>(( ))</code> và <code>[[ ]]</code>, bash KHÔNG cắt từ, nên ở đó dấu nháy là tuỳ chọn. Mọi chỗ khác — <code>[ ]</code>, tham số của lệnh, phép chuyển hướng, gán từ một phép thay thế — đều phải có nháy. Khi phân vân thì cứ đặt nháy; không có trường hợp nào mà đặt nháy đúng lại làm hỏng thứ mà không nháy xử lý được.</div>
 
+<h3>Chỗ nào được bỏ nháy — và chỗ nào thêm nháy lại ĐỔI nghĩa</h3>
+<p>"Nháy mọi thứ" là mặc định đúng, nhưng để đọc script của người khác bạn cần biết vài chỗ bash vốn đã không cắt từ, và hai chỗ mà thêm nháy vào sẽ âm thầm đổi việc mã làm. Mọi dòng đã thử trên bash 5.2:</p>
+<table>
+<tr><th>Chỗ</th><th>Không nháy thì…</th><th>Đã thử</th></tr>
+<tr><td>Phép gán <code>b=$a</code>, <code>c=$(lệnh)</code></td><td>an toàn — không cắt, không glob</td><td><code>a="x   y"; b=$a</code> giữ nguyên ba dấu cách</td></tr>
+<tr><td>Trong <code>[[ ]]</code>, vế trái</td><td>an toàn</td><td><code>[[ $var == yes ]]</code> với <code>var</code> rỗng chỉ đơn giản là sai</td></tr>
+<tr><td>Trong <code>(( ))</code>, <code>case $x in</code></td><td>an toàn</td><td>—</td></tr>
+<tr><td>Vế phải của <code>==</code> trong <code>[[ ]]</code></td><td>là một <strong>MẪU</strong> (pattern); có nháy = chữ thường</td><td><code>[[ app.log == *.log ]]</code> đúng · <code>[[ app.log == "*.log" ]]</code> sai</td></tr>
+<tr><td>Vế phải của <code>=~</code></td><td>là một <strong>REGEX</strong>; có nháy = chữ thường</td><td><code>re='^[0-9]+$'; [[ 42 =~ $re ]]</code> đúng · <code>[[ 42 =~ "$re" ]]</code> sai</td></tr>
+<tr><td>Mọi chỗ khác</td><td>cắt + glob — hãy đặt nháy</td><td>—</td></tr>
+</table>
+<p>Loại nháy thứ tư là <code>$'…'</code> (ANSI-C quoting — nháy kiểu C): bên trong nó <code>\\t</code>, <code>\\n</code> và <code>\\'</code> thành một tab, một ký tự xuống dòng và một dấu nháy đơn THẬT. Đó là cách viết <code>IFS=$'\\n\\t'</code> hay <code>$'it\\'s'</code>, và cách gỡ ký tự về đầu dòng của Windows bằng <code>\${line%$'\\r'}</code> (Bài 6.5).</p>
+
+<h3>Trên macOS và WSL khác gì</h3>
+<p>Đây là chỗ Mac làm nhiều người bất ngờ nhất, vì shell mặc định của Mac là zsh, và zsh CỐ Ý không làm bước 4 với biến thường. Chạy trên Mac M1, zsh 5.9 (<code>-f</code> = không đọc file cấu hình):</p>
+<pre><code>zsh -f -c 'v="a b *.txt"; printf "[%s]\\n" $v'
+zsh -f -c 'v="a b *.txt"; printf "[%s]\\n" \${=v}'
+zsh -f -c 'n=3; echo {1..$n}'
+zsh -f -c 'a=(x y z); echo "a[1]=$a[1] a[0]=[$a[0]]"'</code></pre>
+<div class="out">[a b *.txt]
+[a]
+[b]
+[*.txt]
+1 2 3
+a[1]=x a[0]=[]</div>
+<p>Vậy trong zsh, <code>$v</code> không nháy vẫn là MỘT từ (<code>\${=v}</code> mới là yêu cầu cắt), <code>{1..$n}</code> chạy được vì zsh khai triển ngoặc nhọn SAU biến, và mảng bắt đầu từ chỉ số 1. Một script bạn "đã thử" bằng cách dán từng dòng vào terminal Mac có thể qua ở đó rồi vỡ dưới bash — luôn chạy nó bằng đúng trình thông dịch mà shebang gọi tên. <code>/bin/bash</code> trên Mac (3.2) cắt từ y như Linux. <strong>WSL</strong>: giống hệt Ubuntu, thêm một điều — script lưu từ trình soạn thảo Windows với kiểu xuống dòng CRLF sẽ hỏng với <code>$'\\r': command not found</code>, vì ký tự <code>\\r</code> dính vào từ cuối của mỗi dòng.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p><strong>Tình huống:</strong> script bọc của một bạn cùng nhóm "làm mất" file <code>bao cao Q3.pdf</code> mà giảng viên tải lên, và có lần in ra cả thư mục khi ai đó truyền vào <code>*</code>. Dựng lại bằng những tên file hiểm rồi sửa nó.</p><ol>
+<li><code>mkdir -p ~/thu-linux/ch6/q2 &amp;&amp; cd ~/thu-linux/ch6/q2 &amp;&amp; touch -- 'bao cao Q3.pdf' '*' -n notes.txt</code></li>
+<li>Viết <code>~/thu-linux/ch6/dem.sh</code> chỉ một dòng: <code>for a in $@; do printf "[%s]\\n" "$a"; done</code>. Chạy <code>bash ../dem.sh * | wc -l</code> và giải thích từng dòng thừa bằng bảng thứ tự khai triển.</li>
+<li>Chạy <code>bash -x ../dem.sh 'a b'</code> để nhìn các tham số bash THẬT SỰ truyền đi, rồi sửa script bằng đúng một cặp dấu nháy.</li>
+<li>Trong script, dựng <code>args=(--label "bao cao")</code> và in <code>printf '[%s]\\n' "\${args[@]}"</code> so với <code>\${args[*]}</code> không nháy.</li>
+</ol>
+<p><strong>Đạt khi:</strong> trước khi sửa, <code>bash ../dem.sh * | wc -l</code> in <code>9</code> (bốn tên, nhưng <code>*</code> lại glob ra đủ bốn tên và <code>bao cao Q3.pdf</code> bị cắt làm ba); sau khi sửa in <code>4</code>; và mảng có nháy in <code>[--label]</code> <code>[bao cao]</code>, không nháy thì ra ba dòng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Word splitting (cắt từ)</span><span class="v">Cắt KẾT QUẢ không nháy của một phép khai triển thành nhiều tham số tại các ký tự IFS.</span></div>
+  <div class="kv"><span class="k">IFS (dấu phân tách trường)</span><span class="v">Những ký tự dùng để cắt: mặc định là dấu cách, tab, xuống dòng.</span></div>
+  <div class="kv"><span class="k">Globbing (khai triển tên file)</span><span class="v">Biến <code>*</code>, <code>?</code>, <code>[…]</code> thành những tên file khớp.</span></div>
+  <div class="kv"><span class="k">Quote removal (bỏ dấu nháy)</span><span class="v">Bước cuối: dấu nháy bị gỡ đi trước khi chương trình chạy.</span></div>
+  <div class="kv"><span class="k">ANSI-C quoting <code>$'…'</code> (nháy kiểu C)</span><span class="v">Loại nháy mà <code>\\n</code>, <code>\\t</code> thành ký tự điều khiển thật.</span></div>
+  <div class="kv"><span class="k"><code>"$@"</code> (mọi tham số)</span><span class="v">Mọi tham số vị trí, mỗi cái đúng một từ.</span></div>
+  <div class="kv"><span class="k">xtrace (<code>set -x</code>, chế độ vết)</span><span class="v">In mỗi lệnh SAU khi khai triển, có dấu <code>+</code> đứng đầu.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Bash khai triển theo thứ tự cố định: ngoặc nhọn → dấu ngã/biến/số học/lệnh (trái sang phải) → cắt từ → glob → bỏ dấu nháy.</li>
+<li>Ngoặc nhọn chạy trước biến nên <code>{1..$n}</code> không chạy trong bash; kết quả của bước 3 không bao giờ bị khai triển ngoặc nhọn lần nữa.</li>
+<li>Nháy kép giữ các phép <code>$</code> nhưng chặn cắt từ và glob; nháy đơn chặn tất cả; <code>$'…'</code> cho ký tự điều khiển thật.</li>
+<li><code>"$@"</code> và <code>"\${arr[@]}"</code> là hai dạng duy nhất giữ nguyên từng tham số, từng phần tử.</li>
+<li>Phép gán, <code>[[ ]]</code> và <code>(( ))</code> không cắt từ — nhưng đặt nháy vế phải của <code>==</code> hay <code>=~</code> biến mẫu thành chữ thường.</li>
+<li>zsh không cắt <code>$var</code> và khai triển được <code>{1..$n}</code>; hãy thử script bash bằng bash, và soi tham số thật bằng <code>printf '[%s]\\n'</code> hoặc <code>set -x</code>.</li>
+</ul>
 <a class="link-card" href="https://mywiki.wooledge.org/Quotes" target="_blank" rel="noopener">
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">Greg's Wiki — Quotes</span><span class="lc-sub">Lời giải thích dứt khoát về khi nào và vì sao, kèm đúng thứ tự khai triển. Nếu phần nào trong bài này còn thấy mơ hồ thì trang này lấp đầy.</span></span>
@@ -625,6 +990,7 @@ if [ "\$a" -gt "\$b" ]        →  if (( a &gt; b ))</code></pre>
 <p class="lead">Bash can slice, trim, substitute and default a string entirely inside <code>\${…}</code>, with no external program and no subshell. The syntax is dense and looks like line noise the first time — but there are only six forms, they compose, and each one replaces a <code>sed</code> or <code>basename</code> call that costs a process launch.</p>
 
 <h3>Defaults, and the one that fails loudly</h3>
+${slide('lx-06', 14, 'Bốn toán tử mặc định: chưa đặt khác rỗng')}
 <pre><code>name=""
 unset colour
 
@@ -670,6 +1036,7 @@ port="\${PORT:-\${DEFAULT_PORT:-3000}}"</code></pre>
   <div class="lz-layer"><span class="lz-lname">Indirect</span><span class="lz-lnote"><code>\${!name}</code> read by variable name · <code>\${!prefix@}</code> list matching names</span></div>
 </div>
 <h3>Trimming: # from the left, % from the right</h3>
+${slide('lx-06', 15, '# xén từ trái, % xén từ phải')}
 <p>Two operators remove a matching pattern from one end. The mnemonic is the keyboard: <code>#</code> is left of <code>%</code> on a US layout, and it trims from the left.</p>
 <pre><code>path="/srv/app/config/db.yml"
 
@@ -707,6 +1074,7 @@ feature/login</div>
 <div class="callout">The patterns here are <strong>globs, not regexes</strong> (Lesson 2.2): <code>*</code>, <code>?</code> and <code>[…]</code> work; <code>+</code>, <code>|</code> and <code>\\d</code> do not. That is why <code>\${path##*/}</code> means "remove everything up to and including the last slash" — the greedy <code>*</code> eats as much as it can while still leaving a <code>/</code> to match.</div>
 
 <h3>Substitution</h3>
+${slide('lx-06', 16, '/ và //, và dấu &amp; của bash 5.2')}
 <pre><code>s="hello world world"
 
 echo "\${s/world/there}"      <span class="tok-comment"># FIRST occurrence</span>
@@ -726,6 +1094,7 @@ echo "myapp:\${tag}"</code></pre>
 <div class="out">myapp:feature-user-login</div>
 
 <h3>Length, slicing, and case</h3>
+${slide('lx-06', 17, 'Độ dài, cắt lát, hoa thường')}
 <pre><code>s="deployment"
 echo "\${#s}"              <span class="tok-comment"># length: 10</span>
 echo "\${s:0:6}"           <span class="tok-comment"># from index 0, 6 chars</span>
@@ -745,6 +1114,7 @@ Deployment</div>
 <div class="callout warn">The space in <code>\${s: -4}</code> is required. Without it, <code>\${s:-4}</code> is the <em>default-value</em> operator from the top of this lesson and means "use 4 if <code>s</code> is empty" — a completely different result that will not error. Two syntaxes, one character apart, and only a space distinguishes them.</div>
 
 <h3>Replacing external commands</h3>
+${slide('lx-06', 18, 'Không fork thì nhanh gấp ~200 lần; bash 3.2 của Mac')}
 <pre><code>path="/srv/app/config/db.yml"
 
 <span class="tok-comment"># Each of these launches a process — ~1-3 ms and a fork</span>
@@ -796,6 +1166,93 @@ done</code></pre>
 20260822_beach_sunset.jpg  20260822_family_photo.jpg</div>
 <p>Four expansions, one <code>mv</code>, no <code>basename</code>, no <code>sed</code>, no subshell except the one <code>date</code>. That is the shape most file-processing loops should have.</p>
 
+<h3>The whole table: unset, empty and set are three different states</h3>
+<p>The colon in <code>:-</code>, <code>:=</code>, <code>:?</code>, <code>:+</code> means "treat <em>empty</em> like <em>unset</em>". Drop the colon and only a truly unset variable triggers the operator. Real output, one row per state:</p>
+<pre><code>for st in unset empty set; do
+  unset v; case $st in empty) v=;; set) v=val;; esac
+  printf '%-6s :-[%s] -[%s] :+[%s] +[%s]\\n' "$st" "\${v:-D}" "\${v-D}" "\${v:+A}" "\${v+A}"
+done</code></pre>
+<div class="out">unset  :-[D] -[D] :+[] +[]
+empty  :-[D] -[] :+[] +[A]
+set    :-[val] -[val] :+[A] +[A]</div>
+<p>For configuration you almost always want the colon form: an environment variable set to the empty string (<code>DATABASE_URL=</code> left blank in a <code>.env</code> file) is just as broken as a missing one. The colon-less form is for the rare case where "empty" is a meaningful value you must not overwrite. Related: <code>set -u</code> (Chapter 7) makes any use of an unset variable an error — and <code>\${X:-}</code> is how you say "unset is fine here" under it.</p>
+
+<h3>Transformations and two traps: <code>&amp;</code> in bash 5.2, and Vietnamese text</h3>
+<table>
+<tr><th>Form</th><th>Does</th><th>Tested (bash 5.2)</th></tr>
+<tr><td><code>\${v@Q}</code></td><td>Quote the value so it can be pasted back into a shell safely</td><td><code>it's "x" $y</code> → <code>'it'\\''s "x" $y'</code></td></tr>
+<tr><td><code>\${v@U}</code> · <code>\${v@u}</code> · <code>\${v@L}</code></td><td>Upper · first letter upper · lower (bash 5.1+)</td><td><code>hello</code> → <code>HELLO Hello hello</code></td></tr>
+<tr><td><code>\${v@A}</code></td><td>The <code>declare</code> command that would recreate it</td><td><code>declare -i num='5'</code></td></tr>
+<tr><td><code>\${t^^[aeiou]}</code></td><td>Upper-case only characters matching a pattern</td><td><code>xin chao ban</code> → <code>xIn chAO bAn</code></td></tr>
+<tr><td><code>\${#u}</code></td><td>Length in <strong>characters of the current locale</strong></td><td><code>u="đường"</code>: <code>5</code> under C.UTF-8, <code>9</code> under <code>LC_ALL=C</code> (bytes)</td></tr>
+</table>
+<p><strong>Trap 1 — <code>&amp;</code> in the replacement.</strong> Since bash 5.2 the option <code>patsub_replacement</code> is on by default (bash(1): "This option is enabled by default"), and an unquoted <code>&amp;</code> in the replacement of <code>\${v/pat/rep}</code> means "the text that matched". It bites exactly when you insert a URL query string:</p>
+<pre><code>q="a=1&amp;b=2"; u="x?QUERY"
+echo "\${u/QUERY/$q}"
+echo "\${u/QUERY/"$q"}"</code></pre>
+<div class="out">x?a=1QUERYb=2
+x?a=1&amp;b=2</div>
+<p>Quote the replacement (or write <code>\\&amp;</code>) whenever it comes from a variable. The same line under the Mac's bash 3.2 prints the <code>&amp;</code> literally — one more reason a script can behave differently on two machines.</p>
+<p><strong>Trap 2 — length and slicing depend on the locale.</strong> In a UTF-8 locale <code>\${#u}</code> counts characters and <code>\${u:0:2}</code> takes two letters; in a container or cron job with no locale set (<code>LC_ALL=C</code>/<code>POSIX</code>) the same code counts bytes, and slicing can cut a Vietnamese letter in half. If a script truncates names, set <code>LC_ALL=C.UTF-8</code> at the top.</p>
+
+<h3>Run it step by step</h3>
+<pre><code>p=/srv/app/config/db.yml; f=archive.tar.gz
+printf '[%s]\\n' "\${p##*/}" "\${p%/*}" "\${p%%/*}" "\${f%.*}" "\${f#*.}"
+x=/srv/app/; echo "[\${x##*/}] [$(basename "$x")]"
+s="hello world world"; echo "\${s//[ol]/_}"
+unset c; echo "[\${c:=green}] c=[$c]"
+: "\${NOPE:?not set}"; echo "not reached"</code></pre>
+<div class="out">[db.yml]
+[/srv/app/config]
+[]
+[archive.tar]
+[tar.gz]
+[] [app]
+he___ w_r_d w_r_d
+[green] c=[green]
+bash: NOPE: not set</div>
+<p>Note the third and sixth lines: <code>\${p%%/*}</code> removes everything because the path starts with <code>/</code>, and on a path ending in <code>/</code> the pure-bash basename is empty while <code>basename</code> says <code>app</code>. The last line never prints: in a script, <code>:?</code> exits the whole script with status 1.</p>
+
+<h3>On macOS and WSL</h3>
+<p>Everything in this lesson except <code>#</code>, <code>%</code>, <code>/</code> and the four default operators is newer than the Mac's <code>/bin/bash</code> 3.2 (2007). Run on a Mac M1:</p>
+<pre><code>/bin/bash -c 's=deploy; echo "\${s^^}"'
+/bin/bash -c 'v="it s"; echo "\${v@Q}"'
+/bin/bash -c 'a=(x y z); echo "\${a[-1]}"'
+zsh -f -c 's=deploy; echo \${s:u} \${(U)s}'</code></pre>
+<div class="out">/bin/bash: \${s^^}: bad substitution
+/bin/bash: \${v@Q}: bad substitution
+/bin/bash: a: bad array subscript
+DEPLOY DEPLOY</div>
+<p>zsh has its own spelling (<code>\${s:u}</code>, <code>\${(U)s}</code>) and rejects <code>\${s^^}</code> with <code>bad substitution</code>. Forks are also far more expensive on macOS: 2,000 calls to <code>basename</code> took 15.7 s on a Mac M1, against 6.06 s for 10,000 in the Ubuntu container — so replacing external commands inside loops pays off even more on a Mac. <strong>WSL</strong> behaves like Ubuntu.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p><strong>Scenario:</strong> the CI pipeline gives your deploy script a branch name like <code>refs/heads/feature/Dang-Nhap</code> and an image file path, and the script must build a Docker tag and refuse to run without a registry URL — using no <code>sed</code>, <code>basename</code> or <code>tr</code>.</p><ol>
+<li>In <code>~/thu-linux/ch6</code> write <code>tag.sh</code> with <code>ref=\${1:?usage: tag.sh REF FILE}</code> and <code>file=\${2:?usage: tag.sh REF FILE}</code>.</li>
+<li>Strip <code>refs/heads/</code> with <code>#</code>, replace every <code>/</code> with <code>-</code>, and lower-case the result with <code>,,</code>.</li>
+<li>From <code>file</code> print the name without directory and the extension, using <code>##*/</code> and <code>##*.</code>.</li>
+<li>Add <code>: "\${REGISTRY:?set REGISTRY}"</code> and print <code>$REGISTRY/app:$tag</code>.</li>
+</ol>
+<p><strong>Done when:</strong> <code>REGISTRY=ghcr.io/nhom bash tag.sh refs/heads/feature/Dang-Nhap /srv/up/anh.bia.png</code> prints <code>ghcr.io/nhom/app:feature-dang-nhap</code>, <code>anh.bia.png</code> and <code>png</code>; the same command without <code>REGISTRY</code> exits with status 1 and the message <code>set REGISTRY</code>; with no arguments it prints the usage line.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Parameter expansion</span><span class="v">Any <code>\${…}</code> form that reads and transforms a variable inside bash.</span></div>
+  <div class="kv"><span class="k">Unset vs empty</span><span class="v">Never assigned (or <code>unset</code>) versus assigned the empty string; <code>:</code> treats them alike.</span></div>
+  <div class="kv"><span class="k">Default value</span><span class="v"><code>\${v:-x}</code> uses x; <code>\${v:=x}</code> also assigns it.</span></div>
+  <div class="kv"><span class="k">Prefix / suffix removal</span><span class="v"><code>#</code>/<code>##</code> from the start, <code>%</code>/<code>%%</code> from the end; doubled = longest match.</span></div>
+  <div class="kv"><span class="k">Pattern substitution</span><span class="v"><code>\${v/a/b}</code> first, <code>\${v//a/b}</code> all; the pattern is a glob.</span></div>
+  <div class="kv"><span class="k">Substring</span><span class="v"><code>\${v:offset:length}</code>; a negative offset needs a space: <code>\${v: -4}</code>.</span></div>
+  <div class="kv"><span class="k">Locale</span><span class="v">Language settings (<code>LANG</code>, <code>LC_ALL</code>) that decide whether bash counts characters or bytes.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li><code>:-</code> <code>:=</code> <code>:?</code> <code>:+</code> treat empty like unset; without the colon only unset counts.</li>
+<li><code>\${VAR:?message}</code> at the top of a script turns a mysterious later failure into an immediate, named one.</li>
+<li><code>#</code>/<code>##</code> trim from the left, <code>%</code>/<code>%%</code> from the right; patterns are globs, never regexes.</li>
+<li><code>/</code> replaces the first match, <code>//</code> all; in bash 5.2 an unquoted <code>&amp;</code> in the replacement means the matched text.</li>
+<li><code>\${#v}</code> and slicing count characters only in a UTF-8 locale; <code>\${s: -4}</code> needs its space.</li>
+<li>Replacing <code>basename</code>/<code>sed</code> in loops is ~200× faster, but <code>^^</code>, <code>@Q</code> and negative indexes do not exist in the Mac's bash 3.2.</li>
+</ul>
 <a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Bash Manual — Shell Parameter Expansion</span><span class="lc-sub">Every form in one place, including the ones this lesson skipped (<code>@Q</code>, <code>@U</code>, transformations). Worth one careful read.</span></span>
@@ -822,6 +1279,7 @@ done</code></pre>
 <p class="lead">Bash cắt lát, xén, thay thế và đặt giá trị mặc định cho một chuỗi hoàn toàn bên trong <code>\${…}</code>, không cần chương trình ngoài và không cần shell con. Cú pháp thì đặc và lần đầu nhìn giống nhiễu — nhưng chỉ có sáu dạng, chúng ghép nối được với nhau, và mỗi dạng thay được một lời gọi <code>sed</code> hay <code>basename</code> vốn tốn cả một lần khởi chạy tiến trình.</p>
 
 <h3>Giá trị mặc định, và cái biết kêu to</h3>
+${slide('lx-06', 14, 'Bốn toán tử mặc định: chưa đặt khác rỗng')}
 <pre><code>name=""
 unset colour
 
@@ -867,6 +1325,7 @@ port="\${PORT:-\${DEFAULT_PORT:-3000}}"</code></pre>
   <div class="lz-layer"><span class="lz-lname">Gián tiếp</span><span class="lz-lnote"><code>\${!name}</code> đọc theo tên biến · <code>\${!tiền_tố@}</code> liệt kê các tên khớp</span></div>
 </div>
 <h3>Xén: # từ bên trái, % từ bên phải</h3>
+${slide('lx-06', 15, '# xén từ trái, % xén từ phải')}
 <p>Hai toán tử gỡ bỏ một mẫu khớp ở một đầu. Cách nhớ nằm trên bàn phím: <code>#</code> nằm bên trái <code>%</code> trong bố cục Mỹ, và nó xén từ bên trái.</p>
 <pre><code>path="/srv/app/config/db.yml"
 
@@ -904,6 +1363,7 @@ feature/login</div>
 <div class="callout">Các mẫu ở đây là <strong>GLOB, không phải regex</strong> (Bài 2.2): <code>*</code>, <code>?</code> và <code>[…]</code> chạy; <code>+</code>, <code>|</code> và <code>\\d</code> thì không. Đó là lý do <code>\${path##*/}</code> nghĩa là "gỡ mọi thứ cho tới và bao gồm dấu gạch chéo cuối cùng" — dấu <code>*</code> tham lam ăn được nhiều nhất có thể mà vẫn còn chừa lại một dấu <code>/</code> để khớp.</div>
 
 <h3>Thay thế</h3>
+${slide('lx-06', 16, '/ và //, và dấu &amp; của bash 5.2')}
 <pre><code>s="hello world world"
 
 echo "\${s/world/there}"      <span class="tok-comment"># lần khớp ĐẦU TIÊN</span>
@@ -923,6 +1383,7 @@ echo "myapp:\${tag}"</code></pre>
 <div class="out">myapp:feature-user-login</div>
 
 <h3>Độ dài, cắt lát, và hoa thường</h3>
+${slide('lx-06', 17, 'Độ dài, cắt lát, hoa thường')}
 <pre><code>s="deployment"
 echo "\${#s}"              <span class="tok-comment"># độ dài: 10</span>
 echo "\${s:0:6}"           <span class="tok-comment"># từ vị trí 0, lấy 6 ký tự</span>
@@ -931,7 +1392,7 @@ echo "\${s: -4}"           <span class="tok-comment"># 4 ký tự CUỐI — đ�
 
 echo "\${s^^}"             <span class="tok-comment"># CHỮ HOA (bash 4 trở lên)</span>
 echo "\${s,,}"             <span class="tok-comment"># chữ thường</span>
-echo "\${s^}"              <span class="tok-comment"># viết hoa mỗi chữ cái đầu</span></code></pre>
+echo "\${s^}"              <span class="tok-comment"># chỉ viết hoa ký tự ĐẦU TIÊN của chuỗi</span></code></pre>
 <div class="out">10
 deploy
 ment
@@ -942,6 +1403,7 @@ Deployment</div>
 <div class="callout warn">Dấu cách trong <code>\${s: -4}</code> là BẮT BUỘC. Thiếu nó, <code>\${s:-4}</code> chính là toán tử <em>GIÁ TRỊ MẶC ĐỊNH</em> ở đầu bài này và nghĩa là "dùng 4 nếu <code>s</code> rỗng" — một kết quả hoàn toàn khác mà lại không báo lỗi. Hai cú pháp, cách nhau một ký tự, và chỉ một dấu cách phân biệt chúng.</div>
 
 <h3>Thay thế các lệnh bên ngoài</h3>
+${slide('lx-06', 18, 'Không fork thì nhanh gấp ~200 lần; bash 3.2 của Mac')}
 <pre><code>path="/srv/app/config/db.yml"
 
 <span class="tok-comment"># Mỗi dòng dưới đây khởi chạy một tiến trình — chừng 1-3 mili giây và một lần fork</span>
@@ -993,6 +1455,93 @@ done</code></pre>
 20260822_beach_sunset.jpg  20260822_family_photo.jpg</div>
 <p>Bốn phép khai triển, một lệnh <code>mv</code>, không <code>basename</code>, không <code>sed</code>, không shell con nào ngoài đúng một lệnh <code>date</code>. Đó là hình dạng mà phần lớn vòng lặp xử lý file nên có.</p>
 
+<h3>Bảng đầy đủ: chưa đặt, rỗng và có giá trị là BA trạng thái khác nhau</h3>
+<p>Dấu hai chấm trong <code>:-</code>, <code>:=</code>, <code>:?</code>, <code>:+</code> nghĩa là "coi <em>RỖNG</em> như <em>CHƯA ĐẶT</em>". Bỏ dấu hai chấm thì chỉ biến thật sự chưa đặt mới kích hoạt toán tử. Output thật, mỗi trạng thái một dòng:</p>
+<pre><code>for st in unset empty set; do
+  unset v; case $st in empty) v=;; set) v=val;; esac
+  printf '%-6s :-[%s] -[%s] :+[%s] +[%s]\\n' "$st" "\${v:-D}" "\${v-D}" "\${v:+A}" "\${v+A}"
+done</code></pre>
+<div class="out">unset  :-[D] -[D] :+[] +[]
+empty  :-[D] -[] :+[] +[A]
+set    :-[val] -[val] :+[A] +[A]</div>
+<p>Với cấu hình thì gần như lúc nào bạn cũng muốn dạng CÓ dấu hai chấm: một biến môi trường bằng chuỗi rỗng (<code>DATABASE_URL=</code> bị để trống trong file <code>.env</code>) cũng hỏng y như một biến bị thiếu. Dạng không có dấu hai chấm dành cho ca hiếm khi "rỗng" là một giá trị có nghĩa mà bạn không được ghi đè. Liên quan: <code>set -u</code> (Chương 7) biến mọi lần dùng biến chưa đặt thành lỗi — và <code>\${X:-}</code> là cách nói "chưa đặt cũng được" khi bật nó.</p>
+
+<h3>Các phép biến đổi, và hai cái bẫy: dấu <code>&amp;</code> của bash 5.2, và chữ tiếng Việt</h3>
+<table>
+<tr><th>Dạng</th><th>Làm gì</th><th>Đã thử (bash 5.2)</th></tr>
+<tr><td><code>\${v@Q}</code></td><td>Đặt nháy cho giá trị để dán lại vào shell một cách an toàn</td><td><code>it's "x" $y</code> → <code>'it'\\''s "x" $y'</code></td></tr>
+<tr><td><code>\${v@U}</code> · <code>\${v@u}</code> · <code>\${v@L}</code></td><td>HOA · hoa chữ đầu · thường (bash 5.1+)</td><td><code>hello</code> → <code>HELLO Hello hello</code></td></tr>
+<tr><td><code>\${v@A}</code></td><td>Lệnh <code>declare</code> dựng lại được biến đó</td><td><code>declare -i num='5'</code></td></tr>
+<tr><td><code>\${t^^[aeiou]}</code></td><td>Chỉ viết hoa những ký tự khớp mẫu</td><td><code>xin chao ban</code> → <code>xIn chAO bAn</code></td></tr>
+<tr><td><code>\${#u}</code></td><td>Độ dài tính bằng <strong>ký tự của locale hiện tại</strong></td><td><code>u="đường"</code>: <code>5</code> với C.UTF-8, <code>9</code> với <code>LC_ALL=C</code> (byte)</td></tr>
+</table>
+<p><strong>Bẫy 1 — dấu <code>&amp;</code> trong phần thay thế.</strong> Từ bash 5.2, tuỳ chọn <code>patsub_replacement</code> bật sẵn (bash(1): "This option is enabled by default"), và một dấu <code>&amp;</code> không nháy trong phần thay của <code>\${v/mẫu/thay}</code> nghĩa là "đoạn vừa khớp". Nó cắn đúng lúc bạn chèn một chuỗi truy vấn URL:</p>
+<pre><code>q="a=1&amp;b=2"; u="x?QUERY"
+echo "\${u/QUERY/$q}"
+echo "\${u/QUERY/"$q"}"</code></pre>
+<div class="out">x?a=1QUERYb=2
+x?a=1&amp;b=2</div>
+<p>Hãy đặt nháy cho phần thay (hoặc viết <code>\\&amp;</code>) mỗi khi nó đến từ một biến. Cùng dòng đó chạy bằng bash 3.2 của Mac lại in nguyên chữ <code>&amp;</code> — thêm một lý do để cùng một script cư xử khác nhau trên hai máy.</p>
+<p><strong>Bẫy 2 — độ dài và cắt lát phụ thuộc locale (thiết lập ngôn ngữ).</strong> Trong locale UTF-8, <code>\${#u}</code> đếm KÝ TỰ và <code>\${u:0:2}</code> lấy hai chữ; trong một container hay một job cron không đặt locale (<code>LC_ALL=C</code>/<code>POSIX</code>) cùng đoạn mã đó đếm BYTE, và cắt lát có thể xẻ đôi một chữ tiếng Việt. Script nào cắt ngắn tên người thì đặt <code>LC_ALL=C.UTF-8</code> ở đầu.</p>
+
+<h3>Chạy thử từng bước</h3>
+<pre><code>p=/srv/app/config/db.yml; f=archive.tar.gz
+printf '[%s]\\n' "\${p##*/}" "\${p%/*}" "\${p%%/*}" "\${f%.*}" "\${f#*.}"
+x=/srv/app/; echo "[\${x##*/}] [$(basename "$x")]"
+s="hello world world"; echo "\${s//[ol]/_}"
+unset c; echo "[\${c:=green}] c=[$c]"
+: "\${NOPE:?not set}"; echo "không tới được đây"</code></pre>
+<div class="out">[db.yml]
+[/srv/app/config]
+[]
+[archive.tar]
+[tar.gz]
+[] [app]
+he___ w_r_d w_r_d
+[green] c=[green]
+bash: NOPE: not set</div>
+<p>Để ý dòng thứ ba và thứ sáu: <code>\${p%%/*}</code> gỡ sạch vì đường dẫn bắt đầu bằng <code>/</code>, và với đường dẫn kết thúc bằng <code>/</code> thì basename bằng bash thuần ra rỗng trong khi <code>basename</code> nói <code>app</code>. Dòng cuối không bao giờ được in: trong một script, <code>:?</code> thoát CẢ script với mã 1.</p>
+
+<h3>Trên macOS và WSL khác gì</h3>
+<p>Mọi thứ trong bài này, trừ <code>#</code>, <code>%</code>, <code>/</code> và bốn toán tử mặc định, đều mới hơn <code>/bin/bash</code> 3.2 (2007) của Mac. Chạy trên Mac M1:</p>
+<pre><code>/bin/bash -c 's=deploy; echo "\${s^^}"'
+/bin/bash -c 'v="it s"; echo "\${v@Q}"'
+/bin/bash -c 'a=(x y z); echo "\${a[-1]}"'
+zsh -f -c 's=deploy; echo \${s:u} \${(U)s}'</code></pre>
+<div class="out">/bin/bash: \${s^^}: bad substitution
+/bin/bash: \${v@Q}: bad substitution
+/bin/bash: a: bad array subscript
+DEPLOY DEPLOY</div>
+<p>zsh có cách viết riêng (<code>\${s:u}</code>, <code>\${(U)s}</code>) và từ chối <code>\${s^^}</code> với <code>bad substitution</code>. Việc fork trên macOS cũng đắt hơn nhiều: 2.000 lần gọi <code>basename</code> mất 15,7 giây trên Mac M1, so với 6,06 giây cho 10.000 lần trong container Ubuntu — nên thay lệnh ngoài trong vòng lặp còn đáng hơn nữa trên Mac. <strong>WSL</strong> cư xử như Ubuntu.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p><strong>Tình huống:</strong> pipeline CI đưa cho script deploy một tên nhánh kiểu <code>refs/heads/feature/Dang-Nhap</code> và một đường dẫn file ảnh; script phải dựng ra tag Docker và từ chối chạy nếu thiếu địa chỉ registry — KHÔNG dùng <code>sed</code>, <code>basename</code> hay <code>tr</code>.</p><ol>
+<li>Trong <code>~/thu-linux/ch6</code> viết <code>tag.sh</code> với <code>ref=\${1:?usage: tag.sh REF FILE}</code> và <code>file=\${2:?usage: tag.sh REF FILE}</code>.</li>
+<li>Gỡ <code>refs/heads/</code> bằng <code>#</code>, thay mọi <code>/</code> bằng <code>-</code>, rồi chuyển kết quả sang chữ thường bằng <code>,,</code>.</li>
+<li>Từ <code>file</code>, in tên không kèm thư mục và phần đuôi, dùng <code>##*/</code> và <code>##*.</code>.</li>
+<li>Thêm <code>: "\${REGISTRY:?set REGISTRY}"</code> và in <code>$REGISTRY/app:$tag</code>.</li>
+</ol>
+<p><strong>Đạt khi:</strong> <code>REGISTRY=ghcr.io/nhom bash tag.sh refs/heads/feature/Dang-Nhap /srv/up/anh.bia.png</code> in <code>ghcr.io/nhom/app:feature-dang-nhap</code>, <code>anh.bia.png</code> và <code>png</code>; cùng lệnh đó mà thiếu <code>REGISTRY</code> thì thoát mã 1 kèm thông điệp <code>set REGISTRY</code>; không có tham số nào thì in dòng usage.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Parameter expansion (khai triển tham số)</span><span class="v">Mọi dạng <code>\${…}</code> đọc rồi biến đổi một biến ngay trong bash.</span></div>
+  <div class="kv"><span class="k">Unset / empty (chưa đặt / rỗng)</span><span class="v">Chưa từng gán (hoặc đã <code>unset</code>) so với đã gán chuỗi rỗng; dấu <code>:</code> coi hai thứ như nhau.</span></div>
+  <div class="kv"><span class="k">Default value (giá trị mặc định)</span><span class="v"><code>\${v:-x}</code> dùng x; <code>\${v:=x}</code> còn gán luôn x.</span></div>
+  <div class="kv"><span class="k">Prefix / suffix removal (xén đầu / đuôi)</span><span class="v"><code>#</code>/<code>##</code> từ đầu, <code>%</code>/<code>%%</code> từ cuối; nhân đôi = khớp dài nhất.</span></div>
+  <div class="kv"><span class="k">Pattern substitution (thay theo mẫu)</span><span class="v"><code>\${v/a/b}</code> lần đầu, <code>\${v//a/b}</code> tất cả; mẫu là glob.</span></div>
+  <div class="kv"><span class="k">Substring (chuỗi con)</span><span class="v"><code>\${v:vị_trí:độ_dài}</code>; vị trí âm cần dấu cách: <code>\${v: -4}</code>.</span></div>
+  <div class="kv"><span class="k">Locale (thiết lập ngôn ngữ)</span><span class="v"><code>LANG</code>, <code>LC_ALL</code> — quyết định bash đếm ký tự hay đếm byte.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li><code>:-</code> <code>:=</code> <code>:?</code> <code>:+</code> coi rỗng như chưa đặt; bỏ dấu hai chấm thì chỉ "chưa đặt" mới tính.</li>
+<li><code>\${VAR:?thông điệp}</code> ở đầu script biến một lỗi bí ẩn về sau thành một lỗi tức thì, có tên.</li>
+<li><code>#</code>/<code>##</code> xén từ trái, <code>%</code>/<code>%%</code> xén từ phải; mẫu là glob, không bao giờ là regex.</li>
+<li><code>/</code> thay chỗ khớp đầu, <code>//</code> thay tất cả; ở bash 5.2 dấu <code>&amp;</code> không nháy trong phần thay là đoạn vừa khớp.</li>
+<li><code>\${#v}</code> và cắt lát chỉ đếm ký tự khi locale là UTF-8; <code>\${s: -4}</code> cần dấu cách của nó.</li>
+<li>Thay <code>basename</code>/<code>sed</code> trong vòng lặp nhanh ~200 lần, nhưng <code>^^</code>, <code>@Q</code> và chỉ số âm không có trong bash 3.2 của Mac.</li>
+</ul>
 <a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Bash Manual — Shell Parameter Expansion</span><span class="lc-sub">Mọi dạng gói trong một chỗ, gồm cả những cái bài này bỏ qua (<code>@Q</code>, <code>@U</code>, các phép biến đổi). Đáng đọc kỹ một lần.</span></span>
@@ -1028,6 +1577,7 @@ done</code></pre>
 <p class="lead">Every command returns a number when it finishes. The shell's entire notion of "did that work" is built on it, and so are <code>&amp;&amp;</code>, <code>||</code>, <code>if</code> and <code>while</code>. Once you see that <code>if</code> does not test a boolean but simply runs a command and looks at its exit code, the syntax stops being arbitrary.</p>
 
 <h3>Zero is success</h3>
+${slide('lx-06', 19, 'Mã thoát: 0 là thành công, số khác là kiểu hỏng')}
 <pre><code>ls /etc &gt;/dev/null; echo \$?
 ls /nonexistent 2&gt;/dev/null; echo \$?
 grep -q root /etc/passwd; echo \$?
@@ -1051,6 +1601,7 @@ exit 2        <span class="tok-comment"># bad usage — conventional for "you ca
 <div class="callout warn"><code>\$?</code> holds the exit code of the <strong>immediately preceding</strong> command, and it is overwritten by everything — including <code>echo</code>. <code>cmd; echo "done"; if [ \$? -ne 0 ]</code> tests the exit code of <code>echo</code>, which always succeeds. Capture it at once (<code>rc=\$?</code>) or, better, test the command directly with <code>if</code>.</div>
 
 <h3>&amp;&amp; and ||: conditionals without if</h3>
+${slide('lx-06', 20, 'a &amp;&amp; b || c không phải if/else')}
 <pre><code>mkdir -p build &amp;&amp; cd build           <span class="tok-comment"># cd only if mkdir succeeded</span>
 grep -q ERROR log || echo "clean"    <span class="tok-comment"># echo only if grep FAILED</span>
 command -v jq &gt;/dev/null || { echo "jq required" &gt;&amp;2; exit 1; }
@@ -1081,6 +1632,7 @@ fi</code></pre>
   <div class="lz-step"><span class="lz-k">4 · [ and [[ are just commands</span><span class="lz-t">[ "\$a" = "\$b" ] exits 0 or 1</span><span class="lz-d">/usr/bin/[ is a real file. That is why every token needs a space around it — they are arguments.</span></div>
 </div>
 <h3>[ ] versus [[ ]]</h3>
+${slide('lx-06', 21, '[ là một lệnh, [[ là cú pháp')}
 <pre><code><span class="tok-comment"># [ ] — POSIX, works in sh, is a real command</span>
 if [ "\$name" = "Binh" ]; then echo yes; fi
 
@@ -1096,6 +1648,7 @@ if [[ -f \$f &amp;&amp; -r \$f ]]; then echo "readable"; fi    <span class="tok-
 <div class="callout ok"><strong>Use <code>[[ ]]</code> in anything with a bash shebang.</strong> Inside it, an empty variable cannot break the syntax — <code>[ \$x = y ]</code> with <code>x</code> empty becomes <code>[ = y ]</code> and errors, while <code>[[ \$x == y ]]</code> is simply false. That one difference removes a classic source of scripts that work in testing and fail on real data.</div>
 
 <h3>String versus numeric comparison</h3>
+${slide('lx-06', 22, '&gt; trong [[ ]] so chuỗi, trong [ ] tạo file')}
 <pre><code><span class="tok-comment"># Strings</span>
 [[ \$a == \$b ]]      [[ \$a != \$b ]]
 [[ -z \$a ]]          <span class="tok-comment"># zero length (empty)</span>
@@ -1113,6 +1666,7 @@ $ (( a &gt; b )) &amp;&amp; echo "10 &gt; 9"
 <div class="callout warn">This is the classic silent bug. With <code>&gt;</code> inside <code>[[ ]]</code> you get a <strong>string</strong> comparison, so <code>"10"</code> sorts before <code>"9"</code> — exactly the <code>sort</code> problem from Lesson 3.4, in a new place. Use <code>-gt</code> or, better, <code>(( ))</code> for anything numeric. And inside <code>[ ]</code>, a bare <code>&gt;</code> is worse still: it is a <em>redirection</em>, so <code>[ \$a &gt; \$b ]</code> silently creates a file named after <code>\$b</code>.</div>
 
 <h3>File tests</h3>
+${slide('lx-06', 23, 'Phép thử file và case')}
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>-e</code> · <code>-f</code> · <code>-d</code></span><span class="v">Exists (anything) · is a regular file · is a directory.</span></div>
   <div class="kv"><span class="k"><code>-r</code> · <code>-w</code> · <code>-x</code></span><span class="v">Readable · writable · executable <strong>by the current user</strong> — which is exactly the Chapter 4 question, answered correctly.</span></div>
@@ -1175,6 +1729,89 @@ $ ./deploy.sh prod
 unknown env: prod</div>
 <p>Every check exits with a distinct message on stderr and a nonzero code, so CI fails loudly and a human reading the output knows exactly which precondition was not met. Chapter 7 turns this into a full script template.</p>
 
+<h3>Exit codes you will actually meet — measured</h3>
+<pre><code>ls /khong 2&gt;/dev/null; echo $?
+grep -q nobodyxx /etc/passwd; echo $?
+khonglenh 2&gt;/dev/null; echo $?
+printf 'echo hi\\n' &gt; s.sh; ./s.sh 2&gt;/dev/null; echo $?
+bash -c 'kill -TERM $$'; echo $?
+bash -c 'exit 300'; echo $?
+false | true; echo "$? \${PIPESTATUS[*]}"</code></pre>
+<div class="out">2
+1
+127
+126
+Terminated
+143
+44
+0 1 0</div>
+<p>Each line teaches one rule. <code>127</code> = the name was not found on <code>PATH</code> (Chapter 8); <code>126</code> = found but not executable (no <code>x</code> bit — Chapter 4); <code>143</code> = 128 + 15, killed by SIGTERM (Chapter 5); an exit code is one byte, so <code>exit 300</code> becomes 300 − 256 = 44. And a pipeline returns the code of its <strong>last</strong> command: <code>false | true</code> "succeeds". <code>\${PIPESTATUS[@]}</code> keeps every stage's code, and <code>set -o pipefail</code> (Chapters 3 and 7) makes the pipeline fail if any stage fails.</p>
+
+<h3>The test operators, in one table</h3>
+<table>
+<tr><th>Operator</th><th>True when</th><th>Note</th></tr>
+<tr><td><code>-e</code> · <code>-f</code> · <code>-d</code></td><td>exists · regular file · directory</td><td><code>-f</code> and <code>-e</code> follow symlinks</td></tr>
+<tr><td><code>-s</code> · <code>-L</code></td><td>size &gt; 0 · is a symlink</td><td>an empty log is <code>-f</code> but not <code>-s</code></td></tr>
+<tr><td><code>-r</code> · <code>-w</code> · <code>-x</code></td><td>the CURRENT user may read · write · execute/enter</td><td>includes groups, ACLs, read-only mounts</td></tr>
+<tr><td><code>a -nt b</code> · <code>a -ot b</code></td><td>a newer · older than b (mtime)</td><td>tested: a file touched a second later is <code>-nt</code></td></tr>
+<tr><td><code>-z s</code> · <code>-n s</code></td><td>empty · non-empty string</td><td>—</td></tr>
+<tr><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code></td><td>string equal / different / sorts before / after</td><td>in <code>[[ ]]</code> the right side of <code>==</code> is a glob</td></tr>
+<tr><td><code>=~</code></td><td>matches an extended regex</td><td>captures land in <code>BASH_REMATCH</code></td></tr>
+<tr><td><code>-eq -ne -lt -le -gt -ge</code></td><td>integer comparison</td><td>inside <code>[[ ]]</code> both sides are evaluated as arithmetic</td></tr>
+<tr><td><code>!</code> · <code>&amp;&amp;</code> · <code>||</code></td><td>not · and · or (inside <code>[[ ]]</code>)</td><td><code>[ ]</code> needs two separate tests instead</td></tr>
+</table>
+<p>That "evaluated as arithmetic" note hides a real trap. Tested:</p>
+<pre><code>a=10; [[ $a -gt x ]]; echo $?
+[[ "ERROR42 xx" =~ ^ERROR([0-9]+) ]] &amp;&amp; echo "code: \${BASH_REMATCH[1]}"
+v=b; case $v in a) echo A;; b) echo B;&amp; c) echo "C (fell through)";; d) echo D;; esac
+v=ab; case $v in a*) echo "a*";;&amp; *b) echo "*b";; esac</code></pre>
+<div class="out">0
+code: 42
+B
+C (fell through)
+a*
+*b</div>
+<p><code>x</code> is not a number, so bash reads it as a <em>variable name</em>; unset means 0, and <code>10 -gt 0</code> is true — no error at all. Validate input first with <code>[[ $v =~ ^[0-9]+$ ]]</code> before comparing it as a number. The last two lines show the rare <code>case</code> terminators: <code>;&amp;</code> runs the next branch without testing it, <code>;;&amp;</code> keeps testing the remaining patterns.</p>
+
+<h3>On macOS and WSL</h3>
+<p>The shell that runs <code>sh script.sh</code> differs between the three systems, and that decides whether <code>==</code> and <code>[[</code> work:</p>
+<table>
+<tr><th></th><th>Ubuntu / WSL</th><th>macOS</th></tr>
+<tr><td><code>/bin/sh</code> is</td><td><code>dash</code> (symlink)</td><td>a stub that runs <code>/bin/bash</code> 3.2 in POSIX mode (<code>/private/var/select/sh → /bin/bash</code>)</td></tr>
+<tr><td><code>sh -c '[ a == a ] &amp;&amp; echo ok'</code></td><td><code>sh: 1: [: a: unexpected operator</code></td><td><code>ok</code></td></tr>
+<tr><td><code>sh -c '[[ a == a ]]'</code></td><td><code>sh: 1: [[: not found</code> (exit 127)</td><td>works</td></tr>
+<tr><td><code>df --output=pcent /</code></td><td>works (GNU)</td><td><code>df: unrecognized option &#96;--output=pcent'</code> — use <code>df -P / | awk 'NR==2{print $5}'</code></td></tr>
+</table>
+<p>So a script tested with <code>sh</code> on a Mac can still fail with <code>sh</code> on the server. Put <code>#!/usr/bin/env bash</code> on line 1 and run it as <code>./script.sh</code> or <code>bash script.sh</code>, never <code>sh script.sh</code>, if it uses anything from this lesson.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p><strong>Scenario:</strong> last month someone ran <code>deploy.sh prod</code> (instead of <code>production</code>), with an empty <code>.env</code>, on a disk that was nearly full — and the script happily started. Write the guard that should have stopped it.</p><ol>
+<li>In <code>~/thu-linux/ch6</code> write <code>guard.sh</code>: exit 2 with a usage message on stderr unless there is exactly one argument (<code>[[ $# -eq 1 ]]</code>).</li>
+<li>Accept only <code>staging|production</code> with a <code>case</code>; anything else exits 2 with <code>unknown env: …</code>.</li>
+<li>Require <code>.env.$env</code> to exist AND be non-empty with one file test; otherwise exit 1.</li>
+<li>Read disk usage with <code>used=$(df --output=pcent / | tail -1 | tr -dc 0-9)</code> and refuse with exit 1 unless <code>(( used &lt; 90 ))</code>; finally print <code>OK $env (disk N%)</code>.</li>
+</ol>
+<p><strong>Done when:</strong> <code>bash guard.sh; echo $?</code> → <code>2</code>; <code>bash guard.sh prod</code> → <code>unknown env: prod</code> and 2; after <code>touch .env.staging</code> → <code>missing or empty .env.staging</code> and 1; after <code>echo X=1 &gt; .env.staging</code> → <code>OK staging (disk …%)</code> and 0. (All four tested in Ubuntu 24.04.)</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Exit status / exit code</span><span class="v">The 0–255 number a command returns; 0 means success.</span></div>
+  <div class="kv"><span class="k">Short-circuit</span><span class="v"><code>&amp;&amp;</code>/<code>||</code> run the right side only when needed.</span></div>
+  <div class="kv"><span class="k"><code>test</code> / <code>[</code></span><span class="v">A command (builtin and <code>/usr/bin/[</code>) that evaluates a condition into an exit code.</span></div>
+  <div class="kv"><span class="k"><code>[[ ]]</code></span><span class="v">Bash's conditional syntax: no splitting inside, glob with <code>==</code>, regex with <code>=~</code>.</span></div>
+  <div class="kv"><span class="k">Lexicographic order</span><span class="v">Dictionary order used by <code>&lt;</code>/<code>&gt;</code>: "10" comes before "9".</span></div>
+  <div class="kv"><span class="k">PIPESTATUS</span><span class="v">Array holding the exit code of every stage of the last pipeline.</span></div>
+  <div class="kv"><span class="k">Guard clause</span><span class="v">A check near the top that exits early, with a message, when a precondition fails.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>0 is success; 1 is "no/failed", 2 misuse, 126 not executable, 127 not found, 128+N killed by signal N.</li>
+<li><code>$?</code> is overwritten by every command; a pipeline reports only its last command unless you read <code>PIPESTATUS</code> or set <code>pipefail</code>.</li>
+<li><code>a &amp;&amp; b || c</code> runs c when b fails too — use a real <code>if</code> when b can fail.</li>
+<li><code>[</code> is a command that breaks on empty variables; <code>[[ ]]</code> is safe, supports <code>&amp;&amp;</code>, globs and regex — but does not exist in dash.</li>
+<li><code>&lt;</code>/<code>&gt;</code> compare strings; numbers use <code>(( ))</code> or <code>-gt</code>, after checking the input really is a number.</li>
+<li><code>case</code> matches globs in order, first match wins; on Ubuntu <code>sh</code> is dash, on macOS it is bash 3.2.</li>
+</ul>
 <a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Bash Manual — Conditional Expressions</span><span class="lc-sub">The complete list of file tests and comparison operators, and the exact difference between <code>[</code> and <code>[[</code>.</span></span>
@@ -1201,6 +1838,7 @@ unknown env: prod</div>
 <p class="lead">Mọi lệnh đều trả về một con số khi nó kết thúc. Toàn bộ khái niệm "việc đó có chạy được không" của shell dựng trên con số ấy, và <code>&amp;&amp;</code>, <code>||</code>, <code>if</code>, <code>while</code> cũng vậy. Khi bạn thấy rằng <code>if</code> KHÔNG kiểm một giá trị luận lý mà chỉ đơn giản là CHẠY một lệnh rồi nhìn mã thoát của nó, cú pháp sẽ thôi có vẻ tuỳ tiện.</p>
 
 <h3>Số 0 là thành công</h3>
+${slide('lx-06', 19, 'Mã thoát: 0 là thành công, số khác là kiểu hỏng')}
 <pre><code>ls /etc &gt;/dev/null; echo \$?
 ls /nonexistent 2&gt;/dev/null; echo \$?
 grep -q root /etc/passwd; echo \$?
@@ -1224,6 +1862,7 @@ exit 2        <span class="tok-comment"># dùng sai — quy ước cho "bạn g�
 <div class="callout warn"><code>\$?</code> giữ mã thoát của lệnh <strong>NGAY TRƯỚC ĐÓ</strong>, và nó bị ghi đè bởi mọi thứ — kể cả một lệnh <code>echo</code>. Đoạn <code>cmd; echo "xong"; if [ \$? -ne 0 ]</code> đang kiểm mã thoát của <code>echo</code>, thứ luôn thành công. Hãy bắt lấy nó ngay lập tức (<code>rc=\$?</code>) hoặc, tốt hơn, kiểm thẳng cái lệnh đó bằng <code>if</code>.</div>
 
 <h3>&amp;&amp; và ||: rẽ nhánh mà không cần if</h3>
+${slide('lx-06', 20, 'a &amp;&amp; b || c không phải if/else')}
 <pre><code>mkdir -p build &amp;&amp; cd build           <span class="tok-comment"># chỉ cd nếu mkdir thành công</span>
 grep -q ERROR log || echo "sạch"     <span class="tok-comment"># chỉ echo nếu grep THẤT BẠI</span>
 command -v jq &gt;/dev/null || { echo "cần jq" &gt;&amp;2; exit 1; }
@@ -1254,6 +1893,7 @@ fi</code></pre>
   <div class="lz-step"><span class="lz-k">4 · [ và [[ cũng chỉ là lệnh</span><span class="lz-t">[ "\$a" = "\$b" ] thoát ra 0 hoặc 1</span><span class="lz-d">/usr/bin/[ là một file có thật. Đó là lý do mọi ký hiệu đều cần dấu cách quanh nó — chúng là THAM SỐ.</span></div>
 </div>
 <h3>[ ] so với [[ ]]</h3>
+${slide('lx-06', 21, '[ là một lệnh, [[ là cú pháp')}
 <pre><code><span class="tok-comment"># [ ] — chuẩn POSIX, chạy được trong sh, là một lệnh thật</span>
 if [ "\$name" = "Binh" ]; then echo yes; fi
 
@@ -1269,6 +1909,7 @@ if [[ -f \$f &amp;&amp; -r \$f ]]; then echo "đọc được"; fi    <span clas
 <div class="callout ok"><strong>Hãy dùng <code>[[ ]]</code> trong mọi script có shebang bash.</strong> Bên trong nó, một biến rỗng KHÔNG thể làm vỡ cú pháp — <code>[ \$x = y ]</code> với <code>x</code> rỗng biến thành <code>[ = y ]</code> và báo lỗi, còn <code>[[ \$x == y ]]</code> đơn giản là sai. Riêng khác biệt đó đã gỡ bỏ một nguồn kinh điển của những script chạy tốt lúc thử và hỏng với dữ liệu thật.</div>
 
 <h3>So sánh chuỗi so với so sánh số</h3>
+${slide('lx-06', 22, '&gt; trong [[ ]] so chuỗi, trong [ ] tạo file')}
 <pre><code><span class="tok-comment"># Chuỗi</span>
 [[ \$a == \$b ]]      [[ \$a != \$b ]]
 [[ -z \$a ]]          <span class="tok-comment"># độ dài bằng 0 (rỗng)</span>
@@ -1286,6 +1927,7 @@ $ (( a &gt; b )) &amp;&amp; echo "10 &gt; 9"
 <div class="callout warn">Đây là lỗi âm thầm kinh điển. Với dấu <code>&gt;</code> bên trong <code>[[ ]]</code>, bạn nhận được một phép so sánh <strong>CHUỖI</strong>, nên <code>"10"</code> đứng trước <code>"9"</code> — đúng cái vấn đề của <code>sort</code> ở Bài 3.4, xuất hiện ở một chỗ mới. Hãy dùng <code>-gt</code>, hoặc tốt hơn là <code>(( ))</code>, cho mọi thứ liên quan tới số. Và bên trong <code>[ ]</code> thì một dấu <code>&gt;</code> trần còn tệ hơn nữa: nó là một phép CHUYỂN HƯỚNG, nên <code>[ \$a &gt; \$b ]</code> âm thầm tạo ra một file mang tên bằng giá trị của <code>\$b</code>.</div>
 
 <h3>Các phép thử file</h3>
+${slide('lx-06', 23, 'Phép thử file và case')}
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>-e</code> · <code>-f</code> · <code>-d</code></span><span class="v">Tồn tại (bất cứ loại nào) · là file thường · là thư mục.</span></div>
   <div class="kv"><span class="k"><code>-r</code> · <code>-w</code> · <code>-x</code></span><span class="v">Đọc được · ghi được · chạy được <strong>BỞI NGƯỜI DÙNG HIỆN TẠI</strong> — đúng là câu hỏi của Chương 4, và được trả lời cho đúng.</span></div>
@@ -1348,6 +1990,89 @@ $ ./deploy.sh prod
 env không hợp lệ: prod</div>
 <p>Mỗi phép kiểm đều thoát ra với một thông điệp riêng trên stderr và một mã khác 0, nên CI hỏng một cách ồn ào và người đọc output biết chính xác điều kiện tiên quyết nào chưa thoả. Chương 7 sẽ biến cái này thành một khuôn script hoàn chỉnh.</p>
 
+<h3>Những mã thoát bạn sẽ thật sự gặp — đo thật</h3>
+<pre><code>ls /khong 2&gt;/dev/null; echo $?
+grep -q nobodyxx /etc/passwd; echo $?
+khonglenh 2&gt;/dev/null; echo $?
+printf 'echo hi\\n' &gt; s.sh; ./s.sh 2&gt;/dev/null; echo $?
+bash -c 'kill -TERM $$'; echo $?
+bash -c 'exit 300'; echo $?
+false | true; echo "$? \${PIPESTATUS[*]}"</code></pre>
+<div class="out">2
+1
+127
+126
+Terminated
+143
+44
+0 1 0</div>
+<p>Mỗi dòng dạy một luật. <code>127</code> = không tìm thấy tên đó trên <code>PATH</code> (Chương 8); <code>126</code> = tìm thấy nhưng không chạy được (thiếu bit <code>x</code> — Chương 4); <code>143</code> = 128 + 15, bị SIGTERM giết (Chương 5); mã thoát chỉ là một byte, nên <code>exit 300</code> thành 300 − 256 = 44. Và một ống dẫn trả về mã của lệnh <strong>CUỐI CÙNG</strong>: <code>false | true</code> "thành công". <code>\${PIPESTATUS[@]}</code> giữ mã của từng chặng, còn <code>set -o pipefail</code> (Chương 3 và 7) làm cả ống hỏng nếu bất kỳ chặng nào hỏng.</p>
+
+<h3>Các toán tử phép thử, gói trong một bảng</h3>
+<table>
+<tr><th>Toán tử</th><th>Đúng khi</th><th>Ghi chú</th></tr>
+<tr><td><code>-e</code> · <code>-f</code> · <code>-d</code></td><td>tồn tại · là file thường · là thư mục</td><td><code>-f</code> và <code>-e</code> đi THEO liên kết tượng trưng</td></tr>
+<tr><td><code>-s</code> · <code>-L</code></td><td>kích thước &gt; 0 · là liên kết tượng trưng</td><td>một file log rỗng là <code>-f</code> nhưng không <code>-s</code></td></tr>
+<tr><td><code>-r</code> · <code>-w</code> · <code>-x</code></td><td>người dùng HIỆN TẠI đọc · ghi · chạy/vào được</td><td>tính cả nhóm, ACL, ổ gắn chỉ-đọc</td></tr>
+<tr><td><code>a -nt b</code> · <code>a -ot b</code></td><td>a mới hơn · cũ hơn b (theo mtime)</td><td>đã thử: file touch sau một giây là <code>-nt</code></td></tr>
+<tr><td><code>-z s</code> · <code>-n s</code></td><td>chuỗi rỗng · khác rỗng</td><td>—</td></tr>
+<tr><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code></td><td>chuỗi bằng / khác / đứng trước / đứng sau</td><td>trong <code>[[ ]]</code> vế phải của <code>==</code> là glob</td></tr>
+<tr><td><code>=~</code></td><td>khớp một regex mở rộng</td><td>nhóm bắt được nằm trong <code>BASH_REMATCH</code></td></tr>
+<tr><td><code>-eq -ne -lt -le -gt -ge</code></td><td>so sánh số nguyên</td><td>trong <code>[[ ]]</code> cả hai vế được TÍNH như số học</td></tr>
+<tr><td><code>!</code> · <code>&amp;&amp;</code> · <code>||</code></td><td>phủ định · và · hoặc (trong <code>[[ ]]</code>)</td><td><code>[ ]</code> phải dùng hai phép thử riêng</td></tr>
+</table>
+<p>Ghi chú "được tính như số học" giấu một cái bẫy thật. Đã thử:</p>
+<pre><code>a=10; [[ $a -gt x ]]; echo $?
+[[ "ERROR42 xx" =~ ^ERROR([0-9]+) ]] &amp;&amp; echo "code: \${BASH_REMATCH[1]}"
+v=b; case $v in a) echo A;; b) echo B;&amp; c) echo "C (fell through)";; d) echo D;; esac
+v=ab; case $v in a*) echo "a*";;&amp; *b) echo "*b";; esac</code></pre>
+<div class="out">0
+code: 42
+B
+C (fell through)
+a*
+*b</div>
+<p><code>x</code> không phải một con số, nên bash đọc nó như một <em>TÊN BIẾN</em>; chưa đặt nghĩa là 0, và <code>10 -gt 0</code> đúng — không có lỗi nào cả. Hãy kiểm đầu vào trước bằng <code>[[ $v =~ ^[0-9]+$ ]]</code> rồi mới so nó như một số. Hai dòng cuối cho thấy hai dấu kết nhánh hiếm gặp của <code>case</code>: <code>;&amp;</code> chạy luôn nhánh kế mà không thử, <code>;;&amp;</code> tiếp tục thử các mẫu còn lại.</p>
+
+<h3>Trên macOS và WSL khác gì</h3>
+<p>Shell chạy lệnh <code>sh script.sh</code> khác nhau giữa ba hệ, và chính nó quyết định <code>==</code> và <code>[[</code> có chạy hay không:</p>
+<table>
+<tr><th></th><th>Ubuntu / WSL</th><th>macOS</th></tr>
+<tr><td><code>/bin/sh</code> là</td><td><code>dash</code> (liên kết tượng trưng)</td><td>một chương trình mồi chạy <code>/bin/bash</code> 3.2 ở chế độ POSIX (<code>/private/var/select/sh → /bin/bash</code>)</td></tr>
+<tr><td><code>sh -c '[ a == a ] &amp;&amp; echo ok'</code></td><td><code>sh: 1: [: a: unexpected operator</code></td><td><code>ok</code></td></tr>
+<tr><td><code>sh -c '[[ a == a ]]'</code></td><td><code>sh: 1: [[: not found</code> (mã 127)</td><td>chạy được</td></tr>
+<tr><td><code>df --output=pcent /</code></td><td>chạy (GNU)</td><td><code>df: unrecognized option &#96;--output=pcent'</code> — dùng <code>df -P / | awk 'NR==2{print $5}'</code></td></tr>
+</table>
+<p>Vậy một script thử bằng <code>sh</code> trên Mac vẫn có thể hỏng khi chạy bằng <code>sh</code> trên máy chủ. Đặt <code>#!/usr/bin/env bash</code> ở dòng 1 và chạy bằng <code>./script.sh</code> hoặc <code>bash script.sh</code>, đừng bao giờ <code>sh script.sh</code>, nếu script dùng bất cứ thứ gì trong bài này.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p><strong>Tình huống:</strong> tháng trước có người chạy <code>deploy.sh prod</code> (thay vì <code>production</code>), với file <code>.env</code> rỗng, trên một ổ đĩa gần đầy — và script vẫn vui vẻ chạy. Viết cái chốt chặn lẽ ra phải dừng nó lại.</p><ol>
+<li>Trong <code>~/thu-linux/ch6</code> viết <code>guard.sh</code>: thoát mã 2 kèm dòng hướng dẫn trên stderr trừ khi có đúng một tham số (<code>[[ $# -eq 1 ]]</code>).</li>
+<li>Chỉ nhận <code>staging|production</code> bằng một <code>case</code>; mọi thứ khác thoát mã 2 với <code>unknown env: …</code>.</li>
+<li>Đòi <code>.env.$env</code> phải tồn tại VÀ khác rỗng bằng MỘT phép thử file; không thì thoát mã 1.</li>
+<li>Đọc mức dùng đĩa bằng <code>used=$(df --output=pcent / | tail -1 | tr -dc 0-9)</code> và từ chối (mã 1) trừ khi <code>(( used &lt; 90 ))</code>; cuối cùng in <code>OK $env (disk N%)</code>.</li>
+</ol>
+<p><strong>Đạt khi:</strong> <code>bash guard.sh; echo $?</code> → <code>2</code>; <code>bash guard.sh prod</code> → <code>unknown env: prod</code> và 2; sau <code>touch .env.staging</code> → <code>missing or empty .env.staging</code> và 1; sau <code>echo X=1 &gt; .env.staging</code> → <code>OK staging (disk …%)</code> và 0. (Cả bốn đã thử trên Ubuntu 24.04.)</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Exit status / exit code (mã thoát)</span><span class="v">Con số 0–255 một lệnh trả về; 0 nghĩa là thành công.</span></div>
+  <div class="kv"><span class="k">Short-circuit (ngắt mạch)</span><span class="v"><code>&amp;&amp;</code>/<code>||</code> chỉ chạy vế phải khi cần.</span></div>
+  <div class="kv"><span class="k"><code>test</code> / <code>[</code> (lệnh thử)</span><span class="v">Một LỆNH (dựng sẵn và <code>/usr/bin/[</code>) biến một điều kiện thành mã thoát.</span></div>
+  <div class="kv"><span class="k"><code>[[ ]]</code> (biểu thức điều kiện)</span><span class="v">Cú pháp của bash: không cắt từ bên trong, glob với <code>==</code>, regex với <code>=~</code>.</span></div>
+  <div class="kv"><span class="k">Lexicographic order (thứ tự từ điển)</span><span class="v">Thứ tự mà <code>&lt;</code>/<code>&gt;</code> dùng: "10" đứng trước "9".</span></div>
+  <div class="kv"><span class="k">PIPESTATUS (mã của từng chặng)</span><span class="v">Mảng giữ mã thoát của mọi chặng trong ống dẫn vừa chạy.</span></div>
+  <div class="kv"><span class="k">Guard clause (chốt chặn)</span><span class="v">Một phép kiểm ở đầu script, thoát sớm kèm thông điệp khi điều kiện tiên quyết không thoả.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>0 là thành công; 1 là "không/hỏng", 2 dùng sai, 126 không chạy được, 127 không tìm thấy, 128+N bị tín hiệu N giết.</li>
+<li><code>$?</code> bị mọi lệnh ghi đè; ống dẫn chỉ báo mã của lệnh cuối trừ khi bạn đọc <code>PIPESTATUS</code> hoặc bật <code>pipefail</code>.</li>
+<li><code>a &amp;&amp; b || c</code> chạy c cả khi b hỏng — dùng <code>if</code> thật khi b có thể hỏng.</li>
+<li><code>[</code> là một lệnh và vỡ với biến rỗng; <code>[[ ]]</code> an toàn, có <code>&amp;&amp;</code>, glob và regex — nhưng dash không có nó.</li>
+<li><code>&lt;</code>/<code>&gt;</code> so chuỗi; số thì dùng <code>(( ))</code> hoặc <code>-gt</code>, sau khi đã kiểm đầu vào đúng là số.</li>
+<li><code>case</code> đối chiếu glob theo thứ tự, khớp đầu tiên thắng; trên Ubuntu <code>sh</code> là dash, trên macOS là bash 3.2.</li>
+</ul>
 <a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Bash Manual — Conditional Expressions</span><span class="lc-sub">Danh sách đầy đủ các phép thử file và toán tử so sánh, cùng khác biệt chính xác giữa <code>[</code> và <code>[[</code>.</span></span>
@@ -1383,6 +2108,7 @@ env không hợp lệ: prod</div>
 <p class="lead">Loops are where all of this chapter's quoting rules get exercised, and where the classic shell bugs live. There is one correct way to loop over files, one correct way to loop over lines, and both look slightly odd until you know what they are defending against.</p>
 
 <h3>for: over a list</h3>
+${slide('lx-06', 24, 'for qua glob, mảng, khoảng — {1..$n} không chạy')}
 <pre><code><span class="tok-comment"># Over a glob — the shell expands it into words for you (Lesson 2.2)</span>
 for f in *.log; do
   [[ -e \$f ]] || continue          <span class="tok-comment"># guard: unmatched glob passes through literally</span>
@@ -1408,6 +2134,7 @@ processing db.log
 <div class="callout warn">Brace ranges are expanded before variables, so <code>for i in {1..\$n}</code> does <strong>not</strong> work — it produces the literal string <code>{1..5}</code>. Use the C-style form <code>for ((i=1; i&lt;=n; i++))</code> when the bound is a variable, or <code>seq</code>. This trips people up because the fixed-number version works perfectly.</div>
 
 <h3>The one rule: do not parse ls</h3>
+${slide('lx-06', 25, 'Đừng lặp trên $(ls)')}
 <pre><code><span class="tok-comment"># WRONG — breaks on any filename with a space or a glob character</span>
 for f in \$(ls *.txt); do rm "\$f"; done
 
@@ -1429,6 +2156,7 @@ done</code></pre>
   <div class="lz-layer"><span class="lz-lname">Never</span><span class="lz-lnote"><code>for f in \$(ls)</code> — word splitting turns one filename into several and expands any glob characters in it.</span></div>
 </div>
 <h3>while read: over lines</h3>
+${slide('lx-06', 26, 'while IFS= read -r: giữ thụt lề, \\ và dòng cuối')}
 <pre><code>while IFS= read -r line; do
   echo "[\$line]"
 done &lt; input.txt</code></pre>
@@ -1453,6 +2181,32 @@ An &lt;an@example.com&gt; is editor
 37 errors</div>
 <div class="callout ok">That <code>&lt; &lt;(command)</code> is process substitution (Lesson 3.2), and it is the fix for the subshell trap: <code>cmd | while read …</code> runs the loop in a child, so <code>count</code> is lost. Reading from <code>&lt;(cmd)</code> keeps the loop in the current shell. Two extra characters, and the variable survives.</div>
 
+<h3>Three ways a line-reading loop silently loses data</h3>
+${slide('lx-06', 27, 'Ống dẫn chạy vòng lặp trong shell con; ký tự \\r của Windows')}
+<p>All three were reproduced in the Ubuntu container; each one prints no error.</p>
+<pre><code><span class="tok-comment"># 1 · a pipe runs the loop in a subshell — the counter dies with it</span>
+count=0; printf 'ERROR a\\nok\\nERROR b\\n' | while IFS= read -r l; do [[ $l == ERROR* ]] &amp;&amp; ((count++)); done; echo "pipe: $count"
+count=0; while IFS= read -r l; do [[ $l == ERROR* ]] &amp;&amp; ((count++)); done &lt; &lt;(printf 'ERROR a\\nok\\nERROR b\\n'); echo "procsub: $count"
+
+<span class="tok-comment"># 2 · the last line has no newline — read returns 1 and the loop skips it</span>
+printf 'mot\\nhai' &gt; nonl.txt
+while IFS= read -r l; do printf '[%s]\\n' "$l"; done &lt; nonl.txt
+while IFS= read -r l || [[ -n $l ]]; do printf '[%s]\\n' "$l"; done &lt; nonl.txt
+
+<span class="tok-comment"># 3 · a file saved on Windows ends every line with \\r</span>
+printf 'prod\\r\\n' &gt; env.txt; read -r e &lt; env.txt
+[[ $e == prod ]] &amp;&amp; echo khop || { echo "KHONG khop:"; printf '%s' "$e" | od -c | head -1; }
+e=\${e%$'\\r'}; [[ $e == prod ]] &amp;&amp; echo "after removing \\r: khop"</code></pre>
+<div class="out">pipe: 0
+procsub: 2
+[mot]
+[mot]
+[hai]
+KHONG khop:
+0000000   p   r   o   d  \\r
+after removing \\r: khop</div>
+<p>Case 3 is the one your Windows teammates hit: a <code>.env</code> or host list edited in Notepad looks identical in <code>cat</code>, but every comparison fails. <code>cat -A</code> shows it as <code>^M$</code> at the end of each line; fix the data with <code>dos2unix</code> or <code>sed -i 's/\\r$//' file</code>, or strip it in the script with <code>\${var%$'\\r'}</code>. The same <code>\\r</code> at the end of the shebang line is what produces <code>/usr/bin/env: 'bash\\r': No such file or directory</code>.</p>
+<p>A fourth, related trap: a command inside the loop that reads from standard input (<code>ssh</code>, <code>ffmpeg</code>, <code>cat</code>) swallows the rest of the file, and the loop ends after one line. Tested with a three-line <code>hosts</code> file and a <code>cat &gt;/dev/null</code> in the body: only <code>host=h1</code> printed; with <code>&lt;/dev/null</code> on that command all three did. Use <code>ssh -n</code>, <code>ffmpeg -nostdin</code>, or read the loop from another descriptor (<code>while read -r h &lt;&amp;3; do …; done 3&lt; hosts</code>).</p>
 <h3>mapfile: a file into an array</h3>
 <pre><code>mapfile -t lines &lt; input.txt         <span class="tok-comment"># -t strips the trailing newlines</span>
 echo "\${#lines[@]} lines"
@@ -1481,6 +2235,7 @@ done &gt; summary.txt</code></pre>
 <p>Putting the redirection after <code>done</code> opens the file once for the entire loop. Writing <code>&gt;&gt; summary.txt</code> inside the body instead reopens it on every iteration — correct, but measurably slower and easy to get wrong by using <code>&gt;</code> and truncating each time.</p>
 
 <h3>Functions</h3>
+${slide('lx-06', 28, 'Hàm: local, return là mã thoát, dữ liệu qua stdout')}
 <pre><code>log() {
   echo "[\$(date +%T)] \$*" &gt;&amp;2      <span class="tok-comment"># diagnostics go to stderr</span>
 }
@@ -1552,6 +2307,57 @@ auth.log                 1.1M      7 errors
 kern.log                 892K      0 errors</div>
 <p>Every technique from this chapter is in those fifteen lines: <code>local</code>, quoted expansions, <code>\${file##*/}</code>, a guard with <code>continue</code>, <code>nullglob</code>, a function printing to stdout, and the whole loop piped once into <code>sort</code>.</p>
 
+<h3>Ranges, mapfile and nested loops: the flags</h3>
+<table>
+<tr><th>Form</th><th>Does</th><th>Tested (bash 5.2)</th></tr>
+<tr><td><code>{1..5}</code> · <code>{a..e}</code></td><td>fixed range of numbers / letters</td><td><code>1 2 3 4 5</code> · <code>a b c d e</code></td></tr>
+<tr><td><code>{01..10..3}</code></td><td>zero-padded, step 3 (bash 4+)</td><td><code>01 04 07 10</code></td></tr>
+<tr><td><code>x{,.bak}</code></td><td>with and without a suffix</td><td><code>x x.bak</code> — <code>cp f{,.bak}</code> makes a backup</td></tr>
+<tr><td><code>seq -w 8 10</code></td><td>range from variables, equal width</td><td><code>08 09 10</code></td></tr>
+<tr><td><code>mapfile -t arr &lt; f</code></td><td>one line per element, newline removed</td><td>without <code>-t</code> every element keeps its <code>\\n</code></td></tr>
+<tr><td><code>mapfile -s 1 -n 2</code></td><td>skip 1 line, read at most 2</td><td><code>l1..l4</code> → <code>l2 l3</code></td></tr>
+<tr><td><code>mapfile -d ''</code></td><td>split on NUL (pairs with <code>find -print0</code>)</td><td><code>a</code>, <code>b c</code></td></tr>
+<tr><td><code>continue 2</code> · <code>break 2</code></td><td>act on the OUTER loop</td><td><code>continue 2</code> prints <code>1a 2a</code>; <code>break 2</code> stops everything at <code>i=2</code></td></tr>
+</table>
+<p>Measured on the practice machine: four <code>sleep 1</code> one after another took 4.0 s; the same four started with <code>&amp;</code> and a <code>wait</code> took 1.0 s; eight jobs through <code>xargs -0 -P 4</code> took 2.0 s — exactly four at a time. Bounded parallelism (and <code>wait -n</code>, GNU <code>parallel</code>) gets its own lesson in Chapter 13.</p>
+
+<h3>On macOS and WSL</h3>
+<pre><code>/bin/bash -c 'mapfile -t a &lt; /etc/hosts'
+/bin/bash -c 'echo {01..03} {1..10..3}'
+zsh -f -c 'for f in *.csv; do echo $f; done; echo "rc=$?"'</code></pre>
+<div class="out">/bin/bash: mapfile: command not found
+1 2 3 {1..10..3}
+zsh:1: no matches found: *.csv</div>
+<p>On the Mac's bash 3.2 there is no <code>mapfile</code> (use a <code>while IFS= read -r</code> loop that appends <code>arr+=("$line")</code>), zero-padding is silently ignored and a step is not understood at all. zsh refuses to run a command whose glob matches nothing (<code>NOMATCH</code>), so the script stops instead of looping over the literal <code>*.csv</code> — safer, but different from bash. <strong>WSL</strong> is Ubuntu; its trap is the <code>\\r</code> above whenever a file crosses from Windows.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p><strong>Scenario:</strong> the list of servers for tonight's maintenance was edited in Notepad by a teammate, one name has a space, the file ends without a newline, and the loop "only processes some of them". Make the loop count every server and the errors correctly.</p><ol>
+<li><code>cd ~/thu-linux/ch6 &amp;&amp; printf 'web 1\\r\\ndb\\r\\ncache' &gt; servers.txt &amp;&amp; cat -A servers.txt</code> — find the <code>^M</code> and the missing final <code>$</code>.</li>
+<li>Write <code>loop.sh</code> with a function <code>check() { local name=$1; … }</code> that prints <code>[name]</code> and returns 1 if the name contains a space; read the file with <code>while IFS= read -r s || [[ -n $s ]]</code> and strip <code>\${s%$'\\r'}</code>.</li>
+<li>Count servers and failures in variables inside the loop, and print both AFTER the loop — first with <code>cat servers.txt | while …</code>, then with <code>done &lt; servers.txt</code>.</li>
+<li>Call <code>check</code> from a loop that itself uses <code>name</code> as its variable, and prove <code>local</code> protects it.</li>
+</ol>
+<p><strong>Done when:</strong> <code>bash loop.sh</code> prints <code>[web 1]</code> <code>[db]</code> <code>[cache]</code> with no stray <code>\\r</code>, then <code>3 servers, 1 failed</code> in the <code>done &lt; file</code> version while the pipe version prints <code>0 servers, 0 failed</code>.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Glob loop</span><span class="v"><code>for f in *.log</code>: the shell hands the loop correctly split file names.</span></div>
+  <div class="kv"><span class="k">Brace range</span><span class="v"><code>{1..5}</code>: generated before variables, so the bounds must be literal.</span></div>
+  <div class="kv"><span class="k">Process substitution</span><span class="v"><code>&lt;(cmd)</code>: a command's output as a file name, so the loop stays in the current shell.</span></div>
+  <div class="kv"><span class="k">CRLF</span><span class="v">Windows line ending <code>\\r\\n</code>; bash keeps the <code>\\r</code> as part of the data.</span></div>
+  <div class="kv"><span class="k">local</span><span class="v">Makes a variable belong to the function; without it every variable is global.</span></div>
+  <div class="kv"><span class="k">Return status</span><span class="v"><code>return N</code> sets the function's exit code 0–255; data goes out on stdout.</span></div>
+  <div class="kv"><span class="k">mapfile / readarray</span><span class="v">Reads lines into an array; bash 4+ only.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>Loop over files with a glob (plus a <code>[[ -e ]]</code> guard or <code>nullglob</code>), never over <code>$(ls)</code>; use <code>find -print0</code> for recursion.</li>
+<li>Read lines with <code>while IFS= read -r line</code>; add <code>|| [[ -n $line ]]</code> for a last line without a newline.</li>
+<li>Feed loops with <code>&lt; file</code> or <code>&lt; &lt;(cmd)</code>, not a pipe, or variables set inside are lost.</li>
+<li>Data from Windows carries <code>\\r</code>: check with <code>cat -A</code>, strip with <code>\${v%$'\\r'}</code> or <code>dos2unix</code>.</li>
+<li>Functions: <code>local</code> for every variable, <code>return</code> for status, stdout for data, declaration and <code>$( )</code> on separate lines.</li>
+<li>bash 3.2 on the Mac has no <code>mapfile</code> and no padded or stepped ranges; zsh stops on an unmatched glob.</li>
+</ul>
 <a class="link-card" href="https://mywiki.wooledge.org/BashFAQ/001" target="_blank" rel="noopener">
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">BashFAQ 001 — "How can I read a file line by line?"</span><span class="lc-sub">Explains every part of <code>while IFS= read -r line</code> and what breaks when you drop each piece. The single most useful FAQ entry there is.</span></span>
@@ -1578,6 +2384,7 @@ kern.log                 892K      0 errors</div>
 <p class="lead">Vòng lặp là chỗ mọi luật về dấu nháy của chương này được đem ra dùng, và cũng là chỗ những lỗi shell kinh điển cư ngụ. Có đúng MỘT cách đúng để lặp qua các file, đúng MỘT cách đúng để lặp qua các dòng, và cả hai đều trông hơi lạ cho tới khi bạn biết chúng đang phòng thủ trước cái gì.</p>
 
 <h3>for: qua một danh sách</h3>
+${slide('lx-06', 24, 'for qua glob, mảng, khoảng — {1..$n} không chạy')}
 <pre><code><span class="tok-comment"># Qua một glob — shell khai triển nó thành các từ giúp bạn (Bài 2.2)</span>
 for f in *.log; do
   [[ -e \$f ]] || continue          <span class="tok-comment"># chốt chặn: glob không khớp thì truyền qua nguyên văn</span>
@@ -1603,6 +2410,7 @@ for ((i = 0; i &lt; 5; i++)); do echo "\$i"; done   <span class="tok-comment"># 
 <div class="callout warn">Khoảng trong ngoặc nhọn được khai triển TRƯỚC biến, nên <code>for i in {1..\$n}</code> <strong>KHÔNG</strong> chạy — nó sinh ra đúng chuỗi chữ <code>{1..5}</code>. Hãy dùng dạng kiểu C <code>for ((i=1; i&lt;=n; i++))</code> khi cận là một biến, hoặc dùng <code>seq</code>. Chỗ này bẫy người ta vì bản dùng số cố định thì chạy hoàn hảo.</div>
 
 <h3>Luật số một: đừng phân tích output của ls</h3>
+${slide('lx-06', 25, 'Đừng lặp trên $(ls)')}
 <pre><code><span class="tok-comment"># SAI — vỡ với mọi tên file có dấu cách hoặc ký tự glob</span>
 for f in \$(ls *.txt); do rm "\$f"; done
 
@@ -1624,6 +2432,7 @@ done</code></pre>
   <div class="lz-layer"><span class="lz-lname">Không bao giờ</span><span class="lz-lnote"><code>for f in \$(ls)</code> — phép cắt từ biến một tên file thành nhiều cái và khai triển mọi ký tự glob trong đó.</span></div>
 </div>
 <h3>while read: qua các dòng</h3>
+${slide('lx-06', 26, 'while IFS= read -r: giữ thụt lề, \\ và dòng cuối')}
 <pre><code>while IFS= read -r line; do
   echo "[\$line]"
 done &lt; input.txt</code></pre>
@@ -1648,6 +2457,32 @@ An &lt;an@example.com&gt; là editor
 37 lỗi</div>
 <div class="callout ok">Cái <code>&lt; &lt;(lệnh)</code> đó là thay thế tiến trình (Bài 3.2), và nó chính là cách chữa cho bẫy shell con: <code>cmd | while read …</code> chạy vòng lặp trong một tiến trình con, nên <code>count</code> mất trắng. Đọc từ <code>&lt;(cmd)</code> giữ vòng lặp lại trong shell hiện tại. Thêm hai ký tự, và cái biến sống sót.</div>
 
+<h3>Ba cách một vòng lặp đọc dòng âm thầm đánh mất dữ liệu</h3>
+${slide('lx-06', 27, 'Ống dẫn chạy vòng lặp trong shell con; ký tự \\r của Windows')}
+<p>Cả ba đều đã dựng lại trong container Ubuntu; không cái nào in ra lỗi.</p>
+<pre><code><span class="tok-comment"># 1 · ống dẫn chạy vòng lặp trong shell con — biến đếm chết theo nó</span>
+count=0; printf 'ERROR a\\nok\\nERROR b\\n' | while IFS= read -r l; do [[ $l == ERROR* ]] &amp;&amp; ((count++)); done; echo "pipe: $count"
+count=0; while IFS= read -r l; do [[ $l == ERROR* ]] &amp;&amp; ((count++)); done &lt; &lt;(printf 'ERROR a\\nok\\nERROR b\\n'); echo "procsub: $count"
+
+<span class="tok-comment"># 2 · dòng cuối không có ký tự xuống dòng — read trả 1 và vòng lặp bỏ qua nó</span>
+printf 'mot\\nhai' &gt; nonl.txt
+while IFS= read -r l; do printf '[%s]\\n' "$l"; done &lt; nonl.txt
+while IFS= read -r l || [[ -n $l ]]; do printf '[%s]\\n' "$l"; done &lt; nonl.txt
+
+<span class="tok-comment"># 3 · file lưu trên Windows kết thúc mỗi dòng bằng \\r</span>
+printf 'prod\\r\\n' &gt; env.txt; read -r e &lt; env.txt
+[[ $e == prod ]] &amp;&amp; echo khop || { echo "KHONG khop:"; printf '%s' "$e" | od -c | head -1; }
+e=\${e%$'\\r'}; [[ $e == prod ]] &amp;&amp; echo "after removing \\r: khop"</code></pre>
+<div class="out">pipe: 0
+procsub: 2
+[mot]
+[mot]
+[hai]
+KHONG khop:
+0000000   p   r   o   d  \\r
+after removing \\r: khop</div>
+<p>Trường hợp 3 là cái các bạn cùng nhóm dùng Windows hay dính: một file <code>.env</code> hay danh sách máy sửa bằng Notepad nhìn qua <code>cat</code> thì y hệt, nhưng mọi phép so sánh đều sai. <code>cat -A</code> hiện nó thành <code>^M$</code> ở cuối mỗi dòng; sửa dữ liệu bằng <code>dos2unix</code> hoặc <code>sed -i 's/\\r$//' file</code>, hoặc gỡ ngay trong script bằng <code>\${var%$'\\r'}</code>. Cũng chính <code>\\r</code> đó ở cuối dòng shebang sinh ra lỗi <code>/usr/bin/env: 'bash\\r': No such file or directory</code>.</p>
+<p>Bẫy thứ tư, họ hàng với ba bẫy trên: một lệnh bên trong vòng lặp mà đọc đầu vào chuẩn (<code>ssh</code>, <code>ffmpeg</code>, <code>cat</code>) sẽ nuốt hết phần còn lại của file, và vòng lặp dừng sau một dòng. Đã thử với file <code>hosts</code> ba dòng và một lệnh <code>cat &gt;/dev/null</code> trong thân vòng lặp: chỉ in ra <code>host=h1</code>; thêm <code>&lt;/dev/null</code> cho lệnh đó thì in đủ ba. Dùng <code>ssh -n</code>, <code>ffmpeg -nostdin</code>, hoặc cho vòng lặp đọc từ một bộ mô tả khác (<code>while read -r h &lt;&amp;3; do …; done 3&lt; hosts</code>).</p>
 <h3>mapfile: một file vào một mảng</h3>
 <pre><code>mapfile -t lines &lt; input.txt         <span class="tok-comment"># -t cắt bỏ ký tự xuống dòng ở cuối</span>
 echo "\${#lines[@]} dòng"
@@ -1676,6 +2511,7 @@ done &gt; summary.txt</code></pre>
 <p>Đặt phép chuyển hướng sau chữ <code>done</code> sẽ mở file đúng MỘT lần cho cả vòng lặp. Viết <code>&gt;&gt; summary.txt</code> bên trong thân vòng lặp thì nó mở lại file ở mỗi vòng — vẫn đúng, nhưng chậm hơn một cách đo được và dễ viết sai thành <code>&gt;</code> rồi cắt trắng file mỗi lần.</p>
 
 <h3>Hàm</h3>
+${slide('lx-06', 28, 'Hàm: local, return là mã thoát, dữ liệu qua stdout')}
 <pre><code>log() {
   echo "[\$(date +%T)] \$*" &gt;&amp;2      <span class="tok-comment"># thông báo chẩn đoán đi ra stderr</span>
 }
@@ -1747,6 +2583,57 @@ auth.log                 1.1M      7 lỗi
 kern.log                 892K      0 lỗi</div>
 <p>Mọi kỹ thuật của chương này đều nằm trong mười lăm dòng đó: <code>local</code>, các phép khai triển có nháy, <code>\${file##*/}</code>, một chốt chặn bằng <code>continue</code>, <code>nullglob</code>, một hàm in ra stdout, và cả vòng lặp được đưa qua ống vào <code>sort</code> đúng một lần.</p>
 
+<h3>Khoảng số, mapfile và vòng lặp lồng nhau: các cờ</h3>
+<table>
+<tr><th>Dạng</th><th>Làm gì</th><th>Đã thử (bash 5.2)</th></tr>
+<tr><td><code>{1..5}</code> · <code>{a..e}</code></td><td>khoảng cố định của số / chữ</td><td><code>1 2 3 4 5</code> · <code>a b c d e</code></td></tr>
+<tr><td><code>{01..10..3}</code></td><td>đệm số 0, bước 3 (bash 4+)</td><td><code>01 04 07 10</code></td></tr>
+<tr><td><code>x{,.bak}</code></td><td>có và không có hậu tố</td><td><code>x x.bak</code> — <code>cp f{,.bak}</code> là tạo bản sao lưu</td></tr>
+<tr><td><code>seq -w 8 10</code></td><td>khoảng lấy từ biến, cùng độ rộng</td><td><code>08 09 10</code></td></tr>
+<tr><td><code>mapfile -t arr &lt; f</code></td><td>mỗi dòng một phần tử, bỏ ký tự xuống dòng</td><td>thiếu <code>-t</code> thì phần tử nào cũng còn <code>\\n</code></td></tr>
+<tr><td><code>mapfile -s 1 -n 2</code></td><td>bỏ 1 dòng đầu, đọc tối đa 2</td><td><code>l1..l4</code> → <code>l2 l3</code></td></tr>
+<tr><td><code>mapfile -d ''</code></td><td>tách theo NUL (đi cặp với <code>find -print0</code>)</td><td><code>a</code>, <code>b c</code></td></tr>
+<tr><td><code>continue 2</code> · <code>break 2</code></td><td>tác động lên vòng lặp NGOÀI</td><td><code>continue 2</code> in <code>1a 2a</code>; <code>break 2</code> dừng tất cả ở <code>i=2</code></td></tr>
+</table>
+<p>Đo trên máy thực hành: bốn lệnh <code>sleep 1</code> nối tiếp nhau mất 4,0 giây; cũng bốn lệnh đó chạy bằng <code>&amp;</code> rồi <code>wait</code> mất 1,0 giây; tám việc qua <code>xargs -0 -P 4</code> mất 2,0 giây — đúng bốn việc một lúc. Chạy song song có giới hạn (cùng <code>wait -n</code>, GNU <code>parallel</code>) có bài riêng ở Chương 13.</p>
+
+<h3>Trên macOS và WSL khác gì</h3>
+<pre><code>/bin/bash -c 'mapfile -t a &lt; /etc/hosts'
+/bin/bash -c 'echo {01..03} {1..10..3}'
+zsh -f -c 'for f in *.csv; do echo $f; done; echo "rc=$?"'</code></pre>
+<div class="out">/bin/bash: mapfile: command not found
+1 2 3 {1..10..3}
+zsh:1: no matches found: *.csv</div>
+<p>bash 3.2 của Mac không có <code>mapfile</code> (thay bằng một vòng <code>while IFS= read -r</code> nối thêm <code>arr+=("$line")</code>), âm thầm bỏ qua phần đệm số 0 và hoàn toàn không hiểu bước nhảy. zsh từ chối chạy một lệnh có glob không khớp gì (<code>NOMATCH</code>), nên script dừng lại thay vì lặp qua chữ <code>*.csv</code> — an toàn hơn, nhưng khác bash. <strong>WSL</strong> là Ubuntu; cái bẫy của nó là ký tự <code>\\r</code> ở trên, mỗi khi một file đi từ Windows sang.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p><strong>Tình huống:</strong> danh sách máy chủ cho đợt bảo trì tối nay do một bạn sửa bằng Notepad, một cái tên có dấu cách, file kết thúc mà không có ký tự xuống dòng, và vòng lặp "chỉ xử lý được một vài máy". Làm cho vòng lặp đếm đúng mọi máy và mọi lỗi.</p><ol>
+<li><code>cd ~/thu-linux/ch6 &amp;&amp; printf 'web 1\\r\\ndb\\r\\ncache' &gt; servers.txt &amp;&amp; cat -A servers.txt</code> — tìm các <code>^M</code> và dấu <code>$</code> bị thiếu ở dòng cuối.</li>
+<li>Viết <code>loop.sh</code> có hàm <code>check() { local name=$1; … }</code> in <code>[name]</code> và trả về 1 nếu tên chứa dấu cách; đọc file bằng <code>while IFS= read -r s || [[ -n $s ]]</code> và gỡ <code>\${s%$'\\r'}</code>.</li>
+<li>Đếm số máy và số lỗi bằng biến bên trong vòng lặp, rồi in cả hai SAU vòng lặp — lần đầu với <code>cat servers.txt | while …</code>, lần sau với <code>done &lt; servers.txt</code>.</li>
+<li>Gọi <code>check</code> từ một vòng lặp mà chính nó cũng dùng biến <code>name</code>, và chứng minh <code>local</code> bảo vệ được nó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> <code>bash loop.sh</code> in <code>[web 1]</code> <code>[db]</code> <code>[cache]</code> không còn <code>\\r</code> thừa, rồi <code>3 servers, 1 failed</code> ở bản <code>done &lt; file</code>, trong khi bản dùng ống dẫn in <code>0 servers, 0 failed</code>.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Glob loop (vòng lặp qua glob)</span><span class="v"><code>for f in *.log</code>: shell đưa cho vòng lặp những tên file đã cắt đúng.</span></div>
+  <div class="kv"><span class="k">Brace range (khoảng ngoặc nhọn)</span><span class="v"><code>{1..5}</code>: sinh ra TRƯỚC biến, nên hai đầu phải là số viết thẳng.</span></div>
+  <div class="kv"><span class="k">Process substitution (thay thế tiến trình)</span><span class="v"><code>&lt;(lệnh)</code>: output của lệnh dưới dạng tên file, để vòng lặp ở lại shell hiện tại.</span></div>
+  <div class="kv"><span class="k">CRLF (xuống dòng kiểu Windows)</span><span class="v">Cặp <code>\\r\\n</code>; bash giữ <code>\\r</code> lại như một phần dữ liệu.</span></div>
+  <div class="kv"><span class="k">local (biến cục bộ)</span><span class="v">Cho biến thuộc về hàm; thiếu nó thì mọi biến đều toàn cục.</span></div>
+  <div class="kv"><span class="k">Return status (trạng thái trả về)</span><span class="v"><code>return N</code> đặt mã thoát 0–255 của hàm; dữ liệu đi ra qua stdout.</span></div>
+  <div class="kv"><span class="k">mapfile / readarray (đọc vào mảng)</span><span class="v">Đọc các dòng vào một mảng; chỉ có từ bash 4.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Lặp qua file bằng glob (kèm chốt <code>[[ -e ]]</code> hoặc <code>nullglob</code>), không bao giờ qua <code>$(ls)</code>; đệ quy thì dùng <code>find -print0</code>.</li>
+<li>Đọc dòng bằng <code>while IFS= read -r line</code>; thêm <code>|| [[ -n $line ]]</code> cho dòng cuối không có ký tự xuống dòng.</li>
+<li>Cấp dữ liệu cho vòng lặp bằng <code>&lt; file</code> hoặc <code>&lt; &lt;(lệnh)</code>, không bằng ống dẫn, kẻo biến đặt bên trong bị mất.</li>
+<li>Dữ liệu từ Windows mang theo <code>\\r</code>: soi bằng <code>cat -A</code>, gỡ bằng <code>\${v%$'\\r'}</code> hoặc <code>dos2unix</code>.</li>
+<li>Hàm: <code>local</code> cho mọi biến, <code>return</code> cho trạng thái, stdout cho dữ liệu, khai báo và <code>$( )</code> trên hai dòng riêng.</li>
+<li>bash 3.2 trên Mac không có <code>mapfile</code> và không có khoảng đệm số hay có bước; zsh dừng lại khi glob không khớp.</li>
+</ul>
 <a class="link-card" href="https://mywiki.wooledge.org/BashFAQ/001" target="_blank" rel="noopener">
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">BashFAQ 001 — "Đọc một file từng dòng thế nào?"</span><span class="lc-sub">Giải thích từng phần của <code>while IFS= read -r line</code> và chuyện gì hỏng khi bạn bỏ đi từng mảnh. Mục FAQ hữu ích nhất từng có.</span></span>
@@ -1774,111 +2661,161 @@ kern.log                 892K      0 lỗi</div>
       title: '6.6 — Chapter 6 quiz|||6.6 — Kiểm tra Chương 6',
       slug: 'lnx-6-6-quiz',
       type: 'QUIZ',
-      description: 'Tám câu về gán biến, cắt từ, "$@", chia số nguyên, ${var:?}, ## và %%, so sánh số trong [[ ]], và luật đừng phân tích ls.',
+      description: 'Mười câu tình huống: đọc một dòng bash và đoán nó in gì — thứ tự khai triển, cắt từ, "$@", ${var…}, mã thoát, [ ] với [[ ]], vòng lặp qua ống dẫn, local, dấu & của bash 5.2 và bash 3.2 của Mac.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Quiz</span>
 <h2>Check what stuck</h2>
-<p class="lead">Eight questions on variables, quoting, expansion and control flow. Answer from memory; they follow the lesson order.</p>
-<div class="callout ok">Aim for 7/8. The three that matter most in real work: what unquoted <code>\$var</code> actually does (6.2), why <code>"\$@"</code> needs both the quotes and the <code>@</code> (6.2), and why <code>[[ \$a &gt; \$b ]]</code> compares strings (6.4).</div>
+<p class="lead">Ten questions, almost all of the form "what does this line really do". Every answer was run in an Ubuntu 24.04 container (bash 5.2) or on a Mac, and every explanation says why the most tempting wrong answer is wrong. Fifteen minutes.</p>
+<h3>Self-check before you start</h3>
+<ul>
+<li>I can list bash's expansion order and explain why <code>{1..$n}</code> does not work.</li>
+<li>I can predict how many arguments an unquoted <code>$var</code> or <code>$@</code> becomes.</li>
+<li>I can use <code>\${v:-x}</code>, <code>\${v:?msg}</code>, <code>#</code>, <code>%</code> and <code>//</code> without looking them up.</li>
+<li>I know why <code>[[ $a &gt; $b ]]</code> compares strings and what <code>[ $a &gt; $b ]</code> creates.</li>
+<li>I can write a <code>while IFS= read -r</code> loop that keeps its variables and survives Windows line endings.</li>
+<li>I know which of these features the Mac's <code>/bin/bash</code> 3.2 and zsh do differently.</li>
+</ul>
+${slide('lx-06', 30, 'Bảng tra nhanh Chương 6')}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Kiểm tra</span>
 <h2>Xem thử đọng lại được gì</h2>
-<p class="lead">Tám câu về biến, dấu nháy, khai triển và luồng điều khiển. Trả lời bằng trí nhớ; các câu theo thứ tự bài.</p>
-<div class="callout ok">Hãy nhắm 7/8. Ba câu quan trọng nhất trong việc thật: <code>\$var</code> không nháy THẬT SỰ làm gì (bài 6.2), vì sao <code>"\$@"</code> cần cả dấu nháy lẫn dấu <code>@</code> (bài 6.2), và vì sao <code>[[ \$a &gt; \$b ]]</code> lại so sánh CHUỖI (bài 6.4).</div>
+<p class="lead">Mười câu, gần như câu nào cũng có dạng "dòng này THẬT SỰ làm gì". Mọi đáp án đã chạy thật trong container Ubuntu 24.04 (bash 5.2) hoặc trên Mac, và mọi lời giải thích đều nói vì sao phương án sai hấp dẫn nhất lại sai. Mười lăm phút.</p>
+<h3>Tự kiểm trước khi làm</h3>
+<ul>
+<li>Tôi kể được thứ tự khai triển của bash và giải thích vì sao <code>{1..$n}</code> không chạy.</li>
+<li>Tôi đoán được một <code>$var</code> hay <code>$@</code> không nháy sẽ thành bao nhiêu tham số.</li>
+<li>Tôi dùng được <code>\${v:-x}</code>, <code>\${v:?msg}</code>, <code>#</code>, <code>%</code> và <code>//</code> mà không cần tra.</li>
+<li>Tôi biết vì sao <code>[[ $a &gt; $b ]]</code> so sánh chuỗi và <code>[ $a &gt; $b ]</code> tạo ra cái gì.</li>
+<li>Tôi viết được một vòng <code>while IFS= read -r</code> giữ được biến và chịu được kiểu xuống dòng của Windows.</li>
+<li>Tôi biết tính năng nào ở trên mà <code>/bin/bash</code> 3.2 và zsh của Mac làm khác.</li>
+</ul>
+${slide('lx-06', 30, 'Bảng tra nhanh Chương 6')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 900,
         questions: [
           {
-            question: 'Why does "name = Binh" fail with "name: command not found"?|||Vì sao "name = Binh" lại hỏng với thông báo "name: command not found"?',
+            question: 'n=3; for i in {1..$n}; do echo "$i"; done — what does bash print?|||n=3; for i in {1..$n}; do echo "$i"; done — bash in ra gì?',
             options: [
-              'Because Binh needs to be quoted|||Vì Binh cần được đặt trong dấu nháy',
-              'Because the shell splits on whitespace and treats the first word as a command — an assignment requires no space around the =|||Vì shell cắt theo khoảng trắng và coi từ đầu tiên là một LỆNH — một phép gán bắt buộc không được có dấu cách quanh dấu =',
-              'Because variable names must be uppercase|||Vì tên biến bắt buộc phải viết hoa',
-              'Because you must write "let name = Binh"|||Vì bạn phải viết "let name = Binh"',
-            ],
-            correctIndex: 1,
-            points: 1,
-          },
-          {
-            question: 'file="my report.txt"; ls -l $file fails with two errors. What happened?|||file="my report.txt"; lệnh ls -l $file hỏng với hai thông báo lỗi. Chuyện gì đã xảy ra?',
-            options: [
-              'The file does not exist|||File đó không tồn tại',
-              'ls cannot handle filenames with spaces|||ls không xử lý được tên file có dấu cách',
-              'Unquoted, the shell substitutes the value and then word-splits it on whitespace, so ls receives TWO arguments instead of one|||Không có nháy, shell thay giá trị vào rồi CẮT TỪ kết quả theo khoảng trắng, nên ls nhận được HAI tham số thay vì một',
-              'The variable needs to be exported first|||Biến đó cần được export trước đã',
+              '1, 2 and 3 on three lines|||1, 2 và 3 trên ba dòng',
+              'Nothing — the loop runs zero times|||Không gì cả — vòng lặp chạy 0 lần',
+              'One line: {1..3}|||Một dòng: {1..3}',
+              'An error: bad substitution|||Một lỗi: bad substitution',
             ],
             correctIndex: 2,
             points: 1,
+            explanation: 'EN: Brace expansion is step 1, before variables exist, and {1..$n} is not a valid range, so it is left as text; step 3 then turns $n into 3 and the loop runs once with the literal {1..3} (tested). "1 2 3" is what zsh prints, because zsh expands braces after variables — which is exactly why testing a bash script in the Mac terminal misleads. Use for ((i=1; i<=n; i++)) or seq.|||VI: Khai triển ngoặc nhọn là bước 1, khi biến còn chưa có, mà {1..$n} không phải một khoảng hợp lệ nên nó bị để nguyên là chữ; bước 3 mới biến $n thành 3 và vòng lặp chạy MỘT lần với chữ {1..3} (đã thử). "1 2 3" là thứ zsh in ra, vì zsh khai triển ngoặc nhọn SAU biến — đúng lý do thử script bash trong terminal Mac dễ đánh lừa bạn. Hãy dùng for ((i=1; i<=n; i++)) hoặc seq.',
           },
           {
-            question: 'Your wrapper script forwards arguments. Which form preserves an argument containing a space?|||Script bọc của bạn chuyển tiếp các tham số. Dạng nào giữ được một tham số có chứa dấu cách?',
+            question: 'v="a  b" (two spaces). What does printf "[%s]\\n" $v print?|||v="a  b" (hai dấu cách). printf "[%s]\\n" $v in ra gì?',
             options: [
-              '$@ — unquoted, so each argument stays separate|||$@ — không nháy, để mỗi tham số vẫn tách riêng',
-              '"$*" — quoted, so nothing gets split|||"$*" — có nháy, nên không gì bị cắt',
-              '"$@" — quoted with @, so each argument stays exactly one word|||"$@" — có nháy và dùng @, nên mỗi tham số vẫn đúng là một từ',
-              '${@} — braces prevent splitting|||${@} — ngoặc nhọn ngăn việc cắt từ',
+              'Two lines: [a] and [b]|||Hai dòng: [a] và [b]',
+              'One line: [a  b]|||Một dòng: [a  b]',
+              'One line: [a b]|||Một dòng: [a b]',
+              'Three lines: [a], [] and [b]|||Ba dòng: [a], [] và [b]',
+            ],
+            correctIndex: 0,
+            points: 1,
+            explanation: 'EN: Unquoted, the value is word-split on IFS, and a run of whitespace IFS characters counts as ONE separator, so there is no empty field — two arguments, two lines (tested). Three lines with an empty one happens only with a non-whitespace separator such as IFS=, and "a,,b". [a  b] is the quoted "$v".|||VI: Không nháy, giá trị bị cắt từ theo IFS, và một dãy ký tự khoảng trắng liền nhau tính là MỘT dấu phân cách, nên không có trường rỗng — hai tham số, hai dòng (đã thử). Ba dòng có một dòng rỗng chỉ xảy ra với dấu phân cách không phải khoảng trắng, như IFS=, và "a,,b". [a  b] là kết quả của "$v" có nháy.',
+          },
+          {
+            question: 'wrap.sh contains: exec tool $@ — you run ./wrap.sh "bao cao.pdf" -v. What does tool receive?|||wrap.sh chứa: exec tool $@ — bạn chạy ./wrap.sh "bao cao.pdf" -v. tool nhận được gì?',
+            options: [
+              'Two arguments: [bao cao.pdf] [-v]|||Hai tham số: [bao cao.pdf] [-v]',
+              'One argument: [bao cao.pdf -v]|||Một tham số: [bao cao.pdf -v]',
+              'Two arguments: [bao] [cao.pdf -v]|||Hai tham số: [bao] [cao.pdf -v]',
+              'Three arguments: [bao] [cao.pdf] [-v]|||Ba tham số: [bao] [cao.pdf] [-v]',
+            ],
+            correctIndex: 3,
+            points: 1,
+            explanation: 'EN: Unquoted $@ expands to the arguments and then word-splits each of them again, so "bao cao.pdf" becomes two words; with -v that is three (tested with a tool that prints each argument). The tempting first option is what "$@" — with quotes — gives, and that is the fix. One single argument would be "$*".|||VI: $@ không nháy khai triển thành các tham số rồi CẮT TỪ từng cái một lần nữa, nên "bao cao.pdf" thành hai từ; cộng -v là ba (đã thử bằng một tool in từng tham số). Phương án đầu hấp dẫn chính là kết quả của "$@" — có nháy — và đó là cách sửa. Một tham số duy nhất là kết quả của "$*".',
+          },
+          {
+            question: 'f=backup.tar.gz — what does echo "${f%%.*} ${f#*.}" print?|||f=backup.tar.gz — echo "${f%%.*} ${f#*.}" in ra gì?',
+            options: [
+              'backup.tar gz',
+              'backup tar.gz',
+              'backup.tar tar.gz',
+              'gz backup',
+            ],
+            correctIndex: 1,
+            points: 1,
+            explanation: 'EN: %% removes the LONGEST match of .* from the right, i.e. everything from the first dot: backup. # removes the SHORTEST match of *. from the left, i.e. up to the first dot: tar.gz (tested). "backup.tar" is the single-% result, "gz" is ##*. — the doubled/single and #/% pairs are exactly what the question tests.|||VI: %% gỡ chỗ khớp DÀI NHẤT của .* tính từ phải, tức mọi thứ từ dấu chấm đầu tiên: còn backup. # gỡ chỗ khớp NGẮN NHẤT của *. tính từ trái, tức tới dấu chấm đầu tiên: còn tar.gz (đã thử). "backup.tar" là kết quả của một dấu %, "gz" là của ##*. — câu này kiểm đúng hai cặp đơn/đôi và #/%.',
+          },
+          {
+            question: 'The .env on the server contains DATABASE_URL= (empty). The script begins with : "${DATABASE_URL?missing}". What happens?|||File .env trên máy chủ có DATABASE_URL= (rỗng). Script mở đầu bằng : "${DATABASE_URL?missing}". Chuyện gì xảy ra?',
+            options: [
+              'The script stops with "DATABASE_URL: missing"|||Script dừng với "DATABASE_URL: missing"',
+              'Nothing is caught: the variable is set (to empty), so the script carries on with an empty URL|||Không bắt được gì: biến ĐÃ đặt (bằng rỗng), nên script chạy tiếp với URL rỗng',
+              'DATABASE_URL becomes the string "missing"|||DATABASE_URL thành chuỗi "missing"',
+              'A syntax error, because ? needs a colon|||Lỗi cú pháp, vì ? cần dấu hai chấm',
+            ],
+            correctIndex: 1,
+            points: 1,
+            explanation: 'EN: Without the colon, ${v?msg} only fires when v is UNSET; an empty value passes (tested: the script printed ok []). ${v:?msg} treats empty like unset and would have stopped it — that colon is the whole difference, and it is why configuration checks should always use :?. Option C describes := (and without a colon, =).|||VI: Thiếu dấu hai chấm, ${v?msg} chỉ kích hoạt khi v CHƯA ĐẶT; giá trị rỗng thì lọt qua (đã thử: script in ok []). ${v:?msg} coi rỗng như chưa đặt và đã chặn được nó — dấu hai chấm là toàn bộ khác biệt, và là lý do phép kiểm cấu hình luôn nên dùng :?. Phương án C mô tả := (hoặc = khi không có dấu hai chấm).',
+          },
+          {
+            question: 'a=10 b=9. You run: [ $a > $b ] && echo lon. What happens?|||a=10 b=9. Bạn chạy: [ $a > $b ] && echo lon. Chuyện gì xảy ra?',
+            options: [
+              'Nothing is printed, because "10" sorts before "9"|||Không in gì, vì "10" đứng trước "9" theo thứ tự chuỗi',
+              'bash: [: integer expression expected',
+              'It prints "lon" — and a file named 9 appears in the directory|||In ra "lon" — và trong thư mục xuất hiện một file tên 9',
+              'It prints "lon" because 10 > 9|||In ra "lon" vì 10 > 9',
             ],
             correctIndex: 2,
             points: 1,
+            explanation: 'EN: Inside [ ], > is a redirection: bash runs [ 10 ] with stdout sent to a file named 9. [ 10 ] is a one-argument test, true for any non-empty string, so "lon" prints and ls shows a new file 9 (tested). Option D gets the output right for the wrong reason; option A is what [[ $a > $b ]] does. Numbers: (( a > b )) or -gt.|||VI: Bên trong [ ], > là một phép chuyển hướng: bash chạy [ 10 ] với stdout đổ vào một file tên 9. [ 10 ] là phép thử một tham số, đúng với mọi chuỗi khác rỗng, nên "lon" được in và ls thấy một file 9 mới (đã thử). Phương án D đúng output nhưng sai lý do; phương án A là thứ [[ $a > $b ]] làm. So số: (( a > b )) hoặc -gt.',
           },
           {
-            question: 'echo $((10 / 3)) prints 3. How do you get 3.33?|||echo $((10 / 3)) in ra 3. Làm sao để có 3,33?',
+            question: 'count=0; printf "a\\nb\\n" | while read -r l; do ((count++)); done; echo $count — what is printed?|||count=0; printf "a\\nb\\n" | while read -r l; do ((count++)); done; echo $count — in ra gì?',
             options: [
-              'Use $((10.0 / 3)) — floats work if you write a decimal point|||Dùng $((10.0 / 3)) — số thực chạy được nếu bạn viết dấu thập phân',
-              'Bash arithmetic is integer-only and truncates; use an external tool such as bc or awk|||Số học của bash chỉ dùng số nguyên và cắt bỏ phần lẻ; hãy dùng công cụ ngoài như bc hoặc awk',
-              'Set "shopt -s floatmath" first|||Đặt "shopt -s floatmath" trước đã',
-              'Use $[10 / 3] instead|||Dùng $[10 / 3] thay vào',
+              '0',
+              '2',
+              '1',
+              'An error, because count was not declared|||Một lỗi, vì count chưa được khai báo',
             ],
-            correctIndex: 1,
+            correctIndex: 0,
             points: 1,
+            explanation: 'EN: Each part of a pipeline runs in its own subshell, so the loop increments a COPY of count that disappears when the loop ends; the parent still has 0 (tested). 2 is what you get with done < <(printf …) or done < file, which keep the loop in the current shell. 1 would be the "last line without newline" trap, which does not apply here.|||VI: Mỗi chặng của ống dẫn chạy trong một shell con riêng, nên vòng lặp tăng một BẢN SAO của count và bản sao đó biến mất khi vòng lặp kết thúc; shell cha vẫn là 0 (đã thử). 2 là kết quả của done < <(printf …) hoặc done < file, vốn giữ vòng lặp trong shell hiện tại. 1 sẽ là bẫy "dòng cuối không có xuống dòng", không áp dụng ở đây.',
           },
           {
-            question: 'What does : "${DATABASE_URL:?DATABASE_URL is required}" do at the top of a script?|||Dòng : "${DATABASE_URL:?DATABASE_URL là bắt buộc}" ở đầu một script làm gì?',
+            question: 'In a function: local out=$(git rev-parse HEAD) || return 1 — run outside any git repository. What happens?|||Trong một hàm: local out=$(git rev-parse HEAD) || return 1 — chạy ở chỗ không phải kho git. Chuyện gì xảy ra?',
             options: [
-              'Sets DATABASE_URL to that message if it is empty|||Đặt DATABASE_URL bằng chính thông điệp đó nếu nó rỗng',
-              'Prints the message as a warning and continues|||In thông điệp ra như một cảnh báo rồi chạy tiếp',
-              'Aborts the script with that error message on stderr if DATABASE_URL is unset or empty — so it fails immediately instead of failing mysteriously later|||DỪNG script với thông điệp lỗi đó trên stderr nếu DATABASE_URL chưa đặt hoặc rỗng — nên nó hỏng ngay lập tức thay vì hỏng một cách bí ẩn về sau',
-              'Comments the line out — the : makes it a no-op|||Biến dòng đó thành chú thích — dấu : làm nó thành lệnh rỗng',
+              'The function returns 1|||Hàm trả về 1',
+              'The whole script exits|||Cả script thoát',
+              'out holds the error message and the function returns 1|||out chứa thông báo lỗi và hàm trả về 1',
+              'return 1 never runs: $? comes from local, which succeeded; out is empty and the function carries on|||return 1 không bao giờ chạy: $? là của lệnh local, vốn thành công; out rỗng và hàm chạy tiếp',
+            ],
+            correctIndex: 3,
+            points: 1,
+            explanation: 'EN: The exit code checked by || is that of the local builtin, and local succeeds even when the substitution inside it failed (tested: local out=$(false); echo $? prints 0, while local o; o=$(false) prints 1). The tempting "returns 1" is what you get after splitting declaration and assignment onto two lines. stderr is never captured by $( ), so out does not hold the message either.|||VI: Mã thoát mà || kiểm là của lệnh dựng sẵn local, và local thành công kể cả khi phép thay thế bên trong nó hỏng (đã thử: local out=$(false); echo $? in 0, còn local o; o=$(false) in 1). "Hàm trả về 1" hấp dẫn chính là kết quả SAU khi tách khai báo và phép gán ra hai dòng. stderr không bao giờ bị $( ) bắt, nên out cũng không chứa thông báo lỗi.',
+          },
+          {
+            question: 'bash 5.2: q="a=1&b=2"; u="x?QUERY"; echo "${u/QUERY/$q}" — what is printed?|||bash 5.2: q="a=1&b=2"; u="x?QUERY"; echo "${u/QUERY/$q}" — in ra gì?',
+            options: [
+              'x?a=1&b=2',
+              'x?QUERY',
+              'x?a=1QUERYb=2',
+              'bash: bad substitution',
             ],
             correctIndex: 2,
             points: 1,
+            explanation: 'EN: Since bash 5.2 the option patsub_replacement is on by default, and an unquoted & in the replacement means "the matched text" — so the & between the two parameters becomes QUERY (tested). The expected x?a=1&b=2 appears only with the replacement quoted, "${u/QUERY/"$q"}", or under an older bash such as the Mac 3.2.|||VI: Từ bash 5.2, tuỳ chọn patsub_replacement bật sẵn, và một dấu & không nháy trong phần thay thế nghĩa là "đoạn vừa khớp" — nên dấu & giữa hai tham số biến thành QUERY (đã thử). Kết quả mong đợi x?a=1&b=2 chỉ có khi phần thay được đặt nháy, "${u/QUERY/"$q"}", hoặc với một bash cũ như bản 3.2 của Mac.',
           },
           {
-            question: 'path="/srv/app/db.yml". What does "${path##*/}" produce, and why?|||path="/srv/app/db.yml". Biểu thức "${path##*/}" cho ra gì, và vì sao?',
+            question: 'deploy.sh contains env=${1,,} and works on the Ubuntu VPS. On your Mac you run /bin/bash deploy.sh PROD. What happens?|||deploy.sh có dòng env=${1,,} và chạy tốt trên VPS Ubuntu. Trên Mac bạn chạy /bin/bash deploy.sh PROD. Chuyện gì xảy ra?',
             options: [
-              '/srv/app — ## trims from the right|||/srv/app — ## xén từ bên phải',
-              'db.yml — ## removes the LONGEST match from the LEFT, so everything up to the last slash goes|||db.yml — ## gỡ chỗ khớp DÀI NHẤT từ bên TRÁI, nên mọi thứ tới dấu gạch chéo cuối cùng đều biến mất',
-              'srv/app/db.yml — it removes only the first slash|||srv/app/db.yml — nó chỉ gỡ dấu gạch chéo đầu tiên',
-              'yml — it removes everything before the last dot|||yml — nó gỡ mọi thứ trước dấu chấm cuối cùng',
+              'It works: env becomes prod|||Chạy được: env thành prod',
+              'deploy.sh: … ${1,,}: bad substitution — /bin/bash on macOS is 3.2, and case conversion arrived in bash 4|||deploy.sh: … ${1,,}: bad substitution — /bin/bash của macOS là bản 3.2, còn đổi hoa thường có từ bash 4',
+              'zsh: bad substitution, because the Mac always runs zsh|||zsh: bad substitution, vì Mac lúc nào cũng chạy zsh',
+              'env is silently empty|||env âm thầm rỗng',
             ],
             correctIndex: 1,
             points: 1,
-          },
-          {
-            question: 'a=10 b=9. Why does [[ $a > $b ]] fail to print anything?|||a=10 b=9. Vì sao [[ $a > $b ]] chẳng in ra gì?',
-            options: [
-              'Because > must be escaped inside [[ ]]|||Vì dấu > phải được thoát khi ở trong [[ ]]',
-              'Because > inside [[ ]] is a STRING comparison, so "10" sorts before "9" — use -gt or (( a > b ))|||Vì dấu > bên trong [[ ]] là phép so sánh CHUỖI, nên "10" đứng trước "9" — hãy dùng -gt hoặc (( a > b ))',
-              'Because the variables need to be declared with declare -i|||Vì các biến cần được khai báo bằng declare -i',
-              'Because [[ ]] does not support comparison at all|||Vì [[ ]] hoàn toàn không hỗ trợ phép so sánh',
-            ],
-            correctIndex: 1,
-            points: 1,
-          },
-          {
-            question: 'Why is "for f in $(ls *.txt)" wrong, and what should replace it?|||Vì sao "for f in $(ls *.txt)" là sai, và nên thay bằng gì?',
-            options: [
-              'ls is slow; use find instead for performance|||ls chậm; hãy dùng find cho nhanh hơn',
-              'ls output goes through word splitting, so a name with a space becomes two iterations and a file named * expands to everything — use "for f in *.txt" instead|||Output của ls đi qua phép cắt từ, nên một cái tên có dấu cách thành hai vòng lặp và một file tên là * khai triển thành mọi thứ — hãy dùng "for f in *.txt" thay vào',
-              'ls does not support globs; you must quote the pattern|||ls không hỗ trợ glob; bạn phải đặt cái mẫu trong nháy',
-              'Nothing is wrong with it as long as you quote "$f" inside the loop|||Chẳng có gì sai cả, miễn là bạn đặt "$f" trong nháy ở bên trong vòng lặp',
-            ],
-            correctIndex: 1,
-            points: 1,
+            explanation: 'EN: Apple ships bash 3.2.57 as /bin/bash; ^^ ,, @Q, mapfile and negative array indexes are all bash 4+ (tested: "${1,,}: bad substitution"). Naming /bin/bash explicitly means zsh is not involved, so option C is wrong even though zsh would also reject ${1,,}. Fix: #!/usr/bin/env bash plus a newer bash from Homebrew (Chapter 15), or code for 3.2.|||VI: Apple kèm bash 3.2.57 ở /bin/bash; ^^ ,, @Q, mapfile và chỉ số mảng âm đều là của bash 4 trở lên (đã thử: "${1,,}: bad substitution"). Gọi thẳng /bin/bash nghĩa là zsh không dính vào, nên phương án C sai dù zsh cũng từ chối ${1,,}. Cách sửa: #!/usr/bin/env bash cộng một bash mới từ Homebrew (Chương 15), hoặc viết theo tập con của 3.2.',
           },
         ],
       },

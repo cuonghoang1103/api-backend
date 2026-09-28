@@ -979,6 +979,7 @@ for route in \
     video-hoc/cua-toi \
     xuong-3d/bo-phan \
     gifs \
+    toc-do-mang/ping \
     voice-mini/voices \
     messages/threads \
     messages/unread-count \

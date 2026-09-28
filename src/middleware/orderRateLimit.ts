@@ -134,3 +134,23 @@ export const keyReplacementLimiter = taoLimiter({
   max: parseInt(process.env.KEY_REPLACEMENT_LIMIT_PER_HOUR || '5', 10),
   message: 'Bạn đã gửi quá nhiều yêu cầu đổi key. Vui lòng chờ và liên hệ hỗ trợ nếu cần gấp.',
 });
+
+/**
+ * Đo tốc độ — tải xuống. Mỗi lượt bơm tới 50 MB băng thông VPS, nên chặn theo
+ * người: 40 lượt/phút cho phép đo nhiều luồng song song + vài lần đo lại,
+ * nhưng chặn kịch bản rút băng thông máy chủ liên tục.
+ */
+export const tocDoTaiXuongLimiter = taoLimiter({
+  prefix: 'rl:sptaixuong:',
+  windowMs: 60_000,
+  max: parseInt(process.env.SPEEDTEST_DOWN_LIMIT_PER_MIN || '40', 10),
+  message: 'Bạn đang đo tốc độ quá nhiều lần. Vui lòng chờ một lát.',
+});
+
+/** Đo tốc độ — tải lên. Cùng lý do, cùng mức với tải xuống. */
+export const tocDoTaiLenLimiter = taoLimiter({
+  prefix: 'rl:sptailen:',
+  windowMs: 60_000,
+  max: parseInt(process.env.SPEEDTEST_UP_LIMIT_PER_MIN || '40', 10),
+  message: 'Bạn đang đo tốc độ quá nhiều lần. Vui lòng chờ một lát.',
+});

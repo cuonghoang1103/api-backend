@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
-  Gauge, Home, BookOpen, FolderOpen, Music, MessagesSquare,
+  Wifi, Gauge, Home, BookOpen, FolderOpen, Music, MessagesSquare,
   LayoutDashboard, Shield, BookMarked, Receipt,
   Sparkles, FileCode2, LogOut, User, Settings,
   GraduationCap, ShoppingBag, Layers, ChevronRight,
@@ -110,6 +110,7 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/music', label: 'Music', icon: Music, section: 'tools' },
   { href: '/finance', label: 'MoneyFlow', icon: Wallet, section: 'tools' },
   { href: '/games', label: 'Games', icon: Gamepad2, section: 'tools' },
+  { href: '/toc-do-mang', label: 'Tốc độ mạng', icon: Wifi, section: 'tools' },
   // Shop (feature-flagged)
   { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'shop' },
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'shop' },

@@ -103,16 +103,19 @@ export default {
     'lnx-9-5-tuong-lua': { yt: 'GQcrRhcZMF8', credit: '3CodeCamp — Lock down your Linux VPS using UFW and Fail2Ban' },         // Lock down your Linux VPS using UFW and Fail2Ban
 
     /* ── Chương 10 — Đĩa, gói phần mềm & log ── */
+    'lnx-10-0-slides': { yt: 'ZRs5zVv_1UU', credit: "Learn Linux TV — Linux Crash Course - The df and du Commands" },
     'lnx-10-1-dia-day': { yt: 'Tky5uCQUZPQ', credit: 'Red Hat Enterprise Linux — Troubleshooting Linux Disk Space Issues at 2 AM?' },      // Troubleshooting Linux Disk Space Issues at 2 AM?
     'lnx-10-2-goi-phan-mem': { yt: 'oNfy6QYmq7g', credit: 'Tech Taught by Her — Linux Package Management Tutorial | apt vs yum vs dnf Explained' },  // Linux Package Management Tutorial | apt vs yum vs dnf Explained
     'lnx-10-3-log-journalctl': { yt: 'J1XhNXWhCKU', credit: 'Devops_world — Linux Log Analysis Explained | /var/log, tail, grep & journalctl' },// Linux Log Analysis Explained | /var/log, tail, grep & journalctl
 
     /* ── Chương 11 — systemd, cron & quản trị ── */
+    'lnx-11-0-slides': { yt: 'Kzpm-rGAXos', credit: "Learn Linux TV — Systemd Explained: How to Manage Linux Services Easily" },
     'lnx-11-1-systemd-unit': { yt: 'C4a7jxlMTfo', credit: 'tutoriaLinux — How to Create a systemd Linux Service' },   // How to Create a systemd Linux Service
     'lnx-11-2-cron-timer': { yt: 'DixhIrgMy3M', credit: 'tutoriaLinux — Introduction to systemd timers' },     // Introduction to systemd timers
     'lnx-11-3-gia-co-may-chu': { yt: '1PljaLoTZ28', credit: 'TechSky - Ethical Hacking — How to Harden Linux Server using Auditd, UFW & Fail2Ban?' }, // How to Harden Linux Server using Auditd, UFW & Fail2Ban?
 
     /* ── Chương 12 — Chẩn đoán một máy chủ thật ── */
+    'lnx-12-0-slides': { yt: 'iJ_eIsA5E1U', credit: "ByteByteGo — Linux Performance Tools!" },
     'lnx-12-1-phuong-phap': { yt: 'ZNkFDHLQnrA', credit: 'EuroBSDCon — Keynote 3: System Performance Analysis Methodologies - Brendan Gregg' },  // Keynote 3: System Performance Analysis Methodologies - Brendan Gregg
     'lnx-12-2-no-chet': { yt: 'fhBHvsi0Ql0', credit: 'USENIX — LISA19 - Linux Systems Performance' },      // LISA19 - Linux Systems Performance
     'lnx-12-3-no-cham': { yt: 'FJW8nGV4jxY', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 1 of 2' },      // Linux Performance Tools, Brendan Gregg, part 1 of 2

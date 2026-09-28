@@ -4733,6 +4733,15 @@ model Note {
   bgKind String? @map("bg_kind") @db.VarChar(8)
   bgPage Int     @default(0) @map("bg_page")
 
+  // Tên trang do người dùng đặt (Vở · "Đổi tên trang") và nhãn chương đặt
+  // trên trang, TÁCH khỏi `title`. `title` là thứ web đọc nên nó được dựng
+  // từ hai cột này (tên trang → nhãn chương → "Trang N"); giữ riêng hai cột
+  // thì máy kéo về mới phân biệt được "trang tên Bài 3" với "trang mở đầu
+  // chương Bài 3" — trước 28/09/2026 kéo về lấy thẳng `title` làm nhãn
+  // chương nên cài lại app là MỌI trang thành một mục trong mục lục.
+  inkTitle   String? @map("ink_title") @db.VarChar(300)
+  inkSection String? @map("ink_section") @db.VarChar(300)
+
   // UUID do MÁY sinh ra, là khoá chống trùng khi đồng bộ. Không có nó thì
   // một lượt đẩy bị mạng cắt giữa chừng rồi thử lại sẽ tạo ra trang thứ
   // hai y hệt, và người dùng thấy vở tự nhân đôi.

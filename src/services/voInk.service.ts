@@ -36,6 +36,8 @@ const TRAN_TRANG = 2000;
 
 const GIAY_HOP_LE = new Set([
   'trang', 'keNgang', 'oLy', 'cham', 'cornell', 'genkou', 'nhacLy',
+  // 28/09/2026: giấy tập viết tiếng Anh 4 dòng + lưới viết code tay.
+  'bonDong', 'luoiCode',
 ]);
 const HUONG_HOP_LE = new Set(['doc', 'ngang']);
 
@@ -66,6 +68,9 @@ export interface TrangVao {
   clientId: string;
   thuTu: number;
   tenChuong?: string | null;
+  /** Tên trang người dùng đặt ("Đổi tên trang"). Máy CŨ không gửi khoá này
+   *  ⇒ `undefined` ⇒ không đụng `inkTitle`; `null` nghĩa là bỏ tên. */
+  tieuDe?: string | null;
   giay?: string | null;
   huong?: string | null;
   /** Phiên bản nét vẽ mà MÁY đang dựa trên. Máy chủ so với `inkVersion`
@@ -111,6 +116,29 @@ function uuidSach(v: unknown, ten: string): string {
     throw new AppError(`${ten} không hợp lệ`, 400, 'INVALID_CLIENT_ID');
   }
   return s;
+}
+
+/** Chuỗi tuỳ chọn: rỗng/không phải chuỗi ⇒ `null`, cắt ở 300 ký tự. */
+function chuoiTuyChon(v: unknown): string | null {
+  if (typeof v !== 'string') return null;
+  const s = v.trim();
+  return s ? s.slice(0, 300) : null;
+}
+
+/**
+ * Tên trang + nhãn chương để trả về máy.
+ *
+ * Hàng ghi TRƯỚC khi có hai cột `ink_title`/`ink_section` (cả hai null) chỉ
+ * có `title` = nhãn chương hoặc "Trang N" tự sinh. "Trang N" KHÔNG phải nhãn
+ * chương — trả nó về là cài lại app thì mọi trang thành một mục lục.
+ */
+function tenVaChuong(t: { title: string; inkTitle: string | null; inkSection: string | null }):
+  { tieuDe: string | null; tenChuong: string | null } {
+  if (t.inkTitle != null || t.inkSection != null) {
+    return { tieuDe: t.inkTitle, tenChuong: t.inkSection };
+  }
+  const laTuSinh = /^Trang \d+$/.test(t.title);
+  return { tieuDe: null, tenChuong: laTuSinh ? null : t.title };
 }
 
 function mauSangHex(mau: unknown): string | null {
@@ -232,15 +260,22 @@ export async function dongBoCay(
         const trangClient = uuidSach(trang.clientId, 'clientId của trang');
         const giay = typeof trang.giay === 'string' && GIAY_HOP_LE.has(trang.giay) ? trang.giay : null;
         const huong = typeof trang.huong === 'string' && HUONG_HOP_LE.has(trang.huong) ? trang.huong : null;
-        const tieuDe = typeof trang.tenChuong === 'string' && trang.tenChuong.trim()
-          ? trang.tenChuong.trim().slice(0, 300)
-          : `Trang ${(Number(trang.thuTu) || 0) + 1}`;
+        const nhanChuong = chuoiTuyChon(trang.tenChuong);
+        // Máy mới gửi `tieuDe` (kể cả null); máy cũ không biết khoá này.
+        const coTieuDe = Object.prototype.hasOwnProperty.call(trang, 'tieuDe');
+        const tenTrang = coTieuDe ? chuoiTuyChon(trang.tieuDe) : null;
+        // `title` là thứ web đọc: tên trang → nhãn chương → "Trang N".
+        const tieuDe = tenTrang ?? nhanChuong ?? `Trang ${(Number(trang.thuTu) || 0) + 1}`;
+        const cotTen = coTieuDe
+          ? { inkTitle: tenTrang, inkSection: nhanChuong }
+          : { inkSection: nhanChuong };
 
         const trangRow = await prisma.note.upsert({
           where: { uk_note_client: { userId, clientId: trangClient } },
           create: {
             userId, subjectId: monRow.id, chapterId: cuonRow.id, clientId: trangClient,
             title: tieuDe,
+            ...cotTen,
             sortOrder: Number.isInteger(trang.thuTu) ? trang.thuTu! : 0,
             paperKind: giay, paperOrient: huong,
             ...nenGhi(trang, userId),
@@ -248,6 +283,7 @@ export async function dongBoCay(
           update: {
             subjectId: monRow.id, chapterId: cuonRow.id,
             title: tieuDe,
+            ...cotTen,
             sortOrder: Number.isInteger(trang.thuTu) ? trang.thuTu! : 0,
             paperKind: giay, paperOrient: huong,
             ...nenGhi(trang, userId),
@@ -581,7 +617,7 @@ export async function layCayVo(userId: number) {
       id: true, clientId: true, chapterId: true, title: true, sortOrder: true,
       paperKind: true, paperOrient: true, inkKey: true, inkPreviewKey: true,
       inkVersion: true, inkStrokeCount: true, inkUpdatedAt: true,
-      bgKey: true, bgKind: true, bgPage: true,
+      bgKey: true, bgKind: true, bgPage: true, inkTitle: true, inkSection: true,
     },
   });
 
@@ -615,7 +651,7 @@ export async function layCayVo(userId: number) {
           clientId: t.clientId!,
           id: t.id,
           thuTu: t.sortOrder,
-          tenChuong: t.title,
+          ...tenVaChuong(t),
           giay: t.paperKind,
           huong: t.paperOrient,
           inkVersion: t.inkVersion,
@@ -663,4 +699,4 @@ export async function xoaCuonVo(userId: number, clientId: string): Promise<{ daX
   return { daXoa: r.count };
 }
 
-export const _chiDeKiemThu = { khoaNet, khoaCuaNguoiNay, mauSangHex };
+export const _chiDeKiemThu = { khoaNet, khoaCuaNguoiNay, mauSangHex, tenVaChuong };

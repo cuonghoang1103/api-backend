@@ -34,7 +34,11 @@ function url(base: string, path: string): string {
 }
 
 function headers(token: string | null): HeadersInit {
-  const h: Record<string, string> = { 'X-Client-Platform': 'desktop' };
+  // KHÔNG gửi header tuỳ biến (vd X-Client-Platform): app desktop gọi
+  // api.cuongthai.com QUA origin app:// — header lạ kích hoạt CORS preflight,
+  // mà backend chỉ cho `Authorization`/`Content-Type`/… ⇒ trình duyệt chặn,
+  // phép đo hỏng câm. Đo tốc độ cũng chẳng cần nhãn nền tảng.
+  const h: Record<string, string> = {};
   if (token) h['Authorization'] = `Bearer ${token}`;
   return h;
 }

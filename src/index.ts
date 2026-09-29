@@ -312,6 +312,7 @@ const corsOptions: cors.CorsOptions = {
     'X-Requested-With',
     'Accept',
     'cf-turnstile-response',
+    'X-Client-Platform',
   ],
   exposedHeaders: [
     'X-Request-ID',

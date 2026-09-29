@@ -1396,6 +1396,14 @@ export const TU_DIEN: Record<string, string> = {
   'Mất mạng, và chưa có AI trên máy để dùng thay. Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.': 'You are offline and no on-device AI is available. Open Settings → Offline AI to download a model for offline use.',
 
   // ── Mạng nhà (features/mang) ──
+  'Máy lạ': 'Unknown',
+  'Đang quét…': 'Scanning…',
+  'Đang tìm thiết bị…': 'Looking for devices…',
+  'Có {n} thiết bị lạ': '{n} unknown devices',
+  'Đánh dấu máy của bạn để lọc chúng ra, rồi gửi danh sách còn lại cho nhà mạng để chặn.': 'Mark your own devices to filter them out, then send the rest to your ISP to block.',
+  'Hoàn tất': 'Done',
+  'Sẵn sàng đo': 'Ready to test',
+  'Đo lại': 'Test again',
   'Mạng nhà': 'Home Network',
   'Xem ai đang dùng chung mạng và đo tốc độ đường truyền.': 'See who shares your network and measure your connection speed.',
   'Thiết bị trong mạng': 'Devices on network',

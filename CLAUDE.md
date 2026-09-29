@@ -143,9 +143,16 @@ model Child {
    - A recommended fix, and wait for user approval
 5. If schema drift is suspected (DB doesn't match migration history), suggest running:
    ```bash
-   npx prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script
+   # CSDL thật vs schema.prisma — KHÔNG cần shadow DB (dùng được trong repo này):
+   npx prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --script
+   # Lịch sử migration vs CSDL thật — CẦN shadow DB, và trong repo này sẽ vấp P3006
+   # (migration add_music_and_profile không replay được — xem mục Pre-Push):
+   npx prisma migrate diff --from-migrations ./prisma/migrations --to-url "$DATABASE_URL" \
+     --shadow-database-url "$SHADOW_DATABASE_URL" --script
    ```
-   to see the actual difference before deciding anything.
+   to see the actual difference before deciding anything. ⚠️ `--to-database-url` KHÔNG tồn tại ở
+   Prisma 5.22 (bản repo đang dùng) — cờ đúng là `--to-url`/`--from-url` (đính chính 29/09/2026, kiểm
+   bằng `npx prisma migrate diff --help`).
 
 Rationale: auto-resolving partially-applied migrations can silently corrupt schema/data on production.
 

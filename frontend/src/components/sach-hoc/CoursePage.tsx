@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, List, X, Clock, CalendarDays } from 'lucide-react';
 import api from '@/lib/api';
@@ -39,7 +39,11 @@ function viewToQuery(v: View): [string, string] {
  * Kế hoạch & tiến độ. Nội dung đến từ `course` (vd. IELTS trong
  * app/language/[code]/ielts/data.ts).
  */
-export default function CoursePage({ course }: { course: Course }) {
+export default function CoursePage({ course, lessonExtra }: {
+  course: Course;
+  /** Khối thêm ở đầu mỗi bài (vd. thẻ 📷 Sách gốc của Dekiru, chỉ hiện với tài khoản được phép). */
+  lessonExtra?: (lesson: Lesson, dayN: number | undefined) => ReactNode;
+}) {
   const DAYS = course.days;
   const INTRO = course.intro;
   const READY_LESSONS = course.readyLessons;
@@ -327,6 +331,7 @@ export default function CoursePage({ course }: { course: Course }) {
                     <Clock size={13} className="inline" style={{ marginTop: -2 }} /> ~{lesson.minutes} phút
                   </span>
                 </div>
+                {lessonExtra?.(lesson, day?.n)}
 
                 {full ? (
                   <Blocks key={lesson.id} blocks={full.blocks ?? []} framed={lesson.kind === 'grammar'} />

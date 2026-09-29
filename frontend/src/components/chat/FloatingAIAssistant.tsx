@@ -77,6 +77,8 @@ export default function FloatingAIAssistant() {
    || pathname === '/notes' || pathname?.startsWith('/notes/')
    // IELTS có gia sư riêng neo đúng góc phải; robot nổi che nút Gửi của nó.
    || pathname?.endsWith('/ielts') || pathname?.endsWith('/dekiru')
+   // 📷 Sách gốc có khung gia sư theo trang ở cột phải — robot che ô gõ câu hỏi.
+   || pathname?.endsWith('/dekiru/sach-goc')
    || hiddenOnMobile,
  );
 

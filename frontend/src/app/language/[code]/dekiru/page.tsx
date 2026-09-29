@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import CoursePage from '@/components/sach-hoc/CoursePage';
+import { NutSachGoc } from '@/components/sach-goc/NutSachGoc';
 import { DEKIRU } from './data';
 
 /** Khoá tiếng Nhật Dekiru — nội dung ở data.ts + bai/, bộ khung ở components/sach-hoc. */
@@ -15,5 +16,6 @@ export default function DekiruPage() {
       </div>
     );
   }
-  return <CoursePage course={DEKIRU} />;
+  // 📷 Sách gốc: thẻ đầu mỗi bài, chỉ tài khoản được phép thấy. Buổi n = Bài n − 1.
+  return <CoursePage course={DEKIRU} lessonExtra={(l, dayN) => <NutSachGoc lesson={l} bai={dayN ? dayN - 1 : undefined} />} />;
 }

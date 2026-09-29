@@ -171,6 +171,8 @@ const myLanguagePublicRoutes = myLanguageModule.publicRouter;
 const myLanguageAdminRoutes = myLanguageModule.adminRouter;
 // IELTS — nội dung khoá học + tiến độ, phục vụ app iOS/iPad
 const ieltsRoutes = (await import(path.join(__dirname, 'routes', 'ielts.routes.js'))).default;
+// 📷 Sách gốc — ảnh trang sách giáo trình, chỉ tài khoản được phép (SACH_RIENG_USER_IDS / ADMIN)
+const sachRiengRoutes = (await import(path.join(__dirname, 'routes', 'sachRieng.routes.js'))).default;
 const videoRoutes = (await import(path.join(__dirname, 'routes', 'video.routes.js'))).default;
 const xuong3dRoutes = (await import(path.join(__dirname, 'routes', 'xuong3d.routes.js'))).default;
 // MoneyFlow — private per-user personal finance module
@@ -654,6 +656,7 @@ app.use('/api/v1/landing', landingRoutes);
 app.use('/api/v1/admin/landing', landingAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);
 app.use('/api/v1/ielts', ieltsRoutes);
+app.use('/api/v1/sach-rieng', sachRiengRoutes);
 app.use('/api/v1/video-hoc', videoRoutes);
 app.use('/api/v1/xuong-3d', xuong3dRoutes);
 app.use('/api/v1/maker-lab', makerLabRoutes);

@@ -101,6 +101,24 @@ lỗi trang · commit theo pathspec · `deploy-nha.sh` (tự push).
 | 15 | ✅ ポイント 119–124, 48 từ (27/09) — TRỌN SÁCH |
 | Chữ Hán B1–6 | ✅ bổ sung 👁/✍, đứng riêng/chung, readkanji (27/09) |
 
+## 5. 📷 Sách gốc (RIÊNG TƯ — 29/09/2026)
+
+Ngoại lệ DUY NHẤT của luật "không đưa ảnh scan lên web": trang
+`/language/ja/dekiru/sach-goc` cho **tài khoản được phép** (`SACH_RIENG_USER_IDS`
+hoặc vai trò ADMIN) xem từng trang sách thật + hướng dẫn học trang đó + gia sư
+AI nhìn đúng ảnh trang. Người khác: API 403, web không hiện thẻ/mục.
+
+- Ảnh + hướng dẫn KHÔNG ở repo / `public/`: dựng ở `~/Documents/JPD123/sach-goc-web/`
+  bằng `scripts/sach-rieng/` (1 `dekiru-xuat-anh.mjs` → 2 `dekiru-huong-dan.mts`
+  (AI soạn, gpt-6-sol nhìn ảnh) → 3 `dekiru-tai-len.mts` (mã hoá AES-GCM bằng
+  `SACH_RIENG_KHOA`, lên R2 `rieng/sach/dekiru/`)). Bucket R2 được CDN phục vụ
+  công khai theo tên khoá — vì thế PHẢI mã hoá, và mọi byte đi qua backend.
+- Số trang = trang in trên sách (bản đầy đủ 304 trang); p.1–132 và p.270–289
+  lấy từ "BẢN RÕ" (đã đối chiếu ảnh từng trang).
+- Mục của trang (チャレンジ！/やってみよう/…) do AI đọc, chuẩn hoá bởi
+  `chuanHoaMuc()` (src/services/sachRieng/dekiru.ts) — tên in trên trang thắng.
+- Các mục cũ (📖 Theo sách viết lại, hội thoại SVG…) GIỮ NGUYÊN — đây là phần thêm.
+
 ## 6. 🈶 Chữ Hán của lớp + thẻ chữ Hán + Chia động từ (29/09/2026)
 
 Người học: "chữ Hán của khoá thiếu nhiều so với bài cô giảng" (slide Bài 5 có đúng

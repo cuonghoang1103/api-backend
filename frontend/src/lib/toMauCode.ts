@@ -88,6 +88,9 @@ export async function toMauTrong(goc: HTMLElement | null) {
     return true;
   });
   if (!khoi.length) return;
+  // Đánh dấu TRƯỚC khi chờ nạp highlight.js: MutationObserver có thể gọi lần
+  // nữa trong lúc chờ, và lần đó không được nhặt lại đúng các khối này.
+  for (const c of khoi) c.dataset.daToMau = '1';
 
   const hljs = await layHljs();
   for (const code of khoi) {
@@ -126,9 +129,28 @@ export function useToMauCode(
 ) {
   useEffect(() => {
     let huy = false;
+    let theoDoi: MutationObserver | null = null;
+    let lan = 0;
+    // ⚠️ Khung nội dung có thể CHƯA có trong DOM lúc effect chạy: ở trang học,
+    // bài đầu tiên đã có `content` ngay khi trang còn hiện vòng xoay tải, nên
+    // effect chạy với ref = null rồi không bao giờ chạy lại (id/nội dung không
+    // đổi khi khung hiện ra) ⇒ bài mở đầu tiên luôn trắng trơn (báo 30/09/2026).
+    // Vì vậy: chờ khung xuất hiện (tối đa ~10 giây), rồi theo dõi khung — React
+    // thay innerHTML mà deps không đổi cũng được tô lại.
+    const thu = () => {
+      if (huy) return;
+      const el = lay();
+      if (!el) {
+        if (++lan < 100) t = setTimeout(thu, 100);
+        return;
+      }
+      void toMauTrong(el);
+      theoDoi = new MutationObserver(() => { if (!huy) void toMauTrong(el); });
+      theoDoi.observe(el, { childList: true, subtree: true });
+    };
     // Đợi một nhịp để `dangerouslySetInnerHTML` gắn xong nội dung.
-    const t = setTimeout(() => { if (!huy) void toMauTrong(lay()); }, 0);
-    return () => { huy = true; clearTimeout(t); };
+    let t = setTimeout(thu, 0);
+    return () => { huy = true; clearTimeout(t); theoDoi?.disconnect(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, phuThuoc);
 }

@@ -336,7 +336,9 @@ export type LlmPurpose =
   | 'work_digest'         // CT Work — diễn đạt lại số liệu mã đã tính (báo cáo tuần, bản tin)
   | 'note_format'         // Notes — "✨ Sắp xếp lại trang": sửa chính tả + dựng mục/bảng/khối code, KHÔNG thêm ý
   | 've_net'              // Vở iPad — "AI vẽ bằng nét": viết SVG nét đơn, máy chủ đổi ra điểm cho PKStroke
-  | 'vo_viet_lai';        // Vở iPad — "AI viết lại trang": đọc ẢNH trang viết tay → khối có cấu trúc, sửa chính tả, KHÔNG thêm ý
+  | 'vo_viet_lai'         // Vở iPad — "AI viết lại trang": đọc ẢNH trang viết tay → khối có cấu trúc, sửa chính tả, KHÔNG thêm ý
+  | 'han_tra'             // Vở iPad — "Vẽ chữ Hán": tra chữ từ âm Hán Việt / nghĩa / romaji + On/Kun/nghĩa (JSON nhỏ)
+  | 'so_do_khoi';         // Vở iPad — "Luồng / sơ đồ khối": mô tả → ĐỒ THỊ JSON (nút + cạnh); app tự dàn bố cục + viết chữ bằng nét
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -469,6 +471,18 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * `VIEC_CHI_OPENAI` + `VISION_PURPOSES`.
    */
   vo_viet_lai: 'gpt-6-sol',
+  /**
+   * Vở iPad — "Vẽ chữ Hán" (29/09/2026). Chỉ TRA chữ (âm Hán Việt / nghĩa /
+   * romaji → chữ + On/Kun), câu trả lời JSON ~200 token. NÉT chữ KHÔNG do AI
+   * vẽ — lấy từ dữ liệu nét chuẩn `/my-language/hanzi-stroke`.
+   */
+  han_tra: 'gpt-6-sol',
+  /**
+   * Vở iPad — "Luồng / sơ đồ khối" (29/09/2026). Model chỉ trả CẤU TRÚC đồ thị
+   * (nút, cạnh, hướng) — bố cục và chữ bằng nét do app tự dựng, nên model
+   * không cần giỏi hình học, chỉ cần hiểu kiến trúc phần mềm.
+   */
+  so_do_khoi: 'gpt-6-sol',
 
   cv_critique: 'gpt-6-sol',
   cv_writing: 'gpt-6-sol',

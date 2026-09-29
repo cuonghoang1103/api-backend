@@ -22,6 +22,8 @@ import {
 } from '../services/voInk.service.js';
 import { veBangNet, batDauVe, xemViecVe } from '../services/voVe.service.js';
 import { vietLaiTrang, batDauVietLai, xemViecVietLai } from '../services/voVietLai.service.js';
+import { traChuHan } from '../services/voHan.service.js';
+import { batDauSoDo, xemViecSoDo } from '../services/voSoDo.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -119,6 +121,33 @@ router.get('/ve/viec/:id', (req, res: Response<ApiResponse>, next) => {
 router.post('/ve', async (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await veBangNet(req.userId!, req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+/**
+ * Vẽ giúp → Chữ Hán: `{ q }` (chữ Hán, âm Hán Việt, nghĩa, romaji) →
+ * `{ ungVien: [{ chu, hanViet, nghia, doc, chiTiet: [{ chu, hanViet, on, kun, nghia, soNet }] }], model }`.
+ * Chỉ TRA chữ — nét lấy ở `/my-language/hanzi-stroke/:char`, không do AI vẽ. Nhanh (≤ 10s) nên gọi thẳng.
+ */
+router.post('/han/tra', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await traChuHan(req.userId!, req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+/**
+ * Vẽ giúp → Luồng / sơ đồ khối, CHẠY NỀN: `{ de }` → `{ viec }`; hỏi lại bằng GET.
+ * Kết quả: `{ xong: true, tieuDe, dang, huong, nut, nhom, canh, model }` — app tự dàn bố cục.
+ */
+router.post('/so-do/viec', (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: batDauSoDo(req.userId!, req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+router.get('/so-do/viec/:id', (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: xemViecSoDo(req.userId!, String(req.params.id)) });
   } catch (e) { next(e); }
 });
 

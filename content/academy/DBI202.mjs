@@ -6,6 +6,19 @@
  * Luyện: CodeLab SQL track (#module-406..413,721,720) + SQL Server.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/DBI202.mjs --apply
  */
+// 📑 Bài học theo từng slide, 🧪 bài thực hành chương và quiz viết lại/mới nằm trong ./dbi202/*.mjs
+// (SINH bởi flm-nguon/DBI202/gen/gen.mjs — sửa nguồn ở đó rồi chạy lại, đừng sửa tay các module).
+import sec0 from './dbi202/sec0.mjs';
+import ch1 from './dbi202/ch1.mjs';
+import ch2 from './dbi202/ch2.mjs';
+import ch3 from './dbi202/ch3.mjs';
+import ch4 from './dbi202/ch4.mjs';
+import ch5 from './dbi202/ch5.mjs';
+import ch6 from './dbi202/ch6.mjs';
+import ch7 from './dbi202/ch7.mjs';
+import ch8 from './dbi202/ch8.mjs';
+import fe from './dbi202/fe.mjs';
+
 export default {
   semester: { code: 'FPTU_Hola3', name: 'Kỳ 3', ordinal: 5 },
   course: {
@@ -27,6 +40,10 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn học là gì, điều kiện qua môn, chuẩn đầu ra, và cài đặt SQL Server.',
       lessons: [
+        /* 📑 Học theo từng slide (dbi1 1–5) — ./dbi202/sec0.mjs */
+        ...sec0.slides,
+        /* 🧭 Bài nền tảng bổ sung — ./dbi202/sec0.mjs */
+        ...sec0.extrasStart,
         {
           title: '0.1 — About DBI202 & the course map|||0.1 — Giới thiệu DBI202 & bản đồ môn học',
           slug: 'dbi202-gioi-thieu',
@@ -194,6 +211,8 @@ export default {
       title: 'Chapter 1 — Databases & DBMS|||Chương 1 — Cơ sở dữ liệu & DBMS',
       description: 'Vì sao dùng CSDL thay vì tệp, và hệ quản trị CSDL (DBMS) làm những gì.',
       lessons: [
+        /* 📑 Học theo từng slide (dbi2 1–21) — ./dbi202/ch1.mjs */
+        ...ch1.slides,
         {
           title: '1.1 — Why databases & what a DBMS does|||1.1 — Vì sao CSDL & DBMS làm gì',
           slug: 'dbi202-csdl-dbms',
@@ -230,6 +249,10 @@ export default {
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./dbi202/ch1.mjs */
+        ch1.practice,
+        /* ❓ Quiz mới — ./dbi202/ch1.mjs */
+        ch1.quizLesson,
       ],
     },
 
@@ -238,6 +261,8 @@ export default {
       title: 'Chapter 2 — Relational Model & Algebra|||Chương 2 — Mô hình quan hệ & Đại số',
       description: 'Bảng, hàng, khóa; và đại số quan hệ — nền toán học của SQL.',
       lessons: [
+        /* 📑 Học theo từng slide (dbi3 1–25, dbi6 1–30) — ./dbi202/ch2.mjs */
+        ...ch2.slides,
         {
           title: '2.1 — Tables, keys & the relational model|||2.1 — Bảng, khóa & mô hình quan hệ',
           slug: 'dbi202-mo-hinh-quan-he',
@@ -502,20 +527,14 @@ SET NULL → <b>thất bại ở đây</b>, vì Enrol.sid là một phần khoá
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./dbi202/ch2.mjs */
+        ch2.practice,
         {
           title: 'Quiz 1 — Relational model & algebra|||Quiz 1 — Mô hình & đại số quan hệ',
           slug: 'dbi202-quiz-1',
           type: 'QUIZ',
-          description: 'Kiểm tra bảng, khóa và đại số quan hệ.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'A primary key must be…|||Khóa chính phải…', options: ['nullable and repeatable|||cho phép null và lặp', 'unique and never null|||duy nhất và không bao giờ null', 'a number|||là một số', 'the first column|||là cột đầu tiên'], correctIndex: 1, points: 1 },
-              { question: 'A foreign key enforces…|||Khóa ngoại đảm bảo…', options: ['sorting|||sắp xếp', 'referential integrity (it must point to an existing row)|||toàn vẹn tham chiếu (phải trỏ tới hàng tồn tại)', 'encryption|||mã hóa', 'indexing|||đánh chỉ mục'], correctIndex: 1, points: 1 },
-              { question: 'The relational-algebra selection σ corresponds to SQL…|||Phép chọn σ trong đại số quan hệ tương ứng SQL…', options: ['SELECT list|||danh sách SELECT', 'WHERE', 'ORDER BY', 'JOIN'], correctIndex: 1, points: 1 },
-              { question: 'Projection π corresponds to…|||Phép chiếu π tương ứng…', options: ['choosing rows|||chọn hàng', 'choosing columns (the SELECT list)|||chọn cột (danh sách SELECT)', 'grouping|||gom nhóm', 'deleting|||xóa'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch2.quizDescription,
+          quiz: ch2.quiz,
         },
       ],
     },
@@ -525,6 +544,8 @@ SET NULL → <b>thất bại ở đây</b>, vì Enrol.sid là một phần khoá
       title: 'Chapter 3 — ER Modelling|||Chương 3 — Mô hình thực thể-liên kết (ER)',
       description: 'Thiết kế khái niệm: thực thể, thuộc tính, liên kết, bản số — và chuyển ER sang bảng.',
       lessons: [
+        /* 📑 Học theo từng slide (dbi5 1–53) — ./dbi202/ch3.mjs */
+        ...ch3.slides,
         {
           title: '3.1 — Entities, relationships & diagrams|||3.1 — Thực thể, liên kết & sơ đồ',
           slug: 'dbi202-er-model',
@@ -863,6 +884,12 @@ put the FK on Branch, the side with total participation: <span class="badge">Bra
 </div>
 `,
         },
+        /* 🧩 Bài bổ sung — ./dbi202/ch3.mjs */
+        ...ch3.extrasEnd,
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./dbi202/ch3.mjs */
+        ch3.practice,
+        /* ❓ Quiz mới — ./dbi202/ch3.mjs */
+        ch3.quizLesson,
       ],
     },
 
@@ -871,6 +898,8 @@ put the FK on Branch, the side with total participation: <span class="badge">Bra
       title: 'Chapter 4 — Functional Dependencies & Normalization|||Chương 4 — Phụ thuộc hàm & Chuẩn hóa',
       description: 'Phụ thuộc hàm và các dạng chuẩn 1NF → BCNF — loại bỏ dư thừa và bất thường dữ liệu.',
       lessons: [
+        /* 📑 Học theo từng slide (dbi4 1–73) — ./dbi202/ch4.mjs */
+        ...ch4.slides,
         {
           title: '4.1 — Functional dependencies & 1NF–BCNF|||4.1 — Phụ thuộc hàm & 1NF–BCNF',
           slug: 'dbi202-chuan-hoa',
@@ -1211,20 +1240,14 @@ product_id → unit_price &nbsp; <em>(cũng chỉ một phần khoá)</em><br>
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./dbi202/ch4.mjs */
+        ch4.practice,
         {
           title: 'Quiz 2 — ER & Normalization|||Quiz 2 — ER & Chuẩn hóa',
           slug: 'dbi202-quiz-2',
           type: 'QUIZ',
-          description: 'Kiểm tra mô hình ER và chuẩn hóa.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'A many-to-many relationship is stored using…|||Liên kết nhiều-nhiều được lưu bằng…', options: ['one table|||một bảng', 'a junction table with two foreign keys|||một bảng trung gian với hai khóa ngoại', 'a primary key only|||chỉ một khóa chính', 'no table|||không bảng nào'], correctIndex: 1, points: 1 },
-              { question: 'A functional dependency A → B means…|||Phụ thuộc hàm A → B nghĩa là…', options: ['B determines A|||B xác định A', 'A determines B (one A gives one B)|||A xác định B (một A cho một B)', 'they are unrelated|||chúng không liên quan', 'A and B are keys|||A và B là khóa'], correctIndex: 1, points: 1 },
-              { question: '3NF removes…|||3NF loại bỏ…', options: ['all keys|||mọi khóa', 'transitive dependencies (non-key → non-key)|||phụ thuộc bắc cầu (không-khóa → không-khóa)', 'foreign keys|||khóa ngoại', 'indexes|||chỉ mục'], correctIndex: 1, points: 1 },
-              { question: 'Normalization exists mainly to prevent…|||Chuẩn hóa tồn tại chủ yếu để ngăn…', options: ['fast queries|||truy vấn nhanh', 'update/insert/delete anomalies from redundancy|||bất thường cập nhật/chèn/xóa do dư thừa', 'using SQL|||dùng SQL', 'small tables|||bảng nhỏ'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch4.quizDescription,
+          quiz: ch4.quiz,
         },
       ],
     },
@@ -1233,6 +1256,8 @@ product_id → unit_price &nbsp; <em>(cũng chỉ một phần khoá)</em><br>
       title: 'Chapter 5 — SQL DDL: defining data|||Chương 5 — SQL DDL: định nghĩa dữ liệu',
       description: 'CREATE TABLE, kiểu dữ liệu, khóa chính/ngoại và ràng buộc — dựng lược đồ bằng SQL.',
       lessons: [
+        /* 📑 Học theo từng slide (dbi7 1–21) — ./dbi202/ch5.mjs */
+        ...ch5.slides,
         {
           title: '5.1 — CREATE TABLE, keys & constraints|||5.1 — CREATE TABLE, khóa & ràng buộc',
           slug: 'dbi202-sql-ddl',
@@ -1495,6 +1520,10 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./dbi202/ch5.mjs */
+        ch5.practice,
+        /* ❓ Quiz mới — ./dbi202/ch5.mjs */
+        ch5.quizLesson,
       ],
     },
 
@@ -1503,6 +1532,8 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
       title: 'Chapter 6 — SQL Queries|||Chương 6 — Truy vấn SQL',
       description: 'SELECT/WHERE/ORDER BY, JOIN nhiều bảng, GROUP BY & hàm tổng hợp, và truy vấn con.',
       lessons: [
+        /* 📑 Học theo từng slide (dbi7 22–82) — ./dbi202/ch6.mjs */
+        ...ch6.slides,
         {
           title: '6.1 — SELECT, WHERE, JOIN|||6.1 — SELECT, WHERE, JOIN',
           slug: 'dbi202-select-join',
@@ -1945,20 +1976,14 @@ This is the single habit that separates people who have dropped production data 
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./dbi202/ch6.mjs */
+        ch6.practice,
         {
           title: 'Quiz 3 — SQL DDL & Queries|||Quiz 3 — SQL DDL & Truy vấn',
           slug: 'dbi202-quiz-3',
           type: 'QUIZ',
-          description: 'Kiểm tra DDL, JOIN và tổng hợp.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'An INNER JOIN returns…|||INNER JOIN trả về…', options: ['all rows from both tables|||mọi hàng từ cả hai bảng', 'only rows that match in both tables|||chỉ hàng khớp ở cả hai bảng', 'all left rows|||mọi hàng trái', 'no rows|||không hàng nào'], correctIndex: 1, points: 1 },
-              { question: 'WHERE filters rows … grouping; HAVING filters groups … grouping.|||WHERE lọc hàng … gom nhóm; HAVING lọc nhóm … gom nhóm.', options: ['after / before|||sau / trước', 'before / after|||trước / sau', 'both before|||cả hai trước', 'both after|||cả hai sau'], correctIndex: 1, points: 1 },
-              { question: 'The CHECK constraint is used to…|||Ràng buộc CHECK dùng để…', options: ['create a foreign key|||tạo khóa ngoại', 'enforce a custom rule on a value|||thực thi luật tùy chỉnh trên giá trị', 'sort the table|||sắp bảng', 'index a column|||đánh chỉ mục cột'], correctIndex: 1, points: 1 },
-              { question: 'To count students per class you use…|||Để đếm sinh viên mỗi lớp bạn dùng…', options: ['ORDER BY', 'GROUP BY classId with COUNT(*)|||GROUP BY classId với COUNT(*)', 'DISTINCT only|||chỉ DISTINCT', 'a foreign key|||một khóa ngoại'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch6.quizDescription,
+          quiz: ch6.quiz,
         },
       ],
     },
@@ -1968,6 +1993,8 @@ This is the single habit that separates people who have dropped production data 
       title: 'Chapter 7 — Programmability: Views, Procedures, Triggers|||Chương 7 — Lập trình: View, Procedure, Trigger',
       description: 'View, Stored Procedure, Function, Cursor và Trigger — logic sống bên trong CSDL.',
       lessons: [
+        /* 📑 Học theo từng slide (dbi9 1–51) — ./dbi202/ch7.mjs */
+        ...ch7.slides,
         {
           title: '7.1 — Views, stored procedures, functions & triggers|||7.1 — View, stored procedure, function & trigger',
           slug: 'dbi202-plsql',
@@ -2362,6 +2389,10 @@ This is the number-one trigger bug in student projects, and it only shows up onc
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./dbi202/ch7.mjs */
+        ch7.practice,
+        /* ❓ Quiz mới — ./dbi202/ch7.mjs */
+        ch7.quizLesson,
       ],
     },
 
@@ -2370,6 +2401,8 @@ This is the number-one trigger bug in student projects, and it only shows up onc
       title: 'Chapter 8 — Indexing & Optimization|||Chương 8 — Chỉ mục & Tối ưu',
       description: 'Chỉ mục làm truy vấn nhanh thế nào, cái giá của chúng, và giao dịch ACID.',
       lessons: [
+        /* 📑 Học theo từng slide (dbi8 1–41) — ./dbi202/ch8.mjs */
+        ...ch8.slides,
         {
           title: '8.1 — Indexes & query performance|||8.1 — Chỉ mục & hiệu năng truy vấn',
           slug: 'dbi202-chi-muc',
@@ -2592,20 +2625,14 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./dbi202/ch8.mjs */
+        ch8.practice,
         {
           title: 'Quiz 4 — Programmability, Indexing & ACID|||Quiz 4 — Lập trình, Chỉ mục & ACID',
           slug: 'dbi202-quiz-4',
           type: 'QUIZ',
-          description: 'Kiểm tra View/Procedure/Trigger, chỉ mục và giao dịch.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'A View is…|||View là…', options: ['a physical copy of data|||một bản sao vật lý của dữ liệu', 'a saved query used like a table|||một truy vấn được lưu, dùng như bảng', 'an index|||một chỉ mục', 'a backup|||một bản backup'], correctIndex: 1, points: 1 },
-              { question: 'A Trigger runs…|||Trigger chạy…', options: ['only when you call it|||chỉ khi bạn gọi', 'automatically on INSERT/UPDATE/DELETE|||tự động khi INSERT/UPDATE/DELETE', 'once a day|||một lần mỗi ngày', 'never|||không bao giờ'], correctIndex: 1, points: 1 },
-              { question: 'An index speeds up reads but…|||Chỉ mục tăng tốc đọc nhưng…', options: ['also speeds up writes|||cũng tăng tốc ghi', 'slows down writes and uses disk|||làm chậm ghi và tốn đĩa', 'deletes data|||xóa dữ liệu', 'has no downside|||không có nhược điểm'], correctIndex: 1, points: 1 },
-              { question: 'ACID guarantees that a transaction is…|||ACID đảm bảo một giao dịch là…', options: ['fast|||nhanh', 'all-or-nothing and reliable (Atomic, Consistent, Isolated, Durable)|||được-ăn-cả-ngã-về-không và đáng tin (Nguyên tử, Nhất quán, Cô lập, Bền vững)', 'indexed|||được đánh chỉ mục', 'read-only|||chỉ đọc'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch8.quizDescription,
+          quiz: ch8.quiz,
         },
       ],
     },
@@ -2839,83 +2866,7 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
           "type": "article",
           "description": "Syllabus cho gì (60 phút, 30%, ≥4) và KHÔNG cho gì (format, số câu — mô tả trắc nghiệm chỉ áp cho Progress Test). Lộ trình ôn 7 CLO + câu mẫu.",
           "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Assessment · FE</span>\n<h2>FE — Final Exam (60 minutes, 30%, must reach 4/10)</h2>\n<p class=\"lead\">What the DBI202 syllabus states about the final &mdash; and what it does not:</p>\n<table>\n<thead><tr><th>Field</th><th>Value (syllabus ID 12039)</th></tr></thead>\n<tbody>\n<tr><td>Category / type</td><td>Final exam</td></tr>\n<tr><td>Parts</td><td>1</td></tr>\n<tr><td>Weight</td><td><strong>30%</strong></td></tr>\n<tr><td>Duration</td><td><strong>60 minutes</strong></td></tr>\n<tr><td>Completion criterion</td><td><strong>&ge; 4</strong>/10 &mdash; below that you fail the subject whatever your average</td></tr>\n<tr><td>Question type</td><td><strong>Not stated in the syllabus</strong> &mdash; only the Progress Tests are described (&ldquo;Multiple choices; Marked by Computer&hellip;&rdquo;)</td></tr>\n<tr><td>Number of questions</td><td><strong>Not stated in the syllabus</strong></td></tr>\n</tbody>\n</table>\n<div class=\"callout warn\"><span class=\"badge\">Correction</span> This page used to assert the FE is &ldquo;a computer-graded multiple-choice test&rdquo; and to send you to Lesson 0.2 for the question count, duration, weight and pass mark. The format claim is not in the syllabus &mdash; that description belongs to the Progress Tests &mdash; and the real numbers now live in Lesson 0.2. Confirm the paper's format with your lecturer or the FLM.</div>\n<h3>Revise by CLO &mdash; the seven areas the paper can draw from</h3>\n<ul>\n<li><b>CLO1 database concepts &amp; DBMS</b> &mdash; why a DBMS rather than files, the three-level architecture and data independence, data models. Lessons 1.1, 9.2.</li>\n<li><b>CLO2 relational model &amp; relational algebra</b> &mdash; schema vs instance, keys, and &sigma; &pi; &cup; &cap; &minus; &#8904; &rho;, outer joins, division. Lessons 2.1&ndash;2.4.</li>\n<li><b>CLO3 normalization</b> &mdash; functional dependencies, Armstrong's axioms, attribute closure, finding keys, 1NF&rarr;2NF&rarr;3NF&rarr;BCNF, lossless join and dependency preservation. Lessons 4.1&ndash;4.4.</li>\n<li><b>CLO4 ER modelling</b> &mdash; entities, relationships, cardinality, weak entity sets, subclasses, and the rules for turning an ERD into tables. Lessons 3.1&ndash;3.4.</li>\n<li><b>CLO5 SQL DDL &amp; DML</b> &mdash; CREATE/ALTER, the five constraint types, SELECT with joins, nested queries, aggregation, INSERT/UPDATE/DELETE. Lessons 5.1&ndash;5.3, 6.1&ndash;6.5.</li>\n<li><b>CLO6 programmability</b> &mdash; views, stored procedures, functions, triggers (including a trigger that enforces a rule), cursors. Lessons 7.1&ndash;7.4.</li>\n<li><b>CLO7 index &amp; query optimization</b> &mdash; clustered vs nonclustered indexes, reading an execution plan, transactions and ACID. Lessons 8.1&ndash;8.3.</li>\n</ul>\n<p>Lesson <strong>9.2</strong> answers all 30 of the syllabus's constructive questions grouped by CLO &mdash; it is the fastest revision pass available for this paper.</p>\n<h3>In the room</h3>\n<ul>\n<li>Pace yourself: divide 60 minutes by the number of items, flag hard ones, return at the end.</li>\n<li>For algebra or SQL items, write the intermediate result table &mdash; a two-row worked example settles most &ldquo;what does this return?&rdquo; questions faster than reasoning about them.</li>\n<li>Recheck the classic distinctions: WHERE vs HAVING, <code>COUNT(*)</code> vs <code>COUNT(col)</code>, 3NF vs BCNF, clustered vs nonclustered.</li>\n<li>Never leave a gated paper blank: 4/10 is a hard floor.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course, for content practice. Real past papers are added in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Đánh giá · FE</span>\n<h2>FE — Thi cuối kỳ (60 phút, 30%, phải đạt 4/10)</h2>\n<p class=\"lead\">Syllabus DBI202 nói gì về bài thi cuối &mdash; và không nói gì:</p>\n<table>\n<thead><tr><th>Mục</th><th>Giá trị (syllabus ID 12039)</th></tr></thead>\n<tbody>\n<tr><td>Loại</td><td>Final exam</td></tr>\n<tr><td>Số phần</td><td>1</td></tr>\n<tr><td>Trọng số</td><td><strong>30%</strong></td></tr>\n<tr><td>Thời lượng</td><td><strong>60 phút</strong></td></tr>\n<tr><td>Điều kiện hoàn thành</td><td><strong>&ge; 4</strong>/10 &mdash; dưới mức đó là trượt môn dù trung bình bao nhiêu</td></tr>\n<tr><td>Dạng câu hỏi</td><td><strong>Syllabus không nêu</strong> &mdash; chỉ Progress Test được mô tả (&ldquo;Multiple choices; Marked by Computer&hellip;&rdquo;)</td></tr>\n<tr><td>Số câu</td><td><strong>Syllabus không nêu</strong></td></tr>\n</tbody>\n</table>\n<div class=\"callout warn\"><span class=\"badge\">Đính chính</span> Trang này trước đây khẳng định FE là &ldquo;bài trắc nghiệm máy chấm&rdquo; và chỉ bạn sang Bài 0.2 để biết số câu, thời lượng, trọng số và điểm qua. Khẳng định về format không có trong syllabus &mdash; mô tả đó thuộc về Progress Test &mdash; và các con số thật nay đã nằm ở Bài 0.2. Hãy xác nhận format đề với giảng viên hoặc trên FLM.</div>\n<h3>Ôn theo CLO — bảy mảng đề có thể rút ra</h3>\n<ul>\n<li><b>CLO1 khái niệm CSDL &amp; DBMS</b> &mdash; vì sao cần DBMS thay vì tệp, kiến trúc ba mức và tính độc lập dữ liệu, các mô hình dữ liệu. Bài 1.1, 9.2.</li>\n<li><b>CLO2 mô hình quan hệ &amp; đại số quan hệ</b> &mdash; lược đồ vs thể hiện, khoá, và &sigma; &pi; &cup; &cap; &minus; &#8904; &rho;, phép nối ngoài, phép chia. Bài 2.1&ndash;2.4.</li>\n<li><b>CLO3 chuẩn hoá</b> &mdash; phụ thuộc hàm, tiên đề Armstrong, bao đóng thuộc tính, tìm khoá, 1NF&rarr;2NF&rarr;3NF&rarr;BCNF, nối không mất mát và bảo toàn phụ thuộc. Bài 4.1&ndash;4.4.</li>\n<li><b>CLO4 mô hình ER</b> &mdash; thực thể, liên kết, bản số, thực thể yếu, lớp con, và các quy tắc chuyển ERD thành bảng. Bài 3.1&ndash;3.4.</li>\n<li><b>CLO5 SQL DDL &amp; DML</b> &mdash; CREATE/ALTER, năm loại ràng buộc, SELECT có join, truy vấn lồng, tổng hợp, INSERT/UPDATE/DELETE. Bài 5.1&ndash;5.3, 6.1&ndash;6.5.</li>\n<li><b>CLO6 lập trình trong CSDL</b> &mdash; view, stored procedure, function, trigger (kể cả trigger áp đặt luật nghiệp vụ), cursor. Bài 7.1&ndash;7.4.</li>\n<li><b>CLO7 chỉ mục &amp; tối ưu truy vấn</b> &mdash; chỉ mục clustered vs nonclustered, đọc execution plan, giao dịch và ACID. Bài 8.1&ndash;8.3.</li>\n</ul>\n<p>Bài <strong>9.2</strong> trả lời cả 30 câu hỏi kiến tạo của syllabus, nhóm theo CLO &mdash; đó là lượt ôn nhanh nhất có thể cho đề này.</p>\n<h3>Trong phòng thi</h3>\n<ul>\n<li>Chia thời gian: lấy 60 phút chia cho số câu, đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Câu về đại số hay SQL hãy viết bảng kết quả trung gian &mdash; một ví dụ hai dòng giải quyết phần lớn câu &ldquo;truy vấn này trả về gì?&rdquo; nhanh hơn là ngồi suy luận.</li>\n<li>Rà lại các phân biệt kinh điển: WHERE vs HAVING, <code>COUNT(*)</code> vs <code>COUNT(cột)</code>, 3NF vs BCNF, clustered vs nonclustered.</li>\n<li>Đừng bao giờ bỏ trống bài có cổng điểm: 4/10 là sàn cứng.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính khóa học, để luyện nội dung. Đề thi thật được thêm ở trang phòng thi.</div>\n</div>",
-          "quiz": {
-            "timeLimitSeconds": 360,
-            "questions": [
-              {
-                "id": "q1",
-                "points": 1,
-                "question": "A primary key must be…|||Khóa chính phải…",
-                "options": [
-                  "nullable and repeatable|||cho phép null và lặp",
-                  "unique and never null|||duy nhất và không bao giờ null",
-                  "a number|||là một số",
-                  "the first column|||là cột đầu tiên"
-                ],
-                "correctIndex": 1
-              },
-              {
-                "id": "q2",
-                "points": 1,
-                "question": "A foreign key enforces…|||Khóa ngoại đảm bảo…",
-                "options": [
-                  "sorting|||sắp xếp",
-                  "referential integrity (it must point to an existing row)|||toàn vẹn tham chiếu (phải trỏ tới hàng tồn tại)",
-                  "encryption|||mã hóa",
-                  "indexing|||đánh chỉ mục"
-                ],
-                "correctIndex": 1
-              },
-              {
-                "id": "q3",
-                "points": 1,
-                "question": "The relational-algebra selection σ corresponds to SQL…|||Phép chọn σ trong đại số quan hệ tương ứng SQL…",
-                "options": [
-                  "SELECT list|||danh sách SELECT",
-                  "WHERE",
-                  "ORDER BY",
-                  "JOIN"
-                ],
-                "correctIndex": 1
-              },
-              {
-                "id": "q4",
-                "points": 1,
-                "question": "Projection π corresponds to…|||Phép chiếu π tương ứng…",
-                "options": [
-                  "choosing rows|||chọn hàng",
-                  "choosing columns (the SELECT list)|||chọn cột (danh sách SELECT)",
-                  "grouping|||gom nhóm",
-                  "deleting|||xóa"
-                ],
-                "correctIndex": 1
-              },
-              {
-                "id": "q5",
-                "points": 1,
-                "question": "A many-to-many relationship is stored using…|||Liên kết nhiều-nhiều được lưu bằng…",
-                "options": [
-                  "one table|||một bảng",
-                  "a junction table with two foreign keys|||một bảng trung gian với hai khóa ngoại",
-                  "a primary key only|||chỉ một khóa chính",
-                  "no table|||không bảng nào"
-                ],
-                "correctIndex": 1
-              },
-              {
-                "id": "q6",
-                "points": 1,
-                "question": "A functional dependency A → B means…|||Phụ thuộc hàm A → B nghĩa là…",
-                "options": [
-                  "B determines A|||B xác định A",
-                  "A determines B (one A gives one B)|||A xác định B (một A cho một B)",
-                  "they are unrelated|||chúng không liên quan",
-                  "A and B are keys|||A và B là khóa"
-                ],
-                "correctIndex": 1
-              }
-            ]
-          }
+          "quiz": fe.quiz
         }
       ]
     },

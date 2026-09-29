@@ -115,5 +115,33 @@ export default {
     'deploy-11-3-cong-thuc-deploy': { yt: '5zmCTO2UCIk', credit: 'Nozomi Networks — Incident Response (5 Step process) – A Guide.' },    // Incident Response (5 Step process) – A Guide.
     'deploy-11-4-cong-thuc-tai-nguyen': { yt: 'aDNM1hW9Ods', credit: 'quidsup — Solving Disk Usage Issue on Linux Server' },// Solving Disk Usage Issue on Linux Server
     'deploy-11-5-nghiem-thu': { yt: 'iLVoA1DTE60', credit: 'Steve Griffith - Prof3ssorSt3v3 — Testing APIs with the cURL Command' },          // Testing APIs with the cURL Command
+
+    /* ── Bài slide N.0 + bài mới Ch7–15 (29/09/2026) ── */
+    'deploy-7-0-slides': { yt: 'Y_erZnIhgKg', credit: "Better Stack — Bash Script BEST Practices You Need to Know, According to Google" },
+    'deploy-8-0-slides': { yt: 'Cm3-6cOwICU', credit: "Nir Lichtman — What Happens When Linux Runs Out of Memory?" },
+    'deploy-9-0-slides': { yt: 'h4Sl21AKiDg', credit: "TechWorld with Nana — How Prometheus Monitoring works | Prometheus Architecture explained" },
+    'deploy-10-0-slides': { yt: 'S0KZ5iXTkzg', credit: "Jeff Geerling — Backups: You're doing 'em wrong!" },
+    'deploy-10-7-ra-khoi-may': { yt: 'WJzsX32qMJY', credit: "IBM Technology — 3‑2‑1 Backup Rule Explained: Protect Your Data from Disaster" },
+    'deploy-11-0-slides': { yt: 'iJ_eIsA5E1U', credit: "ByteByteGo — Linux Performance Tools!" },
+    'deploy-12-0-slides': { yt: 'DCJiQBag6Fs', credit: "ByteGrad — Dockerize Next.js 16 & Deploy To VPS (+ Custom Domain, SSL, CDN Cloudflare, Docker Compose)" },
+    'deploy-12-1-ten-mien-dns': { yt: 'NiQTs9DbtW4', credit: "NetworkChuck — What is DNS? (and how it makes the Internet work)" },
+    'deploy-12-2-reverse-proxy-tls': { yt: 'jrR_WfgmWEw', credit: "That DevOps Guy — Let's Encrypt Explained: Free SSL" },
+    'deploy-12-3-cong-mo-ra-internet': { yt: 'bpWytcz4uMw', credit: "Awesome Open Source — Docker and Firewalls - Docker wants to punch holes in the local firewall, let's mitigate that issue" },
+    'deploy-12-4-cdn-tep-tinh': { yt: 'Cy2ZJOBgk84', credit: "Software Developer Diaries — Deep Dive into HTTP Caching: cache-control, no-cache, no-store, max-age, ETag and etc." },
+    'deploy-13-0-slides': { yt: 'R8_veQiYBjI', credit: "TechWorld with Nana — GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker" },
+    'deploy-13-1-compose-tren-vps': { yt: 'T--X3v2pwtU', credit: "Nick Janetakis — Best Practices Around Production Ready Web Apps with Docker Compose" },
+    'deploy-13-2-registry-build-o-may-khac': { yt: 'hWSHtHasJUI', credit: "DevOps Directive — How to Build Multi-Architecture Docker Images with BuildX | Deploy containers to x86 and ARM!" },
+    'deploy-13-3-github-actions-deploy': { yt: 'llUzfOCeLH0', credit: "Programonaut — How To Deploy A Git Repository To A Server Using GitHub Actions" },
+    'deploy-13-4-khong-rot-request-voi-container': { yt: 'BiuQ-sVbWGU', credit: "Web Dev Cody — How do software systems achieve zero downtime on new deploys?" },
+    'deploy-14-0-slides': { yt: 'EWS_CIxttVw', credit: "ByteByteGo — Scalability Simply Explained in 10 Minutes" },
+    'deploy-14-1-staging-preview': { yt: 'A1E6P7U_nrk', credit: "Mehul Mohan — 💻 Staging vs Production Environments : How Tech Startups Deploy?" },
+    'deploy-14-2-hai-may-can-bang-tai': { yt: 'a41jxGP9Ic8', credit: "NGINX — Load Balancing with NGINX" },
+    'deploy-14-3-paas-vps-kubernetes': { yt: 'yVuyh95kqXk', credit: "Maximilian Schwarzmüller — Should you use a VPS instead of Vercel, Netlify & co?" },
+    'deploy-14-4-chi-phi-doi-nha-cung-cap': { yt: '1ovdiaB0rMo', credit: "Chris Titus Tech — How to Move VPS Servers" },
+    'deploy-15-0-slides': { yt: 'fuZoxuBiL9o', credit: "Dreams of Code — docker stack is my new favorite way to deploy to a VPS" },
+    'deploy-15-1-may-ten-mien-https': { yt: 'pLXb6TDyIUI', credit: "Learn Linux TV — First Things To Do On Every New Linux Server" },
+    'deploy-15-2-duong-ong-phat-hanh': { yt: 'AknbizcLq4w', credit: "TechWorld with Nana — CI/CD Explained: The DevOps Skill That Makes You 10x More Valuable" },
+    'deploy-15-3-lui-ban-sao-luu': { yt: 'r_A5NKkAqZM', credit: "Techno Tim — Meet Uptime Kuma, a Fancy Open Source Uptime Monitor for all your HomeLab Monitoring Needs" },
+    'deploy-15-4-ra-mat-tuan-dau': { yt: 'tLdRBsuvVKc', credit: "Kevin Fang — Dev Deletes Entire Production Database, Chaos Ensues" },
   },
 };

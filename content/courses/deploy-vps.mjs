@@ -1,6 +1,6 @@
 /**
  * Deploy VPS — khoá học CuongThai (Courses, academyType=GENERAL, KHÔNG thuộc kỳ Academy).
- * Giáo trình tự soạn: 12 mục (Mục 0 + Chương 1–11), zero → một quy trình phát hành
+ * Giáo trình tự soạn: 16 phần (Mục 0 + Chương 1–15), zero → một quy trình phát hành
  * chạy được trên VPS thật, song ngữ EN/VI.
  * Sections tách theo file trong ./deploy-vps/ cho dễ soạn; seeder chỉ đọc file này.
  *
@@ -29,6 +29,10 @@ import s08 from './deploy-vps/s08-may-nho.mjs';
 import s09 from './deploy-vps/s09-giam-sat.mjs';
 import s10 from './deploy-vps/s10-sao-luu.mjs';
 import s11 from './deploy-vps/s11-chan-doan.mjs';
+import s12 from './deploy-vps/s12-ten-mien-https.mjs';
+import s13 from './deploy-vps/s13-container-ci.mjs';
+import s14 from './deploy-vps/s14-moi-truong-mo-rong.mjs';
+import s15 from './deploy-vps/s15-du-an-cuoi-khoa.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -47,7 +51,7 @@ export default {
     //     --slug deploy-vps --icon ubuntu --color E95420 --title "Deploy lên VPS" --subtitle "Máy bạn → Production"
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/deploy-vps.png?v=3',
     shortDescription: 'A deploy is four steps — build an artifact, move it, swap it in, prove it works — and each one has its own way of failing silently. Measured on a real server over real SSH.|||Một lần deploy là bốn bước — dựng tạo tác, chuyển đi, tráo vào, chứng minh nó chạy — và mỗi bước có kiểu hỏng âm thầm riêng. Đo thật trên một máy chủ thật qua SSH thật.',
-    description: 'Khoá deploy lên VPS từ số 0 tới một quy trình phát hành chạy được, do CuongThai tự biên soạn. 12 mục đi từ mô hình bốn bước của một lần deploy, qua cách chuẩn bị máy nhận, ba đường vận chuyển mã (rsync, git, registry) đo bằng byte và giây, cách tráo phiên bản mà không rơi request, nơi cất bí mật, thứ tự chạy migration cơ sở dữ liệu, đường lùi khi hỏng, viết script deploy chịu được lỗi, giới hạn tài nguyên trên một VPS nhỏ, giám sát, sao lưu và phục hồi, cho tới một sách công thức chẩn đoán. Mọi kết quả đều ĐO THẬT trên một máy chủ SSH thật, không chép từ tài liệu.',
+    description: 'Khoá deploy lên VPS từ số 0 tới một quy trình phát hành chạy được, do CuongThai tự biên soạn. 16 phần đi từ mô hình bốn bước của một lần deploy, qua cách chuẩn bị máy nhận, ba đường vận chuyển mã (rsync, git, registry) đo bằng byte và giây, cách tráo phiên bản mà không rơi request, nơi cất bí mật, thứ tự chạy migration cơ sở dữ liệu, đường lùi khi hỏng, viết script deploy chịu được lỗi, giới hạn tài nguyên trên một VPS nhỏ, giám sát, sao lưu và phục hồi, cho tới một sách công thức chẩn đoán; rồi đưa máy chủ ra Internet (tên miền, DNS, HTTPS, tường lửa, CDN), deploy bằng container + registry + GitHub Actions, nhiều môi trường và vượt khỏi một máy (staging, cân bằng tải, PaaS vs VPS, chi phí), và một dự án cuối khoá dựng–phát hành–vận hành trọn vẹn kèm bài thi 20 câu. Mỗi chương có bộ slide riêng, code tô màu, bài tập, thuật ngữ và quiz có giải thích. Mọi kết quả đều ĐO THẬT trên một máy chủ SSH thật, không chép từ tài liệu.',
     whatYouLearn: 'Nhìn một lần deploy thành bốn bước tách rời và biết bước nào đang hỏng; chuẩn bị một VPS mới nhận deploy an toàn bằng khoá SSH và một người dùng riêng; chọn giữa rsync, git và registry bằng số đo chứ không bằng thói quen; tráo phiên bản mà không rơi request, kể cả khi ứng dụng khởi động mất vài giây; cất bí mật ở nơi sống sót qua mọi lần deploy; chạy migration cơ sở dữ liệu theo thứ tự không khoá bảng và không kẹt; lùi lại được khi bản mới hỏng — và biết thứ gì KHÔNG lùi được; viết một script deploy tự dừng khi có gì sai thay vì đi tiếp; sống được trên một VPS 6GB mà không bị OOM hay đầy đĩa; và phục hồi từ bản sao lưu, đo bằng đồng hồ thật.',
     requirements: 'Biết dùng terminal ở mức cơ bản (khoá Linux & Bash của CuongThai bao phần đó). Biết git ở mức commit/push (khoá Git & GitHub là đủ). Hiểu HTTP ở mức request/response. KHÔNG cần biết Docker trước — khoá này có nhắc tới nhưng giải thích lại chỗ cần. Nên có một VPS rẻ tiền để thực hành; không có thì một máy ảo hoặc container cũng chạy được toàn bộ bài.',
     documentsNote: 'Tài liệu tham chiếu chính: man ssh, ssh_config(5), sshd_config(5) và rsync(1) (đây là ba trang man đáng đọc hết) • OpenSSH manual (openssh.com/manual.html) • The Twelve-Factor App (12factor.net — phần III Config và phần V Build/Release/Run là xương sống của khoá này) • systemd.service(5) và systemd.exec(5) cho phần chạy dịch vụ. Phần thực hành đi kèm: track "Deploy VPS" trên Code Lab.',
@@ -65,5 +69,9 @@ export default {
     s09,
     s10,
     s11,
+    s12,
+    s13,
+    s14,
+    s15,
   ],
 };

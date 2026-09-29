@@ -1206,3 +1206,165 @@
 .rateBtn:hover { background: var(--lh-surface-2); }
 .rateOn { background: var(--lh-accent); color: var(--lh-accent-ink); }
 .rateOn:hover { background: var(--lh-accent); }
+
+/* ═══════════ Nâng cấp dễ nhìn (29/09): tóm tắt · công thức 1 dòng · tự kiểm từ vựng · tra cứu ═══════════ */
+/* thêm hai màu thành phần câu: N danh từ (xanh két), adj tính từ (cam) */
+.rN { background: rgba(13, 148, 136, 0.14); color: #0f766e; }
+.rAdj { background: rgba(234, 88, 12, 0.14); color: #c2410c; }
+:global(html.theme-dark) .rN { background: rgba(45, 212, 191, 0.16); color: #5eead4; }
+:global(html.theme-dark) .rAdj { background: rgba(251, 146, 60, 0.16); color: #fdba74; }
+.legendItem { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; white-space: nowrap; }
+.legend .legendItem .role { margin-left: 0; }
+
+/* 🎯 tóm tắt đầu bài */
+.recap {
+  margin: 20px 0 24px;
+  padding: 16px 18px 14px;
+  border: 1.5px solid color-mix(in srgb, var(--k) 45%, var(--lh-line));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--k) 7%, var(--lh-surface));
+}
+.recapTitle { font-size: 15px; font-weight: 750; color: color-mix(in srgb, var(--k) 70%, var(--lh-ink)); }
+.recapList { margin: 8px 0 0; padding-left: 22px; list-style: decimal; }
+.recapList li { margin-top: 6px; font-size: 15.5px; line-height: 1.6; color: var(--lh-ink); }
+.recapList li::marker { font-weight: 700; color: color-mix(in srgb, var(--k) 70%, var(--lh-ink)); }
+.recapList b { font-weight: 700; color: color-mix(in srgb, var(--k) 75%, var(--lh-ink)); }
+.recapList s { color: var(--lh-bad); text-decoration-thickness: 2px; }
+
+/* công thức 1 dòng: dải nổi bật chốt cuối mỗi điểm ngữ pháp */
+.rule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 16px 0 6px;
+  padding: 12px 14px;
+  border: 2px dashed color-mix(in srgb, var(--k) 60%, var(--lh-ink));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--k) 6%, var(--lh-bg));
+}
+.ruleTag {
+  flex-shrink: 0;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--k) 80%, var(--lh-ink));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+:global(html.theme-dark) .ruleTag { color: #111; background: color-mix(in srgb, var(--k) 75%, #fff); }
+.ruleFormula { font-size: 16px; line-height: 1.7; color: var(--lh-ink); overflow-wrap: anywhere; }
+.ruleVi { flex-basis: 100%; font-size: 14.5px; line-height: 1.55; color: var(--lh-ink-2); }
+.ruleVi b { color: var(--lh-ink); }
+
+/* tự kiểm tra từ vựng */
+.vocabBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--lh-line);
+  background: color-mix(in srgb, var(--k) 5%, var(--lh-surface));
+}
+.vocabBarLabel { font-size: 13px; font-weight: 700; color: var(--lh-ink-2); margin-right: 2px; }
+.vocabBarCount { margin-left: auto; font-size: 12.5px; color: var(--lh-ink-3); }
+.vocabBar .chipOn, .traTools .chipOn { color: var(--lh-ink); font-weight: 650; }
+.vocabHow { padding: 8px 16px; font-size: 13.5px; color: var(--lh-ink-2); border-bottom: 1px solid var(--lh-line); background: var(--lh-bg); }
+.mask {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0 6px;
+  border: 1px dashed color-mix(in srgb, var(--k) 55%, var(--lh-line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--k) 8%, var(--lh-bg));
+  cursor: pointer;
+  text-align: left;
+}
+.maskInner { filter: blur(7px); opacity: 0.55; user-select: none; pointer-events: none; }
+.maskHint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 650; color: var(--lh-ink-2); white-space: nowrap; }
+.mask:hover { border-style: solid; }
+.speakGhost { display: inline-block; width: 28px; height: 28px; border-radius: 999px; border: 1px dashed var(--lh-line); }
+.wordMore { display: flex; gap: 6px; margin-top: 6px; padding: 6px 10px; border-radius: 8px; background: color-mix(in srgb, var(--k) 6%, var(--lh-bg)); font-size: 14px; line-height: 1.55; color: var(--lh-ink-2); }
+.wordMore b { color: var(--lh-ink); font-weight: 650; }
+.wordMore s { color: var(--lh-bad); }
+.wordMoreTag { flex-shrink: 0; font-weight: 800; color: color-mix(in srgb, var(--k) 75%, var(--lh-ink)); }
+
+/* tra cứu từ vựng cả khoá */
+.traWrap { margin: 16px 0; }
+.traTools { display: grid; gap: 10px; }
+.traTools .input { width: 100%; min-width: 0; }
+.traSep { flex: 1; }
+.traRow {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 6px 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--lh-line);
+}
+.traRow:last-child { border-bottom: none; }
+.traRow:nth-child(even) { background: color-mix(in srgb, var(--k) 3%, transparent); }
+.traMain { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; min-width: 0; }
+.traVi { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 8px; min-width: 0; }
+.traDay { font-size: 12px; color: var(--lh-ink-3); white-space: nowrap; }
+@media (max-width: 560px) {
+  .traRow { grid-template-columns: 28px minmax(0, 1fr); }
+  .traVi { grid-column: 2; }
+}
+.flashWrap { margin: 16px 0; }
+.flashTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.flash {
+  display: flex;
+  width: 100%;
+  min-height: 220px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px 20px;
+  border: 2px solid color-mix(in srgb, var(--k) 45%, var(--lh-line));
+  border-radius: 18px;
+  background: var(--lh-surface);
+  text-align: center;
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--k) 25%, var(--lh-line));
+}
+.flashOn { background: color-mix(in srgb, var(--k) 6%, var(--lh-surface)); }
+.flashFront { font-family: var(--font-fraunces), 'Fraunces Variable', Georgia, serif; font-size: clamp(26px, 6vw, 38px); font-weight: 600; color: var(--lh-ink); line-height: 1.25; }
+.flashSub { font-family: var(--font-jetbrains-mono), ui-monospace, monospace; font-size: 15px; color: var(--lh-ink-3); }
+.flashBack { font-size: 19px; font-weight: 600; color: var(--lh-accent); }
+.flashHint { font-size: 13.5px; color: var(--lh-ink-3); }
+.flashNav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+/* chữ Việt xen trong công thức: font thường, nhẹ hơn ký hiệu */
+.fVi { font-family: var(--font-inter), Inter, system-ui, sans-serif; font-weight: 500; font-size: 0.92em; color: var(--lh-ink-2); }
+/* đầu bảng được xuống dòng — bảng nhiều cột không bị đẩy tràn ngang trong cột bài hẹp */
+.table th { white-space: normal; min-width: 5.5em; line-height: 1.35; }
+.cellFirst { white-space: normal; min-width: 6.5em; }
+.recapList b { color: color-mix(in srgb, var(--k) 55%, var(--lh-ink)); }
+/* bảng chữ dài trên điện thoại: mỗi hàng một thẻ */
+@media (max-width: 560px) {
+  .cardTable thead { display: none; }
+  .cardTable tr, .cardTable td { display: block; width: 100%; }
+  .cardTable td.cellFirst { padding-bottom: 2px; border-bottom: none; font-size: 15.5px; }
+  .cardTable td[data-label] { padding-top: 6px; padding-bottom: 6px; border-bottom: none; }
+  .cardTable td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--k) 65%, var(--lh-ink-3));
+  }
+  .cardTable tr { padding-bottom: 8px; border-bottom: 1px solid var(--lh-line); }
+  .cardTable tr:last-child { border-bottom: none; }
+  .gbox { padding: 26px 12px 12px; }
+}
+/* điện thoại: tiêu đề khung ngữ pháp dài 2 dòng không đè lên chữ bên dưới */
+@media (max-width: 560px) {
+  .gbox { padding-top: 0; }
+  .gboxTitle { position: relative; top: -17px; left: 0; display: inline-block; max-width: 100%; margin-bottom: -6px; }
+}

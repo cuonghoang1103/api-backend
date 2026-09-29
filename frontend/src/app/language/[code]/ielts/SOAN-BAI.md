@@ -36,6 +36,19 @@ iCloud `~/Ielts` (ảnh HEIC, hay bị xoay ngang) để soạn từng đợt.
     thận" → ⚠️ Watch out; "mẹo/cách học" → 💡; còn lại → 📌 Ghi nhớ),
     `examples`, `vocab` (w, pos, ipa, vi, ex, exVi — từ tự tô dạ quang trong
     `ex`), `alphabet`.
+  - Nâng cấp dễ nhìn (29/09/2026) — BẮT BUỘC cho ngày mới:
+    - `recap` (items, title?) — khối **đầu tiên** của mỗi bài: 3–6 ý "bài này học gì / cần nhớ gì".
+    - `rule` (formula, vi?) — "Công thức 1 dòng", đặt **cuối mỗi điểm ngữ pháp** (trước `h` kế tiếp);
+      bài kỹ năng dùng cho khung câu mẫu quan trọng.
+    - Mỗi điểm ngữ pháp có **bài dịch Việt→Anh 3–5 câu** (`quiz` kind `translate`, `grammar` +
+      `hint` cho nút 💡) đặt ngay sau `rule`; id dạng `dN-<muc>-dich`.
+    - `vocab` item có thể thêm `more` (collocation / họ từ / lỗi hay sai). Khối `vocab` tự có nút
+      "Che nghĩa / Che từ" để tự kiểm — không phải khai gì.
+    - Ký hiệu tô màu trong `formula` (patterns, rule, ô bảng bắt đầu bằng S/V/N/Do…): `S V O C A N adj adv
+      Wh- V-ing V-ed V3 V(s/es) to V`, trợ động từ `do/does/did/don't…`, `am/is/are/was/were/be`, `not`,
+      `will`, `have/has`. "am / is / are" cùng vai tự gộp một ô; chữ Việt trong công thức hiện font thường.
+    - KHÔNG dùng `*nghiêng*` (một dấu sao) — bộ khung không hiểu, hiện nguyên dấu sao. Dùng `**đậm**`.
+    - Bảng ≥ 3 cột chữ dài tự xếp thành thẻ trên điện thoại (nhãn cột lấy từ `head`) — `head` phải ngắn, rõ.
   - Bài tập: `quiz` (`fill` | `translate` — `translate` có `hint` = từ cần dùng
     và `grammar` = cấu trúc, hiện trong nút 💡 Gợi ý), `mcq` (có `why`),
     `dictation` (đánh vần).
@@ -49,7 +62,14 @@ iCloud `~/Ielts` (ảnh HEIC, hay bị xoay ngang) để soạn từng đợt.
   khối `listen` bằng `quiz`/`mcq`.
 - `goal` mỗi bài một câu "học xong làm được gì"; `minutes` ước lượng thật.
 
-## 3. Kiểm trước khi deploy
+## 3. Mục tra cứu cả khoá (`tracuu.ts`, 29/09/2026)
+
+- `?bai=tra-cong-thuc` — mọi công thức + khung câu Nói/Viết, gom theo điểm ngữ pháp, ghi ngày học chi
+  tiết. **Soạn ngày có ngữ pháp mới → thêm một mục `h` + `patterns`/`table` + `rule` vào đây.**
+- `?bai=tra-tu-vung` — khối `vocabAll`: toàn bộ từ vựng lấy từ mục lục (manifest) — tự cập nhật,
+  tìm Anh/Việt (không dấu), lọc theo ngày, che nghĩa/che từ, thẻ nhớ Anh→Việt / Việt→Anh.
+
+## 4. Kiểm trước khi deploy
 
 1. `(cd frontend && npx tsc --noEmit)`.
 2. Chạy dev (`NEXT_DIST_DIR=.next-xxx`) và mở `?buoi=N` + từng `?bai=…`, chụp
@@ -57,7 +77,7 @@ iCloud `~/Ielts` (ảnh HEIC, hay bị xoay ngang) để soạn từng đợt.
 3. Đếm lại với bản trích sách: số từ, số câu từng bài tập khớp.
 4. Commit chỉ các tệp của mình (pathspec), `deploy-nha.sh` (tự push).
 
-## 4. Tiến độ soạn
+## 5. Tiến độ soạn
 
 | Day | Trạng thái |
 |---|---|
@@ -65,4 +85,5 @@ iCloud `~/Ielts` (ảnh HEIC, hay bị xoay ngang) để soạn từng đợt.
 | 2–4 | ✅ đủ (trang 20–75, soạn 27/09/2026; sách không in đáp án Day 2–4 → đáp án tự soạn & kiểm) |
 | 5 | ✅ trang 75–90 (28/09): danh từ đếm/không đếm được, Remote Work, Dictation 2, homework 12+10 |
 | 6 | ✅ trang 91–110 (28/09): Flow-chart Completion, Opinion intro 5 bước, Speaking Wh- (Daily Routine 6 câu, Family 2), 8 nguyên âm đôi, homework 6 chỗ trống |
+| 1–6 | 🔎 rà soát lại toàn bộ với ảnh 29/09/2026: đủ từ/câu như sách; thêm recap, rule, bài dịch 💡 từng điểm ngữ pháp, `more` cho từ vựng; Ngày 6 bài đọc sửa cho đáp án khớp Answer Explanation (firm · simplicity · full version · feedback) |
 | 7–15 | chờ ảnh (ảnh mới bắt đầu từ trang 111) |

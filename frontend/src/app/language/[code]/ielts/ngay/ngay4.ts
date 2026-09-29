@@ -1,5 +1,5 @@
 /**
- * Ngày 4 — sách trang 54–73:
+ * Ngày 4 — sách trang 54–74:
  *   Reading Skills: Sentence Completion 1 · Writing Skills: Introduction to
  *   IELTS Writing Task 1 · Speaking Skills: Yes/No Questions (Part 1, Hobbies)
  *   · Homework (34 câu dịch + điền từ theo khung).
@@ -16,8 +16,18 @@ const D4_READING: Lesson = {
   kind: "reading",
   title: "Đọc: Sentence Completion 1 (hoàn thành câu)",
   goal: "Làm được dạng Sentence Completion theo 9 bước: đọc kỹ giới hạn số từ, đoán từ loại, tìm từ khoá, dò ra câu được viết lại (paraphrase) và điền đúng từ trong bài.",
-  minutes: 40,
+  minutes: 45,
   blocks: [
+    {
+      t: "recap",
+      items: [
+        "**Sentence Completion** (hoàn thành câu): điền vào chỗ trống bằng từ ==chép đúng từ bài đọc==, không tự đổi từ.",
+        "Đọc **giới hạn số từ** trước tiên (ONE WORD ONLY / NO MORE THAN TWO WORDS). Quá số từ = sai cả câu.",
+        "Nhìn từ đứng quanh chỗ trống để **đoán từ loại**: sau a/the/tính từ → danh từ; sau to/can → động từ.",
+        "Câu hỏi luôn **viết lại (paraphrase)** câu trong bài: closed ↔ shut, half ↔ 15/30. Săn **từ đồng nghĩa**, không săn từ giống hệt.",
+        "Cuối bài: **42 từ vựng** của bài đọc (đủ như sách) — 34 từ đầu dùng lại trong Bài tập Ngày 4.",
+      ],
+    },
     {
       t: "p",
       text: "**Sentence Completion** (hoàn thành câu) là dạng bài cho sẵn một câu hoặc một bản ghi chú (notes) có chỗ trống. Bạn phải **lấy đúng từ trong bài đọc** để điền vào. Đây là dạng dễ lấy điểm với người mới, vì đáp án **có sẵn trong bài**, bạn không phải tự nghĩ ra từ, chỉ cần tìm đúng chỗ.",
@@ -61,6 +71,16 @@ const D4_READING: Lesson = {
         "Điền quá số từ: đề ONE WORD ONLY mà viết ~~the market~~ là sai, chỉ viết **market**.",
         "Thấy đúng từ khoá là điền luôn từ đứng cạnh, không đọc lại cả câu. Luôn làm **bước 7 và bước 9**.",
       ],
+    },
+    {
+      t: "rule",
+      formula: "a / an / the / adj + ___ → N    ·    to / can / will + ___ → V    ·    is / are / very + ___ → adj",
+      vi: "Bước 3 — đoán từ loại trước khi quét bài: biết mình đang săn danh từ, động từ hay tính từ thì loại được ngay các từ sai.",
+    },
+    {
+      t: "rule",
+      formula: "Câu hỏi (paraphrase)  ↔  câu trong bài  →  chép ĐÚNG từ trong bài (≤ số từ cho phép)",
+      vi: "Công thức cả dạng bài: tìm câu trong bài có cùng nghĩa với câu hỏi, rồi chép nguyên chữ (đúng chính tả, đúng số ít/số nhiều).",
     },
     {
       t: "note",
@@ -175,7 +195,7 @@ const D4_READING: Lesson = {
       title: "Giải thích đáp án câu 1: skills",
       items: [
         "**Dạng câu hỏi:** Sentence Completion · **Vị trí:** đoạn A, câu 4.",
-        "Bài viết: “The first was to understand the range of physical and cognitive **skills** that young children bring to a tablet.” — *Mục tiêu thứ nhất là hiểu các kỹ năng thể chất và nhận thức mà trẻ nhỏ mang theo khi dùng máy tính bảng.*",
+        "Bài viết: “The first was to understand the range of physical and cognitive **skills** that young children bring to a tablet.” — **Mục tiêu thứ nhất là hiểu các kỹ năng thể chất và nhận thức mà trẻ nhỏ mang theo khi dùng máy tính bảng.**",
         "Paraphrase: **mental** (thuộc về trí óc) = **cognitive** (nhận thức); **Identify** (xác định) ≈ **understand**. Sau hai tính từ physical and mental phải là **danh từ số nhiều** → **skills**.",
         "Không điền ~~range~~: “physical and mental range” không có nghĩa. Trong bài, hai tính từ physical and cognitive đứng ngay trước **skills**, đúng như hai tính từ physical and mental đứng trước chỗ trống.",
       ],
@@ -185,7 +205,7 @@ const D4_READING: Lesson = {
       title: "Giải thích đáp án câu 2: teachers",
       items: [
         "**Dạng câu hỏi:** Sentence Completion · **Vị trí:** đoạn A, câu 6 (câu cuối).",
-        "Bài viết: “The third was to find out the expectations of **teachers**, since many children meet a tablet for the first time in the classroom.” — *Mục tiêu thứ ba là tìm hiểu kỳ vọng của giáo viên, vì nhiều trẻ lần đầu gặp máy tính bảng ở lớp học.*",
+        "Bài viết: “The third was to find out the expectations of **teachers**, since many children meet a tablet for the first time in the classroom.” — **Mục tiêu thứ ba là tìm hiểu kỳ vọng của giáo viên, vì nhiều trẻ lần đầu gặp máy tính bảng ở lớp học.**",
         "Paraphrase: **Discover** = **find out**; **what (2) expect** = **the expectations of (2)**. Danh từ “expectations” trong bài đã được đổi thành động từ “expect” trong câu hỏi: đây là kiểu viết lại rất hay gặp.",
         "Không điền ~~producers~~: đoạn A chỉ nói người sản xuất **quan tâm** tới ý tưởng (interest), không nói họ kỳ vọng gì ở ứng dụng học tập.",
       ],
@@ -195,7 +215,7 @@ const D4_READING: Lesson = {
       title: "Giải thích đáp án câu 3: regions",
       items: [
         "**Dạng câu hỏi:** Sentence Completion · **Vị trí:** đoạn B, câu 2.",
-        "Bài viết: “They therefore started by conducting 30 home visits in three **regions** of the country: an urban district of Hanoi, a suburban area… and a rural village…” — *Vì vậy họ bắt đầu bằng 30 lần đến thăm tại nhà ở ba vùng của đất nước: một quận nội thành Hà Nội, một khu ngoại ô… và một làng quê…*",
+        "Bài viết: “They therefore started by conducting 30 home visits in three **regions** of the country: an urban district of Hanoi, a suburban area… and a rural village…” — **Vì vậy họ bắt đầu bằng 30 lần đến thăm tại nhà ở ba vùng của đất nước: một quận nội thành Hà Nội, một khu ngoại ô… và một làng quê…**",
         "Từ khoá dễ dò: con số **30** và **three**. Sau “three” cần **danh từ số nhiều** → **regions** (nhớ giữ đuôi -s).",
         "Không điền ~~districts~~ hay ~~areas~~: bài không viết số nhiều của chúng, và chúng chỉ là **từng** nơi cụ thể trong ba vùng.",
       ],
@@ -205,7 +225,7 @@ const D4_READING: Lesson = {
       title: "Giải thích đáp án câu 4: grandparents",
       items: [
         "**Dạng câu hỏi:** Sentence Completion · **Vị trí:** đoạn C, câu 3.",
-        "Bài viết: “In many homes, the children were looked after during the day by their **grandparents** while both parents were at work.” — *Ở nhiều nhà, ban ngày trẻ được ông bà trông trong khi bố mẹ đi làm.*",
+        "Bài viết: “In many homes, the children were looked after during the day by their **grandparents** while both parents were at work.” — **Ở nhiều nhà, ban ngày trẻ được ông bà trông trong khi bố mẹ đi làm.**",
         "Paraphrase: **Many children spend the day with** ≈ **In many homes, the children were looked after during the day by**. Câu bị động trong bài (were looked after by) đã được đổi thành câu chủ động trong câu hỏi.",
         "Bẫy: ~~parents~~ đứng ngay sau, nhưng bố mẹ **đi làm** (at work), không ở cùng trẻ ban ngày. Còn ~~siblings~~ ở câu trước nói về anh chị, không nói ai trông trẻ.",
       ],
@@ -215,7 +235,7 @@ const D4_READING: Lesson = {
       title: "Giải thích đáp án câu 5: tablet",
       items: [
         "**Dạng câu hỏi:** Sentence Completion · **Vị trí:** đoạn C, câu 4.",
-        "Bài viết: “Fifteen of the thirty families already owned a **tablet**; for the others, the researchers brought one along.” — *Mười lăm trong ba mươi gia đình đã có sẵn máy tính bảng; với các gia đình còn lại, nhà nghiên cứu mang một chiếc đến.*",
+        "Bài viết: “Fifteen of the thirty families already owned a **tablet**; for the others, the researchers brought one along.” — **Mười lăm trong ba mươi gia đình đã có sẵn máy tính bảng; với các gia đình còn lại, nhà nghiên cứu mang một chiếc đến.**",
         "Paraphrase bằng **con số**: 15 trên 30 = **Half** (một nửa); **already owned** = **had… before the study**. Trước chỗ trống có **a** → danh từ số ít → **tablet** (không có -s).",
         "Đây là kiểu viết lại khó nhất với người mới: bài không có chữ “half”, bạn phải tự tính. Gặp con số trong bài, luôn thử xem câu hỏi có nói bằng **phân số, phần trăm** hay không.",
       ],
@@ -229,48 +249,48 @@ const D4_READING: Lesson = {
     {
       t: "vocab",
       items: [
-        { w: "combination", pos: "n", ipa: "/ˌkɒmbɪˈneɪʃn/", vi: "sự kết hợp", ex: "Pho is a combination of rice noodles, broth and herbs.", exVi: "Phở là sự kết hợp của bánh phở, nước dùng và rau thơm." },
-        { w: "instinctive", pos: "adj", ipa: "/ɪnˈstɪŋktɪv/", vi: "theo bản năng", ex: "Pulling your hand away from a hot pan is instinctive.", exVi: "Rụt tay khỏi chảo nóng là phản xạ theo bản năng." },
-        { w: "interest", pos: "n", ipa: "/ˈɪntrəst/", vi: "sự quan tâm, sở thích", ex: "My sister has a strong interest in space.", exVi: "Chị tôi rất quan tâm đến vũ trụ." },
-        { w: "intuitive", pos: "adj", ipa: "/ɪnˈtjuːɪtɪv/", vi: "theo trực giác; (thiết kế) dễ dùng, nhìn là biết cách dùng", ex: "The new menu is so intuitive that my grandfather uses it easily.", exVi: "Menu mới dễ dùng đến mức ông tôi dùng được ngay." },
-        { w: "agree", pos: "v", ipa: "/əˈɡriː/", vi: "đồng ý", ex: "We agreed to meet at the library at eight.", exVi: "Chúng tôi đồng ý gặp nhau ở thư viện lúc tám giờ." },
-        { w: "goal", pos: "n", ipa: "/ɡəʊl/", vi: "mục tiêu", ex: "Set a small goal for every study session.", exVi: "Hãy đặt một mục tiêu nhỏ cho mỗi buổi học." },
-        { w: "project", pos: "n", ipa: "/ˈprɒdʒekt/", vi: "dự án", ex: "Our science project is about recycling plastic.", exVi: "Dự án khoa học của chúng tôi nói về tái chế nhựa." },
-        { w: "understand", pos: "v", ipa: "/ˌʌndəˈstænd/", vi: "hiểu", ex: "Read the question twice if you don't understand it.", exVi: "Hãy đọc câu hỏi hai lần nếu bạn chưa hiểu." },
-        { w: "range", pos: "n", ipa: "/reɪndʒ/", vi: "phạm vi, loạt (nhiều loại khác nhau)", ex: "The shop sells a wide range of school bags.", exVi: "Cửa hàng bán rất nhiều loại cặp sách." },
-        { w: "physical", pos: "adj", ipa: "/ˈfɪzɪkl/", vi: "thuộc về thể chất, cơ thể", ex: "Swimming is good for your physical health.", exVi: "Bơi lội tốt cho sức khoẻ thể chất." },
-        { w: "cognitive", pos: "adj", ipa: "/ˈkɒɡnətɪv/", vi: "thuộc về nhận thức (suy nghĩ, ghi nhớ, hiểu)", ex: "Chess can improve a child's cognitive skills.", exVi: "Cờ vua có thể cải thiện kỹ năng nhận thức của trẻ." },
-        { w: "ability", pos: "n", ipa: "/əˈbɪləti/", vi: "khả năng", ex: "She has the ability to explain hard ideas simply.", exVi: "Cô ấy có khả năng giải thích ý khó một cách đơn giản." },
-        { w: "context", pos: "n", ipa: "/ˈkɒntekst/", vi: "bối cảnh, ngữ cảnh", ex: "You can often guess a word from its context.", exVi: "Bạn thường đoán được nghĩa một từ nhờ ngữ cảnh." },
+        { w: "combination", pos: "n", ipa: "/ˌkɒmbɪˈneɪʃn/", vi: "sự kết hợp", ex: "Pho is a combination of rice noodles, broth and herbs.", exVi: "Phở là sự kết hợp của bánh phở, nước dùng và rau thơm.", more: "**a combination of** A and B · động từ: **combine** A **with** B" },
+        { w: "instinctive", pos: "adj", ipa: "/ɪnˈstɪŋktɪv/", vi: "theo bản năng", ex: "Pulling your hand away from a hot pan is instinctive.", exVi: "Rụt tay khỏi chảo nóng là phản xạ theo bản năng.", more: "an instinctive **reaction / feeling** · n: instinct · adv: instinctively" },
+        { w: "interest", pos: "n", ipa: "/ˈɪntrəst/", vi: "sự quan tâm, sở thích", ex: "My sister has a strong interest in space.", exVi: "Chị tôi rất quan tâm đến vũ trụ.", more: "**have an interest in** sth · **show / lose** interest · adj: interested **in** (người) ≠ interesting (vật)" },
+        { w: "intuitive", pos: "adj", ipa: "/ɪnˈtjuːɪtɪv/", vi: "theo trực giác; (thiết kế) dễ dùng, nhìn là biết cách dùng", ex: "The new menu is so intuitive that my grandfather uses it easily.", exVi: "Menu mới dễ dùng đến mức ông tôi dùng được ngay.", more: "an intuitive **design / interface** (dễ dùng) · ≠ instinctive: intuitive nói về hiểu/cảm nhận, instinctive nói về phản xạ" },
+        { w: "agree", pos: "v", ipa: "/əˈɡriː/", vi: "đồng ý", ex: "We agreed to meet at the library at eight.", exVi: "Chúng tôi đồng ý gặp nhau ở thư viện lúc tám giờ.", more: "agree **with** sb · agree **to** V (đồng ý làm) · agree **on** sth (thống nhất) · ~~I am agree~~ → **I agree**" },
+        { w: "goal", pos: "n", ipa: "/ɡəʊl/", vi: "mục tiêu", ex: "Set a small goal for every study session.", exVi: "Hãy đặt một mục tiêu nhỏ cho mỗi buổi học.", more: "**set / reach / achieve** a goal · a **long-term / short-term** goal" },
+        { w: "project", pos: "n", ipa: "/ˈprɒdʒekt/", vi: "dự án", ex: "Our science project is about recycling plastic.", exVi: "Dự án khoa học của chúng tôi nói về tái chế nhựa.", more: "**work on / carry out** a project · danh từ /ˈprɒdʒekt/ ≠ động từ project /prəˈdʒekt/ (dự báo)" },
+        { w: "understand", pos: "v", ipa: "/ˌʌndəˈstænd/", vi: "hiểu", ex: "Read the question twice if you don't understand it.", exVi: "Hãy đọc câu hỏi hai lần nếu bạn chưa hiểu.", more: "bất quy tắc: understand – **understood** – understood · n: understanding" },
+        { w: "range", pos: "n", ipa: "/reɪndʒ/", vi: "phạm vi, loạt (nhiều loại khác nhau)", ex: "The shop sells a wide range of school bags.", exVi: "Cửa hàng bán rất nhiều loại cặp sách.", more: "**a wide range of** + N số nhiều · **range from A to B** (xem mục range from)" },
+        { w: "physical", pos: "adj", ipa: "/ˈfɪzɪkl/", vi: "thuộc về thể chất, cơ thể", ex: "Swimming is good for your physical health.", exVi: "Bơi lội tốt cho sức khoẻ thể chất.", more: "physical **health / activity / exercise** · adv: physically" },
+        { w: "cognitive", pos: "adj", ipa: "/ˈkɒɡnətɪv/", vi: "thuộc về nhận thức (suy nghĩ, ghi nhớ, hiểu)", ex: "Chess can improve a child's cognitive skills.", exVi: "Cờ vua có thể cải thiện kỹ năng nhận thức của trẻ.", more: "cognitive **skills / development / abilities** — từ học thuật, hay gặp trong bài đọc về trẻ em" },
+        { w: "ability", pos: "n", ipa: "/əˈbɪləti/", vi: "khả năng", ex: "She has the ability to explain hard ideas simply.", exVi: "Cô ấy có khả năng giải thích ý khó một cách đơn giản.", more: "the ability **to** V · ~~ability of doing~~ · adj: able (be able to V)" },
+        { w: "context", pos: "n", ipa: "/ˈkɒntekst/", vi: "bối cảnh, ngữ cảnh", ex: "You can often guess a word from its context.", exVi: "Bạn thường đoán được nghĩa một từ nhờ ngữ cảnh.", more: "**in the context of** sth · guess a word **from context**" },
         { w: "system", pos: "n", ipa: "/ˈsɪstəm/", vi: "hệ thống", ex: "The school uses a new system to take attendance.", exVi: "Trường dùng một hệ thống mới để điểm danh." },
-        { w: "urban", pos: "adj", ipa: "/ˈɜːbən/", vi: "thuộc đô thị, thành thị", ex: "Urban traffic gets worse every year.", exVi: "Giao thông đô thị ngày càng tệ hơn mỗi năm." },
-        { w: "suburban", pos: "adj", ipa: "/səˈbɜːbən/", vi: "thuộc ngoại ô", ex: "They moved to a suburban house with a small garden.", exVi: "Họ chuyển đến một ngôi nhà ngoại ô có vườn nhỏ." },
-        { w: "interact", pos: "v", ipa: "/ˌɪntərˈækt/", vi: "tương tác", ex: "Good teachers interact with every student in the class.", exVi: "Giáo viên giỏi tương tác với mọi học sinh trong lớp." },
-        { w: "control", pos: "v", ipa: "/kənˈtrəʊl/", vi: "điều khiển, kiểm soát", ex: "You control the robot with this small remote.", exVi: "Bạn điều khiển con robot bằng chiếc điều khiển nhỏ này." },
-        { w: "different", pos: "adj", ipa: "/ˈdɪfrənt/", vi: "khác, khác nhau", ex: "My twin brother and I have very different tastes in music.", exVi: "Anh em sinh đôi chúng tôi có gu âm nhạc rất khác nhau." },
-        { w: "mechanics", pos: "n", ipa: "/mɪˈkænɪks/", vi: "cơ chế (cách một thứ vận hành); game mechanics = cơ chế trò chơi", ex: "The mechanics of this puzzle game are easy to learn.", exVi: "Cơ chế của trò chơi giải đố này dễ học." },
-        { w: "present", pos: "adj", ipa: "/ˈpreznt/", vi: "hiện tại, hiện nay", ex: "The present price of rice is higher than last year.", exVi: "Giá gạo hiện nay cao hơn năm ngoái." },
-        { w: "market", pos: "n", ipa: "/ˈmɑːkɪt/", vi: "thị trường; chợ", ex: "Many new phones enter the market every year.", exVi: "Mỗi năm có nhiều điện thoại mới ra thị trường." },
-        { w: "platform", pos: "n", ipa: "/ˈplætfɔːm/", vi: "nền tảng", ex: "This game is available on every platform.", exVi: "Trò chơi này có trên mọi nền tảng." },
-        { w: "expectation", pos: "n", ipa: "/ˌekspekˈteɪʃn/", vi: "sự kỳ vọng", ex: "The film did not meet my expectations.", exVi: "Bộ phim không đạt được kỳ vọng của tôi." },
-        { w: "parent", pos: "n", ipa: "/ˈpeərənt/", vi: "cha hoặc mẹ; parents = bố mẹ, phụ huynh", ex: "Every parent wants their child to be safe online.", exVi: "Cha mẹ nào cũng muốn con an toàn trên mạng." },
-        { w: "purchase", pos: "v", ipa: "/ˈpɜːtʃəs/", vi: "mua (trang trọng hơn buy)", ex: "You can purchase tickets at the front desk.", exVi: "Bạn có thể mua vé ở quầy lễ tân." },
-        { w: "occur", pos: "v", ipa: "/əˈkɜː(r)/", vi: "xảy ra", ex: "Most floods occur between September and November.", exVi: "Phần lớn lũ lụt xảy ra từ tháng Chín đến tháng Mười Một." },
+        { w: "urban", pos: "adj", ipa: "/ˈɜːbən/", vi: "thuộc đô thị, thành thị", ex: "Urban traffic gets worse every year.", exVi: "Giao thông đô thị ngày càng tệ hơn mỗi năm.", more: "**urban areas** ≠ **rural areas** · n: urbanisation (đô thị hoá) — hay gặp ở Task 1 & 2" },
+        { w: "suburban", pos: "adj", ipa: "/səˈbɜːbən/", vi: "thuộc ngoại ô", ex: "They moved to a suburban house with a small garden.", exVi: "Họ chuyển đến một ngôi nhà ngoại ô có vườn nhỏ.", more: "n: **the suburbs** (vùng ngoại ô) · live **in the suburbs**" },
+        { w: "interact", pos: "v", ipa: "/ˌɪntərˈækt/", vi: "tương tác", ex: "Good teachers interact with every student in the class.", exVi: "Giáo viên giỏi tương tác với mọi học sinh trong lớp.", more: "interact **with** sb/sth · n: interaction · adj: **interactive**" },
+        { w: "control", pos: "v", ipa: "/kənˈtrəʊl/", vi: "điều khiển, kiểm soát", ex: "You control the robot with this small remote.", exVi: "Bạn điều khiển con robot bằng chiếc điều khiển nhỏ này.", more: "control **a device / your spending** · danh từ: **be in control of** · quá khứ: controlled (gấp đôi l)" },
+        { w: "different", pos: "adj", ipa: "/ˈdɪfrənt/", vi: "khác, khác nhau", ex: "My twin brother and I have very different tastes in music.", exVi: "Anh em sinh đôi chúng tôi có gu âm nhạc rất khác nhau.", more: "different **from** sth (~~different with~~) · n: difference · **make a difference**" },
+        { w: "mechanics", pos: "n", ipa: "/mɪˈkænɪks/", vi: "cơ chế (cách một thứ vận hành); game mechanics = cơ chế trò chơi", ex: "The mechanics of this puzzle game are easy to learn.", exVi: "Cơ chế của trò chơi giải đố này dễ học.", more: "**game mechanics** · a **mechanic** = thợ máy (khác nghĩa!)" },
+        { w: "present", pos: "adj", ipa: "/ˈpreznt/", vi: "hiện tại, hiện nay", ex: "The present price of rice is higher than last year.", exVi: "Giá gạo hiện nay cao hơn năm ngoái.", more: "**at present** = hiện nay · adv: presently · động từ present /prɪˈzent/ = trình bày" },
+        { w: "market", pos: "n", ipa: "/ˈmɑːkɪt/", vi: "thị trường; chợ", ex: "Many new phones enter the market every year.", exVi: "Mỗi năm có nhiều điện thoại mới ra thị trường.", more: "**the job market** (thị trường việc làm) · **on the market** (đang bán) · **enter** the market" },
+        { w: "platform", pos: "n", ipa: "/ˈplætfɔːm/", vi: "nền tảng", ex: "This game is available on every platform.", exVi: "Trò chơi này có trên mọi nền tảng.", more: "**online / social media** platform · **on** a platform" },
+        { w: "expectation", pos: "n", ipa: "/ˌekspekˈteɪʃn/", vi: "sự kỳ vọng", ex: "The film did not meet my expectations.", exVi: "Bộ phim không đạt được kỳ vọng của tôi.", more: "**high** expectations **of / for** sb · **meet / live up to** expectations · động từ: expect" },
+        { w: "parent", pos: "n", ipa: "/ˈpeərənt/", vi: "cha hoặc mẹ; parents = bố mẹ, phụ huynh", ex: "Every parent wants their child to be safe online.", exVi: "Cha mẹ nào cũng muốn con an toàn trên mạng.", more: "số nhiều **parents** (bố mẹ) · **single parent** · n: parenting (việc nuôi dạy con)" },
+        { w: "purchase", pos: "v", ipa: "/ˈpɜːtʃəs/", vi: "mua (trang trọng hơn buy)", ex: "You can purchase tickets at the front desk.", exVi: "Bạn có thể mua vé ở quầy lễ tân.", more: "**make a purchase** (n) · purchase **from** a shop — trang trọng, dùng trong bài viết thay buy" },
+        { w: "occur", pos: "v", ipa: "/əˈkɜː(r)/", vi: "xảy ra", ex: "Most floods occur between September and November.", exVi: "Phần lớn lũ lụt xảy ra từ tháng Chín đến tháng Mười Một.", more: "**occur** không có bị động: ~~was occurred~~ → **occurred** · quá khứ gấp đôi r" },
         { w: "team", pos: "n", ipa: "/tiːm/", vi: "đội, nhóm", ex: "Our team has five members.", exVi: "Nhóm chúng tôi có năm thành viên." },
-        { w: "research", pos: "n", ipa: "/rɪˈsɜːtʃ/", vi: "sự nghiên cứu", ex: "New research shows that breakfast helps students focus.", exVi: "Nghiên cứu mới cho thấy bữa sáng giúp học sinh tập trung." },
-        { w: "decide", pos: "v", ipa: "/dɪˈsaɪd/", vi: "quyết định", ex: "I decided to study abroad after university.", exVi: "Tôi quyết định đi du học sau đại học." },
+        { w: "research", pos: "n", ipa: "/rɪˈsɜːtʃ/", vi: "sự nghiên cứu", ex: "New research shows that breakfast helps students focus.", exVi: "Nghiên cứu mới cho thấy bữa sáng giúp học sinh tập trung.", more: "không đếm được: ~~a research~~, ~~researches~~ → **a piece of research / studies** · **do / conduct** research **on** sth" },
+        { w: "decide", pos: "v", ipa: "/dɪˈsaɪd/", vi: "quyết định", ex: "I decided to study abroad after university.", exVi: "Tôi quyết định đi du học sau đại học.", more: "decide **to** V · decide **on** sth · n: decision → **make a decision**" },
         { w: "family", pos: "n", ipa: "/ˈfæməli/", vi: "gia đình", ex: "My family goes back to our hometown every Tet.", exVi: "Tết nào gia đình tôi cũng về quê." },
-        { w: "yield", pos: "v", ipa: "/jiːld/", vi: "mang lại, tạo ra (kết quả, sản lượng)", ex: "The survey yielded some surprising results.", exVi: "Cuộc khảo sát mang lại vài kết quả bất ngờ." },
-        { w: "comprehensive", pos: "adj", ipa: "/ˌkɒmprɪˈhensɪv/", vi: "toàn diện, đầy đủ", ex: "This guide gives a comprehensive list of IELTS topics.", exVi: "Cuốn hướng dẫn này đưa ra danh sách đầy đủ các chủ đề IELTS." },
+        { w: "yield", pos: "v", ipa: "/jiːld/", vi: "mang lại, tạo ra (kết quả, sản lượng)", ex: "The survey yielded some surprising results.", exVi: "Cuộc khảo sát mang lại vài kết quả bất ngờ.", more: "yield **results / benefits / information** · n: **crop yield** (sản lượng)" },
+        { w: "comprehensive", pos: "adj", ipa: "/ˌkɒmprɪˈhensɪv/", vi: "toàn diện, đầy đủ", ex: "This guide gives a comprehensive list of IELTS topics.", exVi: "Cuốn hướng dẫn này đưa ra danh sách đầy đủ các chủ đề IELTS.", more: "a comprehensive **guide / study / list** ≠ comprehensible (dễ hiểu)" },
         { w: "database", pos: "n", ipa: "/ˈdeɪtəbeɪs/", vi: "cơ sở dữ liệu", ex: "The library database has over ten thousand books.", exVi: "Cơ sở dữ liệu của thư viện có hơn mười nghìn cuốn sách." },
         { w: "ethnography", pos: "n", ipa: "/eθˈnɒɡrəfi/", vi: "nghiên cứu quan sát thực địa (dân tộc học): nhà nghiên cứu đến tận nơi xem người ta sống, làm việc", ex: "The ethnography showed how families really use their phones at dinner.", exVi: "Nghiên cứu quan sát thực địa cho thấy các gia đình thật sự dùng điện thoại thế nào trong bữa tối." },
         { w: "start", pos: "v", ipa: "/stɑːt/", vi: "bắt đầu", ex: "Classes start at seven thirty.", exVi: "Lớp học bắt đầu lúc bảy giờ ba mươi." },
-        { w: "conduct", pos: "v", ipa: "/kənˈdʌkt/", vi: "tiến hành (khảo sát, nghiên cứu, phỏng vấn)", ex: "The students conducted a survey about screen time.", exVi: "Các bạn sinh viên đã tiến hành một khảo sát về thời gian dùng màn hình." },
-        { w: "rural", pos: "adj", ipa: "/ˈrʊərəl/", vi: "thuộc nông thôn", ex: "Rural schools often lack good internet.", exVi: "Trường ở nông thôn thường thiếu mạng internet tốt." },
+        { w: "conduct", pos: "v", ipa: "/kənˈdʌkt/", vi: "tiến hành (khảo sát, nghiên cứu, phỏng vấn)", ex: "The students conducted a survey about screen time.", exVi: "Các bạn sinh viên đã tiến hành một khảo sát về thời gian dùng màn hình.", more: "**conduct research / a survey / an interview / an experiment**" },
+        { w: "rural", pos: "adj", ipa: "/ˈrʊərəl/", vi: "thuộc nông thôn", ex: "Rural schools often lack good internet.", exVi: "Trường ở nông thôn thường thiếu mạng internet tốt.", more: "**rural areas / life** ≠ urban · khó phát âm: /ˈrʊərəl/" },
         { w: "subject", pos: "n", ipa: "/ˈsʌbdʒɪkt/", vi: "đối tượng (được nghiên cứu); môn học", ex: "Each subject in the study wore a small watch.", exVi: "Mỗi đối tượng trong nghiên cứu đeo một chiếc đồng hồ nhỏ." },
-        { w: "include", pos: "v", ipa: "/ɪnˈkluːd/", vi: "bao gồm", ex: "The price includes breakfast.", exVi: "Giá đã bao gồm bữa sáng." },
-        { w: "range from", pos: "v", ipa: "/reɪndʒ frɒm/", vi: "dao động (từ … đến …)", ex: "Ticket prices range from 50,000 to 200,000 dong.", exVi: "Giá vé dao động từ 50.000 đến 200.000 đồng." },
-        { w: "effect", pos: "n", ipa: "/ɪˈfekt/", vi: "ảnh hưởng, tác động", ex: "Music has a calming effect on me.", exVi: "Âm nhạc có tác dụng làm tôi bình tĩnh lại." },
+        { w: "include", pos: "v", ipa: "/ɪnˈkluːd/", vi: "bao gồm", ex: "The price includes breakfast.", exVi: "Giá đã bao gồm bữa sáng.", more: "The price **includes** breakfast · giới từ: **including** (bao gồm cả)" },
+        { w: "range from", pos: "v", ipa: "/reɪndʒ frɒm/", vi: "dao động (từ … đến …)", ex: "Ticket prices range from 50,000 to 200,000 dong.", exVi: "Giá vé dao động từ 50.000 đến 200.000 đồng.", more: "range from A **to** B · The subjects' ages ranged from 3 to 6." },
+        { w: "effect", pos: "n", ipa: "/ɪˈfekt/", vi: "ảnh hưởng, tác động", ex: "Music has a calming effect on me.", exVi: "Âm nhạc có tác dụng làm tôi bình tĩnh lại.", more: "have an effect **on** sth (n) · ≠ **affect** (v): It affects children." },
       ],
     },
     {
@@ -293,8 +313,18 @@ const D4_WRITING: Lesson = {
   kind: "writing",
   title: "Viết: Làm quen IELTS Writing Task 1",
   goal: "Biết Task 1 yêu cầu gì, nhận ra 6 dạng biểu đồ, nắm khung Introduction – Overview – Body, hiểu một bài band 4 trông thế nào và phải làm gì để lên band 5–6.",
-  minutes: 40,
+  minutes: 45,
   blocks: [
+    {
+      t: "recap",
+      items: [
+        "Task 1 (Academic): tả **một hình** (biểu đồ, bảng, quy trình, bản đồ) trong **20 phút**, **ít nhất 150 từ**. Chỉ tả và so sánh — ==không nêu ý kiến==.",
+        "**6 dạng**: bar chart · line graph · pie chart · table · process diagram · map.",
+        "Khung chung **4 đoạn**: Introduction (viết lại đề) → **Overview** (2 điểm nổi bật, không số) → Body 1 → Body 2 (có số liệu).",
+        "Bảng **band 4** theo 4 tiêu chí (như sách) + cột **muốn lên band 5–6 thì làm gì**.",
+        "Có **công thức câu mở bài và overview** để học thuộc, bài dịch ngắn, bài mẫu và ô tự viết có AI chấm.",
+      ],
+    },
     { t: "h", text: "1. Writing Task 1 là gì?" },
     {
       t: "p",
@@ -375,6 +405,34 @@ const D4_WRITING: Lesson = {
         "Theo tiêu chí chấm, bài **không có overview rõ ràng** thì Task Achievement khó vượt **band 5**.",
         "Overview **không cần kết luận**, không viết “In conclusion, I think…”. Task 1 không có ý kiến riêng.",
         "Mở overview bằng **Overall,** hoặc **In general,** để giám khảo thấy ngay.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "The + line graph / bar chart / table + illustrates / compares + what (N) + where + between 2014 and 2024.",
+      vi: "Câu mở bài: viết lại đề bằng lời của bạn — hình gì, tả cái gì, ở đâu, khi nào. Đổi shows → illustrates / compares.",
+    },
+    {
+      t: "rule",
+      formula: "Overall, + N1 + V (rose / fell…) + , while + N2 + V.",
+      vi: "Câu overview: 2 xu hướng hoặc 2 điểm nổi bật nhất, nối bằng while — không có con số chi tiết.",
+    },
+    {
+      t: "rule",
+      formula: "In 2014, + N + V-ed + around + số + , far more than + N2.",
+      vi: "Câu thân bài: mốc thời gian + số liệu + so sánh. Số liệu quá khứ → quá khứ đơn.",
+    },
+    {
+      t: "quiz",
+      id: "d4-viet-khung-dich",
+      title: "Dịch — câu khung Task 1 (4 câu)",
+      kind: "translate",
+      grammar: "The line graph illustrates + what/how many… + between X and Y · Overall, A rose, while B fell · In + năm, S + V-ed + số liệu (quá khứ đơn).",
+      items: [
+        { q: "Biểu đồ đường cho thấy trẻ em dành bao nhiêu phút mỗi ngày để xem TV từ năm 2014 đến 2024.", hint: "the line graph, illustrates, how many minutes, a day, between 2014 and 2024", answers: ["The line graph illustrates how many minutes a day children spent watching TV between 2014 and 2024.", "The line graph illustrates how many minutes per day children spent watching TV between 2014 and 2024.", "The line graph shows how many minutes a day children spent watching TV between 2014 and 2024.", "The line graph illustrates how many minutes children spent watching TV each day between 2014 and 2024.", "The line graph illustrates how many minutes a day children spent watching TV from 2014 to 2024."] },
+        { q: "Nhìn chung, việc dùng máy tính bảng tăng mạnh, trong khi việc xem TV giảm.", hint: "overall, tablet use, rose sharply, while, TV viewing, fell", answers: ["Overall, tablet use rose sharply, while TV viewing fell.", "Overall, tablet use rose sharply while TV viewing fell.", "Overall, tablet use increased sharply, while TV viewing fell.", "Overall, tablet use rose sharply, while TV viewing decreased.", "Overall, tablet use rose sharply, whereas TV viewing fell."] },
+        { q: "Năm 2014, trẻ em xem TV khoảng 95 phút mỗi ngày.", hint: "in 2014, watched, around, 95 minutes, a day", answers: ["In 2014, children watched TV for around 95 minutes a day.", "In 2014, children watched TV for about 95 minutes a day.", "In 2014, children watched TV for around 95 minutes per day.", "In 2014, children watched TV for about 95 minutes per day.", "In 2014 children watched TV for around 95 minutes a day.", "In 2014, children watched around 95 minutes of TV a day."] },
+        { q: "Đọc sách là hoạt động ít phổ biến nhất trong suốt giai đoạn.", hint: "reading books, the least popular activity, throughout the period", answers: ["Reading books was the least popular activity throughout the period.", "Reading was the least popular activity throughout the period.", "Reading books was the least popular activity during the whole period.", "Reading books was the least popular activity over the period."] },
       ],
     },
 
@@ -491,8 +549,18 @@ const D4_SPEAKING: Lesson = {
   kind: "speaking",
   title: "Nói: Trả lời câu hỏi Yes/No (Part 1 · Sở thích)",
   goal: "Trả lời câu hỏi Yes/No ở Speaking Part 1 bằng 2–4 câu (trả lời + lý do + ví dụ) về chủ đề sở thích, và phát âm đúng 11 nguyên âm đơn ngắn/dài.",
-  minutes: 40,
+  minutes: 45,
   blocks: [
+    {
+      t: "recap",
+      items: [
+        "Câu hỏi **Yes/No** ở Part 1 (Do you…? / Are you…? / Did you…? / Have you…?) **không** trả lời một chữ — nói **2–4 câu**.",
+        "Khung 3 bước: ==Answer== (Yes/No + câu đầy đủ) → ==Reason== (because / so) → ==Example== (khi nào, với ai, ở đâu).",
+        "Trả lời ngắn phải **khớp trợ động từ** của câu hỏi: Do you…? → Yes, I **do** · Are you…? → Yes, I **am** · Did you…? → Yes, I **did**.",
+        "Chủ đề Hobbies (như sách): **watching movies**, **playing sports** — từ vựng, công thức, câu trả lời band 4.0 và bản nâng band 6.",
+        "Phát âm: **11 nguyên âm đơn** — 6 ngắn, 5 dài (dấu ː = kéo dài).",
+      ],
+    },
     { t: "h", text: "1. Câu hỏi Yes/No ở Part 1" },
     {
       t: "p",
@@ -528,6 +596,44 @@ const D4_SPEAKING: Lesson = {
         "Mỗi câu trả lời dài khoảng **15–25 giây**, 2–4 câu là đủ. Part 1 không cần nói dài như Part 2.",
         "Không cần nói thật 100%. Nếu thật ra bạn không có sở thích gì hay ho, **chọn câu trả lời mà bạn có từ vựng để nói**.",
         "Bắt đầu tự nhiên bằng **Yes, definitely. / Yes, I do. / Not really, to be honest.** rồi mới vào ý.",
+      ],
+    },
+    {
+      t: "p",
+      text: "Phần này sách chưa có: câu trả lời ngắn mở đầu phải dùng **đúng trợ động từ** của câu hỏi. Bảng dưới là khung cho 4 kiểu câu Yes/No hay gặp nhất.",
+    },
+    {
+      t: "table",
+      caption: "Khung trả lời Yes/No — trợ động từ ở câu hỏi quay lại ở câu trả lời",
+      head: ["Câu hỏi bắt đầu bằng", "Trả lời Yes", "Trả lời No", "Mở rộng tiếp (Reason + Example)"],
+      rows: [
+        ["**Do you** + V…? (thói quen, sở thích)", "Yes, I **do**. / Yes, definitely.", "No, I **don't**. / Not really.", "…because it helps me relax. I usually… on Friday nights."],
+        ["**Are you** + adj / V-ing…? (tính chất, đang làm)", "Yes, I **am**.", "No, I'm **not**.", "…I'm quite a sporty person, so I…"],
+        ["**Did you** + V…? (hồi nhỏ, quá khứ)", "Yes, I **did**.", "No, I **didn't**.", "When I was a child, I used to… with my…"],
+        ["**Have you (ever)** + V3…? (đã từng)", "Yes, I **have**.", "No, I **haven't**.", "I tried it once last summer, and…"],
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Yes, I do. + S + V… + because + S + V… + (when / with / where…).",
+      vi: "Khung trả lời YES: trả lời ngắn → nhắc lại ý thành câu đủ → lý do → chi tiết. Khoảng 2–4 câu, 15–25 giây.",
+    },
+    {
+      t: "rule",
+      formula: "Not really. + S + don't + V… + because… + Instead, S + V…",
+      vi: "Khung trả lời NO: nói không kèm lý do, rồi chuyển sang điều bạn LÀM thay vào đó — vẫn đủ ý để giám khảo chấm.",
+    },
+    {
+      t: "quiz",
+      id: "d4-noi-yesno-dich",
+      title: "Dịch — trả lời Yes/No theo khung (4 câu)",
+      kind: "translate",
+      grammar: "Do you…? → Yes, I do / No, I don't · Did you…? → Yes, I did · enjoy / like + V-ing · because + S + V · find + something + adj.",
+      items: [
+        { q: "Có, tôi thích. Tôi xem phim vào tối thứ Sáu vì nó giúp tôi thư giãn.", hint: "Yes, I do, watch movies, on Friday nights, because, help me relax", answers: ["Yes, I do. I watch movies on Friday nights because it helps me relax.", "Yes, I do. I watch movies on Friday nights because they help me relax.", "Yes, I do. I watch films on Friday nights because it helps me relax.", "Yes, I do. I watch films on Friday nights because they help me relax."] },
+        { q: "Không hẳn. Tôi không chơi thể thao nhiều vì tôi khá bận.", hint: "Not really, don't play sports much, because, quite busy", answers: ["Not really. I don't play sports much because I'm quite busy.", "Not really. I don't play sports much because I am quite busy.", "Not really. I do not play sports much because I am quite busy.", "Not really. I don't play sports very much because I'm quite busy."] },
+        { q: "Có. Hồi nhỏ tôi hay vẽ tranh với chị tôi.", hint: "Yes, I did, when I was a child, used to, draw, with my sister", answers: ["Yes, I did. When I was a child, I used to draw with my sister.", "Yes, I did. When I was a child I used to draw with my sister.", "Yes, I did. I used to draw with my sister when I was a child.", "Yes, I did. When I was a child, I often drew with my sister.", "Yes, I did. When I was little, I used to draw with my sister."] },
+        { q: "Tôi thấy phim hài rất thư giãn.", hint: "find, comedy movies, relaxing", answers: ["I find comedy movies very relaxing.", "I find comedy movies relaxing.", "I find comedy films very relaxing.", "I find comedy films relaxing.", "I find comedies very relaxing."] },
       ],
     },
 
@@ -727,6 +833,14 @@ const D4_HOMEWORK: Lesson = {
   goal: "Dùng lại 34 từ vựng của bài đọc trong câu tiếng Anh của chính mình, và điền đúng 14 chỗ trống trong câu trả lời Speaking mẫu.",
   minutes: 45,
   blocks: [
+    {
+      t: "recap",
+      items: [
+        "Hai phần như sách: **I. 34 câu dịch** — mỗi câu dùng một từ vựng của bài đọc (từ combination tới database) · **II. 14 chỗ trống** trong 4 câu trả lời Speaking mẫu.",
+        "Câu dịch: bấm 💡 để xem từ gợi ý và cấu trúc. Sự thật / thói quen → **hiện tại đơn**; việc đã xong → **quá khứ đơn**.",
+        "Phần II: mỗi từ trong khung dùng **đúng một lần**; đọc **từ loại** quanh chỗ trống trước khi chọn.",
+      ],
+    },
     {
       t: "quiz",
       id: "d4-dich",

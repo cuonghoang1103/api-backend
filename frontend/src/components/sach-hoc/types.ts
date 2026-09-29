@@ -17,7 +17,24 @@ export type Block =
   | { t: 'note'; title: string; items: string[] }
   | { t: 'examples'; items: Ex[] }
   /** Từ vựng. Khoá tiếng Nhật: `ipa` = romaji của từ, `exRo` = romaji của câu ví dụ. */
-  | { t: 'vocab'; items: { w: string; pos: string; ipa: string; vi: string; ex: string; exVi: string; exRo?: string }[] }
+  /**
+   * `more` (tuỳ chọn): một dòng mở rộng dưới ví dụ — cụm từ hay đi kèm
+   * (collocation), họ từ, lỗi hay gặp. Viết gọn, có thể dùng markup Inline.
+   * Khối có nút "Che nghĩa / Che từ" để tự kiểm tra (không cần khai gì thêm).
+   */
+  | { t: 'vocab'; items: { w: string; pos: string; ipa: string; vi: string; ex: string; exVi: string; exRo?: string; more?: string }[] }
+  /**
+   * Tóm tắt đầu bài / đầu buổi: 3–6 ý "hôm nay học gì, cần nhớ gì" — khung 🎯
+   * nổi bật ở ngay đầu bài. `title` mặc định "Tóm tắt nhanh".
+   */
+  | { t: 'recap'; title?: string; items: string[] }
+  /**
+   * "Công thức 1 dòng" — chốt cuối mỗi điểm ngữ pháp: một dòng công thức (tô
+   * màu S/V/O… như `patterns`) + một câu tiếng Việt nói nó dùng khi nào.
+   */
+  | { t: 'rule'; formula: string; vi?: string }
+  /** Tra cứu toàn bộ từ vựng của khoá (lấy từ mục lục các buổi): tìm, lọc theo buổi, thẻ nhớ. */
+  | { t: 'vocabAll' }
   | { t: 'alphabet'; groups: { sound: string; letters: { l: string; ipa: string }[] }[] }
   | { t: 'dictation'; id: string; title?: string; items: { label: string; spell: string; answer: string }[] }
   | {

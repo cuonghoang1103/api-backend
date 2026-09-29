@@ -192,6 +192,9 @@ export function lessonText(l: Lesson): string {
       case 'note': out.push(`${b.title}: ${b.items.map(strip).join(' ')}`); break;
       case 'examples': out.push(b.items.map((e) => e.en).join(' ')); break;
       case 'vocab': out.push(b.items.map((v) => `${v.w} (${v.pos}) = ${v.vi}`).join('; ')); break;
+      case 'recap': out.push(`${b.title ?? 'Tóm tắt'}: ${b.items.map(strip).join(' / ')}`); break;
+      case 'rule': out.push(`Công thức: ${b.formula}${b.vi ? ` (${strip(b.vi)})` : ''}`); break;
+      case 'vocabAll': out.push('Tra cứu toàn bộ từ vựng của khoá: tìm, lọc theo buổi, thẻ nhớ.'); break;
       case 'alphabet': out.push(b.groups.map((g) => `${g.sound}: ${g.letters.map((x) => x.l).join(' ')}`).join('; ')); break;
       case 'dictation': out.push(`Bài nghe chép ${b.items.length} câu đánh vần.`); break;
       case 'quiz': out.push(`${b.title}: ${b.items.map((q) => q.q).join(' / ')}`); break;

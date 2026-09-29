@@ -21,6 +21,8 @@ import s from './course.module.css';
 
 // Công cụ chia động từ chỉ có ở một mục tra cứu — tách chunk riêng.
 const ChiaDongTu = dynamic(() => import('./nhat/ChiaDongTu'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải…</div> });
+// Tra cứu từ vựng cả khoá — cũng chỉ ở một mục tra cứu.
+const TraTuVung = dynamic(() => import('./TraTuVung'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải…</div> });
 
 /* ── Nhân vật ────────────────────────────────────────────────────────── */
 
@@ -588,6 +590,7 @@ export function renderBlock2(b: Block, i: number) {
     case 'write': return <WriteBlock key={b.id} b={b} />;
     case 'hanlop': return <HanLop key={`hanlop-${b.bai}`} b={b} />;
     case 'chia': return <ChiaDongTu key="chia" />;
+    case 'vocabAll': return <TraTuVung key="vocabAll" />;
     default: return null;
   }
 }

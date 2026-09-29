@@ -7,6 +7,10 @@
  * Homework 12 + 10 câu). Lời giảng, câu ví dụ, kịch bản nghe và câu bài tập
  * đều VIẾT MỚI (xem ../SOAN-BAI.md). Sách không in đáp án Day 5 → đáp án tự
  * soạn và đã kiểm theo kịch bản / ngữ pháp.
+ *
+ * Rà soát 29/09/2026: recap đầu mỗi bài; bài ngữ pháp thêm mục a/an/some/any,
+ * bảng so sánh many/much/a lot of/(a) few/(a) little, thêm đơn vị đo và danh
+ * từ "hai mặt"; mỗi mục có rule + bài dịch (d5-*-dich); từ vựng có dòng `more`.
  */
 import type { Lesson } from '../data';
 
@@ -17,12 +21,24 @@ const D5_GRAMMAR: Lesson = {
   kind: 'grammar',
   title: 'Danh từ đếm được & không đếm được (Countable & Uncountable Nouns)',
   goal: 'Phân biệt danh từ đếm được / không đếm được, chọn đúng a/an, many/much, few/little…, tránh các lỗi "informations, advices" và dùng đúng trong Writing Task 2.',
-  minutes: 40,
+  minutes: 55,
   blocks: [
+    {
+      t: 'recap',
+      title: 'Bài này học gì',
+      items: [
+        '**Danh từ đếm được** (a book → two books) có số ít và số nhiều. **Danh từ không đếm được** (water, advice, information) ==không đi với a/an, không thêm -s, động từ chia số ít==.',
+        'Muốn "đếm" danh từ không đếm được → dùng **đơn vị + of**: **a piece of advice, two cups of coffee** — chỉ **đơn vị** thêm -s.',
+        '**many / a few / few / fewer** + đếm được số nhiều · **much / a little / little / less** + không đếm được · **a lot of / some / any / no** dùng cho cả hai.',
+        '**a/an** chỉ đi với đếm được số ít (chọn theo **âm**: an hour, a university) · **some** cho câu khẳng định & lời mời · **any** cho câu phủ định & câu hỏi.',
+        'Có từ **vừa đếm được vừa không**, nghĩa đổi theo loại: **glass** (thuỷ tinh) / **a glass** (cái cốc) · **time** (thời gian) / **three times** (ba lần).',
+        'Mỗi mục có **khung "Công thức 1 dòng"** và **bài dịch Việt → Anh** có nút 💡 — làm hết là thuộc bài.',
+      ],
+    },
     { t: 'h', text: '1. Hai loại danh từ — bảng tổng quan' },
     {
       t: 'p',
-      text: 'Tiếng Việt đếm được mọi thứ bằng cách thêm từ chỉ đơn vị: "một **cái** bàn", "hai **lời** khuyên", "ba **chai** nước". Tiếng Anh thì chia danh từ làm hai nhóm. **Danh từ đếm được** (countable noun) đếm thẳng được bằng số: *one book, two books*. **Danh từ không đếm được** (uncountable noun) không đếm thẳng được, không có dạng số nhiều: nói ~~two waters~~ hay ~~an advice~~ là sai. Chọn sai loại danh từ kéo theo sai cả mạo từ, từ chỉ số lượng và động từ — nên đây là **nền móng** của cả tiêu chí ngữ pháp.',
+      text: 'Tiếng Việt đếm được mọi thứ bằng cách thêm từ chỉ đơn vị: "một **cái** bàn", "hai **lời** khuyên", "ba **chai** nước". Tiếng Anh thì chia danh từ làm hai nhóm. **Danh từ đếm được** (countable noun) đếm thẳng được bằng số: **one book, two books**. **Danh từ không đếm được** (uncountable noun) không đếm thẳng được, không có dạng số nhiều: nói ~~two waters~~ hay ~~an advice~~ là sai. Chọn sai loại danh từ kéo theo sai cả mạo từ, từ chỉ số lượng và động từ — nên đây là **nền móng** của cả tiêu chí ngữ pháp.',
     },
     {
       t: 'table',
@@ -31,7 +47,7 @@ const D5_GRAMMAR: Lesson = {
       rows: [
         ['**Đếm được** (Countable Nouns)', '• Đếm được bằng số (one, two, three…). • Có **số ít** và **số nhiều**.', 'Số ít: **a** laptop, **an** email, **one** colleague · Số nhiều: laptops, emails, colleagues', 'many, a few, few, several, a couple of, a number of, a lot of, one / two…, each, every'],
         ['**Không đếm được** (Uncountable Nouns)', '• Không đếm trực tiếp bằng số. • Chỉ có **một dạng** (không thêm -s), động từ chia **số ít**.', 'water, rice, money, information, advice, furniture', 'much, a little, little, some, a lot of, a great deal of, an amount of'],
-        ['**Vừa đếm được vừa không**', 'Đổi loại theo **nghĩa** trong câu.', '**glass** (thuỷ tinh — chất liệu, không đếm được): *The table is made of glass.* · **a glass / two glasses** (cái cốc — đếm được): *Bring two glasses, please.*', 'Tuỳ nghĩa: nghĩa đếm được → many, a few…; nghĩa không đếm được → much, a little…'],
+        ['**Vừa đếm được vừa không**', 'Đổi loại theo **nghĩa** trong câu.', '**glass** (thuỷ tinh — chất liệu, không đếm được): **The table is made of glass.** · **a glass / two glasses** (cái cốc — đếm được): **Bring two glasses, please.**', 'Tuỳ nghĩa: nghĩa đếm được → many, a few…; nghĩa không đếm được → much, a little…'],
       ],
     },
     {
@@ -40,7 +56,25 @@ const D5_GRAMMAR: Lesson = {
       items: [
         'Một danh từ đếm được **số ít** không bao giờ đứng trơ trọi: phải có **a / an / the / my / this / one…** phía trước. ~~I have laptop.~~ → **I have a laptop.**',
         'Danh từ không đếm được **không đi với a/an** và **không thêm -s**: ~~an information~~, ~~informations~~ → **information**, **some information**.',
-        '**some, a lot of, lots of, the, no, any** dùng được cho **cả hai** loại: *some emails / some money*.',
+        '**some, a lot of, lots of, the, no, any** dùng được cho **cả hai** loại: **some emails / some money**.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'a / an + N (số ít) · N-s (số nhiều) + V · N (không đếm được) + V(s/es)',
+      vi: 'Đếm được: có số ít và số nhiều. Không đếm được: chỉ một dạng, không a/an, không -s, động từ chia số ít.',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-loai-dt-dich',
+      title: 'Dịch nhanh — đếm được hay không đếm được? (4 câu)',
+      kind: 'translate',
+      grammar: 'a/an + danh từ đếm được số ít; danh từ đếm được số nhiều thêm -s; danh từ không đếm được (money, information, advice) không a/an, không -s, động từ chia số ít (is, V-s).',
+      items: [
+        { q: 'Tôi có một chiếc laptop và hai cái điện thoại.', hint: 'have, a laptop, two phones', answers: ['I have a laptop and two phones.', 'I have one laptop and two phones.', "I've got a laptop and two phones.", 'I have a laptop and two mobile phones.'] },
+        { q: 'Tiền không phải là tất cả.', hint: 'money (không đếm được → is), not, everything', answers: ['Money is not everything.', "Money isn't everything."] },
+        { q: 'Cô ấy cần thông tin về khoá học.', hint: 'needs, information (không -s), about the course', answers: ['She needs information about the course.', 'She needs some information about the course.', 'She needs information on the course.', 'She needs some information on the course.', 'She needs more information about the course.'] },
+        { q: 'Lời khuyên của anh ấy rất hữu ích.', hint: 'his advice (không đếm được → is), very useful', answers: ['His advice is very useful.', 'His advice was very useful.', 'His advice is really useful.', 'His advice was really useful.', 'His advice is very helpful.', 'His advice was very helpful.'] },
       ],
     },
 
@@ -62,7 +96,7 @@ const D5_GRAMMAR: Lesson = {
       t: 'patterns',
       rows: [
         {
-          formula: 'a / an + danh từ đếm được số ít + V (số ít)',
+          formula: 'a / an + N (đếm được, số ít) + V(s/es)',
           vi: 'Một người / một vật',
           examples: [
             { en: 'An employee is waiting in the lobby.', vi: 'Một nhân viên đang đợi ở sảnh.' },
@@ -70,7 +104,7 @@ const D5_GRAMMAR: Lesson = {
           ],
         },
         {
-          formula: 'danh từ đếm được số nhiều (-s / -es) + V (số nhiều)',
+          formula: 'N-s / N-es (đếm được, số nhiều) + V (không -s)',
           vi: 'Nhiều người / nhiều vật, hoặc nói chung chung về cả loại',
           examples: [
             { en: 'Freelancers choose their own hours.', vi: 'Người làm tự do tự chọn giờ làm.' },
@@ -78,13 +112,39 @@ const D5_GRAMMAR: Lesson = {
           ],
         },
         {
-          formula: 'danh từ không đếm được (không a/an, không -s) + V (số ít)',
+          formula: 'N (không đếm được — không a/an, không -s) + V(s/es) / is',
           vi: 'Chất, khối, ý niệm — luôn chia động từ số ít',
           examples: [
             { en: 'Information travels fast online.', vi: 'Thông tin lan truyền nhanh trên mạng.' },
             { en: 'Good advice is hard to find.', vi: 'Lời khuyên hay thì khó tìm.' },
           ],
         },
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo nhớ: thử "một, hai, ba"',
+      items: [
+        'Đặt **two** trước từ đó. Nghe hợp lý (**two meetings, two ideas**) → đếm được. Phải chen thêm "cốc / mẩu / lời" (*two ~~waters~~ → two **glasses of** water*) → không đếm được.',
+        'Tiếng Việt cũng phải thêm từ đơn vị trước chính những danh từ đó: "hai **lời** khuyên", "một **mẩu** tin", "ba **món** đồ đạc" → gần như chắc chắn là **không đếm được** trong tiếng Anh.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'đếm thẳng "one, two…" được → đếm được (C) · chất / khối / ý niệm / tên chung một nhóm đồ → không đếm được (U)',
+      vi: 'Không chắc thì tra từ điển: [C] = countable (đếm được), [U] = uncountable (không đếm được).',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-nhan-biet-dich',
+      title: 'Dịch nhanh — nhận ra danh từ không đếm được (4 câu)',
+      kind: 'translate',
+      grammar: 'furniture, luggage, equipment, knowledge = không đếm được → không a/an, không -s, động từ số ít (is / needs).',
+      items: [
+        { q: 'Đồ đạc trong phòng tôi rất cũ.', hint: 'the furniture (không -s), in my room, is, very old', answers: ['The furniture in my room is very old.', 'The furniture in my room is really old.', 'My furniture is very old.'] },
+        { q: 'Hành lý của bạn ở đâu?', hint: 'Where, is (số ít), your luggage', answers: ['Where is your luggage?', "Where's your luggage?", 'Where is your baggage?', "Where's your baggage?"] },
+        { q: 'Kiến thức là sức mạnh.', hint: 'knowledge (không đếm được, không "the"), is, power', answers: ['Knowledge is power.'] },
+        { q: 'Văn phòng cần thiết bị mới.', hint: 'the office, needs, new equipment (không -s)', answers: ['The office needs new equipment.', 'The office needs some new equipment.', 'Our office needs new equipment.', 'The office needs more equipment.'] },
       ],
     },
 
@@ -114,7 +174,25 @@ const D5_GRAMMAR: Lesson = {
       items: [
         '**news** có -s nhưng là **không đếm được, số ít**: ~~The news are bad.~~ → **The news is bad.** Một tin = **a piece of news**.',
         'Môn học tận cùng **-ics** (economics, physics, mathematics) chia động từ **số ít**: *Physics **is** difficult.*',
-        '**data**: trong IELTS nên dùng như danh từ không đếm được (*the data **shows***); cách dùng số nhiều (*the data show*) cũng không bị coi là sai — chỉ cần **thống nhất cả bài**.',
+        '**data**: trong IELTS nên dùng như danh từ không đếm được (*the data **shows***); cách dùng số nhiều (**the data show**) cũng không bị coi là sai — chỉ cần **thống nhất cả bài**.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'information / advice / news / equipment / traffic… + is / V(s/es) — không bao giờ thêm -s',
+      vi: 'Nhóm từ "hay bị thêm -s sai": luôn một dạng, luôn động từ số ít.',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-khong-dem-dich',
+      title: 'Dịch nhanh — danh từ không đếm được hay gặp (4 câu)',
+      kind: 'translate',
+      grammar: 'Danh từ không đếm được (news, traffic, economics, accommodation) + động từ số ít: is / was / V-s. Không thêm -s vào danh từ.',
+      items: [
+        { q: 'Tin tức hôm nay không tốt.', hint: 'the news (có -s nhưng số ít → is), not good, today', answers: ['The news is not good today.', "The news isn't good today.", "Today's news is not good.", "Today's news isn't good.", 'The news today is not good.', "The news today isn't good.", 'The news is bad today.', "Today's news is bad."] },
+        { q: 'Giao thông ở Hà Nội rất tệ vào giờ cao điểm.', hint: 'the traffic, in Hanoi, is, terrible / very bad, at rush hour', answers: ['The traffic in Hanoi is terrible at rush hour.', 'Traffic in Hanoi is terrible at rush hour.', 'The traffic in Hanoi is very bad at rush hour.', 'Traffic in Hanoi is very bad at rush hour.', 'The traffic in Hanoi is terrible during rush hour.', 'The traffic in Hanoi is very bad during rush hour.', 'Traffic in Hanoi is terrible during rush hour.', 'Traffic in Hanoi is very bad during rush hour.'] },
+        { q: 'Kinh tế học là một môn khó.', hint: 'economics (đuôi -ics nhưng số ít → is), a difficult subject', answers: ['Economics is a difficult subject.', 'Economics is a hard subject.'] },
+        { q: 'Sinh viên cần chỗ ở giá rẻ.', hint: 'students, need, cheap accommodation (không -s)', answers: ['Students need cheap accommodation.', 'Students need affordable accommodation.', 'Students need inexpensive accommodation.'] },
       ],
     },
 
@@ -146,6 +224,44 @@ const D5_GRAMMAR: Lesson = {
         ['a slice / loaf of', 'bread, cake, cheese', 'two **slices of** bread — hai lát bánh mì'],
         ['a sheet / piece of', 'paper', 'a **sheet of** paper — một tờ giấy'],
         ['a sum / an amount of', 'money, time, energy', 'a large **sum of** money — một khoản tiền lớn'],
+        ['a carton of', 'milk, juice', 'a **carton of** milk — một hộp sữa (hộp giấy)'],
+        ['a can / a tin of', 'cola, beer, soup, beans', 'two **cans of** cola — hai lon cola'],
+        ['a jar of', 'honey, jam, coffee', 'a **jar of** honey — một hũ mật ong'],
+        ['a bar of', 'chocolate, soap', 'a **bar of** chocolate — một thanh sô-cô-la'],
+        ['a tube of', 'toothpaste, cream', 'a **tube of** toothpaste — một tuýp kem đánh răng'],
+        ['a grain of', 'rice, sand, salt', 'a **grain of** rice — một hạt gạo'],
+        ['a drop of', 'water, rain, oil', 'a few **drops of** oil — vài giọt dầu'],
+        ['a spoonful / teaspoon of', 'sugar, salt, honey', 'two **teaspoons of** sugar — hai thìa đường'],
+        ['a litre / kilo / metre of', 'water, petrol · rice, meat · cloth', 'five **litres of** petrol — năm lít xăng'],
+        ['a pair of', 'đồ có hai phần: trousers, jeans, shoes, glasses, scissors', 'a **pair of** jeans — một chiếc quần jean'],
+        ['a lot / a great deal of', 'đơn vị "nhiều" (xem mục 5)', 'a **great deal of** stress — rất nhiều căng thẳng'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Cẩn thận: chỗ thêm -s và động từ (người Việt hay sai)',
+      items: [
+        'Chỉ **đơn vị** thêm -s: **two cups of coffee** — không phải ~~two cup of coffees~~, ~~two cups of coffees~~.',
+        'Động từ chia theo **đơn vị**: *A piece of advice **is** enough.* · *Two bottles of water **are** on the table.*',
+        'Phần này sách chưa có: trong Writing Task 1 hay gặp **a tonne of**, **a litre of**, **a kilogram of** + danh từ không đếm được (**the amount of rice**, **two million tonnes of coffee**).',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'a / two… + đơn vị (piece, cup, bottle, kilo…) + of + N (không đếm được)',
+      vi: 'Đếm danh từ không đếm được qua một đơn vị; đơn vị thêm -s, danh từ phía sau giữ nguyên.',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-don-vi-dich',
+      title: 'Dịch nhanh — đơn vị đo (4 câu)',
+      kind: 'translate',
+      grammar: 'số + đơn vị (thêm -s nếu nhiều) + of + danh từ không đếm được: two glasses of water, a loaf of bread, a piece of advice.',
+      items: [
+        { q: 'Cho tôi hai cốc nước nhé.', hint: 'Can I have / Could I have, two glasses of water, please', answers: ['Two glasses of water, please.', 'Two glasses of water please.', 'Can I have two glasses of water, please?', 'Could I have two glasses of water, please?', 'Can I have two glasses of water?', 'Could I have two glasses of water?', 'Can I get two glasses of water, please?', 'Can you give me two glasses of water, please?'] },
+        { q: 'Cô ấy mua một ổ bánh mì và một hộp sữa.', hint: 'bought, a loaf of bread, a carton of milk', answers: ['She bought a loaf of bread and a carton of milk.', 'She bought a loaf of bread and a bottle of milk.', 'She has bought a loaf of bread and a carton of milk.'] },
+        { q: 'Đây là một lời khuyên hữu ích.', hint: 'this is, a useful piece of advice', answers: ['This is a useful piece of advice.', 'This is a piece of useful advice.', 'That is a useful piece of advice.', "That's a useful piece of advice.", 'This is a helpful piece of advice.', 'This is useful advice.'] },
+        { q: 'Tôi cần một tờ giấy.', hint: 'need, a sheet of paper / a piece of paper', answers: ['I need a sheet of paper.', 'I need a piece of paper.'] },
       ],
     },
 
@@ -192,7 +308,99 @@ const D5_GRAMMAR: Lesson = {
       ],
     },
 
-    { t: 'h', text: '6. Danh từ vừa đếm được vừa không đếm được' },
+    {
+      t: 'table',
+      caption: 'So sánh 7 từ hay nhầm nhất: dùng ở loại câu nào? (phần sách chưa có)',
+      head: ['Từ', 'Đi với', 'Câu khẳng định', 'Câu phủ định', 'Câu hỏi', 'Sắc thái'],
+      rows: [
+        ['**many**', 'đếm được số nhiều', '✅ **Many people work online.** (hơi trang trọng — hợp Writing)', '✅ **not many friends**', '✅ **How many…?**', 'nhiều'],
+        ['**much**', 'không đếm được', '⚠️ nghe cứng: ~~I have much work.~~ → dùng a lot of. Được: **too much, so much, very much**', '✅ **not much time**', '✅ **How much…?**', 'nhiều'],
+        ['**a lot of / lots of**', 'cả hai loại', '✅ tự nhiên nhất khi nói', '✅ **not a lot of money**', '✅ **Do you have a lot of homework?**', 'nhiều (lots of thân mật hơn)'],
+        ['**a few**', 'đếm được số nhiều', '✅ **I have a few ideas.**', '— (ít dùng)', '✅ **Can I ask a few questions?**', 'vài — **đủ, tích cực**'],
+        ['**few**', 'đếm được số nhiều', '✅ **Few people came.** (hay đi với very / only)', '—', '—', 'rất ít — **gần như không, tiêu cực**'],
+        ['**a little**', 'không đếm được', '✅ **I have a little money.**', '— (ít dùng)', '✅ **Could you wait a little longer?**', 'một chút — **đủ, tích cực**'],
+        ['**little**', 'không đếm được', '✅ **There is little hope.** (hay đi với very)', '—', '—', 'rất ít — **thiếu, tiêu cực**'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo nhớ: có "a" là còn, không "a" là hết',
+      items: [
+        'Cốc nước còn **một chút**: *There is **a little** water left* (vẫn đủ uống — lạc quan). Cốc gần cạn: *There is **little** water left* (sắp hết — lo lắng).',
+        '**many – few – fewer** đi cùng một đội (đếm được); **much – little – less** đi cùng một đội (không đếm được). Học theo **cặp**: many ↔ much, few ↔ little, fewer ↔ less.',
+        '**quite a few** = **khá nhiều** (không phải "khá ít"): **Quite a few colleagues work from home.**',
+        'Trong Writing, thay **a lot of** bằng cụm trang trọng hơn: **a large number of** + đếm được, **a great deal of / a large amount of** + không đếm được.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'many / a few / few / fewer + N-s · much / a little / little / less + N (không đếm được) · a lot of / some / any / no + cả hai',
+      vi: 'Hỏi số lượng: How many + N-s? · How much + N (không đếm được)?',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-luong-tu-dich',
+      title: 'Dịch nhanh — từ chỉ số lượng (5 câu)',
+      kind: 'translate',
+      grammar: 'How many + N-s + do/does + S + V? · How much + N + …? · S + don\'t / doesn\'t + have + much / many… · a few (vài — đủ) / few (hầu như không) · fewer + N-s, less + N không đếm được.',
+      items: [
+        { q: 'Bạn có bao nhiêu anh chị em?', hint: 'How many, brothers and sisters / siblings, do you have', answers: ['How many brothers and sisters do you have?', 'How many siblings do you have?', 'How many brothers and sisters have you got?', 'How many siblings have you got?'] },
+        { q: 'Tôi không có nhiều thời gian rảnh.', hint: "don't have, much (time không đếm được), free time", answers: ["I don't have much free time.", 'I do not have much free time.', "I haven't got much free time.", "I don't have a lot of free time.", 'I do not have a lot of free time.', "I don't have much spare time.", "I don't have a lot of spare time."] },
+        { q: 'Tôi có vài người bạn ở Đà Nẵng.', hint: 'have, a few friends (vài — tích cực), in Da Nang', answers: ['I have a few friends in Da Nang.', "I've got a few friends in Da Nang.", 'I have some friends in Da Nang.', 'I have a few friends in Danang.'] },
+        { q: 'Hầu như không ai đến buổi họp.', hint: 'few people (không "a" → gần như không), came to the meeting', answers: ['Few people came to the meeting.', 'Very few people came to the meeting.', 'Hardly anyone came to the meeting.', 'Almost nobody came to the meeting.', 'Almost no one came to the meeting.', 'Hardly anybody came to the meeting.'] },
+        { q: 'Làm việc tại nhà nghĩa là ít xe hơn và ít ô nhiễm hơn.', hint: 'working from home means, fewer cars, less pollution', answers: ['Working from home means fewer cars and less pollution.', 'Working at home means fewer cars and less pollution.', 'Working from home means fewer cars and less pollution on the roads.', 'Working from home means there are fewer cars and less pollution.'] },
+      ],
+    },
+
+    { t: 'h', text: '6. a / an / some / any — mạo từ và từ hạn định đi với danh từ' },
+    {
+      t: 'p',
+      text: 'Phần này sách chưa tách riêng, nhưng nó là "bạn đồng hành" không thể thiếu: chọn **a/an** hay **some/any** phụ thuộc trực tiếp vào việc danh từ **đếm được hay không**, và câu là **khẳng định, phủ định hay câu hỏi**. **Mạo từ** (article) là a, an, the; **từ hạn định** (determiner) là từ đứng trước danh từ để giới hạn nghĩa của nó (some, any, no…).',
+    },
+    {
+      t: 'table',
+      caption: 'Bảng so sánh a / an / some / any / no',
+      head: ['Từ', 'Đi với', 'Dùng khi', 'Ví dụ'],
+      rows: [
+        ['**a**', 'đếm được **số ít**, đứng trước **âm phụ âm**', 'nói tới **một** người/vật bất kỳ, hoặc lần đầu nhắc tới', '**a laptop** · *a **u**niversity* (/juː/ là âm phụ âm) · *a **one**-hour meeting* (/w/)'],
+        ['**an**', 'đếm được **số ít**, đứng trước **âm nguyên âm**', 'như a', '**an email** · *an **h**our* (h câm) · *an **M**BA* (đọc /em/)'],
+        ['**some**', 'đếm được **số nhiều** + **không đếm được**', 'câu **khẳng định**; câu **mời / xin** (mong câu trả lời "có")', '**I have some emails to answer.** · **Would you like some tea?** · **Can I have some water?**'],
+        ['**any**', 'đếm được **số nhiều** + **không đếm được**', 'câu **phủ định** và **câu hỏi** thông thường', "**I don't have any meetings today.** · **Is there any milk?**"],
+        ['**no**', 'cả hai loại', '= **not any**, đứng trong câu khẳng định nhưng mang nghĩa phủ định', '*There is **no** time.* = *There isn\'t **any** time.*'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Người Việt hay sai với a / an / some / any',
+      items: [
+        'Chọn **a/an theo âm**, không theo chữ cái: ~~an university~~ → **a university**; ~~a hour~~ → **an hour**; ~~a honest man~~ → **an honest man**.',
+        '~~a advice~~, ~~an information~~, ~~a homework~~ → danh từ không đếm được **không bao giờ** đi với a/an. Dùng **some advice / a piece of advice**.',
+        'Hai phủ định trong một câu: ~~I don\'t have no money.~~ → **I don\'t have any money.** hoặc **I have no money.**',
+        'Câu hỏi thông thường dùng **any**: *Do you have **any** questions?* — nhưng lời mời/xin dùng **some**: *Would you like **some** coffee?*',
+        '**any** trong câu khẳng định = "**bất cứ … nào**": *You can call me **any** time.* (không phải lỗi).',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'a / an + N (số ít) · some + N-s / N (khẳng định, lời mời) · any + N-s / N (phủ định, câu hỏi) · no + N = not any',
+      vi: 'a/an chọn theo ÂM đầu của từ phía sau (an hour, a university).',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-a-some-any-dich',
+      title: 'Dịch nhanh — a / an / some / any (5 câu)',
+      kind: 'translate',
+      grammar: 'a/an + danh từ số ít (an trước âm nguyên âm: an hour); Would you like + some…? (lời mời); S + don\'t / doesn\'t + have + any…; Is there + any + N…?',
+      items: [
+        { q: 'Tôi có một câu hỏi.', hint: 'have, a question', answers: ['I have a question.', "I've got a question.", 'I have one question.'] },
+        { q: 'Bạn có muốn uống chút trà không?', hint: 'Would you like, some tea (lời mời → some)', answers: ['Would you like some tea?', 'Do you want some tea?', 'Would you like to drink some tea?', 'Would you like to have some tea?'] },
+        { q: 'Chúng tôi không có câu hỏi nào.', hint: "don't have, any questions / have no questions", answers: ["We don't have any questions.", 'We do not have any questions.', 'We have no questions.', "We haven't got any questions."] },
+        { q: 'Trong tủ lạnh có sữa không?', hint: 'Is there, any milk (không đếm được → is), in the fridge', answers: ['Is there any milk in the fridge?'] },
+        { q: 'Anh ấy đã đợi một tiếng.', hint: 'waited, for an hour (h câm → an)', answers: ['He waited for an hour.', 'He waited an hour.', 'He has waited for an hour.', 'He has been waiting for an hour.', 'He had waited for an hour.', "He's been waiting for an hour."] },
+      ],
+    },
+
+    { t: 'h', text: '7. Danh từ vừa đếm được vừa không đếm được' },
     {
       t: 'p',
       text: 'Sách nêu ví dụ **glass / glasses**. Thực tế có khá nhiều từ như vậy, và nghĩa đổi theo loại. Quy tắc chung: **nói chung chung, trừu tượng, chất liệu → không đếm được**; **nói một cái, một lần, một loại cụ thể → đếm được**.',
@@ -210,6 +418,10 @@ const D5_GRAMMAR: Lesson = {
         ['business', 'việc kinh doanh nói chung: ***Business** is good this year.*', 'một công ty: *She runs **two small businesses**.*'],
         ['coffee / tea', 'cà phê (đồ uống nói chung): *I love **coffee**.*', 'một cốc (khi gọi món): *Two **coffees**, please.*'],
         ['light', 'ánh sáng: *This room gets a lot of **light**.*', 'cái đèn: *Turn off **the lights**.*'],
+        ['hair', 'tóc (cả mái): *She has long **hair**.* (~~long hairs~~)', 'một sợi tóc: *There is **a hair** in my soup!*'],
+        ['chicken', 'thịt gà: *I had **chicken** for lunch.*', 'con gà: *My grandmother keeps ten **chickens**.*'],
+        ['iron', 'sắt: *The gate is made of **iron**.*', 'cái bàn là: *I need **an iron** for my shirt.*'],
+        ['noise', 'tiếng ồn nói chung: *There is too much **noise** in the office.*', 'một tiếng động: *I heard **a** strange **noise**.*'],
       ],
     },
     {
@@ -221,8 +433,26 @@ const D5_GRAMMAR: Lesson = {
         'Cặp tương tự: **a suggestion** (đếm được) ≈ **advice** (không đếm được); **a suitcase** ≈ **luggage**; **a chair** ≈ **furniture**; **a fact** ≈ **information**. Không nhớ được từ không đếm được thì đổi sang từ đếm được cùng nghĩa.',
       ],
     },
+    {
+      t: 'rule',
+      formula: 'N (không a/an, không -s) = nghĩa chung, chất liệu · a / an + N · N-s = một cái, một lần, một trải nghiệm cụ thể',
+      vi: 'Đọc cả câu để biết nghĩa rồi mới chọn loại: glass / a glass, time / three times, experience / an experience.',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-hai-mat-dich',
+      title: 'Dịch nhanh — danh từ "hai mặt" (4 câu)',
+      kind: 'translate',
+      grammar: 'Nghĩa chung / chất liệu → không đếm được (glass, experience, time). Nghĩa cụ thể → đếm được (an experience, three times).',
+      items: [
+        { q: 'Cửa sổ làm bằng thuỷ tinh.', hint: 'the window, is made of, glass (chất liệu → không a)', answers: ['The window is made of glass.', 'The windows are made of glass.'] },
+        { q: 'Tôi đã gọi cho cô ấy ba lần.', hint: 'called her, three times (lần → đếm được)', answers: ['I called her three times.', 'I have called her three times.', "I've called her three times.", 'I phoned her three times.', 'I rang her three times.'] },
+        { q: 'Anh ấy có nhiều kinh nghiệm trong ngành du lịch.', hint: 'has, a lot of experience (kinh nghiệm → không -s), in tourism', answers: ['He has a lot of experience in tourism.', 'He has a lot of experience in the tourism industry.', 'He has lots of experience in tourism.', 'He has much experience in tourism.', 'He has plenty of experience in tourism.', 'He has a lot of experience in the travel industry.'] },
+        { q: 'Chuyến đi Sa Pa là một trải nghiệm tuyệt vời.', hint: 'the trip to Sa Pa, was, an amazing / a wonderful experience (một trải nghiệm → đếm được)', answers: ['The trip to Sa Pa was an amazing experience.', 'The trip to Sa Pa was a wonderful experience.', 'The trip to Sa Pa was a great experience.', 'My trip to Sa Pa was an amazing experience.', 'My trip to Sa Pa was a wonderful experience.', 'My trip to Sa Pa was a great experience.', 'The trip to Sapa was an amazing experience.', 'The trip to Sapa was a wonderful experience.', 'The trip to Sapa was a great experience.'] },
+      ],
+    },
 
-    { t: 'h', text: '7. Danh từ chỉ có dạng số nhiều và danh từ số ít = số nhiều' },
+    { t: 'h', text: '8. Danh từ chỉ có dạng số nhiều và danh từ số ít = số nhiều' },
     {
       t: 'p',
       text: 'Phần này sách chưa có nhưng rất hay gây lỗi chia động từ.',
@@ -231,7 +461,7 @@ const D5_GRAMMAR: Lesson = {
       t: 'table',
       head: ['Nhóm', 'Các từ', 'Cách dùng'],
       rows: [
-        ['**Luôn số nhiều** (đồ vật có hai phần)', 'trousers, jeans, shorts, glasses (kính), scissors, headphones', 'Động từ số nhiều: *My headphones **are** broken.* Đếm bằng **a pair of**: *a pair of scissors*.'],
+        ['**Luôn số nhiều** (đồ vật có hai phần)', 'trousers, jeans, shorts, glasses (kính), scissors, headphones', 'Động từ số nhiều: *My headphones **are** broken.* Đếm bằng **a pair of**: **a pair of scissors**.'],
         ['**Luôn số nhiều** (không có -s nhưng mang nghĩa số nhiều)', 'people, police, cattle', '*The police **are** looking into it.* · *People **are** busier than ever.* (~~peoples~~ chỉ dùng khi nói "các dân tộc")'],
         ['**Tận cùng -s nhưng thường số nhiều**', 'clothes, goods, belongings, surroundings, earnings', '*Her clothes **are** very stylish.*'],
         ['**Số ít = số nhiều** (không đổi dạng)', 'sheep, fish, deer, species, series, means, aircraft, crossroads', '*one **species**, many **species*** · *This means of transport **is** cheap. / These means **are** cheap.*'],
@@ -246,8 +476,26 @@ const D5_GRAMMAR: Lesson = {
         '**family, team, government, company** có thể chia số ít (coi là một khối) hoặc số nhiều (nghĩ đến từng thành viên, kiểu Anh-Anh). Chọn một cách và giữ nguyên cả bài.',
       ],
     },
+    {
+      t: 'rule',
+      formula: 'people / police / clothes / jeans / scissors + are · a pair of + N-s + is · species / series / means: số ít = số nhiều',
+      vi: 'Đếm đồ có hai phần bằng "a pair of"; "people" đã là số nhiều — không thêm -s.',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-so-nhieu-dich',
+      title: 'Dịch nhanh — danh từ luôn số nhiều (4 câu)',
+      kind: 'translate',
+      grammar: 'jeans, police, scissors, people + are (số nhiều); a pair of + N; staff + are/is (thống nhất cả bài).',
+      items: [
+        { q: 'Quần jean của tôi bị rách.', hint: 'my jeans (luôn số nhiều → are), torn', answers: ['My jeans are torn.', 'My jeans are ripped.'] },
+        { q: 'Cảnh sát đang điều tra vụ việc.', hint: 'the police (số nhiều → are), investigating / looking into, the case', answers: ['The police are investigating the case.', 'The police are looking into the case.', 'The police are investigating the incident.', 'The police are looking into the incident.'] },
+        { q: 'Tôi cần mua một cái kéo.', hint: 'need to buy, a pair of scissors', answers: ['I need to buy a pair of scissors.', 'I need to buy some scissors.', 'I need a pair of scissors.'] },
+        { q: 'Nhân viên ở đây rất thân thiện.', hint: 'the staff (danh từ tập hợp, không -s), are / is, very friendly', answers: ['The staff here are very friendly.', 'The staff here is very friendly.', 'The staff are very friendly here.', 'The staff is very friendly here.', 'The staff here are really friendly.', 'The staff here is really friendly.'] },
+      ],
+    },
 
-    { t: 'h', text: '8. Ứng dụng trong IELTS Writing Task 2' },
+    { t: 'h', text: '9. Ứng dụng trong IELTS Writing Task 2' },
     {
       t: 'p',
       text: 'Task 2 thường xoay quanh giáo dục, xã hội, môi trường, công việc — toàn chủ đề đầy danh từ không đếm được (education, pollution, employment, technology, information…). Sách chia phần ứng dụng thành 4 ý a–b–c–d; các câu ví dụ dưới đây được viết mới cho chủ đề làm việc từ xa.',
@@ -293,7 +541,7 @@ const D5_GRAMMAR: Lesson = {
     },
     {
       t: 'p',
-      text: '**d) Tăng điểm Grammatical Range and Accuracy.** Tiêu chí ngữ pháp chấm cả **độ chính xác** lẫn **độ đa dạng**. Bài band 5 thường đầy lỗi *informations, much people, a work*; bài band 6.5+ gần như không có lỗi này và còn dùng linh hoạt *a great deal of, a growing number of, fewer… less…*. Sửa hết lỗi danh từ là cách **rẻ nhất** để lên điểm.',
+      text: '**d) Tăng điểm Grammatical Range and Accuracy.** Tiêu chí ngữ pháp chấm cả **độ chính xác** lẫn **độ đa dạng**. Bài band 5 thường đầy lỗi **informations, much people, a work**; bài band 6.5+ gần như không có lỗi này và còn dùng linh hoạt **a great deal of, a growing number of, fewer… less…**. Sửa hết lỗi danh từ là cách **rẻ nhất** để lên điểm.',
     },
     {
       t: 'examples',
@@ -308,12 +556,30 @@ const D5_GRAMMAR: Lesson = {
       title: 'Mẹo làm bài',
       items: [
         'Soát bài theo một vòng riêng chỉ để kiểm danh từ: gạch chân mọi danh từ, hỏi "đếm được không?", rồi kiểm **a/an**, **-s**, **từ chỉ số lượng** và **động từ** đi theo.',
-        'Viết về một nhóm người **nói chung** thì dùng **số nhiều không "the"**: *Employees need…*, *Freelancers often…* — tự nhiên hơn "An employee needs…".',
+        'Viết về một nhóm người **nói chung** thì dùng **số nhiều không "the"**: **Employees need…**, **Freelancers often…** — tự nhiên hơn "An employee needs…".',
         'Thuộc sẵn 5 cụm "an toàn": **a growing number of** + số nhiều · **a great deal of** + không đếm được · **fewer / less** · **the number / the amount of** · **a piece of** + không đếm được.',
       ],
     },
+    {
+      t: 'rule',
+      formula: 'Education / Technology / Money (không đếm được) + V(s/es) · Employees / Students (số nhiều) + V · a growing number of + N-s + V',
+      vi: 'Bốn ý của sách: (a) đúng loại danh từ · (b) đúng từ chỉ số lượng · (c) đúng nghĩa với danh từ "hai mặt" · (d) ít lỗi + đa dạng = điểm ngữ pháp cao.',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-task2-dich',
+      title: 'Dịch nhanh — câu Writing Task 2 (4 câu)',
+      kind: 'translate',
+      grammar: 'Danh từ không đếm được (education, money) + động từ số ít; problems (đếm được) + many; a growing number of + danh từ số nhiều + động từ số nhiều.',
+      items: [
+        { q: 'Giáo dục đóng vai trò quan trọng trong xã hội.', hint: 'education (không -s → plays), an important role, in society', answers: ['Education plays an important role in society.', 'Education plays a crucial role in society.', 'Education plays a vital role in society.', 'Education plays an important part in society.', 'Education plays a key role in society.'] },
+        { q: 'Chính phủ nên đầu tư nhiều tiền hơn vào y tế.', hint: 'the government / governments, should invest, more money (không -s), in healthcare', answers: ['The government should invest more money in healthcare.', 'Governments should invest more money in healthcare.', 'The government should invest more money in health care.', 'Governments should invest more money in health care.', 'The government should invest more money in health.', 'Governments should invest more money in health.', 'The government should invest more money in the healthcare system.', 'Governments should invest more money in the healthcare system.'] },
+        { q: 'Ngày càng nhiều nhân viên muốn làm việc tại nhà.', hint: 'a growing number of employees, want (số nhiều), to work from home', answers: ['A growing number of employees want to work from home.', 'An increasing number of employees want to work from home.', 'More and more employees want to work from home.', 'A growing number of workers want to work from home.', 'An increasing number of workers want to work from home.', 'More and more workers want to work from home.', 'A growing number of employees want to work at home.', 'More and more employees want to work at home.'] },
+        { q: 'Có nhiều vấn đề trong xã hội hiện đại.', hint: 'there are, many problems (đếm được → many), in modern society', answers: ['There are many problems in modern society.', 'There are a lot of problems in modern society.', 'There are lots of problems in modern society.', 'There are many issues in modern society.', 'There are a lot of issues in modern society.'] },
+      ],
+    },
 
-    { t: 'h', text: '9. Lỗi danh từ người Việt hay mắc nhất' },
+    { t: 'h', text: '10. Lỗi danh từ người Việt hay mắc nhất' },
     {
       t: 'p',
       text: 'Phần này sách chưa có. Những lỗi dưới đây xuất hiện trong gần như mọi bài viết band 4–5.',
@@ -335,6 +601,23 @@ const D5_GRAMMAR: Lesson = {
         ['~~much people~~, ~~less people~~', '**many people**, **fewer people**', 'people là số nhiều'],
         ['~~childrens~~, ~~peoples~~', '**children**, **people**', 'đã là số nhiều rồi'],
         ['~~staffs~~', '**staff** / staff members / employees', ''],
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Soát mỗi danh từ: đếm được? → a/an, -s, many / few · không đếm được? → không a/an, không -s, much / little, V(s/es)',
+      vi: 'Một vòng soát riêng cho danh từ trước khi nộp bài — cách rẻ nhất để tăng điểm ngữ pháp.',
+    },
+    {
+      t: 'quiz',
+      id: 'd5-loi-dich',
+      title: 'Dịch nhanh — tránh lỗi hay gặp (3 câu)',
+      kind: 'translate',
+      grammar: 'advice, research, homework = không đếm được: không -s, không a/an, động từ số ít; "nhiều" → a lot of / much.',
+      items: [
+        { q: 'Cô ấy cho tôi nhiều lời khuyên.', hint: 'gave me, a lot of advice (không -s)', answers: ['She gave me a lot of advice.', 'She gave me lots of advice.', 'She gave me much advice.', 'She gave me plenty of advice.', 'She has given me a lot of advice.'] },
+        { q: 'Chúng tôi đã làm nhiều nghiên cứu về chủ đề này.', hint: 'have done / did, a lot of research (không -s), on this topic', answers: ['We have done a lot of research on this topic.', 'We did a lot of research on this topic.', "We've done a lot of research on this topic.", 'We have done a lot of research into this topic.', 'We did a lot of research into this topic.', 'We have done lots of research on this topic.', 'We did lots of research on this topic.', 'We have done much research on this topic.', 'We have done a lot of research on this subject.', 'We did a lot of research on this subject.'] },
+        { q: 'Bài tập về nhà hôm nay rất dễ.', hint: "today's homework (không -s → is), very easy", answers: ["Today's homework is very easy.", 'The homework today is very easy.', "Today's homework is really easy.", 'The homework for today is very easy.'] },
       ],
     },
     {
@@ -367,6 +650,17 @@ const D5_VOCAB: Lesson = {
   minutes: 35,
   blocks: [
     {
+      t: 'recap',
+      title: 'Bài này học gì',
+      items: [
+        '**19 từ** chủ đề Remote Work (job, office, colleague, work-life balance…) — đủ như sách, mỗi từ có IPA Anh-Anh, ví dụ tự đặt và nhiều từ có dòng **"Hay đi với"**.',
+        '**10 cụm động từ** văn phòng: set up, log in / log out, catch up, turn on / turn off, work on, check in, follow up, put off.',
+        '**5 họ từ**: flexible → flexibility, collaborate → collaboration, produce → productivity, communicate → communication, employ → employment.',
+        'Áp dụng bài ngữ pháp: ==job== đếm được nhưng ==work, job satisfaction, time management== **không đếm được**.',
+        'Dùng nút **Che nghĩa / Che từ** để tự kiểm tra sau khi học.',
+      ],
+    },
+    {
       t: 'p',
       text: 'Từ sau năm 2020, **làm việc từ xa** (remote work — làm việc không cần đến văn phòng) trở thành đề tài quen thuộc của IELTS. Bấm 🔊 để nghe từng từ. Học theo vòng: nghe → đọc to → che nghĩa tự nhớ → đặt một câu về công việc hoặc việc học của chính bạn. Để ý cột **loại từ**: bài ngữ pháp hôm nay dạy bạn phân biệt đếm được / không đếm được — hãy áp dụng ngay cho từng từ.',
     },
@@ -374,38 +668,38 @@ const D5_VOCAB: Lesson = {
     {
       t: 'vocab',
       items: [
-        { w: 'job', pos: 'n', ipa: '/dʒɒb/', vi: 'công việc, việc làm (đếm được)', ex: 'My brother got a part-time job at a design studio.', exVi: 'Anh tôi xin được một công việc bán thời gian ở một xưởng thiết kế.' },
-        { w: 'office', pos: 'n', ipa: '/ˈɒfɪs/', vi: 'văn phòng', ex: 'Our office is on the tenth floor, but I only go there on Mondays.', exVi: 'Văn phòng chúng tôi ở tầng mười, nhưng tôi chỉ lên đó vào thứ Hai.' },
-        { w: 'home', pos: 'n', ipa: '/həʊm/', vi: 'nhà (nơi mình sống)', ex: 'Since the pandemic, she has done most of her work from home.', exVi: 'Từ sau đại dịch, cô ấy làm phần lớn công việc tại nhà.' },
-        { w: 'workplace', pos: 'n', ipa: '/ˈwɜːkpleɪs/', vi: 'nơi làm việc', ex: 'A friendly workplace makes people want to stay longer in a company.', exVi: 'Một nơi làm việc thân thiện khiến người ta muốn gắn bó lâu hơn với công ty.' },
-        { w: 'employee', pos: 'n', ipa: '/ɪmˈplɔɪiː/', vi: 'nhân viên, người làm thuê', ex: 'Every new employee receives a laptop on the first day.', exVi: 'Mỗi nhân viên mới được nhận một chiếc laptop vào ngày đầu tiên.' },
-        { w: 'boss', pos: 'n', ipa: '/bɒs/', vi: 'sếp, cấp trên', ex: 'My boss replies to messages even at weekends, which is a bit stressful.', exVi: 'Sếp tôi trả lời tin nhắn cả cuối tuần, điều đó hơi căng thẳng.' },
-        { w: 'internet', pos: 'n', ipa: '/ˈɪntənet/', vi: 'mạng internet (thường có "the")', ex: 'Without a stable internet connection, remote work is almost impossible.', exVi: 'Không có kết nối internet ổn định thì gần như không thể làm việc từ xa.' },
-        { w: 'computer', pos: 'n', ipa: '/kəmˈpjuːtə(r)/', vi: 'máy tính', ex: 'I bought a second screen for my computer to work faster.', exVi: 'Tôi mua thêm một màn hình cho máy tính để làm việc nhanh hơn.' },
-        { w: 'email', pos: 'n, v', ipa: '/ˈiːmeɪl/', vi: 'thư điện tử; gửi thư điện tử', ex: 'I usually answer emails before I start my main tasks.', exVi: 'Tôi thường trả lời email trước khi bắt đầu các việc chính.' },
-        { w: 'meeting', pos: 'n', ipa: '/ˈmiːtɪŋ/', vi: 'cuộc họp', ex: 'The weekly meeting moved online, so nobody has to travel.', exVi: 'Cuộc họp hằng tuần đã chuyển lên mạng nên không ai phải di chuyển.' },
-        { w: 'online', pos: 'adj, adv', ipa: '/ˌɒnˈlaɪn/', vi: 'trực tuyến, trên mạng', ex: 'Many companies now hold job interviews online.', exVi: 'Nhiều công ty hiện phỏng vấn tuyển dụng qua mạng.' },
-        { w: 'task', pos: 'n', ipa: '/tɑːsk/', vi: 'nhiệm vụ, đầu việc', ex: 'I write down three tasks every morning and finish them one by one.', exVi: 'Mỗi sáng tôi ghi ra ba đầu việc và làm xong từng việc một.' },
-        { w: 'call', pos: 'n, v', ipa: '/kɔːl/', vi: 'cuộc gọi; gọi điện', ex: 'We have a quick video call with the design team at ten.', exVi: 'Lúc mười giờ chúng tôi có một cuộc gọi video ngắn với nhóm thiết kế.' },
-        { w: 'flexible', pos: 'adj', ipa: '/ˈfleksəbl/', vi: 'linh hoạt', ex: 'Flexible hours let parents take their children to school.', exVi: 'Giờ làm linh hoạt giúp cha mẹ đưa con đi học được.' },
-        { w: 'job satisfaction', pos: 'n', ipa: '/ˌdʒɒb ˌsætɪsˈfækʃn/', vi: 'sự hài lòng với công việc', ex: 'Good relationships with colleagues increase job satisfaction.', exVi: 'Quan hệ tốt với đồng nghiệp làm tăng sự hài lòng với công việc.' },
-        { w: 'colleague', pos: 'n', ipa: '/ˈkɒliːɡ/', vi: 'đồng nghiệp', ex: 'Working from home, I sometimes miss chatting with my colleagues.', exVi: 'Làm việc ở nhà, đôi khi tôi nhớ những lúc trò chuyện với đồng nghiệp.' },
-        { w: 'work-life balance', pos: 'n', ipa: '/ˌwɜːk ˈlaɪf ˈbæləns/', vi: 'sự cân bằng giữa công việc và cuộc sống', ex: 'Turning off notifications after 7 p.m. helps my work-life balance.', exVi: 'Tắt thông báo sau 7 giờ tối giúp tôi cân bằng công việc và cuộc sống.' },
-        { w: 'time management', pos: 'n', ipa: '/ˈtaɪm ˌmænɪdʒmənt/', vi: 'kỹ năng quản lý thời gian', ex: 'Without a manager nearby, time management becomes your own responsibility.', exVi: 'Không có quản lý bên cạnh, việc quản lý thời gian trở thành trách nhiệm của chính bạn.' },
-        { w: 'freelancer', pos: 'n', ipa: '/ˈfriːlɑːnsə(r)/', vi: 'người làm việc tự do (nhận việc theo dự án, không thuộc công ty nào)', ex: 'As a freelancer, he translates documents for clients in three countries.', exVi: 'Là người làm tự do, anh ấy dịch tài liệu cho khách hàng ở ba nước.' },
+        { w: 'job', pos: 'n', ipa: '/dʒɒb/', vi: 'công việc, việc làm (đếm được)', ex: 'My brother got a part-time job at a design studio.', exVi: 'Anh tôi xin được một công việc bán thời gian ở một xưởng thiết kế.', more: 'Hay đi với: **get / find / apply for / lose** a job · a **full-time / part-time** job. ~~a work~~ → **a job** (đếm được) / **work** (không đếm được).' },
+        { w: 'office', pos: 'n', ipa: '/ˈɒfɪs/', vi: 'văn phòng', ex: 'Our office is on the tenth floor, but I only go there on Mondays.', exVi: 'Văn phòng chúng tôi ở tầng mười, nhưng tôi chỉ lên đó vào thứ Hai.', more: 'Hay đi với: **go to / work in** the office · **head** office (trụ sở chính) · **home** office (góc làm việc tại nhà).' },
+        { w: 'home', pos: 'n', ipa: '/həʊm/', vi: 'nhà (nơi mình sống)', ex: 'Since the pandemic, she has done most of her work from home.', exVi: 'Từ sau đại dịch, cô ấy làm phần lớn công việc tại nhà.', more: '**at home**, **work from home**, nhưng **go home** / **come home** (không có ~~to~~). **homework / housework** là danh từ không đếm được.' },
+        { w: 'workplace', pos: 'n', ipa: '/ˈwɜːkpleɪs/', vi: 'nơi làm việc', ex: 'A friendly workplace makes people want to stay longer in a company.', exVi: 'Một nơi làm việc thân thiện khiến người ta muốn gắn bó lâu hơn với công ty.', more: 'Hay đi với: a **safe / friendly / modern** workplace · **in the** workplace (ở nơi làm việc nói chung).' },
+        { w: 'employee', pos: 'n', ipa: '/ɪmˈplɔɪiː/', vi: 'nhân viên, người làm thuê', ex: 'Every new employee receives a laptop on the first day.', exVi: 'Mỗi nhân viên mới được nhận một chiếc laptop vào ngày đầu tiên.', more: '**employer** (-er: người thuê) ≠ **employee** (-ee: người được thuê). Nhấn âm cuối: em-ploy-**EE**. Gần nghĩa: **staff** (không đếm được), **worker**.' },
+        { w: 'boss', pos: 'n', ipa: '/bɒs/', vi: 'sếp, cấp trên', ex: 'My boss replies to messages even at weekends, which is a bit stressful.', exVi: 'Sếp tôi trả lời tin nhắn cả cuối tuần, điều đó hơi căng thẳng.', more: 'Số nhiều **bosses** (tận cùng -ss thêm -es). Writing trang trọng hơn dùng **manager / employer / supervisor**.' },
+        { w: 'internet', pos: 'n', ipa: '/ˈɪntənet/', vi: 'mạng internet (thường có "the")', ex: 'Without a stable internet connection, remote work is almost impossible.', exVi: 'Không có kết nối internet ổn định thì gần như không thể làm việc từ xa.', more: '**on the internet**, **search the internet**, **internet access / connection** (không ~~an internet~~).' },
+        { w: 'computer', pos: 'n', ipa: '/kəmˈpjuːtə(r)/', vi: 'máy tính', ex: 'I bought a second screen for my computer to work faster.', exVi: 'Tôi mua thêm một màn hình cho máy tính để làm việc nhanh hơn.', more: 'Hay đi với: **use / turn on / shut down** a computer · **computer skills** · a **desktop / laptop** computer.' },
+        { w: 'email', pos: 'n, v', ipa: '/ˈiːmeɪl/', vi: 'thư điện tử; gửi thư điện tử', ex: 'I usually answer emails before I start my main tasks.', exVi: 'Tôi thường trả lời email trước khi bắt đầu các việc chính.', more: '**send / reply to / check** an email · contact us **by email** (không mạo từ) · động từ: *Please **email** me the file.*' },
+        { w: 'meeting', pos: 'n', ipa: '/ˈmiːtɪŋ/', vi: 'cuộc họp', ex: 'The weekly meeting moved online, so nobody has to travel.', exVi: 'Cuộc họp hằng tuần đã chuyển lên mạng nên không ai phải di chuyển.', more: 'Hay đi với: **have / hold / attend / join** a meeting · an **online** meeting · **in** a meeting (đang họp).' },
+        { w: 'online', pos: 'adj, adv', ipa: '/ˌɒnˈlaɪn/', vi: 'trực tuyến, trên mạng', ex: 'Many companies now hold job interviews online.', exVi: 'Nhiều công ty hiện phỏng vấn tuyển dụng qua mạng.', more: 'Vừa là tính từ (*an **online** course*) vừa là trạng từ (*work **online***). ~~work in online~~ là sai. Trái nghĩa: **offline**, **face-to-face**.' },
+        { w: 'task', pos: 'n', ipa: '/tɑːsk/', vi: 'nhiệm vụ, đầu việc', ex: 'I write down three tasks every morning and finish them one by one.', exVi: 'Mỗi sáng tôi ghi ra ba đầu việc và làm xong từng việc một.', more: 'Hay đi với: **do / complete / carry out** a task · a **difficult / daily** task. Trong IELTS, **Task 1 / Task 2** chính là từ này.' },
+        { w: 'call', pos: 'n, v', ipa: '/kɔːl/', vi: 'cuộc gọi; gọi điện', ex: 'We have a quick video call with the design team at ten.', exVi: 'Lúc mười giờ chúng tôi có một cuộc gọi video ngắn với nhóm thiết kế.', more: '**make / get / join** a call · a **video / phone** call · **call** somebody (không ~~call to somebody~~).' },
+        { w: 'flexible', pos: 'adj', ipa: '/ˈfleksəbl/', vi: 'linh hoạt', ex: 'Flexible hours let parents take their children to school.', exVi: 'Giờ làm linh hoạt giúp cha mẹ đưa con đi học được.', more: 'Hay đi với: **flexible hours / working hours / schedule** · danh từ **flexibility** (sự linh hoạt).' },
+        { w: 'job satisfaction', pos: 'n', ipa: '/ˌdʒɒb ˌsætɪsˈfækʃn/', vi: 'sự hài lòng với công việc', ex: 'Good relationships with colleagues increase job satisfaction.', exVi: 'Quan hệ tốt với đồng nghiệp làm tăng sự hài lòng với công việc.', more: 'Không đếm được: **high / low** job satisfaction (không ~~a job satisfaction~~) · **increase / improve** job satisfaction.' },
+        { w: 'colleague', pos: 'n', ipa: '/ˈkɒliːɡ/', vi: 'đồng nghiệp', ex: 'Working from home, I sometimes miss chatting with my colleagues.', exVi: 'Làm việc ở nhà, đôi khi tôi nhớ những lúc trò chuyện với đồng nghiệp.', more: 'Đọc /ˈkɒliːɡ/ (âm cuối /ɡ/). Gần nghĩa: **co-worker**. Cụm hay: **a close colleague**, **my colleagues at work**.' },
+        { w: 'work-life balance', pos: 'n', ipa: '/ˌwɜːk ˈlaɪf ˈbæləns/', vi: 'sự cân bằng giữa công việc và cuộc sống', ex: 'Turning off notifications after 7 p.m. helps my work-life balance.', exVi: 'Tắt thông báo sau 7 giờ tối giúp tôi cân bằng công việc và cuộc sống.', more: 'Hay đi với: **achieve / maintain / improve** a healthy work-life balance — cụm ăn điểm trong Task 2 về công việc.' },
+        { w: 'time management', pos: 'n', ipa: '/ˈtaɪm ˌmænɪdʒmənt/', vi: 'kỹ năng quản lý thời gian', ex: 'Without a manager nearby, time management becomes your own responsibility.', exVi: 'Không có quản lý bên cạnh, việc quản lý thời gian trở thành trách nhiệm của chính bạn.', more: 'Không đếm được. Cụm hay: **time management skills** · **be good at managing time**.' },
+        { w: 'freelancer', pos: 'n', ipa: '/ˈfriːlɑːnsə(r)/', vi: 'người làm việc tự do (nhận việc theo dự án, không thuộc công ty nào)', ex: 'As a freelancer, he translates documents for clients in three countries.', exVi: 'Là người làm tự do, anh ấy dịch tài liệu cho khách hàng ở ba nước.', more: 'Tính từ / trạng từ **freelance**: *a **freelance** designer*, *work **freelance*** (làm tự do). Danh từ chỉ việc: **freelancing**.' },
       ],
     },
     {
       t: 'note',
       title: 'Người Việt hay sai (phần sách chưa có)',
       items: [
-        '**job** đếm được (*a job, two jobs*) nhưng **work** không đếm được (~~a work~~). *I have **a** job* = tôi có việc làm; *I have **a lot of work*** = tôi có nhiều việc phải làm.',
+        '**job** đếm được (**a job, two jobs**) nhưng **work** không đếm được (~~a work~~). *I have **a** job* = tôi có việc làm; *I have **a lot of work*** = tôi có nhiều việc phải làm.',
         '**at home / from home**, còn đi về nhà thì **không có giới từ**: ~~go to home~~ → **go home**. *work **from** home* = làm việc tại nhà (thay vì ở văn phòng).',
         '**the internet** thường có **the** và không đếm được: *search **the** internet*, *on **the** internet*. Viết hoa (Internet) hay thường đều được.',
         '**email**: *send **an** email / two emails* (đếm được, một lá thư) — nhưng *contact us **by email*** (phương thức, không có mạo từ).',
         '**online** vừa là tính từ (*an **online** meeting*) vừa là trạng từ (*work **online***). ~~work in online~~ là sai.',
         '**colleague** đọc /ˈkɒliːɡ/, âm cuối là /ɡ/ — không đọc "co-lê-giu". **employee** nhấn âm cuối: em-ploy-**EE**.',
-        '**job satisfaction, time management, work-life balance** đều là **danh từ không đếm được**: *high job satisfaction* (không ~~a high job satisfaction~~).',
+        '**job satisfaction, time management, work-life balance** đều là **danh từ không đếm được**: **high job satisfaction** (không ~~a high job satisfaction~~).',
       ],
     },
     { t: 'h', text: '2. Cụm động từ (phrasal verbs)' },
@@ -416,16 +710,16 @@ const D5_VOCAB: Lesson = {
     {
       t: 'vocab',
       items: [
-        { w: 'set up', pos: 'phr v', ipa: '/set ʌp/', vi: 'thiết lập, cài đặt, dựng lên', ex: 'It took me an hour to set up the new printer.', exVi: 'Tôi mất một tiếng để cài đặt chiếc máy in mới.' },
-        { w: 'log in', pos: 'phr v', ipa: '/lɒɡ ˈɪn/', vi: 'đăng nhập', ex: 'You have to log in with your company password.', exVi: 'Bạn phải đăng nhập bằng mật khẩu công ty.' },
+        { w: 'set up', pos: 'phr v', ipa: '/set ʌp/', vi: 'thiết lập, cài đặt, dựng lên', ex: 'It took me an hour to set up the new printer.', exVi: 'Tôi mất một tiếng để cài đặt chiếc máy in mới.', more: 'Danh từ viết liền: **setup** (sự cài đặt). Hay đi với: **set up** a business / an account / a home office.' },
+        { w: 'log in', pos: 'phr v', ipa: '/lɒɡ ˈɪn/', vi: 'đăng nhập', ex: 'You have to log in with your company password.', exVi: 'Bạn phải đăng nhập bằng mật khẩu công ty.', more: '**log in to / log into** + hệ thống · danh từ **login** (**your login details**). Trái nghĩa: **log out**.' },
         { w: 'log out', pos: 'phr v', ipa: '/lɒɡ ˈaʊt/', vi: 'đăng xuất', ex: 'Always log out when you use a shared computer.', exVi: 'Luôn đăng xuất khi dùng máy tính dùng chung.' },
-        { w: 'catch up', pos: 'phr v', ipa: '/kætʃ ˈʌp/', vi: 'bắt kịp, làm bù (phần bị chậm / bị lỡ)', ex: 'I stayed late on Friday to catch up on my reports.', exVi: 'Tôi ở lại muộn hôm thứ Sáu để làm bù các bản báo cáo.' },
+        { w: 'catch up', pos: 'phr v', ipa: '/kætʃ ˈʌp/', vi: 'bắt kịp, làm bù (phần bị chậm / bị lỡ)', ex: 'I stayed late on Friday to catch up on my reports.', exVi: 'Tôi ở lại muộn hôm thứ Sáu để làm bù các bản báo cáo.', more: '**catch up on** + việc bị chậm (**catch up on emails**) · **catch up with** + người (bắt kịp ai; gặp lại hàn huyên).' },
         { w: 'turn on', pos: 'phr v', ipa: '/tɜːn ˈɒn/', vi: 'bật (máy, đèn…)', ex: 'Please turn on your camera when the meeting starts.', exVi: 'Vui lòng bật camera khi cuộc họp bắt đầu.' },
         { w: 'turn off', pos: 'phr v', ipa: '/tɜːn ˈɒf/', vi: 'tắt (máy, đèn…)', ex: 'I turn off my work phone at 6 p.m.', exVi: 'Tôi tắt điện thoại công việc lúc 6 giờ chiều.' },
         { w: 'work on', pos: 'phr v', ipa: '/wɜːk ˈɒn/', vi: 'làm, dành công sức cho (một việc, dự án)', ex: 'Our team is working on a new website for a hotel.', exVi: 'Nhóm chúng tôi đang làm một trang web mới cho một khách sạn.' },
-        { w: 'check in', pos: 'phr v', ipa: '/tʃek ˈɪn/', vi: 'hỏi thăm / báo cáo tình hình; làm thủ tục nhận phòng', ex: 'The team leader checks in with each of us every morning.', exVi: 'Trưởng nhóm hỏi thăm tình hình từng người chúng tôi mỗi sáng.' },
-        { w: 'follow up', pos: 'phr v', ipa: '/ˌfɒləʊ ˈʌp/', vi: 'liên hệ lại, theo dõi tiếp (sau một việc đã xảy ra)', ex: 'The client did not reply, so I followed up with a short email.', exVi: 'Khách hàng không trả lời nên tôi liên hệ lại bằng một email ngắn.' },
-        { w: 'put off', pos: 'phr v', ipa: '/pʊt ˈɒf/', vi: 'hoãn lại, trì hoãn', ex: 'We had to put off the launch because of a technical problem.', exVi: 'Chúng tôi phải hoãn buổi ra mắt vì một sự cố kỹ thuật.' },
+        { w: 'check in', pos: 'phr v', ipa: '/tʃek ˈɪn/', vi: 'hỏi thăm / báo cáo tình hình; làm thủ tục nhận phòng', ex: 'The team leader checks in with each of us every morning.', exVi: 'Trưởng nhóm hỏi thăm tình hình từng người chúng tôi mỗi sáng.', more: 'Hai nghĩa: **check in with** + người (hỏi thăm tình hình) · **check in at** + khách sạn / sân bay (làm thủ tục) — sách dùng nghĩa khách sạn ở Bài tập.' },
+        { w: 'follow up', pos: 'phr v', ipa: '/ˌfɒləʊ ˈʌp/', vi: 'liên hệ lại, theo dõi tiếp (sau một việc đã xảy ra)', ex: 'The client did not reply, so I followed up with a short email.', exVi: 'Khách hàng không trả lời nên tôi liên hệ lại bằng một email ngắn.', more: '**follow up on** + việc · **follow up with** + người · danh từ/tính từ **follow-up** (**a follow-up email**).' },
+        { w: 'put off', pos: 'phr v', ipa: '/pʊt ˈɒf/', vi: 'hoãn lại, trì hoãn', ex: 'We had to put off the launch because of a technical problem.', exVi: 'Chúng tôi phải hoãn buổi ra mắt vì một sự cố kỹ thuật.', more: '**put off + V-ing** (**put off doing homework**) · với đại từ phải tách: *put **it** off*. Trang trọng: **postpone / delay**.' },
       ],
     },
     {
@@ -434,9 +728,9 @@ const D5_VOCAB: Lesson = {
       items: [
         '**Động từ viết rời, danh từ viết liền**: *to **log in*** (đăng nhập) → *your **login** details* (thông tin đăng nhập) · *to **set up*** → *the **setup*** · *to **check in*** → *the **check-in** desk* · *to **follow up*** → *a **follow-up** email*.',
         'Đi kèm giới từ: **log in to / log into** + hệ thống · **catch up on** + việc bị chậm · **check in with** + người · **follow up on** + việc / **follow up with** + người · **put off** + V-ing (*put off **doing** homework*).',
-        '**set up, turn on, turn off, put off** tách ra được: *turn on the camera* = *turn the camera on*. Với đại từ thì **bắt buộc** tách: *turn **it** on* (~~turn on it~~), *put **it** off*.',
+        '**set up, turn on, turn off, put off** tách ra được: **turn on the camera** = **turn the camera on**. Với đại từ thì **bắt buộc** tách: *turn **it** on* (~~turn on it~~), *put **it** off*.',
         '**work on** không tách: *work on **it*** (~~work it on~~).',
-        '**put off** hay xuất hiện trong chủ đề thói quen học tập: *I tend to put things off* = tôi hay trì hoãn. Từ học thuật cùng nghĩa: **procrastinate**; trong Writing trang trọng hơn thì dùng **postpone / delay**.',
+        '**put off** hay xuất hiện trong chủ đề thói quen học tập: **I tend to put things off** = tôi hay trì hoãn. Từ học thuật cùng nghĩa: **procrastinate**; trong Writing trang trọng hơn thì dùng **postpone / delay**.',
       ],
     },
     { t: 'h', text: '3. Họ từ (word formation)' },
@@ -448,11 +742,11 @@ const D5_VOCAB: Lesson = {
       t: 'table',
       head: ['Gốc', 'Danh từ', 'Động từ', 'Tính từ', 'Trạng từ'],
       rows: [
-        ['flex — linh hoạt, uốn', 'flexibility (sự linh hoạt)', 'flex (uốn, co giãn)', 'flexible (linh hoạt) · *inflexible* (cứng nhắc)', 'flexibly'],
-        ['collaborate — hợp tác', 'collaboration (sự hợp tác) · *collaborator* (người cộng tác)', 'collaborate', 'collaborative (mang tính hợp tác)', 'collaboratively'],
-        ['produce — sản xuất, năng suất', 'production (sự sản xuất) · *product* (sản phẩm) · *productivity* (năng suất)', 'produce', 'productive (năng suất cao) · *unproductive*', 'productively'],
+        ['flex — linh hoạt, uốn', 'flexibility (sự linh hoạt)', 'flex (uốn, co giãn)', 'flexible (linh hoạt) · **inflexible** (cứng nhắc)', 'flexibly'],
+        ['collaborate — hợp tác', 'collaboration (sự hợp tác) · **collaborator** (người cộng tác)', 'collaborate', 'collaborative (mang tính hợp tác)', 'collaboratively'],
+        ['produce — sản xuất, năng suất', 'production (sự sản xuất) · **product** (sản phẩm) · **productivity** (năng suất)', 'produce', 'productive (năng suất cao) · **unproductive**', 'productively'],
         ['communicate — giao tiếp', 'communication (sự giao tiếp)', 'communicate', 'communicative (cởi mở, hay giao tiếp)', 'communicatively'],
-        ['employ — thuê người làm', 'employment (việc làm) · *employer* (chủ) · *employee* (nhân viên) · *unemployment* (thất nghiệp)', 'employ', 'employed (có việc làm) · *unemployed* · *employable* (dễ được tuyển)', '— (không có)'],
+        ['employ — thuê người làm', 'employment (việc làm) · **employer** (chủ) · **employee** (nhân viên) · **unemployment** (thất nghiệp)', 'employ', 'employed (có việc làm) · **unemployed** · **employable** (dễ được tuyển)', '— (không có)'],
       ],
     },
     {
@@ -460,10 +754,10 @@ const D5_VOCAB: Lesson = {
       title: 'Dễ nhầm trong họ từ',
       items: [
         '**productivity** (năng suất — danh từ, không đếm được) mới là từ hay dùng nhất trong bài về làm từ xa, dù sách chỉ ghi **production** (việc sản xuất ra hàng hoá). *Remote work can boost **productivity**.*',
-        '**employer** (người thuê — chủ) ≠ **employee** (người được thuê — nhân viên). Đuôi **-er** = người làm hành động; đuôi **-ee** = người nhận hành động (giống *trainer / trainee*, *interviewer / interviewee*).',
+        '**employer** (người thuê — chủ) ≠ **employee** (người được thuê — nhân viên). Đuôi **-er** = người làm hành động; đuôi **-ee** = người nhận hành động (giống **trainer / trainee**, **interviewer / interviewee**).',
         '**employment** (việc làm nói chung) là **không đếm được**: ~~employments~~. Muốn đếm thì dùng **jobs**.',
         '**communication** (sự giao tiếp) không đếm được; **communications** (số nhiều) chỉ ngành / hệ thống truyền thông. *Good **communication** is vital in remote teams.*',
-        '**flex** là động từ ít gặp (*flex your muscles*); trong bài viết hãy dùng **flexible / flexibility**. Cụm hay gặp: **flexible working hours**, **flexitime / flextime** (giờ làm linh hoạt).',
+        '**flex** là động từ ít gặp (**flex your muscles**); trong bài viết hãy dùng **flexible / flexibility**. Cụm hay gặp: **flexible working hours**, **flexitime / flextime** (giờ làm linh hoạt).',
       ],
     },
     { t: 'h', text: '4. Dùng trong IELTS: câu mẫu ăn điểm' },
@@ -507,6 +801,16 @@ const D5_LISTENING: Lesson = {
   goal: 'Ôn lại cách luyện dictation và tự làm một bài nghe dài về đa nhiệm (multitasking): điền 19 chỗ trống và trả lời 13 câu trắc nghiệm.',
   minutes: 35,
   blocks: [
+    {
+      t: 'recap',
+      title: 'Bài này học gì',
+      items: [
+        '**Dictation** (nghe chép chính tả) lần 2: bài **dài hơn, nhanh hơn** Ngày 3.',
+        '5 lưu ý: **chọn bài vừa sức · nghe từng chi tiết · nghe lại nhiều lần · đối chiếu sửa lỗi · kiên trì**.',
+        'Practice 1: điền **19 chỗ trống** (một từ). Practice 2: **13 câu** chọn a/b/c — giống dạng Multiple Choice.',
+        'Chủ đề: **đa nhiệm (multitasking) và bộ não** — hay gặp ở Listening Section 4 và Reading.',
+      ],
+    },
     { t: 'h', text: '1. Nhắc lại: nghe chép chính tả' },
     {
       t: 'p',
@@ -578,10 +882,10 @@ const D5_LISTENING: Lesson = {
       t: 'note',
       title: 'Mẹo soát đáp án Practice 1',
       items: [
-        'Câu (1) **messages**, (4) **meetings**, (7) **programs** là **danh từ số nhiều** — nghe kỹ âm cuối /ɪz/ và /z/. Trước (4) là *during* (trong suốt) nên cần danh từ; "meetings" số nhiều vì nói chung chung.',
-        'Câu (2) **shorter**: sau *get any* + tính từ so sánh hơn. Câu (13) **overwhelmed** (bị quá tải, choáng ngợp) có đuôi **-ed** — đuôi này đọc rất nhẹ, dễ bị bỏ sót.',
+        'Câu (1) **messages**, (4) **meetings**, (7) **programs** là **danh từ số nhiều** — nghe kỹ âm cuối /ɪz/ và /z/. Trước (4) là **during** (trong suốt) nên cần danh từ; "meetings" số nhiều vì nói chung chung.',
+        'Câu (2) **shorter**: sau **get any** + tính từ so sánh hơn. Câu (13) **overwhelmed** (bị quá tải, choáng ngợp) có đuôi **-ed** — đuôi này đọc rất nhẹ, dễ bị bỏ sót.',
         'Câu (11) **conscious** (có ý thức) /ˈkɒnʃəs/ — chữ viết có "sc" nhưng đọc như "con-shợs". Từ này quay lại ở Practice 2.',
-        'Câu (7): cả **programs** (Mỹ) và **programmes** (Anh) đều được chấp nhận; riêng chương trình **máy tính** thì người Anh cũng viết *program*.',
+        'Câu (7): cả **programs** (Mỹ) và **programmes** (Anh) đều được chấp nhận; riêng chương trình **máy tính** thì người Anh cũng viết **program**.',
         'Liên hệ bài ngữ pháp: (10) **skin** và (19) **capacity** ở đây là **không đếm được** — không thêm -s. Câu (10) còn có *a huge **amount** of information* — "amount" đi với danh từ không đếm được.',
       ],
     },
@@ -603,10 +907,10 @@ const D5_LISTENING: Lesson = {
       id: 'd5-nghe-chon',
       title: 'Practice 2 — chọn đáp án đúng (13 câu)',
       items: [
-        { q: '(1) Instead, it is ___ rapidly from one task to the other and back again.', options: ['sleeping', 'switching', 'stopping'], correct: 1, why: 'Bộ não **chuyển** qua lại rất nhanh giữa hai việc — *switching*. Đây là ý chính của cả đoạn: đa nhiệm thật ra là chuyển việc liên tục.' },
+        { q: '(1) Instead, it is ___ rapidly from one task to the other and back again.', options: ['sleeping', 'switching', 'stopping'], correct: 1, why: 'Bộ não **chuyển** qua lại rất nhanh giữa hai việc — **switching**. Đây là ý chính của cả đoạn: đa nhiệm thật ra là chuyển việc liên tục.' },
         { q: '(2) Researchers call this the "switch ___".', options: ['cost', 'time', 'game'], correct: 0, why: '**switch cost** = "cái giá của việc chuyển đổi": mỗi lần chuyển việc mất một chút thời gian và sự tập trung.' },
-        { q: '(3) The ___ is almost always the same: we make more mistakes and finish later…', options: ['reason', 'problem', 'result'], correct: 2, why: 'Câu nói về **kết quả** của việc chuyển đổi — *the result*. "reason" (lý do) không hợp vì phía sau là hậu quả.' },
-        { q: '(4) …than if we had done the tasks one ___ a time.', options: ['in', 'at', 'by'], correct: 1, why: 'Cụm cố định **one at a time** = từng cái một. (Đừng nhầm với *one by one* — cũng là "từng cái một" nhưng không có "a time".)' },
+        { q: '(3) The ___ is almost always the same: we make more mistakes and finish later…', options: ['reason', 'problem', 'result'], correct: 2, why: 'Câu nói về **kết quả** của việc chuyển đổi — **the result**. "reason" (lý do) không hợp vì phía sau là hậu quả.' },
+        { q: '(4) …than if we had done the tasks one ___ a time.', options: ['in', 'at', 'by'], correct: 1, why: 'Cụm cố định **one at a time** = từng cái một. (Đừng nhầm với **one by one** — cũng là "từng cái một" nhưng không có "a time".)' },
         { q: '(5) We can do two things together quite well if they use different kinds of mental ___ .', options: ['images', 'energy', 'resources'], correct: 2, why: '**mental resources** = nguồn lực tinh thần (thị giác, thính giác, ngôn ngữ, vận động…). Hai việc dùng nguồn lực khác nhau thì không "giành" nhau.' },
         { q: '(6) For example, most people can ___ laundry and listen to a podcast at the same time.', options: ['fold', 'wash', 'sell'], correct: 0, why: 'Người nói nhắc **fold laundry** (gấp quần áo) — việc chủ yếu dùng tay, nên làm song song với việc nghe được.' },
         { q: '(7) You might ___, then, that chatting on the phone while driving is safe…', options: ['assume', 'deny', 'forget'], correct: 0, why: '**assume** = cho rằng, mặc định là. Người nói đưa ra một suy nghĩ phổ biến rồi bác bỏ nó ở câu sau.' },
@@ -644,7 +948,7 @@ const D5_LISTENING: Lesson = {
       items: [
         'Mở lời thoại, nghe lại từng đoạn và **đọc nhại theo** (shadowing) — bắt chước cả chỗ ngắt nghỉ và nhấn giọng.',
         'Chép vào sổ những cụm hữu ích cho Writing: **a huge amount of information**, **at the same time**, **one at a time**, **fail to notice**, **not that simple**, **in other words**.',
-        'Bài nghe này là "nguyên liệu" cho Speaking: *Do you often do several things at once?* — thử trả lời 3–4 câu bằng những ý vừa nghe.',
+        'Bài nghe này là "nguyên liệu" cho Speaking: **Do you often do several things at once?** — thử trả lời 3–4 câu bằng những ý vừa nghe.',
       ],
     },
   ],
@@ -659,6 +963,15 @@ const D5_HOMEWORK: Lesson = {
   goal: 'Tự kiểm tra Ngày 5: 12 câu chia danh từ đếm được / không đếm được theo từ vựng Remote Work và 10 câu dịch dùng cụm động từ — có đáp án và gia sư chấm.',
   minutes: 30,
   blocks: [
+    {
+      t: 'recap',
+      title: 'Bài tập hôm nay',
+      items: [
+        '**Bài I (12 câu):** nhìn **dấu hiệu** quanh chỗ trống (a, two, many, all, each, one of, động từ số ít/nhiều) để quyết định giữ nguyên hay thêm **-s / -es**.',
+        '**Bài II (10 câu):** dịch Việt → Anh với **10 cụm động từ**; với đại từ phải tách: *turn **it** on*.',
+        'Nhớ giới từ đi kèm: **log in to · catch up on · check in with · follow up with · put off + V-ing**.',
+      ],
+    },
     {
       t: 'p',
       text: '**Bài I:** xác định danh từ trong ngoặc là đếm được hay không đếm được, rồi điền **dạng đúng** của nó (giữ nguyên hoặc thêm -s / -es). Nhìn các **dấu hiệu** quanh chỗ trống: a/an, many, several, all, one of, động từ số ít hay số nhiều… Gợi ý trong ngoặc tròn cho biết dấu hiệu cần để ý.',
@@ -687,7 +1000,7 @@ const D5_HOMEWORK: Lesson = {
       t: 'note',
       title: 'Giải thích đáp án Bài I',
       items: [
-        '(1) **job** — "a" + danh từ đếm được **số ít**. (2) **offices** — "two" → số nhiều; *office* chỉ thêm -s. (3) **home** — "my quiet home": một ngôi nhà, số ít.',
+        '(1) **job** — "a" + danh từ đếm được **số ít**. (2) **offices** — "two" → số nhiều; **office** chỉ thêm -s. (3) **home** — "my quiet home": một ngôi nhà, số ít.',
         '(4) **workplaces** — "many" chỉ đi với danh từ đếm được **số nhiều**. (5) **employees** — "all fifty" → số nhiều.',
         '(6) **boss** — động từ **lets** có -s nên chủ ngữ số ít. Lưu ý số nhiều của boss là **bosses** (thêm -es vì tận cùng -ss).',
         '(7) **internet** — không đếm được, không bao giờ thêm -s.',
@@ -764,9 +1077,9 @@ const D5_HOMEWORK: Lesson = {
       title: 'Soát lỗi Bài II',
       items: [
         '(2) **log in to / log into** + hệ thống — đừng quên "to": ~~log in the system~~.',
-        '(4) **catch up on** + việc bị chậm (*catch up on my work*). **catch up with** thường dùng cho người (*catch up with the other students*).',
+        '(4) **catch up on** + việc bị chậm (**catch up on my work**). **catch up with** thường dùng cho người (**catch up with the other students**).',
         '(5)(6) Có thể tách: *turn **your camera** on* — với đại từ thì **bắt buộc** tách: *turn **it** on*.',
-        '(8) Chủ ngữ số ít (**Our manager**) → **checks** có -s. **check in with** + người.',
+        '(8) Chủ ngữ số ít (**Our manager**) → **checks** có -s. **check in with** + người. Sách đặt câu (8) theo nghĩa khác của cụm này: **check in** = làm thủ tục nhận phòng — **We need to check in at the hotel before 3 p.m.**',
         '(10) **put off** + danh từ hoặc **V-ing**: *Don\'t put off **doing** your homework.* Không dùng ~~put off to do~~.',
       ],
     },

@@ -1,6 +1,6 @@
 /**
  * Ngày 3 — Đại từ · Từ vựng Giáo dục & Xã hội · Nghe chép chính tả 1 · Bài tập.
- * Theo sách trang 37–52. Lời giảng, câu ví dụ, kịch bản nghe và câu bài tập
+ * Theo sách trang 38–52. Lời giảng, câu ví dụ, kịch bản nghe và câu bài tập
  * đều VIẾT MỚI (xem ../SOAN-BAI.md); giữ đủ điểm kiến thức, từ và số câu.
  */
 import type { Lesson } from '../data';
@@ -10,12 +10,23 @@ const D3_GRAMMAR: Lesson = {
   kind: 'grammar',
   title: 'Đại từ (Pronouns)',
   goal: 'Nắm 7 loại đại từ, chọn đúng I/me/my/mine, dùng who/which/that để nối câu và dùng đại từ để bài Writing Task 2 bớt lặp từ.',
-  minutes: 35,
+  minutes: 45,
   blocks: [
+    {
+      t: 'recap',
+      title: 'Bài này học gì, cần nhớ gì',
+      items: [
+        '**Đại từ** = từ đứng **thay cho danh từ** đã nhắc, để câu không bị lặp. Có **7 loại**: nhân xưng, sở hữu, phản thân, chỉ định, nghi vấn, quan hệ (và nhân xưng chia 2 dạng chủ ngữ / tân ngữ).',
+        'Chọn dạng theo **chỗ đứng**: trước động từ → ==I, he, she, we, they==; sau động từ / giới từ → ==me, him, her, us, them==.',
+        'Có danh từ theo sau → **my, your, their…**; đứng một mình → **mine, yours, theirs…**. Tự mình / một mình → **myself, by themselves…**',
+        '**who** cho người, **which** cho vật, **that** cho cả hai; **whose** = của ai. **It is + adj + to V** khi chủ ngữ thật là một cụm dài.',
+        'Mỗi mục có **Công thức 1 dòng** và **bài dịch Việt → Anh** ngắn (bấm 💡 để xem từ + cấu trúc). Làm hết trước khi sang bài từ vựng.',
+      ],
+    },
     { t: 'h', text: '1. Đại từ là gì? Bảng 7 loại đại từ' },
     {
       t: 'p',
-      text: "**Đại từ** (pronoun) là từ đứng **thay cho một danh từ** đã nhắc tới, để khỏi phải lặp lại danh từ đó. Thay vì nói \"Lan thích sách. Lan đọc sách mỗi tối\", ta nói \"Lan thích sách. ==Cô ấy== đọc ==chúng== mỗi tối\". Trong bài thi, dùng đại từ đúng giúp câu văn **gọn và mạch lạc** — giám khảo chấm điều này ở tiêu chí *Coherence and Cohesion* (sự mạch lạc và liên kết).",
+      text: "**Đại từ** (pronoun) là từ đứng **thay cho một danh từ** đã nhắc tới, để khỏi phải lặp lại danh từ đó. Thay vì nói \"Lan thích sách. Lan đọc sách mỗi tối\", ta nói \"Lan thích sách. ==Cô ấy== đọc ==chúng== mỗi tối\". Trong bài thi, dùng đại từ đúng giúp câu văn **gọn và mạch lạc** — giám khảo chấm điều này ở tiêu chí **Coherence and Cohesion** (sự mạch lạc và liên kết).",
     },
     {
       t: 'table',
@@ -35,8 +46,26 @@ const D3_GRAMMAR: Lesson = {
       t: 'note',
       title: 'Ghi nhớ',
       items: [
-        'Cùng một chữ có thể thuộc nhiều loại: **who** vừa là đại từ nghi vấn (*Who is he?*) vừa là đại từ quan hệ (*the man who helped me*). Nhìn **vị trí trong câu** để biết nó đang làm gì.',
+        'Cùng một chữ có thể thuộc nhiều loại: **who** vừa là đại từ nghi vấn (**Who is he?**) vừa là đại từ quan hệ (**the man who helped me**). Nhìn **vị trí trong câu** để biết nó đang làm gì.',
         '**you** giống nhau ở cả chủ ngữ lẫn tân ngữ, số ít lẫn số nhiều. **it** cũng vậy (chủ ngữ và tân ngữ đều là it).',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'N (nhắc lần 1)  →  đại từ (he / it / they / this / who…) (nhắc lần 2)',
+      vi: 'Danh từ đã nói một lần rồi thì lần sau thay bằng đại từ cho gọn — đại từ phải khớp người/vật và số ít/số nhiều.',
+    },
+    {
+      t: 'quiz',
+      id: 'd3-dt-loai-dich',
+      title: 'Dịch nhanh — nhận ra từng loại đại từ (4 câu)',
+      kind: 'translate',
+      grammar: 'Danh từ nhắc lần 2 → đại từ. Người số ít: he/she; vật: it; số nhiều: they/them. Hỏi "ai" → Who; "của tôi" đứng một mình → mine.',
+      items: [
+        { q: 'Lan thích sách. Cô ấy đọc chúng mỗi tối.', hint: 'Lan likes books, she, read, them, every evening', answers: ['Lan likes books. She reads them every evening.', 'Lan likes books. She reads them every night.', 'Lan loves books. She reads them every evening.', 'Lan loves books. She reads them every night.'] },
+        { q: 'Đây là bạn tôi. Anh ấy học ở Hà Nội.', hint: 'this, my friend, he, study', answers: ['This is my friend. He studies in Hanoi.', 'This is my friend. He studies in Ha Noi.', 'This is my friend. He is studying in Hanoi.', "This is my friend. He's studying in Hanoi."] },
+        { q: 'Ai đang gọi bạn vậy?', hint: 'who, call, you', answers: ['Who is calling you?', "Who's calling you?"] },
+        { q: 'Cái túi này là của tôi.', hint: 'this bag, mine', answers: ['This bag is mine.'] },
       ],
     },
 
@@ -95,6 +124,26 @@ const D3_GRAMMAR: Lesson = {
         'Dùng chủ ngữ sau giới từ: ~~This is a secret between you and I.~~ → **between you and me**. ~~The book is for she.~~ → **for her**.',
         'Quên đổi đại từ theo số nhiều: ~~Children need sleep because it helps it grow.~~ → **Children** need sleep because it helps **them** grow. Danh từ số nhiều → **they / them**.',
         'Lặp chủ ngữ: ~~My teacher she is very kind.~~ → **My teacher is very kind.** Đã có danh từ làm chủ ngữ thì không thêm đại từ ngay sau nó.',
+        'Nhầm **he / she** khi nói nhanh (tiếng Việt nói "bạn ấy" cho cả nam lẫn nữ): ~~My mother… he works…~~ → **My mother… she works…** Giám khảo Speaking bắt lỗi này rất nhanh.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'S (I / he / she / we / they) + V + O (me / him / her / us / them)',
+      vi: 'Trước động từ → dạng chủ ngữ. Sau động từ hoặc sau giới từ (for, with, to, between…) → dạng tân ngữ.',
+    },
+    {
+      t: 'quiz',
+      id: 'd3-dt-chu-tan-dich',
+      title: 'Dịch — chủ ngữ hay tân ngữ? (5 câu)',
+      kind: 'translate',
+      grammar: 'S (I/he/she/we/they) + V + O (me/him/her/us/them). Sau giới từ luôn dùng tân ngữ. Kể cả mình: người khác trước, "I" sau.',
+      items: [
+        { q: 'Chị tôi và tôi đi học bằng xe buýt.', hint: 'my sister and I, go to school, by bus', answers: ['My sister and I go to school by bus.', 'My older sister and I go to school by bus.', 'My sister and I travel to school by bus.'] },
+        { q: 'Thầy giáo giúp chúng tôi mỗi ngày.', hint: 'the teacher, help, us, every day', answers: ['The teacher helps us every day.', 'Our teacher helps us every day.', 'My teacher helps us every day.', 'The teacher helps us every single day.'] },
+        { q: 'Món quà này dành cho cô ấy.', hint: 'this gift, for, her', answers: ['This gift is for her.', 'This present is for her.'] },
+        { q: 'Họ gọi cho tôi tối qua.', hint: 'they, call, me, last night', answers: ['They called me last night.', 'They phoned me last night.', 'They rang me last night.'] },
+        { q: 'Đây là bí mật giữa bạn và tôi.', hint: 'secret, between you and me', answers: ['This is a secret between you and me.', 'It is a secret between you and me.', "It's a secret between you and me."] },
       ],
     },
 
@@ -105,16 +154,33 @@ const D3_GRAMMAR: Lesson = {
     },
     {
       t: 'table',
-      head: ['Chủ ngữ', 'Tính từ sở hữu + danh từ', 'Đại từ sở hữu (đứng một mình)', 'Phản thân'],
+      caption: 'Bảng so sánh đủ 7 ngôi: I / me / my / mine / myself — học thuộc theo HÀNG NGANG',
+      head: ['Ngôi (nghĩa)', 'Chủ ngữ (trước V)', 'Tân ngữ (sau V / giới từ)', 'Tính từ sở hữu + N', 'Đại từ sở hữu (đứng một mình)', 'Phản thân'],
       rows: [
-        ['I', 'my book', 'mine', 'myself'],
-        ['you (số ít)', 'your book', 'yours', 'yourself'],
-        ['he', 'his book', 'his', 'himself'],
-        ['she', 'her book', 'hers', 'herself'],
-        ['it', 'its cover', '(its — gần như không dùng)', 'itself'],
-        ['we', 'our book', 'ours', 'ourselves'],
-        ['you (số nhiều)', 'your books', 'yours', 'yourselves'],
-        ['they', 'their books', 'theirs', 'themselves'],
+        ['Ngôi 1 số ít — **tôi**', '**I**', 'me', 'my book', 'mine', 'myself'],
+        ['Ngôi 2 số ít — **bạn**', '**you**', 'you', 'your book', 'yours', 'yourself'],
+        ['Ngôi 3 số ít — **anh ấy**', '**he**', 'him', 'his book', 'his', 'himself'],
+        ['Ngôi 3 số ít — **cô ấy**', '**she**', 'her', 'her book', 'hers', 'herself'],
+        ['Ngôi 3 số ít — **nó** (vật, con vật)', '**it**', 'it', 'its cover', '(gần như không dùng)', 'itself'],
+        ['Ngôi 1 số nhiều — **chúng tôi / chúng ta**', '**we**', 'us', 'our books', 'ours', 'ourselves'],
+        ['Ngôi 2 số nhiều — **các bạn**', '**you**', 'you', 'your books', 'yours', 'yourselves'],
+        ['Ngôi 3 số nhiều — **họ, chúng nó**', '**they**', 'them', 'their books', 'theirs', 'themselves'],
+      ],
+    },
+    {
+      t: 'examples',
+      items: [
+        { en: 'I did my homework myself. Nobody helped me — the idea was all mine.', vi: 'Tôi tự làm bài tập của mình. Không ai giúp tôi — ý tưởng hoàn toàn là của tôi. (một câu dùng đủ 5 dạng của "I")' },
+        { en: 'They told us their plan, but we preferred ours, so we did it by ourselves.', vi: 'Họ kể cho chúng tôi kế hoạch của họ, nhưng chúng tôi thích kế hoạch của mình hơn, nên chúng tôi tự làm.' },
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo nhớ bảng trên',
+      items: [
+        '**Chữ -s cuối** = đứng một mình: your → **yours**, her → **hers**, our → **ours**, their → **theirs**. Riêng **my → mine** và **his → his** (không đổi).',
+        '**Phản thân**: ngôi 1 và 2 ghép với tính từ sở hữu (**my**self, **your**self, **our**selves); ngôi 3 ghép với tân ngữ (**him**self, **her**self, **it**self, **them**selves). Vì vậy không có ~~hisself~~, ~~theirselves~~.',
+        '**-self** cho số ít, **-selves** cho số nhiều: yourself (một bạn) ≠ yourselves (nhiều bạn).',
       ],
     },
     {
@@ -134,7 +200,27 @@ const D3_GRAMMAR: Lesson = {
         'Đại từ sở hữu **không có dấu nháy**: ~~your\'s~~, ~~her\'s~~, ~~our\'s~~ → **yours, hers, ours**.',
         '**its** (của nó) ≠ **it\'s** (= it is / it has): *The school changed **its** rules.* nhưng ***It\'s** a good school.* Đây là lỗi chính tả hay gặp nhất trong bài viết IELTS.',
         '**their** (của họ) ≠ **there** (ở đó) ≠ **they\'re** (= they are). Ba chữ đọc gần giống nhau nên dễ viết nhầm.',
-        'Sách xếp **its** vào bảng đại từ sở hữu. Trên thực tế **its** gần như chỉ dùng làm tính từ sở hữu (*its size*), rất hiếm khi đứng một mình — đừng viết ~~The idea is its.~~',
+        'Sách xếp **its** vào bảng đại từ sở hữu. Trên thực tế **its** gần như chỉ dùng làm tính từ sở hữu (**its size**), rất hiếm khi đứng một mình — đừng viết ~~The idea is its.~~',
+        'Người Việt hay sai: dịch từng chữ "của" thành **of**: ~~the book of me~~, ~~the car of my father~~ → **my book**, **my father\'s car**. Với người, sở hữu dùng **\'s** hoặc tính từ sở hữu.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'my / your / his / her / its / our / their + N    ·    mine / yours / his / hers / ours / theirs (đứng một mình)',
+      vi: 'Có danh từ ngay sau → tính từ sở hữu. Không có danh từ (đã hiểu là cái gì) → đại từ sở hữu.',
+    },
+    {
+      t: 'quiz',
+      id: 'd3-dt-so-huu-dich',
+      title: 'Dịch — my hay mine? (5 câu)',
+      kind: 'translate',
+      grammar: 'Tính từ sở hữu + N (my phone, their school) · Đại từ sở hữu đứng một mình (mine, yours, ours) · a friend of mine = một người bạn của tôi.',
+      items: [
+        { q: 'Đây là điện thoại của tôi, còn cái kia là của bạn.', hint: 'my phone, that one, yours', answers: ['This is my phone, and that one is yours.', 'This is my phone and that one is yours.', 'This is my phone, and that is yours.', 'This is my phone and that is yours.', 'This is my phone, but that one is yours.', 'This is my phone, while that one is yours.'] },
+        { q: 'Bài luận của cô ấy dài hơn bài của tôi.', hint: 'her essay, longer than, mine', answers: ['Her essay is longer than mine.', 'Her essay was longer than mine.'] },
+        { q: 'Trường của họ lớn hơn trường của chúng tôi.', hint: 'their school, bigger than, ours', answers: ['Their school is bigger than ours.', 'Their school is larger than ours.'] },
+        { q: 'Công ty thay đổi quy định của nó mỗi năm.', hint: 'the company, change, its rules', answers: ['The company changes its rules every year.', 'The company changes its rules each year.', 'The company changes its regulations every year.'] },
+        { q: 'Minh là một người bạn của tôi.', hint: 'a friend of mine', answers: ['Minh is a friend of mine.'] },
       ],
     },
 
@@ -179,7 +265,26 @@ const D3_GRAMMAR: Lesson = {
         'Viết sai dạng: ~~hisself~~, ~~theirselves~~, ~~ourself~~ (khi nói "chúng tôi") → **himself, themselves, ourselves**.',
         'Dùng phản thân khi người làm và người chịu tác động KHÁC nhau: ~~My mother helped myself.~~ → **My mother helped me.**',
         'Nhiều động từ tiếng Việt có "tự/bản thân" nhưng tiếng Anh **không cần** đại từ phản thân: ~~I feel myself tired.~~ → **I feel tired.** ~~We relaxed ourselves.~~ → **We relaxed.** Các từ hay gặp: feel, relax, concentrate, meet, wake up.',
-        '**themselves** ≠ **each other**: *They blamed themselves* = mỗi người tự trách mình; *They blamed each other* = họ trách lẫn nhau.',
+        '**themselves** ≠ **each other**: **They blamed themselves** = mỗi người tự trách mình; **They blamed each other** = họ trách lẫn nhau.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'S + V + myself / yourself / himself / ourselves / themselves…    ·    by + oneself = một mình',
+      vi: 'Chủ ngữ và tân ngữ là CÙNG một người → phản thân. Nhấn mạnh "tự mình" → đặt ngay sau S hoặc cuối câu.',
+    },
+    {
+      t: 'quiz',
+      id: 'd3-dt-phan-than-dich',
+      title: 'Dịch — đại từ phản thân (5 câu)',
+      kind: 'translate',
+      grammar: 'S + V + myself/himself/themselves… (tự làm cho chính mình) · by + himself/themselves = một mình, không ai giúp · She did it herself = chính cô ấy làm.',
+      items: [
+        { q: 'Tôi tự làm đứt tay khi đang nấu ăn.', hint: 'cut, myself, while cooking', answers: ['I cut myself while cooking.', 'I cut myself while I was cooking.', 'I cut myself when cooking.', 'I cut myself when I was cooking.'] },
+        { q: 'Em trai tôi sống một mình.', hint: 'my younger brother, live, by himself', answers: ['My younger brother lives by himself.', 'My brother lives by himself.', 'My little brother lives by himself.', 'My younger brother lives alone.', 'My brother lives alone.'] },
+        { q: 'Học sinh phải tự hoàn thành bài tập mà không cần ai giúp.', hint: 'students, must, complete, their assignments, by themselves', answers: ['Students must complete their assignments by themselves.', 'Students have to complete their assignments by themselves.', 'Students must complete the assignments by themselves.', 'Students must complete their assignments by themselves without any help.', 'Students must complete their assignments themselves.', 'Students have to complete their assignments themselves.'] },
+        { q: 'Chính cô ấy đã thiết kế tấm áp phích.', hint: 'design, the poster, herself', answers: ['She designed the poster herself.', 'She herself designed the poster.'] },
+        { q: 'Các bạn đi tiệc vui vẻ nhé!', hint: 'enjoy, yourselves, the party', answers: ['Enjoy yourselves at the party!', 'Enjoy yourselves at the party.'] },
       ],
     },
 
@@ -212,6 +317,33 @@ const D3_GRAMMAR: Lesson = {
         'Khớp số: ~~this problems~~ → **these problems**; ~~those idea~~ → **that idea**.',
       ],
     },
+    {
+      t: 'note',
+      title: 'Người Việt hay sai với this / these',
+      items: [
+        'Động từ phải khớp: ~~These is my books.~~ → **These are my books.** ~~This are~~ → **This is**.',
+        'Tiếng Việt nói "Đây là…" cho cả số ít lẫn số nhiều, nên hay viết ~~This is my shoes.~~ → **These are my shoes.**',
+        'Nghe **this** /ðɪs/ và **these** /ðiːz/ rất giống nhau với tai người Việt: **these** kéo dài âm "i" và kết thúc bằng /z/.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'this / that + N số ít + is    ·    these / those + N số nhiều + are',
+      vi: 'Gần → this/these, xa → that/those. Trong bài viết, This/These (+ N) chỉ lại ý vừa nói ở câu trước.',
+    },
+    {
+      t: 'quiz',
+      id: 'd3-dt-chi-dinh-dich',
+      title: 'Dịch — this, that, these, those (4 câu)',
+      kind: 'translate',
+      grammar: 'this/that + N số ít · these/those + N số nhiều · This = "điều này" (chỉ lại ý câu trước) · that of = thay cho danh từ số ít đã nhắc.',
+      items: [
+        { q: 'Đây là lớp IELTS đầu tiên của tôi.', hint: 'this, my first, class', answers: ['This is my first IELTS class.', 'This is my first IELTS lesson.', 'This is my first IELTS course.'] },
+        { q: 'Những cuốn sách kia là của thư viện.', hint: 'those books, belong to, the library', answers: ['Those books belong to the library.', "Those books are the library's.", 'Those books are from the library.'] },
+        { q: 'Nhiều sinh viên không tìm được việc. Điều này làm cha mẹ họ lo lắng.', hint: 'cannot find jobs, this, worry, their parents', answers: ['Many students cannot find jobs. This worries their parents.', "Many students can't find jobs. This worries their parents.", 'Many students cannot find a job. This worries their parents.', "Many students can't find a job. This worries their parents.", 'Many students cannot find jobs. This makes their parents worried.', "Many students can't find jobs. This makes their parents worried.", 'Many graduates cannot find jobs. This worries their parents.'] },
+        { q: 'Dân số Hà Nội lớn hơn dân số Đà Nẵng.', hint: 'the population of, larger than, that of', answers: ['The population of Hanoi is larger than that of Da Nang.', 'The population of Hanoi is bigger than that of Da Nang.', 'The population of Ha Noi is larger than that of Da Nang.', 'The population of Hanoi is larger than that of Danang.', 'The population of Hanoi is bigger than that of Danang.'] },
+      ],
+    },
 
     { t: 'h', text: '6. Đại từ nghi vấn: who, whom, whose, which, what' },
     {
@@ -230,15 +362,35 @@ const D3_GRAMMAR: Lesson = {
       title: 'Dễ nhầm',
       items: [
         '**whose** (của ai) ≠ **who\'s** (= who is / who has): ***Whose** bag is this?* nhưng ***Who\'s** your teacher?*',
-        '**which** hay **what**? Có sẵn vài lựa chọn → **which** (*Which colour, red or blue?*). Hỏi mở → **what** (*What colour is your car?*).',
+        '**which** hay **what**? Có sẵn vài lựa chọn → **which** (**Which colour, red or blue?**). Hỏi mở → **what** (**What colour is your car?**).',
         'Trong **câu hỏi gián tiếp** (câu hỏi nằm trong một câu khác), trật tự trở lại như câu thường: ~~I don\'t know what is the answer.~~ → **I don\'t know what the answer is.** Dạng này hay dùng ở mở bài Task 2.',
+        'Khi **Who / What làm chủ ngữ** (hỏi "ai đã làm"), KHÔNG thêm do/did: ~~Who did write this report?~~ → **Who wrote this report?** Còn khi hỏi tân ngữ thì cần trợ động từ: **Who did you meet?**',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Who / What + V…?  (hỏi chủ ngữ)    ·    Wh- + do / does / did + S + V?  (hỏi tân ngữ)',
+      vi: 'who = ai, whom = ai (tân ngữ, trang trọng), whose + N = của ai, which = cái nào (có sẵn lựa chọn), what = cái gì.',
+    },
+    {
+      t: 'quiz',
+      id: 'd3-dt-nghi-van-dich',
+      title: 'Dịch — đặt câu hỏi với who, whose, which, what (5 câu)',
+      kind: 'translate',
+      grammar: 'Who/What làm chủ ngữ + V (không do/did) · Wh- + do/does/did + S + V? · Whose + N + is…? · Câu hỏi gián tiếp: I don\'t know + what + S + V.',
+      items: [
+        { q: 'Ai đã viết báo cáo này?', hint: 'who, write (wrote), this report', answers: ['Who wrote this report?', 'Who has written this report?', 'Who wrote the report?'] },
+        { q: 'Cái cặp này là của ai?', hint: 'whose, bag', answers: ['Whose bag is this?', 'Whose is this bag?'] },
+        { q: 'Bạn thích môn nào hơn, toán hay lý?', hint: 'which, prefer, maths, physics', answers: ['Which do you prefer, maths or physics?', 'Which subject do you prefer, maths or physics?', 'Which do you prefer, math or physics?', 'Which subject do you prefer, math or physics?'] },
+        { q: 'Hôm nay bạn đã học được gì?', hint: 'what, learn, today', answers: ['What did you learn today?', 'What have you learnt today?', 'What have you learned today?'] },
+        { q: 'Tôi không biết đáp án là gì.', hint: "I don't know, what, the answer", answers: ["I don't know what the answer is.", 'I do not know what the answer is.'] },
       ],
     },
 
     { t: 'h', text: '7. Đại từ quan hệ: nối hai câu bằng who, which, that' },
     {
       t: 'p',
-      text: 'Đại từ quan hệ giúp **gộp hai câu ngắn thành một câu dài**, nói rõ danh từ đứng trước là ai, là cái gì. Câu dài và đúng ngữ pháp giúp tăng điểm tiêu chí *Grammatical Range and Accuracy* (độ đa dạng và chính xác của ngữ pháp).',
+      text: 'Đại từ quan hệ giúp **gộp hai câu ngắn thành một câu dài**, nói rõ danh từ đứng trước là ai, là cái gì. Câu dài và đúng ngữ pháp giúp tăng điểm tiêu chí **Grammatical Range and Accuracy** (độ đa dạng và chính xác của ngữ pháp).',
     },
     {
       t: 'patterns',
@@ -285,6 +437,25 @@ const D3_GRAMMAR: Lesson = {
         'Động từ sau who/which/that chia theo **danh từ đứng trước**: *a student who **studies*** nhưng *students who **study***.',
       ],
     },
+    {
+      t: 'rule',
+      formula: 'người + who / that + V    ·    vật + which / that + V    ·    N + whose + N',
+      vi: 'Nối hai câu ngắn thành một: đại từ quan hệ đứng ngay sau danh từ nó bổ nghĩa, và thay luôn cho đại từ cũ (không giữ lại "it/them").',
+    },
+    {
+      t: 'quiz',
+      id: 'd3-dt-quan-he-dich',
+      title: 'Dịch — nối câu bằng who, which, whose (5 câu)',
+      kind: 'translate',
+      grammar: 'người + who/that + V · vật + which/that + V · N + whose + N · There are many people who + V… (câu mẫu Task 2).',
+      items: [
+        { q: 'Cô gái ngồi cạnh tôi nói được ba thứ tiếng.', hint: 'the girl, who, sit next to me, three languages', answers: ['The girl who sits next to me speaks three languages.', 'The girl that sits next to me speaks three languages.', 'The girl who sits next to me can speak three languages.', 'The girl that sits next to me can speak three languages.'] },
+        { q: 'Đây là ứng dụng đã giúp tôi học từ vựng.', hint: 'the app, which, help, learn vocabulary', answers: ['This is the app which helped me learn vocabulary.', 'This is the app that helped me learn vocabulary.', 'This is the app which helped me to learn vocabulary.', 'This is the app that helped me to learn vocabulary.', 'This is the app which has helped me learn vocabulary.', 'This is the app that has helped me learn vocabulary.'] },
+        { q: 'Có nhiều người quan tâm đến môi trường.', hint: 'there are, many people, who, be concerned about, the environment', answers: ['There are many people who are concerned about the environment.', 'There are many people that are concerned about the environment.', 'There are many people who care about the environment.', 'There are a lot of people who are concerned about the environment.'] },
+        { q: 'Những đứa trẻ được bố mẹ đọc sách cho nghe thường yêu sách.', hint: 'children, whose, parents, read to them, often', answers: ['Children whose parents read to them often love books.', 'Children whose parents read to them usually love books.', 'Children whose parents read to them often like books.'] },
+        { q: 'Sinh viên làm thêm thường có ít thời gian học hơn.', hint: 'students, who, work part-time, less time to study', answers: ['Students who work part-time often have less time to study.', 'Students who work part-time usually have less time to study.', 'Students that work part-time often have less time to study.', 'Students who work part time often have less time to study.', 'Students who work part-time often have less time for studying.'] },
+      ],
+    },
 
     { t: 'h', text: '8. "It" làm chủ ngữ giả và "one" chỉ người nói chung' },
     {
@@ -320,6 +491,24 @@ const D3_GRAMMAR: Lesson = {
         'Bài luận học thuật nên hạn chế **you**. Thay bằng **people, students, one, we** hoặc câu bị động.',
       ],
     },
+    {
+      t: 'rule',
+      formula: 'It + is + adj (important / difficult / necessary…) + to V',
+      vi: 'Chủ ngữ thật là cụm "to V" dài → đẩy ra sau, đặt It làm chủ ngữ giả ở đầu. "one + V" = người ta nói chung (văn viết trang trọng).',
+    },
+    {
+      t: 'quiz',
+      id: 'd3-dt-it-one-dich',
+      title: 'Dịch — It làm chủ ngữ giả và "one" (4 câu)',
+      kind: 'translate',
+      grammar: 'It is + adj + to V (không được bỏ "It") · One should + V = người ta nên…',
+      items: [
+        { q: 'Ngủ đủ giấc trước kỳ thi là điều quan trọng.', hint: 'it, important, get enough sleep, before an exam', answers: ['It is important to get enough sleep before an exam.', "It's important to get enough sleep before an exam.", 'It is important to get enough sleep before the exam.', "It's important to get enough sleep before the exam.", 'It is important to sleep well before an exam.', "It's important to sleep well before an exam.", 'It is important to sleep enough before an exam.'] },
+        { q: 'Học ngoại ngữ mà không luyện tập thì rất khó.', hint: 'it, difficult, learn a foreign language, without practice', answers: ['It is difficult to learn a foreign language without practice.', "It's difficult to learn a foreign language without practice.", 'It is very difficult to learn a foreign language without practice.', "It's very difficult to learn a foreign language without practice.", 'It is hard to learn a foreign language without practice.', "It's hard to learn a foreign language without practice.", 'It is difficult to learn a language without practice.'] },
+        { q: 'Người ta nên kiểm tra thông tin trước khi chia sẻ.', hint: 'one, should, check, before sharing it', answers: ['One should check information before sharing it.', 'One should check the information before sharing it.', 'One should check information before sharing.', 'One should check the information before sharing.', 'One should always check information before sharing it.'] },
+        { q: 'Học tiếng Anh mỗi ngày là cần thiết.', hint: 'it, necessary, every day', answers: ['It is necessary to learn English every day.', "It's necessary to learn English every day.", 'It is necessary to study English every day.', "It's necessary to study English every day."] },
+      ],
+    },
 
     { t: 'h', text: '9. Ứng dụng đại từ vào IELTS Writing Task 2' },
     {
@@ -351,6 +540,32 @@ const D3_GRAMMAR: Lesson = {
       ],
     },
     {
+      t: 'note',
+      title: 'Cẩn thận với ví dụ đại từ sở hữu trong sách',
+      items: [
+        'Sách minh hoạ hàng "Đại từ sở hữu" bằng một câu mở đầu bằng **Theirs is critical…** để thay cho "every person\'s responsibility". Câu này **chưa tự nhiên**: người đọc dễ hiểu "theirs" là "của những người KHÁC".',
+        'Muốn tránh lặp "responsibility", viết **This responsibility is critical…** hoặc **Their responsibility is critical…** thì rõ hơn. Đại từ sở hữu (mine, theirs) hợp nhất khi **so sánh hai bên**, như ví dụ "mine" ở bảng trên.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'N (câu trước)  →  it / they / them / their / this / who (câu sau)',
+      vi: 'Viết Task 2: danh từ nhắc lần hai thì thay bằng đại từ — nhưng đại từ phải chỉ rõ MỘT danh từ và khớp số ít / số nhiều.',
+    },
+    {
+      t: 'quiz',
+      id: 'd3-dt-writing-dich',
+      title: 'Dịch — viết câu Task 2 không lặp từ (4 câu)',
+      kind: 'translate',
+      grammar: 'education → it · teenagers/children → they, them, their · cả ý câu trước → This · người + who + V.',
+      items: [
+        { q: 'Giáo dục quan trọng vì nó giúp mỗi người phát triển các kỹ năng thiết yếu.', hint: 'education, important, it, individuals, develop, essential skills', answers: ['Education is important because it helps individuals develop essential skills.', 'Education is important because it helps individuals to develop essential skills.', 'Education is important because it helps people develop essential skills.', 'Education is important because it helps people to develop essential skills.'] },
+        { q: 'Thanh thiếu niên cần định hướng, nên trường học nên tư vấn nghề nghiệp cho họ.', hint: 'teenagers, need guidance, so, give, them, career advice', answers: ['Teenagers need guidance, so schools should give them career advice.', 'Teenagers need guidance so schools should give them career advice.', 'Teenagers need guidance, so schools should provide them with career advice.', 'Teenagers need guidance so schools should provide them with career advice.'] },
+        { q: 'Nhiều trường dùng máy tính bảng trong lớp. Điều này làm bài học sinh động hơn.', hint: 'tablets, in class, this, make, more interactive', answers: ['Many schools use tablets in class. This makes lessons more interactive.', 'Many schools now use tablets in class. This makes lessons more interactive.', 'Many schools use tablets in class. This makes the lessons more interactive.', 'Many schools use tablets in class. This makes lessons more lively.'] },
+        { q: 'Cha mẹ nên nói chuyện với con cái về mục tiêu của chúng.', hint: 'parents, talk to, children, their goals', answers: ['Parents should talk to children about their goals.', 'Parents should talk to their children about their goals.', 'Parents should talk with their children about their goals.', 'Parents should talk with children about their goals.'] },
+      ],
+    },
+    {
       t: 'quiz',
       id: 'd3-nhanh',
       title: 'Kiểm tra nhanh — điền đại từ đúng',
@@ -373,8 +588,18 @@ const D3_VOCAB: Lesson = {
   kind: 'vocab',
   title: 'Từ vựng chủ đề Giáo dục & Xã hội',
   goal: 'Nắm 20 từ, 10 cụm động từ và 5 họ từ về giáo dục — chủ đề ra thường xuyên nhất ở Writing Task 2 và Speaking.',
-  minutes: 30,
+  minutes: 35,
   blocks: [
+    {
+      t: 'recap',
+      items: [
+        'Đủ như sách: **20 từ** chủ đề Giáo dục & Xã hội · **10 cụm động từ** về việc học · **5 họ từ** (educate, achieve, develop, influence, access).',
+        'Học từ **cùng giới từ đi kèm**: access ==to== · participate ==in== · prepare ==for== · focus ==on== · encourage sb ==to V==.',
+        '**knowledge, learning** là danh từ **không đếm được** — không thêm -s, không dùng "a".',
+        'Dòng ➕ dưới mỗi từ là **cụm hay dùng trong IELTS** và họ từ — chép vào sổ cùng câu ví dụ.',
+        'Cụm động từ tách được (hand in, pick up, carry out): với đại từ **bắt buộc tách** — **hand it in**.',
+      ],
+    },
     {
       t: 'p',
       text: 'Giáo dục (Education) là chủ đề **gặp nhiều nhất** trong IELTS. Bấm 🔊 để nghe. Mỗi từ: nghe → đọc to theo → che nghĩa tự nhớ lại → đặt một câu về việc học của chính bạn.',
@@ -383,26 +608,26 @@ const D3_VOCAB: Lesson = {
     {
       t: 'vocab',
       items: [
-        { w: 'achievement', pos: 'n', ipa: '/əˈtʃiːvmənt/', vi: 'thành tích, thành tựu', ex: 'Passing the entrance exam was a huge achievement for her.', exVi: 'Đỗ kỳ thi đầu vào là một thành tích lớn của cô ấy.' },
-        { w: 'access', pos: 'n', ipa: '/ˈækses/', vi: 'sự tiếp cận, quyền sử dụng', ex: 'Students in remote villages have limited access to the internet.', exVi: 'Học sinh ở làng xa có ít cơ hội tiếp cận internet.' },
-        { w: 'program', pos: 'n', ipa: '/ˈprəʊɡræm/', vi: 'chương trình (Anh-Anh viết programme)', ex: 'The university runs an exchange program with Korea.', exVi: 'Trường đại học có một chương trình trao đổi với Hàn Quốc.' },
-        { w: 'opportunity', pos: 'n', ipa: '/ˌɒpəˈtjuːnəti/', vi: 'cơ hội', ex: 'Studying abroad gives young people the opportunity to become independent.', exVi: 'Du học cho người trẻ cơ hội trở nên tự lập.' },
-        { w: 'support', pos: 'n, v', ipa: '/səˈpɔːt/', vi: 'sự hỗ trợ; hỗ trợ, ủng hộ', ex: 'My older sister supported me when I failed my first test.', exVi: 'Chị tôi đã động viên tôi khi tôi trượt bài kiểm tra đầu tiên.' },
-        { w: 'learning', pos: 'n', ipa: '/ˈlɜːnɪŋ/', vi: 'việc học, sự học tập', ex: 'Online learning suits people who work full-time.', exVi: 'Học trực tuyến hợp với người đi làm toàn thời gian.' },
-        { w: 'knowledgeable', pos: 'adj', ipa: '/ˈnɒlɪdʒəbl/', vi: 'hiểu biết, có kiến thức', ex: 'Our tour guide was very knowledgeable about local history.', exVi: 'Hướng dẫn viên của chúng tôi rất am hiểu lịch sử địa phương.' },
-        { w: 'development', pos: 'n', ipa: '/dɪˈveləpmənt/', vi: 'sự phát triển', ex: 'Playing outside is good for a child\'s development.', exVi: 'Chơi ngoài trời tốt cho sự phát triển của trẻ.' },
-        { w: 'resource', pos: 'n', ipa: '/rɪˈzɔːs/', vi: 'tài nguyên, nguồn lực, tài liệu', ex: 'The website offers free resources for English teachers.', exVi: 'Trang web cung cấp tài liệu miễn phí cho giáo viên tiếng Anh.' },
-        { w: 'improve', pos: 'v', ipa: '/ɪmˈpruːv/', vi: 'cải thiện, tiến bộ', ex: 'Watching films with subtitles improved my listening a lot.', exVi: 'Xem phim có phụ đề giúp khả năng nghe của tôi tiến bộ nhiều.' },
-        { w: 'challenge', pos: 'n', ipa: '/ˈtʃælɪndʒ/', vi: 'thách thức, thử thách', ex: 'Living away from home is a real challenge for first-year students.', exVi: 'Sống xa nhà là một thử thách thật sự với sinh viên năm nhất.' },
-        { w: 'motivation', pos: 'n', ipa: '/ˌməʊtɪˈveɪʃn/', vi: 'động lực', ex: 'Clear goals give learners more motivation.', exVi: 'Mục tiêu rõ ràng cho người học nhiều động lực hơn.' },
-        { w: 'success', pos: 'n', ipa: '/səkˈses/', vi: 'sự thành công', ex: 'His success in the competition surprised everyone.', exVi: 'Thành công của cậu ấy trong cuộc thi làm mọi người bất ngờ.' },
-        { w: 'participate', pos: 'v', ipa: '/pɑːˈtɪsɪpeɪt/', vi: 'tham gia (participate in)', ex: 'Over two hundred students participated in the charity run.', exVi: 'Hơn hai trăm sinh viên đã tham gia cuộc chạy từ thiện.' },
-        { w: 'skill', pos: 'n', ipa: '/skɪl/', vi: 'kỹ năng (hay dùng số nhiều: skills)', ex: 'Teamwork is a skill that employers value highly.', exVi: 'Làm việc nhóm là kỹ năng nhà tuyển dụng đánh giá rất cao.' },
-        { w: 'focus', pos: 'n, v', ipa: '/ˈfəʊkəs/', vi: 'sự tập trung; tập trung (focus on)', ex: 'I keep my phone in another room so I don\'t lose focus.', exVi: 'Tôi để điện thoại ở phòng khác để không bị mất tập trung.' },
-        { w: 'prepare', pos: 'v', ipa: '/prɪˈpeə(r)/', vi: 'chuẩn bị (prepare for)', ex: 'We prepared for the debate by reading news articles.', exVi: 'Chúng tôi chuẩn bị cho buổi tranh biện bằng cách đọc báo.' },
-        { w: 'evaluate', pos: 'v', ipa: '/ɪˈvæljueɪt/', vi: 'đánh giá', ex: 'The school evaluates each teacher at the end of the year.', exVi: 'Nhà trường đánh giá từng giáo viên vào cuối năm.' },
-        { w: 'knowledge', pos: 'n', ipa: '/ˈnɒlɪdʒ/', vi: 'kiến thức, sự hiểu biết', ex: 'Her knowledge of computers helped the whole team.', exVi: 'Kiến thức máy tính của cô ấy đã giúp cả nhóm.' },
-        { w: 'encourage', pos: 'v', ipa: '/ɪnˈkʌrɪdʒ/', vi: 'khuyến khích, động viên', ex: 'Good teachers encourage students to ask questions.', exVi: 'Giáo viên giỏi khuyến khích học sinh đặt câu hỏi.' },
+        { w: 'achievement', pos: 'n', ipa: '/əˈtʃiːvmənt/', vi: 'thành tích, thành tựu', ex: 'Passing the entrance exam was a huge achievement for her.', exVi: 'Đỗ kỳ thi đầu vào là một thành tích lớn của cô ấy.', more: 'Hay đi với: **academic** achievement · a **great / huge** achievement · họ từ: achieve (v) → achievable (adj, có thể đạt được)' },
+        { w: 'access', pos: 'n', ipa: '/ˈækses/', vi: 'sự tiếp cận, quyền sử dụng', ex: 'Students in remote villages have limited access to the internet.', exVi: 'Học sinh ở làng xa có ít cơ hội tiếp cận internet.', more: '**have / gain access to** sth (danh từ + to) · động từ thì không "to": **access the internet** · adj: **accessible**' },
+        { w: 'program', pos: 'n', ipa: '/ˈprəʊɡræm/', vi: 'chương trình (Anh-Anh viết programme)', ex: 'The university runs an exchange program with Korea.', exVi: 'Trường đại học có một chương trình trao đổi với Hàn Quốc.', more: '**run / offer / complete** a program(me) · an **exchange / training** programme · Anh-Anh: programme' },
+        { w: 'opportunity', pos: 'n', ipa: '/ˌɒpəˈtjuːnəti/', vi: 'cơ hội', ex: 'Studying abroad gives young people the opportunity to become independent.', exVi: 'Du học cho người trẻ cơ hội trở nên tự lập.', more: '**have / get / give sb the opportunity to** V · **job / career** opportunities · **equal** opportunities (cơ hội bình đẳng)' },
+        { w: 'support', pos: 'n, v', ipa: '/səˈpɔːt/', vi: 'sự hỗ trợ; hỗ trợ, ủng hộ', ex: 'My older sister supported me when I failed my first test.', exVi: 'Chị tôi đã động viên tôi khi tôi trượt bài kiểm tra đầu tiên.', more: 'động từ: **support sb** (không thêm for) · danh từ: **provide support for** sb · **financial / emotional** support' },
+        { w: 'learning', pos: 'n', ipa: '/ˈlɜːnɪŋ/', vi: 'việc học, sự học tập', ex: 'Online learning suits people who work full-time.', exVi: 'Học trực tuyến hợp với người đi làm toàn thời gian.', more: '**online / lifelong** learning (học trực tuyến / học suốt đời) · không đếm được: ~~learnings~~' },
+        { w: 'knowledgeable', pos: 'adj', ipa: '/ˈnɒlɪdʒəbl/', vi: 'hiểu biết, có kiến thức', ex: 'Our tour guide was very knowledgeable about local history.', exVi: 'Hướng dẫn viên của chúng tôi rất am hiểu lịch sử địa phương.', more: 'knowledgeable **about** sth · họ từ: knowledge (n) — đọc /ˈnɒl-/, chữ k câm' },
+        { w: 'development', pos: 'n', ipa: '/dɪˈveləpmənt/', vi: 'sự phát triển', ex: 'Playing outside is good for a child\'s development.', exVi: 'Chơi ngoài trời tốt cho sự phát triển của trẻ.', more: '**child / personal / economic** development · **developed** countries (nước phát triển) ≠ **developing** countries' },
+        { w: 'resource', pos: 'n', ipa: '/rɪˈzɔːs/', vi: 'tài nguyên, nguồn lực, tài liệu', ex: 'The website offers free resources for English teachers.', exVi: 'Trang web cung cấp tài liệu miễn phí cho giáo viên tiếng Anh.', more: '**learning / natural** resources · hay dùng **số nhiều** · **lack (of) resources** (thiếu nguồn lực)' },
+        { w: 'improve', pos: 'v', ipa: '/ɪmˈpruːv/', vi: 'cải thiện, tiến bộ', ex: 'Watching films with subtitles improved my listening a lot.', exVi: 'Xem phim có phụ đề giúp khả năng nghe của tôi tiến bộ nhiều.', more: 'improve **skills / performance / quality** · danh từ: **improvement in** sth' },
+        { w: 'challenge', pos: 'n', ipa: '/ˈtʃælɪndʒ/', vi: 'thách thức, thử thách', ex: 'Living away from home is a real challenge for first-year students.', exVi: 'Sống xa nhà là một thử thách thật sự với sinh viên năm nhất.', more: '**face / overcome / meet** a challenge · adj: **challenging** (đầy thử thách)' },
+        { w: 'motivation', pos: 'n', ipa: '/ˌməʊtɪˈveɪʃn/', vi: 'động lực', ex: 'Clear goals give learners more motivation.', exVi: 'Mục tiêu rõ ràng cho người học nhiều động lực hơn.', more: '**lack of** motivation · motivation **to** V · động từ: motivate · adj: motivated (có động lực)' },
+        { w: 'success', pos: 'n', ipa: '/səkˈses/', vi: 'sự thành công', ex: 'His success in the competition surprised everyone.', exVi: 'Thành công của cậu ấy trong cuộc thi làm mọi người bất ngờ.', more: '**achieve** success · **the key to** success · succeed **in** V-ing · adj: successful' },
+        { w: 'participate', pos: 'v', ipa: '/pɑːˈtɪsɪpeɪt/', vi: 'tham gia (participate in)', ex: 'Over two hundred students participated in the charity run.', exVi: 'Hơn hai trăm sinh viên đã tham gia cuộc chạy từ thiện.', more: 'participate **in** sth = **take part in** · danh từ: participation · participate **actively** (tích cực)' },
+        { w: 'skill', pos: 'n', ipa: '/skɪl/', vi: 'kỹ năng (hay dùng số nhiều: skills)', ex: 'Teamwork is a skill that employers value highly.', exVi: 'Làm việc nhóm là kỹ năng nhà tuyển dụng đánh giá rất cao.', more: '**communication / practical / teamwork** skills · **develop / improve** skills' },
+        { w: 'focus', pos: 'n, v', ipa: '/ˈfəʊkəs/', vi: 'sự tập trung; tập trung (focus on)', ex: 'I keep my phone in another room so I don\'t lose focus.', exVi: 'Tôi để điện thoại ở phòng khác để không bị mất tập trung.', more: 'focus **on** sth · **lose / keep** focus · ~~focus in~~' },
+        { w: 'prepare', pos: 'v', ipa: '/prɪˈpeə(r)/', vi: 'chuẩn bị (prepare for)', ex: 'We prepared for the debate by reading news articles.', exVi: 'Chúng tôi chuẩn bị cho buổi tranh biện bằng cách đọc báo.', more: 'prepare **for** an exam · prepare sb **for** sth · adj: **well-prepared** · n: preparation' },
+        { w: 'evaluate', pos: 'v', ipa: '/ɪˈvæljueɪt/', vi: 'đánh giá', ex: 'The school evaluates each teacher at the end of the year.', exVi: 'Nhà trường đánh giá từng giáo viên vào cuối năm.', more: 'evaluate **progress / performance / results** · danh từ: evaluation' },
+        { w: 'knowledge', pos: 'n', ipa: '/ˈnɒlɪdʒ/', vi: 'kiến thức, sự hiểu biết', ex: 'Her knowledge of computers helped the whole team.', exVi: 'Kiến thức máy tính của cô ấy đã giúp cả nhóm.', more: '**gain / broaden / share** knowledge · knowledge **of / about** sth · không đếm được' },
+        { w: 'encourage', pos: 'v', ipa: '/ɪnˈkʌrɪdʒ/', vi: 'khuyến khích, động viên', ex: 'Good teachers encourage students to ask questions.', exVi: 'Giáo viên giỏi khuyến khích học sinh đặt câu hỏi.', more: 'encourage sb **to** V (~~encourage sb V-ing~~) · n: encouragement · adj: encouraging' },
       ],
     },
     {
@@ -413,7 +638,7 @@ const D3_VOCAB: Lesson = {
         'Nhớ giới từ đi kèm: **access to** sth · **participate in** sth · **prepare for** sth · **focus on** sth · **encourage** sb **to** V · **support** sb (động từ, không thêm "for").',
         '~~have access the internet~~ → **have access to the internet** (danh từ cần "to") — nhưng **access the internet** (động từ, không "to").',
         '**success** (danh từ) ≠ **successful** (tính từ) ≠ **succeed** (động từ): *She **succeeded**. She was **successful**. Her **success** was deserved.*',
-        '**program** là cách viết Mỹ; Anh viết **programme** (nhưng *computer program* thì Anh cũng viết program). Trong IELTS viết kiểu nào cũng được, miễn **thống nhất cả bài**.',
+        '**program** là cách viết Mỹ; Anh viết **programme** (nhưng **computer program** thì Anh cũng viết program). Trong IELTS viết kiểu nào cũng được, miễn **thống nhất cả bài**.',
       ],
     },
     { t: 'h', text: '2. Cụm động từ (phrasal verbs)' },
@@ -424,16 +649,16 @@ const D3_VOCAB: Lesson = {
     {
       t: 'vocab',
       items: [
-        { w: 'catch up', pos: 'phr v', ipa: '/kætʃ ʌp/', vi: 'đuổi kịp, bắt kịp (phần bị bỏ lỡ)', ex: 'After the holiday, I stayed late to catch up on my homework.', exVi: 'Sau kỳ nghỉ, tôi thức khuya để làm bù bài tập.' },
-        { w: 'drop out', pos: 'phr v', ipa: '/drɒp aʊt/', vi: 'bỏ học giữa chừng', ex: 'Some students drop out because they cannot pay the fees.', exVi: 'Một số sinh viên bỏ học vì không đóng nổi học phí.' },
-        { w: 'look into', pos: 'phr v', ipa: '/lʊk ˈɪntuː/', vi: 'xem xét, tìm hiểu kỹ', ex: 'The committee will look into the cause of the exam leak.', exVi: 'Ban hội đồng sẽ điều tra nguyên nhân lộ đề.' },
-        { w: 'pick up', pos: 'phr v', ipa: '/pɪk ʌp/', vi: 'học được (một cách tự nhiên), tiếp thu', ex: 'Kids pick up new words very quickly from cartoons.', exVi: 'Trẻ con học từ mới từ phim hoạt hình rất nhanh.' },
-        { w: 'go over', pos: 'phr v', ipa: '/ɡəʊ ˈəʊvə(r)/', vi: 'xem lại, rà soát kỹ', ex: 'Let\'s go over the main points before the test.', exVi: 'Mình xem lại các ý chính trước bài kiểm tra nhé.' },
-        { w: 'keep up with', pos: 'phr v', ipa: '/kiːp ʌp wɪð/', vi: 'theo kịp, bắt nhịp với', ex: 'It is hard to keep up with a class that moves so fast.', exVi: 'Rất khó theo kịp một lớp học đi nhanh như vậy.' },
-        { w: 'brush up on', pos: 'phr v', ipa: '/brʌʃ ʌp ɒn/', vi: 'ôn lại (kỹ năng đã học nhưng bị mai một)', ex: 'I need to brush up on my maths before the placement test.', exVi: 'Tôi cần ôn lại toán trước bài kiểm tra xếp lớp.' },
-        { w: 'get ahead', pos: 'phr v', ipa: '/ɡet əˈhed/', vi: 'tiến lên, vượt lên trước, thành công', ex: 'Learning a second language can help you get ahead at work.', exVi: 'Học thêm một ngoại ngữ có thể giúp bạn tiến xa trong công việc.' },
-        { w: 'hand in', pos: 'phr v', ipa: '/hænd ɪn/', vi: 'nộp (bài)', ex: 'Please hand in your reports before Friday.', exVi: 'Vui lòng nộp báo cáo trước thứ Sáu.' },
-        { w: 'carry out', pos: 'phr v', ipa: '/ˈkæri aʊt/', vi: 'tiến hành, thực hiện', ex: 'The students carried out an experiment on plant growth.', exVi: 'Học sinh đã tiến hành một thí nghiệm về sự phát triển của cây.' },
+        { w: 'catch up', pos: 'phr v', ipa: '/kætʃ ʌp/', vi: 'đuổi kịp, bắt kịp (phần bị bỏ lỡ)', ex: 'After the holiday, I stayed late to catch up on my homework.', exVi: 'Sau kỳ nghỉ, tôi thức khuya để làm bù bài tập.', more: 'catch up **on** sth (bù phần bị lỡ) · catch up **with** sb (đuổi kịp ai)' },
+        { w: 'drop out', pos: 'phr v', ipa: '/drɒp aʊt/', vi: 'bỏ học giữa chừng', ex: 'Some students drop out because they cannot pay the fees.', exVi: 'Một số sinh viên bỏ học vì không đóng nổi học phí.', more: 'drop out **of** school / university · danh từ: **a dropout** (người bỏ học)' },
+        { w: 'look into', pos: 'phr v', ipa: '/lʊk ˈɪntuː/', vi: 'xem xét, tìm hiểu kỹ', ex: 'The committee will look into the cause of the exam leak.', exVi: 'Ban hội đồng sẽ điều tra nguyên nhân lộ đề.', more: '= investigate · look into **a problem / complaint / the cause** · không tách: look into it' },
+        { w: 'pick up', pos: 'phr v', ipa: '/pɪk ʌp/', vi: 'học được (một cách tự nhiên), tiếp thu', ex: 'Kids pick up new words very quickly from cartoons.', exVi: 'Trẻ con học từ mới từ phim hoạt hình rất nhanh.', more: 'pick up **a language / a skill / a habit** · tách được: **pick it up**' },
+        { w: 'go over', pos: 'phr v', ipa: '/ɡəʊ ˈəʊvə(r)/', vi: 'xem lại, rà soát kỹ', ex: 'Let\'s go over the main points before the test.', exVi: 'Mình xem lại các ý chính trước bài kiểm tra nhé.', more: 'go over **notes / answers / mistakes** · không tách với đại từ: go over it' },
+        { w: 'keep up with', pos: 'phr v', ipa: '/kiːp ʌp wɪð/', vi: 'theo kịp, bắt nhịp với', ex: 'It is hard to keep up with a class that moves so fast.', exVi: 'Rất khó theo kịp một lớp học đi nhanh như vậy.', more: 'keep up with **the class / the news / the latest trends**' },
+        { w: 'brush up on', pos: 'phr v', ipa: '/brʌʃ ʌp ɒn/', vi: 'ôn lại (kỹ năng đã học nhưng bị mai một)', ex: 'I need to brush up on my maths before the placement test.', exVi: 'Tôi cần ôn lại toán trước bài kiểm tra xếp lớp.', more: 'brush up on **grammar / your English / skills** · dùng cho thứ đã học nhưng bị quên' },
+        { w: 'get ahead', pos: 'phr v', ipa: '/ɡet əˈhed/', vi: 'tiến lên, vượt lên trước, thành công', ex: 'Learning a second language can help you get ahead at work.', exVi: 'Học thêm một ngoại ngữ có thể giúp bạn tiến xa trong công việc.', more: 'get ahead **in** your career / studies · không có tân ngữ trực tiếp' },
+        { w: 'hand in', pos: 'phr v', ipa: '/hænd ɪn/', vi: 'nộp (bài)', ex: 'Please hand in your reports before Friday.', exVi: 'Vui lòng nộp báo cáo trước thứ Sáu.', more: '= submit (trang trọng hơn) · hand in **homework / an essay** · với đại từ: **hand it in**' },
+        { w: 'carry out', pos: 'phr v', ipa: '/ˈkæri aʊt/', vi: 'tiến hành, thực hiện', ex: 'The students carried out an experiment on plant growth.', exVi: 'Học sinh đã tiến hành một thí nghiệm về sự phát triển của cây.', more: 'carry out **research / a survey / an experiment / a plan** · bị động: was carried out' },
       ],
     },
     {
@@ -441,8 +666,8 @@ const D3_VOCAB: Lesson = {
       title: 'Mẹo nhớ cụm động từ (phần sách chưa có)',
       items: [
         '**catch up** (bù lại cái đã bị bỏ lỡ, ví dụ sau khi ốm) khác **keep up with** (giữ nhịp, không để bị tụt lại). Catch up = đang ở phía sau, chạy theo; keep up = đang ngang hàng, cố giữ.',
-        '**go over** (xem lại chi tiết một tài liệu) khác **brush up on** (ôn lại một kỹ năng đã bị quên). *Go over your essay* / *brush up on your French*.',
-        'Một số cụm **tách ra được**: *hand in the essay* = *hand the essay in*; với đại từ thì **bắt buộc** tách: *hand **it** in* (~~hand in it~~). Tương tự: *pick it up*, *carry it out*.',
+        '**go over** (xem lại chi tiết một tài liệu) khác **brush up on** (ôn lại một kỹ năng đã bị quên). **Go over your essay** / **brush up on your French**.',
+        'Một số cụm **tách ra được**: **hand in the essay** = **hand the essay in**; với đại từ thì **bắt buộc** tách: *hand **it** in* (~~hand in it~~). Tương tự: **pick it up**, **carry it out**.',
         '**look into** thì **không tách**: *look into **it*** (~~look it into~~).',
         '**drop out of** + nơi học: *drop out **of** university*.',
       ],
@@ -467,11 +692,20 @@ const D3_VOCAB: Lesson = {
       t: 'note',
       title: 'Dễ nhầm trong họ từ',
       items: [
-        'Sách để trống trạng từ của **educate**; thực tế có **educationally** (*educationally useful games*).',
+        'Sách để trống trạng từ của **educate**; thực tế có **educationally** (**educationally useful games**).',
         'Sách chỉ ghi **achieved** làm tính từ. Tính từ hay dùng hơn là **achievable**: *Set **achievable** goals.* (đặt mục tiêu có thể đạt được).',
-        '**educational** (có tính giáo dục: *an educational video*) ≠ **educated** (người có học: *an educated woman*).',
+        '**educational** (có tính giáo dục: **an educational video**) ≠ **educated** (người có học: **an educated woman**).',
         '**developed countries** = nước phát triển; **developing countries** = nước đang phát triển. Hai cụm này ra rất nhiều ở Task 2.',
         '**influence** là danh từ và động từ, sau động từ **không có "on"**: ~~influence on children~~ (động từ) → **influence children**; nhưng danh từ thì **have an influence on** children.',
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo nhớ trọng âm trong họ từ (phần sách chưa có)',
+      items: [
+        'Đuôi **-tion / -ial / -ical** kéo trọng âm về **ngay trước đuôi**: ˈeducate /ˈedʒukeɪt/ → eduˈcation /ˌedʒuˈkeɪʃn/ · ˈinfluence /ˈɪnfluəns/ → influˈential /ˌɪnfluˈenʃl/.',
+        '**develop** /dɪˈveləp/ → **development** /dɪˈveləpmənt/: đuôi **-ment** không đổi trọng âm. Tương tự **achieve** /əˈtʃiːv/ → **achievement** /əˈtʃiːvmənt/.',
+        '**access** /ˈækses/ → **accessible** /əkˈsesəbl/: trọng âm chuyển sang âm thứ hai khi thêm **-ible**.',
       ],
     },
     { t: 'h', text: '4. Dùng trong IELTS: câu mẫu ăn điểm' },
@@ -508,6 +742,15 @@ const D3_LISTENING: Lesson = {
   goal: 'Hiểu nghe chép chính tả là gì, vì sao nó giúp tăng điểm Listening, và tự làm được một bài nghe điền 22 từ.',
   minutes: 30,
   blocks: [
+    {
+      t: 'recap',
+      items: [
+        '**Dictation** (nghe chép chính tả) = nghe rồi **viết lại từng chữ** — luyện tai bắt được cả từ nhỏ, đuôi -s, -ed.',
+        '**5 lợi ích** như sách: nghe chi tiết · vững từ vựng + ngữ pháp · quen tốc độ bản xứ · thêm vốn câu mẫu · luyện thẳng dạng điền từ của đề thi.',
+        'Làm theo **5 bước**: nghe cả bài → nghe từng câu và điền → soát ngữ pháp → mở lời thoại chấm → đọc nhại theo (shadowing).',
+        'Bài luyện: **22 chỗ trống**, mỗi chỗ ==một từ==. Sai chính tả hoặc thiếu **-s** = sai.',
+      ],
+    },
     { t: 'h', text: '1. Nghe chép chính tả (Dictation) là gì?' },
     {
       t: 'p',
@@ -533,7 +776,7 @@ const D3_LISTENING: Lesson = {
         '**Bước 1 — Nghe cả bài một lần**, không viết, chỉ để nắm chủ đề và ý chính. Biết chủ đề thì đoán từ dễ hơn.',
         '**Bước 2 — Nghe từng câu và điền.** Gặp chỗ khó thì nghe lại câu đó (tối đa 3 lần), vẫn không nghe ra thì đoán theo nghĩa và ngữ pháp rồi đi tiếp.',
         '**Bước 3 — Soát lại ngữ pháp:** trước chỗ trống có "a/an" → danh từ số ít; có "the … of" → danh từ; sau "are/were" → có thể là tính từ hoặc V-ing. Danh từ số nhiều có **-s** không?',
-        '**Bước 4 — Mở lời thoại (transcript) để chấm.** Ghi lỗi vào sổ theo 3 nhóm: *không biết từ* · *biết từ nhưng không nghe ra* · *nghe ra nhưng viết sai chính tả*.',
+        '**Bước 4 — Mở lời thoại (transcript) để chấm.** Ghi lỗi vào sổ theo 3 nhóm: **không biết từ** · **biết từ nhưng không nghe ra** · **nghe ra nhưng viết sai chính tả**.',
         '**Bước 5 — Nghe lại lần cuối và đọc nhại theo (shadowing)** — đọc to ngay sau giọng đọc, bắt chước cả ngữ điệu. Bước này sửa luôn cả phát âm của bạn.',
       ],
     },
@@ -542,8 +785,8 @@ const D3_LISTENING: Lesson = {
       title: 'Người Việt hay sai khi nghe chép',
       items: [
         '**Mất âm cuối**: tiếng Việt không bật âm cuối nên hay bỏ **-s, -ed, -t, -k**: ~~seed~~ thay vì **seeds**, ~~threat~~ thay vì **threats**. Trong IELTS, thiếu **-s** là sai cả câu.',
-        '**Bỏ sót từ nhỏ**: a, the, of, to, and được đọc rất nhẹ (gọi là *weak forms* — dạng đọc yếu). Nghe câu như một chuỗi ý nghĩa, đừng chỉ bắt từ to.',
-        '**Viết sai chính tả từ đã biết**: nghe ra *environment* nhưng viết ~~enviroment~~. Trong phòng thi, sai chính tả = sai.',
+        '**Bỏ sót từ nhỏ**: a, the, of, to, and được đọc rất nhẹ (gọi là **weak forms** — dạng đọc yếu). Nghe câu như một chuỗi ý nghĩa, đừng chỉ bắt từ to.',
+        '**Viết sai chính tả từ đã biết**: nghe ra **environment** nhưng viết ~~enviroment~~. Trong phòng thi, sai chính tả = sai.',
       ],
     },
     { t: 'h', text: '4. Luyện tập: nghe và điền 22 chỗ trống' },
@@ -594,7 +837,7 @@ const D3_LISTENING: Lesson = {
       items: [
         'Câu (8) **seeds**, (12) **threats**, (15) **viruses**, (19) **pesticides** đều là **số nhiều** — nếu bạn viết thiếu -s, hãy nghe lại âm cuối /z/ hoặc /s/.',
         'Câu (7) **pollination** và (13) **habitat** là từ học thuật hay gặp trong bài sinh thái — chép vào sổ từ vựng.',
-        'Câu (3) **alone** đứng sau động từ *live*: "live alone" = sống một mình (nhớ lại **by themselves** ở bài ngữ pháp — cùng nghĩa).',
+        'Câu (3) **alone** đứng sau động từ **live**: "live alone" = sống một mình (nhớ lại **by themselves** ở bài ngữ pháp — cùng nghĩa).',
       ],
     },
     {
@@ -621,6 +864,14 @@ const D3_HOMEWORK: Lesson = {
   goal: 'Tự kiểm tra lại toàn bộ Ngày 3: 22 câu dịch dùng từ vựng giáo dục, 10 câu cụm động từ, 10 câu chọn đại từ — có đáp án và gia sư chấm.',
   minutes: 35,
   blocks: [
+    {
+      t: 'recap',
+      items: [
+        'Ba phần như sách: **I. 22 câu dịch** (20 từ vựng + 2 cụm động từ) · **II. 10 câu chọn cụm động từ** · **III. 10 câu chọn đại từ**.',
+        'Câu dịch: bấm 💡 để xem **từ cần dùng** và **cấu trúc**; nhớ giới từ đi kèm (access to, participate in, prepare for).',
+        'Phần III: nhìn **chỗ đứng** (trước V → chủ ngữ, sau V → tân ngữ) và **số ít / số nhiều** trước khi chọn.',
+      ],
+    },
     {
       t: 'quiz',
       id: 'd3-dich',
@@ -674,15 +925,15 @@ const D3_HOMEWORK: Lesson = {
       id: 'd3-dai-tu',
       title: 'III. Chọn đại từ phù hợp (10 câu)',
       items: [
-        { q: '___ is necessary for young people to learn how to manage money.', options: ['He', 'She', 'It'], correct: 2, why: '**It** làm chủ ngữ giả: *It is necessary to…* — chủ ngữ thật là cụm "to learn…" ở sau.' },
-        { q: 'Many teenagers say that ___ feel stressed before exams.', options: ['they', 'them'], correct: 0, why: 'Chỗ trống đứng trước động từ *feel* → cần đại từ **chủ ngữ** they.' },
-        { q: 'Teachers play a vital role in society, so we should respect ___ .', options: ['they', 'them', 'their'], correct: 1, why: 'Đứng sau động từ *respect* → đại từ **tân ngữ** them.' },
-        { q: 'When living abroad, ___ must learn to adapt to a new culture.', options: ['one', 'it'], correct: 0, why: '**one** = người ta nói chung, làm chủ ngữ thật của *must learn*. "it" không thể "học".' },
+        { q: '___ is necessary for young people to learn how to manage money.', options: ['He', 'She', 'It'], correct: 2, why: '**It** làm chủ ngữ giả: **It is necessary to…** — chủ ngữ thật là cụm "to learn…" ở sau.' },
+        { q: 'Many teenagers say that ___ feel stressed before exams.', options: ['they', 'them'], correct: 0, why: 'Chỗ trống đứng trước động từ **feel** → cần đại từ **chủ ngữ** they.' },
+        { q: 'Teachers play a vital role in society, so we should respect ___ .', options: ['they', 'them', 'their'], correct: 1, why: 'Đứng sau động từ **respect** → đại từ **tân ngữ** them.' },
+        { q: 'When living abroad, ___ must learn to adapt to a new culture.', options: ['one', 'it'], correct: 0, why: '**one** = người ta nói chung, làm chủ ngữ thật của **must learn**. "it" không thể "học".' },
         { q: 'The city opened three new libraries last year. ___ libraries are always full at weekends.', options: ['These', 'Those', 'This'], correct: 0, why: 'Chỉ lại điều **vừa nhắc** ở câu trước, danh từ số nhiều → **These** libraries. (This đi với số ít.)' },
-        { q: 'Every university has ___ own admission rules.', options: ["it's", 'its', 'their'], correct: 1, why: '"của nó" + danh từ → tính từ sở hữu **its**. *it\'s* = it is. "Every university" là số ít nên không dùng their.' },
+        { q: 'Every university has ___ own admission rules.', options: ["it's", 'its', 'their'], correct: 1, why: '"của nó" + danh từ → tính từ sở hữu **its**. **it\'s** = it is. "Every university" là số ít nên không dùng their.' },
         { q: 'Online learning has grown rapidly since 2020. ___ has changed the way students study.', options: ['This', 'These', 'Those'], correct: 0, why: '**This** chỉ lại cả ý của câu trước (việc học trực tuyến phát triển nhanh) — số ít.' },
         { q: 'Lan and Minh passed the exam easily because ___ had studied every evening.', options: ['he', 'she', 'they'], correct: 2, why: 'Hai người (Lan **and** Minh) → số nhiều → **they**.' },
-        { q: 'The number of students in 2020 was higher than ___ in 2010.', options: ['that', 'those', 'it'], correct: 0, why: '**that** thay cho "the number" (số ít) để khỏi lặp lại — mẫu *that of / that in* rất hay dùng ở Writing Task 1.' },
+        { q: 'The number of students in 2020 was higher than ___ in 2010.', options: ['that', 'those', 'it'], correct: 0, why: '**that** thay cho "the number" (số ít) để khỏi lặp lại — mẫu **that of / that in** rất hay dùng ở Writing Task 1.' },
         { q: 'Parents who read to ___ children every night help them build a love of books.', options: ['their', 'they', 'them'], correct: 0, why: '"con **của họ**" + danh từ children → tính từ sở hữu **their**.' },
       ],
     },

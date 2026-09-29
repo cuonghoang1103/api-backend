@@ -16,6 +16,15 @@ const D2_READING: Lesson = {
   goal: "Biết bài thi Reading gồm những gì, nhận ra 10 loại từ khoá và dùng chúng để tìm đáp án nhanh theo 2 bước.",
   minutes: 35,
   blocks: [
+    {
+      t: "recap",
+      items: [
+        "Reading: **60 phút · 3 bài đọc · 40 câu**, không có thời gian chép đáp án riêng.",
+        "**8 dạng câu hỏi** phổ biến — mỗi ngày sau học kỹ một dạng.",
+        "**Từ khoá** chia 4 nhóm (chính · số liệu · tên riêng & địa điểm · thời gian) = 10 loại nhỏ.",
+        "Làm bài theo **2 bước**: ==(1) gạch từ khoá câu hỏi → (2) tìm & đối chiếu trong bài==, chú ý từ đồng nghĩa.",
+      ],
+    },
     { t: "h", text: "1. Cấu trúc bài thi IELTS Reading" },
     {
       t: "p",
@@ -169,6 +178,7 @@ const D2_READING: Lesson = {
         ["3. Chú ý từ khoá thay thế", "Thông tin trong bài thường được **viết lại bằng từ khác** (từ đồng nghĩa, cụm từ khác, hoặc cách nói trái nghĩa). Không thấy đúng chữ không có nghĩa là không có thông tin."],
       ],
     },
+    { t: "rule", formula: "Từ khoá câu hỏi → quét bài → đọc kỹ 1–2 câu quanh đó → đối chiếu", vi: "Tên riêng, số, năm dễ tìm nhất — **tìm chúng trước**. Bài hay dùng **từ đồng nghĩa** thay cho chữ trong câu hỏi." },
 
     { t: "h", text: "7. Ví dụ làm bài theo 2 bước" },
     {
@@ -274,6 +284,15 @@ const D2_WRITING: Lesson = {
   goal: "Biết Task 2 yêu cầu gì, dựng được khung bài luận 4–5 đoạn, hiểu 4 tiêu chí chấm và tự tính được band.",
   minutes: 45,
   blocks: [
+    {
+      t: "recap",
+      items: [
+        "Task 2 = bài luận **ít nhất 250 từ** trong **40 phút**, chiếm **2/3 điểm Writing**.",
+        "Khung **4–5 đoạn**: Mở bài (paraphrase + thesis) → 2 thân bài (ý chính → ví dụ → giải thích) → Kết bài.",
+        "**4 tiêu chí**, mỗi cái 25%: Task Response · Coherence & Cohesion · Lexical Resource · Grammar.",
+        "Điểm = **trung bình 4 tiêu chí**, báo theo bước 0.5.",
+      ],
+    },
     { t: "h", text: "1. Writing Task 2 là gì?" },
     {
       t: "p",
@@ -310,6 +329,7 @@ const D2_WRITING: Lesson = {
         ["Kết bài (Conclusion)", "**Tóm tắt** các ý chính và **nhắc lại luận điểm** (bằng từ khác). **Không đưa thông tin mới** vào kết bài.", "1–2 câu, ~30–40 từ"],
       ],
     },
+    { t: "rule", formula: "Mở bài (paraphrase + thesis) → Thân bài 1 → Thân bài 2 → Kết bài", vi: "Mỗi thân bài: **ý chính → ví dụ → giải thích**. Kết bài **không** thêm ý mới." },
     {
       t: "note",
       title: "Người Việt hay sai",
@@ -351,7 +371,7 @@ const D2_WRITING: Lesson = {
       rows: [
         ["**A. Task Response (TR)** — Đáp ứng yêu cầu đề", "Bạn có **trả lời đúng và đủ** câu hỏi của đề không? Ý có được **phát triển** không?", "Trả lời **mọi phần** của đề · ý kiến rõ từ mở bài tới kết bài · mỗi ý có giải thích và ví dụ cụ thể", "Lạc đề · chỉ trả lời một nửa đề · ý kiến mập mờ · dưới 250 từ · ví dụ chung chung"],
         ["**B. Coherence and Cohesion (CC)** — Mạch lạc và liên kết", "Bài có **sắp xếp hợp lý** không? Câu, đoạn có **nối với nhau** trôi chảy không?", "Mỗi đoạn **một ý chính** · chia đoạn rõ · dùng từ nối đúng (Firstly, However, For example, As a result) · dùng **it, this, they** để khỏi lặp", "Không chia đoạn · ý nhảy lung tung · dùng từ nối **máy móc** ở đầu mọi câu · dùng sai nghĩa từ nối"],
-        ["**C. Lexical Resource (LR)** — Vốn từ vựng", "Bạn dùng từ có **đa dạng và chính xác** không?", "Dùng từ **đúng ngữ cảnh** · có cụm từ tự nhiên (collocation — từ hay đi cùng nhau, vd: *make a decision*) · biết đổi từ đồng nghĩa · chính tả đúng", "Lặp một từ nhiều lần · dùng từ “to tát” sai nghĩa · sai chính tả · sai từ loại (~~a success person~~ → **a successful person**)"],
+        ["**C. Lexical Resource (LR)** — Vốn từ vựng", "Bạn dùng từ có **đa dạng và chính xác** không?", "Dùng từ **đúng ngữ cảnh** · có cụm từ tự nhiên (collocation — từ hay đi cùng nhau, vd: **make a decision**) · biết đổi từ đồng nghĩa · chính tả đúng", "Lặp một từ nhiều lần · dùng từ “to tát” sai nghĩa · sai chính tả · sai từ loại (~~a success person~~ → **a successful person**)"],
         ["**D. Grammatical Range and Accuracy (GRA)** — Ngữ pháp: đa dạng và chính xác", "Bạn dùng **được nhiều kiểu câu** không? Câu có **đúng ngữ pháp** không?", "Trộn câu đơn với câu ghép, câu phức (có although, because, which…) · nhiều câu **không lỗi** · dấu câu đúng", "Chỉ viết câu đơn ngắn · lỗi cơ bản lặp lại (quên -s, sai thì, thiếu động từ) · câu dài nhưng rối"],
       ],
     },
@@ -448,6 +468,15 @@ const D2_SPEAKING: Lesson = {
   goal: "Nắm 3 phần của bài thi Nói (thời gian, giám khảo làm gì), nghe câu trả lời mẫu và tự ghi âm trả lời Part 1.",
   minutes: 35,
   blocks: [
+    {
+      t: "recap",
+      items: [
+        "Speaking **11–14 phút**, nói trực tiếp với giám khảo, **3 phần**.",
+        "**Part 1** (4–5 phút): câu hỏi quen thuộc · **Part 2** (1 phút chuẩn bị + nói 1–2 phút theo cue card) · **Part 3** (4–5 phút): thảo luận sâu hơn.",
+        "Chấm **4 tiêu chí**: trôi chảy · từ vựng · ngữ pháp · phát âm.",
+        "Không bao giờ trả lời cụt một chữ — luôn **trả lời + lý do + ví dụ**.",
+      ],
+    },
     { t: "h", text: "1. Tổng quan bài thi Nói" },
     {
       t: "p",
@@ -643,6 +672,15 @@ const D2_HOMEWORK: Lesson = {
   minutes: 30,
   blocks: [
     {
+      t: "recap",
+      title: "Bài tập gồm 5 bài như sách",
+      items: [
+        "Mỗi bài: đọc câu hỏi → **gạch từ khoá** → đọc đoạn văn → **tìm từ khoá tương ứng** → chọn đáp án.",
+        "Cuối mỗi bài có **bản dịch** — làm xong mới mở.",
+        "Phần cuối: **5 câu trả lời ngắn** (tối đa HAI TỪ và/hoặc MỘT SỐ).",
+      ],
+    },
+    {
       t: "p",
       text: "Mỗi bài gồm **một câu hỏi**, **một đoạn văn tiếng Anh** và các **yêu cầu**. Hãy làm theo đúng 2 bước đã học: **(1) tìm từ khoá**, **(2) so sánh, đối chiếu với đoạn văn**. Cố làm trước khi xem bản dịch ở cuối mỗi bài.",
     },
@@ -651,7 +689,7 @@ const D2_HOMEWORK: Lesson = {
     { t: "h", text: "Bài tập 1" },
     {
       t: "p",
-      text: "**Câu hỏi:** What was the main cause of the Asian financial crisis in 1997? *(Nguyên nhân chính của cuộc khủng hoảng tài chính châu Á năm 1997 là gì?)*",
+      text: "**Câu hỏi:** What was the main cause of the Asian financial crisis in 1997? **(Nguyên nhân chính của cuộc khủng hoảng tài chính châu Á năm 1997 là gì?)**",
     },
     {
       t: "passage",
@@ -702,7 +740,7 @@ const D2_HOMEWORK: Lesson = {
     { t: "h", text: "Bài tập 2" },
     {
       t: "p",
-      text: "**Câu hỏi:** Which animal is most threatened by forest loss on the island of Borneo? *(Loài vật nào bị đe doạ nhiều nhất bởi nạn mất rừng trên đảo Borneo?)*",
+      text: "**Câu hỏi:** Which animal is most threatened by forest loss on the island of Borneo? **(Loài vật nào bị đe doạ nhiều nhất bởi nạn mất rừng trên đảo Borneo?)**",
     },
     {
       t: "passage",
@@ -752,7 +790,7 @@ const D2_HOMEWORK: Lesson = {
     { t: "h", text: "Bài tập 3" },
     {
       t: "p",
-      text: "**Câu hỏi:** In which year did the first public steam railway open? *(Tuyến đường sắt hơi nước công cộng đầu tiên mở cửa vào năm nào?)*",
+      text: "**Câu hỏi:** In which year did the first public steam railway open? **(Tuyến đường sắt hơi nước công cộng đầu tiên mở cửa vào năm nào?)**",
     },
     {
       t: "passage",
@@ -794,7 +832,7 @@ const D2_HOMEWORK: Lesson = {
     { t: "h", text: "Bài tập 4" },
     {
       t: "p",
-      text: "**Câu hỏi:** What percentage of all the water on Earth is fresh water? *(Nước ngọt chiếm bao nhiêu phần trăm tổng lượng nước trên Trái Đất?)*",
+      text: "**Câu hỏi:** What percentage of all the water on Earth is fresh water? **(Nước ngọt chiếm bao nhiêu phần trăm tổng lượng nước trên Trái Đất?)**",
     },
     {
       t: "passage",
@@ -836,7 +874,7 @@ const D2_HOMEWORK: Lesson = {
     { t: "h", text: "Bài tập 5" },
     {
       t: "p",
-      text: "**Câu hỏi:** What method do scientists use to find out the age of ancient wooden objects? *(Các nhà khoa học dùng phương pháp nào để xác định tuổi của những đồ vật bằng gỗ cổ xưa?)*",
+      text: "**Câu hỏi:** What method do scientists use to find out the age of ancient wooden objects? **(Các nhà khoa học dùng phương pháp nào để xác định tuổi của những đồ vật bằng gỗ cổ xưa?)**",
     },
     {
       t: "passage",

@@ -12,6 +12,7 @@
 
 import { loadNgay } from './ngay';
 import { MANIFEST } from './ngay/manifest';
+import { TRA_CONG_THUC, TRA_TU_VUNG } from './tracuu';
 
 import { defineCourse } from '@/components/sach-hoc/course';
 import type { Lesson, Day } from '@/components/sach-hoc/types';
@@ -90,8 +91,18 @@ const D1_GRAMMAR: Lesson = {
   kind: 'grammar',
   title: 'Câu đơn & thì hiện tại đơn',
   goal: 'Viết được câu đơn đúng cấu trúc và dùng thì hiện tại đơn ở cả 3 dạng: khẳng định, phủ định, câu hỏi.',
-  minutes: 25,
+  minutes: 35,
   blocks: [
+    {
+      t: 'recap',
+      items: [
+        '**Câu đơn** = một chủ ngữ (S) + một động từ (V), nói trọn một ý. Có **4 mẫu gốc**: S + V · S + V + O · S + V + C · S + V + A.',
+        '**Hiện tại đơn** dùng cho ==thói quen, sự thật, lịch trình, ý kiến==.',
+        'Chủ ngữ **he / she / it** (hoặc danh từ số ít): động từ thêm **-s/-es**, phủ định & câu hỏi dùng **does / doesn\'t**.',
+        'Sau **do / does / don\'t / doesn\'t**: động từ ==luôn về nguyên mẫu==. ~~She doesn\'t likes~~ → She doesn\'t like.',
+        'Bài luận Writing Task 2 viết **chủ yếu bằng hiện tại đơn** — 6 kiểu câu mẫu ở mục 3.',
+      ],
+    },
     { t: 'h', text: '1. Câu đơn là gì?' },
     {
       t: 'p',
@@ -140,6 +151,41 @@ const D1_GRAMMAR: Lesson = {
       items: [
         'Quên động từ khi có tính từ: ~~She very busy.~~ → **She is very busy.** Tiếng Việt nói "cô ấy rất bận" không cần "là", tiếng Anh thì bắt buộc có động từ.',
         'Quên chủ ngữ: ~~Is raining.~~ → **It is raining.** Câu tiếng Anh luôn cần chủ ngữ, kể cả khi chỉ là "it".',
+        'Nhét "là" vào trước động từ thường: ~~I am like music.~~ → **I like music.** Đã có động từ (like, work, go…) thì **không thêm am/is/are**.',
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo nhận ra mẫu câu',
+      items: [
+        'Hỏi động từ **"…cái gì / ai?"** mà có câu trả lời → phần đó là **O** (tân ngữ): She reads **a book**.',
+        'Động từ là **be / look / seem / feel / become** và phần sau **nói về chính chủ ngữ** → đó là **C** (bổ ngữ): She seems **happy**.',
+        'Phần sau trả lời **ở đâu / khi nào / thế nào** → đó là **A** (trạng ngữ): He works **hard**.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Phần này sách chưa có — động từ "to be" (am / is / are) ở hiện tại',
+      head: ['Chủ ngữ', 'Khẳng định', 'Phủ định', 'Câu hỏi'],
+      rows: [
+        ['I', 'I **am** tired. (I\'m)', 'I **am not** tired. (I\'m not)', '**Am** I late?'],
+        ['he / she / it · danh từ số ít', 'The app **is** free. (it\'s)', 'It **is not** free. (isn\'t)', '**Is** it free?'],
+        ['you / we / they · danh từ số nhiều', 'We **are** ready. (we\'re)', 'We **are not** ready. (aren\'t)', '**Are** you ready?'],
+      ],
+    },
+    { t: 'rule', formula: 'S + V (+ O / C / A)', vi: 'Câu nào cũng phải có **chủ ngữ + động từ**. Sau tính từ/danh từ mà chưa có động từ → thêm **am / is / are**.' },
+    {
+      t: 'quiz',
+      id: 'd1-cau-don-dich',
+      title: 'Luyện nhanh mục 1 — viết câu đơn (5 câu)',
+      kind: 'translate',
+      grammar: 'Câu đơn: S + V · S + V + O · S + V + C (be/seem/look + tính từ) · S + V + A. Nhớ thêm am/is/are trước tính từ.',
+      items: [
+        { q: 'Em bé ngủ. (câu S + V)', hint: 'baby, sleep', answers: ['The baby sleeps.', 'Babies sleep.', 'A baby sleeps.'] },
+        { q: 'Tôi dùng Facebook. (S + V + O)', hint: 'use', answers: ['I use Facebook.'] },
+        { q: 'Ứng dụng này miễn phí. (S + V + C)', hint: 'app, free', answers: ['This app is free.', 'The app is free.'] },
+        { q: 'Bài đăng của cô ấy trông thú vị. (S + V + C)', hint: 'post, look, interesting', answers: ['Her post looks interesting.'] },
+        { q: 'Họ sống ở Hà Nội. (S + V + A)', hint: 'live', answers: ['They live in Hanoi.', 'They live in Ha Noi.'] },
       ],
     },
 
@@ -197,6 +243,41 @@ const D1_GRAMMAR: Lesson = {
         ['Các âm còn lại', '/z/', 'plays, reads, lives'],
       ],
     },
+    {
+      t: 'table',
+      caption: 'Trả lời ngắn câu hỏi Yes/No (phần này sách chưa có) — lặp lại do/does, KHÔNG lặp động từ chính',
+      head: ['Câu hỏi', 'Có', 'Không'],
+      rows: [
+        ['**Do** you use TikTok?', 'Yes, I **do**.', 'No, I **don\'t**.'],
+        ['**Does** she post videos?', 'Yes, she **does**.', 'No, she **doesn\'t**.'],
+        ['**Do** they follow you?', 'Yes, they **do**.', 'No, they **don\'t**.'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Dấu hiệu nhận biết thì hiện tại đơn (phần này sách chưa có)',
+      head: ['Nhóm', 'Từ hay gặp', 'Vị trí'],
+      rows: [
+        ['Trạng từ tần suất', '**always** (luôn luôn) · **usually** (thường) · **often** (hay) · **sometimes** (thỉnh thoảng) · **rarely** (hiếm khi) · **never** (không bao giờ)', 'Đứng **trước động từ thường**, **sau be**: She **often** posts. / She is **often** online.'],
+        ['Cụm chỉ tần suất', '**every** day / week / morning · **once / twice / three times** a week · **on** Mondays', 'Thường ở **cuối câu**: I check email **every morning**.'],
+      ],
+    },
+    { t: 'rule', formula: "S + V(s/es) · S + don't/doesn't + V · Do/Does + S + V?", vi: '**He / she / it** → thêm **-s** hoặc dùng **does**. Còn lại → nguyên mẫu hoặc **do**. Có does thì động từ trơn.' },
+    {
+      t: 'quiz',
+      id: 'd1-hien-tai-don-dich',
+      title: 'Luyện nhanh mục 2 — viết câu hiện tại đơn (6 câu)',
+      kind: 'translate',
+      grammar: "Khẳng định: S + V(s/es). Phủ định: S + don't/doesn't + V. Câu hỏi: Do/Does + S + V? · Wh- + do/does + S + V?",
+      items: [
+        { q: 'Cô ấy kiểm tra email mỗi sáng.', hint: 'check, every morning', answers: ['She checks her email every morning.', 'She checks email every morning.', 'She checks her emails every morning.'] },
+        { q: 'Anh trai tôi không dùng Instagram.', hint: "doesn't, use", answers: ["My brother doesn't use Instagram.", 'My brother does not use Instagram.'] },
+        { q: 'Bạn có xem video trên YouTube không?', hint: 'watch, video', answers: ['Do you watch videos on YouTube?'] },
+        { q: 'Mẹ bạn làm việc ở đâu?', hint: 'where, work', answers: ['Where does your mother work?', 'Where does your mom work?'] },
+        { q: 'Tôi thường lướt bảng tin trên xe buýt.', hint: 'usually, scroll through, feed', answers: ['I usually scroll through my feed on the bus.', 'I usually scroll through the feed on the bus.'] },
+        { q: 'Cô ấy hiếm khi đăng ảnh.', hint: 'rarely, post, photo', answers: ['She rarely posts photos.', 'She rarely posts pictures.'] },
+      ],
+    },
 
     { t: 'h', text: '3. Dùng trong IELTS Writing Task 2' },
     {
@@ -224,6 +305,20 @@ const D1_GRAMMAR: Lesson = {
         ['Kết luận', 'In conclusion, social media **brings** more benefits than drawbacks. — Tóm lại, mạng xã hội mang lại nhiều lợi ích hơn tác hại.'],
       ],
     },
+    { t: 'rule', formula: 'Firstly, + S + V. · For example, + S + V. · In conclusion, + S + V.', vi: 'Ba câu "khung" của một đoạn thân bài và kết bài Task 2 — đều ở **hiện tại đơn**.' },
+    {
+      t: 'quiz',
+      id: 'd1-task2-dich',
+      title: 'Luyện nhanh mục 3 — viết câu kiểu Writing Task 2 (4 câu)',
+      kind: 'translate',
+      grammar: 'Hiện tại đơn cho sự thật chung / ý kiến. Mở đầu bằng: I believe that… · Firstly, … · For example, … · In conclusion, …',
+      items: [
+        { q: 'Tôi tin rằng mạng xã hội giúp mọi người giữ liên lạc.', hint: 'believe, help, stay in touch', answers: ['I believe that social media helps people stay in touch.', 'I believe social media helps people stay in touch.', 'I believe that social media helps people to stay in touch.'] },
+        { q: 'Thứ nhất, nhiều doanh nghiệp nhỏ quảng cáo trên Facebook.', hint: 'firstly, business, advertise', answers: ['Firstly, many small businesses advertise on Facebook.', 'First, many small businesses advertise on Facebook.'] },
+        { q: 'Ví dụ, học sinh xem video để học tiếng Anh.', hint: 'for example, watch, learn', answers: ['For example, students watch videos to learn English.', 'For instance, students watch videos to learn English.'] },
+        { q: 'Tóm lại, mạng xã hội mang lại nhiều lợi ích.', hint: 'in conclusion, bring, benefit', answers: ['In conclusion, social media brings many benefits.', 'In conclusion, social media brings a lot of benefits.'] },
+      ],
+    },
     {
       t: 'quiz',
       id: 'd1-nhanh',
@@ -248,6 +343,15 @@ const D1_VOCAB: Lesson = {
   minutes: 25,
   blocks: [
     {
+      t: 'recap',
+      items: [
+        '**27 từ** về mạng xã hội (sách có 19 từ — trang này đủ 19 từ đó + 8 từ hay gặp khi thi).',
+        '**11 cụm động từ** (log in, sign up, scroll through…) — dùng nhiều nhất ở Speaking.',
+        '**Họ từ**: một gốc → danh từ / động từ / tính từ / trạng từ (connect → connection → connected).',
+        'Học xong bấm **Che nghĩa** rồi **Che từ tiếng Anh** ở đầu mỗi danh sách để tự kiểm tra.',
+      ],
+    },
+    {
       t: 'p',
       text: 'Bấm 🔊 để nghe. Mỗi từ: nghe → đọc to theo → che nghĩa tự nhớ lại → đặt một câu của riêng bạn.',
     },
@@ -255,25 +359,25 @@ const D1_VOCAB: Lesson = {
     {
       t: 'vocab',
       items: [
-        { w: 'account', pos: 'n', ipa: '/əˈkaʊnt/', vi: 'tài khoản', ex: 'I opened a second account for my work posts.', exVi: 'Tôi mở tài khoản thứ hai cho các bài đăng công việc.' },
+        { w: 'account', pos: 'n', ipa: '/əˈkaʊnt/', vi: 'tài khoản', ex: 'I opened a second account for my work posts.', exVi: 'Tôi mở tài khoản thứ hai cho các bài đăng công việc.', more: 'Hay đi với: **create / open** an account · **log into** your account · a **fake** account (tài khoản ảo)' },
         { w: 'profile', pos: 'n', ipa: '/ˈprəʊfaɪl/', vi: 'trang cá nhân, hồ sơ', ex: 'Update your profile photo before you apply for jobs.', exVi: 'Hãy đổi ảnh đại diện trước khi đi xin việc.' },
-        { w: 'post', pos: 'v, n', ipa: '/pəʊst/', vi: 'đăng; bài đăng', ex: 'She posts a short video every Sunday.', exVi: 'Chủ nhật nào cô ấy cũng đăng một video ngắn.' },
-        { w: 'comment', pos: 'n, v', ipa: '/ˈkɒment/', vi: 'bình luận', ex: 'His comment got more likes than the post itself.', exVi: 'Bình luận của anh ấy được nhiều lượt thích hơn cả bài đăng.' },
-        { w: 'share', pos: 'v', ipa: '/ʃeə(r)/', vi: 'chia sẻ', ex: "Please don't share this photo without asking me.", exVi: 'Đừng chia sẻ ảnh này khi chưa hỏi tôi nhé.' },
+        { w: 'post', pos: 'v, n', ipa: '/pəʊst/', vi: 'đăng; bài đăng', ex: 'She posts a short video every Sunday.', exVi: 'Chủ nhật nào cô ấy cũng đăng một video ngắn.', more: 'Họ từ: post (v, n) · poster (người đăng; áp phích). ~~post on Facebook a photo~~ → **post a photo on Facebook**' },
+        { w: 'comment', pos: 'n, v', ipa: '/ˈkɒment/', vi: 'bình luận', ex: 'His comment got more likes than the post itself.', exVi: 'Bình luận của anh ấy được nhiều lượt thích hơn cả bài đăng.', more: 'Đi với giới từ: **comment on** something · **leave / write** a comment' },
+        { w: 'share', pos: 'v', ipa: '/ʃeə(r)/', vi: 'chia sẻ', ex: "Please don't share this photo without asking me.", exVi: 'Đừng chia sẻ ảnh này khi chưa hỏi tôi nhé.', more: '**share** something **with** someone: share a link with friends' },
         { w: 'like', pos: 'v, n', ipa: '/laɪk/', vi: 'thích; lượt thích', ex: 'Over two hundred people liked the announcement.', exVi: 'Hơn hai trăm người đã thích thông báo đó.' },
-        { w: 'follower', pos: 'n', ipa: '/ˈfɒləʊə(r)/', vi: 'người theo dõi', ex: 'The chef has fifty thousand followers on TikTok.', exVi: 'Đầu bếp đó có năm mươi nghìn người theo dõi trên TikTok.' },
+        { w: 'follower', pos: 'n', ipa: '/ˈfɒləʊə(r)/', vi: 'người theo dõi', ex: 'The chef has fifty thousand followers on TikTok.', exVi: 'Đầu bếp đó có năm mươi nghìn người theo dõi trên TikTok.', more: 'Họ từ: **follow** (v) → **follower** (n). Ngược nghĩa: the **following** = những người mình theo dõi' },
         { w: 'tag', pos: 'v', ipa: '/tæɡ/', vi: 'gắn thẻ (tên ai đó)', ex: 'My friend tagged me in a photo from our trip.', exVi: 'Bạn tôi gắn thẻ tôi vào một bức ảnh chuyến đi.' },
-        { w: 'upload', pos: 'v', ipa: '/ˌʌpˈləʊd/', vi: 'tải lên', ex: 'It takes a few minutes to upload a long video.', exVi: 'Tải một video dài lên mất vài phút.' },
+        { w: 'upload', pos: 'v', ipa: '/ˌʌpˈləʊd/', vi: 'tải lên', ex: 'It takes a few minutes to upload a long video.', exVi: 'Tải một video dài lên mất vài phút.', more: 'Trái nghĩa: **download** (tải xuống). upload a video **to** YouTube' },
         { w: 'feed', pos: 'n', ipa: '/fiːd/', vi: 'bảng tin', ex: 'My feed is full of football news this week.', exVi: 'Tuần này bảng tin của tôi toàn tin bóng đá.' },
-        { w: 'platform', pos: 'n', ipa: '/ˈplætfɔːm/', vi: 'nền tảng', ex: 'Which platform do young people use most?', exVi: 'Giới trẻ dùng nền tảng nào nhiều nhất?' },
-        { w: 'content', pos: 'n', ipa: '/ˈkɒntent/', vi: 'nội dung', ex: 'Useful content keeps viewers watching.', exVi: 'Nội dung hữu ích giữ chân người xem.' },
-        { w: 'viral', pos: 'adj', ipa: '/ˈvaɪrəl/', vi: 'lan truyền rất nhanh', ex: 'A clip of the singing cat went viral overnight.', exVi: 'Đoạn clip chú mèo hát lan truyền chỉ sau một đêm.' },
+        { w: 'platform', pos: 'n', ipa: '/ˈplætfɔːm/', vi: 'nền tảng', ex: 'Which platform do young people use most?', exVi: 'Giới trẻ dùng nền tảng nào nhiều nhất?', more: 'Ở IELTS hay viết: **social media platforms** (các nền tảng mạng xã hội)' },
+        { w: 'content', pos: 'n', ipa: '/ˈkɒntent/', vi: 'nội dung', ex: 'Useful content keeps viewers watching.', exVi: 'Nội dung hữu ích giữ chân người xem.', more: 'Không đếm được khi nói chung: ~~contents videos~~ → **video content**. content creator = người làm nội dung' },
+        { w: 'viral', pos: 'adj', ipa: '/ˈvaɪrəl/', vi: 'lan truyền rất nhanh', ex: 'A clip of the singing cat went viral overnight.', exVi: 'Đoạn clip chú mèo hát lan truyền chỉ sau một đêm.', more: 'Hay đi với **go**: **go viral** (lan truyền). Quá khứ: The clip **went** viral.' },
         { w: 'notification', pos: 'n', ipa: '/ˌnəʊtɪfɪˈkeɪʃn/', vi: 'thông báo', ex: 'I mute notifications while I study.', exVi: 'Tôi tắt tiếng thông báo khi học.' },
-        { w: 'influencer', pos: 'n', ipa: '/ˈɪnfluənsə(r)/', vi: 'người có sức ảnh hưởng', ex: 'Brands pay influencers to review their products.', exVi: 'Các thương hiệu trả tiền cho người có ảnh hưởng để đánh giá sản phẩm.' },
+        { w: 'influencer', pos: 'n', ipa: '/ˈɪnfluənsə(r)/', vi: 'người có sức ảnh hưởng', ex: 'Brands pay influencers to review their products.', exVi: 'Các thương hiệu trả tiền cho người có ảnh hưởng để đánh giá sản phẩm.', more: 'Họ từ: **influence** (n, v) → **influential** (adj). have an influence **on** someone' },
         { w: 'hashtag', pos: 'n', ipa: '/ˈhæʃtæɡ/', vi: 'thẻ bắt đầu bằng dấu #', ex: 'Add a hashtag so more people can find your post.', exVi: 'Thêm hashtag để nhiều người tìm thấy bài của bạn hơn.' },
-        { w: 'privacy', pos: 'n', ipa: '/ˈprɪvəsi/', vi: 'quyền riêng tư', ex: 'Check your privacy settings every few months.', exVi: 'Vài tháng hãy kiểm tra cài đặt quyền riêng tư một lần.' },
+        { w: 'privacy', pos: 'n', ipa: '/ˈprɪvəsi/', vi: 'quyền riêng tư', ex: 'Check your privacy settings every few months.', exVi: 'Vài tháng hãy kiểm tra cài đặt quyền riêng tư một lần.', more: 'Tính từ: **private** /ˈpraɪvət/ (riêng tư). Hay gặp: privacy **settings**, **protect** your privacy' },
         { w: 'audience', pos: 'n', ipa: '/ˈɔːdiəns/', vi: 'khán giả, người xem', ex: 'Know your audience before you write a caption.', exVi: 'Hiểu người xem của mình trước khi viết chú thích.' },
-        { w: 'engage', pos: 'v', ipa: '/ɪnˈɡeɪdʒ/', vi: 'thu hút, tương tác', ex: 'Questions in a caption help engage readers.', exVi: 'Câu hỏi trong chú thích giúp thu hút người đọc tương tác.' },
+        { w: 'engage', pos: 'v', ipa: '/ɪnˈɡeɪdʒ/', vi: 'thu hút, tương tác', ex: 'Questions in a caption help engage readers.', exVi: 'Câu hỏi trong chú thích giúp thu hút người đọc tương tác.', more: 'Họ từ: engage (v) → **engagement** (n, mức độ tương tác) → **engaging** (adj, lôi cuốn). engage **with** the audience' },
         { w: 'add', pos: 'v', ipa: '/æd/', vi: 'thêm (bạn, ảnh…)', ex: 'You can add friends by scanning their QR code.', exVi: 'Bạn có thể thêm bạn bằng cách quét mã QR của họ.' },
         { w: 'create', pos: 'v', ipa: '/kriˈeɪt/', vi: 'tạo ra', ex: 'He creates a short tutorial every weekend.', exVi: 'Cuối tuần nào anh ấy cũng tạo một video hướng dẫn ngắn.' },
         { w: 'delete', pos: 'v', ipa: '/dɪˈliːt/', vi: 'xoá', ex: 'I deleted the photo because it was blurry.', exVi: 'Tôi đã xoá bức ảnh vì nó bị mờ.' },
@@ -343,6 +447,15 @@ const D1_LISTENING: Lesson = {
   goal: 'Nghe và chép đúng tên riêng, email, mã bưu điện được đánh vần, dạng hay gặp ở Listening Section 1.',
   minutes: 20,
   blocks: [
+    {
+      t: 'recap',
+      items: [
+        '26 chữ cái xếp theo **7 nhóm âm** — học theo nhóm nhớ nhanh hơn A→Z.',
+        'Cặp dễ nhầm nhất: **E /iː/ – I /aɪ/**, **G /dʒiː/ – J /dʒeɪ/**, **A /eɪ/ – R /ɑː/**.',
+        '"**double L**" = LL · "**dot**" = . · "**at**" = @ · "**hyphen**" = - · "**underscore**" = _',
+        'Chép tên riêng: **đúng từng chữ, viết hoa chữ đầu** — sai một chữ là mất cả câu.',
+      ],
+    },
     {
       t: 'p',
       text: 'Ở **Listening Section 1** (một cuộc gọi đặt phòng, đăng ký lớp học...), người nói thường **đánh vần** tên, đường phố, email. Chép sai một chữ cái là mất trọn điểm câu đó, nên đây là điểm dễ lấy nhất nếu luyện kỹ.',
@@ -442,6 +555,15 @@ const D1_HOMEWORK: Lesson = {
   goal: 'Tự kiểm tra lại toàn bộ Ngày 1: 22 câu dịch, 10 câu cụm động từ, 10 câu chia động từ — có đáp án và gia sư chấm.',
   minutes: 25,
   blocks: [
+    {
+      t: 'recap',
+      title: 'Bài tập gồm 3 phần như sách',
+      items: [
+        '**I. 22 câu dịch** Việt → Anh theo mẫu **S + V + O** — bấm 💡 Gợi ý để xem từ và cấu trúc.',
+        '**II. 10 câu** chọn cụm động từ đúng.',
+        '**III. 10 câu** chia động từ ở hiện tại đơn — nhớ **-s/-es** với he/she/it.',
+      ],
+    },
     {
       t: 'quiz',
       id: 'd1-dich',
@@ -555,6 +677,8 @@ export const IELTS = defineCourse({
   unit: 'Ngày',
   badgeWord: 'Day',
   intro: INTRO,
+  // Hai mục tra cứu cả khoá (công thức · từ vựng) — hiện dưới "Mở đầu" ở mục lục.
+  extras: [TRA_CONG_THUC, TRA_TU_VUNG],
   days: DAYS,
   // Ngày 1 viết thẳng ở trên; Ngày 2+ chỉ có mục lục (ngay/manifest.ts), nội dung tải khi mở.
   manifest: MANIFEST,

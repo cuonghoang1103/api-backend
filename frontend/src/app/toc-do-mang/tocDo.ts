@@ -95,29 +95,33 @@ export async function doTaiXuong(
   const luong = cauHinh.luong ?? 4;
   const khoiMB = cauHinh.khoiMB ?? 20;
   let tong = 0;
-  let dung = false;
+
+  const gd = new AbortController();
+  const boNgoai = () => gd.abort();
+  signal.addEventListener('abort', boNgoai, { once: true });
 
   const motLuong = async (): Promise<void> => {
-    while (!dung && !signal.aborted) {
+    while (!gd.signal.aborted) {
       try {
-        const res = await fetchApi(`/tai-xuong?bytes=${khoiMB * 1024 * 1024}`, {}, signal);
+        const res = await fetchApi(`/tai-xuong?bytes=${khoiMB * 1024 * 1024}`, {}, gd.signal);
         const reader = res.body?.getReader();
         if (!reader) break;
         for (;;) {
           const { done, value } = await reader.read();
           if (done) break;
           tong += value?.byteLength ?? 0;
-          if (dung || signal.aborted) { await reader.cancel().catch(() => {}); break; }
+          if (gd.signal.aborted) { await reader.cancel().catch(() => {}); break; }
         }
       } catch {
-        if (signal.aborted) break;
+        if (gd.signal.aborted) break;
       }
     }
   };
 
   const luongs = Array.from({ length: luong }, () => motLuong());
   const mbps = await layMau(() => tong, onMau, cauHinh.giayKhoiDong ?? 1, cauHinh.giayDo ?? 6, signal);
-  dung = true;
+  gd.abort();
+  signal.removeEventListener('abort', boNgoai);
   await Promise.allSettled(luongs);
   return mbps;
 }
@@ -133,27 +137,34 @@ export async function doTaiLen(
   for (let i = 0; i < khoi.length; i += 65536) {
     crypto.getRandomValues(khoi.subarray(i, Math.min(i + 65536, khoi.length)));
   }
+  // Blob thay vì TypedArray trần: fetch POST với TypedArray đôi khi treo trên
+  // Chromium/Electron. Xem bản desktop.
+  const than = new Blob([khoi], { type: 'application/octet-stream' });
   let tong = 0;
-  let dung = false;
+
+  const gd = new AbortController();
+  const boNgoai = () => gd.abort();
+  signal.addEventListener('abort', boNgoai, { once: true });
 
   const motLuong = async (): Promise<void> => {
-    while (!dung && !signal.aborted) {
+    while (!gd.signal.aborted) {
       try {
         await fetchApi('/tai-len', {
           method: 'POST',
           headers: { 'Content-Type': 'application/octet-stream' },
-          body: khoi,
-        }, signal);
+          body: than,
+        }, gd.signal);
         tong += khoi.byteLength;
       } catch {
-        if (signal.aborted) break;
+        if (gd.signal.aborted) break;
       }
     }
   };
 
   const luongs = Array.from({ length: luong }, () => motLuong());
   const mbps = await layMau(() => tong, onMau, cauHinh.giayKhoiDong ?? 1, cauHinh.giayDo ?? 6, signal);
-  dung = true;
+  gd.abort();
+  signal.removeEventListener('abort', boNgoai);
   await Promise.allSettled(luongs);
   return mbps;
 }

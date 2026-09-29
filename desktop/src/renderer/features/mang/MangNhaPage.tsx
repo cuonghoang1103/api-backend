@@ -89,6 +89,7 @@ function TabThietBi() {
   const [daChon, setDaChon] = useState<Set<string>>(new Set()); // MAC "máy của tôi"
   const [daChep, setDaChep] = useState(false);
   const [daQuetLan, setDaQuetLan] = useState(false);
+  const [loiQuet, setLoiQuet] = useState<string | null>(null);
 
   const mangNha = window.cuongthai?.mangNha;
 
@@ -102,7 +103,11 @@ function TabThietBi() {
       setDsThietBi((cu) => (cu.some((x) => x.ip === tb.ip) ? cu : [...cu, tb]));
     });
     const boTienDo = on('mangNha:tienDo', (p) => setTienDo(p as { da: number; tong: number }));
-    const boXong = on('mangNha:xong', () => { setDangQuet(false); setTienDo(null); });
+    const boXong = on('mangNha:xong', (p) => {
+      setDangQuet(false); setTienDo(null);
+      const loi = (p as { loi?: string })?.loi;
+      if (loi) setLoiQuet(loi);
+    });
     return () => { boThietBi(); boTienDo(); boXong(); };
   }, []);
 
@@ -112,6 +117,7 @@ function TabThietBi() {
     setTienDo({ da: 0, tong: 254 });
     setDangQuet(true);
     setDaQuetLan(true);
+    setLoiQuet(null);
     const kq = await mangNha.quet();
     if (!kq.dangChay) { setDangQuet(false); setTienDo(null); }
   }, [mangNha]);
@@ -208,6 +214,8 @@ function TabThietBi() {
         </div>
       )}
 
+      {loiQuet && <div className="ct-mang-card ct-mang-err">{dich('Quét mạng gặp lỗi:')} {loiQuet}</div>}
+
       <p className="ct-mang-ghichu">
         {dich('Không đuổi được máy lạ khỏi WiFi từ đây: lệnh chặn phải đặt ở router. Cách chắc chắn nhất là gọi nhà mạng đổi mật khẩu WiFi.')}
       </p>
@@ -262,6 +270,20 @@ function gocKim(mbps: number): number {
   if (mbps <= 0) return 0;
   const t = Math.min(1, Math.log10(mbps + 1) / Math.log10(1001)); // 0..1 cho 0..1000 Mbps
   return t * 270;
+}
+
+interface DanhGia { muc: string; tone: 'tot' | 'kha' | 'yeu'; khuyen: string; }
+
+/** Đánh giá mạng theo tốc độ tải xuống (chính) + độ trễ. Câu chữ cho người thường đọc. */
+function danhGiaMang(dl: number | null, ping: number | null): DanhGia | null {
+  if (dl === null) return null;
+  const treCao = ping !== null && ping > 120;
+  if (dl >= 100) return { muc: 'Rất tốt', tone: 'tot', khuyen: 'Thoải mái xem 4K, họp video nhóm, tải game — nhiều máy cùng lúc vẫn mượt.' };
+  if (dl >= 50) return { muc: 'Tốt', tone: 'tot', khuyen: 'Xem 4K, họp video, tải file lớn đều ổn.' };
+  if (dl >= 25) return { muc: 'Khá', tone: 'kha', khuyen: 'Xem Full HD và họp video tốt; tải nặng nhiều máy cùng lúc có thể chậm.' };
+  if (dl >= 10) return { muc: 'Trung bình', tone: 'kha', khuyen: treCao ? 'Đủ xem HD, nhưng độ trễ cao — gọi video/chơi game dễ giật.' : 'Đủ lướt web, xem HD, họp video cơ bản.' };
+  if (dl >= 3) return { muc: 'Yếu', tone: 'yeu', khuyen: 'Chỉ hợp lướt web và nhắn tin; video HD dễ giật. Kiểm xem có ai đang tải nặng không.' };
+  return { muc: 'Rất yếu', tone: 'yeu', khuyen: 'Khó xem video mượt. Thử khởi động lại router, hoặc gọi nhà mạng nếu kéo dài.' };
 }
 
 function TabTocDo() {
@@ -325,6 +347,12 @@ function TabTocDo() {
     <div className="ct-mang-body ct-tocdo">
       <div className="ct-tocdo-gauge">
         <svg viewBox="0 0 200 200" className="ct-gauge-svg" aria-hidden>
+          <defs>
+            <linearGradient id="ctGradDl" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#4f46e5" />
+              <stop offset="100%" stopColor="#06b6d4" />
+            </linearGradient>
+          </defs>
           <circle cx="100" cy="100" r={R} className="ct-gauge-nen"
             strokeDasharray={`${cungNen} ${CHU_VI}`} transform="rotate(135 100 100)" />
           <circle cx="100" cy="100" r={R} className="ct-gauge-chay" data-gd={giaiDoan}
@@ -348,6 +376,16 @@ function TabTocDo() {
         <KetO icon={<Activity size={17} />} nhan={dich('Độ trễ')} gt={ping} dv="ms" dangDo={giaiDoan === 'ping'} />
         <KetO icon={<ArrowDownUp size={17} />} nhan={dich('Độ rung')} gt={jitter} dv="ms" />
       </div>
+
+      {giaiDoan === 'xong' && (() => {
+        const dg = danhGiaMang(taiXuong, ping);
+        return dg ? (
+          <div className="ct-danhgia" data-tone={dg.tone}>
+            <div className="ct-danhgia-muc">{dich('Mạng của bạn')}: <strong>{dich(dg.muc)}</strong></div>
+            <div className="ct-danhgia-khuyen">{dich(dg.khuyen)}</div>
+          </div>
+        ) : null;
+      })()}
 
       {loi && <div className="ct-mang-card ct-mang-err">{loi}</div>}
 

@@ -31,8 +31,6 @@ const router = Router();
 
 /** Trần mỗi lượt tải về. 50 MB đủ để đo đường ~vài trăm Mbps trong ~1 giây. */
 const MAX_TAI_XUONG = 50 * 1024 * 1024;
-/** Trần mỗi lượt tải lên. Body lớn hơn bị Express từ chối trước khi tới đây. */
-const MAX_TAI_LEN = 50 * 1024 * 1024;
 /** Kích thước mỗi khối random sinh ra. 64 KB: đủ lớn để rẻ, đủ nhỏ để mượt. */
 const KHOI = 64 * 1024;
 
@@ -90,22 +88,13 @@ router.get('/tai-xuong', authenticate, tocDoTaiXuongLimiter, (req: Request, res:
  * khối nhị phân.
  */
 router.post('/tai-len', authenticate, tocDoTaiLenLimiter, (req: Request, res: Response<ApiResponse>) => {
-  let nhan = 0;
-  let qua = false;
-  req.on('data', (khuc: Buffer) => {
-    nhan += khuc.length;
-    if (nhan > MAX_TAI_LEN && !qua) {
-      qua = true;
-      req.destroy();
-    }
-  });
-  req.on('end', () => {
-    res.set('Cache-Control', 'no-store');
-    res.json({ success: true, data: { nhan } });
-  });
-  req.on('error', () => {
-    if (!res.headersSent) res.status(400).json({ success: false, message: 'Tải lên lỗi.' });
-  });
+  // ⚠️ `express.raw` (mount ở index.ts cho đúng đường này) ĐÃ đọc hết body vào
+  // `req.body` dạng Buffer rồi. Nếu ở đây còn nghe `req.on('data'/'end')` thì
+  // sự kiện không bao giờ bắn nữa (stream đã cạn) ⇒ không trả lời ⇒ client
+  // TREO MÃI ở bước tải lên. Vì thế đọc thẳng Buffer, không nghe stream.
+  const nhan = Buffer.isBuffer(req.body) ? req.body.length : 0;
+  res.set('Cache-Control', 'no-store');
+  res.json({ success: true, data: { nhan } });
 });
 
 export default router;

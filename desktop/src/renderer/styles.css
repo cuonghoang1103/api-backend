@@ -14387,3 +14387,34 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-keto-gt { font-size: 21px; font-weight: 700; color: var(--ct-text); font-variant-numeric: tabular-nums; }
 .ct-keto-dv { font-size: 12px; font-weight: 500; color: var(--ct-text-faint); margin-left: 3px; }
 .ct-tocdo-nut { margin-top: 4px; }
+
+/* Đánh giá mạng sau khi đo (features/mang) — màu mạnh để đọc nhanh */
+.ct-danhgia {
+  width: 100%; padding: 16px 18px; border-radius: 14px;
+  border: 1px solid transparent;
+  animation: ct-tb-vao 300ms var(--ct-ease);
+}
+.ct-danhgia-muc { font-size: 16px; font-weight: 600; }
+.ct-danhgia-muc strong { font-weight: 800; }
+.ct-danhgia-khuyen { margin-top: 5px; font-size: 13.5px; line-height: 1.6; opacity: 0.92; }
+.ct-danhgia[data-tone='tot'] {
+  background: color-mix(in srgb, var(--ct-ok) 15%, var(--ct-surface));
+  border-color: color-mix(in srgb, var(--ct-ok) 45%, transparent);
+  color: var(--ct-ok);
+}
+.ct-danhgia[data-tone='kha'] {
+  background: color-mix(in srgb, var(--ct-warn) 15%, var(--ct-surface));
+  border-color: color-mix(in srgb, var(--ct-warn) 45%, transparent);
+  color: var(--ct-warn);
+}
+.ct-danhgia[data-tone='yeu'] {
+  background: color-mix(in srgb, var(--ct-err) 15%, var(--ct-surface));
+  border-color: color-mix(in srgb, var(--ct-err) 45%, transparent);
+  color: var(--ct-err);
+}
+.ct-danhgia-khuyen { color: var(--ct-text); }
+
+/* Đậm màu thêm cho đồng hồ + ô kết quả đang đo */
+.ct-gauge-chay[data-gd='taiXuong'] { stroke: url(#ctGradDl); }
+.ct-keto[data-dang='do'] .ct-keto-dau,
+.ct-keto[data-dang='do'] .ct-keto-gt { color: var(--ct-accent-text); }

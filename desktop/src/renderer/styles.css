@@ -14357,3 +14357,21 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   font-variant-numeric: tabular-nums;
 }
 .ct-tocdo-o-dv { font-size: 13px; font-weight: 500; color: var(--ct-text-faint); }
+
+/* Dải báo "đang ngoại tuyến" trên AI Chat (features/chat/ChatMode.tsx) */
+.ct-offline-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--ct-border);
+  background: color-mix(in srgb, var(--ct-warn) 14%, var(--ct-surface));
+  color: var(--ct-warn);
+}
+.ct-offline-bar[data-co='khong'] {
+  background: color-mix(in srgb, var(--ct-err) 12%, var(--ct-surface));
+  color: var(--ct-err);
+}
+.ct-offline-bar svg { flex-shrink: 0; }

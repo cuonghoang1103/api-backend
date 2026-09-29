@@ -19,7 +19,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X, Search, BookOpen } from 'lucide-react';
+  CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X, Search, BookOpen, WifiOff } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
 import { docThanhTieng, ngungNoi, phatTieng } from '../odin/giongNoi';
@@ -32,6 +32,7 @@ import {
   DaiDinhKem, DinhKemDaGui, NutDinhKem, ODinhKem, useDinhKem, type TepDinhKem,
 } from './DinhKem';
 import { anhKemLai, type LuotChat } from '../../../shared/nguCanhChat';
+import type { AiCucBoTinhTrang } from '../../../shared/ipc';
 import { useDanKhapNoi } from './DinhKemCode';
 import { ChupManHinh, NutChupManHinh } from './ChupManHinh';
 import { NutGoiThoai } from './NutGoiThoai';
@@ -162,6 +163,8 @@ export function ChatMode({ pro }: { pro: boolean }) {
   const [buocDangChay, datBuocDangChay] = useState<Array<{ viec: string; chu: string }>>([]);
   const [moManGoi, datMoManGoi] = useState(false);
   const [loi, datLoi] = useState<string | null>(null);
+  // Trạng thái AI trên máy — để hiện dải báo "đang ngoại tuyến" và tên model.
+  const [cucBoTt, datCucBoTt] = useState<AiCucBoTinhTrang | null>(null);
   /** Máy chủ đã HẠ BẬC lượt này chưa, và vì sao — xem khung `model` của SSE. */
   const [roiBac, datRoiBac] = useState<string | null>(null);
   /**
@@ -433,6 +436,25 @@ export function ChatMode({ pro }: { pro: boolean }) {
 
   // Rời trang giữa chừng ⇒ cắt kết nối. Không cắt thì stream chạy tiếp tới cùng
   // và vẫn bị tính tiền, chỉ khác là không còn ai đọc.
+  useEffect(() => {
+    // Nạp lại mỗi khi trạng thái mạng đổi: mất mạng thì cần biết ngay có model
+    // trên máy để chạy hay không mà báo cho người dùng.
+    let huy = false;
+    void window.cuongthai?.aiCucBo?.tinhTrang().then((t) => { if (!huy) datCucBoTt(t ?? null); });
+    return () => { huy = true; };
+  }, [online]);
+
+  // Model sẽ dùng khi mất mạng: bản đang chạy, hoặc bản nên dùng trong số đã
+  // tải, hoặc bản đầu đã tải. `null` = chưa có gì để chạy offline.
+  const modelCucBoSanSang = ((): string | null => {
+    if (settings.aiCucBoBat === false || settings.aiCucBoTuDong === false) return null;
+    const daCo = cucBoTt?.daCo ?? [];
+    if (!daCo.length) return null;
+    const ma = cucBoTt?.dangChay
+      ?? (cucBoTt?.khuyen.nen && daCo.includes(cucBoTt.khuyen.nen) ? cucBoTt.khuyen.nen : daCo[0]);
+    return cucBoTt?.kho.find((m) => m.ma === ma)?.ten ?? 'AI trên máy';
+  })();
+
   useEffect(() => () => huyRef.current?.abort(), []);
 
   /**
@@ -954,6 +976,21 @@ ${kq.chu}`;
       )}
       </div>
 
+      {!online && (
+        <div className="ct-offline-bar" data-co={modelCucBoSanSang ? 'co' : 'khong'} role="status">
+          {modelCucBoSanSang ? (
+            <>
+              <WifiOff size={15} aria-hidden />
+              <span>{dichP('Đang ngoại tuyến — trả lời bằng AI trên máy ({ten}). Có mạng lại sẽ tự dùng model đầy đủ.', { ten: modelCucBoSanSang })}</span>
+            </>
+          ) : (
+            <>
+              <WifiOff size={15} aria-hidden />
+              <span>{dich('Đang ngoại tuyến, và chưa có AI trên máy. Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.')}</span>
+            </>
+          )}
+        </div>
+      )}
       <div className="ct-agent-scroll" ref={cuonRef}>
         {luot.length === 0 && (
           <div className="ct-agent-trong">
